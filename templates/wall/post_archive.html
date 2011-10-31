@@ -1,0 +1,6 @@
+{% for post in latest %}
+  <h2>{{ post }}</h2>
+  <p>{{ post.post }}</p>
+  <b>{{ post.author }}</b> wrote {{ post.post|wordcount }} words on {{ post.date|date }} at {{ post.date|time }}
+{% endfor %}
+

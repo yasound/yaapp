@@ -1,0 +1,12 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/wall/sendpost/" method="post">
+{% csrf_token %}
+  <input type="text" name="username" />
+  <br>
+  <input type="text" name="password" />
+  <br>
+  <input type="text" name="posttext" />
+  <br>
+  <input type="submit" value="sendpost" />
+</form>
