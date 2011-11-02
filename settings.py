@@ -1,5 +1,10 @@
 # Django settings for yachat project.
 
+import os, sys
+
+PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
+
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -12,7 +17,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/Users/meeloo/work/yaapp/db/yachat.sqlite3',                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(PROJECT_PATH, 'db/yachat.sqlite3'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
