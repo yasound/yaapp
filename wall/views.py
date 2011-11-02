@@ -43,3 +43,31 @@ def sendpost(request):
   else:
     return HttpResponseRedirect(reverse('yaapp.wall.views.all'))
 
+def allAPI(request):
+  posts = Post.objects.all().order_by('-date')
+  return render_to_response('wall/allxml', {'posts': posts}, csrfContext)
+
+@csrf_exempt
+def sendpostAPI(request):
+  username = request.POST['username']
+  password = request.POST['password']
+  tpe = request.POST['type']
+  if len(tpe) == 0
+    tpe = text
+  user = authenticate(username=username, password=password)
+  if user is not None:
+    if user.is_active:
+      login(request, user)
+      posttext = request.POST['posttext']
+      p = Post()
+      p.author = user
+      p.post = posttext
+      p.type = tpe
+      p.date = datetime.now()
+      p.save()
+      # Always return an HttpResponseRedirect after successfully dealing
+      # with POST data. This prevents data from being posted twice if a
+      # user hits the Back button.
+
+  return allAPI(request)
+

@@ -6,4 +6,7 @@ urlpatterns = patterns('',
   (r'^all/$', 'yaapp.wall.views.all' ),
   (r'^write/$', 'yaapp.wall.views.write' ),
   (r'^sendpost/$', 'yaapp.wall.views.sendpost'),
+  # API:
+  (r'^allAPI/$', 'yaapp.wall.views.allAPI' ),
+  (r'^sendpostAPI/$', 'yaapp.wall.views.sendpostAPI'),
 )
