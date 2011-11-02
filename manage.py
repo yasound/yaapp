@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+import os
+if not os.environ.has_key('DJANGO_MODE'): 
+    os.environ['DJANGO_MODE'] = 'local'
+    print "------------------------------------------------------------------------------"
+    print " Manage in LOCAL mode : set DJANGO_MODE env variable for prod and dev servers."
+    print " See README for more informations"
+    print "------------------------------------------------------------------------------"
+    from time import sleep
+    sleep(1)
+
 from django.core.management import execute_manager
 import imp
 try:

@@ -1,9 +1,18 @@
-# Django settings for yachat project.
+# Django settings for yaapp project.
 
 import os, sys
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
 
+# Theses settings are different with env variables
+#
+# We wait a DJANGO_MODE environment variable with values :
+# 'production' OR 'development'
+#
+DJANGO_MODE = os.environ.get('DJANGO_MODE', False)
+PRODUCTION_MODE = ( DJANGO_MODE == 'production' )
+DEVELOPMENT_MODE = ( DJANGO_MODE == 'development' )
+LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -105,13 +114,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'urls.py'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/Users/meeloo/work/yachat/templates"
+    os.path.join(PROJECT_PATH, 'templates')
 )
 
 INSTALLED_APPS = (
