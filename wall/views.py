@@ -19,55 +19,48 @@ def write(request):
     
 @csrf_exempt
 def sendpost(request):
-  username = request.POST['username']
+  author = request.POST['author']
   password = request.POST['password']
-  tpe = request.POST['type']
-  if len(tpe) == 0
-    tpe = text
-  user = authenticate(username=username, password=password)
+  kind = request.POST['kind']
+  #if len(tpe) == 0
+  #kind = "text"
+  user = authenticate(username=author, password=password)
   if user is not None:
     if user.is_active:
       login(request, user)
       posttext = request.POST['posttext']
       p = Post()
+      p.kind = kind
       p.author = user
-      p.post = posttext
+      p.data = posttext
       p.date = datetime.now()
       p.save()
       # Always return an HttpResponseRedirect after successfully dealing
       # with POST data. This prevents data from being posted twice if a
       # user hits the Back button.
-      return HttpResponseRedirect(reverse('yaapp.wall.views.all'))
-    else:
-      return HttpResponseRedirect(reverse('yaapp.wall.views.all'))
-  else:
-    return HttpResponseRedirect(reverse('yaapp.wall.views.all'))
+  return HttpResponseRedirect(reverse('yaapp.wall.views.all'))
 
 def allAPI(request):
   posts = Post.objects.all().order_by('-date')
-  return render_to_response('wall/allxml', {'posts': posts}, csrfContext)
+  return render_to_response('wall/all.xml', {'posts': posts})
 
 @csrf_exempt
 def sendpostAPI(request):
-  username = request.POST['username']
+  author = request.POST['author']
   password = request.POST['password']
-  tpe = request.POST['type']
-  if len(tpe) == 0
-    tpe = text
-  user = authenticate(username=username, password=password)
+  kind = request.POST['kind']
+  #if len(tpe) == 0
+  #kind = "text"
+  user = authenticate(username=author, password=password)
   if user is not None:
     if user.is_active:
       login(request, user)
       posttext = request.POST['posttext']
       p = Post()
       p.author = user
-      p.post = posttext
-      p.type = tpe
+      p.data = posttext
+      p.kind = kind
       p.date = datetime.now()
       p.save()
-      # Always return an HttpResponseRedirect after successfully dealing
-      # with POST data. This prevents data from being posted twice if a
-      # user hits the Back button.
-
   return allAPI(request)
 

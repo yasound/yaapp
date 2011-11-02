@@ -2,11 +2,12 @@
 
 <form action="/wall/sendpost/" method="post">
 {% csrf_token %}
-  <input type="text" name="username" />
+  <input type="text" name="author" />
   <br>
   <input type="text" name="password" />
   <br>
   <input type="text" name="posttext" />
   <br>
+  <input type="text" name="kind" value="text" />
   <input type="submit" value="sendpost" />
 </form>

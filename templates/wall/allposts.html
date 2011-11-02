@@ -2,13 +2,14 @@
 
 <form action="/wall/sendpost/" method="post">
 {% csrf_token %}
-  User:<input type="text" name="username" />
+  User:<input type="text" name="author" />
   Password:<input type="text" name="password" />
   <br>
   Message:
   <br>
   <input type="text" name="posttext" />
   <br>
+  <input type="text" name="kind" value="text" />
   <input type="submit" value="sendpost" />
 </form>
 
@@ -16,7 +17,7 @@
 <div>
   <h1>{{ post.author }}:</h1>
   <h2>{{ post.date }}</h2>
-  <span>{{ post.post }}</span>
+  <span>{{ post.data }}</span>
 </div>
 {% endfor %}
 
