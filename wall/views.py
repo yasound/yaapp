@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from yachat.wall.models import Post
 
@@ -16,6 +17,7 @@ def write(request):
   csrfContext = RequestContext(request)
   return render_to_response('wall/write.html', csrfContext)
     
+#@csrf_exempt
 def sendpost(request):
   username = request.POST['username']
   password = request.POST['password']
