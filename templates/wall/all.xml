@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wall>
+{% for post in posts %}
+  <post>
+    <id>{{ post.id }}</id>
+    <kind>{{ post.kind }}</kind>
+    <author>{{ post.author }}</author>
+    <date>{{ post.date }}</date>
+    <message>{{ post.data }}</message>
+  </post>
+{% endfor %}
+</wall>
+
