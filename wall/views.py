@@ -40,8 +40,9 @@ def sendpost(request):
       # user hits the Back button.
   return HttpResponseRedirect(reverse('yaapp.wall.views.all'))
 
+@csrf_exempt
 def allAPI(request):
-  posts = Post.objects.all().order_by('-date')
+  posts = Post.objects.all().order_by('date')
   return render_to_response('wall/all.xml', {'posts': posts})
 
 @csrf_exempt
