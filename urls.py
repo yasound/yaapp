@@ -1,8 +1,18 @@
 from django.conf.urls.defaults import patterns, include, url
+from tastypie.api import Api
+from yabase.api import SongMetadataResource, SongInstanceResource, PlaylistResource, UserProfileResource, RadioResource
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
+
+api = Api(api_name='v1')
+api.register(SongMetadataResource())
+api.register(SongInstanceResource())
+api.register(PlaylistResource())
+api.register(UserProfileResource())
+
+api.register(RadioResource())
 
 urlpatterns = patterns('',
     # Examples:
@@ -16,4 +26,5 @@ urlpatterns = patterns('',
     #(r'^wall/', include('wall.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^wall/', include('yaapp.wall.urls')),
+    (r'^api/', include(api.urls)),
 )

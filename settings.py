@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'wall',
+    'yabase',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -159,3 +160,5 @@ LOGGING = {
         },
     }
 }
+
+AUTH_PROFILE_MODULE = 'yabase.UserProfile'
