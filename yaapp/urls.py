@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from tastypie.api import Api
 from yabase.api import SongMetadataResource, SongInstanceResource, PlaylistResource, UserProfileResource, RadioResource
-
+from yabase.api import RadioEventResource
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -11,7 +11,7 @@ api.register(SongMetadataResource())
 api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserProfileResource())
-
+api.register(RadioEventResource())
 api.register(RadioResource())
 
 urlpatterns = patterns('',

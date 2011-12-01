@@ -32,7 +32,7 @@ class PlaylistResource(ModelResource):
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=True)
     #picture
-    wall = fields.ManyToManyField('yabase.api.RadioEventResource', 'wall', full=True)
+    wall = fields.ToManyField('yabase.api.RadioEventResource', 'wall', full=False)
     next_songs = fields.ManyToManyField('yabase.api.RadioEventResource', 'next_songs', full=True)
     connected_users = fields.ManyToManyField('yabase.api.UserProfileResource', 'connected_users', full=True)
     users_with_this_radio_as_favorite = fields.ManyToManyField('yabase.api.UserProfileResource', 'users_with_this_radio_as_favorite', full=True)
@@ -46,10 +46,9 @@ class RadioResource(ModelResource):
         include_resource_uri = False
     
     def override_urls(self):
-        urls = [
-                url(r"^radio/(?P<pk>\w[\w/-]*)/wall%s$" % (trailing_slash()), self.wrap_view('get_wall'), name="api_get_wall"),
-                ]
-        return urls
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/wall%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_wall'), name="api_get_wall"),
+        ]
 
     def get_wall(self, request, **kwargs):
         try:
@@ -60,7 +59,7 @@ class RadioResource(ModelResource):
             return HttpMultipleChoices("More than one resource is found at this URI.")
         
         wall_event_resource = RadioEventResource()
-        return wall_event_resource.get_detail(request) # to fix...
+        return wall_event_resource.get_detail(request, wall_events=obj.pk) # to fix...
 
 
 
