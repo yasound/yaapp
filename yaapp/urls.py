@@ -25,6 +25,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     #(r'^wall/', include('wall.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^wall/', include('yaapp.wall.urls')),
+    (r'^wall/', include('wall.urls')),
     (r'^api/', include(api.urls)),
 )
