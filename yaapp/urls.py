@@ -1,9 +1,10 @@
 from django.conf.urls.defaults import patterns, include, url
-from tastypie.api import Api
-from yabase.api import SongMetadataResource, SongInstanceResource, PlaylistResource, UserProfileResource, RadioResource
-from yabase.api import RadioEventResource
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from tastypie.api import Api
+from yabase.api import NextSongsResource, RadioEventResource, \
+    SongMetadataResource, SongInstanceResource, PlaylistResource, \
+    UserProfileResource, RadioResource, WallEventResource
+# Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
 api = Api(api_name='v1')
@@ -13,6 +14,9 @@ api.register(PlaylistResource())
 api.register(UserProfileResource())
 api.register(RadioEventResource())
 api.register(RadioResource())
+
+next_songs = NextSongsResource()
+wall_event = WallEventResource()
 
 urlpatterns = patterns('',
     # Examples:
@@ -26,5 +30,8 @@ urlpatterns = patterns('',
     #(r'^wall/', include('wall.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(next_songs.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(wall_event.urls)),
     (r'^api/', include(api.urls)),
+    # The normal jazz here, then...
 )

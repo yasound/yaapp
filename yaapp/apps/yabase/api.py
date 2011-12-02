@@ -3,6 +3,7 @@ from tastypie.resources import ModelResource
 from yabase.models import SongMetadata, SongInstance, UserProfile, Playlist, RadioEvent, Radio
 from django.contrib.auth.models import User
 from django.conf.urls.defaults import url
+from django.shortcuts import get_object_or_404
 from tastypie.utils import trailing_slash
 import datetime
 
@@ -42,35 +43,6 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['name', 'playlists', 'picture', 'description', 'creation_date', 'wall', 'next_songs', 'url', 'connected_users', 'users_with_this_radio_as_favorite', 'audience_peak', 'likes', 'dislikes', 'overall_listening_time']
         include_resource_uri = False
-    
-    def override_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/wall%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_wall'), name="api_get_wall"),
-            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/next_songs%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_next_songs'), name="api_get_next_songs"),
-        ]
-
-    def get_wall(self, request, **kwargs):
-        try:
-            obj = self.cached_obj_get(request=request, **self.remove_api_resource_names(kwargs))
-        except ObjectDoesNotExist:
-            return HttpGone()
-        except MultipleObjectsReturned:
-            return HttpMultipleChoices("More than one resource is found at this URI.")
-        
-        wall_event_resource = WallEventResource()
-        return wall_event_resource.get_list(request, radio=obj.pk) # to fix...
-
-    def get_next_songs(self, request, **kwargs):
-        try:
-            obj = self.cached_obj_get(request=request, **self.remove_api_resource_names(kwargs))
-        except ObjectDoesNotExist:
-            return HttpGone()
-        except MultipleObjectsReturned:
-            return HttpMultipleChoices("More than one resource is found at this URI.")
-        
-        next_songs_resource = NextSongsResource()
-        return next_songs_resource.get_list(request, radio=obj.pk) # to fix...
-
 
 class UserResource(ModelResource):
     class Meta:
@@ -109,9 +81,14 @@ class WallEventResource(ModelResource):
     user = fields.ForeignKey(UserProfileResource, 'user', full=True, null=True)
     class Meta:
         queryset = RadioEvent.objects.all()
-        resource_name = 'radio_event'
+        resource_name = 'wall'
         fields = ['type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(WallEventResource, self).dispatch(request_type, request, **kwargs)
 
     def get_object_list(self, request):
         return super(WallEventResource, self).get_object_list(request).filter(start_date__lt=datetime.datetime.now())
@@ -121,9 +98,15 @@ class NextSongsResource(ModelResource):
     user = fields.ForeignKey(UserProfileResource, 'user', full=True, null=True)
     class Meta:
         queryset = RadioEvent.objects.all()
-        resource_name = 'radio_event'
+        resource_name = 'next_songs'
         fields = ['type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(NextSongsResource, self).dispatch(request_type, request, **kwargs)
+
 
     def get_object_list(self, request):
         return super(NextSongsResource, self).get_object_list(request).filter(start_date__gte=datetime.datetime.now())
