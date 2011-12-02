@@ -14,14 +14,14 @@ then
 fi
 vtenv/bin/pip install -r requirements.txt --download-cache=eggs
 if [ ! -d ./vtenv/src/paramiko ];then
-    vtenv/bin/pip install -e git://github.com/bearstech/paramiko.git#egg=paramiko || echo "Please install python-dev and retry"
+    vtenv/bin/pip install -e git://github.com/jbl2024/paramiko.git#egg=paramiko || echo "Please install python-dev and retry"
 else
     cd vtenv/src/paramiko
     git pull origin master
     cd ../../..
 fi
 if [ ! -d ./vtenv/src/fabric ];then
-    vtenv/bin/pip install -e git://github.com/bearstech/fabric.git@ssh-agent#egg=fabric
+    vtenv/bin/pip install -e git://github.com/jbl2024/fabric.git@ssh-agent#egg=fabric
 else
     cd vtenv/src/fabric
     git pull origin ssh-agent
