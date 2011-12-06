@@ -1,5 +1,19 @@
 #!/usr/bin/env python
+import sys
+
 import os
+from os.path import abspath, dirname, join
+
+PROJECT_ROOT = abspath(dirname(__file__))
+
+# Uncomment this if you use Virtualenv
+#
+activate_this = PROJECT_ROOT + "/../vtenv/bin/activate_this.py"
+execfile(activate_this, dict(__file__=activate_this))
+
+sys.path.insert(0, join(PROJECT_ROOT, "apps"))
+
+
 if not os.environ.has_key('DJANGO_MODE'): 
     os.environ['DJANGO_MODE'] = 'local'
     print "------------------------------------------------------------------------------"
