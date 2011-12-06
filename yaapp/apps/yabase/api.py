@@ -3,7 +3,9 @@ from tastypie.resources import ModelResource
 from yabase.models import SongMetadata, SongInstance, UserProfile, Playlist, RadioEvent, Radio
 from django.contrib.auth.models import User
 from django.conf.urls.defaults import url
+from django.shortcuts import get_object_or_404
 from tastypie.utils import trailing_slash
+import datetime
 
 class SongMetadataResource(ModelResource):
     class Meta:
@@ -31,9 +33,6 @@ class PlaylistResource(ModelResource):
 
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=True)
-    #picture
-    wall = fields.ManyToManyField('yabase.api.RadioEventResource', 'wall', full=True)
-    next_songs = fields.ManyToManyField('yabase.api.RadioEventResource', 'next_songs', full=True)
     connected_users = fields.ManyToManyField('yabase.api.UserProfileResource', 'connected_users', full=True)
     users_with_this_radio_as_favorite = fields.ManyToManyField('yabase.api.UserProfileResource', 'users_with_this_radio_as_favorite', full=True)
     likes = fields.ManyToManyField('yabase.api.UserProfileResource', 'likes', full=True)
@@ -44,29 +43,6 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['name', 'playlists', 'picture', 'description', 'creation_date', 'wall', 'next_songs', 'url', 'connected_users', 'users_with_this_radio_as_favorite', 'audience_peak', 'likes', 'dislikes', 'overall_listening_time']
         include_resource_uri = False
-    
-    def override_urls(self):
-        urls = [
-                url(r"^radio/(?P<pk>\w[\w/-]*)/wall%s$" % (trailing_slash()), self.wrap_view('get_wall'), name="api_get_wall"),
-                ]
-        return urls
-
-    def get_wall(self, request, **kwargs):
-        try:
-            obj = self.cached_obj_get(request=request, **self.remove_api_resource_names(kwargs))
-        except ObjectDoesNotExist:
-            return HttpGone()
-        except MultipleObjectsReturned:
-            return HttpMultipleChoices("More than one resource is found at this URI.")
-        
-        wall_event_resource = RadioEventResource()
-        return wall_event_resource.get_detail(request) # to fix...
-
-
-
-
-
-
 
 class UserResource(ModelResource):
     class Meta:
@@ -89,6 +65,7 @@ class UserProfileResource(ModelResource):
         include_resource_uri = False
 
 
+
 class RadioEventResource(ModelResource):
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
     user = fields.ForeignKey(UserProfileResource, 'user', full=True, null=True)
@@ -98,3 +75,38 @@ class RadioEventResource(ModelResource):
         resource_name = 'radio_event'
         fields = ['type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture']
         include_resource_uri = False
+
+class WallEventResource(ModelResource):
+    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
+    user = fields.ForeignKey(UserProfileResource, 'user', full=True, null=True)
+    class Meta:
+        queryset = RadioEvent.objects.all()
+        resource_name = 'wall'
+        fields = ['type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        include_resource_uri = False
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(WallEventResource, self).dispatch(request_type, request, **kwargs)
+
+    def get_object_list(self, request):
+        return super(WallEventResource, self).get_object_list(request).filter(start_date__lt=datetime.datetime.now())
+
+class NextSongsResource(ModelResource):
+    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
+    user = fields.ForeignKey(UserProfileResource, 'user', full=True, null=True)
+    class Meta:
+        queryset = RadioEvent.objects.all()
+        resource_name = 'next_songs'
+        fields = ['type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        include_resource_uri = False
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(NextSongsResource, self).dispatch(request_type, request, **kwargs)
+
+
+    def get_object_list(self, request):
+        return super(NextSongsResource, self).get_object_list(request).filter(start_date__gte=datetime.datetime.now())

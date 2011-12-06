@@ -86,7 +86,25 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 
+class Radio(models.Model):
+    name = models.CharField(max_length=40)
+    playlists = models.ManyToManyField(Playlist, related_name='playlists')
+    picture = models.ForeignKey(Picture, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    creation_date= models.DateTimeField(default=datetime.datetime.now)
+    url = models.CharField(max_length=100, null=True, blank=True)
+    connected_users = models.ManyToManyField(UserProfile, related_name='connected_users', null=True, blank=True)
+    users_with_this_radio_as_favorite = models.ManyToManyField(UserProfile, related_name='users_with_this_radio_as_favorite',null=True, blank=True)
+    audience_peak = models.FloatField(default=0, null=True, blank=True)
+    likes = models.ManyToManyField(UserProfile, related_name='radio_likes', null=True, blank=True)
+    dislikes = models.ManyToManyField(UserProfile, related_name='radio_dislikes', null=True, blank=True)
+    overall_listening_time = models.FloatField(default=0, null=True, blank=True)
+    
+    def __unicode__(self):
+        return self.name;
+    
 class RadioEvent(models.Model):
+    radio = models.ForeignKey(Radio)
     TYPE_CHOICES = (
                     ('J', 'Joined'),
                     ('L', 'Left'),
@@ -126,7 +144,7 @@ class RadioEvent(models.Model):
         return s
     
     def isValid(self):
-        valid = Fasle
+        valid = False
         if type == 'J':
             valid = not (user is None)
         elif type == 'L':
@@ -137,24 +155,7 @@ class RadioEvent(models.Model):
             valid = (not (song is None)) and (not (old_id is None))
         return valid
 
-class Radio(models.Model):
-    name = models.CharField(max_length=40)
-    playlists = models.ManyToManyField(Playlist, related_name='playlists')
-    picture = models.ForeignKey(Picture, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    creation_date= models.DateTimeField(default=datetime.datetime.now)
-    wall = models.ManyToManyField(RadioEvent, related_name='wall_events', null=True, blank=True)
-    next_songs = models.ManyToManyField(RadioEvent, related_name='next_songs', null=True, blank=True)
-    url = models.CharField(max_length=100, null=True, blank=True)
-    connected_users = models.ManyToManyField(UserProfile, related_name='connected_users', null=True, blank=True)
-    users_with_this_radio_as_favorite = models.ManyToManyField(UserProfile, related_name='users_with_this_radio_as_favorite',null=True, blank=True)
-    audience_peak = models.FloatField(default=0, null=True, blank=True)
-    likes = models.ManyToManyField(UserProfile, related_name='radio_likes', null=True, blank=True)
-    dislikes = models.ManyToManyField(UserProfile, related_name='radio_dislikes', null=True, blank=True)
-    overall_listening_time = models.FloatField(default=0, null=True, blank=True)
-    
-    def __unicode__(self):
-        return self.name;
+
 
 
 
