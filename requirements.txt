@@ -1,0 +1,5 @@
+# Put here all your python libs dependencies before vtenv.sh
+Django >= 1.3
+South
+django-tastypie
+PIL

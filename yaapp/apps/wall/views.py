@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-from yaapp.wall.models import Post
+from models import Post
 
 def all(request):
   csrfContext = RequestContext(request)

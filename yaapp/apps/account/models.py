@@ -1,0 +1,32 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, verbose_name=_('user'))
+    url = models.URLField(null=True, blank=True)
+    twitter_account = models.CharField(max_length=60, null=True, blank=True)
+    facebook_account = models.CharField(max_length=60, null=True, blank=True)
+    bio_text = models.TextField(null=True, blank=True)
+    
+    def __unicode__(self):
+        return self.user.username
+
+def create_user_profile(sender, instance, created, **kwargs):  
+    if created:  
+        profile, created = UserProfile.objects.get_or_create(user=instance)  
+post_save.connect(create_user_profile, sender=User)
+
+
+
+
+
+
+
+
+
+
+
+
+

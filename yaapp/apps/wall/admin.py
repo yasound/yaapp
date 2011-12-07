@@ -1,5 +1,5 @@
 from django.contrib import admin
-from wall.models import Post
+from models import Post
 
 class PostAdmin(admin.ModelAdmin):
   list_display = ('author', 'date', 'data')
