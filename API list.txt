@@ -1,0 +1,49 @@
+Yasound web API:
+
+Login screen:
+    - login
+        login
+        passwd
+        type (facebook, twitter, yasound)
+        return:
+             ok / nok
+
+    - create account
+        login
+        passwd
+        type (facebook, twitter, yasound)
+        return:
+             ok / nok
+
+        side effect:
+            create default radio without playlist.
+
+Radio Config screen:
+    - get / set radio desc
+        name
+        theme
+        picture
+        genre
+        playlists
+
+    - add / del song to / from playlist
+
+    - enable / disable playlist
+
+    - create / delete playlist
+
+On the radio wall:
+    - get radio desc + likes + ...
+    - get wall
+    - get connected users
+    - get current playing song
+    - post message (w/ picture + emoticons)
+
+    in case this is MY yasound:
+    - kick / ban user
+    - remove / change one of the next songs
+
+Radio lists:
+    - get radio list with search params and filters (for categories: top, selection, news, friends, favorites)
+
+
