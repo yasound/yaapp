@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # Adding model 'Picture'
         db.create_table('yabase_picture', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.CharField')(max_length=120)),
+            ('file', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('yabase', ['Picture'])
 
@@ -64,84 +64,16 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('yabase_playlist_songs', ['playlist_id', 'songinstance_id'])
 
-        # Adding model 'UserProfile'
-        db.create_table('yabase_userprofile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True)),
-            ('join_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('last_login_time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('twitter_account', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
-            ('facebook_account', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
-            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
-            ('bio_text', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('last_selection_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('yabase', ['UserProfile'])
-
-        # Adding M2M table for field radios on 'UserProfile'
-        db.create_table('yabase_userprofile_radios', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False))
-        ))
-        db.create_unique('yabase_userprofile_radios', ['userprofile_id', 'radio_id'])
-
-        # Adding M2M table for field favorites on 'UserProfile'
-        db.create_table('yabase_userprofile_favorites', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False))
-        ))
-        db.create_unique('yabase_userprofile_favorites', ['userprofile_id', 'radio_id'])
-
-        # Adding M2M table for field likes on 'UserProfile'
-        db.create_table('yabase_userprofile_likes', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False))
-        ))
-        db.create_unique('yabase_userprofile_likes', ['userprofile_id', 'radio_id'])
-
-        # Adding M2M table for field dislikes on 'UserProfile'
-        db.create_table('yabase_userprofile_dislikes', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False))
-        ))
-        db.create_unique('yabase_userprofile_dislikes', ['userprofile_id', 'radio_id'])
-
-        # Adding M2M table for field selection on 'UserProfile'
-        db.create_table('yabase_userprofile_selection', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False))
-        ))
-        db.create_unique('yabase_userprofile_selection', ['userprofile_id', 'radio_id'])
-
-        # Adding model 'RadioEvent'
-        db.create_table('yabase_radioevent', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('start_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('end_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('song', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.SongInstance'], null=True, blank=True)),
-            ('old_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.UserProfile'], null=True, blank=True)),
-            ('text', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('animated_emoticon', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
-        ))
-        db.send_create_signal('yabase', ['RadioEvent'])
-
         # Adding model 'Radio'
         db.create_table('yabase_radio', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('creator', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='owned_radios', unique=True, null=True, to=orm['auth.User'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=40)),
             ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('audience_peak', self.gf('django.db.models.fields.FloatField')(default=0, null=True, blank=True)),
             ('overall_listening_time', self.gf('django.db.models.fields.FloatField')(default=0, null=True, blank=True)),
         ))
@@ -155,57 +87,52 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('yabase_radio_playlists', ['radio_id', 'playlist_id'])
 
-        # Adding M2M table for field wall on 'Radio'
-        db.create_table('yabase_radio_wall', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False)),
-            ('radioevent', models.ForeignKey(orm['yabase.radioevent'], null=False))
+        # Adding model 'RadioUser'
+        db.create_table('yabase_radiouser', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('radio', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Radio'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('mood', self.gf('django.db.models.fields.CharField')(default='L', max_length=1)),
+            ('favorite', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('connected', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('radio_selected', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.create_unique('yabase_radio_wall', ['radio_id', 'radioevent_id'])
+        db.send_create_signal('yabase', ['RadioUser'])
 
-        # Adding M2M table for field next_songs on 'Radio'
-        db.create_table('yabase_radio_next_songs', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False)),
-            ('radioevent', models.ForeignKey(orm['yabase.radioevent'], null=False))
-        ))
-        db.create_unique('yabase_radio_next_songs', ['radio_id', 'radioevent_id'])
+        # Adding unique constraint on 'RadioUser', fields ['radio', 'user']
+        db.create_unique('yabase_radiouser', ['radio_id', 'user_id'])
 
-        # Adding M2M table for field connected_users on 'Radio'
-        db.create_table('yabase_radio_connected_users', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False))
+        # Adding model 'WallEvent'
+        db.create_table('yabase_wallevent', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('radio', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Radio'])),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('start_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('end_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('song', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.SongInstance'], null=True, blank=True)),
+            ('old_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('text', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('animated_emoticon', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
         ))
-        db.create_unique('yabase_radio_connected_users', ['radio_id', 'userprofile_id'])
+        db.send_create_signal('yabase', ['WallEvent'])
 
-        # Adding M2M table for field users_with_this_radio_as_favorite on 'Radio'
-        db.create_table('yabase_radio_users_with_this_radio_as_favorite', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False))
+        # Adding model 'NextSong'
+        db.create_table('yabase_nextsong', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('radio', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Radio'])),
+            ('song', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.SongInstance'])),
+            ('order', self.gf('django.db.models.fields.IntegerField')()),
         ))
-        db.create_unique('yabase_radio_users_with_this_radio_as_favorite', ['radio_id', 'userprofile_id'])
-
-        # Adding M2M table for field likes on 'Radio'
-        db.create_table('yabase_radio_likes', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False))
-        ))
-        db.create_unique('yabase_radio_likes', ['radio_id', 'userprofile_id'])
-
-        # Adding M2M table for field dislikes on 'Radio'
-        db.create_table('yabase_radio_dislikes', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('radio', models.ForeignKey(orm['yabase.radio'], null=False)),
-            ('userprofile', models.ForeignKey(orm['yabase.userprofile'], null=False))
-        ))
-        db.create_unique('yabase_radio_dislikes', ['radio_id', 'userprofile_id'])
+        db.send_create_signal('yabase', ['NextSong'])
 
 
     def backwards(self, orm):
         
+        # Removing unique constraint on 'RadioUser', fields ['radio', 'user']
+        db.delete_unique('yabase_radiouser', ['radio_id', 'user_id'])
+
         # Deleting model 'Picture'
         db.delete_table('yabase_picture')
 
@@ -221,50 +148,20 @@ class Migration(SchemaMigration):
         # Removing M2M table for field songs on 'Playlist'
         db.delete_table('yabase_playlist_songs')
 
-        # Deleting model 'UserProfile'
-        db.delete_table('yabase_userprofile')
-
-        # Removing M2M table for field radios on 'UserProfile'
-        db.delete_table('yabase_userprofile_radios')
-
-        # Removing M2M table for field favorites on 'UserProfile'
-        db.delete_table('yabase_userprofile_favorites')
-
-        # Removing M2M table for field likes on 'UserProfile'
-        db.delete_table('yabase_userprofile_likes')
-
-        # Removing M2M table for field dislikes on 'UserProfile'
-        db.delete_table('yabase_userprofile_dislikes')
-
-        # Removing M2M table for field selection on 'UserProfile'
-        db.delete_table('yabase_userprofile_selection')
-
-        # Deleting model 'RadioEvent'
-        db.delete_table('yabase_radioevent')
-
         # Deleting model 'Radio'
         db.delete_table('yabase_radio')
 
         # Removing M2M table for field playlists on 'Radio'
         db.delete_table('yabase_radio_playlists')
 
-        # Removing M2M table for field wall on 'Radio'
-        db.delete_table('yabase_radio_wall')
+        # Deleting model 'RadioUser'
+        db.delete_table('yabase_radiouser')
 
-        # Removing M2M table for field next_songs on 'Radio'
-        db.delete_table('yabase_radio_next_songs')
+        # Deleting model 'WallEvent'
+        db.delete_table('yabase_wallevent')
 
-        # Removing M2M table for field connected_users on 'Radio'
-        db.delete_table('yabase_radio_connected_users')
-
-        # Removing M2M table for field users_with_this_radio_as_favorite on 'Radio'
-        db.delete_table('yabase_radio_users_with_this_radio_as_favorite')
-
-        # Removing M2M table for field likes on 'Radio'
-        db.delete_table('yabase_radio_likes')
-
-        # Removing M2M table for field dislikes on 'Radio'
-        db.delete_table('yabase_radio_dislikes')
+        # Deleting model 'NextSong'
+        db.delete_table('yabase_nextsong')
 
 
     models = {
@@ -304,9 +201,16 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'yabase.nextsong': {
+            'Meta': {'object_name': 'NextSong'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'order': ('django.db.models.fields.IntegerField', [], {}),
+            'radio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Radio']"}),
+            'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.SongInstance']"})
+        },
         'yabase.picture': {
             'Meta': {'object_name': 'Picture'},
-            'file': ('django.db.models.fields.CharField', [], {'max_length': '120'}),
+            'file': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'yabase.playlist': {
@@ -322,33 +226,28 @@ class Migration(SchemaMigration):
         'yabase.radio': {
             'Meta': {'object_name': 'Radio'},
             'audience_peak': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
-            'connected_users': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'connected_users'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.UserProfile']"}),
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'creator': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'owned_radios'", 'unique': 'True', 'null': 'True', 'to': "orm['auth.User']"}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'dislikes': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'radio_dislikes'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.UserProfile']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'likes': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'radio_likes'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.UserProfile']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'next_songs': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'next_songs'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.RadioEvent']"}),
+            'next_songs': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['yabase.SongInstance']", 'through': "orm['yabase.NextSong']", 'symmetrical': 'False'}),
             'overall_listening_time': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
             'picture': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Picture']", 'null': 'True', 'blank': 'True'}),
             'playlists': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'playlists'", 'symmetrical': 'False', 'to': "orm['yabase.Playlist']"}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'users_with_this_radio_as_favorite': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'users_with_this_radio_as_favorite'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.UserProfile']"}),
-            'wall': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'wall_events'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.RadioEvent']"})
+            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'through': "orm['yabase.RadioUser']", 'blank': 'True'})
         },
-        'yabase.radioevent': {
-            'Meta': {'object_name': 'RadioEvent'},
-            'animated_emoticon': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateTimeField', [], {}),
+        'yabase.radiouser': {
+            'Meta': {'unique_together': "(('radio', 'user'),)", 'object_name': 'RadioUser'},
+            'connected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'favorite': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'old_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'picture': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Picture']", 'null': 'True', 'blank': 'True'}),
-            'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.SongInstance']", 'null': 'True', 'blank': 'True'}),
-            'start_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'text': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.UserProfile']", 'null': 'True', 'blank': 'True'})
+            'mood': ('django.db.models.fields.CharField', [], {'default': "'L'", 'max_length': '1'}),
+            'radio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Radio']"}),
+            'radio_selected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'yabase.songinstance': {
             'Meta': {'object_name': 'SongInstance'},
@@ -376,23 +275,19 @@ class Migration(SchemaMigration):
             'track_count': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'track_index': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
         },
-        'yabase.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'bio_text': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'dislikes': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'user_dislikes'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.Radio']"}),
-            'facebook_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
-            'favorites': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'favorites'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.Radio']"}),
+        'yabase.wallevent': {
+            'Meta': {'object_name': 'WallEvent'},
+            'animated_emoticon': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'end_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'join_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_login_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'last_selection_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'likes': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'user_likes'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.Radio']"}),
+            'old_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'picture': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Picture']", 'null': 'True', 'blank': 'True'}),
-            'radios': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'radios'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.Radio']"}),
-            'selection': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'selection'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['yabase.Radio']"}),
-            'twitter_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'unique': 'True'})
+            'radio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Radio']"}),
+            'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.SongInstance']", 'null': 'True', 'blank': 'True'}),
+            'start_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'text': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         }
     }
 

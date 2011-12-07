@@ -10,9 +10,11 @@
 		40207DA1148519AC0086BA6E /* models.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = models.py; sourceTree = "<group>"; };
 		40207DA2148519AC0086BA6E /* tests.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tests.py; sourceTree = "<group>"; };
 		40207DA3148519AC0086BA6E /* views.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = views.py; sourceTree = "<group>"; };
-		40207DA4148519BC0086BA6E /* settings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = settings.py; path = ../settings.py; sourceTree = "<group>"; };
-		40207DA5148519BC0086BA6E /* urls.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = urls.py; path = ../urls.py; sourceTree = "<group>"; };
 		40207DA614851F900086BA6E /* admin.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = admin.py; sourceTree = "<group>"; };
+		403767C2148E2CC500809685 /* settings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = settings.py; path = ../../settings.py; sourceTree = "<group>"; };
+		403767C3148E2CC500809685 /* urls.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = urls.py; path = ../../urls.py; sourceTree = "<group>"; };
+		405ACA86148F765300F8D00A /* admin.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = admin.py; path = ../account/admin.py; sourceTree = "<group>"; };
+		405ACA87148F765300F8D00A /* models.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = models.py; path = ../account/models.py; sourceTree = "<group>"; };
 		409829DD14868BED0043A490 /* api.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = api.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -20,8 +22,9 @@
 		40207D90148519640086BA6E = {
 			isa = PBXGroup;
 			children = (
-				40207DA4148519BC0086BA6E /* settings.py */,
-				40207DA5148519BC0086BA6E /* urls.py */,
+				403767C2148E2CC500809685 /* settings.py */,
+				403767C3148E2CC500809685 /* urls.py */,
+				405ACA84148F763100F8D00A /* account */,
 				40207DA01485199A0086BA6E /* yabase */,
 			);
 			sourceTree = "<group>";
@@ -36,6 +39,15 @@
 				40207DA3148519AC0086BA6E /* views.py */,
 			);
 			name = yabase;
+			sourceTree = "<group>";
+		};
+		405ACA84148F763100F8D00A /* account */ = {
+			isa = PBXGroup;
+			children = (
+				405ACA86148F765300F8D00A /* admin.py */,
+				405ACA87148F765300F8D00A /* models.py */,
+			);
+			name = account;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

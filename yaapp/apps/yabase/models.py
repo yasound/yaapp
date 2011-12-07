@@ -2,16 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 import datetime
+from django.utils.translation import ugettext_lazy as _
 
 
 class Picture(models.Model):
-    #file = models.FileField()
-    file = models.CharField(max_length=120)
+    #file = models.ImageField(upload_to='pictures')
+    file = models.IntegerField();
     
     def __unicode__(self):
         return self.file
 
-class SongMetadata(models.Model):
+class SongMetadata(models.Model):    
     name = models.CharField(max_length=40)
     artist_name = models.CharField(max_length=40)
     album_name = models.CharField(max_length=40)
@@ -22,12 +23,16 @@ class SongMetadata(models.Model):
     bpm = models.FloatField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     score = models.FloatField(null=True, blank=True)
-    duration = models.FloatField() # or models.TimeField() ?
+    duration = models.FloatField()
     genre = models.CharField(max_length=40, null=True, blank=True)
     picture = models.ForeignKey(Picture, null=True, blank=True)
     
     def __unicode__(self):
         return self.name
+
+
+
+
 
 class SongInstance(models.Model):
     song = models.IntegerField(null=True, blank=True) # is it ok?
@@ -37,8 +42,7 @@ class SongInstance(models.Model):
     metadata = models.OneToOneField(SongMetadata)
     
     def __unicode__(self):
-        return unicode(self.metadata)
-
+        return str(self.song)
 
 class Playlist(models.Model):
     name = models.CharField(max_length=40)
@@ -46,7 +50,7 @@ class Playlist(models.Model):
     enabled = models.BooleanField(default=True)
     sync_date = models.DateTimeField(default=datetime.datetime.now)
     CRC = models.IntegerField(null=True, blank=True) # ??
-    songs = models.ManyToManyField(SongInstance, related_name='songs')
+    songs = models.ManyToManyField(SongInstance, related_name='songs_playlist')
     
     def __unicode__(self):
         return self.name
@@ -57,53 +61,113 @@ class Playlist(models.Model):
 
 
 
-class UserProfile(models.Model):
-    user = models.ForeignKey(User, unique=True)
-    
-    join_date = models.DateTimeField(default=datetime.datetime.now)
-    last_login_time = models.DateTimeField(null=True, blank=True)
-    url = models.CharField(max_length=100, null=True, blank=True)
-    # name ?
-    twitter_account = models.CharField(max_length=60, null=True, blank=True)
-    facebook_account = models.CharField(max_length=60, null=True, blank=True)
-    picture = models.ForeignKey(Picture, null=True, blank=True)
-    
-    radios = models.ManyToManyField('Radio', related_name='radios', null=True, blank=True)
-    bio_text = models.TextField(null=True, blank=True)
-    favorites = models.ManyToManyField('Radio', related_name='favorites', null=True, blank=True)
-    likes = models.ManyToManyField('Radio', related_name='user_likes', null=True, blank=True)
-    dislikes = models.ManyToManyField('Radio', related_name='user_dislikes', null=True, blank=True)
-    
-    selection = models.ManyToManyField('Radio', related_name='selection', null=True, blank=True)
-    last_selection_date = models.DateTimeField(null=True, blank=True)
-    
-    def __unicode__(self):
-        return self.user.username
 
-def create_user_profile(sender, instance, created, **kwargs):  
-    if created:  
-        profile, created = UserProfile.objects.get_or_create(user=instance)  
 
-post_save.connect(create_user_profile, sender=User)
+
+
+
 
 class Radio(models.Model):
-    name = models.CharField(max_length=40)
+    creator = models.OneToOneField(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)    
+
     playlists = models.ManyToManyField(Playlist, related_name='playlists')
+    
+    name = models.CharField(max_length=40)
     picture = models.ForeignKey(Picture, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    creation_date= models.DateTimeField(default=datetime.datetime.now)
-    url = models.CharField(max_length=100, null=True, blank=True)
-    connected_users = models.ManyToManyField(UserProfile, related_name='connected_users', null=True, blank=True)
-    users_with_this_radio_as_favorite = models.ManyToManyField(UserProfile, related_name='users_with_this_radio_as_favorite',null=True, blank=True)
+    
     audience_peak = models.FloatField(default=0, null=True, blank=True)
-    likes = models.ManyToManyField(UserProfile, related_name='radio_likes', null=True, blank=True)
-    dislikes = models.ManyToManyField(UserProfile, related_name='radio_dislikes', null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
+    
+    users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
+    
+    next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     
     def __unicode__(self):
         return self.name;
+
+
+
+
+class RadioUserManager(models.Manager):
+    def get_likers(self):
+        likers = self.filter(mood = 'L')
+        return likers
     
-class RadioEvent(models.Model):
+    def get_dislikers(self):
+        dislikers = self.filter(mood = 'D')
+        return dislikers
+    
+    def get_favorite(self):
+        favorites = self.filter(favorite=True)
+        return favorites
+    
+    def get_connected(self):
+        connected = self.filter(connected=True)
+        return connected
+    
+    def get_selected(self):
+        selected = self.filter(radio_selected=True)
+        return selected
+
+
+class RadioUser(models.Model):
+    radio = models.ForeignKey(Radio, verbose_name=_('radio'))
+    user = models.ForeignKey(User, verbose_name=_('user'))
+    
+    MOOD_NEUTRAL = 'Net'
+    MOOD_LIKE = 'L'
+    MOOD_DISLIKE = 'D'
+    
+    MOOD_CHOICES = (
+                    (MOOD_LIKE, _('Like')),
+                    (MOOD_DISLIKE, _('Dislike')),
+                    (MOOD_NEUTRAL, _('Neutral'))
+                    )
+    mood = models.CharField(max_length=1, choices=MOOD_CHOICES, default=MOOD_NEUTRAL)
+    favorite = models.BooleanField(default=False)
+    connected = models.BooleanField(default=False)
+    radio_selected = models.BooleanField(default=False)
+    
+    # custom manager
+    objects = RadioUserManager()
+    
+    def __unicode__(self):
+        return u'%s - %s' % (self.radio, self.user);
+    
+    class Meta:
+        verbose_name = _('Radio user')
+        unique_together = (('radio', 'user'))
+
+
+
+class WallEventManager(models.Manager):
+    def get_events(self, type_value):
+        events = self.filter(type=type_value)
+        return events
+    
+    def get_join_events(self):
+        events = self.get_events('J')
+        return events
+
+    def get_left_events(self):
+        events = self.get_events('L')
+        return events
+
+    def get_message_events(self):
+        events = self.get_events('M')
+        return events
+
+    def get_song_events(self):
+        events = self.get_events('S')
+        return events
+
+
+    
+class WallEvent(models.Model):
     radio = models.ForeignKey(Radio)
     TYPE_CHOICES = (
                     ('J', 'Joined'),
@@ -120,12 +184,15 @@ class RadioEvent(models.Model):
     old_id = models.IntegerField(null=True, blank=True)
     
     # attribute specific to 'joined', 'left' and 'message' events
-    user = models.ForeignKey(UserProfile, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
     
     # attributes specific to 'message' event
     text = models.TextField(null=True, blank=True)
     animated_emoticon = models.IntegerField(null=True, blank=True)
     picture = models.ForeignKey(Picture, null=True, blank=True)
+    
+    # custom manager
+    objects = WallEventManager()
     
     def __unicode__(self):
         s = ''
@@ -143,7 +210,8 @@ class RadioEvent(models.Model):
             s += unicode(self.song)
         return s
     
-    def isValid(self):
+    @property
+    def is_valid(self):
         valid = False
         if type == 'J':
             valid = not (user is None)
@@ -156,6 +224,13 @@ class RadioEvent(models.Model):
         return valid
 
 
+
+
+class NextSong(models.Model):
+    radio = models.ForeignKey(Radio)
+    song = models.ForeignKey(SongInstance)
+
+    order = models.IntegerField()
 
 
 
