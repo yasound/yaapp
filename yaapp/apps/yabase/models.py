@@ -118,7 +118,7 @@ class RadioUser(models.Model):
     radio = models.ForeignKey(Radio, verbose_name=_('radio'))
     user = models.ForeignKey(User, verbose_name=_('user'))
     
-    MOOD_NEUTRAL = 'Net'
+    MOOD_NEUTRAL = 'N'
     MOOD_LIKE = 'L'
     MOOD_DISLIKE = 'D'
     
