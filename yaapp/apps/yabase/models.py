@@ -34,14 +34,44 @@ class SongMetadata(models.Model):
 
 
 class SongInstance(models.Model):
+    playlist = models.ForeignKey('Playlist')
     song = models.IntegerField(null=True, blank=True) # is it ok?
     play_count = models.IntegerField(default=0)
     last_play_time = models.DateTimeField(null=True, blank=True)
     yasound_score = models.FloatField(default=0)
     metadata = models.OneToOneField(SongMetadata)
+    users = models.ManyToManyField(User, through='SongUser', blank=True, null=True)
     
     def __unicode__(self):
         return str(self.song)
+
+
+class SongUser(models.Model):
+    song = models.ForeignKey(SongInstance, verbose_name=_('song'))
+    user = models.ForeignKey(User, verbose_name=_('user'))
+    
+    MOOD_NEUTRAL = 'N'
+    MOOD_LIKE = 'L'
+    MOOD_DISLIKE = 'D'
+    
+    MOOD_CHOICES = (
+                    (MOOD_LIKE, _('Like')),
+                    (MOOD_DISLIKE, _('Dislike')),
+                    (MOOD_NEUTRAL, _('Neutral'))
+                    )
+    mood = models.CharField(max_length=1, choices=MOOD_CHOICES, default=MOOD_NEUTRAL)
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.song, self.user);
+    
+    class Meta:
+        verbose_name = _('Song user')
+        unique_together = (('song', 'user'))
+
+
+
+
+
 
 class Playlist(models.Model):
     name = models.CharField(max_length=40)
@@ -49,7 +79,6 @@ class Playlist(models.Model):
     enabled = models.BooleanField(default=True)
     sync_date = models.DateTimeField(default=datetime.datetime.now)
     CRC = models.IntegerField(null=True, blank=True) # ??
-    songs = models.ManyToManyField(SongInstance, related_name='songs_playlist')
     
     def __unicode__(self):
         return self.name
@@ -77,6 +106,8 @@ class Radio(models.Model):
     picture = models.ForeignKey(Picture, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    genre = models.CharField(max_length=40, blank=True)
+    theme = models.CharField(max_length=60, blank=True)
     
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)

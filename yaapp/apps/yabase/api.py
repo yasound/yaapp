@@ -16,18 +16,18 @@ class SongMetadataResource(ModelResource):
 
 class SongInstanceResource(ModelResource):
     metadata = fields.OneToOneField(SongMetadataResource, 'metadata', full=True)
+    playlist = fields.ForeignKey('yabase.api.PlaylistResource', 'playlist')
     class Meta:
         queryset = SongInstance.objects.all()
         resource_name = 'song'
-        fields = ['song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
+        fields = ['playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
         include_resource_uri = False
 
 class PlaylistResource(ModelResource):
-    songs = fields.ManyToManyField(SongInstanceResource, 'songs')
     class Meta:
         queryset = Playlist.objects.all()
         resource_name = 'playlist'
-        fields = ['name', 'source', 'enabled', 'sync_date', 'CRC', 'songs']
+        fields = ['name', 'source', 'enabled', 'sync_date', 'CRC']
         include_resource_uri = False
 
 
@@ -38,10 +38,12 @@ class RadioResource(ModelResource):
     users = fields.ManyToManyField('yabase.api.UserResource', 'users')
     next_songs = fields.ManyToManyField(SongInstanceResource, 'next_songs')
     
+    # likers ?
+    
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['creator', 'created', 'updated', 'playlists', 'name', 'picture', 'url' 'description', 'audience_peak', 'overall_listening_time', 'users', 'next_songs']
+        fields = ['creator', 'created', 'updated', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'audience_peak', 'overall_listening_time', 'users', 'next_songs']
         include_resource_uri = False;
 
 class UserResource(ModelResource):

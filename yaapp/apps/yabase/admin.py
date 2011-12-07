@@ -9,4 +9,5 @@ admin.site.register(Radio)
 admin.site.register(WallEvent)
 admin.site.register(NextSong)
 admin.site.register(RadioUser)
+admin.site.register(SongUser)
 
