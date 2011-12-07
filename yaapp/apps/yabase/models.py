@@ -6,11 +6,10 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class Picture(models.Model):
-    #file = models.ImageField(upload_to='pictures')
-    file = models.IntegerField();
+    file = models.ImageField(upload_to='pictures')
     
     def __unicode__(self):
-        return self.file
+        return self.file.name
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=40)
