@@ -51,7 +51,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme']
+        fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme']
         include_resource_uri = False;
 
 
