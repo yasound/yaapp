@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     twitter_account = models.CharField(max_length=60, null=True, blank=True)
     facebook_account = models.CharField(max_length=60, null=True, blank=True)
     bio_text = models.TextField(null=True, blank=True)
-    friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
+#    friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
     
     def __unicode__(self):
         return self.user.username
