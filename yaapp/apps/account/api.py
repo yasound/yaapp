@@ -15,3 +15,11 @@ class UserResource(ModelResource):
         resource_name = 'user'
         fields = ['id', 'username', 'first_name', 'last_name']
         include_resource_uri = False
+
+    def dehydrate(self, bundle):
+        userID = bundle.data['id'];
+        
+        picture = User.objects.get(pk=userID).userprofile.picture
+        bundle.data['picture'] = picture
+        
+        return bundle
