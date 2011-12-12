@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 import datetime
 from django.utils.translation import ugettext_lazy as _
+import settings as yabase_settings
 
 
 class Picture(models.Model):
@@ -50,16 +51,7 @@ class SongUser(models.Model):
     song = models.ForeignKey(SongInstance, verbose_name=_('song'))
     user = models.ForeignKey(User, verbose_name=_('user'))
     
-    MOOD_NEUTRAL = 'N'
-    MOOD_LIKE = 'L'
-    MOOD_DISLIKE = 'D'
-    
-    MOOD_CHOICES = (
-                    (MOOD_LIKE, _('Like')),
-                    (MOOD_DISLIKE, _('Dislike')),
-                    (MOOD_NEUTRAL, _('Neutral'))
-                    )
-    mood = models.CharField(max_length=1, choices=MOOD_CHOICES, default=MOOD_NEUTRAL)
+    mood = models.CharField(max_length=1, choices=yabase_settings.MOOD_CHOICES, default=yabase_settings.MOOD_NEUTRAL)
 
     def __unicode__(self):
         return u'%s - %s' % (self.song, self.user);
@@ -124,11 +116,11 @@ class Radio(models.Model):
 
 class RadioUserManager(models.Manager):
     def get_likers(self):
-        likers = self.filter(mood = 'L')
+        likers = self.filter(mood = yabase_settings.MOOD_LIKE)
         return likers
     
     def get_dislikers(self):
-        dislikers = self.filter(mood = 'D')
+        dislikers = self.filter(mood = yabase_settings.MOOD_DISLIKE)
         return dislikers
     
     def get_favorite(self):
@@ -148,16 +140,8 @@ class RadioUser(models.Model):
     radio = models.ForeignKey(Radio, verbose_name=_('radio'))
     user = models.ForeignKey(User, verbose_name=_('user'))
     
-    MOOD_NEUTRAL = 'N'
-    MOOD_LIKE = 'L'
-    MOOD_DISLIKE = 'D'
     
-    MOOD_CHOICES = (
-                    (MOOD_LIKE, _('Like')),
-                    (MOOD_DISLIKE, _('Dislike')),
-                    (MOOD_NEUTRAL, _('Neutral'))
-                    )
-    mood = models.CharField(max_length=1, choices=MOOD_CHOICES, default=MOOD_NEUTRAL)
+    mood = models.CharField(max_length=1, choices=yabase_settings.MOOD_CHOICES, default=yabase_settings.MOOD_NEUTRAL)
     favorite = models.BooleanField(default=False)
     connected = models.BooleanField(default=False)
     radio_selected = models.BooleanField(default=False)
@@ -180,32 +164,26 @@ class WallEventManager(models.Manager):
         return events
     
     def get_join_events(self):
-        events = self.get_events('J')
+        events = self.get_events(yabase_settings.EVENT_JOINED)
         return events
 
     def get_left_events(self):
-        events = self.get_events('L')
+        events = self.get_events(yabase_settings.EVENT_LEFT)
         return events
 
     def get_message_events(self):
-        events = self.get_events('M')
+        events = self.get_events(yabase_settings.EVENT_MESSAGE)
         return events
 
     def get_song_events(self):
-        events = self.get_events('S')
+        events = self.get_events(yabase_settings.EVENT_SONG)
         return events
 
 
     
 class WallEvent(models.Model):
     radio = models.ForeignKey(Radio)
-    TYPE_CHOICES = (
-                    ('J', 'Joined'),
-                    ('L', 'Left'),
-                    ('M', 'Message'),
-                    ('S', 'Song'),
-                    )
-    type = models.CharField(max_length=1, choices = TYPE_CHOICES)
+    type = models.CharField(max_length=1, choices = yabase_settings.EVENT_TYPE_CHOICES)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     
@@ -226,16 +204,16 @@ class WallEvent(models.Model):
     
     def __unicode__(self):
         s = ''
-        if self.type == 'J':
+        if self.type == yabase_settings.EVENT_JOINED:
             s += 'joined: '
             s += unicode(self.user)
-        elif self.type == 'L':
+        elif self.type == yabase_settings.EVENT_LEFT:
             s += 'left: '
             s += unicode(self.user)
-        elif self.type == 'M':
+        elif self.type == yabase_settings.EVENT_MESSAGE:
             s += 'message: from '
             s += unicode(self.user)
-        elif self.	type == 'S':
+        elif self.	type == yabase_settings.EVENT_SONG:
             s += 'song: '
             s += unicode(self.song)
         return s
@@ -243,13 +221,13 @@ class WallEvent(models.Model):
     @property
     def is_valid(self):
         valid = False
-        if type == 'J':
+        if type == yabase_settings.EVENT_JOINED:
             valid = not (user is None)
-        elif type == 'L':
+        elif type == yabase_settings.EVENT_LEFT:
             valid = not (user is None)
-        elif type == 'M':
+        elif type == yabase_settings.EVENT_MESSAGE:
             valid = (not (text is None)) or (not (animated_emoticon is None)) or (not (picture is None))
-        elif type == 'S':
+        elif type == yabase_settings.EVENT_SONG:
             valid = (not (song is None)) and (not (old_id is None))
         return valid
 

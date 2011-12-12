@@ -8,6 +8,7 @@ from tastypie.utils import trailing_slash
 import datetime
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
+import settings as yabase_settings
 
 
 class SongMetadataResource(ModelResource):
@@ -57,7 +58,7 @@ class RadioResource(ModelResource):
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
         
-        likes = Radio.objects.get(pk=radioID).radiouser_set.filter(mood='L').count()
+        likes = Radio.objects.get(pk=radioID).radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         bundle.data['likes'] = likes
         
         listeners = Radio.objects.get(pk=radioID).radiouser_set.filter(connected=True).count()
@@ -140,7 +141,7 @@ class RadioLikerResource(ModelResource):
         return super(RadioLikerResource, self).dispatch(request_type, request, **kwargs)
     
     def get_object_list(self, request):
-        return super(RadioLikerResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__mood='L')
+        return super(RadioLikerResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__mood=yabase_settings.MOOD_LIKE)
 
 
 class RadioUserConnectedResource(ModelResource):    
@@ -169,7 +170,7 @@ class PlayedSongResource(ModelResource):
     song = fields.ForeignKey(SongInstanceResource, 'song', null=True, full=True)
 
     class Meta:
-        queryset = WallEvent.objects.filter(type='S').order_by('-start_date')
+        queryset = WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).order_by('-start_date')
         resource_name = 'songs'
         fields = ['id', 'start_date', 'end_date', 'radio', 'song']
         include_resource_uri = False
