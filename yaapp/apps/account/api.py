@@ -20,6 +20,7 @@ class UserResource(ModelResource):
         userID = bundle.data['id'];
         
         picture = User.objects.get(pk=userID).userprofile.picture
+        picture = 'media/' + unicode(picture)
         bundle.data['picture'] = picture
         
         return bundle
