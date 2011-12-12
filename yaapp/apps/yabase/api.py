@@ -154,13 +154,13 @@ class RadioUserConnectedResource(ModelResource):
 
 
 class PlayedSongResource(ModelResource):
-    radio = fields.ForeignKey(RadioResource, 'radio')
+    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     song = fields.ForeignKey(SongInstanceResource, 'song', null=True, full=True)
 
     class Meta:
         queryset = WallEvent.objects.filter(type='S').order_by('-start_date')
         resource_name = 'songs'
-        fields = ['song']
+        fields = ['id', 'start_date', 'end_date', 'radio', 'song']
         include_resource_uri = False
         filtering = {
             'radio': 'exact',
