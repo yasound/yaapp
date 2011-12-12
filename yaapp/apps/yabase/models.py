@@ -6,11 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 import settings as yabase_settings
 
 
-class Picture(models.Model):
-    file = models.ImageField(upload_to='pictures')
-    
-    def __unicode__(self):
-        return self.file.name
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=40)
@@ -25,7 +20,7 @@ class SongMetadata(models.Model):
     score = models.FloatField(null=True, blank=True)
     duration = models.FloatField()
     genre = models.CharField(max_length=40, null=True, blank=True)
-    picture = models.ForeignKey(Picture, null=True, blank=True)
+    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     
     def __unicode__(self):
         return self.name
@@ -95,7 +90,7 @@ class Radio(models.Model):
     playlists = models.ManyToManyField(Playlist, related_name='playlists')
     
     name = models.CharField(max_length=40)
-    picture = models.ForeignKey(Picture, null=True, blank=True)
+    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     genre = models.CharField(max_length=40, blank=True)
@@ -197,7 +192,7 @@ class WallEvent(models.Model):
     # attributes specific to 'message' event
     text = models.TextField(null=True, blank=True)
     animated_emoticon = models.IntegerField(null=True, blank=True)
-    picture = models.ForeignKey(Picture, null=True, blank=True)
+    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     
     # custom manager
     objects = WallEventManager()

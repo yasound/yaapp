@@ -3,8 +3,10 @@ from django.contrib import admin
 from tastypie.api import Api
 from yabase.api import NextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
-    UserResource, RadioResource, RadioLikerResource, RadioUserConnectedResource, \
+    RadioResource, RadioLikerResource, RadioUserConnectedResource, \
     PlayedSongResource, WallEventResource
+from account.api import UserResource
+
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 

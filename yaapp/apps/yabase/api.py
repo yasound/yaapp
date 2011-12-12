@@ -9,6 +9,7 @@ import datetime
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 import settings as yabase_settings
+from account.api import UserResource
 
 
 class SongMetadataResource(ModelResource):
@@ -65,14 +66,6 @@ class RadioResource(ModelResource):
         bundle.data['listeners'] = listeners
         
         return bundle
-
-
-class UserResource(ModelResource):
-    class Meta:
-        queryset = User.objects.all()
-        resource_name = 'user'
-        fields = ['id', 'username', 'first_name', 'last_name']
-        include_resource_uri = False
 
 class WallEventResource(ModelResource):
   radio = fields.ForeignKey(RadioResource, 'radio', full=True)

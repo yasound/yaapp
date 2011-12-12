@@ -8,13 +8,6 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Picture'
-        db.create_table('yabase_picture', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('yabase', ['Picture'])
-
         # Adding model 'SongMetadata'
         db.create_table('yabase_songmetadata', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -30,13 +23,14 @@ class Migration(SchemaMigration):
             ('score', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
             ('duration', self.gf('django.db.models.fields.FloatField')()),
             ('genre', self.gf('django.db.models.fields.CharField')(max_length=40, null=True, blank=True)),
-            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal('yabase', ['SongMetadata'])
 
         # Adding model 'SongInstance'
         db.create_table('yabase_songinstance', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('playlist', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Playlist'])),
             ('song', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('play_count', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('last_play_time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
@@ -44,6 +38,18 @@ class Migration(SchemaMigration):
             ('metadata', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['yabase.SongMetadata'], unique=True)),
         ))
         db.send_create_signal('yabase', ['SongInstance'])
+
+        # Adding model 'SongUser'
+        db.create_table('yabase_songuser', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('song', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.SongInstance'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('mood', self.gf('django.db.models.fields.CharField')(default='N', max_length=1)),
+        ))
+        db.send_create_signal('yabase', ['SongUser'])
+
+        # Adding unique constraint on 'SongUser', fields ['song', 'user']
+        db.create_unique('yabase_songuser', ['song_id', 'user_id'])
 
         # Adding model 'Playlist'
         db.create_table('yabase_playlist', (
@@ -56,14 +62,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('yabase', ['Playlist'])
 
-        # Adding M2M table for field songs on 'Playlist'
-        db.create_table('yabase_playlist_songs', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('playlist', models.ForeignKey(orm['yabase.playlist'], null=False)),
-            ('songinstance', models.ForeignKey(orm['yabase.songinstance'], null=False))
-        ))
-        db.create_unique('yabase_playlist_songs', ['playlist_id', 'songinstance_id'])
-
         # Adding model 'Radio'
         db.create_table('yabase_radio', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -71,9 +69,11 @@ class Migration(SchemaMigration):
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=40)),
-            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('genre', self.gf('django.db.models.fields.CharField')(max_length=40, blank=True)),
+            ('theme', self.gf('django.db.models.fields.CharField')(max_length=60, blank=True)),
             ('audience_peak', self.gf('django.db.models.fields.FloatField')(default=0, null=True, blank=True)),
             ('overall_listening_time', self.gf('django.db.models.fields.FloatField')(default=0, null=True, blank=True)),
         ))
@@ -92,7 +92,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('radio', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Radio'])),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('mood', self.gf('django.db.models.fields.CharField')(default='L', max_length=1)),
+            ('mood', self.gf('django.db.models.fields.CharField')(default='N', max_length=1)),
             ('favorite', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('connected', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('radio_selected', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -114,7 +114,7 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
             ('text', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('animated_emoticon', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.Picture'], null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal('yabase', ['WallEvent'])
 
@@ -133,8 +133,8 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'RadioUser', fields ['radio', 'user']
         db.delete_unique('yabase_radiouser', ['radio_id', 'user_id'])
 
-        # Deleting model 'Picture'
-        db.delete_table('yabase_picture')
+        # Removing unique constraint on 'SongUser', fields ['song', 'user']
+        db.delete_unique('yabase_songuser', ['song_id', 'user_id'])
 
         # Deleting model 'SongMetadata'
         db.delete_table('yabase_songmetadata')
@@ -142,11 +142,11 @@ class Migration(SchemaMigration):
         # Deleting model 'SongInstance'
         db.delete_table('yabase_songinstance')
 
+        # Deleting model 'SongUser'
+        db.delete_table('yabase_songuser')
+
         # Deleting model 'Playlist'
         db.delete_table('yabase_playlist')
-
-        # Removing M2M table for field songs on 'Playlist'
-        db.delete_table('yabase_playlist_songs')
 
         # Deleting model 'Radio'
         db.delete_table('yabase_radio')
@@ -208,18 +208,12 @@ class Migration(SchemaMigration):
             'radio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Radio']"}),
             'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.SongInstance']"})
         },
-        'yabase.picture': {
-            'Meta': {'object_name': 'Picture'},
-            'file': ('django.db.models.fields.IntegerField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
         'yabase.playlist': {
             'CRC': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'Meta': {'object_name': 'Playlist'},
             'enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'songs': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'songs'", 'symmetrical': 'False', 'to': "orm['yabase.SongInstance']"}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'sync_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'})
         },
@@ -229,12 +223,14 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'creator': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'owned_radios'", 'unique': 'True', 'null': 'True', 'to': "orm['auth.User']"}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'genre': ('django.db.models.fields.CharField', [], {'max_length': '40', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
             'next_songs': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['yabase.SongInstance']", 'through': "orm['yabase.NextSong']", 'symmetrical': 'False'}),
             'overall_listening_time': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
-            'picture': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Picture']", 'null': 'True', 'blank': 'True'}),
+            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'playlists': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'playlists'", 'symmetrical': 'False', 'to': "orm['yabase.Playlist']"}),
+            'theme': ('django.db.models.fields.CharField', [], {'max_length': '60', 'blank': 'True'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'through': "orm['yabase.RadioUser']", 'blank': 'True'})
@@ -244,7 +240,7 @@ class Migration(SchemaMigration):
             'connected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'favorite': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'mood': ('django.db.models.fields.CharField', [], {'default': "'L'", 'max_length': '1'}),
+            'mood': ('django.db.models.fields.CharField', [], {'default': "'N'", 'max_length': '1'}),
             'radio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Radio']"}),
             'radio_selected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
@@ -255,7 +251,9 @@ class Migration(SchemaMigration):
             'last_play_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'metadata': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['yabase.SongMetadata']", 'unique': 'True'}),
             'play_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'playlist': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Playlist']"}),
             'song': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'through': "orm['yabase.SongUser']", 'blank': 'True'}),
             'yasound_score': ('django.db.models.fields.FloatField', [], {'default': '0'})
         },
         'yabase.songmetadata': {
@@ -270,10 +268,17 @@ class Migration(SchemaMigration):
             'genre': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'picture': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Picture']", 'null': 'True', 'blank': 'True'}),
+            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'score': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'track_count': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'track_index': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
+        },
+        'yabase.songuser': {
+            'Meta': {'unique_together': "(('song', 'user'),)", 'object_name': 'SongUser'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'mood': ('django.db.models.fields.CharField', [], {'default': "'N'", 'max_length': '1'}),
+            'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.SongInstance']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'yabase.wallevent': {
             'Meta': {'object_name': 'WallEvent'},
@@ -281,7 +286,7 @@ class Migration(SchemaMigration):
             'end_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'old_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'picture': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Picture']", 'null': 'True', 'blank': 'True'}),
+            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'radio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.Radio']"}),
             'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.SongInstance']", 'null': 'True', 'blank': 'True'}),
             'start_date': ('django.db.models.fields.DateTimeField', [], {}),
