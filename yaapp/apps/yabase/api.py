@@ -39,7 +39,7 @@ class PlaylistResource(ModelResource):
 
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
-    creator = fields.OneToOneField('yabase.api.UserResource', 'creator', full=False)
+    creator = fields.OneToOneField('yabase.api.UserResource', 'creator', full=True)
     url = fields.CharField('url')
     description = fields.CharField('description')
     
@@ -53,6 +53,17 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme']
         include_resource_uri = False;
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        
+        likes = Radio.objects.get(pk=radioID).radiouser_set.filter(mood='L').count()
+        bundle.data['likes'] = likes
+        
+        listeners = Radio.objects.get(pk=radioID).radiouser_set.filter(connected=True).count()
+        bundle.data['listeners'] = listeners
+        
+        return bundle
 
 
 class UserResource(ModelResource):
