@@ -8,6 +8,8 @@ from tastypie.utils import trailing_slash
 import datetime
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
+from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
+from tastypie.models import ApiKey
 
 class UserResource(ModelResource):
     class Meta:
@@ -15,6 +17,7 @@ class UserResource(ModelResource):
         resource_name = 'user'
         fields = ['id', 'username', 'first_name', 'last_name']
         include_resource_uri = False
+#        authentication = ApiKeyAuthentication()
 
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
@@ -24,3 +27,12 @@ class UserResource(ModelResource):
         bundle.data['picture'] = picture
         
         return bundle
+
+class UserApiKeyResource(ModelResource):
+    class Meta:
+        queryset = ApiKey.objects.all()
+        resource_name = 'api_key'
+        authentication = BasicAuthentication()
+        
+    def apply_authorization_limits(self, request, object_list):
+        return object_list.filter(user=request.user)
