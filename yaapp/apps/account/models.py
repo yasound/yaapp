@@ -25,9 +25,9 @@ post_save.connect(create_user_profile, sender=User)
 
 post_save.connect(create_api_key, sender=User)
 
- 
+
 #for user in User.objects.all(): 
-#    ApiKey.objects.get_or_create(user=user) 
+#    ApiKey.objects.get_or_create(user=user)
 
 
 
