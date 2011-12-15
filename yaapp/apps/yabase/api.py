@@ -70,17 +70,18 @@ class RadioResource(ModelResource):
         return bundle
 
 class WallEventResource(ModelResource):
-  radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-  song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
-  user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
-  class Meta:
-    queryset = WallEvent.objects.all()
-    resource_name = 'wall_event'
-    fields = ['id', 'type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
-    include_resource_uri = False
-    authorization= Authorization()
-    authentication = Authentication()
-    allowed_methods = ['get', 'post']
+    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
+    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
+    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
+    class Meta:
+        queryset = WallEvent.objects.all()
+        resource_name = 'wall_event'
+        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        include_resource_uri = False
+        authorization= Authorization()
+        authentication = Authentication()
+        allowed_methods = ['get', 'post']
+    
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
