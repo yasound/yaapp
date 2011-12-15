@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'account',
     'wall',
     'yabase',
+    'tastypie',
 )
 
 # A sample logging configuration. The only tangible logging

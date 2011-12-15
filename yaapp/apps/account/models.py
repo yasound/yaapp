@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
+from tastypie.models import create_api_key
+from tastypie.models import ApiKey
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
@@ -21,9 +23,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 
+post_save.connect(create_api_key, sender=User)
 
-
-
+ 
+for user in User.objects.all(): 
+    ApiKey.objects.get_or_create(user=user) 
 
 
 

@@ -10,6 +10,7 @@ from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 import settings as yabase_settings
 from account.api import UserResource
+from tastypie.authentication import ApiKeyAuthentication 
 
 
 class SongMetadataResource(ModelResource):
@@ -55,6 +56,7 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'picture']
         include_resource_uri = False;
+#        authentication = ApiKeyAuthentication()
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
