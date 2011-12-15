@@ -25,6 +25,8 @@ class SongMetadata(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        db_table = u'yaapp'
 
 
 
@@ -41,6 +43,9 @@ class SongInstance(models.Model):
     def __unicode__(self):
         return str(self.song)
 
+    class Meta:
+        db_table = u'yaapp'
+
 
 class SongUser(models.Model):
     song = models.ForeignKey(SongInstance, verbose_name=_('song'))
@@ -54,6 +59,7 @@ class SongUser(models.Model):
     class Meta:
         verbose_name = _('Song user')
         unique_together = (('song', 'user'))
+        db_table = u'yaapp'
 
 
 
@@ -70,6 +76,8 @@ class Playlist(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        db_table = u'yaapp'
 
 
 
@@ -106,6 +114,8 @@ class Radio(models.Model):
     def __unicode__(self):
         return self.name;
 
+    class Meta:
+        db_table = u'yaapp'
 
 
 
@@ -130,6 +140,10 @@ class RadioUserManager(models.Manager):
         selected = self.filter(radio_selected=True)
         return selected
 
+    class Meta:
+        db_table = u'yaapp'
+
+
 
 class RadioUser(models.Model):
     radio = models.ForeignKey(Radio, verbose_name=_('radio'))
@@ -150,6 +164,7 @@ class RadioUser(models.Model):
     class Meta:
         verbose_name = _('Radio user')
         unique_together = (('radio', 'user'))
+        db_table = u'yaapp'
 
 
 
@@ -173,7 +188,9 @@ class WallEventManager(models.Manager):
     def get_song_events(self):
         events = self.get_events(yabase_settings.EVENT_SONG)
         return events
-
+  
+    class Meta:
+        db_table = u'yaapp'
 
     
 class WallEvent(models.Model):
@@ -226,6 +243,8 @@ class WallEvent(models.Model):
             valid = (not (song is None)) and (not (old_id is None))
         return valid
 
+    class Meta:
+        db_table = u'yaapp'
 
 
 
@@ -235,6 +254,8 @@ class NextSong(models.Model):
 
     order = models.IntegerField()
 
+    class Meta:
+        db_table = u'yaapp'
 
 
 
@@ -247,5 +268,94 @@ class NextSong(models.Model):
 
 
 
+
+
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#     * Rearrange models' order
+#     * Make sure each model has one field with primary_key=True
+# Feel free to rename the models, but don't rename db_table values or field names.
+#
+# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
+# into your database.
+
+class YasoundArtist(models.Model):
+    id = models.IntegerField(primary_key=True)
+    echonest_id = models.CharField(unique=True, max_length=20)
+    lastfm_id = models.CharField(max_length=20)
+    musicbrainz_id = models.CharField(max_length=36)
+    name = models.CharField(max_length=255)
+    name_simplified = models.CharField(max_length=255)
+    comment = models.TextField()
+    class Meta:
+        db_table = u'yasound_artist'
+    def __unicode__(self):
+        return self.name
+
+class YasoundAlbum(models.Model):
+    id = models.IntegerField(primary_key=True)
+    lastfm_id = models.CharField(unique=True, max_length=20)
+    musicbrainz_id = models.CharField(max_length=36)
+    name = models.CharField(max_length=255)
+    name_simplified = models.CharField(max_length=255)
+    cover_filename = models.CharField(max_length=45)
+    class Meta:
+        db_table = u'yasound_album'
+    def __unicode__(self):
+        return self.name
+
+class YasoundGenre(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=45)
+    namecanonical = models.CharField(unique=True, max_length=45)
+    class Meta:
+        db_table = u'yasound_genre'
+    def __unicode__(self):
+        return self.name
+
+class YasoundSong(models.Model):
+    id = models.IntegerField(primary_key=True)
+    artist = models.ForeignKey(YasoundArtist)
+    album = models.ForeignKey(YasoundAlbum)
+    echonest_id = models.CharField(max_length=20)
+    lastfm_id = models.CharField(max_length=20)
+    lastfm_fingerprint_id = models.CharField(max_length=20)
+    musicbrainz_id = models.CharField(max_length=36)
+    filename = models.CharField(max_length=45)
+    filesize = models.IntegerField()
+    name = models.CharField(max_length=255)
+    name_simplified = models.CharField(max_length=255)
+    artist_name = models.CharField(max_length=255)
+    artist_name_simplified = models.CharField(max_length=255)
+    album_name = models.CharField(max_length=255)
+    album_name_simplified = models.CharField(max_length=255)
+    duration = models.IntegerField()
+    danceability = models.DecimalField(max_digits=10, decimal_places=2)
+    loudness = models.DecimalField(max_digits=10, decimal_places=2)
+    energy = models.DecimalField(max_digits=10, decimal_places=2)
+    tempo = models.SmallIntegerField()
+    tonality_mode = models.SmallIntegerField()
+    tonality_key = models.SmallIntegerField()
+    fingerprint = models.TextField()
+    fingerprint_hash = models.CharField(max_length=45)
+    echoprint_version = models.CharField(max_length=8)
+    publish_at = models.DateTimeField()
+    published = models.BooleanField()
+    locked = models.BooleanField()
+    allowed_countries = models.CharField(max_length=255)
+    comment = models.TextField()
+    cover_filename = models.CharField(max_length=45)
+    class Meta:
+        db_table = u'yasound_song'
+    def __unicode__(self):
+        return self.name
+
+class YasoundSongGenre(models.Model):
+    song = models.ForeignKey(YasoundSong)
+    genre = models.ForeignKey(YasoundGenre)
+    class Meta:
+        db_table = u'yasound_song_genre'
+    def __unicode__(self):
+        return self.genre.name
 
 
