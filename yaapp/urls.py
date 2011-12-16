@@ -5,7 +5,7 @@ from yabase.api import NextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, RadioLikerResource, RadioUserConnectedResource, \
     PlayedSongResource, WallEventResource
-from account.api import UserResource, UserApiKeyResource
+from account.api import UserResource, UserApiKeyResource, LoginResource
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -18,6 +18,7 @@ api.register(UserResource())
 api.register(RadioResource())
 api.register(WallEventResource())
 api.register(UserApiKeyResource())
+api.register(LoginResource())
 
 next_songs = NextSongsResource()
 wall_event = RadioWallEventResource()
@@ -37,6 +38,7 @@ urlpatterns = patterns('',
     #(r'^wall/', include('wall.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists/$', 'yabase.views.upload_playlists'),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(next_songs.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(wall_event.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_likers.urls)),

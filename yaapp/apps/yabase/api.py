@@ -7,10 +7,11 @@ from django.shortcuts import get_object_or_404
 from tastypie.utils import trailing_slash
 import datetime
 from tastypie.authentication import Authentication
-from tastypie.authorization import Authorization
+from tastypie.authorization import DjangoAuthorization, Authorization
 import settings as yabase_settings
 from account.api import UserResource
 from tastypie.authentication import ApiKeyAuthentication 
+from tastypie.resources import ModelResource, ALL
 
 
 class SongMetadataResource(ModelResource):
@@ -19,7 +20,7 @@ class SongMetadataResource(ModelResource):
         resource_name = 'metadata'
         fields = ['name', 'artist_name', 'album_name', 'track_index', 'track_count', 'disc_index', 'disc_count', 'bpm', 'date', 'score', 'duration', 'genre', 'picture']
         include_resource_uri = False
-        authorization= Authorization()
+        authorization= DjangoAuthorization()
         authentication = Authentication()
 
 class SongInstanceResource(ModelResource):
@@ -40,11 +41,15 @@ class PlaylistResource(ModelResource):
 
 
 
+
+
+
+
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
-    creator = fields.OneToOneField('yabase.api.UserResource', 'creator', full=True)
-    url = fields.CharField('url')
-    description = fields.CharField('description')
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+#    url = fields.CharField('url')
+#    description = fields.CharField('description')
     
 #    users = fields.ManyToManyField('yabase.api.UserResource', 'users')
 #    next_songs = fields.ManyToManyField(SongInstanceResource, 'next_songs')
@@ -57,6 +62,12 @@ class RadioResource(ModelResource):
         fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'picture']
         include_resource_uri = False;
 #        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
+        authorization = DjangoAuthorization()
+        allowed_methods = ['get', 'post']
+        filtering = {
+            'creator': ALL,
+        }
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];

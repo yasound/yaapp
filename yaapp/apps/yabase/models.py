@@ -18,7 +18,7 @@ class SongMetadata(models.Model):
     bpm = models.FloatField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     score = models.FloatField(null=True, blank=True)
-    duration = models.FloatField()
+    duration = models.FloatField(null=True, blank=True)
     genre = models.CharField(max_length=40, null=True, blank=True)
     picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     
@@ -31,12 +31,13 @@ class SongMetadata(models.Model):
 
 class SongInstance(models.Model):
     playlist = models.ForeignKey('Playlist')
-    song = models.IntegerField(null=True, blank=True) # is it ok?
+    song = models.IntegerField(null=True, blank=True) # song ID in the Song db
     play_count = models.IntegerField(default=0)
     last_play_time = models.DateTimeField(null=True, blank=True)
     yasound_score = models.FloatField(default=0)
     metadata = models.OneToOneField(SongMetadata)
     users = models.ManyToManyField(User, through='SongUser', blank=True, null=True)
+    order = models.IntegerField(null=True, blank=True) # song index in the playlist
     
     def __unicode__(self):
         return str(self.song)
@@ -83,7 +84,7 @@ class Playlist(models.Model):
 
 
 class Radio(models.Model):
-    creator = models.OneToOneField(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
+    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
@@ -217,13 +218,13 @@ class WallEvent(models.Model):
     def is_valid(self):
         valid = False
         if type == yabase_settings.EVENT_JOINED:
-            valid = not (user is None)
+            valid = not (self.user is None)
         elif type == yabase_settings.EVENT_LEFT:
-            valid = not (user is None)
+            valid = not (self.user is None)
         elif type == yabase_settings.EVENT_MESSAGE:
-            valid = (not (text is None)) or (not (animated_emoticon is None)) or (not (picture is None))
+            valid = (not (self.text is None)) or (not (self.animated_emoticon is None)) or (not (self.picture is None))
         elif type == yabase_settings.EVENT_SONG:
-            valid = (not (song is None)) and (not (old_id is None))
+            valid = (not (self.song is None)) and (not (self.old_id is None))
         return valid
 
 

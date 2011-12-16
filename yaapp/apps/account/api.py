@@ -10,6 +10,7 @@ from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
 from tastypie.models import ApiKey
+from tastypie.serializers import Serializer
 
 class UserResource(ModelResource):
 #    userprofile = fields.OneToOneField('account.api.UserProfileResource', 'userprofile', full=True)
@@ -25,24 +26,11 @@ class UserResource(ModelResource):
 
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
-        userprofile = User.objects.get(pk=userID).userprofile
-        
-        picture = userprofile.picture
-        picture = '/media/' + unicode(picture)
-        
-        bio = userprofile.bio_text
-        facebook_account = userprofile.facebook_account
-        twitter_account = userprofile.twitter_account
-        url = userprofile.url
-        
-        bundle.data['picture'] = picture
-        bundle.data['bio_text'] = bio
-        bundle.data['facebook_account'] = facebook_account
-        bundle.data['twitter_account'] = twitter_account
-        bundle.data['url'] = url
+        userprofile = User.objects.get(pk=userID).userprofile        
+        userprofile.fill_user_bundle(bundle)
         return bundle
     
-    def updateUserProfile(self, user_profile, bundle):
+    def update_user_profile(self, user_profile, bundle):
         user_profile.bio_text = bundle.data['bio_text']
         user_profile.facebook_account = bundle.data['facebook_account']
         user_profile.twitter_account = bundle.data['twitter_account']
@@ -53,7 +41,16 @@ class UserResource(ModelResource):
         
         user = user_resource.obj
         user_profile = user.userprofile
-        self.updateUserProfile(user_profile, bundle)
+        self.update_user_profile(user_profile, bundle)
+        
+        return user_resource
+    
+    def obj_update(self, bundle, request=None, **kwargs):
+        user_resource = super(UserResource, self).obj_update(bundle, request, **kwargs)
+        
+        user = user_resource.obj
+        user_profile = user.userprofile
+        self.update_user_profile(user_profile, bundle)
         
         return user_resource
     
@@ -65,7 +62,6 @@ class UserResource(ModelResource):
 #        resource_name = 'userprofile'
 #        fields = ['id', 'twitter_account', 'facebook_account', 'bio_text']
 #        include_resource_uri = False    
-    
 
 class UserApiKeyResource(ModelResource):
     class Meta: 
@@ -78,4 +74,22 @@ class UserApiKeyResource(ModelResource):
     def apply_authorization_limits(self, request, object_list):
         print request.user
         return object_list.filter(user=request.user)
+    
+class LoginResource(ModelResource):
+    class Meta: 
+        queryset = User.objects.all()
+        resource_name = 'login'
+        include_resource_uri = False
+        fields = ['id', 'username']
+        authentication = BasicAuthentication()
+        
+    def dehydrate(self, bundle):
+        userID = bundle.data['id'];
+        userprofile = User.objects.get(pk=userID).userprofile        
+        userprofile.fill_user_bundle(bundle)
+        return bundle
+    
+    def apply_authorization_limits(self, request, object_list):
+        print request.user
+        return object_list.filter(id=request.user.id)
         
