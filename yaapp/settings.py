@@ -23,17 +23,51 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
-#        'NAME': '/var/www/dev.yasound.com/root/yaapp/db.dat',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+if LOCAL_MODE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        },
+        'yasound': {
+            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': os.path.join(PROJECT_PATH, 'db2.dat'),                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
+            'USER': 'yaapp',                      # Not used with sqlite3.
+            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
+            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
+        },
+        'yasound': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
+            'USER': 'yaapp',                      # Not used with sqlite3.
+            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
+            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
+        }
+
+    }
+
+# yaapp/apps/yabase/legacy_models.py
+DATABASE_ROUTERS = ['yabase.router.YaappRouter']
+#DATABASE_ROUTERS = ['legacy_models.YaappRouter']
+
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -170,3 +204,6 @@ LOGGING = {
 }
 
 AUTH_PROFILE_MODULE = 'account.UserProfile'
+
+
+

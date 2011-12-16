@@ -10,3 +10,14 @@ admin.site.register(NextSong)
 admin.site.register(RadioUser)
 admin.site.register(SongUser)
 
+# yasound read only song db:
+class YasoundSongAdmin(admin.ModelAdmin):
+    list_display = ('name')
+
+
+admin.site.register(YasoundSong)
+admin.site.register(YasoundArtist)
+admin.site.register(YasoundAlbum)
+admin.site.register(YasoundGenre)
+admin.site.register(YasoundSongGenre)
+
