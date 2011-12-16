@@ -17,23 +17,19 @@ class YaappRouter(object):
         "Point all operations on yabase models to 'default'"
 	if model._meta.app_label != 'yabase':
             return None
-        if model._meta.db_table[:8] == 'yasound_':
-            return 'yasound'
-        return 'default'
+        return model._meta.db_name
 
     def db_for_write(self, model, **hints):
         "Point all operations on yabase models to 'default'"
 	if model._meta.app_label != 'yabase':
             return None
-        if model._meta.db_table[:8] == 'yasound_':
-            return 'yasound'
-        return 'default'
+        return model._meta.db_name
 
     def allow_relation(self, obj1, obj2, **hints):
         "Allow any relation if a model in yabase is involved"
 	if model._meta.app_label != 'yabase':
             return None
-        if model._meta.db_table[:8] != 'yasound_':
+        if model._meta.db_name != 'yasound':
             return True
         return False
 

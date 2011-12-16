@@ -26,7 +26,7 @@ class SongMetadata(models.Model):
         return self.name
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -44,7 +44,7 @@ class SongInstance(models.Model):
         return str(self.song)
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 class SongUser(models.Model):
@@ -59,7 +59,7 @@ class SongUser(models.Model):
     class Meta:
         verbose_name = _('Song user')
         unique_together = (('song', 'user'))
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -77,7 +77,7 @@ class Playlist(models.Model):
         return self.name
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -115,7 +115,7 @@ class Radio(models.Model):
         return self.name;
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -141,7 +141,7 @@ class RadioUserManager(models.Manager):
         return selected
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -164,7 +164,7 @@ class RadioUser(models.Model):
     class Meta:
         verbose_name = _('Radio user')
         unique_together = (('radio', 'user'))
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -190,7 +190,7 @@ class WallEventManager(models.Manager):
         return events
   
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
     
 class WallEvent(models.Model):
@@ -244,7 +244,7 @@ class WallEvent(models.Model):
         return valid
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -255,7 +255,7 @@ class NextSong(models.Model):
     order = models.IntegerField()
 
     class Meta:
-        db_table = u'yaapp'
+        db_name = u'default'
 
 
 
@@ -289,6 +289,7 @@ class YasoundArtist(models.Model):
     comment = models.TextField()
     class Meta:
         db_table = u'yasound_artist'
+        db_name = u'yasound'
     def __unicode__(self):
         return self.name
 
@@ -301,6 +302,7 @@ class YasoundAlbum(models.Model):
     cover_filename = models.CharField(max_length=45)
     class Meta:
         db_table = u'yasound_album'
+        db_name = u'yasound'
     def __unicode__(self):
         return self.name
 
@@ -310,6 +312,7 @@ class YasoundGenre(models.Model):
     namecanonical = models.CharField(unique=True, max_length=45)
     class Meta:
         db_table = u'yasound_genre'
+        db_name = u'yasound'
     def __unicode__(self):
         return self.name
 
@@ -347,6 +350,7 @@ class YasoundSong(models.Model):
     cover_filename = models.CharField(max_length=45)
     class Meta:
         db_table = u'yasound_song'
+        db_name = u'yasound'
     def __unicode__(self):
         return self.name
 
@@ -355,6 +359,7 @@ class YasoundSongGenre(models.Model):
     genre = models.ForeignKey(YasoundGenre)
     class Meta:
         db_table = u'yasound_song_genre'
+        db_name = u'yasound'
     def __unicode__(self):
         return self.genre.name
 
