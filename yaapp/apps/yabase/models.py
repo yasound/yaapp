@@ -5,6 +5,8 @@ import datetime
 from django.utils.translation import ugettext_lazy as _
 import settings as yabase_settings
 
+import django.db.models.options as options
+options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 
 class SongMetadata(models.Model):    
