@@ -8,8 +8,6 @@ import zlib
 def upload_playlists(request, radio_id):
     radio = get_object_or_404(Radio, pk=radio_id)
 
-    return HttpResponse("short response")
-
     print 'upload_playlists'
     print request.FILES 
     file = request.FILES['playlists_data']
