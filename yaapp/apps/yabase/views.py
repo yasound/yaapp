@@ -7,9 +7,8 @@ import zlib
 @csrf_exempt
 def upload_playlists(request, radio_id):
     radio = get_object_or_404(Radio, pk=radio_id)
-    
-#    import pdb
-#    pdb.set_trace()
+
+    return HttpResponse("short response")
 
     print 'upload_playlists'
     print request.FILES 
@@ -17,6 +16,7 @@ def upload_playlists(request, radio_id):
     content_compressed = file.read()
     content_uncompressed = zlib.decompress(content_compressed)
     lines = content_uncompressed.split('\n')
+    print 'nb lines: %d' % len(lines)
     
     ACTION_ADD_TAG = 'ADD'
     ACTION_DEL_TAG = 'DEL'
@@ -54,6 +54,6 @@ def upload_playlists(request, radio_id):
             song_name = elements[2]
 #            print "song: %(song)s - %(artist)s - %(album)s (%(order)d)" % {"song": song_name, "artist": artist_name, "album": album_name, "order": order}
             metadata = SongMetadata.objects.create(name=song_name, artist_name=artist_name, album_name=album_name)
-            song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, song=0, order=order)
+            song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, song=0, order=order, play_count=0, yasound_score=0)
     
-    return HttpResponse("You're trying to upload playlists for radio '%s'\n" % radio)
+    return HttpResponse("You've successfully uploaded playlists to radio '%s'\n" % radio)

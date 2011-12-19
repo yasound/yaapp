@@ -12,32 +12,32 @@
 class YaappRouter(object):
     """A router to control all database operations on models in
     the yabase application"""
-
+    
     def db_for_read(self, model, **hints):
         "Point all operations on yabase models to 'default'"
-	if model._meta.app_label != 'yabase':
+        if model._meta.app_label != 'yabase':
             return None
         return model._meta.db_name
-
+    
     def db_for_write(self, model, **hints):
         "Point all operations on yabase models to 'default'"
-	if model._meta.app_label != 'yabase':
+        if model._meta.app_label != 'yabase':
             return None
         return model._meta.db_name
-
+    
     def allow_relation(self, obj1, obj2, **hints):
         "Allow any relation if a model in yabase is involved"
-	if model._meta.app_label != 'yabase':
+        if obj1._meta.app_label != 'yabase' or obj2._meta.app_label != 'yabase':
             return None
-        if model._meta.db_name != 'yasound':
+        if obj1._meta.db_name == obj2._meta.db_name:
             return True
         return False
-
+    
     def allow_syncdb(self, db, model):
         "Make sure the yabase app only appears on the 'default' db"
-	if model._meta.app_label != 'yabase':
+        if model._meta.app_label != 'yabase':
             return None
         if db == 'yasound':
             return False
         return True
-
+    
