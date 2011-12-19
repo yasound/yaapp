@@ -14,6 +14,8 @@ PRODUCTION_MODE = ( DJANGO_MODE == 'production' )
 DEVELOPMENT_MODE = ( DJANGO_MODE == 'development' )
 LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 
+BROKER_URL = "django://"
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -178,6 +180,7 @@ INSTALLED_APPS = (
     'wall',
     'yabase',
     'tastypie',
+    "djkombu",
 )
 
 # A sample logging configuration. The only tangible logging
