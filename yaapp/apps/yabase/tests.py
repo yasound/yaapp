@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from models import Radio
-from yabase.models import RadioUser
-
+from models import RadioUser
+import settings as yabase_settings
 
 class TestModels(TestCase):
     def setUp(self):
@@ -25,7 +25,7 @@ class TestModels(TestCase):
         ru.save()
         
         # test default fields
-        self.assertEquals(ru.mood, RadioUser.MOOD_NEUTRAL)
+        self.assertEquals(ru.mood, yabase_settings.MOOD_NEUTRAL)
         
         # test favorite
         favorites = RadioUser.objects.get_favorite()
@@ -41,7 +41,7 @@ class TestModels(TestCase):
         likers = RadioUser.objects.get_likers()
         self.assertEquals(len(likers), 0)
         
-        ru.mood = RadioUser.MOOD_LIKE
+        ru.mood = yabase_settings.MOOD_LIKE
         ru.save()
 
         likers = RadioUser.objects.get_likers()
@@ -51,7 +51,7 @@ class TestModels(TestCase):
         dislikers = RadioUser.objects.get_dislikers()
         self.assertEquals(len(dislikers), 0)
         
-        ru.mood = RadioUser.MOOD_DISLIKE
+        ru.mood = yabase_settings.MOOD_DISLIKE
         ru.save()
 
         dislikers = RadioUser.objects.get_dislikers()
