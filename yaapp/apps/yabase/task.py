@@ -44,8 +44,12 @@ def process_playlists(radio, lines):
             playlist_name = elements[1]
             source_name = 'test_playlist_file'
             if action == ACTION_ADD_TAG:
-                playlist = Playlist.objects.create(name=playlist_name, source=source_name)
-                print 'playlist created: '
+                print 'ADD playlist'
+                playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=source_name)
+                if created:
+                    print 'playlist created: '
+                else:
+                    print 'playlist found: '
                 print playlist
             elif action == ACTION_DEL_TAG:
                 try:
@@ -64,8 +68,18 @@ def process_playlists(radio, lines):
             order = int(elements[1])
             song_name = elements[2]
             if action == ACTION_ADD_TAG:
-                metadata = SongMetadata.objects.create(name=song_name, artist_name=artist_name, album_name=album_name)
-                song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, song=0, order=order, play_count=0, yasound_score=0)
+                metadata, created = SongMetadata.objects.get_or_create(name=song_name, artist_name=artist_name, album_name=album_name)
+#                if created:
+#                    print 'metadata created'
+#                else:
+#                    print 'metadata found'
+#                    print metadata
+#                    print metadata.id
+                song_instance, created = SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata, order=order)
+#                if created:
+#                    print 'song created'
+#                else:
+#                    print 'song found'
             elif action == ACTION_DEL_TAG:
                 try: 
                     metadata = SongMetadata.objects.get(name=song_name, artist_name=artist_name, album_name=album_name)
