@@ -5,3 +5,4 @@ django-tastypie
 PIL
 django-kombu
 celery
+djcelery
