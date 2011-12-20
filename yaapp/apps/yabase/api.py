@@ -20,7 +20,7 @@ class SongMetadataResource(ModelResource):
         resource_name = 'metadata'
         fields = ['name', 'artist_name', 'album_name', 'track_index', 'track_count', 'disc_index', 'disc_count', 'bpm', 'date', 'score', 'duration', 'genre', 'picture']
         include_resource_uri = False
-        authorization= DjangoAuthorization()
+        authorization= Authorization()
         authentication = Authentication()
 
 class SongInstanceResource(ModelResource):
@@ -63,7 +63,7 @@ class RadioResource(ModelResource):
         include_resource_uri = False;
 #        authentication = ApiKeyAuthentication()
         authentication = Authentication()
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
         allowed_methods = ['get', 'post']
         filtering = {
             'creator': ALL,

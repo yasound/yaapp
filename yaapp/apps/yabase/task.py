@@ -6,9 +6,9 @@ from yabase.models import Radio, Playlist, SongMetadata, SongInstance
 @task
 def test(a):
     print 'testing task'
-    f = open('/Users/meeloo/Desktop/prout.txt', 'w')
-    f.write(a)
-    f.close()
+#    f = open('/Users/meeloo/Desktop/prout.txt', 'w')
+#    f.write(a)
+#    f.close()
     print 'testing task done YAY!'
     
     
