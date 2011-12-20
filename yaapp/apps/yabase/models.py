@@ -39,7 +39,7 @@ class SongInstance(models.Model):
     play_count = models.IntegerField(default=0)
     last_play_time = models.DateTimeField(null=True, blank=True)
     yasound_score = models.FloatField(default=0)
-    metadata = models.OneToOneField(SongMetadata)
+    metadata = models.ForeignKey(SongMetadata)
     users = models.ManyToManyField(User, through='SongUser', blank=True, null=True)
     order = models.IntegerField(null=True, blank=True) # song index in the playlist
     

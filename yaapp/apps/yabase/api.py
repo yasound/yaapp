@@ -24,7 +24,7 @@ class SongMetadataResource(ModelResource):
         authentication = Authentication()
 
 class SongInstanceResource(ModelResource):
-    metadata = fields.OneToOneField(SongMetadataResource, 'metadata', full=True)
+    metadata = fields.ForeignKey(SongMetadataResource, 'metadata', full=True)
     playlist = fields.ForeignKey('yabase.api.PlaylistResource', 'playlist', full=False)
     class Meta:
         queryset = SongInstance.objects.all()
