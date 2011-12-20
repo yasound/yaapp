@@ -4,25 +4,34 @@ from django.views.decorators.csrf import csrf_exempt
 from yabase.models import Radio, Playlist, SongMetadata, SongInstance
 import zlib
 
+from yabase.task import test
+
+def test_task(request):
+    print 'launch task\n'
+    test.delay('prout!!!')
+    print 'launched task\n'
+    return HttpResponse("Worked fine\n")
+
+
 @csrf_exempt
 def upload_playlists(request, radio_id):
     radio = get_object_or_404(Radio, pk=radio_id)
 
     print 'upload_playlists'
-    print request.FILES 
+    print request.FILES
     file = request.FILES['playlists_data']
     content_compressed = file.read()
     content_uncompressed = zlib.decompress(content_compressed)
     lines = content_uncompressed.split('\n')
     print 'nb lines: %d' % len(lines)
-    
+
     ACTION_ADD_TAG = 'ADD'
     ACTION_DEL_TAG = 'DEL'
     PLAYLIST_TAG = 'LST'
     ARTIST_TAG = 'ART'
     ALBUM_TAG = 'ALB'
     SONG_TAG = 'SNG'
-        
+
     action = None;
     artist_name = None
     album_name = None
@@ -53,5 +62,5 @@ def upload_playlists(request, radio_id):
 #            print "song: %(song)s - %(artist)s - %(album)s (%(order)d)" % {"song": song_name, "artist": artist_name, "album": album_name, "order": order}
             metadata = SongMetadata.objects.create(name=song_name, artist_name=artist_name, album_name=album_name)
             song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, song=0, order=order, play_count=0, yasound_score=0)
-    
+
     return HttpResponse("You've successfully uploaded playlists to radio '%s'\n" % radio)

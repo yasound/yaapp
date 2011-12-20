@@ -39,11 +39,12 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists/$', 'yabase.views.upload_playlists'),
+    url(r'^task/$', 'yabase.views.test_task'),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(next_songs.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(wall_event.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_likers.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
-    (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),                   
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),
     (r'^api/', include(api.urls)),
     # The normal jazz here, then...
 )

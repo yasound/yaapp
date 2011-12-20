@@ -1,6 +1,9 @@
 # Django settings for yaapp project.
 
 import os, sys
+import djcelery
+
+djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
 
@@ -16,6 +19,9 @@ LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+CELERY_IMPORTS = ("yabase.task", )
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
