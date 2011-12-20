@@ -20,8 +20,6 @@ LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-CELERY_IMPORTS = ("yabase.task", )
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -30,6 +28,11 @@ ADMINS = (
 MANAGERS = ADMINS
 
 if LOCAL_MODE:
+    # Celery config:
+    BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+    CELERY_IMPORTS = ("yabase.task", )
+
+    # Databases config:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -49,6 +52,11 @@ if LOCAL_MODE:
         }
     }
 else:
+    # Celery config:
+    BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+    CELERY_IMPORTS = ("yabase.task", )
+
+    # Databases config:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -69,9 +77,8 @@ else:
 
     }
 
-# yaapp/apps/yabase/legacy_models.py
+# As we use a multi database config, we need a working database router:
 DATABASE_ROUTERS = ['yabase.router.YaappRouter']
-#DATABASE_ROUTERS = ['legacy_models.YaappRouter']
 
 
 
