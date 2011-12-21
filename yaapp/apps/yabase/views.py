@@ -3,17 +3,20 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from yabase.models import Radio
 import zlib
+from celery.result import AsyncResult
 
 from yabase.task import test, process_playlists
 
 def test_task(request):
     print 'launch task\n'
     res = test.delay('prout!!!')
-    print 'launched task\n'
-    print res
-    print 'task id: %s' % res.task_id
-    taskURL = 'task/' + res.task_id
-    return HttpResponse("task url: %s" % taskURL)
+    
+    return HttpResponse(res.task_id)
+
+def task_status(request, task_id):
+    asyncRes = AsyncResult(task_id=task_id)
+    status = asyncRes.state
+    return HttpResponse(status)
 
 
 @csrf_exempt
@@ -26,6 +29,6 @@ def upload_playlists(request, radio_id):
     content_uncompressed = zlib.decompress(content_compressed)
     lines = content_uncompressed.split('\n')
     
-    process_playlists.delay(radio, lines)
+    asyncRes = process_playlists.delay(radio, lines)
 
-    return HttpResponse("You've successfully launched playlists processing for radio '%s'\n" % radio)
+    return HttpResponse(asyncRes.task_id)
