@@ -191,8 +191,8 @@ INSTALLED_APPS = (
     'wall',
     'yabase',
     'tastypie',
-    'djcelery',
     "djkombu",
+    'djcelery',
 )
 
 # A sample logging configuration. The only tangible logging
