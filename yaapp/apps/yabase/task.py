@@ -14,6 +14,7 @@ def test(a):
     
 @task
 def process_playlists(radio, lines):
+    print 'process_playlists'
     PLAYLIST_TAG = 'LST'
     ARTIST_TAG = 'ART'
     ALBUM_TAG = 'ALB'
@@ -25,6 +26,8 @@ def process_playlists(radio, lines):
     
     pattern = re.compile('[\W_]+')
 
+    
+
     for line in lines:
         elements = line.split(';')
         for i in range(len(elements)):
@@ -34,6 +37,12 @@ def process_playlists(radio, lines):
             playlist_name = elements[1]
             source_name = 'test_playlist_file'
             playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=source_name)
+            if created:
+                print 'playlist created '
+                print playlist
+            else:
+                print 'playlist found '
+                print playlist
             
         elif tag == ALBUM_TAG:
             album_name = elements[1]
