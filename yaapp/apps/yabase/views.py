@@ -23,6 +23,8 @@ def task_status(request, task_id):
 def upload_playlists(request, radio_id):
     radio = get_object_or_404(Radio, pk=radio_id)
 
+    print 'upload_playlists'
+    print radio
     print request.FILES
     data = request.FILES['playlists_data']
     content_compressed = data.read()
