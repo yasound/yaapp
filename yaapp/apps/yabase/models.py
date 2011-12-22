@@ -21,7 +21,7 @@ class SongMetadata(models.Model):
     date = models.DateField(null=True, blank=True)
     score = models.FloatField(null=True, blank=True)
     duration = models.FloatField(null=True, blank=True)
-    genre = models.CharField(max_length=40, null=True, blank=True)
+    genre = models.CharField(max_length=128, null=True, blank=True)
     picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     
     def __unicode__(self):
