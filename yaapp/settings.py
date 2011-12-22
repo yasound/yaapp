@@ -53,6 +53,7 @@ if LOCAL_MODE:
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
+
     }
 else:
     # Celery config:
