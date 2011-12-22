@@ -10,9 +10,9 @@ options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 
 class SongMetadata(models.Model):    
-    name = models.CharField(max_length=40)
-    artist_name = models.CharField(max_length=40)
-    album_name = models.CharField(max_length=40)
+    name = models.CharField(max_length=128)
+    artist_name = models.CharField(max_length=128)
+    album_name = models.CharField(max_length=128)
     track_index = models.IntegerField(null=True, blank=True)
     track_count = models.IntegerField(null=True, blank=True)
     disc_index = models.IntegerField(null=True, blank=True)
@@ -70,8 +70,8 @@ class SongUser(models.Model):
 
 
 class Playlist(models.Model):
-    name = models.CharField(max_length=40)
-    source = models.CharField(max_length=80)
+    name = models.CharField(max_length=128)
+    source = models.CharField(max_length=128)
     enabled = models.BooleanField(default=True)
     sync_date = models.DateTimeField(default=datetime.datetime.now)
     CRC = models.IntegerField(null=True, blank=True) # ??
@@ -100,12 +100,12 @@ class Radio(models.Model):
 
     playlists = models.ManyToManyField(Playlist, related_name='playlists')
     
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=128)
     picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    genre = models.CharField(max_length=40, blank=True)
-    theme = models.CharField(max_length=60, blank=True)
+    genre = models.CharField(max_length=128, blank=True)
+    theme = models.CharField(max_length=128, blank=True)
     
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)

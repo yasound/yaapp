@@ -14,7 +14,7 @@ def test(a):
     
 @task
 def process_playlists(radio, lines):
-    print 'process_playlists'
+    print '*** process_playlists ***'
     PLAYLIST_TAG = 'LST'
     ARTIST_TAG = 'ART'
     ALBUM_TAG = 'ALB'
@@ -26,6 +26,9 @@ def process_playlists(radio, lines):
     
     pattern = re.compile('[\W_]+')
 
+    count = 0
+    found = 0
+    notfound = 0
     
 
     for line in lines:
@@ -53,13 +56,22 @@ def process_playlists(radio, lines):
             song_name = elements[2]                
             metadata, created = SongMetadata.objects.get_or_create(name=song_name, artist_name=artist_name, album_name=album_name)
             song_instance, created = SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata, order=order)
-            if created:
-                song_name_simplified = pattern.sub('', song_name.printable)
-                artist_name_simplified = pattern.sub('', artist_name.printable)
-                album_name_simplified = pattern.sub('', album_name.printable)
-                yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
-                if yasound_song:
+            if created or song_instance.song == 0:
+                song_name_simplified = pattern.sub('', song_name)
+                artist_name_simplified = pattern.sub('', artist_name)
+                album_name_simplified = pattern.sub('', album_name)
+                count += 1
+                try:
+                    yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
                     song_instance.song = yasound_song.id
+                    song_instance.save()
+                    found += 1
+                except YasoundSong.DoesNotExist:
+                    notfound += 1
+                    pass
+
+    print 'found: %d - not found: %d - total: %d' % (found, notfound, count)
+                    
                 
             
             
