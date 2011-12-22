@@ -10,9 +10,9 @@ options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 
 class SongMetadata(models.Model):    
-    name = models.CharField(max_length=128)
-    artist_name = models.CharField(max_length=128)
-    album_name = models.CharField(max_length=128)
+    name = models.CharField(max_length=255)
+    artist_name = models.CharField(max_length=255)
+    album_name = models.CharField(max_length=255)
     track_index = models.IntegerField(null=True, blank=True)
     track_count = models.IntegerField(null=True, blank=True)
     disc_index = models.IntegerField(null=True, blank=True)
@@ -21,7 +21,7 @@ class SongMetadata(models.Model):
     date = models.DateField(null=True, blank=True)
     score = models.FloatField(null=True, blank=True)
     duration = models.FloatField(null=True, blank=True)
-    genre = models.CharField(max_length=128, null=True, blank=True)
+    genre = models.CharField(max_length=255, null=True, blank=True)
     picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     
     def __unicode__(self):
@@ -70,8 +70,8 @@ class SongUser(models.Model):
 
 
 class Playlist(models.Model):
-    name = models.CharField(max_length=128)
-    source = models.CharField(max_length=128)
+    name = models.CharField(max_length=255)
+    source = models.CharField(max_length=255)
     enabled = models.BooleanField(default=True)
     sync_date = models.DateTimeField(default=datetime.datetime.now)
     CRC = models.IntegerField(null=True, blank=True) # ??
@@ -100,12 +100,12 @@ class Radio(models.Model):
 
     playlists = models.ManyToManyField(Playlist, related_name='playlists')
     
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=255)
     picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    genre = models.CharField(max_length=128, blank=True)
-    theme = models.CharField(max_length=128, blank=True)
+    genre = models.CharField(max_length=255, blank=True)
+    theme = models.CharField(max_length=255, blank=True)
     
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
