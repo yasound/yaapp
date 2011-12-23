@@ -91,7 +91,7 @@ class Playlist(models.Model):
 
 
 
-
+RADIO_NEXT_SONGS_COUNT = 20
 
 class Radio(models.Model):
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
@@ -116,6 +116,12 @@ class Radio(models.Model):
     
     def __unicode__(self):
         return self.name;
+    
+#    def find_new_song(self):
+#        songs = SongInstance.objects.filter(playlist=)
+    
+#    def get_next_song(self):
+        
 
     class Meta:
         db_name = u'default'
