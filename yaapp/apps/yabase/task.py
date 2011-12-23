@@ -63,10 +63,15 @@ def process_playlists(radio, lines):
                 count += 1
                 try:
 #                    yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
-                    yasound_song = YasoundSong.objects.get(name=song_name, artist__name=artist_name, album__name=album_name)
-                    song_instance.song = yasound_song.id
-                    song_instance.save()
-                    found += 1
+                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist__name=artist_name, album__name=album_name)
+                    if len(yasound_songs.all()) > 0:
+                        yasound_song = yasound_songs.all()[0]
+                        song_instance.song = yasound_song.id
+                        song_instance.save()
+                        found += 1
+                    else:
+                        notfound += 1
+                    
                 except YasoundSong.DoesNotExist:
                     notfound += 1
                     pass
