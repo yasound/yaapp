@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 import datetime
 from django.utils.translation import ugettext_lazy as _
 import settings as yabase_settings
+import random
 
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
@@ -44,7 +45,7 @@ class SongInstance(models.Model):
     order = models.IntegerField(null=True, blank=True) # song index in the playlist
     
     def __unicode__(self):
-        return str(self.song)
+        return str(self.metadata)
 
     class Meta:
         db_name = u'default'
@@ -117,10 +118,42 @@ class Radio(models.Model):
     def __unicode__(self):
         return self.name;
     
-#    def find_new_song(self):
-#        songs = SongInstance.objects.filter(playlist=)
+    def find_new_song(self):
+        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), song__gt=0)
+        songs = songs_queryset.all()
+        count = len(songs)
+        if count == 0:
+            return None
+        
+        index = random.randint(0, count-1)
+        s = songs[index]
+        # FIXME todo: check
+        return s
     
-#    def get_next_song(self):
+    def get_next_song(self):
+        while len(self.next_songs.all()) < (RADIO_NEXT_SONGS_COUNT + 1):
+            s = self.find_new_song()
+            if s == None:
+                break;
+            o = len(self.next_songs.all()) + 1
+            n = NextSong.objects.create(radio=self, song=s, order=o)
+            
+        try:
+            n = NextSong.objects.get(radio=self, order=1)
+            song = n.song
+            n.delete()
+            w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
+            print w
+            next_songs = NextSong.objects.filter(radio=self)
+            for n in next_songs.all():
+                n.order -= 1
+                n.save()
+            return song
+        except NextSong.DoesNotExist:
+            print 'cannot get next song for radio: %s' % unicode(self)
+            return None 
+            
+        
         
 
     class Meta:
@@ -242,14 +275,14 @@ class WallEvent(models.Model):
     @property
     def is_valid(self):
         valid = False
-        if type == yabase_settings.EVENT_JOINED:
+        if self.type == yabase_settings.EVENT_JOINED:
             valid = not (self.user is None)
-        elif type == yabase_settings.EVENT_LEFT:
+        elif self.type == yabase_settings.EVENT_LEFT:
             valid = not (self.user is None)
-        elif type == yabase_settings.EVENT_MESSAGE:
+        elif self.type == yabase_settings.EVENT_MESSAGE:
             valid = (not (self.text is None)) or (not (self.animated_emoticon is None)) or (not (self.picture is None))
-        elif type == yabase_settings.EVENT_SONG:
-            valid = (not (self.song is None)) and (not (self.old_id is None))
+        elif self.type == yabase_settings.EVENT_SONG:
+            valid = not (self.song is None)
         return valid
 
     class Meta:
@@ -266,6 +299,9 @@ class NextSong(models.Model):
     class Meta:
         db_name = u'default'
 
+    def __unicode__(self):
+        s = '%s - %s - %d' % (unicode(self.radio), unicode(self.song), self.order)
+        return s;
 
 
 
