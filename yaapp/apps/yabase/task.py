@@ -57,13 +57,13 @@ def process_playlists(radio, lines):
             metadata, created = SongMetadata.objects.get_or_create(name=song_name, artist_name=artist_name, album_name=album_name)
             song_instance, created = SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata, order=order)
             if created or song_instance.song == 0:
-#                song_name_simplified = pattern.sub('', song_name).lower()
-#                artist_name_simplified = pattern.sub('', artist_name).lower()
-#                album_name_simplified = pattern.sub('', album_name).lower()
+                song_name_simplified = pattern.sub('', song_name).lower()
+                artist_name_simplified = pattern.sub('', artist_name).lower()
+                album_name_simplified = pattern.sub('', album_name).lower()
                 count += 1
                 try:
-#                    yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
-                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist__name=artist_name, album__name=album_name)
+                    yasound_songs = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
+    #                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist__name=artist_name, album__name=album_name)
                     if len(yasound_songs.all()) > 0:
                         yasound_song = yasound_songs.all()[0]
                         song_instance.song = yasound_song.id
