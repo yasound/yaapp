@@ -27,10 +27,9 @@ def upload_playlists(request, radio_id):
     print radio
     print request.FILES
     data = request.FILES['playlists_data']
-#    content_compressed = data.read()
-#    content_uncompressed = zlib.decompress(content_compressed)
-#    lines = content_uncompressed.split('\n')
-    lines = data.readlines()
+    content_compressed = data.read()
+    content_uncompressed = zlib.decompress(content_compressed)
+    lines = content_uncompressed.split('\n')
     
     asyncRes = process_playlists.delay(radio, lines)
 
