@@ -57,9 +57,9 @@ def process_playlists(radio, lines):
             metadata, created = SongMetadata.objects.get_or_create(name=song_name, artist_name=artist_name, album_name=album_name)
             song_instance, created = SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata, order=order)
             if created or song_instance.song == 0:
-                song_name_simplified = pattern.sub('', song_name)
-                artist_name_simplified = pattern.sub('', artist_name)
-                album_name_simplified = pattern.sub('', album_name)
+                song_name_simplified = pattern.sub('', song_name).lower()
+                artist_name_simplified = pattern.sub('', artist_name).lower()
+                album_name_simplified = pattern.sub('', album_name).lower()
                 count += 1
                 try:
                     yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
