@@ -125,9 +125,17 @@ class Radio(models.Model):
         if count == 0:
             return None
         
-        index = random.randint(0, count-1)
-        s = songs[index]
-        # FIXME todo: check
+        seconds_before_replay = 60 * 60 # at least 60 minutes before replaying the same song
+        now = datetime.datetime.now()
+        i = random.randint(0, count-1)
+        first = i
+        while songs[i].last_play_time and (now - songs[i].last_play_time).total_seconds() > seconds_before_replay:
+            i += 1
+            i %= count
+            if i == first:
+                break
+        
+        s = songs[i]
         return s
     
     def get_next_song(self):
@@ -143,12 +151,12 @@ class Radio(models.Model):
             song = n.song
             n.delete()
             w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
-            print w
             next_songs = NextSong.objects.filter(radio=self)
             for n in next_songs.all():
                 n.order -= 1
                 n.save()
-            return song
+            song.last_play_time = datetime.datetime.now()
+            return song # SongInstance
         except NextSong.DoesNotExist:
             print 'cannot get next song for radio: %s' % unicode(self)
             return None 
