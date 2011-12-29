@@ -12,6 +12,9 @@ from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
 from tastypie.models import ApiKey
 from tastypie.serializers import Serializer
 
+APP_KEY_COOKIE_NAME = 'app_key'
+APP_KEY_IPHONE = 'yasound_iphone_app'
+
 class UserResource(ModelResource):
 #    userprofile = fields.OneToOneField('account.api.UserProfileResource', 'userprofile', full=True)
     class Meta:
@@ -83,8 +86,6 @@ def add_api_key_to_bundle(user, bundle):
     
 class SignupAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        APP_KEY_COOKIE_NAME = 'app_key'
-        APP_KEY_IPHONE = 'yasound_iphone_app'
         print 'signup authentication'
         print request.COOKIES
         cookies = request.COOKIES
@@ -149,6 +150,16 @@ def build_social_username(uid, account_type):
     
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
+        # Application Cookie authentication:
+        print 'social login cookie authentication'
+        print request.COOKIES
+        cookies = request.COOKIES
+        if not cookies.has_key(APP_KEY_COOKIE_NAME):
+            return False
+        if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
+            return False
+        
+        # Social account verification:
         ACCOUNT_TYPE_PARAM_NAME = 'account_type'
         UID_PARAM_NAME = 'uid'
         TOKEN_PARAM_NAME = 'token'
@@ -179,7 +190,7 @@ class SocialAuthentication(Authentication):
                 user = User.objects.create(username=username)
                 profile = user.userprofile
                 profile.facebook_uid = uid
-                profile.facebook_token = uid
+                profile.facebook_token = token
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
@@ -197,7 +208,7 @@ class SocialAuthentication(Authentication):
                 user = User.objects.create(username=username)
                 profile = user.userprofile
                 profile.twitter_uid = uid
-                profile.twitter_token = uid
+                profile.twitter_token = token
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
