@@ -45,7 +45,7 @@ class SongInstance(models.Model):
     order = models.IntegerField(null=True, blank=True) # song index in the playlist
     
     def __unicode__(self):
-        return str(self.metadata)
+        return unicode(self.metadata)
 
     class Meta:
         db_name = u'default'
