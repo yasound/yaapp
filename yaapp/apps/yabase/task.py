@@ -2,18 +2,10 @@ import sys
 from celery.task import task
 from yabase.models import Radio, Playlist, SongMetadata, SongInstance, YasoundSong, YasoundArtist, YasoundAlbum
 import re
+from django.db import transaction
 
-@task
-def test(a):
-    print 'testing task'
-#    f = open('/Users/meeloo/Desktop/prout.txt', 'w')
-#    f.write(a)
-#    f.close()
-    print 'testing task done YAY!'
-    
-    
-@task
-def process_playlists(radio, lines):
+@transaction.commit_on_success
+def process_playlists_exec(radio, lines):
     print '*** process_playlists ***'
     PLAYLIST_TAG = 'LST'
     ARTIST_TAG = 'ART'
@@ -62,8 +54,8 @@ def process_playlists(radio, lines):
                 album_name_simplified = pattern.sub('', album_name).lower()
                 count += 1
                 try:
-#                    yasound_songs = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
-                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist__name=artist_name, album__name=album_name)
+                    yasound_songs = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
+#                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist_name=artist_name, album_name=album_name)
                     if len(yasound_songs.all()) > 0:
                         yasound_song = yasound_songs.all()[0]
                         song_instance.song = yasound_song.id
@@ -80,6 +72,10 @@ def process_playlists(radio, lines):
                     
                 
             
+@task
+def process_playlists(radio, lines):
+    return process_playlists_exec(radio, lines)
+
             
             
             
