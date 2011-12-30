@@ -47,7 +47,12 @@ def process_playlists_exec(radio, lines):
             order = int(elements[1])
             song_name = elements[2]                
             metadata, created = SongMetadata.objects.get_or_create(name=song_name, artist_name=artist_name, album_name=album_name)
-            song_instance, created = SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata, order=order)
+            try:
+                song_instance = SongInstance.objects.get(playlist=playlist, metadata=metadata, order=order)
+                created = 0
+            except SongInstance.DoesNotExist:
+                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
+                created = 1
             if created or song_instance.song == 0:
                 song_name_simplified = pattern.sub('', song_name).lower()
                 artist_name_simplified = pattern.sub('', artist_name).lower()
