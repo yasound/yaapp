@@ -236,5 +236,5 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'account.UserProfile'
 
-
+PICTURE_FOLDER = 'pictures'
 

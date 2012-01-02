@@ -35,7 +35,6 @@ class UserResource(ModelResource):
         userprofile = user.userprofile        
         userprofile.fill_user_bundle(bundle)
         
-        add_api_key_to_bundle(user, bundle)
         return bundle
     
     

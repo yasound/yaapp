@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from tastypie.models import create_api_key
 from tastypie.models import ApiKey
 from yabase.models import Radio
+import yaapp.settings as yaapp_settings
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
@@ -16,7 +17,7 @@ class UserProfile(models.Model):
     twitter_token = models.CharField(max_length=60, blank=True)
     facebook_token = models.CharField(max_length=60, blank=True)
     bio_text = models.TextField(null=True, blank=True)
-    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
+    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(default=False)
 #    friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
     
@@ -24,10 +25,7 @@ class UserProfile(models.Model):
         return self.user.username
     
     def fill_user_bundle(self, bundle):
-        p = None
-        if self.picture:
-            p = '/media/' + unicode(self.picture)
-        bundle.data['picture'] = p
+        bundle.data['picture'] = self.picture.url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
         

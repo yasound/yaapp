@@ -12,6 +12,8 @@ import settings as yabase_settings
 from account.api import UserResource
 from tastypie.authentication import ApiKeyAuthentication 
 from tastypie.resources import ModelResource, ALL
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 
 class SongMetadataResource(ModelResource):
@@ -64,10 +66,11 @@ class RadioResource(ModelResource):
 #        authentication = ApiKeyAuthentication()
         authentication = Authentication()
         authorization = Authorization()
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post', 'put']
         filtering = {
             'creator': ALL,
         }
+        
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];

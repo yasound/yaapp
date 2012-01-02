@@ -9,6 +9,7 @@ import random
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
+import yaapp.settings as yaapp_settings
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
@@ -23,7 +24,7 @@ class SongMetadata(models.Model):
     score = models.FloatField(null=True, blank=True)
     duration = models.FloatField(null=True, blank=True)
     genre = models.CharField(max_length=255, null=True, blank=True)
-    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
+    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     
     def __unicode__(self):
         return self.name
@@ -102,7 +103,7 @@ class Radio(models.Model):
     playlists = models.ManyToManyField(Playlist, related_name='playlists')
     
     name = models.CharField(max_length=255)
-    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
+    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     genre = models.CharField(max_length=255, blank=True)
@@ -259,7 +260,7 @@ class WallEvent(models.Model):
     # attributes specific to 'message' event
     text = models.TextField(null=True, blank=True)
     animated_emoticon = models.IntegerField(null=True, blank=True)
-    picture = models.ImageField(upload_to='pictures', null=True, blank=True)
+    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     
     # custom manager
     objects = WallEventManager()
