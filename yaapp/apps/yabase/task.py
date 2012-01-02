@@ -41,8 +41,10 @@ def process_playlists_exec(radio, lines):
             
         elif tag == ALBUM_TAG:
             album_name = elements[1]
+            album_name_simplified = pattern.sub('', album_name).lower()
         elif tag == ARTIST_TAG:
             artist_name = elements[1]
+            artist_name_simplified = pattern.sub('', artist_name).lower()
         elif tag == SONG_TAG:
             order = int(elements[1])
             song_name = elements[2]                
@@ -55,12 +57,10 @@ def process_playlists_exec(radio, lines):
                 created = 1
             if created or song_instance.song == 0:
                 song_name_simplified = pattern.sub('', song_name).lower()
-                artist_name_simplified = pattern.sub('', artist_name).lower()
-                album_name_simplified = pattern.sub('', album_name).lower()
                 count += 1
                 try:
-                    yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
-#                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist_name=artist_name, album_name=album_name)
+#                    yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
+                    yasound_song = YasoundSong.objects.get(name=song_name, artist_name=artist_name, album_name=album_name)
                     song_instance.song = yasound_song.id
                     song_instance.save()
                     found += 1
