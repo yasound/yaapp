@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from forms import UserPictureForm
 from models import User, UserProfile
 import datetime
 
