@@ -100,7 +100,7 @@ class Radio(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
-    playlists = models.ManyToManyField(Playlist, related_name='playlists')
+    playlists = models.ManyToManyField(Playlist, related_name='playlists', blank=True)
     
     name = models.CharField(max_length=255)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)

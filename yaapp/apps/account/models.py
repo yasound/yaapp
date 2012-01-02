@@ -25,7 +25,10 @@ class UserProfile(models.Model):
         return self.user.username
     
     def fill_user_bundle(self, bundle):
-        bundle.data['picture'] = self.picture.url
+        picture_url = None
+        if self.picture:
+            picture_url = self.picture.url
+        bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
         

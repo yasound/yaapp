@@ -47,7 +47,7 @@ def set_radio_picture(request, radio_id):
     d = datetime.datetime.now()
     filename = unicode(d) + '.png'
     
-    radio.picture.save(filename, f)
+    radio.picture.save(filename, f, save=True)
     
     res = 'picture OK for radio: %s' % unicode(radio)
     return HttpResponse(res)
