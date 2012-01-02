@@ -2,18 +2,10 @@ import sys
 from celery.task import task
 from yabase.models import Radio, Playlist, SongMetadata, SongInstance, YasoundSong, YasoundArtist, YasoundAlbum
 import re
+from django.db import transaction
 
-@task
-def test(a):
-    print 'testing task'
-#    f = open('/Users/meeloo/Desktop/prout.txt', 'w')
-#    f.write(a)
-#    f.close()
-    print 'testing task done YAY!'
-    
-    
-@task
-def process_playlists(radio, lines):
+@transaction.commit_on_success
+def process_playlists_exec(radio, lines):
     print '*** process_playlists ***'
     PLAYLIST_TAG = 'LST'
     ARTIST_TAG = 'ART'
@@ -49,28 +41,29 @@ def process_playlists(radio, lines):
             
         elif tag == ALBUM_TAG:
             album_name = elements[1]
+            album_name_simplified = pattern.sub('', album_name).lower()
         elif tag == ARTIST_TAG:
             artist_name = elements[1]
+            artist_name_simplified = pattern.sub('', artist_name).lower()
         elif tag == SONG_TAG:
             order = int(elements[1])
             song_name = elements[2]                
             metadata, created = SongMetadata.objects.get_or_create(name=song_name, artist_name=artist_name, album_name=album_name)
-            song_instance, created = SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata, order=order)
+            try:
+                song_instance = SongInstance.objects.get(playlist=playlist, metadata=metadata, order=order)
+                created = 0
+            except SongInstance.DoesNotExist:
+                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
+                created = 1
             if created or song_instance.song == 0:
                 song_name_simplified = pattern.sub('', song_name).lower()
-                artist_name_simplified = pattern.sub('', artist_name).lower()
-                album_name_simplified = pattern.sub('', album_name).lower()
                 count += 1
                 try:
-#                    yasound_songs = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist__name_simplified=artist_name_simplified, album__name_simplified=album_name_simplified)
-                    yasound_songs = YasoundSong.objects.filter(name=song_name, artist__name=artist_name, album__name=album_name)
-                    if len(yasound_songs.all()) > 0:
-                        yasound_song = yasound_songs.all()[0]
-                        song_instance.song = yasound_song.id
-                        song_instance.save()
-                        found += 1
-                    else:
-                        notfound += 1
+#                    yasound_song = YasoundSong.objects.get(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
+                    yasound_song = YasoundSong.objects.get(name=song_name, artist_name=artist_name, album_name=album_name)
+                    song_instance.song = yasound_song.id
+                    song_instance.save()
+                    found += 1
                     
                 except YasoundSong.DoesNotExist:
                     notfound += 1
@@ -80,6 +73,10 @@ def process_playlists(radio, lines):
                     
                 
             
+@task
+def process_playlists(radio, lines):
+    return process_playlists_exec(radio, lines)
+
             
             
             

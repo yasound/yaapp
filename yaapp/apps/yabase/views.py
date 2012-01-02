@@ -6,15 +6,9 @@ import zlib
 from celery.result import AsyncResult
 import datetime
 
-from yabase.task import test, process_playlists
+from yabase.task import process_playlists
 
 PICTURE_FILE_TAG = 'picture'
-
-def test_task(request):
-    print 'launch task\n'
-    res = test.delay('prout!!!')
-    
-    return HttpResponse(res.task_id)
 
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
