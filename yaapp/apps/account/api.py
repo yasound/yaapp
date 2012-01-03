@@ -106,6 +106,7 @@ class SignupResource(ModelResource):
         detail_allowed_methods = ['post']
         
     def obj_create(self, bundle, request=None, **kwargs):
+        #test if user already exist
         user_resource = super(SignupResource, self).obj_create(bundle, request, **kwargs)
         user = user_resource.obj
         user.set_password(user.password) # encrypt password
@@ -163,18 +164,20 @@ class SocialAuthentication(Authentication):
         UID_PARAM_NAME = 'uid'
         TOKEN_PARAM_NAME = 'token'
         NAME_PARAM_NAME = 'name'
+        EMAIL_PARAM_NAME = 'email'
         
         ACCOUNT_TYPE_FACEBOOK = 'facebook'
         ACCOUNT_TYPE_TWITTER = 'twitter'
         
         params = request.GET
-        if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
+        if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME) and params.has_key(EMAIL_PARAM_NAME)):
             return False
         
         account_type = params[ACCOUNT_TYPE_PARAM_NAME]
         uid = params[UID_PARAM_NAME]
         token = params[TOKEN_PARAM_NAME]
         name = params[NAME_PARAM_NAME]
+        email = params[EMAIL_PARAM_NAME]
         
         username = build_social_username(uid, account_type)
         if account_type == ACCOUNT_TYPE_FACEBOOK:
@@ -186,7 +189,7 @@ class SocialAuthentication(Authentication):
                 request.user = user
                 return True
             except User.DoesNotExist:
-                user = User.objects.create(username=username)
+                user = User.objects.create(username=username, email=email)
                 profile = user.userprofile
                 profile.facebook_uid = uid
                 profile.facebook_token = token
@@ -204,7 +207,7 @@ class SocialAuthentication(Authentication):
                 request.user
                 return True
             except User.DoesNotExist:
-                user = User.objects.create(username=username)
+                user = User.objects.create(username=username, email=email)
                 profile = user.userprofile
                 profile.twitter_uid = uid
                 profile.twitter_token = token
