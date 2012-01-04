@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from yabase.models import Radio
-import zlib
 from celery.result import AsyncResult
 import datetime
 
@@ -25,10 +24,7 @@ def upload_playlists(request, radio_id):
     print request.FILES
     data = request.FILES['playlists_data']
     content_compressed = data.read()
-    content_uncompressed = zlib.decompress(content_compressed)
-    lines = content_uncompressed.split('\n')
-    
-    asyncRes = process_playlists.delay(radio, lines)
+    asyncRes = process_playlists.delay(radio, content_compressed)
 
     return HttpResponse(asyncRes.task_id)
 
@@ -39,15 +35,15 @@ def set_radio_picture(request, radio_id):
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
         return HttpResponse('radio does not exist')
-    
+
     if not request.FILES.has_key(PICTURE_FILE_TAG):
         return HttpResponse('request does not contain a picture file')
-    
+
     f = request.FILES[PICTURE_FILE_TAG]
     d = datetime.datetime.now()
     filename = unicode(d) + '.png'
-    
+
     radio.picture.save(filename, f, save=True)
-    
+
     res = 'picture OK for radio: %s' % unicode(radio)
     return HttpResponse(res)
