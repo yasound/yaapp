@@ -186,8 +186,6 @@ class SocialAuthentication(Authentication):
         username = build_social_username(uid, account_type)
         if account_type == ACCOUNT_TYPE_FACEBOOK:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
-            print 'profile:'
-            print facebook_profile
             
             if not facebook_profile:
                 return False
