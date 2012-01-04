@@ -15,6 +15,7 @@ class UserProfile(models.Model):
     twitter_uid = models.CharField(max_length=60, null=True, blank=True)
     facebook_uid = models.CharField(max_length=60, null=True, blank=True)
     twitter_token = models.CharField(max_length=60, blank=True)
+    twitter_token_secret = models.CharField(max_length=60, blank=True)
     facebook_token = models.CharField(max_length=60, blank=True)
     bio_text = models.TextField(null=True, blank=True)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)

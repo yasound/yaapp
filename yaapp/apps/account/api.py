@@ -12,6 +12,10 @@ from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
 from tastypie.models import ApiKey
 from tastypie.serializers import Serializer
 
+import json
+import urllib
+import tweepy
+
 APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
 
@@ -181,9 +185,31 @@ class SocialAuthentication(Authentication):
         
         username = build_social_username(uid, account_type)
         if account_type == ACCOUNT_TYPE_FACEBOOK:
-            account_valid = True #FIXME todo: check if uid/token values are from a valid facebook account
-            if not account_valid:
+            facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
+            print 'profile:'
+            print facebook_profile
+            
+            if not facebook_profile:
                 return False
+            
+            if facebook_profile.has_key('error'):
+                print facebook_profile['error']
+                return False
+            
+            if not facebook_profile.has_key('id'):
+                print 'no "id" attribute in facebook profile'
+                return False
+            if facebook_profile['id'] != uid:
+                print 'uid does not match'
+                return False
+            
+            if not facebook_profile.has_key('email'):
+                print 'no "email" attribute in facebook profile'
+                return False
+            if facebook_profile['email'] != email:
+                print 'email does not match'
+                return False
+            
             try:
                 user = User.objects.get(username=username)
                 request.user = user
@@ -199,9 +225,26 @@ class SocialAuthentication(Authentication):
                 request.user = user
                 return True
         elif account_type == ACCOUNT_TYPE_TWITTER:
-            account_valid = True #FIXME todo: check if uid/token values are from a valid twitter account
-            if not account_valid:
+            YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
+            YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
+            
+            TOKEN_SECRET_PARAM_NAME = 'token_secret'
+            if not params.has_key(TOKEN_SECRET_PARAM_NAME):
                 return False
+        
+            token_secret = params[TOKEN_SECRET_PARAM_NAME]
+            auth = tweepy.OAuthHandler(YASOUND_TWITTER_APP_CONSUMER_KEY, YASOUND_TWITTER_APP_CONSUMER_SECRET)
+            auth.set_access_token(token, token_secret)
+            api = tweepy.API(auth)
+            res = api.verify_credentials()
+            print 'verify_credentials:'
+            print res
+            if (not res) or (res == False):
+                return False
+            if res.id != int(uid):
+                print 'res id does not match'
+                return False
+            
             try:
                 user = User.objects.get(username=username)
                 request.user
@@ -211,6 +254,7 @@ class SocialAuthentication(Authentication):
                 profile = user.userprofile
                 profile.twitter_uid = uid
                 profile.twitter_token = token
+                profile.twitter_token_secret = token_secret
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
