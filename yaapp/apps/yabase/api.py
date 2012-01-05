@@ -61,7 +61,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'picture']
+        fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'picture', 'overall_listening_time']
         include_resource_uri = False;
 #        authentication = ApiKeyAuthentication()
         authentication = Authentication()
@@ -69,6 +69,9 @@ class RadioResource(ModelResource):
         allowed_methods = ['get', 'post', 'put']
         filtering = {
             'creator': ALL,
+        }
+        ordering = {
+            'overall_listening_time': ALL,
         }
         
     def obj_update(self, bundle, request=None, **kwargs):

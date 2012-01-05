@@ -181,14 +181,16 @@ class SocialAuthentication(Authentication):
         ACCOUNT_TYPE_TWITTER = 'twitter'
         
         params = request.GET
-        if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME) and params.has_key(EMAIL_PARAM_NAME)):
+        if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
             return False
         
         account_type = params[ACCOUNT_TYPE_PARAM_NAME]
         uid = params[UID_PARAM_NAME]
         token = params[TOKEN_PARAM_NAME]
         name = params[NAME_PARAM_NAME]
-        email = params[EMAIL_PARAM_NAME]
+        email = None
+        if params.has_key(EMAIL_PARAM_NAME):
+            email = params[EMAIL_PARAM_NAME]
         
         username = build_social_username(uid, account_type)
         if account_type == ACCOUNT_TYPE_FACEBOOK:
@@ -208,19 +210,15 @@ class SocialAuthentication(Authentication):
                 print 'uid does not match'
                 return False
             
-            if not facebook_profile.has_key('email'):
-                print 'no "email" attribute in facebook profile'
-                return False
-            if facebook_profile['email'] != email:
-                print 'email does not match'
-                return False
-            
             try:
                 user = User.objects.get(username=username)
                 request.user = user
                 return True
             except User.DoesNotExist:
-                user = User.objects.create(username=username, email=email)
+                user = User.objects.create(username=username)
+                if email:
+                    user.email = email
+                    user.save()
                 profile = user.userprofile
                 profile.facebook_uid = uid
                 profile.facebook_token = token
@@ -252,10 +250,13 @@ class SocialAuthentication(Authentication):
             
             try:
                 user = User.objects.get(username=username)
-                request.user
+                request.user = user
                 return True
             except User.DoesNotExist:
-                user = User.objects.create(username=username, email=email)
+                user = User.objects.create(username=username)
+                if email:
+                    user.email = email
+                    user.save()
                 profile = user.userprofile
                 profile.twitter_uid = uid
                 profile.twitter_token = token
@@ -288,6 +289,7 @@ class LoginSocialResource(ModelResource):
         return bundle
 
     def apply_authorization_limits(self, request, object_list):
+        print 'apply_authorization_limits:'
         print request.user
         return object_list.filter(id=request.user.id)
         
