@@ -71,6 +71,18 @@ class RadioResource(ModelResource):
             'creator': ALL,
         }
         
+    def obj_update(self, bundle, request=None, **kwargs):
+        print bundle
+        if 'listeners' in bundle.data:
+            del bundle.data['listeners']
+        if 'likes' in bundle.data:
+            del bundle.data['likes']
+        print bundle
+        radio_resource = super(RadioResource, self).obj_update(bundle, request, **kwargs)
+        print radio_resource
+        print radio_resource.obj
+        return radio_resource
+        
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
