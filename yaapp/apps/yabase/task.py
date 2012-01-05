@@ -6,6 +6,7 @@ from django.db import transaction
 from yabase.bulkops import insert_many, update_many
 import zlib
 from struct import *
+import time
 
 class SongImportObject:
     def __init__(self):
@@ -24,6 +25,8 @@ class SongImportObject:
 
 @transaction.commit_on_success
 def get_song_metadatas(objects):
+    print "get_song_metadatas"
+    t = time.time()
     for object in objects:
         if object.metadata == None:
             try:
@@ -32,9 +35,13 @@ def get_song_metadatas(objects):
                     object.metadata = metadata[0]
             except:
                 pass # do nothing
+    t = time.time() - t
+    print " -> " + str(t)
 
 @transaction.commit_on_success
 def create_song_metadatas(objects):
+    print "create_song_metadatas"
+    t = time.time()
     operations = []
     for object in objects:
         if object.metadata == None:
@@ -43,9 +50,13 @@ def create_song_metadatas(objects):
             #metadata.save()
             operations.append(metadata)
     insert_many(operations)
+    t = time.time() - t
+    print " -> " + str(t)
 
-# Not needed as wee only read:  @transaction.commit_on_success
+@transaction.commit_on_success
 def get_yasound_songs(objects):
+    print "get_yasound_songs"
+    t = time.time()
     for object in objects:
         if object.yasound_song == None:
             try:
@@ -54,9 +65,13 @@ def get_yasound_songs(objects):
                 object.yasound_song = songs[0]
             except:
                 pass # Not found? we can't do anything about it
+    t = time.time() - t
+    print " -> " + str(t)
 
 @transaction.commit_on_success
 def create_song_instances(objects):
+    print "create_song_instances"
+    t = time.time()
     found = 0
     adds = []
     updates = []
@@ -79,6 +94,9 @@ def create_song_instances(objects):
 
     insert_many(adds);
     update_many(updates);
+
+    t = time.time() - t
+    print " -> " + str(t)
     return found
 
 class BinaryData:
@@ -110,6 +128,7 @@ class BinaryData:
     def is_done(self):
         return self.offset >= len(self.data)
 
+#@transaction.commit_on_success
 def process_playlists_exec(radio, content_compressed):
     print "decompress playlist"
     content_uncompressed = zlib.decompress(content_compressed)
@@ -177,22 +196,17 @@ def process_playlists_exec(radio, content_compressed):
             objects.append(object)
 
     # Get the metadata for each object in the list if they exist:
-    print "get_song_metadatas"
     get_song_metadatas(objects)
 
     # Create the metadata for the objects that did not exist:
-    print "create_song_metadatas"
     create_song_metadatas(objects)
 
-    print "update get_song_metadatas"
     get_song_metadatas(objects)
 
     # Get the songs from the read only song db:
-    print "get_yasound_songs"
     get_yasound_songs(objects)
 
     # Create the song instances:
-    print "create_song_instances"
     found = create_song_instances(objects)
 
     count = len(objects)
