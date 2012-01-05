@@ -32,12 +32,9 @@ def get_song_metadatas(objects):
     for object in objects:
         if object.metadata == None:
             try:
-                metadata = SongMetadata.objects.filter(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
-                if metadata != None:
-                    ok = ok + 1
-                    object.metadata = metadata[0]
-                else:
-                    nok = nok + 1
+                metadata = SongMetadata.objects.get(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
+                object.metadata = metadata
+                ok = ok + 1
             except:
                 nok = nok + 1
                 # do nothing
@@ -50,12 +47,15 @@ def create_song_metadatas(objects):
     print "create_song_metadatas"
     t = time.time()
     operations = []
+    md = set([])
     for object in objects:
         if object.metadata == None:
             # I use a local object as metadata here as its id will not be updated by the insert_many operation and we'll need to consolidate the list with a new set of "gets":
-            metadata = SongMetadata(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
-            #metadata.save()
-            operations.append(metadata)
+            hash = object.song_name + '|' + object.artist_name + '|' + object.album_name;
+            if hash not in md:
+                metadata = SongMetadata(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
+                md.add(hash)
+                operations.append(metadata)
     insert_many(operations)
     t = time.time() - t
     print " -> " + str(t) + ' s'
