@@ -5,7 +5,7 @@ import re
 from django.db import transaction
 from yabase.bulkops import insert_many, update_many
 import zlib
-
+from struct import *
 
 class SongImportObject:
     def __init__(self):
@@ -22,23 +22,25 @@ class SongImportObject:
         self.instance = None
         self.yasound_song = None
 
-#@transaction.commit_on_success
+@transaction.commit_on_success
 def get_song_metadatas(objects):
     for object in objects:
         if object.metadata == None:
             try:
-                object.metadata = SongMetadata.objects.get(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
-            except SongMetadata.DoesNotExist:
-                0; # do nothing
+                metadata = SongMetadata.objects.filter(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
+                if metadata != None:
+                    object.metadata = metadata[0]
+            except:
+                pass # do nothing
 
-#@transaction.commit_on_success
+@transaction.commit_on_success
 def create_song_metadatas(objects):
     operations = []
     for object in objects:
         if object.metadata == None:
             # I use a local object as metadata here as its id will not be updated by the insert_many operation and we'll need to consolidate the list with a new set of "gets":
             metadata = SongMetadata(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
-            metadata.save()
+            #metadata.save()
             operations.append(metadata)
     insert_many(operations)
 
@@ -51,9 +53,9 @@ def get_yasound_songs(objects):
                 songs = YasoundSong.objects.filter(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
                 object.yasound_song = songs[0]
             except:
-                0; # Not found? we can't do anything about it
+                pass # Not found? we can't do anything about it
 
-#@transaction.commit_on_success
+@transaction.commit_on_success
 def create_song_instances(objects):
     found = 0
     adds = []
@@ -79,7 +81,39 @@ def create_song_instances(objects):
     update_many(updates);
     return found
 
-def process_playlists_exec(radio, lines):
+class BinaryData:
+    def __init__(self, data):
+        self.offset = 0
+        self.data = data
+
+    def get_int16(self):
+        res = unpack_from('<h', self.data, self.offset)[0]
+        self.offset = self.offset + 2
+        return res
+
+    def get_int32(self):
+        res = unpack_from('<i', self.data, self.offset)[0]
+        self.offset = self.offset + 4
+        return res
+
+    def get_tag(self):
+        res = unpack_from('<4s', self.data, self.offset)[0]
+        self.offset = self.offset + 4
+        return res
+
+    def get_string(self):
+        size = self.get_int16()
+        res = unpack_from('<' + str(size) + 's', self.data, self.offset)[0]
+        self.offset = self.offset + size
+        return res
+
+    def is_done(self):
+        return self.offset >= len(self.data)
+
+def process_playlists_exec(radio, content_compressed):
+    print "decompress playlist"
+    content_uncompressed = zlib.decompress(content_compressed)
+
     print '*** process_playlists ***'
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
@@ -103,13 +137,13 @@ def process_playlists_exec(radio, lines):
     objects = [];
 
     # Parse the input and create a list of SongImportObjects
-    for line in lines:
-        elements = line.split(';')
-        for i in range(len(elements)):
-            elements[i] = elements[i].strip('"')
-        tag = elements[0]
+    data = BinaryData(content_uncompressed)
+
+    while not data.is_done():
+        tag = data.get_tag()
+
         if tag == PLAYLIST_TAG:
-            playlist_name = elements[1]
+            playlist_name = data.get_string()
             source_name = 'test_playlist_file'
             playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=source_name)
             if created:
@@ -120,14 +154,14 @@ def process_playlists_exec(radio, lines):
                 print playlist
 
         elif tag == ALBUM_TAG:
-            album_name = elements[1]
+            album_name = data.get_string()
             album_name_simplified = pattern.sub('', album_name).lower()
         elif tag == ARTIST_TAG:
-            artist_name = elements[1]
+            artist_name = data.get_string()
             artist_name_simplified = pattern.sub('', artist_name).lower()
         elif tag == SONG_TAG:
-            order = int(elements[1])
-            song_name = elements[2]
+            order = data.get_int32()
+            song_name = data.get_string()
             song_name_simplified = pattern.sub('', song_name).lower()
 
             object = SongImportObject()
@@ -169,9 +203,7 @@ def process_playlists_exec(radio, lines):
 
 @task
 def process_playlists(radio, content_compressed):
-    content_uncompressed = zlib.decompress(content_compressed)
-    lines = content_uncompressed.split('\n')
-    return process_playlists_exec(radio, lines)
+    return process_playlists_exec(radio, content_compressed)
 
 
 
