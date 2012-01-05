@@ -223,6 +223,7 @@ INSTALLED_APPS = (
     'tastypie',
     "djkombu",
     'djcelery',
+    'taggit',
 )
 
 # A sample logging configuration. The only tangible logging

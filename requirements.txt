@@ -7,3 +7,4 @@ django-kombu
 celery
 django-celery
 tweepy
+django-taggit

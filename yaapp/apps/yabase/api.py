@@ -61,7 +61,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'audience_peak', 'overall_listening_time']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time']
         include_resource_uri = False;
 #        authentication = ApiKeyAuthentication()
         authentication = Authentication()
@@ -82,18 +82,23 @@ class RadioResource(ModelResource):
             radio_resource.obj.description = radio_resource.data['description']
         if 'url' in radio_resource.data:
             radio_resource.obj.url = radio_resource.data['url']
+        if 'tags' in radio_resource.data:
+            radio_resource.obj.set_tags(radio_resource.data['tags'])
         radio_resource.obj.save()
         return radio_resource
         
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
         
-        likes = Radio.objects.get(pk=radioID).radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        likes = radio.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         bundle.data['likes'] = likes
         
-        listeners = Radio.objects.get(pk=radioID).radiouser_set.filter(connected=True).count()
+        listeners = radio.radiouser_set.filter(connected=True).count()
         bundle.data['listeners'] = listeners
+        
+        bundle.data['tags'] = radio.tags_to_string()
         
         return bundle
 

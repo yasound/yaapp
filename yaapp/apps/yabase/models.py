@@ -5,7 +5,8 @@ import datetime
 from django.utils.translation import ugettext_lazy as _
 import settings as yabase_settings
 import random
-
+import string
+from taggit.managers import TaggableManager
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
@@ -108,6 +109,7 @@ class Radio(models.Model):
     description = models.TextField(blank=True)
     genre = models.CharField(max_length=255, blank=True)
     theme = models.CharField(max_length=255, blank=True)
+    tags = TaggableManager()
     
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
@@ -162,7 +164,25 @@ class Radio(models.Model):
             print 'cannot get next song for radio: %s' % unicode(self)
             return None 
             
-        
+    def tags_to_string(self):
+        first = True
+        tags_str = ''
+        for tag in self.tags.all():
+            t = tag.name
+            if first:
+                tags_str += t
+                first = False
+            else:
+                tags_str += ','
+                tags_str += t
+        return tags_str
+    
+    def set_tags(self, tags_string):
+        separator = ','
+        tags_array = string.split(tags_string, separator)
+        self.tags.clear()
+        for tag in tags_array:
+            self.tags.add(tag)
         
 
     class Meta:
