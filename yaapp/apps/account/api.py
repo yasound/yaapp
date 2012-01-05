@@ -11,7 +11,7 @@ from tastypie.authorization import Authorization
 from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
 from tastypie.models import ApiKey
 from tastypie.serializers import Serializer
-
+from yabase.models import Radio
 import json
 import urllib
 import tweepy
@@ -118,6 +118,13 @@ class SignupResource(ModelResource):
             
         user_profile = user.userprofile
         user_profile.update_with_bundle(bundle, True)
+        
+        radio = Radio.objects.filter(creator=user.id)[0]
+        n = user_profile.name
+        if not n:
+            n = user.username
+        radio.name = n + "'s radio"
+        radio.save()
         
         return user_resource
     

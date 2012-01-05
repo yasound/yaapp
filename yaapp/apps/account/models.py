@@ -64,9 +64,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 def create_radio(sender, instance, created, **kwargs):  
     if created:  
-        radio_name = instance.username + "'s radio"
-        print radio_name
-        radio, created = Radio.objects.get_or_create(creator=instance, name=radio_name)
+        radio, created = Radio.objects.get_or_create(creator=instance)
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_api_key, sender=User)
