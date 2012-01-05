@@ -61,7 +61,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'picture', 'overall_listening_time']
+        fields = ['id', 'creator', 'playlists', 'name', 'picture', 'url' 'description', 'genre', 'theme', 'picture', 'audience_peak', 'overall_listening_time']
         include_resource_uri = False;
 #        authentication = ApiKeyAuthentication()
         authentication = Authentication()
@@ -75,15 +75,14 @@ class RadioResource(ModelResource):
         }
         
     def obj_update(self, bundle, request=None, **kwargs):
-        print bundle
-        if 'listeners' in bundle.data:
-            del bundle.data['listeners']
-        if 'likes' in bundle.data:
-            del bundle.data['likes']
-        print bundle
         radio_resource = super(RadioResource, self).obj_update(bundle, request, **kwargs)
-        print radio_resource
-        print radio_resource.obj
+        
+        # auto binding seems to work for CharField and FloatField but not for textField and URLField in this case
+        if 'description' in radio_resource.data:
+            radio_resource.obj.description = radio_resource.data['description']
+        if 'url' in radio_resource.data:
+            radio_resource.obj.url = radio_resource.data['url']
+        radio_resource.obj.save()
         return radio_resource
         
 

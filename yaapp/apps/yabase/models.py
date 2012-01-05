@@ -105,7 +105,7 @@ class Radio(models.Model):
     name = models.CharField(max_length=255)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True)
     genre = models.CharField(max_length=255, blank=True)
     theme = models.CharField(max_length=255, blank=True)
     
