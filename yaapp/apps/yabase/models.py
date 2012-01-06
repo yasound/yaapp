@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
-import yaapp.settings as yaapp_settings
+from django.conf import settings as yaapp_settings
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)

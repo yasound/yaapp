@@ -12,6 +12,8 @@ from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
 from tastypie.models import ApiKey
 from tastypie.serializers import Serializer
 from yabase.models import Radio
+import settings as account_settings
+from django.conf import settings as yaapp_settings
 import json
 import urllib
 import tweepy
@@ -53,34 +55,10 @@ class UserResource(ModelResource):
     
     def obj_update(self, bundle, request=None, **kwargs):
         user_resource = super(UserResource, self).obj_update(bundle, request, **kwargs)
-        
         user = user_resource.obj        
         user_profile = user.userprofile
         user_profile.update_with_bundle(bundle, False)
-        
         return user_resource
-    
-    
-    
-#class UserProfileResource(ModelResource):
-#    class Meta:
-#        queryset = UserProfile.objects.all()
-#        resource_name = 'userprofile'
-#        fields = ['id', 'twitter_account', 'facebook_account', 'bio_text']
-#        include_resource_uri = False    
-
-#class UserApiKeyResource(ModelResource):
-#    class Meta: 
-#        queryset = ApiKey.objects.all()
-#        resource_name = 'api_key'
-#        include_resource_uri = False
-#        fields = ['key']
-#        authentication = BasicAuthentication()
-#    
-#    def apply_authorization_limits(self, request, object_list):
-#        print request.user
-#        return object_list.filter(user=request.user)
-    
     
 def add_api_key_to_bundle(user, bundle):
     k = ApiKey.objects.get(user=user).key
@@ -159,7 +137,6 @@ class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         # Application Cookie authentication:
         print 'social login cookie authentication'
-        print request.COOKIES
         cookies = request.COOKIES
         if not cookies.has_key(APP_KEY_COOKIE_NAME):
             return False
@@ -172,9 +149,6 @@ class SocialAuthentication(Authentication):
         TOKEN_PARAM_NAME = 'token'
         NAME_PARAM_NAME = 'name'
         EMAIL_PARAM_NAME = 'email'
-        
-        ACCOUNT_TYPE_FACEBOOK = 'facebook'
-        ACCOUNT_TYPE_TWITTER = 'twitter'
         
         params = request.GET
         if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
@@ -189,7 +163,7 @@ class SocialAuthentication(Authentication):
             email = params[EMAIL_PARAM_NAME]
         
         username = build_social_username(uid, account_type)
-        if account_type == ACCOUNT_TYPE_FACEBOOK:
+        if account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
             
             if not facebook_profile:
@@ -221,21 +195,21 @@ class SocialAuthentication(Authentication):
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
+#                profile.scan_friends()
+                
                 request.user = user
                 
                 radio = Radio.objects.filter(creator=user.id)[0]
                 radio.create_name(user)
+                print 'facebook user created'
                 return True
-        elif account_type == ACCOUNT_TYPE_TWITTER:
-            YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
-            YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
-            
+        elif account_type == account_settings.ACCOUNT_TYPE_TWITTER:            
             TOKEN_SECRET_PARAM_NAME = 'token_secret'
             if not params.has_key(TOKEN_SECRET_PARAM_NAME):
                 return False
         
             token_secret = params[TOKEN_SECRET_PARAM_NAME]
-            auth = tweepy.OAuthHandler(YASOUND_TWITTER_APP_CONSUMER_KEY, YASOUND_TWITTER_APP_CONSUMER_SECRET)
+            auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
             auth.set_access_token(token, token_secret)
             api = tweepy.API(auth)
             res = api.verify_credentials()
@@ -263,6 +237,7 @@ class SocialAuthentication(Authentication):
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
+                profile.scan_friends()
                 request.user = user
                 
                 radio = Radio.objects.filter(creator=user.id)[0]
@@ -288,6 +263,7 @@ class LoginSocialResource(ModelResource):
         userprofile = user.userprofile        
         userprofile.fill_user_bundle(bundle)
         add_api_key_to_bundle(user, bundle)
+        print 'login social dehydrate OK'
         return bundle
 
     def apply_authorization_limits(self, request, object_list):

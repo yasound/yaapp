@@ -140,6 +140,33 @@ class FavoriteRadioResource(ModelResource):
         user = request.user
         return object_list.filter(radiouser__user=user, radiouser__favorite=True)
 
+class FriendRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+    
+    class Meta:
+        queryset = Radio.objects.all()
+        resource_name = 'friend_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        include_resource_uri = False;
+        authentication = ApiKeyAuthentication()
+        authorization = Authorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def apply_authorization_limits(self, request, object_list):
+        user = request.user
+        return object_list.filter(creator__in=user.userprofile.friends.all())
+
+
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
@@ -153,6 +180,38 @@ class WallEventResource(ModelResource):
         authentication = Authentication()
         allowed_methods = ['get', 'post']
     
+    def obj_create(self, bundle, request=None, **kwargs):
+        wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
+        wall_event = wall_event_resource.obj
+        if wall_event.type == yabase_settings.EVENT_JOINED:
+            print 'joined'
+            user = wall_event.user
+            radio = wall_event.radio
+            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
+            radiouser.connected = True
+            radiouser.save()
+            
+            connected_users = RadioUser.objects.filter(radio=radio, connected=True)
+            audience = len(connected_users)
+            if audience > radio.audience_peak:
+                radio.audience_peak = audience
+                radio.save()
+            
+        elif wall_event.type == yabase_settings.EVENT_LEFT:
+            print 'left'
+            user = wall_event.user
+            radio = wall_event.radio
+            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
+            radiouser.connected = False
+            radiouser.save()
+            
+            last_joined = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_JOINED).order_by('-start_date')[0]
+            last_left = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_LEFT).order_by('-start_date')[0]
+            duration = last_left.start_date - last_joined.start_date
+            seconds = duration.total_seconds()
+            radio.overall_listening_time += seconds
+            print 'add %d seconds' % seconds
+            radio.save()
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)

@@ -5,13 +5,17 @@ from django.db.models.signals import post_save
 from tastypie.models import create_api_key
 from tastypie.models import ApiKey
 from yabase.models import Radio
-import yaapp.settings as yaapp_settings
+from django.conf import settings as yaapp_settings
+import settings as account_settings
+import tweepy
+import json
+import urllib
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(max_length = 60, blank=True)
     url = models.URLField(null=True, blank=True)
-    account_type = models.CharField(max_length=20, default='yasound')
+    account_type = models.CharField(max_length=20, default=account_settings.ACCOUNT_TYPE_YASOUND)
     twitter_uid = models.CharField(max_length=60, null=True, blank=True)
     facebook_uid = models.CharField(max_length=60, null=True, blank=True)
     twitter_token = models.CharField(max_length=256, blank=True)
@@ -20,7 +24,7 @@ class UserProfile(models.Model):
     bio_text = models.TextField(null=True, blank=True)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(default=False)
-#    friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
+    friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
     
     def __unicode__(self):
         return self.user.username
@@ -50,13 +54,32 @@ class UserProfile(models.Model):
         if created and bundle.data.has_key('account_type'):
             t = bundle.data['account_type']
             self.account_type = t
-            if  t == 'yasound':
+            if  t == account_settings.ACCOUNT_TYPE_YASOUND:
                 print 'new yasound user'
-            elif t == 'facebook':
+            elif t == account_settings.ACCOUNT_TYPE_FACEBOOK:
                 print 'new facebook user'
-            elif t == 'twitter':
+            elif t == account_settings.ACCOUNT_TYPE_TWITTER:
                 print 'new twitter user'
         self.save()
+        
+    def scan_friends(self):
+        if self.account_type == account_settings.ACCOUNT_TYPE_YASOUND:
+            print 'cannot retrieve friends from yasound account'
+            return
+        
+        if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+            # FIXME: facebook token seems to expire!!!
+            print 'scan facebook friends'
+            friend_list = json.load(urllib.urlopen("https://graph.facebook.com/me/friendlists?" + urllib.urlencode(dict(access_token=self.facebook_token))))
+            print friend_list
+        elif self.account_type == account_settings.ACCOUNT_TYPE_TWITTER:
+            auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+            auth.set_access_token(self.twitter_token, self.twitter_token_secret)
+            api = tweepy.API(auth)
+            friends_ids = api.friends_ids()
+            friends = User.objects.filter(userprofile__twitter_uid__in=friends_ids)
+            self.friends = friends
+            self.save()
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
