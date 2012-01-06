@@ -109,7 +109,7 @@ class Radio(models.Model):
     description = models.TextField(blank=True)
     genre = models.CharField(max_length=255, blank=True)
     theme = models.CharField(max_length=255, blank=True)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
@@ -184,6 +184,28 @@ class Radio(models.Model):
         for tag in tags_array:
             self.tags.add(tag)
         
+    def fill_bundle(self, bundle):
+        likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        bundle.data['likes'] = likes
+        listeners = self.radiouser_set.filter(connected=True).count()
+        bundle.data['listeners'] = listeners
+        bundle.data['tags'] = self.tags_to_string()
+        
+    def update_with_data(self, data):
+        if 'description' in data:
+            self.description = data['description']
+        if 'url' in data:
+            self.url = data['url']
+        if 'tags' in data:
+            self.set_tags(data['tags'])
+        self.save()
+        
+    def create_name(self, user):
+        n = user.userprofile.name
+        if not n:
+            n = user.username
+        self.name = n + "'s radio"
+        self.save()
 
     class Meta:
         db_name = u'default'

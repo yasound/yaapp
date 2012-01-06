@@ -120,11 +120,7 @@ class SignupResource(ModelResource):
         user_profile.update_with_bundle(bundle, True)
         
         radio = Radio.objects.filter(creator=user.id)[0]
-        n = user_profile.name
-        if not n:
-            n = user.username
-        radio.name = n + "'s radio"
-        radio.save()
+        radio.create_name(user)
         
         return user_resource
     
@@ -226,6 +222,9 @@ class SocialAuthentication(Authentication):
                 profile.name = name
                 profile.save()
                 request.user = user
+                
+                radio = Radio.objects.filter(creator=user.id)[0]
+                radio.create_name(user)
                 return True
         elif account_type == ACCOUNT_TYPE_TWITTER:
             YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
@@ -265,6 +264,9 @@ class SocialAuthentication(Authentication):
                 profile.name = name
                 profile.save()
                 request.user = user
+                
+                radio = Radio.objects.filter(creator=user.id)[0]
+                radio.create_name(user)
                 return True
         
         return False
@@ -289,7 +291,5 @@ class LoginSocialResource(ModelResource):
         return bundle
 
     def apply_authorization_limits(self, request, object_list):
-        print 'apply_authorization_limits:'
-        print request.user
         return object_list.filter(id=request.user.id)
         

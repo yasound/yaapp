@@ -50,18 +50,13 @@ class PlaylistResource(ModelResource):
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
-#    url = fields.CharField('url')
-#    description = fields.CharField('description')
-    
-#    users = fields.ManyToManyField('yabase.api.UserResource', 'users')
-#    next_songs = fields.ManyToManyField(SongInstanceResource, 'next_songs')
     
     # likers ?
     
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
 #        authentication = ApiKeyAuthentication()
         authentication = Authentication()
@@ -69,38 +64,80 @@ class RadioResource(ModelResource):
         allowed_methods = ['get', 'post', 'put']
         filtering = {
             'creator': ALL,
+            'genre': ALL,
         }
-        ordering = {
-            'overall_listening_time': ALL,
-        }
+        ordering = [
+            'overall_listening_time',
+            'created',
+        ]
         
     def obj_update(self, bundle, request=None, **kwargs):
         radio_resource = super(RadioResource, self).obj_update(bundle, request, **kwargs)
         
         # auto binding seems to work for CharField and FloatField but not for textField and URLField in this case
-        if 'description' in radio_resource.data:
-            radio_resource.obj.description = radio_resource.data['description']
-        if 'url' in radio_resource.data:
-            radio_resource.obj.url = radio_resource.data['url']
-        if 'tags' in radio_resource.data:
-            radio_resource.obj.set_tags(radio_resource.data['tags'])
-        radio_resource.obj.save()
+        radio = radio_resource.obj
+        radio.update_with_data(radio_resource.data)
         return radio_resource
         
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
         radio = Radio.objects.get(pk=radioID)
-        
-        likes = radio.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        bundle.data['likes'] = likes
-        
-        listeners = radio.radiouser_set.filter(connected=True).count()
-        bundle.data['listeners'] = listeners
-        
-        bundle.data['tags'] = radio.tags_to_string()
-        
+        radio.fill_bundle(bundle)
         return bundle
+    
+    
+class SelectedRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+    
+    class Meta:
+        queryset = Radio.objects.all()
+        resource_name = 'selected_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        include_resource_uri = False;
+        authentication = ApiKeyAuthentication()
+        authorization = Authorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def apply_authorization_limits(self, request, object_list):
+        user = request.user
+        return object_list.filter(radiouser__user=user, radiouser__radio_selected=True)
+    
+class FavoriteRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+    
+    class Meta:
+        queryset = Radio.objects.all()
+        resource_name = 'favorite_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        include_resource_uri = False;
+        authentication = ApiKeyAuthentication()
+        authorization = Authorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def apply_authorization_limits(self, request, object_list):
+        user = request.user
+        return object_list.filter(radiouser__user=user, radiouser__favorite=True)
 
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
