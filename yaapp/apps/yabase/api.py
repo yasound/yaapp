@@ -65,6 +65,7 @@ class RadioResource(ModelResource):
         filtering = {
             'creator': ALL,
             'genre': ALL,
+            'name': ('contains',),
         }
         ordering = [
             'overall_listening_time',
