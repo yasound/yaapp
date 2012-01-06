@@ -31,16 +31,21 @@ def get_song_metadatas(objects):
     nok = 0
     for object in objects:
         if object.metadata == None:
-            try:
-                metadata = SongMetadata.objects.get(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
-                object.metadata = metadata
+            #metadata = SongMetadata.objects.get(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
+            raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE name=%s and artist_name=%s and album_name=%s",
+                                           [object.song_name,
+                                            object.artist_name,
+                                            object.album_name])
+            for item in raw:
+                object.metadata = item
                 ok = ok + 1
-            except:
+                break
+            else:
                 nok = nok + 1
-                # do nothing
     t = time.time() - t
     print ' ( ' + str(ok) + ' / ' + str(nok + ok) + ')'
     print ' -> ' + str(t) + ' s'
+
 
 @transaction.commit_on_success
 def create_song_metadatas(objects):
@@ -55,6 +60,7 @@ def create_song_metadatas(objects):
             if hash not in md:
                 metadata = SongMetadata(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
                 md.add(hash)
+                #metadata.save()
                 operations.append(metadata)
     insert_many(operations)
     t = time.time() - t
@@ -66,14 +72,49 @@ def get_yasound_songs(objects):
     t = time.time()
     for object in objects:
         if object.yasound_song == None:
-            try:
-                #yasound_song = YasoundSong.objects.get(name_simplified=object.song_name_simplified, artist_name_simplified=object.artist_name_simplified, album_name_simplified=object.album_name_simplified)
-                songs = YasoundSong.objects.filter(name=object.song_name, artist_name=object.artist_name, album_name=object.album_name)
-                object.yasound_song = songs[0]
-            except:
-                pass # Not found? we can't do anything about it
+            raw = YasoundSong.objects.raw("SELECT * from yasound_song WHERE name=%s and artist_name=%s and album_name=%s",
+                                           [object.song_name,
+                                            object.artist_name,
+                                            object.album_name])
+            for item in raw:
+                object.yasound_song = item.id
+                break
     t = time.time() - t
     print " -> " + str(t) + ' s'
+
+
+
+
+@transaction.commit_on_success
+def old_create_song_instances(objects):
+    print "create_song_instances"
+    t = time.time()
+    found = 0
+    adds = []
+    updates = []
+    for object in objects:
+        try:
+            instance = SongInstance.objects.get(playlist=object.playlist, metadata=object.metadata, order=object.order)
+            if instance.song != object.yasound_song:
+                instance.song = object.yasound_song
+                #object.song_instance.save()
+                updates.append(instance)
+        except SongInstance.DoesNotExist:
+            if object.yasound_song != None:
+                instance = SongInstance(playlist=object.playlist, metadata=object.metadata, order=object.order, song=object.yasound_song)
+            else:
+                instance = SongInstance(playlist=object.playlist, metadata=object.metadata, order=object.order)
+            #object.song_instance.save()
+            adds.append(instance)
+        if instance.song != None:
+            found = found + 1
+
+    insert_many(adds);
+    update_many(updates);
+
+    t = time.time() - t
+    print " -> " + str(t) + ' s'
+    return found
 
 @transaction.commit_on_success
 def create_song_instances(objects):
@@ -83,21 +124,20 @@ def create_song_instances(objects):
     adds = []
     updates = []
     for object in objects:
-        try:
-            object.song_instance = SongInstance.objects.get(playlist=object.playlist, metadata=object.metadata, order=object.order)
-            if object.song_instance.song != object.yasound_song.id:
-                object.song_instance.song = object.yasound_song.id
-                #object.song_instance.save()
-                updates.append(object.song_instance)
-        except SongInstance.DoesNotExist:
+        res = SongInstance.objects.filter(playlist=object.playlist, metadata=object.metadata, order=object.order)
+        done = False
+        for item in res:
+            if (item.song != object.yasound_song):
+                item.song = object.yasound_song
+                updates.append(item)
+                found = found + 1
+                done = True
+            break
+        if not done:
             if object.yasound_song != None:
-                object.song_instance = SongInstance(playlist=object.playlist, metadata=object.metadata, order=object.order, song=object.yasound_song.id)
+                adds.append(SongInstance(playlist=object.playlist, metadata=object.metadata, order=object.order, song=object.yasound_song))
             else:
-                object.song_instance = SongInstance(playlist=object.playlist, metadata=object.metadata, order=object.order)
-            #object.song_instance.save()
-            adds.append(object.song_instance)
-        if object.song_instance.song != None:
-            found = found + 1
+                adds.append(SongInstance(playlist=object.playlist, metadata=object.metadata, order=object.order))
 
     insert_many(adds);
     update_many(updates);

@@ -28,6 +28,9 @@
 # History
 # 2010-12-10: quote column names, reported by Beres Botond. 
 
+from django.db import transaction
+
+@transaction.commit_on_success
 def insert_many(objects, using="default"):
     """Insert list of Django objects in one SQL query. Objects must be
     of the same Django model. Note that save is not called and signals
@@ -48,10 +51,17 @@ def insert_many(objects, using="default"):
     table = model._meta.db_table
     column_names = ",".join(con.ops.quote_name(f.column) for f in fields)
     placeholders = ",".join(("%s",) * len(fields))
-    con.cursor().executemany(
+    cursor = con.cursor()
+    cursor.executemany(
         "insert into %s (%s) values (%s)" % (table, column_names, placeholders),
         parameters)
+    #res = cursor.fetchall()
+    #print 'insert results: ' + str(len(res))
+    #for i in res:
+    #     print i
 
+
+@transaction.commit_on_success
 def update_many(objects, fields=[], using="default"):
     """Update list of Django objects in one SQL query, optionally only
     overwrite the given fields (as names, e.g. fields=["foo"]).
