@@ -29,7 +29,8 @@ class YaappRouter(object):
         "Allow any relation if a model in yabase is involved"
         if obj1._meta.app_label != 'yabase' or obj2._meta.app_label != 'yabase':
             return None
-        if obj1._meta.db_name == obj2._meta.db_name:
+        return True
+        if 'db_name' in dir(obj1._meta) and 'db_name' in dir(obj2._meta) and obj1._meta.db_name == obj2._meta.db_name:
             return True
         return False
     
