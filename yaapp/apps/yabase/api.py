@@ -313,6 +313,10 @@ class RadioUserResource(ModelResource):
         
         radio_id = kwargs.pop('radio_id')
         radio = get_object_or_404(Radio, id=radio_id)
+        
+        # create RadioUSer object if it does not exist
+        radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+        
         resource = RadioUserResource() 
         return resource.get_detail(request, radio=radio, user=request.user)
 #        print 'radio id %d' % kwargs['radio_id'] 
