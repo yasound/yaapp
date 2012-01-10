@@ -12,8 +12,8 @@ from account.api import UserResource, LoginResource, SignupResource, LoginSocial
 admin.autodiscover()
 
 api = Api(api_name='v1')
-api.register(SongMetadataResource())
-api.register(SongInstanceResource())
+#api.register(SongMetadataResource())
+#api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(RadioResource())

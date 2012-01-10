@@ -3,11 +3,16 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from models import User, UserProfile
 import datetime
+from check_request import check_api_key_Authentication, check_http_method
 
 PICTURE_FILE_TAG = 'picture'
 
 @csrf_exempt
 def set_user_picture(request, user_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:

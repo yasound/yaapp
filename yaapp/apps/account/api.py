@@ -22,17 +22,14 @@ APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
 
 class UserResource(ModelResource):
-#    userprofile = fields.OneToOneField('account.api.UserProfileResource', 'userprofile', full=True)
     class Meta:
         queryset = User.objects.all()
         resource_name = 'user'
-        fields = ['id', 'username', 'first_name']
+        fields = ['id', 'username']
         include_resource_uri = False
-        list_allowed_methods = ['get', 'put', 'delete']
-        detail_allowed_methods = ['get', 'put', 'delete']
-#        authentication = ApiKeyAuthentication()
-        authentication =    Authentication()
-        authorization = Authorization()
+        allowed_methods = []
+        authentication = ApiKeyAuthentication()
+        authorization = ReadOnlyAuthorization()
 
 
     def dehydrate(self, bundle):
@@ -40,18 +37,7 @@ class UserResource(ModelResource):
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
         userprofile.fill_user_bundle(bundle)
-        
         return bundle
-    
-    
-#    def obj_create(self, bundle, request=None, **kwargs):
-#        user_resource = super(UserResource, self).obj_create(bundle, request, **kwargs)
-#        
-#        user = user_resource.obj
-#        user_profile = user.userprofile
-#        user_profile.update_with_bundle(bundle, True)
-#        
-#        return user_resource
     
     def obj_update(self, bundle, request=None, **kwargs):
         user_resource = super(UserResource, self).obj_update(bundle, request, **kwargs)
@@ -84,8 +70,7 @@ class SignupResource(ModelResource):
         fields = ['id', 'username', 'last_name', 'password']
         authentication = SignupAuthentication()
         authorization = Authorization()
-        list_allowed_methods = ['post']
-        detail_allowed_methods = ['post']
+        allowed_methods = ['post']
         
     def obj_create(self, bundle, request=None, **kwargs):
         #test if user already exist
@@ -108,8 +93,7 @@ class LoginResource(ModelResource):
         resource_name = 'login'
         include_resource_uri = False
         fields = ['id', 'username']
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
+        allowed_methods = ['get']
         authentication = BasicAuthentication()
         
         
@@ -123,9 +107,6 @@ class LoginResource(ModelResource):
         return bundle
     
     def apply_authorization_limits(self, request, object_list):
-        print request.user
-#        import pdb
-#        pdb.set_trace()
         return object_list.filter(id=request.user.id)
     
  
@@ -136,7 +117,6 @@ def build_social_username(uid, account_type):
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         # Application Cookie authentication:
-        print 'social login cookie authentication'
         cookies = request.COOKIES
         if not cookies.has_key(APP_KEY_COOKIE_NAME):
             return False
@@ -252,8 +232,7 @@ class LoginSocialResource(ModelResource):
         resource_name = 'login_social'
         include_resource_uri = False
         fields = ['id', 'username']
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
+        allowed_methods = ['get']
         authentication = SocialAuthentication()
         
         

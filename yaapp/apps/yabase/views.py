@@ -1,31 +1,15 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from yabase.models import Radio, RadioUser
 from celery.result import AsyncResult
 import datetime
-from tastypie.models import ApiKey
-from django.contrib.auth.models import User
 from yabase.task import process_playlists
 import yabase.settings as yabase_settings
+from check_request import check_api_key_Authentication, check_http_method
 
 PICTURE_FILE_TAG = 'picture'
 
-def authenticate_api_key(request):
-    if not ('username' in request.GET and 'api_key' in request.GET):
-        return False
-    username = request.GET['username']
-    key = request.GET['api_key']
-    try:
-        user = User.objects.get(username=username)
-        api_key = ApiKey.objects.get(user=user)
-        if api_key.key == key:
-            request.user =user
-        else:
-            return False
-    except User.DoesNotExist, ApiKey.DoesNotExist:
-        return False
-    return True
 
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
@@ -35,6 +19,11 @@ def task_status(request, task_id):
 
 @csrf_exempt
 def upload_playlists(request, radio_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
     radio = get_object_or_404(Radio, pk=radio_id)
 
     print 'upload_playlists'
@@ -48,7 +37,11 @@ def upload_playlists(request, radio_id):
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
-    print 'set_radio_picture'
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
@@ -68,8 +61,12 @@ def set_radio_picture(request, radio_id):
 
 @csrf_exempt
 def like_radio(request, radio_id):
-    if not authenticate_api_key(request):
+    if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
+    
+    print request.method
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
     
     try:
         radio = Radio.objects.get(id=radio_id)
@@ -84,8 +81,11 @@ def like_radio(request, radio_id):
 
 @csrf_exempt
 def neutral_radio(request, radio_id):
-    if not authenticate_api_key(request):
+    if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
+    
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
     
     try:
         radio = Radio.objects.get(id=radio_id)
@@ -100,8 +100,11 @@ def neutral_radio(request, radio_id):
 
 @csrf_exempt
 def dislike_radio(request, radio_id):
-    if not authenticate_api_key(request):
+    if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
+    
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
     
     try:
         radio = Radio.objects.get(id=radio_id)
@@ -116,8 +119,11 @@ def dislike_radio(request, radio_id):
 
 @csrf_exempt
 def favorite_radio(request, radio_id):
-    if not authenticate_api_key(request):
+    if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
+    
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
     
     try:
         radio = Radio.objects.get(id=radio_id)
@@ -132,8 +138,11 @@ def favorite_radio(request, radio_id):
 
 @csrf_exempt
 def not_favorite_radio(request, radio_id):
-    if not authenticate_api_key(request):
+    if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
+    
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
     
     try:
         radio = Radio.objects.get(id=radio_id)

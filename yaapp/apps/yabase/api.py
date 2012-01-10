@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from tastypie.utils import trailing_slash
 import datetime
 from tastypie.authentication import Authentication
-from tastypie.authorization import DjangoAuthorization, Authorization
+from tastypie.authorization import DjangoAuthorization, Authorization, ReadOnlyAuthorization
 import settings as yabase_settings
 from account.api import UserResource
 from tastypie.authentication import ApiKeyAuthentication 
@@ -15,6 +15,7 @@ from tastypie.resources import ModelResource, ALL
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.http import HttpResponse
+import json
 
 
 class SongMetadataResource(ModelResource):
@@ -23,8 +24,9 @@ class SongMetadataResource(ModelResource):
         resource_name = 'metadata'
         fields = ['name', 'artist_name', 'album_name', 'track_index', 'track_count', 'disc_index', 'disc_count', 'bpm', 'date', 'score', 'duration', 'genre', 'picture']
         include_resource_uri = False
-        authorization= Authorization()
-        authentication = Authentication()
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = []
 
 class SongInstanceResource(ModelResource):
     metadata = fields.ForeignKey(SongMetadataResource, 'metadata', full=True)
@@ -34,13 +36,19 @@ class SongInstanceResource(ModelResource):
         resource_name = 'song'
         fields = ['playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
         include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = []
 
 class PlaylistResource(ModelResource):
     class Meta:
         queryset = Playlist.objects.all()
         resource_name = 'playlist'
-        fields = ['name', 'source', 'enabled', 'sync_date', 'CRC']
+        fields = ['name', 'source', 'enabled']
         include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = []
 
 
 
@@ -52,17 +60,14 @@ class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
-    # likers ?
-    
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
-#        authentication = ApiKeyAuthentication()
-        authentication = Authentication()
+        authentication = ApiKeyAuthentication()
         authorization = Authorization()
-        allowed_methods = ['get', 'post', 'put']
+        allowed_methods = ['get', 'put']
         filtering = {
             'creator': ALL,
             'genre': ALL,
@@ -99,7 +104,7 @@ class SelectedRadioResource(ModelResource):
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
             'genre': ALL,
@@ -125,7 +130,7 @@ class FavoriteRadioResource(ModelResource):
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
             'genre': ALL,
@@ -151,7 +156,7 @@ class FriendRadioResource(ModelResource):
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
             'genre': ALL,
@@ -168,6 +173,25 @@ class FriendRadioResource(ModelResource):
         return object_list.filter(creator__in=user.userprofile.friends.all())
 
 
+#class WallPostAuthorization(Authorization):
+#    def is_authorized(self, request, object=None):
+#        print 'WallPostAuthorization'
+#        print request
+#        print 'prout'
+#        data = request.POST['']
+#        print data
+#        dict = json.load(data)
+#        print dict
+#        print hasattr(request, 'user')
+##        print 'user' in request.POST
+##        print request.POST['user']
+##        print request.user
+#        
+#        if 'user' in request.POST and request.POST['user'] != request.user:
+#            print 'should not post'
+#        print request
+#        return True
+
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
@@ -175,17 +199,16 @@ class WallEventResource(ModelResource):
     class Meta:
         queryset = WallEvent.objects.all()
         resource_name = 'wall_event'
-        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization= Authorization()
-        authentication = Authentication()
-        allowed_methods = ['get', 'post']
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['post']
     
     def obj_create(self, bundle, request=None, **kwargs):
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
         wall_event = wall_event_resource.obj
         if wall_event.type == yabase_settings.EVENT_JOINED:
-            print 'joined'
             user = wall_event.user
             radio = wall_event.radio
             radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
@@ -199,7 +222,6 @@ class WallEventResource(ModelResource):
                 radio.save()
             
         elif wall_event.type == yabase_settings.EVENT_LEFT:
-            print 'left'
             user = wall_event.user
             radio = wall_event.radio
             radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
@@ -211,8 +233,9 @@ class WallEventResource(ModelResource):
             duration = last_left.start_date - last_joined.start_date
             seconds = duration.total_seconds()
             radio.overall_listening_time += seconds
-            print 'add %d seconds' % seconds
             radio.save()
+            
+        return wall_event_resource
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
@@ -223,9 +246,12 @@ class RadioWallEventResource(ModelResource):
         resource_name = 'wall'
         fields = ['id', 'type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
+        authorization = ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
-        }
+            }
 
     def dispatch(self, request_type, request, **kwargs):
         radio = kwargs.pop('radio')
@@ -241,9 +267,12 @@ class NextSongsResource(ModelResource):
         resource_name = 'next_songs'
         fields = ['radio', 'song', 'order']
         include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
-        }
+            }
 
     def dispatch(self, request_type, request, **kwargs):
         radio = kwargs.pop('radio')
@@ -259,8 +288,10 @@ class RadioLikerResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'likes'
-        fields = ['username']
+        fields = ['id']
         allowed_methods = ['get']
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -278,7 +309,10 @@ class RadioUserConnectedResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'connected_users'
-        fields = ['username']
+        fields = ['id']
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -288,6 +322,11 @@ class RadioUserConnectedResource(ModelResource):
     
     def get_object_list(self, request):
         return super(RadioUserConnectedResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__connected=True)
+    
+    def dehydrate(self, bundle):
+        bundle.data['username'] = bundle.obj.username
+        bundle.obj.userprofile.fill_user_bundle(bundle)
+        return bundle
     
 
 class RadioUserResource(ModelResource): 
@@ -300,7 +339,7 @@ class RadioUserResource(ModelResource):
         allowed_methods = ['get']
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
         
     def override_urls(self):
         return [
@@ -337,6 +376,9 @@ class PlayedSongResource(ModelResource):
         filtering = {
             'radio': 'exact',
     }
+        allowed_methods = ['get']
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
     
     def dispatch(self, request_type, request, **kwargs):
         radio = kwargs.pop('radio')
