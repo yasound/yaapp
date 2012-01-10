@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from tastypie.utils import trailing_slash
 import datetime
 from tastypie.authentication import Authentication
-from tastypie.authorization import Authorization
+from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
 from tastypie.models import ApiKey
 from tastypie.serializers import Serializer
