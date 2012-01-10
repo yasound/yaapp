@@ -14,6 +14,7 @@ from tastypie.authentication import ApiKeyAuthentication
 from tastypie.resources import ModelResource, ALL
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from django.http import HttpResponse
 
 
 class SongMetadataResource(ModelResource):
@@ -259,6 +260,7 @@ class RadioLikerResource(ModelResource):
         queryset = User.objects.all()
         resource_name = 'likes'
         fields = ['username']
+        allowed_methods = ['get']
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -286,6 +288,34 @@ class RadioUserConnectedResource(ModelResource):
     
     def get_object_list(self, request):
         return super(RadioUserConnectedResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__connected=True)
+    
+
+class RadioUserResource(ModelResource): 
+    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
+    user = fields.ForeignKey(UserResource, 'user', full=True)   
+    class Meta:
+        queryset = RadioUser.objects.all()
+        resource_name = 'radio_user'
+        fields = ['radio', 'user', 'mood', 'favorite']
+        allowed_methods = ['get']
+        include_resource_uri = False
+        authentication = ApiKeyAuthentication()
+        authorization = Authorization()
+        
+    def override_urls(self):
+        return [
+            url(r"^radio/(?P<radio_id>\d+)/%s/$" % self._meta.resource_name, self.wrap_view('get_radio_user'), name="api_get_radio_user"),
+        ]
+        
+    def get_radio_user(self, request, **kwargs):        
+        self.method_check(request, self._meta.allowed_methods)
+        self.is_authenticated(request)
+        
+        radio_id = kwargs.pop('radio_id')
+        radio = get_object_or_404(Radio, id=radio_id)
+        resource = RadioUserResource() 
+        return resource.get_detail(request, radio=radio, user=request.user)
+#        print 'radio id %d' % kwargs['radio_id'] 
 
 
 
