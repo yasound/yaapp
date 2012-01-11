@@ -187,6 +187,8 @@ class Radio(models.Model):
     def fill_bundle(self, bundle):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         bundle.data['likes'] = likes
+        favorites = self.radiouser_set.filter(favorite=True).count()
+        bundle.data['favorites'] = favorites
         listeners = self.radiouser_set.filter(connected=True).count()
         bundle.data['listeners'] = listeners
         bundle.data['tags'] = self.tags_to_string()

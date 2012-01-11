@@ -1,9 +1,10 @@
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from yabase.models import Radio, RadioUser
+from yabase.models import Radio, RadioUser, SongInstance, SongUser
 from celery.result import AsyncResult
 import datetime
+import json
 from yabase.task import process_playlists
 import yabase.settings as yabase_settings
 from check_request import check_api_key_Authentication, check_http_method
@@ -154,5 +155,121 @@ def not_favorite_radio(request, radio_id):
     radio_user.save()
     res = '%s (user) has not %s (radio) as favorite anymore\n' % (request.user, radio)
     return HttpResponse(res)
+
+
+
+# SONG USER
+@csrf_exempt
+def like_song(request, song_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    
+    print request.method
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    try:
+        song = SongInstance.objects.get(id=song_id)
+    except SongInstance.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    song_user, created = SongUser.objects.get_or_create(song=song, user=request.user)
+    song_user.mood = yabase_settings.MOOD_LIKE
+    song_user.save()
+    res = '%s (user) likes %s (song)\n' % (request.user, song)
+    return HttpResponse(res)
+
+@csrf_exempt
+def neutral_song(request, song_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    
+    print request.method
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    try:
+        song = SongInstance.objects.get(id=song_id)
+    except SongInstance.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    song_user, created = SongUser.objects.get_or_create(song=song, user=request.user)
+    song_user.mood = yabase_settings.MOOD_NEUTRAL
+    song_user.save()
+    res = '%s (user) does not like nor dislike %s (song)\n' % (request.user, song)
+    return HttpResponse(res)
+
+@csrf_exempt
+def dislike_song(request, song_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    
+    print request.method
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    try:
+        song = SongInstance.objects.get(id=song_id)
+    except SongInstance.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    song_user, created = SongUser.objects.get_or_create(song=song, user=request.user)
+    song_user.mood = yabase_settings.MOOD_DISLIKE
+    song_user.save()
+    res = '%s (user) dislikes %s (song)\n' % (request.user, song)
+    return HttpResponse(res)
+
+
+
+@csrf_exempt
+def add_song_to_favorites(request, radio_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    try:
+        radio = Radio.objects.get(id=radio_id)
+        if not request.user or request.user != radio.creator:
+            return HttpResponse(status=401) 
+    except Radio.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    print request
+    if len(request.POST.keys()) == 0:
+        print 'no keys'
+        return HttpResponseBadRequest()
+    data = request.POST.keys()[0]
+    print data
+    obj = json.loads(data)
+    print 'obj:'
+    print obj
+    if not 'id' in obj:
+        print 'no id'
+        return HttpResponseBadRequest()
+    
+    try:
+        song_id = int(obj['id'])
+        song_source = SongInstance.objects.get(id=song_id)
+    except SongInstance.DoesNotExist:
+        print 'no song instance'
+        return HttpResponseBadRequest()
+    
+    already_in_radio = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song=song_source.song).count() > 0
+    if already_in_radio:
+        result = dict(success=True, created=False)
+        response = json.dumps(result)
+        return HttpResponse(response)
+    
+    YASOUND_FAVORITES_PLAYLIST_NAME = '#yasound_favorites_playlist'
+    YASOUND_FAVORITES_PLAYLIST_SOURCE = '#yasound_favorites_playlist_source'
+    playlist, created = radio.playlists.get_or_create(name=YASOUND_FAVORITES_PLAYLIST_NAME, source=YASOUND_FAVORITES_PLAYLIST_SOURCE)
+    new_song = SongInstance.objects.create(playlist=playlist, metadata=song_source.metadata, song=song_source.song, play_count=0)
+
+    result = dict(success=True, created=True)
+    response = json.dumps(result)
+    return HttpResponse(response)
+
 
     

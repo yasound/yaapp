@@ -1,6 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, NextSong, RadioUser
+from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, NextSong, RadioUser, SongUser
 from django.contrib.auth.models import User
 from django.conf.urls.defaults import url
 from django.shortcuts import get_object_or_404
@@ -287,7 +287,7 @@ class RadioLikerResource(ModelResource):
     
     class Meta:
         queryset = User.objects.all()
-        resource_name = 'likes'
+        resource_name = 'like_user'
         fields = ['id']
         allowed_methods = ['get']
         authorization= ReadOnlyAuthorization()
@@ -301,6 +301,36 @@ class RadioLikerResource(ModelResource):
     
     def get_object_list(self, request):
         return super(RadioLikerResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__mood=yabase_settings.MOOD_LIKE)
+    
+    def dehydrate(self, bundle):
+        bundle.data['username'] = bundle.obj.username
+        bundle.obj.userprofile.fill_user_bundle(bundle)
+        return bundle
+    
+class RadioFavoriteResource(ModelResource):    
+    radio = None
+    
+    class Meta:
+        queryset = User.objects.all()
+        resource_name = 'favorite_user'
+        fields = ['id']
+        allowed_methods = ['get']
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        include_resource_uri = False
+    
+    def dispatch(self, request_type, request, **kwargs):
+        radioID = kwargs.pop('radio')
+        self.radio = get_object_or_404(Radio, id=radioID)
+        return super(RadioFavoriteResource, self).dispatch(request_type, request, **kwargs)
+    
+    def get_object_list(self, request):
+        return super(RadioFavoriteResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__favorite=True)
+    
+    def dehydrate(self, bundle):
+        bundle.data['username'] = bundle.obj.username
+        bundle.obj.userprofile.fill_user_bundle(bundle)
+        return bundle
 
 
 class RadioUserConnectedResource(ModelResource):    
@@ -308,7 +338,7 @@ class RadioUserConnectedResource(ModelResource):
     
     class Meta:
         queryset = User.objects.all()
-        resource_name = 'connected_users'
+        resource_name = 'connected_user'
         fields = ['id']
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
@@ -386,6 +416,35 @@ class PlayedSongResource(ModelResource):
         return super(PlayedSongResource, self).dispatch(request_type, request, **kwargs)
 
    
-
+class SongUserResource(ModelResource): 
+    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
+    user = fields.ForeignKey(UserResource, 'user', full=True)   
+    class Meta:
+        queryset = SongUser.objects.all()
+        resource_name = 'song_user'
+        fields = ['song', 'user', 'mood']
+        allowed_methods = ['get']
+        include_resource_uri = False
+        authentication = ApiKeyAuthentication()
+        authorization = ReadOnlyAuthorization()
+        
+    def override_urls(self):
+        return [
+            url(r"^song/(?P<song_id>\d+)/%s/$" % self._meta.resource_name, self.wrap_view('get_song_user'), name="api_get_song_user"),
+        ]
+        
+    def get_song_user(self, request, **kwargs): 
+        print 'get_song_user'       
+        self.method_check(request, self._meta.allowed_methods)
+        self.is_authenticated(request)
+        
+        song_id = kwargs.pop('song_id')
+        song = get_object_or_404(SongInstance, id=song_id)
+        
+        # create SongUser object if it does not exist
+        song_user, created = SongUser.objects.get_or_create(song=song, user=request.user)
+        
+        resource = SongUserResource() 
+        return resource.get_detail(request, song=song, user=request.user)
 
 
