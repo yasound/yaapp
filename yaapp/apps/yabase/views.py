@@ -26,10 +26,6 @@ def upload_playlists(request, radio_id):
         return HttpResponse(status=405)
     
     radio = get_object_or_404(Radio, pk=radio_id)
-
-    print 'upload_playlists'
-    print radio
-    print request.FILES
     data = request.FILES['playlists_data']
     content_compressed = data.read()
     asyncRes = process_playlists.delay(radio, content_compressed)
@@ -65,7 +61,6 @@ def like_radio(request, radio_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
     
-    print request.method
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
@@ -164,7 +159,6 @@ def like_song(request, song_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
     
-    print request.method
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
@@ -184,7 +178,6 @@ def neutral_song(request, song_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
     
-    print request.method
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
@@ -204,7 +197,6 @@ def dislike_song(request, song_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
     
-    print request.method
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
@@ -236,24 +228,17 @@ def add_song_to_favorites(request, radio_id):
     except Radio.DoesNotExist:
         return HttpResponseNotFound()
     
-    print request
     if len(request.POST.keys()) == 0:
-        print 'no keys'
         return HttpResponseBadRequest()
     data = request.POST.keys()[0]
-    print data
     obj = json.loads(data)
-    print 'obj:'
-    print obj
     if not 'id' in obj:
-        print 'no id'
         return HttpResponseBadRequest()
     
     try:
         song_id = int(obj['id'])
         song_source = SongInstance.objects.get(id=song_id)
     except SongInstance.DoesNotExist:
-        print 'no song instance'
         return HttpResponseBadRequest()
     
     already_in_radio = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song=song_source.song).count() > 0
