@@ -8,3 +8,4 @@ celery
 django-celery
 tweepy
 django-taggit
+python-memcached
