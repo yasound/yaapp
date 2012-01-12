@@ -143,24 +143,24 @@ class Radio(models.Model):
         s = songs[i]
         return s
     
-    def get_next_song(self):
-        while len(self.next_songs.all()) < (RADIO_NEXT_SONGS_COUNT + 1):
+    def fill_next_songs_queue(self):
+        while self.next_songs.count() < RADIO_NEXT_SONGS_COUNT:
             s = self.find_new_song()
             if s == None:
                 break;
             o = len(self.next_songs.all()) + 1
-            n = NextSong.objects.create(radio=self, song=s, order=o)
+            NextSong.objects.create(radio=self, song=s, order=o)
+    
+    def get_next_song(self):
+        self.fill_next_songs_queue()
             
         try:
             n = NextSong.objects.get(radio=self, order=1)
             song = n.song
             n.delete()
             w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
-#            next_songs = NextSong.objects.filter(radio=self)
-#            for n in next_songs.all():
-#                n.order -= 1
-#                n.save()
             song.last_play_time = datetime.datetime.now()
+            self.fill_next_songs_queue()
             return song # SongInstance
         except NextSong.DoesNotExist:
             print 'cannot get next song for radio: %s' % unicode(self)
@@ -366,15 +366,16 @@ class NextSong(models.Model):
         for n in to_update:
             n.order -= 1
             super(NextSong, n).save()
+        self.radio.fill_next_songs_queue()
             
     @transaction.commit_on_success
     def save(self, *args, **kwargs):
-        old_order = self.order
-        new_order = self.order
+        old_order = int(self.order)
+        new_order = int(self.order)
         creation = False
         if self.pk:
             in_db = NextSong.objects.get(pk=self.pk)
-            old_order = in_db.order
+            old_order = int(in_db.order)
         else:
             creation = True
         

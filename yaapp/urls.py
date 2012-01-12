@@ -1,11 +1,11 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from tastypie.api import Api
-from yabase.api import NextSongsResource, RadioWallEventResource, \
+from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, \
-    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource
+    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 
 # Uncomment the next two lines to enable the admin:
@@ -13,7 +13,7 @@ admin.autodiscover()
 
 api = Api(api_name='v1')
 #api.register(SongMetadataResource())
-#api.register(SongInstanceResource())
+api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(RadioResource())
@@ -24,8 +24,9 @@ api.register(WallEventResource())
 api.register(LoginResource())
 api.register(SignupResource())
 api.register(LoginSocialResource())
+api.register(NextSongResource())
 
-next_songs = NextSongsResource()
+radio_next_songs = RadioNextSongsResource()
 wall_event = RadioWallEventResource()
 radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
@@ -56,7 +57,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/favorite/$', 'yabase.views.favorite_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/not_favorite/$', 'yabase.views.not_favorite_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/favorite_song/$', 'yabase.views.add_song_to_favorites'),
-    (r'^api/v1/radio/(?P<radio>\d+)/', include(next_songs.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_next_songs.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(wall_event.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_likers.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
