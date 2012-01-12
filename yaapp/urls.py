@@ -5,7 +5,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, \
-    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource
+    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 
 # Uncomment the next two lines to enable the admin:
@@ -34,6 +34,7 @@ connected_users = RadioUserConnectedResource()
 played_song = PlayedSongResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
+radio_enabled_playlist = RadioPlaylistResource()
 
 urlpatterns = patterns('',
     # Examples:
@@ -63,6 +64,7 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/', include(radio_user.urls)),
     (r'^api/v1/', include(song_user.urls)),
     url(r'^api/v1/song/(?P<song_id>\d+)/liker/$', 'yabase.views.like_song'),

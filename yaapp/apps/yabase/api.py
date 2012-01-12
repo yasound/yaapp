@@ -44,7 +44,7 @@ class PlaylistResource(ModelResource):
     class Meta:
         queryset = Playlist.objects.all()
         resource_name = 'playlist'
-        fields = ['name', 'source', 'enabled']
+        fields = ['id', 'name']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
@@ -263,7 +263,7 @@ class RadioNextSongsResource(ModelResource):
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     class Meta:
-        queryset = NextSong.objects.all()
+        queryset = NextSong.objects.order_by('order')
         resource_name = 'next_songs'
         fields = ['id', 'radio', 'song', 'order']
         include_resource_uri = False
@@ -456,5 +456,26 @@ class SongUserResource(ModelResource):
         
         resource = SongUserResource() 
         return resource.get_detail(request, song=song, user=request.user)
+
+
+
+class RadioPlaylistResource(ModelResource):
+    
+    class Meta:
+        queryset = Playlist.objects.filter(enabled=True)
+        resource_name = 'enabled_playlist'
+        fields = ['id', 'name']
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
+        filtering = {
+            'radio': 'exact',
+            }
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(RadioPlaylistResource, self).dispatch(request_type, request, **kwargs)
 
 
