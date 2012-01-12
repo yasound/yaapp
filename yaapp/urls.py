@@ -1,11 +1,11 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from tastypie.api import Api
-from yabase.api import NextSongsResource, RadioWallEventResource, \
+from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, \
-    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource
+    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 
 # Uncomment the next two lines to enable the admin:
@@ -13,7 +13,7 @@ admin.autodiscover()
 
 api = Api(api_name='v1')
 #api.register(SongMetadataResource())
-#api.register(SongInstanceResource())
+api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(RadioResource())
@@ -24,8 +24,9 @@ api.register(WallEventResource())
 api.register(LoginResource())
 api.register(SignupResource())
 api.register(LoginSocialResource())
+api.register(NextSongResource())
 
-next_songs = NextSongsResource()
+radio_next_songs = RadioNextSongsResource()
 wall_event = RadioWallEventResource()
 radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
@@ -33,6 +34,7 @@ connected_users = RadioUserConnectedResource()
 played_song = PlayedSongResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
+radio_enabled_playlist = RadioPlaylistResource()
 
 urlpatterns = patterns('',
     # Examples:
@@ -46,7 +48,7 @@ urlpatterns = patterns('',
     #(r'^wall/', include('wall.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
-    url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists/$', 'yabase.views.upload_playlists'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists_update/$', 'yabase.views.upload_playlists'),
     url(r'^api/v1/task/(?P<task_id>\S+)/$', 'yabase.views.task_status'),
     url(r'^api/v1/user/(?P<user_id>\d+)/picture/$', 'account.views.set_user_picture'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/picture/$', 'yabase.views.set_radio_picture'),
@@ -58,11 +60,13 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/favorite_song/$', 'yabase.views.add_song_to_favorites'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/get_next_song/$', 'yabase.views.get_next_song'),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(next_songs.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_next_songs.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(wall_event.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_likers.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/', include(radio_user.urls)),
     (r'^api/v1/', include(song_user.urls)),
     url(r'^api/v1/song/(?P<song_id>\d+)/liker/$', 'yabase.views.like_song'),

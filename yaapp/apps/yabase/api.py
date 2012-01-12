@@ -34,17 +34,17 @@ class SongInstanceResource(ModelResource):
     class Meta:
         queryset = SongInstance.objects.all()
         resource_name = 'song'
-        fields = ['playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
+        fields = ['id', 'playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
-        allowed_methods = []
+        allowed_methods = ['post']
 
 class PlaylistResource(ModelResource):
     class Meta:
         queryset = Playlist.objects.all()
         resource_name = 'playlist'
-        fields = ['name', 'source', 'enabled']
+        fields = ['id', 'name']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
@@ -259,13 +259,13 @@ class RadioWallEventResource(ModelResource):
         return super(RadioWallEventResource, self).dispatch(request_type, request, **kwargs)
 
 
-class NextSongsResource(ModelResource):
+class RadioNextSongsResource(ModelResource):
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     class Meta:
-        queryset = NextSong.objects.all()
+        queryset = NextSong.objects.order_by('order')
         resource_name = 'next_songs'
-        fields = ['radio', 'song', 'order']
+        fields = ['id', 'radio', 'song', 'order']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
@@ -277,9 +277,19 @@ class NextSongsResource(ModelResource):
     def dispatch(self, request_type, request, **kwargs):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
-        return super(NextSongsResource, self).dispatch(request_type, request, **kwargs)
+        return super(RadioNextSongsResource, self).dispatch(request_type, request, **kwargs)
 
-
+class NextSongResource(ModelResource):
+    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
+    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
+    class Meta:
+        queryset = NextSong.objects.all()
+        resource_name = 'next_song'
+        fields = ['id', 'radio', 'song', 'order']
+        include_resource_uri = False
+        authorization= Authorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['post', 'put', 'delete']
 
 
 class RadioLikerResource(ModelResource):    
@@ -446,5 +456,26 @@ class SongUserResource(ModelResource):
         
         resource = SongUserResource() 
         return resource.get_detail(request, song=song, user=request.user)
+
+
+
+class RadioPlaylistResource(ModelResource):
+    
+    class Meta:
+        queryset = Playlist.objects.filter(enabled=True)
+        resource_name = 'enabled_playlist'
+        fields = ['id', 'name']
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
+        filtering = {
+            'radio': 'exact',
+            }
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(RadioPlaylistResource, self).dispatch(request_type, request, **kwargs)
 
 
