@@ -7,7 +7,9 @@ import settings as yabase_settings
 import random
 import string
 from taggit.managers import TaggableManager
+from django.db import transaction
 import django.db.models.options as options
+from Carbon.Aliases import true
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 from django.conf import settings as yaapp_settings
@@ -154,10 +156,10 @@ class Radio(models.Model):
             song = n.song
             n.delete()
             w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
-            next_songs = NextSong.objects.filter(radio=self)
-            for n in next_songs.all():
-                n.order -= 1
-                n.save()
+#            next_songs = NextSong.objects.filter(radio=self)
+#            for n in next_songs.all():
+#                n.order -= 1
+#                n.save()
             song.last_play_time = datetime.datetime.now()
             return song # SongInstance
         except NextSong.DoesNotExist:
@@ -355,6 +357,47 @@ class NextSong(models.Model):
     def __unicode__(self):
         s = '%s - %s - %d' % (unicode(self.radio), unicode(self.song), self.order)
         return s;
+    
+    @transaction.commit_on_success
+    def delete(self, *args, **kwargs):
+        order = self.order
+        super(NextSong, self).delete(*args, **kwargs)
+        to_update = NextSong.objects.filter(radio=self.radio, order__gt=order)
+        for n in to_update:
+            n.order -= 1
+            super(NextSong, n).save()
+            
+    @transaction.commit_on_success
+    def save(self, *args, **kwargs):
+        old_order = self.order
+        new_order = self.order
+        creation = False
+        if self.pk:
+            in_db = NextSong.objects.get(pk=self.pk)
+            old_order = in_db.order
+        else:
+            creation = True
+        
+        if creation:
+            to_update = NextSong.objects.filter(radio=self.radio, order__gte=self.order).order_by('-order')
+            for i in to_update:
+                i.order += 1
+                super(NextSong, i).save()
+        
+        super(NextSong, self).save(*args, **kwargs)
+        
+        if old_order != new_order:
+            if new_order < old_order:
+                to_update = NextSong.objects.filter(radio=self.radio, order__range=(new_order, old_order-1)).exclude(pk=self.pk).order_by('-order')
+                for i in to_update:
+                    i.order += 1
+                    super(NextSong, i).save()
+            else:
+                to_update = NextSong.objects.filter(radio=self.radio, order__range=(old_order+1, new_order)).exclude(pk=self.pk).order_by('order')
+                for i in to_update:
+                    i.order -= 1
+                    super(NextSong, i).save()
+        
 
 
 
