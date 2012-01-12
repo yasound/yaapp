@@ -9,7 +9,7 @@ import string
 from taggit.managers import TaggableManager
 from django.db import transaction
 import django.db.models.options as options
-from Carbon.Aliases import true
+#from Carbon.Aliases import true
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 from django.conf import settings as yaapp_settings
@@ -108,6 +108,7 @@ class Radio(models.Model):
     name = models.CharField(max_length=255)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
+    uuid = models.CharField(max_length=32, blank=True)
     description = models.TextField(blank=True)
     genre = models.CharField(max_length=255, blank=True)
     theme = models.CharField(max_length=255, blank=True)
