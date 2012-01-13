@@ -247,8 +247,8 @@ def add_song_to_favorites(request, radio_id):
         response = json.dumps(result)
         return HttpResponse(response)
 
-    YASOUND_FAVORITES_PLAYLIST_NAME = '#yasound_favorites_playlist'
-    YASOUND_FAVORITES_PLAYLIST_SOURCE = '#yasound_favorites_playlist_source'
+    YASOUND_FAVORITES_PLAYLIST_NAME = '#yasound_songs_from_other_radios'
+    YASOUND_FAVORITES_PLAYLIST_SOURCE = '#yasound_songs_from_other_radios_source_%d' % request.user.id
     playlist, created = radio.playlists.get_or_create(name=YASOUND_FAVORITES_PLAYLIST_NAME, source=YASOUND_FAVORITES_PLAYLIST_SOURCE)
     new_song = SongInstance.objects.create(playlist=playlist, metadata=song_source.metadata, song=song_source.song, play_count=0)
 

@@ -4,7 +4,7 @@ from tastypie.api import Api
 from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
-    RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, \
+    RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, RadioListenerResource, \
     PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 
@@ -31,6 +31,7 @@ wall_event = RadioWallEventResource()
 radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
 connected_users = RadioUserConnectedResource()
+listeners = RadioListenerResource()
 played_song = PlayedSongResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
@@ -64,6 +65,7 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_likers.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(listeners.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/', include(radio_user.urls)),

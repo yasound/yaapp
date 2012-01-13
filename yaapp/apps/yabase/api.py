@@ -215,12 +215,6 @@ class WallEventResource(ModelResource):
             radiouser.connected = True
             radiouser.save()
             
-            connected_users = RadioUser.objects.filter(radio=radio, connected=True)
-            audience = len(connected_users)
-            if audience > radio.audience_peak:
-                radio.audience_peak = audience
-                radio.save()
-            
         elif wall_event.type == yabase_settings.EVENT_LEFT:
             user = wall_event.user
             radio = wall_event.radio
@@ -228,9 +222,29 @@ class WallEventResource(ModelResource):
             radiouser.connected = False
             radiouser.save()
             
-            last_joined = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_JOINED).order_by('-start_date')[0]
-            last_left = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_LEFT).order_by('-start_date')[0]
-            duration = last_left.start_date - last_joined.start_date
+        elif wall_event.type == yabase_settings.EVENT_STARTED_LISTEN:
+            user = wall_event.user
+            radio = wall_event.radio
+            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
+            radiouser.listening = True
+            radiouser.save()
+            
+            listeners = RadioUser.objects.filter(radio=radio, listening=True)
+            audience = len(listeners)
+            if audience > radio.audience_peak:
+                radio.audience_peak = audience
+                radio.save()
+            
+        elif wall_event.type == yabase_settings.EVENT_STOPPED_LISTEN:
+            user = wall_event.user
+            radio = wall_event.radio
+            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
+            radiouser.listening = False
+            radiouser.save()
+            
+            last_start = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
+            last_stop = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
+            duration = last_stop.start_date - last_start.start_date
             seconds = duration.total_seconds()
             radio.overall_listening_time += seconds
             radio.save()
@@ -362,6 +376,31 @@ class RadioUserConnectedResource(ModelResource):
     
     def get_object_list(self, request):
         return super(RadioUserConnectedResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__connected=True)
+    
+    def dehydrate(self, bundle):
+        bundle.data['username'] = bundle.obj.username
+        bundle.obj.userprofile.fill_user_bundle(bundle)
+        return bundle
+    
+class RadioListenerResource(ModelResource):    
+    radio = None
+    
+    class Meta:
+        queryset = User.objects.all()
+        resource_name = 'listener'
+        fields = ['id']
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
+        include_resource_uri = False
+    
+    def dispatch(self, request_type, request, **kwargs):
+        radioID = kwargs.pop('radio')
+        self.radio = get_object_or_404(Radio, id=radioID)
+        return super(RadioListenerResource, self).dispatch(request_type, request, **kwargs)
+    
+    def get_object_list(self, request):
+        return super(RadioListenerResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__listening=True)
     
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
