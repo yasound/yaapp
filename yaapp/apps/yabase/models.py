@@ -151,21 +151,32 @@ class Radio(models.Model):
                 break;
             o = len(self.next_songs.all()) + 1
             NextSong.objects.create(radio=self, song=s, order=o)
+            
+    def empty_next_songs_queue(self):
+        next_songs = NextSong.objects.filter(radio=self).order_by('-order').all()
+        for i in next_songs:
+            super(NextSong, i).delete()
     
     def get_next_song(self):
         self.fill_next_songs_queue()
             
         try:
             n = NextSong.objects.get(radio=self, order=1)
-            song = n.song
-            n.delete()
-            w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
-            song.last_play_time = datetime.datetime.now()
-            self.fill_next_songs_queue()
-            return song # SongInstance
         except NextSong.DoesNotExist:
-            print 'cannot get next song for radio: %s' % unicode(self)
-            return None 
+            try:
+                self.empty_next_songs_queue()
+                self.fill_next_songs_queue()
+                n = NextSong.objects.get(radio=self, order=1)
+            except NextSong.DoesNotExist:
+                print 'cannot get next song for radio: %s' % unicode(self)
+                return None 
+        
+        song = n.song
+        n.delete()
+        w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
+        song.last_play_time = datetime.datetime.now()
+        self.fill_next_songs_queue()
+        return song # SongInstance
             
     def tags_to_string(self):
         first = True
