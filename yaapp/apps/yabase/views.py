@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from yabase.models import Radio, RadioUser, SongInstance, SongUser
+from yabase.models import Radio, RadioUser, SongInstance, SongUser, YasoundSong
 from celery.result import AsyncResult
 import datetime
 import json
@@ -258,18 +258,13 @@ def add_song_to_favorites(request, radio_id):
 
 @csrf_exempt
 def get_next_song(request, radio_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-
-    if not check_http_method(request, ['get']):
-        return HttpResponse(status=405)
-
     try:
         radio = Radio.objects.get(uuid=radio_id)
+        nextsong = radio.get_next_song()
+        song_id = nextsong.song
+        song = YasoundSong.objects.get(id=song_id)
+        return HttpResponse(song.filename)
     except Radio.DoesNotExist:
         return HttpResponseNotFound()
-
-    response = radio.get_next_song()
-    return HttpResponse(response)
 
 
