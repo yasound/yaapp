@@ -203,7 +203,9 @@ class Radio(models.Model):
         bundle.data['likes'] = likes
         favorites = self.radiouser_set.filter(favorite=True).count()
         bundle.data['favorites'] = favorites
-        listeners = self.radiouser_set.filter(connected=True).count()
+        connected_users = self.radiouser_set.filter(connected=True).count()
+        bundle.data['connected_users'] = connected_users
+        listeners = self.radiouser_set.filter(listening=True).count()
         bundle.data['listeners'] = listeners
         bundle.data['tags'] = self.tags_to_string()
         
@@ -263,6 +265,7 @@ class RadioUser(models.Model):
     favorite = models.BooleanField(default=False)
     connected = models.BooleanField(default=False)
     radio_selected = models.BooleanField(default=False)
+    listening = models.BooleanField(default=False)
     
     # custom manager
     objects = RadioUserManager()
@@ -337,10 +340,18 @@ class WallEvent(models.Model):
         elif self.	type == yabase_settings.EVENT_SONG:
             s += 'song: '
             s += unicode(self.song)
+        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
+            s += 'started to listen: '
+            s += unicode(self.user)
+        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
+            s += 'stopped listening: '
+            s += unicode(self.user)
         return s
     
     @property
     def is_valid(self):
+        if not self.radio:
+            return False
         valid = False
         if self.type == yabase_settings.EVENT_JOINED:
             valid = not (self.user is None)
@@ -350,6 +361,10 @@ class WallEvent(models.Model):
             valid = (not (self.text is None)) or (not (self.animated_emoticon is None)) or (not (self.picture is None))
         elif self.type == yabase_settings.EVENT_SONG:
             valid = not (self.song is None)
+        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
+            valid = not (self.user is None)
+        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
+            valid = not (self.user is None)
         return valid
 
     class Meta:
