@@ -63,7 +63,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = Authorization()
