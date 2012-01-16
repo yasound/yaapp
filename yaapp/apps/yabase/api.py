@@ -101,7 +101,7 @@ class SelectedRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'selected_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -127,7 +127,7 @@ class FavoriteRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -153,7 +153,7 @@ class FriendRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'friend_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'url', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
