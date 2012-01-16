@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_head %}
+    <script type="text/javascript">
+        var g_radio_url = '{{ radio_url }}';
+    </script>
+    <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
+    <script type="text/javascript" src="/media/js/listen.js"></script>
+    
+{% endblock %}
 {% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
 {% block body %}
 <div class='container'>

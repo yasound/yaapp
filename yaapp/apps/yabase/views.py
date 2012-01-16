@@ -273,4 +273,5 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     return render_to_response(template_name, {
         "radio": radio,
+        "radio_url": '/'
     }, context_instance=RequestContext(request))    
