@@ -2,8 +2,11 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from models import Radio
 from models import RadioUser
+from models import NextSong, SongInstance
+from models import RADIO_NEXT_SONGS_COUNT
 import settings as yabase_settings
 from django.core.urlresolvers import reverse
+from tests_utils import generate_playlist
 
 class TestModels(TestCase):
     def setUp(self):
@@ -76,6 +79,24 @@ class TestNextSong(TestCase):
         radio.save()
         self.radio = radio
         
-    def test_view(self):
+    def test_view_empty_radio(self):
         res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
         self.assertEqual(res.status_code, 404)
+        
+    def test_find_new_song(self):
+        playlist = generate_playlist(song_count=5)
+        self.radio.playlists.add(playlist)
+        song = self.radio.find_new_song()
+        self.assertIn(song.id, range(0, 6))
+        
+    def test_empty_next_songs_queue(self):
+        playlist = generate_playlist(song_count=5)
+        self.radio.playlists.add(playlist)
+
+        ns = NextSong(song=SongInstance.objects.get(id=1), radio=self.radio, order=1)
+        ns.save()
+        self.assertEqual(self.radio.next_songs.count(), 1)
+        self.radio.empty_next_songs_queue()
+        self.assertEqual(self.radio.next_songs.count(), RADIO_NEXT_SONGS_COUNT-1)
+        
+        
