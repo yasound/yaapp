@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404
+from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from models import Radio, RadioUser, SongInstance, SongUser, YasoundSong
 from celery.result import AsyncResult
@@ -268,3 +269,9 @@ def get_next_song(request, radio_id):
     return HttpResponse(song.filename)
 
 
+def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    return render_to_response(template_name, {
+        "radio": radio,
+        "radio_url": '/'
+    }, context_instance=RequestContext(request))    
