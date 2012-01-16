@@ -1,12 +1,12 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from yabase.models import Radio, RadioUser, SongInstance, SongUser, YasoundSong
+from models import Radio, RadioUser, SongInstance, SongUser, YasoundSong
 from celery.result import AsyncResult
 import datetime
 import json
-from yabase.task import process_playlists
-import yabase.settings as yabase_settings
+from task import process_playlists
+import settings as yabase_settings
 from check_request import check_api_key_Authentication, check_http_method
 
 PICTURE_FILE_TAG = 'picture'
