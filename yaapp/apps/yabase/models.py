@@ -13,6 +13,7 @@ import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 from django.conf import settings as yaapp_settings
+from django.db.models import signals
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
@@ -153,9 +154,7 @@ class Radio(models.Model):
             NextSong.objects.create(radio=self, song=s, order=o)
             
     def empty_next_songs_queue(self):
-        next_songs = NextSong.objects.filter(radio=self).order_by('-order').all()
-        for i in next_songs:
-            super(NextSong, i).delete()
+        NextSong.objects.filter(radio=self).delete()
     
     def get_next_song(self):
         self.fill_next_songs_queue()
@@ -386,16 +385,6 @@ class NextSong(models.Model):
         return s;
     
     @transaction.commit_on_success
-    def delete(self, *args, **kwargs):
-        order = self.order
-        super(NextSong, self).delete(*args, **kwargs)
-        to_update = NextSong.objects.filter(radio=self.radio, order__gt=order)
-        for n in to_update:
-            n.order -= 1
-            super(NextSong, n).save()
-        self.radio.fill_next_songs_queue()
-            
-    @transaction.commit_on_success
     def save(self, *args, **kwargs):
         old_order = int(self.order)
         new_order = int(self.order)
@@ -428,12 +417,21 @@ class NextSong(models.Model):
         
 
 
-
-
-
-
-
-
+def next_song_deleted(sender, instance, created=None, **kwargs):
+    """
+    handle next song deletion
+    """
+    if isinstance(instance, NextSong):
+        next_song = instance
+    else:
+        return
+    order = next_song.order
+    to_update = NextSong.objects.filter(radio=next_song.radio, order__gt=order).exclude(id=next_song.id)
+    for n in to_update:
+        n.order -= 1
+        n.save()
+    next_song.radio.fill_next_songs_queue()
+signals.pre_delete.connect(next_song_deleted, sender=NextSong)
 
 
 
