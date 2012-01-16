@@ -136,7 +136,11 @@ class Radio(models.Model):
         now = datetime.datetime.now()
         i = random.randint(0, count-1)
         first = i
-        while songs[i].last_play_time and (now - songs[i].last_play_time).total_seconds() > seconds_before_replay:
+        while songs[i].last_play_time:
+            delta = now - songs[i].last_play_time
+            total_seconds = delta.days * 86400 + delta.seconds
+            if total_seconds <= seconds_before_replay:
+                break
             i += 1
             i %= count
             if i == first:
