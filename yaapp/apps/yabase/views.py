@@ -263,8 +263,8 @@ def get_next_song(request, radio_id):
     nextsong = radio.get_next_song()
     if not nextsong:
         raise Http404
-    song_id = nextsong.song
-    song = YasoundSong.objects.get(id=song_id)
+    
+    song = get_object_or_404(YasoundSong, id=nextsong.song)
     return HttpResponse(song.filename)
 
 
