@@ -258,13 +258,10 @@ def add_song_to_favorites(request, radio_id):
 
 @csrf_exempt
 def get_next_song(request, radio_id):
-    try:
-        radio = Radio.objects.get(uuid=radio_id)
-        nextsong = radio.get_next_song()
-        song_id = nextsong.song
-        song = YasoundSong.objects.get(id=song_id)
-        return HttpResponse(song.filename)
-    except Radio.DoesNotExist:
-        return HttpResponseNotFound()
+    radio = get_object_or_404(Radio, uuid=radio_id)
+    nextsong = radio.get_next_song()
+    song_id = nextsong.song
+    song = YasoundSong.objects.get(id=song_id)
+    return HttpResponse(song.filename)
 
 
