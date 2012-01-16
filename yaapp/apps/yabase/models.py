@@ -158,7 +158,9 @@ class Radio(models.Model):
             NextSong.objects.create(radio=self, song=s, order=o)
             
     def empty_next_songs_queue(self):
+        signals.post_delete.disconnect(next_song_deleted, sender=NextSong)
         NextSong.objects.filter(radio=self).delete()
+        signals.post_delete.connect(next_song_deleted, sender=NextSong)
     
     def get_next_song(self):
         self.fill_next_songs_queue()
@@ -429,13 +431,14 @@ def next_song_deleted(sender, instance, created=None, **kwargs):
         next_song = instance
     else:
         return
+    
     order = next_song.order
     to_update = NextSong.objects.filter(radio=next_song.radio, order__gt=order).exclude(id=next_song.id)
     for n in to_update:
         n.order -= 1
-        n.save()
+        super(NextSong, n).save()
     next_song.radio.fill_next_songs_queue()
-signals.pre_delete.connect(next_song_deleted, sender=NextSong)
+signals.post_delete.connect(next_song_deleted, sender=NextSong)
 
 
 
