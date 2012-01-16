@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 from models import Radio, RadioUser, SongInstance, SongUser, YasoundSong
 from celery.result import AsyncResult
@@ -260,6 +261,8 @@ def add_song_to_favorites(request, radio_id):
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
     nextsong = radio.get_next_song()
+    if not nextsong:
+        raise Http404
     song_id = nextsong.song
     song = YasoundSong.objects.get(id=song_id)
     return HttpResponse(song.filename)

@@ -3,6 +3,7 @@ from django.test import TestCase
 from models import Radio
 from models import RadioUser
 import settings as yabase_settings
+from django.core.urlresolvers import reverse
 
 class TestModels(TestCase):
     def setUp(self):
@@ -60,4 +61,21 @@ class TestModels(TestCase):
         # misc fields
         self.assertEquals(dislikers[0].radio, self.radio)
         self.assertEquals(dislikers[0].user, self.user)
+   
+class TestNextSong(TestCase):
+    
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+    
+        # build some data
+        radio = Radio(creator=user, name='radio1', uuid='radio1')
+        radio.save()
+        self.radio = radio
         
+    def test_view(self):
+        res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
+        self.assertEqual(res.status_code, 404)
