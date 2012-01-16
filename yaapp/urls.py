@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from tastypie.api import Api
@@ -8,6 +10,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 
+from os import path
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
@@ -74,5 +77,15 @@ urlpatterns = patterns('',
     url(r'^api/v1/song/(?P<song_id>\d+)/neutral/$', 'yabase.views.neutral_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/disliker/$', 'yabase.views.dislike_song'),
     (r'^api/', include(api.urls)),
+    (r'^listen/(?P<radio_uuid>[\w-]+)', 'yabase.views.web_listen')
     # The normal jazz here, then...
 )
+
+if settings.LOCAL_MODE:
+    urlpatterns += patterns('',
+
+    # if we are in local mode we need django to serve medias
+     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': path.join(settings.PROJECT_PATH, 'media')}),
+
+    )
