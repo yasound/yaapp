@@ -8,6 +8,7 @@ from yabase.models import Radio
 from django.conf import settings as yaapp_settings
 import settings as account_settings
 import tweepy
+from facepy import GraphAPI
 import json
 import urllib
 import uuid
@@ -71,8 +72,21 @@ class UserProfile(models.Model):
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             # FIXME: facebook token seems to expire!!!
             print 'scan facebook friends'
-            friend_list = json.load(urllib.urlopen("https://graph.facebook.com/me/friendlists?" + urllib.urlencode(dict(access_token=self.facebook_token))))
-            print friend_list
+            graph = GraphAPI(self.facebook_token)
+            friends_response = graph.get('me/friends')
+            if not friends_response.has_key('data'):
+                print 'no friend data'
+                return
+            friends_data = friends_response['data']
+            friends_ids = []
+            for f in friends_data:
+                friends_ids.append(f['id'])
+            friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
+            print 'friends:'
+            print friends
+            self.friends = friends
+            self.save()
+            
         elif self.account_type == account_settings.ACCOUNT_TYPE_TWITTER:
             auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
             auth.set_access_token(self.twitter_token, self.twitter_token_secret)
