@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from tastypie.models import create_api_key
 from tastypie.models import ApiKey
-from yabase.models import Radio
+from yabase.models import Radio, RadioUser
 from django.conf import settings as yaapp_settings
 import settings as account_settings
 import tweepy
@@ -31,6 +31,27 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
     
+    @property
+    def current_radio(self):
+        current = self.listened_radio
+        if not current:
+            current = self.connected_radio
+        return current
+    
+    @property
+    def listened_radio(self):
+        radio_users = RadioUser.objects.filter(user=self.user, listening=True)
+        if radio_users.count() == 0:
+            return None
+        return radio_users[0].radio
+    
+    @property
+    def connected_radio(self):
+        radio_users = RadioUser.objects.filter(user=self.user, connected=True)
+        if radio_users.count() == 0:
+            return None
+        return radio_users[0].radio
+    
     def fill_user_bundle(self, bundle):
         picture_url = None
         if self.picture:
@@ -38,7 +59,7 @@ class UserProfile(models.Model):
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
-        
+                   
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
             self.bio_text = bundle.data['bio_text']
