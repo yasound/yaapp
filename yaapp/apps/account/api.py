@@ -175,7 +175,7 @@ class SocialAuthentication(Authentication):
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
-#                profile.scan_friends()
+                profile.scan_friends()
                 
                 request.user = user
                 

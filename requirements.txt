@@ -9,3 +9,4 @@ django-celery
 tweepy
 django-taggit
 python-memcached
+facepy
