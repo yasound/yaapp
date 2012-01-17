@@ -84,6 +84,8 @@ class UserProfile(models.Model):
             friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
             print 'friends:'
             print friends
+            self.friends = friends
+            self.save()
             
         elif self.account_type == account_settings.ACCOUNT_TYPE_TWITTER:
             auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
