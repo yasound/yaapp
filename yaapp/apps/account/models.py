@@ -32,6 +32,13 @@ class UserProfile(models.Model):
         return self.user.username
     
     @property
+    def own_radio(self):
+        own_radios = Radio.objects.filter(creator=self.user)
+        if own_radios.count() == 0:
+            return None
+        return own_radios[0]        
+    
+    @property
     def current_radio(self):
         current = self.listened_radio
         if not current:
