@@ -89,7 +89,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 def create_radio(sender, instance, created, **kwargs):  
     if created:  
         radio, created = Radio.objects.get_or_create(creator=instance)
-        radio.url = uuid.uuid4().hex + '.mp3'
+        radio.uuid = uuid.uuid4().hex + '.mp3'
         radio.save()
 
 post_save.connect(create_user_profile, sender=User)
