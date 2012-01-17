@@ -256,3 +256,10 @@ PICTURE_FOLDER = 'pictures'
 YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
 YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
 
+if LOCAL_MODE:
+    YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8001/'
+elif DEVELOPMENT_MODE:
+    YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8001/'
+elif PRODUCTION_MODE:
+    YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8001/'
+    

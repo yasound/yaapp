@@ -9,6 +9,7 @@ import datetime
 import json
 from task import process_playlists
 import settings as yabase_settings
+from django.conf import settings
 from check_request import check_api_key_Authentication, check_http_method
 
 PICTURE_FILE_TAG = 'picture'
@@ -271,7 +272,8 @@ def get_next_song(request, radio_id):
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
         "radio": radio,
-        "radio_url": '/'
+        "radio_url": radio_url
     }, context_instance=RequestContext(request))    
