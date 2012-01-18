@@ -47,17 +47,23 @@ class UserProfile(models.Model):
     
     @property
     def listened_radio(self):
-        radio_users = RadioUser.objects.filter(user=self.user, radio__is_valid=True, listening=True)
+        radio_users = RadioUser.objects.filter(user=self.user, listening=True)
         if radio_users.count() == 0:
             return None
-        return radio_users[0].radio
+        r = radio_users[0].radio
+        if not r.is_valid:
+            return None
+        return r
     
     @property
     def connected_radio(self):
-        radio_users = RadioUser.objects.filter(user=self.user, radio__is_valid=True, connected=True)
+        radio_users = RadioUser.objects.filter(user=self.user, connected=True)
         if radio_users.count() == 0:
             return None
-        return radio_users[0].radio
+        r = radio_users[0].radio
+        if not r.is_valid:
+            return None
+        return r
     
     def fill_user_bundle(self, bundle):
         picture_url = None
