@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-18 23:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: templates/yabase/listen.html:7
+#: templates/yabase/listen.html.py:52
+msgid "Mute"
+msgstr "Couper le son"
+
+#: templates/yabase/listen.html:8
+msgid "Unmute"
+msgstr "Rétablir le son"
+
+#: templates/yabase/listen.html:9
+#: templates/yabase/listen.html.py:49
+msgid "Play"
+msgstr "Jouer"
+
+#: templates/yabase/listen.html:10
+msgid "Stop"
+msgstr "Arrêter"
+
+#: templates/yabase/listen.html:17
+msgid "Listening to"
+msgstr "Ecoute de"
+
+#: templates/yabase/listen.html:26
+msgid "Created by"
+msgstr "Crée par"
+
+#: templates/yabase/listen.html:26
+msgid "on"
+msgstr "le"
+
+#: templates/yabase/listen.html:28
+msgid "Go to Yasound »"
+msgstr "Visiter Yasound »"
+
+#: templates/yabase/listen.html:36
+msgid "Creator"
+msgstr "Créateur"
+
+#: templates/yabase/listen.html:37
+msgid "Date"
+msgstr "Date"
+
+#: templates/yabase/listen.html:38
+msgid "Genre"
+msgstr "Genre"
+
+#: templates/yabase/listen.html:39
+msgid "Theme"
+msgstr "Thème"
+
+#: templates/yabase/listen.html:40
+msgid "Audience peak"
+msgstr "Pic d'audience"
+
+#: templates/yabase/listen.html:41
+msgid "Overall listening time"
+msgstr "Temps d'écoute global"
+
+#: templates/yabase/listen.html:42
+msgid "Listeners"
+msgstr "Auditeurs"
+
+#: templates/yabase/listen.html:43
+msgid "Fans"
+msgstr "Fans"
+
+#: templates/yabase/listen.html:50
+msgid "Increase volume"
+msgstr "Augmenter le volume"
+
+#: templates/yabase/listen.html:51
+msgid "Decrease volume"
+msgstr "Diminuer le volume"
+

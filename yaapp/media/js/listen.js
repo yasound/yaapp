@@ -10,10 +10,10 @@ $(document).ready(function() {
 	    url: g_radio_url,
 	    stream: true,
 	    onplay: function() {
-	    	$('#play').text('Stop');
+	    	$('#play').text(lbl_stop);
 	    },
 	    onstop: function() {
-	    	$('#play').text('Play');
+	    	$('#play').text(lbl_play);
 	    }
 	  });
 	  $('#play').click();
@@ -34,9 +34,9 @@ $(document).ready(function() {
 	$('#mute').click(function() {
 		mySound.toggleMute();
 		if (mySound.muted) {
-			$('#mute').text('Unmute');
+			$('#mute').text(lbl_unmute);
 		} else {
-			$('#mute').text('Mute');
+			$('#mute').text(lbl_mute);
 		}
 	})
 	
