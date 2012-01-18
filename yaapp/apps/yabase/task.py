@@ -70,10 +70,12 @@ def process_playlists_exec(radio, content_compressed):
             if created:
                 print 'playlist created '
                 print playlist
-                radio.playlists.add(playlist)
             else:
                 print 'playlist found '
                 print playlist
+            if not playlist in radio.playlists.all():
+                radio.playlists.add(playlist)
+                radio.save()
 
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
