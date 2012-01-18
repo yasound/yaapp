@@ -5,6 +5,7 @@
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
     </script>
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
     <script type="text/javascript" src="/media/js/listen.js"></script>
     
@@ -12,12 +13,18 @@
 {% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
 {% block body %}
 <div class='container'>
+    <div class="well">
+        <a class="btn large" id='play' href='#'>Play</a>
+        <a class="btn large" id='inc' href='#'>Increase volume</a>
+        <a class="btn large" id='dec' href='#'>Decrease volume</a>
+        <a class="btn large" id='mute' href='#'>Mute</a>
+    </div>
+
     <div class="hero-unit">
 	    <h1>{{ radio }}</h1>
 	    <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
-		<p>
-		<a class="btn primary large" href='http://yasound.com'>Go to Yasound »</a>
-		</p>
+		<p><a class="btn primary large" href='http://yasound.com'>Go to Yasound »</a></p>
     </div>
+    
 </div>
 {% endblock %}

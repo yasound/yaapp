@@ -313,8 +313,8 @@ class WallEventManager(models.Manager):
 class WallEvent(models.Model):
     radio = models.ForeignKey(Radio)
     type = models.CharField(max_length=1, choices = yabase_settings.EVENT_TYPE_CHOICES)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(auto_now_add=True)
     
     # attributes specific to 'song' event
     song = models.ForeignKey(SongInstance, null=True, blank=True)

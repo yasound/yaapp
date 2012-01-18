@@ -265,6 +265,7 @@ class RadioWallEventResource(ModelResource):
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
+            'id': 'lt',
             }
 
     def dispatch(self, request_type, request, **kwargs):

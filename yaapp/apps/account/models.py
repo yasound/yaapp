@@ -4,10 +4,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from tastypie.models import create_api_key
 from tastypie.models import ApiKey
-from yabase.models import Radio
+from yabase.models import Radio, RadioUser
 from django.conf import settings as yaapp_settings
 import settings as account_settings
 import tweepy
+from facepy import GraphAPI
 import json
 import urllib
 import uuid
@@ -30,6 +31,34 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
     
+    @property
+    def own_radio(self):
+        own_radios = Radio.objects.filter(creator=self.user)
+        if own_radios.count() == 0:
+            return None
+        return own_radios[0]        
+    
+    @property
+    def current_radio(self):
+        current = self.listened_radio
+        if not current:
+            current = self.connected_radio
+        return current
+    
+    @property
+    def listened_radio(self):
+        radio_users = RadioUser.objects.filter(user=self.user, listening=True)
+        if radio_users.count() == 0:
+            return None
+        return radio_users[0].radio
+    
+    @property
+    def connected_radio(self):
+        radio_users = RadioUser.objects.filter(user=self.user, connected=True)
+        if radio_users.count() == 0:
+            return None
+        return radio_users[0].radio
+    
     def fill_user_bundle(self, bundle):
         picture_url = None
         if self.picture:
@@ -37,7 +66,7 @@ class UserProfile(models.Model):
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
-        
+                   
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
             self.bio_text = bundle.data['bio_text']
@@ -71,8 +100,21 @@ class UserProfile(models.Model):
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             # FIXME: facebook token seems to expire!!!
             print 'scan facebook friends'
-            friend_list = json.load(urllib.urlopen("https://graph.facebook.com/me/friendlists?" + urllib.urlencode(dict(access_token=self.facebook_token))))
-            print friend_list
+            graph = GraphAPI(self.facebook_token)
+            friends_response = graph.get('me/friends')
+            if not friends_response.has_key('data'):
+                print 'no friend data'
+                return
+            friends_data = friends_response['data']
+            friends_ids = []
+            for f in friends_data:
+                friends_ids.append(f['id'])
+            friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
+            print 'friends:'
+            print friends
+            self.friends = friends
+            self.save()
+            
         elif self.account_type == account_settings.ACCOUNT_TYPE_TWITTER:
             auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
             auth.set_access_token(self.twitter_token, self.twitter_token_secret)
@@ -89,7 +131,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 def create_radio(sender, instance, created, **kwargs):  
     if created:  
         radio, created = Radio.objects.get_or_create(creator=instance)
-        radio.url = uuid.uuid4().hex + '.mp3'
+        radio.uuid = uuid.uuid4().hex + '.mp3'
         radio.save()
 
 post_save.connect(create_user_profile, sender=User)

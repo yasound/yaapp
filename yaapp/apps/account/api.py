@@ -25,7 +25,7 @@ class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'user'
-        fields = ['id', 'username']
+        fields = ['id']
         include_resource_uri = False
         allowed_methods = []
         authentication = ApiKeyAuthentication()
@@ -175,7 +175,7 @@ class SocialAuthentication(Authentication):
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
-#                profile.scan_friends()
+                profile.scan_friends()
                 
                 request.user = user
                 
