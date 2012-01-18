@@ -2,3 +2,7 @@
 body {
     padding-top: 30px;
 }
+
+.hero-unit h1 {
+	font-size:38px;
+}
