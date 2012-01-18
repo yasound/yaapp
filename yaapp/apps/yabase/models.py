@@ -128,6 +128,7 @@ class Radio(models.Model):
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
     
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
+    computing_next_songs = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.name;
