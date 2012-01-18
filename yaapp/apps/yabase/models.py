@@ -133,6 +133,11 @@ class Radio(models.Model):
     def __unicode__(self):
         return self.name;
     
+    @property
+    def is_valid(self):
+        valid = self.playlists.count() > 0
+        return valid
+    
     def find_new_song(self):
         songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), song__gt=0)
         songs = songs_queryset.all()
