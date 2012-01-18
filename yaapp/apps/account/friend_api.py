@@ -10,8 +10,8 @@ from yabase.models import Radio
 from yabase.api import RadioResource
 
 class FriendResource(ModelResource):
-    current_radio = fields.ForeignKey(RadioResource, attribute='current_radio', full=True)
-    own_radio = fields.ForeignKey(RadioResource, attribute='own_radio', full=True)
+    current_radio = fields.ForeignKey(RadioResource, attribute='current_radio', full=True, null=True, blank=True)
+    own_radio = fields.ForeignKey(RadioResource, attribute='own_radio', full=True, null=True, blank=True)
     class Meta:
         queryset = UserProfile.objects.all()
         resource_name = 'friend'
