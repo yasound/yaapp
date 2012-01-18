@@ -11,7 +11,7 @@ from task import process_playlists
 import settings as yabase_settings
 from django.conf import settings
 from check_request import check_api_key_Authentication, check_http_method
-
+import time
 PICTURE_FILE_TAG = 'picture'
 
 
@@ -262,7 +262,24 @@ def add_song_to_favorites(request, radio_id):
 @csrf_exempt
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
+    
+    i = 0
+    while radio.computing_next_songs:
+        time.sleep(3)
+        i = i+1
+        if i > 2:
+            break
+    
+    if radio.computing_next_songs:
+        raise Http404
+    
+    radio.computing_next_songs = True
+    radio.save()
+    
     nextsong = radio.get_next_song()
+    radio.computing_next_songs = False
+    radio.save()
+    
     if not nextsong:
         raise Http404
     
