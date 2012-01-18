@@ -38,7 +38,7 @@ class SongInstanceResource(ModelResource):
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
-        allowed_methods = ['post']
+        allowed_methods = ['post', 'get']
         
     def dehydrate(self, bundle):
         song = bundle.obj
