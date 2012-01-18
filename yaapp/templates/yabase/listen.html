@@ -4,6 +4,10 @@
 {% block extra_head %}
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
+        var lbl_mute = "{% trans 'Mute' %}";
+        var lbl_unmute = "{% trans 'Unmute' %}";
+        var lbl_play = "{% trans 'Play' %}";
+        var lbl_stop = "{% trans 'Stop' %}";
     </script>
     <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
@@ -21,7 +25,7 @@
 		        {% for tag in radio.tags.all %}<span class="label notice">{{tag}}</span> {% endfor%}
 			    <p>{% trans "Created by" %} <strong>{{ radio.creator }}</strong> {% trans "on" %} {{ radio.created|date:"j F Y" }}</p>
 			    <p>{{ radio.description }}</p>
-				<p><a class="btn primary large" href='http://yasound.com'>Go to Yasound »</a></p>
+				<p><a class="btn primary large" href='http://yasound.com'>{% trans "Go to Yasound »" %}</a></p>
 		    </div>
 	    </div>
         <div class='span6'>
@@ -42,10 +46,10 @@
         </div>
     </div>
     <div class="well">
-        <a class="btn large" id='play' href='#'>Play</a>
-        <a class="btn large" id='inc' href='#'>Increase volume</a>
-        <a class="btn large" id='dec' href='#'>Decrease volume</a>
-        <a class="btn large" id='mute' href='#'>Mute</a>
+        <a class="btn large" id='play' href='#'>{% trans "Play" %}</a>
+        <a class="btn large" id='inc' href='#'>{% trans "Increase volume" %}</a>
+        <a class="btn large" id='dec' href='#'>{% trans "Decrease volume" %}</a>
+        <a class="btn large" id='mute' href='#'>{% trans "Mute" %}</a>
     </div>
 </div>
 {% endblock %}
