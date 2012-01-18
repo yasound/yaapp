@@ -67,18 +67,18 @@ def process_playlists_exec(radio, content_compressed):
             playlist_name = data.get_string()
             source_name = 'test_playlist_file'
             playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=source_name)
-            if created:
-                print 'playlist created '
-                print playlist
-            else:
-                print 'playlist found '
-                print playlist
+#            if created:
+#               print 'playlist created '
+#                print playlist
+#            else:
+#                print 'playlist found '
+#                print playlist
             if not playlist in radio.playlists.all():
-                print radio
-                print radio.playlists
+#               print radio
+#                print radio.playlists
                 radio.playlists.add(playlist)
                 radio.save()
-                print radio.playlists
+#                print radio.playlists
 
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
