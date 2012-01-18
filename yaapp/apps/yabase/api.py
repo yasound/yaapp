@@ -66,7 +66,7 @@ class RadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter(playlists__isnull=False)
+        queryset = Radio.objects.filter()
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
@@ -104,7 +104,7 @@ class SelectedRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter(playlists__isnull=False)
+        queryset = Radio.objects.filter()
         resource_name = 'selected_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
@@ -130,7 +130,7 @@ class FavoriteRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter(playlists__isnull=False)
+        queryset = Radio.objects.filter()
         resource_name = 'favorite_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
@@ -156,7 +156,7 @@ class FriendRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter(playlists__isnull=False)
+        queryset = Radio.objects.filter()
         resource_name = 'friend_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
         include_resource_uri = False;
