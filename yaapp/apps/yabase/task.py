@@ -70,6 +70,7 @@ def process_playlists_exec(radio, content_compressed):
             if created:
                 print 'playlist created '
                 print playlist
+                radio.playlists.add(playlist)
             else:
                 print 'playlist found '
                 print playlist
