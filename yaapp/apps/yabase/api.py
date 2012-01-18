@@ -39,6 +39,11 @@ class SongInstanceResource(ModelResource):
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
         allowed_methods = ['post']
+        
+    def dehydrate(self, bundle):
+        song = bundle.obj
+        song.fill_bundle(bundle)
+        return bundle
 
 class PlaylistResource(ModelResource):
     class Meta:

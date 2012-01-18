@@ -54,6 +54,13 @@ class SongInstance(models.Model):
 
     class Meta:
         db_name = u'default'
+        
+    def fill_bundle(self, bundle):
+        likes = self.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        bundle.data['likes'] = likes
+        dislikes = self.songuser_set.filter(mood=yabase_settings.MOOD_DISLIKE).count()
+        bundle.data['dislikes'] = dislikes
+        
 
 
 class SongUser(models.Model):
