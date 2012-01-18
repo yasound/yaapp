@@ -8,7 +8,13 @@ $(document).ready(function() {
 	  mySound = soundManager.createSound({
 	    id: 'soundManagerObject1',
 	    url: g_radio_url,
-	    stream: true
+	    stream: true,
+	    onplay: function() {
+	    	$('#play').text('Stop');
+	    },
+	    onstop: function() {
+	    	$('#play').text('Play');
+	    }
 	  });
 	  $('#play').click();
 	});
@@ -18,7 +24,31 @@ $(document).ready(function() {
 	});
 
 	$('#play').click(function() {
-	  mySound.play();
+	  if (mySound.playState == 1) {
+		  mySound.stop();
+	  } else {
+		  mySound.play();
+	  }
+	});
+	
+	$('#mute').click(function() {
+		mySound.toggleMute();
+		if (mySound.muted) {
+			$('#mute').text('Unmute');
+		} else {
+			$('#mute').text('Mute');
+		}
+	})
+	
+	$('#inc').click(function() {
+		if (mySound.volume <= 90) {
+			mySound.setVolume(mySound.volume+10);
+		}	
+	})
+	$('#dec').click(function() {
+		if (mySound.volume >= 10) {
+			mySound.setVolume(mySound.volume-10);
+		}
 	})
 	
 });
