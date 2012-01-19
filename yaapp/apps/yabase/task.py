@@ -95,9 +95,8 @@ def process_playlists_exec(radio, content_compressed):
                                            [song_name,
                                             artist_name,
                                             album_name])
-            for item in raw:
-                metadata = item
-                break
+            if raw and len(raw) > 0:
+                metadata = raw[0]
             else:
                 metadata = SongMetadata(name=song_name, artist_name=artist_name, album_name=album_name)
                 metadata.save()
@@ -106,8 +105,8 @@ def process_playlists_exec(radio, content_compressed):
                                            [playlist.id,
                                             metadata.id,
                                             order])
-            for item in raw:
-                song_instance = item
+            if raw and len(raw) > 0:
+                song_instance = raw[0]
             else:
                 song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
 
@@ -129,6 +128,11 @@ def process_playlists_exec(radio, content_compressed):
 
                 song_instance.save()
 
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
+    if songs_ok.count() > 0:
+        radio.valid = True
+        radio.save()
+        
     print 'found: %d - not found: %d - total: %d' % (found, notfound, count)
 
 
