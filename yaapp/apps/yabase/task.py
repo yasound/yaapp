@@ -95,8 +95,8 @@ def process_playlists_exec(radio, content_compressed):
                                            [song_name,
                                             artist_name,
                                             album_name])
-            if raw and len(raw) > 0:
-                metadata = raw[0]
+            if raw and len(list(raw)) > 0:
+                metadata = list(raw)[0]
             else:
                 metadata = SongMetadata(name=song_name, artist_name=artist_name, album_name=album_name)
                 metadata.save()
@@ -105,8 +105,8 @@ def process_playlists_exec(radio, content_compressed):
                                            [playlist.id,
                                             metadata.id,
                                             order])
-            if raw and len(raw) > 0:
-                song_instance = raw[0]
+            if raw and len(list(raw)) > 0:
+                song_instance = list(raw)[0]
             else:
                 song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
 
