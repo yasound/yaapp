@@ -10,3 +10,4 @@ tweepy
 django-taggit
 python-memcached
 facepy
+django-test-utils
