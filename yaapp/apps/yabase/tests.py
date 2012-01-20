@@ -7,6 +7,21 @@ from models import RADIO_NEXT_SONGS_COUNT
 import settings as yabase_settings
 from django.core.urlresolvers import reverse
 from tests_utils import generate_playlist
+from models import YasoundSong, YasoundArtist
+
+class TestDatabase(TestCase):
+    multi_db = True
+    fixtures = ['yasound_local.yaml',]
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+    
+    def testFixtures(self):
+        song = YasoundSong.objects.get(id=1)
+        self.assertEqual(song.id, 1)
 
 class TestModels(TestCase):
     def setUp(self):
@@ -66,7 +81,8 @@ class TestModels(TestCase):
         self.assertEquals(dislikers[0].user, self.user)
    
 class TestNextSong(TestCase):
-    
+    multi_db = True
+    fixtures = ['yasound_local.yaml',]
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
@@ -93,7 +109,6 @@ class TestNextSong(TestCase):
 
         res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
         self.assertEqual(res.status_code, 200)
-        
 
         res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
         self.assertEqual(res.status_code, 200)
