@@ -112,7 +112,7 @@ class Radio(models.Model):
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
     playlists = models.ManyToManyField(Playlist, related_name='playlists', null=True, blank=True)
-    valid = models.BooleanField(default=False)
+    ready = models.BooleanField(default=False)
     
     name = models.CharField(max_length=255)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)

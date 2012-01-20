@@ -47,7 +47,7 @@ class UserProfile(models.Model):
     
     @property
     def listened_radio(self):
-        radio_users = RadioUser.objects.filter(user=self.user, listening=True, radio__valid=True)
+        radio_users = RadioUser.objects.filter(user=self.user, listening=True, radio__ready=True)
         if radio_users.count() == 0:
             return None
         r = radio_users[0].radio
@@ -57,7 +57,7 @@ class UserProfile(models.Model):
     
     @property
     def connected_radio(self):
-        radio_users = RadioUser.objects.filter(user=self.user, connected=True, radio__valid=True)
+        radio_users = RadioUser.objects.filter(user=self.user, connected=True, radio__ready=True)
         if radio_users.count() == 0:
             return None
         r = radio_users[0].radio

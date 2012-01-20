@@ -66,9 +66,9 @@ class RadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter()
+        queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = Authorization()
@@ -77,6 +77,7 @@ class RadioResource(ModelResource):
             'creator': ALL,
             'genre': ALL,
             'name': ('contains',),
+            'ready': ('exact',),
         }
         ordering = [
             'overall_listening_time',
@@ -104,15 +105,16 @@ class SelectedRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter()
+        queryset = Radio.objects.all()
         resource_name = 'selected_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
             'genre': ALL,
+            'ready': ('exact',),
         }        
 
     def dehydrate(self, bundle):
@@ -130,15 +132,16 @@ class FavoriteRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter()
+        queryset = Radio.objects.all()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
             'genre': ALL,
+            'ready': ('exact',),
         }        
 
     def dehydrate(self, bundle):
@@ -156,15 +159,16 @@ class FriendRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.filter()
+        queryset = Radio.objects.all()
         resource_name = 'friend_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
             'genre': ALL,
+            'ready': ('exact',),
         }        
 
     def dehydrate(self, bundle):
