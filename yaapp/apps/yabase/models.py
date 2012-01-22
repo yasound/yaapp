@@ -466,6 +466,14 @@ signals.post_delete.connect(next_song_deleted, sender=NextSong)
 #
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
 # into your database.
+class YasoundDoubleMetaphone(models.Model):
+    primary = models.CharField(max_length=255)
+    secondary = models.CharField(max_length=255, blank=True)
+    def __unicode__(self):
+        return u'%s - %s' % (self.primary, self.secondary)
+    class Meta:
+        db_table = u'yasound_doublemetaphone'
+        db_name = u'yasound'
 
 class YasoundArtist(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -473,6 +481,8 @@ class YasoundArtist(models.Model):
     lastfm_id = models.CharField(max_length=20, blank=True, null=True)
     musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
     name = models.CharField(max_length=255)
+    dms = models.ManyToManyField(YasoundDoubleMetaphone, null=True, blank=True)
+    
     name_simplified = models.CharField(max_length=255)
     comment = models.TextField(null=True, blank=True)
     class Meta:

@@ -1,4 +1,6 @@
-from yabase.models import *
+from models import SongMetadata, SongInstance, Playlist, Radio, \
+    WallEvent, NextSong, RadioUser, SongUser, YasoundSong, YasoundArtist, \
+    YasoundAlbum, YasoundGenre, YasoundSongGenre, YasoundDoubleMetaphone
 from django.contrib import admin
 
 class SongMetadataAdmin(admin.ModelAdmin):
@@ -30,4 +32,5 @@ admin.site.register(YasoundArtist)
 admin.site.register(YasoundAlbum)
 admin.site.register(YasoundGenre)
 admin.site.register(YasoundSongGenre)
+admin.site.register(YasoundDoubleMetaphone)
 
