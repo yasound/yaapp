@@ -470,11 +470,11 @@ signals.post_delete.connect(next_song_deleted, sender=NextSong)
 class YasoundArtist(models.Model):
     id = models.IntegerField(primary_key=True)
     echonest_id = models.CharField(unique=True, max_length=20)
-    lastfm_id = models.CharField(max_length=20)
-    musicbrainz_id = models.CharField(max_length=36)
+    lastfm_id = models.CharField(max_length=20, blank=True, null=True)
+    musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
     name = models.CharField(max_length=255)
     name_simplified = models.CharField(max_length=255)
-    comment = models.TextField()
+    comment = models.TextField(null=True, blank=True)
     class Meta:
         db_table = u'yasound_artist'
         db_name = u'yasound'
@@ -483,11 +483,11 @@ class YasoundArtist(models.Model):
 
 class YasoundAlbum(models.Model):
     id = models.IntegerField(primary_key=True)
-    lastfm_id = models.CharField(unique=True, max_length=20)
-    musicbrainz_id = models.CharField(max_length=36)
+    lastfm_id = models.CharField(unique=True, max_length=20, null=True, blank=True)
+    musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
     name = models.CharField(max_length=255)
     name_simplified = models.CharField(max_length=255)
-    cover_filename = models.CharField(max_length=45)
+    cover_filename = models.CharField(max_length=45, null=True, blank=True)
     class Meta:
         db_table = u'yasound_album'
         db_name = u'yasound'
@@ -506,12 +506,12 @@ class YasoundGenre(models.Model):
 
 class YasoundSong(models.Model):
     id = models.IntegerField(primary_key=True)
-    artist = models.ForeignKey(YasoundArtist)
-    album = models.ForeignKey(YasoundAlbum)
-    echonest_id = models.CharField(max_length=20)
-    lastfm_id = models.CharField(max_length=20)
-    lastfm_fingerprint_id = models.CharField(max_length=20)
-    musicbrainz_id = models.CharField(max_length=36)
+    artist = models.ForeignKey(YasoundArtist, null=True, blank=True)
+    album = models.ForeignKey(YasoundAlbum, null=True, blank=True)
+    echonest_id = models.CharField(max_length=20, blank=True, null=True)
+    lastfm_id = models.CharField(max_length=20, blank=True, null=True)
+    lastfm_fingerprint_id = models.CharField(max_length=20, blank=True, null=True)
+    musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
     filename = models.CharField(max_length=45)
     filesize = models.IntegerField()
     name = models.CharField(max_length=255)
@@ -521,21 +521,21 @@ class YasoundSong(models.Model):
     album_name = models.CharField(max_length=255)
     album_name_simplified = models.CharField(max_length=255)
     duration = models.IntegerField()
-    danceability = models.DecimalField(max_digits=10, decimal_places=2)
-    loudness = models.DecimalField(max_digits=10, decimal_places=2)
-    energy = models.DecimalField(max_digits=10, decimal_places=2)
-    tempo = models.SmallIntegerField()
-    tonality_mode = models.SmallIntegerField()
-    tonality_key = models.SmallIntegerField()
-    fingerprint = models.TextField()
-    fingerprint_hash = models.CharField(max_length=45)
-    echoprint_version = models.CharField(max_length=8)
+    danceability = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    loudness = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    energy = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    tempo = models.SmallIntegerField(null=True, blank=True)
+    tonality_mode = models.SmallIntegerField(null=True, blank=True)
+    tonality_key = models.SmallIntegerField(null=True, blank=True)
+    fingerprint = models.TextField(null=True, blank=True)
+    fingerprint_hash = models.CharField(max_length=45, null=True, blank=True)
+    echoprint_version = models.CharField(max_length=8, null=True, blank=True)
     publish_at = models.DateTimeField()
     published = models.BooleanField()
     locked = models.BooleanField()
-    allowed_countries = models.CharField(max_length=255)
-    comment = models.TextField()
-    cover_filename = models.CharField(max_length=45)
+    allowed_countries = models.CharField(max_length=255, blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
+    cover_filename = models.CharField(max_length=45, blank=True, null=True)
     class Meta:
         db_table = u'yasound_song'
         db_name = u'yasound'
