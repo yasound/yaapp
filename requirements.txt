@@ -11,3 +11,4 @@ django-taggit
 python-memcached
 facepy
 django-test-utils
+-e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy

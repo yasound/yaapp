@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from optparse import make_option
 from time import time
 from yabase import metaphone
-from yabase.models import YasoundArtist, YasoundAlbum, YasoundSong,\
+from yabase.models import YasoundArtist, YasoundAlbum, YasoundSong, \
     YasoundDoubleMetaphone
 import datetime
 
@@ -23,27 +23,20 @@ class Command(BaseCommand):
     help = "Generate fuzzy index"
     args = ''
 
-    def dm_from_sentence(self, sentence):
-        dms = []
-        words = sorted(sentence.lower().split())
-        for word in words:
-            dm = metaphone.dm(word)
-            dm_record, created = YasoundDoubleMetaphone.objects.get_or_create(primary=dm[0],
-                                                                              secondary=dm[1])
-            dms.append(dm_record)
-        return dms
-
-
     def handle(self, *app_labels, **options):
         dry = options.get('dry',False)
         
         artists = YasoundArtist.objects.all()
         for artist in artists:
-            dms = self.dm_from_sentence(artist.name)
-            artist.dms.clear()
-            for dm in dms:
-                print "adding %s" % (dm) 
-                artist.dms.add(dm)
+            artist.build_fuzzy_index()
+        
+        albums = YasoundAlbum.objects.all()
+        for album in albums:
+            album.build_fuzzy_index()
+
+        songs = YasoundSong.objects.all()
+        for song in songs:
+            song.build_fuzzy_index()
 #        albums = YasoundAlbum.objects.all()
 #        for album in albums:
 #            dms = self.dm_from_sentence(album.name)
