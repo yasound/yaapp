@@ -12,7 +12,7 @@ from facepy import GraphAPI
 import json
 import urllib
 import uuid
-from apps.account.settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
