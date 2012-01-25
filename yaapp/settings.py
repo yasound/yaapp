@@ -111,6 +111,7 @@ else:
 # As we use a multi database config, we need a working database router:
 DATABASE_ROUTERS = ['yabase.router.YaappRouter']
 if 'test' in sys.argv:
+    # the test router enable syncdb for yasound database
     DATABASE_ROUTERS = ['yabase.router.YaappRouterForTest']
 
 
