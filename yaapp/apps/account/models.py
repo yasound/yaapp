@@ -12,6 +12,7 @@ from facepy import GraphAPI
 import json
 import urllib
 import uuid
+from apps.account.settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
@@ -30,6 +31,18 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return self.user.username
+    
+    def subscription(self):
+        if self.user.username == '846054191@facebook': # mat
+            return SUBSCRIPTION_PREMIUM
+        if self.user.username == '1060354026@facebook': # meeloo
+            return SUBSCRIPTION_PREMIUM
+        if self.user.username == '1460646148@facebook': # jerome
+            return SUBSCRIPTION_PREMIUM
+        if self.user.username == '100001622138259@facebook': # neywen
+            return SUBSCRIPTION_PREMIUM
+        
+        return SUBSCRIPTION_NONE
     
     @property
     def own_radio(self):

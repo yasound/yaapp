@@ -29,4 +29,15 @@ def set_user_picture(request, user_id):
     
     res = 'picture OK for user: %s' % unicode(user)
     return HttpResponse(res)
+
+def get_subscription(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    profile = get_object_or_404(UserProfile, user=request.user)
+    subscription = profile.subscription
+    return HttpResponse(subscription)
     

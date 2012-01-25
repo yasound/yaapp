@@ -271,7 +271,7 @@ def get_next_song(request, radio_id):
             break
     
     if radio.computing_next_songs:
-        raise Http404
+        return HttpResponse('computing next songs already set', status=404)
     
     radio.computing_next_songs = True
     radio.save()
@@ -281,7 +281,7 @@ def get_next_song(request, radio_id):
     radio.save()
     
     if not nextsong:
-        raise Http404
+        return HttpResponse('cannot find next song', status=404)
     
     song = get_object_or_404(YasoundSong, id=nextsong.song)
     return HttpResponse(song.filename)
@@ -296,3 +296,5 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "listeners": radio.radiouser_set.filter(listening=True).count(),
         "fans": radio.radiouser_set.filter(favorite=True).count()
     }, context_instance=RequestContext(request))    
+    
+    

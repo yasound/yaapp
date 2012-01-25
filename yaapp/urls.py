@@ -78,6 +78,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/song/(?P<song_id>\d+)/liker/$', 'yabase.views.like_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/neutral/$', 'yabase.views.neutral_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/disliker/$', 'yabase.views.dislike_song'),
+    url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
     (r'^api/', include(api.urls)),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen')
     # The normal jazz here, then...
