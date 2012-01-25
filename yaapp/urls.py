@@ -10,7 +10,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
-
+from yabase.models import Radio
 from os import path
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -41,6 +41,8 @@ played_song = PlayedSongResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
 radio_enabled_playlist = RadioPlaylistResource()
+
+Radio.objects.unlock_all()
 
 urlpatterns = patterns('',
     # Examples:

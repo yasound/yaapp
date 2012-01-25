@@ -14,7 +14,6 @@ from check_request import check_api_key_Authentication, check_http_method
 import time
 PICTURE_FILE_TAG = 'picture'
 
-
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
     status = asyncRes.state
@@ -264,21 +263,18 @@ def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
     
     i = 0
-    while radio.computing_next_songs:
+    while radio.is_locked:
         time.sleep(3)
         i = i+1
         if i > 2:
             break
     
-    if radio.computing_next_songs:
+    if radio.is_locked:
         return HttpResponse('computing next songs already set', status=404)
     
-    radio.computing_next_songs = True
-    radio.save()
-    
+    radio.lock()
     nextsong = radio.get_next_song()
-    radio.computing_next_songs = False
-    radio.save()
+    radio.unlock()
     
     if not nextsong:
         return HttpResponse('cannot find next song', status=404)
