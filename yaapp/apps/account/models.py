@@ -32,6 +32,7 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
     
+    @property
     def subscription(self):
         if self.user.username == '846054191@facebook': # mat
             return SUBSCRIPTION_PREMIUM
