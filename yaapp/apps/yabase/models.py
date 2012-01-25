@@ -112,7 +112,12 @@ class Playlist(models.Model):
 
 RADIO_NEXT_SONGS_COUNT = 20
 
+class RadioManager(models.Manager):
+    def unlock_all(self):
+        self.all().update(computing_next_songs=False)
+
 class Radio(models.Model):
+    objects = RadioManager()
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
@@ -249,6 +254,18 @@ class Radio(models.Model):
             n = user.username
         self.name = n + "'s radio"
         self.save()
+
+    def unlock(self):
+        self.computing_next_songs = False
+        self.save()
+    
+    def lock(self):
+        self.computing_next_songs = True
+        self.save()
+    
+    @property
+    def is_locked(self):
+        return self.computing_next_songs
 
     class Meta:
         db_name = u'default'
