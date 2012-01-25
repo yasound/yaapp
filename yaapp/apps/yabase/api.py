@@ -213,52 +213,6 @@ class WallEventResource(ModelResource):
         authorization= Authorization()
         authentication = ApiKeyAuthentication()
         allowed_methods = ['post']
-    
-    def obj_create(self, bundle, request=None, **kwargs):
-        wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
-        wall_event = wall_event_resource.obj
-        if wall_event.type == yabase_settings.EVENT_JOINED:
-            user = wall_event.user
-            radio = wall_event.radio
-            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
-            radiouser.connected = True
-            radiouser.save()
-            
-        elif wall_event.type == yabase_settings.EVENT_LEFT:
-            user = wall_event.user
-            radio = wall_event.radio
-            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
-            radiouser.connected = False
-            radiouser.save()
-            
-        elif wall_event.type == yabase_settings.EVENT_STARTED_LISTEN:
-            user = wall_event.user
-            radio = wall_event.radio
-            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
-            radiouser.listening = True
-            radiouser.save()
-            
-            listeners = RadioUser.objects.filter(radio=radio, listening=True)
-            audience = len(listeners)
-            if audience > radio.audience_peak:
-                radio.audience_peak = audience
-                radio.save()
-            
-        elif wall_event.type == yabase_settings.EVENT_STOPPED_LISTEN:
-            user = wall_event.user
-            radio = wall_event.radio
-            radiouser, created = RadioUser.objects.get_or_create(user=user, radio=radio)
-            radiouser.listening = False
-            radiouser.save()
-            
-            last_start = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
-            last_stop = WallEvent.objects.filter(user=user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
-            duration = last_stop.start_date - last_start.start_date
-            seconds = duration.total_seconds()
-            radio.overall_listening_time += seconds
-            radio.save()
-            
-        return wall_event_resource
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)

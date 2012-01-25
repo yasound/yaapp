@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from models import Radio, RadioUser, SongInstance, SongUser, YasoundSong
+from models import Radio, RadioUser, SongInstance, SongUser, YasoundSong, WallEvent
 from celery.result import AsyncResult
 import datetime
 import json
@@ -281,6 +281,48 @@ def get_next_song(request, radio_id):
     
     song = get_object_or_404(YasoundSong, id=nextsong.song)
     return HttpResponse(song.filename)
+
+@csrf_exempt
+def start_listening_to_radio(request, radio_uuid):
+    check_api_key_Authentication(request) # set request.user
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    
+    if request.user:
+        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN)
+        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
+    else:
+        if not request.Get.has_key('address'):
+            return HttpResponseBadRequest()
+        address = request.GET['address']
+        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN, text=address)
+        res = '%s stopped listening to %s' % (event.text, event.radio.name)
+
+    return HttpResponse(res)
+
+@csrf_exempt
+def stop_listening_to_radio(request, radio_uuid):
+    check_api_key_Authentication(request) # set request.user
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    
+    if request.user:
+        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN)
+        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
+    else:
+        if not request.Get.has_key('address'):
+            return HttpResponseBadRequest()
+        address = request.GET['address']
+        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN, text=address)
+        res = '%s stopped listening to %s' % (event.text, event.radio.name)
+
+    return HttpResponse(res)
 
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
