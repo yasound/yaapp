@@ -4,13 +4,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from optparse import make_option
 from time import time
-from yabase import metaphone
-from yabase.models import YasoundArtist, YasoundAlbum, YasoundSong, \
+from yaref.models import YasoundArtist, YasoundAlbum, YasoundSong, \
     YasoundDoubleMetaphone
 import datetime
-
-
 import gc
+
+
 
 def queryset_iterator(queryset, chunksize=1000):
     '''
