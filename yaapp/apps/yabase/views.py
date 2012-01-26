@@ -297,7 +297,7 @@ def start_listening_to_radio(request, radio_uuid):
         event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN)
         res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
     else:
-        if not request.Get.has_key('address'):
+        if not request.GET.has_key('address'):
             return HttpResponseBadRequest()
         address = request.GET['address']
         event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN, text=address)
@@ -318,7 +318,7 @@ def stop_listening_to_radio(request, radio_uuid):
         event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN)
         res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
     else:
-        if not request.Get.has_key('address'):
+        if not request.GET.has_key('address'):
             return HttpResponseBadRequest()
         address = request.GET['address']
         event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN, text=address)
