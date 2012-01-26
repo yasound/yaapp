@@ -451,7 +451,7 @@ class WallEvent(models.Model):
                 last_start = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
                 last_stop = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
                 duration = last_stop.start_date - last_start.start_date
-                seconds = duration.total_seconds()
+                seconds = duration.days * 86400 + duration.seconds
                 self.radio.overall_listening_time += seconds
                 self.radio.save()
             
@@ -462,7 +462,7 @@ class WallEvent(models.Model):
                 last_start = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
                 last_stop = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
                 duration = last_stop.start_date - last_start.start_date
-                seconds = duration.total_seconds()
+                seconds = duration.days * 86400 + duration.seconds
                 self.radio.overall_listening_time += seconds
                 self.radio.save()
 
