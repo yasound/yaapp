@@ -414,7 +414,7 @@ class WallEvent(models.Model):
         db_name = u'default'
         
     def save(self, *args, **kwargs):
-        super(NextSong, self).save(*args, **kwargs)
+        super(WallEvent, self).save(*args, **kwargs)
         
         if self.type == yabase_settings.EVENT_JOINED:
             radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
