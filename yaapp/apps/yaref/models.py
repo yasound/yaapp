@@ -49,41 +49,6 @@ class YasoundAlbumManager(models.Manager):
             return qs[:limit]
         return qs
     
-class YasoundSongManager(models.Manager):
-    def get_query_set(self):
-        return self.model.QuerySet(self.model)
-    
-    def find_fuzzy(self, name, album, artist, limit=5):
-        artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
-        albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
-        artists = list(artists)
-        albums = list(albums)
-        songs = YasoundSong.objects.filter(Q(artist__id__in=artists) |
-                                             Q(album__id__in=albums))
-        #songs = YasoundSong.objects.filter(artist__id__in=artists, album__id__in=albums)
-        songs.find_by_name(name)
-        
-        best_song = None
-        best_ratio = 0
-        print "found %d candidates" % (songs.count())
-        for song in songs:
-            ratio_song, ratio_album, ratio_artist = 0, 0, 0
-            
-            ratio_song = fuzz.token_sort_ratio(name, song.name)
-            if song.album:
-                ratio_album = fuzz.token_sort_ratio(album, song.album.name)
-            if song.artist:
-                ratio_artist = fuzz.token_sort_ratio(artist, song.artist.name)
-        
-            ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-            #print "ratio of %s = %d" % (song, ratio)
-            if ratio >= best_ratio:
-                best_ratio = ratio
-                best_song = song
-                if ratio >= 100:
-                    break
-        return best_song, songs
-
 class YasoundArtist(models.Model):
     objects = YasoundArtistManager()
     id = models.IntegerField(primary_key=True)
@@ -146,6 +111,40 @@ class YasoundGenre(models.Model):
     def __unicode__(self):
         return self.name
 
+class YasoundSongManager(models.Manager):
+    def get_query_set(self):
+        return self.model.QuerySet(self.model)
+    
+    def find_fuzzy(self, name, album, artist, limit=5):
+        artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
+        albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
+        artists = list(artists)
+        albums = list(albums)
+        songs = YasoundSong.objects.filter(Q(artist__id__in=artists) |
+                                             Q(album__id__in=albums))
+        songs = songs.find_by_name(name)
+        
+        best_song = None
+        best_ratio = 0
+        print "found %d candidates" % (songs.count())
+        for song in songs:
+            ratio_song, ratio_album, ratio_artist = 0, 0, 0
+            
+            ratio_song = fuzz.token_sort_ratio(name, song.name)
+            if song.album:
+                ratio_album = fuzz.token_sort_ratio(album, song.album.name)
+            if song.artist:
+                ratio_artist = fuzz.token_sort_ratio(artist, song.artist.name)
+        
+            ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
+            #print "ratio of %s = %d" % (song, ratio)
+            if ratio >= best_ratio:
+                best_ratio = ratio
+                best_song = song
+                if ratio >= 100:
+                    break
+        return best_song, songs
+    
 class YasoundSong(models.Model):
     objects = YasoundSongManager()
     id = models.IntegerField(primary_key=True)
