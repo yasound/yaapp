@@ -12,7 +12,7 @@
       Live At The Village Vanguard', name_simplified: misty live at the village vanguard,
     publish_at: !!timestamp '2011-11-18 10:20:56', published: true, tempo: 62, tonality_key: 1,
     tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 1
 - fields: {album: null, album_name: Hillbilly Classics, album_name_simplified: hillbilly
       classics, allowed_countries: null, artist: null, artist_name: 'Various Artists,
@@ -24,7 +24,7 @@
     lastfm_id: '18975225', locked: false, loudness: null, musicbrainz_id: null, name: Rootie
       Tootie, name_simplified: rootie tootie, publish_at: !!timestamp '2011-11-18
       10:20:56', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 2
 - fields: {album: 1, album_name: C'Est La Vie, album_name_simplified: c est la vie,
     allowed_countries: null, artist: null, artist_name: 'Martin Solveig, Chakib Chambi',
@@ -35,7 +35,7 @@
     lastfm_id: '204029527', locked: false, loudness: null, musicbrainz_id: null, name: One
       2.3 Four, name_simplified: one 2 3 four, publish_at: !!timestamp '2011-11-18
       10:20:56', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 3
 - fields: {album: null, album_name: 'Special Beat Service
 
@@ -48,7 +48,7 @@
     lastfm_id: '36490402', locked: false, loudness: '-9.35', musicbrainz_id: null,
     name: End Of The Party, name_simplified: end of the party, publish_at: !!timestamp '2011-11-18
       10:20:56', published: true, tempo: 87, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 4
 - fields: {album: null, album_name: Unforgettable, album_name_simplified: unforgettable,
     allowed_countries: null, artist: null, artist_name: 'Sergio Mendes, Brasil ''66',
@@ -61,7 +61,7 @@
 
       Album Version', name_simplified: mais que nada album version, publish_at: !!timestamp '2011-11-18
       10:20:56', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 5
 - fields: {album: 2, album_name: Nos Maux Mots D'Amour, album_name_simplified: nos
       maux mots d amour, allowed_countries: null, artist: null, artist_name: Michel
@@ -72,7 +72,7 @@
     lastfm_id: '3560690', locked: false, loudness: null, musicbrainz_id: null, name: L'Amour
       Avec Toi, name_simplified: l amour avec toi, publish_at: !!timestamp '2011-11-18
       10:20:56', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 6
 - fields: {album: 3, album_name: Who's In The House, album_name_simplified: who s
       in the house, allowed_countries: null, artist: 3, artist_name: Chris Kaeser,
@@ -85,7 +85,7 @@
 
       New Vocal Edit', name_simplified: who s in the house new vocal edit, publish_at: !!timestamp '2011-11-18
       10:20:56', published: true, tempo: 129, tonality_key: 4, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 7
 - fields: {album: 4, album_name: Five Feet Of Soul, album_name_simplified: five feet
       of soul, allowed_countries: null, artist: null, artist_name: Jimmy Rushing,
@@ -98,7 +98,7 @@
 
       LP Version', name_simplified: ain t it lonesome lp version, publish_at: !!timestamp '2011-11-18
       10:20:57', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 8
 - fields: {album: 5, album_name: Addictions, album_name_simplified: addictions, allowed_countries: null,
     artist: 4, artist_name: Superbus, artist_name_simplified: superbus, comment: null,
@@ -109,7 +109,7 @@
     lastfm_id: '250066510', locked: false, loudness: '-4.93', musicbrainz_id: null,
     name: Addictions, name_simplified: addictions, publish_at: !!timestamp '2011-11-18
       10:20:58', published: true, tempo: 127, tonality_key: 8, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 9
 - fields: {album: 6, album_name: Como La Palma De Mi Mano, album_name_simplified: como
       la palma de mi mano, allowed_countries: null, artist: 5, artist_name: Banda
@@ -121,7 +121,7 @@
     lastfm_id: '239432716', locked: false, loudness: '-3.63', musicbrainz_id: null,
     name: Mi Unico Camino, name_simplified: mi unico camino, publish_at: !!timestamp '2011-11-18
       10:20:58', published: true, tempo: 180, tonality_key: 3, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 10
 - fields: {album: null, album_name: Raw Punk Power, album_name_simplified: raw punk
       power, allowed_countries: null, artist: null, artist_name: 'Various Artists,
@@ -132,7 +132,7 @@
     lastfm_id: '41266', locked: false, loudness: null, musicbrainz_id: null, name: God
       Save The Queen, name_simplified: god save the queen, publish_at: !!timestamp '2011-11-18
       10:21:06', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 11
 - fields: {album: 7, album_name: Disremembrance, album_name_simplified: disremembrance,
     allowed_countries: null, artist: null, artist_name: Dannii, artist_name_simplified: dannii,
@@ -145,7 +145,7 @@
       Flexifinger''s Radio Edit', name_simplified: disremembrance flexifinger s radio
       edit, publish_at: !!timestamp '2011-11-18 10:21:07', published: true, tempo: null,
     tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 12
 - fields: {album: null, album_name: Hillbilly Classics, album_name_simplified: hillbilly
       classics, allowed_countries: null, artist: null, artist_name: 'Various Artists,
@@ -157,7 +157,7 @@
     lastfm_id: '84974305', locked: false, loudness: null, musicbrainz_id: null, name: Mountain
       Boogie, name_simplified: mountain boogie, publish_at: !!timestamp '2011-11-18
       10:21:07', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 13
 - fields: {album: 8, album_name: Oh!, album_name_simplified: oh, allowed_countries: null,
     artist: 6, artist_name: Micky Green, artist_name_simplified: micky green, comment: null,
@@ -168,7 +168,7 @@
     lastfm_id: '113606446', locked: false, loudness: '-8.12', musicbrainz_id: null,
     name: Oh!, name_simplified: oh, publish_at: !!timestamp '2011-11-18 10:21:08',
     published: true, tempo: 119, tonality_key: 10, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 14
 - fields: {album: 9, album_name: 'American Gothic
 
@@ -181,7 +181,7 @@
     lastfm_id: '1993493', locked: false, loudness: '-17.04', musicbrainz_id: null,
     name: American Gothic, name_simplified: american gothic, publish_at: !!timestamp '2011-11-18
       10:21:08', published: true, tempo: 233, tonality_key: 7, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 15
 - fields: {album: 10, album_name: A La Luna Nueva, album_name_simplified: a la luna
       nueva, allowed_countries: null, artist: null, artist_name: Tomasa Guerrero 'la
@@ -193,7 +193,7 @@
 
       Fandangos', name_simplified: jerezana fandangos, publish_at: !!timestamp '2011-11-18
       10:21:08', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 16
 - fields: {album: 11, album_name: Samedi Soir A Beyrouth, album_name_simplified: samedi
       soir a beyrouth, allowed_countries: null, artist: 8, artist_name: Bernard Lavilliers,
@@ -204,7 +204,7 @@
     lastfm_id: '162954356', locked: false, loudness: '-10.74', musicbrainz_id: null,
     name: Bosse, name_simplified: bosse, publish_at: !!timestamp '2011-11-18 10:21:08',
     published: true, tempo: 111, tonality_key: 4, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 17
 - fields: {album: 12, album_name: 'Watts In A Tank
 
@@ -219,7 +219,7 @@
 
       Album Version', name_simplified: sausalito summernight album version, publish_at: !!timestamp '2011-11-18
       10:21:09', published: true, tempo: 125, tonality_key: 10, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 18
 - fields: {album: 13, album_name: The Best Of, album_name_simplified: the best of,
     allowed_countries: null, artist: 10, artist_name: Janne Lucas, artist_name_simplified: janne
@@ -230,7 +230,7 @@
     lastfm_id: '4219409', locked: false, loudness: '-9.99', musicbrainz_id: null,
     name: Blueberry Hill, name_simplified: blueberry hill, publish_at: !!timestamp '2011-11-18
       10:21:11', published: true, tempo: 161, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 19
 - fields: {album: 14, album_name: Use Your Illusion I, album_name_simplified: use
       your illusion i, allowed_countries: null, artist: null, artist_name: Guns N'
@@ -243,7 +243,7 @@
 
       Album Version', name_simplified: don t cry original album version, publish_at: !!timestamp '2011-11-18
       10:21:12', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 20
 - fields: {album: null, album_name: Hillbilly Classics, album_name_simplified: hillbilly
       classics, allowed_countries: null, artist: null, artist_name: 'Various Artists,
@@ -254,7 +254,7 @@
     lastfm_id: '160964753', locked: false, loudness: null, musicbrainz_id: null, name: Lovin'
       Ducky Daddy, name_simplified: lovin ducky daddy, publish_at: !!timestamp '2011-11-18
       10:21:15', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 21
 - fields: {album: 15, album_name: Le Renouveau, album_name_simplified: le renouveau,
     allowed_countries: null, artist: null, artist_name: Sexion d'Assaut, artist_name_simplified: sexion
@@ -266,7 +266,7 @@
       feat Black Mesrimes (Sexion d'Assaut), name_simplified: antitecktonik feat black
       mesrimes sexion d assaut, publish_at: !!timestamp '2011-11-18 10:21:19', published: true,
     tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 22
 - fields: {album: null, album_name: 'Accept No Substitute
 
@@ -281,7 +281,7 @@
 
       LP Version', name_simplified: the ghetto lp version, publish_at: !!timestamp '2011-11-18
       10:21:19', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 23
 - fields: {album: 16, album_name: 'Soundtrack
 
@@ -296,7 +296,7 @@
 
       LP Version', name_simplified: pre dawn lp version, publish_at: !!timestamp '2011-11-18
       10:21:20', published: true, tempo: 61, tonality_key: 10, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 24
 - fields: {album: null, album_name: Salsa Legende - Best of Salsa, album_name_simplified: salsa
       legende best of salsa, allowed_countries: null, artist: null, artist_name: Pete
@@ -307,7 +307,7 @@
     lastfm_id: '3671619', locked: false, loudness: null, musicbrainz_id: null, name: I'd
       like it like that, name_simplified: i d like it like that, publish_at: !!timestamp '2011-11-18
       10:21:20', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 25
 - fields: {album: 13, album_name: The Best Of, album_name_simplified: the best of,
     allowed_countries: null, artist: 10, artist_name: Janne Lucas, artist_name_simplified: janne
@@ -318,7 +318,7 @@
     lastfm_id: '44169429', locked: false, loudness: '-10.78', musicbrainz_id: null,
     name: Nut Rocker, name_simplified: nut rocker, publish_at: !!timestamp '2011-11-18
       10:21:21', published: true, tempo: 218, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 26
 - fields: {album: 17, album_name: "20 Suosikkia / Rilluttele y\xF6", album_name_simplified: 20
       suosikkia rilluttele yo, allowed_countries: null, artist: 12, artist_name: Solistiyhtye
@@ -329,7 +329,7 @@
     lastfm_id: '3678262', locked: false, loudness: '-12.41', musicbrainz_id: null,
     name: Taina, name_simplified: taina, publish_at: !!timestamp '2011-11-18 10:21:21',
     published: true, tempo: 127, tonality_key: 2, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 27
 - fields: {album: 18, album_name: Iman, album_name_simplified: iman, allowed_countries: null,
     artist: 13, artist_name: Mercedes Ferrer, artist_name_simplified: mercedes ferrer,
@@ -340,7 +340,7 @@
     lastfm_id: '70518751', locked: false, loudness: '-9.56', musicbrainz_id: null,
     name: Esto no es amor, name_simplified: esto no es amor, publish_at: !!timestamp '2011-11-18
       10:21:21', published: true, tempo: 96, tonality_key: 11, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 28
 - fields: {album: 19, album_name: Windows Open, album_name_simplified: windows open,
     allowed_countries: null, artist: 14, artist_name: Herbie Mann, artist_name_simplified: herbie
@@ -353,7 +353,7 @@
 
       LP Version', name_simplified: if i were a carpenter lp version, publish_at: !!timestamp '2011-11-18
       10:21:24', published: true, tempo: 174, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 29
 - fields: {album: 20, album_name: The Huge Hefner Chronicles, album_name_simplified: the
       huge hefner chronicles, allowed_countries: null, artist: null, artist_name: 'Diamond
@@ -364,7 +364,7 @@
     lastfm_id: '237208007', locked: false, loudness: null, musicbrainz_id: null, name: Intro,
     name_simplified: intro, publish_at: !!timestamp '2011-11-18 10:21:24', published: true,
     tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 30
 - fields: {album: 21, album_name: Complete Jazz Series 1946 - 1949, album_name_simplified: complete
       jazz series 1946 1949, allowed_countries: null, artist: 15, artist_name: Al
@@ -375,7 +375,7 @@
     lastfm_id: '59795423', locked: false, loudness: '-10.03', musicbrainz_id: null,
     name: Fat And Forty (1946), name_simplified: fat and forty 1946, publish_at: !!timestamp '2011-11-18
       10:10:29', published: true, tempo: 142, tonality_key: 0, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 31
 - fields: {album: null, album_name: "Rom\xE2ntico", album_name_simplified: romantico,
     allowed_countries: null, artist: null, artist_name: 'Various Artists, Emanuel',
@@ -386,7 +386,7 @@
     lastfm_id: '119134449', locked: false, loudness: null, musicbrainz_id: null, name: Bendita
       Aquela Hora, name_simplified: bendita aquela hora, publish_at: !!timestamp '2011-11-18
       10:10:29', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 32
 - fields: {album: null, album_name: The Ultimate Collection, album_name_simplified: the
       ultimate collection, allowed_countries: null, artist: null, artist_name: 'Bob
@@ -398,7 +398,7 @@
       Bob Hope Clothing Range - Sweet Violets, name_simplified: the bob hope clothing
       range sweet violets, publish_at: !!timestamp '2011-11-18 10:10:29', published: true,
     tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 33
 - fields: {album: 23, album_name: Sviatoslav Richter In The 1950's - Volume 2, album_name_simplified: sviatoslav
       richter in the 1950 s volume 2, allowed_countries: null, artist: 17, artist_name: Sviatoslav
@@ -410,7 +410,7 @@
     name: Pictures At An Exhibition - Promenade, name_simplified: pictures at an exhibition
       promenade, publish_at: !!timestamp '2011-11-18 10:10:29', published: true, tempo: 125,
     tonality_key: 5, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 35
 - fields: {album: 24, album_name: The Very Best Of, album_name_simplified: the very
       best of, allowed_countries: null, artist: 18, artist_name: Big Joe Williams,
@@ -421,7 +421,7 @@
     lastfm_id: '40623508', locked: false, loudness: '-12.68', musicbrainz_id: null,
     name: Banta Rooster Blues, name_simplified: banta rooster blues, publish_at: !!timestamp '2011-11-18
       10:10:29', published: true, tempo: 105, tonality_key: 2, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 36
 - fields: {album: 25, album_name: Cellar Door, album_name_simplified: cellar door,
     allowed_countries: null, artist: null, artist_name: John Vanderslice, artist_name_simplified: john
@@ -432,7 +432,7 @@
     lastfm_id: '2823860', locked: false, loudness: null, musicbrainz_id: null, name: They
       Won't Let Me Run, name_simplified: they won t let me run, publish_at: !!timestamp '2011-11-18
       10:10:30', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 37
 - fields: {album: 26, album_name: 24 Rosas, album_name_simplified: 24 rosas, allowed_countries: null,
     artist: 19, artist_name: Diana Navarro, artist_name_simplified: diana navarro,
@@ -443,7 +443,7 @@
     lastfm_id: '132803620', locked: false, loudness: '-17.99', musicbrainz_id: null,
     name: Letania, name_simplified: letania, publish_at: !!timestamp '2011-11-18 10:10:30',
     published: true, tempo: 120, tonality_key: 8, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 38
 - fields: {album: 27, album_name: Musica Clasica - Johannes Brahms, album_name_simplified: musica
       clasica johannes brahms, allowed_countries: null, artist: null, artist_name: The
@@ -455,7 +455,7 @@
       \ Grazioso Quasi Andantino Sinfonia N\xBA2 En Re Mayor Op.73 - Brahms", name_simplified: allegro
       grazioso quasi andantino sinfonia n2 en re mayor op 73 brahms, publish_at: !!timestamp '2011-11-18
       10:10:30', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 39
 - fields: {album: 28, album_name: "Concerto K\xF6ln plays Dall'Abaco, Locatelli, Vanhal,\
       \ Kozeluch and Eberl", album_name_simplified: concerto koln plays dall abaco
@@ -469,7 +469,7 @@
     name_simplified: eberl symphony in d minor op 34 i andante maestoso e sostenuto
       allegro agitato, publish_at: !!timestamp '2011-11-18 10:10:30', published: true,
     tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 40
 - fields: {album: null, album_name: 'Free Spirits
 
@@ -484,7 +484,7 @@
 
       LP Version', name_simplified: opportunity please knock lp version, publish_at: !!timestamp '2011-11-18
       10:21:29', published: true, tempo: 108, tonality_key: 5, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 41
 - fields: {album: 29, album_name: Nevermind, album_name_simplified: nevermind, allowed_countries: null,
     artist: null, artist_name: Nirvana, artist_name_simplified: nirvana, comment: null,
@@ -496,7 +496,7 @@
 
       Album Version', name_simplified: come as you are album version, publish_at: !!timestamp '2011-11-18
       10:21:29', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 42
 - fields: {album: 30, album_name: The Huge Hefner Chronicles, album_name_simplified: the
       huge hefner chronicles, allowed_countries: null, artist: null, artist_name: Diamond
@@ -507,7 +507,7 @@
     lastfm_id: '237208167', locked: false, loudness: null, musicbrainz_id: null, name: U
       Can't Be Me, name_simplified: u can t be me, publish_at: !!timestamp '2011-11-18
       10:21:30', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 43
 - fields: {album: 31, album_name: The Paul Butterfield Blues Band Live, album_name_simplified: the
       paul butterfield blues band live, allowed_countries: null, artist: 20, artist_name: The
@@ -522,7 +522,7 @@
       Previously Unissued Live @ The Troubadour, LosAngeles', name_simplified: except
       you previously unissued live the troubadour losangeles, publish_at: !!timestamp '2011-11-18
       10:10:33', published: true, tempo: 90, tonality_key: 3, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 44
 - fields: {album: 13, album_name: The Best Of, album_name_simplified: the best of,
     allowed_countries: null, artist: 10, artist_name: Janne Lucas, artist_name_simplified: janne
@@ -533,7 +533,7 @@
     lastfm_id: '44532138', locked: false, loudness: '-10.38', musicbrainz_id: null,
     name: Lovely Life, name_simplified: lovely life, publish_at: !!timestamp '2011-11-18
       10:21:31', published: true, tempo: 152, tonality_key: 11, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 45
 - fields: {album: 32, album_name: Beziehungsweise, album_name_simplified: beziehungsweise,
     allowed_countries: null, artist: 21, artist_name: Roger Cicero, artist_name_simplified: roger
@@ -544,7 +544,7 @@
     lastfm_id: '136616648', locked: false, loudness: '-5.19', musicbrainz_id: null,
     name: "Alle M\xF6bel verr\xFCckt", name_simplified: alle mobel verruckt, publish_at: !!timestamp '2011-11-18
       10:21:31', published: true, tempo: 135, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 46
 - fields: {album: null, album_name: La Cave Saravah Vol. 1, album_name_simplified: la
       cave saravah vol 1, allowed_countries: null, artist: null, artist_name: 'Various
@@ -555,7 +555,7 @@
     lastfm_id: '56625864', locked: false, loudness: null, musicbrainz_id: null, name: Solstice,
     name_simplified: solstice, publish_at: !!timestamp '2011-11-18 10:10:34', published: true,
     tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 47
 - fields: {album: null, album_name: "Les petits chanteurs de la ma\xEEtrise de la\
       \ cath\xE9drale de strasbourg / strasbourg cathedral's children choirs", album_name_simplified: les
@@ -570,7 +570,7 @@
     name: Les anges dans nos campagnes, name_simplified: les anges dans nos campagnes,
     publish_at: !!timestamp '2011-11-18 10:21:34', published: true, tempo: 116, tonality_key: 7,
     tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 48
 - fields: {album: 33, album_name: 'Reader''s Digest Music: Harry James: The Reader''s
       Digest Sessions Volume 2', album_name_simplified: reader s digest music harry
@@ -583,7 +583,7 @@
     lastfm_id: '429942416', locked: false, loudness: '-9.67', musicbrainz_id: null,
     name: Around The World, name_simplified: around the world, publish_at: !!timestamp '2011-11-18
       10:21:34', published: true, tempo: 133, tonality_key: 7, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 49
 - fields: {album: 34, album_name: 'Beethoven : String Quartets Nos 1 - 16 [Complete]',
     album_name_simplified: beethoven string quartets nos 1 16 complete, allowed_countries: null,
@@ -596,7 +596,7 @@
       : String Quartet No.2 in G major Op.18 No.2 : II Adagio cantabile', name_simplified: beethoven
       string quartet no 2 in g major op 18 no 2 ii adagio cantabile, publish_at: !!timestamp '2011-11-18
       10:10:37', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 50
 - fields: {album: 35, album_name: Swing Street Cafe, album_name_simplified: swing
       street cafe, allowed_countries: null, artist: null, artist_name: 'Joe Sample,
@@ -607,7 +607,7 @@
     lastfm_id: '68082176', locked: false, loudness: null, musicbrainz_id: null, name: Next
       Time U See Me, name_simplified: next time u see me, publish_at: !!timestamp '2011-11-18
       10:21:36', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 51
 - fields: {album: null, album_name: 'THE E.N.D. (THE ENERGY NEVER DIES)
 
@@ -622,7 +622,7 @@
 
       Album Version', name_simplified: rock that body album version, publish_at: !!timestamp '2011-11-18
       10:10:39', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 52
 - fields: {album: null, album_name: 'Honegger : Symphonies Nos 1 - 5, Pacific 231
       & Rugby
@@ -637,7 +637,7 @@
       : Symphony No.5 in D major, ''Di tre re'' : I Grave', name_simplified: honegger
       symphony no 5 in d major di tre re i grave, publish_at: !!timestamp '2011-11-18
       10:21:37', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 53
 - fields: {album: 36, album_name: Karaoke Downloads - Michael Ball, album_name_simplified: karaoke
       downloads michael ball, allowed_countries: null, artist: 24, artist_name: Karaoke
@@ -649,7 +649,7 @@
     name: Love Changes Everything (In The Style Of Michael Ball), name_simplified: love
       changes everything in the style of michael ball, publish_at: !!timestamp '2011-11-18
       10:10:40', published: true, tempo: 91, tonality_key: 9, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 54
 - fields: {album: null, album_name: 'DMZ
 
@@ -663,7 +663,7 @@
 
       Album Version', name_simplified: mighty idy album version, publish_at: !!timestamp '2011-11-18
       10:21:39', published: true, tempo: 178, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 55
 - fields: {album: null, album_name: 'Zodico Blue & Boogie
 
@@ -678,7 +678,7 @@
 
       Take 2', name_simplified: i m on my way back home to you take 2, publish_at: !!timestamp '2011-11-18
       10:21:41', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 56
 - fields: {album: 37, album_name: Double Exposure, album_name_simplified: double exposure,
     allowed_countries: null, artist: 26, artist_name: Chris Connor, artist_name_simplified: chris
@@ -691,7 +691,7 @@
 
       LP Version', name_simplified: two ladies in de shade lp version, publish_at: !!timestamp '2011-11-18
       10:10:44', published: true, tempo: 108, tonality_key: 9, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 57
 - fields: {album: 38, album_name: Rock N' Roll Live, album_name_simplified: rock n
       roll live, allowed_countries: null, artist: 27, artist_name: The Everly Brothers,
@@ -702,7 +702,7 @@
     lastfm_id: '3664646', locked: false, loudness: '-10.29', musicbrainz_id: null,
     name: Bird Dog, name_simplified: bird dog, publish_at: !!timestamp '2011-11-18
       10:21:41', published: true, tempo: 151, tonality_key: 11, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 58
 - fields: {album: null, album_name: Snowstorm-Factory-Magnum Bonum, album_name_simplified: snowstorm
       factory magnum bonum, allowed_countries: null, artist: 28, artist_name: Factory,
@@ -713,7 +713,7 @@
     lastfm_id: '22641230', locked: false, loudness: '-5.92', musicbrainz_id: null,
     name: Ultrabox, name_simplified: ultrabox, publish_at: !!timestamp '2011-11-18
       10:10:44', published: true, tempo: 128, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 59
 - fields: {album: 39, album_name: Goodnight Nobody, album_name_simplified: goodnight
       nobody, allowed_countries: null, artist: 29, artist_name: Julie Doiron, artist_name_simplified: julie
@@ -724,7 +724,7 @@
     lastfm_id: '3439348', locked: false, loudness: '-15.85', musicbrainz_id: null,
     name: The Songwriter, name_simplified: the songwriter, publish_at: !!timestamp '2011-11-18
       10:21:42', published: true, tempo: 40, tonality_key: 4, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 60
 - fields: {album: 40, album_name: Retroactive, album_name_simplified: retroactive,
     allowed_countries: null, artist: null, artist_name: Stereo MC's, artist_name_simplified: stereo
@@ -737,7 +737,7 @@
 
       Edit', name_simplified: on 33 edit, publish_at: !!timestamp '2011-11-18 10:21:42',
     published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 61
 - fields: {album: null, album_name: "Kultainen 60-luku - 40 Pophitti\xE4 2", album_name_simplified: kultainen
       60 luku 40 pophittia 2, allowed_countries: null, artist: 30, artist_name: Ann
@@ -748,7 +748,7 @@
     lastfm_id: '32272898', locked: false, loudness: '-6.58', musicbrainz_id: null,
     name: Playboy, name_simplified: playboy, publish_at: !!timestamp '2011-11-18 10:21:43',
     published: true, tempo: 127, tonality_key: 6, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 62
 - fields: {album: 41, album_name: War Ina Babylon, album_name_simplified: war ina
       babylon, allowed_countries: null, artist: 31, artist_name: Max Romeo, artist_name_simplified: max
@@ -759,7 +759,7 @@
     lastfm_id: '2742862', locked: false, loudness: '-10.22', musicbrainz_id: null,
     name: I Chase The Devil, name_simplified: i chase the devil, publish_at: !!timestamp '2011-11-18
       10:21:43', published: true, tempo: 149, tonality_key: 11, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 63
 - fields: {album: null, album_name: Ameurope, album_name_simplified: ameurope, allowed_countries: null,
     artist: null, artist_name: 'Percewood''s Onagram, Michels', artist_name_simplified: percewood
@@ -772,7 +772,7 @@
 
       Remastered', name_simplified: feeling lonely remastered, publish_at: !!timestamp '2011-11-18
       10:21:44', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 64
 - fields: {album: 42, album_name: 'Pom Pom: The Essential Cibo Matto', album_name_simplified: pom
       pom the essential cibo matto, allowed_countries: null, artist: 32, artist_name: Cibo
@@ -786,7 +786,7 @@
       2006 Remastered Album Version', name_simplified: beef jerky 2006 remastered
       album version, publish_at: !!timestamp '2011-11-18 10:10:47', published: true,
     tempo: 96, tonality_key: 6, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 65
 - fields: {album: 31, album_name: The Paul Butterfield Blues Band Live, album_name_simplified: the
       paul butterfield blues band live, allowed_countries: null, artist: null, artist_name: The
@@ -802,7 +802,7 @@
       ve got to love her with a feeling previously unissued live the troubadour losangeles,
     publish_at: !!timestamp '2011-11-18 10:10:49', published: true, tempo: null, tonality_key: null,
     tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 66
 - fields: {album: null, album_name: Peque Mix - Exitos Infantiles, album_name_simplified: peque
       mix exitos infantiles, allowed_countries: null, artist: null, artist_name: 'Various
@@ -822,7 +822,7 @@
       mundo fantastico peque mix soy un gnomo el equipo a bang bang lucky luke peque
       mix david el loco mundo de los payasos la, publish_at: !!timestamp '2011-11-18
       10:10:49', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 67
 - fields: {album: 43, album_name: 'DMZ
 
@@ -836,7 +836,7 @@
 
       Album Version', name_simplified: destroyer album version, publish_at: !!timestamp '2011-11-18
       10:21:48', published: true, tempo: 86, tonality_key: 5, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 68
 - fields: {album: 44, album_name: Discotheque, album_name_simplified: discotheque,
     allowed_countries: null, artist: 14, artist_name: Herbie Mann, artist_name_simplified: herbie
@@ -849,7 +849,7 @@
 
       LP Version', name_simplified: lady marmalade lp version, publish_at: !!timestamp '2011-11-18
       10:21:49', published: true, tempo: 116, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 69
 - fields: {album: 45, album_name: Tu Sigues Siendo El Mismo, album_name_simplified: tu
       sigues siendo el mismo, allowed_countries: null, artist: 33, artist_name: Flor
@@ -860,7 +860,7 @@
     lastfm_id: '336798977', locked: false, loudness: '-12.39', musicbrainz_id: null,
     name: Campanitas De Cristal, name_simplified: campanitas de cristal, publish_at: !!timestamp '2011-11-18
       10:21:51', published: true, tempo: 114, tonality_key: 10, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 70
 - fields: {album: null, album_name: 'Good Morning England (The Boat That Rocked)
 
@@ -873,7 +873,7 @@
     lastfm_id: '3258814', locked: false, loudness: '-9.34', musicbrainz_id: null,
     name: Friday On My Mind, name_simplified: friday on my mind, publish_at: !!timestamp '2011-11-18
       10:21:52', published: true, tempo: 190, tonality_key: 9, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 71
 - fields: {album: null, album_name: 'Stand Back
 
@@ -889,7 +889,7 @@
       Ralphi''s Beefy-Retro Radio', name_simplified: stand back ralphi s beefy retro
       radio, publish_at: !!timestamp '2011-11-18 10:10:55', published: true, tempo: null,
     tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 72
 - fields: {album: 46, album_name: Chess Chartbusters Vol. 4, album_name_simplified: chess
       chartbusters vol 4, allowed_countries: null, artist: null, artist_name: John
@@ -903,7 +903,7 @@
       Album Version', name_simplified: one bourbon one scotch one beer album version,
     publish_at: !!timestamp '2011-11-18 10:10:55', published: true, tempo: null, tonality_key: null,
     tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 73
 - fields: {album: 47, album_name: A Lua Sabe Quem Eu Sou, album_name_simplified: a
       lua sabe quem eu sou, allowed_countries: null, artist: 35, artist_name: "Sandra\
@@ -914,7 +914,7 @@
     lastfm_id: '198523845', locked: false, loudness: '-9.17', musicbrainz_id: null,
     name: "Ilus\xF5es\nWaterfalls", name_simplified: ilusoes waterfalls, publish_at: !!timestamp '2011-11-18
       10:21:53', published: true, tempo: 172, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 74
 - fields: {album: 48, album_name: Siempre con Vos, album_name_simplified: siempre
       con vos, allowed_countries: null, artist: 36, artist_name: Los De Salta, artist_name_simplified: los
@@ -925,7 +925,7 @@
     lastfm_id: '330695809', locked: false, loudness: '-6.91', musicbrainz_id: null,
     name: La Casa De Mis Abuelos, name_simplified: la casa de mis abuelos, publish_at: !!timestamp '2011-11-18
       10:10:56', published: true, tempo: 85, tonality_key: 4, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 75
 - fields: {album: null, album_name: 'Swing & Hits
 
@@ -938,7 +938,7 @@
     lastfm_id: '32396616', locked: false, loudness: '-7.99', musicbrainz_id: null,
     name: F-F-F-Falling, name_simplified: f f f falling, publish_at: !!timestamp '2011-11-18
       10:10:56', published: true, tempo: 146, tonality_key: 6, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 76
 - fields: {album: null, album_name: 'Together
 
@@ -953,7 +953,7 @@
 
       Album Version', name_simplified: stormy monday album version, publish_at: !!timestamp '2011-11-18
       10:21:55', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 77
 - fields: {album: 49, album_name: Las Mejores Cumbias, album_name_simplified: las
       mejores cumbias, allowed_countries: null, artist: 38, artist_name: Marimba Chiapas,
@@ -964,7 +964,7 @@
     lastfm_id: '117089449', locked: false, loudness: '-8.01', musicbrainz_id: null,
     name: Cumbia Del Sol, name_simplified: cumbia del sol, publish_at: !!timestamp '2011-11-18
       10:10:58', published: true, tempo: 99, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 78
 - fields: {album: null, album_name: 'Rachmaninov : Vespers
 
@@ -978,7 +978,7 @@
       \ : Vespers Op.37 : X Chant de la R\xE9surrection", name_simplified: rachmaninov
       vespers op 37 x chant de la resurrection, publish_at: !!timestamp '2011-11-18
       10:10:59', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 79
 - fields: {album: 50, album_name: Irish Rose, album_name_simplified: irish rose, allowed_countries: null,
     artist: 39, artist_name: Frank Slay, artist_name_simplified: frank slay, comment: null,
@@ -989,7 +989,7 @@
     lastfm_id: '294119626', locked: false, loudness: '-7.78', musicbrainz_id: null,
     name: Bei Mir Bist De Schoen, name_simplified: bei mir bist de schoen, publish_at: !!timestamp '2011-11-18
       10:21:56', published: true, tempo: 95, tonality_key: 9, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 80
 - fields: {album: 51, album_name: Back & Forth, album_name_simplified: back forth,
     allowed_countries: null, artist: null, artist_name: Lanae' Hale, artist_name_simplified: lanae
@@ -1002,7 +1002,7 @@
 
       EP Version', name_simplified: quiet place ep version, publish_at: !!timestamp '2011-11-18
       10:10:59', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 81
 - fields: {album: 43, album_name: 'DMZ
 
@@ -1016,7 +1016,7 @@
 
       Album Version', name_simplified: border line album version, publish_at: !!timestamp '2011-11-18
       10:21:58', published: true, tempo: 146, tonality_key: 2, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 82
 - fields: {album: 39, album_name: Goodnight Nobody, album_name_simplified: goodnight
       nobody, allowed_countries: null, artist: 29, artist_name: Julie Doiron, artist_name_simplified: julie
@@ -1027,7 +1027,7 @@
     lastfm_id: '7768025', locked: false, loudness: '-15.25', musicbrainz_id: null,
     name: Banjo, name_simplified: banjo, publish_at: !!timestamp '2011-11-18 10:21:58',
     published: true, tempo: 97, tonality_key: 2, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 83
 - fields: {album: null, album_name: Ameurope, album_name_simplified: ameurope, allowed_countries: null,
     artist: null, artist_name: 'Percewood''s Onagram, Michels', artist_name_simplified: percewood
@@ -1040,7 +1040,7 @@
 
       Remastered', name_simplified: the wilderness remastered, publish_at: !!timestamp '2011-11-18
       10:21:59', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 84
 - fields: {album: 52, album_name: 'Songs by Stephen Foster, Vol. 1-2', album_name_simplified: songs
       by stephen foster vol 1 2, allowed_countries: null, artist: 40, artist_name: Jan
@@ -1051,7 +1051,7 @@
     lastfm_id: '73740150', locked: false, loudness: '-32.19', musicbrainz_id: null,
     name: Beautiful Dreamer, name_simplified: beautiful dreamer, publish_at: !!timestamp '2011-11-18
       10:21:59', published: true, tempo: 129, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 85
 - fields: {album: 53, album_name: "Entre R\xEAve Et R\xE9alit\xE9s", album_name_simplified: entre
       reve et realites, allowed_countries: null, artist: 41, artist_name: Nathalie
@@ -1062,7 +1062,7 @@
     lastfm_id: '70519890', locked: false, loudness: '-7.09', musicbrainz_id: null,
     name: Une Seconde, name_simplified: une seconde, publish_at: !!timestamp '2011-11-18
       10:22:01', published: true, tempo: 142, tonality_key: 10, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 86
 - fields: {album: 54, album_name: Les Voisines, album_name_simplified: les voisines,
     allowed_countries: null, artist: 42, artist_name: Renan Luce, artist_name_simplified: renan
@@ -1073,7 +1073,7 @@
     lastfm_id: '45745060', locked: false, loudness: '-3.21', musicbrainz_id: null,
     name: Les Voisines, name_simplified: les voisines, publish_at: !!timestamp '2011-11-18
       10:22:02', published: true, tempo: 130, tonality_key: 1, tonality_mode: 0}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 87
 - fields: {album: 55, album_name: Volver A Verte, album_name_simplified: volver a
       verte, allowed_countries: null, artist: 33, artist_name: Flor Silvestre, artist_name_simplified: flor
@@ -1084,7 +1084,7 @@
     lastfm_id: '449565725', locked: false, loudness: '-8.84', musicbrainz_id: null,
     name: Volver A Verte, name_simplified: volver a verte, publish_at: !!timestamp '2011-11-18
       10:22:02', published: true, tempo: 97, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 88
 - fields: {album: 56, album_name: East-West, album_name_simplified: east west, allowed_countries: null,
     artist: 20, artist_name: The Paul Butterfield Blues Band, artist_name_simplified: the
@@ -1097,7 +1097,7 @@
 
       LP Version', name_simplified: never say no lp version, publish_at: !!timestamp '2011-11-18
       10:11:07', published: true, tempo: 59, tonality_key: 5, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 89
 - fields: {album: 57, album_name: Zander's Hitbox, album_name_simplified: zander s
       hitbox, allowed_countries: null, artist: 43, artist_name: Frank Zander, artist_name_simplified: frank
@@ -1108,7 +1108,7 @@
     lastfm_id: '2924875', locked: false, loudness: '-6.41', musicbrainz_id: null,
     name: Hier kommt Kurt, name_simplified: hier kommt kurt, publish_at: !!timestamp '2011-11-18
       10:11:08', published: true, tempo: 116, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 90
 - fields: {album: 59, album_name: Calm Hades Float, album_name_simplified: calm hades
       float, allowed_countries: null, artist: 45, artist_name: Windsor For The Derby,
@@ -1119,7 +1119,7 @@
     lastfm_id: '9026923', locked: false, loudness: '-12.65', musicbrainz_id: null,
     name: FIve, name_simplified: five, publish_at: !!timestamp '2011-11-18 10:11:09',
     published: true, tempo: 104, tonality_key: 11, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 92
 - fields: {album: 60, album_name: Live In New York, album_name_simplified: live in
       new york, allowed_countries: null, artist: 46, artist_name: Jonatha Brooke,
@@ -1130,7 +1130,7 @@
     lastfm_id: '1217164', locked: false, loudness: '-5.31', musicbrainz_id: null,
     name: Linger, name_simplified: linger, publish_at: !!timestamp '2011-11-18 10:11:09',
     published: true, tempo: 89, tonality_key: 7, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 93
 - fields: {album: 61, album_name: Smoke Rings In The Dark, album_name_simplified: smoke
       rings in the dark, allowed_countries: null, artist: null, artist_name: Gary
@@ -1143,7 +1143,7 @@
 
       Album Version', name_simplified: right where i need to be album version, publish_at: !!timestamp '2011-11-18
       10:11:10', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 94
 - fields: {album: 62, album_name: Judy Henske, album_name_simplified: judy henske,
     allowed_countries: null, artist: 47, artist_name: Judy Henske, artist_name_simplified: judy
@@ -1156,7 +1156,7 @@
 
       LP Version', name_simplified: ballad of little romy lp version, publish_at: !!timestamp '2011-11-18
       10:11:10', published: true, tempo: 122, tonality_key: 0, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 95
 - fields: {album: 63, album_name: Romance, album_name_simplified: romance, allowed_countries: null,
     artist: null, artist_name: Chang Faye, artist_name_simplified: chang faye, comment: null,
@@ -1166,7 +1166,7 @@
     lastfm_id: '77793622', locked: false, loudness: null, musicbrainz_id: null, name: I've
       Got You Under My Skin, name_simplified: i ve got you under my skin, publish_at: !!timestamp '2011-11-18
       10:22:09', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 96
 - fields: {album: 64, album_name: 'Beethoven : Symphonies Nos 1 - 9 & Overtures',
     album_name_simplified: beethoven symphonies nos 1 9 overtures, allowed_countries: null,
@@ -1179,7 +1179,7 @@
       : Symphony No.3 in E flat major Op.55, ''Eroica'' : I Allegro con brio', name_simplified: beethoven
       symphony no 3 in e flat major op 55 eroica i allegro con brio, publish_at: !!timestamp '2011-11-18
       10:22:09', published: true, tempo: null, tonality_key: null, tonality_mode: null}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 97
 - fields: {album: null, album_name: Get Riel, album_name_simplified: get riel, allowed_countries: null,
     artist: 48, artist_name: 'Alex Riel, Pierre Boussaguet, Kenny Werner', artist_name_simplified: alex
@@ -1190,7 +1190,7 @@
     lastfm_id: '320253494', locked: false, loudness: '-15.40', musicbrainz_id: null,
     name: Autumn in 3, name_simplified: autumn in 3, publish_at: !!timestamp '2011-11-18
       10:22:10', published: true, tempo: 145, tonality_key: 8, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 98
 - fields: {album: 65, album_name: The Groove Collection, album_name_simplified: the
       groove collection, allowed_countries: null, artist: 49, artist_name: Ambros
@@ -1202,466 +1202,466 @@
     lastfm_id: '108780150', locked: false, loudness: '-9.34', musicbrainz_id: null,
     name: Gimmi More, name_simplified: gimmi more, publish_at: !!timestamp '2011-11-18
       10:22:10', published: true, tempo: 123, tonality_key: 5, tonality_mode: 1}
-  model: yabase.yasoundsong
+  model: yaref.yasoundsong
   pk: 99
 - fields: {comment: null, echonest_id: ARC7S1F1187B98CF1D, lastfm_id: null, musicbrainz_id: 92434230-412b-4097-a223-ee67f84cba3d,
     name: Chris Connor, name_simplified: chris connor}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 1
 - fields: {cover_filename: null, lastfm_id: '211883148', musicbrainz_id: null, name: C'Est
       La Vie, name_simplified: c est la vie}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 1
 - fields: {comment: null, echonest_id: ARSEVRC12131B4B7A7, lastfm_id: null, musicbrainz_id: null,
     name: 'The Beat, The English Beat', name_simplified: the beat the english beat}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 2
 - fields: {cover_filename: 4a7e7345b.jpg, lastfm_id: '2384408', musicbrainz_id: f3d1fb5b-2be0-407c-bfb1-51cff30bbe45,
     name: Nos Maux Mots D'Amour, name_simplified: nos maux mots d amour}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 2
 - fields: {comment: null, echonest_id: ARWQPF31187FB52C4C, lastfm_id: null, musicbrainz_id: null,
     name: Chris Kaeser, name_simplified: chris kaeser}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 3
 - fields: {cover_filename: null, lastfm_id: '51389649', musicbrainz_id: null, name: Who's
       In The House, name_simplified: who s in the house}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 3
 - fields: {cover_filename: a6e0dbecd.jpg, lastfm_id: '2155990', musicbrainz_id: fd957d94-52d8-46f2-a11d-7972a6ab1f9e,
     name: Five Feet Of Soul, name_simplified: five feet of soul}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 4
 - fields: {comment: null, echonest_id: AR4VW591187FB493FD, lastfm_id: null, musicbrainz_id: 2be7b462-382f-4dd4-a635-99c4801dcd39,
     name: Superbus, name_simplified: superbus}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 4
 - fields: {cover_filename: ab37a8e96.jpg, lastfm_id: '35458179', musicbrainz_id: null,
     name: Addictions, name_simplified: addictions}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 5
 - fields: {comment: null, echonest_id: ARVNNIS11F4C8475B6, lastfm_id: null, musicbrainz_id: null,
     name: Banda San Jose De Mesillas, name_simplified: banda san jose de mesillas}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 5
 - fields: {cover_filename: f30d2c6d9.jpg, lastfm_id: '14977901', musicbrainz_id: null,
     name: Como La Palma De Mi Mano, name_simplified: como la palma de mi mano}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 6
 - fields: {cover_filename: e8f648d5d.jpg, lastfm_id: '2952932', musicbrainz_id: null,
     name: Disremembrance, name_simplified: disremembrance}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 7
 - fields: {comment: null, echonest_id: ARE4SX81187FB53771, lastfm_id: null, musicbrainz_id: null,
     name: Micky Green, name_simplified: micky green}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 6
 - fields: {cover_filename: cc0ef0d65.png, lastfm_id: '3713489', musicbrainz_id: 999a5d5b-c6c8-4422-bde0-e99493e1decd,
     name: Oh!, name_simplified: oh}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 8
 - fields: {comment: null, echonest_id: ARKDTH11187FB3CC21, lastfm_id: null, musicbrainz_id: af7000dd-d92c-4b05-9c10-509ade446527,
     name: David Ackles, name_simplified: david ackles}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 7
 - fields: {cover_filename: ac8be97dd.jpg, lastfm_id: '2128305', musicbrainz_id: 527e171c-830c-4314-8f0f-77fffd0e4f32,
     name: 'American Gothic
 
       US Internet Release', name_simplified: american gothic us internet release}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 9
 - fields: {cover_filename: null, lastfm_id: '3209847', musicbrainz_id: null, name: A
       La Luna Nueva, name_simplified: a la luna nueva}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 10
 - fields: {comment: null, echonest_id: ARJZRQT1187FB3C1A8, lastfm_id: null, musicbrainz_id: 8bef9bae-a250-4c4e-8e5e-b2f81607db2a,
     name: Bernard Lavilliers, name_simplified: bernard lavilliers}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 8
 - fields: {cover_filename: c18b5e63e.jpg, lastfm_id: '3713518', musicbrainz_id: null,
     name: Samedi Soir A Beyrouth, name_simplified: samedi soir a beyrouth}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 11
 - fields: {comment: null, echonest_id: ARPOSF41187FB3FDAD, lastfm_id: null, musicbrainz_id: c9ba869f-5751-4fb5-a710-17817111a173,
     name: Diesel, name_simplified: diesel}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 9
 - fields: {cover_filename: null, lastfm_id: '2336462', musicbrainz_id: 36ea2f7a-4f08-40cf-91e7-26bc2077bbff,
     name: 'Watts In A Tank
 
       US Release', name_simplified: watts in a tank us release}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 12
 - fields: {comment: null, echonest_id: ARSHAJO1187B9894D9, lastfm_id: null, musicbrainz_id: 96ce69b9-64d3-4cfd-a05d-60180f21b899,
     name: Janne Lucas, name_simplified: janne lucas}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 10
 - fields: {cover_filename: null, lastfm_id: '3403689', musicbrainz_id: null, name: The
       Best Of, name_simplified: the best of}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 13
 - fields: {cover_filename: e4ef447c4.png, lastfm_id: '152322', musicbrainz_id: 0344b552-be1d-4db7-ab63-23501b09b64f,
     name: Use Your Illusion I, name_simplified: use your illusion i}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 14
 - fields: {cover_filename: 9be7f2eca.jpg, lastfm_id: '4823821', musicbrainz_id: null,
     name: Le Renouveau, name_simplified: le renouveau}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 15
 - fields: {comment: null, echonest_id: AR7J8WW1187B9B6F33, lastfm_id: null, musicbrainz_id: b9b579ad-e499-4e3e-9d09-06bc8e504135,
     name: Charles Lloyd, name_simplified: charles lloyd}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 11
 - fields: {cover_filename: f348e1840.jpg, lastfm_id: '2091286', musicbrainz_id: f493c70f-1e1e-47b3-b455-7ea6c5a44f5b,
     name: 'Soundtrack
 
       US Release', name_simplified: soundtrack us release}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 16
 - fields: {comment: null, echonest_id: ARL6XZC1187FB3936E, lastfm_id: null, musicbrainz_id: 8b49d89a-cd3d-4766-aebb-0a5e1dd2d7a5,
     name: Solistiyhtye Suomi, name_simplified: solistiyhtye suomi}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 12
 - fields: {cover_filename: null, lastfm_id: '14405740', musicbrainz_id: null, name: "20\
       \ Suosikkia / Rilluttele y\xF6", name_simplified: 20 suosikkia rilluttele yo}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 17
 - fields: {comment: null, echonest_id: ART5SRU1187B9A26C2, lastfm_id: null, musicbrainz_id: e08e3928-7b25-474a-aed6-fce6bfe856cd,
     name: Mercedes Ferrer, name_simplified: mercedes ferrer}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 13
 - fields: {cover_filename: null, lastfm_id: '3213566', musicbrainz_id: null, name: Iman,
     name_simplified: iman}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 18
 - fields: {comment: null, echonest_id: ARJQVBE1187FB3D623, lastfm_id: null, musicbrainz_id: 04271c28-b9a7-4724-b7fd-022409fbce60,
     name: Herbie Mann, name_simplified: herbie mann}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 14
 - fields: {cover_filename: null, lastfm_id: '3247828', musicbrainz_id: null, name: Windows
       Open, name_simplified: windows open}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 19
 - fields: {cover_filename: null, lastfm_id: '26441005', musicbrainz_id: null, name: The
       Huge Hefner Chronicles, name_simplified: the huge hefner chronicles}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 20
 - fields: {comment: null, echonest_id: ARRF2WB1187FB4641E, lastfm_id: null, musicbrainz_id: a4a60ca9-45ff-464d-9764-7117d3f8c6d7,
     name: Al Hibbler, name_simplified: al hibbler}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 15
 - fields: {cover_filename: null, lastfm_id: '67894929', musicbrainz_id: null, name: Complete
       Jazz Series 1946 - 1949, name_simplified: complete jazz series 1946 1949}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 21
 - fields: {comment: null, echonest_id: ARZECAL11F50C485D2, lastfm_id: null, musicbrainz_id: 2014bfbb-c65d-45dc-9973-35bead3833fa,
     name: Sviatoslav Richter, name_simplified: sviatoslav richter}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 17
 - fields: {cover_filename: null, lastfm_id: '73152393', musicbrainz_id: null, name: Sviatoslav
       Richter In The 1950's - Volume 2, name_simplified: sviatoslav richter in the
       1950 s volume 2}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 23
 - fields: {comment: null, echonest_id: ARFNKDR1187B9B19CF, lastfm_id: null, musicbrainz_id: bf295ac0-21e8-4e11-89e9-22b10fd8973a,
     name: Big Joe Williams, name_simplified: big joe williams}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 18
 - fields: {cover_filename: 8f779cdc4.jpg, lastfm_id: '2222190', musicbrainz_id: 2b0c1269-e7e5-4453-8924-abea46a3c881,
     name: The Very Best Of, name_simplified: the very best of}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 24
 - fields: {cover_filename: 9af2e0f4c.jpg, lastfm_id: '1423962', musicbrainz_id: 36c899f8-3df3-41d4-aaad-6a04bee7f66f,
     name: Cellar Door, name_simplified: cellar door}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 25
 - fields: {comment: null, echonest_id: ARMODQV1187B9B08FF, lastfm_id: null, musicbrainz_id: 1fb533cf-f024-4587-a30f-40fbae5e2211,
     name: Diana Navarro, name_simplified: diana navarro}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 19
 - fields: {cover_filename: 9dcfb2273.jpg, lastfm_id: '3410080', musicbrainz_id: null,
     name: 24 Rosas, name_simplified: 24 rosas}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 26
 - fields: {cover_filename: 8004cad33.jpg, lastfm_id: '54166696', musicbrainz_id: null,
     name: Musica Clasica - Johannes Brahms, name_simplified: musica clasica johannes
       brahms}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 27
 - fields: {cover_filename: f13f45abe.jpg, lastfm_id: '3410091', musicbrainz_id: null,
     name: "Concerto K\xF6ln plays Dall'Abaco, Locatelli, Vanhal, Kozeluch and Eberl",
     name_simplified: concerto koln plays dall abaco locatelli vanhal kozeluch and
       eberl}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 28
 - fields: {cover_filename: 2439ebf32.png, lastfm_id: '1338', musicbrainz_id: c12262e2-7185-4942-87ee-da27ddd45ddf,
     name: Nevermind, name_simplified: nevermind}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 29
 - fields: {cover_filename: b8ccdac1c.jpg, lastfm_id: '12133259', musicbrainz_id: 1e07ede6-4e30-42cf-bd12-8ca7b30994fe,
     name: The Huge Hefner Chronicles, name_simplified: the huge hefner chronicles}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 30
 - fields: {comment: null, echonest_id: ARHWVGW1187FB41479, lastfm_id: null, musicbrainz_id: 20dcf3aa-c313-4f24-acd4-461327a76a73,
     name: The Paul Butterfield Blues Band, name_simplified: the paul butterfield blues
       band}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 20
 - fields: {cover_filename: 61c8986e5.jpg, lastfm_id: '3307973', musicbrainz_id: null,
     name: The Paul Butterfield Blues Band Live, name_simplified: the paul butterfield
       blues band live}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 31
 - fields: {comment: null, echonest_id: ARWJR6V1187B99B8E1, lastfm_id: null, musicbrainz_id: 18c96f8c-c6fa-4b4b-b01a-40a9eb5e3927,
     name: Roger Cicero, name_simplified: roger cicero}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 21
 - fields: {cover_filename: 556f2cd8a.jpg, lastfm_id: '3438364', musicbrainz_id: 622164cf-35a3-482c-abd9-b36aafe35051,
     name: Beziehungsweise, name_simplified: beziehungsweise}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 32
 - fields: {comment: null, echonest_id: ARYUESW1269FB35383, lastfm_id: null, musicbrainz_id: null,
     name: "Ma\xEEtrise De La Cath\xE9drale De Strasbourg", name_simplified: maitrise
       de la cathedrale de strasbourg}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 22
 - fields: {comment: null, echonest_id: AR0RULM1187B9A1D7A, lastfm_id: null, musicbrainz_id: null,
     name: Harry James, name_simplified: harry james}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 23
 - fields: {cover_filename: null, lastfm_id: '3485291', musicbrainz_id: null, name: 'Reader''s
       Digest Music: Harry James: The Reader''s Digest Sessions Volume 2', name_simplified: reader
       s digest music harry james the reader s digest sessions volume 2}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 33
 - fields: {cover_filename: null, lastfm_id: '56260388', musicbrainz_id: null, name: 'Beethoven
       : String Quartets Nos 1 - 16 [Complete]', name_simplified: beethoven string
       quartets nos 1 16 complete}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 34
 - fields: {cover_filename: null, lastfm_id: '270460229', musicbrainz_id: null, name: Swing
       Street Cafe, name_simplified: swing street cafe}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 35
 - fields: {comment: null, echonest_id: ARFC1NH1187B98E850, lastfm_id: null, musicbrainz_id: null,
     name: Karaoke - Ameritz, name_simplified: karaoke ameritz}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 24
 - fields: {cover_filename: null, lastfm_id: '57810119', musicbrainz_id: null, name: Karaoke
       Downloads - Michael Ball, name_simplified: karaoke downloads michael ball}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 36
 - fields: {comment: null, echonest_id: AR7XU1L1187B98D481, lastfm_id: null, musicbrainz_id: f4840524-37fd-4eb8-9906-f0ba9814f834,
     name: DMZ, name_simplified: dmz}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 25
 - fields: {comment: null, echonest_id: ARBFWQO1187B998862, lastfm_id: null, musicbrainz_id: f2e61a0f-0f2b-4162-a166-3c9d68a5a42d,
     name: Chris Connor, name_simplified: chris connor}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 26
 - fields: {cover_filename: 936c6a4d4.jpg, lastfm_id: '2252953', musicbrainz_id: fe26583d-e3ab-4eb5-8d5c-710d25903890,
     name: Double Exposure, name_simplified: double exposure}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 37
 - fields: {comment: null, echonest_id: ARPAB1I1187B9AD8E4, lastfm_id: null, musicbrainz_id: 091ec508-877f-4e3c-92a3-10903bbbc7ad,
     name: The Everly Brothers, name_simplified: the everly brothers}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 27
 - fields: {cover_filename: 74b8dce81.jpg, lastfm_id: '2389565', musicbrainz_id: 77222af0-4d2f-4e5c-8cbf-827a8d8c7a4a,
     name: Rock N' Roll Live, name_simplified: rock n roll live}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 38
 - fields: {comment: null, echonest_id: ARXJQAX1187B9B18B0, lastfm_id: null, musicbrainz_id: b2180f66-1fd2-42a4-b423-ccc38dae7b2f,
     name: Factory, name_simplified: factory}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 28
 - fields: {comment: null, echonest_id: ARKT5U81187B98E29A, lastfm_id: null, musicbrainz_id: 44727d86-a37c-449f-aa91-4a8554127336,
     name: Julie Doiron, name_simplified: julie doiron}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 29
 - fields: {cover_filename: 461918de6.jpg, lastfm_id: '1419775', musicbrainz_id: fed28e2c-49ee-4b8d-859a-104cf4536389,
     name: Goodnight Nobody, name_simplified: goodnight nobody}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 39
 - fields: {cover_filename: 389ec31ad.jpg, lastfm_id: '2301555', musicbrainz_id: a9d14ae7-5c71-43dd-b583-ccbce90c371a,
     name: Retroactive, name_simplified: retroactive}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 40
 - fields: {comment: null, echonest_id: AR8WIOJ1187FB3E2B4, lastfm_id: null, musicbrainz_id: 35ef68f2-04b5-46b2-9713-a93374306b55,
     name: Ann Christine, name_simplified: ann christine}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 30
 - fields: {comment: null, echonest_id: ARYCUWT1187B98AFF4, lastfm_id: null, musicbrainz_id: null,
     name: Max Romeo, name_simplified: max romeo}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 31
 - fields: {cover_filename: 18af66504.jpg, lastfm_id: '1411678', musicbrainz_id: null,
     name: War Ina Babylon, name_simplified: war ina babylon}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 41
 - fields: {comment: null, echonest_id: ARPOXHP1187B9B8112, lastfm_id: null, musicbrainz_id: dc4968ba-1fe0-43b9-bba0-81c09acd6326,
     name: Cibo Matto, name_simplified: cibo matto}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 32
 - fields: {cover_filename: b94d9434b.jpg, lastfm_id: '2285179', musicbrainz_id: 59e7742b-ce72-492b-b996-b83be399b850,
     name: 'Pom Pom: The Essential Cibo Matto', name_simplified: pom pom the essential
       cibo matto}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 42
 - fields: {cover_filename: 3ac8edf19.jpg, lastfm_id: '2451291', musicbrainz_id: 4a3bc273-4355-48ec-945f-840a59a42e5c,
     name: 'DMZ
 
       US Release', name_simplified: dmz us release}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 43
 - fields: {cover_filename: 23799642c.jpg, lastfm_id: '2359706', musicbrainz_id: 4d42f437-7d4a-4cab-b3fe-0ed14ff47afc,
     name: Discotheque, name_simplified: discotheque}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 44
 - fields: {comment: null, echonest_id: ARHFEBO11F50C4825A, lastfm_id: null, musicbrainz_id: null,
     name: Flor Silvestre, name_simplified: flor silvestre}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 33
 - fields: {cover_filename: 6bc7cc9f8.jpg, lastfm_id: '81938805', musicbrainz_id: null,
     name: Tu Sigues Siendo El Mismo, name_simplified: tu sigues siendo el mismo}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 45
 - fields: {comment: null, echonest_id: ARXBCH91187B996EF6, lastfm_id: null, musicbrainz_id: dff0eebd-dbc3-4a60-aeee-842bde2c1372,
     name: Easybeats, name_simplified: easybeats}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 34
 - fields: {cover_filename: 95682e184.jpg, lastfm_id: '1423943', musicbrainz_id: 0d225de3-5dcf-4219-93e0-be16ab17afa7,
     name: Chess Chartbusters Vol. 4, name_simplified: chess chartbusters vol 4}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 46
 - fields: {comment: null, echonest_id: ARQK8KT1187B994F16, lastfm_id: null, musicbrainz_id: 04547553-efb6-4be3-8190-37a76a1a4e35,
     name: "Sandra De S\xE1", name_simplified: sandra de sa}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 35
 - fields: {cover_filename: dc6e41cc7.jpg, lastfm_id: '3249325', musicbrainz_id: b7eccdad-af78-4759-9f12-f3422a1491f4,
     name: A Lua Sabe Quem Eu Sou, name_simplified: a lua sabe quem eu sou}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 47
 - fields: {comment: null, echonest_id: ARVYNFW11F50C50E54, lastfm_id: null, musicbrainz_id: null,
     name: Los De Salta, name_simplified: los de salta}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 36
 - fields: {cover_filename: null, lastfm_id: '69154403', musicbrainz_id: null, name: Siempre
       con Vos, name_simplified: siempre con vos}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 48
 - fields: {comment: null, echonest_id: ARGZJPZ1250941143C, lastfm_id: null, musicbrainz_id: null,
     name: 'Riku Niemi, his orchestra', name_simplified: riku niemi his orchestra}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 37
 - fields: {comment: null, echonest_id: ARKXEDO11F50C482A1, lastfm_id: null, musicbrainz_id: null,
     name: Marimba Chiapas, name_simplified: marimba chiapas}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 38
 - fields: {cover_filename: null, lastfm_id: '3317010', musicbrainz_id: null, name: Las
       Mejores Cumbias, name_simplified: las mejores cumbias}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 49
 - fields: {comment: null, echonest_id: ARNSMKA1241B9CE48E, lastfm_id: null, musicbrainz_id: null,
     name: Frank Slay, name_simplified: frank slay}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 39
 - fields: {cover_filename: null, lastfm_id: '78789064', musicbrainz_id: null, name: Irish
       Rose, name_simplified: irish rose}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 50
 - fields: {cover_filename: 548cb6509.jpg, lastfm_id: '52662353', musicbrainz_id: 100b17cc-03cb-464d-a832-e4f060db3216,
     name: Back & Forth, name_simplified: back forth}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 51
 - fields: {comment: null, echonest_id: AR3E01M1187FB50623, lastfm_id: null, musicbrainz_id: null,
     name: Jan DeGaetani, name_simplified: jan degaetani}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 40
 - fields: {cover_filename: null, lastfm_id: '3248157', musicbrainz_id: null, name: 'Songs
       by Stephen Foster, Vol. 1-2', name_simplified: songs by stephen foster vol 1
       2}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 52
 - fields: {comment: null, echonest_id: ARCWHJA1250940FE87, lastfm_id: null, musicbrainz_id: null,
     name: Nathalie Santamaria, name_simplified: nathalie santamaria}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 41
 - fields: {cover_filename: null, lastfm_id: '3213565', musicbrainz_id: null, name: "Entre\
       \ R\xEAve Et R\xE9alit\xE9s", name_simplified: entre reve et realites}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 53
 - fields: {comment: null, echonest_id: ARYDHN21187FB466A8, lastfm_id: null, musicbrainz_id: 54f2540b-5e16-4e74-a253-dd888450b86c,
     name: Renan Luce, name_simplified: renan luce}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 42
 - fields: {cover_filename: acb6b2cb3.jpg, lastfm_id: '3569388', musicbrainz_id: 92343332-15a6-4382-8678-bff29dbc71a2,
     name: Les Voisines, name_simplified: les voisines}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 54
 - fields: {cover_filename: null, lastfm_id: '248988558', musicbrainz_id: null, name: Volver
       A Verte, name_simplified: volver a verte}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 55
 - fields: {cover_filename: b22d32b96.jpg, lastfm_id: '2501463', musicbrainz_id: 93c6cec1-1153-4bf9-be90-2b54507965dd,
     name: East-West, name_simplified: east west}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 56
 - fields: {comment: null, echonest_id: ARAGIJJ1187B98D01B, lastfm_id: null, musicbrainz_id: 47522335-222a-4228-b3df-6858ed9cf8fa,
     name: Frank Zander, name_simplified: frank zander}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 43
 - fields: {cover_filename: null, lastfm_id: '4411317', musicbrainz_id: null, name: Zander's
       Hitbox, name_simplified: zander s hitbox}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 57
 - fields: {comment: null, echonest_id: ARPQA4M1187B9B12F4, lastfm_id: null, musicbrainz_id: 04fc2164-c46d-4d0d-851d-13467b444b84,
     name: Windsor For The Derby, name_simplified: windsor for the derby}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 45
 - fields: {cover_filename: 7c372d5b6.jpg, lastfm_id: '2545601', musicbrainz_id: dea47cef-a4a4-4c7c-a300-d33b25b96bb6,
     name: Calm Hades Float, name_simplified: calm hades float}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 59
 - fields: {comment: null, echonest_id: ARZF30Z1187FB53ED3, lastfm_id: null, musicbrainz_id: b23f4734-27e3-48e8-8d6e-492eeb21d3e6,
     name: Jonatha Brooke, name_simplified: jonatha brooke}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 46
 - fields: {cover_filename: 20445cb0e.jpg, lastfm_id: '2084408', musicbrainz_id: 63745e5c-bd8b-47b0-a47e-81e3520b87e0,
     name: Live In New York, name_simplified: live in new york}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 60
 - fields: {cover_filename: de205c04b.jpg, lastfm_id: '2026550', musicbrainz_id: c06aedd5-91c0-4e7d-bd62-37f387811147,
     name: Smoke Rings In The Dark, name_simplified: smoke rings in the dark}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 61
 - fields: {comment: null, echonest_id: ARI9DQS1187B995625, lastfm_id: null, musicbrainz_id: 2cc6789c-48f2-4554-9b63-3112bfa5242c,
     name: Judy Henske, name_simplified: judy henske}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 47
 - fields: {cover_filename: null, lastfm_id: '2073290', musicbrainz_id: 24bd914a-cb2e-48fa-b5b7-a9d011d3469f,
     name: Judy Henske, name_simplified: judy henske}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 62
 - fields: {cover_filename: null, lastfm_id: '3259265', musicbrainz_id: null, name: Romance,
     name_simplified: romance}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 63
 - fields: {cover_filename: null, lastfm_id: '50014983', musicbrainz_id: null, name: 'Beethoven
       : Symphonies Nos 1 - 9 & Overtures', name_simplified: beethoven symphonies nos
       1 9 overtures}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 64
 - fields: {comment: null, echonest_id: ARVVCCX124549A3960, lastfm_id: null, musicbrainz_id: null,
     name: 'Alex Riel, Pierre Boussaguet, Kenny Werner', name_simplified: alex riel
       pierre boussaguet kenny werner}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 48
 - fields: {comment: null, echonest_id: AROXFBD124549A3B35, lastfm_id: null, musicbrainz_id: 1cc6d4c4-9739-4cce-914a-72ac908e014a,
     name: Ambros Seelos Orchestra, name_simplified: ambros seelos orchestra}
-  model: yabase.yasoundartist
+  model: yaref.yasoundartist
   pk: 49
 - fields: {cover_filename: null, lastfm_id: '48708357', musicbrainz_id: null, name: The
       Groove Collection, name_simplified: the groove collection}
-  model: yabase.yasoundalbum
+  model: yaref.yasoundalbum
   pk: 65

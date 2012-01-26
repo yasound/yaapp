@@ -1,11 +1,12 @@
-import sys
 from celery.task import task
-from yabase.models import Radio, Playlist, SongMetadata, SongInstance, YasoundSong, YasoundArtist, YasoundAlbum
-import re
 from django.db import transaction
-import zlib
 from struct import *
+from yabase.models import Radio, Playlist, SongMetadata, SongInstance
+from yaref.models import YasoundSong
+import re
+import sys
 import time
+import zlib
 
 class BinaryData:
     def __init__(self, data):

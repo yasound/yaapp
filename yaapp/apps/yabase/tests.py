@@ -2,9 +2,9 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
-    RadioUser, YasoundSong, YasoundArtist
+    RadioUser
 from tests_utils import generate_playlist
-from yabase.models import YasoundAlbum
+from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import settings as yabase_settings
 
 class TestDatabase(TestCase):
