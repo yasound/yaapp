@@ -551,41 +551,54 @@ class YasoundDoubleMetaphone(models.Model):
         db_table = u'yasound_doublemetaphone'
         db_name = u'yasound'
 
-def _build_metaphone(sentence):
+def _build_metaphone(sentence, exclude_common_words=True):
     words = sorted(sentence.lower().split())
     values = []
     for word in words:
+        if exclude_common_words and word in yabase_settings.FUZZY_COMMON_WORDS:
+            continue
         dm = metaphone.dm(word)
         value = u'%s - %s' % (dm[0], dm[1])
         values.append(value)
     return values
 
 class YasoundArtistManager(models.Manager):
-    def find_by_name(self, name, limit=5):
+    def find_by_name(self, name, limit=None):
         values = _build_metaphone(name)
-        found_artists = YasoundArtist.objects.filter(dms__value__in=values)
-        return found_artists[:limit]
+        qs = self.all()
+        for value in values:
+            qs = qs.filter(dms__value=value)
+        if limit:
+            return qs[:limit]
+        return qs
 
 class YasoundAlbumManager(models.Manager):
-    def find_by_name(self, name, limit=5):
+    def find_by_name(self, name, limit=None):
         values = _build_metaphone(name)
-        found_albums = YasoundAlbum.objects.filter(dms__value__in=values)
-        return found_albums[:limit]
+        qs = self.all()
+        for value in values:
+            qs = qs.filter(dms__value=value)
+        if limit:
+            return qs[:limit]
+        return qs
     
 class YasoundSongManager(models.Manager):
     def get_query_set(self):
         return self.model.QuerySet(self.model)
     
     def find_fuzzy(self, name, album, artist, limit=5):
-        artists = YasoundArtist.objects.find_by_name(artist)
-        albums = YasoundAlbum.objects.find_by_name(name=album)
-        
-        songs = YasoundSong.objects.filter(Q(artist__in=artists) | 
-                                           Q(album__in=albums))
+        artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
+        albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
+        artists = list(artists)
+        albums = list(albums)
+        songs = YasoundSong.objects.filter(Q(artist__id__in=artists) |
+                                             Q(album__id__in=albums))
+        #songs = YasoundSong.objects.filter(artist__id__in=artists, album__id__in=albums)
         songs.find_by_name(name)
         
         best_song = None
         best_ratio = 0
+        print "found %d candidates" % (songs.count())
         for song in songs:
             ratio_song, ratio_album, ratio_artist = 0, 0, 0
             
@@ -596,10 +609,12 @@ class YasoundSongManager(models.Manager):
                 ratio_artist = fuzz.token_sort_ratio(artist, song.artist.name)
         
             ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-            print "ratio of %s = %d" % (song, ratio)
+            #print "ratio of %s = %d" % (song, ratio)
             if ratio >= best_ratio:
                 best_ratio = ratio
                 best_song = song
+                if ratio >= 100:
+                    break
         return best_song, songs
 
 class YasoundArtist(models.Model):
@@ -709,10 +724,14 @@ class YasoundSong(models.Model):
             self.dms.add(dm_record)
 
     class QuerySet(QuerySet):
-        def find_by_name(self, name, limit=5):
+        def find_by_name(self, name, limit=None):
             values = _build_metaphone(name)
-            found_songs = YasoundSong.objects.filter(dms__value__in=values)
-            return found_songs[:limit]
+            qs = self.all()
+            for value in values:
+                qs = qs.filter(dms__value=value)
+            if limit:
+                return qs[:limit]
+            return qs
 
     class Meta:
         db_table = u'yasound_song'
