@@ -25,3 +25,5 @@ EVENT_TYPE_CHOICES = (
                         (EVENT_STARTED_LISTEN, _('Started listening')),
                         (EVENT_STOPPED_LISTEN, _('Stopped listening')),
                     )
+
+FUZZY_COMMON_WORDS = ("the", "for", "a", "of", 'and')

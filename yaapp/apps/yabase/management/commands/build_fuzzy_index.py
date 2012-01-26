@@ -10,7 +10,27 @@ from yabase.models import YasoundArtist, YasoundAlbum, YasoundSong, \
 import datetime
 
 
+import gc
 
+def queryset_iterator(queryset, chunksize=1000):
+    '''
+    Iterate over a Django Queryset ordered by the primary key
+
+    This method loads a maximum of chunksize (default: 1000) rows in it's
+    memory at the same time while django normally would load all rows in it's
+    memory. Using the iterator() method only causes it to not preload all the
+    classes.
+
+    Note that the implementation of the iterator does not support ordered query sets.
+    '''
+    pk = 0
+    last_pk = queryset.order_by('-pk')[0].pk
+    queryset = queryset.order_by('pk')
+    while pk < last_pk:
+        for row in queryset.filter(pk__gt=pk)[:chunksize]:
+            pk = row.pk
+            yield row
+        gc.collect()
 
 class Command(BaseCommand):
     """
@@ -26,29 +46,32 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         dry = options.get('dry',False)
         
-        artists = YasoundArtist.objects.all()
-        for artist in artists:
-            artist.build_fuzzy_index()
+        artists = YasoundArtist.objects.filter(dms__isnull=True)
+        count = artists.count()
+        print "processing %d artists" % (count)
+        if count > 0:
+            for i, artist in enumerate(queryset_iterator(artists)):
+                artist.build_fuzzy_index()
+                if i % 1000 == 0:
+                    print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
         
-        albums = YasoundAlbum.objects.all()
-        for album in albums:
-            album.build_fuzzy_index()
+        albums = YasoundAlbum.objects.filter(dms__isnull=True)
+        count = albums.count()
+        print "processing %d albums" % (count)
+        if count > 0:
+            for i, album in enumerate(queryset_iterator(albums)):
+                album.build_fuzzy_index()
+                if i % 1000 == 0:
+                    print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
 
-        songs = YasoundSong.objects.all()
-        for song in songs:
-            song.build_fuzzy_index()
-#        albums = YasoundAlbum.objects.all()
-#        for album in albums:
-#            dms = self.dm_from_sentence(album.name)
-#            for dm in dms:
-#                album.dms.add(dm)
-#        
-#        songs = YasoundSong.objects.all()
-#        for song in songs:
-#            dms = self.dm_from_sentence(song.name)
-#            for dm in dms:
-#                song.dms.add(dm)
-        
-        
-        print "ok"
+        songs = YasoundSong.objects.filter(dms__isnull=True)
+        count = songs.count()
+        print "processing %d songs" % (count)
+        if count > 0:
+            for i, song in enumerate(queryset_iterator(songs)):
+                song.build_fuzzy_index()
+                if i % 1000 == 0:
+                    print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
+                    
+        print "done"
         
