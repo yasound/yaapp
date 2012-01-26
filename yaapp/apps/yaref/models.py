@@ -6,6 +6,10 @@ from fuzzywuzzy import fuzz
 import metaphone
 import settings as yaref_settings
 
+import django.db.models.options as options
+if not 'db_name' in options.DEFAULT_NAMES:
+    options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
+
 class YasoundDoubleMetaphone(models.Model):
     value = models.CharField(max_length=255)
     def __unicode__(self):

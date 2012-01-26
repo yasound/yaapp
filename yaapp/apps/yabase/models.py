@@ -10,7 +10,8 @@ import settings as yabase_settings
 import string
 
 import django.db.models.options as options
-options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
+if not 'db_name' in options.DEFAULT_NAMES:
+    options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
