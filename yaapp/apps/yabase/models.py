@@ -134,6 +134,7 @@ class Radio(models.Model):
     theme = models.CharField(max_length=255, blank=True)
     tags = TaggableManager(blank=True)
     
+    anonymous_audience = models.IntegerField(default=0)
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
     
@@ -411,6 +412,59 @@ class WallEvent(models.Model):
 
     class Meta:
         db_name = u'default'
+        
+    def save(self, *args, **kwargs):
+        super(NextSong, self).save(*args, **kwargs)
+        
+        if self.type == yabase_settings.EVENT_JOINED:
+            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+            radiouser.connected = True
+            radiouser.save()
+            
+        elif self.type == yabase_settings.EVENT_LEFT:
+            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+            radiouser.connected = False
+            radiouser.save()
+            
+        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
+            if self.user:
+                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+                radiouser.listening = True
+                radiouser.save()
+            else:
+                self.radio.anonymous_audience += 1
+                self.radio.save()
+            
+            
+            listeners = RadioUser.objects.filter(radio=self.radio, listening=True)
+            audience = len(listeners) + self.radio.anonymous_audience
+            if audience > self.radio.audience_peak:
+                self.radio.audience_peak = audience
+                self.radio.save()
+            
+        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
+            if self.user:
+                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+                radiouser.listening = False
+                radiouser.save()
+                            
+                last_start = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
+                last_stop = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
+                duration = last_stop.start_date - last_start.start_date
+                seconds = duration.total_seconds()
+                self.radio.overall_listening_time += seconds
+                self.radio.save()
+            
+            elif self.text:
+                self.radio.anonymous_audience -= 1
+                self.radio.save()
+                
+                last_start = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
+                last_stop = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
+                duration = last_stop.start_date - last_start.start_date
+                seconds = duration.total_seconds()
+                self.radio.overall_listening_time += seconds
+                self.radio.save()
 
 
 
