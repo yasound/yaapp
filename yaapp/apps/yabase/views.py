@@ -12,6 +12,8 @@ import settings as yabase_settings
 from django.conf import settings
 from check_request import check_api_key_Authentication, check_http_method
 import time
+from django.contrib.auth.models import AnonymousUser
+
 PICTURE_FILE_TAG = 'picture'
 
 def task_status(request, task_id):
@@ -291,7 +293,7 @@ def start_listening_to_radio(request, radio_uuid):
     
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     
-    if request.user:
+    if not request.user.is_anonymous():
         event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN)
         res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
     else:
@@ -312,7 +314,7 @@ def stop_listening_to_radio(request, radio_uuid):
     
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     
-    if request.user:
+    if not request.user.is_anonymous():
         event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN)
         res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
     else:
