@@ -143,6 +143,9 @@ class Radio(models.Model):
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     computing_next_songs = models.BooleanField(default=False)
     
+    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song')) 
+    current_song_play_date = models.DateTimeField(null=True, blank=True)
+    
     def __unicode__(self):
         return self.name;
     
@@ -327,14 +330,6 @@ class WallEventManager(models.Manager):
     def get_events(self, type_value):
         events = self.filter(type=type_value)
         return events
-    
-    def get_join_events(self):
-        events = self.get_events(yabase_settings.EVENT_JOINED)
-        return events
-
-    def get_left_events(self):
-        events = self.get_events(yabase_settings.EVENT_LEFT)
-        return events
 
     def get_message_events(self):
         events = self.get_events(yabase_settings.EVENT_MESSAGE)
@@ -352,16 +347,19 @@ class WallEvent(models.Model):
     radio = models.ForeignKey(Radio)
     type = models.CharField(max_length=1, choices=yabase_settings.EVENT_TYPE_CHOICES)
     start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(auto_now_add=True)
     
     # attributes specific to 'song' event
     song = models.ForeignKey(SongInstance, null=True, blank=True)
-    old_id = models.IntegerField(null=True, blank=True)
-    
-    # attribute specific to 'joined', 'left' and 'message' events
-    user = models.ForeignKey(User, null=True, blank=True)
+    song_name = models.CharField(max_length=255, blank=True)
+    song_album = models.CharField(max_length=255, blank=True)
+    song_artist = models.CharField(max_length=255, blank=True)
+    song_cover_filename = models.CharField(max_length=45, blank=True)
     
     # attributes specific to 'message' event
+    user = models.ForeignKey(User, null=True, blank=True)
+    user_name = models.CharField(max_length = 60, blank=True)
+    user_picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    
     text = models.TextField(null=True, blank=True)
     animated_emoticon = models.IntegerField(null=True, blank=True)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
@@ -371,24 +369,10 @@ class WallEvent(models.Model):
     
     def __unicode__(self):
         s = ''
-        if self.type == yabase_settings.EVENT_JOINED:
-            s += 'joined: '
-            s += unicode(self.user)
-        elif self.type == yabase_settings.EVENT_LEFT:
-            s += 'left: '
-            s += unicode(self.user)
-        elif self.type == yabase_settings.EVENT_MESSAGE:
-            s += 'message: from '
-            s += unicode(self.user)
+        if self.type == yabase_settings.EVENT_MESSAGE:
+            s = '(%s) %s: "%s"' % (self.radio.name, self.user_name, self.text)
         elif self.	type == yabase_settings.EVENT_SONG:
-            s += 'song: '
-            s += unicode(self.song)
-        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
-            s += 'started to listen: '
-            s += unicode(self.user)
-        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
-            s += 'stopped listening: '
-            s += unicode(self.user)
+            s = '(%s) song: "%s - %s - %s"' % (self.radio.name, self.song_name, self.song_artist, self.song_album)
         return s
     
     @property
@@ -396,75 +380,67 @@ class WallEvent(models.Model):
         if not self.radio:
             return False
         valid = False
-        if self.type == yabase_settings.EVENT_JOINED:
-            valid = not (self.user is None)
-        elif self.type == yabase_settings.EVENT_LEFT:
-            valid = not (self.user is None)
-        elif self.type == yabase_settings.EVENT_MESSAGE:
+        if self.type == yabase_settings.EVENT_MESSAGE:
             valid = (not (self.text is None)) or (not (self.animated_emoticon is None)) or (not (self.picture is None))
         elif self.type == yabase_settings.EVENT_SONG:
             valid = not (self.song is None)
-        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
-            valid = not (self.user is None)
-        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
-            valid = not (self.user is None)
         return valid
 
     class Meta:
         db_name = u'default'
         
-    def save(self, *args, **kwargs):
-        super(WallEvent, self).save(*args, **kwargs)
-        
-        if self.type == yabase_settings.EVENT_JOINED:
-            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-            radiouser.connected = True
-            radiouser.save()
-            
-        elif self.type == yabase_settings.EVENT_LEFT:
-            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-            radiouser.connected = False
-            radiouser.save()
-            
-        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
-            if self.user:
-                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-                radiouser.listening = True
-                radiouser.save()
-            else:
-                self.radio.anonymous_audience += 1
-                self.radio.save()
-            
-            
-            listeners = RadioUser.objects.filter(radio=self.radio, listening=True)
-            audience = len(listeners) + self.radio.anonymous_audience
-            if audience > self.radio.audience_peak:
-                self.radio.audience_peak = audience
-                self.radio.save()
-            
-        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
-            if self.user:
-                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-                radiouser.listening = False
-                radiouser.save()
-                            
-                last_start = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
-                last_stop = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
-                duration = last_stop.start_date - last_start.start_date
-                seconds = duration.days * 86400 + duration.seconds
-                self.radio.overall_listening_time += seconds
-                self.radio.save()
-            
-            elif self.text:
-                self.radio.anonymous_audience -= 1
-                self.radio.save()
-                
-                last_start = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
-                last_stop = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
-                duration = last_stop.start_date - last_start.start_date
-                seconds = duration.days * 86400 + duration.seconds
-                self.radio.overall_listening_time += seconds
-                self.radio.save()
+#    def save(self, *args, **kwargs):
+#        super(WallEvent, self).save(*args, **kwargs)
+#        
+#        if self.type == yabase_settings.EVENT_JOINED:
+#            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+#            radiouser.connected = True
+#            radiouser.save()
+#            
+#        elif self.type == yabase_settings.EVENT_LEFT:
+#            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+#            radiouser.connected = False
+#            radiouser.save()
+#            
+#        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
+#            if self.user:
+#                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+#                radiouser.listening = True
+#                radiouser.save()
+#            else:
+#                self.radio.anonymous_audience += 1
+#                self.radio.save()
+#            
+#            
+#            listeners = RadioUser.objects.filter(radio=self.radio, listening=True)
+#            audience = len(listeners) + self.radio.anonymous_audience
+#            if audience > self.radio.audience_peak:
+#                self.radio.audience_peak = audience
+#                self.radio.save()
+#            
+#        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
+#            if self.user:
+#                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
+#                radiouser.listening = False
+#                radiouser.save()
+#                            
+#                last_start = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
+#                last_stop = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
+#                duration = last_stop.start_date - last_start.start_date
+#                seconds = duration.days * 86400 + duration.seconds
+#                self.radio.overall_listening_time += seconds
+#                self.radio.save()
+#            
+#            elif self.text:
+#                self.radio.anonymous_audience -= 1
+#                self.radio.save()
+#                
+#                last_start = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
+#                last_stop = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
+#                duration = last_stop.start_date - last_start.start_date
+#                seconds = duration.days * 86400 + duration.seconds
+#                self.radio.overall_listening_time += seconds
+#                self.radio.save()
 
 
 

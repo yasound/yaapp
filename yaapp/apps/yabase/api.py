@@ -203,12 +203,11 @@ class FriendRadioResource(ModelResource):
 
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
     user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
     class Meta:
         queryset = WallEvent.objects.all()
         resource_name = 'wall_event'
-        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['type', 'start_date', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization= Authorization()
         authentication = ApiKeyAuthentication()
@@ -216,12 +215,12 @@ class WallEventResource(ModelResource):
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
-    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
+#    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date')
         resource_name = 'wall'
-        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'user_picture', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization = ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
@@ -401,32 +400,31 @@ class RadioUserResource(ModelResource):
         
         resource = RadioUserResource() 
         return resource.get_detail(request, radio=radio, user=request.user)
-#        print 'radio id %d' % kwargs['radio_id'] 
 
 
 
 
 
-class PlayedSongResource(ModelResource):
-    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-    song = fields.ForeignKey(SongInstanceResource, 'song', null=True, full=True)
-
-    class Meta:
-        queryset = WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).order_by('-start_date')
-        resource_name = 'songs'
-        fields = ['id', 'start_date', 'end_date', 'radio', 'song']
-        include_resource_uri = False
-        filtering = {
-            'radio': 'exact',
-    }
-        allowed_methods = ['get']
-        authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
-    
-    def dispatch(self, request_type, request, **kwargs):
-        radio = kwargs.pop('radio')
-        kwargs['radio'] = get_object_or_404(Radio, id=radio)
-        return super(PlayedSongResource, self).dispatch(request_type, request, **kwargs)
+#class PlayedSongResource(ModelResource):
+#    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', null=True, full=True)
+#
+#    class Meta:
+#        queryset = WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).order_by('-start_date')
+#        resource_name = 'songs'
+#        fields = ['id', 'start_date', 'end_date', 'radio', 'song']
+#        include_resource_uri = False
+#        filtering = {
+#            'radio': 'exact',
+#    }
+#        allowed_methods = ['get']
+#        authorization= ReadOnlyAuthorization()
+#        authentication = ApiKeyAuthentication()
+#    
+#    def dispatch(self, request_type, request, **kwargs):
+#        radio = kwargs.pop('radio')
+#        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+#        return super(PlayedSongResource, self).dispatch(request_type, request, **kwargs)
 
    
 class SongUserResource(ModelResource): 

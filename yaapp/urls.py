@@ -7,7 +7,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, RadioListenerResource, \
-    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
+    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from yabase.models import Radio
@@ -37,7 +37,6 @@ radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
 connected_users = RadioUserConnectedResource()
 listeners = RadioListenerResource()
-played_song = PlayedSongResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
 radio_enabled_playlist = RadioPlaylistResource()
@@ -73,7 +72,6 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(listeners.urls)),
-    (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/', include(radio_user.urls)),
     (r'^api/v1/', include(song_user.urls)),
@@ -83,6 +81,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     (r'^api/', include(api.urls)),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen')
     # The normal jazz here, then...

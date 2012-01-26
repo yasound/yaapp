@@ -286,45 +286,67 @@ def get_next_song(request, radio_id):
 
 @csrf_exempt
 def start_listening_to_radio(request, radio_uuid):
-    check_api_key_Authentication(request) # set request.user
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-    
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-    
-    if not request.user.is_anonymous():
-        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN)
-        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
-    else:
-        if not request.GET.has_key('address'):
-            return HttpResponseBadRequest()
-        address = request.GET['address']
-        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN, text=address)
-        res = '%s stopped listening to %s' % (event.text, event.radio.name)
-
-    return HttpResponse(res)
+    return HttpResponse(status=501)
+#    check_api_key_Authentication(request) # set request.user
+#
+#    if not check_http_method(request, ['post']):
+#        return HttpResponse(status=405)
+#    
+#    radio = get_object_or_404(Radio, uuid=radio_uuid)
+#    
+#    if not request.user.is_anonymous():
+#        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN)
+#        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
+#    else:
+#        if not request.GET.has_key('address'):
+#            return HttpResponseBadRequest()
+#        address = request.GET['address']
+#        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN, text=address)
+#        res = '%s stopped listening to %s' % (event.text, event.radio.name)
+#
+#    return HttpResponse(res)
 
 @csrf_exempt
 def stop_listening_to_radio(request, radio_uuid):
-    check_api_key_Authentication(request) # set request.user
+    return HttpResponse(status=501)
+#    check_api_key_Authentication(request) # set request.user
+#
+#    if not check_http_method(request, ['post']):
+#        return HttpResponse(status=405)
+#    
+#    radio = get_object_or_404(Radio, uuid=radio_uuid)
+#    
+#    if not request.user.is_anonymous():
+#        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN)
+#        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
+#    else:
+#        if not request.GET.has_key('address'):
+#            return HttpResponseBadRequest()
+#        address = request.GET['address']
+#        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN, text=address)
+#        res = '%s stopped listening to %s' % (event.text, event.radio.name)
+#
+#    return HttpResponse(res)
 
-    if not check_http_method(request, ['post']):
+def get_current_song(request, radio_id):
+#    if not check_api_key_Authentication(request):
+#        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
     
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = get_object_or_404(Radio, id=radio_id)
+    song_instance = radio.current_song
+    song = get_object_or_404(YasoundSong, id=song_instance.song)
     
-    if not request.user.is_anonymous():
-        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN)
-        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
-    else:
-        if not request.GET.has_key('address'):
-            return HttpResponseBadRequest()
-        address = request.GET['address']
-        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN, text=address)
-        res = '%s stopped listening to %s' % (event.text, event.radio.name)
-
-    return HttpResponse(res)
+    song_dict = {};
+    song_dict['name'] = song.name
+    song_dict['artist'] = song.artist_name
+    song_dict['album'] = song.album_name
+    song_dict['cover'] = song.album.cover
+    
+    song_json = json.dumps(song_dict)
+    return HttpResponse(song_json)
 
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
