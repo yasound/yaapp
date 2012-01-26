@@ -344,7 +344,13 @@ def get_current_song(request, radio_id):
     song_dict['name'] = song.name
     song_dict['artist'] = song.artist_name
     song_dict['album'] = song.album_name
-    song_dict['cover'] = song.album.cover
+    if song.album:
+        cover = song.album.cover_filename
+    elif song.cover_filename:
+        cover = song.cover_filename
+    else:
+        cover = None
+    song_dict['cover'] = cover
     
     song_json = json.dumps(song_dict)
     return HttpResponse(song_json)

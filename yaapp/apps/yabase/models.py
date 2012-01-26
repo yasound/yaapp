@@ -135,8 +135,7 @@ class Radio(models.Model):
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     computing_next_songs = models.BooleanField(default=False)
     
-    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song')) 
-    current_song_play_date = models.DateTimeField(null=True, blank=True)
+    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song'), related_name='current_song_radio') 
     
     def __unicode__(self):
         return self.name;
@@ -199,7 +198,10 @@ class Radio(models.Model):
         
         song = n.song
         n.delete()
-        w = WallEvent.objects.create(radio=self, type=yabase_settings.EVENT_SONG, song=song, start_date=datetime.datetime.now(), end_date=datetime.datetime.now())
+        
+        # update current song
+        self.current_song = song
+        
         song.last_play_time = datetime.datetime.now()
         self.fill_next_songs_queue()
         return song # SongInstance
@@ -377,6 +379,30 @@ class WallEvent(models.Model):
         elif self.type == yabase_settings.EVENT_SONG:
             valid = not (self.song is None)
         return valid
+    
+    def save(self, *args, **kwargs):
+        creation = False
+        if not self.pk:
+            creation = True
+           
+        super(WallEvent, self).save(*args, **kwargs)
+        
+        if creation:
+            if self.type == yabase_settings.EVENT_MESSAGE:
+                self .user_name = self.user.userprofile.name
+                self.user_picture = self.user.userprofile.picture
+            elif self.type == yabase_settings.EVENT_SONG:
+                self.song_name = self.song.name
+                self.song_artist = self.song.artist_name
+                self.song_album = self.song.album_name
+                if self.song.album:
+                    cover = self.song.album.cover_filename
+                elif self.song.cover_filename:
+                    cover = self.song.cover_filename
+                else:
+                    cover = None
+                self.song_cover_filename = cover
+            self.save()
 
     class Meta:
         db_name = u'default'

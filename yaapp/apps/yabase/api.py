@@ -207,11 +207,32 @@ class WallEventResource(ModelResource):
     class Meta:
         queryset = WallEvent.objects.all()
         resource_name = 'wall_event'
-        fields = ['type', 'start_date', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization= Authorization()
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['post']
+        
+    def obj_create(self, bundle, request=None, **kwargs):
+        if bundle.data['type'] != yabase_settings.EVENT_MESSAGE:
+            print 'can only post Message events'
+            return None
+        
+        radio_uri = bundle.data['radio']
+        elements = radio_uri.split('/')
+        radio_id = int(elements[len(elements)-2])
+        try:
+            radio = Radio.objects.get(id=radio_id)
+        except Radio.DoesNotExist:
+            return None
+        
+        song_events = WallEvent.objects.filter(radio=radio, type=yabase_settings.EVENT_SONG).order_by('-start_date').all()
+        if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
+            s = radio.current_song
+            WallEvent.objects.create(radio=radio, song=s)
+
+        wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
+        return wall_event_resource
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
