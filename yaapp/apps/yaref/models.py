@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
 import metaphone
 import settings as yaref_settings
-
+import mongo
 import logging
 logger = logging.getLogger("yaapp.yaref")
 
@@ -66,16 +66,7 @@ class YasoundArtist(models.Model):
     
     name_simplified = models.CharField(max_length=255)
     comment = models.TextField(null=True, blank=True)
-    
-    def build_fuzzy_index(self):
-        words = sorted(self.name.lower().split())
-        self.dms.clear()
-        for word in words:
-            dm = metaphone.dm(word)
-            value = u'%s - %s' % (dm[0], dm[1])
-            dm_record, created = YasoundDoubleMetaphone.objects.get_or_create(value=value)
-            self.dms.add(dm_record)
-    
+        
     class Meta:
         db_table = u'yasound_artist'
         db_name = u'yasound'
@@ -91,15 +82,6 @@ class YasoundAlbum(models.Model):
     name_simplified = models.CharField(max_length=255)
     cover_filename = models.CharField(max_length=45, null=True, blank=True)
     dms = models.ManyToManyField(YasoundDoubleMetaphone, null=True, blank=True)
-    
-    def build_fuzzy_index(self):
-        words = sorted(self.name.lower().split())
-        self.dms.clear()
-        for word in words:
-            dm = metaphone.dm(word)
-            value = u'%s - %s' % (dm[0], dm[1])
-            dm_record, created = YasoundDoubleMetaphone.objects.get_or_create(value=value)
-            self.dms.add(dm_record)
     
     class Meta:
         db_table = u'yasound_album'
@@ -127,7 +109,7 @@ class YasoundSongManager(models.Manager):
         from time import time
         start = time()
         count = 20
-        random_ids = random.sample(xrange(1000000), count)
+        random_ids = random.sample(xrange(97), count)
         artist_records = list(YasoundSong.objects.filter(id__in=random_ids).all())
         
         found = 0
@@ -152,15 +134,8 @@ class YasoundSongManager(models.Manager):
         from time import time
         logger.debug('fuzzy search for %s | %s | %s, limit = %r' % (name, album, artist, limit))
         start = time()
-        artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
-        albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
-        artists = list(artists)
-        albums = list(albums)
-        songs = YasoundSong.objects.filter(Q(artist__id__in=artists) |
-                                             Q(album__id__in=albums))
-        
-#        songs = YasoundSong.objects.filter(artist__id__in=artists)
-        songs = songs.find_by_name(name)
+        songs = mongo.find_song(name, album, artist)
+        song_object = None
         best_song = None
         best_ratio = 0
         found_count = songs.count()
@@ -171,11 +146,9 @@ class YasoundSongManager(models.Manager):
             for song in songs:
                 ratio_song, ratio_album, ratio_artist = 0, 0, 0
                 
-                ratio_song = fuzz.token_sort_ratio(name, song.name)
-                if song.album:
-                    ratio_album = fuzz.token_sort_ratio(album, song.album.name)
-                if song.artist:
-                    ratio_artist = fuzz.token_sort_ratio(artist, song.artist.name)
+                ratio_song = fuzz.token_sort_ratio(name, song["name"])
+                ratio_album = fuzz.token_sort_ratio(album, song["album"])
+                ratio_artist = fuzz.token_sort_ratio(artist, song["artist"])
             
                 ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
                 if ratio >= best_ratio:
@@ -185,11 +158,12 @@ class YasoundSongManager(models.Manager):
                         break
         elapsed = time() - start
         if best_song:
-            logger.debug('candidate is %d - %s' % (best_song.id, best_song.name.replace("\n", " ")))
+            song_object = YasoundSong.objects.get(id=best_song["db_id"])
+            logger.debug('candidate is %d - %s' % (best_song["db_id"], best_song["name"].replace("\n", " ")))
         else:
             logger.debug('no candidate found')
         logger.debug('Search took %d seconds' % (elapsed))
-        return best_song
+        return song_object
     
 class YasoundSong(models.Model):
     objects = YasoundSongManager()
@@ -227,13 +201,7 @@ class YasoundSong(models.Model):
     dms = models.ManyToManyField(YasoundDoubleMetaphone, null=True, blank=True)
 
     def build_fuzzy_index(self):
-        words = sorted(self.name.lower().split())
-        self.dms.clear()
-        for word in words:
-            dm = metaphone.dm(word)
-            value = u'%s - %s' % (dm[0], dm[1])
-            dm_record, created = YasoundDoubleMetaphone.objects.get_or_create(value=value)
-            self.dms.add(dm_record)
+        mongo.add_song(self)
 
     class QuerySet(QuerySet):
         def find_by_name(self, name, limit=None):

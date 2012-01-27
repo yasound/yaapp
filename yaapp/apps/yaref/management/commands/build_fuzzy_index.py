@@ -45,25 +45,7 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         dry = options.get('dry',False)
         
-        artists = YasoundArtist.objects.filter(dms__isnull=True)
-        count = artists.count()
-        print "processing %d artists" % (count)
-        if count > 0:
-            for i, artist in enumerate(queryset_iterator(artists)):
-                artist.build_fuzzy_index()
-                if i % 1000 == 0:
-                    print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
-        
-        albums = YasoundAlbum.objects.filter(dms__isnull=True)
-        count = albums.count()
-        print "processing %d albums" % (count)
-        if count > 0:
-            for i, album in enumerate(queryset_iterator(albums)):
-                album.build_fuzzy_index()
-                if i % 1000 == 0:
-                    print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
-
-        songs = YasoundSong.objects.filter(dms__isnull=True)
+        songs = YasoundSong.objects.all()
         count = songs.count()
         print "processing %d songs" % (count)
         if count > 0:
