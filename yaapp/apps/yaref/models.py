@@ -23,8 +23,10 @@ class YasoundDoubleMetaphone(models.Model):
         db_name = u'yasound'
 
 def _build_metaphone(sentence, exclude_common_words=True):
-    words = sorted(sentence.lower().split())
     values = []
+    if not sentence:
+        return values
+    words = sorted(sentence.lower().split())
     for word in words:
         if exclude_common_words and word in yaref_settings.FUZZY_COMMON_WORDS:
             continue
@@ -120,16 +122,18 @@ class YasoundSongManager(models.Manager):
         return self.model.QuerySet(self.model)
     
     def test_fuzzy(self, limit=5):
+#        from yaref.models import *;YasoundSong.objects.test_fuzzy()
         import random
         from time import time
         start = time()
-        count = 3000
+        count = 20
         random_ids = random.sample(xrange(1000000), count)
         artist_records = list(YasoundSong.objects.filter(id__in=random_ids).all())
         
         found = 0
         errors = 0
         for i, artist in enumerate(artist_records):
+            logger.debug("song id = %d" % (artist.id))
             res = self.find_fuzzy(artist.name,  artist.album_name, artist.artist_name, limit=limit) 
             if res:
                 found +=1
@@ -141,7 +145,7 @@ class YasoundSongManager(models.Manager):
         elapsed = time() - start
         logger.debug('Complete search took ' + str(elapsed) + ' seconds')
         logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
-        logger.debug('Found : %d/%d (%d%%), errors = %d (%%)' % (found, count, 100*found/count, errors, 100*errors/count))
+        logger.debug('Found : %d/%d (%d%%), errors = %d (%d%%)' % (found, count, 100*found/count, errors, 100*errors/count))
         
     
     def find_fuzzy(self, name, album, artist, limit=5):
@@ -157,10 +161,6 @@ class YasoundSongManager(models.Manager):
         
 #        songs = YasoundSong.objects.filter(artist__id__in=artists)
         songs = songs.find_by_name(name)
-        try:
-            print songs.query
-        except:
-            pass
         best_song = None
         best_ratio = 0
         found_count = songs.count()
@@ -185,7 +185,7 @@ class YasoundSongManager(models.Manager):
                         break
         elapsed = time() - start
         if best_song:
-            logger.debug('candidate is %s' % (best_song))
+            logger.debug('candidate is %d - %s' % (best_song.id, best_song.name.replace("\n", " ")))
         else:
             logger.debug('no candidate found')
         logger.debug('Search took %d seconds' % (elapsed))
