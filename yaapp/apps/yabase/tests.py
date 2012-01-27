@@ -143,19 +143,6 @@ class TestFuzzy(TestCase):
         radio.save()
         self.radio = radio
         
-        # build fuzzy index
-        artists = YasoundArtist.objects.all()
-        for artist in artists:
-            artist.build_fuzzy_index()
-
-        albums = YasoundAlbum.objects.all()
-        for album in albums:
-            album.build_fuzzy_index()
-        
-        songs = YasoundSong.objects.all()
-        for song in songs:
-            song.build_fuzzy_index()
-
     def test_search(self):
         song = u'party'
         artist = u'The English Beat'
