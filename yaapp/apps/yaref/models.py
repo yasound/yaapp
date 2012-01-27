@@ -116,6 +116,8 @@ class YasoundSongManager(models.Manager):
         return self.model.QuerySet(self.model)
     
     def find_fuzzy(self, name, album, artist, limit=5):
+        from time import time, sleep
+        start = time()
         artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
         albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
         artists = list(artists)
@@ -143,6 +145,8 @@ class YasoundSongManager(models.Manager):
                 best_song = song
                 if ratio >= 100:
                     break
+        elapsed = time() - start
+        print 'Search took ' + str(elapsed) + ' seconds'
         return best_song, songs
     
 class YasoundSong(models.Model):
