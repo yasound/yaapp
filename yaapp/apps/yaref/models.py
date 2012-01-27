@@ -119,16 +119,34 @@ class YasoundSongManager(models.Manager):
     def get_query_set(self):
         return self.model.QuerySet(self.model)
     
+    def test_fuzzy(self):
+        import random
+        from time import time
+        start = time()
+        count = 100
+        random_ids = random.sample(xrange(1000000), count)
+        artist_records = list(YasoundSong.objects.filter(id__in=random_ids).all())
+        
+        for i, artist in enumerate(artist_records):
+            self.find_fuzzy(artist.name,  artist.album_name, artist.artist_name)
+            print i
+        elapsed = time() - start
+        logger.debug('Complete search took ' + str(elapsed) + ' seconds')
+        logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
+        
+    
     def find_fuzzy(self, name, album, artist, limit=5):
-        from time import time, sleep
+        from time import time
         logger.debug('fuzzy search for %s %s %s, limit = %r' % (name, album, artist, limit))
         start = time()
         artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
-        albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
+        #albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
         artists = list(artists)
-        albums = list(albums)
-        songs = YasoundSong.objects.filter(Q(artist__id__in=artists) |
-                                             Q(album__id__in=albums))
+#        albums = list(albums)
+#        songs = YasoundSong.objects.filter(Q(artist__id__in=artists) |
+#                                             Q(album__id__in=albums))
+        
+        songs = YasoundSong.objects.filter(artist__id__in=artists)
         songs = songs.find_by_name(name)
         
         best_song = None
