@@ -22,6 +22,8 @@ def _build_dms(sentence, remove_common_words=False):
             continue 
         dm = metaphone.dm(word)
         value = u'%s - %s' % (dm[0], dm[1])
+        if value == u' - ':
+            continue
         if value not in dms:
             dms.append(value)
     return dms

@@ -111,7 +111,7 @@ class YasoundSongManager(models.Manager):
 #        from yaref.models import *;YasoundSong.objects.test_fuzzy()
         import random
         from time import time
-        count = 3000
+        count = 100
         random_ids = random.sample(xrange(1600000), count)
         artist_records = list(YasoundSong.objects.filter(id__in=random_ids).all())
         
@@ -123,9 +123,13 @@ class YasoundSongManager(models.Manager):
             if res:
                 found +=1
                 if res["db_id"] != artist.id:
-                    errors += 1
-                    found -= 1
-            print i
+                    if res["name"] != artist.name or res["artist"] != artist.artist_name or res["album"] != artist.album_name:
+                        logger.debug("** error : %d instead of %d" % (res['db_id'], artist.id))
+                        logger.debug("** wrong = %s|%s|%s" % (res["name"],res["album"],res["artist"]))
+                        logger.debug("** real  = %s|%s|%s" % (artist.name,artist.album_name,artist.artist_name))
+                        errors += 1
+                        found -= 1
+            #print i
         elapsed = time() - start
         logger.debug('Complete search took ' + str(elapsed) + ' seconds')
         logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
@@ -146,7 +150,6 @@ class YasoundSongManager(models.Manager):
     
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time
-        #logger.debug('fuzzy search for %s | %s | %s, limit = %r' % (name, album, artist, limit))
         start = time()
         songs = mongo.find_song(name, album, artist)
         best_song = None
@@ -155,42 +158,29 @@ class YasoundSongManager(models.Manager):
         prev_song = None
         
         for i, song in enumerate(songs):
-            if i == 0:
-                best_song = song
-                prev_song = song
-                continue
-            elif i == 1:
-                ratio_song, ratio_album, ratio_artist = 0, 0, 0
-                ratio_song = fuzz.token_sort_ratio(name, prev_song["name"])
-                ratio_album = fuzz.token_sort_ratio(album, prev_song["album"])
-                ratio_artist = fuzz.token_sort_ratio(artist, prev_song["artist"])
-                ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-                if ratio >= best_ratio:
-                    best_ratio = ratio
-                    best_song = song
-                    if ratio >= 100:
-                        break
-                    
             ratio_song, ratio_album, ratio_artist = 0, 0, 0
             ratio_song = fuzz.token_sort_ratio(name, song["name"])
             ratio_album = fuzz.token_sort_ratio(album, song["album"])
             ratio_artist = fuzz.token_sort_ratio(artist, song["artist"])
         
             ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-            if ratio >= best_ratio:
+            logger.debug('%d:%s%s%s = %d+%d+%d=%d' % (song["db_id"],
+                                      song["name"],
+                                      song["album"],
+                                      song["artist"],
+                                      ratio_song,
+                                      ratio_album,
+                                      ratio_artist,
+                                      ratio))
+            if ratio >= best_ratio and ratio > 50:
                 best_ratio = ratio
                 best_song = song
-                if ratio >= 100:
-                    break
         elapsed = time() - start
-#        if best_song:
-#            logger.debug('candidate is %d - %s' % (best_song["db_id"], best_song["name"].replace("\n", " ")))
-#        else:
-#            logger.debug('no candidate found')
+        if not best_song:
+            logger.debug('## cannot find %s|%s|%s' % (name, album, artist))
         if elapsed > self._max_query:
             self._max_query = elapsed
             self._max_song = best_song
-#        logger.debug('Search took %f seconds' % (elapsed))
         return best_song
     
 class YasoundSong(models.Model):
