@@ -11,80 +11,7 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'SongInstance', fields ['metadata']
         db.delete_unique('yabase_songinstance', ['metadata_id'])
 
-        # Adding model 'YasoundSongGenre'
-        db.create_table(u'yasound_song_genre', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('song', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.YasoundSong'])),
-            ('genre', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.YasoundGenre'])),
-        ))
-        db.send_create_signal('yabase', ['YasoundSongGenre'])
 
-        # Adding model 'YasoundArtist'
-        db.create_table(u'yasound_artist', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('echonest_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
-            ('lastfm_id', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('musicbrainz_id', self.gf('django.db.models.fields.CharField')(max_length=36)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('name_simplified', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('comment', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('yabase', ['YasoundArtist'])
-
-        # Adding model 'YasoundAlbum'
-        db.create_table(u'yasound_album', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('lastfm_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
-            ('musicbrainz_id', self.gf('django.db.models.fields.CharField')(max_length=36)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('name_simplified', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('cover_filename', self.gf('django.db.models.fields.CharField')(max_length=45)),
-        ))
-        db.send_create_signal('yabase', ['YasoundAlbum'])
-
-        # Adding model 'YasoundGenre'
-        db.create_table(u'yasound_genre', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=45)),
-            ('namecanonical', self.gf('django.db.models.fields.CharField')(unique=True, max_length=45)),
-        ))
-        db.send_create_signal('yabase', ['YasoundGenre'])
-
-        # Adding model 'YasoundSong'
-        db.create_table(u'yasound_song', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('artist', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.YasoundArtist'])),
-            ('album', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.YasoundAlbum'])),
-            ('echonest_id', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('lastfm_id', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('lastfm_fingerprint_id', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('musicbrainz_id', self.gf('django.db.models.fields.CharField')(max_length=36)),
-            ('filename', self.gf('django.db.models.fields.CharField')(max_length=45)),
-            ('filesize', self.gf('django.db.models.fields.IntegerField')()),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('name_simplified', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('artist_name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('artist_name_simplified', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('album_name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('album_name_simplified', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('duration', self.gf('django.db.models.fields.IntegerField')()),
-            ('danceability', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=2)),
-            ('loudness', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=2)),
-            ('energy', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=2)),
-            ('tempo', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('tonality_mode', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('tonality_key', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('fingerprint', self.gf('django.db.models.fields.TextField')()),
-            ('fingerprint_hash', self.gf('django.db.models.fields.CharField')(max_length=45)),
-            ('echoprint_version', self.gf('django.db.models.fields.CharField')(max_length=8)),
-            ('publish_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('locked', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('allowed_countries', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('comment', self.gf('django.db.models.fields.TextField')()),
-            ('cover_filename', self.gf('django.db.models.fields.CharField')(max_length=45)),
-        ))
-        db.send_create_signal('yabase', ['YasoundSong'])
 
         # Changing field 'SongInstance.metadata'
         db.alter_column('yabase_songinstance', 'metadata_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['yabase.SongMetadata']))
@@ -92,21 +19,6 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
-        # Deleting model 'YasoundSongGenre'
-        db.delete_table(u'yasound_song_genre')
-
-        # Deleting model 'YasoundArtist'
-        db.delete_table(u'yasound_artist')
-
-        # Deleting model 'YasoundAlbum'
-        db.delete_table(u'yasound_album')
-
-        # Deleting model 'YasoundGenre'
-        db.delete_table(u'yasound_genre')
-
-        # Deleting model 'YasoundSong'
-        db.delete_table(u'yasound_song')
-
         # Changing field 'SongInstance.metadata'
         db.alter_column('yabase_songinstance', 'metadata_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['yabase.SongMetadata'], unique=True))
 
@@ -245,71 +157,6 @@ class Migration(SchemaMigration):
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
-        'yabase.yasoundalbum': {
-            'Meta': {'object_name': 'YasoundAlbum', 'db_table': "u'yasound_album'"},
-            'cover_filename': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'lastfm_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
-            'musicbrainz_id': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'name_simplified': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        'yabase.yasoundartist': {
-            'Meta': {'object_name': 'YasoundArtist', 'db_table': "u'yasound_artist'"},
-            'comment': ('django.db.models.fields.TextField', [], {}),
-            'echonest_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
-            'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'lastfm_id': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'musicbrainz_id': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'name_simplified': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        'yabase.yasoundgenre': {
-            'Meta': {'object_name': 'YasoundGenre', 'db_table': "u'yasound_genre'"},
-            'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'namecanonical': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '45'})
-        },
-        'yabase.yasoundsong': {
-            'Meta': {'object_name': 'YasoundSong', 'db_table': "u'yasound_song'"},
-            'album': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.YasoundAlbum']"}),
-            'album_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'album_name_simplified': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'allowed_countries': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'artist': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.YasoundArtist']"}),
-            'artist_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'artist_name_simplified': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'comment': ('django.db.models.fields.TextField', [], {}),
-            'cover_filename': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'danceability': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '2'}),
-            'duration': ('django.db.models.fields.IntegerField', [], {}),
-            'echonest_id': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'echoprint_version': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
-            'energy': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '2'}),
-            'filename': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'filesize': ('django.db.models.fields.IntegerField', [], {}),
-            'fingerprint': ('django.db.models.fields.TextField', [], {}),
-            'fingerprint_hash': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
-            'lastfm_fingerprint_id': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'lastfm_id': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'locked': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'loudness': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '2'}),
-            'musicbrainz_id': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'name_simplified': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'publish_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'tempo': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'tonality_key': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'tonality_mode': ('django.db.models.fields.SmallIntegerField', [], {})
-        },
-        'yabase.yasoundsonggenre': {
-            'Meta': {'object_name': 'YasoundSongGenre', 'db_table': "u'yasound_song_genre'"},
-            'genre': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.YasoundGenre']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'song': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['yabase.YasoundSong']"})
-        }
     }
 
     complete_apps = ['yabase']
