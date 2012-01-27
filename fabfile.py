@@ -13,7 +13,14 @@ def syncdb():
     """Create database or syncdb
     """
     with lcd("%s" % WEBSITE_PATH):
-        local('./manage.py syncdb')
+        local('./manage.py syncdb --noinput')
+
+
+def create_superuser():
+    """Create super user
+    """
+    with lcd("%s" % WEBSITE_PATH):
+        local('./manage.py createsuperuser')
 
 def migrate():
     """Migrate database
@@ -72,6 +79,7 @@ def prepare():
     vtenv_helpers()
     gitsubmodules()
     update()
+    create_superuser()
 
 def install():
     """[DISTANT] Remote install
