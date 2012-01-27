@@ -261,6 +261,20 @@ def add_song_to_favorites(request, radio_id):
     response = json.dumps(result)
     return HttpResponse(response)
 
+
+def get_song_status(request, song_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    song = get_object_or_404(SongInstance, id=song_id)
+    status_dict = song.song_status
+    res = json.dumps(status_dict)
+    return HttpResponse(res)
+
+
 @csrf_exempt
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
@@ -294,7 +308,7 @@ def connect_to_radio(request, radio_id):
         return HttpResponse(status=405)
     
     radio = get_object_or_404(Radio, id=radio_id)
-    radio_user = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.connected = True
     radio_user.save()
     
@@ -310,7 +324,7 @@ def disconnect_from_radio(request, radio_id):
         return HttpResponse(status=405)
     
     radio = get_object_or_404(Radio, id=radio_id)
-    radio_user = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.connected = False
     radio_user.save()
     
@@ -331,7 +345,7 @@ def start_listening_to_radio(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     
     if not request.user.is_anonymous:
-        radio_user = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+        radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
         radio_user.listening = True
         radio_user.save()
         client = request.user
@@ -365,7 +379,7 @@ def stop_listening_to_radio(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     
     if not request.user.is_anonymous:
-        radio_user = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+        radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
         radio_user.listening = False
         radio_user.save()
         client = request.user
@@ -387,27 +401,17 @@ def stop_listening_to_radio(request, radio_uuid):
     return HttpResponse(res)
 
 def get_current_song(request, radio_id):
-#    if not check_api_key_Authentication(request):
-#        return HttpResponse(status=401)
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
 
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
     
     radio = get_object_or_404(Radio, id=radio_id)
     song_instance = radio.current_song
-    song = get_object_or_404(YasoundSong, id=song_instance.song)
-    
-    song_dict = {};
-    song_dict['name'] = song.name
-    song_dict['artist'] = song.artist_name
-    song_dict['album'] = song.album_name
-    if song.album:
-        cover = song.album.cover_filename
-    elif song.cover_filename:
-        cover = song.cover_filename
-    else:
-        cover = None
-    song_dict['cover'] = cover
+    song_dict = song_instance.song_description
+    if not song_dict:
+        return HttpResponseNotFound()
     
     song_json = json.dumps(song_dict)
     return HttpResponse(song_json)

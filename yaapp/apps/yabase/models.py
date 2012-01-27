@@ -8,6 +8,7 @@ import datetime
 import random
 import settings as yabase_settings
 import string
+from yaref.models import YasoundSong
 
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
@@ -59,9 +60,47 @@ class SongInstance(models.Model):
         dislikes = self.songuser_set.filter(mood=yabase_settings.MOOD_DISLIKE).count()
         bundle.data['dislikes'] = dislikes
         
-
+    @property
+    def song_description(self):
+        try:
+            song = YasoundSong.objects.get(id=self.song)
+        except YasoundSong.DoesNotExist:
+            return None
+        
+        desc_dict = {};
+        desc_dict['id'] = self.id
+        desc_dict['name'] = song.name
+        desc_dict['artist'] = song.artist_name
+        desc_dict['album'] = song.album_name
+        if song.album:
+            cover = song.album.cover_filename
+        elif song.cover_filename:
+            cover = song.cover_filename
+        else:
+            cover = None
+        desc_dict['cover'] = cover
+        
+        return desc_dict
+    
+    @property
+    def song_status(self):
+        likes = SongUser.objects.likers(self).count()
+        dislikes = SongUser.objects.dislikers(self).count()
+        status_dict = {};
+        status_dict['id'] = self.id
+        status_dict['likes'] = likes
+        status_dict['dislikes'] = dislikes
+        return status_dict
+        
+class SongUserManager(models.Manager):
+    def likers(self, song):
+        return self.filter(song=song, mood=yabase_settings.MOOD_LIKE)
+    
+    def dislikers(self, song):
+        return self.filter(song=song, mood=yabase_settings.MOOD_DISLIKE)
 
 class SongUser(models.Model):
+    objects = SongUserManager()
     song = models.ForeignKey(SongInstance, verbose_name=_('song'))
     user = models.ForeignKey(User, verbose_name=_('user'))
     
@@ -392,16 +431,21 @@ class WallEvent(models.Model):
                 self .user_name = self.user.userprofile.name
                 self.user_picture = self.user.userprofile.picture
             elif self.type == yabase_settings.EVENT_SONG:
-                self.song_name = self.song.name
-                self.song_artist = self.song.artist_name
-                self.song_album = self.song.album_name
-                if self.song.album:
-                    cover = self.song.album.cover_filename
-                elif self.song.cover_filename:
-                    cover = self.song.cover_filename
-                else:
-                    cover = None
-                self.song_cover_filename = cover
+                yasound_song_id = self.song.song
+                try:
+                    yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+                    self.song_name = yasound_song.name
+                    self.song_artist = yasound_song.artist_name
+                    self.song_album = yasound_song.album_name
+                    if yasound_song.album:
+                        cover = yasound_song.album.cover_filename
+                    elif yasound_song.cover_filename:
+                        cover = yasound_song.cover_filename
+                    else:
+                        cover = None
+                    self.song_cover_filename = cover
+                except YasoundSong.DoesNotExist:
+                    pass
             self.save()
 
     class Meta:

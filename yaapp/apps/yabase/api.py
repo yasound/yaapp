@@ -229,22 +229,24 @@ class WallEventResource(ModelResource):
         song_events = WallEvent.objects.filter(radio=radio, type=yabase_settings.EVENT_SONG).order_by('-start_date').all()
         if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
             s = radio.current_song
-            WallEvent.objects.create(radio=radio, song=s)
+            WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
 
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
+        wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event
+        wall_event_resource.obj.save()
         return wall_event_resource
 
 class RadioWallEventResource(ModelResource):
-    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
+#    radio = fields.ForeignKey(RadioResource, 'radio', full=False)
 #    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
 #    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date')
         resource_name = 'wall'
-        fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'user_picture', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'user_picture', 'text', 'animated_emoticon', 'picture']
         include_resource_uri = False
         authorization = ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -255,18 +257,31 @@ class RadioWallEventResource(ModelResource):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioWallEventResource, self).dispatch(request_type, request, **kwargs)
+    
+    def dehydrate(self, bundle):
+        event = bundle.obj
+        user_id = None
+        song_id = None
+        if event.user:
+            user_id = event.user.id
+        if event.song:
+            song_id = event.song.id
+        bundle.data['radio_id'] = event.radio.id
+        bundle.data['user_id'] = user_id
+        bundle.data['song_id'] = song_id
+        return bundle
 
 
 class RadioNextSongsResource(ModelResource):
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     class Meta:
         queryset = NextSong.objects.order_by('order')
         resource_name = 'next_songs'
-        fields = ['id', 'radio', 'song', 'order']
+        fields = ['id', 'radio', 'order']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -276,6 +291,11 @@ class RadioNextSongsResource(ModelResource):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioNextSongsResource, self).dispatch(request_type, request, **kwargs)
+    
+    def dehydrate(self, bundle):
+        desc_dict = bundle.obj.song.song_description
+        bundle.data['song'] = desc_dict
+        return bundle
 
 class NextSongResource(ModelResource):
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
@@ -449,7 +469,7 @@ class RadioUserResource(ModelResource):
 
    
 class SongUserResource(ModelResource): 
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
     user = fields.ForeignKey(UserResource, 'user', full=True)   
     class Meta:
         queryset = SongUser.objects.all()
@@ -478,6 +498,12 @@ class SongUserResource(ModelResource):
         
         resource = SongUserResource() 
         return resource.get_detail(request, song=song, user=request.user)
+    
+    def dehydrate(self, bundle):
+        song_user = bundle.obj
+        song_desc = song_user.song.song_description
+        bundle.data['song'] = song_desc
+        return bundle
 
 
 
