@@ -4,13 +4,21 @@ from pymongo import ASCENDING, DESCENDING
 from django.conf import settings
 import metaphone
 import settings as yaref_settings
+import string
+
+exclude = set(string.punctuation)
+
+def _remove_punctuation(s):
+    return ''.join(ch for ch in s if ch not in exclude)
+    
 def _build_dms(sentence, remove_common_words=False):
     dms = []
     if not sentence:
         return dms
+    sentence = _remove_punctuation(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
-        if remove_common_words and word in yaref_settings.FUZZY_COMMON_WORDS:
+        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or len(word) < 3):
             continue 
         dm = metaphone.dm(word)
         value = u'%s - %s' % (dm[0], dm[1])
@@ -52,7 +60,12 @@ def find_song(name, album, artist):
     res = db.songs.find({"song_dms":{"$all": dms_name},
                    "artist_dms":{"$all": dms_artist},
                    "album_dms":{"$all": dms_album},
-                   });
+                   }, {
+                        "db_id": True,
+                        "name": True,
+                        "artist": True,
+                        "album": True,
+                    });
     return res
 
 def get_last_doc():

@@ -46,13 +46,22 @@ class Command(BaseCommand):
         dry = options.get('dry',False)
         
         songs = YasoundSong.objects.all()
+        last_indexed = YasoundSong.objects.last_indexed()
+        if last_indexed:
+            print "last indexed = %d" % (last_indexed.id)
+            songs = songs.filter(id__gt=last_indexed.id)
         count = songs.count()
         print "processing %d songs" % (count)
+        from time import time
         if count > 0:
+            start = time()
             for i, song in enumerate(queryset_iterator(songs)):
                 song.build_fuzzy_index()
                 if i % 1000 == 0:
                     print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
+                    elapsed = time() - start
+                    print 'elapsed time ' + str(elapsed) + ' seconds'
+                    start = time()
                     
         print "done"
         
