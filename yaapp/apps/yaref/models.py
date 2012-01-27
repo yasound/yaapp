@@ -6,6 +6,10 @@ from fuzzywuzzy import fuzz
 import metaphone
 import settings as yaref_settings
 
+import logging
+logger = logging.getLogger("yaapp.yaref")
+
+
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
@@ -117,6 +121,7 @@ class YasoundSongManager(models.Manager):
     
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time, sleep
+        logger.debug('fuzzy search for %s %s %s, limit = %r' % (name, album, artist, limit))
         start = time()
         artists = YasoundArtist.objects.find_by_name(artist, limit=limit).values_list('id', flat=True)
         albums = YasoundAlbum.objects.find_by_name(album, limit=limit).values_list('id', flat=True)
@@ -128,26 +133,33 @@ class YasoundSongManager(models.Manager):
         
         best_song = None
         best_ratio = 0
-        print "found %d candidates" % (songs.count())
-        for song in songs:
-            ratio_song, ratio_album, ratio_artist = 0, 0, 0
+        found_count = songs.count()
+        logger.debug("found %d candidate(s)" % (found_count))
+        if found_count == 1:
+            best_song = songs[0]
+        else:
+            for song in songs:
+                ratio_song, ratio_album, ratio_artist = 0, 0, 0
+                
+                ratio_song = fuzz.token_sort_ratio(name, song.name)
+                if song.album:
+                    ratio_album = fuzz.token_sort_ratio(album, song.album.name)
+                if song.artist:
+                    ratio_artist = fuzz.token_sort_ratio(artist, song.artist.name)
             
-            ratio_song = fuzz.token_sort_ratio(name, song.name)
-            if song.album:
-                ratio_album = fuzz.token_sort_ratio(album, song.album.name)
-            if song.artist:
-                ratio_artist = fuzz.token_sort_ratio(artist, song.artist.name)
-        
-            ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-            #print "ratio of %s = %d" % (song, ratio)
-            if ratio >= best_ratio:
-                best_ratio = ratio
-                best_song = song
-                if ratio >= 100:
-                    break
+                ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
+                if ratio >= best_ratio:
+                    best_ratio = ratio
+                    best_song = song
+                    if ratio >= 100:
+                        break
         elapsed = time() - start
-        print 'Search took ' + str(elapsed) + ' seconds'
-        return best_song, songs
+        if best_song:
+            logger.debug('candidate is %s' % (best_song))
+        else:
+            logger.debug('no candidate found')
+        logger.debug('Search took %d seconds' % (elapsed))
+        return best_song
     
 class YasoundSong(models.Model):
     objects = YasoundSongManager()
