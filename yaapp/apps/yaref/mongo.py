@@ -1,16 +1,31 @@
+# -*- coding: utf-8 -*-
+
+from pymongo import ASCENDING, DESCENDING
 from django.conf import settings
 import metaphone
-
-def _build_dms(sentence):
+import settings as yaref_settings
+def _build_dms(sentence, remove_common_words=False):
     dms = []
-    words = sentence.lower().split()
+    if not sentence:
+        return dms
+    words = sorted(sentence.lower().split())
     for word in words:
+        if remove_common_words and word in yaref_settings.FUZZY_COMMON_WORDS:
+            continue 
         dm = metaphone.dm(word)
         value = u'%s - %s' % (dm[0], dm[1])
-        dms.append(value)
+        if value not in dms:
+            dms.append(value)
     return dms
 
-def add_song(song):
+def build_index():
+    db = settings.MONGO_DB
+    db.songs.ensure_index("song_dms")
+    db.songs.ensure_index("artist_dms")
+    db.songs.ensure_index("album_dms")
+    
+
+def add_song(song, upsert=False):
     db = settings.MONGO_DB
     song_doc = {
         "db_id": song.id,
@@ -21,17 +36,25 @@ def add_song(song):
         "artist_dms": _build_dms(song.artist_name),
         "album_dms": _build_dms(song.album_name),
     }
-    db.songs.update({"db_id": song.id},
-                    {"$set": song_doc}, upsert=True, safe=True)
-    
+    if upsert:
+        db.songs.update({"db_id": song.id},
+                        {"$set": song_doc}, upsert=True, safe=True)
+    else:
+        db.songs.insert(song_doc, safe=True)
+        
 def find_song(name, album, artist):
+# from yaref.mongo import *;find_song(u"Voy A Perder La Razón", u"Raíces Del Flamenco (Antología 5)",u"Various Artists, El Agujeta")
     db = settings.MONGO_DB
-    dms_name = _build_dms(name)
-    dms_artist = _build_dms(artist)
-    dms_album = _build_dms(album)
+    dms_name = _build_dms(name, remove_common_words=True)
+    dms_artist = _build_dms(artist, remove_common_words=True)
+    dms_album = _build_dms(album, remove_common_words=True)
     
-    res = db.songs.find({"song_dms":{"$in": dms_name},
-                   "artist_dms":{"$in": dms_artist},
-                   "album_dms":{"$in": dms_album},
+    res = db.songs.find({"song_dms":{"$all": dms_name},
+                   "artist_dms":{"$all": dms_artist},
+                   "album_dms":{"$all": dms_album},
                    });
-    return res    
+    return res
+
+def get_last_doc():
+    db = settings.MONGO_DB
+    return db.songs.find().sort([("$natural", DESCENDING)]).limit(1)

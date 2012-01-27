@@ -100,6 +100,10 @@ class YasoundGenre(models.Model):
         return self.name
 
 class YasoundSongManager(models.Manager):
+    
+    _max_query = 0
+    _max_song = None
+    
     def get_query_set(self):
         return self.model.QuerySet(self.model)
     
@@ -108,38 +112,45 @@ class YasoundSongManager(models.Manager):
         import random
         from time import time
         start = time()
-        count = 20
-        random_ids = random.sample(xrange(97), count)
+        count = 30
+        random_ids = random.sample(xrange(1600000), count)
         artist_records = list(YasoundSong.objects.filter(id__in=random_ids).all())
         
         found = 0
         errors = 0
         for i, artist in enumerate(artist_records):
-            logger.debug("song id = %d" % (artist.id))
             res = self.find_fuzzy(artist.name,  artist.album_name, artist.artist_name, limit=limit) 
             if res:
                 found +=1
-                if res.id != artist.id:
+                if res["db_id"] != artist.id:
                     errors += 1
                     found -= 1
-                
             print i
         elapsed = time() - start
         logger.debug('Complete search took ' + str(elapsed) + ' seconds')
         logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
         logger.debug('Found : %d/%d (%d%%), errors = %d (%d%%)' % (found, count, 100*found/count, errors, 100*errors/count))
-        
+        logger.debug('slowest song : %d:%s|%s|%s (%f)' % (self._max_song["db_id"], 
+                                                          self._max_song["name"], 
+                                                          self._max_song["album"], 
+                                                          self._max_song["artist"], 
+                                                          self._max_query))
+                     
+    def last_indexed(self):
+        doc = mongo.get_last_doc()
+        if doc and doc.count() > 0:
+            return self.get(id=doc[0]['db_id'])
+        return None
     
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time
-        logger.debug('fuzzy search for %s | %s | %s, limit = %r' % (name, album, artist, limit))
+        #logger.debug('fuzzy search for %s | %s | %s, limit = %r' % (name, album, artist, limit))
         start = time()
         songs = mongo.find_song(name, album, artist)
-        song_object = None
         best_song = None
         best_ratio = 0
         found_count = songs.count()
-        logger.debug("found %d candidate(s)" % (found_count))
+        #logger.debug("found %d candidate(s)" % (found_count))
         if found_count == 1:
             best_song = songs[0]
         else:
@@ -157,13 +168,15 @@ class YasoundSongManager(models.Manager):
                     if ratio >= 100:
                         break
         elapsed = time() - start
-        if best_song:
-            song_object = YasoundSong.objects.get(id=best_song["db_id"])
-            logger.debug('candidate is %d - %s' % (best_song["db_id"], best_song["name"].replace("\n", " ")))
-        else:
-            logger.debug('no candidate found')
-        logger.debug('Search took %d seconds' % (elapsed))
-        return song_object
+#        if best_song:
+#            logger.debug('candidate is %d - %s' % (best_song["db_id"], best_song["name"].replace("\n", " ")))
+#        else:
+#            logger.debug('no candidate found')
+        if elapsed > self._max_query:
+            self._max_query = elapsed
+            self._max_song = best_song
+        #logger.debug('Search took %f seconds' % (elapsed))
+        return best_song
     
 class YasoundSong(models.Model):
     objects = YasoundSongManager()
