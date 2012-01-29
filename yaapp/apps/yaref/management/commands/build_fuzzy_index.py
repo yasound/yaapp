@@ -8,7 +8,10 @@ from yaref.models import YasoundArtist, YasoundAlbum, YasoundSong, \
     YasoundDoubleMetaphone
 import datetime
 import gc
+from yaref import mongo
 
+import logging
+logger = logging.getLogger("yaapp.yaref")
 
 
 def queryset_iterator(queryset, chunksize=1000):
@@ -36,32 +39,45 @@ class Command(BaseCommand):
     Update action states
     """
     option_list = BaseCommand.option_list + (
-        make_option('-D', '--dry-run', dest='dry', action='store_true',
-            default=False, help="Dry run : don't update', only simulation"),
+        make_option('-u', '--upsert', dest='upsert', action='store_true',
+            default=False, help="upsert : check if document exist before inserting (slow)"),
+        make_option('-e', '--erase', dest='erase', action='store_true',
+            default=False, help="erase : erase yasound collection and restart indexing from scratch"),
     )
     help = "Generate fuzzy index"
     args = ''
 
     def handle(self, *app_labels, **options):
-        dry = options.get('dry',False)
+        upsert = options.get('upsert',False)
+        erase = options.get('erase',False)
+
+        if erase:
+            logger.info("deleting index")
+            mongo.erase_index()
+        
+        if upsert:
+            logger.info("using upsert")
+        else:
+            logger.info("not using upsert")
         
         songs = YasoundSong.objects.all()
         last_indexed = YasoundSong.objects.last_indexed()
         if last_indexed:
-            print "last indexed = %d" % (last_indexed.id)
+            logger.info("last indexed = %d" % (last_indexed.id))
             songs = songs.filter(id__gt=last_indexed.id)
         count = songs.count()
-        print "processing %d songs" % (count)
+        logger.info("processing %d songs" % (count))
         from time import time
         if count > 0:
             start = time()
             for i, song in enumerate(queryset_iterator(songs)):
-                song.build_fuzzy_index()
+                song.build_fuzzy_index(upsert)
                 if i % 1000 == 0:
-                    print "processed %d/%d (%d/100)" % (i, count, 100*i/count)
+                    logger.info("processed %d/%d (%d/100)" % (i, count, 100*i/count))
                     elapsed = time() - start
-                    print 'elapsed time ' + str(elapsed) + ' seconds'
+                    logger.info('elapsed time ' + str(elapsed) + ' seconds')
                     start = time()
-                    
-        print "done"
+        logger.info("building mongodb index")
+        mongo.build_index()      
+        logger.info("done")
         

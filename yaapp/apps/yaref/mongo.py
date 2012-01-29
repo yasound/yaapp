@@ -18,12 +18,15 @@ def _build_dms(sentence, remove_common_words=False):
     sentence = _remove_punctuation(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
-        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or len(word) < 3):
+        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS):
             continue 
-        dm = metaphone.dm(word)
-        value = u'%s - %s' % (dm[0], dm[1])
-        if value == u' - ':
-            continue
+        if word.isdigit():
+            value = word
+        else:
+            dm = metaphone.dm(word)
+            value = u'%s - %s' % (dm[0], dm[1])
+            if value == u' - ':
+                continue
         if value not in dms:
             dms.append(value)
     return dms
@@ -33,7 +36,6 @@ def build_index():
     db.songs.ensure_index("song_dms")
     db.songs.ensure_index("artist_dms")
     db.songs.ensure_index("album_dms")
-    
 
 def add_song(song, upsert=False):
     db = settings.MONGO_DB
@@ -73,3 +75,7 @@ def find_song(name, album, artist):
 def get_last_doc():
     db = settings.MONGO_DB
     return db.songs.find().sort([("$natural", DESCENDING)]).limit(1)
+
+def erase_index():
+    db = settings.MONGO_DB
+    db.songs.drop()

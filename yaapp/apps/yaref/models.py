@@ -218,8 +218,8 @@ class YasoundSong(models.Model):
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
     dms = models.ManyToManyField(YasoundDoubleMetaphone, null=True, blank=True)
 
-    def build_fuzzy_index(self):
-        mongo.add_song(self)
+    def build_fuzzy_index(self, upsert=False):
+        mongo.add_song(self, upsert)
 
     class QuerySet(QuerySet):
         def find_by_name(self, name, limit=None):
