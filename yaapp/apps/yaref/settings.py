@@ -10,7 +10,4 @@ FUZZY_COMMON_WORDS = ("the",
                       'le',
                       'les',
                       'el',
-                      'los',
-                      'various', 
-                      'artist', 
-                      'artists')
+                      'los')

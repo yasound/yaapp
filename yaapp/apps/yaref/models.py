@@ -148,23 +148,16 @@ class YasoundSongManager(models.Manager):
             return self.get(id=doc[0]['db_id'])
         return None
     
-    def find_fuzzy(self, name, album, artist, limit=5):
-        from time import time
-        start = time()
-        songs = mongo.find_song(name, album, artist)
-        best_song = None
+    def _check_candidates(self, songs, name, album, artist):
         best_ratio = 0
-        
-        prev_song = None
-        
-        for i, song in enumerate(songs):
+        best_song = None
+        for song in songs:
             ratio_song, ratio_album, ratio_artist = 0, 0, 0
             ratio_song = fuzz.token_sort_ratio(name, song["name"])
             ratio_album = fuzz.token_sort_ratio(album, song["album"])
             ratio_artist = fuzz.token_sort_ratio(artist, song["artist"])
-        
             ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-            logger.debug('%d:%s%s%s = %d+%d+%d=%d' % (song["db_id"],
+            logger.debug('%d:%s|%s|%s = %d+%d+%d=%d' % (song["db_id"],
                                       song["name"],
                                       song["album"],
                                       song["artist"],
@@ -175,13 +168,20 @@ class YasoundSongManager(models.Manager):
             if ratio >= best_ratio and ratio > 50:
                 best_ratio = ratio
                 best_song = song
+        return best_song, best_ratio
+    
+    def find_fuzzy(self, name, album, artist, limit=5):
+        from time import time
+        start = time()
+        songs = mongo.find_song(name, album, artist)
+        song, ratio = self._check_candidates(songs, name, album, artist)
         elapsed = time() - start
-        if not best_song:
+        if not song:
             logger.debug('## cannot find %s|%s|%s' % (name, album, artist))
         if elapsed > self._max_query:
             self._max_query = elapsed
-            self._max_song = best_song
-        return best_song
+            self._max_song = song
+        return song
     
 class YasoundSong(models.Model):
     objects = YasoundSongManager()

@@ -54,22 +54,31 @@ def add_song(song, upsert=False):
     else:
         db.songs.insert(song_doc, safe=True)
         
-def find_song(name, album, artist):
+def find_song(name, album, artist, remove_common_words=True):
 # from yaref.mongo import *;find_song(u"Voy A Perder La Razón", u"Raíces Del Flamenco (Antología 5)",u"Various Artists, El Agujeta")
     db = settings.MONGO_DB
-    dms_name = _build_dms(name, remove_common_words=True)
-    dms_artist = _build_dms(artist, remove_common_words=True)
-    dms_album = _build_dms(album, remove_common_words=True)
+    dms_name = _build_dms(name, remove_common_words)
+    dms_artist = _build_dms(artist, remove_common_words)
+    dms_album = _build_dms(album, remove_common_words)
     
-    res = db.songs.find({"song_dms":{"$all": dms_name},
-                   "artist_dms":{"$all": dms_artist},
-                   "album_dms":{"$all": dms_album},
-                   }, {
+    query_items = []
+    if name and len(dms_name) > 0:
+        query_items.append({"song_dms":{"$all": dms_name}})
+
+    if artist and len(dms_artist) > 0:
+        query_items.append({"artist_dms":{"$all": dms_artist}})
+
+    if album and len(dms_album) > 0:
+        query_items.append({"album_dms":{"$all": dms_album}})
+
+    res = db.songs.find({"$and":query_items}, 
+                         {
                         "db_id": True,
                         "name": True,
                         "artist": True,
                         "album": True,
                     });
+    print res.explain()
     return res
 
 def get_last_doc():
