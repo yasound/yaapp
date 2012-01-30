@@ -323,3 +323,8 @@ elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8001/'
  
 SOUTH_TESTS_MIGRATE=False   
+
+from pymongo.connection import Connection
+from pymongo import DESCENDING
+import gridfs
+MONGO_DB = Connection().yasound
