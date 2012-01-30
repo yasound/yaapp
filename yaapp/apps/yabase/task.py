@@ -125,7 +125,9 @@ def process_playlists_exec(radio, content_compressed):
                     break
                 else:
                     # let's go fuzzy
-                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name, album_name, artist_name)
+                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name.decode('utf-8', 'ignore'), 
+                                                               album_name.decode('utf-8', 'ignore'), 
+                                                               artist_name.decode('utf-8', 'ignore'))
                     if not mongo_doc:
                         notfound += 1
                     else:
