@@ -14,6 +14,7 @@ import json
 import settings as yabase_settings
 import time
 from django.contrib.auth.models import AnonymousUser
+from decorators import unlock_radio_on_exception
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -275,10 +276,10 @@ def get_song_status(request, song_id):
     return HttpResponse(res)
 
 
+@unlock_radio_on_exception
 @csrf_exempt
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
-    
     i = 0
     while radio.is_locked:
         time.sleep(3)
