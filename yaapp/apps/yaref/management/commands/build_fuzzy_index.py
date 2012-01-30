@@ -4,8 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from optparse import make_option
 from time import time
-from yaref.models import YasoundArtist, YasoundAlbum, YasoundSong, \
-    YasoundDoubleMetaphone
+from yaref.models import YasoundArtist, YasoundAlbum, YasoundSong
 import datetime
 import gc
 from yaref import mongo
