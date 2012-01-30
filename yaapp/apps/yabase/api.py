@@ -229,7 +229,8 @@ class WallEventResource(ModelResource):
         song_events = WallEvent.objects.filter(radio=radio, type=yabase_settings.EVENT_SONG).order_by('-start_date').all()
         if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
             s = radio.current_song
-            WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
+            d = radio.current_song_play_date
+            WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s, start_date=d)
 
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
         wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event

@@ -174,7 +174,8 @@ class Radio(models.Model):
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     computing_next_songs = models.BooleanField(default=False)
     
-    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song'), related_name='current_song_radio') 
+    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song'), related_name='current_song_radio')
+    current_song_play_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
         return self.name;
@@ -240,6 +241,7 @@ class Radio(models.Model):
         
         # update current song
         self.current_song = song
+        self.current_song_play_date = datetime.datetime.now()
         
         song.last_play_time = datetime.datetime.now()
         self.fill_next_songs_queue()
