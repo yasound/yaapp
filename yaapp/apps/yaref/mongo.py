@@ -10,7 +10,7 @@ exclude = set(string.punctuation)
 
 def _remove_punctuation(s):
     return ''.join(ch for ch in s if ch not in exclude)
-    
+
 def _build_dms(sentence, remove_common_words=False):
     dms = []
     if not sentence:
@@ -77,7 +77,7 @@ def find_song(name, album, artist, remove_common_words=True):
                         "name": True,
                         "artist": True,
                         "album": True,
-                    });
+                    }).limit(10);
     return res
 
 def get_last_doc():
