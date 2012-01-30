@@ -124,8 +124,13 @@ def process_playlists_exec(radio, content_compressed):
                     found += 1
                     break
                 else:
-                    notfound += 1
-                    pass
+                    # let's go fuzzy
+                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name, album_name, artist_name)
+                    if not mongo_doc:
+                        notfound += 1
+                    else:
+                        song_instance.song = mongo_doc['db_id']
+                        found +=1
 
                 song_instance.save()
 
