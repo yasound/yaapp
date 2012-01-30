@@ -138,15 +138,14 @@ class YasoundSongManager(models.Manager):
     
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time
-        logger.debug('find fuzzy: %s|%s|%s' % (name, album, artist))
         start = time()
         songs = mongo.find_song(name, album, artist)
         song, ratio = self._check_candidates(songs, name, album, artist)
         elapsed = time() - start
         if not song:
-            logger.debug('## cannot find %s|%s|%s' % (name, album, artist))
+            logger.debug('find fuzzy: %s|%s|%s : FAILED in %s seconds' % (name, album, artist, str(elapsed)))
         else:
-            logger.debug('found!')
+            logger.debug('find fuzzy: %s|%s|%s : OK in %s seconds' % (name, album, artist, str(elapsed)))
         if elapsed > self._max_query:
             self._max_query = elapsed
             self._max_song = song

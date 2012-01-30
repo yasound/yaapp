@@ -8,6 +8,15 @@ import sys
 import time
 import zlib
 
+import string
+exclude = set(string.punctuation)
+def _remove_punctuation(s):
+    return ''.join(ch for ch in s if ch not in exclude)
+
+def get_simplified_name(s):
+    return ' '.join(_remove_punctuation(s).split()).lower()
+    
+
 class BinaryData:
     def __init__(self, data):
         self.offset = 0
@@ -83,14 +92,14 @@ def process_playlists_exec(radio, content_compressed):
 
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
-            album_name_simplified = pattern.sub('', album_name).lower()
+            album_name_simplified = get_simplified_name(album_name)
         elif tag == ARTIST_TAG:
             artist_name = data.get_string()
-            artist_name_simplified = pattern.sub('', artist_name).lower()
+            artist_name_simplified = get_simplified_name(artist_name)
         elif tag == SONG_TAG:
             order = data.get_int32()
             song_name = data.get_string()
-            song_name_simplified = pattern.sub('', song_name).lower()
+            song_name_simplified = get_simplified_name(song_name)
 
             raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE name=%s and artist_name=%s and album_name=%s",
                                            [song_name,
@@ -112,22 +121,21 @@ def process_playlists_exec(radio, content_compressed):
                 song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
 
             if song_instance.song == None:
-                song_name_simplified = pattern.sub('', song_name).lower()
+                song_name_simplified = get_simplified_name(song_name)
                 count += 1
-#                    res = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
-                raw = YasoundSong.objects.raw("SELECT * from yasound_song WHERE name=%s and artist_name=%s and album_name=%s",
-                                           [song_name,
-                                            artist_name,
-                                            album_name])
+                raw = YasoundSong.objects.raw("SELECT * from yasound_song WHERE name_simplified=%s and artist_name_simplified=%s and album_name_simplified=%s",
+                                           [song_name_simplified,
+                                            artist_name_simplified,
+                                            album_name_simplified])
                 for yasound_song in raw:
                     song_instance.song = yasound_song.id
                     found += 1
                     break
                 else:
                     # let's go fuzzy
-                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name.decode('utf-8', 'ignore'), 
-                                                               album_name.decode('utf-8', 'ignore'), 
-                                                               artist_name.decode('utf-8', 'ignore'))
+                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified.decode('utf-8', 'ignore'), 
+                                                               album_name_simplified.decode('utf-8', 'ignore'), 
+                                                               artist_name_simplified.decode('utf-8', 'ignore'))
                     if not mongo_doc:
                         notfound += 1
                     else:
