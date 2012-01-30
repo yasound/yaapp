@@ -78,7 +78,6 @@ def find_song(name, album, artist, remove_common_words=True):
                         "artist": True,
                         "album": True,
                     });
-    print res.explain()
     return res
 
 def get_last_doc():
