@@ -115,19 +115,19 @@ def process_playlists_exec(radio, content_compressed):
                 song_name_simplified = pattern.sub('', song_name).lower()
                 count += 1
 #                    res = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
-                raw = YasoundSong.objects.raw("SELECT * from yasound_song WHERE name=%s and artist_name=%s and album_name=%s",
-                                           [song_name,
-                                            artist_name,
-                                            album_name])
+                raw = YasoundSong.objects.raw("SELECT * from yasound_song WHERE name_simplified=%s and artist_name_simplified=%s and album_name_simplified=%s",
+                                           [song_name_simplified,
+                                            artist_name_simplified,
+                                            album_name_simplified])
                 for yasound_song in raw:
                     song_instance.song = yasound_song.id
                     found += 1
                     break
                 else:
                     # let's go fuzzy
-                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name.decode('utf-8', 'ignore'), 
-                                                               album_name.decode('utf-8', 'ignore'), 
-                                                               artist_name.decode('utf-8', 'ignore'))
+                    mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified.decode('utf-8', 'ignore'), 
+                                                               album_name_simplified.decode('utf-8', 'ignore'), 
+                                                               artist_name_simplified.decode('utf-8', 'ignore'))
                     if not mongo_doc:
                         notfound += 1
                     else:
