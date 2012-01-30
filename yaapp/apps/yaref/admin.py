@@ -1,6 +1,6 @@
 from django.contrib import admin
 from models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
-    YasoundSongGenre, YasoundDoubleMetaphone
+    YasoundSongGenre
 
 # yasound read only song db:
 class YasoundSongAdmin(admin.ModelAdmin):
@@ -13,5 +13,4 @@ admin.site.register(YasoundArtist)
 admin.site.register(YasoundAlbum)
 admin.site.register(YasoundGenre)
 admin.site.register(YasoundSongGenre)
-admin.site.register(YasoundDoubleMetaphone)
 
