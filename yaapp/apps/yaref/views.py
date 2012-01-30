@@ -16,7 +16,6 @@ def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
         song_name = form.cleaned_data['song']
         artist_name = form.cleaned_data['artist']
         album_name = form.cleaned_data['album']
-        
         song = YasoundSong.objects.find_fuzzy(song_name, album_name, artist_name)
 
     return render_to_response(template_name, {
