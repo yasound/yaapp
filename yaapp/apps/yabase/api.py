@@ -309,6 +309,18 @@ class NextSongResource(ModelResource):
         authorization= Authorization()
         authentication = ApiKeyAuthentication()
         allowed_methods = ['post', 'put', 'delete']
+        
+    def obj_delete(self, request=None, **kwargs):
+        try:
+            obj = self.get_object_list(request).get(**kwargs)
+        except ObjectDoesNotExist:
+            pass
+        
+        radio = obj.radio
+        super(NextSongResource, self).obj_delete(request, **kwargs)
+        radio.fill_next_songs_queue()
+        
+        
 
 
 class RadioLikerResource(ModelResource):    

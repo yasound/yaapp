@@ -568,7 +568,6 @@ def next_song_deleted(sender, instance, created=None, **kwargs):
     for n in to_update:
         n.order -= 1
         super(NextSong, n).save()
-    next_song.radio.fill_next_songs_queue()
+    
 signals.post_delete.connect(next_song_deleted, sender=NextSong)
-
 
