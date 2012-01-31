@@ -66,16 +66,25 @@ class Command(BaseCommand):
             songs = songs.filter(id__gt=last_indexed.id)
         count = songs.count()
         logger.info("processing %d songs" % (count))
-        from time import time
         if count > 0:
             start = time()
-            for i, song in enumerate(queryset_iterator(songs)):
-                song.build_fuzzy_index(upsert)
-                if i % 1000 == 0:
-                    logger.info("processed %d/%d (%d/100)" % (i, count, 100*i/count))
-                    elapsed = time() - start
-                    logger.info('elapsed time ' + str(elapsed) + ' seconds')
+            if upsert:
+                for i, song in enumerate(queryset_iterator(songs)):
+                    song.build_fuzzy_index(upsert=True)
+                    if i % 10000 == 0:
+                        elapsed = time() - start
+                        logger.info("processed %d/%d (%d%%) in %s seconds" % (i, count, 100*i/count, str(elapsed)))
                     start = time()
+            else:
+                bulk = mongo.begin_bulk_insert()
+                for i, song in enumerate(queryset_iterator(songs)):
+                    bulk.append(song.build_fuzzy_index(upsert=False, insert=False))
+                    if i % 10000 == 0:
+                        mongo.commit_bulk_insert(bulk)
+                        bulk = mongo.begin_bulk_insert()
+                        elapsed = time() - start
+                        logger.info("processed %d/%d (%d%%) in % seconds" % (i, count, 100*i/count, str(elapsed)))
+                        start = time()
         logger.info("building mongodb index")
         mongo.build_index()      
         logger.info("done")
