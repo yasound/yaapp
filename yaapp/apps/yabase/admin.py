@@ -28,10 +28,10 @@ class SongInstanceAdmin(admin.ModelAdmin):
         return obj.metadata.name
     metadata_name.short_description = 'Song'    
     def metadata_album(self, obj):
-        return obj.metadata.album
+        return obj.metadata.album_name
     metadata_album.short_description = 'Album'    
     def metadata_artist(self, obj):
-        return obj.metadata.artist
+        return obj.metadata.artist_name
     metadata_artist.short_description = 'Artist'    
     
 class WallEventAdmin(admin.ModelAdmin):
