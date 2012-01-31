@@ -335,3 +335,16 @@ from pymongo.connection import Connection
 from pymongo import DESCENDING
 import gridfs
 MONGO_DB = Connection().yasound
+
+
+
+from celery.schedules import crontab
+#from stats.task import radio_listening_stats_task
+
+CELERYBEAT_SCHEDULE = {
+    # Executes every hour
+    "radio-listening-stat-every-hour": {
+        "task": "stats.task.radio_listening_stats_task",
+        "schedule": crontab(minute=0, hour='*'),
+    },
+}
