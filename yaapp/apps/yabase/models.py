@@ -9,6 +9,7 @@ import random
 import settings as yabase_settings
 import string
 from yaref.models import YasoundSong
+from stats.models import RadioListeningStat
 
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
@@ -176,6 +177,7 @@ class Radio(models.Model):
     
     anonymous_audience = models.IntegerField(default=0)
     audience_peak = models.FloatField(default=0, null=True, blank=True)
+    current_audience_peak = models.FloatField(default=0, null=True, blank=True) # audience peak since last RadioListeningStat
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
     
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
@@ -314,6 +316,56 @@ class Radio(models.Model):
     @property
     def is_locked(self):
         return self.computing_next_songs
+    
+    @property
+    def audience(self):
+        listeners = RadioUser.objects.filter(radio=self, listening=True)
+        audience = len(listeners) + self.anonymous_audience
+        return audience
+    
+    def user_started_listening(self, user):
+        if not user.is_anonymous:
+            radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
+            radio_user.listening = True
+            radio_user.save()
+            
+        else:
+            self.anonymous_audience += 1
+            self.save()
+        
+        audience = self.audience
+        if audience > self.audience_peak:
+            self.audience_peak = audience
+            self.save()
+        if audience > self.current_audience_peak:
+            self.current_audience_peak = audience
+            self.save()
+            
+    def user_stopped_listening(self, user, listening_duration):
+        if not user.is_anonymous:
+            radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
+            radio_user.listening = False
+            radio_user.save()
+        else:
+            self.anonymous_audience -= 1
+            self.save()
+            
+        self.overall_listening_time += listening_duration
+        self.save() 
+        
+
+    def create_listening_stat(self):
+        favorites = RadioUser.objects.get_favorite().filter(radio=self).count()
+        likes = RadioUser.objects.get_likers().filter(radio=self).count()
+        dislikes = RadioUser.objects.get_dislikers().filter(radio=self).count()
+        stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience=self.current_audience_peak, favorites=favorites, likes=likes, dislikes=dislikes)
+        
+        # reset current audience peak
+        audience = self.audience
+        self.current_audience_peak = audience
+        self.save()
+        return stat
+
 
     class Meta:
         db_name = u'default'
@@ -461,59 +513,6 @@ class WallEvent(models.Model):
 
     class Meta:
         db_name = u'default'
-        
-#    def save(self, *args, **kwargs):
-#        super(WallEvent, self).save(*args, **kwargs)
-#        
-#        if self.type == yabase_settings.EVENT_JOINED:
-#            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-#            radiouser.connected = True
-#            radiouser.save()
-#            
-#        elif self.type == yabase_settings.EVENT_LEFT:
-#            radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-#            radiouser.connected = False
-#            radiouser.save()
-#            
-#        elif self.type == yabase_settings.EVENT_STARTED_LISTEN:
-#            if self.user:
-#                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-#                radiouser.listening = True
-#                radiouser.save()
-#            else:
-#                self.radio.anonymous_audience += 1
-#                self.radio.save()
-#            
-#            
-#            listeners = RadioUser.objects.filter(radio=self.radio, listening=True)
-#            audience = len(listeners) + self.radio.anonymous_audience
-#            if audience > self.radio.audience_peak:
-#                self.radio.audience_peak = audience
-#                self.radio.save()
-#            
-#        elif self.type == yabase_settings.EVENT_STOPPED_LISTEN:
-#            if self.user:
-#                radiouser, created = RadioUser.objects.get_or_create(user=self.user, radio=self.radio)
-#                radiouser.listening = False
-#                radiouser.save()
-#                            
-#                last_start = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
-#                last_stop = WallEvent.objects.filter(user=self.user, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
-#                duration = last_stop.start_date - last_start.start_date
-#                seconds = duration.days * 86400 + duration.seconds
-#                self.radio.overall_listening_time += seconds
-#                self.radio.save()
-#            
-#            elif self.text:
-#                self.radio.anonymous_audience -= 1
-#                self.radio.save()
-#                
-#                last_start = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STARTED_LISTEN).order_by('-start_date')[0]
-#                last_stop = WallEvent.objects.filter(text=self.text, radio=self.radio, type=yabase_settings.EVENT_STOPPED_LISTEN).order_by('-start_date')[0]
-#                duration = last_stop.start_date - last_start.start_date
-#                seconds = duration.days * 86400 + duration.seconds
-#                self.radio.overall_listening_time += seconds
-#                self.radio.save()
 
 
 

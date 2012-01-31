@@ -344,28 +344,15 @@ def start_listening_to_radio(request, radio_uuid):
         return HttpResponse(status=405)
     
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio.user_started_listening(request.user)
     
     if not request.user.is_anonymous:
-        radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
-        radio_user.listening = True
-        radio_user.save()
         client = request.user
-        
     else:
-        radio.anonymous_audience += 1
-        radio.save()
-        
         if request.GET.has_key(CLIENT_ADDRESS_PARAM_NAME):
             client = request.GET[CLIENT_ADDRESS_PARAM_NAME]
         else:
             client = 'anonymous'
-    
-    listeners = RadioUser.objects.filter(radio=radio, listening=True)
-    audience = len(listeners) + radio.anonymous_audience
-    if audience > radio.audience_peak:
-        radio.audience_peak = audience
-        radio.save()
-        
         
     res = '%s is listening to "%s"' % (client, radio)
     return HttpResponse(res)
@@ -376,27 +363,20 @@ def stop_listening_to_radio(request, radio_uuid):
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
+        
+    LISTENING_DURATION_PARAM_NAME = 'listening_duration'
+    listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
     
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio.user_stopped_listening(request.user, listening_duration)
     
     if not request.user.is_anonymous:
-        radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
-        radio_user.listening = False
-        radio_user.save()
         client = request.user
     else:
-        radio.anonymous_audience -= 1
-        radio.save()
         if request.GET.has_key(CLIENT_ADDRESS_PARAM_NAME):
             client = request.GET[CLIENT_ADDRESS_PARAM_NAME]
         else:
             client = 'anonymous'
-        
-    LISTENING_DURATION_PARAM_NAME = 'listening_duration'
-    if request.GET.has_key[LISTENING_DURATION_PARAM_NAME]:
-        listening_duration = int(request.GET[LISTENING_DURATION_PARAM_NAME])
-        radio.overall_listening_time += listening_duration
-        radio.save() 
         
     res = '%s stopped listening to "%s" (listening duration = %d)' % (client, radio, listening_duration)
     return HttpResponse(res)

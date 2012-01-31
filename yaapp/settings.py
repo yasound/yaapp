@@ -244,6 +244,7 @@ INSTALLED_APPS = (
     'wall',
     'yabase',
     'yaref',
+    'stats',
     'tastypie',
     "djkombu",
     'djcelery',
