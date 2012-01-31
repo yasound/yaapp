@@ -5,7 +5,7 @@ from tastypie import fields
 from models import RadioListeningStat
 
 class RadioListeningStatResource(ModelResource):
-    radio = fields.ForeignKey('yabase.api.RadioResource', 'radio', full=False)
+    radio_uri = fields.ForeignKey('yabase.api.RadioResource', 'radio', full=False)
     
     class Meta:
         queryset = RadioListeningStat.objects.all()
