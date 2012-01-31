@@ -11,6 +11,13 @@ exclude = set(string.punctuation)
 def _remove_punctuation(s):
     return ''.join(ch for ch in s if ch not in exclude)
 
+def _is_digit(val):
+    try:
+        int(val)
+        return True
+    except ValueError:
+        return False
+    
 def _build_dms(sentence, remove_common_words=False):
     dms = []
     if not sentence:
@@ -18,9 +25,9 @@ def _build_dms(sentence, remove_common_words=False):
     sentence = _remove_punctuation(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
-        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or len(word) <= 2) :
+        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or (not _is_digit(word) and len(word) <= 2)):
             continue 
-        if word.isdigit():
+        if _is_digit(word):
             value = word
         else:
             dm = metaphone.dm(word)
