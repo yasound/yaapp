@@ -79,7 +79,7 @@ class Command(BaseCommand):
                     not_found +=1
                 if i % 1000 == 0:
                     elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) in %s seconds, %d found, %d not found" % (i, count, 100*i/count, str(elapsed), found, not_found))
+                    logger.info("processed %d/%d (%d%%) in %s seconds, %d found, %d not found, %d skipped" % (i, count, 100*i/count, str(elapsed), found, not_found, skipped))
                     start = time()
             elapsed = time() - global_start
             logger.info("processed %d songs in %s seconds, %d found, %d not found, %d skipped" % (count, str(elapsed), found, not_found, skipped))
