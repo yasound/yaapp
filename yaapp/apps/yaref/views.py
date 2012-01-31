@@ -13,6 +13,7 @@ from time import time
 def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
     form = SearchForm(request.REQUEST)
     song = None
+    elapsed = 0
     if form.is_valid():
         song_name = form.cleaned_data['song']
         artist_name = form.cleaned_data['artist']
