@@ -125,9 +125,18 @@ class Playlist(models.Model):
     enabled = models.BooleanField(default=True)
     sync_date = models.DateTimeField(default=datetime.datetime.now)
     CRC = models.IntegerField(null=True, blank=True) # ??
+
+    @property
+    def radio(self):
+        radio = None
+        try:
+            radio = Radio.objects.filter(playlists=self)[0]
+        except:
+            pass
+        return radio
     
     def __unicode__(self):
-        return self.name
+        return u'%s - %s' % (self.name, self.radio)
 
     class Meta:
         db_name = u'default'
