@@ -137,7 +137,7 @@ def process_playlists_exec(radio, content_compressed):
 
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
     if songs_ok.count() > 0:
-        radio.valid = True
+        radio.ready = True
         radio.save()
         
     print 'found: %d - not found: %d - total: %d' % (found, notfound, count)
