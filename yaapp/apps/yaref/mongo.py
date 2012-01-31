@@ -18,7 +18,7 @@ def _build_dms(sentence, remove_common_words=False):
     sentence = _remove_punctuation(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
-        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS):
+        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or len(word) <= 2) :
             continue 
         if word.isdigit():
             value = word

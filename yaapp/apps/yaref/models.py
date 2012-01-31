@@ -139,7 +139,7 @@ class YasoundSongManager(models.Manager):
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time
         start = time()
-        songs = mongo.find_song(name, album, artist)
+        songs = mongo.find_song(name, album, artist, remove_common_words=True)
         song, ratio = self._check_candidates(songs, name, album, artist)
         elapsed = time() - start
         if not song:
