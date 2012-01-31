@@ -55,12 +55,13 @@ class Command(BaseCommand):
         count = song_instances.count()
         logger.info("processing %d song instances" % (count))
         
-        found, not_found = 0, 0
+        found, not_found, skipped = 0, 0, 0
         if count > 0:
             global_start = time()
             start = time()
             for i, song_instance in enumerate(queryset_iterator(song_instances)):
                 if song_instance.song and not reindex:
+                    skipped += 1
                     logger.debug("skipping %s|%s|%s because song_id = %d" % (song_instance.metadata.name,
                                                song_instance.metadata.album_name,
                                                song_instance.metadata.artist_name,
@@ -81,6 +82,6 @@ class Command(BaseCommand):
                     logger.info("processed %d/%d (%d%%) in %s seconds, %d found, %d not found" % (i, count, 100*i/count, str(elapsed), found, not_found))
                     start = time()
             elapsed = time() - global_start
-            logger.info("processed %d songs in %s seconds, %d found, %d not found" % (count, str(elapsed), found, not_found))
+            logger.info("processed %d songs in %s seconds, %d found, %d not found, %d skipped" % (count, str(elapsed), found, not_found, skipped))
         logger.info("done")
         
