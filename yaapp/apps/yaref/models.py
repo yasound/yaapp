@@ -185,8 +185,8 @@ class YasoundSong(models.Model):
     comment = models.TextField(blank=True, null=True)
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
 
-    def build_fuzzy_index(self, upsert=False):
-        mongo.add_song(self, upsert)
+    def build_fuzzy_index(self, upsert=False, insert=True):
+        return mongo.add_song(self, upsert, insert)
 
     class Meta:
         db_table = u'yasound_song'

@@ -34,11 +34,17 @@ def _build_dms(sentence, remove_common_words=False):
 def build_index():
     db = settings.MONGO_DB
     db.songs.ensure_index("song_dms")
-    db.songs.ensure_index("artist_dms")
+    db.songs.ensure_index("artist_dms") 
     db.songs.ensure_index("album_dms")
+    
+def begin_bulk_insert():
+    return []
 
-def add_song(song, upsert=False):
+def commit_bulk_insert(data):
     db = settings.MONGO_DB
+    db.songs.insert(data, safe=True)
+        
+def add_song(song, upsert=False, insert=True):
     song_doc = {
         "db_id": song.id,
         "name": song.name,
@@ -49,11 +55,14 @@ def add_song(song, upsert=False):
         "album_dms": _build_dms(song.album_name),
     }
     if upsert:
+        db = settings.MONGO_DB
         db.songs.update({"db_id": song.id},
                         {"$set": song_doc}, upsert=True, safe=True)
-    else:
+    elif insert:
+        db = settings.MONGO_DB
         db.songs.insert(song_doc, safe=True)
-        
+    return song_doc
+
 def find_song(name, album, artist, remove_common_words=True):
 # from yaref.mongo import *;find_song(u"Voy A Perder La Razón", u"Raíces Del Flamenco (Antología 5)",u"Various Artists, El Agujeta")
     db = settings.MONGO_DB
