@@ -9,3 +9,6 @@ class RadioListeningStat(models.Model):
     likes = models.IntegerField()
     dislikes = models.IntegerField()
     
+    def __unicode__(self):
+        return 'stat for %s' % self.radio
+    
