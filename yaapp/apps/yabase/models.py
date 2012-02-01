@@ -179,6 +179,7 @@ class Radio(models.Model):
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     current_audience_peak = models.FloatField(default=0, null=True, blank=True) # audience peak since last RadioListeningStat
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
+    current_connections = models.IntegerField(default=0) # number of connections since last RadioListeningStat
     
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
     
@@ -328,7 +329,6 @@ class Radio(models.Model):
             radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
             radio_user.listening = True
             radio_user.save()
-            
         else:
             self.anonymous_audience += 1
             self.save()
@@ -336,10 +336,11 @@ class Radio(models.Model):
         audience = self.audience
         if audience > self.audience_peak:
             self.audience_peak = audience
-            self.save()
         if audience > self.current_audience_peak:
             self.current_audience_peak = audience
-            self.save()
+        
+        self.current_connections += 1    
+        self.save()
             
     def user_stopped_listening(self, user, listening_duration):
         if not user.is_anonymous:
@@ -358,11 +359,13 @@ class Radio(models.Model):
         favorites = RadioUser.objects.get_favorite().filter(radio=self).count()
         likes = RadioUser.objects.get_likers().filter(radio=self).count()
         dislikes = RadioUser.objects.get_dislikers().filter(radio=self).count()
-        stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience=self.current_audience_peak, favorites=favorites, likes=likes, dislikes=dislikes)
+        stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience=self.current_audience_peak, connections=self.current_connections, favorites=favorites, likes=likes, dislikes=dislikes)
         
         # reset current audience peak
         audience = self.audience
         self.current_audience_peak = audience
+        # reset current number of connections
+        self.current_connections = 0
         self.save()
         return stat
 
