@@ -37,8 +37,9 @@ class RadioListeningStatResource(ModelResource):
         date = None
         daily_stat = None
         for hourly_stat in original_stats: 
-            if date != hourly_stat.date.date():
-                date = hourly_stat.date.date()
+            if not date or date.date() != hourly_stat.date.date():
+                date = hourly_stat.date
+                date = date.replace(hour=0, minute=0, second=0, microsecond=0)
                 daily_stat = RadioListeningStat(date=date, radio=hourly_stat.radio, connections=hourly_stat.connections, audience_peak=hourly_stat.audience_peak, overall_listening_time=hourly_stat.overall_listening_time, favorites=hourly_stat.favorites, likes=hourly_stat.likes, dislikes=hourly_stat.dislikes)
                 results.append(daily_stat)
             else:
