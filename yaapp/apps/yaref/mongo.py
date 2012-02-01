@@ -1,42 +1,7 @@
 # -*- coding: utf-8 -*-
-
-from pymongo import ASCENDING, DESCENDING
+from pymongo import DESCENDING
 from django.conf import settings
-import metaphone
-import settings as yaref_settings
-import string
-
-exclude = set(string.punctuation)
-
-def _remove_punctuation(s):
-    return ''.join(ch for ch in s if ch not in exclude)
-
-def _is_digit(val):
-    try:
-        int(val)
-        return True
-    except ValueError:
-        return False
-    
-def _build_dms(sentence, remove_common_words=False):
-    dms = []
-    if not sentence:
-        return dms
-    sentence = _remove_punctuation(sentence)
-    words = sorted(sentence.lower().split())
-    for word in words:
-        if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or (not _is_digit(word) and len(word) <= 2)):
-            continue 
-        if _is_digit(word):
-            value = word
-        else:
-            dm = metaphone.dm(word)
-            value = u'%s - %s' % (dm[0], dm[1])
-            if value == u' - ':
-                continue
-        if value not in dms:
-            dms.append(value)
-    return dms
+import utils as yaref_utils
 
 def build_index():
     db = settings.MONGO_DB
@@ -57,9 +22,9 @@ def add_song(song, upsert=False, insert=True):
         "name": song.name,
         "artist": song.artist_name,
         "album": song.album_name,
-        "song_dms": _build_dms(song.name),
-        "artist_dms": _build_dms(song.artist_name),
-        "album_dms": _build_dms(song.album_name),
+        "song_dms": yaref_utils.build_dms(song.name),
+        "artist_dms": yaref_utils.build_dms(song.artist_name),
+        "album_dms": yaref_utils.build_dms(song.album_name),
     }
     if upsert:
         db = settings.MONGO_DB
@@ -73,9 +38,9 @@ def add_song(song, upsert=False, insert=True):
 def find_song(name, album, artist, remove_common_words=True):
 # from yaref.mongo import *;find_song(u"Voy A Perder La Razón", u"Raíces Del Flamenco (Antología 5)",u"Various Artists, El Agujeta")
     db = settings.MONGO_DB
-    dms_name = _build_dms(name, remove_common_words)
-    dms_artist = _build_dms(artist, remove_common_words)
-    dms_album = _build_dms(album, remove_common_words)
+    dms_name = yaref_utils.build_dms(name, remove_common_words)
+    dms_artist = yaref_utils.build_dms(artist, remove_common_words)
+    dms_album = yaref_utils.build_dms(album, remove_common_words)
     
     query_items = []
     if name and len(dms_name) > 0:
