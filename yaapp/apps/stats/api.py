@@ -1,11 +1,11 @@
 from tastypie.authentication import ApiKeyAuthentication , Authentication
 from tastypie.authorization import ReadOnlyAuthorization
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, ALL
 from tastypie import fields
 from models import RadioListeningStat
 
 class RadioListeningStatResource(ModelResource):
-    radio_uri = fields.ForeignKey('yabase.api.RadioResource', 'radio', full=False)
+    radio = fields.ForeignKey('yabase.api.RadioResource', 'radio', full=False)
     
     class Meta:
         queryset = RadioListeningStat.objects.all()
@@ -16,7 +16,7 @@ class RadioListeningStatResource(ModelResource):
         authentication = Authentication()
         allowed_methods = ['get']
         filtering = {
-            'radio': ('exact',),
+            'radio': ('exact'),
             'date': ('gt'),
         }
         ordering = [
