@@ -359,7 +359,7 @@ class Radio(models.Model):
         favorites = RadioUser.objects.get_favorite().filter(radio=self).count()
         likes = RadioUser.objects.get_likers().filter(radio=self).count()
         dislikes = RadioUser.objects.get_dislikers().filter(radio=self).count()
-        stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience=self.current_audience_peak, connections=self.current_connections, favorites=favorites, likes=likes, dislikes=dislikes)
+        stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience_peak=self.current_audience_peak, connections=self.current_connections, favorites=favorites, likes=likes, dislikes=dislikes)
         
         # reset current audience peak
         audience = self.audience
