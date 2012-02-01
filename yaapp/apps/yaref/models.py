@@ -1,33 +1,13 @@
 from django.db import models
-from django.db.models import Q
-from django.db.models.query import QuerySet
-from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
-import metaphone
-import settings as yaref_settings
 import mongo
 import logging
 logger = logging.getLogger("yaapp.yaref")
-
 
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
-def _build_metaphone(sentence, exclude_common_words=True):
-    values = []
-    if not sentence:
-        return values
-    words = sorted(sentence.lower().split())
-    for word in words:
-        if exclude_common_words and word in yaref_settings.FUZZY_COMMON_WORDS:
-            continue
-        dm = metaphone.dm(word)
-        value = u'%s - %s' % (dm[0], dm[1])
-        values.append(value)
-    return values
-
-    
 class YasoundArtist(models.Model):
     id = models.IntegerField(primary_key=True)
     echonest_id = models.CharField(unique=True, max_length=20)

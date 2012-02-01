@@ -7,14 +7,8 @@ import re
 import sys
 import time
 import zlib
-
+from yaref.utils import get_simplified_name
 import string
-exclude = set(string.punctuation)
-def _remove_punctuation(s):
-    return ''.join(ch for ch in s if ch not in exclude)
-
-def get_simplified_name(s):
-    return ' '.join(_remove_punctuation(s).split()).lower()
     
 
 class BinaryData:
