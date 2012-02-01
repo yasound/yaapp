@@ -3,6 +3,7 @@ from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.resources import ModelResource, ALL
 from tastypie import fields
 from models import RadioListeningStat
+from datetime import datetime, timedelta
 
 class RadioListeningStatResource(ModelResource):
     radio = fields.ForeignKey('yabase.api.RadioResource', 'radio', full=False)
@@ -22,3 +23,8 @@ class RadioListeningStatResource(ModelResource):
         ordering = [
             'date'
         ]
+        
+    def dispatch(self, request_type, request, **kwargs):
+        ref = datetime.now() - timedelta(days=30)
+        kwargs['date__gt'] = ref
+        return super(RadioListeningStatResource, self).dispatch(request_type, request, **kwargs)
