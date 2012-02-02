@@ -182,25 +182,6 @@ class FriendRadioResource(ModelResource):
         return object_list.filter(creator__in=user.userprofile.friends.all())
 
 
-#class WallPostAuthorization(Authorization):
-#    def is_authorized(self, request, object=None):
-#        print 'WallPostAuthorization'
-#        print request
-#        print 'prout'
-#        data = request.POST['']
-#        print data
-#        dict = json.load(data)
-#        print dict
-#        print hasattr(request, 'user')
-##        print 'user' in request.POST
-##        print request.POST['user']
-##        print request.user
-#        
-#        if 'user' in request.POST and request.POST['user'] != request.user:
-#            print 'should not post'
-#        print request
-#        return True
-
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
@@ -229,8 +210,9 @@ class WallEventResource(ModelResource):
         song_events = WallEvent.objects.filter(radio=radio, type=yabase_settings.EVENT_SONG).order_by('-start_date').all()
         if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
             s = radio.current_song
-            d = radio.current_song_play_date
-            WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s, start_date=d)
+            song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
+            song_event.start_date = radio.current_song_play_date
+            song_event.save()
 
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
         wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event
@@ -454,31 +436,6 @@ class RadioUserResource(ModelResource):
         
         resource = RadioUserResource() 
         return resource.get_detail(request, radio=radio, user=request.user)
-
-
-
-
-
-#class PlayedSongResource(ModelResource):
-#    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-#    song = fields.ForeignKey(SongInstanceResource, 'song', null=True, full=True)
-#
-#    class Meta:
-#        queryset = WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).order_by('-start_date')
-#        resource_name = 'songs'
-#        fields = ['id', 'start_date', 'end_date', 'radio', 'song']
-#        include_resource_uri = False
-#        filtering = {
-#            'radio': 'exact',
-#    }
-#        allowed_methods = ['get']
-#        authorization= ReadOnlyAuthorization()
-#        authentication = ApiKeyAuthentication()
-#    
-#    def dispatch(self, request_type, request, **kwargs):
-#        radio = kwargs.pop('radio')
-#        kwargs['radio'] = get_object_or_404(Radio, id=radio)
-#        return super(PlayedSongResource, self).dispatch(request_type, request, **kwargs)
 
    
 class SongUserResource(ModelResource): 
