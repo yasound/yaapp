@@ -15,7 +15,7 @@ class RadioListeningStatResource(ModelResource):
         fields = ['date', 'overall_listening_time', 'audience_peak', 'connections', 'likes', 'dislikes', 'favorites']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = Authentication()
+        authentication = ApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': ('exact'),
@@ -57,3 +57,9 @@ class RadioListeningStatResource(ModelResource):
     def obj_get_list(self, request=None, **kwargs):
         # Filtering disabled for brevity...
         return self.get_object_list(request)
+    
+    
+    
+
+    
+    

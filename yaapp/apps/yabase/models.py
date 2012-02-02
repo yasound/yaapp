@@ -181,6 +181,9 @@ class Radio(models.Model):
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
     current_connections = models.IntegerField(default=0) # number of connections since last RadioListeningStat
     
+    favorites = models.IntegerField(default=0)
+    leaderboard_rank = models.IntegerField(null=True, blank=True)
+    
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
     
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
@@ -191,6 +194,12 @@ class Radio(models.Model):
     
     def __unicode__(self):
         return self.name;
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # creation
+            self.leaderboard_rank = Radio.objects.count()
+        super(Radio, self).save(*args, **kwargs)
     
     @property
     def is_valid(self):
@@ -282,8 +291,6 @@ class Radio(models.Model):
     def fill_bundle(self, bundle):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         bundle.data['likes'] = likes
-        favorites = self.radiouser_set.filter(favorite=True).count()
-        bundle.data['favorites'] = favorites
         connected_users = self.radiouser_set.filter(connected=True).count()
         bundle.data['connected_users'] = connected_users
         listeners = self.radiouser_set.filter(listening=True).count()
@@ -372,6 +379,23 @@ class Radio(models.Model):
 
     class Meta:
         db_name = u'default'
+        
+        
+def update_leaderboard():
+    radios = Radio.objects.order_by('-favorites')
+    print radios
+    
+    current_rank = 1
+    count = 0
+    last_favorites = None
+    for r in radios:
+        if last_favorites and r.favorites != last_favorites:
+            current_rank = count + 1
+        r.leaderboard_rank = current_rank
+        r.save()
+        count += 1
+        last_favorites = r.favorites
+        
 
 
 
@@ -422,6 +446,23 @@ class RadioUser(models.Model):
         verbose_name = _('Radio user')
         unique_together = (('radio', 'user'))
         db_name = u'default'
+        
+    def save(self, *args, **kwargs):
+        same_favorite = False
+        if self.pk is not None:
+            orig = RadioUser.objects.get(pk=self.pk)
+            if orig.favorite == self.favorite:
+                same_favorite = True
+        super(RadioUser, self).save(*args, **kwargs)
+        if not same_favorite:
+            radio = self.radio
+            if self.favorite:
+                radio.favorites += 1
+            else:
+                radio.favorites -= 1
+                if radio.favorites < 0:
+                    radio.favorites = 0
+            radio.save()
 
 
 

@@ -68,7 +68,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = Authorization()
@@ -107,7 +107,7 @@ class SelectedRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'selected_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -134,7 +134,7 @@ class FavoriteRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -161,7 +161,7 @@ class FriendRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'friend_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -538,5 +538,49 @@ class RadioPlaylistResource(ModelResource):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioPlaylistResource, self).dispatch(request_type, request, **kwargs)
+    
+    
+    
+    
+    
+class LeaderBoardResource(ModelResource):
+    class Meta:
+        queryset = Radio.objects.all()
+        resource_name = 'leaderboard'
+        fields = ['id', 'name', 'favorites', 'leaderboard_rank']
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
+        
+    def get_object_list(self, request):
+        self.request_user = request.user
+        try:
+            user_radio = Radio.objects.get(creator=request.user)
+        except Radio.DoesNotExist:
+            return None
+        
+        higher_radios = Radio.objects.filter(leaderboard_rank__gt=user_radio.leaderboard_rank).order_by('-favorites')
+        lower_radios = Radio.objects.filter(leaderboard_rank__lte=user_radio.leaderboard_rank).exclude(id=user_radio.id).order_by('favorites')
+        
+        results = []
+        nb_higher_radios = min(3, higher_radios.count())
+        nb_lower_radios = min(3, lower_radios.count())
+        for i in range(higher_radios.count() - 1, higher_radios.count() - 1 - nb_higher_radios, -1):
+            results.append(higher_radios[i])
+        results.append(user_radio)
+        for i in range(nb_lower_radios):
+            results.append(lower_radios[i])
+        return results
+        
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
+    
+    def dehydrate(self, bundle):
+        radio = bundle.obj
+        mine = radio.creator == self.request_user
+        bundle.data['mine'] = mine
+        return bundle
 
 
