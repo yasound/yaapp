@@ -1,7 +1,7 @@
 from celery.task import task
 from django.db import transaction
 from struct import *
-from yabase.models import Radio, Playlist, SongMetadata, SongInstance
+from yabase.models import Radio, Playlist, SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
 import re
 import sys
@@ -9,6 +9,10 @@ import time
 import zlib
 from yaref.utils import get_simplified_name
 import string
+
+@task
+def leaderboard_update_task():
+    update_leaderboard()
     
 
 class BinaryData:

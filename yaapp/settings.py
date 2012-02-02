@@ -351,4 +351,8 @@ CELERYBEAT_SCHEDULE = {
         "task": "stats.task.radio_listening_stats_task",
         "schedule": crontab(minute=0, hour='*'),
     },
+    "leaderboard_update-every-hour": {
+        "task": "yasbase.task.leaderboard_update_task",
+        "schedule": crontab(minute=0, hour='*'),
+    },
 }
