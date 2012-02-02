@@ -375,6 +375,28 @@ class Radio(models.Model):
         self.current_connections = 0
         self.save()
         return stat
+    
+    def relative_leaderboard(self):
+        higher_radios = Radio.objects.filter(leaderboard_rank__lt=self.leaderboard_rank).order_by('leaderboard_rank')
+        lower_radios = Radio.objects.filter(leaderboard_rank__gte=self.leaderboard_rank).exclude(id=self.id).order_by('leaderboard_rank')
+        
+        print 'HIGHER: '
+        print higher_radios
+        print 'LOWER: '
+        print lower_radios
+        results = []
+        nb_higher_radios = min(3, higher_radios.count())
+        nb_lower_radios = min(3, lower_radios.count())
+        print 'higher: %d  lower: %d' % (nb_higher_radios, nb_lower_radios)
+        for i in range(higher_radios.count()- nb_higher_radios, higher_radios.count()):
+            print 'from higher append %s' % higher_radios[i] 
+            results.append(higher_radios[i])
+        results.append(self)
+        print 'append %s' % self
+        for i in range(nb_lower_radios):
+            print 'from lower append %s' % lower_radios[i]
+            results.append(lower_radios[i])
+        return results
 
 
     class Meta:
@@ -382,9 +404,7 @@ class Radio(models.Model):
         
         
 def update_leaderboard():
-    radios = Radio.objects.order_by('-favorites')
-    print radios
-    
+    radios = Radio.objects.order_by('-favorites')    
     current_rank = 1
     count = 0
     last_favorites = None

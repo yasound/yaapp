@@ -559,19 +559,7 @@ class LeaderBoardResource(ModelResource):
             user_radio = Radio.objects.get(creator=request.user)
         except Radio.DoesNotExist:
             return None
-        
-        higher_radios = Radio.objects.filter(leaderboard_rank__gt=user_radio.leaderboard_rank).order_by('-favorites')
-        lower_radios = Radio.objects.filter(leaderboard_rank__lte=user_radio.leaderboard_rank).exclude(id=user_radio.id).order_by('favorites')
-        
-        results = []
-        nb_higher_radios = min(3, higher_radios.count())
-        nb_lower_radios = min(3, lower_radios.count())
-        for i in range(higher_radios.count() - 1, higher_radios.count() - 1 - nb_higher_radios, -1):
-            results.append(higher_radios[i])
-        results.append(user_radio)
-        for i in range(nb_lower_radios):
-            results.append(lower_radios[i])
-        return results
+        return user_radio.relative_leaderboard()
         
     def obj_get_list(self, request=None, **kwargs):
         # Filtering disabled for brevity...
