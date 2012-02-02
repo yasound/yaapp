@@ -85,6 +85,8 @@ class Command(BaseCommand):
                         elapsed = time() - start
                         logger.info("processed %d/%d (%d%%) in % seconds" % (i, count, 100*i/count, str(elapsed)))
                         start = time()
+                mongo.commit_bulk_insert(bulk)
+        
         logger.info("building mongodb index")
         mongo.build_index()      
         logger.info("done")
