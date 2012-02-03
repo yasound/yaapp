@@ -1,6 +1,6 @@
 from celery.result import AsyncResult
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseNotAllowed, HttpResponseBadRequest
+    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -31,12 +31,13 @@ def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
     
     
 def find_fuzzy_json(request):
-    name = request.REQUEST.get('name')
-    album = request.REQUEST.get('album')
-    artist = request.REQUEST.get('artist')
+    name = request.REQUEST.get('name', '')
+    album = request.REQUEST.get('album', '')
+    artist = request.REQUEST.get('artist', '')
     key = request.REQUEST.get('key')
     if key != FUZZY_KEY:
-        raise Http404
+        return HttpResponseForbidden()
+    
     song = YasoundSong.objects.find_fuzzy(name, album, artist)
     if song:
         db_id = song['db_id']
