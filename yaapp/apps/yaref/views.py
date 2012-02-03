@@ -32,9 +32,9 @@ def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
 @csrf_exempt
 def find_fuzzy_json(request):
     decoded = simplejson.loads(request.raw_post_data)
-    name = decoded['name']
-    album = decoded['album']
-    artist = decoded['artist']
+    name = decoded['name'].decode('utf-8', 'ignore')
+    album = decoded['album'].decode('utf-8', 'ignore')
+    artist = decoded['artist'].decode('utf-8', 'ignore')
     key = decoded['key']
     if key != FUZZY_KEY:
         return HttpResponseForbidden()
