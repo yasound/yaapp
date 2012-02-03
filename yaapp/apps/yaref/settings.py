@@ -11,3 +11,5 @@ FUZZY_COMMON_WORDS = ("the",
                       'les',
                       'el',
                       'los')
+
+FUZZY_KEY='ksdjwIueudfnksx(@38*2jdnjweapnfnhshdf'

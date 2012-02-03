@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from forms import SearchForm
 from models import YasoundSong
 from time import time
-
+from settings import FUZZY_KEY
+from django.utils import simplejson
 @login_required
 def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
     form = SearchForm(request.REQUEST)
@@ -29,3 +30,19 @@ def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
     }, context_instance=RequestContext(request))    
     
     
+def find_fuzzy_json(request):
+    name = request.REQUEST.get('name')
+    album = request.REQUEST.get('album')
+    artist = request.REQUEST.get('artist')
+    key = request.REQUEST.get('key')
+    if key != FUZZY_KEY:
+        raise Http404
+    song = YasoundSong.objects.find_fuzzy(name, album, artist)
+    if song:
+        db_id = song['db_id']
+    else:
+        db_id = None
+    to_json = {
+        "db_id": db_id,
+    }
+    return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
