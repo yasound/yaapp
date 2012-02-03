@@ -29,12 +29,13 @@ def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
         "form": form,
     }, context_instance=RequestContext(request))    
     
-    
+@csrf_exempt
 def find_fuzzy_json(request):
-    name = request.REQUEST.get('name', '')
-    album = request.REQUEST.get('album', '')
-    artist = request.REQUEST.get('artist', '')
-    key = request.REQUEST.get('key')
+    decoded = simplejson.loads(request.raw_post_data)
+    name = decoded['name']
+    album = decoded['album']
+    artist = decoded['artist']
+    key = decoded['key']
     if key != FUZZY_KEY:
         return HttpResponseForbidden()
     
