@@ -1,12 +1,19 @@
 from celery.task import task
 from django.db import transaction
 from struct import *
-from yabase.models import Radio, Playlist, SongMetadata, SongInstance
+from yabase.models import Radio, Playlist, SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
 import re
 import sys
 import time
 import zlib
+from yaref.utils import get_simplified_name
+import string
+
+@task
+def leaderboard_update_task():
+    update_leaderboard()
+    
 
 class BinaryData:
     def __init__(self, data):
@@ -83,14 +90,14 @@ def process_playlists_exec(radio, content_compressed):
 
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
-            album_name_simplified = pattern.sub('', album_name).lower()
+            album_name_simplified = get_simplified_name(album_name)
         elif tag == ARTIST_TAG:
             artist_name = data.get_string()
-            artist_name_simplified = pattern.sub('', artist_name).lower()
+            artist_name_simplified = get_simplified_name(artist_name)
         elif tag == SONG_TAG:
             order = data.get_int32()
             song_name = data.get_string()
-            song_name_simplified = pattern.sub('', song_name).lower()
+            song_name_simplified = get_simplified_name(song_name)
 
             raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE name=%s and artist_name=%s and album_name=%s",
                                            [song_name,
@@ -112,26 +119,23 @@ def process_playlists_exec(radio, content_compressed):
                 song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
 
             if song_instance.song == None:
-                song_name_simplified = pattern.sub('', song_name).lower()
+                song_name_simplified = get_simplified_name(song_name)
                 count += 1
-#                    res = YasoundSong.objects.filter(name_simplified=song_name_simplified, artist_name_simplified=artist_name_simplified, album_name_simplified=album_name_simplified)
-                raw = YasoundSong.objects.raw("SELECT * from yasound_song WHERE name=%s and artist_name=%s and album_name=%s",
-                                           [song_name,
-                                            artist_name,
-                                            album_name])
-                for yasound_song in raw:
-                    song_instance.song = yasound_song.id
-                    found += 1
-                    break
-                else:
+                # let's go fuzzy
+                mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified.decode('utf-8', 'ignore'), 
+                                                           album_name_simplified.decode('utf-8', 'ignore'), 
+                                                           artist_name_simplified.decode('utf-8', 'ignore'))
+                if not mongo_doc:
                     notfound += 1
-                    pass
+                else:
+                    song_instance.song = mongo_doc['db_id']
+                    found +=1
 
                 song_instance.save()
 
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
     if songs_ok.count() > 0:
-        radio.valid = True
+        radio.ready = True
         radio.save()
         
     print 'found: %d - not found: %d - total: %d' % (found, notfound, count)

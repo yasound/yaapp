@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_head %}
+{% endblock %}
+{% block head_title %}{% trans "Fuzzy search" %}{% endblock %}
+{% block body %}
+<div class='container'>
+
+    <div class='row'>
+        <div class='span16'>
+            <div class="hero-unit">
+                <h1>{% trans "Fuzzy search" %}</h1>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='span16'>
+	      <form action='' method='get'>
+	        <fieldset>
+	          <legend>Fill in form</legend>
+	          <div class="clearfix">
+	            {{ form.as_p }}
+	          </div><!-- /clearfix -->
+				<div class="actions">
+				<input class="btn primary" type="submit" value="Search">
+				<button class="btn" type="reset">Cancel</button>
+				</div>	          
+	        </fieldset>
+           </form>
+	        </div>
+    </div>
+    <div class='row'>
+        <div class='span16'>
+        <pre>{{ song }}</pre>
+        </div>
+        <div class='span16'>
+        <pre>Search took {{ elapsed }} seconds</pre>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

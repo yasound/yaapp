@@ -17,6 +17,8 @@ DJANGO_MODE = os.environ.get('DJANGO_MODE', False)
 PRODUCTION_MODE = ( DJANGO_MODE == 'production' )
 DEVELOPMENT_MODE = ( DJANGO_MODE == 'development' )
 LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
+TEST_MODE = 'test' in sys.argv
+USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -31,59 +33,61 @@ MANAGERS = ADMINS
 if LOCAL_MODE:
     # Celery config:
     BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-    CELERY_IMPORTS = ("yabase.task", )
+    CELERY_IMPORTS = ("yabase.task", "stats.task", )
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10
 
     # Databases config:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
-            'USER': '',                      # Not used with sqlite3.
-            'PASSWORD': '',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        },
-#        'yasound': {
-#            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-#            'USER': 'root',                      # Not used with sqlite3.
-#            'PASSWORD': 'root',                  # Not used with sqlite3.
-#            'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
-#            'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
-#        }
-         'yasound': {
-             'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-             'NAME': os.path.join(PROJECT_PATH, 'yasound_db.dat'),                      # Or path to database file if using sqlite3.
-             'USER': '',                      # Not used with sqlite3.
-             'PASSWORD': '',                  # Not used with sqlite3.
-             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-         }
-#        'yasound': {
-#            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-#            'USER': 'yaapp',                      # Not used with sqlite3.
-#            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
-#            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
-#            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
-#        }
-
-
-    }
+    if not USE_MYSQL_IN_LOCAL_MODE:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+                'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
+                'USER': '',                      # Not used with sqlite3.
+                'PASSWORD': '',                  # Not used with sqlite3.
+                'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+                'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            },
+             'yasound': {
+                 'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+                 'NAME': os.path.join(PROJECT_PATH, 'yasound_db.dat'),                      # Or path to database file if using sqlite3.
+                 'USER': '',                      # Not used with sqlite3.
+                 'PASSWORD': '',                  # Not used with sqlite3.
+                 'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+                 'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+             }
+        }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+                'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
+                'USER': '',                      # Not used with sqlite3.
+                'PASSWORD': '',                  # Not used with sqlite3.
+                'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+                'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            },
+            'yasound': {
+                'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+                'NAME': 'yasound',                      # Or path to database file if using sqlite3.
+                'USER': 'root',                      # Not used with sqlite3.
+                'PASSWORD': 'root',                  # Not used with sqlite3.
+                'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+                'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
+            }
+        }
 else:
     # Celery config:
     if False:
         BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-        CELERY_IMPORTS = ("yabase.task", )
+        CELERY_IMPORTS = ("yabase.task","stats.task" )
         CELERY_RESULT_BACKEND = "database"
         CELERY_RESULT_DBURI = "postgresql://yaapp:N3EDTnz945FSh6D@yasound.com/yaapp"
         CELERY_TASK_RESULT_EXPIRES = 10
     else:
         CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
-        CELERY_IMPORTS = ("yabase.task", )
+        CELERY_IMPORTS = ("yabase.task", "stats.task")
         #BROKER_HOST = "127.0.0.1"
         #BROKER_PORT = 5672
         #BROKER_VHOST = "prod"
@@ -113,12 +117,12 @@ else:
             'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
         }
-
     }
 
 # As we use a multi database config, we need a working database router:
-DATABASE_ROUTERS = ['yabase.router.YaappRouter']
-if 'test' in sys.argv:
+if not TEST_MODE:
+    DATABASE_ROUTERS = ['yabase.router.YaappRouter']
+else:
     # the test router enable syncdb for yasound database
     DATABASE_ROUTERS = ['yabase.router.YaappRouterForTest']
 
@@ -238,11 +242,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'django_extensions',
     'south',
     'account',
     'wall',
     'yabase',
     'yaref',
+    'stats',
     'tastypie',
     "djkombu",
     'djcelery',
@@ -305,6 +311,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yabase': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     }
 }
 
@@ -323,3 +334,25 @@ elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8001/'
  
 SOUTH_TESTS_MIGRATE=False   
+
+from pymongo.connection import Connection
+from pymongo import DESCENDING
+import gridfs
+MONGO_DB = Connection().yasound
+
+
+
+from celery.schedules import crontab
+#from stats.task import radio_listening_stats_task
+
+CELERYBEAT_SCHEDULE = {
+    # Executes every hour
+    "radio-listening-stat-every-hour": {
+        "task": "stats.task.radio_listening_stats_task",
+        "schedule": crontab(minute=0, hour='*'),
+    },
+    "leaderboard_update-every-hour": {
+        "task": "yasbase.task.leaderboard_update_task",
+        "schedule": crontab(minute=0, hour='*'),
+    },
+}

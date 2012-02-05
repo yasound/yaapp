@@ -68,7 +68,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = Authorization()
@@ -107,7 +107,7 @@ class SelectedRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'selected_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -134,7 +134,7 @@ class FavoriteRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -161,7 +161,7 @@ class FriendRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.all()
         resource_name = 'friend_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -182,49 +182,54 @@ class FriendRadioResource(ModelResource):
         return object_list.filter(creator__in=user.userprofile.friends.all())
 
 
-#class WallPostAuthorization(Authorization):
-#    def is_authorized(self, request, object=None):
-#        print 'WallPostAuthorization'
-#        print request
-#        print 'prout'
-#        data = request.POST['']
-#        print data
-#        dict = json.load(data)
-#        print dict
-#        print hasattr(request, 'user')
-##        print 'user' in request.POST
-##        print request.POST['user']
-##        print request.user
-#        
-#        if 'user' in request.POST and request.POST['user'] != request.user:
-#            print 'should not post'
-#        print request
-#        return True
-
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
     user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
     class Meta:
         queryset = WallEvent.objects.all()
         resource_name = 'wall_event'
-        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization= Authorization()
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['post']
+        
+    def obj_create(self, bundle, request=None, **kwargs):
+        if bundle.data['type'] != yabase_settings.EVENT_MESSAGE:
+            print 'can only post Message events'
+            return None
+        
+        radio_uri = bundle.data['radio']
+        elements = radio_uri.split('/')
+        radio_id = int(elements[len(elements)-2])
+        try:
+            radio = Radio.objects.get(id=radio_id)
+        except Radio.DoesNotExist:
+            return None
+        
+        song_events = WallEvent.objects.filter(radio=radio, type=yabase_settings.EVENT_SONG).order_by('-start_date').all()
+        if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
+            s = radio.current_song
+            song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
+            song_event.start_date = radio.current_song_play_date
+            song_event.save()
+
+        wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
+        wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event
+        wall_event_resource.obj.save()
+        return wall_event_resource
 
 class RadioWallEventResource(ModelResource):
-    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
-    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
+    radio = fields.ForeignKey(RadioResource, 'radio', full=False)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
+#    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date')
         resource_name = 'wall'
-        fields = ['id', 'type', 'start_date', 'end_date', 'song', 'old_id', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'user_picture', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization = ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -235,18 +240,31 @@ class RadioWallEventResource(ModelResource):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioWallEventResource, self).dispatch(request_type, request, **kwargs)
+    
+    def dehydrate(self, bundle):
+        event = bundle.obj
+        user_id = None
+        song_id = None
+        if event.user:
+            user_id = event.user.id
+        if event.song:
+            song_id = event.song.id
+        bundle.data['radio_id'] = event.radio.id
+        bundle.data['user_id'] = user_id
+        bundle.data['song_id'] = song_id
+        return bundle
 
 
 class RadioNextSongsResource(ModelResource):
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     class Meta:
         queryset = NextSong.objects.order_by('order')
         resource_name = 'next_songs'
-        fields = ['id', 'radio', 'song', 'order']
+        fields = ['id', 'radio', 'order']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -256,6 +274,11 @@ class RadioNextSongsResource(ModelResource):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioNextSongsResource, self).dispatch(request_type, request, **kwargs)
+    
+    def dehydrate(self, bundle):
+        desc_dict = bundle.obj.song.song_description
+        bundle.data['song'] = desc_dict
+        return bundle
 
 class NextSongResource(ModelResource):
     song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
@@ -268,6 +291,18 @@ class NextSongResource(ModelResource):
         authorization= Authorization()
         authentication = ApiKeyAuthentication()
         allowed_methods = ['post', 'put', 'delete']
+        
+    def obj_delete(self, request=None, **kwargs):
+        try:
+            obj = self.get_object_list(request).get(**kwargs)
+        except ObjectDoesNotExist:
+            pass
+        
+        radio = obj.radio
+        super(NextSongResource, self).obj_delete(request, **kwargs)
+        radio.fill_next_songs_queue()
+        
+        
 
 
 class RadioLikerResource(ModelResource):    
@@ -401,36 +436,10 @@ class RadioUserResource(ModelResource):
         
         resource = RadioUserResource() 
         return resource.get_detail(request, radio=radio, user=request.user)
-#        print 'radio id %d' % kwargs['radio_id'] 
-
-
-
-
-
-class PlayedSongResource(ModelResource):
-    radio = fields.ForeignKey(RadioResource, 'radio', full=True)
-    song = fields.ForeignKey(SongInstanceResource, 'song', null=True, full=True)
-
-    class Meta:
-        queryset = WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).order_by('-start_date')
-        resource_name = 'songs'
-        fields = ['id', 'start_date', 'end_date', 'radio', 'song']
-        include_resource_uri = False
-        filtering = {
-            'radio': 'exact',
-    }
-        allowed_methods = ['get']
-        authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
-    
-    def dispatch(self, request_type, request, **kwargs):
-        radio = kwargs.pop('radio')
-        kwargs['radio'] = get_object_or_404(Radio, id=radio)
-        return super(PlayedSongResource, self).dispatch(request_type, request, **kwargs)
 
    
 class SongUserResource(ModelResource): 
-    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
+#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)
     user = fields.ForeignKey(UserResource, 'user', full=True)   
     class Meta:
         queryset = SongUser.objects.all()
@@ -459,6 +468,12 @@ class SongUserResource(ModelResource):
         
         resource = SongUserResource() 
         return resource.get_detail(request, song=song, user=request.user)
+    
+    def dehydrate(self, bundle):
+        song_user = bundle.obj
+        song_desc = song_user.song.song_description
+        bundle.data['song'] = song_desc
+        return bundle
 
 
 
@@ -480,5 +495,37 @@ class RadioPlaylistResource(ModelResource):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioPlaylistResource, self).dispatch(request_type, request, **kwargs)
+    
+    
+    
+    
+    
+class LeaderBoardResource(ModelResource):
+    class Meta:
+        queryset = Radio.objects.all()
+        resource_name = 'leaderboard'
+        fields = ['id', 'name', 'favorites', 'leaderboard_rank']
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
+        
+    def get_object_list(self, request):
+        self.request_user = request.user
+        try:
+            user_radio = Radio.objects.get(creator=request.user)
+        except Radio.DoesNotExist:
+            return None
+        return user_radio.relative_leaderboard()
+        
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
+    
+    def dehydrate(self, bundle):
+        radio = bundle.obj
+        mine = radio.creator == self.request_user
+        bundle.data['mine'] = mine
+        return bundle
 
 

@@ -13,3 +13,5 @@ facepy
 django-test-utils
 -e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
 pyyaml
+pymongo
+django-extensions

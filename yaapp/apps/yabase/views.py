@@ -14,6 +14,7 @@ import json
 import settings as yabase_settings
 import time
 from django.contrib.auth.models import AnonymousUser
+from decorators import unlock_radio_on_exception
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -261,10 +262,24 @@ def add_song_to_favorites(request, radio_id):
     response = json.dumps(result)
     return HttpResponse(response)
 
+
+def get_song_status(request, song_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    song = get_object_or_404(SongInstance, id=song_id)
+    status_dict = song.song_status
+    res = json.dumps(status_dict)
+    return HttpResponse(res)
+
+
+@unlock_radio_on_exception
 @csrf_exempt
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
-    
     i = 0
     while radio.is_locked:
         time.sleep(3)
@@ -286,46 +301,101 @@ def get_next_song(request, radio_id):
     return HttpResponse(song.filename)
 
 @csrf_exempt
+def connect_to_radio(request, radio_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    radio = get_object_or_404(Radio, id=radio_id)
+    radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user.connected = True
+    radio_user.save()
+    
+    res = '%s connected to "%s"' % (request.user, radio)
+    return HttpResponse(res)
+    
+@csrf_exempt
+def disconnect_from_radio(request, radio_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    radio = get_object_or_404(Radio, id=radio_id)
+    radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user.connected = False
+    radio_user.save()
+    
+    res = '%s disconnected from "%s"' % (request.user, radio)
+    return HttpResponse(res)
+
+
+
+CLIENT_ADDRESS_PARAM_NAME = 'address'
+
+@csrf_exempt
 def start_listening_to_radio(request, radio_uuid):
-    check_api_key_Authentication(request) # set request.user
+    check_api_key_Authentication(request)
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio.user_started_listening(request.user)
     
-    if not request.user.is_anonymous():
-        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN)
-        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
+    if not request.user.is_anonymous:
+        client = request.user
     else:
-        if not request.GET.has_key('address'):
-            return HttpResponseBadRequest()
-        address = request.GET['address']
-        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STARTED_LISTEN, text=address)
-        res = '%s stopped listening to %s' % (event.text, event.radio.name)
-
+        if request.GET.has_key(CLIENT_ADDRESS_PARAM_NAME):
+            client = request.GET[CLIENT_ADDRESS_PARAM_NAME]
+        else:
+            client = 'anonymous'
+        
+    res = '%s is listening to "%s"' % (client, radio)
     return HttpResponse(res)
 
 @csrf_exempt
 def stop_listening_to_radio(request, radio_uuid):
-    check_api_key_Authentication(request) # set request.user
+    check_api_key_Authentication(request)
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
+        
+    LISTENING_DURATION_PARAM_NAME = 'listening_duration'
+    listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
     
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio.user_stopped_listening(request.user, listening_duration)
     
-    if not request.user.is_anonymous():
-        event = WallEvent.objects.create(user=request.user, radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN)
-        res = '%s stopped listening to %s' % (event.user.userprofile.name, event.radio.name)
+    if not request.user.is_anonymous:
+        client = request.user
     else:
-        if not request.GET.has_key('address'):
-            return HttpResponseBadRequest()
-        address = request.GET['address']
-        event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_STOPPED_LISTEN, text=address)
-        res = '%s stopped listening to %s' % (event.text, event.radio.name)
-
+        if request.GET.has_key(CLIENT_ADDRESS_PARAM_NAME):
+            client = request.GET[CLIENT_ADDRESS_PARAM_NAME]
+        else:
+            client = 'anonymous'
+        
+    res = '%s stopped listening to "%s" (listening duration = %d)' % (client, radio, listening_duration)
     return HttpResponse(res)
+
+def get_current_song(request, radio_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    radio = get_object_or_404(Radio, id=radio_id)
+    song_instance = radio.current_song
+    song_dict = song_instance.song_description
+    if not song_dict:
+        return HttpResponseNotFound()
+    
+    song_json = json.dumps(song_dict)
+    return HttpResponse(song_json)
 
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):

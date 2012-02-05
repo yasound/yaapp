@@ -7,9 +7,10 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, RadioListenerResource, \
-    PlayedSongResource, WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource
+    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource, LeaderBoardResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
+from stats.api import RadioListeningStatResource
 from yabase.models import Radio
 from os import path
 # Uncomment the next two lines to enable the admin:
@@ -30,6 +31,8 @@ api.register(SignupResource())
 api.register(LoginSocialResource())
 api.register(NextSongResource())
 api.register(FriendResource())
+api.register(RadioListeningStatResource())
+api.register(LeaderBoardResource())
 
 radio_next_songs = RadioNextSongsResource()
 wall_event = RadioWallEventResource()
@@ -37,7 +40,6 @@ radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
 connected_users = RadioUserConnectedResource()
 listeners = RadioListenerResource()
-played_song = PlayedSongResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
 radio_enabled_playlist = RadioPlaylistResource()
@@ -73,18 +75,22 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(listeners.urls)),
-    (r'^api/v1/radio/(?P<radio>\d+)/', include(played_song.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/', include(radio_user.urls)),
     (r'^api/v1/', include(song_user.urls)),
     url(r'^api/v1/song/(?P<song_id>\d+)/liker/$', 'yabase.views.like_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/neutral/$', 'yabase.views.neutral_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/disliker/$', 'yabase.views.dislike_song'),
+    url(r'^api/v1/song/(?P<song_id>\d+)/status/$', 'yabase.views.get_song_status'),
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/connect/$', 'yabase.views.connect_to_radio'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/disconnect/$', 'yabase.views.disconnect_from_radio'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     (r'^api/', include(api.urls)),
-    (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen')
+    (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
+    (r'^yaref/', include('yaref.urls'))
     # The normal jazz here, then...
 )
 
