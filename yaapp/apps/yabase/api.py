@@ -374,7 +374,7 @@ class RadioUserConnectedResource(ModelResource):
         return super(RadioUserConnectedResource, self).dispatch(request_type, request, **kwargs)
     
     def get_object_list(self, request):
-        return super(RadioUserConnectedResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__connected=True)
+        return super(RadioUserConnectedResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__connected=True).order_by('id')
     
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
