@@ -357,4 +357,8 @@ CELERYBEAT_SCHEDULE = {
         "task": "yabase.task.leaderboard_update_task",
         "schedule": crontab(minute=0, hour='*'),
     },
+    "build-mongodb-index": {
+        "task": "yaref.task.build_mongodb_index",
+        "schedule": crontab(minute=0, hour='*'),
+    },
 }
