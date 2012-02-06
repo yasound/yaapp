@@ -254,6 +254,7 @@ INSTALLED_APPS = (
     'djcelery',
     'taggit',
     'test_utils',
+    'yagraph'
 )
 
 ugettext = lambda s: s
