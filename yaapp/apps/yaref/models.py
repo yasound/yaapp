@@ -1,14 +1,63 @@
+"""
+Contains models related to yasound database (ie all the songs)
+"""
 from django.db import models
 from django.conf import settings
 from fuzzywuzzy import fuzz
 import mongo
 import logging
+from time import time
 import utils as yaref_utils
 logger = logging.getLogger("yaapp.yaref")
 
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
+
+def build_mongodb_index(upsert=False, erase=False):
+    """
+    build mongodb fuzzy index : if upsert=False then document is inserted without checking for existent one
+    """
+    if erase:
+        logger.info("deleting index")
+        mongo.erase_index()
+    
+    if upsert:
+        logger.info("using upsert")
+    else:
+        logger.info("not using upsert")
+
+    songs = YasoundSong.objects.all()
+    last_indexed = YasoundSong.objects.last_indexed()
+    if last_indexed:
+        logger.info("last indexed = %d" % (last_indexed.id))
+        songs = songs.filter(id__gt=last_indexed.id)
+    count = songs.count()
+    logger.info("processing %d songs" % (count))
+    if count > 0:
+        start = time()
+        if upsert:
+            for i, song in enumerate(yaref_utils.queryset_iterator(songs)):
+                song.build_fuzzy_index(upsert=True)
+                if i % 10000 == 0:
+                    elapsed = time() - start
+                    logger.info("processed %d/%d (%d%%) in %s seconds" % (i, count, 100*i/count, str(elapsed)))
+                start = time()
+        else:
+            bulk = mongo.begin_bulk_insert()
+            for i, song in enumerate(yaref_utils.queryset_iterator(songs)):
+                bulk.append(song.build_fuzzy_index(upsert=False, insert=False))
+                if i % 10000 == 0:
+                    mongo.commit_bulk_insert(bulk)
+                    bulk = mongo.begin_bulk_insert()
+                    elapsed = time() - start
+                    logger.info("processed %d/%d (%d%%) in % seconds" % (i, count, 100*i/count, str(elapsed)))
+                    start = time()
+            mongo.commit_bulk_insert(bulk)
+    
+    logger.info("building mongodb index")
+    mongo.build_index()      
+    logger.info("done")    
 
 class YasoundArtist(models.Model):
     id = models.IntegerField(primary_key=True)
