@@ -341,6 +341,8 @@ import gridfs
 MONGO_DB = Connection().yasound
 
 
+ALBUM_COVER_URL = MEDIA_URL + 'covers/albums/'
+
 
 from celery.schedules import crontab
 #from stats.task import radio_listening_stats_task

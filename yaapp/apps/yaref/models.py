@@ -1,7 +1,9 @@
 from django.db import models
+from django.conf import settings
 from fuzzywuzzy import fuzz
 import mongo
 import logging
+import utils as yaref_utils
 logger = logging.getLogger("yaapp.yaref")
 
 import django.db.models.options as options
@@ -31,6 +33,14 @@ class YasoundAlbum(models.Model):
     name = models.CharField(max_length=255)
     name_simplified = models.CharField(max_length=255)
     cover_filename = models.CharField(max_length=45, null=True, blank=True)
+    
+    @property
+    def cover_url(self):
+        if not self.cover_filename:
+            return None
+        
+        return '%s%s' % (settings.ALBUM_COVER_URL,
+                         yaref_utils.convert_filename_to_filepath(self.cover_filename))
     
     class Meta:
         db_table = u'yasound_album'
@@ -164,6 +174,11 @@ class YasoundSong(models.Model):
     allowed_countries = models.CharField(max_length=255, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
+
+    @property
+    def cover_url(self):
+        return None
+        
 
     def build_fuzzy_index(self, upsert=False, insert=True):
         return mongo.add_song(self, upsert, insert)
