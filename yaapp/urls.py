@@ -90,7 +90,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     (r'^api/', include(api.urls)),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
-    (r'^yaref/', include('yaref.urls'))
+    (r'^yaref/', include('yaref.urls')),
+    url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
     # The normal jazz here, then...
 )
 

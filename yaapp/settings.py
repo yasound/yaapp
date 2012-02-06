@@ -269,6 +269,7 @@ INSTALLED_APPS = (
     'taggit',
     'test_utils',
     #'django-iphone-push',
+    'yagraph'
 )
 
 ugettext = lambda s: s
