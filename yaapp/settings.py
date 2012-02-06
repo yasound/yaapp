@@ -7,6 +7,7 @@ import djcelery
 djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
+APNS_CERTIFICATE_PATH = os.path.join(PROJECT_PATH, 'certificates/apns-dev.pem')
 
 # Theses settings are different with env variables
 #
@@ -23,6 +24,16 @@ USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# Configuration for connecting to the local pyapns daemon,
+# including our certificate for pushing notifications to
+# mobile terminals via APNS.
+PYAPNS_CONFIG = {
+    'HOST': 'http://localhost:7077/',
+    'TIMEOUT': 15,
+    'INITIAL': [
+        ('MyAppName', 'path/to/cert/apns_sandbox.pem', 'sandbox'),
+    ]
+}
 
 ADMINS = (
     ('Sebastien Metrot', 'seb@yasound.com'),
@@ -254,6 +265,7 @@ INSTALLED_APPS = (
     'djcelery',
     'taggit',
     'test_utils',
+    #'django-iphone-push',
 )
 
 ugettext = lambda s: s
