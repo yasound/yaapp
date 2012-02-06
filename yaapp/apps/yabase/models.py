@@ -74,9 +74,9 @@ class SongInstance(models.Model):
         desc_dict['artist'] = song.artist_name
         desc_dict['album'] = song.album_name
         if song.album:
-            cover = song.album.cover_filename
+            cover = song.album.cover_url
         elif song.cover_filename:
-            cover = song.cover_filename
+            cover = song.cover_url
         else:
             cover = None
         desc_dict['cover'] = cover
