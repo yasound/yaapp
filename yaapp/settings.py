@@ -31,7 +31,10 @@ PYAPNS_CONFIG = {
     'HOST': 'http://localhost:7077/',
     'TIMEOUT': 15,
     'INITIAL': [
-        ('MyAppName', 'path/to/cert/apns_sandbox.pem', 'sandbox'),
+        #('DGQ2ENLVWP.com.yasound.yasound', os.path.join(PROJECT_PATH, 'certificates/apns-dev.pem'), 'sandbox'),
+        #('com.yasound.yasound', os.path.join(PROJECT_PATH, 'certificates/apns-dev.pem'), 'sandbox'),
+        #('DGQ2ENLVWP.com.yasound.yasound', os.path.join(PROJECT_PATH, 'certificates/apns-prod.pem'), 'production'),
+        ('yasound', os.path.join(PROJECT_PATH, 'certificates/apns-prod.pem'), 'production'),
     ]
 }
 
