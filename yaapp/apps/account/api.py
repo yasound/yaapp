@@ -176,6 +176,7 @@ class SocialAuthentication(Authentication):
                 profile.name = name
                 profile.save()
                 profile.scan_friends()
+                profile.update_with_social_picture()
                 
                 request.user = user
                 
@@ -218,6 +219,8 @@ class SocialAuthentication(Authentication):
                 profile.name = name
                 profile.save()
                 profile.scan_friends()
+                profile.update_with_social_picture()
+                
                 request.user = user
                 
                 radio = Radio.objects.filter(creator=user.id)[0]

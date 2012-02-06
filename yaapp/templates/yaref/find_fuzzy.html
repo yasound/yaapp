@@ -8,17 +8,17 @@
 <div class='container'>
 
     <div class='row'>
-        <div class='span16'>
+        <div class='span12'>
             <div class="hero-unit">
                 <h1>{% trans "Fuzzy search" %}</h1>
             </div>
         </div>
     </div>
     <div class='row'>
-        <div class='span16'>
-	      <form action='' method='get'>
+        <div class='span12'>
+	      <form action='' class="well form-search" method='get'>
+              <legend>Fill in form</legend>
 	        <fieldset>
-	          <legend>Fill in form</legend>
 	          <div class="clearfix">
 	            {{ form.as_p }}
 	          </div><!-- /clearfix -->
@@ -31,13 +31,15 @@
 	        </div>
     </div>
     <div class='row'>
-        <div class='span16'>
+        <div class='span12'>
         <pre>{{ song }}</pre>
         </div>
-        <div class='span16'>
+   </div>
+   <div class='row'>
+        <div class='span12'>
         <pre>Search took {{ elapsed }} seconds</pre>
         </div>
-    </div>
-
+   </div>
 </div>
+
 {% endblock %}

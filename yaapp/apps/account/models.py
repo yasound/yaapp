@@ -13,6 +13,8 @@ import json
 import urllib
 import uuid
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+from django.core.files.base import ContentFile
+import datetime
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
@@ -143,6 +145,23 @@ class UserProfile(models.Model):
             friends = User.objects.filter(userprofile__twitter_uid__in=friends_ids)
             self.friends = friends
             self.save()
+            
+    def update_with_facebook_picture(self):
+        if self.account_type != account_settings.ACCOUNT_TYPE_FACEBOOK:
+            return
+        graph = GraphAPI(self.facebook_token)
+        img = graph.get('me/picture?type=square')
+        f = ContentFile(img)
+        filename = unicode(datetime.datetime.now()) + '.jpg' # set 'jpg' extension by default (for now, don't know how to know which image format we get)
+        self.picture.save(filename, f, save=True)
+        radio = Radio.objects.get(creator=self.user)
+        radio.picture = self.picture
+        radio.save()
+        
+    def update_with_social_picture(self):
+        if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+            self.update_with_facebook_picture()
+        
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
