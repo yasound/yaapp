@@ -58,6 +58,11 @@ def set_radio_picture(request, radio_id):
     filename = unicode(d) + '.png'
 
     radio.picture.save(filename, f, save=True)
+    
+    # for now, set also the UserProfile picture
+    userprofile = radio.creator.userprofile
+    userprofile.picture = radio.picture
+    userprofile.save()
 
     res = 'picture OK for radio: %s' % unicode(radio)
     return HttpResponse(res)
