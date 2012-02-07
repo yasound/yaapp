@@ -55,10 +55,12 @@ def process_playlists_exec(radio, content_compressed):
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
     SONG_TAG = 'SONG'
-
+    UUID_TAG = 'UUID'
+    
     artist_name = None
     album_name = None
     playlist = None
+    uuid = ''
 
     pattern = re.compile('[\W_]+')
 
@@ -71,10 +73,12 @@ def process_playlists_exec(radio, content_compressed):
 
     while not data.is_done():
         tag = data.get_tag()
-        if tag == PLAYLIST_TAG:
+        if tag == UUID_TAG:
+            uuid = data.get_string()
+            
+        elif tag == PLAYLIST_TAG:
             playlist_name = data.get_string()
-            source_name = 'test_playlist_file'
-            playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=source_name)
+            playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=uuid)
 #            if created:
 #               print 'playlist created '
 #                print playlist
