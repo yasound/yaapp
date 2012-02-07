@@ -1,0 +1,51 @@
+{% extends "web/base.html" %} 
+{% load i18n %} 
+{% block extra_head %}
+    <script type="text/javascript">
+        var g_radio_url = '{{ radio_url }}';
+        var lbl_mute = "{% trans 'Mute' %}";
+        var lbl_unmute = "{% trans 'Unmute' %}";
+        var lbl_play = "{% trans 'Play' %}";
+        var lbl_stop = "{% trans 'Stop' %}";
+    </script>
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
+    <script type="text/javascript" src="/media/js/listen.js"></script>
+    
+{% endblock %}
+
+{% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
+
+
+{% block menu %}
+    {% include "web/menu.html" with selected="selection" %}
+{% endblock %}
+
+{% block content %}
+	<form class="well" action='' method='get'>
+	   <div class='controls'>
+        {{ form }}
+        </div>
+        
+        <button class="btn" type="submit">Filter</button>
+    </form>
+
+	<h2>{% trans "Friends" %}</h2>
+	<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+	    <th>{% trans "Name" %}</th>
+        <th>{% trans "Genre" %}</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for radio in radios %}
+	   <tr>
+	       <td><a href="{% url web_favorite radio.uuid %}">{{ radio }}</a></td>
+	       <td>{{ radio.genre }}</td>
+	   </tr>
+	{% endfor %}
+	</tbody>
+	</table>
+{% endblock %}
+

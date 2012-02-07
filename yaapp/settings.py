@@ -8,6 +8,10 @@ djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
 
+IPHONE_APN_PUSH_CERT = os.path.join(PROJECT_PATH, "certificates/dev.pem")
+#IPHONE_APN_PUSH_CERT = os.path.join(PROJECT_PATH, "certificates/prod.pem")
+
+
 # Theses settings are different with env variables
 #
 # We wait a DJANGO_MODE environment variable with values :
@@ -22,7 +26,6 @@ USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
 
 ADMINS = (
     ('Sebastien Metrot', 'seb@yasound.com'),
@@ -254,6 +257,7 @@ INSTALLED_APPS = (
     'djcelery',
     'taggit',
     'test_utils',
+    #'django-iphone-push',
     'yagraph'
 )
 

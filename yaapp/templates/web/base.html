@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% load i18n %} 
+
+{% block body %}
+<div class='container-fluid'>
+    <div class='row-fluid'>
+        <div class='well'>
+       <img src='/media/images/logo.png' alt='Yasound logo'/>
+       </div>
+    </div>
+    <div class='row-fluid'>
+        <div class='span3'>
+            <div class='well'>
+                {% block menu %}{% endblock %}
+            </div>
+        </div>
+        <div class='span9'>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <hr>
+    <footer>
+    <p>&copy; Yasound 2012</p>
+    </footer>
+</div>
+{% endblock %}
