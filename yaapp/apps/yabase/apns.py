@@ -1,3 +1,4 @@
+# From : http://leecutsco.de/2009/07/14/push-on-the-iphone/
 from django.db import models
 from django.conf import settings
  
@@ -75,6 +76,16 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
 
 
 def test():
-    send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Hello!', sandbox=True)
+    #send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Hello!', sandbox=True)
+    host_name = 'gateway.sandbox.push.apple.com'
+    s = socket()
+    c = ssl.wrap_socket(s,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c.connect((host_name, 2195))
+    #c.write(msg)
+    send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Hello!', sandbox=True, passed_socket=c)
+    send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Bleh!', sandbox=True, passed_socket=c)
+    c.close()
 
 
