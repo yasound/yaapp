@@ -1,0 +1,46 @@
+{% extends "web/base.html" %} 
+{% load i18n %} 
+{% block extra_head %}
+    <script type="text/javascript">
+        var g_radio_url = '{{ radio_url }}';
+        var lbl_mute = "{% trans 'Mute' %}";
+        var lbl_unmute = "{% trans 'Unmute' %}";
+        var lbl_play = "{% trans 'Play' %}";
+        var lbl_stop = "{% trans 'Stop' %}";
+    </script>
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
+    <script type="text/javascript" src="/media/js/listen.js"></script>
+    
+{% endblock %}
+
+{% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
+
+
+{% block menu %}
+    {% include "web/menu.html" with selected="my-friends" %}
+{% endblock %}
+
+{% block content %}
+	<h2>{% trans "Friends" %}</h2>
+	<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+	    <th>{% trans "Friend" %}</th>
+	    <th>{% trans "On air" %}</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for friend in friends %}
+	<tr><td>{{ friend }}</td><td>
+       {% if friend.userprofile.current_radio %}
+	   <a href='{{ friend.userprofile.current_radio.get_absolute_url }}'>{{ friend.userprofile.current_radio }}</a>
+	   {% else %}
+	   {% trans "Nothing for now" %}
+	   {% endif %}
+	</td></tr>
+	{% endfor %}
+	</tbody>
+	</table>
+{% endblock %}
+

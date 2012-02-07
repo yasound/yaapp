@@ -90,8 +90,16 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     (r'^api/', include(api.urls)),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
-    (r'^yaref/', include('yaref.urls')),
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
+
+    # web front end
+    url(r'^radios/my/$', 'yabase.views.web_myradio', name='web_myradio'),
+    url(r'^radios/my-friends/$', 'yabase.views.web_myfriends', name='web_myfriends'),
+    url(r'^terms/$', 'yabase.views.web_terms', name='web_terms'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
+        
+    # yaref (fuzzy, ..)
+    (r'^yaref/', include('yaref.urls'))
     # The normal jazz here, then...
 )
 

@@ -1,0 +1,13 @@
+{% load i18n %}
+<ul class="nav nav-list">
+    <li class="nav-header">{% trans "My radio" %}</li>
+    <li {% ifequal selected "my-radio" %}class='active' {% endifequal %}><a href="{% url web_myradio %}">{% trans "My radio" %}</a></li>
+    <li class="nav-header">{% trans "Radios" %}</li>
+    <li {% ifequal selected "my-friends" %}class='active' {% endifequal %}><a href="{% url web_myfriends %}">{% trans "My friends" %}</a></li>
+    <li {% ifequal selected "favorites" %}class='active' {% endifequal %}><a href="#">{% trans "My favorites" %}</a></li>
+    <li {% ifequal selected "selection" %}class='active' {% endifequal %}><a href="#">{% trans "Selection" %}</a></li>
+    <li {% ifequal selected "find" %}class='active' {% endifequal %}><a href="#">{% trans "Find" %}</a></li>
+    <li class="nav-header">{% trans "Me" %}</li>
+    <li {% ifequal selected "terms" %}class='active' {% endifequal %}><a href="{% url web_terms %}">{% trans "Terms and conditions" %}</a></li>
+    <li {% ifequal selected "logout" %}class='active' {% endifequal %}><a href="{% url logout %}">{% trans "Logout" %}</a></li>
+</ul>

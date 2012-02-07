@@ -15,6 +15,7 @@ import settings as yabase_settings
 import time
 from django.contrib.auth.models import AnonymousUser
 from decorators import unlock_radio_on_exception
+from django.contrib.auth.decorators import login_required
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -411,6 +412,33 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "radio_url": radio_url,
         "listeners": radio.radiouser_set.filter(listening=True).count(),
         "fans": radio.radiouser_set.filter(favorite=True).count()
+    }, context_instance=RequestContext(request))    
+    
+def radios(request, template_name='web/radios.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))    
+        
+@login_required
+def web_myradio(request, template_name='web/my_radio.html'):
+    radio = get_object_or_404(Radio, creator=request.user)
+    radio_uuid = radio.uuid
+    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
+    return render_to_response(template_name, {
+        "radio": radio,
+        "radio_url": radio_url,
+        "listeners": radio.radiouser_set.filter(listening=True).count(),
+        "fans": radio.radiouser_set.filter(favorite=True).count()
+    }, context_instance=RequestContext(request))    
+
+@login_required
+def web_myfriends(request, template_name='web/my_friends.html'):
+    friends = request.user.userprofile.friends.all()
+    return render_to_response(template_name, {
+        "friends": friends,
+    }, context_instance=RequestContext(request))    
+    
+def web_terms(request, template_name='web/terms.html'):
+    return render_to_response(template_name, {
     }, context_instance=RequestContext(request))    
     
     
