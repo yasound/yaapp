@@ -16,4 +16,3 @@ pyyaml
 pymongo
 django-extensions
 django-iphone-push
-#pyapns

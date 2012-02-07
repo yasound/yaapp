@@ -1,47 +1,80 @@
-"""
-Wrappers for the pyapns client to simplify sending APNS
-notifications, including support for re-configuring the
-pyapns daemon after a restart.
-"""
+from django.db import models
+from django.conf import settings
+ 
+from socket import socket
+ 
+import datetime
+import struct
+import ssl
+import binascii
+import json
+ 
+def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
+                        custom_params={}, action_loc_key=None, loc_key=None,
+                        loc_args=[], passed_socket=None):
+        """
+        Send a message to an iPhone using the APN server, returns whether
+        it was successful or not.
+ 
+        alert - The message you want to send
+        badge - Numeric badge number you wish to show, 0 will clear it
+        sound - chime is shorter than default! Replace with None/"" for no sound
+        sandbox - Are you sending to the sandbox or the live server
+        custom_params - A dict of custom params you want to send
+        action_loc_key - As per APN docs
+        loc_key - As per APN docs
+        loc_args - As per APN docs, make sure you use a list
+        passed_socket - Rather than open/close a socket, use an already open one
+ 
+        This requires IPHONE_APN_PUSH_CERT in settings.py to be the full
+        path to the cert/pk .pem file.
+        """
+        aps_payload = {}
+ 
+        alert_payload = alert
+        if action_loc_key or loc_key or loc_args:
+            alert_payload = {'body' : alert}
+            if action_loc_key:
+                alert_payload['action-loc-key'] = action_loc_key
+            if loc_key:
+                alert_payload['loc-key'] = loc_key
+            if loc_args:
+                alert_payload['loc-args'] = loc_args
+ 
+        aps_payload['alert'] = alert_payload
+ 
+        if badge:
+            aps_payload['badge'] = badge
+ 
+        if sound:
+            aps_payload['sound'] = sound        
+ 
+        payload = custom_params
+        payload['aps'] = aps_payload
+ 
+        s_payload = json.dumps(payload, separators=(',',':'))
+ 
+        fmt = "!cH32sH%ds" % len(s_payload)
+        command = '\x00'
+        msg = struct.pack(fmt, command, 32, binascii.unhexlify(udid), len(s_payload), s_payload)
+ 
+        if passed_socket:
+            passed_socket.write(msg)
+        else:
+            host_name = 'gateway.sandbox.push.apple.com' if sandbox else 'gateway.push.apple.com'
+            s = socket()
+            c = ssl.wrap_socket(s,
+                                ssl_version=ssl.PROTOCOL_SSLv3,
+                                certfile=settings.IPHONE_APN_PUSH_CERT)
+            c.connect((host_name, 2195))
+            c.write(msg)
+            c.close()
+ 
+        return True
+ 
 
-import pyapns.client
-import time
-import logging
-
-#log = logging.getLogger('APNS')
-
-def notify(apns_token, message, badge=None, sound=None):
-    """Push notification to device with the given message
-
-    @param apns_token - The device's APNS-issued unique token
-    @param message - The message to display in the
-                     notification window
-    """
-    notification = {'aps': {'alert': message}}
-    if badge is not None:
-        notification['aps']['badge'] = int(badge)
-    if sound is not None:
-        notification['aps']['sound'] = str(sound)
-    for attempt in range(4):
-        try:
-            pyapns.client.notify('MyAppId', apns_token,
-                                 notification)
-            break
-        except (pyapns.client.UnknownAppID,
-                pyapns.client.APNSNotConfigured):
-            # This can happen if the pyapns server has been
-            # restarted since django started running.  In
-            # that case, we need to clear the client's
-            # configured flag so we can reconfigure it from
-            # our settings.py PYAPNS_CONFIG settings.
-            if attempt == 3:
-                logging.exception('%s', 'unable to send apns notification')
-            logging.warning('%s', 'pyapns not configured yet')
-            pyapns.client.OPTIONS['CONFIGURED'] = False
-            pyapns.client.configure({})
-            time.sleep(0.5)
 
 def test():
-    notify('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', {'aps':{'alert': 'Hello!'}})
+    send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Hello!', sandbox=True)
 
 

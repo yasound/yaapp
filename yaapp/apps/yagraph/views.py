@@ -10,7 +10,7 @@ def song_graph(request, radio_id, song_id):
 
     code += '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns# %s: http://ogp.me/ns/apps/%s#">' % (YASOUND_NAMESPACE, YASOUND_NAMESPACE)
     code += '<meta property="fb:app_id" content="%s" />' % YASOUND_APP_ID
-    code += '<meta property="og:type" content="%s:recipe" />' % YASOUND_NAMESPACE 
+    code += '<meta property="og:type" content="%s:song" />' % YASOUND_NAMESPACE 
     code += '<meta property="og:title" content="Stuffed Cookies" />'
     code += '<meta property="og:image" content="http://example.com/zhen/cookie.jpg" />' 
     code += '<meta property="og:description" content="The Turducken of Cookies" />'
