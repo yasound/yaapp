@@ -7,7 +7,7 @@ import djcelery
 djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
-APNS_CERTIFICATE_PATH = os.path.join(PROJECT_PATH, 'certificates/apns-dev.pem')
+
 IPHONE_APN_PUSH_CERT = os.path.join(PROJECT_PATH, "certificates/dev.pem")
 #IPHONE_APN_PUSH_CERT = os.path.join(PROJECT_PATH, "certificates/prod.pem")
 
@@ -26,20 +26,6 @@ USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
-# Configuration for connecting to the local pyapns daemon,
-# including our certificate for pushing notifications to
-# mobile terminals via APNS.
-PYAPNS_CONFIG = {
-    'HOST': 'http://localhost:7077/',
-    'TIMEOUT': 15,
-    'INITIAL': [
-        #('DGQ2ENLVWP.com.yasound.yasound', os.path.join(PROJECT_PATH, 'certificates/apns-dev.pem'), 'sandbox'),
-        #('com.yasound.yasound', os.path.join(PROJECT_PATH, 'certificates/apns-dev.pem'), 'sandbox'),
-        #('DGQ2ENLVWP.com.yasound.yasound', os.path.join(PROJECT_PATH, 'certificates/apns-prod.pem'), 'production'),
-        ('yasound', os.path.join(PROJECT_PATH, 'certificates/apns-prod.pem'), 'production'),
-    ]
-}
 
 ADMINS = (
     ('Sebastien Metrot', 'seb@yasound.com'),
