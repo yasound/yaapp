@@ -392,7 +392,6 @@ class Radio(models.Model):
             results.append(lower_radios[i])
         return results
 
-
     class Meta:
         db_name = u'default'
         

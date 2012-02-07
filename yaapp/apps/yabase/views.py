@@ -16,6 +16,7 @@ import time
 from django.contrib.auth.models import AnonymousUser
 from decorators import unlock_radio_on_exception
 from django.contrib.auth.decorators import login_required
+from forms import SelectionForm
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -431,12 +432,44 @@ def web_myradio(request, template_name='web/my_radio.html'):
     }, context_instance=RequestContext(request))    
 
 @login_required
-def web_myfriends(request, template_name='web/my_friends.html'):
+def web_friends(request, template_name='web/friends.html'):
     friends = request.user.userprofile.friends.all()
     return render_to_response(template_name, {
         "friends": friends,
     }, context_instance=RequestContext(request))    
     
+@login_required
+def web_favorites(request, template_name='web/favorites.html'):
+    radios = Radio.objects.filter(radiouser__user=request.user, radiouser__favorite=True)
+    return render_to_response(template_name, {
+        "radios": radios,
+    }, context_instance=RequestContext(request))    
+
+
+@login_required
+def web_selections(request, template_name='web/selections.html', form_class=SelectionForm):
+    form = form_class(request.REQUEST)
+    radios = Radio.objects.filter(radiouser__user=request.user, radiouser__favorite=True)
+    if form.is_valid():
+        genre = form.cleaned_data['genre']
+        if len(genre) > 0:
+            radios = Radio.objects.filter(radiouser__user=request.user, radiouser__favorite=True, genre=genre)
+    return render_to_response(template_name, {
+        "radios": radios,
+        "form": form,
+    }, context_instance=RequestContext(request))    
+
+@login_required
+def web_favorite(request, radio_uuid, template_name='web/favorite.html'):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
+    return render_to_response(template_name, {
+        "radio": radio,
+        "radio_url": radio_url,
+        "listeners": radio.radiouser_set.filter(listening=True).count(),
+        "fans": radio.radiouser_set.filter(favorite=True).count()
+    }, context_instance=RequestContext(request))    
+
 def web_terms(request, template_name='web/terms.html'):
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))    

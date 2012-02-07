@@ -94,7 +94,10 @@ urlpatterns = patterns('',
 
     # web front end
     url(r'^radios/my/$', 'yabase.views.web_myradio', name='web_myradio'),
-    url(r'^radios/my-friends/$', 'yabase.views.web_myfriends', name='web_myfriends'),
+    url(r'^radios/friends/$', 'yabase.views.web_friends', name='web_friends'),
+    url(r'^radios/favorites/$', 'yabase.views.web_favorites', name='web_favorites'),
+    url(r'^radios/favorites/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_favorite', name='web_favorite'),
+    url(r'^radios/selection/$', 'yabase.views.web_selections', name='web_selections'),
     url(r'^terms/$', 'yabase.views.web_terms', name='web_terms'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
         

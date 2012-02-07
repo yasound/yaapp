@@ -18,7 +18,7 @@
 
 
 {% block menu %}
-    {% include "web/menu.html" with selected="my-friends" %}
+    {% include "web/menu.html" with selected="favorites" %}
 {% endblock %}
 
 {% block content %}
@@ -26,19 +26,12 @@
 	<table class="table table-bordered table-striped">
 	<thead>
 	<tr>
-	    <th>{% trans "Friend" %}</th>
-	    <th>{% trans "On air" %}</th>
+	    <th>{% trans "Name" %}</th>
 	</tr>
 	</thead>
 	<tbody>
-	{% for friend in friends %}
-	<tr><td>{{ friend }}</td><td>
-       {% if friend.userprofile.current_radio %}
-	   <a href='{{ friend.userprofile.current_radio.get_absolute_url }}'>{{ friend.userprofile.current_radio }}</a>
-	   {% else %}
-	   {% trans "Nothing for now" %}
-	   {% endif %}
-	</td></tr>
+	{% for radio in radios %}
+	   <tr><td><a href="{% url web_favorite radio.uuid %}">{{ radio }}</a></td><td>
 	{% endfor %}
 	</tbody>
 	</table>
