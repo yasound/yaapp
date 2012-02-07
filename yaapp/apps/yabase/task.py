@@ -60,7 +60,7 @@ def process_playlists_exec(radio, content_compressed):
     artist_name = None
     album_name = None
     playlist = None
-    uuid = ''
+    uuid = 'unknown'
 
     pattern = re.compile('[\W_]+')
 
