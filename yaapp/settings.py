@@ -363,7 +363,7 @@ CELERYBEAT_SCHEDULE = {
     },
     "scan_friends": {
         "task": "account.task.scan_friends_task",
-        "schedule": crontab(minute=46, hour='*'),
+        "schedule": crontab(minute=0, hour='*'),
     },
     "build-mongodb-index": {
         "task": "yaref.task.build_mongodb_index",
