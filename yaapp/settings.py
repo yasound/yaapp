@@ -36,7 +36,7 @@ MANAGERS = ADMINS
 if LOCAL_MODE:
     # Celery config:
     BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-    CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task",)
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task")
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10

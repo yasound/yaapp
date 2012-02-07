@@ -116,14 +116,17 @@ class UserProfile(models.Model):
         
     def scan_friends(self):
         if self.account_type == account_settings.ACCOUNT_TYPE_YASOUND:
-            print 'cannot retrieve friends from yasound account'
             return
         
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             # FIXME: facebook token seems to expire!!!
-            print 'scan facebook friends'
             graph = GraphAPI(self.facebook_token)
-            friends_response = graph.get('me/friends')
+            
+            try:
+                friends_response = graph.get('me/friends')
+            except GraphAPI.Error:
+                print 'GraphAPI exception error'
+                return
             if not friends_response.has_key('data'):
                 print 'no friend data'
                 return
@@ -132,8 +135,6 @@ class UserProfile(models.Model):
             for f in friends_data:
                 friends_ids.append(f['id'])
             friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
-            print 'friends:'
-            print friends
             self.friends = friends
             self.save()
             
