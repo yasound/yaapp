@@ -34,5 +34,9 @@ except ImportError:
 
 import settings
 
+if sys.argv[1] == "runfcgi":
+    sys.stderr = open("logs/django-error.log", "a")
+    sys.stdout = open("logs/django-out.log", "a")
+
 if __name__ == "__main__":
     execute_manager(settings)

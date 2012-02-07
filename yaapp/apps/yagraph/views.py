@@ -14,7 +14,7 @@ def song_graph(request, radio_id, song_id):
     code += '<meta property="og:title" content="Stuffed Cookies" />'
     code += '<meta property="og:image" content="http://example.com/zhen/cookie.jpg" />' 
     code += '<meta property="og:description" content="The Turducken of Cookies" />'
-    code += '<meta property="og:url" content="https://dev.yasound.com/graph/radio/%d/song/%d">' % (radio_id, song_id) 
+    code += '<meta property="og:url" content="https://dev.yasound.com/graph/radio/%d/song/%d">' % (int(radio_id), int(song_id)) 
     code += '</head>'
 
     code += '<body>' 
