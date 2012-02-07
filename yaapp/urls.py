@@ -7,7 +7,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, RadioListenerResource, \
-    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioPlaylistResource, LeaderBoardResource
+    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, LeaderBoardResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from stats.api import RadioListeningStatResource
@@ -42,7 +42,7 @@ connected_users = RadioUserConnectedResource()
 listeners = RadioListenerResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
-radio_enabled_playlist = RadioPlaylistResource()
+radio_enabled_playlist = RadioEnabledPlaylistResource()
 
 Radio.objects.unlock_all()
 

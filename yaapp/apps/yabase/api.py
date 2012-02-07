@@ -477,7 +477,7 @@ class SongUserResource(ModelResource):
 
 
 
-class RadioPlaylistResource(ModelResource):
+class RadioEnabledPlaylistResource(ModelResource):
     
     class Meta:
         queryset = Playlist.objects.filter(enabled=True)
@@ -494,7 +494,7 @@ class RadioPlaylistResource(ModelResource):
     def dispatch(self, request_type, request, **kwargs):
         radio = kwargs.pop('radio')
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
-        return super(RadioPlaylistResource, self).dispatch(request_type, request, **kwargs)
+        return super(RadioEnabledPlaylistResource, self).dispatch(request_type, request, **kwargs)
     
     
     
