@@ -7,7 +7,8 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     RadioResource, SelectedRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, RadioUserConnectedResource, RadioListenerResource, \
-    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, LeaderBoardResource
+    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
+    RadioAllPlaylistResource, LeaderBoardResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from stats.api import RadioListeningStatResource

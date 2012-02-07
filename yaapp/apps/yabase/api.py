@@ -496,7 +496,25 @@ class RadioEnabledPlaylistResource(ModelResource):
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioEnabledPlaylistResource, self).dispatch(request_type, request, **kwargs)
     
+class RadioAllPlaylistResource(ModelResource):
     
+    class Meta:
+        queryset = Playlist.objects.all()
+        resource_name = 'all_playlist'
+        fields = ['id', 'name', 'source', 'enabled', 'sync_date']
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = ApiKeyAuthentication()
+        allowed_methods = ['get']
+        filtering = {
+            'radio': 'exact',
+            }
+
+    def dispatch(self, request_type, request, **kwargs):
+        radio = kwargs.pop('radio')
+        kwargs['radio'] = get_object_or_404(Radio, id=radio)
+        return super(RadioAllPlaylistResource, self).dispatch(request_type, request, **kwargs)
+        
     
     
     
