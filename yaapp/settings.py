@@ -350,7 +350,6 @@ ALBUM_COVER_URL = MEDIA_URL + 'covers/albums/'
 
 
 from celery.schedules import crontab
-#from stats.task import radio_listening_stats_task
 
 CELERYBEAT_SCHEDULE = {
     # Executes every hour
@@ -361,6 +360,10 @@ CELERYBEAT_SCHEDULE = {
     "leaderboard_update-every-hour": {
         "task": "yabase.task.leaderboard_update_task",
         "schedule": crontab(minute=0, hour='*'),
+    },
+    "scan_friends": {
+        "task": "account.task.scan_friends_task",
+        "schedule": crontab(minute=46, hour='*'),
     },
     "build-mongodb-index": {
         "task": "yaref.task.build_mongodb_index",

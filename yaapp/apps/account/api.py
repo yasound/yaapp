@@ -162,6 +162,9 @@ class SocialAuthentication(Authentication):
             
             try:
                 user = User.objects.get(username=username)
+                profile = user.userprofile
+                profile.facebook_token = token
+                profile.save()
                 request.user = user
                 return True
             except User.DoesNotExist:
@@ -204,6 +207,9 @@ class SocialAuthentication(Authentication):
             
             try:
                 user = User.objects.get(username=username)
+                profile = user.userprofile
+                profile.facebook_token = token
+                profile.save()
                 request.user = user
                 return True
             except User.DoesNotExist:
