@@ -304,10 +304,7 @@ class Radio(models.Model):
     def fill_bundle(self, bundle):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         bundle.data['likes'] = likes
-        connected_users = self.radiouser_set.filter(connected=True).count()
-        bundle.data['connected_users'] = connected_users
-        listeners = self.radiouser_set.filter(listening=True).count()
-        bundle.data['listeners'] = listeners
+        bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
         
     def update_with_data(self, data):
@@ -338,11 +335,11 @@ class Radio(models.Model):
     def is_locked(self):
         return self.computing_next_songs
     
-    @property
-    def audience(self):
-        listeners = RadioUser.objects.filter(radio=self, listening=True)
-        audience = len(listeners) + self.anonymous_audience
-        return audience
+#    @property
+#    def audience(self):
+#        listeners = RadioUser.objects.filter(radio=self, listening=True)
+#        audience = len(listeners) + self.anonymous_audience
+#        return audience
     
     def user_started_listening(self, user):
         if not user.is_anonymous:
@@ -353,7 +350,7 @@ class Radio(models.Model):
             self.anonymous_audience += 1
             self.save()
         
-        audience = self.audience
+        audience = self.nb_current_users
         if audience > self.audience_peak:
             self.audience_peak = audience
         if audience > self.current_audience_peak:
@@ -382,7 +379,7 @@ class Radio(models.Model):
         stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience_peak=self.current_audience_peak, connections=self.current_connections, favorites=favorites, likes=likes, dislikes=dislikes)
         
         # reset current audience peak
-        audience = self.audience
+        audience = self.nb_current_users
         self.current_audience_peak = audience
         # reset current number of connections
         self.current_connections = 0
@@ -406,11 +403,13 @@ class Radio(models.Model):
         return results
     
     def current_users(self):
-        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self.radio).all()
+        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()
         return users
     
+    @property
     def nb_current_users(self):
-        nb_users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self.radio).count()
+        nb_users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).count()
+        nb_users += self.anonymous_audience
         return nb_users
 
     class Meta:

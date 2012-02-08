@@ -70,7 +70,7 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = ApiKeyAuthentication()
+        authentication = Authentication()
         authorization = Authorization()
         allowed_methods = ['get', 'put']
         filtering = {
@@ -356,12 +356,12 @@ class RadioFavoriteResource(ModelResource):
         return bundle
 
 
-class RadioUserConnectedResource(ModelResource):    
+class RadioCurrentUserResource(ModelResource):    
     radio = None
     
     class Meta:
         queryset = User.objects.all()
-        resource_name = 'connected_user'
+        resource_name = 'current_user'
         fields = ['id']
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
@@ -371,35 +371,10 @@ class RadioUserConnectedResource(ModelResource):
     def dispatch(self, request_type, request, **kwargs):
         radioID = kwargs.pop('radio')
         self.radio = get_object_or_404(Radio, id=radioID)
-        return super(RadioUserConnectedResource, self).dispatch(request_type, request, **kwargs)
+        return super(RadioCurrentUserResource, self).dispatch(request_type, request, **kwargs)
     
     def get_object_list(self, request):
-        return super(RadioUserConnectedResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__connected=True).order_by('id')
-    
-    def dehydrate(self, bundle):
-        bundle.data['username'] = bundle.obj.username
-        bundle.obj.userprofile.fill_user_bundle(bundle)
-        return bundle
-    
-class RadioListenerResource(ModelResource):    
-    radio = None
-    
-    class Meta:
-        queryset = User.objects.all()
-        resource_name = 'listener'
-        fields = ['id']
-        authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
-        allowed_methods = ['get']
-        include_resource_uri = False
-    
-    def dispatch(self, request_type, request, **kwargs):
-        radioID = kwargs.pop('radio')
-        self.radio = get_object_or_404(Radio, id=radioID)
-        return super(RadioListenerResource, self).dispatch(request_type, request, **kwargs)
-    
-    def get_object_list(self, request):
-        return super(RadioListenerResource, self).get_object_list(request).filter(radiouser__radio=self.radio, radiouser__listening=True)
+        return self.radio.current_users()
     
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
