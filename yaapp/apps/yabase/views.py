@@ -17,8 +17,14 @@ from django.contrib.auth.models import AnonymousUser
 from decorators import unlock_radio_on_exception
 from django.contrib.auth.decorators import login_required
 from forms import SelectionForm
+import uuid
+
+import logging
+logger = logging.getLogger("yaapp.yabase")
+
 
 PICTURE_FILE_TAG = 'picture'
+SONG_FILE_TAG = 'song'
 
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
@@ -409,6 +415,28 @@ def get_current_song(request, radio_id):
     
     song_json = json.dumps(song_dict)
     return HttpResponse(song_json)
+
+@csrf_exempt
+def upload_song(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+
+    if not request.FILES.has_key(SONG_FILE_TAG):
+        logger.info('upload_song: request does not contain song')
+        return HttpResponse('request does not contain a song file')
+
+    f = request.FILES[SONG_FILE_TAG]
+    filename = uuid.uuid1() + '.mp3'
+    path = '%s%s' % (settings.UPLOAD_SONG_FOLDER, filename)
+    destination = open(path, 'wb')
+    for chunk in f.chunks():
+        destination.write(chunk)
+    destination.close()
+    
+    res = 'upload OK for song: %s' % unicode(f.name)
+    return HttpResponse(res)
 
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):

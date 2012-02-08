@@ -370,3 +370,7 @@ CELERYBEAT_SCHEDULE = {
         "schedule": crontab(minute=0, hour='*'),
     },
 }
+
+UPLOAD_SONG_FOLDER = '/tmp/'
+if PRODUCTION_MODE:
+    UPLOAD_SONG_FOLDER = '/space/new/medias/sources/with_id3/'
