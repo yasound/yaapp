@@ -44,6 +44,7 @@ listeners = RadioListenerResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
 radio_enabled_playlist = RadioEnabledPlaylistResource()
+radio_all_playlist = RadioAllPlaylistResource()
 
 Radio.objects.unlock_all()
 
@@ -77,6 +78,7 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(connected_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(listeners.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
+    (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_all_playlist.urls)),
     (r'^api/v1/', include(radio_user.urls)),
     (r'^api/v1/', include(song_user.urls)),
     url(r'^api/v1/song/(?P<song_id>\d+)/liker/$', 'yabase.views.like_song'),

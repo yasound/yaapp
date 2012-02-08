@@ -136,6 +136,18 @@ class Playlist(models.Model):
             pass
         return radio
     
+    @property
+    def song_count(self):
+        return SongInstance.objects.filter(playlist=self).count()
+    
+    @property
+    def matched_song_count(self):
+        return SongInstance.objects.filter(playlist=self, song__isnull=False).count()
+    
+    @property
+    def unmatched_song_count(self):
+        return SongInstance.objects.filter(playlist=self, song__isnull=True).count()
+    
     def __unicode__(self):
         return u'%s - %s' % (self.name, self.radio)
 

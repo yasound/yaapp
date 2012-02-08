@@ -497,11 +497,17 @@ class RadioEnabledPlaylistResource(ModelResource):
         return super(RadioEnabledPlaylistResource, self).dispatch(request_type, request, **kwargs)
     
 class RadioAllPlaylistResource(ModelResource):
-    
+    song_count = fields.IntegerField(attribute='song_count', default=0, readonly=True)
+    matched_song_count = fields.IntegerField(attribute='matched_song_count', default=0, readonly=True)
+    unmatched_song_count = fields.IntegerField(attribute='unmatched_song_count', default=0, readonly=True)
     class Meta:
         queryset = Playlist.objects.all()
         resource_name = 'all_playlist'
-        fields = ['id', 'name', 'source', 'enabled', 'sync_date']
+        fields = ['id', 
+                  'name', 
+                  'source', 
+                  'enabled', 
+                  'sync_date',]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = ApiKeyAuthentication()
