@@ -425,11 +425,14 @@ def upload_song(request):
 
     if not request.FILES.has_key(SONG_FILE_TAG):
         logger.info('upload_song: request does not contain song')
+        logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
     f = request.FILES[SONG_FILE_TAG]
-    filename = uuid.uuid1() + '.mp3'
+    filename = u'%s.mp3' % (str(uuid.uuid1()))
     path = '%s%s' % (settings.UPLOAD_SONG_FOLDER, filename)
+
+    
     destination = open(path, 'wb')
     for chunk in f.chunks():
         destination.write(chunk)
