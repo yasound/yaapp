@@ -1,5 +1,6 @@
 from tastypie.models import ApiKey
 from django.contrib.auth.models import User
+from account.models import UserProfile
 
 def check_api_key_Authentication(request):
     if not ('username' in request.GET and 'api_key' in request.GET):
@@ -15,6 +16,8 @@ def check_api_key_Authentication(request):
             return False
     except User.DoesNotExist, ApiKey.DoesNotExist:
         return False
+    
+    user.userprofile.authenticated()
     return True
 
 def check_http_method(request, allowed_methods):

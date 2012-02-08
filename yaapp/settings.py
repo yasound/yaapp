@@ -365,6 +365,10 @@ CELERYBEAT_SCHEDULE = {
         "task": "account.task.scan_friends_task",
         "schedule": crontab(minute=0, hour='*'),
     },
+    "check_users_are_alive": {
+        "task": "account.task.check_live_status_task",
+        "schedule": crontab(minute='*/10', hour='*'),
+    },
     "build-mongodb-index": {
         "task": "yaref.task.build_mongodb_index",
         "schedule": crontab(minute=0, hour='*'),

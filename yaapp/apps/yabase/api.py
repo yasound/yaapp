@@ -11,6 +11,7 @@ from tastypie.authorization import DjangoAuthorization, Authorization, ReadOnlyA
 import settings as yabase_settings
 from account.api import UserResource
 from tastypie.authentication import ApiKeyAuthentication 
+from account.api import YasoundApiKeyAuthentication
 from tastypie.resources import ModelResource, ALL
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -25,7 +26,7 @@ class SongMetadataResource(ModelResource):
         fields = ['name', 'artist_name', 'album_name', 'track_index', 'track_count', 'disc_index', 'disc_count', 'bpm', 'date', 'score', 'duration', 'genre', 'picture']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = []
 
 class SongInstanceResource(ModelResource):
@@ -37,7 +38,7 @@ class SongInstanceResource(ModelResource):
         fields = ['id', 'playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['post', 'get']
         
     def dehydrate(self, bundle):
@@ -52,7 +53,7 @@ class PlaylistResource(ModelResource):
         fields = ['id', 'name']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = []
 
 
@@ -70,7 +71,7 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = Authentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = Authorization()
         allowed_methods = ['get', 'put']
         filtering = {
@@ -109,7 +110,7 @@ class SelectedRadioResource(ModelResource):
         resource_name = 'selected_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -136,7 +137,7 @@ class FavoriteRadioResource(ModelResource):
         resource_name = 'favorite_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -163,7 +164,7 @@ class FriendRadioResource(ModelResource):
         resource_name = 'friend_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -229,7 +230,7 @@ class RadioWallEventResource(ModelResource):
         fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'user_picture', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization = ReadOnlyAuthorization()
-        authentication = Authentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -289,7 +290,7 @@ class NextSongResource(ModelResource):
         fields = ['id', 'radio', 'song', 'order']
         include_resource_uri = False
         authorization= Authorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['post', 'put', 'delete']
         
     def obj_delete(self, request=None, **kwargs):
@@ -314,7 +315,7 @@ class RadioLikerResource(ModelResource):
         fields = ['id']
         allowed_methods = ['get']
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -339,7 +340,7 @@ class RadioFavoriteResource(ModelResource):
         fields = ['id']
         allowed_methods = ['get']
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -364,7 +365,7 @@ class RadioCurrentUserResource(ModelResource):
         resource_name = 'current_user'
         fields = ['id']
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         include_resource_uri = False
     
@@ -391,7 +392,7 @@ class RadioUserResource(ModelResource):
         fields = ['radio', 'user', 'mood', 'favorite']
         allowed_methods = ['get']
         include_resource_uri = False
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         
     def override_urls(self):
@@ -422,7 +423,7 @@ class SongUserResource(ModelResource):
         fields = ['song', 'user', 'mood']
         allowed_methods = ['get']
         include_resource_uri = False
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         
     def override_urls(self):
@@ -460,7 +461,7 @@ class RadioEnabledPlaylistResource(ModelResource):
         fields = ['id', 'name']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -488,7 +489,7 @@ class RadioAllPlaylistResource(ModelResource):
                   'sync_date',]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -509,7 +510,7 @@ class LeaderBoardResource(ModelResource):
         fields = ['id', 'name', 'favorites', 'leaderboard_rank']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         
     def get_object_list(self, request):

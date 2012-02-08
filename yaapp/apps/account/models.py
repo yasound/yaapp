@@ -30,6 +30,7 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(default=False)
     friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
+    last_authentication_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
         return self.user.username
@@ -162,6 +163,23 @@ class UserProfile(models.Model):
     def update_with_social_picture(self):
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             self.update_with_facebook_picture()
+            
+    def authenticated(self):
+        d = datetime.datetime.now()
+        self.last_authentication_date = d
+        self.save()
+        
+    def check_live_status(self):
+        MAX_DELAY_BETWEEN_AUTHENTICATIONS = 10 * 60; # 10 minutes
+        alive = False
+        if self.last_authentication_date:
+            since_last_authentication = datetime.datetime.now() - self.last_authentication_date
+            total_seconds = since_last_authentication.days * 86400 + since_last_authentication.seconds
+            alive = total_seconds <= MAX_DELAY_BETWEEN_AUTHENTICATIONS 
+        if not alive:
+            RadioUser.objects.filter(user=self.user, connected=True).update(connected=False)
+            RadioUser.objects.filter(user=self.user, listening=True).update(listening=False)
+        return alive
         
 
 def create_user_profile(sender, instance, created, **kwargs):  

@@ -21,6 +21,16 @@ import tweepy
 APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
 
+
+class YasoundApiKeyAuthentication(ApiKeyAuthentication):
+    def is_authenticated(self, request, **kwargs):
+        authenticated = super(YasoundApiKeyAuthentication, self).is_authenticated(request, **kwargs)
+        if authenticated:
+            userprofile = request.user.userprofile
+            userprofile.authenticated()
+        return authenticated
+
+
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -28,7 +38,7 @@ class UserResource(ModelResource):
         fields = ['id']
         include_resource_uri = False
         allowed_methods = []
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
 
 

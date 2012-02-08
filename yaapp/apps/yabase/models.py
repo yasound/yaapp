@@ -482,10 +482,16 @@ class RadioUser(models.Model):
         
     def save(self, *args, **kwargs):
         same_favorite = False
+        just_connected = False
+        just_started_listening = False
         if self.pk is not None:
             orig = RadioUser.objects.get(pk=self.pk)
             if orig.favorite == self.favorite:
                 same_favorite = True
+            if self.connected == True and orig.connected == False:
+                just_connected = True
+            if self.listening == True and orig.listening == False:
+                just_started_listening = True 
         super(RadioUser, self).save(*args, **kwargs)
         if not same_favorite:
             radio = self.radio
@@ -496,6 +502,13 @@ class RadioUser(models.Model):
                 if radio.favorites < 0:
                     radio.favorites = 0
             radio.save()
+            
+        if just_connected:
+            radio_users = RadioUser.objects.filter(user=self.user, connected=True).exclude(id=self.id)
+            radio_users.update(connected=False)
+        if just_started_listening:
+            radio_users = RadioUser.objects.filter(user=self.user, listening=True).exclude(id=self.id)
+            radio_users.update(listening=False)
 
 
 

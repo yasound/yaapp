@@ -1,4 +1,5 @@
 from tastypie.authentication import ApiKeyAuthentication , Authentication
+from account.api import YasoundApiKeyAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.resources import ModelResource, ALL
 from tastypie import fields
@@ -15,7 +16,7 @@ class RadioListeningStatResource(ModelResource):
         fields = ['date', 'overall_listening_time', 'audience_peak', 'connections', 'likes', 'dislikes', 'favorites']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': ('exact'),

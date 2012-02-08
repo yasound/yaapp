@@ -409,6 +409,8 @@ def get_current_song(request, radio_id):
     
     radio = get_object_or_404(Radio, id=radio_id)
     song_instance = radio.current_song
+    if not song_instance:
+        return HttpResponseNotFound()
     song_dict = song_instance.song_description
     if not song_dict:
         return HttpResponseNotFound()
