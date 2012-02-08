@@ -10,6 +10,7 @@ import settings as yabase_settings
 import string
 from yaref.models import YasoundSong
 from stats.models import RadioListeningStat
+from django.db.models import Q
 
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
@@ -403,6 +404,14 @@ class Radio(models.Model):
         for i in range(nb_lower_radios):
             results.append(lower_radios[i])
         return results
+    
+    def current_users(self):
+        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self.radio).all()
+        return users
+    
+    def nb_current_users(self):
+        nb_users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self.radio).count()
+        return nb_users
 
     class Meta:
         db_name = u'default'

@@ -42,17 +42,22 @@ def upload_playlists(request, radio_id):
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
+    print 'set_radio_picture'
     if not check_api_key_Authentication(request):
+        print 'set_radio_picture: athentication error'
         return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
+        print 'set_radio_picture: http method error'
         return HttpResponse(status=405)
 
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
+        print 'set_radio_picture: radio does not exist'
         return HttpResponse('radio does not exist')
 
     if not request.FILES.has_key(PICTURE_FILE_TAG):
+        print 'set_radio_picture: request does not contain picture file'
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
@@ -67,6 +72,7 @@ def set_radio_picture(request, radio_id):
     userprofile.save()
 
     res = 'picture OK for radio: %s' % unicode(radio)
+    print 'set_radio_picture: OK (%s)' % res
     return HttpResponse(res)
 
 @csrf_exempt
