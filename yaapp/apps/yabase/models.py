@@ -357,6 +357,8 @@ class Radio(models.Model):
             radio_user.save()
         else:
             self.anonymous_audience -= 1
+            if self.anonymous_audience < 0:
+                self.anonymous_audience = 0
             self.save()
             
         self.overall_listening_time += listening_duration
