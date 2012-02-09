@@ -71,10 +71,10 @@ def set_radio_picture(request, radio_id):
     d = datetime.datetime.now()
     filename = unicode(d) + '.png'
 
-    old_picture = radio.picture
-    if old_picture:
-        print 'remove old picture file'
-        old_picture.delete()
+#    old_picture = radio.picture
+#    if old_picture:
+#        print 'remove old picture file'
+#        old_picture.delete()
     
     radio.picture.save(filename, f, save=True)
     
