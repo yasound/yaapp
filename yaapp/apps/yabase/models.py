@@ -161,6 +161,9 @@ RADIO_NEXT_SONGS_COUNT = 20
 class RadioManager(models.Manager):
     def unlock_all(self):
         self.all().update(computing_next_songs=False)
+        
+    def ready_objects(self):
+        return self.filter(ready=True)
 
 class Radio(models.Model):
     objects = RadioManager()

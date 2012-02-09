@@ -67,7 +67,7 @@ class RadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.all()
+        queryset = Radio.objects.ready_objects()
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
@@ -99,14 +99,44 @@ class RadioResource(ModelResource):
         radio = Radio.objects.get(pk=radioID)
         radio.fill_bundle(bundle)
         return bundle
+
+class SearchRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'search_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+#        authentication = YasoundApiKeyAuthentication()
+        authentication = Authentication()
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def get_object_list(self, request):
+        search = request.GET.get('search', None)
+        obj_list = super(SearchRadioResource, self).get_object_list(request)
+        if search:
+            # apply search
+            obj_list = obj_list.filter(name__contains=search)
+        return obj_list
     
 class SelectedRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.all()
+        queryset = Radio.objects.ready_objects()
         resource_name = 'selected_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
@@ -133,7 +163,7 @@ class FavoriteRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.all()
+        queryset = Radio.objects.ready_objects()
         resource_name = 'favorite_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
@@ -160,7 +190,7 @@ class FriendRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     
     class Meta:
-        queryset = Radio.objects.all()
+        queryset = Radio.objects.ready_objects()
         resource_name = 'friend_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
@@ -507,7 +537,7 @@ class RadioAllPlaylistResource(ModelResource):
     
 class LeaderBoardResource(ModelResource):
     class Meta:
-        queryset = Radio.objects.all()
+        queryset = Radio.objects.ready_objects()
         resource_name = 'leaderboard'
         fields = ['id', 'name', 'favorites', 'leaderboard_rank']
         include_resource_uri = False
