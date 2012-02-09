@@ -37,6 +37,9 @@ class SongInstanceResource(ModelResource):
         resource_name = 'song'
         fields = ['id', 'playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
         include_resource_uri = False
+        filtering = {
+            'playlist': ALL,
+        }
         authorization= ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['post', 'get']
