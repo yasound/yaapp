@@ -50,7 +50,7 @@ class PlaylistResource(ModelResource):
     class Meta:
         queryset = Playlist.objects.all()
         resource_name = 'playlist'
-        fields = ['id', 'name']
+        fields = ['id', 'name',]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
@@ -454,6 +454,7 @@ class SongUserResource(ModelResource):
 
 
 class RadioEnabledPlaylistResource(ModelResource):
+    radio = fields.ForeignKey(RadioResource, 'radio')
     
     class Meta:
         queryset = Playlist.objects.filter(enabled=True)
@@ -476,6 +477,7 @@ class RadioAllPlaylistResource(ModelResource):
     """
     return all playlists for a given radio
     """
+    radio = fields.ForeignKey(RadioResource, 'radio')
     song_count = fields.IntegerField(attribute='song_count', default=0, readonly=True)
     matched_song_count = fields.IntegerField(attribute='matched_song_count', default=0, readonly=True)
     unmatched_song_count = fields.IntegerField(attribute='unmatched_song_count', default=0, readonly=True)
