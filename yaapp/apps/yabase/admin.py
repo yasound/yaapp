@@ -5,6 +5,7 @@ from models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, \
 class PlaylistAdmin(admin.ModelAdmin):
     list_display = ('name', 'source', 'radio', 'enabled', 'sync_date', 'CRC' )
     search_fields = ( 'name', 'source', )
+    list_filter = ('radio',)
 admin.site.register(Playlist, PlaylistAdmin)
 
     
