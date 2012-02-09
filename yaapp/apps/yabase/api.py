@@ -113,7 +113,7 @@ class SearchRadioResource(ModelResource):
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
 #        authentication = YasoundApiKeyAuthentication()
-        authentication = Authentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -225,7 +225,7 @@ class WallEventResource(ModelResource):
         fields = ['id', 'type', 'start_date', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization= Authorization()
-        authentication = Authentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['post']
         
     def obj_create(self, bundle, request=None, **kwargs):
@@ -298,7 +298,7 @@ class RadioNextSongsResource(ModelResource):
         fields = ['id', 'radio', 'order']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = Authentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
