@@ -366,7 +366,7 @@ def start_listening_to_radio(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio.user_started_listening(request.user)
     
-    if not request.user.is_anonymous:
+    if not request.user.is_anonymous():
         client = request.user
     else:
         if request.GET.has_key(CLIENT_ADDRESS_PARAM_NAME):
@@ -391,7 +391,7 @@ def stop_listening_to_radio(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio.user_stopped_listening(request.user, listening_duration)
     
-    if not request.user.is_anonymous:
+    if not request.user.is_anonymous():
         client = request.user
     else:
         if request.GET.has_key(CLIENT_ADDRESS_PARAM_NAME):
