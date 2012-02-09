@@ -18,6 +18,7 @@ from decorators import unlock_radio_on_exception
 from django.contrib.auth.decorators import login_required
 from forms import SelectionForm
 import uuid
+import os
 
 import logging
 logger = logging.getLogger("yaapp.yabase")
@@ -70,6 +71,11 @@ def set_radio_picture(request, radio_id):
     d = datetime.datetime.now()
     filename = unicode(d) + '.png'
 
+    old_picture = radio.picture
+    if old_picture:
+        print 'remove old picture file'
+        old_picture.delete()
+    
     radio.picture.save(filename, f, save=True)
     
     # for now, set also the UserProfile picture
