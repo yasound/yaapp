@@ -333,10 +333,8 @@ class Radio(models.Model):
 #        return audience
     
     def user_started_listening(self, user):
-        print 'user_started_listening user=%s radio=%s' % (user, self)
-        if not user.is_anonymous:
+        if not user.is_anonymous():
             radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
-            print'user_started_listening radio_user=%s (id=%d)' % (radio_user, radio_user.id)
             radio_user.listening = True
             radio_user.save()
         else:
@@ -353,7 +351,7 @@ class Radio(models.Model):
         self.save()
             
     def user_stopped_listening(self, user, listening_duration):
-        if not user.is_anonymous:
+        if not user.is_anonymous():
             radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
             radio_user.listening = False
             radio_user.save()
