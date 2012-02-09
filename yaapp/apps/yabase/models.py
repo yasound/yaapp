@@ -62,6 +62,11 @@ class SongInstance(models.Model):
         dislikes = self.songuser_set.filter(mood=yabase_settings.MOOD_DISLIKE).count()
         bundle.data['dislikes'] = dislikes
         
+        if self.metadata:
+            bundle.data['name'] = self.metadata.name
+            bundle.data['artist'] = self.metadata.artist_name
+            bundle.data['album'] = self.metadata.album_name
+        
     @property
     def song_description(self):
         try:
