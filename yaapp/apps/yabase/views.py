@@ -357,6 +357,7 @@ CLIENT_ADDRESS_PARAM_NAME = 'address'
 
 @csrf_exempt
 def start_listening_to_radio(request, radio_uuid):
+    print '%s started listen to radio %s' % (request.user, radio_uuid)
     check_api_key_Authentication(request)
 
     if not check_http_method(request, ['post']):
@@ -378,6 +379,7 @@ def start_listening_to_radio(request, radio_uuid):
 
 @csrf_exempt
 def stop_listening_to_radio(request, radio_uuid):
+    print '%s stopped listen to radio %s' % (request.user, radio_uuid)
     check_api_key_Authentication(request)
 
     if not check_http_method(request, ['post']):
