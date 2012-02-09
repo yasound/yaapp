@@ -127,8 +127,15 @@ class Playlist(models.Model):
     enabled = models.BooleanField(default=True)
     sync_date = models.DateTimeField(default=datetime.datetime.now)
     CRC = models.IntegerField(null=True, blank=True) # ??
-    radio = models.ForeignKey('Radio', related_name='playlists', blank=True, null=True)
 
+    @property
+    def radio(self):
+        radio = None
+        try:
+            radio = Radio.objects.filter(playlists=self)[0]
+        except:
+            pass
+        return radio
     
     @property
     def song_count(self):
@@ -169,6 +176,7 @@ class Radio(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
+    playlists = models.ManyToManyField(Playlist, related_name='playlists', null=True, blank=True)
     ready = models.BooleanField(default=False)
     
     name = models.CharField(max_length=255)
@@ -208,7 +216,7 @@ class Radio(models.Model):
     
     @property
     def is_valid(self):
-        valid = self.playlists.all().count() > 0
+        valid = self.playlists.count() > 0
         return valid
     
     def find_new_song(self):
@@ -334,8 +342,10 @@ class Radio(models.Model):
 #        return audience
     
     def user_started_listening(self, user):
+        print 'user_started_listening user=%s radio=%s' % (user, self)
         if not user.is_anonymous:
             radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
+            print'user_started_listening radio_user=%s (id=%d)' % (radio_user, radio_user.id)
             radio_user.listening = True
             radio_user.save()
         else:
