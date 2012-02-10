@@ -21,8 +21,8 @@ class SongMetadataAdmin(admin.ModelAdmin):
     search_fields = ( 'name', 'artist_name', 'album_name', )
 
 class SongInstanceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'song', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist')
-    list_filter = ('playlist',)
+    list_display = ('id', 'song', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'need_sync')
+    list_filter = ('playlist', 'need_sync')
     search_fields = ('song', 'metadata__name', 'metadata__album_name', 'metadata__artist_name')
     
     def metadata_name(self, obj):

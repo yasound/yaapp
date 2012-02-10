@@ -35,7 +35,14 @@ class SongInstanceResource(ModelResource):
     class Meta:
         queryset = SongInstance.objects.all()
         resource_name = 'song'
-        fields = ['id', 'playlist', 'song', 'play_count', 'last_play_time', 'yasound_score', 'metadata']
+        fields = ['id', 
+                  'playlist', 
+                  'song', 
+                  'play_count', 
+                  'last_play_time', 
+                  'yasound_score', 
+                  'metadata',
+                  'need_sync',]
         include_resource_uri = False
         filtering = {
             'playlist': ALL,

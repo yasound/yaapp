@@ -425,7 +425,7 @@ def get_current_song(request, radio_id):
     return HttpResponse(song_json)
 
 @csrf_exempt
-def upload_song(request):
+def upload_song(request, song_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
@@ -440,11 +440,12 @@ def upload_song(request):
     filename = u'%s.mp3' % (str(uuid.uuid1()))
     path = '%s%s' % (settings.UPLOAD_SONG_FOLDER, filename)
 
-    
     destination = open(path, 'wb')
     for chunk in f.chunks():
         destination.write(chunk)
     destination.close()
+    
+    SongInstance.objects.filter(id=song_id).update(need_sync=True)
     
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)

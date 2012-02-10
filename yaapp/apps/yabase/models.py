@@ -49,6 +49,7 @@ class SongInstance(models.Model):
     metadata = models.ForeignKey(SongMetadata)
     users = models.ManyToManyField(User, through='SongUser', blank=True, null=True)
     order = models.IntegerField(null=True, blank=True) # song index in the playlist
+    need_sync = models.BooleanField(default=False)
     
     def __unicode__(self):
         return unicode(self.metadata)

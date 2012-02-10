@@ -133,6 +133,7 @@ def process_playlists_exec(radio, content_compressed):
                     notfound += 1
                 else:
                     song_instance.song = mongo_doc['db_id']
+                    song_instance.need_sync = False
                     found +=1
 
                 song_instance.save()

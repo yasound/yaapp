@@ -148,11 +148,9 @@ class TestFuzzy(TestCase):
         artist = u'The English Beat'
         album = u'Special'
         best_song = YasoundSong.objects.find_fuzzy(song, album, artist, limit=1)
-        print best_song
         
     def test_search2(self):
         song = u'live village'
         artist = u'chris'
         album = u''
         best_song = YasoundSong.objects.find_fuzzy(song, album, artist, limit=1)
-        print best_song
