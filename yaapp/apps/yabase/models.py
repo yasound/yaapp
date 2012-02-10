@@ -350,7 +350,7 @@ class Radio(models.Model):
             self.anonymous_audience += 1
             self.save()
         
-        audience = self.nb_current_users
+        audience = self.audience_total
         if audience > self.audience_peak:
             self.audience_peak = audience
         if audience > self.current_audience_peak:
@@ -381,7 +381,7 @@ class Radio(models.Model):
         stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience_peak=self.current_audience_peak, connections=self.current_connections, favorites=favorites, likes=likes, dislikes=dislikes)
         
         # reset current audience peak
-        audience = self.nb_current_users
+        audience = self.audience_total
         self.current_audience_peak = audience
         # reset current number of connections
         self.current_connections = 0
@@ -411,8 +411,13 @@ class Radio(models.Model):
     @property
     def nb_current_users(self):
         nb_users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).count()
-        nb_users += self.anonymous_audience
         return nb_users
+
+    @property
+    def audience_total(self):
+        audience = self.nb_current_users
+        audience += self.anonymous_audience
+        return audience
 
     class Meta:
         db_name = u'default'
