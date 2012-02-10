@@ -378,3 +378,6 @@ CELERYBEAT_SCHEDULE = {
 UPLOAD_SONG_FOLDER = '/tmp/'
 if PRODUCTION_MODE:
     UPLOAD_SONG_FOLDER = '/space/new/medias/sources/with_id3/'
+
+# tastypie
+API_LIMIT_PER_PAGE = 0 # no pagination for now
