@@ -374,6 +374,10 @@ CELERYBEAT_SCHEDULE = {
     },
     "build-mongodb-index": {
         "task": "yaref.task.build_mongodb_index",
+        "schedule": crontab(minute="*/30"),
+    },
+    "need-sync-songs": {
+        "task": "yabase.task.process_need_sync_songs",
         "schedule": crontab(minute=0, hour='*'),
     },
 }
