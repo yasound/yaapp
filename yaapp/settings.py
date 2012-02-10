@@ -182,6 +182,9 @@ STATIC_URL = '/media/statics'
 #ADMIN_MEDIA_PREFIX = '/static/admin/'
 ADMIN_MEDIA_PREFIX = "/media/statics/admin/"
 
+# defaut permission for uploaded file
+FILE_UPLOAD_PERMISSIONS = 0644
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
