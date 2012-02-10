@@ -84,6 +84,8 @@ def process_playlists_exec(radio, content_compressed):
             if not playlist in radio.playlists.all():
                 radio.playlists.add(playlist)
                 radio.save()
+            playlist.enabled = True
+            playlist.save()
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
             album_name_simplified = get_simplified_name(album_name)
