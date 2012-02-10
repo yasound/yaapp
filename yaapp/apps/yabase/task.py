@@ -56,6 +56,8 @@ def process_playlists_exec(radio, content_compressed):
     ALBUM_TAG = 'ALBM'
     SONG_TAG = 'SONG'
     UUID_TAG = 'UUID'
+    REMOVE_PLAYLIST = 'REMV'
+    REMOTE_PLAYLIST = 'RLST'
     
     artist_name = None
     album_name = None
@@ -75,23 +77,13 @@ def process_playlists_exec(radio, content_compressed):
         tag = data.get_tag()
         if tag == UUID_TAG:
             uuid = data.get_string()
-            
+        
         elif tag == PLAYLIST_TAG:
             playlist_name = data.get_string()
             playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=uuid)
-#            if created:
-#               print 'playlist created '
-#                print playlist
-#            else:
-#                print 'playlist found '
-#                print playlist
             if not playlist in radio.playlists.all():
-#               print radio
-#                print radio.playlists
                 radio.playlists.add(playlist)
                 radio.save()
-#                print radio.playlists
-
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
             album_name_simplified = get_simplified_name(album_name)
@@ -137,7 +129,15 @@ def process_playlists_exec(radio, content_compressed):
                     found +=1
 
                 song_instance.save()
-
+        elif tag == REMOVE_PLAYLIST:
+            playlist_name = data.get_string()
+            source = data.get_string()
+            Playlist.objects.filter(name=playlist_name, source=source).update(enabled=False)
+        elif tag == REMOTE_PLAYLIST:
+            playlist_name = data.get_string()
+            source = data.get_string()
+            Playlist.objects.filter(name=playlist_name, source=source).update(enabled=True)
+            
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
     if songs_ok.count() > 0:
         radio.ready = True
