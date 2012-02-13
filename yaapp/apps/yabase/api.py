@@ -166,7 +166,9 @@ class SelectedRadioResource(ModelResource):
     
     def apply_authorization_limits(self, request, object_list):
         user = request.user
-        return object_list.filter(radiouser__user=user, radiouser__radio_selected=True)
+        # For now, until we fill in selected radios, return all radios
+        return object_list.order_by('-overall_listening_time')
+#        return object_list.filter(radiouser__user=user, radiouser__radio_selected=True)
     
 class FavoriteRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
