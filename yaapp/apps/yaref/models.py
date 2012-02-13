@@ -158,18 +158,17 @@ class YasoundSongManager(models.Manager):
         best_song = None
         for song in songs:
             ratio_song, ratio_album, ratio_artist = 0, 0, 0
-            ratio_song = fuzz.token_sort_ratio(name, song["name"])
-            ratio_album = fuzz.token_sort_ratio(album, song["album"])
-            ratio_artist = fuzz.token_sort_ratio(artist, song["artist"])
+
+            if name is not None and song["name"] is not None:
+                ratio_song = fuzz.token_sort_ratio(name, song["name"])
+                
+            if album is not None and song["album"] is not None:
+                ratio_album = fuzz.token_sort_ratio(album, song["album"])
+
+            if artist is not None and song["artist"] is not None:
+                ratio_artist = fuzz.token_sort_ratio(artist, song["artist"])
             ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-#            logger.debug('%d:%s|%s|%s = %d+%d+%d=%d' % (song["db_id"],
-#                                      song["name"],
-#                                      song["album"],
-#                                      song["artist"],
-#                                      ratio_song,
-#                                      ratio_album,
-#                                      ratio_artist,
-#                                      ratio))
+
             if ratio >= best_ratio and ratio > 50:
                 best_ratio = ratio
                 best_song = song
