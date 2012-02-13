@@ -397,9 +397,7 @@ class RadioFavoriteResource(ModelResource):
         return bundle
 
 
-class RadioCurrentUserResource(ModelResource): 
-    current_radio = fields.ForeignKey(RadioResource, attribute='current_radio', full=True, null=True)
-    own_radio = fields.ForeignKey(RadioResource, attribute='own_radio', full=True, null=True)   
+class RadioCurrentUserResource(ModelResource):    
     radio = None
     
     class Meta:
