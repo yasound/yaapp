@@ -184,7 +184,7 @@ class Radio(models.Model):
     url = models.URLField(null=True, blank=True)
     uuid = models.CharField(max_length=48, blank=True)
     description = models.TextField(blank=True)
-    genre = models.CharField(max_length=255, blank=True)
+    genre = models.CharField(max_length=255, blank=True, default='style_all')
     theme = models.CharField(max_length=255, blank=True)
     tags = TaggableManager(blank=True)
     
