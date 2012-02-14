@@ -499,7 +499,7 @@ class RadioEnabledPlaylistResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio')
     
     class Meta:
-        queryset = Playlist.objects.filter(enabled=True)
+        queryset = Playlist.objects.filter(enabled=True).exclude(name=yabase_settings.YASOUND_FAVORITES_PLAYLIST_NAME)
         resource_name = 'enabled_playlist'
         fields = ['id', 'name']
         include_resource_uri = False
@@ -524,7 +524,7 @@ class RadioAllPlaylistResource(ModelResource):
     matched_song_count = fields.IntegerField(attribute='matched_song_count', default=0, readonly=True)
     unmatched_song_count = fields.IntegerField(attribute='unmatched_song_count', default=0, readonly=True)
     class Meta:
-        queryset = Playlist.objects.all()
+        queryset = Playlist.objects.exclude(name=yabase_settings.YASOUND_FAVORITES_PLAYLIST_NAME)
         resource_name = 'all_playlist'
         fields = ['id', 
                   'name', 

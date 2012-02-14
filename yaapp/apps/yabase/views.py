@@ -19,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from forms import SelectionForm
 import uuid
 import os
+import yabase.settings as yabase_settings
 
 import logging
 logger = logging.getLogger("yaapp.yabase")
@@ -278,9 +279,11 @@ def add_song_to_favorites(request, radio_id):
         response = json.dumps(result)
         return HttpResponse(response)
 
-    YASOUND_FAVORITES_PLAYLIST_NAME = '#yasound_songs_from_other_radios'
-    YASOUND_FAVORITES_PLAYLIST_SOURCE = '#yasound_songs_from_other_radios_source_%d' % request.user.id
-    playlist, created = radio.playlists.get_or_create(name=YASOUND_FAVORITES_PLAYLIST_NAME, source=YASOUND_FAVORITES_PLAYLIST_SOURCE)
+    favorites_playlist_name = yabase_settings.YASOUND_FAVORITES_PLAYLIST_NAME
+    favorites_playlist_source_name = yabase_settings.YASOUND_FAVORITES_PLAYLIST_SOURCE
+    favorites_playlist_source_name += '_'
+    favorites_playlist_source_name += request.user.id
+    playlist, created = radio.playlists.get_or_create(name=favorites_playlist_name, source=favorites_playlist_source_name)
     new_song = SongInstance.objects.create(playlist=playlist, metadata=song_source.metadata, song=song_source.song, play_count=0)
 
     result = dict(success=True, created=True)
