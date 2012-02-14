@@ -320,7 +320,7 @@ class Radio(models.Model):
         n = user.userprofile.name
         if not n:
             n = user.username
-        self.name = n + "'s radio"
+        self.name = n
         self.save()
 
     def unlock(self):
