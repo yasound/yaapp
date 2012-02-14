@@ -37,11 +37,14 @@ class SongInstanceAdmin(admin.ModelAdmin):
     
 class WallEventAdmin(admin.ModelAdmin):
     list_display = ('radio', 'type', 'start_date', 'song', 'user', 'text')
+
+class NextSongAdmin(admin.ModelAdmin):
+    list_filter = ('radio',)
     
-    
+     
 admin.site.register(SongMetadata, SongMetadataAdmin)
 admin.site.register(SongInstance, SongInstanceAdmin)
 admin.site.register(WallEvent, WallEventAdmin)
-admin.site.register(NextSong)
+admin.site.register(NextSong, NextSongAdmin)
 admin.site.register(RadioUser)
 admin.site.register(SongUser)
