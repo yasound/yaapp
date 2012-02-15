@@ -144,6 +144,7 @@ def process_playlists_exec(radio, content_compressed):
     if songs_ok.count() > 0:
         radio.ready = True
         radio.save()
+        radio.fill_next_songs_queue()
         
     print 'found: %d - not found: %d - total: %d' % (found, notfound, count)
 
