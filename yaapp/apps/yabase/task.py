@@ -80,10 +80,7 @@ def process_playlists_exec(radio, content_compressed):
         
         elif tag == PLAYLIST_TAG:
             playlist_name = data.get_string()
-            playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=uuid)
-            if not playlist in radio.playlists.all():
-                radio.playlists.add(playlist)
-                radio.save()
+            playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=uuid, radio=radio)
             playlist.enabled = True
             playlist.save()
         elif tag == ALBUM_TAG:
