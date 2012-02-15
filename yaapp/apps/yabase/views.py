@@ -31,7 +31,14 @@ SONG_FILE_TAG = 'song'
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
     status = asyncRes.state
-    return HttpResponse(status)
+    progress = 0.5
+    message = 'updating...'
+    response_dict = {}
+    response_dict['status'] = status
+    response_dict['progress'] = progress
+    response_dict['message'] = message
+    response = json.dumps(response_dict)
+    return HttpResponse(response)
 
 
 @csrf_exempt
