@@ -36,7 +36,8 @@ def task_status(request, task_id):
     response_dict = {}
     response_dict['status'] = status
     response_dict['progress'] = progress
-    response_dict['message'] = message
+    if message:
+   	 response_dict['message'] = message
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
