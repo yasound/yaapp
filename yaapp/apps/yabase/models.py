@@ -559,14 +559,14 @@ class WallEvent(models.Model):
     
     # attributes specific to 'song' event
     song = models.ForeignKey(SongInstance, null=True, blank=True)
-    song_name = models.CharField(max_length=255, blank=True)
-    song_album = models.CharField(max_length=255, blank=True)
-    song_artist = models.CharField(max_length=255, blank=True)
+    song_name = models.CharField(max_length=255, blank=True, default='unknown')
+    song_album = models.CharField(max_length=255, blank=True, default='unknown')
+    song_artist = models.CharField(max_length=255, blank=True, default='unknown')
     song_cover_filename = models.CharField(max_length=45, blank=True)
     
     # attributes specific to 'message' event
     user = models.ForeignKey(User, null=True, blank=True)
-    user_name = models.CharField(max_length = 60, blank=True)
+    user_name = models.CharField(max_length = 60, blank=True, , default='unknown')
     user_picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     
     text = models.TextField(null=True, blank=True)
