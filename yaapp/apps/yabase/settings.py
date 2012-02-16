@@ -12,10 +12,12 @@ MOOD_CHOICES = (
 
 EVENT_MESSAGE = 'M'
 EVENT_SONG = 'S'
+EVENT_LIKE = 'L'
 
 EVENT_TYPE_CHOICES = (
                         (EVENT_MESSAGE, _('Message')),
                         (EVENT_SONG, _('Song')),
+                        (EVENT_LIKE, _('Like')),
                     )
 
 FUZZY_COMMON_WORDS = ("the", "for", "a", "of", 'and')

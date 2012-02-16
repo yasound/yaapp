@@ -238,8 +238,8 @@ class WallEventResource(ModelResource):
         allowed_methods = ['post']
         
     def obj_create(self, bundle, request=None, **kwargs):
-        if bundle.data['type'] != yabase_settings.EVENT_MESSAGE:
-            print 'can only post Message events'
+        if bundle.data['type'] == yabase_settings.EVENT_SONG:
+            print 'cannot post Song messages'
             return None
         
         radio_uri = bundle.data['radio']
@@ -250,12 +250,7 @@ class WallEventResource(ModelResource):
         except Radio.DoesNotExist:
             return None
         
-        song_events = WallEvent.objects.filter(radio=radio, type=yabase_settings.EVENT_SONG).order_by('-start_date').all()
-        if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
-            s = radio.current_song
-            song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
-            song_event.start_date = radio.current_song_play_date
-            song_event.save()
+        WallEvent.objects.add_current_song_event(radio)
 
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
         wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event

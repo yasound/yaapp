@@ -520,17 +520,33 @@ class RadioUser(models.Model):
 
 
 class WallEventManager(models.Manager):
-    def get_events(self, type_value):
-        events = self.filter(type=type_value)
+    def get_events(self, radio, type_value):
+        events = self.filter(radio=radio, type=type_value)
         return events
 
-    def get_message_events(self):
-        events = self.get_events(yabase_settings.EVENT_MESSAGE)
+    def get_message_events(self, radio):
+        events = self.get_events(radio, yabase_settings.EVENT_MESSAGE)
         return events
 
-    def get_song_events(self):
-        events = self.get_events(yabase_settings.EVENT_SONG)
+    def get_song_events(self, radio):
+        events = self.get_events(radio, yabase_settings.EVENT_SONG)
         return events
+    
+    def add_current_song_event(self, radio):
+        song_events = self.get_song_events().order_by('-start_date').all()
+        if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
+            s = radio.current_song
+            song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
+            song_event.start_date = radio.current_song_play_date
+            song_event.save()
+            
+    def create_like_event(self, radio, song, user):
+        self.create(radio=radio, type=yabase_settings.EVENT_LIKE, song=song, user=user)
+        
+    def add_like_event(self, radio, song, user):
+        self.add_current_song_event(radio)
+        self.create_like_event(radio, song, user)
+        
   
     class Meta:
         db_name = u'default'
@@ -587,10 +603,10 @@ class WallEvent(models.Model):
         super(WallEvent, self).save(*args, **kwargs)
         
         if creation:
-            if self.type == yabase_settings.EVENT_MESSAGE:
+            if self.user:
                 self .user_name = self.user.userprofile.name
                 self.user_picture = self.user.userprofile.picture
-            elif self.type == yabase_settings.EVENT_SONG:
+            if self.song:
                 yasound_song_id = self.song.song
                 try:
                     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
