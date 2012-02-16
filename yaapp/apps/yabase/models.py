@@ -533,7 +533,7 @@ class WallEventManager(models.Manager):
         return events
     
     def add_current_song_event(self, radio):
-        song_events = self.get_song_events().order_by('-start_date').all()
+        song_events = self.get_song_events(radio).order_by('-start_date').all()
         if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
             s = radio.current_song
             song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
