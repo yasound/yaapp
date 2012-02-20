@@ -542,7 +542,7 @@ def radio_unmatched_song(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)
     unmatched_list = radio.unmatched_songs
     paginator = Paginator(unmatched_list, 25) # Show 25 songs per page
-    page = request.GET.get('page')
+    page = request.GET.get('page', 1)
     try:
         unmatched = paginator.page(page)
     except PageNotAnInteger:
