@@ -418,6 +418,11 @@ class Radio(models.Model):
         audience = self.nb_current_users
         audience += self.anonymous_audience
         return audience
+    
+    @property
+    def unmatched_songs(self):
+        songs = SongInstance.objects.filter(song=None, playlist__in=self.playlists.all())
+        return songs
 
     class Meta:
         db_name = u'default'

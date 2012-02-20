@@ -1,0 +1,35 @@
+<table cellspacing="10" border="0" cellpadding="0">
+<caption>Unmatched songs for {{radio.name}} (radio {{radio.id}})</caption>
+<tr>
+<th align="left">ID</th>
+<th align="left">Metadata ID</th>
+<th align="left">Artist</th>
+<th align="left">Album</th>
+<th align="left">Song</th>
+</tr>
+{% for song in unmatched_songs.object_list %}
+	<tr>
+	<td>{{ song.id}}</td>
+	<td>{{ song.metadata.id}}</td>
+    <td>{{ song.metadata.artist_name}}</td>
+    <td>{{ song.metadata.album_name}}</td>
+    <td>{{ song.metadata.name}}</li></td>
+    </tr>
+{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if unmatched_songs.has_previous %}
+            <a href="?page={{ unmatched_songs.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ unmatched_songs.number }} of {{ unmatched_songs.paginator.num_pages }}.
+        </span>
+
+        {% if unmatched_songs.has_next %}
+            <a href="?page={{ unmatched_songs.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>

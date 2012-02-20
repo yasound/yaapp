@@ -20,6 +20,7 @@ from forms import SelectionForm
 import uuid
 import os
 import yabase.settings as yabase_settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import logging
 logger = logging.getLogger("yaapp.yabase")
@@ -535,6 +536,23 @@ def web_favorite(request, radio_uuid, template_name='web/favorite.html'):
 
 def web_terms(request, template_name='web/terms.html'):
     return render_to_response(template_name, {
-    }, context_instance=RequestContext(request))    
+    }, context_instance=RequestContext(request))  
+    
+def radio_unmatched_song(request, radio_id):
+    radio = get_object_or_404(Radio, id=radio_id)
+    unmatched_list = radio.unmatched_songs
+    paginator = Paginator(unmatched_list, 25) # Show 25 songs per page
+    page = request.GET.get('page')
+    try:
+        unmatched = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        unmatched = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        unmatched = paginator.page(paginator.num_pages)
+
+    print 'radio_unmatched_song view: %d songs' % unmatched.object_list.count()
+    return render_to_response('yabase/unmatched.html', {"unmatched_songs": unmatched, "radio": radio})  
     
     
