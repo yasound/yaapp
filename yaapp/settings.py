@@ -360,6 +360,17 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
 )
 
+LOGIN_URL          = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL    = '/login-error/'
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
+from django.template.defaultfilters import slugify
+SOCIAL_AUTH_USERNAME_FIXER = lambda u: slugify(u)
+SOCIAL_AUTH_EXPIRATION = 'expires'
+SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/'
+
 AUTH_PROFILE_MODULE = 'account.UserProfile'
 
 PICTURE_FOLDER = 'pictures'

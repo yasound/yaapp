@@ -117,7 +117,8 @@ urlpatterns = patterns('',
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
     
     url(r'', include('social_auth.urls')),
-    url(r'^login_social/$', 'account.views.web_login_social', name="login_social"),
+    url(r'^login/$', 'account.views.login', name="login"),
+    url(r'^login-error/$', 'account.views.error', name='login-error'),
 )
 
 if settings.LOCAL_MODE:

@@ -41,7 +41,11 @@ def get_subscription(request):
     subscription = profile.subscription
     return HttpResponse(subscription)
 
-def web_login_social(request):
-    print 'web_social_login!!!'
+def login(request):
+    print 'web login!!!'
+    return render_to_response('login/login_social.html', {"matparam": "prout"}) 
+
+def error(request):
+    print 'web login error!!!'
     return render_to_response('login/login_social.html', {"matparam": "prout"}) 
     
