@@ -49,6 +49,10 @@ radio_all_playlist = RadioAllPlaylistResource()
 
 Radio.objects.unlock_all()
 
+js_info_dict = {
+    'packages': ('backoffice',),
+}
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'yaapp.views.home', name='home'),
@@ -108,8 +112,9 @@ urlpatterns = patterns('',
     url(r'^radio/(?P<radio_id>\d+)/unmatched/$', 'yabase.views.radio_unmatched_song'),
         
     # yaref (fuzzy, ..)
-    (r'^yaref/', include('yaref.urls'))
-    # The normal jazz here, then...
+    (r'^yaref/', include('yaref.urls')),
+    (r'^yabackoffice/', include('yabackoffice.urls')),
+    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )
 
 if settings.LOCAL_MODE:

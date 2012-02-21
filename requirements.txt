@@ -16,3 +16,6 @@ pyyaml
 pymongo
 django-extensions
 django-iphone-push
+-e git+https://github.com/jbl2024/django-extjs#egg=django-extjs
+django-compress
+simplejson

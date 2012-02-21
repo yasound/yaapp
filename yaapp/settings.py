@@ -249,6 +249,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'django_extensions',
+    'extjs',
+    'compress',
     'south',
     'account',
     'wall',
@@ -261,7 +263,8 @@ INSTALLED_APPS = (
     'taggit',
     'test_utils',
     #'django-iphone-push',
-    'yagraph'
+    'yagraph',
+    'yabackoffice',
 )
 
 ugettext = lambda s: s
@@ -388,3 +391,17 @@ if PRODUCTION_MODE:
 
 # tastypie
 API_LIMIT_PER_PAGE = 0 # no pagination for now
+
+
+# compress
+if PRODUCTION_MODE :
+    COMPRESS = True
+else :
+    COMPRESS = False
+    
+COMPRESS_VERSION = True
+from resources_settings import COMPRESS_JS, COMPRESS_CSS
+# Remove filters. We just need concatenated files
+COMPRESS_JS_FILTERS = ()
+COMPRESS_CSS_FILTERS = ()
+    
