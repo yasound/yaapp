@@ -15,17 +15,38 @@ Yasound.Backoffice.Data.RadioStore = function() {
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Backoffice.UI.RadioColumnModel = function(sm){
-    return ([sm, {
+Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
+	var cm = [{
         header: gettext('Name'),
         dataIndex: 'name',
         sortable: true,
         width: 60,
         filterable: true
-    }]);
+    }];
+	
+	if (sm) {
+		cm.splice(0, 0, sm); 
+	}
+	
+    return cm;
 };
 
+Yasound.Backoffice.UI.RadioFilters = function(){
+    return new Ext.ux.grid.GridFilters({
+        encode: false,
+        local: true,
+        filters: [{
+            type: 'string',
+            dataIndex: 'name'
+        }]
+    });
+};
+
+
 Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
+	singleSelect: true,
+	checkboxSelect: true,
+	
     initComponent: function() {
         this.addEvents('radioselected');
         this.pageSize = 25;
@@ -33,7 +54,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
-            singleSelect: true,
+            singleSelect: this.multipleSelection,
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
@@ -62,12 +83,13 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.RadioColumnModel(sm)),
+            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.RadioColumnModel(this.checkboxSelect ? sm : null)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
-            })
+            }),
+        	plugins: [Yasound.Backoffice.UI.RadioFilters()]
         
         }; // eo config object
         // apply config

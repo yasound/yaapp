@@ -31,6 +31,8 @@ class SongMetadata(models.Model):
     genre = models.CharField(max_length=255, null=True, blank=True)
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     
+    yasound_song_id = models.IntegerField(_('yasound song id'), null=True, blank=True) # song ID in the Song db
+    
     def __unicode__(self):
         return self.name
 
@@ -42,7 +44,7 @@ class SongMetadata(models.Model):
 
 class SongInstance(models.Model):
     playlist = models.ForeignKey('Playlist')
-    song = models.IntegerField(null=True, blank=True) # song ID in the Song db
+    song = models.IntegerField(null=True, blank=True) # song ID in the Song db -- this should disappear soon
     play_count = models.IntegerField(default=0)
     last_play_time = models.DateTimeField(null=True, blank=True)
     yasound_score = models.FloatField(default=0)
@@ -67,11 +69,12 @@ class SongInstance(models.Model):
             bundle.data['name'] = self.metadata.name
             bundle.data['artist'] = self.metadata.artist_name
             bundle.data['album'] = self.metadata.album_name
+            bundle.data['song'] = self.metadata.yasound_song_id
         
     @property
     def song_description(self):
         try:
-            song = YasoundSong.objects.get(id=self.song)
+            song = YasoundSong.objects.get(id=self.metadata.yasound_song_id)
         except YasoundSong.DoesNotExist:
             return None
         
@@ -220,7 +223,7 @@ class Radio(models.Model):
         return valid
     
     def find_new_song(self):
-        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), song__gt=0)
+        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0)
         songs = songs_queryset.all()
         count = len(songs)
         if count == 0:
@@ -616,7 +619,7 @@ class WallEvent(models.Model):
                 self .user_name = self.user.userprofile.name
                 self.user_picture = self.user.userprofile.picture
             if self.song:
-                yasound_song_id = self.song.song
+                yasound_song_id = self.song.metadata.yasound_song_id
                 try:
                     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
                     self.song_name = yasound_song.name

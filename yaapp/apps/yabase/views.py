@@ -340,7 +340,7 @@ def get_next_song(request, radio_id):
     if not nextsong:
         return HttpResponse('cannot find next song', status=404)
     
-    song = get_object_or_404(YasoundSong, id=nextsong.song)
+    song = get_object_or_404(YasoundSong, id=nextsong.metadata.yasound_song_id)
     return HttpResponse(song.filename)
 
 @csrf_exempt

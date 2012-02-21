@@ -197,8 +197,18 @@ post_save.connect(create_api_key, sender=User)
 post_save.connect(create_radio, sender=User)
 
 
+class Device(models.Model):
+    """
+    Represent a device (iphone, ipad, ..)
+    """
+    user = models.ForeignKey(User, verbose_name=_('user'))
+    uuid = models.CharField(_('uuid'), max_length=255)
+    
+    class Meta:
+        verbose_name = _('device')
+        unique_together = ('user', 'uuid')
 
-
+    
 
 
 

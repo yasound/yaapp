@@ -23,7 +23,7 @@ class SongMetadataResource(ModelResource):
     class Meta:
         queryset = SongMetadata.objects.all()
         resource_name = 'metadata'
-        fields = ['name', 'artist_name', 'album_name', 'track_index', 'track_count', 'disc_index', 'disc_count', 'bpm', 'date', 'score', 'duration', 'genre', 'picture']
+        fields = ['name', 'yasound_song_id', 'artist_name', 'album_name', 'track_index', 'track_count', 'disc_index', 'disc_count', 'bpm', 'date', 'score', 'duration', 'genre', 'picture']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
@@ -37,7 +37,6 @@ class SongInstanceResource(ModelResource):
         resource_name = 'song'
         fields = ['id', 
                   'playlist', 
-                  'song', 
                   'play_count', 
                   'last_play_time', 
                   'yasound_score', 

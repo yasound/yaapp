@@ -11,19 +11,20 @@ admin.site.register(Playlist, PlaylistAdmin)
     
 class RadioAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'creator', 'url', 'uuid', 'ready')
-    search_fields = ( 'name', )
+    search_fields = ['name']
+    exclude = ('next_songs', 'current_song',)
     list_filter = ('creator', 'ready')
 admin.site.register(Radio, RadioAdmin)
     
 
 class SongMetadataAdmin(admin.ModelAdmin):
-    list_display = ('name', 'artist_name', 'album_name' )
+    list_display = ('name', 'artist_name', 'album_name', 'yasound_song_id', )
     search_fields = ( 'name', 'artist_name', 'album_name', )
 
 class SongInstanceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'song', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'need_sync')
+    list_display = ('id', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'need_sync')
     list_filter = ('playlist', 'need_sync')
-    search_fields = ('song', 'metadata__name', 'metadata__album_name', 'metadata__artist_name')
+    search_fields = ('song', 'metadata__yasound_song_id', 'metadata__name', 'metadata__album_name', 'metadata__artist_name')
     
     def metadata_name(self, obj):
         return obj.metadata.name
