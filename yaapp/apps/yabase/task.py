@@ -113,7 +113,7 @@ def process_playlists_exec(radio, content_compressed):
             else:
                 song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
 
-            if song_instance.song == None:
+            if metadata.yasound_song_id == None:
                 song_name_simplified = get_simplified_name(song_name)
                 count += 1
                 # let's go fuzzy
@@ -123,10 +123,12 @@ def process_playlists_exec(radio, content_compressed):
                 if not mongo_doc:
                     notfound += 1
                 else:
-                    song_instance.song = mongo_doc['db_id']
+                    metadata.yasound_song_id = mongo_doc['db_id']
+                    metadata.save()
+                    
                     song_instance.need_sync = False
                     found +=1
-
+                    
                 song_instance.save()
         elif tag == REMOVE_PLAYLIST:
             playlist_name = data.get_string()
@@ -156,7 +158,7 @@ def process_need_sync_songs_exec():
     """
     try to match all needed sync songs with the yasound songs
     """
-    songs = SongInstance.objects.filter(need_sync=True, song__isnull=True).select_related()
+    songs = SongInstance.objects.filter(need_sync=True, metadata__yasound_song_id__isnull=True).select_related()
     for song in songs:
         metadata = song.metadata
         if not metadata:
@@ -166,7 +168,8 @@ def process_need_sync_songs_exec():
         artist = metadata.artist_name
         mongo_doc = YasoundSong.objects.find_fuzzy(name, album, artist) 
         if mongo_doc:
-            song.song = mongo_doc['db_id']
+            metadata.yasound_song_id = mongo_doc['db_id']
+            metadata.save()
             song.need_sync = False
             song.save()
     
