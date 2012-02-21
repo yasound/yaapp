@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from models import User, UserProfile
 import datetime
@@ -40,4 +40,8 @@ def get_subscription(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     subscription = profile.subscription
     return HttpResponse(subscription)
+
+def web_login_social(request):
+    print 'web_social_login!!!'
+    return render_to_response('login/login_social.html', {"matparam": "prout"}) 
     
