@@ -376,15 +376,17 @@ elif PRODUCTION_MODE:
  
 SOUTH_TESTS_MIGRATE=False   
 
+# mongodb
 from pymongo.connection import Connection
-from pymongo import DESCENDING
-import gridfs
-MONGO_DB = Connection().yasound
+if PRODUCTION_MODE:
+    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@localhost/yasound').yasound
+else:
+    MONGO_DB = Connection().yasound
 
-
+# album images folder
 ALBUM_COVER_URL = MEDIA_URL + 'covers/albums/'
 
-
+# celery stuff
 from celery.schedules import crontab
 
 CELERYBEAT_SCHEDULE = {
