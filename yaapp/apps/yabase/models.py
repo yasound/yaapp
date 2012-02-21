@@ -44,7 +44,7 @@ class SongMetadata(models.Model):
 
 class SongInstance(models.Model):
     playlist = models.ForeignKey('Playlist')
-    song = models.IntegerField(null=True, blank=True) # song ID in the Song db
+    song = models.IntegerField(null=True, blank=True) # song ID in the Song db -- this should disappear soon
     play_count = models.IntegerField(default=0)
     last_play_time = models.DateTimeField(null=True, blank=True)
     yasound_score = models.FloatField(default=0)
