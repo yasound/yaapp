@@ -31,6 +31,18 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
     return cm;
 };
 
+Yasound.Backoffice.UI.RadioFilters = function(){
+    return new Ext.ux.grid.GridFilters({
+        encode: false,
+        local: true,
+        filters: [{
+            type: 'string',
+            dataIndex: 'name'
+        }]
+    });
+};
+
+
 Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelect: true,
 	checkboxSelect: true,
@@ -76,7 +88,8 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
-            })
+            }),
+        	plugins: [Yasound.Backoffice.UI.RadioFilters()]
         
         }; // eo config object
         // apply config

@@ -37,6 +37,23 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
     }]);
 };
 
+Yasound.Backoffice.UI.SongInstanceFilters = function(){
+    return new Ext.ux.grid.GridFilters({
+        encode: false,
+        local: true,
+        filters: [{
+            type: 'string',
+            dataIndex: 'name'
+        }, {
+            type: 'string',
+            dataIndex: 'album_name'
+        }, {
+            type: 'string',
+            dataIndex: 'artist_name'
+        }]
+    });
+};
+
 Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     initComponent: function(){
         this.pageSize = 25;
@@ -78,8 +95,8 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
-            })
-        
+            }),
+            plugins: [Yasound.Backoffice.UI.SongInstanceFilters()]
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
