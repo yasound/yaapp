@@ -424,6 +424,10 @@ class Radio(models.Model):
         songs = SongInstance.objects.filter(song=None, playlist__in=self.playlists.all())
         return songs
 
+    @property
+    def picture_url(self):
+        return None
+        
     class Meta:
         db_name = u'default'
         

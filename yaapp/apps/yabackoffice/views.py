@@ -15,7 +15,7 @@ import simplejson as json
 from extjs import utils
 from django.views.decorators.csrf import csrf_exempt
 
-from grids import SongInstanceGrid
+from grids import SongInstanceGrid, RadioGrid
 from yabase.models import Radio
 import utils as yabackoffice_utils
 
@@ -32,6 +32,16 @@ def radio_unmatched_song(request, radio_id):
     if request.method == 'GET':
         qs = radio.unmatched_songs
         grid = SongInstanceGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    
+@csrf_exempt
+@login_required
+def radios(request):
+    if request.method == 'GET':
+        qs = Radio.objects.all()
+        grid = RadioGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp

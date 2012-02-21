@@ -1,5 +1,6 @@
 Ext.BLANK_IMAGE_URL = '/media/extjs/resources/images/default/s.gif';
 Ext.namespace("Yasound.Backoffice.UI", "Yasound.Backoffice.Handler", "Yasound.Backoffice.Data");
+Ext.namespace("Yasound.Utils");
 
 
 //------------------------------------------
@@ -50,7 +51,7 @@ Ext.onReady(function(){
     Ext.QuickTips.init();
     Ext.History.init();
     
-    var tabPanel1 = {
+    var tabPanelSongs = {
         id: 'registers-tab',
         expanded: false,
         listeners: {
@@ -60,10 +61,10 @@ Ext.onReady(function(){
         },
         items: [{
             title: gettext('Songs'),
-            id: 'registers-top-panel',
-            tabTip: gettext('Restricted area'),
+            id: 'songs-top-panel',
+            tabTip: gettext('Song management'),
             style: 'padding: 10px;',
-            html: '<h1>Hello, world</h1>',
+            html: '<h1>Song management</h1>',
             listeners: {
                 'activate': function(p){
                     var tabPanel = p.findParentByType('grouptab');
@@ -88,7 +89,7 @@ Ext.onReady(function(){
         items: []
     };
     
-    tabPanels.items.push(tabPanel1);
+    tabPanels.items.push(tabPanelSongs);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',

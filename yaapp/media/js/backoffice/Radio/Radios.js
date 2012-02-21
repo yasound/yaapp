@@ -2,9 +2,9 @@
 // Datastore
 //------------------------------------------
 
-Yasound.Backoffice.Data.SongInstanceStore = function() {
-	var fields = ['id', 'name', 'artist_name', 'album_name'];
-	var url = '/yabackoffice/radio/0/unmatched/';
+Yasound.Backoffice.Data.RadioStore = function() {
+	var fields = ['id', 'name'];
+	var url = '/yabackoffice/radios/';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -15,32 +15,21 @@ Yasound.Backoffice.Data.SongInstanceStore = function() {
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
+Yasound.Backoffice.UI.RadioColumnModel = function(sm){
     return ([sm, {
-        header: gettext('Track'),
+        header: gettext('Name'),
         dataIndex: 'name',
-        sortable: true,
-        width: 60,
-        filterable: true
-    }, {
-        header: gettext('Album'),
-        dataIndex: 'album_name',
-        sortable: true,
-        width: 60,
-        filterable: true
-    }, {
-        header: gettext('Artist'),
-        dataIndex: 'artist_name',
         sortable: true,
         width: 60,
         filterable: true
     }]);
 };
 
-Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
-    initComponent: function(){
+Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
+    initComponent: function() {
+        this.addEvents('radioselected');
         this.pageSize = 25;
-        this.store = Yasound.Backoffice.Data.SongInstanceStore();
+        this.store = Yasound.Backoffice.Data.RadioStore();
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
@@ -48,7 +37,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('staffselected', this, record.data.id, record.data.lastname);							
+                        this.grid.fireEvent('radioselected', this, record.data.id, record.data);							
 					}, this);
                 }
             }
@@ -73,7 +62,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.SongInstanceColumnModel(sm)),
+            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.RadioColumnModel(sm)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
@@ -83,39 +72,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
-        Yasound.Backoffice.UI.SongInstanceGrid.superclass.initComponent.apply(this, arguments);
-    },
-    refresh: function(radioId) {
-    	var url = String.format('/yabackoffice/radio/{0}/unmatched/', radioId);
-    	this.store.proxy.setUrl(url, true);
-    	this.store.reload();
+        Yasound.Backoffice.UI.RadioGrid.superclass.initComponent.apply(this, arguments);
     }
 });
-Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);
-
-Yasound.Backoffice.UI.UnmatchedSongsPanel = function(){
-	var songGrid = Ext.ComponentMgr.create({
-    	xtype:'songinstancegrid',
-    	region:'center'
-	});
-	
-    return {
-        xtype: 'panel',
-        layout: 'border',
-        id: 'contacts-panel',
-        title: gettext('Unmatched songs'),
-        items: [{
-        	xtype:'radiogrid',
-        	region:'west',
-        	split:true,
-        	width:200,
-        	listeners: {
-        		'radioselected': function(grid, id, record) {
-        			songGrid.refresh(id)
-        		}
-        	}
-        }, songGrid],
-        updateData: function(component){
-        }
-    };
-};
+Ext.reg('radiogrid', Yasound.Backoffice.UI.RadioGrid);
