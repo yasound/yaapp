@@ -27,5 +27,6 @@ COMPRESS_JS = { 'backoffice-all': {'output_filename': 'backoffice-all.?.js',
                                              'extjs/examples/ux/treegrid/TreeGridColumns.js',
                                              'extjs/examples/ux/treegrid/TreeGrid.js',
                                              'js/backoffice/backoffice.js',
+                                             'js/backoffice/Radio/UnmatchedSongs.js',
                                              ]}
                }

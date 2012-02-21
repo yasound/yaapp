@@ -59,12 +59,22 @@ Ext.onReady(function(){
             }
         },
         items: [{
-            title: gettext('Registers'),
+            title: gettext('Songs'),
             id: 'registers-top-panel',
             tabTip: gettext('Restricted area'),
             style: 'padding: 10px;',
-            html: '<h1>Hello, world</h1>'
-        }]
+            html: '<h1>Hello, world</h1>',
+            listeners: {
+                'activate': function(p){
+                    var tabPanel = p.findParentByType('grouptab');
+                    var nextItem = p.nextSibling();
+                    tabPanel.setActiveTab(nextItem);
+                }
+            }
+        }, Ext.apply(Yasound.Backoffice.UI.UnmatchedSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Unmatched songs')
+        })]
     };
 
     var tabPanels = {
