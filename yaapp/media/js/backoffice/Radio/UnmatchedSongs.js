@@ -96,7 +96,23 @@ Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);
 Yasound.Backoffice.UI.UnmatchedSongsPanel = function(){
 	var songGrid = Ext.ComponentMgr.create({
     	xtype:'songinstancegrid',
+    	title: gettext('Tracks'),
     	region:'center'
+	});
+	
+	var radioGrid = Ext.ComponentMgr.create({
+    	xtype:'radiogrid',
+    	title: gettext('Radios'),
+    	region:'west',
+    	split:true,
+    	width:200,
+    	singleSelect: true,
+    	checkboxSelect: false,
+    	listeners: {
+    		'radioselected': function(grid, id, record) {
+    			songGrid.refresh(id)
+    		}
+    	}		
 	});
 	
     return {
@@ -104,18 +120,9 @@ Yasound.Backoffice.UI.UnmatchedSongsPanel = function(){
         layout: 'border',
         id: 'contacts-panel',
         title: gettext('Unmatched songs'),
-        items: [{
-        	xtype:'radiogrid',
-        	region:'west',
-        	split:true,
-        	width:200,
-        	listeners: {
-        		'radioselected': function(grid, id, record) {
-        			songGrid.refresh(id)
-        		}
-        	}
-        }, songGrid],
-        updateData: function(component){
+        items: [radioGrid, songGrid],
+        updateData: function(component) {
+        	radioGrid.store.reload();
         }
     };
 };

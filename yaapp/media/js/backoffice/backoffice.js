@@ -52,7 +52,7 @@ Ext.onReady(function(){
     Ext.History.init();
     
     var tabPanelSongs = {
-        id: 'registers-tab',
+        id: 'songs-tab',
         expanded: false,
         listeners: {
             'tabchange': function(tabPanel, tab){
