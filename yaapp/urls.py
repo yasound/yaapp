@@ -101,6 +101,7 @@ urlpatterns = patterns('',
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
 
     # web front end
+    url(r'^$', 'yabase.views.web_index', name='web_index'),
     url(r'^radios/my/$', 'yabase.views.web_myradio', name='web_myradio'),
     url(r'^radios/friends/$', 'yabase.views.web_friends', name='web_friends'),
     url(r'^radios/favorites/$', 'yabase.views.web_favorites', name='web_favorites'),
