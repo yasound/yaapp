@@ -704,3 +704,36 @@ def next_song_deleted(sender, instance, created=None, **kwargs):
     
 signals.post_delete.connect(next_song_deleted, sender=NextSong)
 
+class FeaturedContent(models.Model):
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)    
+    name = models.CharField(_('name'), max_length=255)
+    description = models.TextField(_('description'), blank=True)
+    activated = models.BooleanField(_('activated'), default=False)
+    radios = models.ManyToManyField(Radio, through='FeaturedRadio', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        FeaturedContent.objects.exclude(id=self.id).update(activated=False)
+        super(FeaturedContent, self).save(*args, **kwargs)
+            
+    class Meta:
+        db_name = u'default'
+        verbose_name = _('featured content')    
+        
+class FeaturedRadio(models.Model):
+    featured_content = models.ForeignKey(FeaturedContent, verbose_name=_('featured content'))
+    radio = models.ForeignKey(Radio, verbose_name=_('radio'))
+    order = models.IntegerField(_('order'), default=0)
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.featured_content, self.radio);
+    
+    class Meta:
+        verbose_name = _('featured radio')
+        unique_together = ('featured_content', 'radio')
+        ordering = ['order',]
+        db_name = u'default'
+        
