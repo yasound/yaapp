@@ -443,9 +443,38 @@ def get_current_song(request, radio_id):
     return HttpResponse(song_json)
 
 @csrf_exempt
-def upload_song(request, song_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
+def upload_song(request, song_id=None):
+    """
+    Upload a song to the system.
+    
+    This view can be called by the mobile client or with regular form.
+    song_id can be specified to match an already existing SongInstance object
+    
+    A data json dict can also be provided. It must contains:
+    
+    {'title': 'a title',
+     'artist_name' : 'an artist name',
+     'album_name' : 'an album_name',
+     'track_index' : ..,
+     'track_count' : ..,
+     'disc_index': ...,
+     'disc_count': ...,
+     'bpm': ...,
+     'score':  ..,
+     'duration': ..,
+     'genre': ..,
+     'lastfm_id:': ..,
+     'echonest_id: ..,
+     'echonest_data': {},
+     'mb_id:'..,
+    }
+    
+    
+    """
+    
+    if not request.user.is_authenticated():
+        if not check_api_key_Authentication(request):
+            return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
@@ -463,7 +492,8 @@ def upload_song(request, song_id):
         destination.write(chunk)
     destination.close()
     
-    SongInstance.objects.filter(id=song_id).update(need_sync=True)
+    if song_id:
+        SongInstance.objects.filter(id=song_id).update(need_sync=True)
     
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
