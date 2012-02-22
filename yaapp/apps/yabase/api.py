@@ -18,6 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.http import HttpResponse
 import json
+from django.db.models import Q
 
 
 class SongMetadataResource(ModelResource):
@@ -551,8 +552,7 @@ class MatchedSongResource(ModelResource):
                   ]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-#        authentication = YasoundApiKeyAuthentication()
-        authentication = Authentication()
+        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         
     def dispatch(self, request_type, request, **kwargs):
@@ -575,6 +575,40 @@ class MatchedSongResource(ModelResource):
         else:
             cover = None
         bundle.data['cover'] = cover
+        
+        
+class SearchSongResource(ModelResource):  
+    class Meta:
+        playlist = None
+        queryset = YasoundSong.objects.exclude()
+        resource_name = 'search_song'
+        fields = ['id', 
+                  'name',
+                  'artist_name',
+                  'album_name',
+                  ]
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+        authentication = YasoundApiKeyAuthentication()
+        allowed_methods = ['get']
+        
+    
+    def get_object_list(self, request):
+        search = request.GET.get('search', None)
+        
+        
+        yasound_songs = YasoundSong.objects.filter(Q(name=search) | Q(artist_name=search) | Q(album_name=search))
+        return yasound_songs
+    
+    def dehydrate(self, bundle):
+        yasound_song = bundle.obj
+        if yasound_song.album:
+            cover = yasound_song.album.cover_url
+        elif yasound_song.cover_filename:
+            cover = yasound_song.cover_url
+        else:
+            cover = None
+        bundle.data['cover'] = cover      
     
     
 class LeaderBoardResource(ModelResource):
