@@ -337,18 +337,13 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-FACEBOOK_APP_ID              = '296167703762159'
-FACEBOOK_API_SECRET          = 'af4d20f383ed42cabfb4bf4b960bb03f'
-
-SOCIAL_AUTH_PIPELINE = (
-    'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email',
-    'social_auth.backends.pipeline.misc.save_status_to_session',
-    'social_auth.backends.pipeline.user.create_user',
-    'social_auth.backends.pipeline.social.associate_user',
-    'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details',
-)
+if PRODUCTION_MODE:
+    FACEBOOK_APP_ID              = '296167703762159'
+    FACEBOOK_API_SECRET          = 'af4d20f383ed42cabfb4bf4b960bb03f'
+if LOCAL_MODE:
+    # myapp.com:8000
+    FACEBOOK_APP_ID='256873614391089'
+    FACEBOOK_API_SECRET='7e591216eeaa551cc8c4ed10a0f5c490'
 
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
@@ -361,8 +356,17 @@ SOCIAL_AUTH_EXPIRATION = 'expires'
 SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/'
 SOCIAL_AUTH_ENABLED_BACKENDS = ( 'facebook', )
-
 AUTH_PROFILE_MODULE = 'account.UserProfile'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.user.get_username',
+    'account.pipeline.associate_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details'
+)
 
 PICTURE_FOLDER = 'pictures'
 

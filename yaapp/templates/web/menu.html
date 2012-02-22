@@ -1,5 +1,6 @@
 {% load i18n %}
 <ul class="nav nav-list">
+    {% if request.user.is_authenticated %}
     <li class="nav-header">{% trans "My radio" %}</li>
     <li {% ifequal selected "my-radio" %}class='active' {% endifequal %}><a href="{% url web_myradio %}">{% trans "My radio" %}</a></li>
     <li class="nav-header">{% trans "Radios" %}</li>
@@ -10,4 +11,9 @@
     <li class="nav-header">{% trans "Me" %}</li>
     <li {% ifequal selected "terms" %}class='active' {% endifequal %}><a href="{% url web_terms %}">{% trans "Terms and conditions" %}</a></li>
     <li {% ifequal selected "logout" %}class='active' {% endifequal %}><a href="{% url logout %}">{% trans "Logout" %}</a></li>
+    {% else %}
+    <li class="nav-header">{% trans "Welcome" %}</li>
+    <li {% ifequal selected "login" %}class='active' {% endifequal %}><a href="{% url login %}">{% trans "Login" %}</a></li>
+    <li {% ifequal selected "terms" %}class='active' {% endifequal %}><a href="{% url web_terms %}">{% trans "Terms and conditions" %}</a></li>
+    {% endif %}
 </ul>

@@ -468,6 +468,7 @@ def upload_song(request, song_id):
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
 
+    
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
@@ -537,6 +538,12 @@ def web_favorite(request, radio_uuid, template_name='web/favorite.html'):
 def web_terms(request, template_name='web/terms.html'):
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))  
+    
+    
+def web_index(request, template_name='web/index.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))  
+
     
 def radio_unmatched_song(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)

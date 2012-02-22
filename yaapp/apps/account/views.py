@@ -1,9 +1,12 @@
+from check_request import check_api_key_Authentication, check_http_method
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
+from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from models import User, UserProfile
 import datetime
-from check_request import check_api_key_Authentication, check_http_method
+from django.contrib.messages.api import get_messages
+from social_auth import __version__ as version
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -41,11 +44,13 @@ def get_subscription(request):
     subscription = profile.subscription
     return HttpResponse(subscription)
 
-def login(request):
-    print 'web login!!!'
-    return render_to_response('account/login.html') 
+def login(request, template_name='account/login.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))    
 
-def error(request):
-    print 'web login error!!!'
-    return render_to_response('account/login_error.html') 
+def error(request, template_name='account/login_error.html'):
+    messages = get_messages(request)
+    return render_to_response(template_name, {'version': version,
+                                             'messages': messages},
+                              RequestContext(request))
     

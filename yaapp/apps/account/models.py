@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import login
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from tastypie.models import create_api_key
@@ -13,6 +14,9 @@ import json
 import urllib
 import uuid
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+
+from social_auth.signals import socialauth_not_registered
+
 from django.core.files.base import ContentFile
 import datetime
 
@@ -195,7 +199,6 @@ def create_radio(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_api_key, sender=User)
 post_save.connect(create_radio, sender=User)
-
 
 class Device(models.Model):
     """
