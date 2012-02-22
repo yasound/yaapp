@@ -26,20 +26,19 @@ class YaappRouter(object):
         return None
     
     def allow_relation(self, obj1, obj2, **hints):
-        "Allow any relation if a model in yabase is involved"
-        if obj1._meta.app_label != 'yabase' or obj2._meta.app_label != 'yabase':
-            return None
+        "Disallow relation between different databases"
+        if 'db_name' in dir(obj1._meta) and 'db_name' in dir(obj2._meta):
+            if obj1._meta.db_name != obj2._meta.db_name:
+                return False
         return True
-        if 'db_name' in dir(obj1._meta) and 'db_name' in dir(obj2._meta) and obj1._meta.db_name == obj2._meta.db_name:
-            return True
-        return False
     
     def allow_syncdb(self, db, model):
         "Make sure the yabase app only appears on the 'default' db"
-        if model._meta.app_label != 'yabase':
-            return None
         if db == 'yasound':
             return False
+
+        if model._meta.app_label == 'yaref':
+            return None
         return True
 
 class YaappRouterForTest(object):
