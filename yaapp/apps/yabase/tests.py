@@ -4,6 +4,7 @@ from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
 from tests_utils import generate_playlist
+from yabase.models import FeaturedContent
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import settings as yabase_settings
 
@@ -154,3 +155,50 @@ class TestFuzzy(TestCase):
         artist = u'chris'
         album = u''
         best_song = YasoundSong.objects.find_fuzzy(song, album, artist, limit=1)
+        
+class TestFeaturedModels(TestCase):
+    multi_db = True
+    fixtures = ['yasound_local.yaml',]
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+    
+        # build some data
+        radio = Radio(creator=user, name='radio1', uuid='radio1')
+        radio.save()
+        self.radio = radio
+    
+    def testActivate(self):
+        featured_content1 = FeaturedContent(name='featured_1') 
+        featured_content1.save()
+        
+        self.assertEquals(featured_content1.activated, False)
+        
+        featured_content1.activated = True
+        featured_content1.save()
+        self.assertEquals(featured_content1.activated, True)
+        
+        featured_content2 = FeaturedContent(name='featured_2') 
+        featured_content2.save()
+        featured_content1 = FeaturedContent.objects.get(id=featured_content1.id)
+        featured_content2 = FeaturedContent.objects.get(id=featured_content2.id)
+        self.assertEquals(featured_content1.activated, True)
+        self.assertEquals(featured_content2.activated, False)
+
+        featured_content2.activated = True
+        featured_content2.save()
+        featured_content1 = FeaturedContent.objects.get(id=featured_content1.id)
+        featured_content2 = FeaturedContent.objects.get(id=featured_content2.id)
+        self.assertEquals(featured_content1.activated, False)
+        self.assertEquals(featured_content2.activated, True)
+        featured_content1.activated = True
+        featured_content1.save()
+        featured_content1 = FeaturedContent.objects.get(id=featured_content1.id)
+        featured_content2 = FeaturedContent.objects.get(id=featured_content2.id)
+        self.assertEquals(featured_content1.activated, True)
+        self.assertEquals(featured_content2.activated, False)
+        
+           
