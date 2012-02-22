@@ -9,7 +9,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     RadioLikerResource, RadioFavoriteResource, SearchRadioResource, \
     RadioCurrentUserResource, \
     WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
-    RadioAllPlaylistResource, LeaderBoardResource
+    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from stats.api import RadioListeningStatResource
@@ -46,6 +46,7 @@ radio_user = RadioUserResource()
 song_user = SongUserResource()
 radio_enabled_playlist = RadioEnabledPlaylistResource()
 radio_all_playlist = RadioAllPlaylistResource()
+playlist_matched_songs = MatchedSongResource()
 
 Radio.objects.unlock_all()
 
@@ -84,6 +85,7 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(current_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_all_playlist.urls)),
+    (r'^api/v1/playlist/(?P<playlist>\d+)/', include(playlist_matched_songs.urls)),
     (r'^api/v1/', include(radio_user.urls)),
     (r'^api/v1/', include(song_user.urls)),
     url(r'^api/v1/song/(?P<song_id>\d+)/liker/$', 'yabase.views.like_song'),

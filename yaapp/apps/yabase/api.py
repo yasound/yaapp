@@ -1,6 +1,7 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
 from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, NextSong, RadioUser, SongUser
+from yaref.models import YasoundSong
 from django.contrib.auth.models import User
 from django.conf.urls.defaults import url
 from django.shortcuts import get_object_or_404
@@ -538,7 +539,32 @@ class RadioAllPlaylistResource(ModelResource):
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioAllPlaylistResource, self).dispatch(request_type, request, **kwargs)
         
+class MatchedSongResource(ModelResource):  
+    class Meta:
+        playlist = None
+        queryset = YasoundSong.objects.exclude()
+        resource_name = 'matched_song'
+        fields = ['id', 
+                  'name',
+                  'artist_name',
+                  'album_name',
+                  ]
+        include_resource_uri = False
+        authorization= ReadOnlyAuthorization()
+#        authentication = YasoundApiKeyAuthentication()
+        authentication = Authentication()
+        allowed_methods = ['get']
+        
+    def dispatch(self, request_type, request, **kwargs):
+        playlist_id = kwargs.pop('playlist')
+        self.playlist = get_object_or_404(Playlist, id=playlist_id)
+        return super(MatchedSongResource, self).dispatch(request_type, request, **kwargs)
     
+    def get_object_list(self, request):
+        song_instances = SongInstance.objects.filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
+        yasound_song_ids = song_instances.values_list('metadata__yasound_song_id', flat=False)
+        yasound_songs = YasoundSong.objects.filter(id__in=yasound_song_ids)
+        return yasound_songs
     
     
 class LeaderBoardResource(ModelResource):
