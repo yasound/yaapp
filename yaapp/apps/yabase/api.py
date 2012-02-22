@@ -562,8 +562,8 @@ class MatchedSongResource(ModelResource):
     
     def get_object_list(self, request):
         song_instances = SongInstance.objects.filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
-        yasound_song_ids = song_instances.values_list('metadata__yasound_song_id', flat=False)
-        yasound_songs = YasoundSong.objects.filter(id__in=yasound_song_ids)
+        yasound_song_ids = song_instances.values_list('metadata__yasound_song_id', flat=True)
+        yasound_songs = YasoundSong.objects.filter(id__in=list(yasound_song_ids))
         return yasound_songs
     
     
