@@ -43,9 +43,9 @@ def get_subscription(request):
 
 def login(request):
     print 'web login!!!'
-    return render_to_response('login/login_social.html', {"matparam": "prout"}) 
+    return render_to_response('account/login.html') 
 
 def error(request):
     print 'web login error!!!'
-    return render_to_response('login/login_social.html', {"matparam": "prout"}) 
+    return render_to_response('account/login_error.html') 
     

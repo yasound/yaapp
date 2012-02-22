@@ -228,6 +228,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",
+    "social_auth.context_processors.social_auth_by_type_backends",
 )
 
 TEMPLATE_DIRS = (
@@ -359,6 +360,7 @@ SOCIAL_AUTH_USERNAME_FIXER = lambda u: slugify(u)
 SOCIAL_AUTH_EXPIRATION = 'expires'
 SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/'
+SOCIAL_AUTH_ENABLED_BACKENDS = ( 'facebook', )
 
 AUTH_PROFILE_MODULE = 'account.UserProfile'
 
