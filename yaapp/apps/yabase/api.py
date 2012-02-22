@@ -575,6 +575,7 @@ class MatchedSongResource(ModelResource):
         else:
             cover = None
         bundle.data['cover'] = cover
+	return bundle
     
     
 class LeaderBoardResource(ModelResource):
