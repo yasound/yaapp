@@ -566,6 +566,16 @@ class MatchedSongResource(ModelResource):
         yasound_songs = YasoundSong.objects.filter(id__in=list(yasound_song_ids))
         return yasound_songs
     
+    def dehydrate(self, bundle):
+        yasound_song = bundle.obj
+        if yasound_song.album:
+            cover = yasound_song.album.cover_url
+        elif yasound_song.cover_filename:
+            cover = yasound_song.cover_url
+        else:
+            cover = None
+        bundle.data['cover'] = cover
+    
     
 class LeaderBoardResource(ModelResource):
     class Meta:
