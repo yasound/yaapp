@@ -566,19 +566,25 @@ class MatchedSongResource(ModelResource):
     def dehydrate(self, bundle):
         song_instance = bundle.obj
         
-        bundle.data['name'] = song_instance.name
-        bundle.data['artist'] = song_instance.artist_name
-        bundle.data['album'] = song_instance.album_name
-        if song_instance.album:
-            cover = song_instance.album.cover_url
-        elif song_instance.cover_filename:
-            cover = song_instance.cover_url
+        likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        bundle.data['likes'] = likes
+        
+        try:
+            yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
+        except YasoundSong.DoesNotExist:
+            return bundle
+        
+        bundle.data['name'] = yasound_song.name
+        bundle.data['artist'] = yasound_song.artist_name
+        bundle.data['album'] = yasound_song.album_name
+        if yasound_song.album:
+            cover = yasound_song.album.cover_url
+        elif yasound_song.cover_filename:
+            cover = yasound_song.cover_url
         else:
             cover = None
         bundle.data['cover'] = cover
-        
-        likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        bundle.data['likes'] = likes
+    
         return bundle
         
         
