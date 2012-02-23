@@ -443,3 +443,13 @@ from resources_settings import COMPRESS_JS, COMPRESS_CSS
 COMPRESS_JS_FILTERS = ()
 COMPRESS_CSS_FILTERS = ()
     
+# FFMPEG settings
+FFMPEG_BIN = 'ffmpeg' # path to binary
+FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ab 64000' # convert option when generating mp3 preview
+
+if PRODUCTION_MODE:
+    SONGS_ROOT = '/space/new/medias/song/'
+    ALBUM_COVERS_ROOT = '/space/new/medias/album-cover/'
+else:
+    SONGS_ROOT = '/tmp/'
+    ALBUM_COVERS_ROOT = '/tmp/'

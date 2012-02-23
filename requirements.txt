@@ -20,3 +20,4 @@ django-iphone-push
 django-compress
 simplejson
 django-social-auth
+requests

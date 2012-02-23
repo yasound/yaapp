@@ -60,7 +60,6 @@ def build_mongodb_index(upsert=False, erase=False):
     logger.info("done")    
 
 class YasoundArtist(models.Model):
-    id = models.IntegerField(primary_key=True)
     echonest_id = models.CharField(unique=True, max_length=20)
     lastfm_id = models.CharField(max_length=20, blank=True, null=True)
     musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
@@ -76,7 +75,6 @@ class YasoundArtist(models.Model):
         return self.name
 
 class YasoundAlbum(models.Model):
-    id = models.IntegerField(primary_key=True)
     lastfm_id = models.CharField(unique=True, max_length=20, null=True, blank=True)
     musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
     name = models.CharField(max_length=255)
@@ -98,7 +96,6 @@ class YasoundAlbum(models.Model):
         return self.name
 
 class YasoundGenre(models.Model):
-    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=45)
     namecanonical = models.CharField(unique=True, max_length=45)
     class Meta:
@@ -191,7 +188,6 @@ class YasoundSongManager(models.Manager):
     
 class YasoundSong(models.Model):
     objects = YasoundSongManager()
-    id = models.IntegerField(primary_key=True)
     artist = models.ForeignKey(YasoundArtist, null=True, blank=True)
     album = models.ForeignKey(YasoundAlbum, null=True, blank=True)
     echonest_id = models.CharField(max_length=20, blank=True, null=True)
@@ -222,7 +218,8 @@ class YasoundSong(models.Model):
     allowed_countries = models.CharField(max_length=255, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
-
+    quality = models.SmallIntegerField(blank=True, null=True)
+    
     @property
     def cover_url(self):
         return None

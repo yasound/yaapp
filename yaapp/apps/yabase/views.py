@@ -22,6 +22,8 @@ import os
 import yabase.settings as yabase_settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+import import_utils
+
 import logging
 logger = logging.getLogger("yaapp.yabase")
 
@@ -450,31 +452,15 @@ def upload_song(request, song_id=None):
     This view can be called by the mobile client or with regular form.
     song_id can be specified to match an already existing SongInstance object
     
-    A data json dict can also be provided. It must contains:
-    
-    {'title': 'a title',
-     'artist_name' : 'an artist name',
-     'album_name' : 'an album_name',
-     'track_index' : ..,
-     'track_count' : ..,
-     'disc_index': ...,
-     'disc_count': ...,
-     'bpm': ...,
-     'score':  ..,
-     'duration': ..,
-     'genre': ..,
-     'lastfm_id:': ..,
-     'echonest_id: ..,
-     'echonest_data': {},
-     'mb_id:'..,
-    }
-    
+    A data json dict can also be provided.    
     
     """
     
     if not request.user.is_authenticated():
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
+        key = request.REQUEST.get('key')
+        if key != yabase_settings.UPLOAD_KEY:
+            if not check_api_key_Authentication(request):
+                return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
@@ -484,19 +470,27 @@ def upload_song(request, song_id=None):
         return HttpResponse('request does not contain a song file')
 
     f = request.FILES[SONG_FILE_TAG]
-    filename = u'%s.mp3' % (str(uuid.uuid1()))
-    path = '%s%s' % (settings.UPLOAD_SONG_FOLDER, filename)
-
-    destination = open(path, 'wb')
-    for chunk in f.chunks():
-        destination.write(chunk)
-    destination.close()
     
-    if song_id:
-        SongInstance.objects.filter(id=song_id).update(need_sync=True)
+    data = request.REQUEST.get('data')
+    if not data:
+        filename = u'%s.mp3' % (str(uuid.uuid1()))
+        path = '%s%s' % (settings.UPLOAD_SONG_FOLDER, filename)
     
-    res = 'upload OK for song: %s' % unicode(f.name)
-    return HttpResponse(res)
+        destination = open(path, 'wb')
+        for chunk in f.chunks():
+            destination.write(chunk)
+        destination.close()
+    
+        if song_id:
+            SongInstance.objects.filter(id=song_id).update(need_sync=True)
+    
+        res = 'upload OK for song: %s' % unicode(f.name)
+        return HttpResponse(res)
+    else:
+        decoded_data = json.loads(data)
+        import_utils.import_song(decoded_data, f)
+        res = 'upload OK for song: %s' % unicode(f.name)
+        return HttpResponse(res)
 
 @csrf_exempt
 def add_song(request, radio_id, playlist_index, yasound_song_id):
