@@ -9,6 +9,7 @@ import time
 import zlib
 from yaref.utils import get_simplified_name
 import string
+import settings as yabase_settings
 
 @task
 def leaderboard_update_task():
@@ -111,7 +112,7 @@ def process_playlists_exec(radio, content_compressed):
             if raw and len(list(raw)) > 0:
                 song_instance = list(raw)[0]
             else:
-                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order)
+                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order, frequency=yabase_settings.FREQUENCY_NORMAL)
 
             if metadata.yasound_song_id == None:
                 song_name_simplified = get_simplified_name(song_name)
