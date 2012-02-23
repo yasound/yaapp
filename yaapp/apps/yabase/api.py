@@ -597,12 +597,6 @@ class MatchedSongResource(ModelResource):
         bundle.data['cover'] = cover
     
         return bundle
-    
-class EditSongAuthorization(Authorization):
-    def is_authorized(self, request, object=None):
-        if object.playlist.radio.creator == request.user:
-            return True
-        return False
         
     
 class EditSongResource(ModelResource):  
@@ -615,7 +609,7 @@ class EditSongResource(ModelResource):
                   'enabled',
                   ]
         include_resource_uri = False
-        authorization= EditSongAuthorization()
+        authorization= Authorization()
         authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['put', 'delete']
     
