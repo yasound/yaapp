@@ -12,8 +12,9 @@ class Migration(SchemaMigration):
         db.add_column('yabase_songinstance', 'enabled', self.gf('django.db.models.fields.BooleanField')(default=True), keep_default=False)
 
         # Changing field 'SongInstance.frequency'
-        db.alter_column('yabase_songinstance', 'frequency', self.gf('django.db.models.fields.FloatField')())
-
+#        db.alter_column('yabase_songinstance', 'frequency', self.gf('django.db.models.fields.FloatField')())
+        db.delete_column('yabase_songinstance', 'frequency')
+        db.add_column('yabase_songinstance', 'frequency', self.gf('django.db.models.fields.FloatField')(default=0.5), keep_default=False)
 
     def backwards(self, orm):
         
@@ -21,7 +22,9 @@ class Migration(SchemaMigration):
         db.delete_column('yabase_songinstance', 'enabled')
 
         # Changing field 'SongInstance.frequency'
-        db.alter_column('yabase_songinstance', 'frequency', self.gf('django.db.models.fields.CharField')(max_length=1))
+#        db.alter_column('yabase_songinstance', 'frequency', self.gf('django.db.models.fields.CharField')(max_length=1))
+        db.delete_column('yabase_songinstance', 'frequency')
+        db.add_column('yabase_songinstance', 'frequency', self.gf('django.db.models.fields.CharField')(default='N', max_length=1), keep_default=False)
 
 
     models = {
