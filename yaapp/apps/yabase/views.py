@@ -469,21 +469,18 @@ def upload_song(request, song_id):
     return HttpResponse(res)
 
 @csrf_exempt
-def add_song(request, yasound_song_id):
+def add_song(request, radio_id, playlist_index, yasound_song_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
-    radios = Radio.objects.filter(creator=request.user)
-    if radios.count() == 0:
-        return HttpResponse(status=404)
-    radio = radios[0]
+    radio = get_object_or_404(Radio, id=radio_id)
     
     playlists = Playlist.objects.filter(radio=radio)
-    if playlists.count() == 0:
+    if playlist_index > playlists.count():
         return HttpResponse(status=404)
-    playlist = playlists[0]
+    playlist = playlists[playlist_index]
     
     matched_songs = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id=yasound_song_id)
     if matched_songs.count() > 0:
