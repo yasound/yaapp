@@ -19,19 +19,17 @@ Example of metadata:
  'lastfm_data': {
           album:{
                artist:u'Feist', 
-               image:[{size:u'small', data:u'http://userserve-ak.last.fm/serve/64s/67147752.png'},                     
-                      {size:u'medium', data:u'http://userserve-ak.last.fm/serve/126/67147752.png'},           
-                      {size:u'large', data:u'http://userserve-ak.last.fm/serve/174s/67147752.png'}, 
-                      {size:u'extralarge', data:u'http://userserve-ak.last.fm/serve/300x300/67147752.png'}], 
-               mbid:u'49683c30-b73d-40cf-a370-a8d1224be26c', 
+               image:['http://userserve-ak.last.fm/serve/64s/67147752.png',                     
+                      'http://userserve-ak.last.fm/serve/126/67147752.png',           
+               mbid:u'49683c30-b73d-40cf-a370-a8d1224be26c',]
                position:u'1', 
                title:u'Let It Die', 
                url:u'http://www.last.fm/music/Feist/Let+It+Die'
           }, 
-          artist:{
+          artist:[{
                mbid:u'a670e05a-cea8-4b37-bce9-d82daf1a0fa4', 
                name:u'Feist', url:u'http://www.last.fm/music/Feist'
-          }, 
+          }], 
           duration:u'135000', 
           id:u'10577496', 
           listeners:u'247404', 
@@ -104,7 +102,7 @@ def _find_mb_id_for_artist(metadata):
     if not artist:
         return None
     
-    return artist.get('mbid')
+    return artist[0].get('mbid')
 
 
 def _find_mb_id_for_album(metadata):
@@ -131,12 +129,7 @@ def _find_cover_url_for_album(metadata):
     if not image:
         return None
     
-    for item in image:
-        if item['size'] == u'extralarge':
-            if 'url' in item:
-                return item['url']
-                break
-    return None
+    return image[-1]
 
 def _find_audio_summary(metadata):
     data = metadata.get('echonest_data')
@@ -215,7 +208,7 @@ def _get_or_create_artist(metadata):
     try:
         artist = YasoundArtist.objects.get(echonest_id=echonest_id)
     except YasoundArtist.DoesNotExist:
-        logger.info("creating new artist: %s" % (name))
+        logger.info("creating new artist (echonest_id=%s): %s" % (name, echonest_id))
         artist = YasoundArtist(echonest_id=echonest_id,
                                musicbrainz_id=mb_id,
                                name=name,
