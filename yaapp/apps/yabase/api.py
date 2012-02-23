@@ -608,7 +608,7 @@ class SearchSongResource(ModelResource):
         search = request.GET.get('search', None)
         
         
-        yasound_songs = YasoundSong.objects.filter(Q(name__iexact=search) | Q(artist_name__iexact=search) | Q(album_name__iexact=search))
+        yasound_songs = YasoundSong.objects.filter(Q(name__icontains=search) | Q(artist_name__icontains=search) | Q(album_name__icontains=search))
         return yasound_songs
     
     def dehydrate(self, bundle):
