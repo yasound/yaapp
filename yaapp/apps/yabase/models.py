@@ -237,7 +237,7 @@ class Radio(models.Model):
         while songs[i].last_play_time:
             delta = now - songs[i].last_play_time
             total_seconds = delta.days * 86400 + delta.seconds
-            if total_seconds <= seconds_before_replay:
+            if total_seconds > seconds_before_replay:
                 break
             i += 1
             i %= count
@@ -280,8 +280,10 @@ class Radio(models.Model):
         # update current song
         self.current_song = song
         self.current_song_play_date = datetime.datetime.now()
+        self.save()
         
         song.last_play_time = datetime.datetime.now()
+        song.save()
         self.fill_next_songs_queue()
         return song # SongInstance
             
