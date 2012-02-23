@@ -591,7 +591,7 @@ class MatchedSongResource(ModelResource):
 class SearchSongResource(ModelResource):  
     class Meta:
         playlist = None
-        queryset = SongInstance.objects.exclude()
+        queryset = YasoundSong.objects.exclude()
         resource_name = 'search_song'
         fields = ['id', 
                   'name',
