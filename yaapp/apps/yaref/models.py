@@ -97,7 +97,7 @@ class YasoundAlbum(models.Model):
 
 class YasoundGenre(models.Model):
     name = models.CharField(max_length=45)
-    namecanonical = models.CharField(unique=True, max_length=45)
+    name_canonical = models.CharField(unique=True, max_length=45)
     class Meta:
         db_table = u'yasound_genre'
         db_name = u'yasound'

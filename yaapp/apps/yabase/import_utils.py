@@ -379,7 +379,7 @@ def import_song(metadata, binary):
     if genres:
         for genre in genres:
             genre_canonical = get_simplified_name(genre)
-            yasound_genre, created = YasoundGenre.objects.get_or_create(namecanonical=genre_canonical, defaults={'name': genre})
+            yasound_genre, created = YasoundGenre.objects.get_or_create(name_canonical=genre_canonical, defaults={'name': genre})
             YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
     
     
