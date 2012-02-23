@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseNotFound, \
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from models import Radio, RadioUser, SongInstance, SongUser, WallEvent
+from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, SongMetadata
 from task import process_playlists
 from yaref.models import YasoundSong
 import datetime
@@ -468,6 +468,35 @@ def upload_song(request, song_id):
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
 
+@csrf_exempt
+def add_song(request, yasound_song_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    radios = Radio.objects.filter(creator=request.user)
+    if radios.count() == 0:
+        return HttpResponse(status=404)
+    radio = radios[0]
+    
+    playlists = Playlist.objects.filter(radio=radio)
+    if playlists.count() == 0:
+        return HttpResponse(status=404)
+    playlist = playlists[0]
+    
+    matched_songs = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id=yasound_song_id)
+    if matched_songs.count() > 0:
+        res = dict(success=True, created=False)
+        response = json.dumps(res)
+        return HttpResponse(response)
+    
+    yasound_song = get_object_or_404(YasoundSong, id=yasound_song_id)
+    metadata, created = SongMetadata.objects.get_or_create(yasound_song_id=yasound_song_id, name=yasound_song.name, artist_name=yasound_song.artist_name, album_name=yasound_song.album_name)
+    song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata)
+    res = dict(success=True, created=True)
+    response = json.dumps(res)
+    return HttpResponse(response)
     
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):

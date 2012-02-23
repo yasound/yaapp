@@ -540,17 +540,28 @@ class RadioAllPlaylistResource(ModelResource):
         kwargs['radio'] = get_object_or_404(Radio, id=radio)
         return super(RadioAllPlaylistResource, self).dispatch(request_type, request, **kwargs)
         
+        
+    
+class MatchedSongAuthorization(Authorization):
+    def is_authorized(self, request, object=None):
+        return True
+
+    def apply_limits(self, request, object_list):
+        return object_list.filter(playlist__radio__creator=request.user)
+        
+    
 class MatchedSongResource(ModelResource):  
     class Meta:
         playlist = None
-        queryset = SongInstance.objects.exclude()
+        queryset = SongInstance.objects.all()
         resource_name = 'matched_song'
         fields = ['id',
                   'last_play_time',
                   'frequency',
+                  'enabled',
                   ]
         include_resource_uri = False
-        authorization= ReadOnlyAuthorization()
+        authorization= MatchedSongAuthorization()
         authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         
@@ -586,12 +597,65 @@ class MatchedSongResource(ModelResource):
         bundle.data['cover'] = cover
     
         return bundle
+    
+class EditSongAuthorization(Authorization):
+    def is_authorized(self, request, object=None):
+        if object.playlist.radio.creator == request.user:
+            return True
+        return False
         
-        
+    
+class EditSongResource(ModelResource):  
+    class Meta:
+        playlist = None
+        queryset = SongInstance.objects.all()
+        resource_name = 'edit_song'
+        fields = ['id',
+                  'frequency',
+                  'enabled',
+                  ]
+        include_resource_uri = False
+        authorization= EditSongAuthorization()
+        authentication = YasoundApiKeyAuthentication()
+        allowed_methods = ['put', 'delete']
+    
+    
+#YASOUND_SONG_ID_PARAM_NAME = 'yasound_song'
+#class AddSongResource(ModelResource):  
+#    class Meta:
+#        queryset = SongInstance.objects.all()
+#        resource_name = 'add_song'
+#        fields = ['frequency',
+#                  ]
+#        include_resource_uri = False
+#        authorization= Authorization()
+#        authentication = YasoundApiKeyAuthentication()
+#        allowed_methods = ['post']
+#        
+#    def obj_create(self, bundle, request=None, **kwargs):
+#        yasound_song_id = kwargs.pop(YASOUND_SONG_ID_PARAM_NAME)
+#        try:
+#            yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+#        except YasoundSong.DoesNotExist:
+#            return None
+#        
+#        playlists = Playlist.filter(radio__creator=request.user)
+#        if playlists.count() == 0:
+#            return None
+#        playlist = playlists[0]
+#
+#        song_instance_resource = super(AddSongResource, self).obj_create(bundle, request, **kwargs)
+#        song_instance = song_instance_resource.obj
+#        song_instance.playlist = playlist
+#        
+#        song_instance.metadata.yasound_song = yasound_song
+#        song_instance.save()
+#        return song_instance_resource
+#        
 class SearchSongResource(ModelResource):  
     class Meta:
         playlist = None
-        queryset = YasoundSong.objects.exclude()
+        queryset = YasoundSong.objects.all()
         resource_name = 'search_song'
         fields = ['id', 
                   'name',
@@ -606,8 +670,6 @@ class SearchSongResource(ModelResource):
     
     def get_object_list(self, request):
         search = request.GET.get('search', None)
-        
-        
         yasound_songs = YasoundSong.objects.filter(Q(name__icontains=search) | Q(artist_name__icontains=search) | Q(album_name__icontains=search))
         return yasound_songs
     

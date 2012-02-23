@@ -112,7 +112,7 @@ def process_playlists_exec(radio, content_compressed):
             if raw and len(list(raw)) > 0:
                 song_instance = list(raw)[0]
             else:
-                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order, frequency=yabase_settings.FREQUENCY_NORMAL)
+                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order, frequency=0.5, enabled=True)
 
             if metadata.yasound_song_id == None:
                 song_name_simplified = get_simplified_name(song_name)

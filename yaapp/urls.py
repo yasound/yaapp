@@ -9,7 +9,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     RadioLikerResource, RadioFavoriteResource, SearchRadioResource, \
     RadioCurrentUserResource, \
     WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
-    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource
+    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource, EditSongResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from stats.api import RadioListeningStatResource
@@ -37,6 +37,7 @@ api.register(FriendResource())
 api.register(RadioListeningStatResource())
 api.register(LeaderBoardResource())
 api.register(SearchSongResource())
+api.register(EditSongResource())
 
 radio_next_songs = RadioNextSongsResource()
 wall_event = RadioWallEventResource()
@@ -67,6 +68,7 @@ urlpatterns = patterns('',
     #(r'^wall/', include('wall.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
+    url(r'^api/v1/add_song/(?P<yasound_song_id>\d+)/$', 'yabase.views.add_song'),
     url(r'^api/v1/upload_song/(?P<song_id>\d+)/$', 'yabase.views.upload_song'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists_update/$', 'yabase.views.upload_playlists'),
     url(r'^api/v1/task/(?P<task_id>\S+)/$', 'yabase.views.task_status'),
