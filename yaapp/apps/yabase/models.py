@@ -52,6 +52,7 @@ class SongInstance(models.Model):
     users = models.ManyToManyField(User, through='SongUser', blank=True, null=True)
     order = models.IntegerField(null=True, blank=True) # song index in the playlist
     need_sync = models.BooleanField(default=False)
+    frequency = models.CharField(max_length=1, choices=yabase_settings.FREQUENCY_CHOICES, default=yabase_settings.FREQUENCY_NORMAL)
     
     def __unicode__(self):
         return unicode(self.metadata)

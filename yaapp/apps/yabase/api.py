@@ -543,12 +543,11 @@ class RadioAllPlaylistResource(ModelResource):
 class MatchedSongResource(ModelResource):  
     class Meta:
         playlist = None
-        queryset = YasoundSong.objects.exclude()
+        queryset = SongInstance.objects.exclude()
         resource_name = 'matched_song'
-        fields = ['id', 
-                  'name',
-                  'artist_name',
-                  'album_name',
+        fields = ['id',
+                  'last_play_time',
+                  'frequency',
                   ]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
@@ -562,26 +561,31 @@ class MatchedSongResource(ModelResource):
     
     def get_object_list(self, request):
         song_instances = SongInstance.objects.filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
-        yasound_song_ids = song_instances.values_list('metadata__yasound_song_id', flat=True)
-        yasound_songs = YasoundSong.objects.filter(id__in=list(yasound_song_ids))
-        return yasound_songs
+        return song_instances
     
     def dehydrate(self, bundle):
-        yasound_song = bundle.obj
-        if yasound_song.album:
-            cover = yasound_song.album.cover_url
-        elif yasound_song.cover_filename:
-            cover = yasound_song.cover_url
+        song_instance = bundle.obj
+        
+        bundle.data['name'] = song_instance.name
+        bundle.data['artist'] = song_instance.artist_name
+        bundle.data['album'] = song_instance.album_name
+        if song_instance.album:
+            cover = song_instance.album.cover_url
+        elif song_instance.cover_filename:
+            cover = song_instance.cover_url
         else:
             cover = None
         bundle.data['cover'] = cover
+        
+        likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        bundle.data['likes'] = likes
         return bundle
         
         
 class SearchSongResource(ModelResource):  
     class Meta:
         playlist = None
-        queryset = YasoundSong.objects.exclude()
+        queryset = SongInstance.objects.exclude()
         resource_name = 'search_song'
         fields = ['id', 
                   'name',
