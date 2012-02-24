@@ -368,7 +368,7 @@ class SongImporter:
         
         if not name:
             logger.error("no title")
-            return None
+            return None, self.get_messages()
         name_simplified = get_simplified_name(name)
         artist_name_simplified = get_simplified_name(artist_name)
         album_name_simplified = get_simplified_name(album_name)
