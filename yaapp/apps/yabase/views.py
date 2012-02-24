@@ -515,7 +515,7 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     yasound_song = get_object_or_404(YasoundSong, id=yasound_song_id)
     metadata, created = SongMetadata.objects.get_or_create(yasound_song_id=yasound_song_id, name=yasound_song.name, artist_name=yasound_song.artist_name, album_name=yasound_song.album_name)
     song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata)
-    res = dict(success=True, created=True)
+    res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
     
