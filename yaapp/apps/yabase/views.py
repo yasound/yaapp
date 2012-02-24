@@ -520,11 +520,15 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
+    radio_id = int(radio_id)
+    playlist_index = int(playlist_index)
+    yasound_song_id = int(yasound_song_id)
     radio = get_object_or_404(Radio, id=radio_id)
     
     playlists = Playlist.objects.filter(radio=radio)
     if playlist_index > playlists.count():
-        return HttpResponse(status=404)
+        res = 'cannot get playlists (playlist_index=%d  playlists.count=%d)' % (playlist_index, playlists.count())
+        return HttpResponse(res)
     playlist = playlists[playlist_index]
     
     matched_songs = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id=yasound_song_id)
