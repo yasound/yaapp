@@ -21,32 +21,5 @@
 {% endblock %}
 
 {% block content %}
-            <div class="hero-unit">
-                <h1>{{ radio }}</h1>
-                {% for tag in radio.tags.all %}<span class="label notice">{{tag}}</span> {% endfor%}
-                <p>{% trans "Created by" %} <strong>{{ radio.creator }}</strong> {% trans "on" %} {{ radio.created|date:"j F Y" }}</p>
-                <p>{{ radio.description }}</p>
-                <p><a class="btn primary large" href='http://yasound.com'>{% trans "Go to Yasound »" %}</a></p>
-            </div>
-            <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-            <tr><td>{% trans "Creator" %}</td><td>{{ radio.creator }}</td></tr>
-            <tr><td>{% trans "Date" %}</td><td>{{ radio.created|date:"j F Y" }}</td></tr>
-            <tr><td>{% trans "Genre" %}</td><td>{{ radio.genre }}</td></tr>
-            <tr><td>{% trans "Theme" %}</td><td>{{ radio.theme }}</td></tr>
-            <tr><td>{% trans "Audience peak" %}</td><td>{{ radio.audience_peak }}</td></tr>
-            <tr><td>{% trans "Overall listening time" %}</td><td>{{ radio.overall_listening_time }}</td></tr>
-            <tr><td>{% trans "Listeners" %}</td><td>{{ listeners }}</td></tr>
-            <tr><td>{% trans "Fans" %}</td><td>{{ fans }}</td></tr>
-            </tbody>
-            </table>
-            
-            <div class="well">
-                <a class="btn large" id='play' href='#'>{% trans "Play" %}</a>
-                <a class="btn large" id='inc' href='#'>{% trans "Increase volume" %}</a>
-                <a class="btn large" id='dec' href='#'>{% trans "Decrease volume" %}</a>
-                <a class="btn large" id='mute' href='#'>{% trans "Mute" %}</a>
-            </div>  
+    {% include "web/radio.html" with radio=radio %}
 {% endblock %}
