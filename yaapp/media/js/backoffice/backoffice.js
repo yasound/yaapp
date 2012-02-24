@@ -1,5 +1,6 @@
 Ext.BLANK_IMAGE_URL = '/media/extjs/resources/images/default/s.gif';
 Ext.namespace("Yasound.Backoffice.UI", "Yasound.Backoffice.Handler", "Yasound.Backoffice.Data");
+Ext.namespace("Yasound.Upload.UI", "Yasound.Upload.Handler", "Yasound.Upload.Data");
 Ext.namespace("Yasound.Utils");
 
 
@@ -75,6 +76,9 @@ Ext.onReady(function(){
         }, Ext.apply(Yasound.Backoffice.UI.UnmatchedSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Unmatched songs')
+        }),Ext.apply(Yasound.Upload.UI.UploadSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Upload new songs to yasound')
         })]
     };
 

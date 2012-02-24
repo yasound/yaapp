@@ -9,6 +9,7 @@ from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import settings as yabase_settings
 
 import import_utils
+from yabase.import_utils import SongImporter
 
 class TestDatabase(TestCase):
     multi_db = True
@@ -213,43 +214,45 @@ class TestImport(TestCase):
                     'lastfm_id': None,
                     'echonest_id': None,
         }
-        quality = import_utils._get_quality(metadata) 
+        importer = SongImporter()
+        quality = importer._get_quality(metadata) 
         self.assertEquals(quality, 0)
         
         metadata = {'bitrate': '192',
                     'lastfm_id': None,
                     'echonest_id': None,
         }
-        quality = import_utils._get_quality(metadata) 
+        quality = importer._get_quality(metadata) 
         self.assertEquals(quality, 100)
         
         metadata = {'bitrate': '192',
                     'lastfm_id': 1,
                     'echonest_id': None,
         }
-        quality = import_utils._get_quality(metadata) 
+        quality = importer._get_quality(metadata) 
         self.assertEquals(quality, 101)
         
         metadata = {'bitrate': '192',
                     'lastfm_id': None,
                     'echonest_id': 1,
         }
-        quality = import_utils._get_quality(metadata) 
+        quality = importer._get_quality(metadata) 
         self.assertEquals(quality, 101)
 
         metadata = {'bitrate': '192',
                     'lastfm_id': 1,
                     'echonest_id': 1,
         }
-        quality = import_utils._get_quality(metadata) 
+        quality = importer._get_quality(metadata) 
         self.assertEquals(quality, 102)
         
     def test_generate_path(self):
         import os
-        filename, path = import_utils._generate_filename_and_path_for_song()
+        importer = SongImporter()
+        filename, path = importer._generate_filename_and_path_for_song()
         self.assertEquals(len(filename), len('123456789.mp3'))
         
-        preview_path = import_utils._get_filepath_for_preview(path)
+        preview_path = importer._get_filepath_for_preview(path)
         self.assertTrue(preview_path.find("preview64") > -1)
         self.assertEquals(len(os.path.basename(preview_path)), len('789_preview64.mp3'))
         

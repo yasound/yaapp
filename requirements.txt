@@ -21,3 +21,4 @@ django-compress
 simplejson
 django-social-auth
 requests
+-e git+ssh://git@github.com/yasound/uploader.git#egg=uploader

@@ -69,6 +69,8 @@ Example of metadata:
 """
 from django.conf import settings
 from django.db.models.query_utils import Q
+from shutil import rmtree
+from tempfile import mkdtemp
 from yabase.models import SongMetadata
 from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
     YasoundSongGenre
@@ -79,316 +81,412 @@ import logging
 import os
 import random
 import requests
+import uploader
+import uuid
+import subprocess as sub
+from django.utils.translation import ugettext_lazy as _
+import shutil
+
 
 logger = logging.getLogger("yaapp.yabase")
 
-def _find_echonest_id_for_artist(metadata):
-    data = metadata.get('echonest_data')
-    if not data:
-        return None
-    return data.get('artist_id')
-
-def _find_mb_id_for_song(metadata):
-    if not metadata['lastfm_data']:
-        return None
-    return metadata.get('mbid')
-
-def _find_mb_id_for_artist(metadata):
-    lastfm_data = metadata.get('lastfm_data')
-    if not lastfm_data:
-        return None
-    
-    artist = lastfm_data.get('artist')
-    if not artist:
-        return None
-    
-    return artist[0].get('mbid')
-
-
-def _find_mb_id_for_album(metadata):
-    lastfm_data = metadata.get('lastfm_data')
-    if not lastfm_data:
-        return None
-    
-    album = lastfm_data.get('album')
-    if not album:
-        return None
-    
-    return album.get('mbid')
-
-def _find_cover_url_for_album(metadata):
-    lastfm_data = metadata.get('lastfm_data')
-    if not lastfm_data:
-        return None
-    
-    album = lastfm_data.get('album')
-    if not album:
-        return None
-    
-    image = album.get('image')
-    if not image:
-        return None
-    
-    return image[-1]
-
-def _find_audio_summary(metadata):
-    data = metadata.get('echonest_data')
-    if not data:
-        return None
-    return data.get('audio_summary')
-
-def _find_audio_summary_item(metadata, item):
-    audio_summary = _find_audio_summary(metadata)
-    if not audio_summary:
-        return None
-    return audio_summary.get(item)
-
-def _generate_filename_and_path_for_song():
-    path_exists = True
-    filename = None
-    while path_exists:
-        filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + '.mp3'
-        path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
-        path_exists = os.path.exists(path)
-    return filename, path
-
-def _generate_filename_and_path_for_cover(url):
-    extension = url[-4:len(url)]
-    path_exists = True
-    filename = None
-    while path_exists:
-        filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + extension
-        path = os.path.join(settings.ALBUM_COVERS_ROOT, convert_filename_to_filepath(filename))
-        path_exists = os.path.exists(path)
-    return filename, path
-
-def _get_filepath_for_preview(filepath):
-    name, extension = os.path.splitext(filepath)
-    preview = u'%s_preview64%s' % (name, extension)
-    return preview
- 
-def _generate_preview(source, destination):
-    import subprocess as sub
-    logger.info('generating preview for %s' % (source))
-    args = [settings.FFMPEG_BIN, 
-            '-i',
-            source]
-    args.extend(settings.FFMPEG_GENERATE_PREVIEW_OPTIONS.split(" "))
-    args.append(destination)
-    p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
-    output, errors = p.communicate()
-    if len(errors) == 0:
-        logger.info(errors)
-        return False
-    return True    
-    
-def _get_quality(metadata):
-    quality = 0;
-    bitrate = int(metadata.get('bitrate'))
-    echonest_id = metadata.get('echonest_id')
-    lastfm_id = metadata.get('lastfm_id')
-    if bitrate >= 192:
-        quality = 100
-    if lastfm_id:
-        quality += 1
-    if echonest_id:
-        quality += 1
-    return quality
-    
-def _get_or_create_artist(metadata):
-    echonest_id = _find_echonest_id_for_artist(metadata)
-    mb_id = _find_mb_id_for_artist(metadata)
-    name = metadata.get('artist')
-    name_simplified = get_simplified_name(name)
-    
-    if not (echonest_id or mb_id or name):
-        logger.info("artist info not sufficient")
-        return None
-    
-    try:
-        artist = YasoundArtist.objects.get(echonest_id=echonest_id)
-    except YasoundArtist.DoesNotExist:
-        logger.info("creating new artist (echonest_id=%s): %s" % (name, echonest_id))
-        artist = YasoundArtist(echonest_id=echonest_id,
-                               musicbrainz_id=mb_id,
-                               name=name,
-                               name_simplified=name_simplified)
-        artist.save()
-    return artist
-
-def _get_or_create_album(metadata):
-    lastfm_id = metadata.get('album_lastfm_id')
-    if not lastfm_id:
-        logger.info("no lastfm info about album")
-        return None
-    
-    try:
-        album = YasoundAlbum.objects.get(lastfm_id=lastfm_id)
-        logger.info("album already in database")
-        return album
-    except YasoundAlbum.DoesNotExist:
-        pass
-    
-    mbid = _find_mb_id_for_album(metadata)
-    name = metadata.get('album')
-    logger.info("creating new album: %s" % (name))
-    name_simplified = get_simplified_name(name)
-    cover_filename = None
-    cover_url = _find_cover_url_for_album(metadata)
-    if cover_url:
-        # saving cover
-        cover_filename, cover_path = _generate_filename_and_path_for_cover(cover_url)
-        r = requests.get(cover_url)
-        if r.status_code == 200:
-            image_data = r.content
-            os.makedirs(os.path.dirname(cover_path))
-            destination = open(cover_path, 'wb')
-            destination.write(image_data)
-            destination.close()  
-    
-    album = YasoundAlbum(lastfm_id=lastfm_id,
-                         musicbrainz_id=mbid,
-                         name=name,
-                         name_simplified=name_simplified,
-                         cover_filename=cover_filename)
-    album.save()
-    
-    return album
-
-
-
-def import_song(metadata, binary):
-    """
-    * import song file, 
-    * create YasoundSong, 
-    * create YasoundArtist 
-    * create YasoundAlbum
-    * create SongMetadata
-    * finally return SongMetadata
-    
-    """
-    name = metadata.get('title')
-    artist_name = metadata.get('artist')
-    album_name = metadata.get('album')
-
-    logger.info("importing %s-%s-%s" % (name, album_name, artist_name))
-
-    echonest_data = metadata.get('echonest_data')
-    lastfm_data = metadata.get('lastfm_data')
-    if not echonest_data and not lastfm_data:
-        logger.error("no echonest and lastfm datas")
-        return
-    fingerprint = metadata.get('fingerprint')
-    if not fingerprint:
-        logger.error("no fingerprint")
-        return
-    fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
-    
-    now = datetime.datetime.today()
-    
-    if not name:
-        logger.error("no title")
-        return None
-    name_simplified = get_simplified_name(name)
-    artist_name_simplified = get_simplified_name(artist_name)
-    album_name_simplified = get_simplified_name(album_name)
-    
-    duration = _find_audio_summary_item(metadata, 'duration')
-    loudness = _find_audio_summary_item(metadata, 'loudness')
-    danceability = _find_audio_summary_item(metadata, 'danceability')
-    energy = _find_audio_summary_item(metadata, 'energy')
-    tempo = _find_audio_summary_item(metadata, 'tempo')
-    tonality_mode = _find_audio_summary_item(metadata, 'mode')
-    tonality_key = _find_audio_summary_item(metadata, 'key')
-    echoprint_version = metadata.get('echoprint_version')
-    
-    echonest_id = metadata.get('echonest_id')
-    lastfm_id = metadata.get('lastfm_id')
-    musicbrainz_id = _find_mb_id_for_song(metadata)
-    duration = metadata.get('duration')
-    quality = _get_quality(metadata)
-    
-    # first check for an existing SongMetadata
-    try:
-        sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
-        if sm.yasound_song_id:
-            logger.info("song already in database")
-            return None
-    except SongMetadata.DoesNotExist:
-        sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name)
-        sm.save()
-
-    # create artist with info from echonest and lastfm
-    artist = _get_or_create_artist(metadata)
-    # create album if found on lastfm
-    album = _get_or_create_album(metadata)
-    
-    # create yasound song
-    songs = YasoundSong.objects.filter(Q(echonest_id=echonest_id) | Q(lastfm_id=lastfm_id))
-    if songs.count() > 0:
-        song_candidate = songs[0]
-        if song_candidate.echonest_id is not None or song_candidate.lastfm_id is not None:
-            song = song_candidate
-            logger.info("Song already existing (id=%s)" % (song.id))
-    else:
-        # generate filename and save binary to disk
-        filename, mp3_path = _generate_filename_and_path_for_song()
-        os.makedirs(os.path.dirname(mp3_path))
-        destination = open(mp3_path, 'wb')
-        for chunk in binary.chunks():
-            destination.write(chunk)
-        destination.close()  
-        logger.info("generated mp3 file : %s" % (mp3_path))
-    
-        # generate 64kb preview
-        mp3_preview_path = _get_filepath_for_preview(mp3_path)
-        _generate_preview(mp3_path, mp3_preview_path)
-        logger.info("generated mp3 preview file : %s" % (mp3_preview_path))
+class SongImporter:
+    _messages = u''
         
-        # create song object
-        song = YasoundSong(artist=artist,
-                           album=album,
-                           echonest_id=echonest_id,
-                           lastfm_id=lastfm_id,
-                           musicbrainz_id=musicbrainz_id,
-                           filename=filename,
-                           filesize=os.path.getsize(mp3_path),
-                           name=name,
-                           name_simplified=name_simplified,
-                           artist_name=artist_name,
-                           artist_name_simplified=artist_name_simplified,
-                           album_name=album_name,
-                           album_name_simplified=album_name_simplified,
-                           duration=duration,
-                           danceability=danceability,
-                           loudness=loudness,
-                           energy=energy,
-                           tempo=tempo,
-                           tonality_mode=tonality_mode,
-                           tonality_key=tonality_key,
-                           fingerprint=fingerprint,
-                           fingerprint_hash=fingerprint_hash,
-                           echoprint_version=echoprint_version,
-                           publish_at=None,
-                           published=False,
-                           locked=False,
-                           quality=quality)
-        song.save()
-    # assign genre
-    genres = metadata.get('genres')
-    if genres:
-        for genre in genres:
-            genre_canonical = get_simplified_name(genre)
-            yasound_genre, created = YasoundGenre.objects.get_or_create(name_canonical=genre_canonical, defaults={'name': genre})
-            YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
+    def _log(self, message):
+        logger.info(unicode(message))
+        self._messages = u'%s\n%s' % (self._messages, message)
+        
+    def _find_echonest_id_for_artist(self, metadata):
+        data = metadata.get('echonest_data')
+        if not data:
+            return None
+        return data.get('artist_id')
+    
+    def _find_mb_id_for_song(self, metadata):
+        if not metadata['lastfm_data']:
+            return None
+        return metadata.get('mbid')
+    
+    def _find_mb_id_for_artist(self, metadata):
+        lastfm_data = metadata.get('lastfm_data')
+        if not lastfm_data:
+            return None
+        
+        artist = lastfm_data.get('artist')
+        if not artist:
+            return None
+        
+        return artist[0].get('mbid')
     
     
-    # assign song id to metadata
-    sm.yasound_song_id = song.id
-    sm.save()
-    return sm
+    def _find_mb_id_for_album(self, metadata):
+        lastfm_data = metadata.get('lastfm_data')
+        if not lastfm_data:
+            return None
+        
+        album = lastfm_data.get('album')
+        if not album:
+            return None
+        
+        return album.get('mbid')
     
+    def _find_cover_url_for_album(self, metadata):
+        lastfm_data = metadata.get('lastfm_data')
+        if not lastfm_data:
+            return None
+        
+        album = lastfm_data.get('album')
+        if not album:
+            return None
+        
+        image = album.get('image')
+        if not image:
+            return None
+        
+        return image[-1]
     
+    def _find_audio_summary(self, metadata):
+        data = metadata.get('echonest_data')
+        if not data:
+            return None
+        return data.get('audio_summary')
+    
+    def _find_audio_summary_item(self, metadata, item):
+        audio_summary = self._find_audio_summary(metadata)
+        if not audio_summary:
+            return None
+        return audio_summary.get(item)
+    
+    def _generate_filename_and_path_for_song(self):
+        path_exists = True
+        filename = None
+        while path_exists:
+            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + '.mp3'
+            path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
+            path_exists = os.path.exists(path)
+        return filename, path
+    
+    def _generate_filename_and_path_for_cover(self, url):
+        extension = url[-4:len(url)]
+        path_exists = True
+        filename = None
+        while path_exists:
+            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + extension
+            path = os.path.join(settings.ALBUM_COVERS_ROOT, convert_filename_to_filepath(filename))
+            path_exists = os.path.exists(path)
+        return filename, path
+    
+    def _get_filepath_for_preview(self, filepath):
+        name, extension = os.path.splitext(filepath)
+        preview = u'%s_preview64%s' % (name, extension)
+        return preview
+     
+    def _generate_preview(self, source, destination):
+        self._log('generating preview for %s' % (source))
+        args = [settings.FFMPEG_BIN, 
+                '-i',
+                source]
+        args.extend(settings.FFMPEG_GENERATE_PREVIEW_OPTIONS.split(" "))
+        args.append(destination)
+        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
+        output, errors = p.communicate()
+        if len(errors) == 0:
+            self._log(errors)
+            return False
+        return True    
+        
+    def _get_quality(self, metadata):
+        quality = 0;
+        bitrate = int(metadata.get('bitrate'))
+        echonest_id = metadata.get('echonest_id')
+        lastfm_id = metadata.get('lastfm_id')
+        if bitrate >= 192:
+            quality = 100
+        if lastfm_id:
+            quality += 1
+        if echonest_id:
+            quality += 1
+        return quality
+        
+    def _get_or_create_artist(self, metadata):
+        echonest_id = self._find_echonest_id_for_artist(metadata)
+        if not echonest_id:
+            self._log(_("no echonest info about artist"))
+            return None
+        mb_id = self._find_mb_id_for_artist(metadata)
+        name = metadata.get('artist')
+        name_simplified = get_simplified_name(name)
+        
+        if not (echonest_id or mb_id or name):
+            self._log(_("artist info not sufficient"))
+            return None
+        
+        try:
+            artist = YasoundArtist.objects.get(echonest_id=echonest_id)
+        except YasoundArtist.DoesNotExist:
+            self._log(_("creating new artist (echonest_id=%s): %s") % (echonest_id, name))
+            artist = YasoundArtist(echonest_id=echonest_id,
+                                   musicbrainz_id=mb_id,
+                                   name=name,
+                                   name_simplified=name_simplified)
+            artist.save()
+        return artist
+    
+    def _get_or_create_album(self, metadata):
+        lastfm_id = metadata.get('album_lastfm_id')
+        if not lastfm_id:
+            self._log(_("no lastfm info about album"))
+            return None
+        
+        try:
+            album = YasoundAlbum.objects.get(lastfm_id=lastfm_id)
+            self._log(_("album already in database (%d") % (album.id))
+            return album
+        except YasoundAlbum.DoesNotExist:
+            pass
+        
+        mbid = self._find_mb_id_for_album(metadata)
+        name = metadata.get('album')
+        self._log("creating new album: %s" % (name))
+        name_simplified = get_simplified_name(name)
+        cover_filename = None
+        cover_url = self._find_cover_url_for_album(metadata)
+        if cover_url:
+            # saving cover
+            cover_filename, cover_path = self._generate_filename_and_path_for_cover(cover_url)
+            r = requests.get(cover_url)
+            self._log(_("downloading album cover"))
+            if r.status_code == 200:
+                image_data = r.content
+                os.makedirs(os.path.dirname(cover_path))
+                destination = open(cover_path, 'wb')
+                destination.write(image_data)
+                destination.close()  
+        
+        album = YasoundAlbum(lastfm_id=lastfm_id,
+                             musicbrainz_id=mbid,
+                             name=name,
+                             name_simplified=name_simplified,
+                             cover_filename=cover_filename)
+        album.save()
+        
+        return album
+    
+    def _convert_to_mp3(self, source, destination):
+        self._log("converting to mp3 : %s -> %s" % (source, destination))
+        args = [settings.FFMPEG_BIN, 
+                '-i',
+                source]
+        args.extend(settings.FFMPEG_CONVERT_TO_MP3_OPTIONS.split(" "))
+        args.append(destination)
+        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
+        output, errors = p.communicate()
+        print output
+        print errors
+        if len(errors) == 0:
+            self._log(errors)
+            return False
+        return True    
+    
+        
+    def get_messages(self):
+        return self._messages
+    
+    def import_song(self, binary, metadata=None, convert=True):
+        """
+        import song without metadata
+        """
+        directory = mkdtemp()
+        path, extension = os.path.splitext(binary.name)
+        
+        source = u'%s/s%s' % (directory, extension)
+        destination = u'%s/d.mp3' % (directory)
+        source_f = open(source , 'wb')
+        for chunk in binary.chunks():
+            source_f.write(chunk)
+        source_f.close()
+            
+        if convert==True:
+            self._convert_to_mp3(source, destination)
+            if not metadata:
+                metadata = uploader.get_file_infos(destination)
+            sm, messages = self.process_song(metadata, filepath=destination)
+        else:
+            if not metadata:
+                metadata = uploader.get_file_infos(source)
+            sm, messages = self.process_song(metadata, binary=binary)
+            
+        rmtree(directory)
+        
+        return sm, messages
+    
+    def _find_song_by_echonest_id(self, echonest_id):
+        if not echonest_id:
+            return None
+        try:
+            return YasoundSong.objects.filter(echonest_id=echonest_id)[0]
+        except:
+            return None
+        
+    def _find_song_by_lastfm_id(self, lastfm_id):
+        if not lastfm_id:
+            return None
+        try:
+            return YasoundSong.objects.filter(lastfm_id=lastfm_id)[0]
+        except:
+            return None
+
+    def process_song(self, metadata, binary=None, filepath=None):
+        """
+        * import song file, 
+        * create YasoundSong, 
+        * create YasoundArtist 
+        * create YasoundAlbum
+        * create SongMetadata
+        * finally return SongMetadata
+        
+        """
+        name = metadata.get('title')
+        artist_name = metadata.get('artist')
+        album_name = metadata.get('album')
+    
+        self._log("importing %s-%s-%s" % (name, album_name, artist_name))
+    
+        echonest_data = metadata.get('echonest_data')
+        lastfm_data = metadata.get('lastfm_data')
+        if not echonest_data and not lastfm_data:
+            self._log("no echonest and lastfm datas")
+            return None, self.get_messages()
+        fingerprint = metadata.get('fingerprint')
+        if not fingerprint:
+            self._log("no fingerprint")
+            return None, self.get_messages()
+        fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
+        
+        now = datetime.datetime.today()
+        
+        if not name:
+            logger.error("no title")
+            return None
+        name_simplified = get_simplified_name(name)
+        artist_name_simplified = get_simplified_name(artist_name)
+        album_name_simplified = get_simplified_name(album_name)
+        
+        duration = self._find_audio_summary_item(metadata, 'duration')
+        loudness = self._find_audio_summary_item(metadata, 'loudness')
+        danceability = self._find_audio_summary_item(metadata, 'danceability')
+        energy = self._find_audio_summary_item(metadata, 'energy')
+        tempo = self._find_audio_summary_item(metadata, 'tempo')
+        tonality_mode = self._find_audio_summary_item(metadata, 'mode')
+        tonality_key = self._find_audio_summary_item(metadata, 'key')
+        echoprint_version = metadata.get('echoprint_version')
+        
+        echonest_id = metadata.get('echonest_id')
+        lastfm_id = metadata.get('lastfm_id')
+        musicbrainz_id = self._find_mb_id_for_song(metadata)
+        duration = metadata.get('duration')
+        quality = self._get_quality(metadata)
+
+        self._log(_('echonest id = %s, lastfm_id = %s, musicbrainz_id = %s') % (echonest_id, lastfm_id, musicbrainz_id))
+        
+        # first check for an existing SongMetadata
+        try:
+            sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
+            if sm.yasound_song_id:
+                try:
+                    YasoundSong.objects.get(id=sm.yasound_song_id)
+                    self._log(_("song already in database"))
+                    return None, self.get_messages()
+                except YasoundSong.DoesNotExist:
+                    self._log(_("song metadata already in database, but no YasoundSong"))
+        except SongMetadata.DoesNotExist:
+            sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name)
+            sm.save()
+            self._log(_('creating SongMetadata, id = %s') % (sm.id))
+    
+        # create artist with info from echonest and lastfm
+        artist = self._get_or_create_artist(metadata)
+        # create album if found on lastfm
+        album = self._get_or_create_album(metadata)
+        
+        # create yasound song
+        found = self._find_song_by_echonest_id(echonest_id)
+        if not found:
+            found = self._find_song_by_lastfm_id(lastfm_id)
+        if found:
+            song = found
+            self._log("Song already existing in database (id=%s)" % (song.id))
+        else:
+            # generate filename and save binary to disk
+            filename, mp3_path = self._generate_filename_and_path_for_song()
+            os.makedirs(os.path.dirname(mp3_path))
+            
+            if binary:
+                destination = open(mp3_path, 'wb')
+                for chunk in binary.chunks():
+                    destination.write(chunk)
+                destination.close()  
+                self._log("generated mp3 file : %s" % (mp3_path))
+            elif filepath:
+                shutil.copy(filepath, mp3_path)
+                self._log("copied %s to %s" % (filepath, mp3_path))
+                
+        
+            # generate 64kb preview
+            mp3_preview_path = self._get_filepath_for_preview(mp3_path)
+            self._generate_preview(mp3_path, mp3_preview_path)
+            self._log("generated mp3 preview file : %s" % (mp3_preview_path))
+            
+            # create song object
+            song = YasoundSong(artist=artist,
+                               album=album,
+                               echonest_id=echonest_id,
+                               lastfm_id=lastfm_id,
+                               musicbrainz_id=musicbrainz_id,
+                               filename=filename,
+                               filesize=os.path.getsize(mp3_path),
+                               name=name,
+                               name_simplified=name_simplified,
+                               artist_name=artist_name,
+                               artist_name_simplified=artist_name_simplified,
+                               album_name=album_name,
+                               album_name_simplified=album_name_simplified,
+                               duration=duration,
+                               danceability=danceability,
+                               loudness=loudness,
+                               energy=energy,
+                               tempo=tempo,
+                               tonality_mode=tonality_mode,
+                               tonality_key=tonality_key,
+                               fingerprint=fingerprint,
+                               fingerprint_hash=fingerprint_hash,
+                               echoprint_version=echoprint_version,
+                               publish_at=None,
+                               published=False,
+                               locked=False,
+                               quality=quality)
+            song.save()
+            self._log(_('YasoundSong generated, id = %s') % (song.id))
+        # assign genre
+        genres = metadata.get('genres')
+        if genres:
+            for genre in genres:
+                genre_canonical = get_simplified_name(genre)
+                yasound_genre, created = YasoundGenre.objects.get_or_create(name_canonical=genre_canonical, defaults={'name': genre})
+                YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
+        
+        
+        # assign song id to metadata
+        sm.yasound_song_id = song.id
+        sm.save()
+        self._log(_('Association between YasoundSong and SongMetadata done'))
+        return sm, self.get_messages()
+    
+
+def import_song(binary, metadata, convert):    
+    importer = SongImporter()
+    return importer.import_song(binary, metadata, convert)
     
     
     
