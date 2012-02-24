@@ -720,7 +720,8 @@ class FeaturedContent(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        FeaturedContent.objects.exclude(id=self.id).update(activated=False)
+        if self.activated:
+            FeaturedContent.objects.exclude(id=self.id).update(activated=False)
         super(FeaturedContent, self).save(*args, **kwargs)
             
     class Meta:

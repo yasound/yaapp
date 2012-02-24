@@ -4,14 +4,18 @@ import gc
 import string
 
 exclude = set(string.punctuation)
-def _remove_punctuation(s):
-    return ''.join(ch for ch in s if ch not in exclude)
+def _replace_punctuation_with_space(s):
+    """
+    """
+    for i in exclude:
+        s = s.replace(i, ' ')
+    return s
 
 def get_simplified_name(s):
     """
     return simplified name : remove multiple spaces, eol, tabs and punctuations and lower everything
     """
-    return ' '.join(_remove_punctuation(s).split()).lower()
+    return ' '.join(_replace_punctuation_with_space(s).split()).lower()
 
 def _is_digit(val):
     """
@@ -27,7 +31,7 @@ def build_dms(sentence, remove_common_words=False):
     dms = []
     if not sentence:
         return dms
-    sentence = _remove_punctuation(sentence)
+    sentence = _replace_punctuation_with_space(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
         if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or (not _is_digit(word) and len(word) <= 2)):
