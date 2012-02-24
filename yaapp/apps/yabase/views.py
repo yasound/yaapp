@@ -527,8 +527,7 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     
     playlists = Playlist.objects.filter(radio=radio)
     if playlist_index > playlists.count():
-        res = 'cannot get playlists (playlist_index=%d  playlists.count=%d)' % (playlist_index, playlists.count())
-        return HttpResponse(res)
+        return HttpResponse(status=404)
     playlist = playlists[playlist_index]
     
     matched_songs = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id=yasound_song_id)
