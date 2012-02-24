@@ -86,7 +86,7 @@ import uuid
 import subprocess as sub
 from django.utils.translation import ugettext_lazy as _
 import shutil
-
+from decimal import *
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -453,10 +453,10 @@ class SongImporter:
                                album_name=album_name,
                                album_name_simplified=album_name_simplified,
                                duration=duration,
-                               danceability=danceability,
-                               loudness=loudness,
-                               energy=energy,
-                               tempo=tempo,
+                               danceability=Decimal(str(danceability)),
+                               loudness=Decimal(str(loudness)),
+                               energy=Decimal(str(energy)),
+                               tempo=int(tempo),
                                tonality_mode=tonality_mode,
                                tonality_key=tonality_key,
                                fingerprint=fingerprint,
