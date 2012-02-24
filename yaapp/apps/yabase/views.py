@@ -455,12 +455,14 @@ def upload_song(request, song_id=None):
     A data json dict can also be provided.    
     
     """
-    
+    convert = True
     if not request.user.is_authenticated():
         key = request.REQUEST.get('key')
         if key != yabase_settings.UPLOAD_KEY:
             if not check_api_key_Authentication(request):
                 return HttpResponse(status=401)
+        else:
+            convert = False
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
@@ -488,9 +490,28 @@ def upload_song(request, song_id=None):
         return HttpResponse(res)
     else:
         decoded_data = json.loads(data)
-        import_utils.import_song(decoded_data, f)
+        import_utils.import_song(binary=f, metadata=decoded_data, convert=convert)
         res = 'upload OK for song: %s' % unicode(f.name)
         return HttpResponse(res)
+
+@login_required
+def upload_song_ajax(request):
+    if not request.FILES.has_key('file'):
+        logger.info('upload_song: request does not contain song')
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': False,
+            'message': 'upload_song: request does not contain song'
+        })
+        return HttpResponse(json_data, mimetype='text/html')
+
+    f = request.FILES['file']
+    sm, messages = import_utils.import_song(binary=f, metadata=None, convert=True)
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'message': unicode(messages)
+    })
+    return HttpResponse(json_data, mimetype='text/html')
+
 
 @csrf_exempt
 def add_song(request, radio_id, playlist_index, yasound_song_id):
