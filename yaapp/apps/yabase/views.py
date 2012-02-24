@@ -532,7 +532,7 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     
     matched_songs = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id=yasound_song_id)
     if matched_songs.count() > 0:
-        res = dict(success=True, created=False)
+        res = dict(success=True, created=False, song_instance_id=matched_songs[0].id)
         response = json.dumps(res)
         return HttpResponse(response)
     
