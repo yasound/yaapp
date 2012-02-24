@@ -37,6 +37,7 @@ Yasound.Upload.UI.FilePanel = Ext.extend(Ext.form.FormPanel, {
 					if (fp.getForm().isValid()) {
 						fp.getForm().submit({
 							url : '/api/v1/upload_song_ajax/',
+							timeout: 1000 * 60 * 5,
 							waitMsg : gettext('Sending informations...'),
 							success : function(fp, o) {
 								if (o.response) {
