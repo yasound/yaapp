@@ -32,10 +32,12 @@ def _is_digit(val):
     except ValueError:
         return False
     
-def build_dms(sentence, remove_common_words=False):
+def build_dms(sentence, remove_common_words=False, exceptions_list=None):
     dms = []
     if not sentence:
         return dms
+    if sentence == exceptions_list:
+        remove_common_words = False
     sentence = _replace_punctuation_with_space(sentence)
     words = sorted(sentence.lower().split())
     for word in words:

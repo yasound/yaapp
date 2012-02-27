@@ -2,6 +2,7 @@
 from pymongo import DESCENDING
 from django.conf import settings
 import utils as yaref_utils
+import settings as yaref_settings
 
 def build_index():
     db = settings.MONGO_DB
@@ -23,9 +24,9 @@ def add_song(song, upsert=False, insert=True):
         "name": song.name,
         "artist": song.artist_name,
         "album": song.album_name,
-        "song_dms": yaref_utils.build_dms(song.name),
-        "artist_dms": yaref_utils.build_dms(song.artist_name),
-        "album_dms": yaref_utils.build_dms(song.album_name),
+        "song_dms": yaref_utils.build_dms(song.name, True, yaref_settings.SONG_STRING_EXCEPTIONS),
+        "artist_dms": yaref_utils.build_dms(song.artist_name, True, yaref_settings.SONG_STRING_EXCEPTIONS),
+        "album_dms": yaref_utils.build_dms(song.album_name, True, yaref_settings.SONG_STRING_EXCEPTIONS),
     }
     if upsert:
         db = settings.MONGO_DB

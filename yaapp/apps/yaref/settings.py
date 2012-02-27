@@ -5,6 +5,7 @@ FUZZY_COMMON_WORDS = ("the",
                       "a", 
                       "of", 
                       'and', 
+                      'or',
                       'le',
                       'la',
                       'le',
@@ -13,3 +14,6 @@ FUZZY_COMMON_WORDS = ("the",
                       'los')
 
 FUZZY_KEY='ksdjwIueudfnksx(@38*2jdnjweapnfnhshdf'
+
+SONG_STRING_EXCEPTIONS = (
+                          )
