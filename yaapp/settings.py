@@ -269,6 +269,8 @@ INSTALLED_APPS = (
     'social_auth',
 )
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 ugettext = lambda s: s
 LANGUAGES = (
     ('en', 'English'),
