@@ -5,13 +5,21 @@ from models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
 # yasound read only song db:
 class YasoundSongAdmin(admin.ModelAdmin):
     list_display = ('name', 'echonest_id', 'lastfm_id', 'duration', 'filename', 'artist_name', 'album_name' )
-    search_fields = ( 'name_simplified', 'artist_name_simplified', 'album_name_simplified', )
-    
-
-
+    raw_id_fields = ('artist', 'album',)
+    search_fields = ( 'id', 'name_simplified', 'artist_name_simplified', 'album_name_simplified', )
 admin.site.register(YasoundSong, YasoundSongAdmin)
-admin.site.register(YasoundArtist)
-admin.site.register(YasoundAlbum)
+
+
+class YasoundArtistAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'name_simplified', 'lastfm_id', 'echonest_id', 'musicbrainz_id', )
+    search_fields = ( 'id', 'name_simplified', )
+admin.site.register(YasoundArtist, YasoundArtistAdmin)
+
+class YasoundAlbumAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'name_simplified', 'lastfm_id', 'musicbrainz_id', )
+    search_fields = ( 'id', 'name_simplified', )
+admin.site.register(YasoundAlbum, YasoundAlbumAdmin)
+
 admin.site.register(YasoundGenre)
 admin.site.register(YasoundSongGenre)
 
