@@ -236,11 +236,14 @@ class YasoundSong(models.Model):
         return self.name
 
 class YasoundSongGenre(models.Model):
-    song = models.ForeignKey(YasoundSong)
+    song = models.ForeignKey(YasoundSong, primary_key=True)
     genre = models.ForeignKey(YasoundGenre)
+    
     class Meta:
         db_table = u'yasound_song_genre'
         db_name = u'yasound'
+        unique_together = ('song', 'genre')
+        
     def __unicode__(self):
         return self.genre.name
 
