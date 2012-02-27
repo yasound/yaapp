@@ -152,17 +152,17 @@ class SongImporter:
             return None
         return data.get('audio_summary')
     
-    def _find_audio_summary_item(self, metadata, item):
+    def _find_audio_summary_item(self, metadata, item, default=None):
         audio_summary = self._find_audio_summary(metadata)
         if not audio_summary:
-            return None
+            return default
         return audio_summary.get(item)
     
     def _generate_filename_and_path_for_song(self):
         path_exists = True
         filename = None
         while path_exists:
-            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + '.mp3'
+            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(10)) + '.mp3'
             path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
             path_exists = os.path.exists(path)
         return filename, path
@@ -172,7 +172,7 @@ class SongImporter:
         path_exists = True
         filename = None
         while path_exists:
-            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + extension
+            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(10)) + extension
             path = os.path.join(settings.ALBUM_COVERS_ROOT, convert_filename_to_filepath(filename))
             path_exists = os.path.exists(path)
         return filename, path
@@ -241,7 +241,7 @@ class SongImporter:
         
         try:
             album = YasoundAlbum.objects.get(lastfm_id=lastfm_id)
-            self._log(_("album already in database (%d") % (album.id))
+            self._log(_("album already in database (%d)") % (album.id))
             return album
         except YasoundAlbum.DoesNotExist:
             pass
@@ -373,13 +373,12 @@ class SongImporter:
         artist_name_simplified = get_simplified_name(artist_name)
         album_name_simplified = get_simplified_name(album_name)
         
-        duration = self._find_audio_summary_item(metadata, 'duration')
-        loudness = self._find_audio_summary_item(metadata, 'loudness')
-        danceability = self._find_audio_summary_item(metadata, 'danceability')
-        energy = self._find_audio_summary_item(metadata, 'energy')
-        tempo = self._find_audio_summary_item(metadata, 'tempo')
-        tonality_mode = self._find_audio_summary_item(metadata, 'mode')
-        tonality_key = self._find_audio_summary_item(metadata, 'key')
+        loudness = self._find_audio_summary_item(metadata, 'loudness', 0)
+        danceability = self._find_audio_summary_item(metadata, 'danceability', 0)
+        energy = self._find_audio_summary_item(metadata, 'energy', 0)
+        tempo = self._find_audio_summary_item(metadata, 'tempo', 0)
+        tonality_mode = self._find_audio_summary_item(metadata, 'mode', 0)
+        tonality_key = self._find_audio_summary_item(metadata, 'key', 0)
         echoprint_version = metadata.get('echoprint_version')
         
         echonest_id = metadata.get('echonest_id')
@@ -396,7 +395,7 @@ class SongImporter:
             if sm.yasound_song_id:
                 try:
                     YasoundSong.objects.get(id=sm.yasound_song_id)
-                    self._log(_("song already in database"))
+                    self._log(_("song already in database: %s") % (sm.yasound_song_id))
                     return None, self.get_messages()
                 except YasoundSong.DoesNotExist:
                     self._log(_("song metadata already in database, but no YasoundSong"))
@@ -406,11 +405,14 @@ class SongImporter:
             self._log(_('creating SongMetadata, id = %s') % (sm.id))
     
         # create artist with info from echonest and lastfm
+        self._log(_('looking for artist'))
         artist = self._get_or_create_artist(metadata)
         # create album if found on lastfm
+        self._log(_('looking for album'))
         album = self._get_or_create_album(metadata)
         
         # create yasound song
+        self._log(_('looking for song'))
         found = self._find_song_by_echonest_id(echonest_id)
         if not found:
             found = self._find_song_by_lastfm_id(lastfm_id)
@@ -419,6 +421,7 @@ class SongImporter:
             self._log("Song already existing in database (id=%s)" % (song.id))
         else:
             # generate filename and save binary to disk
+            self._log(_('generating file'))
             filename, mp3_path = self._generate_filename_and_path_for_song()
             os.makedirs(os.path.dirname(mp3_path))
             
@@ -434,11 +437,13 @@ class SongImporter:
                 
         
             # generate 64kb preview
+            self._log(_('generating preview'))
             mp3_preview_path = self._get_filepath_for_preview(mp3_path)
             self._generate_preview(mp3_path, mp3_preview_path)
             self._log("generated mp3 preview file : %s" % (mp3_preview_path))
             
             # create song object
+            self._log(_('creating YasoundSong'))
             song = YasoundSong(artist=artist,
                                album=album,
                                echonest_id=echonest_id,
