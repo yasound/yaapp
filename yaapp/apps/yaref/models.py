@@ -218,6 +218,8 @@ class YasoundSong(models.Model):
     comment = models.TextField(blank=True, null=True)
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
     quality = models.SmallIntegerField(blank=True, null=True)
+    owner_id = models.IntegerField(blank=True, null=True)
+    
     
     @property
     def cover_url(self):
