@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.test import TestCase
 from yaref.utils import get_simplified_name
 
@@ -21,3 +22,11 @@ class TestUtils(TestCase):
         name = "Is there anybody?.."
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, "is there anybody")
+
+        name = "Some %^(({}))'\"?<>punctuation-+*&`~:"
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, "some punctuation")
+
+        name = u"Julien Doré"
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, "julien dore")

@@ -37,6 +37,9 @@ class UserProfile(models.Model):
     last_authentication_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
+        if self.name:
+            return self.name
+        
         return self.user.username
     
     @property

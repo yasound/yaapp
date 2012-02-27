@@ -445,8 +445,13 @@ COMPRESS_CSS_FILTERS = ()
     
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
-FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ab 64000' # convert option when generating mp3 preview
-FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ab 192000' # convert to mp3
+FFMPEG_GENERATE_PREVIEW_OPTIONS = '-map_meta_data 0:0 -ab 64000' # convert option when generating mp3 preview
+FFMPEG_CONVERT_TO_MP3_OPTIONS = '-map_meta_data 0:0 -ab 192000' # convert to mp3
+
+if LOCAL_MODE:
+    FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ab 64000' # convert option when generating mp3 preview
+    FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ab 192000' # convert to mp3
+
 if PRODUCTION_MODE:
     SONGS_ROOT = '/space/new/medias/song/'
     ALBUM_COVERS_ROOT = '/space/new/medias/album-cover/'

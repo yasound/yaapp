@@ -10,10 +10,12 @@ $(document).ready(function() {
 	    url: g_radio_url,
 	    stream: true,
 	    onplay: function() {
-	    	$('#play').text(lbl_stop);
+	    	$('#play i').removeClass('icon-pause');
+	    	$('#play i').addClass('icon-stop');
 	    },
 	    onstop: function() {
-	    	$('#play').text(lbl_play);
+	    	$('#play i').removeClass('icon-stop');
+	    	$('#play i').addClass('icon-play');
 	    }
 	  });
 	  $('#play').click();
@@ -30,15 +32,6 @@ $(document).ready(function() {
 		  mySound.play();
 	  }
 	});
-	
-	$('#mute').click(function() {
-		mySound.toggleMute();
-		if (mySound.muted) {
-			$('#mute').text(lbl_unmute);
-		} else {
-			$('#mute').text(lbl_mute);
-		}
-	})
 	
 	$('#inc').click(function() {
 		if (mySound.volume <= 90) {

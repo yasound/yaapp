@@ -131,7 +131,6 @@ class YasoundSongManager(models.Manager):
                         logger.debug("** real  = %s|%s|%s" % (artist.name,artist.album_name,artist.artist_name))
                         errors += 1
                         found -= 1
-            #print i
         elapsed = time() - start
         logger.debug('Complete search took ' + str(elapsed) + ' seconds')
         logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
@@ -212,9 +211,9 @@ class YasoundSong(models.Model):
     fingerprint = models.TextField(null=True, blank=True)
     fingerprint_hash = models.CharField(max_length=45, null=True, blank=True)
     echoprint_version = models.CharField(max_length=8, null=True, blank=True)
-    publish_at = models.DateTimeField()
-    published = models.BooleanField()
-    locked = models.BooleanField()
+    publish_at = models.DateTimeField(blank=True, null=True)
+    published = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
     allowed_countries = models.CharField(max_length=255, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
@@ -236,11 +235,14 @@ class YasoundSong(models.Model):
         return self.name
 
 class YasoundSongGenre(models.Model):
-    song = models.ForeignKey(YasoundSong)
+    song = models.ForeignKey(YasoundSong, primary_key=True)
     genre = models.ForeignKey(YasoundGenre)
+    
     class Meta:
         db_table = u'yasound_song_genre'
         db_name = u'yasound'
+        unique_together = ('song', 'genre')
+        
     def __unicode__(self):
         return self.genre.name
 

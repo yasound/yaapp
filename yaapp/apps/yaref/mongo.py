@@ -14,7 +14,8 @@ def begin_bulk_insert():
 
 def commit_bulk_insert(data):
     db = settings.MONGO_DB
-    db.songs.insert(data, safe=True)
+    if len(data) > 0:
+        db.songs.insert(data, safe=True)
         
 def add_song(song, upsert=False, insert=True):
     song_doc = {

@@ -2,20 +2,25 @@ import metaphone
 import settings as yaref_settings
 import gc
 import string
+import re
+import unicodedata
 
-exclude = set(string.punctuation)
+exclude = string.punctuation
+exclude_regex = re.compile(r"[%s]" % re.escape(exclude))
 def _replace_punctuation_with_space(s):
     """
     """
-    for i in exclude:
-        s = s.replace(i, ' ')
-    return s
+    return exclude_regex.sub(" ", s)
 
 def get_simplified_name(s):
     """
-    return simplified name : remove multiple spaces, eol, tabs and punctuations and lower everything
+    return simplified name : 
+    * remove multiple spaces, eol, tabs and punctuations 
+    * lower everything
+    * convert to ascii
     """
-    return ' '.join(_replace_punctuation_with_space(s).split()).lower()
+    s = ' '.join(_replace_punctuation_with_space(unicode(s)).split()).lower()
+    return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')    
 
 def _is_digit(val):
     """

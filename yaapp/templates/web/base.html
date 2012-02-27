@@ -1,6 +1,21 @@
 {% extends "base.html" %} 
 {% load i18n %} 
 
+{% block extra_head %}
+    <script type="text/javascript">
+        var g_radio_url = '{{ radio_url }}';
+        var lbl_mute = "{% trans 'Mute' %}";
+        var lbl_unmute = "{% trans 'Unmute' %}";
+        var lbl_play = "{% trans 'Play' %}";
+        var lbl_stop = "{% trans 'Stop' %}";
+    </script>
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
+    <script type="text/javascript" src="/media/js/listen.js"></script>
+    
+{% endblock %}
+
+
 {% block body %}
 <div class='container-fluid'>
     <div class='row-fluid'>
