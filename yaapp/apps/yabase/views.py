@@ -452,7 +452,7 @@ def upload_song(request, song_id=None):
     This view can be called by the mobile client or with regular form.
     song_id can be specified to match an already existing SongInstance object
     
-    A data json dict can also be provided.    
+    A metadata json dict can be provided.    
     
     """
     convert = True
@@ -474,25 +474,13 @@ def upload_song(request, song_id=None):
     f = request.FILES[SONG_FILE_TAG]
     
     data = request.REQUEST.get('data')
-    if not data:
-        filename = u'%s.mp3' % (str(uuid.uuid1()))
-        path = '%s%s' % (settings.UPLOAD_SONG_FOLDER, filename)
-    
-        destination = open(path, 'wb')
-        for chunk in f.chunks():
-            destination.write(chunk)
-        destination.close()
-    
-        if song_id:
-            SongInstance.objects.filter(id=song_id).update(need_sync=True)
-    
-        res = 'upload OK for song: %s' % unicode(f.name)
-        return HttpResponse(res)
-    else:
-        decoded_data = json.loads(data)
-        import_utils.import_song(binary=f, metadata=decoded_data, convert=convert)
-        res = 'upload OK for song: %s' % unicode(f.name)
-        return HttpResponse(res)
+    json_data = json.loads(data)
+    sm, messages = import_utils.import_song(binary=f, metadata=json_data, convert=convert)
+    if song_id:
+        SongInstance.objects.filter(id=song_id).update(metadata=sm)
+
+    res = 'upload OK for song: %s' % unicode(f.name)
+    return HttpResponse(res)
 
 @login_required
 def upload_song_ajax(request):
