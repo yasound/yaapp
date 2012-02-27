@@ -1,7 +1,7 @@
 
 Yasound.Upload.UI.FilePanel = Ext.extend(Ext.form.FormPanel, {
     initComponent: function() {
-        this.addEvents('uploadSuccess', 'uploadFailure');
+        this.addEvents('uploadSuccess', 'uploadFailure', 'uploadStarted');
         var fp = this;
         var those = this;
         var config = {
@@ -35,6 +35,7 @@ Yasound.Upload.UI.FilePanel = Ext.extend(Ext.form.FormPanel, {
 				text : gettext('Import'),
 				handler : function(btn, event) {
 					if (fp.getForm().isValid()) {
+						those.fireEvent('uploadStarted', fp);
 						fp.getForm().submit({
 							url : '/api/v1/upload_song_ajax/',
 							timeout: 1000 * 60 * 5,
@@ -107,6 +108,9 @@ Yasound.Upload.UI.UploadSongsPanel = function() {
 				},
 				'uploadFailure': function(component, log) {
 					logPanel.addLog(log);
+				},
+				'uploadStarted': function(component) {
+					logPanel.addLog(gettext("Upload started\n"));
 				}
 			}
 		}, logPanel],
