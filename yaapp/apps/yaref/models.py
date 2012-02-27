@@ -131,7 +131,6 @@ class YasoundSongManager(models.Manager):
                         logger.debug("** real  = %s|%s|%s" % (artist.name,artist.album_name,artist.artist_name))
                         errors += 1
                         found -= 1
-            #print i
         elapsed = time() - start
         logger.debug('Complete search took ' + str(elapsed) + ' seconds')
         logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
