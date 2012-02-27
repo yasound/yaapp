@@ -61,6 +61,25 @@ def find_song(name, album, artist, remove_common_words=True):
                     }).limit(10);
     return res
 
+def search_song(search_text, remove_common_words=True):
+    db = settings.MONGO_DB
+    dms_search = yaref_utils.build_dms(search_text, remove_common_words)
+    
+    query_items = []
+    if search_text and len(dms_search) > 0:
+        query_items.append({"song_dms":{"$in": dms_search}})
+        query_items.append({"artist_dms":{"$in": dms_search}})
+        query_items.append({"album_dms":{"$in": dms_search}})
+    
+    res = db.songs.find({"$or":query_items}, 
+                         {
+                        "db_id": True,
+                        "name": True,
+                        "artist": True,
+                        "album": True,
+                    });
+    return res
+
 def get_last_doc():
     db = settings.MONGO_DB
     return db.songs.find().sort([("$natural", DESCENDING)]).limit(1)
