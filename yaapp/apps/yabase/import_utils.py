@@ -73,7 +73,7 @@ from shutil import rmtree
 from tempfile import mkdtemp
 from yabase.models import SongMetadata
 from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
-    YasoundSongGenre
+    YasoundSongGenre, build_mongodb_index
 from yaref.utils import get_simplified_name, convert_filename_to_filepath
 import datetime
 import hashlib
@@ -483,13 +483,20 @@ class SongImporter:
             for genre in genres:
                 genre_canonical = get_simplified_name(genre)
                 yasound_genre, created = YasoundGenre.objects.get_or_create(name_canonical=genre_canonical, defaults={'name': genre})
-                YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
-        
+                if created:
+                    self._log("creating genre: %s" % (genre))
+                song_genre, created = YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
+                if created:
+                    self._log("genre %s associated with song %s" % (genre, song))
+                    
         
         # assign song id to metadata
         sm.yasound_song_id = song.id
         sm.save()
         self._log(_('Association between YasoundSong and SongMetadata done'))
+        
+        self._log(_('Building mongodb index'))
+        build_mongodb_index()
         return sm, self.get_messages()
     
 
