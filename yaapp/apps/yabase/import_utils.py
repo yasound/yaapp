@@ -162,7 +162,7 @@ class SongImporter:
         path_exists = True
         filename = None
         while path_exists:
-            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(10)) + '.mp3'
+            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + '.mp3'
             path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
             path_exists = os.path.exists(path)
         return filename, path
@@ -172,7 +172,7 @@ class SongImporter:
         path_exists = True
         filename = None
         while path_exists:
-            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(10)) + extension
+            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + extension
             path = os.path.join(settings.ALBUM_COVERS_ROOT, convert_filename_to_filepath(filename))
             path_exists = os.path.exists(path)
         return filename, path
@@ -421,26 +421,9 @@ class SongImporter:
             self._log("Song already existing in database (id=%s)" % (song.id))
         else:
             # generate filename and save binary to disk
-            self._log(_('generating file'))
+            self._log(_('generating filename'))
             filename, mp3_path = self._generate_filename_and_path_for_song()
             os.makedirs(os.path.dirname(mp3_path))
-            
-            if binary:
-                destination = open(mp3_path, 'wb')
-                for chunk in binary.chunks():
-                    destination.write(chunk)
-                destination.close()  
-                self._log("generated mp3 file : %s" % (mp3_path))
-            elif filepath:
-                shutil.copy(filepath, mp3_path)
-                self._log("copied %s to %s" % (filepath, mp3_path))
-                
-        
-            # generate 64kb preview
-            self._log(_('generating preview'))
-            mp3_preview_path = self._get_filepath_for_preview(mp3_path)
-            self._generate_preview(mp3_path, mp3_preview_path)
-            self._log("generated mp3 preview file : %s" % (mp3_preview_path))
             
             # create song object
             self._log(_('creating YasoundSong'))
@@ -450,7 +433,7 @@ class SongImporter:
                                lastfm_id=lastfm_id,
                                musicbrainz_id=musicbrainz_id,
                                filename=filename,
-                               filesize=os.path.getsize(mp3_path),
+                               filesize=0,
                                name=name,
                                name_simplified=name_simplified,
                                artist_name=artist_name,
@@ -473,6 +456,27 @@ class SongImporter:
                                quality=quality)
             song.save()
             self._log(_('YasoundSong generated, id = %s') % (song.id))
+            
+            self._log(_('generating file data'))
+            if binary:
+                destination = open(mp3_path, 'wb')
+                for chunk in binary.chunks():
+                    destination.write(chunk)
+                destination.close()  
+                self._log("generated mp3 file : %s" % (mp3_path))
+            elif filepath:
+                shutil.copy(filepath, mp3_path)
+                self._log("copied %s to %s" % (filepath, mp3_path))
+                
+            # generate 64kb preview
+            self._log(_('generating preview'))
+            mp3_preview_path = self._get_filepath_for_preview(mp3_path)
+            self._generate_preview(mp3_path, mp3_preview_path)
+            self._log("generated mp3 preview file : %s" % (mp3_preview_path))
+            
+            song.filesize = os.path.getsize(mp3_path)
+            song.save()
+            
         # assign genre
         genres = metadata.get('genres')
         if genres:
