@@ -117,7 +117,10 @@ class SongImporter:
         if not artist:
             return None
         
-        return artist[0].get('mbid')
+        if type(artist) == type([]):
+            return artist[0].get('mbid')
+        else:
+            return artist.get('mbid')
     
     
     def _find_mb_id_for_album(self, metadata):
@@ -352,7 +355,12 @@ class SongImporter:
         album_name = metadata.get('album')
     
         self._log("importing %s-%s-%s" % (name, album_name, artist_name))
-    
+        
+        is_valid = metadata.get('is_valid')
+        if not is_valid:
+            self._log("invalid file")
+            return None, self.get_messages()
+        
         echonest_data = metadata.get('echonest_data')
         lastfm_data = metadata.get('lastfm_data')
         if not echonest_data and not lastfm_data:
