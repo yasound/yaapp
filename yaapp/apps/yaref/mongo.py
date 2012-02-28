@@ -9,6 +9,7 @@ def build_index():
     db.songs.ensure_index("song_dms")
     db.songs.ensure_index("artist_dms") 
     db.songs.ensure_index("album_dms")
+    db.songs.ensure_index("all_dms")
     
 def begin_bulk_insert():
     return []
@@ -19,14 +20,25 @@ def commit_bulk_insert(data):
         db.songs.insert(data, safe=True)
         
 def add_song(song, upsert=False, insert=True):
+    song_dms = yaref_utils.build_dms(song.name, True, yaref_settings.SONG_STRING_EXCEPTIONS)
+    artist_dms = yaref_utils.build_dms(song.artist_name, True, yaref_settings.SONG_STRING_EXCEPTIONS)
+    album_dms =  yaref_utils.build_dms(song.album_name, True, yaref_settings.SONG_STRING_EXCEPTIONS)
+    
+    all_dms = []
+    all_dms.extend(song_dms)
+    all_dms.extend(artist_dms)
+    all_dms.extend(album_dms)
+    all_dms = list(set(all_dms))
+    
     song_doc = {
         "db_id": song.id,
         "name": song.name,
         "artist": song.artist_name,
         "album": song.album_name,
-        "song_dms": yaref_utils.build_dms(song.name, True, yaref_settings.SONG_STRING_EXCEPTIONS),
-        "artist_dms": yaref_utils.build_dms(song.artist_name, True, yaref_settings.SONG_STRING_EXCEPTIONS),
-        "album_dms": yaref_utils.build_dms(song.album_name, True, yaref_settings.SONG_STRING_EXCEPTIONS),
+        "song_dms": song_dms,
+        "artist_dms": artist_dms,
+        "album_dms": album_dms,
+        "all_dms": all_dms,
     }
     if upsert:
         db = settings.MONGO_DB
@@ -63,23 +75,20 @@ def find_song(name, album, artist, remove_common_words=True):
                     }).limit(10);
     return res
 
-def search_song(search_text, remove_common_words=True):
+def search_song(search_text, remove_common_words=True, limit=10):
     db = settings.MONGO_DB
     dms_search = yaref_utils.build_dms(search_text, remove_common_words)
     
-    query_items = []
-    if search_text and len(dms_search) > 0:
-        query_items.append({"song_dms":{"$in": dms_search}})
-        query_items.append({"artist_dms":{"$in": dms_search}})
-        query_items.append({"album_dms":{"$in": dms_search}})
-    
-    res = db.songs.find({"$or":query_items}, 
+    if not search_text or len(dms_search) == 0:
+        return []
+
+    res = db.songs.find({"all_dms":{"$all": dms_search}}, 
                          {
                         "db_id": True,
                         "name": True,
                         "artist": True,
                         "album": True,
-                    });
+                    }).limit(limit);
     return res
 
 def get_last_doc():
