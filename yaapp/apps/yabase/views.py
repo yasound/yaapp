@@ -482,7 +482,7 @@ def upload_song(request, song_id=None):
         logger.info('no metadata sent with binary')
     
     logger.info('importing song')
-    process_upload_song.delay(binary=f, metadata=json_data, convert=convert, song_id=song_id)
+    process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id)
 
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
