@@ -312,12 +312,10 @@ class SongImporter:
             
         if convert==True:
             self._convert_to_mp3(source, destination)
-            if not metadata:
-                metadata = uploader.get_file_infos(destination)
+            metadata = uploader.get_file_infos(destination, metadata)
             sm, messages = self.process_song(metadata, filepath=destination)
         else:
-            if not metadata:
-                metadata = uploader.get_file_infos(source)
+            metadata = uploader.get_file_infos(source, metadata)
             sm, messages = self.process_song(metadata, binary=binary)
             
         rmtree(directory)
