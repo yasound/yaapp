@@ -455,6 +455,7 @@ def upload_song(request, song_id=None):
     A metadata json dict can be provided.    
     
     """
+    logger.info("upload song called")
     convert = True
     if not request.user.is_authenticated():
         key = request.REQUEST.get('key')
@@ -462,7 +463,7 @@ def upload_song(request, song_id=None):
             if not check_api_key_Authentication(request):
                 return HttpResponse(status=401)
         else:
-            convert = False
+            convert = False # no conversion needed if request is coming from uploader
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
@@ -473,8 +474,14 @@ def upload_song(request, song_id=None):
 
     f = request.FILES[SONG_FILE_TAG]
     
+    json_data = None
     data = request.REQUEST.get('data')
-    json_data = json.loads(data)
+    if data:
+        json_data = json.loads(data)
+    else:
+        logger.info('no metadata sent with binary')
+    
+    logger.info('importing song')
     sm, messages = import_utils.import_song(binary=f, metadata=json_data, convert=convert)
     if song_id:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)
