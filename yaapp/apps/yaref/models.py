@@ -12,6 +12,9 @@ import string
 logger = logging.getLogger("yaapp.yaref")
 
 import django.db.models.options as options
+from sorl.thumbnail import get_thumbnail
+from django.core.files import File
+
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
@@ -86,9 +89,12 @@ class YasoundAlbum(models.Model):
     def cover_url(self):
         if not self.cover_filename:
             return None
-        
-        return '%s%s' % (settings.ALBUM_COVER_URL,
+        short_url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
                          yaref_utils.convert_filename_to_filepath(self.cover_filename))
+        try:
+            return get_thumbnail(short_url, '256x256').url
+        except:
+            return None
     
     class Meta:
         db_table = u'yasound_album'

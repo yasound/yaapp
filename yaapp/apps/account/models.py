@@ -94,7 +94,10 @@ class UserProfile(models.Model):
     def fill_user_bundle(self, bundle):
         picture_url = None
         if self.picture:
-            picture_url = get_thumbnail(self.picture, '100x100')
+            try:
+                picture_url = get_thumbnail(self.picture, '100x100').url
+            except:
+                pass
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name

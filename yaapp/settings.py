@@ -393,7 +393,8 @@ else:
     MONGO_DB = Connection().yasound
 
 # album images folder
-ALBUM_COVER_URL = MEDIA_URL + 'covers/albums/'
+ALBUM_COVER_SHORT_URL = 'covers/albums/'
+ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
 
 # celery stuff
 from celery.schedules import crontab
