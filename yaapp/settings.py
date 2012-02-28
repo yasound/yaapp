@@ -267,6 +267,7 @@ INSTALLED_APPS = (
     'yagraph',
     'yabackoffice',
     'social_auth',
+    'sorl.thumbnail',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

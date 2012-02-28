@@ -16,6 +16,8 @@ import uuid
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 
 from social_auth.signals import socialauth_not_registered
+from sorl.thumbnail import ImageField
+from sorl.thumbnail import get_thumbnail
 
 from django.core.files.base import ContentFile
 import datetime
@@ -31,7 +33,7 @@ class UserProfile(models.Model):
     twitter_token_secret = models.CharField(max_length=256, blank=True)
     facebook_token = models.CharField(max_length=256, blank=True)
     bio_text = models.TextField(null=True, blank=True)
-    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    picture = ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(default=False)
     friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
     last_authentication_date = models.DateTimeField(null=True, blank=True)
@@ -92,7 +94,7 @@ class UserProfile(models.Model):
     def fill_user_bundle(self, bundle):
         picture_url = None
         if self.picture:
-            picture_url = self.picture.url
+            picture_url = get_thumbnail(self.picture, '100x100')
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
