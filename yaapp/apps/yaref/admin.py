@@ -21,5 +21,12 @@ class YasoundAlbumAdmin(admin.ModelAdmin):
 admin.site.register(YasoundAlbum, YasoundAlbumAdmin)
 
 admin.site.register(YasoundGenre)
-admin.site.register(YasoundSongGenre)
+
+
+class YasoundSongGenreAdmin(admin.ModelAdmin):
+    list_display = ('song', 'genre', )
+    raw_id_fields = ('song',)
+    list_filter = ('genre', )
+    search_fields = ( 'song__name_simplified', 'name_canonical', )
+admin.site.register(YasoundSongGenre, YasoundSongGenreAdmin)
 

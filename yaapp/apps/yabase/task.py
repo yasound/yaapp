@@ -10,6 +10,7 @@ import zlib
 from yaref.utils import get_simplified_name
 import string
 import settings as yabase_settings
+import import_utils
 
 @task
 def leaderboard_update_task():
@@ -178,4 +179,8 @@ def process_need_sync_songs_exec():
 def process_need_sync_songs():
     return process_need_sync_songs_exec()
 
-
+@task
+def process_upload_song(binary, metadata=None, convert=True, song_id=None):
+    sm, messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert)
+    if song_id and sm:
+        SongInstance.objects.filter(id=song_id).update(metadata=sm)
