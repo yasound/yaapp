@@ -266,7 +266,7 @@ class Radio(models.Model):
             
         try:
             n = NextSong.objects.get(radio=self, order=1)
-        except NextSong.DoesNotExist:
+        except (NextSong.DoesNotExist, NextSong.MultipleObjectsReturned):
             try:
                 self.empty_next_songs_queue()
                 self.fill_next_songs_queue()
