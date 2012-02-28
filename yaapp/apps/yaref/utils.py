@@ -4,6 +4,8 @@ import gc
 import string
 import re
 import unicodedata
+from fuzzywuzzy import fuzz
+REG_TOKEN = re.compile("[\w\d]+")
 
 exclude = string.punctuation
 exclude_regex = re.compile(r"[%s]" % re.escape(exclude))
@@ -85,4 +87,44 @@ def queryset_iterator(queryset, chunksize=1000):
             pk = row.pk
             yield row
         gc.collect()
+        
+def token_set_ratio(s1, s2, method):
+
+    if s1 is None: raise TypeError("s1 is None")
+    if s2 is None: raise TypeError("s2 is None")
+
+    # pull tokens
+    tokens1 = set(REG_TOKEN.findall(s1))
+    tokens2 = set(REG_TOKEN.findall(s2))
+
+    intersection = tokens1.intersection(tokens2)
+    diff1to2 = tokens1.difference(tokens2)
+    diff2to1 = tokens2.difference(tokens1)
+
+    sorted_sect = u" ".join(sorted(intersection))
+    sorted_1to2 = u" ".join(sorted(diff1to2))
+    sorted_2to1 = u" ".join(sorted(diff2to1))
+
+    combined_1to2 = sorted_sect + " " + sorted_1to2
+    combined_2to1 = sorted_sect + " " + sorted_2to1
+
+    # strip
+    sorted_sect = sorted_sect.strip()
+    combined_1to2 = combined_1to2.strip()
+    combined_2to1 = combined_2to1.strip()
+
+    pairwise = [
+        fuzz.ratio(sorted_sect, combined_1to2),
+        fuzz.ratio(sorted_sect, combined_2to1),
+        fuzz.ratio(combined_1to2, combined_2to1)
+    ]
+    ratio = 0
+    if method == 'min':
+        ratio = min(pairwise)
+    elif method == 'mean':
+        ratio = sum(pairwise) / len(pairwise)
+    else:
+        ratio = max(pairwise)
+    return ratio
+
     

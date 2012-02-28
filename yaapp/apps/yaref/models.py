@@ -186,7 +186,7 @@ class YasoundSongManager(models.Manager):
             self._max_song = song
         return song
     
-    def search_fuzzy(self, search_text, limit=20):
+    def search_fuzzy(self, search_text, limit=25):
         print 'search fuzzy "%s"' % search_text
         songs = mongo.search_song(search_text, remove_common_words=True)
         print '%d songs' % songs.count()
@@ -222,8 +222,8 @@ class YasoundSongManager(models.Manager):
                 song_info_list.append(s["album"])
             if s["artist"] is not None:
                 song_info_list.append(s["artist"])
-            song_info = string.join(song_info_list)  
-            ratio = fuzz.partial_token_set_ratio(search_text, song_info)
+            song_info = string.join(song_info_list)
+            ratio = yaref_utils.token_set_ratio(search_text.lower(), song_info.lower(), method='min')
             res = (s, ratio)
             results.append(res)
             
