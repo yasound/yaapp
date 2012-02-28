@@ -8,6 +8,7 @@ import mongo
 import logging
 from time import time
 import utils as yaref_utils
+import string
 logger = logging.getLogger("yaapp.yaref")
 
 import django.db.models.options as options
@@ -189,6 +190,12 @@ class YasoundSongManager(models.Manager):
         print 'search fuzzy "%s"' % search_text
         songs = mongo.search_song(search_text, remove_common_words=True)
         print '%d songs' % songs.count()
+        print_count = 100
+        if print_count > songs.count():
+            print_count = songs.count()
+#        print '%d first songs' % print_count
+#        for i in range(print_count):
+#            print '%d: %s - %s - %s (%d)' % (i, songs[i]['artist'], songs[i]['album'], songs[i]['name'], songs[i]['db_id'])
         results = []
         if not search_text:
             return results
@@ -198,16 +205,25 @@ class YasoundSongManager(models.Manager):
         ALBUM_COEFF = 1
         total_coeffs = SONG_COEFF + ARTIST_COEFF + ALBUM_COEFF
         for s in songs:
-            ratio_song, ratio_album, ratio_artist = 0, 0, 0
+#            ratio_song, ratio_album, ratio_artist = 0, 0, 0
+#            if s["name"] is not None:
+#                ratio_song = fuzz.token_sort_ratio(search_text, s["name"])
+#                
+#            if s["album"] is not None:
+#                ratio_album = fuzz.token_sort_ratio(search_text, s["album"])
+#
+#            if s["artist"] is not None:
+#                ratio_artist = fuzz.token_sort_ratio(search_text, s["artist"])
+#            ratio = (SONG_COEFF * ratio_song + ALBUM_COEFF * ratio_album + ARTIST_COEFF * ratio_artist) / total_coeffs
+            song_info_list = []
             if s["name"] is not None:
-                ratio_song = fuzz.token_sort_ratio(search_text, s["name"])
-                
+                song_info_list.append(s["name"])
             if s["album"] is not None:
-                ratio_album = fuzz.token_sort_ratio(search_text, s["album"])
-
+                song_info_list.append(s["album"])
             if s["artist"] is not None:
-                ratio_artist = fuzz.token_sort_ratio(search_text, s["artist"])
-            ratio = (SONG_COEFF * ratio_song + ALBUM_COEFF * ratio_album + ARTIST_COEFF * ratio_artist) / total_coeffs
+                song_info_list.append(s["artist"])
+            song_info = string.join(song_info_list)  
+            ratio = fuzz.partial_token_set_ratio(search_text, song_info)
             res = (s, ratio)
             results.append(res)
             

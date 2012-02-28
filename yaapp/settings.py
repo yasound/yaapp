@@ -387,7 +387,7 @@ SOUTH_TESTS_MIGRATE=False
 # mongodb
 from pymongo.connection import Connection
 if PRODUCTION_MODE:
-    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@localhost/yasound').yasound
+    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@dev.yasound.com/yasound').yasound
 else:
     MONGO_DB = Connection().yasound
 
