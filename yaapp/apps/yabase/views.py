@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, SongMetadata
-from task import process_playlists
+from task import process_playlists, process_upload_song
 from yaref.models import YasoundSong
 import datetime
 import json
@@ -482,9 +482,7 @@ def upload_song(request, song_id=None):
         logger.info('no metadata sent with binary')
     
     logger.info('importing song')
-    sm, messages = import_utils.import_song(binary=f, metadata=json_data, convert=convert)
-    if song_id:
-        SongInstance.objects.filter(id=song_id).update(metadata=sm)
+    process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id)
 
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
