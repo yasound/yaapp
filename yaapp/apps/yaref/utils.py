@@ -4,6 +4,8 @@ import gc
 import string
 import re
 import unicodedata
+from unidecode import unidecode
+
 from fuzzywuzzy import fuzz
 REG_TOKEN = re.compile("[\w\d]+")
 
@@ -24,11 +26,7 @@ def get_simplified_name(s):
     if not isinstance(s, unicode):
         s = unicode(s, 'utf-8')
     s = ' '.join(_replace_punctuation_with_space(s).split()).lower()
-    s = unicodedata.normalize('NFKD', s)
-    ascii_value = s.encode('ascii', 'ignore')
-    if len(ascii_value) > 0:
-        return ascii_value.decode('utf-8')
-    return s
+    return unidecode(s).lower()
 
 def _is_digit(val):
     """

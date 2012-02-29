@@ -9,16 +9,12 @@ class TestUtils(TestCase):
     def test_get_simplified_name(self):
         name = u"スマイライフ"
         simplified_name = get_simplified_name(name)
-        self.assertEquals(simplified_name, u"スマイライフ")
+        self.assertEquals(simplified_name, u"sumairaihu")
 
         name = u"誰是MVP"
         simplified_name = get_simplified_name(name)
-        self.assertEquals(simplified_name, u"mvp")
+        self.assertEquals(simplified_name, u"shui shi mvp")
 
-        name = u"ÔÙπû‹¡Ê±ºò (‹Â¸è)(ÒôÏíÓéÂÛÌá’©"
-        simplified_name = get_simplified_name(name)
-        self.assertEquals(simplified_name, u"ouueoo a e ooiioeauia")
-        
         name = "Welcome, cruel world (hi)"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"welcome cruel world hi")
@@ -39,13 +35,23 @@ class TestUtils(TestCase):
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"some punctuation")
 
-        name = u"Julien Doré"
+        name = u"Julien Doré est français"
         simplified_name = get_simplified_name(name)
-        self.assertEquals(simplified_name, u"julien dore")
+        self.assertEquals(simplified_name, u"julien dore est francais")
 
         name = "Julien Doré"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"julien dore")
 
+        name = u"Москва"
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, u"moskva")
         
+        name = u"שיפל"
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, u"shypl")
+        
+        name = u"طبيب"
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, u"tbyb")
         
