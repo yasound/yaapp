@@ -131,7 +131,7 @@ def process_playlists_exec(radio, content_compressed):
                     song_instance.need_sync = False
                     found +=1
                     
-                song_instance.save()
+            song_instance.save()
         elif tag == REMOVE_PLAYLIST:
             playlist_name = data.get_string()
             source = data.get_string()
