@@ -296,7 +296,7 @@ class SongImporter:
     def get_messages(self):
         return self._messages
     
-    def import_song(self, binary, metadata=None, convert=True):
+    def import_song(self, binary, metadata=None, convert=True, allow_unknown_song=False):
         """
         import song without metadata
         """
@@ -313,10 +313,10 @@ class SongImporter:
         if convert==True:
             self._convert_to_mp3(source, destination)
             metadata = uploader.get_file_infos(destination, metadata)
-            sm, messages = self.process_song(metadata, filepath=destination)
+            sm, messages = self.process_song(metadata, filepath=destination, allow_unknown_song=allow_unknown_song)
         else:
             metadata = uploader.get_file_infos(source, metadata)
-            sm, messages = self.process_song(metadata, binary=binary)
+            sm, messages = self.process_song(metadata, binary=binary, allow_unknown_song=allow_unknown_song)
             
         rmtree(directory)
         
@@ -338,7 +338,7 @@ class SongImporter:
         except:
             return None
 
-    def process_song(self, metadata, binary=None, filepath=None):
+    def process_song(self, metadata, binary=None, filepath=None, allow_unknown_song=False):
         """
         * import song file, 
         * create YasoundSong, 
@@ -359,18 +359,21 @@ class SongImporter:
             self._log("invalid file")
             return None, self.get_messages()
         
-        echonest_data = metadata.get('echonest_data')
-        lastfm_data = metadata.get('lastfm_data')
-        if not echonest_data and not lastfm_data:
-            self._log("no echonest and lastfm datas")
-            return None, self.get_messages()
+        if not allow_unknown_song:
+            # we need to check that the song
+            # is know by echonest or lastfm
+            # otherwhise, import is rejected
+            echonest_data = metadata.get('echonest_data')
+            lastfm_data = metadata.get('lastfm_data')
+            if not echonest_data and not lastfm_data:
+                self._log("no echonest and lastfm datas")
+                return None, self.get_messages()
+            
         fingerprint = metadata.get('fingerprint')
         if not fingerprint:
             self._log("no fingerprint")
             return None, self.get_messages()
         fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
-        
-        now = datetime.datetime.today()
         
         if not name:
             logger.error("no title")
@@ -506,9 +509,9 @@ class SongImporter:
         return sm, self.get_messages()
     
 
-def import_song(binary, metadata, convert):    
+def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
-    return importer.import_song(binary, metadata, convert)
+    return importer.import_song(binary, metadata, convert, allow_unknown_song)
     
     
     

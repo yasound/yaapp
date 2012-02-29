@@ -131,7 +131,7 @@ def process_playlists_exec(radio, content_compressed):
                     song_instance.need_sync = False
                     found +=1
                     
-                song_instance.save()
+            song_instance.save()
         elif tag == REMOVE_PLAYLIST:
             playlist_name = data.get_string()
             source = data.get_string()
@@ -141,7 +141,7 @@ def process_playlists_exec(radio, content_compressed):
             source = data.get_string()
             Playlist.objects.filter(name=playlist_name, source=source).update(enabled=True)
             
-    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)
     if songs_ok.count() > 0:
         radio.ready = True
         radio.save()
@@ -180,7 +180,7 @@ def process_need_sync_songs():
     return process_need_sync_songs_exec()
 
 @task
-def process_upload_song(binary, metadata=None, convert=True, song_id=None):
-    sm, messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert)
+def process_upload_song(binary, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
+    sm, messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
     if song_id and sm:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)

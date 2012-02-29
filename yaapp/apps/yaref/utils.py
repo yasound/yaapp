@@ -28,7 +28,7 @@ def get_simplified_name(s):
     if not isinstance(s, unicode):
         s = unicode(s, 'utf-8')
     s = ' '.join(_replace_punctuation_with_space(s).split()).lower()
-    return unidecode(s).lower()
+    return unicode(unidecode(s).lower(), 'utf-8')
 
 def _is_digit(val):
     """
@@ -46,7 +46,7 @@ def build_dms(sentence, remove_common_words=False, exceptions_list=None):
         return dms
     if sentence == exceptions_list:
         remove_common_words = False
-    sentence = _replace_punctuation_with_space(sentence)
+    sentence = get_simplified_name(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
         if remove_common_words and (word in yaref_settings.FUZZY_COMMON_WORDS or (not _is_digit(word) and len(word) <= 2)):
