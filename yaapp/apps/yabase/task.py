@@ -180,7 +180,7 @@ def process_need_sync_songs():
     return process_need_sync_songs_exec()
 
 @task
-def process_upload_song(binary, metadata=None, convert=True, song_id=None):
-    sm, messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert)
+def process_upload_song(binary, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
+    sm, messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
     if song_id and sm:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)
