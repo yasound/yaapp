@@ -141,7 +141,7 @@ def process_playlists_exec(radio, content_compressed):
             source = data.get_string()
             Playlist.objects.filter(name=playlist_name, source=source).update(enabled=True)
             
-    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)
     if songs_ok.count() > 0:
         radio.ready = True
         radio.save()
