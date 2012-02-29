@@ -26,7 +26,7 @@ def get_simplified_name(s):
     if not isinstance(s, unicode):
         s = unicode(s, 'utf-8')
     s = ' '.join(_replace_punctuation_with_space(s).split()).lower()
-    return unidecode(s).lower()
+    return unicode(unidecode(s).lower(), 'utf-8')
 
 def _is_digit(val):
     """
