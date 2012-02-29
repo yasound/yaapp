@@ -12,17 +12,23 @@ exclude_regex = re.compile(r"[%s]" % re.escape(exclude))
 def _replace_punctuation_with_space(s):
     """
     """
-    return exclude_regex.sub(" ", s)
+    return exclude_regex.sub(u" ", s)
 
 def get_simplified_name(s):
     """
     return simplified name : 
     * remove multiple spaces, eol, tabs and punctuations 
     * lower everything
-    * convert to ascii
+    * return unicode
     """
-    s = ' '.join(_replace_punctuation_with_space(unicode(s)).split()).lower()
-    return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')    
+    if not isinstance(s, unicode):
+        s = unicode(s, 'utf-8')
+    s = ' '.join(_replace_punctuation_with_space(s).split()).lower()
+    s = unicodedata.normalize('NFKD', s)
+    ascii_value = s.encode('ascii', 'ignore')
+    if len(ascii_value) > 0:
+        return ascii_value.decode('utf-8')
+    return s
 
 def _is_digit(val):
     """

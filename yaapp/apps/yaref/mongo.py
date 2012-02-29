@@ -54,6 +54,9 @@ def find_song(name, album, artist, remove_common_words=True):
     if album and len(dms_album) > 0:
         query_items.append({"album_dms":{"$in": dms_album}})
 
+    if len(query_items) == 0:
+        return []
+
     res = db.songs.find({"$and":query_items}, 
                          {
                         "db_id": True,

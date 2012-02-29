@@ -119,9 +119,9 @@ def process_playlists_exec(radio, content_compressed):
                 song_name_simplified = get_simplified_name(song_name)
                 count += 1
                 # let's go fuzzy
-                mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified.decode('utf-8', 'ignore'), 
-                                                           album_name_simplified.decode('utf-8', 'ignore'), 
-                                                           artist_name_simplified.decode('utf-8', 'ignore'))
+                mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified, 
+                                                           album_name_simplified, 
+                                                           artist_name_simplified)
                 if not mongo_doc:
                     notfound += 1
                 else:
