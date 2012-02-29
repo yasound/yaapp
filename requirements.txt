@@ -23,8 +23,5 @@ django-social-auth
 requests
 -e git+ssh://git@github.com/yasound/uploader.git#egg=uploader
 sorl-thumbnail
-<<<<<<< HEAD
 unidecode
-=======
 fuzzy
->>>>>>> f128a8e5b93e295e23adaf84d57c9b51427fbbe8

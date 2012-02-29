@@ -194,12 +194,7 @@ class YasoundSongManager(models.Manager):
     
     def search_fuzzy(self, search_text, limit=25):
         print 'search fuzzy "%s"' % search_text
-<<<<<<< HEAD
         songs = mongo.search_song(search_text, remove_common_words=True)
-
-=======
-        songs = mongo.search_song(search_text, remove_common_words=True, limit=25)
->>>>>>> f128a8e5b93e295e23adaf84d57c9b51427fbbe8
         results = []
         if not search_text:
             return results
