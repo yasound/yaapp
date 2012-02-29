@@ -4,12 +4,12 @@ from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
 from tests_utils import generate_playlist
-from yabase.models import FeaturedContent
+from yabase.import_utils import SongImporter
+from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
+import import_utils
 import settings as yabase_settings
 
-import import_utils
-from yabase.import_utils import SongImporter
 
 class TestDatabase(TestCase):
     multi_db = True
@@ -81,6 +81,21 @@ class TestModels(TestCase):
         # misc fields
         self.assertEquals(dislikers[0].radio, self.radio)
         self.assertEquals(dislikers[0].user, self.user)
+        
+    def test_default_playlist(self):
+        playlist, created = self.radio.get_or_create_default_playlist()
+        
+        self.assertTrue(created)
+        self.assertTrue(playlist.enabled)
+        self.assertEquals(playlist.name, u'default')
+        
+        default_playlist = self.radio.default_playlist
+        self.assertEquals(default_playlist, playlist)
+        
+        other_playlist = Playlist(name='other_playlist', radio=self.radio, enabled=False)
+        other_playlist.save()
+        
+        
    
 class TestNextSong(TestCase):
     multi_db = True
@@ -207,7 +222,11 @@ class TestFeaturedModels(TestCase):
           
 class TestImport(TestCase):
     def setUp(self):
-        pass
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
     
     def test_quality(self):
         metadata = {'bitrate': '10',
@@ -256,4 +275,23 @@ class TestImport(TestCase):
         self.assertTrue(preview_path.find("preview64") > -1)
         self.assertEquals(len(os.path.basename(preview_path)), len('789_preview64.mp3'))
         
+    def test_create_song_instance(self):
+        radio = Radio(creator=self.user, name='radio1')
+        radio.save()
+        
+        importer = SongImporter()
+        song_instance = importer._create_song_instance(None, None)
+        self.assertEquals(song_instance, None)
+        
+        sm = SongMetadata(name='name',
+                          album_name='album',
+                          artist_name='artist')
+        sm.save()
+        infos = {
+            'radio_id': radio.id
+        }
+        si = importer._create_song_instance(sm, infos)
+        self.assertEquals(si.metadata, sm)
+        self.assertEquals(si.playlist.radio, radio)
+
         

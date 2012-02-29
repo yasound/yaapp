@@ -11,6 +11,7 @@ from yaref.utils import get_simplified_name
 import string
 import settings as yabase_settings
 import import_utils
+from account.models import Device
 
 @task
 def leaderboard_update_task():
@@ -53,38 +54,32 @@ def process_playlists_exec(radio, content_compressed):
     content_uncompressed = zlib.decompress(content_compressed)
 
     print '*** process_playlists ***'
-    PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
     SONG_TAG = 'SONG'
     UUID_TAG = 'UUID'
-    REMOVE_PLAYLIST = 'REMV'
-    REMOTE_PLAYLIST = 'RLST'
     
     artist_name = None
     album_name = None
-    playlist = None
     uuid = 'unknown'
 
-    pattern = re.compile('[\W_]+')
 
     count = 0
     found = 0
     notfound = 0
 
+    # create defaut playlist
+    playlist, created = radio.get_or_create_default_playlist()
 
+    # let's play with content
     data = BinaryData(content_uncompressed)
 
     while not data.is_done():
         tag = data.get_tag()
         if tag == UUID_TAG:
             uuid = data.get_string()
-        
-        elif tag == PLAYLIST_TAG:
-            playlist_name = data.get_string()
-            playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=uuid, radio=radio)
-            playlist.enabled = True
-            playlist.save()
+            if radio.creator:
+                Device.objects.get_or_create(user=radio.creator, uuid=uuid)
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
             album_name_simplified = get_simplified_name(album_name)
@@ -132,14 +127,6 @@ def process_playlists_exec(radio, content_compressed):
                     found +=1
                     
             song_instance.save()
-        elif tag == REMOVE_PLAYLIST:
-            playlist_name = data.get_string()
-            source = data.get_string()
-            Playlist.objects.filter(name=playlist_name, source=source).update(enabled=False)
-        elif tag == REMOTE_PLAYLIST:
-            playlist_name = data.get_string()
-            source = data.get_string()
-            Playlist.objects.filter(name=playlist_name, source=source).update(enabled=True)
             
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)
     if songs_ok.count() > 0:

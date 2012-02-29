@@ -224,6 +224,27 @@ class Radio(models.Model):
         valid = self.playlists.all().count() > 0
         return valid
     
+    @property
+    def default_playlist(self):
+        """
+        return first enabled playlist
+        """
+        try:
+            return self.playlists.filter(enabled=True)[:1][0]
+        except:
+            return None
+    
+    def get_or_create_default_playlist(self):
+        """
+        return playlist, created
+        """
+        playlist = self.default_playlist
+        if playlist:
+            return playlist, False
+        playlist = Playlist(radio=self, enabled=True, name='default')
+        playlist.save()
+        return playlist, True
+    
     def find_new_song(self):
         songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0)
         songs = songs_queryset.all()

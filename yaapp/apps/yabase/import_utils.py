@@ -67,11 +67,13 @@ Example of metadata:
 }
 
 """
+from decimal import *
 from django.conf import settings
 from django.db.models.query_utils import Q
+from django.utils.translation import ugettext_lazy as _
 from shutil import rmtree
 from tempfile import mkdtemp
-from yabase.models import SongMetadata
+from yabase.models import SongMetadata, Radio, SongInstance
 from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
     YasoundSongGenre, build_mongodb_index
 from yaref.utils import get_simplified_name, convert_filename_to_filepath
@@ -81,12 +83,10 @@ import logging
 import os
 import random
 import requests
+import shutil
+import subprocess as sub
 import uploader
 import uuid
-import subprocess as sub
-from django.utils.translation import ugettext_lazy as _
-import shutil
-from decimal import *
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -338,6 +338,31 @@ class SongImporter:
         except:
             return None
 
+    def _create_song_instance(self, sm, metadata):
+        if not sm:
+            return
+        if not metadata:
+            return
+        radio_id = metadata.get('radio_id')
+        if not radio_id:
+            return
+        
+        radio = None
+        try:
+            radio = Radio.objects.get(id=radio_id)
+        except:
+            return
+        
+        playlist, created = radio.get_or_create_default_playlist()
+        if not playlist:
+            return
+        
+        si, created = SongInstance.objects.get_or_create(metadata=sm, 
+                                                         playlist=playlist)
+        return si
+        
+
+
     def process_song(self, metadata, binary=None, filepath=None, allow_unknown_song=False):
         """
         * import song file, 
@@ -503,6 +528,10 @@ class SongImporter:
         sm.yasound_song_id = song.id
         sm.save()
         self._log(_('Association between YasoundSong and SongMetadata done'))
+        
+        # creating song instance if needed
+        self._create_song_instance(sm, metadata)
+        
         
         self._log(_('Building mongodb index'))
         build_mongodb_index()
