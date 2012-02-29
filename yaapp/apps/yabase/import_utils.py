@@ -359,18 +359,11 @@ class SongImporter:
             self._log("invalid file")
             return None, self.get_messages()
         
-        echonest_data = metadata.get('echonest_data')
-        lastfm_data = metadata.get('lastfm_data')
-        if not echonest_data and not lastfm_data:
-            self._log("no echonest and lastfm datas")
-            return None, self.get_messages()
         fingerprint = metadata.get('fingerprint')
         if not fingerprint:
             self._log("no fingerprint")
             return None, self.get_messages()
         fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
-        
-        now = datetime.datetime.today()
         
         if not name:
             logger.error("no title")
