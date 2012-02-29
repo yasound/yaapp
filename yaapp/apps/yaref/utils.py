@@ -7,6 +7,8 @@ import unicodedata
 from unidecode import unidecode
 
 from fuzzywuzzy import fuzz
+import fuzzy
+
 REG_TOKEN = re.compile("[\w\d]+")
 
 exclude = string.punctuation
@@ -51,13 +53,17 @@ def build_dms(sentence, remove_common_words=False, exceptions_list=None):
             continue 
         if _is_digit(word):
             value = word
+            if value not in dms:
+                dms.append(value)
         else:
-            dm = metaphone.dm(word)
-            value = u'%s - %s' % (dm[0], dm[1])
-            if value == u' - ':
-                continue
-        if value not in dms:
-            dms.append(value)
+            dmeta = fuzzy.DMetaphone()
+            dm = dmeta(word.encode('utf-8'))
+            value = dm[0]
+            if value is not None and value not in dms:
+                dms.append(value)
+            value = dm[1]
+            if value is not None and value not in dms:
+                dms.append(value)
     return dms
 
 def convert_filename_to_filepath(filename):

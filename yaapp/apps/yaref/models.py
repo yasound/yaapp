@@ -194,27 +194,17 @@ class YasoundSongManager(models.Manager):
     
     def search_fuzzy(self, search_text, limit=25):
         print 'search fuzzy "%s"' % search_text
+<<<<<<< HEAD
         songs = mongo.search_song(search_text, remove_common_words=True)
 
+=======
+        songs = mongo.search_song(search_text, remove_common_words=True, limit=25)
+>>>>>>> f128a8e5b93e295e23adaf84d57c9b51427fbbe8
         results = []
         if not search_text:
             return results
-        
-        SONG_COEFF = 4
-        ARTIST_COEFF = 1
-        ALBUM_COEFF = 1
-        total_coeffs = SONG_COEFF + ARTIST_COEFF + ALBUM_COEFF
+
         for s in songs:
-#            ratio_song, ratio_album, ratio_artist = 0, 0, 0
-#            if s["name"] is not None:
-#                ratio_song = fuzz.token_sort_ratio(search_text, s["name"])
-#                
-#            if s["album"] is not None:
-#                ratio_album = fuzz.token_sort_ratio(search_text, s["album"])
-#
-#            if s["artist"] is not None:
-#                ratio_artist = fuzz.token_sort_ratio(search_text, s["artist"])
-#            ratio = (SONG_COEFF * ratio_song + ALBUM_COEFF * ratio_album + ARTIST_COEFF * ratio_artist) / total_coeffs
             song_info_list = []
             if s["name"] is not None:
                 song_info_list.append(s["name"])
@@ -228,7 +218,7 @@ class YasoundSongManager(models.Manager):
             results.append(res)
             
         sorted_results = sorted(results, key=lambda r: r[1], reverse=True)
-        return sorted_results[:limit]
+        return sorted_results
             
             
     
