@@ -54,11 +54,14 @@ def process_playlists_exec(radio, content_compressed):
     content_uncompressed = zlib.decompress(content_compressed)
 
     print '*** process_playlists ***'
+    PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
     SONG_TAG = 'SONG'
     UUID_TAG = 'UUID'
-    
+    REMOVE_PLAYLIST = 'REMV'
+    REMOTE_PLAYLIST = 'RLST'
+        
     artist_name = None
     album_name = None
     uuid = 'unknown'
@@ -80,6 +83,8 @@ def process_playlists_exec(radio, content_compressed):
             uuid = data.get_string()
             if radio.creator:
                 Device.objects.get_or_create(user=radio.creator, uuid=uuid)
+        elif tag == PLAYLIST_TAG:
+            device_playlist_name = data.get_string()
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
             album_name_simplified = get_simplified_name(album_name)
@@ -127,6 +132,12 @@ def process_playlists_exec(radio, content_compressed):
                     found +=1
                     
             song_instance.save()
+        elif tag == REMOVE_PLAYLIST:
+            device_playlist_name = data.get_string()
+            device_source = data.get_string()
+        elif tag == REMOTE_PLAYLIST:
+            device_playlist_name = data.get_string()
+            device_source = data.get_string()
             
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)
     if songs_ok.count() > 0:
