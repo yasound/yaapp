@@ -7,7 +7,7 @@ import re
 import sys
 import time
 import zlib
-from yaref.utils import get_simplified_name
+from yasearch.utils import get_simplified_name
 import string
 import settings as yabase_settings
 import import_utils

@@ -4,10 +4,12 @@ Contains models related to yasound database (ie all the songs)
 from django.db import models
 from django.conf import settings
 from fuzzywuzzy import fuzz
-import mongo
+import yasearch.indexer as yasearch_indexer
+import yasearch.search as yasearch_search
 import logging
 from time import time
 import utils as yaref_utils
+import yasearch.utils as yasearch_utils
 import string
 logger = logging.getLogger("yaapp.yaref")
 
@@ -16,52 +18,7 @@ from sorl.thumbnail import get_thumbnail
 from django.core.files import File
 
 if not 'db_name' in options.DEFAULT_NAMES:
-    options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
-
-def build_mongodb_index(upsert=False, erase=False):
-    """
-    build mongodb fuzzy index : if upsert=False then document is inserted without checking for existent one
-    """
-    if erase:
-        logger.info("deleting index")
-        mongo.erase_index()
-    
-    if upsert:
-        logger.info("using upsert")
-    else:
-        logger.info("not using upsert")
-
-    songs = YasoundSong.objects.all()
-    last_indexed = YasoundSong.objects.last_indexed()
-    if last_indexed:
-        logger.info("last indexed = %d" % (last_indexed.id))
-        songs = songs.filter(id__gt=last_indexed.id)
-    count = songs.count()
-    logger.info("processing %d songs" % (count))
-    if count > 0:
-        start = time()
-        if upsert:
-            for i, song in enumerate(yaref_utils.queryset_iterator(songs)):
-                song.build_fuzzy_index(upsert=True)
-                if i % 10000 == 0:
-                    elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) in %s seconds" % (i, count, 100*i/count, str(elapsed)))
-                start = time()
-        else:
-            bulk = mongo.begin_bulk_insert()
-            for i, song in enumerate(yaref_utils.queryset_iterator(songs)):
-                bulk.append(song.build_fuzzy_index(upsert=False, insert=False))
-                if i % 10000 == 0:
-                    mongo.commit_bulk_insert(bulk)
-                    bulk = mongo.begin_bulk_insert()
-                    elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) in % seconds" % (i, count, 100*i/count, str(elapsed)))
-                    start = time()
-            mongo.commit_bulk_insert(bulk)
-    
-    logger.info("building mongodb index")
-    mongo.build_index()      
-    logger.info("done")    
+    options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
 
 class YasoundArtist(models.Model):
     echonest_id = models.CharField(unique=True, max_length=20)
@@ -151,7 +108,7 @@ class YasoundSongManager(models.Manager):
                                                               self._max_query))
                      
     def last_indexed(self):
-        doc = mongo.get_last_doc()
+        doc = yasearch_indexer.get_last_song_doc()
         if doc and doc.count() > 0:
             return self.get(id=doc[0]['db_id'])
         return None
@@ -180,7 +137,7 @@ class YasoundSongManager(models.Manager):
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time
         start = time()
-        songs = mongo.find_song(name, album, artist, remove_common_words=True)
+        songs = yasearch_search.find_song(name, album, artist, remove_common_words=True)
         song, ratio = self._check_candidates(songs, name, album, artist)
         elapsed = time() - start
         if not song:
@@ -194,7 +151,7 @@ class YasoundSongManager(models.Manager):
     
     def search_fuzzy(self, search_text, limit=25):
         print 'search fuzzy "%s"' % search_text
-        songs = mongo.search_song(search_text, remove_common_words=True)
+        songs = yasearch_search.search_song(search_text, remove_common_words=True)
         results = []
         if not search_text:
             return results
@@ -208,12 +165,28 @@ class YasoundSongManager(models.Manager):
             if s["artist"] is not None:
                 song_info_list.append(s["artist"])
             song_info = string.join(song_info_list)
-            ratio = yaref_utils.token_set_ratio(search_text.lower(), song_info.lower(), method='mean')
+            ratio = yasearch_utils.token_set_ratio(search_text.lower(), song_info.lower(), method='mean')
             res = (s, ratio)
             results.append(res)
             
         sorted_results = sorted(results, key=lambda r: r[1], reverse=True)
-        return sorted_results
+        return sorted_results[:limit]
+    
+    def search(self, search_text, limit=25, tolerance=0.75):
+        res = self.search_fuzzy(search_text, limit)
+        best_score = None
+        songs = []
+        for i in res:
+            song = i[0]
+            score = i[1]
+            if not best_score:
+                best_score = score
+            if score < best_score * tolerance:
+                break
+            songs.append(song)
+        return songs
+            
+            
             
             
     
@@ -259,7 +232,7 @@ class YasoundSong(models.Model):
         
 
     def build_fuzzy_index(self, upsert=False, insert=True):
-        return mongo.add_song(self, upsert, insert)
+        return yasearch_indexer.add_song(self, upsert, insert)
 
     class Meta:
         db_table = u'yasound_song'

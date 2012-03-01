@@ -14,6 +14,9 @@ import json
 import urllib
 import uuid
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+import yasearch.indexer as yasearch_indexer
+import yasearch.search as yasearch_search
+import yasearch.utils as yasearch_utils
 
 from social_auth.signals import socialauth_not_registered
 from sorl.thumbnail import ImageField
@@ -22,7 +25,26 @@ from sorl.thumbnail import get_thumbnail
 from django.core.files.base import ContentFile
 import datetime
 
+class UserProfileManager(models.Manager):
+    def search_user_fuzzy(self, search_text, limit=5):
+        users = yasearch_search.search_user(search_text, remove_common_words=True)
+        results = []
+        if not search_text:
+            return results
+
+        for u in users:
+            user_info = None
+            if u["name"] is not None:
+                user_info = u["name"]
+            ratio = yasearch_utils.token_set_ratio(search_text.lower(), user_info.lower(), method='mean')
+            res = (u, ratio)
+            results.append(res)
+            
+        sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
+        return sorted_results[:limit]
+
 class UserProfile(models.Model):
+    objects = UserProfileManager()
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(max_length = 60, blank=True)
     url = models.URLField(null=True, blank=True)
@@ -192,6 +214,9 @@ class UserProfile(models.Model):
             RadioUser.objects.filter(user=self.user, connected=True).update(connected=False)
             RadioUser.objects.filter(user=self.user, listening=True).update(listening=False)
         return alive
+    
+    def build_fuzzy_index(self, upsert=False, insert=True):
+        return yasearch_indexer.add_user(self.user, upsert, insert)
         
 
 def create_user_profile(sender, instance, created, **kwargs):  

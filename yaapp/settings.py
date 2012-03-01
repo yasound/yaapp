@@ -268,6 +268,7 @@ INSTALLED_APPS = (
     'yabackoffice',
     'social_auth',
     'sorl.thumbnail',
+    'yasearch',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -418,7 +419,7 @@ CELERYBEAT_SCHEDULE = {
         "schedule": crontab(minute='*/10', hour='*'),
     },
     "build-mongodb-index": {
-        "task": "yaref.task.build_mongodb_index",
+        "task": "yasearch.task.build_mongodb_index",
         "schedule": crontab(minute="*/30"),
     },
     "need-sync-songs": {
