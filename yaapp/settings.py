@@ -35,7 +35,8 @@ MANAGERS = ADMINS
 
 if LOCAL_MODE:
     # Celery config:
-    BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+    BROKER_URL = "django://"
+    BROKER_BACKEND = "django"
     CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task", "account.task",)
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
