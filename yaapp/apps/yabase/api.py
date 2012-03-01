@@ -585,9 +585,9 @@ class MatchedSongResource(ModelResource):
         except YasoundSong.DoesNotExist:
             return bundle
         
-        bundle.data['name'] = yasound_song.name
-        bundle.data['artist'] = yasound_song.artist_name
-        bundle.data['album'] = yasound_song.album_name
+        bundle.data['name'] = song_instance.metadata.name
+        bundle.data['artist'] = song_instance.metadata.artist_name
+        bundle.data['album'] = song_instance.metadata.album_name
         if yasound_song.album:
             cover = yasound_song.album.cover_url
         elif yasound_song.cover_filename:
