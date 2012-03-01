@@ -340,21 +340,26 @@ class SongImporter:
 
     def _create_song_instance(self, sm, metadata):
         if not sm:
+            self._log('no SongMetadata for _create_song_instance')
             return
         if not metadata:
+            self._log('no metadata for _create_song_instance')
             return
         radio_id = metadata.get('radio_id')
         if not radio_id:
+            self._log('no radio_id found for _create_song_instance')
             return
         
         radio = None
         try:
             radio = Radio.objects.get(id=radio_id)
         except:
+            self._log('cannot find radio %s' % (radio_id))
             return
         
         playlist, created = radio.get_or_create_default_playlist()
         if not playlist:
+            self._log('cannot create playlist for radio id %s' % (radio_id))
             return
         
         si, created = SongInstance.objects.get_or_create(metadata=sm, 
@@ -430,6 +435,10 @@ class SongImporter:
                 try:
                     YasoundSong.objects.get(id=sm.yasound_song_id)
                     self._log(_("song already in database: %s") % (sm.yasound_song_id))
+
+                    # creating song instance if needed
+                    self._create_song_instance(sm, metadata)
+                    
                     return None, self.get_messages()
                 except YasoundSong.DoesNotExist:
                     self._log(_("song metadata already in database, but no YasoundSong"))
