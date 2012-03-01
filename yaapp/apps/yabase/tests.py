@@ -103,6 +103,42 @@ class TestModels(TestCase):
         self.assertTrue(created)
         self.assertEquals(playlist.name, u'default')
         
+    def test_migrate_playlist(self):
+        playlist1 = generate_playlist(name='playlist1', song_count=30)
+        playlist2 = generate_playlist(name='playlist2', song_count=30)
+        playlist3 = generate_playlist(name='playlist3', song_count=30)
+        
+        playlist1.radio = self.radio
+        playlist2.radio = self.radio
+        playlist3.radio = self.radio
+        
+        playlist1.save()
+        playlist2.save()
+        playlist3.save()
+        
+        # dry effect, nothing is altered
+        self.radio = Radio.objects.get(id=self.radio.id)
+        self.assertEquals(self.radio.playlists.count(), 3)
+        self.assertEquals(SongInstance.objects.all().count(), 30*3)
+        Playlist.objects.migrate_songs_to_default(dry=True)
+        
+        playlist1 = Playlist.objects.get(name='playlist1')
+        self.assertEquals(playlist1.song_count, 30)
+        
+        # no dry effect, a single playlist should be created
+        Playlist.objects.migrate_songs_to_default(dry=False)
+        self.radio = Radio.objects.get(id=self.radio.id)
+        self.assertEquals(self.radio.playlists.count(), 1)
+        self.assertEquals(SongInstance.objects.all().count(), 30*3)
+        self.assertEquals(self.radio.default_playlist.song_count, 30*3)
+
+        # same as previous, nothing has changed
+        Playlist.objects.migrate_songs_to_default(dry=False)
+        self.radio = Radio.objects.get(id=self.radio.id)
+        self.assertEquals(self.radio.playlists.count(), 1)
+        self.assertEquals(SongInstance.objects.all().count(), 30*3)
+        self.assertEquals(self.radio.default_playlist.song_count, 30*3)
+        
    
 class TestNextSong(TestCase):
     multi_db = True

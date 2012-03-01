@@ -12,6 +12,9 @@ from yaref.models import YasoundSong
 from stats.models import RadioListeningStat
 from django.db.models import Q
 
+import logging
+logger = logging.getLogger("yaapp.yabase")
+
 import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
@@ -130,9 +133,32 @@ class SongUser(models.Model):
 
 
 
-
+class PlaylistManager(models.Manager):
+    def migrate_songs_to_default(self, dry=False):
+        logger.info(u"migrating all playlists to default (dry=%s)" % (dry))
+        playlists = self.exclude(name='default')
+        logger.info(u"found %d playlist to migrate" % (playlists.count()))
+        for playlist in playlists:
+            songs = SongInstance.objects.filter(playlist=playlist, playlist__radio__isnull=False)
+            logger.info(u"found %d songs in playlist %s"  % (songs.count(), playlist))
+            can_delete_playlist = False
+            for song in songs:
+                default_playlist, _created = playlist.radio.get_or_create_default_playlist()
+                if not default_playlist:
+                    continue 
+                if dry:
+                    continue
+                song.playlist = default_playlist
+                song.save()
+                can_delete_playlist = True
+            if dry:
+                continue
+            if can_delete_playlist:
+                playlist.delete()
+        logger.info("done")
 
 class Playlist(models.Model):
+    objects = PlaylistManager()
     name = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
     enabled = models.BooleanField(default=True)
