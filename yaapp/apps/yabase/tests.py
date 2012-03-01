@@ -94,7 +94,14 @@ class TestModels(TestCase):
         
         other_playlist = Playlist(name='other_playlist', radio=self.radio, enabled=False)
         other_playlist.save()
-        
+
+        default_playlist = self.radio.default_playlist
+        self.assertEquals(default_playlist, playlist)
+
+        default_playlist.delete()
+        playlist, created = self.radio.get_or_create_default_playlist()
+        self.assertTrue(created)
+        self.assertEquals(playlist.name, u'default')
         
    
 class TestNextSong(TestCase):

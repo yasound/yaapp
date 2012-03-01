@@ -230,7 +230,7 @@ class Radio(models.Model):
         return first enabled playlist
         """
         try:
-            return self.playlists.filter(enabled=True)[:1][0]
+            return self.playlists.filter(enabled=True, name='default')[:1][0]
         except:
             return None
     
