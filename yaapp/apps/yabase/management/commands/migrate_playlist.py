@@ -18,8 +18,5 @@ class Command(BaseCommand):
 
     def handle(self, *app_labels, **options):
         dry = options.get('dry', False)
-
         Playlist.objects.migrate_songs_to_default(dry)
-
-        logger.info("done")
         
