@@ -319,8 +319,7 @@ class TestImport(TestCase):
         self.assertEquals(len(os.path.basename(preview_path)), len('789_preview64.mp3'))
         
     def test_create_song_instance(self):
-        radio = Radio(creator=self.user, name='radio1')
-        radio.save()
+        radio = Radio.objects.radio_for_user(self.user)
         
         importer = SongImporter()
         song_instance = importer._create_song_instance(None, None)
@@ -336,5 +335,30 @@ class TestImport(TestCase):
         si = importer._create_song_instance(sm, infos)
         self.assertEquals(si.metadata, sm)
         self.assertEquals(si.playlist.radio, radio)
+        
+        self.assertFalse(radio.ready)
+
+    def test_create_song_instance_ready_attribute(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        importer = SongImporter()
+        song_instance = importer._create_song_instance(None, None)
+        self.assertEquals(song_instance, None)
+        
+        sm = SongMetadata(name='name',
+                          album_name='album',
+                          artist_name='artist',
+                          yasound_song_id=42)
+        sm.save()
+        infos = {
+            'radio_id': radio.id
+        }
+        si = importer._create_song_instance(sm, infos)
+        self.assertEquals(si.metadata, sm)
+        self.assertEquals(si.playlist.radio, radio)
+        
+        radio = Radio.objects.radio_for_user(self.user)
+        self.assertTrue(radio.ready)
+        
+        
 
         

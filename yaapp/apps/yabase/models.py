@@ -196,6 +196,9 @@ class Playlist(models.Model):
 RADIO_NEXT_SONGS_COUNT = 20
 
 class RadioManager(models.Manager):
+    def radio_for_user(self, user):
+        return self.filter(creator=user)[:1][0]
+    
     def unlock_all(self):
         self.all().update(computing_next_songs=False)
         

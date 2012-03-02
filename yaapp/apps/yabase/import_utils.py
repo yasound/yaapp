@@ -364,6 +364,11 @@ class SongImporter:
         
         si, created = SongInstance.objects.get_or_create(metadata=sm, 
                                                          playlist=playlist)
+        if sm.yasound_song_id is not None:
+            self._log(u'activating radio %s' % radio)
+            radio.ready = True
+            radio.save()
+        
         return si
         
 
