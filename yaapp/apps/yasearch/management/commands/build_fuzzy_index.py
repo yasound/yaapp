@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from optparse import make_option
-from yaref import models
+from yasearch import models as yasearch_models
 import logging
 logger = logging.getLogger("yaapp.yaref")
 
@@ -20,4 +20,4 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         upsert = options.get('upsert',False)
         erase = options.get('erase',False)
-        models.build_mongodb_index(upsert=upsert, erase=erase)
+        yasearch_models.build_mongodb_index(upsert=upsert, erase=erase)
