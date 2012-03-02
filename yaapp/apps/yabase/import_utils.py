@@ -75,8 +75,10 @@ from shutil import rmtree
 from tempfile import mkdtemp
 from yabase.models import SongMetadata, Radio, SongInstance
 from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
-    YasoundSongGenre, build_mongodb_index
-from yaref.utils import get_simplified_name, convert_filename_to_filepath
+    YasoundSongGenre
+from yasearch.models import build_mongodb_index
+from yaref.utils import convert_filename_to_filepath
+from yasearch.utils import get_simplified_name
 import datetime
 import hashlib
 import logging

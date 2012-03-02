@@ -24,3 +24,4 @@ requests
 -e git+ssh://git@github.com/yasound/uploader.git#egg=uploader
 sorl-thumbnail
 unidecode
+fuzzy
