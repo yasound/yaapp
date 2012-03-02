@@ -32,6 +32,7 @@ else:
 TEMPLATE_DEBUG = DEBUG
 
 DEFAULT_FROM_EMAIL = "dev@yasound.com"
+SERVER_EMAIL = "dev@yasound.com"
 
 ADMINS = (
     ('Sebastien Métrot', 'seb@yasound.com'),
