@@ -571,29 +571,32 @@ class MatchedSongResource(ModelResource):
         return super(MatchedSongResource, self).dispatch(request_type, request, **kwargs)
     
     def get_object_list(self, request):
-        song_instances = SongInstance.objects.filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
+        song_instances = SongInstance.objects.select_related('metadata').filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
         return song_instances
     
     def dehydrate(self, bundle):
         song_instance = bundle.obj
         
-        likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        bundle.data['likes'] = likes
-        
-        try:
-            yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
-        except YasoundSong.DoesNotExist:
-            return bundle
+        #likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        #bundle.data['likes'] = likes
+        bundle.data['likes'] = 0
+ 
+        #try:
+        #    yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
+        #except YasoundSong.DoesNotExist:
+        #    return bundle
         
         bundle.data['name'] = song_instance.metadata.name
         bundle.data['artist'] = song_instance.metadata.artist_name
         bundle.data['album'] = song_instance.metadata.album_name
-        if yasound_song.album:
-            cover = yasound_song.album.cover_url
-        elif yasound_song.cover_filename:
-            cover = yasound_song.cover_url
-        else:
-            cover = None
+
+#        if yasound_song.album:
+#            cover = yasound_song.album.cover_url
+#        elif yasound_song.cover_filename:
+#            cover = yasound_song.cover_url
+#        else:
+#            cover = None
+	cover = None
         bundle.data['cover'] = cover
     
         return bundle
