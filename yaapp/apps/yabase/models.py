@@ -250,10 +250,20 @@ class Radio(models.Model):
         return self.name;
     
     def save(self, *args, **kwargs):
+        update_mongo = False
         if not self.pk:
             # creation
             self.leaderboard_rank = Radio.objects.count()
+        else:
+            saved = Radio.objects.get(pk=self.pk)
+            name_changed = self.name != saved.name
+            genre_changed = self.genre != saved.genre
+            tags_changed = self.tags != saved.tags
+            update_mongo = name_changed or genre_changed or tags_changed
+            
         super(Radio, self).save(*args, **kwargs)
+        if update_mongo:
+            self.build_fuzzy_index(upsert=True)
     
     @property
     def is_valid(self):

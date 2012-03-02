@@ -217,6 +217,17 @@ class UserProfile(models.Model):
     
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_user(self.user, upsert, insert)
+    
+    def save(self, *args, **kwargs):
+        update_mongo = False
+        if self.pk:
+            saved = UserProfile.objects.get(pk=self.pk)
+            name_changed = self.name != saved.name
+            update_mongo = name_changed
+            
+        super(UserProfile, self).save(*args, **kwargs)
+        if update_mongo:
+            self.build_fuzzy_index(upsert=True)
         
 
 def create_user_profile(sender, instance, created, **kwargs):  

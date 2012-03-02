@@ -19,7 +19,7 @@ from django.http import Http404
 from django.http import HttpResponse
 import json
 from django.db.models import Q
-from apps.yasearch.models import search_radio, search_radio_by_user, search_radio_by_song
+from yasearch.models import search_radio, search_radio_by_user, search_radio_by_song
 
 class SongMetadataResource(ModelResource):
     class Meta:
