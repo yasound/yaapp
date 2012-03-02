@@ -8,11 +8,10 @@ def unlock_radio_on_exception(fn):
                 return view_func(request, *args, **kwargs)
             except:
                 radio_id = kwargs['radio_id']
-                try:
-                    radio = Radio.objects.get(uuid=radio_id)
+                radios = Radio.objects.filter(uuid=radio_id)[:1]
+                if len(radios) > 0:
+                    radio = radios[0]
                     radio.unlock()
-                except Radio.DoesNotExist:
-                    pass
                 raise
         _unlock.__doc__ = view_func.__doc__
         _unlock.__dict__ = view_func.__dict__

@@ -31,5 +31,6 @@ COMPRESS_JS = { 'backoffice-all': {'output_filename': 'backoffice-all.?.js',
                                              'js/backoffice/Radio/Radios.js',
                                              'js/backoffice/Radio/UnmatchedSongs.js',
                                              'js/backoffice/Upload/Upload.js',
+                                             'js/backoffice/SearchEngine/SearchEngine.js',
                                              ]}
                }

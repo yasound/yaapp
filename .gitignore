@@ -17,3 +17,10 @@ sample_project/media/statics
 fab
 .project
 .pydevproject
+mongo_data/db/*
+mongo_data/logs/*
+yaapp/media/cache/*
+yaapp/media/pictures/*
+yaapp/logs/*.log
+yaapp/logs/*.log.*
+*.old
