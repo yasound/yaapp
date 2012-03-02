@@ -141,6 +141,10 @@ class SearchRadioResource(ModelResource):
             obj_list = search_radio(search)
         return obj_list
     
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
+    
 class SearchRadioByUserResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
@@ -168,6 +172,10 @@ class SearchRadioByUserResource(ModelResource):
             obj_list = search_radio_by_user(search)
         return obj_list
     
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
+    
 class SearchRadioBySongResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
@@ -194,6 +202,10 @@ class SearchRadioBySongResource(ModelResource):
             # apply search
             obj_list = search_radio_by_song(search)
         return obj_list
+    
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
     
 class SelectedRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
