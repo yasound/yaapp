@@ -1,6 +1,7 @@
 Ext.BLANK_IMAGE_URL = '/media/extjs/resources/images/default/s.gif';
 Ext.namespace("Yasound.Backoffice.UI", "Yasound.Backoffice.Handler", "Yasound.Backoffice.Data");
 Ext.namespace("Yasound.Upload.UI", "Yasound.Upload.Handler", "Yasound.Upload.Data");
+Ext.namespace("Yasound.SearchEngine.UI", "Yasound.SearchEngine.Handler", "Yasound.SearchEngine.Data");
 Ext.namespace("Yasound.Utils");
 
 
@@ -82,6 +83,31 @@ Ext.onReady(function(){
         })]
     };
 
+    var tabPanelSearchEngine = {
+        id: 'search-engine-tab',
+        expanded: false,
+        listeners: {
+            'tabchange': function(tabPanel, tab){
+                Ext.History.add(tabPanel.id + '/' + tab.id);
+            }
+        },
+        items: [{
+            title: gettext('Search engine'),
+            id: 'search-engine-top-panel',
+            tabTip: gettext('Search engine tools'),
+            style: 'padding: 10px;',
+            html: '<h1>Search Engine</h1>',
+            listeners: {
+                'activate': function(p){
+                    var tabPanel = p.findParentByType('grouptab');
+                    var nextItem = p.nextSibling();
+                    tabPanel.setActiveTab(nextItem);
+                }
+            }
+        }, Ext.apply(Yasound.SearchEngine.UI.Fuzzy(), {
+            iconCls: 'x-icon-templates'
+        })]    		
+    }
     var tabPanels = {
         xtype: 'grouptabpanel',
         id: 'group-panel',
@@ -93,7 +119,7 @@ Ext.onReady(function(){
         items: []
     };
     
-    tabPanels.items.push(tabPanelSongs);
+    tabPanels.items.push(tabPanelSongs, tabPanelSearchEngine);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',
