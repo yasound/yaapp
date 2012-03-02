@@ -13,7 +13,7 @@ def generate_playlist(name='playlist1', song_count=30):
         sm.save()
         si = SongInstance(playlist=playlist,
                           metadata=sm,
-                          last_play_time=datetime.datetime(2010, 01, 01, i, 0),
+                          last_play_time=datetime.datetime(2010, 01, 01, i % 23, 0),
                           order=i)
         si.save()
     return playlist

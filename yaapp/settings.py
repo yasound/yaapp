@@ -24,18 +24,28 @@ LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 TEST_MODE = 'test' in sys.argv
 USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
-DEBUG = True
+if PRODUCTION_MODE:
+    DEBUG = False
+else:
+    DEBUG = True
+
 TEMPLATE_DEBUG = DEBUG
 
+DEFAULT_FROM_EMAIL = "dev@yasound.com"
+SERVER_EMAIL = "dev@yasound.com"
+
 ADMINS = (
-    ('Sebastien Metrot', 'seb@yasound.com'),
+    ('Sebastien Métrot', 'seb@yasound.com'),
+    ('Jerome Blondon', 'jerome@yasound.com'),
+    ('Matthieu Campion', 'matthieu@yasound.com'),
 )
 
 MANAGERS = ADMINS
 
 if LOCAL_MODE:
     # Celery config:
-    BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+    BROKER_URL = "django://"
+    BROKER_BACKEND = "django"
     CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task", "account.task",)
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
@@ -315,12 +325,21 @@ LOGGING = {
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.log'),
             'formatter': 'verbose'
         },     
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        }
     },
     'loggers': {
+        'django': {
+            'handlers':['null'],
+            'propagate': True,
+            'level':'INFO',
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'yaapp.yaref': {
             'handlers': ['console', 'file'],

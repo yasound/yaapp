@@ -23,7 +23,7 @@ class SongMetadataAdmin(admin.ModelAdmin):
 admin.site.register(SongMetadata, SongMetadataAdmin)
 
 class SongInstanceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'need_sync')
+    list_display = ('id', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'yasound_song_id', 'need_sync')
     list_filter = ('playlist', 'need_sync')
     search_fields = ('song', 'metadata__yasound_song_id', 'metadata__name', 'metadata__album_name', 'metadata__artist_name')
     
@@ -35,7 +35,10 @@ class SongInstanceAdmin(admin.ModelAdmin):
     metadata_album.short_description = 'Album'    
     def metadata_artist(self, obj):
         return obj.metadata.artist_name
-    metadata_artist.short_description = 'Artist'    
+    metadata_artist.short_description = 'Artist'  
+    def yasound_song_id(self, obj):
+        return obj.metadata.yasound_song_id
+    metadata_artist.short_description = 'Yasound Song Id'    
 admin.site.register(SongInstance, SongInstanceAdmin)
     
 class WallEventAdmin(admin.ModelAdmin):

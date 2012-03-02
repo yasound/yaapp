@@ -67,11 +67,13 @@ Example of metadata:
 }
 
 """
+from decimal import *
 from django.conf import settings
 from django.db.models.query_utils import Q
+from django.utils.translation import ugettext_lazy as _
 from shutil import rmtree
 from tempfile import mkdtemp
-from yabase.models import SongMetadata
+from yabase.models import SongMetadata, Radio, SongInstance
 from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
     YasoundSongGenre, build_mongodb_index
 from yaref.utils import get_simplified_name, convert_filename_to_filepath
@@ -81,12 +83,10 @@ import logging
 import os
 import random
 import requests
+import shutil
+import subprocess as sub
 import uploader
 import uuid
-import subprocess as sub
-from django.utils.translation import ugettext_lazy as _
-import shutil
-from decimal import *
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -296,7 +296,7 @@ class SongImporter:
     def get_messages(self):
         return self._messages
     
-    def import_song(self, binary, metadata=None, convert=True):
+    def import_song(self, binary, metadata=None, convert=True, allow_unknown_song=False):
         """
         import song without metadata
         """
@@ -313,10 +313,10 @@ class SongImporter:
         if convert==True:
             self._convert_to_mp3(source, destination)
             metadata = uploader.get_file_infos(destination, metadata)
-            sm, messages = self.process_song(metadata, filepath=destination)
+            sm, messages = self.process_song(metadata, filepath=destination, allow_unknown_song=allow_unknown_song)
         else:
             metadata = uploader.get_file_infos(source, metadata)
-            sm, messages = self.process_song(metadata, binary=binary)
+            sm, messages = self.process_song(metadata, binary=binary, allow_unknown_song=allow_unknown_song)
             
         rmtree(directory)
         
@@ -338,7 +338,42 @@ class SongImporter:
         except:
             return None
 
-    def process_song(self, metadata, binary=None, filepath=None):
+    def _create_song_instance(self, sm, metadata):
+        if not sm:
+            self._log('no SongMetadata for _create_song_instance')
+            return
+        if not metadata:
+            self._log('no metadata for _create_song_instance')
+            return
+        radio_id = metadata.get('radio_id')
+        if not radio_id:
+            self._log('no radio_id found for _create_song_instance')
+            return
+        
+        radio = None
+        try:
+            radio = Radio.objects.get(id=radio_id)
+        except:
+            self._log('cannot find radio %s' % (radio_id))
+            return
+        
+        playlist, created = radio.get_or_create_default_playlist()
+        if not playlist:
+            self._log('cannot create playlist for radio id %s' % (radio_id))
+            return
+        
+        si, created = SongInstance.objects.get_or_create(metadata=sm, 
+                                                         playlist=playlist)
+        if sm.yasound_song_id is not None:
+            self._log(u'activating radio %s' % radio)
+            radio.ready = True
+            radio.save()
+        
+        return si
+        
+
+
+    def process_song(self, metadata, binary=None, filepath=None, allow_unknown_song=False):
         """
         * import song file, 
         * create YasoundSong, 
@@ -359,18 +394,21 @@ class SongImporter:
             self._log("invalid file")
             return None, self.get_messages()
         
-        echonest_data = metadata.get('echonest_data')
-        lastfm_data = metadata.get('lastfm_data')
-        if not echonest_data and not lastfm_data:
-            self._log("no echonest and lastfm datas")
-            return None, self.get_messages()
+        if not allow_unknown_song:
+            # we need to check that the song
+            # is know by echonest or lastfm
+            # otherwhise, import is rejected
+            echonest_data = metadata.get('echonest_data')
+            lastfm_data = metadata.get('lastfm_data')
+            if not echonest_data and not lastfm_data:
+                self._log("no echonest and lastfm datas")
+                return None, self.get_messages()
+            
         fingerprint = metadata.get('fingerprint')
         if not fingerprint:
             self._log("no fingerprint")
             return None, self.get_messages()
         fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
-        
-        now = datetime.datetime.today()
         
         if not name:
             logger.error("no title")
@@ -402,6 +440,10 @@ class SongImporter:
                 try:
                     YasoundSong.objects.get(id=sm.yasound_song_id)
                     self._log(_("song already in database: %s") % (sm.yasound_song_id))
+
+                    # creating song instance if needed
+                    self._create_song_instance(sm, metadata)
+                    
                     return None, self.get_messages()
                 except YasoundSong.DoesNotExist:
                     self._log(_("song metadata already in database, but no YasoundSong"))
@@ -501,14 +543,18 @@ class SongImporter:
         sm.save()
         self._log(_('Association between YasoundSong and SongMetadata done'))
         
+        # creating song instance if needed
+        self._create_song_instance(sm, metadata)
+        
+        
         self._log(_('Building mongodb index'))
         build_mongodb_index()
         return sm, self.get_messages()
     
 
-def import_song(binary, metadata, convert):    
+def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
-    return importer.import_song(binary, metadata, convert)
+    return importer.import_song(binary, metadata, convert, allow_unknown_song)
     
     
     

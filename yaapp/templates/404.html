@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+{% load i18n %} 
+
+{% block body %}
+<div class='container-fluid'>
+    <div class='row-fluid'>
+        <div class='well'>
+	        <h1>{% trans "Error 404" %}</h1>
+	        <p>{% trans "Document not found." %} </p>
+       </div>
+    </div>
+</div>
+{% endblock %}

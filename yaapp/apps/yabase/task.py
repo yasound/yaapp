@@ -1,16 +1,12 @@
+from account.models import Device
 from celery.task import task
 from django.db import transaction
-from struct import *
-from yabase.models import Radio, Playlist, SongMetadata, SongInstance, update_leaderboard
+from struct import unpack_from
+from yabase.models import SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
-import re
-import sys
-import time
-import zlib
 from yaref.utils import get_simplified_name
-import string
-import settings as yabase_settings
 import import_utils
+import zlib
 
 @task
 def leaderboard_update_task():
@@ -60,31 +56,30 @@ def process_playlists_exec(radio, content_compressed):
     UUID_TAG = 'UUID'
     REMOVE_PLAYLIST = 'REMV'
     REMOTE_PLAYLIST = 'RLST'
-    
+        
     artist_name = None
     album_name = None
-    playlist = None
     uuid = 'unknown'
 
-    pattern = re.compile('[\W_]+')
 
     count = 0
     found = 0
     notfound = 0
 
+    # create defaut playlist
+    playlist, _created = radio.get_or_create_default_playlist()
 
+    # let's play with content
     data = BinaryData(content_uncompressed)
 
     while not data.is_done():
         tag = data.get_tag()
         if tag == UUID_TAG:
             uuid = data.get_string()
-        
+            if radio.creator:
+                Device.objects.get_or_create(user=radio.creator, uuid=uuid)
         elif tag == PLAYLIST_TAG:
-            playlist_name = data.get_string()
-            playlist, created = Playlist.objects.get_or_create(name=playlist_name, source=uuid, radio=radio)
-            playlist.enabled = True
-            playlist.save()
+            _device_playlist_name = data.get_string()
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
             album_name_simplified = get_simplified_name(album_name)
@@ -131,17 +126,15 @@ def process_playlists_exec(radio, content_compressed):
                     song_instance.need_sync = False
                     found +=1
                     
-                song_instance.save()
+            song_instance.save()
         elif tag == REMOVE_PLAYLIST:
-            playlist_name = data.get_string()
-            source = data.get_string()
-            Playlist.objects.filter(name=playlist_name, source=source).update(enabled=False)
+            _device_playlist_name = data.get_string()
+            _device_source = data.get_string()
         elif tag == REMOTE_PLAYLIST:
-            playlist_name = data.get_string()
-            source = data.get_string()
-            Playlist.objects.filter(name=playlist_name, source=source).update(enabled=True)
+            _device_playlist_name = data.get_string()
+            _device_source = data.get_string()
             
-    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), song__gt=0)
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)
     if songs_ok.count() > 0:
         radio.ready = True
         radio.save()
@@ -180,7 +173,7 @@ def process_need_sync_songs():
     return process_need_sync_songs_exec()
 
 @task
-def process_upload_song(binary, metadata=None, convert=True, song_id=None):
-    sm, messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert)
+def process_upload_song(binary, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
+    sm, _messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
     if song_id and sm:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)

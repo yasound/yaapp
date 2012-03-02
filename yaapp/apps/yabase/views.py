@@ -457,11 +457,15 @@ def upload_song(request, song_id=None):
     """
     logger.info("upload song called")
     convert = True
+    allow_unknown_song = False
     if not request.user.is_authenticated():
         key = request.REQUEST.get('key')
         if key != yabase_settings.UPLOAD_KEY:
             if not check_api_key_Authentication(request):
                 return HttpResponse(status=401)
+            else:
+                # we are coming from mobile client, we accept everything
+                allow_unknown_song = True
         else:
             convert = False # no conversion needed if request is coming from uploader
     if not check_http_method(request, ['post']):
@@ -482,7 +486,7 @@ def upload_song(request, song_id=None):
         logger.info('no metadata sent with binary')
     
     logger.info('importing song')
-    process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id)
+    process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id, allow_unknown_song=allow_unknown_song)
 
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
