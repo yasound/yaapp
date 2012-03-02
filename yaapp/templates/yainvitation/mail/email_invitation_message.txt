@@ -1,0 +1,11 @@
+{% load i18n %}{% blocktrans %}Dear {{fullname}},
+
+You have been invited to test our service.
+
+You can join use by clicking on the following link :
+
+{{invitation_url}}
+
+The yasound team.
+
+{% endblocktrans %}

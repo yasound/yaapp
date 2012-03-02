@@ -9,7 +9,7 @@ from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 from yabase.models import Radio
 import datetime
-import random
+from random import random
 
 class InvitationManager(models.Manager):
     def send_invitation(self, fullname, email, radio):
@@ -18,7 +18,7 @@ class InvitationManager(models.Manager):
         path = reverse("yainvitation_accept", args=[key])
         current_site = Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        accept_url = u"%s://%s%s" % (
+        invitation_url = u"%s://%s%s" % (
             protocol,
             unicode(current_site.domain),
             path
@@ -26,19 +26,17 @@ class InvitationManager(models.Manager):
         context = {
             "fullname": fullname,
             "email": email,
-            "accept_url": accept_url,
+            "invitation_url": invitation_url,
             "current_site": current_site,
             "key": key,
         }
-        subject = render_to_string(
-            "yainvitation/email_confirmation_subject.txt", context)
+        subject = render_to_string("yainvitation/mail/email_invitation_subject.txt", context)
         
         # remove superfluous line breaks
         subject = "".join(subject.splitlines())
-        message = render_to_string(
-            "yainvitation/email_confirmation_message.txt", context)
+        message = render_to_string("yainvitation/mail/email_invitation_message.txt", context)
         
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email.email])
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
         invitation = self.create(
             email=email,
             sent=datetime.datetime.now(),
@@ -53,7 +51,7 @@ class Invitation(models.Model):
     fullname = models.CharField(_('Recipient fullname'), max_length=255)
     user = models.OneToOneField(User, verbose_name=_('user'), blank=True, null=True)
     email = models.CharField(_('email'), max_length=255, unique=True)
-    key = models.CharField(_('key'), max_length=40)
+    key = models.CharField(_('key'), max_length=40, unique=True)
     radio = models.ForeignKey(Radio)
     sent = models.DateTimeField(_('sent date'))
     
