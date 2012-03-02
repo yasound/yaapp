@@ -726,14 +726,20 @@ class SearchSongResource(ModelResource):
                   ]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = YasoundApiKeyAuthentication()
+#        authentication = YasoundApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['get']
         
     
     def get_object_list(self, request):
         search = request.GET.get('search', None)
-        yasound_songs = YasoundSong.objects.filter(Q(name__icontains=search) | Q(artist_name__icontains=search) | Q(album_name__icontains=search))
+#        yasound_songs = YasoundSong.objects.filter(Q(name__icontains=search) | Q(artist_name__icontains=search) | Q(album_name__icontains=search))
+        yasound_songs = YasoundSong.objects.search(search)
         return yasound_songs
+    
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
     
     def dehydrate(self, bundle):
         yasound_song = bundle.obj

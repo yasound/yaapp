@@ -177,13 +177,13 @@ class YasoundSongManager(models.Manager):
         best_score = None
         songs = []
         for i in res:
-            song = i[0]
+            song_id = i[0]["db_id"]
             score = i[1]
             if not best_score:
                 best_score = score
             if score < best_score * tolerance:
                 break
-            songs.append(song)
+            songs.append(YasoundSong.objects.get(id=song_id))
         return songs
             
             
