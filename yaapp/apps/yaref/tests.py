@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
-from yaref.utils import get_simplified_name
+from yasearch.utils import get_simplified_name
 
 class TestUtils(TestCase):
     def setUp(self):

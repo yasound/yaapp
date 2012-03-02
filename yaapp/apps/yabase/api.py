@@ -19,7 +19,7 @@ from django.http import Http404
 from django.http import HttpResponse
 import json
 from django.db.models import Q
-
+from yasearch.models import search_radio, search_radio_by_user, search_radio_by_song
 
 class SongMetadataResource(ModelResource):
     class Meta:
@@ -120,7 +120,6 @@ class SearchRadioResource(ModelResource):
         resource_name = 'search_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-#        authentication = YasoundApiKeyAuthentication()
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
@@ -139,8 +138,74 @@ class SearchRadioResource(ModelResource):
         obj_list = super(SearchRadioResource, self).get_object_list(request)
         if search:
             # apply search
-            obj_list = obj_list.filter(name__contains=search)
+            obj_list = search_radio(search)
         return obj_list
+    
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
+    
+class SearchRadioByUserResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+    
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'search_radio_by_user'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+        authentication = YasoundApiKeyAuthentication()
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def get_object_list(self, request):
+        search = request.GET.get('search', None)
+        obj_list = super(SearchRadioByUserResource, self).get_object_list(request)
+        if search:
+            # apply search
+            obj_list = search_radio_by_user(search)
+        return obj_list
+    
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
+    
+class SearchRadioBySongResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+    
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'search_radio_by_song'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'picture', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+        authentication = YasoundApiKeyAuthentication()
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def get_object_list(self, request):
+        search = request.GET.get('search', None)
+        obj_list = super(SearchRadioBySongResource, self).get_object_list(request)
+        if search:
+            # apply search
+            obj_list = search_radio_by_song(search)
+        return obj_list
+    
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
     
 class SelectedRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
@@ -571,29 +636,32 @@ class MatchedSongResource(ModelResource):
         return super(MatchedSongResource, self).dispatch(request_type, request, **kwargs)
     
     def get_object_list(self, request):
-        song_instances = SongInstance.objects.filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
+        song_instances = SongInstance.objects.select_related('metadata').filter(playlist=self.playlist, metadata__yasound_song_id__isnull=False)
         return song_instances
     
     def dehydrate(self, bundle):
         song_instance = bundle.obj
         
-        likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        bundle.data['likes'] = likes
-        
-        try:
-            yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
-        except YasoundSong.DoesNotExist:
-            return bundle
+        #likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        #bundle.data['likes'] = likes
+        bundle.data['likes'] = 0
+ 
+        #try:
+        #    yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
+        #except YasoundSong.DoesNotExist:
+        #    return bundle
         
         bundle.data['name'] = song_instance.metadata.name
         bundle.data['artist'] = song_instance.metadata.artist_name
         bundle.data['album'] = song_instance.metadata.album_name
-        if yasound_song.album:
-            cover = yasound_song.album.cover_url
-        elif yasound_song.cover_filename:
-            cover = yasound_song.cover_url
-        else:
-            cover = None
+
+#        if yasound_song.album:
+#            cover = yasound_song.album.cover_url
+#        elif yasound_song.cover_filename:
+#            cover = yasound_song.cover_url
+#        else:
+#            cover = None
+	cover = None
         bundle.data['cover'] = cover
     
         return bundle
@@ -658,14 +726,20 @@ class SearchSongResource(ModelResource):
                   ]
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
-        authentication = YasoundApiKeyAuthentication()
+#        authentication = YasoundApiKeyAuthentication()
+        authentication = Authentication()
         allowed_methods = ['get']
         
     
     def get_object_list(self, request):
         search = request.GET.get('search', None)
-        yasound_songs = YasoundSong.objects.filter(Q(name__icontains=search) | Q(artist_name__icontains=search) | Q(album_name__icontains=search))
+#        yasound_songs = YasoundSong.objects.filter(Q(name__icontains=search) | Q(artist_name__icontains=search) | Q(album_name__icontains=search))
+        yasound_songs = YasoundSong.objects.search(search)
         return yasound_songs
+    
+    def obj_get_list(self, request=None, **kwargs):
+        # Filtering disabled for brevity...
+        return self.get_object_list(request)
     
     def dehydrate(self, bundle):
         yasound_song = bundle.obj

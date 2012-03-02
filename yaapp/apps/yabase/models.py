@@ -11,6 +11,11 @@ import string
 from yaref.models import YasoundSong
 from stats.models import RadioListeningStat
 from django.db.models import Q
+import yasearch.indexer as yasearch_indexer
+import yasearch.search as yasearch_search
+import yasearch.utils as yasearch_utils
+
+#from account.models import UserProfile
 
 import logging
 logger = logging.getLogger("yaapp.yabase")
@@ -204,6 +209,37 @@ class RadioManager(models.Manager):
         
     def ready_objects(self):
         return self.filter(ready=True)
+    
+    def last_indexed(self):
+        doc = yasearch_indexer.get_last_radio_doc()
+        if doc and doc.count() > 0:
+            return self.get(id=doc[0]['db_id'])
+        return None
+    
+    def search_fuzzy(self, search_text, limit=5):
+        radios = yasearch_search.search_radio(search_text, remove_common_words=True)
+        results = []
+        if not search_text:
+            return results
+
+        for r in radios:
+            radio_info_list = []
+            if r["name"] is not None:
+                radio_info_list.append(r["name"])
+            if r["genre"] is not None:
+                radio_info_list.append(r["genre"])
+            if r["tags"] is not None:
+                radio_info_list.append(r["tags"])
+            radio_info = string.join(radio_info_list)
+            ratio = yasearch_utils.token_set_ratio(search_text.lower(), radio_info.lower(), method='mean')
+            res = (r, ratio)
+            results.append(res)
+            
+        sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
+        return sorted_results[:limit]        
+
+        
+        
 
 class Radio(models.Model):
     objects = RadioManager()
@@ -243,10 +279,20 @@ class Radio(models.Model):
         return self.name;
     
     def save(self, *args, **kwargs):
+        update_mongo = False
         if not self.pk:
             # creation
             self.leaderboard_rank = Radio.objects.count()
+        else:
+            saved = Radio.objects.get(pk=self.pk)
+            name_changed = self.name != saved.name
+            genre_changed = self.genre != saved.genre
+            tags_changed = self.tags != saved.tags
+            update_mongo = name_changed or genre_changed or tags_changed
+            
         super(Radio, self).save(*args, **kwargs)
+        if update_mongo:
+            self.build_fuzzy_index(upsert=True)
     
     @property
     def is_valid(self):
@@ -484,6 +530,9 @@ class Radio(models.Model):
     @property
     def picture_url(self):
         return None
+    
+    def build_fuzzy_index(self, upsert=False, insert=True):
+        return yasearch_indexer.add_radio(self, upsert, insert)
         
     class Meta:
         db_name = u'default'

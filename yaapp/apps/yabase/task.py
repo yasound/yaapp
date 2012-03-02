@@ -4,7 +4,13 @@ from django.db import transaction
 from struct import unpack_from
 from yabase.models import SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
-from yaref.utils import get_simplified_name
+from yasearch.utils import get_simplified_name
+import re
+import sys
+import time
+import zlib
+import string
+import settings as yabase_settings
 import import_utils
 import zlib
 
