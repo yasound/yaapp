@@ -2,7 +2,6 @@
 Django >= 1.3
 South
 django-tastypie
-PIL
 django-kombu
 celery
 django-celery
@@ -21,7 +20,8 @@ django-compress
 simplejson
 django-social-auth
 requests
--e git+ssh://git@github.com/yasound/uploader.git#egg=uploader
+-e git+https://github.com/yasound/uploader.git#egg=uploader
 sorl-thumbnail
 unidecode
-fuzzy
+#fuzzy
+gunicorn
