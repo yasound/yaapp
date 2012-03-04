@@ -18,7 +18,11 @@ activate_this = PROJECT_PATH + "/../vtenv/bin/activate_this.py"
 execfile(activate_this, dict(__file__=activate_this))
 
 sys.path.insert(2, os.path.join(PROJECT_PATH, "apps"))
+sys.path.append('/usr/lib/pymodules/python2.6')
+sys.path.append('/usr/lib/python2.6/dist-packages')
+
 sys.stdout = sys.stderr
+
 
 # Django
 
