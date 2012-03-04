@@ -115,20 +115,14 @@ else:
     # Databases config:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
-            'USER': 'yaapp',                      # Not used with sqlite3.
-            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
-            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
         },
         'yasound': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-            'USER': 'yaapp',                      # Not used with sqlite3.
-            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
-            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
         }
     }
 
