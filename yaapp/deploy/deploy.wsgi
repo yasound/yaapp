@@ -18,6 +18,7 @@ activate_this = PROJECT_PATH + "/../vtenv/bin/activate_this.py"
 execfile(activate_this, dict(__file__=activate_this))
 
 sys.path.insert(2, os.path.join(PROJECT_PATH, "apps"))
+print os.path.join(PROJECT_PATH, "apps")
 sys.stdout = sys.stderr
 
 # Django
@@ -29,6 +30,7 @@ def application(environ, start_response):
     """We need to hook application, to get DJANGO_MODE
     env variable
     """
+    print "toto"
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
     
     # Sets DJANGO_MODE if SetEnv xxx in apache2 vhost's
@@ -38,4 +40,6 @@ def application(environ, start_response):
         else:
             os.environ['DJANGO_MODE'] = 'production'
 
+    print environ
+    print start_response
     return _application(environ, start_response)
