@@ -265,6 +265,7 @@ class Radio(models.Model):
     current_connections = models.IntegerField(default=0) # number of connections since last RadioListeningStat
     
     favorites = models.IntegerField(default=0)
+    leaderboard_favorites = models.IntegerField(default=0)
     leaderboard_rank = models.IntegerField(null=True, blank=True)
     
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
@@ -547,6 +548,7 @@ def update_leaderboard():
         if last_favorites and r.favorites != last_favorites:
             current_rank = count + 1
         r.leaderboard_rank = current_rank
+        r.leaderboard_favorites = r.favorites
         r.save()
         count += 1
         last_favorites = r.favorites

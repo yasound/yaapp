@@ -757,7 +757,7 @@ class LeaderBoardResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'leaderboard'
-        fields = ['id', 'name', 'favorites', 'leaderboard_rank']
+        fields = ['id', 'name', 'leaderboard_favorites', 'leaderboard_rank']
         include_resource_uri = False
         authorization= ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
