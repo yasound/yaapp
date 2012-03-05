@@ -50,6 +50,18 @@ def radio_songs(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)
     if request.method == 'GET':
         qs = SongInstance.objects.filter(playlist__radio=radio)
+
+        name = request.REQUEST.get('name')
+        artist_name = request.REQUEST.get('artist_name')
+        album_name = request.REQUEST.get('album_name')
+        
+        if name:
+            qs = qs.filter(metadata__name__icontains=name)
+        if artist_name:
+            qs = qs.filter(metadata__artist_name__icontains=artist_name)
+        if album_name:
+            qs = qs.filter(metadata__album_name__icontains=album_name)
+            
         grid = SongInstanceGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
@@ -78,6 +90,9 @@ def radios(request):
         raise Http404()
     if request.method == 'GET':
         qs = Radio.objects.all()
+        name = request.REQUEST.get('name')
+        if name:
+            qs = qs.filter(name__icontains=name)
         grid = RadioGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)

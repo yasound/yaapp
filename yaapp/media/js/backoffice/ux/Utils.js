@@ -17,7 +17,7 @@ Yasound.Utils.SimpleStore = function(url, fields) {
             direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
         },
         autoLoad: false,
-        remoteSort: false,
+        remoteSort: true,
         restful: true,
         proxy: new Ext.data.HttpProxy({
             url: url,

@@ -10,19 +10,31 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
         dataIndex: 'name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "name"
+        }        	
     }, {
         header: gettext('Album'),
         dataIndex: 'album_name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "album_name"
+        }        	
     }, {
         header: gettext('Artist'),
         dataIndex: 'artist_name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "artist_name"
+        }        	
     }]);
 };
 
@@ -57,6 +69,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     }],
 	
     initComponent: function(){
+        this.addEvents('selected', 'unselected');
         this.pageSize = 25;
         this.store = Yasound.Backoffice.Data.SongInstanceStore(this.url);
         this.store.pageSize = this.pageSize;
@@ -66,8 +79,11 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('staffselected', this, record.data.id, record.data.lastname);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
+					if (!sm.hasSelection()) {
+                        this.grid.fireEvent('deselected', this.grid);							
+					}
                 }
             }
         });
@@ -89,7 +105,15 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [Yasound.Backoffice.UI.SongInstanceFilters()]
+            plugins: [Yasound.Backoffice.UI.SongInstanceFilters(), new Ext.ux.grid.GridHeaderFilters()],
+        	listeners: {
+        		show: function(component) {
+        			component.calculatePageSize();
+        		},
+        		resize: function(component) {
+        			component.calculatePageSize();
+        		}
+        	}
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
@@ -99,7 +123,16 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     	this.radioId = radioId;
     	var url = String.format(this.url, radioId);
     	this.store.proxy.setUrl(url, true);
-    	this.store.reload();
+    	this.calculatePageSize();
+    },
+    calculatePageSize: function() {
+		var bodyHeight = Ext.getBody().getHeight();
+		var heightOther = 120+50;
+		var rowHeight = 20;
+		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+
+		this.getBottomToolbar().pageSize = gridRows;
+		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
 });
 Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);

@@ -21,7 +21,11 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
         dataIndex: 'name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "name"
+        }        	
     }];
 	
 	if (sm) {
@@ -89,12 +93,29 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-        	plugins: [Yasound.Backoffice.UI.RadioFilters()]
-        
+        	plugins: [Yasound.Backoffice.UI.RadioFilters(), new Ext.ux.grid.GridHeaderFilters()],
+        	listeners: {
+        		show: function(component) {
+        			component.calculatePageSize();
+        		},
+        		resize: function(component) {
+        			component.calculatePageSize();
+        		}
+        	}
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Backoffice.UI.RadioGrid.superclass.initComponent.apply(this, arguments);
+    },
+    calculatePageSize: function() {
+		var bodyHeight = Ext.getBody().getHeight();
+		var heightOther = 120+50;
+		var rowHeight = 20;
+		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+
+		this.getBottomToolbar().pageSize = gridRows;
+		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
+    
 });
 Ext.reg('radiogrid', Yasound.Backoffice.UI.RadioGrid);

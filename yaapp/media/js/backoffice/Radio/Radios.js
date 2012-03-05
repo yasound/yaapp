@@ -49,7 +49,7 @@ Yasound.Radios.UI.RadiosPanel = function() {
 		region: 'center',
 		url: '/yabackoffice/radios/{0}/songs/',
 		radio_id: 0,
-		title: gettext('Songs'),
+		title: gettext('Songs assigned to radio'),
 		tbar:[{
 		    text: gettext('Refresh'),
 		    iconCls: 'silk-arrow-refresh',
@@ -60,13 +60,23 @@ Yasound.Radios.UI.RadiosPanel = function() {
 		    }
 		}, {
 			text: gettext('Remove from radio'),
+		    disabled: true,
+		    ref:'../removeButton',
 			handler: function(b, e) {
 				var grid = b.ownerCt.ownerCt;
 				var selected = grid.getSelectionModel().getSelections();
 				Yasound.Radios.Handler.RemoveSong(grid.radioId, selected);
 			}
 		}
-		]
+		], 
+		listeners: {
+			'selected': function(grid, id, record) {
+				grid.removeButton.setDisabled(false);
+			},
+			'deselected': function(grid) {
+				grid.removeButton.setDisabled(true);
+			} 
+		}
 	});
 
 	var radioForm = Ext.ComponentMgr.create({
