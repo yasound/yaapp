@@ -58,7 +58,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('radioselected', this, record.data.id, record.data);							
+                        this.grid.fireEvent('radioselected', this, record.data.id, record);							
 					}, this);
                 }
             }
