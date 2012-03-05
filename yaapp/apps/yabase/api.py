@@ -732,8 +732,8 @@ class SearchSongResource(ModelResource):
     
     def get_object_list(self, request):
         search = request.GET.get('search', None)
-        offset = int(request.GET.get('offset', 0))
-        count = int(request.GET.get('count', 50))
+        offset = int(request.GET.get('song_offset', 0))
+        count = int(request.GET.get('song_count', 50))
         yasound_songs = YasoundSong.objects.search(search, offset=offset, count=count)
         return yasound_songs
     
