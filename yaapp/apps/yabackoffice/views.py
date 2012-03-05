@@ -90,6 +90,9 @@ def radios(request):
         raise Http404()
     if request.method == 'GET':
         qs = Radio.objects.all()
+        name = request.REQUEST.get('name')
+        if name:
+            qs = qs.filter(name__icontains=name)
         grid = RadioGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
