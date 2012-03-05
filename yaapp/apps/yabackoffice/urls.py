@@ -4,4 +4,5 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^$', 'index', name='yabackoffice_index'),
     url(r'^radio/(?P<radio_id>\d+)/unmatched/$', 'radio_unmatched_song'),
     url(r'^radios/$', 'radios'),
+    url(r'^invitations/$', 'invitations'),
 )

@@ -11,13 +11,14 @@ from django.shortcuts import render_to_response, get_object_or_404, \
     get_list_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
-import simplejson as json
-from extjs import utils
 from django.views.decorators.csrf import csrf_exempt
-
-from grids import SongInstanceGrid, RadioGrid
+from extjs import utils
+from grids import SongInstanceGrid, RadioGrid, InvitationGrid
 from yabase.models import Radio
+from yainvitation.models import Invitation
+import simplejson as json
 import utils as yabackoffice_utils
+
 
 
 @login_required
@@ -42,6 +43,16 @@ def radios(request):
     if request.method == 'GET':
         qs = Radio.objects.all()
         grid = RadioGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+
+@csrf_exempt
+@login_required
+def invitations(request):
+    if request.method == 'GET':
+        qs = Invitation.objects.all()
+        grid = InvitationGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
