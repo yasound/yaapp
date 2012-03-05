@@ -172,10 +172,12 @@ class YasoundSongManager(models.Manager):
         sorted_results = sorted(results, key=lambda r: r[1], reverse=True)
         return sorted_results[:limit]
     
-    def search(self, search_text, limit=25, tolerance=0.75):
+    def search(self, search_text, offset=0, count=25, tolerance=0.75):
+        limit = offset + count
         res = self.search_fuzzy(search_text, limit)
         best_score = None
         songs = []
+        c = 0
         for i in res:
             song_id = i[0]["db_id"]
             score = i[1]
@@ -183,7 +185,9 @@ class YasoundSongManager(models.Manager):
                 best_score = score
             if score < best_score * tolerance:
                 break
-            songs.append(YasoundSong.objects.get(id=song_id))
+            if c >= offset:
+                songs.append(YasoundSong.objects.get(id=song_id))
+            c += 1
         return songs
             
             
