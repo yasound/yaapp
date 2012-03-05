@@ -69,6 +69,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     }],
 	
     initComponent: function(){
+        this.addEvents('selected', 'unselected');
         this.pageSize = 25;
         this.store = Yasound.Backoffice.Data.SongInstanceStore(this.url);
         this.store.pageSize = this.pageSize;
@@ -78,8 +79,11 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('staffselected', this, record.data.id, record.data.lastname);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
+					if (!sm.hasSelection()) {
+                        this.grid.fireEvent('deselected', this.grid);							
+					}
                 }
             }
         });
