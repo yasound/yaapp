@@ -62,6 +62,8 @@ class SongInstance(models.Model):
     need_sync = models.BooleanField(default=False)
     frequency = models.FloatField(default=0.5)
     enabled = models.BooleanField(default=True)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     
     def __unicode__(self):
         return unicode(self.metadata)
@@ -69,12 +71,7 @@ class SongInstance(models.Model):
     class Meta:
         db_name = u'default'
         
-    def fill_bundle(self, bundle):
-        likes = self.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        bundle.data['likes'] = likes
-        dislikes = self.songuser_set.filter(mood=yabase_settings.MOOD_DISLIKE).count()
-        bundle.data['dislikes'] = dislikes
-        
+    def fill_bundle(self, bundle):        
         if self.metadata:
             bundle.data['name'] = self.metadata.name
             bundle.data['artist'] = self.metadata.artist_name
@@ -105,13 +102,21 @@ class SongInstance(models.Model):
     
     @property
     def song_status(self):
-        likes = SongUser.objects.likers(self).count()
-        dislikes = SongUser.objects.dislikers(self).count()
         status_dict = {};
         status_dict['id'] = self.id
-        status_dict['likes'] = likes
-        status_dict['dislikes'] = dislikes
+        status_dict['likes'] = self.likes
+        status_dict['dislikes'] = self.dislikes
         return status_dict
+    
+    def update_likes(self):
+        likes = SongUser.objects.likers(self).count()
+        self.likes = likes
+        self.save()
+        
+    def update_dislikes(self):
+        dislikes = SongUser.objects.dislikers(self).count()
+        self.dislikes = dislikes
+        self.save()
         
 class SongUserManager(models.Manager):
     def likers(self, song):
@@ -134,6 +139,24 @@ class SongUser(models.Model):
         verbose_name = _('Song user')
         unique_together = (('song', 'user'))
         db_name = u'default'
+        
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            orig = SongUser.objects.get(pk=self.pk)
+            if orig.mood != self.mood:
+                song_instance = self.song
+                if orig.mood == yabase_settings.MOOD_LIKE:
+                    song_instance.likes -= 1 # no more liked
+                    song_instance.likes = max(song_instance.likes, 0)
+                elif orig.mood == yabase_settings.MOOD_DISLIKE:
+                    song_instance.dislikes -= 1 # no more disliked
+                    song_instance.dislikes = max(song_instance.dislikes, 0)
+                if self.mood == yabase_settings.MOOD_LIKE:
+                    song_instance.likes += 1
+                elif self.mood == yabase_settings.MOOD_DISLIKE:
+                    song_instance.dislikes += 1
+                song_instance.save()
+        super(SongUser, self).save(*args, **kwargs)
 
 
 

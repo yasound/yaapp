@@ -43,7 +43,9 @@ class SongInstanceResource(ModelResource):
                   'last_play_time', 
                   'yasound_score', 
                   'metadata',
-                  'need_sync',]
+                  'need_sync',
+                  'likes',
+                  'dislikes']
         include_resource_uri = False
         filtering = {
             'playlist': ALL,
