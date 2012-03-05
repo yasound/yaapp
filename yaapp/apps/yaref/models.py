@@ -242,7 +242,7 @@ class YasoundSong(models.Model):
         return self.name
 
 class YasoundSongGenre(models.Model):
-    song = models.ForeignKey(YasoundSong, primary_key=True)
+    song = models.ForeignKey(YasoundSong)
     genre = models.ForeignKey(YasoundGenre)
     
     class Meta:
