@@ -107,7 +107,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     	this.radioId = radioId;
     	var url = String.format(this.url, radioId);
     	this.store.proxy.setUrl(url, true);
-    	this.store.reload();
+    	this.calculatePageSize();
     },
     calculatePageSize: function() {
 		var bodyHeight = Ext.getBody().getHeight();
