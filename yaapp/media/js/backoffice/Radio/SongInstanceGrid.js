@@ -10,19 +10,31 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
         dataIndex: 'name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "name"
+        }        	
     }, {
         header: gettext('Album'),
         dataIndex: 'album_name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "album_name"
+        }        	
     }, {
         header: gettext('Artist'),
         dataIndex: 'artist_name',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "artist_name"
+        }        	
     }]);
 };
 
@@ -89,7 +101,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [Yasound.Backoffice.UI.SongInstanceFilters()],
+            plugins: [Yasound.Backoffice.UI.SongInstanceFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
         		show: function(component) {
         			component.calculatePageSize();
@@ -111,7 +123,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     calculatePageSize: function() {
 		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+30;
+		var heightOther = 120+50;
 		var rowHeight = 20;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
