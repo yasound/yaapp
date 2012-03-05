@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 18:07+0100\n"
+"POT-Creation-Date: 2012-03-05 18:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,13 +88,13 @@ msgid "Refresh"
 msgstr "Rafraichir"
 
 #: js/backoffice/Invitations/InvitationGrid.js:79
-#: js/backoffice/Radio/RadioGrid.js:76
+#: js/backoffice/Radio/RadioGrid.js:79
 #: js/backoffice/Radio/SongInstanceGrid.js:88
 msgid "Displaying {0} - {1} of {2}"
 msgstr "Affichage de {0} - {1} sur {2}"
 
 #: js/backoffice/Invitations/InvitationGrid.js:80
-#: js/backoffice/Radio/RadioGrid.js:77
+#: js/backoffice/Radio/RadioGrid.js:80
 #: js/backoffice/Radio/SongInstanceGrid.js:89
 msgid "Nothing to display"
 msgstr "Rien à afficher"
@@ -124,6 +124,8 @@ msgid "Submit"
 msgstr "Valider"
 
 #: js/backoffice/Radio/Radios.js:13
+#: js/backoffice/Radio/Radios.js.py:99
+#: js/backoffice/Radio/Radios.js:121
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -143,11 +145,23 @@ msgstr "Supprimer de la radio"
 msgid "Create new radio"
 msgstr "Créer une nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:101
+#: js/backoffice/Radio/Radios.js:100
+msgid "Do you want to create new radio ?"
+msgstr "Voulez-vous créer une radio ?"
+
+#: js/backoffice/Radio/Radios.js:107
 msgid "New radio"
 msgstr "Nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:120
+#: js/backoffice/Radio/Radios.js:115
+msgid "Delete"
+msgstr "Supprimer"
+
+#: js/backoffice/Radio/Radios.js:122
+msgid "Do you want to deleted radio ?"
+msgstr "Voulez-vous supprimer la radio ?"
+
+#: js/backoffice/Radio/Radios.js:154
 msgid "Radios management"
 msgstr "Gestion des radios"
 

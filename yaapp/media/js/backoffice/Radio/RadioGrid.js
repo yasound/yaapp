@@ -4,7 +4,7 @@
 
 Yasound.Backoffice.Data.RadioStore = function() {
 	var fields = ['id', 'name'];
-	var url = '/yabackoffice/radios/';
+	var url = '/yabackoffice/radios';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -52,7 +52,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	checkboxSelect: true,
 	tbar: [],
     initComponent: function() {
-        this.addEvents('radioselected');
+        this.addEvents('selected', 'deselected');
         this.pageSize = 25;
         this.store = Yasound.Backoffice.Data.RadioStore();
         this.store.pageSize = this.pageSize;
@@ -62,8 +62,11 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('radioselected', this, record.data.id, record);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
+					if (!sm.hasSelection()) {
+						this.grid.fireEvent('deselected', this.grid);
+					}
                 }
             }
         });

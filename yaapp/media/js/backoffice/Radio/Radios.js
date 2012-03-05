@@ -97,21 +97,55 @@ Yasound.Radios.UI.RadiosPanel = function() {
     		text: gettext('Create new radio'),
     		iconCls: 'silk-add',
     		handler: function(b, e) {
-                var grid = b.ownerCt.ownerCt;
-                var store = grid.getStore();
-                var u = new store.recordType({
-                    name: gettext('New radio')
-                });
-                grid.store.insert(0, u);
+ 			   Ext.Msg.show({
+			        title: gettext('Confirmation'),
+			        msg: gettext('Do you want to create new radio ?'),
+			        buttons: Ext.Msg.YESNOCANCEL,
+			        fn: function(bt, text){
+			            if (bt == 'yes') {
+			                var grid = b.ownerCt.ownerCt;
+			                var store = grid.getStore();
+			                var u = new store.recordType({
+			                    name: gettext('New radio')
+			                });
+			                grid.store.insert(0, u);
+			            }
+			        }
+			   });
+    		}
+    	}, {
+    		text: gettext('Delete'),
+    		disabled: true,
+    		ref: '../deleteButton',
+    		iconCls: 'silk-delete',
+    		handler: function(b, e) {
+    			   Ext.Msg.show({
+    			        title: gettext('Confirmation'),
+    			        msg: gettext('Do you want to deleted radio ?'),
+    			        buttons: Ext.Msg.YESNOCANCEL,
+    			        fn: function(bt, text){
+    			            if (bt == 'yes') {
+    			            	var grid = b.ownerCt.ownerCt;
+    			            	selection = grid.getSelectionModel().getSelections();
+    			            	Ext.each(selection, function(record) {
+    			            		grid.store.remove(record);
+    			            	});
+    			            }
+    			        }
+    			   });
     		}
     	}],
     	singleSelect: true,
     	checkboxSelect: false,
     	listeners: {
-    		'radioselected': function(grid, id, record) {
+    		'selected': function(grid, id, record) {
     			songGrid.refresh(id);
     			radioForm.updateForm(record);
     			radioForm.setDisabled(false);
+    			grid.deleteButton.setDisabled(false);
+    		},
+    		'unselected': function(grid) {
+    			grid.deleteButton.setDisabled(true);
     		}
     	}		
 	});

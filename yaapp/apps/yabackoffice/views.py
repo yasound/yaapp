@@ -123,6 +123,13 @@ def radios(request, radio_id=None):
                 'message': message,
             })
             return utils.JsonResponse(json_data)
+    elif request.method == 'DELETE':
+        radio = get_object_or_404(Radio, id=radio_id)
+        radio.empty_next_songs_queue()
+        radio.delete()
+        data = {"success":True,"message":"ok","data":[]}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
     raise Http404
        
 
