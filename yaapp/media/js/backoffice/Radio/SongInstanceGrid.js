@@ -89,7 +89,15 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [Yasound.Backoffice.UI.SongInstanceFilters()]
+            plugins: [Yasound.Backoffice.UI.SongInstanceFilters()],
+        	listeners: {
+        		show: function(component) {
+        			component.calculatePageSize();
+        		},
+        		resize: function(component) {
+        			component.calculatePageSize();
+        		}
+        	}
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
@@ -100,6 +108,15 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     	var url = String.format(this.url, radioId);
     	this.store.proxy.setUrl(url, true);
     	this.store.reload();
+    },
+    calculatePageSize: function() {
+		var bodyHeight = Ext.getBody().getHeight();
+		var heightOther = 120+30;
+		var rowHeight = 20;
+		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+
+		this.getBottomToolbar().pageSize = gridRows;
+		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
 });
 Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);
