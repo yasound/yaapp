@@ -1,5 +1,6 @@
 from extjs import grids
 from yabase.models import SongInstance, Radio
+from yainvitation.models import Invitation
 
 class SongInstanceGrid(grids.ModelGrid):
     model = SongInstance
@@ -22,4 +23,18 @@ class RadioGrid(grids.ModelGrid):
             ]
     mapping = {
             'picture': 'picture_url'
+    }
+    
+class InvitationGrid(grids.ModelGrid):
+    model = Invitation
+    list_mapping=[
+            'id',
+            'fullname',
+            'user',
+            'email',
+            'key',
+            'sent'
+            ]
+    mapping = {
+            'radio_name': 'radio__name'
     }

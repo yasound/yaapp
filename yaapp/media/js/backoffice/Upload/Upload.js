@@ -21,7 +21,6 @@ Yasound.Upload.UI.FilePanel = Ext.extend(Ext.form.FormPanel, {
     			contentEl : Ext.get('hidden-csrf').dom.cloneNode(true)
     		}, {
     			xtype : 'fileuploadfield',
-    			id : 'form-file',
     			emptyText : gettext('Select a file'),
     			fieldLabel : 'Document',
     			name : 'file',
