@@ -51,16 +51,9 @@ Yasound.Radios.UI.RadiosPanel = function() {
 		radio_id: 0,
 		title: gettext('Songs assigned to radio'),
 		tbar:[{
-		    text: gettext('Refresh'),
-		    iconCls: 'silk-arrow-refresh',
-		    tooltip: gettext('Refresh'),
-		    handler: function(btn, e){
-		        var grid = btn.ownerCt.ownerCt;
-		        grid.getStore().reload();
-		    }
-		}, {
 			text: gettext('Remove from radio'),
 		    disabled: true,
+		    iconCls: 'silk-delete',
 		    ref:'../removeButton',
 			handler: function(b, e) {
 				var grid = b.ownerCt.ownerCt;
@@ -81,10 +74,11 @@ Yasound.Radios.UI.RadiosPanel = function() {
 
 	var radioForm = Ext.ComponentMgr.create({
 		xtype:'radioform',
-		region:'west',
+		region:'south',
 		disabled: true,
 		split: true,
 		width:350,
+		height:300,
 		listeners: {
 			uploadSuccess: function() {
 				songGrid.getStore().reload();
@@ -97,9 +91,20 @@ Yasound.Radios.UI.RadiosPanel = function() {
     	xtype:'radiogrid',
     	id:'radios-radiogrid',
     	title: gettext('Radios'),
-    	region: 'west',
-    	split: true,
-    	width: 200,
+    	region: 'center',
+    	width: 350,
+    	tbar:[{
+    		text: gettext('Create new radio'),
+    		iconCls: 'silk-add',
+    		handler: function(b, e) {
+                var grid = b.ownerCt.ownerCt;
+                var store = grid.getStore();
+                var u = new store.recordType({
+                    name: gettext('New radio')
+                });
+                grid.store.insert(0, u);
+    		}
+    	}],
     	singleSelect: true,
     	checkboxSelect: false,
     	listeners: {
@@ -117,11 +122,13 @@ Yasound.Radios.UI.RadiosPanel = function() {
 		title : gettext('Radios management'),
 		id : 'radios-panel',
 		layout : 'border',
-		items : [ radioGrid, {
+		items : [ {
 			layout: 'border',
-			region: 'center',
-			items: [radioForm, songGrid]
-		}],
+			region: 'west',
+			width: 350,
+			split: true,
+			items:[radioGrid, radioForm]
+		}, songGrid],
 		updateData : function(component) {
 			radioGrid.getStore().reload();
 		}

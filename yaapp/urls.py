@@ -55,7 +55,7 @@ playlist_matched_songs = MatchedSongResource()
 Radio.objects.unlock_all()
 
 js_info_dict = {
-    'packages': ('backoffice',),
+    'packages': ('yabackoffice',),
 }
 
 urlpatterns = patterns('',

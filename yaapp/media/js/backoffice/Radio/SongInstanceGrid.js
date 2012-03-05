@@ -58,16 +58,7 @@ Yasound.Backoffice.UI.SongInstanceFilters = function(){
 Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelected: false,
 	url: '/yabackoffice/radios/{0}/unmatched/',
-    tbar: [{
-        text: gettext('Refresh'),
-        iconCls: 'silk-arrow-refresh',
-        tooltip: gettext('Refresh'),
-        handler: function(btn, e){
-            var grid = btn.ownerCt.ownerCt;
-            grid.getStore().reload();
-        }
-    }],
-	
+    tbar: [],
     initComponent: function(){
         this.addEvents('selected', 'unselected');
         this.pageSize = 25;

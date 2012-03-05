@@ -18,6 +18,7 @@ from yabase.models import Radio, SongInstance
 from yainvitation.models import Invitation
 import simplejson as json
 import utils as yabackoffice_utils
+from yabackoffice.forms import RadioForm
 
 
 @login_required
@@ -85,7 +86,7 @@ def radio_remove_songs(request, radio_id):
 
 @csrf_exempt
 @login_required
-def radios(request):
+def radios(request, radio_id=None):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
@@ -97,6 +98,33 @@ def radios(request):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
+    elif request.method == 'POST':
+        data = request.REQUEST.get('data')
+        decoded_data = json.loads(data)
+        form = RadioForm(decoded_data)
+        errors = None
+        success = True
+        message = ''
+        if form.is_valid():
+            radio = form.save()
+            qs = Radio.objects.filter(id=radio.id)
+            grid = RadioGrid()
+            jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+            resp = utils.JsonResponse(jsonr)
+            return resp
+        else:
+            message = _("Invalid input")
+            errors = form.errors
+            success = False
+            
+            json_data = json.JSONEncoder(ensure_ascii=False).encode({
+                'success': success, 
+                'errors': errors,
+                'message': message,
+            })
+            return utils.JsonResponse(json_data)
+    raise Http404
+       
 
 @csrf_exempt
 @login_required
