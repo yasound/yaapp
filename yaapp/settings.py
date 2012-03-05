@@ -109,7 +109,7 @@ else:
             'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
         },
         'yasound': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yasound',                      # Or path to database file if using sqlite3.
             'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
         }
