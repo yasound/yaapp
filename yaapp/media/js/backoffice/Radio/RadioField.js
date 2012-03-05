@@ -60,7 +60,7 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
                 listeners: {
                     hide: this.onGridHide,
                     show: this.onGridShow,
-                    radioselected: this.onRadioSelected,
+                    selected: this.onRadioSelected,
                     scope: this
                 }
             });
