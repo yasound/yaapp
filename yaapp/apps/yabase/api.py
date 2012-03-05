@@ -626,6 +626,7 @@ class MatchedSongResource(ModelResource):
                   'last_play_time',
                   'frequency',
                   'enabled',
+                  'likes'
                   ]
         include_resource_uri = False
         authorization= MatchedSongAuthorization()
@@ -643,15 +644,6 @@ class MatchedSongResource(ModelResource):
     
     def dehydrate(self, bundle):
         song_instance = bundle.obj
-        
-        #likes = song_instance.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        #bundle.data['likes'] = likes
-        bundle.data['likes'] = 0
- 
-        #try:
-        #    yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
-        #except YasoundSong.DoesNotExist:
-        #    return bundle
         
         bundle.data['name'] = song_instance.metadata.name
         bundle.data['artist'] = song_instance.metadata.artist_name
