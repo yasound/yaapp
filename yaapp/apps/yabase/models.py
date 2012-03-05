@@ -48,9 +48,24 @@ class SongMetadata(models.Model):
         db_name = u'default'
 
 
-
+class SongInstanceManager(models.Manager):
+    def create_from_yasound_song(self, playlist, yasound_song):
+        metadatas = SongMetadata.objects.filter(name=yasound_song.name,
+                                               artist_name=yasound_song.artist_name,
+                                               album_name=yasound_song.album_name,
+                                               yasound_song_id=yasound_song.id)[:1]
+        if len(metadatas) >= 1:
+            metadata = metadatas[0]
+        else:
+            metadata = SongMetadata(name=yasound_song.name,
+                                    artist_name=yasound_song.artist_name,
+                                    album_name=yasound_song.album_name,
+                                    yasound_song_id=yasound_song.id)
+            metadata.save()
+        SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata)
 
 class SongInstance(models.Model):
+    objects = SongInstanceManager()
     playlist = models.ForeignKey('Playlist')
     song = models.IntegerField(null=True, blank=True) # song ID in the Song db -- this should disappear soon
     play_count = models.IntegerField(default=0)

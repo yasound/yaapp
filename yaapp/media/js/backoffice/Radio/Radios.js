@@ -39,8 +39,38 @@ Yasound.Radios.Handler.RemoveSong = function(radioId, selected) {
             }
         }
    });
-}
+};
 
+Yasound.Radios.Handler.AddToRadio = function(radioId, selected) {
+   Ext.Msg.show({
+        title: gettext('Confirmation'),
+        msg: gettext('Do you want to add songs to radio'),
+        buttons: Ext.Msg.YESNOCANCEL,
+        fn: function(b, text){
+            if (b == 'yes') {
+            	ids = [];
+            	Ext.each(selected, function(record) {
+            		ids.push(record.data.id);
+            	});
+                Ext.Ajax.request({
+                    url: String.format('/yabackoffice/radios/{0}/add_songs/', radioId),
+                    success: function(result, request){
+                        var data = result.responseText;
+                        var json = Ext.decode(data);
+                        Ext.getCmp('radios-songgrid').getStore().reload();
+            		},
+                    failure: function(result, request){
+                    },
+                    method: 'POST',
+                    timeout: 1000 * 60 * 5,
+                    params: {
+                        yasound_song_id: ids
+                    }
+                });
+            }
+        }
+   });
+};
 
 Yasound.Radios.UI.RadiosPanel = function() {
 	var songGrid = Ext.ComponentMgr.create({
@@ -90,7 +120,6 @@ Yasound.Radios.UI.RadiosPanel = function() {
 	var radioGrid = Ext.ComponentMgr.create({
     	xtype:'radiogrid',
     	id:'radios-radiogrid',
-    	title: gettext('Radios'),
     	region: 'center',
     	width: 350,
     	tbar:[{
@@ -149,6 +178,36 @@ Yasound.Radios.UI.RadiosPanel = function() {
     		}
     	}		
 	});
+	
+	var yasoundSongGrid = Ext.ComponentMgr.create({
+		xtype: 'yasoundsonggrid',
+		region:'north',
+		collapsible: true,
+		collapsed: false,
+		id: 'radios-yasoundsonggrid',
+		title: gettext('Available songs'),
+		split: true,
+		height:350,
+		tbar: [{
+			text:gettext('Add to radio'),
+			disabled: true,
+			ref: '../addToRadioButton',
+			handler: function(b, e) {
+				var radioId = songGrid.radioId;
+				var grid = b.ownerCt.ownerCt;
+				var selected = grid.getSelectionModel().getSelections();
+				Yasound.Radios.Handler.AddToRadio(radioId, selected);
+			}
+		}],
+		listeners: {
+    		'selected': function(grid, id, record) {
+    			grid.addToRadioButton.setDisabled(false);
+    		},
+    		'unselected': function(grid) {
+    			grid.addToRadioButton.setDisabled(true);
+    		}
+		}
+	});
 
 	
 	return {
@@ -159,10 +218,16 @@ Yasound.Radios.UI.RadiosPanel = function() {
 		items : [ {
 			layout: 'border',
 			region: 'west',
+			collapsible: true,
+			title: gettext('Radios'),
 			width: 350,
 			split: true,
 			items:[radioGrid, radioForm]
-		}, songGrid],
+		}, {
+			region: 'center',
+			layout: 'border',
+			items:[songGrid, yasoundSongGrid]
+		}],
 		updateData : function(component) {
 			radioGrid.getStore().reload();
 		}

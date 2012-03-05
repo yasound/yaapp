@@ -32,7 +32,7 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     			id : 'form-file',
     			allowBlank: true,
     			emptyText : gettext('Select files or folder'),
-    			fieldLabel : 'Upload songs',
+    			fieldLabel : gettext('Upload songs'),
     			name : 'songs',
     			buttonText : '',
     			buttonCfg : {

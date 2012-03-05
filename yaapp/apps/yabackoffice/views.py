@@ -13,12 +13,13 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from extjs import utils
-from grids import SongInstanceGrid, RadioGrid, InvitationGrid
+from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
+from yabackoffice.forms import RadioForm
 from yabase.models import Radio, SongInstance
 from yainvitation.models import Invitation
+from yaref.models import YasoundSong
 import simplejson as json
 import utils as yabackoffice_utils
-from yabackoffice.forms import RadioForm
 
 
 @login_required
@@ -71,12 +72,37 @@ def radio_songs(request, radio_id):
 @csrf_exempt
 @login_required
 def radio_remove_songs(request, radio_id):
+    """
+    delete song instance from radio
+    """
     if not request.user.is_superuser:
         raise Http404()
     radio = get_object_or_404(Radio, id=radio_id)
     if request.method == 'POST':
         ids = request.REQUEST.getlist('song_instance_id')
         SongInstance.objects.filter(playlist__radio=radio, id__in=ids).delete()
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
+@csrf_exempt
+@login_required
+def radio_add_songs(request, radio_id):
+    """
+    add yasound song to radio
+    """
+    if not request.user.is_superuser:
+        raise Http404()
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        ids = request.REQUEST.getlist('yasound_song_id')
+        yasound_songs = YasoundSong.objects.filter(id__in=ids)
+        playlist, _created = radio.get_or_create_default_playlist()
+        for yasound_song in yasound_songs:
+            SongInstance.objects.create_from_yasound_song(playlist, yasound_song)
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': ''
@@ -144,3 +170,27 @@ def invitations(request):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
+    
+@csrf_exempt
+@login_required
+def yasound_songs(request, song_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+    if request.method == 'GET':
+        qs = YasoundSong.objects.all()
+        name = request.REQUEST.get('name', '')
+        artist_name = request.REQUEST.get('artist_name', '')
+        album_name = request.REQUEST.get('album_name', '')
+
+        if name:
+            qs = qs.filter(name_simplified__istartswith=name)
+        if artist_name:
+            qs = qs.filter(artist_name_simplified__istartswith=artist_name)
+        if album_name:
+            qs = qs.filter(album_name_simplified__istartswith=album_name)
+
+        grid = YasoundSongGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    raise Http404    
