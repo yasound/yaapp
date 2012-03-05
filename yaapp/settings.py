@@ -46,7 +46,7 @@ if LOCAL_MODE:
     # Celery config:
     BROKER_URL = "django://"
     BROKER_BACKEND = "django"
-    CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task", "account.task",)
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task",)
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10
@@ -92,25 +92,14 @@ if LOCAL_MODE:
         }
 else:
     # Celery config:
-    if False:
-        BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-        CELERY_IMPORTS = ("yabase.task","stats.task", "yaref.task", "account.task")
-        CELERY_RESULT_BACKEND = "database"
-        CELERY_RESULT_DBURI = "postgresql://yaapp:N3EDTnz945FSh6D@yasound.com/yaapp"
-        CELERY_TASK_RESULT_EXPIRES = 10
-    else:
-        CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
-        CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task", "account.task")
-        #BROKER_HOST = "127.0.0.1"
-        #BROKER_PORT = 5672
-        #BROKER_VHOST = "prod"
-        #BROKER_USER = "yaapp"
-        #BROKER_PASSWORD = "N3EDTnz945FSh6D"
-        #BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-        BROKER_URL = "amqp://yaapp:N3EDTnz945FSh6D@yasound.com:5672/prod"
-        CELERY_RESULT_BACKEND = "amqp"
-        #CELERY_RESULT_DBURI = "amqp://yaapp:N3EDTnz945FSh6D@yasound.com:5672/prod"
-        CELERY_TASK_RESULT_EXPIRES = 10
+    CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task")
+    BROKER_URL = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND = "redis"
+    CELERY_REDIS_HOST = "localhost"
+    CELERY_REDIS_PORT = 6379
+    CELERY_REDIS_DB = 0
+    CELERY_TASK_RESULT_EXPIRES = 10
 
     # Databases config:
     DATABASES = {
