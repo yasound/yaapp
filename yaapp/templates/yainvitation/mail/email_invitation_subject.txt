@@ -1,0 +1,1 @@
+{% load i18n %}{% blocktrans %}Invitation to join and test Yasound{% endblocktrans %}

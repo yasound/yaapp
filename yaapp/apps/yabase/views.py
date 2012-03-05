@@ -493,22 +493,39 @@ def upload_song(request, song_id=None):
 
 @login_required
 def upload_song_ajax(request):
-    if not request.FILES.has_key('file'):
+    print request.FILES
+    if not request.FILES.has_key('file') and not request.FILES.has_key('songs'):
         logger.info('upload_song: request does not contain song')
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': False,
             'message': 'upload_song: request does not contain song'
         })
         return HttpResponse(json_data, mimetype='text/html')
-
-    f = request.FILES['file']
-    sm, messages = import_utils.import_song(binary=f, metadata=None, convert=True)
-    json_data = json.JSONEncoder(ensure_ascii=False).encode({
-        'success': True,
-        'message': unicode(messages)
-    })
-    return HttpResponse(json_data, mimetype='text/html')
-
+    
+    radio_id = request.REQUEST.get('radio_id')
+    metadata = {
+        'radio_id': radio_id
+    }
+    
+    if 'file' in request.FILES:    
+        f = request.FILES['file']
+        sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True)
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': unicode(messages)
+        })
+        return HttpResponse(json_data, mimetype='text/html')
+    else:
+        global_message = ''
+        for f in request.FILES.getlist('songs'):
+            sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True)
+            global_message = global_message + messages + '\n'
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': unicode(global_message)
+        })
+        return HttpResponse(json_data, mimetype='text/html')
+        
 
 @csrf_exempt
 def add_song(request, radio_id, playlist_index, yasound_song_id):

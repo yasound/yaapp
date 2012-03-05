@@ -279,6 +279,7 @@ INSTALLED_APPS = (
     'social_auth',
     'sorl.thumbnail',
     'yasearch',
+    'yainvitation',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

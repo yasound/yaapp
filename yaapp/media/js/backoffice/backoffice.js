@@ -1,7 +1,9 @@
 Ext.BLANK_IMAGE_URL = '/media/extjs/resources/images/default/s.gif';
 Ext.namespace("Yasound.Backoffice.UI", "Yasound.Backoffice.Handler", "Yasound.Backoffice.Data");
+Ext.namespace("Yasound.Radios.UI", "Yasound.Radios.Handler", "Yasound.Radios.Data");
 Ext.namespace("Yasound.Upload.UI", "Yasound.Upload.Handler", "Yasound.Upload.Data");
 Ext.namespace("Yasound.SearchEngine.UI", "Yasound.SearchEngine.Handler", "Yasound.SearchEngine.Data");
+Ext.namespace("Yasound.Invitations.UI", "Yasound.Invitations.Handler", "Yasound.Invitations.Data");
 Ext.namespace("Yasound.Utils");
 
 
@@ -53,8 +55,8 @@ Ext.onReady(function(){
     Ext.QuickTips.init();
     Ext.History.init();
     
-    var tabPanelSongs = {
-        id: 'songs-tab',
+    var tabPanelRadios = {
+        id: 'radios-tab',
         expanded: false,
         listeners: {
             'tabchange': function(tabPanel, tab){
@@ -62,11 +64,11 @@ Ext.onReady(function(){
             }
         },
         items: [{
-            title: gettext('Songs'),
-            id: 'songs-top-panel',
+            title: gettext('Radios'),
+            id: 'radios-top-panel',
             tabTip: gettext('Song management'),
             style: 'padding: 10px;',
-            html: '<h1>Song management</h1>',
+            html: '<h1>Radio management</h1>',
             listeners: {
                 'activate': function(p){
                     var tabPanel = p.findParentByType('grouptab');
@@ -74,7 +76,9 @@ Ext.onReady(function(){
                     tabPanel.setActiveTab(nextItem);
                 }
             }
-        }, Ext.apply(Yasound.Backoffice.UI.UnmatchedSongsPanel(), {
+        }, Ext.apply(Yasound.Radios.UI.RadiosPanel(), {
+            iconCls: 'x-icon-templates'
+        }), Ext.apply(Yasound.Backoffice.UI.UnmatchedSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Unmatched songs')
         }),Ext.apply(Yasound.Upload.UI.UploadSongsPanel(), {
@@ -108,6 +112,31 @@ Ext.onReady(function(){
             iconCls: 'x-icon-templates'
         })]    		
     }
+    
+    var tabPanelInvitations = {
+            id: 'invitations-tab',
+            expanded: false,
+            listeners: {
+                'tabchange': function(tabPanel, tab){
+                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                }
+            },
+            items: [{
+                title: gettext('Invitations'),
+                id: 'invitations-top-panel',
+                style: 'padding: 10px;',
+                listeners: {
+                    'activate': function(p){
+                        var tabPanel = p.findParentByType('grouptab');
+                        var nextItem = p.nextSibling();
+                        tabPanel.setActiveTab(nextItem);
+                    }
+                }
+            }, Ext.apply(Yasound.Invitations.UI.Panel(), {
+                iconCls: 'x-icon-templates'
+            })]    		
+        }
+    
     var tabPanels = {
         xtype: 'grouptabpanel',
         id: 'group-panel',
@@ -119,7 +148,9 @@ Ext.onReady(function(){
         items: []
     };
     
-    tabPanels.items.push(tabPanelSongs, tabPanelSearchEngine);
+    tabPanels.items.push(tabPanelRadios, 
+    					 tabPanelSearchEngine,
+    					 tabPanelInvitations);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',

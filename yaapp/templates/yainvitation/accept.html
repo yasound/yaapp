@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+{% load i18n %} 
+
+{% block body %}
+<div class='container-fluid'>
+    <div class='row-fluid'>
+        <div class='well'>
+       <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+       </div>
+       <h1>{% trans "Welcome" %}</h1>
+    </div>
+    <footer>
+    <p>&copy; Yasound 2012</p>
+    </footer>
+</div>
+{% endblock %}
