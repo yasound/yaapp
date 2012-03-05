@@ -1,6 +1,5 @@
-Yasound.Backoffice.Data.SongInstanceStore = function() {
+Yasound.Backoffice.Data.SongInstanceStore = function(url) {
 	var fields = ['id', 'name', 'artist_name', 'album_name'];
-	var url = '/yabackoffice/radio/0/unmatched/';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -45,13 +44,25 @@ Yasound.Backoffice.UI.SongInstanceFilters = function(){
 };
 
 Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
+	singleSelected: false,
+	url: '/yabackoffice/radios/{0}/unmatched/',
+    tbar: [{
+        text: gettext('Refresh'),
+        iconCls: 'silk-arrow-refresh',
+        tooltip: gettext('Refresh'),
+        handler: function(btn, e){
+            var grid = btn.ownerCt.ownerCt;
+            grid.getStore().reload();
+        }
+    }],
+	
     initComponent: function(){
         this.pageSize = 25;
-        this.store = Yasound.Backoffice.Data.SongInstanceStore();
+        this.store = Yasound.Backoffice.Data.SongInstanceStore(this.url);
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
-            singleSelect: true,
+            singleSelect: this.singleSelect,
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
@@ -62,15 +73,7 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
         });
 
         var config = {
-            tbar: [{
-                text: gettext('Refresh'),
-                iconCls: 'silk-arrow-refresh',
-                tooltip: gettext('Refresh'),
-                handler: function(btn, e){
-                    var grid = btn.ownerCt.ownerCt;
-                    grid.getStore().reload();
-                }
-            }],
+            tbar: this.tbar,
             bbar: new Ext.PagingToolbar({
                 pageSize: this.pageSize,
                 store: this.store,
@@ -93,7 +96,8 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
         Yasound.Backoffice.UI.SongInstanceGrid.superclass.initComponent.apply(this, arguments);
     },
     refresh: function(radioId) {
-    	var url = String.format('/yabackoffice/radio/{0}/unmatched/', radioId);
+    	this.radioId = radioId;
+    	var url = String.format(this.url, radioId);
     	this.store.proxy.setUrl(url, true);
     	this.store.reload();
     }

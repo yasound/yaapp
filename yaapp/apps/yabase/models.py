@@ -524,7 +524,7 @@ class Radio(models.Model):
     
     @property
     def unmatched_songs(self):
-        songs = SongInstance.objects.filter(song=None, playlist__in=self.playlists.all())
+        songs = SongInstance.objects.filter(metadata__yasound_song_id=None, playlist__in=self.playlists.all())
         return songs
 
     @property

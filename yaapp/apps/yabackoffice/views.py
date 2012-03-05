@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid
-from yabase.models import Radio
+from yabase.models import Radio, SongInstance
 from yainvitation.models import Invitation
 import simplejson as json
 import utils as yabackoffice_utils
@@ -36,7 +36,32 @@ def radio_unmatched_song(request, radio_id):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
-    
+
+@csrf_exempt
+@login_required
+def radio_songs(request, radio_id):
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'GET':
+        qs = SongInstance.objects.filter(playlist__radio=radio)
+        grid = SongInstanceGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+
+@csrf_exempt
+@login_required
+def radio_remove_songs(request, radio_id):
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        ids = request.REQUEST.getlist('song_instance_id')
+        SongInstance.objects.filter(playlist__radio=radio, id__in=ids).delete()
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
 @csrf_exempt
 @login_required
 def radios(request):

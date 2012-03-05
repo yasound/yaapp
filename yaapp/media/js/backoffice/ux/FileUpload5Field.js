@@ -115,6 +115,8 @@ Ext.ux.form.FileUpload5Field = Ext.extend(Ext.form.TextField,  {
             tag: 'input',
             type: 'file',
             webkitdirectory: '',
+            mozdirectory: '',
+            multiple: '',
             directory: '',
             size: 1
         });

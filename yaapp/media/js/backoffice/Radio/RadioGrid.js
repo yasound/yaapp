@@ -46,7 +46,15 @@ Yasound.Backoffice.UI.RadioFilters = function(){
 Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelect: true,
 	checkboxSelect: true,
-	
+	tbar: [{
+        text: gettext('Refresh'),
+        iconCls: 'silk-arrow-refresh',
+        tooltip: gettext('Refresh'),
+        handler: function(btn, e){
+            var grid = btn.ownerCt.ownerCt;
+            grid.getStore().reload();
+        }
+    }],
     initComponent: function() {
         this.addEvents('radioselected');
         this.pageSize = 25;
@@ -63,17 +71,9 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             }
         });
-
+    	
         var config = {
-            tbar: [{
-                text: gettext('Refresh'),
-                iconCls: 'silk-arrow-refresh',
-                tooltip: gettext('Refresh'),
-                handler: function(btn, e){
-                    var grid = btn.ownerCt.ownerCt;
-                    grid.getStore().reload();
-                }
-            }],
+            tbar: this.tbar,
             bbar: new Ext.PagingToolbar({
                 pageSize: this.pageSize,
                 store: this.store,

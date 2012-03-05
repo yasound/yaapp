@@ -493,19 +493,16 @@ def upload_song(request, song_id=None):
 
 @login_required
 def upload_song_ajax(request):
-    print request.FILES
-    if not request.FILES.has_key('file') and not request.FILES.has_key('songs'):
-        logger.info('upload_song: request does not contain song')
-        json_data = json.JSONEncoder(ensure_ascii=False).encode({
-            'success': False,
-            'message': 'upload_song: request does not contain song'
-        })
-        return HttpResponse(json_data, mimetype='text/html')
-    
     radio_id = request.REQUEST.get('radio_id')
+    radio_name = request.REQUEST.get('radio_name')
     metadata = {
         'radio_id': radio_id
     }
+    if radio_name and radio_id:
+        radio = Radio.objects.get(id=radio_id)
+        radio.name = radio_name
+        radio.save()
+        
     
     if 'file' in request.FILES:    
         f = request.FILES['file']

@@ -18,26 +18,30 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     			hidden : true,
     			contentEl : Ext.get('hidden-csrf').dom.cloneNode(true)
     		}, {
+    			xtype: 'hidden',
+    			name: 'radio_id'
+    		}, {
     			xtype : 'textfield',
-    			name: 'name',
+    			name: 'radio_name',
     			emptyText : gettext('Enter radio name'),
     			fieldLabel: gettext('Radio name'),
     			allowBlank: false,
     			anchor: '-20'
     		}, {
-    				xtype: 'fileupload5field',
-        			id : 'form-file',
-        			emptyText : gettext('Select a folder'),
-        			fieldLabel : 'Songs',
-        			name : 'songs',
-        			buttonText : '',
-        			buttonCfg : {
-        				iconCls : 'silk-page-save'
-        			}
+				xtype: 'fileupload5field',
+    			id : 'form-file',
+    			allowBlank: true,
+    			emptyText : gettext('Select files or folder'),
+    			fieldLabel : 'Upload songs',
+    			name : 'songs',
+    			buttonText : '',
+    			buttonCfg : {
+    				iconCls : 'silk-page-save'
+    			}
     		}],
     		buttonAlign : 'center',
     		buttons : [{
-				text : gettext('Save'),
+				text : gettext('Submit'),
 				handler : function(btn, event) {
 					if (fp.getForm().isValid()) {
 						fp.getForm().submit({
@@ -63,7 +67,13 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
 							params : {}
 						});
 					}
-				}}]
+				}}, {
+					text: gettext('Cancel'),
+					handler: function(b, e) {
+						fp.getForm().reset();
+						fp.fillInFromRecord();
+					}
+				}]
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
@@ -71,7 +81,12 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     },
     updateForm: function(record) {
     	this.getForm().reset();
-    	this.getForm().findField('name').setValue(record.data.name);
+    	this.record = record;
+    	this.fillInFromRecord();
+    },
+    fillInFromRecord: function() {
+    	this.getForm().findField('radio_name').setValue(this.record.data.name);
+    	this.getForm().findField('radio_id').setValue(this.record.data.id);
     }
 });
 Ext.reg('radioform', Yasound.Radios.UI.RadioForm);
