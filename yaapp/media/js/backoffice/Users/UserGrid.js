@@ -51,12 +51,18 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         format: 'd/m/Y H:i:s',
         sortable: true,
         width: 50
-    }, new Ext.grid.CheckColumn({
+    }, {
         header: gettext('Superuser?'),
         dataIndex: 'is_superuser',
         sortable: true,
-        width: 30
-    })];
+        width: 50,
+        renderer: function(value, p, record){
+        	if (value) {
+        		return gettext('Yes');
+        	}
+        	return gettext('No');
+        }
+    }];
 	
 	if (sm) {
 		cm.splice(0, 0, sm); 
@@ -134,7 +140,7 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     calculatePageSize: function() {
 		var bodyHeight = this.getHeight();
-		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
+		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50+20;
 		var rowHeight = 21;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
