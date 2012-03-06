@@ -12,7 +12,6 @@ import tweepy
 from facepy import GraphAPI
 import json
 import urllib
-import uuid
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
@@ -237,7 +236,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def create_radio(sender, instance, created, **kwargs):  
     if created:  
         radio, created = Radio.objects.get_or_create(creator=instance)
-        radio.uuid = uuid.uuid4().hex
         radio.save()
 
 post_save.connect(create_user_profile, sender=User)

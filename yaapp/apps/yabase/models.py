@@ -16,6 +16,7 @@ import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 
 #from account.models import UserProfile
+import uuid
 
 import logging
 logger = logging.getLogger("yaapp.yabase")
@@ -329,6 +330,9 @@ class Radio(models.Model):
             tags_changed = self.tags != saved.tags
             update_mongo = name_changed or genre_changed or tags_changed
             
+        if not self.uuid:
+            self.uuid = uuid.uuid4().hex
+
         super(Radio, self).save(*args, **kwargs)
         if update_mongo:
             self.build_fuzzy_index(upsert=True)
