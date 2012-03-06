@@ -28,11 +28,19 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     			allowBlank: false,
     			anchor: '-20'
     		}, {
+    			xtype : 'userfield',
+    			name: 'creator',
+    			hiddenName: 'creator_profile_id',
+    			emptyText : gettext('Choose a user'),
+    			fieldLabel: gettext('User'),
+    			allowBlank: true,
+    			anchor: '-20'
+    		}, {
 				xtype: 'fileupload5field',
     			id : 'form-file',
     			allowBlank: true,
     			emptyText : gettext('Select files or folder'),
-    			fieldLabel : 'Upload songs',
+    			fieldLabel : gettext('Upload songs'),
     			name : 'songs',
     			buttonText : '',
     			buttonCfg : {
@@ -87,6 +95,7 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     fillInFromRecord: function() {
     	this.getForm().findField('radio_name').setValue(this.record.data.name);
     	this.getForm().findField('radio_id').setValue(this.record.data.id);
+    	this.getForm().findField('creator_profile_id').setValue(this.record.data.creator_profile_id, this.record.data.creator_profile);
     }
 });
 Ext.reg('radioform', Yasound.Radios.UI.RadioForm);

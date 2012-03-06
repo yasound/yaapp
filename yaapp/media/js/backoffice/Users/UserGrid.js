@@ -1,68 +1,90 @@
-Yasound.Backoffice.Data.SongInstanceStore = function(url) {
-	var fields = ['id', 'name', 'artist_name', 'album_name'];
+//------------------------------------------
+// Datastore
+//------------------------------------------
+
+Yasound.Users.Data.UserStore = function() {
+	var fields = ['id', 
+	              'name', 
+	              'account_type',
+	              'facebook_uid', {
+					name: 'last_authentication_date',
+					type: 'date',
+					dateFormat: 'Y-m-d H:i:s'
+	              },
+	              'is_superuser'];
+	var url = '/yabackoffice/users';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
+//------------------------------------------
+// Handlers
+//------------------------------------------
 
-Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
-    return ([sm, {
-        header: gettext('Track'),
+//------------------------------------------
+// UI
+//------------------------------------------
+Yasound.Users.UI.UserColumnModel = function(sm) {
+	var cm = [{
+        header: gettext('Name'),
         dataIndex: 'name',
         sortable: true,
-        width: 60,
+        width: 100,
         filterable: true,
         filter: {
             xtype: "textfield",
             filterName: "name"
         }        	
     }, {
-        header: gettext('Album'),
-        dataIndex: 'album_name',
+        header: gettext('Facebook UID'),
+        dataIndex: 'facebook_uid',
         sortable: true,
-        width: 60,
+        width: 40,
         filterable: true,
         filter: {
             xtype: "textfield",
-            filterName: "album_name"
+            filterName: "facebook_uid"
         }        	
     }, {
-        header: gettext('Artist'),
-        dataIndex: 'artist_name',
+        header: gettext('Last authentication'),
+        dataIndex: 'last_authentication_date',
+        xtype: 'datecolumn',
+        format: 'd/m/Y H:i:s',
         sortable: true,
-        width: 60,
-        filterable: true,
-        filter: {
-            xtype: "textfield",
-            filterName: "artist_name"
-        }        	
-    }]);
+        width: 50
+    }, new Ext.grid.CheckColumn({
+        header: gettext('Superuser?'),
+        dataIndex: 'is_superuser',
+        sortable: true,
+        width: 30
+    })];
+	
+	if (sm) {
+		cm.splice(0, 0, sm); 
+	}
+	
+    return cm;
 };
 
-Yasound.Backoffice.UI.SongInstanceFilters = function(){
+Yasound.Users.UI.UserFilters = function(){
     return new Ext.ux.grid.GridFilters({
         encode: false,
         local: true,
         filters: [{
             type: 'string',
             dataIndex: 'name'
-        }, {
-            type: 'string',
-            dataIndex: 'album_name'
-        }, {
-            type: 'string',
-            dataIndex: 'artist_name'
         }]
     });
 };
 
-Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
-	singleSelected: false,
-	url: '/yabackoffice/radios/{0}/unmatched/',
-    tbar: [],
-    initComponent: function(){
-        this.addEvents('selected', 'unselected');
+
+Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
+	singleSelect: true,
+	checkboxSelect: true,
+	tbar: [],
+    initComponent: function() {
+        this.addEvents('selected', 'deselected');
         this.pageSize = 25;
-        this.store = Yasound.Backoffice.Data.SongInstanceStore(this.url);
+        this.store = Yasound.Users.Data.UserStore();
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
@@ -73,12 +95,12 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
                         this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
 					if (!sm.hasSelection()) {
-                        this.grid.fireEvent('deselected', this.grid);							
+						this.grid.fireEvent('deselected', this.grid);
 					}
                 }
             }
         });
-
+    	
         var config = {
             tbar: this.tbar,
             bbar: new Ext.PagingToolbar({
@@ -90,13 +112,13 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.SongInstanceColumnModel(sm)),
+            cm: new Ext.grid.ColumnModel(Yasound.Users.UI.UserColumnModel(this.checkboxSelect ? sm : null)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [Yasound.Backoffice.UI.SongInstanceFilters(), new Ext.ux.grid.GridHeaderFilters()],
+        	plugins: [Yasound.Users.UI.UserFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
         		show: function(component) {
         			component.calculatePageSize();
@@ -108,22 +130,17 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
-        Yasound.Backoffice.UI.SongInstanceGrid.superclass.initComponent.apply(this, arguments);
-    },
-    refresh: function(radioId) {
-    	this.radioId = radioId;
-    	var url = String.format(this.url, radioId);
-    	this.store.proxy.setUrl(url, true);
-    	this.calculatePageSize();
+        Yasound.Users.UI.UserGrid.superclass.initComponent.apply(this, arguments);
     },
     calculatePageSize: function() {
-		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+50;
-		var rowHeight = 20;
+		var bodyHeight = this.getHeight();
+		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
+		var rowHeight = 21;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
 		this.getBottomToolbar().pageSize = gridRows;
 		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
+    
 });
-Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);
+Ext.reg('usergrid', Yasound.Users.UI.UserGrid);

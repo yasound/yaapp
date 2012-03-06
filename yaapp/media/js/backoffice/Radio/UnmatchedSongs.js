@@ -27,7 +27,7 @@ Yasound.Backoffice.UI.UnmatchedSongsPanel = function(){
     	singleSelect: true,
     	checkboxSelect: false,
     	listeners: {
-    		'radioselected': function(grid, id, record) {
+    		'selected': function(grid, id, record) {
     			songGrid.refresh(id)
     		}
     	}		

@@ -82,7 +82,7 @@ from yasearch.utils import get_simplified_name
 import datetime
 import hashlib
 import logging
-import os
+import os, errno
 import random
 import requests
 import shutil
@@ -473,7 +473,12 @@ class SongImporter:
             # generate filename and save binary to disk
             self._log(_('generating filename'))
             filename, mp3_path = self._generate_filename_and_path_for_song()
-            os.makedirs(os.path.dirname(mp3_path))
+            try:
+                os.makedirs(os.path.dirname(mp3_path))
+            except OSError as e:
+                if e.errno == errno.EEXIST:
+                    pass
+                else: raise
             
             # create song object
             self._log(_('creating YasoundSong'))

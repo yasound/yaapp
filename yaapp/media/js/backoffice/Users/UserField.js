@@ -1,11 +1,11 @@
-Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
+Yasound.Users.UI.UserField = Ext.extend(Ext.form.TriggerField, {
 
     triggerClass: 'x-form-arrow-trigger',
     resizable: true,
     
     initComponent: function(){
         this.editable = false;
-        Yasound.Backoffice.UI.RadioField.superclass.initComponent.call(this);
+        Yasound.Users.UI.UserField.superclass.initComponent.call(this);
         this.on('specialkey', function(f, e){
             if (e.getKey() == e.ENTER) {
                 this.onTriggerClick();
@@ -23,7 +23,7 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
         if (this.hiddenName && !Ext.isDefined(this.submitValue)) {
             this.submitValue = false;
         }
-        Yasound.Backoffice.UI.RadioField.superclass.onRender.call(this, ct, position);
+        Yasound.Users.UI.UserField.superclass.onRender.call(this, ct, position);
         
         if (this.hiddenName) {
             this.hiddenField = this.el.insertSibling({
@@ -42,13 +42,14 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
     getGrid: function(){
         if (!this.gridPanel) {
             if (!this.gridWidth) {
-                this.gridWidth = Math.max(200, this.width || 200);
+                this.gridWidth = Math.max(550, this.width || 550);
             }
             if (!this.gridHeight) {
                 this.gridHeight = 200;
             }
             this.gridPanel = Ext.ComponentMgr.create({
-            	xtype: 'radiogrid',
+            	xtype: 'usergrid',
+            	checkboxSelect: true,
                 renderTo: Ext.getBody(),
                 singleSelect: true,
                 floating: true,
@@ -60,7 +61,8 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
                 listeners: {
                     hide: this.onGridHide,
                     show: this.onGridShow,
-                    selected: this.onRadioSelected,
+                    selected: this.onUserSelected,
+                    deselected: this.onUserDeselected,
                     scope: this
                 }
             });
@@ -81,7 +83,7 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
     },
     
     initValue: function(){
-        Yasound.Backoffice.UI.RadioField.superclass.initValue.call(this);
+        Yasound.Users.UI.UserField.superclass.initValue.call(this);
         if (this.hiddenField) {
             this.hiddenField.value = Ext.value(Ext.isDefined(this.hiddenValue) ? this.hiddenValue : this.value, '');
         }
@@ -89,7 +91,7 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
     
     onDestroy: function(){
         Ext.destroyMembers(this, 'hiddenField');
-        Yasound.Backoffice.UI.RadioField.superclass.onDestroy.call(this);
+        Yasound.Users.UI.UserField.superclass.onDestroy.call(this);
     },
     
     getName: function(){
@@ -134,17 +136,24 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
         return !this.gridPanel || !this.gridPanel.isVisible();
     },
     
-    setValue: function(v){
+    setValue: function(v, label){
         this.startValue = this.value = v;
         if (this.gridPanel) {
             var n = this.gridPanel.getStore().getById(v);
             if (n) {
-                this.setRawValue(n.text);
+                this.setRawValue(n.data.name);
                 if (this.hiddenField) {
                     this.hiddenField.value = Ext.value(v, '');
                 }
             } else {
-            	this.clearValue();
+            	if (label) {
+                    this.setRawValue(label);
+                    if (this.hiddenField) {
+                        this.hiddenField.value = Ext.value(v, '');
+                    }
+            	} else {
+            		this.clearValue();
+            	}
             }
         }
     },
@@ -153,12 +162,16 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
         return this.value;
     },
     
-    onRadioSelected: function(grid, id, record){
+    onUserSelected: function(grid, id, record){
         this.setRawValue(record.data.name);
         this.value = id;
         this.fireEvent('select', this, record);
         this.collapse();
 		this.hiddenField.value = record.data.id;
-    }
+    },
+
+    onUserDeselected: function(grid){
+    	this.clearValue();
+    },
 });
-Ext.reg('radiofield', Yasound.Backoffice.UI.RadioField);
+Ext.reg('userfield', Yasound.Users.UI.UserField);

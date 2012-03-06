@@ -25,7 +25,6 @@ Yasound.Utils.SimpleStore = function(url, fields) {
         }),
         listeners: {
             beforewrite: function(store, action, records, options, arg){
-                Ext.apply(store.baseParams, additionalParams);
             },
             beforeLoad: function(store, options){
 				if (!options.params.start) {

@@ -1,15 +1,14 @@
-Yasound.Backoffice.Data.SongInstanceStore = function(url) {
+Yasound.Backoffice.Data.YasoundSongStore = function(url) {
 	var fields = ['id', 'name', 'artist_name', 'album_name'];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
 
-Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
+Yasound.Backoffice.UI.YasoundSongColumnModel = function(sm){
     return ([sm, {
         header: gettext('Track'),
         dataIndex: 'name',
         sortable: true,
-        width: 60,
         filterable: true,
         filter: {
             xtype: "textfield",
@@ -19,7 +18,6 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
         header: gettext('Album'),
         dataIndex: 'album_name',
         sortable: true,
-        width: 60,
         filterable: true,
         filter: {
             xtype: "textfield",
@@ -29,7 +27,6 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
         header: gettext('Artist'),
         dataIndex: 'artist_name',
         sortable: true,
-        width: 60,
         filterable: true,
         filter: {
             xtype: "textfield",
@@ -38,7 +35,7 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
     }]);
 };
 
-Yasound.Backoffice.UI.SongInstanceFilters = function(){
+Yasound.Backoffice.UI.YasoundSongFilters = function(){
     return new Ext.ux.grid.GridFilters({
         encode: false,
         local: true,
@@ -55,14 +52,14 @@ Yasound.Backoffice.UI.SongInstanceFilters = function(){
     });
 };
 
-Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
+Yasound.Backoffice.UI.YasoundSongGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelected: false,
-	url: '/yabackoffice/radios/{0}/unmatched/',
+	url: '/yabackoffice/yasound_songs',
     tbar: [],
     initComponent: function(){
         this.addEvents('selected', 'unselected');
         this.pageSize = 25;
-        this.store = Yasound.Backoffice.Data.SongInstanceStore(this.url);
+        this.store = Yasound.Backoffice.Data.YasoundSongStore(this.url);
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
@@ -90,13 +87,14 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.SongInstanceColumnModel(sm)),
+            cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.YasoundSongColumnModel(sm)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
+                autoFill: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [Yasound.Backoffice.UI.SongInstanceFilters(), new Ext.ux.grid.GridHeaderFilters()],
+            plugins: [Yasound.Backoffice.UI.YasoundSongFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
         		show: function(component) {
         			component.calculatePageSize();
@@ -108,17 +106,11 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
-        Yasound.Backoffice.UI.SongInstanceGrid.superclass.initComponent.apply(this, arguments);
-    },
-    refresh: function(radioId) {
-    	this.radioId = radioId;
-    	var url = String.format(this.url, radioId);
-    	this.store.proxy.setUrl(url, true);
-    	this.calculatePageSize();
+        Yasound.Backoffice.UI.YasoundSongGrid.superclass.initComponent.apply(this, arguments);
     },
     calculatePageSize: function() {
-		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+50;
+		var bodyHeight = this.getHeight();
+		var heightOther = 120+30;
 		var rowHeight = 20;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
@@ -126,4 +118,4 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
 		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
 });
-Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);
+Ext.reg('yasoundsonggrid', Yasound.Backoffice.UI.YasoundSongGrid);

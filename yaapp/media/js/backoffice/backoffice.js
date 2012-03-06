@@ -4,6 +4,7 @@ Ext.namespace("Yasound.Radios.UI", "Yasound.Radios.Handler", "Yasound.Radios.Dat
 Ext.namespace("Yasound.Upload.UI", "Yasound.Upload.Handler", "Yasound.Upload.Data");
 Ext.namespace("Yasound.SearchEngine.UI", "Yasound.SearchEngine.Handler", "Yasound.SearchEngine.Data");
 Ext.namespace("Yasound.Invitations.UI", "Yasound.Invitations.Handler", "Yasound.Invitations.Data");
+Ext.namespace("Yasound.Users.UI", "Yasound.Users.Handler", "Yasound.Users.Data");
 Ext.namespace("Yasound.Utils");
 
 

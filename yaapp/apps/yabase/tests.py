@@ -38,6 +38,9 @@ class TestModels(TestCase):
         radio.save()
         self.radio = radio
         
+    def testUUID(self):
+        self.assertTrue(self.radio.uuid is not None)
+        
     def testRadioUser(self):
         connected = RadioUser.objects.get_connected()
         self.assertEquals(len(connected), 0)

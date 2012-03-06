@@ -3,8 +3,8 @@
 //------------------------------------------
 
 Yasound.Backoffice.Data.RadioStore = function() {
-	var fields = ['id', 'name'];
-	var url = '/yabackoffice/radios/';
+	var fields = ['id', 'name', 'creator', 'creator_id', 'creator_profile_id', 'creator_profile'];
+	var url = '/yabackoffice/radios';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -50,17 +50,9 @@ Yasound.Backoffice.UI.RadioFilters = function(){
 Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelect: true,
 	checkboxSelect: true,
-	tbar: [{
-        text: gettext('Refresh'),
-        iconCls: 'silk-arrow-refresh',
-        tooltip: gettext('Refresh'),
-        handler: function(btn, e){
-            var grid = btn.ownerCt.ownerCt;
-            grid.getStore().reload();
-        }
-    }],
+	tbar: [],
     initComponent: function() {
-        this.addEvents('radioselected');
+        this.addEvents('selected', 'deselected');
         this.pageSize = 25;
         this.store = Yasound.Backoffice.Data.RadioStore();
         this.store.pageSize = this.pageSize;
@@ -70,8 +62,11 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('radioselected', this, record.data.id, record);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
+					if (!sm.hasSelection()) {
+						this.grid.fireEvent('deselected', this.grid);
+					}
                 }
             }
         });
@@ -91,6 +86,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
+                autoFill: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
         	plugins: [Yasound.Backoffice.UI.RadioFilters(), new Ext.ux.grid.GridHeaderFilters()],
@@ -108,9 +104,9 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
         Yasound.Backoffice.UI.RadioGrid.superclass.initComponent.apply(this, arguments);
     },
     calculatePageSize: function() {
-		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+50;
-		var rowHeight = 20;
+		var bodyHeight = this.getHeight();
+		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
+		var rowHeight = 21;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
 		this.getBottomToolbar().pageSize = gridRows;
