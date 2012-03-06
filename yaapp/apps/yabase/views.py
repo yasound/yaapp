@@ -1,30 +1,32 @@
 from celery.result import AsyncResult
 from check_request import check_api_key_Authentication, check_http_method
+from decorators import unlock_radio_on_exception
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser, User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
     HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, SongMetadata
+from forms import SelectionForm
+from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
+    SongMetadata
 from task import process_playlists, process_upload_song
 from yaref.models import YasoundSong
 import datetime
+import import_utils
 import json
+import logging
+import os
 import settings as yabase_settings
 import time
-from django.contrib.auth.models import AnonymousUser
-from decorators import unlock_radio_on_exception
-from django.contrib.auth.decorators import login_required
-from forms import SelectionForm
 import uuid
-import os
 import yabase.settings as yabase_settings
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.translation import ugettext_lazy as _
 
-import import_utils
 
-import logging
 logger = logging.getLogger("yaapp.yabase")
 
 
@@ -493,16 +495,25 @@ def upload_song(request, song_id=None):
 
 @login_required
 def upload_song_ajax(request):
+    if not request.user.is_superuser:
+        raise Http404
     radio_id = request.REQUEST.get('radio_id')
     radio_name = request.REQUEST.get('radio_name')
+    creator_profile_id = request.REQUEST.get('creator_profile_id')
+    
     metadata = {
         'radio_id': radio_id
     }
+    global_message = u''
     if radio_name and radio_id:
         radio = Radio.objects.get(id=radio_id)
         radio.name = radio_name
+        if creator_profile_id:
+            user = User.objects.get(userprofile__id=creator_profile_id)
+            radio.creator = user
+            global_message = global_message + _('radio "%s" assigned to "%s"\n') % (radio, user)  
         radio.save()
-        
+             
     
     if 'file' in request.FILES:    
         f = request.FILES['file']
@@ -513,7 +524,6 @@ def upload_song_ajax(request):
         })
         return HttpResponse(json_data, mimetype='text/html')
     else:
-        global_message = ''
         for f in request.FILES.getlist('songs'):
             sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
             global_message = global_message + messages + '\n'

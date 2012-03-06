@@ -1,3 +1,4 @@
+from account.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -15,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm
+from yabackoffice.grids import UserProfileGrid
 from yabase.models import Radio, SongInstance
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
@@ -193,4 +195,18 @@ def yasound_songs(request, song_id=None):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
-    raise Http404    
+    raise Http404   
+
+@csrf_exempt
+@login_required
+def users(request, user_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+    if request.method == 'GET':
+        qs = UserProfile.objects.all()
+        filters = ['name', 'facebook_uid']
+        grid = UserProfileGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    raise Http404 

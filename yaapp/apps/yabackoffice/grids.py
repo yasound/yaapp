@@ -1,3 +1,4 @@
+from account.models import UserProfile
 from extjs import grids
 from yabase.models import SongInstance, Radio
 from yainvitation.models import Invitation
@@ -20,10 +21,12 @@ class RadioGrid(grids.ModelGrid):
     list_mapping=[
             'id',
             'name',
-            'creator'
+            'creator',
             ]
     mapping = {
-            'picture': 'picture_url'
+        'picture': 'picture_url',
+        'creator_id': 'creator__id',
+        'creator_profile_id': 'creator__userprofile__id'
     }
     
 class InvitationGrid(grids.ModelGrid):
@@ -50,4 +53,18 @@ class YasoundSongGrid(grids.ModelGrid):
             'album_name',
             ]
     mapping = {
+    }
+    
+class UserProfileGrid(grids.ModelGrid):
+    model = UserProfile
+    list_mapping=[
+            'id',
+            'name',
+            'account_type',
+            'facebook_uid',
+            'last_authentication_date',
+            ]
+    mapping = {
+            'user_id': 'user__id',
+            'is_superuser': 'user__is_superuser',
     }

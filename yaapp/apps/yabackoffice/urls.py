@@ -10,4 +10,5 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^radios/(?P<radio_id>\d+)$', 'radios'),
     url(r'^yasound_songs$', 'yasound_songs'),
     url(r'^invitations/$', 'invitations'),
+    url(r'^users', 'users'),
 )
