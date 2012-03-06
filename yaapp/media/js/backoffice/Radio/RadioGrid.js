@@ -106,7 +106,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
     calculatePageSize: function() {
 		var bodyHeight = this.getHeight();
 		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
-		var rowHeight = 20;
+		var rowHeight = 21;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
 		this.getBottomToolbar().pageSize = gridRows;
