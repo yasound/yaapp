@@ -3,7 +3,7 @@
 //------------------------------------------
 
 Yasound.Backoffice.Data.RadioStore = function() {
-	var fields = ['id', 'name', 'creator', 'creator_id', 'creator_profile_id'];
+	var fields = ['id', 'name', 'creator', 'creator_id', 'creator_profile_id', 'creator_profile'];
 	var url = '/yabackoffice/radios';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };

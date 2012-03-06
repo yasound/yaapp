@@ -26,6 +26,7 @@ class RadioGrid(grids.ModelGrid):
     mapping = {
         'picture': 'picture_url',
         'creator_id': 'creator__id',
+        'creator_profile': 'creator__userprofile',
         'creator_profile_id': 'creator__userprofile__id'
     }
     
