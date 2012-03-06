@@ -136,7 +136,7 @@ Yasound.Users.UI.UserField = Ext.extend(Ext.form.TriggerField, {
         return !this.gridPanel || !this.gridPanel.isVisible();
     },
     
-    setValue: function(v){
+    setValue: function(v, label){
         this.startValue = this.value = v;
         if (this.gridPanel) {
             var n = this.gridPanel.getStore().getById(v);
@@ -146,7 +146,14 @@ Yasound.Users.UI.UserField = Ext.extend(Ext.form.TriggerField, {
                     this.hiddenField.value = Ext.value(v, '');
                 }
             } else {
-            	this.clearValue();
+            	if (label) {
+                    this.setRawValue(label);
+                    if (this.hiddenField) {
+                        this.hiddenField.value = Ext.value(v, '');
+                    }
+            	} else {
+            		this.clearValue();
+            	}
             }
         }
     },

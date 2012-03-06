@@ -95,7 +95,7 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     fillInFromRecord: function() {
     	this.getForm().findField('radio_name').setValue(this.record.data.name);
     	this.getForm().findField('radio_id').setValue(this.record.data.id);
-    	this.getForm().findField('creator_profile_id').setValue(this.record.data.creator_profile_id);
+    	this.getForm().findField('creator_profile_id').setValue(this.record.data.creator_profile_id, this.record.data.creator);
     }
 });
 Ext.reg('radioform', Yasound.Radios.UI.RadioForm);
