@@ -264,7 +264,12 @@ class SongImporter:
             self._log(_("downloading album cover"))
             if r.status_code == 200:
                 image_data = r.content
-                os.makedirs(os.path.dirname(cover_path))
+                try:
+                    os.makedirs(os.path.dirname(cover_path))
+                except OSError as e:
+                    if e.errno == errno.EEXIST:
+                        pass
+                    else: raise
                 destination = open(cover_path, 'wb')
                 destination.write(image_data)
                 destination.close()  
