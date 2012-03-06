@@ -5,6 +5,7 @@ from django.db.models import signals
 from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
 import datetime
+from datetime import timedelta
 import random
 import settings as yabase_settings
 import string
@@ -345,28 +346,29 @@ class Radio(models.Model):
         return playlist, True
     
     def find_new_song(self):
-        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0)
-        songs = songs_queryset.all()
-        count = len(songs)
-        if count == 0:
+        time_limit = datetime.datetime.now() - timedelta(hours=3)
+        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True, last_play_time__lt=time_limit).order_by('-frequency', 'id')
+        if songs_queryset.count() == 0:
+            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).order_by('-frequency', 'id') # try without time limit
+        if songs_queryset.count() == 0:
+            print 'no available songs'
+            return None 
+
+        frequencies = songs_queryset.values_list('frequency', flat=True)
+        weights = [x for x in frequencies]
+        r = random.random()
+        sum_weight = sum(weights)
+        rnd = r * sum_weight
+        index = -1
+        for i, w in enumerate(weights):
+            rnd -= w
+            if rnd < 0:
+                index = i
+                break
+        if index == -1:
             return None
-        
-        seconds_before_replay = 60 * 60 # at least 60 minutes before replaying the same song
-        now = datetime.datetime.now()
-        i = random.randint(0, count - 1)
-        first = i
-        while songs[i].last_play_time:
-            delta = now - songs[i].last_play_time
-            total_seconds = delta.days * 86400 + delta.seconds
-            if total_seconds > seconds_before_replay:
-                break
-            i += 1
-            i %= count
-            if i == first:
-                break
-        
-        s = songs[i]
-        return s
+        song = songs_queryset.all()[index]
+        return song
     
     def fill_next_songs_queue(self):
         while self.next_songs.count() < RADIO_NEXT_SONGS_COUNT:
@@ -560,8 +562,7 @@ class Radio(models.Model):
         
     class Meta:
         db_name = u'default'
-        
-        
+              
 def update_leaderboard():
     radios = Radio.objects.order_by('-favorites')    
     current_rank = 1
