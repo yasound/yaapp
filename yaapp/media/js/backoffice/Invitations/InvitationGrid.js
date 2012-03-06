@@ -2,7 +2,7 @@
 // Datastore
 //------------------------------------------
 Yasound.Invitations.Data.InvitationStore = function() {
-	var fields = ['id', 'fullname'];
+	var fields = ['id', 'fullname', 'email', 'radio_id', 'radio_name'];
 	var url = '/yabackoffice/invitations/';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
@@ -47,7 +47,7 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 	checkboxSelect: true,
 	
     initComponent: function() {
-        this.addEvents('invitationselected');
+        this.addEvents('selected');
         this.pageSize = 25;
         this.store = Yasound.Invitations.Data.InvitationStore();
         this.store.pageSize = this.pageSize;
@@ -57,8 +57,11 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('invitationselected', this, record.data.id, record.data);							
+                        this.grid.fireEvent('selected', this, record.data.id, record);							
 					}, this);
+					if (!sm.hasSelection()) {
+                        this.grid.fireEvent('deselected', this.grid);							
+					}
                 }
             }
         });
@@ -88,12 +91,29 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-        	plugins: [Yasound.Invitations.UI.InvitationFilters()]
-        
+        	plugins: [Yasound.Invitations.UI.InvitationFilters()],
+        	listeners: {
+        		show: function(component) {
+        			component.calculatePageSize();
+        		},
+        		resize: function(component) {
+        			component.calculatePageSize();
+        		}
+        	}
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Invitations.UI.InvitationGrid.superclass.initComponent.apply(this, arguments);
+    },
+    calculatePageSize: function() {
+		var bodyHeight = this.getHeight();
+		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
+		var rowHeight = 21;
+		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+
+		this.getBottomToolbar().pageSize = gridRows;
+		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
+    
 });
 Ext.reg('invitationgrid', Yasound.Invitations.UI.InvitationGrid);

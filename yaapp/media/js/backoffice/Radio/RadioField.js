@@ -42,7 +42,7 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
     getGrid: function(){
         if (!this.gridPanel) {
             if (!this.gridWidth) {
-                this.gridWidth = Math.max(200, this.width || 200);
+                this.gridWidth = Math.max(450, this.width || 450);
             }
             if (!this.gridHeight) {
                 this.gridHeight = 200;
@@ -134,17 +134,24 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
         return !this.gridPanel || !this.gridPanel.isVisible();
     },
     
-    setValue: function(v){
+    setValue: function(v, label){
         this.startValue = this.value = v;
         if (this.gridPanel) {
             var n = this.gridPanel.getStore().getById(v);
             if (n) {
-                this.setRawValue(n.text);
+                this.setRawValue(n.data.name);
                 if (this.hiddenField) {
                     this.hiddenField.value = Ext.value(v, '');
                 }
             } else {
-            	this.clearValue();
+            	if (label) {
+                    this.setRawValue(label);
+                    if (this.hiddenField) {
+                        this.hiddenField.value = Ext.value(v, '');
+                    }
+            	} else {
+            		this.clearValue();
+            	}
             }
         }
     },

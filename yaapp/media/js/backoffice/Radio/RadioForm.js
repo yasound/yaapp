@@ -93,6 +93,9 @@ Yasound.Radios.UI.RadioForm = Ext.extend(Ext.form.FormPanel, {
     	this.fillInFromRecord();
     },
     fillInFromRecord: function() {
+    	if (!this.record) {
+    		return;
+    	}
     	this.getForm().findField('radio_name').setValue(this.record.data.name);
     	this.getForm().findField('radio_id').setValue(this.record.data.id);
     	this.getForm().findField('creator_profile_id').setValue(this.record.data.creator_profile_id, this.record.data.creator_profile);

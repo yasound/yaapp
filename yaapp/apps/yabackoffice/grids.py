@@ -41,7 +41,8 @@ class InvitationGrid(grids.ModelGrid):
             'sent'
             ]
     mapping = {
-            'radio_name': 'radio__name'
+            'radio_name': 'radio__name',
+            'radio_id': 'radio__id',
     }
     
     

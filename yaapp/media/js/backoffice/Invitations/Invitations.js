@@ -12,19 +12,25 @@
 
 
 Yasound.Invitations.UI.Panel = function() {
-	var invitationGrid = Ext.ComponentMgr.create({
-		title: gettext('Invitations'),
-		xtype:'invitationgrid',
-		region:'west',
-		width:400,
-		split:true
-	});
 	
 	var invitationForm = Ext.ComponentMgr.create({
 		xtype:'invitationform',
 		region:'center'
 	});
-	
+
+	var invitationGrid = Ext.ComponentMgr.create({
+		title: gettext('Invitations'),
+		xtype:'invitationgrid',
+		region:'west',
+		width:400,
+		split:true,
+		listeners: {
+			selected: function(grid, id, record) {
+				invitationForm.updateForm(record);
+			}
+		}
+	});
+
 	return {
 		xtype : 'panel',
 		title : gettext('Invitations management'),
