@@ -110,9 +110,15 @@ Yasound.Radios.UI.RadiosPanel = function() {
 		width:350,
 		height:300,
 		listeners: {
-			uploadSuccess: function() {
+			uploadSuccess: function(fp, message) {
 				songGrid.getStore().reload();
 				Ext.getCmp('radios-radiogrid').getStore().reload();
+				Yasound.Utils.DisplayLogWindow(message);
+			},
+			uploadFailure: function(fp, message) {
+				songGrid.getStore().reload();
+				Ext.getCmp('radios-radiogrid').getStore().reload();
+				Yasound.Utils.DisplayLogWindow(message);
 			}
 		}
 	})

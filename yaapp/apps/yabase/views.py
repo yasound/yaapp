@@ -506,7 +506,7 @@ def upload_song_ajax(request):
     
     if 'file' in request.FILES:    
         f = request.FILES['file']
-        sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True)
+        sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': unicode(messages)
@@ -515,7 +515,7 @@ def upload_song_ajax(request):
     else:
         global_message = ''
         for f in request.FILES.getlist('songs'):
-            sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True)
+            sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
             global_message = global_message + messages + '\n'
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
