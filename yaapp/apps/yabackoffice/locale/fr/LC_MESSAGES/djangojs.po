@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 22:49+0100\n"
+"POT-Creation-Date: 2012-03-06 14:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,34 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/backoffice/backoffice.js:63
-#: js/backoffice/Radio/Radios.js:220
+#: js/backoffice/backoffice.js:64
+#: js/backoffice/Radio/Radios.js:226
 #: js/backoffice/Radio/UnmatchedSongs.js:21
 msgid "Radios"
 msgstr "Radios"
 
-#: js/backoffice/backoffice.js:65
+#: js/backoffice/backoffice.js:66
 msgid "Song management"
 msgstr "Gestion des chansons"
 
-#: js/backoffice/backoffice.js:79
+#: js/backoffice/backoffice.js:80
 #: js/backoffice/Radio/UnmatchedSongs.js:38
 msgid "Unmatched songs"
 msgstr "Chansons non détectées"
 
-#: js/backoffice/backoffice.js:82
+#: js/backoffice/backoffice.js:83
 msgid "Upload new songs to yasound"
 msgstr "Envoyer les nouvelles chansons vers yasound"
 
-#: js/backoffice/backoffice.js:95
+#: js/backoffice/backoffice.js:96
 msgid "Search engine"
 msgstr "Moteur de recherche"
 
-#: js/backoffice/backoffice.js:97
+#: js/backoffice/backoffice.js:98
 msgid "Search engine tools"
 msgstr "Outils de recherche"
 
-#: js/backoffice/backoffice.js:121
+#: js/backoffice/backoffice.js:122
 #: js/backoffice/Invitations/Invitations.js:15
 msgid "Invitations"
 msgstr "Invitations"
@@ -67,18 +67,19 @@ msgid "Save"
 msgstr "Sauver"
 
 #: js/backoffice/Invitations/InvitationForm.js:48
-#: js/backoffice/Radio/RadioForm.js:50
+#: js/backoffice/Radio/RadioForm.js:58
 #: js/backoffice/Upload/Upload.js:41
 msgid "Sending informations..."
 msgstr "Transmission des informations..."
 
 #: js/backoffice/Invitations/InvitationForm.js:69
-#: js/backoffice/Radio/RadioForm.js:71
+#: js/backoffice/Radio/RadioForm.js:79
 msgid "Cancel"
 msgstr "Annuler"
 
 #: js/backoffice/Invitations/InvitationGrid.js:18
 #: js/backoffice/Radio/RadioGrid.js:19
+#: js/backoffice/Users/UserGrid.js:27
 msgid "Name"
 msgstr "Nom"
 
@@ -90,14 +91,16 @@ msgstr "Rafraichir"
 #: js/backoffice/Invitations/InvitationGrid.js:79
 #: js/backoffice/Radio/RadioGrid.js:79
 #: js/backoffice/Radio/SongInstanceGrid.js:88
-#: js/backoffice/Radio/YasoundSongGrid.js:88
+#: js/backoffice/Radio/YasoundSongGrid.js:85
+#: js/backoffice/Users/UserGrid.js:109
 msgid "Displaying {0} - {1} of {2}"
 msgstr "Affichage de {0} - {1} sur {2}"
 
 #: js/backoffice/Invitations/InvitationGrid.js:80
 #: js/backoffice/Radio/RadioGrid.js:80
 #: js/backoffice/Radio/SongInstanceGrid.js:89
-#: js/backoffice/Radio/YasoundSongGrid.js:89
+#: js/backoffice/Radio/YasoundSongGrid.js:86
+#: js/backoffice/Users/UserGrid.js:110
 msgid "Nothing to display"
 msgstr "Rien à afficher"
 
@@ -118,22 +121,30 @@ msgid "Radio name"
 msgstr "Nom de la radio"
 
 #: js/backoffice/Radio/RadioForm.js:34
+msgid "Choose a user"
+msgstr "Sélectionner un utilisateur"
+
+#: js/backoffice/Radio/RadioForm.js:35
+msgid "User"
+msgstr "Utilisateur"
+
+#: js/backoffice/Radio/RadioForm.js:42
 msgid "Select files or folder"
 msgstr "Sélectionner des fichiers ou un répertoire"
 
-#: js/backoffice/Radio/RadioForm.js:35
+#: js/backoffice/Radio/RadioForm.js:43
 #: js/backoffice/Upload/Upload.js:96
 msgid "Upload songs"
 msgstr "Importer des chansons"
 
-#: js/backoffice/Radio/RadioForm.js:44
+#: js/backoffice/Radio/RadioForm.js:52
 msgid "Submit"
 msgstr "Valider"
 
 #: js/backoffice/Radio/Radios.js:13
 #: js/backoffice/Radio/Radios.js.py:44
-#: js/backoffice/Radio/Radios.js:128
-#: js/backoffice/Radio/Radios.js.py:150
+#: js/backoffice/Radio/Radios.js:134
+#: js/backoffice/Radio/Radios.js.py:156
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -153,35 +164,35 @@ msgstr "Chansons assignées à la radio"
 msgid "Remove from radio"
 msgstr "Supprimer de la radio"
 
-#: js/backoffice/Radio/Radios.js:124
+#: js/backoffice/Radio/Radios.js:130
 msgid "Create new radio"
 msgstr "Créer une nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:129
+#: js/backoffice/Radio/Radios.js:135
 msgid "Do you want to create new radio ?"
 msgstr "Voulez-vous créer une radio ?"
 
-#: js/backoffice/Radio/Radios.js:136
+#: js/backoffice/Radio/Radios.js:142
 msgid "New radio"
 msgstr "Nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:144
+#: js/backoffice/Radio/Radios.js:150
 msgid "Delete"
 msgstr "Supprimer"
 
-#: js/backoffice/Radio/Radios.js:151
+#: js/backoffice/Radio/Radios.js:157
 msgid "Do you want to deleted radio ?"
 msgstr "Voulez-vous supprimer la radio ?"
 
-#: js/backoffice/Radio/Radios.js:186
+#: js/backoffice/Radio/Radios.js:192
 msgid "Available songs"
 msgstr "Chansons disponibles"
 
-#: js/backoffice/Radio/Radios.js:190
+#: js/backoffice/Radio/Radios.js:196
 msgid "Add to radio"
 msgstr "Ajouter à la radio"
 
-#: js/backoffice/Radio/Radios.js:213
+#: js/backoffice/Radio/Radios.js:219
 msgid "Radios management"
 msgstr "Gestion des radios"
 
@@ -191,17 +202,17 @@ msgid "Track"
 msgstr "Piste"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:19
-#: js/backoffice/Radio/YasoundSongGrid.js:19
+#: js/backoffice/Radio/YasoundSongGrid.js:18
 msgid "Album"
 msgstr "Album"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:29
-#: js/backoffice/Radio/YasoundSongGrid.js:29
+#: js/backoffice/Radio/YasoundSongGrid.js:27
 msgid "Artist"
 msgstr "Artiste"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:97
-#: js/backoffice/Radio/YasoundSongGrid.js:97
+#: js/backoffice/Radio/YasoundSongGrid.js:95
 #, perl-brace-format
 msgid ""
 "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"elements\" : "
@@ -232,4 +243,20 @@ msgstr "Résultats de l'import"
 #: js/backoffice/Upload/Upload.js:112
 msgid "Upload started\n"
 msgstr "Import démarré\n"
+
+#: js/backoffice/Users/UserGrid.js:37
+msgid "Facebook UID"
+msgstr "UID facebook"
+
+#: js/backoffice/Users/UserGrid.js:47
+msgid "Last authentication"
+msgstr "Dernière authentification"
+
+#: js/backoffice/Users/UserGrid.js:54
+msgid "Superuser?"
+msgstr "Superutilisateur ?"
+
+#: js/backoffice/ux/LoggerWindow.js:14
+msgid "Close"
+msgstr "Fermer"
 
