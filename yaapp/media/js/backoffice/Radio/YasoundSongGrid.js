@@ -110,15 +110,9 @@ Yasound.Backoffice.UI.YasoundSongGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Backoffice.UI.YasoundSongGrid.superclass.initComponent.apply(this, arguments);
     },
-    refresh: function(radioId) {
-    	this.radioId = radioId;
-    	var url = String.format(this.url, radioId);
-    	this.store.proxy.setUrl(url, true);
-    	this.calculatePageSize();
-    },
     calculatePageSize: function() {
-		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+50;
+		var bodyHeight = this.getHeight();
+		var heightOther = 120+30;
 		var rowHeight = 20;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
