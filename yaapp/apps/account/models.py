@@ -66,6 +66,14 @@ class UserProfile(models.Model):
         return self.user.username
     
     @property
+    def fullname(self):
+        if self.name:
+            return self.name
+        
+        return self.user.username
+        
+    
+    @property
     def subscription(self):
         if self.user.username == '846054191@facebook': # mat
             return SUBSCRIPTION_PREMIUM

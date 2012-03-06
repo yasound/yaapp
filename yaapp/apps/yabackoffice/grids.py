@@ -59,12 +59,12 @@ class UserProfileGrid(grids.ModelGrid):
     model = UserProfile
     list_mapping=[
             'id',
-            'name',
             'account_type',
             'facebook_uid',
             'last_authentication_date',
             ]
     mapping = {
+            'name': 'fullname',
             'user_id': 'user__id',
             'is_superuser': 'user__is_superuser',
     }
