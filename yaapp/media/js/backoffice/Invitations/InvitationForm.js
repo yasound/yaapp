@@ -46,7 +46,8 @@ Yasound.Invitations.UI.InvitationForm = Ext.extend(Ext.form.FormPanel, {
 					if (fp.getForm().isValid()) {
 						those.fireEvent('uploadStarted', fp);
 						fp.getForm().submit({
-							url : '/api/v1/upload_song_ajax/',
+							url : '/yabackoffice/invitations/save/',
+							method: 'POST',
 							timeout: 1000 * 60 * 5,
 							waitMsg : gettext('Sending informations...'),
 							success : function(fp, o) {

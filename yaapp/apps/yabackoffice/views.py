@@ -175,6 +175,14 @@ def invitations(request):
     
 @csrf_exempt
 @login_required
+def invitation_save(request):
+    if not request.user.is_superuser:
+        raise Http404
+    raise Http404
+
+
+@csrf_exempt
+@login_required
 def yasound_songs(request, song_id=None):
     if not request.user.is_superuser:
         raise Http404()
@@ -210,3 +218,4 @@ def users(request, user_id=None):
         resp = utils.JsonResponse(jsonr)
         return resp
     raise Http404 
+
