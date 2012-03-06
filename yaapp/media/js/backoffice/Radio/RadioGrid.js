@@ -3,7 +3,7 @@
 //------------------------------------------
 
 Yasound.Backoffice.Data.RadioStore = function() {
-	var fields = ['id', 'name'];
+	var fields = ['id', 'name', 'creator', 'creator_id', 'creator_profile_id'];
 	var url = '/yabackoffice/radios';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
@@ -104,8 +104,8 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
         Yasound.Backoffice.UI.RadioGrid.superclass.initComponent.apply(this, arguments);
     },
     calculatePageSize: function() {
-		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+50;
+		var bodyHeight = this.getHeight();
+		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
 		var rowHeight = 20;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
