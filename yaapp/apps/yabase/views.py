@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseNotAllowed, HttpResponseBadRequest
+    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -563,6 +563,23 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
+
+def song_instance_cover(request, song_instance_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    song_instance = get_object_or_404(SongInstance, id=song_instance_id)
+    yasound_song = get_object_or_404(YasoundSong, id=song_instance.metadata.yasound_song_id)
+    album = yasound_song.album
+    if not album:
+        return HttpResponseNotFound()
+#    album = get_object_or_404(YasoundAlbum, id=album_id)
+    url = album.cover_url
+    if not url:
+        url = '/media/images/logo.png'
+    return HttpResponseRedirect(url)
     
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):

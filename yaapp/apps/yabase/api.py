@@ -655,7 +655,7 @@ class MatchedSongResource(ModelResource):
 #            cover = yasound_song.cover_url
 #        else:
 #            cover = None
-	cover = None
+        cover = None
         bundle.data['cover'] = cover
     
         return bundle
