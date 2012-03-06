@@ -50,9 +50,9 @@ Yasound.Users.UI.UserField = Ext.extend(Ext.form.TriggerField, {
             this.gridPanel = Ext.ComponentMgr.create({
             	xtype: 'usergrid',
             	title: gettext('Please select user'),
-            	checkboxSelect: true,
                 renderTo: Ext.getBody(),
                 singleSelect: true,
+            	checkboxSelect: false,
                 floating: true,
                 autoScroll: true,
                 minWidth: 200,
