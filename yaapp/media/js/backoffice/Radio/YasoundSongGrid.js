@@ -9,7 +9,6 @@ Yasound.Backoffice.UI.YasoundSongColumnModel = function(sm){
         header: gettext('Track'),
         dataIndex: 'name',
         sortable: true,
-        width: 60,
         filterable: true,
         filter: {
             xtype: "textfield",
@@ -19,7 +18,6 @@ Yasound.Backoffice.UI.YasoundSongColumnModel = function(sm){
         header: gettext('Album'),
         dataIndex: 'album_name',
         sortable: true,
-        width: 60,
         filterable: true,
         filter: {
             xtype: "textfield",
@@ -29,7 +27,6 @@ Yasound.Backoffice.UI.YasoundSongColumnModel = function(sm){
         header: gettext('Artist'),
         dataIndex: 'artist_name',
         sortable: true,
-        width: 60,
         filterable: true,
         filter: {
             xtype: "textfield",
@@ -94,6 +91,7 @@ Yasound.Backoffice.UI.YasoundSongGrid = Ext.extend(Ext.grid.GridPanel, {
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
+                autoFill: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
             plugins: [Yasound.Backoffice.UI.YasoundSongFilters(), new Ext.ux.grid.GridHeaderFilters()],
