@@ -156,7 +156,7 @@ Ext.onReady(function(){
     var viewport = new Ext.Viewport({
         layout: 'fit',
         listeners: {
-            afterrender: function(component){
+            beforerender: function(component){
                 var params = document.URL.split('#');
                 if (params.length > 1) {
                     var token = params[1];
