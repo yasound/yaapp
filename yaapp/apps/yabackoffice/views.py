@@ -169,7 +169,11 @@ def invitations(request):
     if request.method == 'GET':
         qs = Invitation.objects.all()
         grid = InvitationGrid()
-        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        filters = ['fullname', 
+                   'email', 
+                   ('radio', 'radio__name'),
+                   ('user_profile',  'user__profile__name')]
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
         return resp
     

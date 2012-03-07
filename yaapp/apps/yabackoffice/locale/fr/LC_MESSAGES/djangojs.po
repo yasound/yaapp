@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-06 14:54+0100\n"
+"POT-Creation-Date: 2012-03-07 10:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,33 +46,33 @@ msgid "Search engine tools"
 msgstr "Outils de recherche"
 
 #: js/backoffice/backoffice.js:122
-#: js/backoffice/Invitations/Invitations.js:15
+#: js/backoffice/Invitations/Invitations.js:21
 msgid "Invitations"
 msgstr "Invitations"
 
-#: js/backoffice/Invitations/InvitationForm.js:24
+#: js/backoffice/Invitations/InvitationForm.js:27
 msgid "Enter name of VIP"
 msgstr "Entrez le nom du VIP"
 
-#: js/backoffice/Invitations/InvitationForm.js:30
+#: js/backoffice/Invitations/InvitationForm.js:33
 msgid "Enter mail of VIP"
 msgstr "Entrez le mail du VIP"
 
-#: js/backoffice/Invitations/InvitationForm.js:37
+#: js/backoffice/Invitations/InvitationForm.js:40
 msgid "Please choose a radio"
 msgstr "Veuillez choisir une radio"
 
-#: js/backoffice/Invitations/InvitationForm.js:41
+#: js/backoffice/Invitations/InvitationForm.js:44
 msgid "Save"
 msgstr "Sauver"
 
-#: js/backoffice/Invitations/InvitationForm.js:48
+#: js/backoffice/Invitations/InvitationForm.js:52
 #: js/backoffice/Radio/RadioForm.js:58
 #: js/backoffice/Upload/Upload.js:41
 msgid "Sending informations..."
 msgstr "Transmission des informations..."
 
-#: js/backoffice/Invitations/InvitationForm.js:69
+#: js/backoffice/Invitations/InvitationForm.js:73
 #: js/backoffice/Radio/RadioForm.js:79
 msgid "Cancel"
 msgstr "Annuler"
@@ -83,32 +83,32 @@ msgstr "Annuler"
 msgid "Name"
 msgstr "Nom"
 
-#: js/backoffice/Invitations/InvitationGrid.js:67
-#: js/backoffice/Invitations/InvitationGrid.js:69
+#: js/backoffice/Invitations/InvitationGrid.js:70
+#: js/backoffice/Invitations/InvitationGrid.js:72
 msgid "Refresh"
 msgstr "Rafraichir"
 
-#: js/backoffice/Invitations/InvitationGrid.js:79
+#: js/backoffice/Invitations/InvitationGrid.js:82
 #: js/backoffice/Radio/RadioGrid.js:79
 #: js/backoffice/Radio/SongInstanceGrid.js:88
 #: js/backoffice/Radio/YasoundSongGrid.js:85
-#: js/backoffice/Users/UserGrid.js:109
+#: js/backoffice/Users/UserGrid.js:115
 msgid "Displaying {0} - {1} of {2}"
 msgstr "Affichage de {0} - {1} sur {2}"
 
-#: js/backoffice/Invitations/InvitationGrid.js:80
+#: js/backoffice/Invitations/InvitationGrid.js:83
 #: js/backoffice/Radio/RadioGrid.js:80
 #: js/backoffice/Radio/SongInstanceGrid.js:89
 #: js/backoffice/Radio/YasoundSongGrid.js:86
-#: js/backoffice/Users/UserGrid.js:110
+#: js/backoffice/Users/UserGrid.js:116
 msgid "Nothing to display"
 msgstr "Rien à afficher"
 
-#: js/backoffice/Invitations/Invitations.js:29
+#: js/backoffice/Invitations/Invitations.js:35
 msgid "Invitations management"
 msgstr "Gestion des invitations"
 
-#: js/backoffice/Invitations/Invitations.js:34
+#: js/backoffice/Invitations/Invitations.js:40
 msgid "New invitation"
 msgstr "Nouvelle invitation"
 
@@ -244,6 +244,10 @@ msgstr "Résultats de l'import"
 msgid "Upload started\n"
 msgstr "Import démarré\n"
 
+#: js/backoffice/Users/UserField.js:52
+msgid "Please select user"
+msgstr "Veuillez sélectionner un utilisateur"
+
 #: js/backoffice/Users/UserGrid.js:37
 msgid "Facebook UID"
 msgstr "UID facebook"
@@ -255,6 +259,14 @@ msgstr "Dernière authentification"
 #: js/backoffice/Users/UserGrid.js:54
 msgid "Superuser?"
 msgstr "Superutilisateur ?"
+
+#: js/backoffice/Users/UserGrid.js:60
+msgid "Yes"
+msgstr "Oui"
+
+#: js/backoffice/Users/UserGrid.js:62
+msgid "No"
+msgstr "Non"
 
 #: js/backoffice/ux/LoggerWindow.js:14
 msgid "Close"

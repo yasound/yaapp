@@ -51,9 +51,9 @@ class Invitation(models.Model):
     fullname = models.CharField(_('Recipient fullname'), max_length=255)
     user = models.OneToOneField(User, verbose_name=_('user'), blank=True, null=True)
     email = models.CharField(_('email'), max_length=255, unique=True)
-    key = models.CharField(_('key'), max_length=40, unique=True)
+    key = models.CharField(_('key'), max_length=40, unique=True, blank=True)
     radio = models.ForeignKey(Radio)
-    sent = models.DateTimeField(_('sent date'))
+    sent = models.DateTimeField(_('sent date'), null=True, blank=True)
     
     def __unicode__(self):
         return self.email

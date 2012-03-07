@@ -2,7 +2,18 @@
 // Datastore
 //------------------------------------------
 Yasound.Invitations.Data.InvitationStore = function() {
-	var fields = ['id', 'fullname', 'email', 'radio_id', 'radio_name'];
+	var fields = [
+	  'id', 
+	  'fullname', 
+	  'email', 
+	  'radio_id', 
+	  'radio', {
+		name: 'sent',
+		type: 'date',
+		dateFormat: 'Y-m-d H:i:s'
+	  }, 
+	  'user_profile'
+	];
 	var url = '/yabackoffice/invitations/';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
@@ -14,13 +25,56 @@ Yasound.Invitations.Data.InvitationStore = function() {
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Invitations.UI.InvitationColumnModel = function(sm) {
+Yasound.Invitations.UI.InvitationColumnModel = function(sm, hideUser, hideSent) {
 	var cm = [{
         header: gettext('Name'),
         dataIndex: 'fullname',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'fullname'
+        }        	
+    }, {
+        header: gettext('Email'),
+        dataIndex: 'email',
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'email'
+        }        	
+    }, {
+        header: gettext('Radio'),
+        dataIndex: 'radio',
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'radio'
+        }        	
+    }, {
+        header: gettext('Associated user'),
+        dataIndex: 'user_profile',
+        hidden: hideUser,
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'user_profile'
+        }        	
+    }, {
+        header: gettext('Sent at'),
+        dataIndex: 'sent',
+        hidden: hideSent,
+        xtype: 'datecolumn',
+        format: 'd/m/Y H:i:s',
+        sortable: true,
+        width: 50
     }];
 	
 	if (sm) {
@@ -45,6 +99,8 @@ Yasound.Invitations.UI.InvitationFilters = function(){
 Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelect: true,
 	checkboxSelect: true,
+	hideColumnUser: true,
+	hideColumnSent: true,
 	
     initComponent: function() {
         this.addEvents('selected');
@@ -85,18 +141,22 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Invitations.UI.InvitationColumnModel(this.checkboxSelect ? sm : null)),
+            cm: new Ext.grid.ColumnModel(Yasound.Invitations.UI.InvitationColumnModel(this.checkboxSelect ? sm : null,
+            		this.hideColumnUser, this.hideColumnSent)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-        	plugins: [Yasound.Invitations.UI.InvitationFilters()],
+        	plugins: [Yasound.Invitations.UI.InvitationFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
         		show: function(component) {
         			component.calculatePageSize();
         		},
         		resize: function(component) {
+        			component.calculatePageSize();
+        		},
+        		expand: function(component) {
         			component.calculatePageSize();
         		}
         	}
@@ -109,10 +169,13 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 		var bodyHeight = this.getHeight();
 		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
 		var rowHeight = 21;
-		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
-
-		this.getBottomToolbar().pageSize = gridRows;
-		this.getStore().reload({ params:{ start:0, limit:gridRows } });
+		var pageSize = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+		if (this.pageSize != pageSize) {
+			this.getBottomToolbar().pageSize = pageSize;
+			this.getStore().reload({ params:{ start:0, limit:pageSize } });
+			
+			this.pageSize = pageSize;
+		}
     }
     
 });
