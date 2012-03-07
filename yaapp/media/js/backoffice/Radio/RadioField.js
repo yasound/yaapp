@@ -42,15 +42,16 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
     getGrid: function(){
         if (!this.gridPanel) {
             if (!this.gridWidth) {
-                this.gridWidth = Math.max(450, this.width || 450);
+                this.gridWidth = Math.max(500, this.width || 500);
             }
             if (!this.gridHeight) {
-                this.gridHeight = 200;
+                this.gridHeight = 400;
             }
             this.gridPanel = Ext.ComponentMgr.create({
             	xtype: 'radiogrid',
                 renderTo: Ext.getBody(),
                 singleSelect: true,
+            	checkboxSelect: false,
                 floating: true,
                 autoScroll: true,
                 minWidth: 200,
