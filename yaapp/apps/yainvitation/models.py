@@ -12,6 +12,15 @@ import datetime
 from random import random
 
 class InvitationManager(models.Manager):
+    def pending(self):
+        return self.filter(sent__isnull=True)
+
+    def sent(self):
+        return self.filter(sent__isnull=False, user__isnull=True)
+    
+    def accepted(self):
+        return self.filter(sent__isnull=False, user__isnull=False)
+        
     def send_invitation(self, fullname, email, radio):
         salt = sha_constructor(str(random())).hexdigest()[:5]
         key = sha_constructor(salt + email).hexdigest()

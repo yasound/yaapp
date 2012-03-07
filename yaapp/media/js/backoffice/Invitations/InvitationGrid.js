@@ -1,7 +1,7 @@
 //------------------------------------------
 // Datastore
 //------------------------------------------
-Yasound.Invitations.Data.InvitationStore = function() {
+Yasound.Invitations.Data.InvitationStore = function(url) {
 	var fields = [
 	  'id', 
 	  'fullname', 
@@ -14,7 +14,6 @@ Yasound.Invitations.Data.InvitationStore = function() {
 	  }, 
 	  'user_profile'
 	];
-	var url = '/yabackoffice/invitations/';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -101,11 +100,12 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 	checkboxSelect: true,
 	hideColumnUser: true,
 	hideColumnSent: true,
+	url: '/yabackoffice/invitations/',
 	
     initComponent: function() {
         this.addEvents('selected');
         this.pageSize = 25;
-        this.store = Yasound.Invitations.Data.InvitationStore();
+        this.store = Yasound.Invitations.Data.InvitationStore(this.url);
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
@@ -150,9 +150,6 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
             }),
         	plugins: [Yasound.Invitations.UI.InvitationFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
-        		show: function(component) {
-        			component.calculatePageSize();
-        		},
         		resize: function(component) {
         			component.calculatePageSize();
         		},

@@ -163,11 +163,21 @@ def radios(request, radio_id=None):
 
 @csrf_exempt
 @login_required
-def invitations(request):
+def invitations(request, type='all'):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
-        qs = Invitation.objects.all()
+        if type == 'all':
+            qs = Invitation.objects.all()
+        elif type == 'pending':
+            qs = Invitation.objects.pending()
+        elif type == 'sent':
+            qs = Invitation.objects.sent()
+        elif type == 'accepted':
+            qs = Invitation.objects.accepted()
+        else:
+            qs = Invitation.objects.all()
+            
         grid = InvitationGrid()
         filters = ['fullname', 
                    'email', 
@@ -182,6 +192,24 @@ def invitations(request):
 def invitation_save(request):
     if not request.user.is_superuser:
         raise Http404
+    if request.method == 'POST':
+        invitation_id = request.REQUEST.get('id')
+        fullname = request.REQUEST.get('fullname')
+        email = request.REQUEST.get('email')
+        radio_id = request.REQUEST.get('radio_id')
+        
+        invitation = get_object_or_404(Invitation, id=invitation_id)
+        invitation.fullname = fullname
+        invitation.email = email
+        invitation.radio_id = radio_id
+        invitation.save()
+
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+        
     raise Http404
 
 
