@@ -82,23 +82,18 @@ def set_radio_picture(request, radio_id):
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
-    d = datetime.datetime.now()
-    filename = unicode(d) + '.png'
+    filename = radio.build_picture_filename()
 
-#    old_picture = radio.picture
-#    if old_picture:
-#        print 'remove old picture file'
-#        old_picture.delete()
-    
+    # todo: delete old file
     radio.picture.save(filename, f, save=True)
     
     # for now, set also the UserProfile picture
     userprofile = radio.creator.userprofile
-    userprofile.picture = radio.picture
-    userprofile.save()
+    # todo: delete old file
+    filename = userprofile.build_picture_filename()
+    userprofile.picture.save(filename, f, save=True)
 
     res = 'picture OK for radio: %s' % unicode(radio)
-    print 'set_radio_picture: OK (%s)' % res
     return HttpResponse(res)
 
 @csrf_exempt

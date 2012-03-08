@@ -578,6 +578,10 @@ class Radio(models.Model):
     
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_radio(self, upsert, insert)
+    
+    def build_picture_filename(self):
+        filename = 'radio_%d_picture.png' % self.id
+        return filename
         
     class Meta:
         db_name = u'default'

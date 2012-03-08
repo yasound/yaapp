@@ -236,6 +236,10 @@ class UserProfile(models.Model):
         if update_mongo:
             self.build_fuzzy_index(upsert=True)
         
+    def build_picture_filename(self):
+        filename = 'userprofile_%d_picture.png' % self.id
+        return filename
+        
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
