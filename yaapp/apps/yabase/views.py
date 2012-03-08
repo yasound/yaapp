@@ -573,7 +573,7 @@ def song_instance_cover(request, song_instance_id):
 #    album = get_object_or_404(YasoundAlbum, id=album_id)
     url = album.cover_url
     if not url:
-        url = '/media/images/logo.png'
+        url = '/media/images/default_image.png'
     return HttpResponseRedirect(url)
     
 
