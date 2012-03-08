@@ -374,7 +374,7 @@ class Radio(models.Model):
             return None 
 
         frequencies = songs_queryset.values_list('frequency', flat=True)
-        weights = [x for x in frequencies]
+        weights = [x*x for x in frequencies] # use frequency * frequency to have high frequencies very differnet from low frequencies
         r = random.random()
         sum_weight = sum(weights)
         rnd = r * sum_weight
