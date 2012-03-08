@@ -454,7 +454,7 @@ class Radio(models.Model):
         bundle.data['likes'] = likes
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
-        bundle.data['stream_url'] = self.stream_url()
+        bundle.data['stream_url'] = self.stream_url
         
     def update_with_data(self, data):
         if 'description' in data:
