@@ -118,7 +118,8 @@ def radio_remove_duplicate_songs(request, radio_id):
         raise Http404()
     radio = get_object_or_404(Radio, id=radio_id)
     if request.method == 'POST':
-        qs = SongInstance.objects.filter(playlist__radio=radio).order_by('metadata')
+        playlist, _created = radio.get_or_create_default_playlist()
+        qs = SongInstance.objects.filter(playlist=playlist).order_by('metadata')
         duplicates = []
         prev_metadata = None
         for si in qs:
