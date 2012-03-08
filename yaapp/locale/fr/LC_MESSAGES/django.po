@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-18 23:26+0100\n"
+"POT-Creation-Date: 2012-03-08 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,209 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
+#: templates/404.html:8
+msgid "Error 404"
+msgstr "Erreur 404"
+
+#: templates/404.html:9
+msgid "Document not found."
+msgstr "Document introuvable."
+
+#: templates/500.html:8
+msgid "Error 500"
+msgstr "Erreur 500"
+
+#: templates/500.html:9
+msgid "Internal error."
+msgstr "Erreur interne."
+
+#: templates/account/login.html:4
+#: templates/web/menu.html:16
+msgid "Login"
+msgstr "Se connecter"
+
+#: templates/account/login.html:12
+msgid "Login using:"
+msgstr "Se connecter en utilisant :"
+
+#: templates/web/base.html:7
+#: templates/web/favorite.html:6
+#: templates/web/favorites.html:6
+#: templates/web/friends.html:6
+#: templates/web/selections.html:6
 #: templates/yabase/listen.html:7
 #: templates/yabase/listen.html.py:52
 msgid "Mute"
 msgstr "Couper le son"
 
+#: templates/web/base.html:8
+#: templates/web/favorite.html:7
+#: templates/web/favorites.html:7
+#: templates/web/friends.html:7
+#: templates/web/selections.html:7
 #: templates/yabase/listen.html:8
 msgid "Unmute"
 msgstr "Rétablir le son"
 
+#: templates/web/base.html:9
+#: templates/web/favorite.html:8
+#: templates/web/favorites.html:8
+#: templates/web/friends.html:8
+#: templates/web/selections.html:8
 #: templates/yabase/listen.html:9
 #: templates/yabase/listen.html.py:49
 msgid "Play"
 msgstr "Jouer"
 
+#: templates/web/base.html:10
+#: templates/web/favorite.html:9
+#: templates/web/favorites.html:9
+#: templates/web/friends.html:9
+#: templates/web/selections.html:9
 #: templates/yabase/listen.html:10
 msgid "Stop"
 msgstr "Arrêter"
 
+#: templates/web/favorite.html:16
+#: templates/web/favorites.html:17
+#: templates/web/friends.html:17
+#: templates/web/my_radio.html:3
+#: templates/web/selections.html:17
 #: templates/yabase/listen.html:17
 msgid "Listening to"
 msgstr "Ecoute de"
+
+#: templates/web/favorites.html:25
+#: templates/web/friends.html:25
+#: templates/web/selections.html:30
+msgid "Friends"
+msgstr "Amis"
+
+#: templates/web/favorites.html:29
+#: templates/web/selections.html:34
+msgid "Name"
+msgstr "Nom"
+
+#: templates/web/friends.html:29
+msgid "Friend"
+msgstr "Ami"
+
+#: templates/web/friends.html:30
+msgid "On air"
+msgstr "En live"
+
+#: templates/web/friends.html:39
+msgid "Nothing for now"
+msgstr "Rien pour le moment"
+
+#: templates/web/index.html:4
+#: templates/web/index.html.py:12
+#: templates/web/menu.html:15
+#: templates/yainvitation/accept.html:10
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: templates/web/index.html:24
+msgid "Login »"
+msgstr "Se connecter »"
+
+#: templates/web/menu.html:4
+#: templates/web/menu.html.py:5
+msgid "My radio"
+msgstr "Ma radio"
+
+#: templates/web/menu.html:6
+#: templates/web/radios.html:4
+msgid "Radios"
+msgstr "Radios"
+
+#: templates/web/menu.html:7
+msgid "My friends"
+msgstr "Mes amis"
+
+#: templates/web/menu.html:8
+msgid "My favorites"
+msgstr "Mes favoris"
+
+#: templates/web/menu.html:9
+msgid "Selection"
+msgstr "Sélection"
+
+#: templates/web/menu.html:10
+msgid "Find"
+msgstr "Recherche"
+
+#: templates/web/menu.html:11
+msgid "Me"
+msgstr "Moi"
+
+#: templates/web/menu.html:12
+#: templates/web/menu.html.py:17
+#: templates/web/terms.html:4
+#: templates/web/terms.html.py:12
+msgid "Terms and conditions"
+msgstr "Conditions d'utilisation"
+
+#: templates/web/menu.html:13
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: templates/web/radio.html:5
+msgid "By"
+msgstr "Par"
+
+#: templates/web/radio.html:17
+#: templates/yabase/listen.html:36
+msgid "Creator"
+msgstr "Créateur"
+
+#: templates/web/radio.html:18
+#: templates/yabase/listen.html:37
+msgid "Date"
+msgstr "Date"
+
+#: templates/web/radio.html:19
+#: templates/web/selections.html:35
+#: templates/yabase/listen.html:38
+msgid "Genre"
+msgstr "Genre"
+
+#: templates/web/radio.html:20
+#: templates/yabase/listen.html:39
+msgid "Theme"
+msgstr "Thème"
+
+#: templates/web/radio.html:21
+#: templates/yabase/listen.html:40
+msgid "Audience peak"
+msgstr "Pic d'audience"
+
+#: templates/web/radio.html:22
+#: templates/yabase/listen.html:41
+msgid "Overall listening time"
+msgstr "Temps d'écoute global"
+
+#: templates/web/radio.html:23
+#: templates/yabase/listen.html:42
+msgid "Listeners"
+msgstr "Auditeurs"
+
+#: templates/web/radio.html:24
+#: templates/yabase/listen.html:43
+msgid "Fans"
+msgstr "Fans"
+
+#: templates/yabackoffice/index.html:8
+msgid "Backoffice"
+msgstr "Backoffice"
+
+#: templates/yabackoffice/index.html:39
+msgid "Loading application..."
+msgstr "Chargement de l'application..."
+
+#: templates/yabackoffice/index.html:42
+msgid "Backoffice loading..."
+msgstr "Chargement du backoffice..."
 
 #: templates/yabase/listen.html:26
 msgid "Created by"
@@ -52,38 +234,6 @@ msgstr "le"
 msgid "Go to Yasound »"
 msgstr "Visiter Yasound »"
 
-#: templates/yabase/listen.html:36
-msgid "Creator"
-msgstr "Créateur"
-
-#: templates/yabase/listen.html:37
-msgid "Date"
-msgstr "Date"
-
-#: templates/yabase/listen.html:38
-msgid "Genre"
-msgstr "Genre"
-
-#: templates/yabase/listen.html:39
-msgid "Theme"
-msgstr "Thème"
-
-#: templates/yabase/listen.html:40
-msgid "Audience peak"
-msgstr "Pic d'audience"
-
-#: templates/yabase/listen.html:41
-msgid "Overall listening time"
-msgstr "Temps d'écoute global"
-
-#: templates/yabase/listen.html:42
-msgid "Listeners"
-msgstr "Auditeurs"
-
-#: templates/yabase/listen.html:43
-msgid "Fans"
-msgstr "Fans"
-
 #: templates/yabase/listen.html:50
 msgid "Increase volume"
 msgstr "Augmenter le volume"
@@ -91,4 +241,37 @@ msgstr "Augmenter le volume"
 #: templates/yabase/listen.html:51
 msgid "Decrease volume"
 msgstr "Diminuer le volume"
+
+#: templates/yainvitation/mail/email_invitation_message.txt:1
+#, python-format
+msgid ""
+"Dear %(fullname)s,\n"
+"\n"
+"You have been invited to test our service.\n"
+"\n"
+"You can join use by clicking on the following link :\n"
+"\n"
+"%(invitation_url)s\n"
+"\n"
+"The yasound team.\n"
+"\n"
+msgstr "Cher %(fullname)s,\n"
+"\n"
+"Vous êtes invité à tester notre service.\n"
+"\n"
+"Vous pouvez rejoindre Yasound en cliquant sur le lien suivant :\n"
+"\n"
+"%(invitation_url)s\n"
+"\n"
+"L'équipe Yasound.\n"
+"\n"
+
+#: templates/yainvitation/mail/email_invitation_subject.txt:1
+msgid "Invitation to join and test Yasound"
+msgstr "Invitation pour rejoindre et tester Yasound"
+
+#: templates/yaref/find_fuzzy.html:6
+#: templates/yaref/find_fuzzy.html.py:13
+msgid "Fuzzy search"
+msgstr "Recherche floue"
 
