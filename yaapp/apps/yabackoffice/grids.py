@@ -39,6 +39,8 @@ class InvitationGrid(grids.ModelGrid):
             'email',
             'key',
             'radio',
+            'subject',
+            'message',
             'sent'
             ]
     mapping = {

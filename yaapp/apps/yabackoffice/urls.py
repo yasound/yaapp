@@ -11,10 +11,15 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^radios$', 'radios'),
     url(r'^radios/(?P<radio_id>\d+)$', 'radios'),
     url(r'^yasound_songs$', 'yasound_songs'),
+    
     url(r'^invitations/$', 'invitations', {'type': 'all'}),
-    url(r'^invitations/pending/$', 'invitations', {'type': 'pending'}),
+    url(r'^invitations/pending$', 'invitations', {'type': 'pending'}),
+    url(r'^invitations/pending/(?P<invitation_id>\d+)$', 'invitations', {'type': 'pending'}),
+
     url(r'^invitations/sent/$', 'invitations', {'type': 'sent'}),
     url(r'^invitations/accepted/$', 'invitations', {'type': 'accepted'}),
     url(r'^invitations/save/$', 'invitation_save'),
+    url(r'^invitations/(?P<invitation_id>\d+)/generate_message/$', 'invitation_generate_message'),
+    url(r'^invitations/(?P<invitation_id>\d+)/send/$', 'invitation_send'),
     url(r'^users', 'users'),
 )

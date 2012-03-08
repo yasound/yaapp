@@ -222,7 +222,7 @@ Yasound.Radios.UI.RadiosPanel = function() {
     		handler: function(b, e) {
     			   Ext.Msg.show({
     			        title: gettext('Confirmation'),
-    			        msg: gettext('Do you want to deleted radio ?'),
+    			        msg: gettext('Do you want to delete radio ?'),
     			        buttons: Ext.Msg.YESNOCANCEL,
     			        fn: function(bt, text){
     			            if (bt == 'yes') {

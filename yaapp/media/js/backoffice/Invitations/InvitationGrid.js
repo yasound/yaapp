@@ -12,7 +12,9 @@ Yasound.Invitations.Data.InvitationStore = function(url) {
 		type: 'date',
 		dateFormat: 'Y-m-d H:i:s'
 	  }, 
-	  'user_profile'
+	  'user_profile',
+	  'message',
+	  'subject'
 	];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
@@ -101,6 +103,7 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 	hideColumnUser: true,
 	hideColumnSent: true,
 	url: '/yabackoffice/invitations/',
+	tbar:[],
 	
     initComponent: function() {
         this.addEvents('selected');
@@ -113,7 +116,7 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('selected', this, record.data.id, record);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
 					if (!sm.hasSelection()) {
                         this.grid.fireEvent('deselected', this.grid);							
@@ -123,15 +126,7 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
         });
 
         var config = {
-            tbar: [{
-                text: gettext('Refresh'),
-                iconCls: 'silk-arrow-refresh',
-                tooltip: gettext('Refresh'),
-                handler: function(btn, e){
-                    var grid = btn.ownerCt.ownerCt;
-                    grid.getStore().reload();
-                }
-            }],
+            tbar:this.tbar,
             bbar: new Ext.PagingToolbar({
                 pageSize: this.pageSize,
                 store: this.store,

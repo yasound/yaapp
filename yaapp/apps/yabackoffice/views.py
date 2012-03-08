@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
-from yabackoffice.forms import RadioForm
+from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid
 from yabase.models import Radio, SongInstance
 from yainvitation.models import Invitation
@@ -209,7 +209,7 @@ def radios(request, radio_id=None):
 
 @csrf_exempt
 @login_required
-def invitations(request, type='all'):
+def invitations(request, type='all', invitation_id=None):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
@@ -232,6 +232,71 @@ def invitations(request, type='all'):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
         return resp
+    elif request.method == 'POST':
+        data = request.REQUEST.get('data')
+        decoded_data = json.loads(data)
+        form = InvitationForm(decoded_data)
+        errors = None
+        success = True
+        message = ''
+        if form.is_valid():
+            invitation = form.save()
+            invitation.generate_message(commit=True)
+            qs = Invitation.objects.filter(id=invitation.id)
+            grid = InvitationGrid()
+            jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+            resp = utils.JsonResponse(jsonr)
+            return resp
+        else:
+            message = _("Invalid input")
+            errors = form.errors
+            success = False
+            
+            json_data = json.JSONEncoder(ensure_ascii=False).encode({
+                'success': success, 
+                'errors': errors,
+                'message': message,
+            })
+            return utils.JsonResponse(json_data)
+    elif request.method == 'DELETE':
+        invitation = get_object_or_404(Invitation, id=invitation_id)
+        invitation.delete()
+        data = {"success":True,"message":"ok","data":[]}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
+        
+@csrf_exempt
+@login_required
+def invitation_generate_message(request, invitation_id):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    invitation = get_object_or_404(Invitation, id=invitation_id)
+    subject, message = invitation.generate_message(commit=False)
+    data = {
+        'subject': subject,
+        'message': message
+    }
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data
+    })
+    return HttpResponse(json_data, mimetype='application/json')
+    
+@csrf_exempt
+@login_required
+def invitation_send(request, invitation_id):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    invitation = get_object_or_404(Invitation, id=invitation_id)
+    invitation.send()
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'message': ''
+    })
+    return HttpResponse(json_data, mimetype='application/json')
+        
     
 @csrf_exempt
 @login_required
@@ -243,11 +308,15 @@ def invitation_save(request):
         fullname = request.REQUEST.get('fullname')
         email = request.REQUEST.get('email')
         radio_id = request.REQUEST.get('radio_id')
+        subject = request.REQUEST.get('subject')
+        message = request.REQUEST.get('message')
         
         invitation = get_object_or_404(Invitation, id=invitation_id)
         invitation.fullname = fullname
         invitation.email = email
         invitation.radio_id = radio_id
+        invitation.subject = subject
+        invitation.message = message
         invitation.save()
 
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
