@@ -38,11 +38,14 @@ class InvitationGrid(grids.ModelGrid):
             'user',
             'email',
             'key',
+            'radio',
+            'subject',
+            'message',
             'sent'
             ]
     mapping = {
-            'radio_name': 'radio__name',
             'radio_id': 'radio__id',
+            'user_profile': 'user__userprofile',
     }
     
     

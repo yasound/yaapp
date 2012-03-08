@@ -1,9 +1,21 @@
 //------------------------------------------
 // Datastore
 //------------------------------------------
-Yasound.Invitations.Data.InvitationStore = function() {
-	var fields = ['id', 'fullname', 'email', 'radio_id', 'radio_name'];
-	var url = '/yabackoffice/invitations/';
+Yasound.Invitations.Data.InvitationStore = function(url) {
+	var fields = [
+	  'id', 
+	  'fullname', 
+	  'email', 
+	  'radio_id', 
+	  'radio', {
+		name: 'sent',
+		type: 'date',
+		dateFormat: 'Y-m-d H:i:s'
+	  }, 
+	  'user_profile',
+	  'message',
+	  'subject'
+	];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -14,13 +26,56 @@ Yasound.Invitations.Data.InvitationStore = function() {
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Invitations.UI.InvitationColumnModel = function(sm) {
+Yasound.Invitations.UI.InvitationColumnModel = function(sm, hideUser, hideSent) {
 	var cm = [{
         header: gettext('Name'),
         dataIndex: 'fullname',
         sortable: true,
         width: 60,
-        filterable: true
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'fullname'
+        }        	
+    }, {
+        header: gettext('Email'),
+        dataIndex: 'email',
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'email'
+        }        	
+    }, {
+        header: gettext('Radio'),
+        dataIndex: 'radio',
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'radio'
+        }        	
+    }, {
+        header: gettext('Associated user'),
+        dataIndex: 'user_profile',
+        hidden: hideUser,
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: 'textfield',
+            filterName: 'user_profile'
+        }        	
+    }, {
+        header: gettext('Sent at'),
+        dataIndex: 'sent',
+        hidden: hideSent,
+        xtype: 'datecolumn',
+        format: 'd/m/Y H:i:s',
+        sortable: true,
+        width: 50
     }];
 	
 	if (sm) {
@@ -45,11 +100,15 @@ Yasound.Invitations.UI.InvitationFilters = function(){
 Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelect: true,
 	checkboxSelect: true,
+	hideColumnUser: true,
+	hideColumnSent: true,
+	url: '/yabackoffice/invitations/',
+	tbar:[],
 	
     initComponent: function() {
         this.addEvents('selected');
         this.pageSize = 25;
-        this.store = Yasound.Invitations.Data.InvitationStore();
+        this.store = Yasound.Invitations.Data.InvitationStore(this.url);
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
@@ -57,7 +116,7 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('selected', this, record.data.id, record);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
 					}, this);
 					if (!sm.hasSelection()) {
                         this.grid.fireEvent('deselected', this.grid);							
@@ -67,15 +126,7 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
         });
 
         var config = {
-            tbar: [{
-                text: gettext('Refresh'),
-                iconCls: 'silk-arrow-refresh',
-                tooltip: gettext('Refresh'),
-                handler: function(btn, e){
-                    var grid = btn.ownerCt.ownerCt;
-                    grid.getStore().reload();
-                }
-            }],
+            tbar:this.tbar,
             bbar: new Ext.PagingToolbar({
                 pageSize: this.pageSize,
                 store: this.store,
@@ -85,18 +136,19 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Invitations.UI.InvitationColumnModel(this.checkboxSelect ? sm : null)),
+            cm: new Ext.grid.ColumnModel(Yasound.Invitations.UI.InvitationColumnModel(this.checkboxSelect ? sm : null,
+            		this.hideColumnUser, this.hideColumnSent)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-        	plugins: [Yasound.Invitations.UI.InvitationFilters()],
+        	plugins: [Yasound.Invitations.UI.InvitationFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
-        		show: function(component) {
+        		resize: function(component) {
         			component.calculatePageSize();
         		},
-        		resize: function(component) {
+        		expand: function(component) {
         			component.calculatePageSize();
         		}
         	}
@@ -109,10 +161,13 @@ Yasound.Invitations.UI.InvitationGrid = Ext.extend(Ext.grid.GridPanel, {
 		var bodyHeight = this.getHeight();
 		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
 		var rowHeight = 21;
-		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
-
-		this.getBottomToolbar().pageSize = gridRows;
-		this.getStore().reload({ params:{ start:0, limit:gridRows } });
+		var pageSize = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+		if (this.pageSize != pageSize) {
+			this.getBottomToolbar().pageSize = pageSize;
+			this.getStore().reload({ params:{ start:0, limit:pageSize } });
+			
+			this.pageSize = pageSize;
+		}
     }
     
 });
