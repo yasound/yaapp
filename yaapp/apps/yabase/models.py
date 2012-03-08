@@ -454,6 +454,7 @@ class Radio(models.Model):
         bundle.data['likes'] = likes
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
+        bundle.data['stream_url'] = self.stream_url()
         
     def update_with_data(self, data):
         if 'description' in data:
@@ -582,6 +583,11 @@ class Radio(models.Model):
     def build_picture_filename(self):
         filename = 'radio_%d_picture.png' % self.id
         return filename
+    
+    @property
+    def stream_url(self):
+        url = 'http://dev.yasound.com:8001/%s' % self.uuid
+        return url
         
     class Meta:
         db_name = u'default'
