@@ -92,6 +92,51 @@ def radio_remove_songs(request, radio_id):
 
 @csrf_exempt
 @login_required
+def radio_remove_all_songs(request, radio_id):
+    """
+    delete all song instance from radio
+    """
+    if not request.user.is_superuser:
+        raise Http404()
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        SongInstance.objects.filter(playlist__radio=radio).delete()
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
+@csrf_exempt
+@login_required
+def radio_remove_duplicate_songs(request, radio_id):
+    """
+    delete duplicate song instance from radio
+    """
+    if not request.user.is_superuser:
+        raise Http404()
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        qs = SongInstance.objects.filter(playlist__radio=radio).order_by('metadata')
+        duplicates = []
+        prev_metadata = None
+        for si in qs:
+            if si.metadata == prev_metadata and prev_metadata is not None:
+                duplicates.append(si.id)
+            prev_metadata = si.metadata
+        
+        SongInstance.objects.filter(id__in=duplicates).delete()
+        
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
+@csrf_exempt
+@login_required
 def radio_add_songs(request, radio_id):
     """
     add yasound song to radio

@@ -41,6 +41,54 @@ Yasound.Radios.Handler.RemoveSong = function(radioId, selected) {
    });
 };
 
+Yasound.Radios.Handler.RemoveAllSongs = function(radioId) {
+   Ext.Msg.show({
+        title: gettext('Confirmation'),
+        msg: gettext('Do you want to remove all songs from radio'),
+        buttons: Ext.Msg.YESNOCANCEL,
+        fn: function(b, text){
+            if (b == 'yes') {
+                Ext.Ajax.request({
+                    url: String.format('/yabackoffice/radios/{0}/remove_all_songs/', radioId),
+                    success: function(result, request){
+                        var data = result.responseText;
+                        var json = Ext.decode(data);
+                        Ext.getCmp('radios-songgrid').getStore().reload();
+            		},
+                    failure: function(result, request){
+                    },
+                    method: 'POST',
+                    timeout: 1000 * 60 * 5
+                });
+            }
+        }
+   });
+};
+
+Yasound.Radios.Handler.RemoveDuplicateSongs = function(radioId) {
+   Ext.Msg.show({
+        title: gettext('Confirmation'),
+        msg: gettext('Do you want to find and remove duplicates from radio'),
+        buttons: Ext.Msg.YESNOCANCEL,
+        fn: function(b, text){
+            if (b == 'yes') {
+                Ext.Ajax.request({
+                    url: String.format('/yabackoffice/radios/{0}/remove_duplicate_songs/', radioId),
+                    success: function(result, request){
+                        var data = result.responseText;
+                        var json = Ext.decode(data);
+                        Ext.getCmp('radios-songgrid').getStore().reload();
+            		},
+                    failure: function(result, request){
+                    },
+                    method: 'POST',
+                    timeout: 1000 * 60 * 5
+                });
+            }
+        }
+   });
+};
+
 Yasound.Radios.Handler.AddToRadio = function(radioId, selected) {
    Ext.Msg.show({
         title: gettext('Confirmation'),
@@ -89,6 +137,24 @@ Yasound.Radios.UI.RadiosPanel = function() {
 				var grid = b.ownerCt.ownerCt;
 				var selected = grid.getSelectionModel().getSelections();
 				Yasound.Radios.Handler.RemoveSong(grid.radioId, selected);
+			}
+		}, {
+			text: gettext('Remove all songs from radio'),
+		    disabled: false,
+		    iconCls: 'silk-delete',
+		    ref:'../removeAllButton',
+			handler: function(b, e) {
+				var grid = b.ownerCt.ownerCt;
+				Yasound.Radios.Handler.RemoveAllSongs(grid.radioId);
+			}
+		}, {
+			text: gettext('Remove duplicate songs from radio'),
+		    disabled: false,
+		    iconCls: 'silk-delete',
+		    ref:'../removeDuplicateButton',
+			handler: function(b, e) {
+				var grid = b.ownerCt.ownerCt;
+				Yasound.Radios.Handler.RemoveDuplicateSongs(grid.radioId);
 			}
 		}
 		], 
