@@ -1,5 +1,5 @@
 Yasound.Backoffice.Data.SongInstanceStore = function(url) {
-	var fields = ['id', 'name', 'artist_name', 'album_name'];
+	var fields = ['id', 'name', 'artist_name', 'album_name', 'yasound_song_id'];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -34,6 +34,15 @@ Yasound.Backoffice.UI.SongInstanceColumnModel = function(sm){
         filter: {
             xtype: "textfield",
             filterName: "artist_name"
+        }        	
+    }, {
+        header: gettext('Song id'),
+        dataIndex: 'yasound_song_id',
+        sortable: true,
+        width: 20,
+        filter: {
+            xtype: "numberfield",
+            filterName: "yasound_song_id"
         }        	
     }]);
 };
@@ -94,7 +103,16 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
-                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
+                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})'),
+                getRowClass: function(row, index){
+                    var data = row.data;
+                    var cls = '';
+                    if (!data.yasound_song_id) {
+                        cls = 'red';
+                    }
+                    return cls;
+                }                
+                
             }),
             plugins: [Yasound.Backoffice.UI.SongInstanceFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {

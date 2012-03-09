@@ -193,7 +193,7 @@ Yasound.Radios.UI.RadiosPanel = function() {
     	xtype:'radiogrid',
     	id:'radios-radiogrid',
     	region: 'center',
-    	width: 350,
+    	width: 500,
     	tbar:[{
     		text: gettext('Create new radio'),
     		iconCls: 'silk-add',
@@ -292,7 +292,7 @@ Yasound.Radios.UI.RadiosPanel = function() {
 			region: 'west',
 			collapsible: true,
 			title: gettext('Radios'),
-			width: 350,
+			width: 500,
 			split: true,
 			items:[radioGrid, radioForm]
 		}, {

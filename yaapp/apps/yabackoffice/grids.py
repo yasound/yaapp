@@ -12,7 +12,8 @@ class SongInstanceGrid(grids.ModelGrid):
     mapping = {
         'name' : 'metadata__name',
         'artist_name': 'metadata__artist_name',
-        'album_name' : 'metadata__album_name'
+        'album_name' : 'metadata__album_name',
+        'yasound_song_id': 'metadata__yasound_song_id'
     }
     
     

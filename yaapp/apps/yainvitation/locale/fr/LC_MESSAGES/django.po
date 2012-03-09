@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-08 16:12+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: models.py:26
+msgid "Recipient fullname"
+msgstr "Nom du destinataire"
+
+#: models.py:27
+msgid "user"
+msgstr "Utilisateur"
+
+#: models.py:28
+msgid "email"
+msgstr "email"
+
+#: models.py:29
+msgid "key"
+msgstr "clef"
+
+#: models.py:31
+msgid "sent date"
+msgstr "date d'envoi"
+
+#: models.py:32
+msgid "subject"
+msgstr "sujet"
+
+#: models.py:33
+msgid "message"
+msgstr "message"
+
+#: models.py:90
+msgid "invitation"
+msgstr "invitation"
+

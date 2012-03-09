@@ -17,6 +17,17 @@ Yasound.Backoffice.Data.RadioStore = function() {
 //------------------------------------------
 Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
 	var cm = [{
+        header: gettext('Id'),
+        dataIndex: 'id',
+        sortable: true,
+        width: 10,
+        filterable: true,
+        filter: {
+            xtype: "numberfield",
+            filterName: "id"
+        }        	
+        
+    }, {
         header: gettext('Name'),
         dataIndex: 'name',
         sortable: true,
@@ -25,6 +36,16 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "name"
+        }        	
+    }, {
+        header: gettext('Owner'),
+        dataIndex: 'creator_profile',
+        sortable: true,
+        width: 60,
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "creator_profile"
         }        	
     }];
 	
