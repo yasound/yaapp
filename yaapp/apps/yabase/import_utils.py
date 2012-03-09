@@ -226,7 +226,7 @@ class SongImporter:
             self._log(_("artist info not sufficient"))
             return None
 
-        if not name:
+        if name is None:
             self._log(_("no name for artist"))
             return None
             
@@ -259,7 +259,7 @@ class SongImporter:
         mbid = self._find_mb_id_for_album(metadata)
 
         name = metadata.get('album')
-        if not name:
+        if name is None:
             self._log("no name for album")
             return None
             
