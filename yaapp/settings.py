@@ -133,7 +133,7 @@ else:
         'yasound': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yasound_final', # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',},
+            'OPTIONS': {'read_default_file': '/root/.my.cnf.yasound',},
         }
     }
 
