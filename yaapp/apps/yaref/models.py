@@ -214,7 +214,7 @@ class YasoundSong(models.Model):
     danceability = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     loudness = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     energy = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    tempo = models.SmallIntegerField(null=True, blank=True)
+    tempo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     tonality_mode = models.SmallIntegerField(null=True, blank=True)
     tonality_key = models.SmallIntegerField(null=True, blank=True)
     fingerprint = models.TextField(null=True, blank=True)

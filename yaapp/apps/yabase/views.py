@@ -676,3 +676,7 @@ def radio_unmatched_song(request, radio_id):
     return render_to_response('yabase/unmatched.html', {"unmatched_songs": unmatched, "radio": radio})  
     
     
+def status(request):
+    User.objects.get(id=1)
+    YasoundSong.objects.get(id=1)
+    return HttpResponse('OK')
