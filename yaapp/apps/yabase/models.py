@@ -238,7 +238,7 @@ class Playlist(models.Model):
 
 
 
-RADIO_NEXT_SONGS_COUNT = 20
+RADIO_NEXT_SONGS_COUNT = 1
 
 class RadioManager(models.Manager):
     def radio_for_user(self, user):
