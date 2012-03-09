@@ -310,10 +310,19 @@ LOGGING = {
             'format': '%(levelname)s %(message)s'
         },
     },
+    'filters': {
+        'time_throttled': {
+            '()': 'yaapp.timethrottledfilter.TimeThrottledFilter',
+            'quantity': 5,
+            'interval': 30,
+            'ignore_lines': [],
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['time_throttled'],
         },
         'null': {
             'level':'DEBUG',
@@ -322,7 +331,7 @@ LOGGING = {
         'console':{
             'level':'DEBUG',
             'class':'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'simple',
         },
         'file':{
             'level':'DEBUG',
@@ -332,10 +341,6 @@ LOGGING = {
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.log'),
             'formatter': 'verbose'
         },     
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-        }
     },
     'loggers': {
         'django': {
