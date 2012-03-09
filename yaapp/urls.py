@@ -109,6 +109,7 @@ urlpatterns = patterns('',
     (r'^api/', include(api.urls)),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
+    (r'^status/', 'yabase.views.status'),
 
     # web front end
     url(r'^$', 'yabase.views.web_index', name='web_index'),
