@@ -504,7 +504,7 @@ class SongImporter:
                                danceability=Decimal(str(danceability)),
                                loudness=Decimal(str(loudness)),
                                energy=Decimal(str(energy)),
-                               tempo=int(tempo),
+                               tempo=Decimal(str(tempo)),
                                tonality_mode=tonality_mode,
                                tonality_key=tonality_key,
                                fingerprint=fingerprint,
