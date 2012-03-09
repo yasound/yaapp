@@ -221,11 +221,16 @@ class SongImporter:
             return None
         mb_id = self._find_mb_id_for_artist(metadata)
         name = metadata.get('artist')
-        name_simplified = get_simplified_name(name)
         
         if not (echonest_id or mb_id or name):
             self._log(_("artist info not sufficient"))
             return None
+
+        if not name:
+            self._log(_("no name for artist"))
+            return None
+            
+        name_simplified = get_simplified_name(name)
         
         try:
             artist = YasoundArtist.objects.get(echonest_id=echonest_id)
@@ -252,7 +257,12 @@ class SongImporter:
             pass
         
         mbid = self._find_mb_id_for_album(metadata)
+
         name = metadata.get('album')
+        if not name:
+            self._log("no name for album")
+            return None
+            
         self._log("creating new album: %s" % (name))
         name_simplified = get_simplified_name(name)
         cover_filename = None
