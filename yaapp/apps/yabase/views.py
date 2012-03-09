@@ -85,6 +85,12 @@ def set_radio_picture(request, radio_id):
     filename = radio.build_picture_filename()
 
     # todo: delete old file
+#    import pdb
+#    pdb.set_trace()
+#    if radio.picture and len(radio.picture.name) > 0:
+#        print 'radio picture delete'
+#        radio.picture.delete(save=True)
+#    print 'radio picture save'
     radio.picture.save(filename, f, save=True)
     
     # for now, set also the UserProfile picture
