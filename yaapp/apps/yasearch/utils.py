@@ -25,6 +25,9 @@ def get_simplified_name(s):
     * lower everything
     * return unicode
     """
+    if s is None:
+        return None
+    
     if not isinstance(s, unicode):
         s = unicode(s, 'utf-8')
     s = ' '.join(_replace_punctuation_with_space(s).split()).lower()
