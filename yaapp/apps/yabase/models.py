@@ -605,11 +605,11 @@ class Radio(models.Model):
               
 def update_leaderboard():
     radios = Radio.objects.order_by('-favorites')    
-    current_rank = 1
+    current_rank = 0
     count = 0
     last_favorites = None
     for r in radios:
-        if last_favorites and r.favorites != last_favorites:
+        if r.favorites != last_favorites:
             current_rank = count + 1
         r.leaderboard_rank = current_rank
         r.leaderboard_favorites = r.favorites

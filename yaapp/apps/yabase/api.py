@@ -1,6 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, NextSong, RadioUser, SongUser
+from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, NextSong, RadioUser, SongUser, FeaturedRadio
 from yaref.models import YasoundSong
 from django.contrib.auth.models import User
 from django.conf.urls.defaults import url
@@ -232,12 +232,11 @@ class SelectedRadioResource(ModelResource):
         radio.fill_bundle(bundle)
         return bundle
     
-    def apply_authorization_limits(self, request, object_list):
-        user = request.user
-        # For now, until we fill in selected radios, return all radios
-        return object_list.order_by('-overall_listening_time')
-#        return object_list.filter(radiouser__user=user, radiouser__radio_selected=True)
     
+    def get_object_list(self, request):
+        radios = Radio.objects.filter(featuredcontent__activated=True).order_by('featuredradio__order')
+        return radios
+
 class FavoriteRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
@@ -760,7 +759,7 @@ class LeaderBoardResource(ModelResource):
     def get_object_list(self, request):
         self.request_user = request.user
         try:
-            user_radio = Radio.objects.get(creator=request.user)
+            user_radio = Radio.objects.filter(creator=request.user)[0]
         except Radio.DoesNotExist:
             return None
         return user_radio.relative_leaderboard()
