@@ -241,6 +241,35 @@ class SelectedRadioResource(ModelResource):
     def get_object_list(self, request):
         radios = Radio.objects.filter(featuredcontent__activated=True).order_by('featuredradio__order')
         return radios
+    
+class TopRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
+    picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'top_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+        authentication = YasoundApiKeyAuthentication()
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+            'ready': ('exact',),
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    
+    def get_object_list(self, request):
+        radios = Radio.objects.order_by('-favorites')
+        return radios
 
 class FavoriteRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
