@@ -15,6 +15,7 @@ from django.db.models import Q
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from sorl.thumbnail import get_thumbnail
 
 #from account.models import UserProfile
 import uuid
@@ -581,7 +582,14 @@ class Radio(models.Model):
 
     @property
     def picture_url(self):
-        return None
+        if self.picture:
+            try:
+                return get_thumbnail(self.picture, '100x100', format='PNG').url
+            except:
+                return yaapp_settings.DEFAULT_IMAGE
+        else:
+            return yaapp_settings.DEFAULT_IMAGE
+            
     
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_radio(self, upsert, insert)
