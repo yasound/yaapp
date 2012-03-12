@@ -573,11 +573,18 @@ class SongImporter:
         build_mongodb_index()
         return sm, self.get_messages()
     
-
+    def generate_preview(self, yasound_song):
+        filename = yasound_song.filename
+        
+        source = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
+        destination = self._get_filepath_for_preview(source)
+        self._generate_preview(source, destination) 
+    
 def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
     return importer.import_song(binary, metadata, convert, allow_unknown_song)
     
-    
-    
+def generate_preview(yasound_song):
+    importer = SongImporter()
+    return importer.generate_preview(yasound_song)
     
