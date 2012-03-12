@@ -46,7 +46,7 @@ if LOCAL_MODE:
     # Celery config:
     BROKER_URL = "django://"
     BROKER_BACKEND = "django"
-    CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task", "account.task",)
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task",)
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10
@@ -94,7 +94,7 @@ else:
     # Celery config:
     if False:
         BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-        CELERY_IMPORTS = ("yabase.task","stats.task", "yaref.task", "account.task")
+        CELERY_IMPORTS = ("yabase.task","stats.task", "account.task")
         CELERY_RESULT_BACKEND = "database"
         CELERY_RESULT_DBURI = "postgresql://yaapp:N3EDTnz945FSh6D@yasound.com/yaapp"
         CELERY_TASK_RESULT_EXPIRES = 10
