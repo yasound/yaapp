@@ -239,8 +239,8 @@ class SelectedRadioResource(ModelResource):
     
     
     def get_object_list(self, request):
-        radios = Radio.objects.filter(featuredcontent__activated=True).order_by('featuredradio__order')
-        return radios
+        obj_list = super(SelectedRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True).order_by('featuredradio__order')
+        return obj_list
     
 class TopRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
@@ -268,7 +268,7 @@ class TopRadioResource(ModelResource):
     
     
     def get_object_list(self, request):
-        radios = Radio.objects.order_by('-favorites')
+        radios = super(TopRadioResource, self).get_object_list(request).order_by('-favorites')
         return radios
 
 class FavoriteRadioResource(ModelResource):
