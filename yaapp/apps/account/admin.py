@@ -3,7 +3,7 @@ from models import UserProfile, Device
 from sorl.thumbnail.admin import AdminImageMixin
 
 class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
-    list_display = ('user',)
+    list_display = ('id', 'user', 'name')
     search_fields = ['user__username']
 admin.site.register(UserProfile, UserProfileAdmin)
 
