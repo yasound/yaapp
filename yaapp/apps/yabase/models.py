@@ -29,8 +29,8 @@ if not 'db_name' in options.DEFAULT_NAMES:
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
-    artist_name = models.CharField(max_length=255)
-    album_name = models.CharField(max_length=255)
+    artist_name = models.CharField(max_length=255, blank=True)
+    album_name = models.CharField(max_length=255, blank=True)
     track_index = models.IntegerField(null=True, blank=True)
     track_count = models.IntegerField(null=True, blank=True)
     disc_index = models.IntegerField(null=True, blank=True)
