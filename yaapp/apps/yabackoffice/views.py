@@ -85,7 +85,7 @@ def radio_remove_songs(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)
     if request.method == 'POST':
         ids = request.REQUEST.getlist('song_instance_id')
-        SongInstance.objects.filter(playlist__radio=radio, id__in=ids).delete()
+        radio.delete_song_instances(ids)
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': ''
@@ -130,7 +130,7 @@ def radio_remove_duplicate_songs(request, radio_id):
                 duplicates.append(si.id)
             prev_metadata = si.metadata
         
-        SongInstance.objects.filter(id__in=duplicates).delete()
+        radio.delete_song_instances(duplicates)
         
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,

@@ -2,7 +2,7 @@ from models import SongInstance, Playlist, Radio, NextSong, SongMetadata
 
 import datetime
 
-def generate_playlist(name='playlist1', song_count=30):
+def generate_playlist(name='default', song_count=30):
     playlist = Playlist(name=name, source=name)
     playlist.save()
     for i in range(1, song_count+1):

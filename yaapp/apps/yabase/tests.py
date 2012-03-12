@@ -361,7 +361,49 @@ class TestImport(TestCase):
         
         radio = Radio.objects.radio_for_user(self.user)
         self.assertTrue(radio.ready)
+   
         
+class TestRadioDeleted(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user   
+    
+    def test_remove_song_instance(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        radio_id = radio.id
         
+        playlist = generate_playlist(song_count=100)
+        playlist.radio = radio
+        playlist.save()
+        
+        self.assertEquals(SongInstance.objects.all().count(), 100)
+        radio.delete_song_instances([1])
+        self.assertEquals(SongInstance.objects.all().count(), 100-1)
+        
+        si = SongInstance.objects.get(id=2)
+        ns = NextSong(radio=radio, song=si, order=1)
+        ns.save()
 
+
+        radio.delete_song_instances([2,3,4])
+        self.assertEquals(SongInstance.objects.all().count(), 100-4)
+
+        radio = Radio.objects.get(id=radio_id)
+        radio.current_song = SongInstance.objects.get(id=5)
+        radio.save()
+        self.assertEquals(SongInstance.objects.all().count(), 100-4)
+
+        radio.delete_song_instances([5])
+        self.assertEquals(SongInstance.objects.all().count(), 100-5)
+
+        # check that radio is still here
+        radio = Radio.objects.get(id=radio_id)
+        
+        
+        
+        
+        
         

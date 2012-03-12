@@ -283,7 +283,7 @@ class RadioManager(models.Manager):
 
 class Radio(models.Model):
     objects = RadioManager()
-    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
+    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
@@ -313,7 +313,13 @@ class Radio(models.Model):
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     computing_next_songs = models.BooleanField(default=False)
     
-    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song'), related_name='current_song_radio')
+    current_song = models.ForeignKey(SongInstance, 
+                                     null=True, 
+                                     blank=True, 
+                                     verbose_name=_('current song'), 
+                                     related_name='current_song_radio', 
+                                     on_delete=models.SET_NULL)
+    
     current_song_play_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
@@ -584,6 +590,11 @@ class Radio(models.Model):
         filename = 'radio_%d_picture.png' % self.id
         return filename
     
+    def delete_song_instances(self, ids):
+        self.empty_next_songs_queue()
+
+        SongInstance.objects.filter(id__in=ids, playlist__radio=self).delete()
+        
     @property
     def stream_url(self):
         url = 'http://dev.yasound.com:8001/%s' % self.uuid
