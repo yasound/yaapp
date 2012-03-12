@@ -476,14 +476,20 @@ def upload_song(request, song_id=None):
         logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
-    f = request.FILES[SONG_FILE_TAG]
-    
-    json_data = None
+        
+    json_data = {}
     data = request.REQUEST.get('data')
     if data:
         json_data = json.loads(data)
     else:
         logger.info('no metadata sent with binary')
+
+    f = request.FILES[SONG_FILE_TAG]
+    filename = f.name
+    if filename == yabase_settings.DEFAULT_FILENAME:
+        filename = import_utils.generate_default_filename(json_data) 
+    
+    json_data['filename'] = filename
     
     logger.info('importing song')
     process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id, allow_unknown_song=allow_unknown_song)

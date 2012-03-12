@@ -494,3 +494,6 @@ if PRODUCTION_MODE:
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
+    
+DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
+

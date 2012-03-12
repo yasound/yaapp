@@ -15,6 +15,7 @@ from django.db.models import Q
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from sorl.thumbnail import get_thumbnail
 
 #from account.models import UserProfile
 import uuid
@@ -28,8 +29,8 @@ if not 'db_name' in options.DEFAULT_NAMES:
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
-    artist_name = models.CharField(max_length=255)
-    album_name = models.CharField(max_length=255)
+    artist_name = models.CharField(max_length=255, blank=True)
+    album_name = models.CharField(max_length=255, blank=True)
     track_index = models.IntegerField(null=True, blank=True)
     track_count = models.IntegerField(null=True, blank=True)
     disc_index = models.IntegerField(null=True, blank=True)
@@ -323,7 +324,15 @@ class Radio(models.Model):
     current_song_play_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
-        return self.name;
+        if self.name:
+            return self.name
+        elif self.creator:
+            try:
+                profile = self.creator.get_profile()
+                return unicode(profile)
+            except:
+                return unicode(self.creator)
+        return self.name
     
     def save(self, *args, **kwargs):
         update_mongo = False
@@ -581,7 +590,14 @@ class Radio(models.Model):
 
     @property
     def picture_url(self):
-        return None
+        if self.picture:
+            try:
+                return get_thumbnail(self.picture, '100x100', format='PNG').url
+            except:
+                return yaapp_settings.DEFAULT_IMAGE
+        else:
+            return yaapp_settings.DEFAULT_IMAGE
+            
     
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_radio(self, upsert, insert)

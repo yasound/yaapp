@@ -26,3 +26,5 @@ YASOUND_FAVORITES_PLAYLIST_NAME = '#yasound_songs_from_other_radios'
 YASOUND_FAVORITES_PLAYLIST_SOURCE_BASENAME = '#yasound_songs_from_other_radios_source'
 
 UPLOAD_KEY='weeriwjwsdiwew9ei9nksxsdwxj,.29x2jdnjweapnfnhshdf'
+
+DEFAULT_FILENAME='file'
