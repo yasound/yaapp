@@ -113,7 +113,7 @@ urlpatterns = patterns('',
 
     # web front end
     url(r'^$', 'yabase.views.web_index', name='web_index'),
-    url(r'^radios/my/$', 'yabase.views.web_myradio', name='web_myradio'),
+    url(r'^radios/my/(?P<radio_uuid>[\w-]+.*[\w-]*)/$', 'yabase.views.web_myradio', name='web_myradio'),
     url(r'^radios/friends/$', 'yabase.views.web_friends', name='web_friends'),
     url(r'^radios/favorites/$', 'yabase.views.web_favorites', name='web_favorites'),
     url(r'^radios/favorites/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_favorite', name='web_favorite'),

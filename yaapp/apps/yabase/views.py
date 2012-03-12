@@ -595,10 +595,21 @@ def radios(request, template_name='web/radios.html'):
     }, context_instance=RequestContext(request))    
         
 @login_required
-def web_myradio(request, template_name='web/my_radio.html'):
-    radio = get_object_or_404(Radio, creator=request.user)
-    radio_uuid = radio.uuid
-    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
+def web_myradio(request, radio_uuid=None, template_name='web/my_radio.html'):
+    radio = None
+    if not uuid:
+        radios = Radio.objects.filter(creator=request.user, ready=True)[0:1]
+        if radios.count() == 0:
+            raise Http404
+        else:
+            radio = radios[0]
+    else:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
+    
+    if not radio.ready:
+        raise Http404
+    
+    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid)
     return render_to_response(template_name, {
         "radio": radio,
         "radio_url": radio_url,
