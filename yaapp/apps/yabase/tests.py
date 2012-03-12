@@ -4,7 +4,7 @@ from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
 from tests_utils import generate_playlist
-from yabase.import_utils import SongImporter
+from yabase.import_utils import SongImporter, generate_default_filename
 from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import import_utils
@@ -361,7 +361,26 @@ class TestImport(TestCase):
         
         radio = Radio.objects.radio_for_user(self.user)
         self.assertTrue(radio.ready)
-   
+        
+    def test_generate_filename(self):
+        filename = generate_default_filename(None)
+        self.assertEquals(len(filename), len('2012-03-12-16:06'))
+
+        radio = Radio.objects.radio_for_user(self.user)
+        filename = generate_default_filename({'radio_id': radio.id})
+        self.assertEquals(len(filename), len('test-2012-03-12-16:06'))
+
+        profile = self.user.get_profile()
+        profile.name = 'my-beloved-name'
+        profile.save()
+
+        filename = generate_default_filename({'radio_id': radio.id})
+        self.assertEquals(len(filename), len('my-beloved-name-2012-03-12-16:06'))
+
+        profile.delete()
+
+        filename = generate_default_filename({'radio_id': radio.id})
+        self.assertEquals(len(filename), len('test-2012-03-12-16:06'))
         
 class TestRadioDeleted(TestCase):
     def setUp(self):

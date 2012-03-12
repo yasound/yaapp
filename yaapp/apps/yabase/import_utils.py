@@ -403,6 +403,7 @@ class SongImporter:
         name = metadata.get('title')
         artist_name = metadata.get('artist')
         album_name = metadata.get('album')
+        filename = metadata.get('filename')
     
         self._log("importing %s-%s-%s" % (name, album_name, artist_name))
         
@@ -427,7 +428,10 @@ class SongImporter:
             return None, self.get_messages()
         fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
         
-        if not name:
+        if name is None and filename is not None:
+            name = filename
+        
+        if name is None:
             logger.error("no title")
             return None, self.get_messages()
         name_simplified = get_simplified_name(name)
@@ -587,4 +591,17 @@ def import_song(binary, metadata, convert, allow_unknown_song=False):
 def generate_preview(yasound_song):
     importer = SongImporter()
     return importer.generate_preview(yasound_song)
+    
+def generate_default_filename(metadata):
+    now = datetime.datetime.now()
+    now_str = now.strftime('%Y-%m-%d-%H:%M')
+    filename = now_str
+    if metadata:
+        radio_id = metadata.get('radio_id')
+        if radio_id:
+            radio = Radio.objects.get(id=radio_id)
+            filename = u'%s-%s' % (radio, now_str)  
+    return filename
+
+    
     

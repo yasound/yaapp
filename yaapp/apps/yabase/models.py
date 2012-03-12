@@ -324,7 +324,15 @@ class Radio(models.Model):
     current_song_play_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
-        return self.name;
+        if self.name:
+            return self.name
+        elif self.creator:
+            try:
+                profile = self.creator.get_profile()
+                return unicode(profile)
+            except:
+                return unicode(self.creator)
+        return self.name
     
     def save(self, *args, **kwargs):
         update_mongo = False
