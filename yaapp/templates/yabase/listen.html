@@ -5,12 +5,15 @@
 {% block extra_head %}
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
+        var g_radio_id = '{{ radio.id }}';
+        
         var lbl_mute = "{% trans 'Mute' %}";
         var lbl_unmute = "{% trans 'Unmute' %}";
         var lbl_play = "{% trans 'Play' %}";
         var lbl_stop = "{% trans 'Stop' %}";
     </script>
     <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/media/js/jquery.timers.js"></script>
     <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
     <script type="text/javascript" src="/media/js/listen.js"></script>
     
@@ -30,9 +33,13 @@
         <div class='span12'>
 		   <div id="radio">
 		       <div id='radio-picture'>
+		           {% if radio.picture %}
 			       {% thumbnail radio.picture "128x128" format='PNG' as im %}
 			       <img src="{{ im.url }}" alt='{% trans "Radio logo" %}'/>
 			       {% endthumbnail %}
+			       {% else %}
+                   <imgsrc="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Radio logo" %}'/>
+			       {% endif %}
 		       </div>
 		       <div id='radio-title'>
 			       <h1>{{ radio }}</h1>
@@ -48,18 +55,16 @@
         <div class='span12'>
            <div id='player'>
                <div id='track-picture'>
-                   {% thumbnail radio.picture "128x128" format='PNG' as im %}
-                   <img src="{{ im.url }}" alt='{% trans "Radio logo" %}'/>
-                   {% endthumbnail %}
+                   <img id='track-image' src="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Track logo" %}'/>
                </div>
                <div id='track-details'>
-                   <h2>You gotta move</h2>
-                   <p>{% trans "By"%} <strong>The Rolling Stones</strong> on <strong>Where is my mind</strong></p>
+                   <h2><span id='track-name'>{% trans "No name" %}</span></h2>
+                   <p>{% trans "By"%} <strong><span id='track-artist'></span></strong> - <strong><span id='track-album'></span></strong></p>
                    <div class="btn-toolbar">
                    <div class="btn-group">
-                      <a class="btn" id='play' href='#'><i class="icon-play"></i></a>
-                      <a class="btn" id='dec' href='#'><i class="icon-volume-down"></i></a>
-                      <a class="btn" id='inc' href='#'><i class="icon-volume-up"></i></a>
+                      <a class="btn" id='play'><i class="icon-play"></i></a>
+                      <a class="btn" id='dec'><i class="icon-volume-down"></i></a>
+                      <a class="btn" id='inc' ><i class="icon-volume-up"></i></a>
                    </div>
 
                    <div class="btn-group">

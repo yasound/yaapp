@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs live
-	soundManager.preferFlash = false;
+	soundManager.preferFlash = true;
 	soundManager.useHTML5Audio = true;
 	soundManager.debugMode = true;
 	var mySound = undefined;
@@ -43,5 +43,38 @@ $(document).ready(function() {
 			mySound.setVolume(mySound.volume-10);
 		}
 	})
+
+	var getData = function() {
+		// get last events
+		$.ajax({
+			  url: '/api/v1/radio/' + g_radio_id + '/current_song/',
+			  dataType: 'json',
+			  data: undefined,
+			  success: function(data) {
+				  if (data) {
+					  var name = data.name;
+					  var artist = data.artist;
+					  var album = data.album;
+					  var cover = data.cover;
+					  
+					  $('#track-name').text(name);
+					  $('#track-artist').text(artist);
+					  $('#track-album').text(album);
+					  
+					  if (cover) {
+						  $('#track-image').attr("src", cover);
+					  } else {
+						  $('#track-image').attr("src", '/media/images/default_image.png');
+					  }
+ 					  
+				  }
+			  }
+			});
+	}
 	
+	$(document).everyTime(3*1000, 'event_timer', function (x) {
+		getData();
+	});
+	getData();
+
 });
