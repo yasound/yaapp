@@ -586,6 +586,7 @@ def song_instance_cover(request, song_instance_id):
     return HttpResponseRedirect(url)
     
 
+@login_required
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
