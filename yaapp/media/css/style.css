@@ -1,8 +1,98 @@
-
 body {
-    padding-top: 30px;
+	padding-top: 30px;
 }
 
 .hero-unit h1 {
-	font-size:38px;
+	font-size: 38px;
+}
+
+footer #menu {
+	bottom: 0;
+	float: right;
+	color: #666666;
+	font-size: 12px;
+	height: 40px;
+	line-height: 40px;
+	overflow: hidden;
+	padding-right: 20px;
+	right: 0;
+	text-align: right;
+	width: 300px;
+}
+
+footer #menu a {
+	color: #666666;
+	text-decoration: none;
+}
+
+footer #menu a:hover {
+	color: #ef7b2b;
+	text-decoration: none;
+}
+
+#radio {
+	margin-top:24px;
+    background-color: #F5F5F5;
+    border-radius: 6px 6px 6px 6px;
+    margin-bottom: 30px;
+    padding: 60px;
+    background-image:url(/media/images/icon-radio.png);
+    background-repeat: no-repeat;
+    background-position: 10px 10px; 
+}
+
+#radio p {font-size:14px;font-weight:200;line-height:27px;}
+
+#radio-picture {
+	float:left;
+	margin-right:20px;
+}
+
+#radio-title {
+	margin-left:10px;
+}
+
+#player {
+    background-color: #F5F5F5;
+    border-radius: 6px 6px 6px 6px;
+    margin-bottom: 30px;
+    padding: 60px;
+    background-image:url(/media/images/icon-on-air.png);
+    background-repeat: no-repeat;
+    background-position: 10px 10px;	
+}
+
+#player p {font-size:18px;font-weight:200;line-height:27px;}
+
+
+#track-picture {
+    float:left;
+    margin-right:20px;
+}
+
+#track-picture .btn-group {
+    padding-top:12px;
+	width: 106px;
+    margin: 0px auto;
+	
+}
+
+#track-details {
+}
+
+#track-details p {
+	height:54px;
+}
+
+
+#banner {
+    width: 728px;
+    margin: 0px auto;
+    
+}
+
+#appstore {
+    width: 148px;
+    margin: 0px auto;
+    
 }

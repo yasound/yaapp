@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block extra_head %}
     <script type="text/javascript">
@@ -17,39 +18,74 @@
 {% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
 {% block body %}
 <div class='container'>
-
     <div class='row'>
-	    <div class='span10'>
-		    <div class="hero-unit">
-			    <h1>{{ radio }}</h1>
-		        {% for tag in radio.tags.all %}<span class="label notice">{{tag}}</span> {% endfor%}
-			    <p>{% trans "Created by" %} <strong>{{ radio.creator }}</strong> {% trans "on" %} {{ radio.created|date:"j F Y" }}</p>
-			    <p>{{ radio.description }}</p>
-				<p><a class="btn primary large" href='http://yasound.com'>{% trans "Go to Yasound »" %}</a></p>
-		    </div>
-	    </div>
-        <div class='span6'>
-            <table class="zebra-striped">
-            <thead>
-            </thead>
-            <tbody>
-            <tr><td>{% trans "Creator" %}</td><td>{{ radio.creator }}</td></tr>
-            <tr><td>{% trans "Date" %}</td><td>{{ radio.created|date:"j F Y" }}</td></tr>
-            <tr><td>{% trans "Genre" %}</td><td>{{ radio.genre }}</td></tr>
-            <tr><td>{% trans "Theme" %}</td><td>{{ radio.theme }}</td></tr>
-            <tr><td>{% trans "Audience peak" %}</td><td>{{ radio.audience_peak }}</td></tr>
-            <tr><td>{% trans "Overall listening time" %}</td><td>{{ radio.overall_listening_time }}</td></tr>
-            <tr><td>{% trans "Listeners" %}</td><td>{{ listeners }}</td></tr>
-            <tr><td>{% trans "Fans" %}</td><td>{{ fans }}</td></tr>
-            </tbody>
-            </table>
+        <div class='span3'>
+        <img src='/media/images/logo.png' alt='Yasound logo'/>
+        </div>
+        <div class='span9'>
+        <img src='/media/images/banner.png' alt='Banner'/>
         </div>
     </div>
-    <div class="well">
-        <a class="btn large" id='play' href='#'>{% trans "Play" %}</a>
-        <a class="btn large" id='inc' href='#'>{% trans "Increase volume" %}</a>
-        <a class="btn large" id='dec' href='#'>{% trans "Decrease volume" %}</a>
-        <a class="btn large" id='mute' href='#'>{% trans "Mute" %}</a>
+    <div class='row'>
+        <div class='span12'>
+		   <div id="radio">
+		       <div id='radio-picture'>
+			       {% thumbnail radio.picture "128x128" format='PNG' as im %}
+			       <img src="{{ im.url }}" alt='{% trans "Radio logo" %}'/>
+			       {% endthumbnail %}
+		       </div>
+		       <div id='radio-title'>
+			       <h1>{{ radio }}</h1>
+			       {% for tag in radio.tags.all %}<span class="label notice">{{tag}}</span> {% endfor%}
+			       <p>{% trans "By" %} <strong>{{ radio.creator.get_profile }}</strong></p>
+			       <p>{{ radio.description }}</p>
+		        </div>
+		   </div>
+        </div>   
     </div>
+
+    <div class='row'>
+        <div class='span12'>
+           <div id='player'>
+               <div id='track-picture'>
+                   {% thumbnail radio.picture "128x128" format='PNG' as im %}
+                   <img src="{{ im.url }}" alt='{% trans "Radio logo" %}'/>
+                   {% endthumbnail %}
+               </div>
+               <div id='track-details'>
+                   <h2>You gotta move</h2>
+                   <p>{% trans "By"%} <strong>The Rolling Stones</strong> on <strong>Where is my mind</strong></p>
+                   <div class="btn-toolbar">
+                   <div class="btn-group">
+                      <a class="btn" id='play' href='#'><i class="icon-play"></i></a>
+                      <a class="btn" id='dec' href='#'><i class="icon-volume-down"></i></a>
+                      <a class="btn" id='inc' href='#'><i class="icon-volume-up"></i></a>
+                   </div>
+
+                   <div class="btn-group">
+                   <a class="btn" href="#">
+                    <i class="icon-shopping-cart"></i>
+                    {% trans "Buy on iTunes" %}
+                    </a>
+                    </div>
+
+                   </div>
+               </div> 
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div id='appstore'>
+        <a href='#'>
+        <img src='/media/images/available-appstore-fr.png' alt='{% trans "available on appstore" %}'/>
+        </a>
+        </div>
+    </div>    
+    
+    <footer>
+      <div id="menu">
+      <a href="a_propos_de_nous.php">À propos de nous</a> | <a href="jobs.php">Jobs</a> | <a href="presse.php">Presse</a> | <a href="contact.php">Contact</a>
+      </div>
+    </footer>
 </div>
 {% endblock %}
