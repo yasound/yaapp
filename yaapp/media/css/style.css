@@ -107,6 +107,8 @@ footer #menu a:hover {
     
 }
 
+
 #volume-control {
 	width:235px;
+	cursor: pointer;
 }

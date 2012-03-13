@@ -39,6 +39,8 @@ $(document).ready(function() {
 		if (mySound.volume <= 90) {
 			$('#volume-position').css("width", mySound.volume+10 + "%");
 			mySound.setVolume(mySound.volume+10);
+		} else {
+			
 		}	
 	})
 	$('#dec').click(function() {

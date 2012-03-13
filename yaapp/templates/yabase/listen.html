@@ -32,13 +32,13 @@
     <div class='row'>
         <div class='span4'>
 		   <div id="radio">
-		       <div id='radio-picture'>
+		       <div id='radio-picture' class='thumbnail'>
 		           {% if radio.picture %}
-			       {% thumbnail radio.picture "128x128" format='PNG' as im %}
-			       <img src="{{ im.url }}" width="128" height="128" alt='{% trans "Radio logo" %}'/>
+			       {% thumbnail radio.picture "160x160" format='PNG' as im %}
+			       <img src="{{ im.url }}" width="160" height="160" alt='{% trans "Radio logo" %}'/>
 			       {% endthumbnail %}
 			       {% else %}
-                   <img src="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Radio logo" %}'/>
+                   <img src="/media/images/default_image.png" width="160px" height="160px" alt='{% trans "Radio logo" %}'/>
 			       {% endif %}
 		       </div>
 		       <div id='radio-title'>
@@ -49,8 +49,8 @@
 
         <div class='span8'>
            <div id='player'>
-               <div id='track-picture'>
-                   <img id='track-image' src="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Track logo" %}'/>
+               <div id='track-picture' class='thumbnail'>
+                   <img id='track-image' src="/media/images/default_image.png" width="160px" height="160px" alt='{% trans "Track logo" %}'/>
                </div>
                <div id='track-details'>
                    <h2><span id='track-name'>{% trans "No name" %}</span></h2>
