@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block extra_head %}
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
+        var g_radio_id = '{{ radio.id }}';
+        
         var lbl_mute = "{% trans 'Mute' %}";
         var lbl_unmute = "{% trans 'Unmute' %}";
         var lbl_play = "{% trans 'Play' %}";
         var lbl_stop = "{% trans 'Stop' %}";
     </script>
     <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/media/js/jquery.timers.js"></script>
     <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
     <script type="text/javascript" src="/media/js/listen.js"></script>
     
@@ -17,39 +21,75 @@
 {% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
 {% block body %}
 <div class='container'>
-
     <div class='row'>
-	    <div class='span10'>
-		    <div class="hero-unit">
-			    <h1>{{ radio }}</h1>
-		        {% for tag in radio.tags.all %}<span class="label notice">{{tag}}</span> {% endfor%}
-			    <p>{% trans "Created by" %} <strong>{{ radio.creator }}</strong> {% trans "on" %} {{ radio.created|date:"j F Y" }}</p>
-			    <p>{{ radio.description }}</p>
-				<p><a class="btn primary large" href='http://yasound.com'>{% trans "Go to Yasound »" %}</a></p>
-		    </div>
-	    </div>
-        <div class='span6'>
-            <table class="zebra-striped">
-            <thead>
-            </thead>
-            <tbody>
-            <tr><td>{% trans "Creator" %}</td><td>{{ radio.creator }}</td></tr>
-            <tr><td>{% trans "Date" %}</td><td>{{ radio.created|date:"j F Y" }}</td></tr>
-            <tr><td>{% trans "Genre" %}</td><td>{{ radio.genre }}</td></tr>
-            <tr><td>{% trans "Theme" %}</td><td>{{ radio.theme }}</td></tr>
-            <tr><td>{% trans "Audience peak" %}</td><td>{{ radio.audience_peak }}</td></tr>
-            <tr><td>{% trans "Overall listening time" %}</td><td>{{ radio.overall_listening_time }}</td></tr>
-            <tr><td>{% trans "Listeners" %}</td><td>{{ listeners }}</td></tr>
-            <tr><td>{% trans "Fans" %}</td><td>{{ fans }}</td></tr>
-            </tbody>
-            </table>
+        <div class='span3'>
+        <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+        </div>
+        <div class='span9'>
+        <img src='/media/images/banner.png' alt='Banner'/>
         </div>
     </div>
-    <div class="well">
-        <a class="btn large" id='play' href='#'>{% trans "Play" %}</a>
-        <a class="btn large" id='inc' href='#'>{% trans "Increase volume" %}</a>
-        <a class="btn large" id='dec' href='#'>{% trans "Decrease volume" %}</a>
-        <a class="btn large" id='mute' href='#'>{% trans "Mute" %}</a>
+    <div class='row'>
+        <div class='span4'>
+		   <div id="radio">
+		       <div id='radio-picture' class='thumbnail'>
+		           {% if radio.picture %}
+			       {% thumbnail radio.picture "160x160" format='PNG' as im %}
+			       <img src="{{ im.url }}" width="160" height="160" alt='{% trans "Radio logo" %}'/>
+			       {% endthumbnail %}
+			       {% else %}
+                   <img src="/media/images/default_image.png" width="160px" height="160px" alt='{% trans "Radio logo" %}'/>
+			       {% endif %}
+		       </div>
+		       <div id='radio-title'>
+			       <h1>{{ radio }}</h1>
+		        </div>
+		   </div>
+        </div>   
+
+        <div class='span8'>
+           <div id='player'>
+               <div id='track-picture' class='thumbnail'>
+                   <img id='track-image' src="/media/images/default_image.png" width="160px" height="160px" alt='{% trans "Track logo" %}'/>
+               </div>
+               <div id='track-details'>
+                   <h2><span id='track-name'>{% trans "No name" %}</span></h2>
+                   <p>{% trans "By"%} <strong><span id='track-artist'></span></strong> - <strong><span id='track-album'></span></strong></p>
+                   <div class="btn-toolbar">
+                   <div class="btn-group">
+                      <a class="btn" id='play'><i class="icon-play"></i></a>
+                      <a class="btn" id='dec'><i class="icon-volume-down"></i></a>
+                      <a class="btn" id='inc' ><i class="icon-volume-up"></i></a>
+                   </div>
+
+                   <div class="btn-group">
+                   <a class="btn" href="#">
+                    <i class="icon-shopping-cart"></i>
+                    {% trans "Buy on iTunes" %}
+                    </a>
+                    </div>
+                      <div class="progress no-ease" id='volume-control' onmousedown="return false">
+                        <div class="bar" id='volume-position' style="width: 0%;" onmousedown="return false"></div>
+                      </div>
+
+                   </div>
+               </div> 
+            </div>
+        </div>
     </div>
+    
+    <div class='row'>
+        <div id='appstore'>
+        <a href='#'>
+        <img src='/media/images/available-appstore-fr.png' alt='{% trans "available on appstore" %}'/>
+        </a>
+        </div>
+    </div>    
+    
+    <footer>
+      <div id="menu">
+      <a href="{% url logout %}">{% trans "Logout" %}</a> | <a href="http://yasound.com/a_propos_de_nous.php">À propos de nous</a> | <a href="http://yasound.com/jobs.php">Jobs</a> | <a href="http://yasound.com/presse.php">Presse</a> | <a href="http://yasound.com/contact.php">Contact</a>
+      </div>
+    </footer>
 </div>
 {% endblock %}

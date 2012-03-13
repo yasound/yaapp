@@ -142,41 +142,47 @@ def build_mongodb_index(upsert=False, erase=False):
     
     
     
-def search_radio(search_text, radio_min_score=40):
-        radio_results = Radio.objects.search_fuzzy(search_text, 5)
-        radios = []
-        for r in radio_results:
-            radio_id = r[0]["db_id"]
-            score = r[1]
-            if score >= radio_min_score:
-                radios.append(Radio.objects.get(id=radio_id))
-            else:
-                break
-        return radios
+def search_radio(search_text, radio_min_score=40, ready_radios_only=True):
+    radio_results = Radio.objects.search_fuzzy(search_text, 5)
+    radios = []
+    for r in radio_results:
+        radio_id = r[0]["db_id"]
+        score = r[1]
+        if score >= radio_min_score:
+            r = Radio.objects.get(id=radio_id)
+            if r.ready or not ready_radios_only:
+                radios.append(r)
+        else:
+            break
+    return radios
     
-def search_radio_by_user(search_text, user_min_score=50):
-        user_results = UserProfile.objects.search_user_fuzzy(search_text, 5)
-        users = []
-        for u in user_results:
-            user_id = u[0]["db_id"]
-            score = u[1]
-            if score >= user_min_score:
-                users.append(User.objects.get(id=user_id))
-            else:
-                break
-        radios = []
-        for u in users:
-            if u.userprofile.own_radio and u.userprofile.own_radio.ready:
+def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True):
+    user_results = UserProfile.objects.search_user_fuzzy(search_text, 5)
+    users = []
+    for u in user_results:
+        user_id = u[0]["db_id"]
+        score = u[1]
+        if score >= user_min_score:
+            users.append(User.objects.get(id=user_id))
+        else:
+            break
+    radios = []
+    for u in users:
+        if u.userprofile.own_radio:
+            if u.userprofile.own_radio.ready or not ready_radios_only:
                 radios.append(u.userprofile.own_radio)
-        return radios
+    return radios
     
-def search_radio_by_song(search_text, limit=10):
-        song_results = YasoundSong.objects.search_fuzzy(search_text, 1000)
-        songs = []
-        for s in song_results:
-            songs.append(s[0]["db_id"])
-        radios = Radio.objects.filter(current_song__metadata__yasound_song_id__in=songs).order_by('-overall_listening_time')[:limit]
-        return radios
+def search_radio_by_song(search_text, limit=10, ready_radios_only=True):
+    song_results = YasoundSong.objects.search_fuzzy(search_text, 1000)
+    songs = []
+    for s in song_results:
+        songs.append(s[0]["db_id"])
+    radio_queryset = Radio.objects
+    if ready_radios_only:
+        radio_queryset = radio_queryset.filter(ready=True)
+    radios = radio_queryset.filter(current_song__metadata__yasound_song_id__in=songs).order_by('-overall_listening_time')[:limit]
+    return radios
     
     
     

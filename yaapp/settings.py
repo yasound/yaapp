@@ -222,6 +222,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "social_auth.context_processors.social_auth_by_type_backends",
+    "yabase.context_processors.my_radios",
 )
 
 TEMPLATE_DIRS = (
@@ -262,6 +263,7 @@ INSTALLED_APPS = (
     'social_auth',
     'sorl.thumbnail',
     'yasearch',
+    'yainvitation',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -287,10 +289,19 @@ LOGGING = {
             'format': '%(levelname)s %(message)s'
         },
     },
+    'filters': {
+        'time_throttled': {
+            '()': 'yaapp.timethrottledfilter.TimeThrottledFilter',
+            'quantity': 5,
+            'interval': 30,
+            'ignore_lines': [],
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['time_throttled'],
         },
         'null': {
             'level':'DEBUG',
@@ -299,7 +310,7 @@ LOGGING = {
         'console':{
             'level':'DEBUG',
             'class':'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'simple',
         },
         'file':{
             'level':'DEBUG',
@@ -309,10 +320,6 @@ LOGGING = {
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.log'),
             'formatter': 'verbose'
         },     
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-        }
     },
     'loggers': {
         'django': {
@@ -452,12 +459,12 @@ COMPRESS_CSS_FILTERS = ()
     
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
-FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ab 64000' # convert option when generating mp3 preview
-FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ab 192000' # convert to mp3
+FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ar 24000 -ab 64000 -y' # convert option when generating mp3 preview
+FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ar 44100 -ab 192000' # convert to mp3
 
 if LOCAL_MODE:
-    FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ab 64000' # convert option when generating mp3 preview
-    FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ab 192000' # convert to mp3
+    FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ar 24000 -ab 64000 -y' # convert option when generating mp3 preview
+    FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ar 44100 -ab 192000' # convert to mp3
 
 if PRODUCTION_MODE:
     SONGS_ROOT = '/space/new/medias/song/'
@@ -465,3 +472,6 @@ if PRODUCTION_MODE:
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
+    
+DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
+

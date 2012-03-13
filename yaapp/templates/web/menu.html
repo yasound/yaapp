@@ -2,7 +2,10 @@
 <ul class="nav nav-list">
     {% if request.user.is_authenticated %}
     <li class="nav-header">{% trans "My radio" %}</li>
-    <li {% ifequal selected "my-radio" %}class='active' {% endifequal %}><a href="{% url web_myradio %}">{% trans "My radio" %}</a></li>
+    
+    {% for radio in my_radios %}
+    <li {% ifequal selected radio.uuid %}class='active' {% endifequal %}><a href="{% url web_myradio radio.uuid %}">{{ radio }}</a></li>
+    {% endfor %}
     <li class="nav-header">{% trans "Radios" %}</li>
     <li {% ifequal selected "friends" %}class='active' {% endifequal %}><a href="{% url web_friends %}">{% trans "My friends" %}</a></li>
     <li {% ifequal selected "favorites" %}class='active' {% endifequal %}><a href="{% url web_favorites %}">{% trans "My favorites" %}</a></li>

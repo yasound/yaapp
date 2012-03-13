@@ -54,4 +54,12 @@ class TestUtils(TestCase):
         name = u"طبيب"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"tbyb")
+
+        name = u"Français"
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, u"francais")
+
+        name = None
+        simplified_name = get_simplified_name(name)
+        self.assertEquals(simplified_name, None)
         

@@ -1,0 +1,360 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-08 15:31+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: js/backoffice/backoffice.js:64
+#: js/backoffice/Radio/Radios.js:292
+#: js/backoffice/Radio/UnmatchedSongs.js:21
+msgid "Radios"
+msgstr "Radios"
+
+#: js/backoffice/backoffice.js:66
+msgid "Song management"
+msgstr "Gestion des chansons"
+
+#: js/backoffice/backoffice.js:80
+#: js/backoffice/Radio/UnmatchedSongs.js:38
+msgid "Unmatched songs"
+msgstr "Chansons non détectées"
+
+#: js/backoffice/backoffice.js:83
+msgid "Upload new songs to yasound"
+msgstr "Envoyer les nouvelles chansons vers yasound"
+
+#: js/backoffice/backoffice.js:96
+msgid "Search engine"
+msgstr "Moteur de recherche"
+
+#: js/backoffice/backoffice.js:98
+msgid "Search engine tools"
+msgstr "Outils de recherche"
+
+#: js/backoffice/backoffice.js:122
+#: js/backoffice/Invitations/Invitations.js:182
+msgid "Invitations"
+msgstr "Invitations"
+
+#: js/backoffice/Invitations/InvitationForm.js:28
+msgid "Enter name of VIP"
+msgstr "Entrez le nom du VIP"
+
+#: js/backoffice/Invitations/InvitationForm.js:34
+msgid "Enter mail of VIP"
+msgstr "Entrez le mail du VIP"
+
+#: js/backoffice/Invitations/InvitationForm.js:41
+msgid "Please choose a radio"
+msgstr "Veuillez choisir une radio"
+
+#: js/backoffice/Invitations/InvitationForm.js:44
+msgid "Subject"
+msgstr "Sujet"
+
+#: js/backoffice/Invitations/InvitationForm.js:45
+msgid "Enter subject of invitation"
+msgstr "Saisir le sujet de l'invitation"
+
+#: js/backoffice/Invitations/InvitationForm.js:49
+msgid "Message"
+msgstr "Message"
+
+#: js/backoffice/Invitations/InvitationForm.js:55
+msgid "Save"
+msgstr "Sauver"
+
+#: js/backoffice/Invitations/InvitationForm.js:63
+#: js/backoffice/Radio/RadioForm.js:58
+#: js/backoffice/Upload/Upload.js:41
+msgid "Sending informations..."
+msgstr "Transmission des informations..."
+
+#: js/backoffice/Invitations/InvitationForm.js:84
+#: js/backoffice/Radio/RadioForm.js:79
+msgid "Cancel"
+msgstr "Annuler"
+
+#: js/backoffice/Invitations/InvitationGrid.js:30
+#: js/backoffice/Radio/RadioGrid.js:19
+#: js/backoffice/Users/UserGrid.js:27
+msgid "Name"
+msgstr "Nom"
+
+#: js/backoffice/Invitations/InvitationGrid.js:40
+msgid "Email"
+msgstr "Email"
+
+#: js/backoffice/Invitations/InvitationGrid.js:50
+msgid "Radio"
+msgstr "Radio"
+
+#: js/backoffice/Invitations/InvitationGrid.js:60
+msgid "Associated user"
+msgstr "Utilisateur associé"
+
+#: js/backoffice/Invitations/InvitationGrid.js:71
+msgid "Sent at"
+msgstr "Envoyée le"
+
+#: js/backoffice/Invitations/InvitationGrid.js:133
+#: js/backoffice/Radio/RadioGrid.js:79
+#: js/backoffice/Radio/SongInstanceGrid.js:88
+#: js/backoffice/Radio/YasoundSongGrid.js:85
+#: js/backoffice/Users/UserGrid.js:115
+msgid "Displaying {0} - {1} of {2}"
+msgstr "Affichage de {0} - {1} sur {2}"
+
+#: js/backoffice/Invitations/InvitationGrid.js:134
+#: js/backoffice/Radio/RadioGrid.js:80
+#: js/backoffice/Radio/SongInstanceGrid.js:89
+#: js/backoffice/Radio/YasoundSongGrid.js:86
+#: js/backoffice/Users/UserGrid.js:116
+msgid "Nothing to display"
+msgstr "Rien à afficher"
+
+#: js/backoffice/Invitations/Invitations.js:10
+#: js/backoffice/Invitations/Invitations.js:35
+#: js/backoffice/Invitations/Invitations.js:102
+#: js/backoffice/Invitations/Invitations.js:124
+#: js/backoffice/Radio/Radios.js:13
+#: js/backoffice/Radio/Radios.js.py:44
+#: js/backoffice/Radio/Radios.js:68
+#: js/backoffice/Radio/Radios.js.py:92
+#: js/backoffice/Radio/Radios.js:200
+#: js/backoffice/Radio/Radios.js.py:222
+msgid "Confirmation"
+msgstr "Confirmation"
+
+#: js/backoffice/Invitations/Invitations.js:11
+msgid "Do you want to generate invitation message ?"
+msgstr "Voulez-vous générer le message d'invitation ?"
+
+#: js/backoffice/Invitations/Invitations.js:36
+msgid "Do you want to send invitation ?"
+msgstr "Voulez-vous envoyer l'invitation ?"
+
+#: js/backoffice/Invitations/Invitations.js:68
+msgid "Generate message"
+msgstr "Générer le message"
+
+#: js/backoffice/Invitations/Invitations.js:74
+msgid "Send invitation"
+msgstr "Envoyer l'invitation"
+
+#: js/backoffice/Invitations/Invitations.js:98
+msgid "Create new invitation"
+msgstr "Créer une nouvelle invitation"
+
+#: js/backoffice/Invitations/Invitations.js:103
+msgid "Do you want to create new invitation ?"
+msgstr "Voulez-vous créer une nouvelle invitation ?"
+
+#: js/backoffice/Invitations/Invitations.js:110
+msgid "New VIP"
+msgstr "Nouveau VIP"
+
+#: js/backoffice/Invitations/Invitations.js:118
+#: js/backoffice/Radio/Radios.js:216
+msgid "Delete"
+msgstr "Supprimer"
+
+#: js/backoffice/Invitations/Invitations.js:125
+msgid "Do you want to delete invitation ?"
+msgstr "Voulez-vous supprimer l'invitation ?"
+
+#: js/backoffice/Invitations/Invitations.js:179
+msgid "Invitations management"
+msgstr "Gestion des invitations"
+
+#: js/backoffice/Invitations/Invitations.js:189
+msgid "Pending"
+msgstr "Non envoyées"
+
+#: js/backoffice/Invitations/Invitations.js:193
+msgid "Sent"
+msgstr "Envoyées"
+
+#: js/backoffice/Invitations/Invitations.js:197
+msgid "Accepted"
+msgstr "Acceptées"
+
+#: js/backoffice/Radio/RadioForm.js:26
+msgid "Enter radio name"
+msgstr "Entrez le nom de la radio"
+
+#: js/backoffice/Radio/RadioForm.js:27
+msgid "Radio name"
+msgstr "Nom de la radio"
+
+#: js/backoffice/Radio/RadioForm.js:34
+msgid "Choose a user"
+msgstr "Sélectionner un utilisateur"
+
+#: js/backoffice/Radio/RadioForm.js:35
+msgid "User"
+msgstr "Utilisateur"
+
+#: js/backoffice/Radio/RadioForm.js:42
+msgid "Select files or folder"
+msgstr "Sélectionner des fichiers ou un répertoire"
+
+#: js/backoffice/Radio/RadioForm.js:43
+#: js/backoffice/Upload/Upload.js:96
+msgid "Upload songs"
+msgstr "Importer des chansons"
+
+#: js/backoffice/Radio/RadioForm.js:52
+msgid "Submit"
+msgstr "Valider"
+
+#: js/backoffice/Radio/Radios.js:14
+msgid "Do you want to remove songs from radio"
+msgstr "Voulez-vous supprimer les chansons de la radio ?"
+
+#: js/backoffice/Radio/Radios.js:45
+msgid "Do you want to remove all songs from radio"
+msgstr "Voulez-vous supprimer toutes les chansons de la radio ?"
+
+#: js/backoffice/Radio/Radios.js:69
+msgid "Do you want to find and remove duplicates from radio"
+msgstr "Voulez-vous supprimer les doublons de la radio ?"
+
+#: js/backoffice/Radio/Radios.js:93
+msgid "Do you want to add songs to radio"
+msgstr "Voulez-vous ajouter les chansons à la radio ?"
+
+#: js/backoffice/Radio/Radios.js:128
+msgid "Songs assigned to radio"
+msgstr "Chansons assignées à la radio"
+
+#: js/backoffice/Radio/Radios.js:130
+msgid "Remove from radio"
+msgstr "Supprimer de la radio"
+
+#: js/backoffice/Radio/Radios.js:140
+msgid "Remove all songs from radio"
+msgstr "Supprimer toutes les chansons de la radio"
+
+#: js/backoffice/Radio/Radios.js:149
+msgid "Remove duplicate songs from radio"
+msgstr "Supprimer les doublons de la radio"
+
+#: js/backoffice/Radio/Radios.js:196
+msgid "Create new radio"
+msgstr "Créer une nouvelle radio"
+
+#: js/backoffice/Radio/Radios.js:201
+msgid "Do you want to create new radio ?"
+msgstr "Voulez-vous créer une radio ?"
+
+#: js/backoffice/Radio/Radios.js:208
+msgid "New radio"
+msgstr "Nouvelle radio"
+
+#: js/backoffice/Radio/Radios.js:223
+msgid "Do you want to delete radio ?"
+msgstr "Voulez-vous supprimer la radio ?"
+
+#: js/backoffice/Radio/Radios.js:258
+msgid "Available songs"
+msgstr "Chansons disponibles"
+
+#: js/backoffice/Radio/Radios.js:262
+msgid "Add to radio"
+msgstr "Ajouter à la radio"
+
+#: js/backoffice/Radio/Radios.js:285
+msgid "Radios management"
+msgstr "Gestion des radios"
+
+#: js/backoffice/Radio/SongInstanceGrid.js:9
+#: js/backoffice/Radio/YasoundSongGrid.js:9
+msgid "Track"
+msgstr "Piste"
+
+#: js/backoffice/Radio/SongInstanceGrid.js:19
+#: js/backoffice/Radio/YasoundSongGrid.js:18
+msgid "Album"
+msgstr "Album"
+
+#: js/backoffice/Radio/SongInstanceGrid.js:29
+#: js/backoffice/Radio/YasoundSongGrid.js:27
+msgid "Artist"
+msgstr "Artiste"
+
+#: js/backoffice/Radio/SongInstanceGrid.js:97
+#: js/backoffice/Radio/YasoundSongGrid.js:95
+#, perl-brace-format
+msgid ""
+"{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"elements\" : "
+"\"element\"]})"
+msgstr "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
+"\"élément\"]})"
+
+#: js/backoffice/Radio/UnmatchedSongs.js:15
+msgid "Songs"
+msgstr "Chanson"
+
+#: js/backoffice/SearchEngine/SearchEngine.js:16
+msgid "Fuzzy song search"
+msgstr "Recherche floue"
+
+#: js/backoffice/Upload/Upload.js:24
+msgid "Select a file"
+msgstr "Sélectionner un fichier"
+
+#: js/backoffice/Upload/Upload.js:34
+msgid "Import"
+msgstr "Importer"
+
+#: js/backoffice/Upload/Upload.js:89
+msgid "Import results"
+msgstr "Résultats de l'import"
+
+#: js/backoffice/Upload/Upload.js:112
+msgid "Upload started\n"
+msgstr "Import démarré\n"
+
+#: js/backoffice/Users/UserField.js:52
+msgid "Please select user"
+msgstr "Veuillez sélectionner un utilisateur"
+
+#: js/backoffice/Users/UserGrid.js:37
+msgid "Facebook UID"
+msgstr "UID facebook"
+
+#: js/backoffice/Users/UserGrid.js:47
+msgid "Last authentication"
+msgstr "Dernière authentification"
+
+#: js/backoffice/Users/UserGrid.js:54
+msgid "Superuser?"
+msgstr "Superutilisateur ?"
+
+#: js/backoffice/Users/UserGrid.js:60
+msgid "Yes"
+msgstr "Oui"
+
+#: js/backoffice/Users/UserGrid.js:62
+msgid "No"
+msgstr "Non"
+
+#: js/backoffice/ux/LoggerWindow.js:14
+msgid "Close"
+msgstr "Fermer"
+

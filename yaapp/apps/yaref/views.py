@@ -1,6 +1,7 @@
 from celery.result import AsyncResult
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseForbidden
+    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseForbidden,\
+    HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +11,9 @@ from models import YasoundSong
 from time import time
 from settings import FUZZY_KEY
 from django.utils import simplejson
+from check_request import check_api_key_Authentication, check_http_method
+from yaref.models import YasoundAlbum
+
 @login_required
 def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
     form = SearchForm(request.REQUEST)
@@ -48,3 +52,16 @@ def find_fuzzy_json(request):
         "db_id": db_id,
     }
     return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+
+def album_cover(request, album_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    album = get_object_or_404(YasoundAlbum, id=album_id)
+    url = album.cover_url
+    if not url:
+        url = '/media/images/default_image.png'
+    return HttpResponseRedirect(url)
+

@@ -4,7 +4,7 @@ from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
 from tests_utils import generate_playlist
-from yabase.import_utils import SongImporter
+from yabase.import_utils import SongImporter, generate_default_filename
 from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import import_utils
@@ -37,6 +37,9 @@ class TestModels(TestCase):
         radio = Radio(creator=user, name='radio1')
         radio.save()
         self.radio = radio
+        
+    def testUUID(self):
+        self.assertTrue(self.radio.uuid is not None)
         
     def testRadioUser(self):
         connected = RadioUser.objects.get_connected()
@@ -359,6 +362,67 @@ class TestImport(TestCase):
         radio = Radio.objects.radio_for_user(self.user)
         self.assertTrue(radio.ready)
         
-        
+    def test_generate_filename(self):
+        filename = generate_default_filename(None)
+        self.assertEquals(len(filename), len('2012-03-12-16:06'))
 
+        radio = Radio.objects.radio_for_user(self.user)
+        filename = generate_default_filename({'radio_id': radio.id})
+        self.assertEquals(len(filename), len('test-2012-03-12-16:06'))
+
+        profile = self.user.get_profile()
+        profile.name = 'my-beloved-name'
+        profile.save()
+
+        filename = generate_default_filename({'radio_id': radio.id})
+        self.assertEquals(len(filename), len('my-beloved-name-2012-03-12-16:06'))
+
+        profile.delete()
+
+        filename = generate_default_filename({'radio_id': radio.id})
+        self.assertEquals(len(filename), len('test-2012-03-12-16:06'))
+        
+class TestRadioDeleted(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user   
+    
+    def test_remove_song_instance(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        radio_id = radio.id
+        
+        playlist = generate_playlist(song_count=100)
+        playlist.radio = radio
+        playlist.save()
+        
+        self.assertEquals(SongInstance.objects.all().count(), 100)
+        radio.delete_song_instances([1])
+        self.assertEquals(SongInstance.objects.all().count(), 100-1)
+        
+        si = SongInstance.objects.get(id=2)
+        ns = NextSong(radio=radio, song=si, order=1)
+        ns.save()
+
+
+        radio.delete_song_instances([2,3,4])
+        self.assertEquals(SongInstance.objects.all().count(), 100-4)
+
+        radio = Radio.objects.get(id=radio_id)
+        radio.current_song = SongInstance.objects.get(id=5)
+        radio.save()
+        self.assertEquals(SongInstance.objects.all().count(), 100-4)
+
+        radio.delete_song_instances([5])
+        self.assertEquals(SongInstance.objects.all().count(), 100-5)
+
+        # check that radio is still here
+        radio = Radio.objects.get(id=radio_id)
+        
+        
+        
+        
+        
         

@@ -5,6 +5,7 @@ from django.db.models import signals
 from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
 import datetime
+from datetime import timedelta
 import random
 import settings as yabase_settings
 import string
@@ -14,8 +15,10 @@ from django.db.models import Q
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from sorl.thumbnail import get_thumbnail
 
 #from account.models import UserProfile
+import uuid
 
 import logging
 logger = logging.getLogger("yaapp.yabase")
@@ -26,8 +29,8 @@ if not 'db_name' in options.DEFAULT_NAMES:
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
-    artist_name = models.CharField(max_length=255)
-    album_name = models.CharField(max_length=255)
+    artist_name = models.CharField(max_length=255, blank=True)
+    album_name = models.CharField(max_length=255, blank=True)
     track_index = models.IntegerField(null=True, blank=True)
     track_count = models.IntegerField(null=True, blank=True)
     disc_index = models.IntegerField(null=True, blank=True)
@@ -48,9 +51,24 @@ class SongMetadata(models.Model):
         db_name = u'default'
 
 
-
+class SongInstanceManager(models.Manager):
+    def create_from_yasound_song(self, playlist, yasound_song):
+        metadatas = SongMetadata.objects.filter(name=yasound_song.name,
+                                               artist_name=yasound_song.artist_name,
+                                               album_name=yasound_song.album_name,
+                                               yasound_song_id=yasound_song.id)[:1]
+        if len(metadatas) >= 1:
+            metadata = metadatas[0]
+        else:
+            metadata = SongMetadata(name=yasound_song.name,
+                                    artist_name=yasound_song.artist_name,
+                                    album_name=yasound_song.album_name,
+                                    yasound_song_id=yasound_song.id)
+            metadata.save()
+        SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata)
 
 class SongInstance(models.Model):
+    objects = SongInstanceManager()
     playlist = models.ForeignKey('Playlist')
     song = models.IntegerField(null=True, blank=True) # song ID in the Song db -- this should disappear soon
     play_count = models.IntegerField(default=0)
@@ -62,6 +80,8 @@ class SongInstance(models.Model):
     need_sync = models.BooleanField(default=False)
     frequency = models.FloatField(default=0.5)
     enabled = models.BooleanField(default=True)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     
     def __unicode__(self):
         return unicode(self.metadata)
@@ -69,12 +89,7 @@ class SongInstance(models.Model):
     class Meta:
         db_name = u'default'
         
-    def fill_bundle(self, bundle):
-        likes = self.songuser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
-        bundle.data['likes'] = likes
-        dislikes = self.songuser_set.filter(mood=yabase_settings.MOOD_DISLIKE).count()
-        bundle.data['dislikes'] = dislikes
-        
+    def fill_bundle(self, bundle):        
         if self.metadata:
             bundle.data['name'] = self.metadata.name
             bundle.data['artist'] = self.metadata.artist_name
@@ -105,13 +120,21 @@ class SongInstance(models.Model):
     
     @property
     def song_status(self):
-        likes = SongUser.objects.likers(self).count()
-        dislikes = SongUser.objects.dislikers(self).count()
         status_dict = {};
         status_dict['id'] = self.id
-        status_dict['likes'] = likes
-        status_dict['dislikes'] = dislikes
+        status_dict['likes'] = self.likes
+        status_dict['dislikes'] = self.dislikes
         return status_dict
+    
+    def update_likes(self):
+        likes = SongUser.objects.likers(self).count()
+        self.likes = likes
+        self.save()
+        
+    def update_dislikes(self):
+        dislikes = SongUser.objects.dislikers(self).count()
+        self.dislikes = dislikes
+        self.save()
         
 class SongUserManager(models.Manager):
     def likers(self, song):
@@ -134,6 +157,24 @@ class SongUser(models.Model):
         verbose_name = _('Song user')
         unique_together = (('song', 'user'))
         db_name = u'default'
+        
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            orig = SongUser.objects.get(pk=self.pk)
+            if orig.mood != self.mood:
+                song_instance = self.song
+                if orig.mood == yabase_settings.MOOD_LIKE:
+                    song_instance.likes -= 1 # no more liked
+                    song_instance.likes = max(song_instance.likes, 0)
+                elif orig.mood == yabase_settings.MOOD_DISLIKE:
+                    song_instance.dislikes -= 1 # no more disliked
+                    song_instance.dislikes = max(song_instance.dislikes, 0)
+                if self.mood == yabase_settings.MOOD_LIKE:
+                    song_instance.likes += 1
+                elif self.mood == yabase_settings.MOOD_DISLIKE:
+                    song_instance.dislikes += 1
+                song_instance.save()
+        super(SongUser, self).save(*args, **kwargs)
 
 
 
@@ -198,7 +239,7 @@ class Playlist(models.Model):
 
 
 
-RADIO_NEXT_SONGS_COUNT = 20
+RADIO_NEXT_SONGS_COUNT = 1
 
 class RadioManager(models.Manager):
     def radio_for_user(self, user):
@@ -243,7 +284,7 @@ class RadioManager(models.Manager):
 
 class Radio(models.Model):
     objects = RadioManager()
-    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
+    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
@@ -265,6 +306,7 @@ class Radio(models.Model):
     current_connections = models.IntegerField(default=0) # number of connections since last RadioListeningStat
     
     favorites = models.IntegerField(default=0)
+    leaderboard_favorites = models.IntegerField(default=0)
     leaderboard_rank = models.IntegerField(null=True, blank=True)
     
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
@@ -272,11 +314,25 @@ class Radio(models.Model):
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     computing_next_songs = models.BooleanField(default=False)
     
-    current_song = models.ForeignKey(SongInstance, null=True, blank=True, verbose_name=_('current song'), related_name='current_song_radio')
+    current_song = models.ForeignKey(SongInstance, 
+                                     null=True, 
+                                     blank=True, 
+                                     verbose_name=_('current song'), 
+                                     related_name='current_song_radio', 
+                                     on_delete=models.SET_NULL)
+    
     current_song_play_date = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
-        return self.name;
+        if self.name:
+            return self.name
+        elif self.creator:
+            try:
+                profile = self.creator.get_profile()
+                return unicode(profile)
+            except:
+                return unicode(self.creator)
+        return self.name
     
     def save(self, *args, **kwargs):
         update_mongo = False
@@ -290,6 +346,9 @@ class Radio(models.Model):
             tags_changed = self.tags != saved.tags
             update_mongo = name_changed or genre_changed or tags_changed
             
+        if not self.uuid:
+            self.uuid = uuid.uuid4().hex
+
         super(Radio, self).save(*args, **kwargs)
         if update_mongo:
             self.build_fuzzy_index(upsert=True)
@@ -321,28 +380,29 @@ class Radio(models.Model):
         return playlist, True
     
     def find_new_song(self):
-        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0)
-        songs = songs_queryset.all()
-        count = len(songs)
-        if count == 0:
+        time_limit = datetime.datetime.now() - timedelta(hours=3)
+        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True, last_play_time__lt=time_limit).order_by('-frequency', 'id')
+        if songs_queryset.count() == 0:
+            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).order_by('-frequency', 'id') # try without time limit
+        if songs_queryset.count() == 0:
+            print 'no available songs'
+            return None 
+
+        frequencies = songs_queryset.values_list('frequency', flat=True)
+        weights = [x*x for x in frequencies] # use frequency * frequency to have high frequencies very differnet from low frequencies
+        r = random.random()
+        sum_weight = sum(weights)
+        rnd = r * sum_weight
+        index = -1
+        for i, w in enumerate(weights):
+            rnd -= w
+            if rnd < 0:
+                index = i
+                break
+        if index == -1:
             return None
-        
-        seconds_before_replay = 60 * 60 # at least 60 minutes before replaying the same song
-        now = datetime.datetime.now()
-        i = random.randint(0, count - 1)
-        first = i
-        while songs[i].last_play_time:
-            delta = now - songs[i].last_play_time
-            total_seconds = delta.days * 86400 + delta.seconds
-            if total_seconds > seconds_before_replay:
-                break
-            i += 1
-            i %= count
-            if i == first:
-                break
-        
-        s = songs[i]
-        return s
+        song = songs_queryset.all()[index]
+        return song
     
     def fill_next_songs_queue(self):
         while self.next_songs.count() < RADIO_NEXT_SONGS_COUNT:
@@ -409,6 +469,7 @@ class Radio(models.Model):
         bundle.data['likes'] = likes
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
+        bundle.data['stream_url'] = self.stream_url
         
     def update_with_data(self, data):
         if 'description' in data:
@@ -524,29 +585,50 @@ class Radio(models.Model):
     
     @property
     def unmatched_songs(self):
-        songs = SongInstance.objects.filter(song=None, playlist__in=self.playlists.all())
+        songs = SongInstance.objects.filter(metadata__yasound_song_id=None, playlist__in=self.playlists.all())
         return songs
 
     @property
     def picture_url(self):
-        return None
+        if self.picture:
+            try:
+                return get_thumbnail(self.picture, '100x100', format='PNG').url
+            except:
+                return yaapp_settings.DEFAULT_IMAGE
+        else:
+            return yaapp_settings.DEFAULT_IMAGE
+            
     
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_radio(self, upsert, insert)
+    
+    def build_picture_filename(self):
+        filename = 'radio_%d_picture.png' % self.id
+        return filename
+    
+    def delete_song_instances(self, ids):
+        self.empty_next_songs_queue()
+
+        SongInstance.objects.filter(id__in=ids, playlist__radio=self).delete()
+        
+    @property
+    def stream_url(self):
+        url = 'http://dev.yasound.com:8001/%s' % self.uuid
+        return url
         
     class Meta:
         db_name = u'default'
-        
-        
+              
 def update_leaderboard():
     radios = Radio.objects.order_by('-favorites')    
-    current_rank = 1
+    current_rank = 0
     count = 0
     last_favorites = None
     for r in radios:
-        if last_favorites and r.favorites != last_favorites:
+        if r.favorites != last_favorites:
             current_rank = count + 1
         r.leaderboard_rank = current_rank
+        r.leaderboard_favorites = r.favorites
         r.save()
         count += 1
         last_favorites = r.favorites

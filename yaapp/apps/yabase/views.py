@@ -1,30 +1,32 @@
 from celery.result import AsyncResult
 from check_request import check_api_key_Authentication, check_http_method
+from decorators import unlock_radio_on_exception
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser, User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseNotAllowed, HttpResponseBadRequest
+    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, SongMetadata
+from forms import SelectionForm
+from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
+    SongMetadata
 from task import process_playlists, process_upload_song
 from yaref.models import YasoundSong
 import datetime
+import import_utils
 import json
+import logging
+import os
 import settings as yabase_settings
 import time
-from django.contrib.auth.models import AnonymousUser
-from decorators import unlock_radio_on_exception
-from django.contrib.auth.decorators import login_required
-from forms import SelectionForm
 import uuid
-import os
 import yabase.settings as yabase_settings
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.translation import ugettext_lazy as _
 
-import import_utils
 
-import logging
 logger = logging.getLogger("yaapp.yabase")
 
 
@@ -80,23 +82,24 @@ def set_radio_picture(request, radio_id):
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
-    d = datetime.datetime.now()
-    filename = unicode(d) + '.png'
+    filename = radio.build_picture_filename()
 
-#    old_picture = radio.picture
-#    if old_picture:
-#        print 'remove old picture file'
-#        old_picture.delete()
-    
+    # todo: delete old file
+#    import pdb
+#    pdb.set_trace()
+#    if radio.picture and len(radio.picture.name) > 0:
+#        print 'radio picture delete'
+#        radio.picture.delete(save=True)
+#    print 'radio picture save'
     radio.picture.save(filename, f, save=True)
     
     # for now, set also the UserProfile picture
     userprofile = radio.creator.userprofile
-    userprofile.picture = radio.picture
-    userprofile.save()
+    # todo: delete old file
+    filename = userprofile.build_picture_filename()
+    userprofile.picture.save(filename, f, save=True)
 
     res = 'picture OK for radio: %s' % unicode(radio)
-    print 'set_radio_picture: OK (%s)' % res
     return HttpResponse(res)
 
 @csrf_exempt
@@ -427,8 +430,9 @@ def stop_listening_to_radio(request, radio_uuid):
     return HttpResponse(res)
 
 def get_current_song(request, radio_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
+    if not request.user.is_authenticated:
+        if not check_api_key_Authentication(request):
+            return HttpResponse(status=401)
 
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
@@ -457,15 +461,12 @@ def upload_song(request, song_id=None):
     """
     logger.info("upload song called")
     convert = True
-    allow_unknown_song = False
+    allow_unknown_song = True
     if not request.user.is_authenticated():
         key = request.REQUEST.get('key')
         if key != yabase_settings.UPLOAD_KEY:
             if not check_api_key_Authentication(request):
                 return HttpResponse(status=401)
-            else:
-                # we are coming from mobile client, we accept everything
-                allow_unknown_song = True
         else:
             convert = False # no conversion needed if request is coming from uploader
     if not check_http_method(request, ['post']):
@@ -476,14 +477,20 @@ def upload_song(request, song_id=None):
         logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
-    f = request.FILES[SONG_FILE_TAG]
-    
-    json_data = None
+        
+    json_data = {}
     data = request.REQUEST.get('data')
     if data:
         json_data = json.loads(data)
     else:
         logger.info('no metadata sent with binary')
+
+    f = request.FILES[SONG_FILE_TAG]
+    filename = f.name
+    if filename == yabase_settings.DEFAULT_FILENAME:
+        filename = import_utils.generate_default_filename(json_data) 
+    
+    json_data['filename'] = filename
     
     logger.info('importing song')
     process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id, allow_unknown_song=allow_unknown_song)
@@ -493,22 +500,44 @@ def upload_song(request, song_id=None):
 
 @login_required
 def upload_song_ajax(request):
-    if not request.FILES.has_key('file'):
-        logger.info('upload_song: request does not contain song')
+    if not request.user.is_superuser:
+        raise Http404
+    radio_id = request.REQUEST.get('radio_id')
+    radio_name = request.REQUEST.get('radio_name')
+    creator_profile_id = request.REQUEST.get('creator_profile_id')
+    
+    metadata = {
+        'radio_id': radio_id
+    }
+    global_message = u''
+    if radio_name and radio_id:
+        radio = Radio.objects.get(id=radio_id)
+        radio.name = radio_name
+        if creator_profile_id:
+            user = User.objects.get(userprofile__id=creator_profile_id)
+            radio.creator = user
+            global_message = global_message + _('radio "%s" assigned to "%s"\n') % (radio, user)  
+        radio.save()
+             
+    
+    if 'file' in request.FILES:    
+        f = request.FILES['file']
+        sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
-            'success': False,
-            'message': 'upload_song: request does not contain song'
+            'success': True,
+            'message': unicode(messages)
         })
         return HttpResponse(json_data, mimetype='text/html')
-
-    f = request.FILES['file']
-    sm, messages = import_utils.import_song(binary=f, metadata=None, convert=True)
-    json_data = json.JSONEncoder(ensure_ascii=False).encode({
-        'success': True,
-        'message': unicode(messages)
-    })
-    return HttpResponse(json_data, mimetype='text/html')
-
+    else:
+        for f in request.FILES.getlist('songs'):
+            sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
+            global_message = global_message + messages + '\n'
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': unicode(global_message)
+        })
+        return HttpResponse(json_data, mimetype='text/html')
+        
 
 @csrf_exempt
 def add_song(request, radio_id, playlist_index, yasound_song_id):
@@ -539,8 +568,26 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
+
+def song_instance_cover(request, song_instance_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    song_instance = get_object_or_404(SongInstance, id=song_instance_id)
+    yasound_song = get_object_or_404(YasoundSong, id=song_instance.metadata.yasound_song_id)
+    album = yasound_song.album
+    if not album:
+        return HttpResponseNotFound()
+#    album = get_object_or_404(YasoundAlbum, id=album_id)
+    url = album.cover_url
+    if not url:
+        url = '/media/images/default_image.png'
+    return HttpResponseRedirect(url)
     
 
+@login_required
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
@@ -556,10 +603,21 @@ def radios(request, template_name='web/radios.html'):
     }, context_instance=RequestContext(request))    
         
 @login_required
-def web_myradio(request, template_name='web/my_radio.html'):
-    radio = get_object_or_404(Radio, creator=request.user)
-    radio_uuid = radio.uuid
-    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
+def web_myradio(request, radio_uuid=None, template_name='web/my_radio.html'):
+    radio = None
+    if not uuid:
+        radios = Radio.objects.filter(creator=request.user, ready=True)[0:1]
+        if radios.count() == 0:
+            raise Http404
+        else:
+            radio = radios[0]
+    else:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
+    
+    if not radio.ready:
+        raise Http404
+    
+    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid)
     return render_to_response(template_name, {
         "radio": radio,
         "radio_url": radio_url,
@@ -634,3 +692,7 @@ def radio_unmatched_song(request, radio_id):
     return render_to_response('yabase/unmatched.html', {"unmatched_songs": unmatched, "radio": radio})  
     
     
+def status(request):
+    User.objects.get(id=1)
+    YasoundSong.objects.get(id=1)
+    return HttpResponse('OK')

@@ -12,7 +12,6 @@ import tweepy
 from facepy import GraphAPI
 import json
 import urllib
-import uuid
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
@@ -65,6 +64,14 @@ class UserProfile(models.Model):
             return self.name
         
         return self.user.username
+    
+    @property
+    def fullname(self):
+        if self.name:
+            return self.name
+        
+        return self.user.username
+        
     
     @property
     def subscription(self):
@@ -229,6 +236,10 @@ class UserProfile(models.Model):
         if update_mongo:
             self.build_fuzzy_index(upsert=True)
         
+    def build_picture_filename(self):
+        filename = 'userprofile_%d_picture.png' % self.id
+        return filename
+        
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
@@ -237,7 +248,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def create_radio(sender, instance, created, **kwargs):  
     if created:  
         radio, created = Radio.objects.get_or_create(creator=instance)
-        radio.uuid = uuid.uuid4().hex
         radio.save()
 
 post_save.connect(create_user_profile, sender=User)

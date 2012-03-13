@@ -82,7 +82,7 @@ from yasearch.utils import get_simplified_name
 import datetime
 import hashlib
 import logging
-import os
+import os, errno
 import random
 import requests
 import shutil
@@ -221,11 +221,16 @@ class SongImporter:
             return None
         mb_id = self._find_mb_id_for_artist(metadata)
         name = metadata.get('artist')
-        name_simplified = get_simplified_name(name)
         
         if not (echonest_id or mb_id or name):
             self._log(_("artist info not sufficient"))
             return None
+
+        if name is None:
+            self._log(_("no name for artist"))
+            return None
+            
+        name_simplified = get_simplified_name(name)
         
         try:
             artist = YasoundArtist.objects.get(echonest_id=echonest_id)
@@ -252,7 +257,12 @@ class SongImporter:
             pass
         
         mbid = self._find_mb_id_for_album(metadata)
+
         name = metadata.get('album')
+        if name is None:
+            self._log("no name for album")
+            return None
+            
         self._log("creating new album: %s" % (name))
         name_simplified = get_simplified_name(name)
         cover_filename = None
@@ -264,7 +274,12 @@ class SongImporter:
             self._log(_("downloading album cover"))
             if r.status_code == 200:
                 image_data = r.content
-                os.makedirs(os.path.dirname(cover_path))
+                try:
+                    os.makedirs(os.path.dirname(cover_path))
+                except OSError as e:
+                    if e.errno == errno.EEXIST:
+                        pass
+                    else: raise
                 destination = open(cover_path, 'wb')
                 destination.write(image_data)
                 destination.close()  
@@ -388,6 +403,7 @@ class SongImporter:
         name = metadata.get('title')
         artist_name = metadata.get('artist')
         album_name = metadata.get('album')
+        filename = metadata.get('filename')
     
         self._log("importing %s-%s-%s" % (name, album_name, artist_name))
         
@@ -412,7 +428,10 @@ class SongImporter:
             return None, self.get_messages()
         fingerprint_hash = hashlib.sha1(fingerprint).hexdigest()
         
-        if not name:
+        if name is None and filename is not None:
+            name = filename
+        
+        if name is None:
             logger.error("no title")
             return None, self.get_messages()
         name_simplified = get_simplified_name(name)
@@ -473,7 +492,12 @@ class SongImporter:
             # generate filename and save binary to disk
             self._log(_('generating filename'))
             filename, mp3_path = self._generate_filename_and_path_for_song()
-            os.makedirs(os.path.dirname(mp3_path))
+            try:
+                os.makedirs(os.path.dirname(mp3_path))
+            except OSError as e:
+                if e.errno == errno.EEXIST:
+                    pass
+                else: raise
             
             # create song object
             self._log(_('creating YasoundSong'))
@@ -494,7 +518,7 @@ class SongImporter:
                                danceability=Decimal(str(danceability)),
                                loudness=Decimal(str(loudness)),
                                energy=Decimal(str(energy)),
-                               tempo=int(tempo),
+                               tempo=Decimal(str(tempo)),
                                tonality_mode=tonality_mode,
                                tonality_key=tonality_key,
                                fingerprint=fingerprint,
@@ -553,11 +577,31 @@ class SongImporter:
         build_mongodb_index()
         return sm, self.get_messages()
     
-
+    def generate_preview(self, yasound_song):
+        filename = yasound_song.filename
+        
+        source = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
+        destination = self._get_filepath_for_preview(source)
+        self._generate_preview(source, destination) 
+    
 def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
     return importer.import_song(binary, metadata, convert, allow_unknown_song)
     
+def generate_preview(yasound_song):
+    importer = SongImporter()
+    return importer.generate_preview(yasound_song)
     
+def generate_default_filename(metadata):
+    now = datetime.datetime.now()
+    now_str = now.strftime('%Y-%m-%d-%H:%M')
+    filename = now_str
+    if metadata:
+        radio_id = metadata.get('radio_id')
+        if radio_id:
+            radio = Radio.objects.get(id=radio_id)
+            filename = u'%s-%s' % (radio, now_str)  
+    return filename
+
     
     

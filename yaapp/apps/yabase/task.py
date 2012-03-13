@@ -183,3 +183,8 @@ def process_upload_song(binary, metadata=None, convert=True, song_id=None, allow
     sm, _messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
     if song_id and sm:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)
+        
+@task
+def generate_preview(yasound_song_id):
+    yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+    import_utils.generate_preview(yasound_song)
