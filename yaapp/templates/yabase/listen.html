@@ -23,7 +23,7 @@
 <div class='container'>
     <div class='row'>
         <div class='span3'>
-        <img src='/media/images/logo.png' alt='Yasound logo'/>
+        <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
         </div>
         <div class='span9'>
         <img src='/media/images/banner.png' alt='Banner'/>
@@ -35,7 +35,7 @@
 		       <div id='radio-picture'>
 		           {% if radio.picture %}
 			       {% thumbnail radio.picture "128x128" format='PNG' as im %}
-			       <img src="{{ im.url }}" alt='{% trans "Radio logo" %}'/>
+			       <img src="{{ im.url }}" width="128px" height="128px" alt='{% trans "Radio logo" %}'/>
 			       {% endthumbnail %}
 			       {% else %}
                    <imgsrc="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Radio logo" %}'/>
@@ -43,7 +43,6 @@
 		       </div>
 		       <div id='radio-title'>
 			       <h1>{{ radio }}</h1>
-			       {% for tag in radio.tags.all %}<span class="label notice">{{tag}}</span> {% endfor%}
 			       <p>{% trans "By" %} <strong>{{ radio.creator.get_profile }}</strong></p>
 			       <p>{{ radio.description }}</p>
 		        </div>
