@@ -88,9 +88,25 @@ $(document).ready(function() {
 	getData();
 	
 	
+	var resizeVolumeBar = function(event) {
+		$('body').css('cursor','pointer');
+		var $volumeControl = $('#volume-control');
+		var position = event.pageX;
+		var left = $volumeControl.position().left;
+		var width = $volumeControl.width();
+		
+		var relativePosition = position - left;
+		var soundVolume = Math.floor(relativePosition * 100 / width)
+		var percentage = soundVolume + "%";
+		$('#volume-position').css("width", percentage);
+
+		mySound.setVolume(soundVolume);
+	}
+	
 	var volumeMouseDown = false;
 	$('#volume-control').mousedown(function(event) {
 		 volumeMouseDown = true;
+		resizeVolumeBar(event);
 	});
 	$(document).mouseup(function(event) {
 		if (volumeMouseDown) {
@@ -104,18 +120,6 @@ $(document).ready(function() {
 		if (!volumeMouseDown) {
 			return;
 		}
-		$('body').css('cursor','pointer');
-		var $volumeControl = $('#volume-control');
-		var position = event.pageX;
-		var left = $volumeControl.position().left;
-		var width = $volumeControl.width();
-		
-		var relativePosition = position - left;
-		var soundVolume = Math.floor(relativePosition * 100 / width)
-		var percentage = soundVolume + "%";
-		$('#volume-position').css("width", percentage);
-
-		mySound.setVolume(soundVolume);
-		
+		resizeVolumeBar(event);
 	});
 });
