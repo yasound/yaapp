@@ -88,7 +88,18 @@ $(document).ready(function() {
 	getData();
 	
 	
-	$('#volume-control').click(function(event) {
+	var volumeMouseDown = false;
+	$('#volume-control').mousedown(function(event) {
+		 volumeMouseDown = true;
+	});
+	$(document).mouseup(function(event) {
+		 volumeMouseDown = false;
+	});
+	
+	$("#volume-control").mousemove(function(event) {
+		if (!volumeMouseDown) {
+			return;
+		}
 		var $volumeControl = $('#volume-control');
 		var position = event.pageX;
 		var left = $volumeControl.position().left;
