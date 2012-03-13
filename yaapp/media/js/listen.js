@@ -40,13 +40,17 @@ $(document).ready(function() {
 			$('#volume-position').css("width", mySound.volume+10 + "%");
 			mySound.setVolume(mySound.volume+10);
 		} else {
-			
+			$('#volume-position').css("width", "100%");
+			mySound.setVolume(100);
 		}	
 	})
 	$('#dec').click(function() {
 		if (mySound.volume >= 10) {
 			$('#volume-position').css("width", mySound.volume-10 + "%");
 			mySound.setVolume(mySound.volume-10);
+		} else {
+			$('#volume-position').css("width", "0%");
+			mySound.setVolume(0);
 		}
 	})
 
