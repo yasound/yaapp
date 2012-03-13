@@ -93,13 +93,18 @@ $(document).ready(function() {
 		 volumeMouseDown = true;
 	});
 	$(document).mouseup(function(event) {
-		 volumeMouseDown = false;
+		if (volumeMouseDown) {
+			$('body').css('cursor','auto');
+			volumeMouseDown = false;
+		}
 	});
 	
-	$("#volume-control").mousemove(function(event) {
+	
+	$(document).mousemove(function(event) {
 		if (!volumeMouseDown) {
 			return;
 		}
+		$('body').css('cursor','pointer');
 		var $volumeControl = $('#volume-control');
 		var position = event.pageX;
 		var left = $volumeControl.position().left;

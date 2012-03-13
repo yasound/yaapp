@@ -31,27 +31,30 @@ footer #menu a:hover {
 }
 
 #radio {
-    margin-top:24px;
+	margin-top: 24px;
 	background-color: #F5F5F5;
-    border-radius: 6px 6px 6px 6px;
-    margin-bottom: 30px;
-    padding: 60px;
-    background-image:url(/media/images/icon-radio.png);
-    background-repeat: no-repeat;
-    background-position: 10px 10px; 
-    height:160px;
+	border-radius: 6px 6px 6px 6px;
+	margin-bottom: 30px;
+	padding: 60px;
+	background-image: url(/media/images/icon-radio.png);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	height: 160px;
 }
 
-
-#radio p {font-size:10px;font-weight:200;line-height:27px;}
+#radio p {
+	font-size: 10px;
+	font-weight: 200;
+	line-height: 27px;
+}
 
 #radio-picture {
-    width: 128px;
-    margin: 0px auto;
+	width: 128px;
+	margin: 0px auto;
 }
 
 #radio-title {
-	margin-left:10px;
+	margin-left: 10px;
 }
 
 #radio-title h1 {
@@ -60,55 +63,62 @@ footer #menu a:hover {
 }
 
 #player {
-	margin-top:24px;
-    background-color: #F5F5F5;
-    border-radius: 6px 6px 6px 6px;
-    margin-bottom: 30px;
-    padding: 60px;
-    background-image:url(/media/images/icon-on-air.png);
-    background-repeat: no-repeat;
-    background-position: 10px 10px;	
-    height:160px;
+	margin-top: 24px; background-color : #F5F5F5;
+	border-radius: 6px 6px 6px 6px;
+	margin-bottom: 30px;
+	padding: 60px;
+	background-image: url(/media/images/icon-on-air.png);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	height: 160px;
+	background-color: #F5F5F5;
 }
 
-#player p {font-size:18px;font-weight:200;line-height:27px;}
-
+#player p {
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 27px;
+}
 
 #track-picture {
-    float:left;
-    margin-right:20px;
+	float: left;
+	margin-right: 20px;
 }
 
 #track-picture .btn-group {
-    padding-top:12px;
+	padding-top: 12px; width : 106px;
+	margin: 0px auto;
 	width: 106px;
-    margin: 0px auto;
-	
 }
 
 #track-details {
+	
 }
 
 #track-details p {
-	height:54px;
-	font-size:12px;
+	height: 54px;
+	font-size: 12px;
 }
 
-
 #banner {
-    width: 728px;
-    margin: 0px auto;
-    
+	width: 728px;
+	margin: 0px auto;
 }
 
 #appstore {
-    width: 148px;
-    margin: 0px auto;
-    
+	width: 148px;
+	margin: 0px auto;
 }
 
-
 #volume-control {
-	width:235px;
+	width: 235px;
 	cursor: pointer;
+}
+
+.no-ease .bar {
+	-webkit-transition: width 0s ease;
+	-moz-transition: width 0s ease;
+	-ms-transition: width 0s ease;
+	-o-transition: width 0s ease;
+	transition: width 0s ease;
 }
