@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs live
-	soundManager.preferFlash = false;
+	soundManager.preferFlash = true;
 	soundManager.useHTML5Audio = true;
 	soundManager.debugMode = true;
 	var mySound = undefined;
