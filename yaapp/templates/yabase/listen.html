@@ -35,7 +35,7 @@
 		       <div id='radio-picture'>
 		           {% if radio.picture %}
 			       {% thumbnail radio.picture "128x128" format='PNG' as im %}
-			       <img src="{{ im.url }}" width="128px" height="128px" alt='{% trans "Radio logo" %}'/>
+			       <img src="{{ im.url }}" width="128" height="128" alt='{% trans "Radio logo" %}'/>
 			       {% endthumbnail %}
 			       {% else %}
                    <imgsrc="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Radio logo" %}'/>
