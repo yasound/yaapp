@@ -497,3 +497,9 @@ else:
     
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 
+
+# iTunes buy link
+ITUNES_BASE_URL="http://itunes.apple.com/search"
+TRADEDOUBLER_URL="http://clk.tradedoubler.com/click?p=23753&a=2007583&url="
+TRADEDOUBLER_ID="partnerId=2003"
+

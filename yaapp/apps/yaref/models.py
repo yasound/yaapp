@@ -11,6 +11,8 @@ from time import time
 import utils as yaref_utils
 import yasearch.utils as yasearch_utils
 import string
+import requests
+
 logger = logging.getLogger("yaapp.yaref")
 
 import django.db.models.options as options
@@ -229,6 +231,41 @@ class YasoundSong(models.Model):
     quality = models.SmallIntegerField(blank=True, null=True)
     owner_id = models.IntegerField(blank=True, null=True)
     
+    
+    @property
+    def generate_buy_link(self):
+        trade_url = None
+        artist_sanitized = self.artist_name.replace('\n', ' ')
+        album_sanitized = self.album_name.replace('\n', ' ')
+        song_sanitized = self.song_sanitized.replace('\n', ' ')
+        
+        terms = u'%s %s %s' % (artist_sanitized, album_sanitized, song_sanitized)
+        url_string = u'%s?term=%s&entity=musicTrack&limit=1&country=FR' % (settings.ITUNES_BASE_URL, terms)
+        
+#        requests.
+#        
+#        
+#        
+#        NSURL *url = [NSURL URLWithString:urlString];
+#  ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+#  [request startSynchronous];
+#  NSError *error = [request error];
+#  if (!error) {
+#    NSString *response = [request responseString];
+#    NSString *trackViewUrl = [self getTrackViewUrl:response];
+#    
+#    if (!response || !trackViewUrl)
+#    {
+#      if (trackViewUrl)
+#        [trackViewUrl release];
+#      return nil;
+#    }
+#
+#    tradeUrl =[NSString stringWithFormat:@"%@%@%@%@", TRADEDOUBLER_URL, trackViewUrl, [self getSeparator:trackViewUrl], TRADEDOUBLER_ID];
+#    
+#    [trackViewUrl release];
+#    NSLog(@"tradeURL = %@", tradeUrl);        
+        
     
     @property
     def cover_url(self):
