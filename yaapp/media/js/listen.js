@@ -19,6 +19,8 @@ $(document).ready(function() {
 	    }
 	  });
 	  $('#play').click();
+   	  $('#volume-position').css("width", mySound.volume + "%");
+	  
 	});
 
 	soundManager.ontimeout(function(){
@@ -35,11 +37,13 @@ $(document).ready(function() {
 	
 	$('#inc').click(function() {
 		if (mySound.volume <= 90) {
+			$('#volume-position').css("width", mySound.volume+10 + "%");
 			mySound.setVolume(mySound.volume+10);
 		}	
 	})
 	$('#dec').click(function() {
 		if (mySound.volume >= 10) {
+			$('#volume-position').css("width", mySound.volume-10 + "%");
 			mySound.setVolume(mySound.volume-10);
 		}
 	})
@@ -76,5 +80,20 @@ $(document).ready(function() {
 		getData();
 	});
 	getData();
+	
+	
+	$('#volume-control').click(function(event) {
+		var $volumeControl = $('#volume-control');
+		var position = event.pageX;
+		var left = $volumeControl.position().left;
+		var width = $volumeControl.width();
+		
+		var relativePosition = position - left;
+		var soundVolume = Math.floor(relativePosition * 100 / width)
+		var percentage = soundVolume + "%";
+		$('#volume-position').css("width", percentage);
 
+		mySound.setVolume(soundVolume);
+		
+	});
 });
