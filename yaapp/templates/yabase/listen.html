@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class='row'>
-        <div class='span12'>
+        <div class='span4'>
 		   <div id="radio">
 		       <div id='radio-picture'>
 		           {% if radio.picture %}
@@ -43,15 +43,11 @@
 		       </div>
 		       <div id='radio-title'>
 			       <h1>{{ radio }}</h1>
-			       <p>{% trans "By" %} <strong>{{ radio.creator.get_profile }}</strong></p>
-			       <p>{{ radio.description }}</p>
 		        </div>
 		   </div>
         </div>   
-    </div>
 
-    <div class='row'>
-        <div class='span12'>
+        <div class='span8'>
            <div id='player'>
                <div id='track-picture'>
                    <img id='track-image' src="/media/images/default_image.png" width="128px" height="128px" alt='{% trans "Track logo" %}'/>
@@ -75,6 +71,7 @@
 
                    </div>
                </div> 
+            </div>
         </div>
     </div>
     

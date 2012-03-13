@@ -31,29 +31,36 @@ footer #menu a:hover {
 }
 
 #radio {
-	margin-top:24px;
-    background-color: #F5F5F5;
+    margin-top:24px;
+	background-color: #F5F5F5;
     border-radius: 6px 6px 6px 6px;
     margin-bottom: 30px;
     padding: 60px;
     background-image:url(/media/images/icon-radio.png);
     background-repeat: no-repeat;
     background-position: 10px 10px; 
-    height:120px;
+    height:160px;
 }
 
-#radio p {font-size:14px;font-weight:200;line-height:27px;}
+
+#radio p {font-size:10px;font-weight:200;line-height:27px;}
 
 #radio-picture {
-	float:left;
-	margin-right:20px;
+    width: 128px;
+    margin: 0px auto;
 }
 
 #radio-title {
 	margin-left:10px;
 }
 
+#radio-title h1 {
+	font-size: 16px;
+	text-align: center;
+}
+
 #player {
+	margin-top:24px;
     background-color: #F5F5F5;
     border-radius: 6px 6px 6px 6px;
     margin-bottom: 30px;
@@ -61,6 +68,7 @@ footer #menu a:hover {
     background-image:url(/media/images/icon-on-air.png);
     background-repeat: no-repeat;
     background-position: 10px 10px;	
+    height:160px;
 }
 
 #player p {font-size:18px;font-weight:200;line-height:27px;}
