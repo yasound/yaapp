@@ -108,22 +108,14 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     url(r'^api/v1/song_instance/(?P<song_instance_id>\d+)/cover/$', 'yabase.views.song_instance_cover'),
     (r'^api/', include(api.urls)),
-    (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
     (r'^status/', 'yabase.views.status'),
 
     # web front end
     url(r'^$', 'yabase.views.web_index', name='web_index'),
-    url(r'^radios/my/(?P<radio_uuid>[\w-]+.*[\w-]*)/$', 'yabase.views.web_myradio', name='web_myradio'),
-    url(r'^radios/friends/$', 'yabase.views.web_friends', name='web_friends'),
-    url(r'^radios/favorites/$', 'yabase.views.web_favorites', name='web_favorites'),
-    url(r'^radios/favorites/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_favorite', name='web_favorite'),
-    url(r'^radios/selection/$', 'yabase.views.web_selections', name='web_selections'),
-    url(r'^terms/$', 'yabase.views.web_terms', name='web_terms'),
+    (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
     
-    url(r'^radio/(?P<radio_id>\d+)/unmatched/$', 'yabase.views.radio_unmatched_song'),
-        
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
