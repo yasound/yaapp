@@ -33,7 +33,7 @@
                <p>{% trans "You must be logged to access this ressource." %}</p>
                
                <p>
-               <a rel="nofollow" href="{% url socialauth_begin 'facebook' %}">{% trans "Please click here to login" %}</a>
+               <a rel="nofollow" href="{% url socialauth_begin 'facebook' %}?next={{ next }}">{% trans "Please click here to login" %}</a>
                </p>
             </div>
         </div>

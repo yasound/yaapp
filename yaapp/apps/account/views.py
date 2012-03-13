@@ -45,7 +45,9 @@ def get_subscription(request):
     return HttpResponse(subscription)
 
 def login(request, template_name='account/login.html'):
+    next = request.REQUEST.get('next')
     return render_to_response(template_name, {
+        'next': next
     }, context_instance=RequestContext(request))    
 
 def error(request, template_name='account/login_error.html'):
