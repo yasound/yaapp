@@ -72,7 +72,7 @@ $(document).ready(function() {
 			});
 	}
 	
-	$(document).everyTime(3*1000, 'event_timer', function (x) {
+	$(document).everyTime(10*1000, 'event_timer', function (x) {
 		getData();
 	});
 	getData();
