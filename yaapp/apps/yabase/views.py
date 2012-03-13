@@ -430,8 +430,9 @@ def stop_listening_to_radio(request, radio_uuid):
     return HttpResponse(res)
 
 def get_current_song(request, radio_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
+    if not request.user.is_authenticated:
+        if not check_api_key_Authentication(request):
+            return HttpResponse(status=401)
 
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
@@ -586,6 +587,7 @@ def song_instance_cover(request, song_instance_id):
     return HttpResponseRedirect(url)
     
 
+@login_required
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)

@@ -1,8 +1,124 @@
-
 body {
-    padding-top: 30px;
+	padding-top: 30px;
 }
 
 .hero-unit h1 {
-	font-size:38px;
+	font-size: 38px;
+}
+
+footer #menu {
+	bottom: 0;
+	float: right;
+	color: #666666;
+	font-size: 12px;
+	height: 40px;
+	line-height: 40px;
+	overflow: hidden;
+	padding-right: 20px;
+	right: 0;
+	text-align: right;
+	width: 300px;
+}
+
+footer #menu a {
+	color: #666666;
+	text-decoration: none;
+}
+
+footer #menu a:hover {
+	color: #ef7b2b;
+	text-decoration: none;
+}
+
+#radio {
+	margin-top: 24px;
+	background-color: #F5F5F5;
+	border-radius: 6px 6px 6px 6px;
+	margin-bottom: 30px;
+	padding: 60px;
+	background-image: url(/media/images/icon-radio.png);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	height: 160px;
+}
+
+#radio p {
+	font-size: 10px;
+	font-weight: 200;
+	line-height: 27px;
+}
+
+#radio-picture {
+	width: 128px;
+	margin: 0px auto;
+}
+
+#radio-title {
+	margin-left: 10px;
+}
+
+#radio-title h1 {
+	font-size: 16px;
+	text-align: center;
+}
+
+#player {
+	margin-top: 24px; background-color : #F5F5F5;
+	border-radius: 6px 6px 6px 6px;
+	margin-bottom: 30px;
+	padding: 60px;
+	background-image: url(/media/images/icon-on-air.png);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	height: 160px;
+	background-color: #F5F5F5;
+}
+
+#player p {
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 27px;
+}
+
+#track-picture {
+	float: left;
+	margin-right: 20px;
+}
+
+#track-picture .btn-group {
+	padding-top: 12px; width : 106px;
+	margin: 0px auto;
+	width: 106px;
+}
+
+#track-details {
+	
+}
+
+#track-details p {
+	height: 54px;
+	font-size: 12px;
+}
+
+#banner {
+	width: 728px;
+	margin: 0px auto;
+}
+
+#appstore {
+	width: 148px;
+	margin: 0px auto;
+}
+
+#volume-control {
+	width: 235px;
+	cursor: pointer;
+}
+
+.no-ease .bar {
+	-webkit-transition: width 0s ease;
+	-moz-transition: width 0s ease;
+	-ms-transition: width 0s ease;
+	-o-transition: width 0s ease;
+	transition: width 0s ease;
 }

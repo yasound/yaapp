@@ -12,7 +12,8 @@ admin.site.register(Playlist, PlaylistAdmin)
 class RadioAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'creator', 'url', 'uuid', 'ready')
     search_fields = ['name']
-    exclude = ('next_songs', 'current_song',)
+    raw_id_fields = ('current_song',)
+    exclude = ('next_songs', )
     list_filter = ('creator', 'ready')
 admin.site.register(Radio, RadioAdmin)
     
