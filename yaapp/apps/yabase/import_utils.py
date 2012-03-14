@@ -401,10 +401,15 @@ class SongImporter:
         
         """
         name = metadata.get('title')
-        artist_name = metadata.get('artist')
-        album_name = metadata.get('album')
+        artist_name = metadata.get('artist', u'')
+        album_name = metadata.get('album', u'')
         filename = metadata.get('filename')
-    
+        
+        if artist_name is None:
+            artist_name = u''
+        if album_name is None:
+            album_name = u''
+        
         self._log("importing %s-%s-%s" % (name, album_name, artist_name))
         
         is_valid = metadata.get('is_valid')
