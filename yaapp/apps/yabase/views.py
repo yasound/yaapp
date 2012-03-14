@@ -5,10 +5,12 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
     HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from forms import SelectionForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
@@ -24,7 +26,6 @@ import settings as yabase_settings
 import time
 import uuid
 import yabase.settings as yabase_settings
-from django.utils.translation import ugettext_lazy as _
 
 
 logger = logging.getLogger("yaapp.yabase")
@@ -447,6 +448,41 @@ def get_current_song(request, radio_id):
     
     song_json = json.dumps(song_dict)
     return HttpResponse(song_json)
+
+
+def buy_link(request, radio_id):
+    if not request.user.is_authenticated:
+        if not check_api_key_Authentication(request):
+            return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    radio = get_object_or_404(Radio, id=radio_id)
+    song_instance = radio.current_song
+    if not song_instance:
+        return HttpResponseRedirect(reverse('buy_link_not_found'))
+
+    song_metadata = song_instance.metadata
+    yasound_song_id = song_metadata.yasound_song_id
+    if not yasound_song_id:
+        return HttpResponseRedirect(reverse('buy_link_not_found'))
+    
+    try:
+        yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+    except YasoundSong.DoesNotExist:
+        return HttpResponseRedirect(reverse('buy_link_not_found'))
+        
+    url = yasound_song.generate_buy_link()
+    if not url:
+        return HttpResponseRedirect(reverse('buy_link_not_found'))
+    else:
+        return HttpResponseRedirect(url)
+
+def buy_link_not_found(request, template_name='yabase/buy_link_not_found.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))    
+
 
 @csrf_exempt
 def upload_song(request, song_id=None):
