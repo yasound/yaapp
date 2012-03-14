@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-08 16:15+0100\n"
+"POT-Creation-Date: 2012-03-14 18:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,21 +35,52 @@ msgid "Internal error."
 msgstr "Erreur interne."
 
 #: templates/account/login.html:4
-#: templates/web/menu.html:16
+#: templates/web/index.html:4
+#: templates/web/menu.html:19
 msgid "Login"
 msgstr "Se connecter"
 
-#: templates/account/login.html:12
-msgid "Login using:"
-msgstr "Se connecter en utilisant :"
+#: templates/account/login.html:23
+#: templates/web/index.html:23
+#: templates/yabase/buy_link_not_found.html:23
+#: templates/yabase/listen.html:38
+#: templates/yabase/listen.html.py:41
+msgid "Radio logo"
+msgstr "Logo de la radio"
+
+#: templates/account/login.html:32
+msgid "Login required"
+msgstr "Identification nécessaire"
+
+#: templates/account/login.html:33
+msgid "You must be logged to access this ressource."
+msgstr "Vous devez être connecté pour accéder à cette ressource."
+
+#: templates/account/login.html:36
+msgid "Please click here to login"
+msgstr "Veuillez cliquer ici pour vous connecter."
+
+#: templates/account/login.html:45
+#: templates/web/index.html:41
+#: templates/yabase/buy_link_not_found.html:42
+#: templates/yabase/listen.html:84
+msgid "available on appstore"
+msgstr "disponible sur l'appstore"
+
+#: templates/account/login.html:52
+#: templates/web/index.html:48
+#: templates/web/menu.html:16
+#: templates/yabase/buy_link_not_found.html:49
+#: templates/yabase/listen.html:91
+msgid "Logout"
+msgstr "Se déconnecter"
 
 #: templates/web/base.html:7
 #: templates/web/favorite.html:6
 #: templates/web/favorites.html:6
 #: templates/web/friends.html:6
 #: templates/web/selections.html:6
-#: templates/yabase/listen.html:7
-#: templates/yabase/listen.html.py:52
+#: templates/yabase/listen.html:10
 msgid "Mute"
 msgstr "Couper le son"
 
@@ -58,7 +89,7 @@ msgstr "Couper le son"
 #: templates/web/favorites.html:7
 #: templates/web/friends.html:7
 #: templates/web/selections.html:7
-#: templates/yabase/listen.html:8
+#: templates/yabase/listen.html:11
 msgid "Unmute"
 msgstr "Rétablir le son"
 
@@ -67,8 +98,7 @@ msgstr "Rétablir le son"
 #: templates/web/favorites.html:8
 #: templates/web/friends.html:8
 #: templates/web/selections.html:8
-#: templates/yabase/listen.html:9
-#: templates/yabase/listen.html.py:49
+#: templates/yabase/listen.html:12
 msgid "Play"
 msgstr "Jouer"
 
@@ -77,7 +107,7 @@ msgstr "Jouer"
 #: templates/web/favorites.html:9
 #: templates/web/friends.html:9
 #: templates/web/selections.html:9
-#: templates/yabase/listen.html:10
+#: templates/yabase/listen.html:13
 msgid "Stop"
 msgstr "Arrêter"
 
@@ -86,7 +116,7 @@ msgstr "Arrêter"
 #: templates/web/friends.html:17
 #: templates/web/my_radio.html:3
 #: templates/web/selections.html:17
-#: templates/yabase/listen.html:17
+#: templates/yabase/listen.html:21
 msgid "Listening to"
 msgstr "Ecoute de"
 
@@ -113,134 +143,128 @@ msgstr "En live"
 msgid "Nothing for now"
 msgstr "Rien pour le moment"
 
-#: templates/web/index.html:4
-#: templates/web/index.html.py:12
-#: templates/web/menu.html:15
-#: templates/yainvitation/accept.html:10
-msgid "Welcome"
-msgstr "Bienvenue"
+#: templates/web/index.html:32
+msgid "Coming soon"
+msgstr "Prochainement"
 
-#: templates/web/index.html:24
-msgid "Login »"
-msgstr "Se connecter »"
+#: templates/web/index.html:33
+msgid "Yasound is coming soon."
+msgstr "Yasound arrive prochainement."
 
 #: templates/web/menu.html:4
-#: templates/web/menu.html.py:5
 msgid "My radio"
 msgstr "Ma radio"
 
-#: templates/web/menu.html:6
+#: templates/web/menu.html:9
 #: templates/web/radios.html:4
 msgid "Radios"
 msgstr "Radios"
 
-#: templates/web/menu.html:7
+#: templates/web/menu.html:10
 msgid "My friends"
 msgstr "Mes amis"
 
-#: templates/web/menu.html:8
+#: templates/web/menu.html:11
 msgid "My favorites"
 msgstr "Mes favoris"
 
-#: templates/web/menu.html:9
+#: templates/web/menu.html:12
 msgid "Selection"
 msgstr "Sélection"
 
-#: templates/web/menu.html:10
+#: templates/web/menu.html:13
 msgid "Find"
 msgstr "Recherche"
 
-#: templates/web/menu.html:11
+#: templates/web/menu.html:14
 msgid "Me"
 msgstr "Moi"
 
-#: templates/web/menu.html:12
-#: templates/web/menu.html.py:17
+#: templates/web/menu.html:15
+#: templates/web/menu.html.py:20
 #: templates/web/terms.html:4
 #: templates/web/terms.html.py:12
 msgid "Terms and conditions"
 msgstr "Conditions d'utilisation"
 
-#: templates/web/menu.html:13
-msgid "Logout"
-msgstr "Se déconnecter"
+#: templates/web/menu.html:18
+#: templates/yainvitation/accept.html:10
+msgid "Welcome"
+msgstr "Bienvenue"
 
 #: templates/web/radio.html:5
+#: templates/yabase/listen.html:57
 msgid "By"
 msgstr "Par"
 
 #: templates/web/radio.html:17
-#: templates/yabase/listen.html:36
 msgid "Creator"
 msgstr "Créateur"
 
 #: templates/web/radio.html:18
-#: templates/yabase/listen.html:37
 msgid "Date"
 msgstr "Date"
 
 #: templates/web/radio.html:19
 #: templates/web/selections.html:35
-#: templates/yabase/listen.html:38
 msgid "Genre"
 msgstr "Genre"
 
 #: templates/web/radio.html:20
-#: templates/yabase/listen.html:39
 msgid "Theme"
 msgstr "Thème"
 
 #: templates/web/radio.html:21
-#: templates/yabase/listen.html:40
 msgid "Audience peak"
 msgstr "Pic d'audience"
 
 #: templates/web/radio.html:22
-#: templates/yabase/listen.html:41
 msgid "Overall listening time"
 msgstr "Temps d'écoute global"
 
 #: templates/web/radio.html:23
-#: templates/yabase/listen.html:42
 msgid "Listeners"
 msgstr "Auditeurs"
 
 #: templates/web/radio.html:24
-#: templates/yabase/listen.html:43
 msgid "Fans"
 msgstr "Fans"
 
-#: templates/yabackoffice/index.html:8
+#: templates/yabackoffice/index.html:9
 msgid "Backoffice"
 msgstr "Backoffice"
 
-#: templates/yabackoffice/index.html:39
+#: templates/yabackoffice/index.html:40
 msgid "Loading application..."
 msgstr "Chargement de l'application..."
 
-#: templates/yabackoffice/index.html:42
+#: templates/yabackoffice/index.html:43
 msgid "Backoffice loading..."
 msgstr "Chargement du backoffice..."
 
-#: templates/yabase/listen.html:26
-msgid "Created by"
-msgstr "Crée par"
+#: templates/yabase/buy_link_not_found.html:4
+msgid "Sorry, item not available"
+msgstr "Désolé, ce morceau n'est pas disponible"
 
-#: templates/yabase/listen.html:26
-msgid "on"
-msgstr "le"
+#: templates/yabase/buy_link_not_found.html:32
+msgid "Item unavailable for purchase"
+msgstr "Morceau indisponible pour achat"
 
-#: templates/yabase/listen.html:28
-msgid "Go to Yasound »"
-msgstr "Visiter Yasound »"
+#: templates/yabase/buy_link_not_found.html:33
+msgid "This item cannot be purchased right now, try later."
+msgstr "Ce morceau ne peut être acheté actuellement, veuillez réessayer plus tard."
 
-#: templates/yabase/listen.html:50
-msgid "Increase volume"
-msgstr "Augmenter le volume"
+#: templates/yabase/listen.html:53
+msgid "Track logo"
+msgstr "Logo du morceau"
 
-#: templates/yabase/listen.html:51
-msgid "Decrease volume"
-msgstr "Diminuer le volume"
+#: templates/yabase/listen.html:56
+msgid "No name"
+msgstr "Sans nom"
+
+#: templates/yabase/listen.html:68
+msgid "Buy on iTunes"
+msgstr "Acheter sur iTunes"
 
 #: templates/yainvitation/mail/email_invitation_message.txt:1
 #, python-format

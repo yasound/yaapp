@@ -115,8 +115,12 @@ footer #menu a:hover {
 }
 
 #volume-control {
-	width: 235px;
+	width: 264px;
 	cursor: pointer;
+}
+
+#btn-buy {
+	width:128px;
 }
 
 .no-ease .bar {
