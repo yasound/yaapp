@@ -135,9 +135,9 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     	this.calculatePageSize();
     },
     calculatePageSize: function() {
-		var bodyHeight = Ext.getBody().getHeight();
-		var heightOther = 120+50;
-		var rowHeight = 20;
+		var bodyHeight = this.getHeight();
+		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
+		var rowHeight = 21;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
 		this.getBottomToolbar().pageSize = gridRows;
