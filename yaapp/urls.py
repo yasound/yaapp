@@ -1,5 +1,6 @@
 from django.conf import settings
 
+from django.views.generic.simple import direct_to_template
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from tastypie.api import Api
@@ -69,7 +70,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     #(r'^wall/', include('wall.urls')),
-    (r'^admin/', include(admin.site.urls)),
+    (r'^rahadm/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/playlist/(?P<playlist_index>\d+)/add_song/(?P<yasound_song_id>\d+)/$', 'yabase.views.add_song'),
     url(r'^api/v1/upload_song/(?P<song_id>\d+)/$', 'yabase.views.upload_song'),
@@ -125,6 +126,9 @@ urlpatterns = patterns('',
     url(r'', include('social_auth.urls')),
     url(r'^login/$', 'account.views.login', name="login"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
+
+    (r'^robots\.txt$', direct_to_template,
+     {'template': 'robots.txt', 'mimetype': 'text/plain'}),
 )
 
 if settings.LOCAL_MODE:
