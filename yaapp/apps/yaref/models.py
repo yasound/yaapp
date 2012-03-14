@@ -16,6 +16,7 @@ logger = logging.getLogger("yaapp.yaref")
 import django.db.models.options as options
 from sorl.thumbnail import get_thumbnail
 from django.core.files import File
+from django.db.models import Q
 
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
@@ -174,21 +175,25 @@ class YasoundSongManager(models.Manager):
     
     def search(self, search_text, offset=0, count=25, tolerance=0.75):
         limit = offset + count
-        res = self.search_fuzzy(search_text, limit)
-        best_score = None
-        songs = []
-        c = 0
-        for i in res:
-            song_id = i[0]["db_id"]
-            score = i[1]
-            if not best_score:
-                best_score = score
-            if score < best_score * tolerance:
-                break
-            if c >= offset:
+        
+        songs = list(self.filter(Q(name_simplified__iexact=search_text) | Q(artist_name_simplified__iexact=search_text) | Q(album_name_simplified__iexact=search_text)))
+        exact_count = len(songs)
+        
+        if exact_count < limit:
+            fuzzy_limit = limit - exact_count
+            res = self.search_fuzzy(search_text, fuzzy_limit)
+            best_score = None
+            for i in res:
+                song_id = i[0]["db_id"]
+                score = i[1]
+                if not best_score:
+                    best_score = score
+                if score < best_score * tolerance:
+                    break
                 songs.append(YasoundSong.objects.get(id=song_id))
-            c += 1
-        return songs
+                
+        final_songs = songs[offset:offset+count]
+        return final_songs
             
             
             
