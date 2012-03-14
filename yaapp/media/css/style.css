@@ -41,6 +41,7 @@ footer #menu a:hover {
 	background-repeat: no-repeat;
 	background-position: 10px 10px;
 	margin-bottom:24px;
+    min-height:170px;
 }
 
 #radio p {
