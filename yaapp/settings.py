@@ -114,6 +114,25 @@ else:
             'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
         }
     }
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': [
+                'yas-web-01:11211',
+                'yas-web-02:11211',
+                'yas-web-03:11211',
+                'yas-web-04:11211',
+                'yas-web-05:11211',
+                'yas-web-06:11211',
+                'yas-web-07:11211',
+                'yas-web-08:11211',
+                'yas-web-09:11211',
+                'yas-web-10:11211',
+            ]
+        }
+    } 
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"   
 
 # As we use a multi database config, we need a working database router:
 if not TEST_MODE:
