@@ -50,7 +50,7 @@ class YasoundAlbum(models.Model):
         short_url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
                          yaref_utils.convert_filename_to_filepath(self.cover_filename))
         try:
-            return get_thumbnail(short_url, '256x256').url
+            return get_thumbnail(short_url, '256x256', crop='center').url
         except:
             return None
     

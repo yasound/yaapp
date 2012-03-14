@@ -124,7 +124,7 @@ class UserProfile(models.Model):
         picture_url = None
         if self.picture:
             try:
-                picture_url = get_thumbnail(self.picture, '100x100').url
+                picture_url = get_thumbnail(self.picture, '100x100', crop='center').url
             except:
                 pass
         bundle.data['picture'] = picture_url
@@ -193,7 +193,7 @@ class UserProfile(models.Model):
         if self.account_type != account_settings.ACCOUNT_TYPE_FACEBOOK:
             return
         graph = GraphAPI(self.facebook_token)
-        img = graph.get('me/picture?type=square')
+        img = graph.get('me/picture?type=large')
         f = ContentFile(img)
         filename = unicode(datetime.datetime.now()) + '.jpg' # set 'jpg' extension by default (for now, don't know how to know which image format we get)
         self.picture.save(filename, f, save=True)
