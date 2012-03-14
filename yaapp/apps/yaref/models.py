@@ -11,12 +11,15 @@ from time import time
 import utils as yaref_utils
 import yasearch.utils as yasearch_utils
 import string
+import requests
+import json
 logger = logging.getLogger("yaapp.yaref")
 
 import django.db.models.options as options
 from sorl.thumbnail import get_thumbnail
 from django.core.files import File
 from django.db.models import Q
+import buylink
 
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
@@ -234,6 +237,9 @@ class YasoundSong(models.Model):
     quality = models.SmallIntegerField(blank=True, null=True)
     owner_id = models.IntegerField(blank=True, null=True)
     
+    
+    def generate_buy_link(self):
+        return buylink.generate_buy_link(self.name, self.album_name, self.artist_name)
     
     @property
     def cover_url(self):
