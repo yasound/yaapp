@@ -2,6 +2,7 @@ from django.conf import settings
 import requests
 import json
 import urllib
+from yasearch.utils import get_simplified_name
     
 def _get_separator(track_view_url):
     index = track_view_url.find('?')
@@ -25,11 +26,9 @@ def _generate_buy_link(song, album, artist):
     artist_sanitized = artist.replace('\n', ' ')
     
     terms = u'%s %s %s' % (artist_sanitized, album_sanitized, song_sanitized)
-    terms = urllib.quote(terms)
+    terms = urllib.quote(get_simplified_name(terms))
     url_string = u'%s?term=%s&entity=musicTrack&limit=1&country=FR' % (settings.ITUNES_BASE_URL, terms)
     r = requests.get(url_string)
-    print r
-    print r.status_code 
     if r.status_code != 200:
         return trade_url
     
