@@ -29,6 +29,7 @@ if PRODUCTION_MODE:
 else:
     DEBUG = True
 
+DEBUG=True
 TEMPLATE_DEBUG = DEBUG
 
 DEFAULT_FROM_EMAIL = "dev@yasound.com"
@@ -117,7 +118,7 @@ else:
         'yasound': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
+            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
         }
     }
     
@@ -278,7 +279,6 @@ INSTALLED_APPS = (
     'yaref',
     'stats',
     'tastypie',
-    "djkombu",
     'djcelery',
     'taggit',
     'test_utils',
@@ -316,7 +316,7 @@ LOGGING = {
     },
     'filters': {
         'time_throttled': {
-            '()': 'yaapp.timethrottledfilter.TimeThrottledFilter',
+            '()': 'timethrottledfilter.TimeThrottledFilter',
             'quantity': 5,
             'interval': 30,
             'ignore_lines': [],
@@ -423,7 +423,7 @@ SOUTH_TESTS_MIGRATE=False
 # mongodb
 from pymongo.connection import Connection
 if PRODUCTION_MODE:
-    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@dev.yasound.com/yasound').yasound
+    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@yas-sql-01,yas-sql-02/yasound').yasound
 else:
     MONGO_DB = Connection().yasound
 
