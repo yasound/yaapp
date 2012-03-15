@@ -4,15 +4,54 @@
 <head>
     <title>{% block head_title %}Home{% endblock %} — Yasound</title>
     <link rel="icon" type="image/x-icon" href="/media/images/favicon.ico" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" /> 
+	<meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile." />
+	<meta name="Author" content="Yasound SAS" />
+	<meta name="copyright" content="Yasound SAS" />
+	<meta http-equiv="Cache-control" content="public" />
+	<meta name="language" content="french" />
+	<meta property="og:title" content="YASOUND : N'écoutez plus seul votre musique."/>
+	<meta property="og:type" content="Compagnie"/>
+	<meta property="og:url" content="http://yasound.com/fr"/>
+	<meta property="og:image" content="http://yasound.com/fr/og.jpg"/>
+	<meta property="og:site_name" content="YASOUND : Ma radio, c'est moi."/>
+	
+	<meta property="fb:admins" content="USER_ID"/>
+	<meta property="og:description"
+	      content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile."/>
+
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/media/css/style.css">
 
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    {% block body %}{% endblock %}
+
+{% block body %}
+<div class='container'>
+    <div class='row'>
+        <div class='span3'>
+        <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+        </div>
+        <div class='span9'>
+        <img src='/media/images/banner.png' alt='Banner'/>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+    <div class='row'>
+        <div id='appstore'>
+        <a href='http://itunes.com/app/yasound' rel="nofollow">
+        <img src='/media/images/available-appstore-fr.png' alt='{% trans "available on appstore" %}'/>
+        </a>
+        </div>
+    </div>    
+    
+    <footer>
+      <div id="menu">
+      <a href="{% url logout %}">{% trans "Logout" %}</a> | <a href="http://yasound.com/a_propos_de_nous.php">À propos de nous</a> | <a href="http://yasound.com/jobs.php">Jobs</a> | <a href="http://yasound.com/presse.php">Presse</a> | <a href="http://yasound.com/contact.php">Contact</a>
+      </div>
+    </footer>
+</div>
 </body>
+{% endblock %}
 </html>
 

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Login" %}{% endblock %}
+{% block head_title %}{% trans "Sorry, item not available" %}{% endblock %}
 
 
 {% block content %}
@@ -18,9 +18,11 @@
 
         <div class='span8'>
            <div id='player'>
-               <h1>{% trans "Coming soon" %}</h1>
-               <p>{% trans "Yasound is coming soon." %}</p>
+               <h1>{% trans "Item unavailable for purchase" %}</h1>
+               <p>{% trans "This item cannot be purchased right now, try later." %}</p>
+               
             </div>
         </div>
     </div>    
 {% endblock %}
+

@@ -427,6 +427,9 @@ if PRODUCTION_MODE:
 else:
     MONGO_DB = Connection().yasound
 
+if TEST_MODE:
+    MONGO_DB = Connection().yasound_test
+
 # album images folder
 ALBUM_COVER_SHORT_URL = 'covers/albums/'
 ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
@@ -499,4 +502,10 @@ else:
     ALBUM_COVERS_ROOT = '/tmp/'
     
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
+
+
+# iTunes buy link
+ITUNES_BASE_URL="http://itunes.apple.com/search"
+TRADEDOUBLER_URL="http://clk.tradedoubler.com/click?p=23753&a=2007583&url="
+TRADEDOUBLER_ID="partnerId=2003"
 

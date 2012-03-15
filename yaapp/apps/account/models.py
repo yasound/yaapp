@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from tastypie.models import create_api_key
 from tastypie.models import ApiKey
 from yabase.models import Radio, RadioUser
@@ -124,7 +124,7 @@ class UserProfile(models.Model):
         picture_url = None
         if self.picture:
             try:
-                picture_url = get_thumbnail(self.picture, '100x100').url
+                picture_url = get_thumbnail(self.picture, '100x100', crop='center').url
             except:
                 pass
         bundle.data['picture'] = picture_url
@@ -193,7 +193,7 @@ class UserProfile(models.Model):
         if self.account_type != account_settings.ACCOUNT_TYPE_FACEBOOK:
             return
         graph = GraphAPI(self.facebook_token)
-        img = graph.get('me/picture?type=square')
+        img = graph.get('me/picture?type=large')
         f = ContentFile(img)
         filename = unicode(datetime.datetime.now()) + '.jpg' # set 'jpg' extension by default (for now, don't know how to know which image format we get)
         self.picture.save(filename, f, save=True)
@@ -224,6 +224,9 @@ class UserProfile(models.Model):
     
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_user(self.user, upsert, insert)
+    
+    def remove_from_fuzzy_index(self):
+        return yasearch_indexer.remove_user(self.user)
     
     def save(self, *args, **kwargs):
         update_mongo = False
@@ -265,8 +268,13 @@ class Device(models.Model):
         verbose_name = _('device')
         unique_together = ('user', 'uuid')
 
-    
-
+def user_profile_deleted(sender, instance, created=None, **kwargs):  
+    if isinstance(instance, UserProfile):
+        user_profile = instance
+    else:
+        return
+    user_profile.remove_from_fuzzy_index()
+pre_delete.connect(user_profile_deleted, sender=UserProfile)
 
 
 

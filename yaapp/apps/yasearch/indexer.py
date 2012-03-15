@@ -80,7 +80,6 @@ def add_user(user, upsert=False, insert=True):
     user_doc = {
         "db_id": user.id,
         "name": user.userprofile.name,
-        
         "name_dms": yasearch_utils.build_dms(user.userprofile.name, True),
     }
     if upsert:
@@ -90,10 +89,25 @@ def add_user(user, upsert=False, insert=True):
     elif insert:
         db = settings.MONGO_DB
         db.users.insert(user_doc, safe=True)
+        
     return user_doc
 
+def remove_user(user):
+    db = settings.MONGO_DB
+    docs = db.users.find({"db_id": user.id}).limit(1)
+    if docs and docs.count() > 0:
+        doc = docs[0]
+        db.users.remove({'_id': doc['_id']})
+    
+def remove_radio(radio):
+    db = settings.MONGO_DB
+    docs = db.radios.find({"db_id": radio.id}).limit(1)
+    if docs and docs.count() > 0:
+        doc = docs[0]
+        db.radios.remove({'_id': doc['_id']})
+
 def add_radio(radio, upsert=False, insert=True):
-    name_dms = yasearch_utils.build_dms(radio.name, True)
+    name_dms = yasearch_utils.build_dms(unicode(radio), True)
     genre_dms = yasearch_utils.build_dms(radio.genre, True)
     tags_dms = yasearch_utils.build_dms(radio.tags_to_string(), True)
     
@@ -138,8 +152,9 @@ def get_last_user_doc():
     db = settings.MONGO_DB
     return db.users.find().sort([("$natural", DESCENDING)]).limit(1)
 
-def erase_index():
+def erase_index(skip_songs=False):
     db = settings.MONGO_DB
-    db.songs.drop()
+    if not skip_songs:
+        db.songs.drop()
     db.radios.drop()
     db.users.drop()

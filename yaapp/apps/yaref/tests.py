@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from yasearch.utils import get_simplified_name
+import buylink
 
 class TestUtils(TestCase):
     def setUp(self):
@@ -62,4 +63,32 @@ class TestUtils(TestCase):
         name = None
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, None)
+  
+class TestBuyLink(TestCase):
+    def setUp(self):
+        pass
+    
+    def test_generate_buy_link_ok(self):
+        name = 'gatekeeper'
+        artist = 'feist'
+        album = 'let it die'
         
+        url = buylink.generate_buy_link(name, album, artist)
+        self.assertIsNotNone(url)
+
+    def test_generate_buy_link_with_wrong_album(self):
+        name = 'gatekeeper'
+        artist = 'feist'
+        album = 'wrong album'
+        
+        url = buylink.generate_buy_link(name, album, artist)
+        self.assertIsNotNone(url)
+    
+    def test_generate_buy_link_with_no_results(self):
+        name = 'sdpsdlsds'
+        artist = 'sdsdsd'
+        album = 'sdsdsdds'
+        
+        url = buylink.generate_buy_link(name, album, artist)
+        self.assertIsNone(url)
+      
