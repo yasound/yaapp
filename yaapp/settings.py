@@ -437,34 +437,80 @@ ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
 # celery stuff
 from celery.schedules import crontab
 
-CELERYBEAT_SCHEDULE = {
-    # Executes every hour
-    "radio-listening-stat-every-hour": {
-        "task": "stats.task.radio_listening_stats_task",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-    "leaderboard_update-every-hour": {
-        "task": "yabase.task.leaderboard_update_task",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-    "scan_friends_regularly": {
-        "task": "account.task.scan_friends_task",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-    "check_users_are_alive": {
-        "task": "account.task.check_live_status_task",
-        "schedule": crontab(minute='*/10', hour='*'),
-    },
-    "build-mongodb-index": {
-        "task": "yasearch.task.build_mongodb_index",
-        "schedule": crontab(minute="*/30"),
-    },
-    "need-sync-songs": {
-        "task": "yabase.task.process_need_sync_songs",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-}
-
+if not PRODUCTION_MODE:
+    CELERYBEAT_SCHEDULE = {
+        # Executes every hour
+        "radio-listening-stat-every-hour": {
+            "task": "stats.task.radio_listening_stats_task",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+        "leaderboard_update-every-hour": {
+            "task": "yabase.task.leaderboard_update_task",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+        "scan_friends_regularly": {
+            "task": "account.task.scan_friends_task",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+        "check_users_are_alive": {
+            "task": "account.task.check_live_status_task",
+            "schedule": crontab(minute='*/10', hour='*'),
+        },
+        "build-mongodb-index": {
+            "task": "yasearch.task.build_mongodb_index",
+            "schedule": crontab(minute="*/30"),
+        },
+        "need-sync-songs": {
+            "task": "yabase.task.process_need_sync_songs",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+    }
+else:
+    import socket   
+    hostname = socket.gethostname()
+    if hostname == 'yas-web-01':
+        CELERYBEAT_SCHEDULE = {
+            "radio-listening-stat-every-hour": {
+                "task": "stats.task.radio_listening_stats_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-02':
+        CELERYBEAT_SCHEDULE = {
+            "leaderboard_update-every-hour": {
+                "task": "yabase.task.leaderboard_update_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-03':
+        CELERYBEAT_SCHEDULE = {
+            "scan_friends_regularly": {
+                "task": "account.task.scan_friends_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-04':
+        CELERYBEAT_SCHEDULE = {
+            "check_users_are_alive": {
+                "task": "account.task.check_live_status_task",
+                "schedule": crontab(minute='*/10', hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-05':
+        CELERYBEAT_SCHEDULE = {
+            "build-mongodb-index": {
+                "task": "yasearch.task.build_mongodb_index",
+                "schedule": crontab(minute="*/30"),
+            },
+        }
+    elif hostname == 'yas-web-06':
+        CELERYBEAT_SCHEDULE = {
+            "need-sync-songs": {
+                "task": "yabase.task.process_need_sync_songs",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    
 UPLOAD_SONG_FOLDER = '/tmp/'
 if PRODUCTION_MODE:
     UPLOAD_SONG_FOLDER = '/space/new/medias/sources/with_id3/'
