@@ -279,8 +279,20 @@ class RadioManager(models.Manager):
         sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
         return sorted_results[:limit]        
 
+    def delete_fake_radios(self):
+        self.filter(name__startswith='____fake____').delete()  
         
-        
+    def generate_fake_radios(self, count):
+        for _i in range(0, count):
+            name = '____fake____%s' % uuid.uuid4().hex
+            logger.info("generating radio %s" % (name))
+            radio = Radio(name=name)
+            radio.save()
+            playlist, _created = radio.get_or_create_default_playlist()
+            metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:10]
+            for metadata in metadatas:
+                song_instance = SongInstance(metadata=metadata, playlist=playlist)
+                song_instance.save()
 
 class Radio(models.Model):
     objects = RadioManager()
