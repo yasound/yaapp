@@ -152,8 +152,9 @@ def get_last_user_doc():
     db = settings.MONGO_DB
     return db.users.find().sort([("$natural", DESCENDING)]).limit(1)
 
-def erase_index():
+def erase_index(skip_songs=False):
     db = settings.MONGO_DB
-    db.songs.drop()
+    if not skip_songs:
+        db.songs.drop()
     db.radios.drop()
     db.users.drop()
