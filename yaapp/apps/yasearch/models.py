@@ -20,7 +20,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     """
     if erase:
         logger.info("deleting index")
-        indexer.erase_index()
+        indexer.erase_index(skip_songs=skip_songs)
     
     if upsert:
         logger.info("using upsert")
