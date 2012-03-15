@@ -36,7 +36,6 @@ def collectstatic():
 def deploy():
     """[DISTANT] Update distant django env
     """
-    test()
     with cd(WEBSITE_PATH):
         run("git pull")
         run("./vtenv.sh")
