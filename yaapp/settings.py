@@ -433,6 +433,9 @@ if PRODUCTION_MODE:
 else:
     MONGO_DB = Connection().yasound
 
+if TEST_MODE:
+    MONGO_DB = Connection().yasound_test
+
 # album images folder
 ALBUM_COVER_SHORT_URL = 'covers/albums/'
 ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL

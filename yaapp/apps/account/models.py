@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from tastypie.models import create_api_key
 from tastypie.models import ApiKey
 from yabase.models import Radio, RadioUser
@@ -225,6 +225,9 @@ class UserProfile(models.Model):
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_user(self.user, upsert, insert)
     
+    def remove_from_fuzzy_index(self):
+        return yasearch_indexer.remove_user(self.user)
+    
     def save(self, *args, **kwargs):
         update_mongo = False
         if self.pk:
@@ -265,8 +268,13 @@ class Device(models.Model):
         verbose_name = _('device')
         unique_together = ('user', 'uuid')
 
-    
-
+def user_profile_deleted(sender, instance, created=None, **kwargs):  
+    if isinstance(instance, UserProfile):
+        user_profile = instance
+    else:
+        return
+    user_profile.remove_from_fuzzy_index()
+pre_delete.connect(user_profile_deleted, sender=UserProfile)
 
 
 

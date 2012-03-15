@@ -339,6 +339,7 @@ class Radio(models.Model):
         if not self.pk:
             # creation
             self.leaderboard_rank = Radio.objects.count()
+            update_mongo = True
         else:
             saved = Radio.objects.get(pk=self.pk)
             name_changed = self.name != saved.name
@@ -602,6 +603,9 @@ class Radio(models.Model):
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_radio(self, upsert, insert)
     
+    def remove_from_fuzzy_index(self):
+        return yasearch_indexer.remove_radio(self)
+        
     def build_picture_filename(self):
         filename = 'radio_%d_picture.png' % self.id
         return filename
@@ -633,6 +637,13 @@ def update_leaderboard():
         count += 1
         last_favorites = r.favorites
         
+def radio_deleted(sender, instance, created=None, **kwargs):  
+    if isinstance(instance, Radio):
+        radio = instance
+    else:
+        return
+    radio.remove_from_fuzzy_index()
+signals.pre_delete.connect(radio_deleted, sender=Radio)
 
 
 
