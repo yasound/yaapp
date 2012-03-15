@@ -41,7 +41,7 @@ def deploy():
         run("git pull")
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
-        run("./manage.py collectstatic --noinput")
+        run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
