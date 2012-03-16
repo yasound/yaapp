@@ -546,8 +546,8 @@ if LOCAL_MODE:
     FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ar 44100 -ab 192000' # convert to mp3
 
 if PRODUCTION_MODE:
-    SONGS_ROOT = '/space/new/medias/song/'
-    ALBUM_COVERS_ROOT = '/space/new/medias/album-cover/'
+    SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
+    ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
