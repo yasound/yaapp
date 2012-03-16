@@ -297,7 +297,7 @@ class RadioManager(models.Manager):
 
 class Radio(models.Model):
     objects = RadioManager()
-    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True, on_delete=models.SET_NULL)
+    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
