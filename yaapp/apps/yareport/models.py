@@ -5,7 +5,7 @@ import datetime
 import csv
 import os
 
-def report_song(radio, song_instance, play_datetime, report_datetime):
+def report_song(radio, song_instance):
     db = settings.MONGO_DB
     
     try:
@@ -13,10 +13,7 @@ def report_song(radio, song_instance, play_datetime, report_datetime):
     except YasoundSong.DoesNotExist:
         print 'YasoundSong %d does not exist' % song_instance.metadata.yasound_song_id
         return
-    
-    duration_timedelta = report_datetime - play_datetime
-    duration = duration_timedelta.seconds + duration_timedelta.days * 24 * 3600
-    
+
     doc = {
            "radio_id": radio.id,
            "radio_name": radio.name,
@@ -24,7 +21,7 @@ def report_song(radio, song_instance, play_datetime, report_datetime):
            "song_name": yasound_song.name,
            "song_artist_name": yasound_song.artist_name,
            "song_album_name": yasound_song.album_name,
-           "duration": duration,
+           "duration": yasound_song.duration,
            "report_date": datetime.datetime.now()
         } 
     db.reports.insert(doc)
@@ -42,7 +39,6 @@ def print_reports():
 
 def scpp_report(destination_folder='', start_date=None, end_date=None):
     db = settings.MONGO_DB
-
 
     radio_ids = db.reports.distinct("radio_id")
     for radio_id in radio_ids:
