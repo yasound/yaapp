@@ -29,7 +29,6 @@ if PRODUCTION_MODE:
 else:
     DEBUG = True
 
-DEBUG=True
 TEMPLATE_DEBUG = DEBUG
 
 DEFAULT_FROM_EMAIL = "dev@yasound.com"
