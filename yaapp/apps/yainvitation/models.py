@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from yabase.models import Radio
 import datetime
 from random import random
+from account import settings as account_settings
 
 class InvitationManager(models.Manager):
     def pending(self):
@@ -75,6 +76,17 @@ class Invitation(models.Model):
             self.save()
         return subject, message 
             
+    def accept(self, user):
+        self.user = user
+        self.save()
+        
+        vip_group, _created = Group.objects.get_or_create(name=account_settings.GROUP_NAME_VIP)
+        user.groups.add(vip_group)
+        
+        radio = self.radio
+        radio.creator = self.user
+        radio.save()
+        
             
     def send(self):
         if not self.message:
