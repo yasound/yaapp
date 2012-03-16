@@ -407,6 +407,11 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 PICTURE_FOLDER = 'pictures'
+if PRODUCTION_MODE:
+    # use shared folder on prod servers
+    PICTURE_FOLDER = 'repl/pictures'
+    THUMBNAIL_PREFIX = 'repl/cache/'
+    
 
 YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
 YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
