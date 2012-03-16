@@ -288,6 +288,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'yasearch',
     'yainvitation',
+    'yareport',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
