@@ -14,13 +14,13 @@ import indexer as yasearch_indexer
 #import string
 logger = logging.getLogger("yaapp.yaref")
 
-def build_mongodb_index(upsert=False, erase=False):
+def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     """
     build mongodb fuzzy index : if upsert=False then document is inserted without checking for existent one
     """
     if erase:
         logger.info("deleting index")
-        indexer.erase_index()
+        indexer.erase_index(skip_songs=skip_songs)
     
     if upsert:
         logger.info("using upsert")
@@ -30,35 +30,36 @@ def build_mongodb_index(upsert=False, erase=False):
 #
 #    YasoundSong
 #
-    songs = YasoundSong.objects.all()
-    last_indexed = YasoundSong.objects.last_indexed()
-    if last_indexed:
-        logger.info("last indexed song = %d" % (last_indexed.id))
-        songs = songs.filter(id__gt=last_indexed.id)
-    count = songs.count()
-    logger.info("processing %d songs" % (count))
-    if count > 0:
-        start = time()
-        if upsert:
-            for i, song in enumerate(yasearch_utils.queryset_iterator(songs)):
-                song.build_fuzzy_index(upsert=True)
-                if i % 10000 == 0 and i != 0:
-                    elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) songs in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
-                    start = time()
-        else:
-            bulk = indexer.begin_bulk_insert()
-            for i, song in enumerate(yasearch_utils.queryset_iterator(songs)):
-                bulk.append(song.build_fuzzy_index(upsert=False, insert=False))
-                if i % 10000 == 0 and i != 0:
-                    indexer.commit_bulk_insert_songs(bulk)
-                    bulk = indexer.begin_bulk_insert()
-                    elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) songs in % seconds" % (i+1, count, 100*i/count, str(elapsed)))
-                    start = time()
-            indexer.commit_bulk_insert_songs(bulk)
-            elapsed = time() - start
-            logger.info("processed %d/%d (%d%%) songs in % seconds" % (count, count, 100, str(elapsed)))
+    if not skip_songs:
+        songs = YasoundSong.objects.all()
+        last_indexed = YasoundSong.objects.last_indexed()
+        if last_indexed:
+            logger.info("last indexed song = %d" % (last_indexed.id))
+            songs = songs.filter(id__gt=last_indexed.id)
+        count = songs.count()
+        logger.info("processing %d songs" % (count))
+        if count > 0:
+            start = time()
+            if upsert:
+                for i, song in enumerate(yasearch_utils.queryset_iterator(songs)):
+                    song.build_fuzzy_index(upsert=True)
+                    if i % 10000 == 0 and i != 0:
+                        elapsed = time() - start
+                        logger.info("processed %d/%d (%d%%) songs in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                        start = time()
+            else:
+                bulk = indexer.begin_bulk_insert()
+                for i, song in enumerate(yasearch_utils.queryset_iterator(songs)):
+                    bulk.append(song.build_fuzzy_index(upsert=False, insert=False))
+                    if i % 10000 == 0 and i != 0:
+                        indexer.commit_bulk_insert_songs(bulk)
+                        bulk = indexer.begin_bulk_insert()
+                        elapsed = time() - start
+                        logger.info("processed %d/%d (%d%%) songs in % seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                        start = time()
+                indexer.commit_bulk_insert_songs(bulk)
+                elapsed = time() - start
+                logger.info("processed %d/%d (%d%%) songs in % seconds" % (count, count, 100, str(elapsed)))
 
 #
 #    Radio
@@ -133,7 +134,9 @@ def build_mongodb_index(upsert=False, erase=False):
     
     
     logger.info("building mongodb index")
-    indexer.build_index_songs() 
+    
+    if not skip_songs:
+        indexer.build_index_songs() 
     indexer.build_index_radios() 
     indexer.build_index_users()      
     logger.info("done")

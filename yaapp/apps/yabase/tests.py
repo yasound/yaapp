@@ -9,7 +9,7 @@ from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import import_utils
 import settings as yabase_settings
-
+from yasearch.indexer import erase_index
 
 class TestDatabase(TestCase):
     multi_db = True
@@ -384,6 +384,7 @@ class TestImport(TestCase):
         
 class TestRadioDeleted(TestCase):
     def setUp(self):
+        erase_index()
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
@@ -420,9 +421,29 @@ class TestRadioDeleted(TestCase):
 
         # check that radio is still here
         radio = Radio.objects.get(id=radio_id)
+     
+    def test_fuzzy_index(self):
+        results = Radio.objects.search_fuzzy('test')
+        self.assertEquals(len(results), 1)
         
+        results = Radio.objects.search_fuzzy('rienrienrien')
+        self.assertEquals(len(results), 0)
         
+    def test_fuzzy_index_deleted(self):
+        results = Radio.objects.search_fuzzy('uneradio')
+        self.assertEquals(len(results), 0)
+
+        radio = Radio(name='uneradio')
+        radio.save()
         
+        results = Radio.objects.search_fuzzy('uneradio')
+        self.assertEquals(len(results), 1)
+
+        results = Radio.objects.search_fuzzy('test')
+        self.assertEquals(len(results), 1)
         
-        
-        
+        Radio.objects.radio_for_user(self.user).delete()
+
+        results = Radio.objects.search_fuzzy('test')
+        self.assertEquals(len(results), 0)
+                

@@ -280,12 +280,25 @@ class RadioManager(models.Manager):
         sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
         return sorted_results[:limit]        
 
+    def delete_fake_radios(self):
+        self.filter(name__startswith='____fake____').delete()  
         
-        
+    def generate_fake_radios(self, count):
+        for _i in range(0, count):
+            radio_uuid = uuid.uuid4().hex
+            name = '____fake____%s' % radio_uuid
+            logger.info("generating radio %s" % (name))
+            radio = Radio(name=name, ready=True, uuid=radio_uuid)
+            radio.save()
+            playlist, _created = radio.get_or_create_default_playlist()
+            metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:10]
+            for metadata in metadatas:
+                song_instance = SongInstance(metadata=metadata, playlist=playlist)
+                song_instance.save()
 
 class Radio(models.Model):
     objects = RadioManager()
-    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True, on_delete=models.SET_NULL)
+    creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)    
 
@@ -340,6 +353,7 @@ class Radio(models.Model):
         if not self.pk:
             # creation
             self.leaderboard_rank = Radio.objects.count()
+            update_mongo = True
         else:
             saved = Radio.objects.get(pk=self.pk)
             name_changed = self.name != saved.name
@@ -607,6 +621,9 @@ class Radio(models.Model):
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_radio(self, upsert, insert)
     
+    def remove_from_fuzzy_index(self):
+        return yasearch_indexer.remove_radio(self)
+        
     def build_picture_filename(self):
         filename = 'radio_%d_picture.png' % self.id
         return filename
@@ -638,6 +655,13 @@ def update_leaderboard():
         count += 1
         last_favorites = r.favorites
         
+def radio_deleted(sender, instance, created=None, **kwargs):  
+    if isinstance(instance, Radio):
+        radio = instance
+    else:
+        return
+    radio.remove_from_fuzzy_index()
+signals.pre_delete.connect(radio_deleted, sender=Radio)
 
 
 

@@ -122,4 +122,6 @@ $(document).ready(function() {
 		}
 		resizeVolumeBar(event);
 	});
+	
+	$('#player').height($('#radio').height());
 });

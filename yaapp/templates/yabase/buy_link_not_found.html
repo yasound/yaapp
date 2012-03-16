@@ -4,18 +4,7 @@
 {% block head_title %}{% trans "Sorry, item not available" %}{% endblock %}
 
 
-{% block body %}
-<div class='container'>
-    <div class='row'>
-        <div class='span3'>
-        <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
-        </div>
-        <div class='span9'>
-        <img src='/media/images/banner.png' alt='Banner'/>
-        </div>
-    </div>
-    
-    
+{% block content %}
     <div class='row'>
         <div class='span4'>
            <div id="radio">
@@ -35,22 +24,5 @@
             </div>
         </div>
     </div>    
-    
-    <div class='row'>
-        <div id='appstore'>
-        <a href='#'>
-        <img src='/media/images/available-appstore-fr.png' alt='{% trans "available on appstore" %}'/>
-        </a>
-        </div>
-    </div>    
-    
-    <footer>
-      <div id="menu">
-      <a href="{% url logout %}">{% trans "Logout" %}</a> | <a href="http://yasound.com/a_propos_de_nous.php">À propos de nous</a> | <a href="http://yasound.com/jobs.php">Jobs</a> | <a href="http://yasound.com/presse.php">Presse</a> | <a href="http://yasound.com/contact.php">Contact</a>
-      </div>
-    </footer>
-</div>
 {% endblock %}
 
-{% block content %}
-{% endblock %}
