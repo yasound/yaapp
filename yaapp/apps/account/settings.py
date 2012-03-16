@@ -4,3 +4,5 @@ ACCOUNT_TYPE_TWITTER = 'twitter'
 
 SUBSCRIPTION_NONE = 'none'
 SUBSCRIPTION_PREMIUM = 'premium'
+
+GROUP_NAME_VIP = 'vip'
