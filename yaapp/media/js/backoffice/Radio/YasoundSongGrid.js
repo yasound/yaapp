@@ -6,6 +6,16 @@ Yasound.Backoffice.Data.YasoundSongStore = function(url) {
 
 Yasound.Backoffice.UI.YasoundSongColumnModel = function(sm){
     return ([sm, {
+        header: gettext('Id'),
+        dataIndex: 'id',
+        sortable: true,
+        width: 20,
+        filterable: true,
+        filter: {
+            xtype: "numberfield",
+            filterName: "id"
+        }        	
+    }, {
         header: gettext('Track'),
         dataIndex: 'name',
         sortable: true,
