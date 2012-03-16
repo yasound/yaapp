@@ -16,6 +16,7 @@ import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 from sorl.thumbnail import get_thumbnail
+from yareport.task import task_report_song
 
 #from account.models import UserProfile
 import uuid
@@ -249,7 +250,7 @@ class RadioManager(models.Manager):
         self.all().update(computing_next_songs=False)
         
     def ready_objects(self):
-        return self.filter(ready=True)
+        return self.filter(ready=True, creator__isnull=False)
     
     def last_indexed(self):
         doc = yasearch_indexer.get_last_radio_doc()
@@ -418,6 +419,10 @@ class Radio(models.Model):
         signals.post_delete.connect(next_song_deleted, sender=NextSong)
     
     def get_next_song(self):
+        if self.current_song:
+            task_report_song.delay(self, self.current_song, self.current_song.last_play_time, datetime.datetime.now())
+        
+        
         self.fill_next_songs_queue()
             
         try:

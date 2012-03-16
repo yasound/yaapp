@@ -142,7 +142,7 @@ def build_mongodb_index(upsert=False, erase=False):
     
     
     
-def search_radio(search_text, radio_min_score=40, ready_radios_only=True):
+def search_radio(search_text, radio_min_score=40, ready_radios_only=True, radios_with_creator_only=True):
     radio_results = Radio.objects.search_fuzzy(search_text, 5)
     radios = []
     for r in radio_results:
@@ -150,13 +150,13 @@ def search_radio(search_text, radio_min_score=40, ready_radios_only=True):
         score = r[1]
         if score >= radio_min_score:
             r = Radio.objects.get(id=radio_id)
-            if r.ready or not ready_radios_only:
+            if (r.ready or not ready_radios_only) and (r.creator or not radios_with_creator_only):
                 radios.append(r)
         else:
             break
     return radios
     
-def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True):
+def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True, radios_with_creator_only=True):
     user_results = UserProfile.objects.search_user_fuzzy(search_text, 5)
     users = []
     for u in user_results:
@@ -169,11 +169,12 @@ def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True)
     radios = []
     for u in users:
         if u.userprofile.own_radio:
-            if u.userprofile.own_radio.ready or not ready_radios_only:
-                radios.append(u.userprofile.own_radio)
+            r = u.userprofile.own_radio
+            if (r.ready or not ready_radios_only) and (r.creator or not radios_with_creator_only):
+                radios.append(r)
     return radios
     
-def search_radio_by_song(search_text, limit=10, ready_radios_only=True):
+def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_with_creator_only=True):
     song_results = YasoundSong.objects.search_fuzzy(search_text, 1000)
     songs = []
     for s in song_results:
@@ -181,6 +182,8 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True):
     radio_queryset = Radio.objects
     if ready_radios_only:
         radio_queryset = radio_queryset.filter(ready=True)
+    if radios_with_creator_only:
+        radio_queryset = radio_queryset.filter(creator__isnull=False)
     radios = radio_queryset.filter(current_song__metadata__yasound_song_id__in=songs).order_by('-overall_listening_time')[:limit]
     return radios
     
