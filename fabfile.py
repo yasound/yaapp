@@ -43,6 +43,10 @@ def deploy():
         run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
         if not exists("./media/repl"):
             run("ln -s /data/glusterfs-mnt/replica2all/front ./media/repl")
+        if not exists("./media/covers"):
+            run("mkdir ./media/covers/")
+        if not exists("./media/covers/albums"):
+            run("ln -s /data/glusterfs-mnt/replica2all/album-cover ./media/covers/albums")
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
