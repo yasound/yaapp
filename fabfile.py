@@ -41,6 +41,7 @@ def deploy():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
+        run("ln -s /data/glusterfs-mnt/replica2all/front ./media/repl")
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
