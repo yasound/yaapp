@@ -1,7 +1,7 @@
 import os.path
 from fabric.api import *
 from fabric.utils import puts
-from fabric.contrib.files import sed, uncomment, append
+from fabric.contrib.files import sed, uncomment, append, exists
 
 env.hosts = [
     'yas-web-01.ig-1.net',
@@ -41,7 +41,8 @@ def deploy():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
-        run("ln -s /data/glusterfs-mnt/replica2all/front ./media/repl")
+        if not exists("./media/repl"):
+            run("ln -s /data/glusterfs-mnt/replica2all/front ./media/repl")
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
