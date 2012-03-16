@@ -336,10 +336,13 @@ def yasound_songs(request, song_id=None):
         raise Http404()
     if request.method == 'GET':
         qs = YasoundSong.objects.all()
+        yasound_song_id = request.REQUEST.get('id')
         name = request.REQUEST.get('name', '')
         artist_name = request.REQUEST.get('artist_name', '')
         album_name = request.REQUEST.get('album_name', '')
 
+        if yasound_song_id:
+            qs = qs.filter(id=yasound_song_id)
         if name:
             qs = qs.filter(name_simplified__istartswith=name)
         if artist_name:
