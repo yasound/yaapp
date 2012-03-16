@@ -55,7 +55,7 @@ class YasoundAlbum(models.Model):
         try:
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
-            return '/media/images/default_image.png'
+            return None
     
     class Meta:
         db_table = u'yasound_album'
