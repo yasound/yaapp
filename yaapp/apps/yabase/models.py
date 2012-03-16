@@ -434,7 +434,7 @@ class Radio(models.Model):
     
     def get_next_song(self):
         if self.current_song:
-            task_report_song.delay(self, self.current_song, self.current_song.last_play_time, datetime.datetime.now())
+            task_report_song.delay(self, self.current_song)
         
         
         self.fill_next_songs_queue()
