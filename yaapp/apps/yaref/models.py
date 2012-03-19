@@ -243,7 +243,14 @@ class YasoundSong(models.Model):
     
     @property
     def cover_url(self):
-        return None
+        if not self.cover_filename:
+            return None
+        short_url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
+                         yaref_utils.convert_filename_to_filepath(self.cover_filename))
+        try:
+            return get_thumbnail(short_url, '256x256', crop='center').url
+        except:
+            return None
         
 
     def build_fuzzy_index(self, upsert=False, insert=True):
