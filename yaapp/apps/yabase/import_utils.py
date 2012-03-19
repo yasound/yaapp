@@ -167,18 +167,27 @@ class SongImporter:
         path_exists = True
         filename = None
         while path_exists:
-            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + '.mp3'
+            filename = ''.join(random.choice("01234567890abcdef") for _i in xrange(9)) + '.mp3'
             path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
             path_exists = os.path.exists(path)
         return filename, path
     
-    def _generate_filename_and_path_for_cover(self, url):
+    def _generate_filename_and_path_for_album_cover(self, url):
         extension = url[-4:len(url)]
         path_exists = True
         filename = None
         while path_exists:
-            filename = ''.join(random.choice("01234567890abcdef") for i in xrange(9)) + extension
+            filename = ''.join(random.choice("01234567890abcdef") for _i in xrange(9)) + extension
             path = os.path.join(settings.ALBUM_COVERS_ROOT, convert_filename_to_filepath(filename))
+            path_exists = os.path.exists(path)
+        return filename, path
+    
+    def _generate_filename_and_path_for_song_cover(self, extension='.jpg'):
+        path_exists = True
+        filename = None
+        while path_exists:
+            filename = ''.join(random.choice("01234567890abcdef") for _i in xrange(9)) + extension
+            path = os.path.join(settings.SONG_COVERS_ROOT, convert_filename_to_filepath(filename))
             path_exists = os.path.exists(path)
         return filename, path
     
@@ -269,7 +278,7 @@ class SongImporter:
         cover_url = self._find_cover_url_for_album(metadata)
         if cover_url:
             # saving cover
-            cover_filename, cover_path = self._generate_filename_and_path_for_cover(cover_url)
+            cover_filename, cover_path = self._generate_filename_and_path_for_album_cover(cover_url)
             r = requests.get(cover_url)
             self._log(_("downloading album cover"))
             if r.status_code == 200:
@@ -589,6 +598,51 @@ class SongImporter:
         destination = self._get_filepath_for_preview(source)
         self._generate_preview(source, destination) 
     
+    def extract_song_cover(self, yasound_song):
+        logger.info("extracting song cover from %d (%s)" % (yasound_song.id, yasound_song))
+        from mutagen import File
+        mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
+        try:
+            file = File(mp3)
+        except:
+            logger.error(u'error while opening mp3: %s' % (mp3))
+            return
+        if not 'APIC:' in file.tags:
+            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+            return
+        
+        artwork = file.tags['APIC:'].data
+        mime =  file.tags['APIC:'].mime
+        
+        extension = None
+        if mime == 'image/jpeg':
+            extension = '.jpg'
+        elif mime == 'image/png':
+            extension = '.png'
+        # TODO : support '-->' for uri
+            
+        if not extension:
+            logger.error(u"unsupported mime type : %s" % (mime))
+            return
+        
+        if not artwork:
+            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+            return
+
+        filename, path = self._generate_filename_and_path_for_song_cover(extension)
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError as e:
+            if e.errno == errno.EEXIST:
+                pass
+            else: raise
+        
+        with open(path, 'wb') as img:
+            img.write(artwork) 
+            yasound_song.cover_filename = filename
+            logger.info('ok, saved in %s' % path)
+            yasound_song.save()
+    
 def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
     return importer.import_song(binary, metadata, convert, allow_unknown_song)
@@ -609,4 +663,8 @@ def generate_default_filename(metadata):
     return filename
 
     
+def extract_song_cover(yasound_song):
+    importer = SongImporter()
+    return importer.extract_song_cover(yasound_song)
+
     

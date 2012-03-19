@@ -195,3 +195,8 @@ def process_upload_song(binary, metadata=None, convert=True, song_id=None, allow
 def generate_preview(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
     import_utils.generate_preview(yasound_song)
+    
+@task
+def extract_song_cover(yasound_song_id):
+    yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+    import_utils.extract_song_cover(yasound_song)

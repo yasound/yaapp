@@ -441,6 +441,9 @@ if TEST_MODE:
 ALBUM_COVER_SHORT_URL = 'covers/albums/'
 ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
 
+SONG_COVER_SHORT_URL = 'covers/songs/'
+SONG_COVER_URL = MEDIA_URL + SONG_COVER_SHORT_URL
+
 # celery stuff
 from celery.schedules import crontab
 
@@ -550,9 +553,11 @@ if LOCAL_MODE:
 if PRODUCTION_MODE:
     SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
+    SONG_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/song-cover/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
+    SONG_COVERS_ROOT = '/tmp/'
     
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 
