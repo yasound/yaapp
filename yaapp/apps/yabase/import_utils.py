@@ -374,12 +374,12 @@ class SongImporter:
             self._log('cannot find radio %s' % (radio_id))
             return
         
-        playlist, created = radio.get_or_create_default_playlist()
+        playlist, _created = radio.get_or_create_default_playlist()
         if not playlist:
             self._log('cannot create playlist for radio id %s' % (radio_id))
             return
         
-        si, created = SongInstance.objects.get_or_create(metadata=sm, 
+        si, _created = SongInstance.objects.get_or_create(metadata=sm, 
                                                          playlist=playlist)
         if sm.yasound_song_id is not None:
             self._log(u'activating radio %s' % radio)
