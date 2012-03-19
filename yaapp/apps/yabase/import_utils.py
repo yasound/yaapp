@@ -602,11 +602,21 @@ class SongImporter:
         logger.info("extracting song cover from %d (%s)" % (yasound_song.id, yasound_song))
         from mutagen import File
         mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
+        file = None
         try:
             file = File(mp3)
         except:
             logger.error(u'error while opening mp3: %s' % (mp3))
             return
+        
+        if not file:
+            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+            return
+
+        if not file.tags:
+            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+            return
+            
         if not 'APIC:' in file.tags:
             logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
             return
