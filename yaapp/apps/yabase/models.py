@@ -637,7 +637,7 @@ class Radio(models.Model):
         
     @property
     def stream_url(self):
-        url = 'http://dev.yasound.com:8001/%s' % self.uuid
+        url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
         return url
         
     class Meta:
