@@ -37,6 +37,7 @@ def deploy():
     """[DISTANT] Update distant django env
     """
     with cd(WEBSITE_PATH):
+        run("git checkout master")
         run("git pull")
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
