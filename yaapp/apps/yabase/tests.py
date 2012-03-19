@@ -1,16 +1,19 @@
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.core.urlresolvers import reverse
+from django.db.models.aggregates import Count
 from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
+from task import process_playlists_exec
 from tests_utils import generate_playlist
 from yabase.import_utils import SongImporter, generate_default_filename
 from yabase.models import FeaturedContent, Playlist, SongMetadata
+from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
+from yasearch.indexer import erase_index, add_song
 import import_utils
 import settings as yabase_settings
-from yasearch.indexer import erase_index
-from django.core.files import File
 
 class TestDatabase(TestCase):
     multi_db = True
@@ -266,7 +269,53 @@ class TestFeaturedModels(TestCase):
         self.assertEquals(featured_content1.activated, True)
         self.assertEquals(featured_content2.activated, False)
         
-          
+class TestImportPlaylist(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user     
+        erase_index()   
+    
+    def test_import_empty(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        process_playlists_exec(radio, content_compressed=None)
+
+    def test_import_ok_with_nothing_found(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        
+        # 643 songs with some duplicates, 492 unique songs
+        f = open('./apps/yabase/fixtures/playlist.data')
+        content_compressed = f.read()
+        f.close()
+
+        self.assertEquals(SongInstance.objects.all().count(), 0)
+        process_playlists_exec(radio, content_compressed=content_compressed)
+        self.assertEquals(SongInstance.objects.all().count(), 492)
+        self.assertEquals(SongMetadata.objects.filter(yasound_song_id__isnull=True).count(), 492)
+        
+    def test_import_ok_with_references(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        f = open('./apps/yabase/fixtures/playlist.data')
+        content_compressed = f.read()
+        f.close()
+
+        song = yaref_test_utils.generate_yasound_song('one of a kind', 'meds', 'placebo')
+        add_song(song)
+        self.assertEquals(SongInstance.objects.all().count(), 0)
+        process_playlists_exec(radio, content_compressed=content_compressed)
+        self.assertEquals(SongInstance.objects.all().count(), 492)
+        self.assertEquals(SongMetadata.objects.filter(yasound_song_id__isnull=True).count(), 491)
+     
+        tests = SongMetadata.objects.annotate(num=Count('songinstance'))
+        for test in tests:
+            if test.num >= 3:
+                print u'%d: %s: %d' % (test.id, test, test.num)
+                sis = SongInstance.objects.filter(metadata=test)
+                for si in sis:
+                    print u'%d:%s:%d' % (si.id, si, si.order)
+     
 class TestImport(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
