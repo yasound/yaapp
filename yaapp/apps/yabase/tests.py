@@ -10,6 +10,7 @@ from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 import import_utils
 import settings as yabase_settings
 from yasearch.indexer import erase_index
+from django.core.files import File
 
 class TestDatabase(TestCase):
     multi_db = True
@@ -272,7 +273,8 @@ class TestImport(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user        
+        self.user = user     
+        erase_index()   
     
     def test_quality(self):
         metadata = {'bitrate': '10',
@@ -382,6 +384,83 @@ class TestImport(TestCase):
         filename = generate_default_filename({'radio_id': radio.id})
         self.assertEquals(len(filename), len('test-2012-03-12-16:06'))
         
+    def test_import_without_metadata_in_file(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        sm, _message = importer.import_song(binary, metadata=None, convert=False, allow_unknown_song=False)
+        self.assertIsNone(sm)
+    
+    def test_import_without_metadata_in_file_and_with_given_metadata(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        
+        self.assertIsNotNone(sm.yasound_song_id)
+        self.assertEquals(sm.name, 'my mp3')
+        self.assertEquals(sm.artist_name, 'my artist')
+        self.assertEquals(sm.album_name, 'my album')
+        
+    def test_import_same_song(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        
+        self.assertIsNotNone(sm.yasound_song_id)
+        self.assertEquals(sm.name, 'my mp3')
+        self.assertEquals(sm.artist_name, 'my artist')
+        self.assertEquals(sm.album_name, 'my album')
+
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertEquals(yasound_song.name, 'my mp3')
+        
+        sm2, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        self.assertEquals(sm2, sm)
+
+    def test_import_same_song_with_different_name(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        
+        self.assertIsNotNone(sm.yasound_song_id)
+        self.assertEquals(sm.name, 'my mp3')
+        self.assertEquals(sm.artist_name, 'my artist')
+        self.assertEquals(sm.album_name, 'my album')
+
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertEquals(yasound_song.name, 'my mp3')
+        
+        metadata = {
+            'title': 'my other mp3',
+            'artist': 'my other artist',
+            'album': 'my other album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        self.assertEquals(sm.yasound_song_id, yasound_song.id)
+        self.assertEquals(sm.name, 'my other mp3')
+        self.assertEquals(sm.artist_name, 'my other artist')
+        self.assertEquals(sm.album_name, 'my other album')
+        
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertEquals(yasound_song.name, 'my mp3')
+
 class TestRadioDeleted(TestCase):
     def setUp(self):
         erase_index()

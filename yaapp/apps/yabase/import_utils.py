@@ -470,7 +470,7 @@ class SongImporter:
                     # creating song instance if needed
                     self._create_song_instance(sm, metadata)
                     
-                    return None, self.get_messages()
+                    return sm, self.get_messages()
                 except YasoundSong.DoesNotExist:
                     self._log(_("song metadata already in database, but no YasoundSong"))
         except SongMetadata.DoesNotExist:
