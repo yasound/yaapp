@@ -419,11 +419,11 @@ YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
 YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
 
 if LOCAL_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://api.yasound.com:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
 elif DEVELOPMENT_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://api.yasound.com:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
 elif PRODUCTION_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://api.yasound.com:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
  
 SOUTH_TESTS_MIGRATE=False   
 
