@@ -50,6 +50,8 @@ def deploy():
             run("mkdir ./media/covers/")
         if not exists("./media/covers/albums"):
             run("ln -s /data/glusterfs-mnt/replica2all/album-cover ./media/covers/albums")
+        if not exists("./media/covers/songs"):
+            run("ln -s /data/glusterfs-mnt/replica2all/song-cover ./media/covers/songs")
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
