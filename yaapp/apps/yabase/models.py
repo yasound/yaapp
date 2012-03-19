@@ -110,10 +110,11 @@ class SongInstance(models.Model):
         desc_dict['artist'] = song.artist_name
         desc_dict['album'] = song.album_name
         cover = None
-        if song.album:
-            cover = song.album.cover_url
-        elif song.cover_filename:
+        if song.cover_filename:
             cover = song.cover_url
+        if cover is None and song.album:
+            cover = song.album.cover_url
+            
         if cover is None:
             cover = '/media/images/default_album.jpg'
         desc_dict['cover'] = cover
