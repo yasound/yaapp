@@ -706,6 +706,7 @@ def web_terms(request, template_name='web/terms.html'):
     
     
 def web_index(request, template_name='web/index.html'):
+    return HttpResponseRedirect(settings.PUBLIC_WEBSITE_URL)
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))  
 

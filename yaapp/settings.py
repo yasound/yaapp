@@ -387,6 +387,7 @@ if LOCAL_MODE:
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'
+PUBLIC_WEBSITE_URL = 'http://yasound.com'
 SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 from django.template.defaultfilters import slugify
@@ -560,4 +561,5 @@ DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 ITUNES_BASE_URL="http://itunes.apple.com/search"
 TRADEDOUBLER_URL="http://clk.tradedoubler.com/click?p=23753&a=2007583&url="
 TRADEDOUBLER_ID="partnerId=2003"
+
 
