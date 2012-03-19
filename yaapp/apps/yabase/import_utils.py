@@ -598,17 +598,22 @@ class SongImporter:
         destination = self._get_filepath_for_preview(source)
         self._generate_preview(source, destination) 
     
-    def extract_song_cover(self, yasound_song):
+    def extract_song_cover(self, yasound_song, mp3=None):
         logger.info("extracting song cover from %d (%s)" % (yasound_song.id, yasound_song))
+        
+        if yasound_song.cover_filename:
+            logger.info("song %d (%s) has a cover" % (yasound_song.id, yasound_song))
+            return
+            
         from mutagen import File
-        mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
+        if not mp3:
+            mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
         file = None
         try:
             file = File(mp3)
         except:
             logger.error(u'error while opening mp3: %s' % (mp3))
             return
-        
         if not file:
             logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
             return
@@ -616,47 +621,52 @@ class SongImporter:
         if not file.tags:
             logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
             return
-            
-        if not 'APIC:' in file.tags:
-            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
-            return
-        
-        artwork = file.tags['APIC:'].data
-        mime =  file.tags['APIC:'].mime
-        
-        extension = None
-        if mime == 'image/jpeg':
-            extension = '.jpg'
-        elif mime == 'image/png':
-            extension = '.png'
-        # TODO : support '-->' for uri
-            
-        if not extension:
-            logger.error(u"unsupported mime type : %s" % (mime))
-            return
-        
-        if not artwork:
-            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
-            return
 
-        filename, path = self._generate_filename_and_path_for_song_cover(extension)
-        try:
-            os.makedirs(os.path.dirname(path))
-        except OSError as e:
-            if e.errno == errno.EEXIST:
-                pass
-            else: raise
-        
-        with open(path, 'wb') as img:
-            img.write(artwork) 
-            yasound_song.cover_filename = filename
-            logger.info('ok, saved in %s' % path)
-            yasound_song.save()
+        pics = file.tags.getall('APIC')
+        for pic in pics:
+            mime = pic.mime
+            extension = None
+            
+            if mime == 'image/jpeg':
+                extension = '.jpg'
+            elif mime == 'image/png':
+                extension = '.png'
+            # TODO : support '-->' for uri            
+            if not extension:
+                logger.error(u"unsupported mime type : %s" % (mime))
+                continue
+            
+            artwork = pic.data
+            if not artwork:
+                logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+                continue
+            
+            filename, path = self._generate_filename_and_path_for_song_cover(extension)
+            try:
+                os.makedirs(os.path.dirname(path))
+            except OSError as e:
+                if e.errno == errno.EEXIST:
+                    pass
+                else: raise
+            
+            with open(path, 'wb') as img:
+                img.write(artwork) 
+                yasound_song.cover_filename = filename
+                logger.info('ok, saved in %s' % path)
+                yasound_song.save()            
+            
+            break
+
+
     
 def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
-    return importer.import_song(binary, metadata, convert, allow_unknown_song)
-    
+    sm, messages = importer.import_song(binary, metadata, convert, allow_unknown_song) 
+    if sm and sm.yasound_song_id:
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        importer.extract_song_cover(yasound_song)
+    return sm, messages
+
 def generate_preview(yasound_song):
     importer = SongImporter()
     return importer.generate_preview(yasound_song)
