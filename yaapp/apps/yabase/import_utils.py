@@ -598,7 +598,7 @@ class SongImporter:
         destination = self._get_filepath_for_preview(source)
         self._generate_preview(source, destination) 
     
-    def extract_song_cover(self, yasound_song, mp3=None):
+    def extract_song_cover(self, yasound_song, binary=None):
         logger.info("extracting song cover from %d (%s)" % (yasound_song.id, yasound_song))
         
         if yasound_song.cover_filename:
@@ -606,21 +606,36 @@ class SongImporter:
             return
             
         from mutagen import File
-        if not mp3:
+
+        directory = None
+        if binary:
+            directory = mkdtemp()
+            _path, extension = os.path.splitext(binary.name)
+            source = u'%s/s%s' % (directory, extension)
+            source_f = open(source , 'wb')
+            for chunk in binary.chunks():
+                source_f.write(chunk)
+            source_f.close()
+            mp3 = source
+            
+        else:
             mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
         file = None
+        
         try:
             file = File(mp3)
         except:
             logger.error(u'error while opening mp3: %s' % (mp3))
-            return
-        if not file:
-            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+            if directory:
+                rmtree(directory)
             return
 
-        if not file.tags:
+        if not file or not file.tags:
             logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
+            if directory:
+                rmtree(directory)
             return
+
 
         pics = file.tags.getall('APIC')
         for pic in pics:
@@ -656,6 +671,9 @@ class SongImporter:
                 yasound_song.save()            
             
             break
+        
+        if directory:
+            rmtree(directory)
 
 
     
@@ -664,7 +682,7 @@ def import_song(binary, metadata, convert, allow_unknown_song=False):
     sm, messages = importer.import_song(binary, metadata, convert, allow_unknown_song) 
     if sm and sm.yasound_song_id:
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
-        importer.extract_song_cover(yasound_song)
+        importer.extract_song_cover(yasound_song, binary)
     return sm, messages
 
 def generate_preview(yasound_song):
