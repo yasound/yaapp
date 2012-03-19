@@ -14,6 +14,9 @@ import settings as yabase_settings
 import import_utils
 import zlib
 
+import logging
+logger = logging.getLogger("yaapp.yabase")
+
 @task
 def leaderboard_update_task():
     update_leaderboard()
@@ -51,10 +54,15 @@ class BinaryData:
 
 @transaction.commit_on_success
 def process_playlists_exec(radio, content_compressed):
-    print "decompress playlist"
-    content_uncompressed = zlib.decompress(content_compressed)
+    logger.info("decompress playlist")
+    
+    try:
+        content_uncompressed = zlib.decompress(content_compressed)
+    except Exception, e:
+        logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
+        return
 
-    print '*** process_playlists ***'
+    logger.info('*** process_playlists ***')
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
@@ -107,14 +115,13 @@ def process_playlists_exec(radio, content_compressed):
                 metadata = SongMetadata(name=song_name, artist_name=artist_name, album_name=album_name)
                 metadata.save()
 
-            raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s and "order"=%s',
+            raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
                                            [playlist.id,
-                                            metadata.id,
-                                            order])
+                                            metadata.id])
             if raw and len(list(raw)) > 0:
                 song_instance = list(raw)[0]
             else:
-                song_instance = SongInstance(playlist=playlist, metadata=metadata, order=order, frequency=0.5, enabled=True)
+                song_instance = SongInstance(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
 
             if metadata.yasound_song_id == None:
                 song_name_simplified = get_simplified_name(song_name)
@@ -146,7 +153,7 @@ def process_playlists_exec(radio, content_compressed):
         radio.save()
         radio.fill_next_songs_queue()
         
-    print 'found: %d - not found: %d - total: %d' % (found, notfound, count)
+    logger.info('found: %d - not found: %d - total: %d' % (found, notfound, count))
 
 
 
