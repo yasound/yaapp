@@ -1,29 +1,41 @@
-import os,sys
+#!/usr/bin/python
+#
+# WSGI File for Django
 
-#raise RuntimeError('WSGI sends to the Apache2 error_log.')
+# To use with apache2 server please read README file
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yaapp.settings")
+import os, sys
+my_location = os.path.abspath(os.path.split(__file__)[0])
 
-# This application object is used by the development server
-# as well as any WSGI server configured to use this file.
+# Insert Project path
+PROJECT_PATH = os.path.join(my_location, './')
+sys.path.insert(0,PROJECT_PATH)
 
-#path = os.path.abspath(os.path.split(__file__)[0])
-path = '/var/local/yaapp' #os.path.abspath(os.path.split(__file__)[0])
-if path not in sys.path:
-    sys.path.append(path)
+# Uncomment this if you use VirtualEnv
+#
+activate_this = PROJECT_PATH + "/../vtenv/bin/activate_this.py"
+execfile(activate_this, dict(__file__=activate_this))
 
-path = '/var/local' #os.path.abspath(os.path.split(__file__)[0])
-if path not in sys.path:
-    sys.path.append(path)
+sys.path.insert(2, os.path.join(PROJECT_PATH, "apps"))
+sys.stdout = sys.stderr
 
-#raise RuntimeError('sys.path = ' + '\n'.join(sys.path)) 
-
+# Django
 
 import django.core.handlers.wsgi
-application = django.core.handlers.wsgi.WSGIHandler()
+_application = django.core.handlers.wsgi.WSGIHandler()
 
-#path = os.path.abspath(os.path.split(__file__)[0])
-#if path not in sys.path:
-#    sys.path.append(path)
+def application(environ, start_response):
+    """We need to hook application, to get DJANGO_MODE
+    env variable
+    """
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+    
+    # Sets DJANGO_MODE if SetEnv xxx in apache2 vhost's
+    if not os.environ.has_key('DJANGO_MODE'):
+        if environ.has_key('DJANGO_MODE'):
+            os.environ['DJANGO_MODE'] = environ['DJANGO_MODE']
+        else:
+            os.environ['DJANGO_MODE'] = 'production'
 
+    return _application(environ, start_response)

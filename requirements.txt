@@ -2,9 +2,8 @@
 Django >= 1.3
 South
 django-tastypie
-PIL
-django-kombu
 celery
+celery-with-redis
 django-celery
 tweepy
 django-taggit
@@ -25,3 +24,4 @@ requests
 sorl-thumbnail
 unidecode
 fuzzy
+kombu

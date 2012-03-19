@@ -729,6 +729,6 @@ def radio_unmatched_song(request, radio_id):
     
     
 def status(request):
-    User.objects.get(id=1)
-    YasoundSong.objects.get(id=1)
+    User.objects.all()[:1]
+    YasoundSong.objects.all()[:1]
     return HttpResponse('OK')

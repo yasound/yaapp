@@ -98,53 +98,47 @@ if LOCAL_MODE:
         }
 else:
     # Celery config:
-    if False:
-        BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-        CELERY_IMPORTS = ("yabase.task","stats.task", "account.task")
-        CELERY_RESULT_BACKEND = "database"
-        CELERY_RESULT_DBURI = "postgresql://yaapp:N3EDTnz945FSh6D@yasound.com/yaapp"
-        CELERY_TASK_RESULT_EXPIRES = 10
-    else:
-        CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
-        CELERY_IMPORTS = ("yabase.task", "stats.task", "yaref.task", "account.task")
-        #BROKER_HOST = "127.0.0.1"
-        #BROKER_PORT = 5672
-        #BROKER_VHOST = "prod"
-        #BROKER_USER = "yaapp"
-        #BROKER_PASSWORD = "N3EDTnz945FSh6D"
-        #BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-        BROKER_URL = "amqp://yaapp:N3EDTnz945FSh6D@yasound.com:5672/prod"
-        CELERY_RESULT_BACKEND = "amqp"
-        #CELERY_RESULT_DBURI = "amqp://yaapp:N3EDTnz945FSh6D@yasound.com:5672/prod"
-        CELERY_TASK_RESULT_EXPIRES = 10
+    CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task")
+    BROKER_URL = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND = "redis"
+    CELERY_REDIS_HOST = "localhost"
+    CELERY_REDIS_PORT = 6379
+    CELERY_REDIS_DB = 0
+    CELERY_TASK_RESULT_EXPIRES = 10
 
     # Databases config:
     DATABASES = {
         'default': {
-#            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#            'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
-#            'USER': 'yaapp',                      # Not used with sqlite3.
-#            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
-#            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
-#            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'yaapp', # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '/root/.my.cnf',},
+            'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
         },
-#        'yasound': {
-#            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-#            'USER': 'yaapp',                      # Not used with sqlite3.
-#            'PASSWORD': 'N3EDTnz945FSh6D',                  # Not used with sqlite3.
-#            'HOST': 'yasound.com',                      # Set to empty string for localhost. Not used with sqlite3.
-#            'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
-#        }
         'yasound': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'yasound_final', # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '/root/.my.cnf.yasound',},
+            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
         }
     }
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': [
+                'yas-web-01:11211',
+                'yas-web-02:11211',
+                'yas-web-03:11211',
+                'yas-web-04:11211',
+                'yas-web-05:11211',
+                'yas-web-06:11211',
+                'yas-web-07:11211',
+                'yas-web-08:11211',
+                'yas-web-09:11211',
+                'yas-web-10:11211',
+            ]
+        }
+    } 
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"   
 
 # As we use a multi database config, we need a working database router:
 if not TEST_MODE:
@@ -284,7 +278,6 @@ INSTALLED_APPS = (
     'yaref',
     'stats',
     'tastypie',
-    "djkombu",
     'djcelery',
     'taggit',
     'test_utils',
@@ -296,6 +289,7 @@ INSTALLED_APPS = (
     'yasearch',
     'yainvitation',
     'yareport',
+    'kombu.transport.django',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -323,7 +317,7 @@ LOGGING = {
     },
     'filters': {
         'time_throttled': {
-            '()': 'yaapp.timethrottledfilter.TimeThrottledFilter',
+            '()': 'timethrottledfilter.TimeThrottledFilter',
             'quantity': 5,
             'interval': 30,
             'ignore_lines': [],
@@ -414,6 +408,11 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 PICTURE_FOLDER = 'pictures'
+if PRODUCTION_MODE:
+    # use shared folder on prod servers
+    PICTURE_FOLDER = 'repl/pictures'
+    THUMBNAIL_PREFIX = 'repl/cache/'
+    
 
 YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
 YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
@@ -430,7 +429,7 @@ SOUTH_TESTS_MIGRATE=False
 # mongodb
 from pymongo.connection import Connection
 if PRODUCTION_MODE:
-    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@dev.yasound.com/yasound').yasound
+    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@yas-sql-01,yas-sql-02/yasound').yasound
 else:
     MONGO_DB = Connection().yasound
 
@@ -444,34 +443,80 @@ ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
 # celery stuff
 from celery.schedules import crontab
 
-CELERYBEAT_SCHEDULE = {
-    # Executes every hour
-    "radio-listening-stat-every-hour": {
-        "task": "stats.task.radio_listening_stats_task",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-    "leaderboard_update-every-hour": {
-        "task": "yabase.task.leaderboard_update_task",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-    "scan_friends_regularly": {
-        "task": "account.task.scan_friends_task",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-    "check_users_are_alive": {
-        "task": "account.task.check_live_status_task",
-        "schedule": crontab(minute='*/10', hour='*'),
-    },
-    "build-mongodb-index": {
-        "task": "yasearch.task.build_mongodb_index",
-        "schedule": crontab(minute="*/30"),
-    },
-    "need-sync-songs": {
-        "task": "yabase.task.process_need_sync_songs",
-        "schedule": crontab(minute=0, hour='*'),
-    },
-}
-
+if not PRODUCTION_MODE:
+    CELERYBEAT_SCHEDULE = {
+        # Executes every hour
+        "radio-listening-stat-every-hour": {
+            "task": "stats.task.radio_listening_stats_task",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+        "leaderboard_update-every-hour": {
+            "task": "yabase.task.leaderboard_update_task",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+        "scan_friends_regularly": {
+            "task": "account.task.scan_friends_task",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+        "check_users_are_alive": {
+            "task": "account.task.check_live_status_task",
+            "schedule": crontab(minute='*/10', hour='*'),
+        },
+        "build-mongodb-index": {
+            "task": "yasearch.task.build_mongodb_index",
+            "schedule": crontab(minute="*/30"),
+        },
+        "need-sync-songs": {
+            "task": "yabase.task.process_need_sync_songs",
+            "schedule": crontab(minute=0, hour='*'),
+        },
+    }
+else:
+    import socket   
+    hostname = socket.gethostname()
+    if hostname == 'yas-web-01':
+        CELERYBEAT_SCHEDULE = {
+            "radio-listening-stat-every-hour": {
+                "task": "stats.task.radio_listening_stats_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-02':
+        CELERYBEAT_SCHEDULE = {
+            "leaderboard_update-every-hour": {
+                "task": "yabase.task.leaderboard_update_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-03':
+        CELERYBEAT_SCHEDULE = {
+            "scan_friends_regularly": {
+                "task": "account.task.scan_friends_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-04':
+        CELERYBEAT_SCHEDULE = {
+            "check_users_are_alive": {
+                "task": "account.task.check_live_status_task",
+                "schedule": crontab(minute='*/10', hour='*'),
+            },
+        }
+    elif hostname == 'yas-web-05':
+        CELERYBEAT_SCHEDULE = {
+            "build-mongodb-index": {
+                "task": "yasearch.task.build_mongodb_index",
+                "schedule": crontab(minute="*/30"),
+            },
+        }
+    elif hostname == 'yas-web-06':
+        CELERYBEAT_SCHEDULE = {
+            "need-sync-songs": {
+                "task": "yabase.task.process_need_sync_songs",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+    
 UPLOAD_SONG_FOLDER = '/tmp/'
 if PRODUCTION_MODE:
     UPLOAD_SONG_FOLDER = '/space/new/medias/sources/with_id3/'
@@ -502,8 +547,8 @@ if LOCAL_MODE:
     FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ar 44100 -ab 192000' # convert to mp3
 
 if PRODUCTION_MODE:
-    SONGS_ROOT = '/space/new/medias/song/'
-    ALBUM_COVERS_ROOT = '/space/new/medias/album-cover/'
+    SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
+    ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'

@@ -1,55 +1,31 @@
 import os.path
 from fabric.api import *
 from fabric.utils import puts
-from fabric.contrib.files import sed, uncomment, append
-env.hosts = ['server.example.com',]
-env.user = "yaapp"
+from fabric.contrib.files import sed, uncomment, append, exists
 
-WEBSITE_PATH = "yaapp"
-GIT_PATH = "forge@git.example.com:sample_project.git"
-BRANCH = "master"
+env.hosts = [
+    'yas-web-01.ig-1.net',
+    'yas-web-02.ig-1.net',
+    'yas-web-03.ig-1.net',
+    'yas-web-04.ig-1.net',
+    'yas-web-05.ig-1.net',
+    'yas-web-06.ig-1.net',
+    'yas-web-07.ig-1.net',
+    'yas-web-08.ig-1.net',
+    'yas-web-09.ig-1.net',
+    'yas-web-10.ig-1.net',
+]
+env.user = "customer"
 
-def syncdb():
-    """Create database or syncdb
-    """
-    with lcd("%s" % WEBSITE_PATH):
-        local('./manage.py syncdb --noinput')
-
-
-def create_superuser():
-    """Create super user
-    """
-    with lcd("%s" % WEBSITE_PATH):
-        local('./manage.py createsuperuser')
-
-def migrate():
-    """Migrate database
-    """
-    with lcd("%s" % WEBSITE_PATH):
-        local('./manage.py migrate')
-
-def vtenv_helpers():
-    """Uncomment some virtualenv helpers
-    """
-    with lcd("%s" % WEBSITE_PATH):
-        local('sed -i -e "s/# activate_this =/activate_this =/g" manage.py deploy/deploy.wsgi')
-        local('sed -i -e "s/# execfile/execfile/g" manage.py deploy/deploy.wsgi')
-
-def local_settings():
-    """Add local_settings.py
-    """
-    if not os.path.exists("%s/local_settings.py" % WEBSITE_PATH):
-        puts("File local_settings.py not found : I create it")
-        with lcd("%s" % WEBSITE_PATH):
-            import random;
-            key = "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])
-            local('echo "SECRET_KEY = \'%s\'" > local_settings.py' % key)
+WEBSITE_PATH = "/data/vhosts/y/yasound.com/root/"
+APP_PATH = "yaapp"
+GIT_PATH = "git@github.com:yasound/yaapp.git"
+BRANCH = "iguane"
 
 def test():
     """Test application
     """
-    with lcd("%s" % WEBSITE_PATH):
-        local('./manage.py test')
+    local('cd yaapp &&./manage.py test')
 
 def collectstatic():
     """Command collect static
@@ -57,55 +33,21 @@ def collectstatic():
     with lcd("%s" % WEBSITE_PATH):
         local('./manage.py collectstatic --noinput')
 
-def gitsubmodules():
-    """Build submodules
-    """
-    if not os.path.exists("%s/media/css/bootstrap/bootstrap.css" % WEBSITE_PATH):
-        local("git submodule init")
-    local("git submodule update")
-
-def update():
-    """Update env : syncdb, migrate, collectstatic, test
-    """
-    syncdb()
-    migrate()
-    collectstatic()
-    test()
-
-def prepare():
-    """Prepare django env for first install
-    """
-    local_settings()
-    vtenv_helpers()
-    gitsubmodules()
-    update()
-    create_superuser()
-
-def install():
-    """[DISTANT] Remote install
-    """
-    with cd("root"):
-        run("git clone %s ." % GIT_PATH)
-        if BRANCH != "master":
-            run("git branch %s origin/%s" % (GIT_BRANCH, GIT_BRANCH))
-        run("git pull -u origin")
-        run("./vtenv.sh")
-        run("./fab prepare")
-
 def deploy():
     """[DISTANT] Update distant django env
     """
-    with settings(warn_only=True):
-        if run("test -d root/%s" % WEBSITE_PATH).failed:
-            with settings(warn_only=False):
-                install()
-    with cd("root"):
+    with cd(WEBSITE_PATH):
         run("git pull")
         run("./vtenv.sh")
-    with cd("root/%s" % WEBSITE_PATH):
-        run("./manage.py syncdb")
-        run("./manage.py migrate")
-        run("./manage.py collectstatic --noinput")
-        run("./manage.py test")
-        run("touch deploy/deploy.wsgi")
+    with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
+        if not exists("./media/repl"):
+            run("ln -s /data/glusterfs-mnt/replica2all/front ./media/repl")
+        if not exists("./media/covers"):
+            run("mkdir ./media/covers/")
+        if not exists("./media/covers/albums"):
+            run("ln -s /data/glusterfs-mnt/replica2all/album-cover ./media/covers/albums")
+        run("/etc/init.d/yaapp restart")
+        run("/etc/init.d/celeryd restart")
+        run("/etc/init.d/celerybeat restart")
 
