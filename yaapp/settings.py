@@ -289,6 +289,7 @@ INSTALLED_APPS = (
     'yasearch',
     'yainvitation',
     'yareport',
+    'kombu.transport.django',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
