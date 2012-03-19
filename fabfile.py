@@ -42,8 +42,10 @@ def deploy():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
-        if not exists("./media/repl"):
-            run("ln -s /data/glusterfs-mnt/replica2all/front ./media/repl")
+        if not exists("./media/cache"):
+            run("ln -s /data/glusterfs-mnt/replica2all/front/cache ./media/cache")
+        if not exists("./media/pictures"):
+            run("ln -s /data/glusterfs-mnt/replica2all/front/pictures ./media/pictures")
         if not exists("./media/covers"):
             run("mkdir ./media/covers/")
         if not exists("./media/covers/albums"):
