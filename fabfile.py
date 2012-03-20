@@ -56,3 +56,24 @@ def deploy():
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
 
+def deploy_web():
+    """[DISTANT] Update distant django env
+    """
+    with cd(WEBSITE_PATH):
+        run("git checkout master")
+        run("git pull")
+        run("./vtenv.sh")
+    with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("DJANGO_MODE='production' ./manage.py collectstatic --noinput")
+        if not exists("./media/cache"):
+            run("ln -s /data/glusterfs-mnt/replica2all/front/cache ./media/cache")
+        if not exists("./media/pictures"):
+            run("ln -s /data/glusterfs-mnt/replica2all/front/pictures ./media/pictures")
+        if not exists("./media/covers"):
+            run("mkdir ./media/covers/")
+        if not exists("./media/covers/albums"):
+            run("ln -s /data/glusterfs-mnt/replica2all/album-cover ./media/covers/albums")
+        if not exists("./media/covers/songs"):
+            run("ln -s /data/glusterfs-mnt/replica2all/song-cover ./media/covers/songs")
+        run("/etc/init.d/yaapp restart")
+                
