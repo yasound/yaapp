@@ -89,7 +89,7 @@ import shutil
 import subprocess as sub
 import uploader
 import uuid
-
+import mimetypes
 logger = logging.getLogger("yaapp.yabase")
 
 class SongImporter:
@@ -598,14 +598,61 @@ class SongImporter:
         destination = self._get_filepath_for_preview(source)
         self._generate_preview(source, destination) 
     
+    def find_song_cover_data(self, filename):
+        """
+        return data, extension
+        """
+        from mutagen import File
+
+        data = None
+        extension = None
+
+        try:
+            file = File(filename)
+        except:
+            logger.error(u'error while opening: %s' % (filename))
+            return data, extension
+
+        if not file or not file.tags:
+            return data, extension
+        
+        try:
+            pics = file.tags.getall('APIC')
+        except:
+            pics = []
+        for pic in pics:
+            mime = pic.mime
+            extension = None
+            
+            if mime == 'image/jpeg':
+                extension = '.jpg'
+            elif mime == 'image/png':
+                extension = '.png'
+            # TODO : support '-->' for uri            
+            if not extension:
+                continue
+            
+            data = pic.data
+            if not data:
+                continue        
+            break
+        
+        if 'covr' in file.tags:
+            for pic in file.tags['covr']:
+                if 'PNG' in pic:
+                    return pic, '.png'
+                else:
+                    return pic, '.jpg'
+            
+        return data, extension
+        
+        
     def extract_song_cover(self, yasound_song, binary=None):
-        logger.info("extracting song cover from %d (%s)" % (yasound_song.id, yasound_song))
+        logger.info("extracting song cover from %d (%s) : start" % (yasound_song.id, yasound_song))
         
         if yasound_song.cover_filename:
             logger.info("song %d (%s) has a cover" % (yasound_song.id, yasound_song))
             return
-            
-        from mutagen import File
 
         directory = None
         if binary:
@@ -620,41 +667,9 @@ class SongImporter:
             
         else:
             mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
-        file = None
-        
-        try:
-            file = File(mp3)
-        except:
-            logger.error(u'error while opening mp3: %s' % (mp3))
-            if directory:
-                rmtree(directory)
-            return
 
-        if not file or not file.tags:
-            logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
-            if directory:
-                rmtree(directory)
-            return
-
-        pics = file.tags.getall('APIC')
-        for pic in pics:
-            mime = pic.mime
-            extension = None
-            
-            if mime == 'image/jpeg':
-                extension = '.jpg'
-            elif mime == 'image/png':
-                extension = '.png'
-            # TODO : support '-->' for uri            
-            if not extension:
-                logger.error(u"unsupported mime type : %s" % (mime))
-                continue
-            
-            artwork = pic.data
-            if not artwork:
-                logger.info(u"yasound_song %d (%s) does not have artwork embedded" % (yasound_song.id, yasound_song))
-                continue
-            
+        data, extension = self.find_song_cover_data(mp3)
+        if data is not None and extension is not None:
             filename, path = self._generate_filename_and_path_for_song_cover(extension)
             try:
                 os.makedirs(os.path.dirname(path))
@@ -664,24 +679,27 @@ class SongImporter:
                 else: raise
             
             with open(path, 'wb') as img:
-                img.write(artwork) 
+                img.write(data) 
                 yasound_song.cover_filename = filename
                 logger.info('ok, saved in %s' % path)
                 yasound_song.save()            
-            
-            break
         
         if directory:
             rmtree(directory)
+        logger.info("extracting song cover from %d (%s) : done" % (yasound_song.id, yasound_song))
 
 
     
 def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
     sm, messages = importer.import_song(binary, metadata, convert, allow_unknown_song) 
-#    if sm and sm.yasound_song_id:
-#        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
-#        importer.extract_song_cover(yasound_song, binary)
+    if sm and sm.yasound_song_id:
+        try:
+            yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+            importer.extract_song_cover(yasound_song, binary)
+        except:
+            pass
+        
     return sm, messages
 
 def generate_preview(yasound_song):
