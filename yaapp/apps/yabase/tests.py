@@ -315,7 +315,73 @@ class TestImportPlaylist(TestCase):
                 sis = SongInstance.objects.filter(metadata=test)
                 for si in sis:
                     print u'%d:%s:%d' % (si.id, si, si.order)
-     
+
+class TestImportCover(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user     
+        YasoundSong.objects.all().delete()
+        erase_index()   
+
+    def test_mp3_without_cover(self):
+        importer = SongImporter()
+        data, extension = importer.find_song_cover_data('./apps/yabase/fixtures/artwork/without_cover.mp3')
+        self.assertIsNone(data)
+        self.assertIsNone(extension)
+        
+    def test_mp3_with_cover(self):
+        importer = SongImporter()
+        data, extension = importer.find_song_cover_data('./apps/yabase/fixtures/artwork/with_cover.mp3')
+        self.assertIsNotNone(data)
+        self.assertEquals(extension, '.jpg')
+
+    def test_m4a_without_cover(self):
+        importer = SongImporter()
+        data, extension = importer.find_song_cover_data('./apps/yabase/fixtures/artwork/without_cover.m4a')
+        self.assertIsNone(data)
+        self.assertIsNone(extension)
+        
+    def test_m4a_with_cover(self):
+        importer = SongImporter()
+        data, extension = importer.find_song_cover_data('./apps/yabase/fixtures/artwork/with_cover.m4a')
+        self.assertIsNotNone(data)
+        self.assertEquals(extension, '.png')
+
+    def test_full_m4a_with_cover(self):
+        binary = File(open('./apps/yabase/fixtures/artwork/with_cover.m4a'))
+        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        self.assertIsNotNone(sm)
+        yasound_song_id = sm.yasound_song_id
+        song = YasoundSong.objects.get(id=yasound_song_id)
+        self.assertIsNotNone(song.cover_filename)
+
+    def test_full_m4a_without_cover(self):
+        binary = File(open('./apps/yabase/fixtures/artwork/without_cover.m4a'))
+        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        self.assertIsNotNone(sm)
+        yasound_song_id = sm.yasound_song_id
+        song = YasoundSong.objects.get(id=yasound_song_id)
+        self.assertIsNone(song.cover_filename)
+        
+    def test_full_mp3_with_cover(self):
+        binary = File(open('./apps/yabase/fixtures/artwork/with_cover.mp3'))
+        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        self.assertIsNotNone(sm)
+        yasound_song_id = sm.yasound_song_id
+        song = YasoundSong.objects.get(id=yasound_song_id)
+        self.assertIsNotNone(song.cover_filename)
+
+    def test_full_mp3_without_cover(self):
+        binary = File(open('./apps/yabase/fixtures/artwork/without_cover.mp3'))
+        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        self.assertIsNotNone(sm)
+        yasound_song_id = sm.yasound_song_id
+        song = YasoundSong.objects.get(id=yasound_song_id)
+        self.assertIsNone(song.cover_filename)
+        
 class TestImport(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
