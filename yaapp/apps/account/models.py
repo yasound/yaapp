@@ -161,7 +161,6 @@ class UserProfile(models.Model):
             return
         
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
-            # FIXME: facebook token seems to expire!!!
             graph = GraphAPI(self.facebook_token)
             
             try:
@@ -179,6 +178,10 @@ class UserProfile(models.Model):
             friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
             self.friends = friends
             self.save()
+            for user in friends.all():
+                profile = user.userprofile
+                profile.friends.add(self.user)
+                profile.save()
             
         elif self.account_type == account_settings.ACCOUNT_TYPE_TWITTER:
             auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
