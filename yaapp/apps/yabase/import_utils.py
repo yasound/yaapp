@@ -636,7 +636,6 @@ class SongImporter:
                 rmtree(directory)
             return
 
-
         pics = file.tags.getall('APIC')
         for pic in pics:
             mime = pic.mime
@@ -680,9 +679,9 @@ class SongImporter:
 def import_song(binary, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
     sm, messages = importer.import_song(binary, metadata, convert, allow_unknown_song) 
-    if sm and sm.yasound_song_id:
-        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
-        importer.extract_song_cover(yasound_song, binary)
+#    if sm and sm.yasound_song_id:
+#        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+#        importer.extract_song_cover(yasound_song, binary)
     return sm, messages
 
 def generate_preview(yasound_song):
