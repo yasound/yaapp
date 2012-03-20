@@ -295,6 +295,10 @@ class TestImportPlaylist(TestCase):
         self.assertEquals(SongInstance.objects.all().count(), 492)
         self.assertEquals(SongMetadata.objects.filter(yasound_song_id__isnull=True).count(), 492)
         
+        # all songs are enabled
+        self.assertEquals(SongInstance.objects.filter(enabled=True).count(), 492)
+        
+        
     def test_import_ok_with_references(self):
         radio = Radio.objects.radio_for_user(self.user)
         f = open('./apps/yabase/fixtures/playlist.data')
@@ -520,6 +524,30 @@ class TestImport(TestCase):
         self.assertEquals(sm.name, 'my mp3')
         self.assertEquals(sm.artist_name, 'my artist')
         self.assertEquals(sm.album_name, 'my album')
+        
+    def test_import_without_metadata_in_file_and_with_given_metadata_and_radio(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+            'radio_id': '1',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        
+        self.assertIsNotNone(sm.yasound_song_id)
+        self.assertEquals(sm.name, 'my mp3')
+        self.assertEquals(sm.artist_name, 'my artist')
+        self.assertEquals(sm.album_name, 'my album')
+        
+        si = SongInstance.objects.get(id=1)
+        self.assertEquals(si.playlist.radio, radio)
+        self.assertEquals(si.metadata, sm)
+        self.assertTrue(si.enabled)
+        
         
     def test_import_same_song(self):
         importer = SongImporter()
