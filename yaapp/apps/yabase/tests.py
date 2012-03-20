@@ -641,3 +641,24 @@ class TestRadioDeleted(TestCase):
         results = Radio.objects.search_fuzzy('test')
         self.assertEquals(len(results), 0)
                 
+    def test_duplicates(self):
+        radio = Radio(name='uneradio')
+        radio.save()
+        
+        results = Radio.objects.search_fuzzy('uneradio')
+        self.assertEquals(len(results), 1)
+
+        radio.save()
+
+        results = Radio.objects.search_fuzzy('uneradio')
+        self.assertEquals(len(results), 1)
+
+        radio.name = 'toto'
+        radio.save()
+        
+        results = Radio.objects.search_fuzzy('uneradio')
+        self.assertEquals(len(results), 0)
+
+        results = Radio.objects.search_fuzzy('toto')
+        self.assertEquals(len(results), 1)
+        
