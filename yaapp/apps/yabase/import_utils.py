@@ -326,7 +326,7 @@ class SongImporter:
         """
         import song without metadata
         """
-        directory = mkdtemp()
+        directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
         path, extension = os.path.splitext(binary.name)
         
         source = u'%s/s%s' % (directory, extension)
@@ -656,7 +656,7 @@ class SongImporter:
 
         directory = None
         if binary:
-            directory = mkdtemp()
+            directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
             _path, extension = os.path.splitext(binary.name)
             source = u'%s/s%s' % (directory, extension)
             source_f = open(source , 'wb')
