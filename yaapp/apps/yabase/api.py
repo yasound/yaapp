@@ -85,7 +85,7 @@ class RadioResource(ModelResource):
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = YasoundApiKeyAuthentication()
+        #authentication = YasoundApiKeyAuthentication()
         authorization = Authorization()
         allowed_methods = ['get', 'put']
         filtering = {
@@ -106,7 +106,12 @@ class RadioResource(ModelResource):
         radio = radio_resource.obj
         radio.update_with_data(radio_resource.data)
         return radio_resource
-        
+
+    def apply_sorting(self, obj_list, options=None):
+        if 'overall_listening_time' in options.get('order_by', ''):
+            # the top radio listing is limited to 25
+            return super(RadioResource, self).apply_sorting(obj_list=obj_list, options=options)[:25]
+        return super(RadioResource, self).apply_sorting(obj_list=obj_list, options=options)
 
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
