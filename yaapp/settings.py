@@ -561,6 +561,11 @@ else:
     
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 
+# temp files
+if PRODUCTION_MODE:
+    TEMP_DIRECTORY = '/data/tmp/'
+else:
+    TEMP_DIRECTORY = '/tmp/'
 
 # iTunes buy link
 ITUNES_BASE_URL="http://itunes.apple.com/search"
