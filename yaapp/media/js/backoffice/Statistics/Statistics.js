@@ -22,8 +22,18 @@ Yasound.Statistics.UI.Panel = function() {
             items:[{
                 title: gettext('Latests radios'),
                 layout:'fit',
+            	tools:[{
+            		id: 'refresh',
+            		handler: function(event, toolEl, panel) {
+                    	Ext.getCmp('stats-latest-radios').getStore().reload();
+            		}
+            	}],
                 items: [{
                 	xtype: 'radiogrid',
+                	url: '/yabackoffice/radios?rtype=latest',
+                	id:'stats-latest-radios',
+                	enablePagination: false,
+                	enableFilters: false,
                 	height:400
                 }]
             },{
@@ -52,6 +62,7 @@ Yasound.Statistics.UI.Panel = function() {
             }]
         }],
         updateData : function(component) {
+        	Ext.getCmp('stats-latest-radios').getStore().reload();
 		}
 	};	
 }

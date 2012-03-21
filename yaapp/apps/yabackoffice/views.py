@@ -168,6 +168,15 @@ def radios(request, radio_id=None):
         raise Http404()
     if request.method == 'GET':
         qs = Radio.objects.all()
+
+        rtype = request.REQUEST.get('rtype', None)
+        if rtype == 'latest':
+            qs = qs.order_by('-id')[:25]
+            grid = RadioGrid()
+            jsonr = grid.get_rows_json(qs)
+            resp = utils.JsonResponse(jsonr)
+            return resp
+            
         filters = ['id', 'name', ('creator_profile', 'creator__userprofile__name')]
         grid = RadioGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters=filters)

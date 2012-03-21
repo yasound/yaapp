@@ -73,6 +73,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	tbar: [],
 	url: '/yabackoffice/radios',
 	enablePagination: true,
+	enableFilters: true,
 	
     initComponent: function() {
         this.addEvents('selected', 'deselected');
@@ -106,7 +107,6 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 autoFill: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-        	plugins: [Yasound.Backoffice.UI.RadioFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
         		show: function(component) {
         			component.calculatePageSize();
@@ -129,21 +129,26 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
         	});
         }
         
+        if (this.enableFilters) {
+        	Ext.apply(config, {
+        		plugins: [Yasound.Backoffice.UI.RadioFilters(), new Ext.ux.grid.GridHeaderFilters()],
+        	})
+        }
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Backoffice.UI.RadioGrid.superclass.initComponent.apply(this, arguments);
     },
     calculatePageSize: function() {
+		if (!this.enablePagination) {
+			return;
+		}
 		var bodyHeight = this.getHeight();
 		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
 		var rowHeight = 21;
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
 		this.getBottomToolbar().pageSize = gridRows;
-		
-		if (this.enablePagination) {
-			this.getStore().reload({ params:{ start:0, limit:gridRows } });
-		}
+		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
     
 });
