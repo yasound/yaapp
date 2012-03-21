@@ -62,14 +62,13 @@ class DoubleSlashMiddleware(object):
     Handle the bug of iOS 4 clients sending 2 // instead of one
     """
     def process_response(self, request, response):
-        if response.status_code == 404:
-            url = request.path
-            if url and '//' in url:
-                url = url.replace("//", "/")
-                if not url.endswith('/'):
-                    url = url + '/'
-                resolver_match = resolve(url)
-                res = resolver_match.func(request, *resolver_match.args, **resolver_match.kwargs)
-                return res
+        url = request.path
+        if url and '//' in url:
+            url = url.replace("//", "/")
+            if request.method == 'POST' and not url.endswith('/'):
+                url = url + '/'
+            resolver_match = resolve(url)
+            res = resolver_match.func(request, *resolver_match.args, **resolver_match.kwargs)
+            return res
         return response
 
