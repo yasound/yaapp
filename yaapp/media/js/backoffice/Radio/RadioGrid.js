@@ -3,7 +3,18 @@
 //------------------------------------------
 
 Yasound.Backoffice.Data.RadioStore = function(url) {
-	var fields = ['id', 'name', 'creator', 'creator_id', 'creator_profile_id', 'creator_profile'];
+	var fields = ['id', 
+	              'name', 
+	              {
+	          		name: 'created',
+	          		type: 'date',
+	          		dateFormat: 'Y-m-d H:i:s'
+	          	  },
+	              'creator', 
+	              'creator_id', 
+	              'creator_profile_id', 
+	              'creator_profile',
+	              'song_count'];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -27,6 +38,13 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
         }        	
         
     }, {
+        header: gettext('Date'),
+        dataIndex: 'created',
+        xtype: 'datecolumn',
+        format: 'd/m/Y H:i:s',
+        sortable: true,
+        width: 65
+    }, {
         header: gettext('Name'),
         dataIndex: 'name',
         sortable: true,
@@ -46,6 +64,11 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
             xtype: "textfield",
             filterName: "creator_profile"
         }        	
+    }, {
+        header: gettext('Song count'),
+        dataIndex: 'song_count',
+        sortable: true,
+        width: 20
     }];
 	
 	if (sm) {

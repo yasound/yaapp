@@ -17,6 +17,7 @@ from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid
+from yabackoffice.models import BackofficeRadio
 from yabase.models import Radio, SongInstance
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
@@ -167,11 +168,11 @@ def radios(request, radio_id=None):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
-        qs = Radio.objects.all()
+        qs = BackofficeRadio.objects.all()
 
         rtype = request.REQUEST.get('rtype', None)
         if rtype == 'latest':
-            qs = qs.order_by('-id')[:25]
+            qs = qs.order_by('-id')[:10]
             grid = RadioGrid()
             jsonr = grid.get_rows_json(qs)
             resp = utils.JsonResponse(jsonr)
@@ -191,7 +192,7 @@ def radios(request, radio_id=None):
         message = ''
         if form.is_valid():
             radio = form.save()
-            qs = Radio.objects.filter(id=radio.id)
+            qs = BackofficeRadio.objects.filter(id=radio.id)
             grid = RadioGrid()
             jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
             resp = utils.JsonResponse(jsonr)
@@ -379,3 +380,24 @@ def users(request, user_id=None):
         return resp
     raise Http404 
 
+
+@csrf_exempt
+@login_required
+def radios_stats_created(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    data = []    
+    for i in range(1, 10):
+        data.append({
+            'timestamp': 'timestamp%d' %(i),
+            'created_radios': i*100
+        })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+    
