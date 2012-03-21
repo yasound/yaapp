@@ -486,7 +486,11 @@ class SongImporter:
             sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name)
             sm.save()
             self._log(_('creating SongMetadata, id = %s') % (sm.id))
-    
+        except SongMetadata.MultipleObjectsReturned:
+            sm = SongMetadata.objects.filter(name=name, artist_name=artist_name, album_name=album_name)[0]
+            self._log(_('multiple objects, choosing id = %s') % (sm.id))
+            
+            
         # create artist with info from echonest and lastfm
         self._log(_('looking for artist'))
         artist = self._get_or_create_artist(metadata)
