@@ -15,6 +15,19 @@ from yasearch.indexer import erase_index, add_song
 import import_utils
 import settings as yabase_settings
 
+class TestMiddleware(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+    
+    def test_slashes(self):
+        self.client.get('/status//')
+        res = self.client.post('/status//', {'username': 'john', 'password': 'smith'})
+        print res
+        
 class TestDatabase(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]

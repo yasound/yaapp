@@ -68,11 +68,8 @@ class DoubleSlashMiddleware(object):
                 url = url.replace("//", "/")
                 if not url.endswith('/'):
                     url = url + '/'
-                view, args, kwargs = resolve(url)
-                if hasattr(view, 'view_func'):
-                    view = view.view_func                
-                kwargs['request'] = request
-                res = view(*args, **kwargs)
-                return HttpResponse(res)
+                resolver_match = resolve(url)
+                res = resolver_match.func(request, *resolver_match.args, **resolver_match.kwargs)
+                return res
         return response
 
