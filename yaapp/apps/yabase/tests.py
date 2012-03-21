@@ -571,6 +571,28 @@ class TestImport(TestCase):
         sm2, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
         self.assertEquals(sm2, sm)
 
+    def test_import_with_duplicated_metatadas(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        for _i in range(0, 10):
+            SongMetadata(name='my mp3',
+                          artist_name='my artist',
+                          album_name='my album').save()
+
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        
+        self.assertIsNotNone(sm.yasound_song_id)
+        self.assertEquals(sm.name, 'my mp3')
+        self.assertEquals(sm.artist_name, 'my artist')
+        self.assertEquals(sm.album_name, 'my album')
+
+
     def test_import_same_song_with_different_name(self):
         importer = SongImporter()
         binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
