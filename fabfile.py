@@ -85,5 +85,3 @@ def restart_all():
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
-                
-                                
