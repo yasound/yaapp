@@ -3,6 +3,7 @@ from fabric.api import *
 from fabric.utils import puts
 from fabric.contrib.files import sed, uncomment, append, exists
 
+env.forward_agent = 'True'
 env.hosts = [
     'yas-web-01.ig-1.net',
     'yas-web-02.ig-1.net',
