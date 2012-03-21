@@ -45,5 +45,6 @@ COMPRESS_JS = { 'backoffice-all': {'output_filename': 'backoffice-all.?.js',
                                              'js/backoffice/Invitations/Invitations.js',
                                              'js/backoffice/Users/UserGrid.js',
                                              'js/backoffice/Users/UserField.js',
+                                             'js/backoffice/Statistics/Statistics.js',
                                              ]}
                }

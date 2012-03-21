@@ -5,6 +5,7 @@ Ext.namespace("Yasound.Upload.UI", "Yasound.Upload.Handler", "Yasound.Upload.Dat
 Ext.namespace("Yasound.SearchEngine.UI", "Yasound.SearchEngine.Handler", "Yasound.SearchEngine.Data");
 Ext.namespace("Yasound.Invitations.UI", "Yasound.Invitations.Handler", "Yasound.Invitations.Data");
 Ext.namespace("Yasound.Users.UI", "Yasound.Users.Handler", "Yasound.Users.Data");
+Ext.namespace("Yasound.Statistics.UI", "Yasound.Statistics.Handler", "Yasound.Statistics.Data");
 Ext.namespace("Yasound.Utils");
 
 
@@ -112,31 +113,57 @@ Ext.onReady(function(){
         }, Ext.apply(Yasound.SearchEngine.UI.Fuzzy(), {
             iconCls: 'x-icon-templates'
         })]    		
-    }
+    };
     
     var tabPanelInvitations = {
-            id: 'invitations-tab',
-            expanded: false,
+        id: 'invitations-tab',
+        expanded: false,
+        listeners: {
+            'tabchange': function(tabPanel, tab){
+                Ext.History.add(tabPanel.id + '/' + tab.id);
+            }
+        },
+        items: [{
+            title: gettext('Invitations'),
+            id: 'invitations-top-panel',
+            style: 'padding: 10px;',
             listeners: {
-                'tabchange': function(tabPanel, tab){
-                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                'activate': function(p){
+                    var tabPanel = p.findParentByType('grouptab');
+                    var nextItem = p.nextSibling();
+                    tabPanel.setActiveTab(nextItem);
                 }
-            },
-            items: [{
-                title: gettext('Invitations'),
-                id: 'invitations-top-panel',
-                style: 'padding: 10px;',
-                listeners: {
-                    'activate': function(p){
-                        var tabPanel = p.findParentByType('grouptab');
-                        var nextItem = p.nextSibling();
-                        tabPanel.setActiveTab(nextItem);
-                    }
+            }
+        }, Ext.apply(Yasound.Invitations.UI.Panel(), {
+            iconCls: 'x-icon-templates'
+        })]    		
+    };
+    
+    var tabPanelStatistics = {
+        id: 'statistics-tab',
+        expanded: false,
+        listeners: {
+            'tabchange': function(tabPanel, tab){
+                Ext.History.add(tabPanel.id + '/' + tab.id);
+            }
+        },
+        items: [{
+            title: gettext('Statistics'),
+            id: 'statistics-top-panel',
+            tabTip: gettext('Useful stats'),
+            style: 'padding: 10px;',
+            html: '<h1>Statistics</h1>',
+            listeners: {
+                'activate': function(p){
+                    var tabPanel = p.findParentByType('grouptab');
+                    var nextItem = p.nextSibling();
+                    tabPanel.setActiveTab(nextItem);
                 }
-            }, Ext.apply(Yasound.Invitations.UI.Panel(), {
-                iconCls: 'x-icon-templates'
-            })]    		
-        }
+            }
+        }, Ext.apply(Yasound.Statistics.UI.Panel(), {
+            iconCls: 'x-icon-templates'
+        })]    		
+    };
     
     var tabPanels = {
         xtype: 'grouptabpanel',
@@ -151,7 +178,8 @@ Ext.onReady(function(){
     
     tabPanels.items.push(tabPanelRadios, 
     					 tabPanelSearchEngine,
-    					 tabPanelInvitations);
+    					 tabPanelInvitations,
+    					 tabPanelStatistics);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',
