@@ -77,4 +77,11 @@ def deploy_web():
         if not exists("./media/covers/songs"):
             run("ln -s /data/glusterfs-mnt/replica2all/song-cover ./media/covers/songs")
         run("/etc/init.d/yaapp restart")
-                
+
+def restart_all():
+    """[DISTANT] restart services
+    """
+    with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("/etc/init.d/yaapp restart")
+        run("/etc/init.d/celeryd restart")
+        run("/etc/init.d/celerybeat restart")
