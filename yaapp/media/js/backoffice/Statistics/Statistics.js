@@ -12,22 +12,46 @@
 
 
 Yasound.Statistics.UI.Panel = function() {
-	return {
-		xtype : 'panel',
+    return {
+		xtype : 'portal',
 		title : gettext('Statistics'),
 		id : 'statistics-panel',
-		layout: 'border',
-		items:[{
-			xtype:'panel',
-			region:'west',
-			width:200,
-			split:true,
-		}, {
-			xtype: 'panel',
-			region:'center',
-			html:'hello, world'
-		}],
-		updateData : function(component) {
+        items:[{
+            columnWidth:.33,
+            style:'padding:10px 0 10px 10px',
+            items:[{
+                title: gettext('Latests radios'),
+                layout:'fit',
+                items: [{
+                	xtype: 'radiogrid',
+                	height:400
+                }]
+            },{
+                title: 'Another Panel 1',
+                html: 'hi'
+            }]
+        },{
+            columnWidth:.33,
+            style:'padding:10px 0 10px 10px',
+            items:[{
+                title: 'Panel 2',
+                html: 'hi'
+            },{
+                title: 'Another Panel 2',
+                html: 'hi'
+            }]
+        },{
+            columnWidth:.33,
+            style:'padding:10px',
+            items:[{
+                title: 'Panel 3',
+                html: 'hi'
+            },{
+                title: 'Another Panel 3',
+                html: 'hi'
+            }]
+        }],
+        updateData : function(component) {
 		}
 	};	
 }

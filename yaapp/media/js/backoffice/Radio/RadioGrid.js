@@ -2,9 +2,8 @@
 // Datastore
 //------------------------------------------
 
-Yasound.Backoffice.Data.RadioStore = function() {
+Yasound.Backoffice.Data.RadioStore = function(url) {
 	var fields = ['id', 'name', 'creator', 'creator_id', 'creator_profile_id', 'creator_profile'];
-	var url = '/yabackoffice/radios';
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -72,10 +71,13 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	singleSelect: true,
 	checkboxSelect: true,
 	tbar: [],
+	url: '/yabackoffice/radios',
+	enablePagination: true,
+	
     initComponent: function() {
         this.addEvents('selected', 'deselected');
         this.pageSize = 25;
-        this.store = Yasound.Backoffice.Data.RadioStore();
+        this.store = Yasound.Backoffice.Data.RadioStore(this.url);
         this.store.pageSize = this.pageSize;
         
     	var sm = new Ext.grid.CheckboxSelectionModel({
@@ -92,15 +94,9 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
     	
+    	
         var config = {
             tbar: this.tbar,
-            bbar: new Ext.PagingToolbar({
-                pageSize: this.pageSize,
-                store: this.store,
-                displayInfo: true,
-                displayMsg: gettext('Displaying {0} - {1} of {2}'),
-                emptyMsg: gettext("Nothing to display")
-            }),            
             loadMask: false,
             sm: sm,
             cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.RadioColumnModel(this.checkboxSelect ? sm : null)),
@@ -120,6 +116,19 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
         		}
         	}
         }; // eo config object
+        
+        if (this.enablePagination) {
+        	Ext.apply(config, {
+                bbar: new Ext.PagingToolbar({
+                    pageSize: this.pageSize,
+                    store: this.store,
+                    displayInfo: true,
+                    displayMsg: gettext('Displaying {0} - {1} of {2}'),
+                    emptyMsg: gettext("Nothing to display")
+                })            
+        	});
+        }
+        
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Backoffice.UI.RadioGrid.superclass.initComponent.apply(this, arguments);
@@ -131,7 +140,10 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
 		this.getBottomToolbar().pageSize = gridRows;
-		this.getStore().reload({ params:{ start:0, limit:gridRows } });
+		
+		if (this.enablePagination) {
+			this.getStore().reload({ params:{ start:0, limit:gridRows } });
+		}
     }
     
 });
