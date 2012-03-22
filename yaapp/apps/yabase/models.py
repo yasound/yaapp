@@ -397,29 +397,78 @@ class Radio(models.Model):
         return playlist, True
     
     def find_new_song(self):
+        next_songs = NextSong.objects.filter(radio=self).values_list('song', flat=True)
         time_limit = datetime.datetime.now() - timedelta(hours=3)
-        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True, last_play_time__lt=time_limit).order_by('-frequency', 'id')
+        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True, last_play_time__lt=time_limit).exclude(id__in=next_songs).order_by('last_play_time')
+        if self.current_song:
+            songs_queryset = songs_queryset.exclude(id=self.current_song.id)
+        
         if songs_queryset.count() == 0:
-            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).order_by('-frequency', 'id') # try without time limit
-        if songs_queryset.count() == 0:
+            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).exclude(id__in=next_songs).order_by('last_play_time') # try without time limit
+            if self.current_song:
+                songs_queryset = songs_queryset.exclude(id=self.current_song.id)
+               
+        if songs_queryset.count() == 0: 
+            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).order_by('last_play_time') # try including current song and next songs
+               
+        count = songs_queryset.count() 
+        if count == 0:
             print 'no available songs'
             return None 
 
-        frequencies = songs_queryset.values_list('frequency', flat=True)
-        weights = [x*x for x in frequencies] # use frequency * frequency to have high frequencies very differnet from low frequencies
+        frequencies = songs_queryset.values_list('frequency', flat=True) 
+        # use frequency * frequency to have high frequencies very different from low frequencies
+        # multiply frequency weight by a date factor to have higher probabilities for songs not played since a long time (date factor = 1 for older song, 1 for more recent one)
+        if count > 1:
+            slope = 1.0 / float(count-1)
+        else:
+            slope = 1
+        weights = [x*x * (1 - (slope * idx)) for idx, x in enumerate(frequencies)]
         r = random.random()
         sum_weight = sum(weights)
-        rnd = r * sum_weight
+        rnd = r * sum_weight    
         index = -1
         for i, w in enumerate(weights):
             rnd -= w
-            if rnd < 0:
+            if rnd <= 0:
                 index = i
                 break
         if index == -1:
-            return None
+            if count > 0:
+                index = 0
+            else:
+                return None
+        
         song = songs_queryset.all()[index]
         return song
+    
+    def test_find_new_song(self, nb_tests=20):
+        print 'test find_new_song for radio %s (%d)' % (self.name, self.id)
+        songs = {}
+        for i in range(nb_tests):
+            s = self.find_new_song()
+            count = songs.get(s, 0)
+            count += 1
+            songs[s] = count
+            if i % 10 == 0:
+                print '%d/%d %.2f%%' % (i, nb_tests, float(i) / float(nb_tests) * 100)
+        print '%d/%d %.2f%%' % (nb_tests, nb_tests, 100)
+            
+        total_songs = SongInstance.objects.filter(playlist__radio=self).count()
+        ready_songs = SongInstance.objects.filter(playlist__radio=self, metadata__yasound_song_id__gt=0, enabled=True).count()
+        print '%d songs in the radio' % total_songs
+        print '%d ready songs in the radio' % ready_songs
+        
+        songs_list = [(k, v) for k, v in songs.iteritems()]
+        songs_list.sort(key=lambda tup: tup[1], reverse=True)
+        i = 0
+        for tup in songs_list:
+            s = tup[0]
+            count = tup[1]
+            print '%4d  (%d) [%.2f %s] %s - %s - %s' % (i, count, s.frequency, s.enabled, s.metadata.artist_name, s.metadata.album_name, s.metadata.name)
+            i += 1
+        
+        
     
     def fill_next_songs_queue(self):
         while self.next_songs.count() < RADIO_NEXT_SONGS_COUNT:
@@ -642,6 +691,30 @@ class Radio(models.Model):
         
     class Meta:
         db_name = u'default'
+        
+def test_random(nb_elements=50, nb_tests=50):
+    print 'test random'
+    print 'random between 0 and %d (int values)' % (nb_elements-1)
+    print '%d tests' % nb_tests
+    counts = {}
+    for i in range(nb_tests):
+        r = random.random()
+        element = int(r * nb_elements)
+        c = counts.get(element, 0)
+        c += 1
+        counts[element] = c
+        print '%d/%d %.2f%%' % (i, nb_tests, float(i) / float(nb_tests) * 100)
+    print '%d/%d %.2f%%' % (nb_tests, nb_tests, 100)
+        
+    counts_list = [(k, v) for k, v in counts.iteritems()]
+    counts_list.sort(key=lambda tup: tup[1], reverse=True)
+    i = 0
+    for tup in counts_list:
+        e = tup[0]
+        c = tup[1]
+        print '%4d  %d (%d times)' % (i, e, c)
+        i += 1
+    
               
 def update_leaderboard():
     radios = Radio.objects.order_by('-favorites')    
