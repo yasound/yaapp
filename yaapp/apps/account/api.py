@@ -188,8 +188,16 @@ class SocialAuthentication(Authentication):
                 profile.account_type = account_type
                 profile.name = name
                 profile.save()
-                profile.scan_friends()
-                profile.update_with_social_picture()
+                
+                try:
+                    profile.scan_friends()
+                except:
+                    pass
+            
+                try:
+                    profile.update_with_social_picture()
+                except:
+                    pass
                 
                 request.user = user
                 
