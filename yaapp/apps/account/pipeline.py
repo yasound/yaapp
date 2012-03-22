@@ -1,6 +1,6 @@
 from account.models import UserProfile
 from django.contrib.auth.models import User
-
+import settings as account_settings
 
 def associate_user(backend, details, response, uid, username, user=None, *args,
                 **kwargs):
@@ -24,6 +24,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
         user.save()
         profile = user.get_profile()
         profile.facebook_uid = uid
+        profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
         profile.name = details.get('fullname')
         profile.save()
         return {
