@@ -24,6 +24,9 @@ from sorl.thumbnail import get_thumbnail
 from django.core.files.base import ContentFile
 import datetime
 
+import logging
+logger = logging.getLogger("yaapp.account")
+
 class UserProfileManager(models.Manager):
     def search_user_fuzzy(self, search_text, limit=5):
         users = yasearch_search.search_user(search_text, remove_common_words=True)
@@ -149,15 +152,17 @@ class UserProfile(models.Model):
             t = bundle.data['account_type']
             self.account_type = t
             if  t == account_settings.ACCOUNT_TYPE_YASOUND:
-                print 'new yasound user'
+                logger.info('new yasound user')
             elif t == account_settings.ACCOUNT_TYPE_FACEBOOK:
-                print 'new facebook user'
+                logger.info('new facebook user')
             elif t == account_settings.ACCOUNT_TYPE_TWITTER:
-                print 'new twitter user'
+                logger.info('new twitter user')
         self.save()
         
     def scan_friends(self):
+        logger.debug('scanning %s' % (unicode(self)))
         if self.account_type == account_settings.ACCOUNT_TYPE_YASOUND:
+            logger.debug('skipping scan_friends of %s, account = %' % (unicode(self), self.account_type))
             return
         
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
@@ -166,16 +171,17 @@ class UserProfile(models.Model):
             try:
                 friends_response = graph.get('me/friends')
             except GraphAPI.Error:
-                print 'GraphAPI exception error'
+                logger.error('GraphAPI exception error')
                 return
             if not friends_response.has_key('data'):
-                print 'no friend data'
+                logger.info('No friend data')
                 return
             friends_data = friends_response['data']
-            friends_ids = []
-            for f in friends_data:
-                friends_ids.append(f['id'])
+            logger.debug('found %d facebook friends', len(friends_data))
+            friends_ids = [f['id'] for f in friends_data]
             friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
+            logger.debug('among them, %d are registered at yasound', len(friends))
+
             self.friends = friends
             self.save()
             for user in friends.all():
