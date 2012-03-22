@@ -160,9 +160,9 @@ class UserProfile(models.Model):
         self.save()
         
     def scan_friends(self):
-        logger.debug('scanning %s' % (unicode(self)))
+        logger.debug('scanning %s' % (unicode(self.id)))
         if self.account_type == account_settings.ACCOUNT_TYPE_YASOUND:
-            logger.debug('skipping scan_friends of %s, account = %s' % (unicode(self), self.account_type))
+            logger.debug('skipping scan_friends of %s, account = %s' % (unicode(self.id), self.account_type))
             return
         
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
