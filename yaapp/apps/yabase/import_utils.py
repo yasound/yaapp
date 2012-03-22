@@ -79,6 +79,7 @@ from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre,
 from yasearch.models import build_mongodb_index
 from yaref.utils import convert_filename_to_filepath
 from yasearch.utils import get_simplified_name
+from utils import flush_transaction
 import datetime
 import hashlib
 import logging
@@ -468,6 +469,9 @@ class SongImporter:
 
         self._log(_('echonest id = %s, lastfm_id = %s, musicbrainz_id = %s') % (echonest_id, lastfm_id, musicbrainz_id))
         
+        # avoid stale data        
+        flush_transaction()
+        
         # first check for an existing SongMetadata
         try:
             sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
@@ -589,7 +593,9 @@ class SongImporter:
         
         # creating song instance if needed
         self._create_song_instance(sm, metadata)
-        
+
+        # avoid stale data        
+        flush_transaction()
         
         self._log(_('Building mongodb index'))
         build_mongodb_index()

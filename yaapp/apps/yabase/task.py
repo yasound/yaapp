@@ -5,6 +5,7 @@ from struct import unpack_from
 from yabase.models import SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
 from yasearch.utils import get_simplified_name
+from utils import flush_transaction
 import re
 import sys
 import time
@@ -79,6 +80,9 @@ def process_playlists_exec(radio, content_compressed):
     count = 0
     found = 0
     notfound = 0
+
+    # avoid stale data        
+    flush_transaction()
 
     # create defaut playlist
     playlist, _created = radio.get_or_create_default_playlist()
