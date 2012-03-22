@@ -639,6 +639,36 @@ class TestImport(TestCase):
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.name, 'my mp3')
 
+    def test_import_owner_id_is_none(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        self.assertIsNotNone(sm.yasound_song_id)
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertIsNone(yasound_song.owner_id)
+
+    def test_import_owner_id_is_not_none(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/unknown.mp3'))
+        radio = Radio.objects.radio_for_user(self.user)
+        
+        metadata = {
+            'title': 'my own mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+            'radio_id':  radio.id
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertEquals(yasound_song.owner_id, self.user.id)
+
 class TestRadioDeleted(TestCase):
     def setUp(self):
         erase_index()
