@@ -191,7 +191,6 @@ Ext.onReady(function(){
                     Yasound.Backoffice.Handler.HandleUrlToken.defer(1000, this, [token]);
                 }
             }
-            
         },
         items: [{
             layout: 'border',

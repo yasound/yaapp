@@ -172,12 +172,20 @@ def radios(request, radio_id=None):
 
         rtype = request.REQUEST.get('rtype', None)
         if rtype == 'latest':
-            qs = qs.order_by('-id')[:10]
+            qs = qs.order_by('-id')
             grid = RadioGrid()
-            jsonr = grid.get_rows_json(qs)
+            (start, limit) = yabackoffice_utils.get_limit(request)
+            jsonr = grid.get_rows_json(qs, start=start, limit=limit)
             resp = utils.JsonResponse(jsonr)
             return resp
-            
+        elif rtype == 'biggest':
+            qs = Radio.objects.annotate(song_count=Count('playlists__songinstance')).order_by('-song_count')
+            grid = RadioGrid()
+            (start, limit) = yabackoffice_utils.get_limit(request)
+            jsonr = grid.get_rows_json(qs, start=start, limit=limit)
+            resp = utils.JsonResponse(jsonr)
+            return resp
+        
         filters = ['id', 'name', ('creator_profile', 'creator__userprofile__name')]
         grid = RadioGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters=filters)

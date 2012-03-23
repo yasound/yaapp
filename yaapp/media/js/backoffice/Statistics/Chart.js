@@ -12,18 +12,17 @@
 
 Yasound.Statistics.UI.ChartPanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
-        var store = new Ext.data.JsonStore({
+        this.store = new Ext.data.JsonStore({
             url: '/yabackoffice/radios/stats/created/',
             root: 'data',
             idProperty: 'timestamp',
             fields: ['timestamp', 'created_radios']
         });
-        store.load();
         
     	var config = {
 	       items: [{
 	            xtype: 'linechart',
-	            store: store,
+	            store: this.store,
 	            xField: 'timestamp',
 	            yField: 'created_radios',
 				listeners: {
@@ -38,6 +37,9 @@ Yasound.Statistics.UI.ChartPanel = Ext.extend(Ext.Panel, {
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Statistics.UI.ChartPanel.superclass.initComponent.apply(this, arguments);
+    },
+    updateData: function() {
+        this.store.load();
     }
 });
 Ext.reg('chartpanel', Yasound.Statistics.UI.ChartPanel);

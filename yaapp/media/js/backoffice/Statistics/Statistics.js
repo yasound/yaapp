@@ -32,13 +32,27 @@ Yasound.Statistics.UI.Panel = function() {
                 	xtype: 'radiogrid',
                 	url: '/yabackoffice/radios?rtype=latest',
                 	id:'stats-latest-radios',
-                	enablePagination: false,
+                	enablePagination: true,
                 	enableFilters: false,
-                	autoHeight: true
+                	height: 400
                 }]
             },{
-                title: 'Another Panel 1',
-                html: 'hi'
+                title: gettext('Biggest radios'),
+                layout:'fit',
+            	tools:[{
+            		id: 'refresh',
+            		handler: function(event, toolEl, panel) {
+                    	Ext.getCmp('stats-biggest-radios').getStore().reload();
+            		}
+            	}],
+                items: [{
+                	xtype: 'radiogrid',
+                	url: '/yabackoffice/radios?rtype=biggest',
+                	id:'stats-biggest-radios',
+                	enablePagination: true,
+                	enableFilters: false,
+                	height: 400
+                }]
             }]
         },{
             columnWidth:.50,
@@ -68,6 +82,7 @@ Yasound.Statistics.UI.Panel = function() {
         }],
         updateData : function(component) {
         	Ext.getCmp('stats-latest-radios').getStore().reload();
+        	Ext.getCmp('stats-biggest-radios').getStore().reload();
 		}
 	};	
 }

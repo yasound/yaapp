@@ -97,13 +97,12 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	url: '/yabackoffice/radios',
 	enablePagination: true,
 	enableFilters: true,
+    this.pageSize: 25,
 	
     initComponent: function() {
         this.addEvents('selected', 'deselected');
-        this.pageSize = 25;
         this.store = Yasound.Backoffice.Data.RadioStore(this.url);
         this.store.pageSize = this.pageSize;
-        
     	var sm = new Ext.grid.CheckboxSelectionModel({
             singleSelect: this.singleSelect,
             listeners: {
@@ -121,7 +120,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
     	
         var config = {
             tbar: this.tbar,
-            loadMask: false,
+            loadMask: true,
             sm: sm,
             cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.RadioColumnModel(this.checkboxSelect ? sm : null)),
             view: new Ext.grid.GroupingView({
@@ -173,6 +172,5 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 		this.getBottomToolbar().pageSize = gridRows;
 		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
-    
 });
 Ext.reg('radiogrid', Yasound.Backoffice.UI.RadioGrid);

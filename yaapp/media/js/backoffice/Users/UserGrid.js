@@ -139,6 +139,9 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
         Yasound.Users.UI.UserGrid.superclass.initComponent.apply(this, arguments);
     },
     calculatePageSize: function() {
+    	if (!this.isVisible()) {
+    		return;
+    	}
 		var bodyHeight = this.getHeight();
 		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50+20;
 		var rowHeight = 21;

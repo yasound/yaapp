@@ -65,9 +65,6 @@ Yasound.Backoffice.UI.RadioField = Ext.extend(Ext.form.TriggerField, {
                     scope: this
                 }
             });
-            this.gridPanel.show();
-            this.gridPanel.hide();
-            //this.relayEvents(this.gridPanel.loader, ['beforeload', 'load', 'loadexception']);
             if (this.resizable) {
                 this.resizer = new Ext.Resizable(this.gridPanel.getEl(), {
                     pinned: true,

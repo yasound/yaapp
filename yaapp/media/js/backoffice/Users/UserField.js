@@ -67,9 +67,6 @@ Yasound.Users.UI.UserField = Ext.extend(Ext.form.TriggerField, {
                     scope: this
                 }
             });
-            this.gridPanel.show();
-            this.gridPanel.hide();
-            //this.relayEvents(this.gridPanel.loader, ['beforeload', 'load', 'loadexception']);
             if (this.resizable) {
                 this.resizer = new Ext.Resizable(this.gridPanel.getEl(), {
                     pinned: true,
@@ -111,7 +108,7 @@ Yasound.Users.UI.UserField = Ext.extend(Ext.form.TriggerField, {
     },
     
     onGridShow: function(){
-    	this.gridPanel.getStore().reload();
+    	//this.gridPanel.getStore().reload();
         Ext.getDoc().on('mousewheel', this.collapseIf, this);
         Ext.getDoc().on('mousedown', this.collapseIf, this);
     },
