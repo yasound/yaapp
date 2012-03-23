@@ -399,19 +399,22 @@ class Radio(models.Model):
     def find_new_song(self):
         next_songs = NextSong.objects.filter(radio=self).values_list('song', flat=True)
         time_limit = datetime.datetime.now() - timedelta(hours=3)
-        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True, last_play_time__lt=time_limit).exclude(id__in=next_songs).order_by('last_play_time')
+        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).exclude(last_play_time__gt=time_limit).exclude(id__in=next_songs).order_by('last_play_time')
         if self.current_song:
             songs_queryset = songs_queryset.exclude(id=self.current_song.id)
         
-        if songs_queryset.count() == 0:
+        count = songs_queryset.count() 
+        
+        if count == 0:
             songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).exclude(id__in=next_songs).order_by('last_play_time') # try without time limit
             if self.current_song:
                 songs_queryset = songs_queryset.exclude(id=self.current_song.id)
-               
-        if songs_queryset.count() == 0: 
+            count = songs_queryset.count() 
+          
+        if count == 0: 
             songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).order_by('last_play_time') # try including current song and next songs
-               
-        count = songs_queryset.count() 
+            count = songs_queryset.count() 
+          
         if count == 0:
             print 'no available songs'
             return None 
@@ -419,11 +422,13 @@ class Radio(models.Model):
         frequencies = songs_queryset.values_list('frequency', flat=True) 
         # use frequency * frequency to have high frequencies very different from low frequencies
         # multiply frequency weight by a date factor to have higher probabilities for songs not played since a long time (date factor = 1 for older song, 1 for more recent one)
-        if count > 1:
-            slope = 1.0 / float(count-1)
+        first_idx_factor = 1
+        last_idx_factor = 0.15
+        if (count-1) != 0:
+            date_factor_func = lambda x: ((last_idx_factor - first_idx_factor) / (count - 1)) * x + first_idx_factor
         else:
-            slope = 1
-        weights = [x*x * (1 - (slope * idx)) for idx, x in enumerate(frequencies)]
+            date_factor_func = lambda x: 1
+        weights = [x*x * date_factor_func(idx) for idx, x in enumerate(frequencies)]
         r = random.random()
         sum_weight = sum(weights)
         rnd = r * sum_weight    
@@ -438,7 +443,7 @@ class Radio(models.Model):
                 index = 0
             else:
                 return None
-        
+            
         song = songs_queryset.all()[index]
         return song
     
@@ -487,9 +492,8 @@ class Radio(models.Model):
         if self.current_song:
             task_report_song.delay(self, self.current_song)
         
-        
         self.fill_next_songs_queue()
-            
+          
         try:
             n = NextSong.objects.get(radio=self, order=1)
         except (NextSong.DoesNotExist, NextSong.MultipleObjectsReturned):
@@ -512,7 +516,32 @@ class Radio(models.Model):
         song.last_play_time = datetime.datetime.now()
         song.save()
         self.fill_next_songs_queue()
+        
         return song # SongInstance
+    
+    def test_get_next_song(self, nb_tests=20):
+        print 'test get_next_song'
+        songs = {}
+        for i in range(nb_tests):
+            s = self.get_next_song()
+            count = songs.get(s, 0)
+            count += 1
+            songs[s] = count
+            if i % 5 == 0:
+                print '%d/%d %.2f%%' % (i, nb_tests, float(i) / float(nb_tests) * 100)
+        print '%d/%d %.2f%%' % (nb_tests, nb_tests, 100)
+        
+        ready_songs = SongInstance.objects.filter(playlist__radio=self, metadata__yasound_song_id__gt=0, enabled=True).count()
+        print '%d ready songs in the radio' % ready_songs
+        
+        songs_list = [(k, v) for k, v in songs.iteritems()]
+        songs_list.sort(key=lambda tup: tup[1], reverse=True)
+        i = 0
+        for tup in songs_list:
+            s = tup[0]
+            count = tup[1]
+            print '%4d  (%d) [%.2f] %s - %s - %s' % (i, count, s.frequency, s.metadata.artist_name, s.metadata.album_name, s.metadata.name)
+            i += 1
             
     def tags_to_string(self):
         first = True
