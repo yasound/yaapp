@@ -271,9 +271,11 @@ class TopRadioResource(ModelResource):
         radio.fill_bundle(bundle)
         return bundle
     
+    def apply_sorting(self, obj_list, options=None):
+        return super(TopRadioResource, self).apply_sorting(obj_list=obj_list, options=options)[:yabase_settings.TOP_RADIOS_LIMIT]
     
     def get_object_list(self, request):
-        radios = super(TopRadioResource, self).get_object_list(request).order_by('-favorites')[:yabase_settings.TOP_RADIOS_LIMIT]
+        radios = super(TopRadioResource, self).get_object_list(request).order_by('-favorites')
         return radios
 
 class FavoriteRadioResource(ModelResource):
