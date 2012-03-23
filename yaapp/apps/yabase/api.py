@@ -273,7 +273,7 @@ class TopRadioResource(ModelResource):
     
     
     def get_object_list(self, request):
-        radios = super(TopRadioResource, self).get_object_list(request).order_by('-favorites')
+        radios = super(TopRadioResource, self).get_object_list(request).order_by('-favorites')[:yabase_settings.TOP_RADIOS_LIMIT]
         return radios
 
 class FavoriteRadioResource(ModelResource):

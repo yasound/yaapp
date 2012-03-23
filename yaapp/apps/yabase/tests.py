@@ -12,8 +12,10 @@ from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 from yasearch.indexer import erase_index, add_song
+from tastypie.models import ApiKey
 import import_utils
 import settings as yabase_settings
+import simplejson as json
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -754,4 +756,27 @@ class TestRadioDeleted(TestCase):
 
         results = Radio.objects.search_fuzzy('toto')
         self.assertEquals(len(results), 1)
+        
+class TestApi(TestCase):
+    def setUp(self):
+        erase_index()
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user 
+        self.key = ApiKey.objects.get(user=self.user).key
+        self.username = self.user.username       
+        
+    def testTopLimitation(self):
+        for i in range(0, 100):
+            Radio(name='%d' % (i), ready=True, creator=self.user).save()
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'top_radio', 'api_name': 'v1',})
+        res = self.client.get(url,{'api_key': self.key, 'username': self.username})
+        self.assertEquals(res.status_code, 200)
+
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], yabase_settings.TOP_RADIOS_LIMIT)
         
