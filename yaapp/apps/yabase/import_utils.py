@@ -71,8 +71,6 @@ from decimal import *
 from django.conf import settings
 from django.db.models.query_utils import Q
 from django.utils.translation import ugettext_lazy as _
-from shutil import rmtree
-from tempfile import mkdtemp
 from yabase.models import SongMetadata, Radio, SongInstance
 from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre, \
     YasoundSongGenre
@@ -323,30 +321,22 @@ class SongImporter:
     def get_messages(self):
         return self._messages
     
-    def import_song(self, binary, metadata=None, convert=True, allow_unknown_song=False):
+    def import_song(self, filepath, metadata=None, convert=True, allow_unknown_song=False):
         """
         import song without metadata
         """
-        directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
-        path, extension = os.path.splitext(binary.name)
         
-        source = u'%s/s%s' % (directory, extension)
+        directory = os.path.dirname(filepath)
         destination = u'%s/d.mp3' % (directory)
-        source_f = open(source , 'wb')
-        for chunk in binary.chunks():
-            source_f.write(chunk)
-        source_f.close()
-            
+
         if convert==True:
-            self._convert_to_mp3(source, destination)
+            self._convert_to_mp3(filepath, destination)
             metadata = uploader.get_file_infos(destination, metadata)
             sm, messages = self.process_song(metadata, filepath=destination, allow_unknown_song=allow_unknown_song)
         else:
-            metadata = uploader.get_file_infos(source, metadata)
-            sm, messages = self.process_song(metadata, binary=binary, allow_unknown_song=allow_unknown_song)
+            metadata = uploader.get_file_infos(filepath, metadata)
+            sm, messages = self.process_song(metadata, filepath=filepath, allow_unknown_song=allow_unknown_song)
             
-        rmtree(directory)
-        
         return sm, messages
     
     def _find_song_by_echonest_id(self, echonest_id):
@@ -412,7 +402,7 @@ class SongImporter:
             
 
 
-    def process_song(self, metadata, binary=None, filepath=None, allow_unknown_song=False):
+    def process_song(self, metadata, filepath=None, allow_unknown_song=False):
         """
         * import song file, 
         * create YasoundSong, 
@@ -523,7 +513,7 @@ class SongImporter:
             song = found
             self._log("Song already existing in database (id=%s)" % (song.id))
         else:
-            # generate filename and save binary to disk
+            # generate filename and save mp3 to disk
             self._log(_('generating filename'))
             filename, mp3_path = self._generate_filename_and_path_for_song()
             try:
@@ -532,7 +522,6 @@ class SongImporter:
                 if e.errno == errno.EEXIST:
                     pass
                 else: raise
-            
             
             owner_id = self._get_owner_id(metadata=metadata, echonest_id=echonest_id, lastfm_id=lastfm_id)
             
@@ -570,15 +559,9 @@ class SongImporter:
             self._log(_('YasoundSong generated, id = %s') % (song.id))
             
             self._log(_('generating file data'))
-            if binary:
-                destination = open(mp3_path, 'wb')
-                for chunk in binary.chunks():
-                    destination.write(chunk)
-                destination.close()  
-                self._log("generated mp3 file : %s" % (mp3_path))
-            elif filepath:
-                shutil.copy(filepath, mp3_path)
-                self._log("copied %s to %s" % (filepath, mp3_path))
+
+            shutil.copy(filepath, mp3_path)
+            self._log("copied %s to %s" % (filepath, mp3_path))
                 
             # generate 64kb preview
             self._log(_('generating preview'))
@@ -673,24 +656,15 @@ class SongImporter:
         return data, extension
         
         
-    def extract_song_cover(self, yasound_song, binary=None):
+    def extract_song_cover(self, yasound_song, filepath=None):
         logger.info("extracting song cover from %d (%s) : start" % (yasound_song.id, yasound_song))
         
         if yasound_song.cover_filename:
             logger.info("song %d (%s) has a cover" % (yasound_song.id, yasound_song))
             return
 
-        directory = None
-        if binary:
-            directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
-            _path, extension = os.path.splitext(binary.name)
-            source = u'%s/s%s' % (directory, extension)
-            source_f = open(source , 'wb')
-            for chunk in binary.chunks():
-                source_f.write(chunk)
-            source_f.close()
-            mp3 = source
-            
+        if filepath:
+            mp3 = filepath
         else:
             mp3 = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(yasound_song.filename))
 
@@ -710,19 +684,16 @@ class SongImporter:
                 logger.info('ok, saved in %s' % path)
                 yasound_song.save()            
         
-        if directory:
-            rmtree(directory)
         logger.info("extracting song cover from %d (%s) : done" % (yasound_song.id, yasound_song))
 
 
-    
-def import_song(binary, metadata, convert, allow_unknown_song=False):    
+def import_song(filepath, metadata, convert, allow_unknown_song=False):    
     importer = SongImporter()
-    sm, messages = importer.import_song(binary, metadata, convert, allow_unknown_song) 
+    sm, messages = importer.import_song(filepath, metadata, convert, allow_unknown_song) 
     if sm and sm.yasound_song_id:
         try:
             yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
-            importer.extract_song_cover(yasound_song, binary)
+            importer.extract_song_cover(yasound_song, filepath)
         except:
             pass
         

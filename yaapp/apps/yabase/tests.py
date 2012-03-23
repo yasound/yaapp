@@ -6,14 +6,15 @@ from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
 from task import process_playlists_exec
+from tastypie.models import ApiKey
 from tests_utils import generate_playlist
 from yabase.import_utils import SongImporter, generate_default_filename
 from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 from yasearch.indexer import erase_index, add_song
-from tastypie.models import ApiKey
 import import_utils
+import os
 import settings as yabase_settings
 import simplejson as json
 
@@ -395,6 +396,12 @@ class TestImportCover(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user     
+        
+        try:
+            os.remove('./apps/yabase/fixtures/artwork/d.mp3')
+        except:
+            pass
+        
         YasoundSong.objects.all().delete()
         erase_index()   
 
@@ -423,32 +430,32 @@ class TestImportCover(TestCase):
         self.assertEquals(extension, '.png')
 
     def test_full_m4a_with_cover(self):
-        binary = File(open('./apps/yabase/fixtures/artwork/with_cover.m4a'))
-        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        filepath = './apps/yabase/fixtures/artwork/with_cover.m4a'
+        sm, _message = import_utils.import_song(filepath, metadata=None, convert=True, allow_unknown_song=False)
         self.assertIsNotNone(sm)
         yasound_song_id = sm.yasound_song_id
         song = YasoundSong.objects.get(id=yasound_song_id)
         self.assertIsNotNone(song.cover_filename)
 
     def test_full_m4a_without_cover(self):
-        binary = File(open('./apps/yabase/fixtures/artwork/without_cover.m4a'))
-        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        filepath = './apps/yabase/fixtures/artwork/without_cover.m4a'
+        sm, _message = import_utils.import_song(filepath, metadata=None, convert=True, allow_unknown_song=False)
         self.assertIsNotNone(sm)
         yasound_song_id = sm.yasound_song_id
         song = YasoundSong.objects.get(id=yasound_song_id)
         self.assertIsNone(song.cover_filename)
         
     def test_full_mp3_with_cover(self):
-        binary = File(open('./apps/yabase/fixtures/artwork/with_cover.mp3'))
-        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        filepath = './apps/yabase/fixtures/artwork/with_cover.mp3'
+        sm, _message = import_utils.import_song(filepath, metadata=None, convert=True, allow_unknown_song=False)
         self.assertIsNotNone(sm)
         yasound_song_id = sm.yasound_song_id
         song = YasoundSong.objects.get(id=yasound_song_id)
         self.assertIsNotNone(song.cover_filename)
 
     def test_full_mp3_without_cover(self):
-        binary = File(open('./apps/yabase/fixtures/artwork/without_cover.mp3'))
-        sm, _message = import_utils.import_song(binary, metadata=None, convert=True, allow_unknown_song=False)
+        filepath = './apps/yabase/fixtures/artwork/without_cover.mp3'
+        sm, _message = import_utils.import_song(filepath, metadata=None, convert=True, allow_unknown_song=False)
         self.assertIsNotNone(sm)
         yasound_song_id = sm.yasound_song_id
         song = YasoundSong.objects.get(id=yasound_song_id)
@@ -460,7 +467,13 @@ class TestImport(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user     
+        self.user = user   
+        
+        try:  
+            os.remove('./apps/yabase/fixtures/mp3/d.mp3')
+        except:
+            pass
+        
         erase_index()   
     
     def test_quality(self):
@@ -573,20 +586,20 @@ class TestImport(TestCase):
         
     def test_import_without_metadata_in_file(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
-        sm, _message = importer.import_song(binary, metadata=None, convert=False, allow_unknown_song=False)
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
+        sm, _message = importer.import_song(filepath, metadata=None, convert=False, allow_unknown_song=False)
         self.assertIsNone(sm)
     
     def test_import_without_metadata_in_file_and_with_given_metadata(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
         
         metadata = {
             'title': 'my mp3',
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -596,7 +609,7 @@ class TestImport(TestCase):
     def test_import_without_metadata_in_file_and_with_given_metadata_and_radio(self):
         radio = Radio.objects.radio_for_user(self.user)
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
         
         metadata = {
             'title': 'my mp3',
@@ -604,7 +617,7 @@ class TestImport(TestCase):
             'album': 'my album',
             'radio_id': '1',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -619,14 +632,14 @@ class TestImport(TestCase):
         
     def test_import_same_song(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
         
         metadata = {
             'title': 'my mp3',
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -636,12 +649,12 @@ class TestImport(TestCase):
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.name, 'my mp3')
         
-        sm2, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm2, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         self.assertEquals(sm2, sm)
 
     def test_import_with_duplicated_metatadas(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
         
         for _i in range(0, 10):
             SongMetadata(name='my mp3',
@@ -653,7 +666,7 @@ class TestImport(TestCase):
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -663,14 +676,14 @@ class TestImport(TestCase):
 
     def test_import_same_song_with_different_name(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
         
         metadata = {
             'title': 'my mp3',
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -685,7 +698,7 @@ class TestImport(TestCase):
             'artist': 'my other artist',
             'album': 'my other album',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         self.assertEquals(sm.yasound_song_id, yasound_song.id)
         self.assertEquals(sm.name, 'my other mp3')
         self.assertEquals(sm.artist_name, 'my other artist')
@@ -696,21 +709,21 @@ class TestImport(TestCase):
 
     def test_import_owner_id_is_none(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
         
         metadata = {
             'title': 'my mp3',
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
         self.assertIsNotNone(sm.yasound_song_id)
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertIsNone(yasound_song.owner_id)
 
     def test_import_owner_id_is_not_none(self):
         importer = SongImporter()
-        binary = File(open('./apps/yabase/fixtures/mp3/unknown.mp3'))
+        filepath = './apps/yabase/fixtures/mp3/unknown.mp3'
         radio = Radio.objects.radio_for_user(self.user)
         
         metadata = {
@@ -719,7 +732,7 @@ class TestImport(TestCase):
             'album': 'my album',
             'radio_id':  radio.id
         }
-        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=True)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         self.assertIsNotNone(sm.yasound_song_id)
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.owner_id, self.user.id)

@@ -26,6 +26,8 @@ import settings as yabase_settings
 import time
 import uuid
 import yabase.settings as yabase_settings
+from tempfile import mkdtemp
+from shutil import rmtree
 
 
 logger = logging.getLogger("yaapp.yabase")
@@ -496,8 +498,6 @@ def upload_song(request, song_id=None):
     
     """
     logger.info("upload song called")
-    convert = True
-    allow_unknown_song = True
     if not request.user.is_authenticated():
         key = request.REQUEST.get('key')
         if key != yabase_settings.UPLOAD_KEY:
@@ -528,8 +528,20 @@ def upload_song(request, song_id=None):
     
     json_data['filename'] = filename
     
+    directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
+    _path, extension = os.path.splitext(f.name)
+    source = u'%s/s%s' % (directory, extension)
+    source_f = open(source , 'wb')
+    for chunk in f.chunks():
+        source_f.write(chunk)
+    source_f.close()
+    
     logger.info('importing song')
-    process_upload_song(binary=f, metadata=json_data, convert=convert, song_id=song_id, allow_unknown_song=allow_unknown_song)
+    process_upload_song.delay(filepath=source, 
+                              metadata=json_data, 
+                              convert=True, 
+                              song_id=song_id, 
+                              allow_unknown_song=True)
 
     res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
@@ -566,7 +578,17 @@ def upload_song_ajax(request):
         return HttpResponse(json_data, mimetype='text/html')
     else:
         for f in request.FILES.getlist('songs'):
-            sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
+            directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
+            _path, extension = os.path.splitext(f.name)
+            source = u'%s/s%s' % (directory, extension)
+            source_f = open(source , 'wb')
+            for chunk in f.chunks():
+                source_f.write(chunk)
+            source_f.close()
+            
+            sm, messages = import_utils.import_song(filepath=source, metadata=metadata, convert=True, allow_unknown_song=True)
+            rmtree(directory)
+            
             global_message = global_message + messages + '\n'
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
