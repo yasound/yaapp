@@ -12,9 +12,24 @@ from yabase.models import FeaturedContent, Playlist, SongMetadata
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 from yasearch.indexer import erase_index, add_song
+from tastypie.models import ApiKey
 import import_utils
 import settings as yabase_settings
+import simplejson as json
 
+class TestMiddleware(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+    
+    def test_slashes(self):
+        self.client.get('/status//')
+        res = self.client.post('/status//', {'username': 'john', 'password': 'smith'})
+        print res
+        
 class TestDatabase(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]
@@ -626,6 +641,36 @@ class TestImport(TestCase):
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.name, 'my mp3')
 
+    def test_import_owner_id_is_none(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/without_metadata.mp3'))
+        
+        metadata = {
+            'title': 'my mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=False)
+        self.assertIsNotNone(sm.yasound_song_id)
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertIsNone(yasound_song.owner_id)
+
+    def test_import_owner_id_is_not_none(self):
+        importer = SongImporter()
+        binary = File(open('./apps/yabase/fixtures/mp3/unknown.mp3'))
+        radio = Radio.objects.radio_for_user(self.user)
+        
+        metadata = {
+            'title': 'my own mp3',
+            'artist': 'my artist',
+            'album': 'my album',
+            'radio_id':  radio.id
+        }
+        sm, _message = importer.import_song(binary, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertEquals(yasound_song.owner_id, self.user.id)
+
 class TestRadioDeleted(TestCase):
     def setUp(self):
         erase_index()
@@ -711,4 +756,27 @@ class TestRadioDeleted(TestCase):
 
         results = Radio.objects.search_fuzzy('toto')
         self.assertEquals(len(results), 1)
+        
+class TestApi(TestCase):
+    def setUp(self):
+        erase_index()
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user 
+        self.key = ApiKey.objects.get(user=self.user).key
+        self.username = self.user.username       
+        
+    def testTopLimitation(self):
+        for i in range(0, 100):
+            Radio(name='%d' % (i), ready=True, creator=self.user).save()
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'top_radio', 'api_name': 'v1',})
+        res = self.client.get(url,{'api_key': self.key, 'username': self.username})
+        self.assertEquals(res.status_code, 200)
+
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], yabase_settings.TOP_RADIOS_LIMIT)
         

@@ -369,6 +369,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.account': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     }
 }
 

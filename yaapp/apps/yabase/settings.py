@@ -28,3 +28,5 @@ YASOUND_FAVORITES_PLAYLIST_SOURCE_BASENAME = '#yasound_songs_from_other_radios_s
 UPLOAD_KEY='weeriwjwsdiwew9ei9nksxsdwxj,.29x2jdnjweapnfnhshdf'
 
 DEFAULT_FILENAME='file'
+
+TOP_RADIOS_LIMIT = 25

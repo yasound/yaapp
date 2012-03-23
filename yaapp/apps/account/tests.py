@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from yasearch.indexer import erase_index
+import settings as account_settings
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -61,4 +62,43 @@ class TestProfile(TestCase):
         users = UserProfile.objects.search_user_fuzzy('babar')
         self.assertEquals(len(users), 1)
                 
+class TestFacebook(TestCase): 
+    def setUp(self):
+        erase_index()
+
+        # jbl
+        jerome = User(email="jbl@yasound.com", username="jerome", is_superuser=False, is_staff=False)
+        jerome.set_password('jerome')
+        jerome.save()
+        self.assertEqual(jerome.get_profile(), UserProfile.objects.get(id=1))
+        
+        profile = jerome.get_profile()
+        profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
+        profile.facebook_uid = '1460646148'
+        profile.facebook_token = 'BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4'
+        
+        profile.save()
+        
+        # seb
+        seb = User(email="seb@yasound.com", username="seb", is_superuser=False, is_staff=False)
+        seb.set_password('seb')
+        seb.save()
+        self.assertEqual(seb.get_profile(), UserProfile.objects.get(id=2))
+        
+        profile = seb.get_profile()
+        profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
+        profile.facebook_uid = '1060354026'
+        profile.save()
+        
+        self.jerome = jerome
+        self.seb = seb
+        
+    def test_scan_friends(self):
+        self.assertFalse(self.seb in self.jerome.get_profile().friends.all())
+        self.assertFalse(self.jerome in self.seb.get_profile().friends.all())
+
+        self.jerome.get_profile().scan_friends()
+        
+        self.assertTrue(self.seb in self.jerome.get_profile().friends.all())
+        self.assertTrue(self.jerome in self.seb.get_profile().friends.all())
         

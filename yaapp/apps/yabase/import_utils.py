@@ -79,6 +79,7 @@ from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre,
 from yasearch.models import build_mongodb_index
 from yaref.utils import convert_filename_to_filepath
 from yasearch.utils import get_simplified_name
+from utils import flush_transaction
 import datetime
 import hashlib
 import logging
@@ -396,7 +397,19 @@ class SongImporter:
             radio.save()
         
         return si
-        
+    
+    def _get_owner_id(self, metadata, echonest_id, lastfm_id):
+        radio_id = metadata.get('radio_id')
+        if not radio_id:
+            return None
+        if echonest_id is None and lastfm_id is None:
+            try:
+                radio = Radio.objects.get(id=radio_id)
+                creator = radio.creator
+                return creator.id
+            except:
+                return None
+            
 
 
     def process_song(self, metadata, binary=None, filepath=None, allow_unknown_song=False):
@@ -468,6 +481,9 @@ class SongImporter:
 
         self._log(_('echonest id = %s, lastfm_id = %s, musicbrainz_id = %s') % (echonest_id, lastfm_id, musicbrainz_id))
         
+        # avoid stale data        
+        flush_transaction()
+        
         # first check for an existing SongMetadata
         try:
             sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
@@ -517,6 +533,9 @@ class SongImporter:
                     pass
                 else: raise
             
+            
+            owner_id = self._get_owner_id(metadata=metadata, echonest_id=echonest_id, lastfm_id=lastfm_id)
+            
             # create song object
             self._log(_('creating YasoundSong'))
             song = YasoundSong(artist=artist,
@@ -545,6 +564,7 @@ class SongImporter:
                                publish_at=None,
                                published=False,
                                locked=False,
+                               owner_id=owner_id,
                                quality=quality)
             song.save()
             self._log(_('YasoundSong generated, id = %s') % (song.id))
@@ -589,7 +609,9 @@ class SongImporter:
         
         # creating song instance if needed
         self._create_song_instance(sm, metadata)
-        
+
+        # avoid stale data        
+        flush_transaction()
         
         self._log(_('Building mongodb index'))
         build_mongodb_index()
