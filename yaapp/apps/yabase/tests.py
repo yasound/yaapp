@@ -211,7 +211,7 @@ class TestNextSong(TestCase):
         self.radio.empty_next_songs_queue()
         self.assertEqual(self.radio.next_songs.count(), 0)
         
-class TestFuzzy(TestCase):
+class TestFuzzySong(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]
     def setUp(self):
@@ -238,6 +238,59 @@ class TestFuzzy(TestCase):
         artist = u'chris'
         album = u''
         best_song = YasoundSong.objects.find_fuzzy(song, album, artist, limit=1)
+
+class TestFuzzyRadio(TestCase):
+    def setUp(self):
+        erase_index()
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+            
+    def test_search(self):
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 0)
+        
+        Radio(name='pizza', ready=True, creator=self.user).save()
+        Radio(name='velo', ready=True, creator=self.user).save()
+        Radio(name='maison', ready=True, creator=self.user).save()
+
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("velo")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("maison")), 1)
+
+        radio = Radio.objects.get(name='pizza')
+        radio.save()
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 1)
+        radio.name = 'cucarracha'
+        radio.save()
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 0)
+        self.assertEquals(len(Radio.objects.search_fuzzy("cucarracha")), 1)
+        
+        radio.name = 'pizza'
+        radio.save()
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("cucarracha")), 0)
+
+        from yasearch import models as yasearch_models
+        yasearch_models.build_mongodb_index()
+        
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("velo")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("maison")), 1)
+
+        erase_index()
+
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 0)
+        self.assertEquals(len(Radio.objects.search_fuzzy("velo")), 0)
+        self.assertEquals(len(Radio.objects.search_fuzzy("maison")), 0)
+
+        yasearch_models.build_mongodb_index()
+        
+        self.assertEquals(len(Radio.objects.search_fuzzy("pizza")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("velo")), 1)
+        self.assertEquals(len(Radio.objects.search_fuzzy("maison")), 1)
+
         
 class TestFeaturedModels(TestCase):
     multi_db = True

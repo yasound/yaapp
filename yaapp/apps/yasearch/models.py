@@ -10,14 +10,24 @@ import logging
 from time import time
 import utils as yasearch_utils
 import indexer as yasearch_indexer
-#import yasearch.utils as yasearch_utils
-#import string
+
+from django.core.cache import cache
+
+LOCK_EXPIRE = 60 * 10 # Lock expires in 10 minutes
+
 logger = logging.getLogger("yaapp.yaref")
 
 def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     """
     build mongodb fuzzy index : if upsert=False then document is inserted without checking for existent one
     """
+    lock_id = "build-mongo-db-index-lock"
+    acquire_lock = lambda: cache.add(lock_id, "true", LOCK_EXPIRE)
+    release_lock = lambda: cache.delete(lock_id)
+    if not acquire_lock():
+        logger.info('build_mongodb_index locked')
+        return    
+    
     if erase:
         logger.info("deleting index")
         indexer.erase_index(skip_songs=skip_songs)
@@ -139,10 +149,9 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
         indexer.build_index_songs() 
     indexer.build_index_radios() 
     indexer.build_index_users()      
+    
+    release_lock()
     logger.info("done")
-    
-    
-    
     
     
 def search_radio(search_text, radio_min_score=40, ready_radios_only=True, radios_with_creator_only=True):

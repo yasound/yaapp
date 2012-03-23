@@ -16,6 +16,7 @@ def build_index_songs():
     
 def build_index_radios():
     db = settings.MONGO_DB
+    db.radios.ensure_index("db_id")
     db.radios.ensure_index("name_dms")
     db.radios.ensure_index("genre_dms") 
     db.radios.ensure_index("tags_dms")
@@ -23,6 +24,7 @@ def build_index_radios():
     
 def build_index_users():
     db = settings.MONGO_DB
+    db.radios.ensure_index("db_id")
     db.radios.ensure_index("name_dms")
     db.radios.ensure_index("all_dms")
     
