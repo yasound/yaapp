@@ -4,9 +4,8 @@ $(document).ready(function() {
 	soundManager.useHTML5Audio = true;
 	soundManager.debugMode = true;
 	var mySound = undefined;
-	soundManager.onready(function(){
-	  mySound = soundManager.createSound({
-	    id: 'soundManagerObject1',
+	var soundConfig = {
+	    id: 'yasoundMainPlay',
 	    url: g_radio_url,
 	    stream: true,
 	    onplay: function() {
@@ -17,10 +16,11 @@ $(document).ready(function() {
 	    	$('#play i').removeClass('icon-stop');
 	    	$('#play i').addClass('icon-play');
 	    }
-	  });
-	  $('#play').click();
+	}
+	soundManager.onready(function(){
+	  mySound = soundManager.createSound(soundConfig);
+	  mySound.play();
    	  $('#volume-position').css("width", mySound.volume + "%");
-	  
 	});
 
 	soundManager.ontimeout(function(){
@@ -28,14 +28,20 @@ $(document).ready(function() {
 	});
 
 	$('#play').click(function() {
-	  if (mySound.playState == 1) {
-		  mySound.stop();
-	  } else {
+	  if (typeof mySound === "undefined") {
+		  mySound = soundManager.createSound(soundConfig);
 		  mySound.play();
+	   	  $('#volume-position').css("width", mySound.volume + "%");
+	  } else {
+		  mySound.destruct();
+		  mySound = undefined;
 	  }
 	});
 	
 	$('#inc').click(function() {
+		if (typeof mySound === "undefined") {
+			return;
+		}		
 		if (mySound.volume <= 90) {
 			$('#volume-position').css("width", mySound.volume+10 + "%");
 			mySound.setVolume(mySound.volume+10);
@@ -45,6 +51,9 @@ $(document).ready(function() {
 		}	
 	})
 	$('#dec').click(function() {
+		if (typeof mySound === "undefined") {
+			return;
+		}		
 		if (mySound.volume >= 10) {
 			$('#volume-position').css("width", mySound.volume-10 + "%");
 			mySound.setVolume(mySound.volume-10);
@@ -83,12 +92,18 @@ $(document).ready(function() {
 	}
 	
 	$(document).everyTime(10*1000, 'event_timer', function (x) {
+		if (typeof mySound === "undefined") {
+			return;
+		}		
 		getData();
 	});
 	getData();
 	
 	
 	var resizeVolumeBar = function(event) {
+		if (typeof mySound === "undefined") {
+			return;
+		}		
 		$('body').css('cursor','pointer');
 		var $volumeControl = $('#volume-control');
 		var position = event.pageX;
@@ -105,7 +120,7 @@ $(document).ready(function() {
 	
 	var volumeMouseDown = false;
 	$('#volume-control').mousedown(function(event) {
-		 volumeMouseDown = true;
+		volumeMouseDown = true;
 		resizeVolumeBar(event);
 	});
 	$(document).mouseup(function(event) {
