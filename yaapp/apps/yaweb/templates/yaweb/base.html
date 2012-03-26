@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -54,64 +55,72 @@ window.addEvent('domready', function() {
     <div id="logo"><a href="/"><img src="/media/yaweb/images/logo.png" alt="Logo Yasound" width="400" height="86" border="0" /></a></div>
     <div id="menu">
         {% ifequal current_page 'about' %}
-        <span class="current">A propos de nous</span>
+        <span class="current">{% trans "About us" %}</span>
         {% else %}
-        <a href='{% url about %}'>A propos de nous</a>
+        <a href='{% url about %}'>{% trans "About us" %}</a>
         {% endifequal %}
         {% ifequal current_page 'jobs' %}
-        <span class="current">Jobs</span>
+        <span class="current">{% trans "Careers" %}</span>
         {% else %}
-        <a href='{% url jobs %}'>Jobs</a>
+        <a href='{% url jobs %}'>{% trans "Careers" %}</a>
         {% endifequal %}
         {% ifequal current_page 'press' %}
-        <span class="current">Presse</span>
+        <span class="current">{% trans "Press" %}</span>
         {% else %}
-        <a href='{% url press %}'>Presse</a>
+        <a href='{% url press %}'>{% trans "Press" %}</a>
         {% endifequal %}
         {% ifequal current_page 'contact' %}
-        <span class="current">Contact</span>
+        <span class="current">{% trans "Contact" %}</span>
         {% else %}
-        <a href='{% url contact %}'>Contact</a>
+        <a href='{% url contact %}'>{% trans "Contact" %}</a>
         {% endifequal %}
     </div>
-    <div id="lang"><a href="../en/index.php">English</a></div>
+    <div id="lang">
+    {% for lang in LANGUAGES %}
+    {% if request.LANGUAGE_CODE != lang.0 %} 
+    <form action='/i18n/setlang/' method='post' class='lang-form'>{% csrf_token %}
+        <input type='hidden' name='language' value='{{lang.0}}'/>
+        <input id='lang_{{lang.0}}' type='submit' value='{{lang.1}}'/>
+    </form>
+    {% endif %}
+    {% endfor %}
+    </div>
   </div>
 </div>
 
 {% block content %}{% endblock %}
 
-<div id="deco">&nbsp</div>
+<div id="deco">&nbsp;</div>
 <div id="footer">
   <div id="content">
     <div id="menu">
-        {% ifequal current_page 'about' %}
-            <span class="current">Accueil</span> |
+        {% ifequal current_page 'index' %}
+            <span class="current">{% trans "Home page" %}</span> |
         {% else %}
-            <a href="{% url index %}">Accueil</a> |
+            <a href="{% url index %}">{% trans "Home page" %}</a> |
         {% endifequal %} 
-        <a href="{% url index %}">Accueil</a> | 
         {% ifequal current_page 'about' %}
-            <span class="current">A propos de nous</span> |
+            <span class="current">{% trans "About us" %}</span> |
         {% else %}
-            <a href="{% url about %}">A propos de nous</a> |
+            <a href="{% url about %}">{% trans "About us" %}</a> |
         {% endifequal %} 
         {% ifequal current_page 'jobs' %}
-            <span class="current">Jobs</span> |
+            <span class="current">{% trans "Careers" %}</span> |
         {% else %}
-            <a href="{% url jobs %}">Jobs</a> |
+            <a href="{% url jobs %}">{% trans "Careers" %}</a> |
         {% endifequal %} 
         {% ifequal current_page 'press' %}
-            <span class="current">Press</span> |
+            <span class="current">{% trans "Press" %}</span> |
         {% else %}
-            <a href="{% url press %}">Press</a> |
+            <a href="{% url press %}">{% trans "Press" %}</a> |
         {% endifequal %} 
         {% ifequal current_page 'contact' %}
-            <span class="current">Contact</span> |
+            <span class="current">{% trans "Contact" %}</span> |
         {% else %}
-            <a href="{% url contact %}">Contact</a> |
+            <a href="{% url contact %}">{% trans "Contact" %}</a> |
         {% endifequal %} 
        <br />
-      <span style="font-size: 18px; font-weight:bold">yasound </span><span style="font-size: 10px">© 2011 - Tous droits réservés</span></div>
+      <span style="font-size: 18px; font-weight:bold">yasound </span><span style="font-size: 10px">{% trans "© 2011 - All rights reserved" %}</span></div>
     <div id="app"><img src="/media/yaweb/images/app.png" width="264" height="45" alt="Bientôt sur AppStore et Android Market" /></div>
   </div>
 </div>

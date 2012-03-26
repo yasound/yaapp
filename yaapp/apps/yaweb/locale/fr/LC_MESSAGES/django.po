@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-26 11:35+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: templates/yaweb/base.html:58
+#: templates/yaweb/base.html.py:60
+#: templates/yaweb/base.html:103
+#: templates/yaweb/base.html.py:105
+msgid "About us"
+msgstr "A propos de nous"
+
+#: templates/yaweb/base.html:63
+#: templates/yaweb/base.html.py:65
+#: templates/yaweb/base.html:108
+#: templates/yaweb/base.html.py:110
+msgid "Careers"
+msgstr "Jobs"
+
+#: templates/yaweb/base.html:68
+#: templates/yaweb/base.html.py:70
+#: templates/yaweb/base.html:113
+#: templates/yaweb/base.html.py:115
+msgid "Press"
+msgstr "Presse"
+
+#: templates/yaweb/base.html:73
+#: templates/yaweb/base.html.py:75
+#: templates/yaweb/base.html:118
+#: templates/yaweb/base.html.py:120
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/yaweb/base.html:98
+#: templates/yaweb/base.html.py:100
+msgid "Home page"
+msgstr "Accueil"
+
+#: templates/yaweb/base.html:123
+msgid "© 2011 - All rights reserved"
+msgstr "© 2011 - Tous droits réservés"
+

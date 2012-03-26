@@ -125,6 +125,8 @@ urlpatterns = patterns('',
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
     (r'^invitation/', include('yainvitation.urls')),
+    
+    (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
     
     url(r'', include('social_auth.urls')),
