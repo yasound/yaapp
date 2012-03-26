@@ -1,0 +1,66 @@
+{% load i18n %}
+<div class="inner-page">
+<h1>{% trans "Key figures" %}</h1>
+<table width="100%" id='certificate-table' class='table zebra-striped'>
+    <thead>
+        <tr style="background:#eeeeee;">
+            <th style="width: 20%;">
+                {% trans "Figure" %}
+            </th>
+            <th style="width: 80px;"> 
+                {% trans "Value" %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {% trans "User count" %}
+            </td>
+            <td>
+            {{user_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Radio count" %}
+            </td>
+            <td>
+            {{radio_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Radio count (ready)" %}
+            </td>
+            <td>
+            {{ready_radio_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Message count" %}
+            </td>
+            <td>
+            {{wall_message_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Like count" %}
+            </td>
+            <td>
+            {{wall_like_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Favorites count" %}
+            </td>
+            <td>
+            {{favorite_count}} 
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

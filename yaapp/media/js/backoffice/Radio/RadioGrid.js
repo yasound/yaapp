@@ -97,7 +97,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	url: '/yabackoffice/radios',
 	enablePagination: true,
 	enableFilters: true,
-    this.pageSize: 25,
+    pageSize: 25,
 	
     initComponent: function() {
         this.addEvents('selected', 'deselected');

@@ -25,4 +25,6 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^invitations/(?P<invitation_id>\d+)/generate_message/$', 'invitation_generate_message'),
     url(r'^invitations/(?P<invitation_id>\d+)/send/$', 'invitation_send'),
     url(r'^users', 'users'),
+
+    url(r'^keyfigures/', 'keyfigures'),
 )

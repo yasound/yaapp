@@ -18,12 +18,12 @@ from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid
 from yabackoffice.models import BackofficeRadio
-from yabase.models import Radio, SongInstance
+from yabase.models import Radio, SongInstance, WallEvent, RadioUser
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 import simplejson as json
 import utils as yabackoffice_utils
-
+from yabase import settings as yabase_settings
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -409,3 +409,18 @@ def radios_stats_created(request):
     resp = utils.JsonResponse(json_data)
     return resp
     
+@csrf_exempt
+@login_required
+def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+    return render_to_response(template_name, {
+        "user_count": User.objects.filter(is_active=True).count(),
+        "radio_count": Radio.objects.all().count(),
+        "ready_radio_count": Radio.objects.filter(ready=True).count(),
+        "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
+        "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
+        "favorite_count": RadioUser.objects.filter(favorite=True).count()
+    }, context_instance=RequestContext(request))  
+
+

@@ -58,31 +58,29 @@ Yasound.Statistics.UI.Panel = function() {
             columnWidth:.50,
             style:'padding:10px 0 10px 10px',
             items:[{
-                title: 'New radios for the day',
+                title: gettext('Key figures'),
                 layout:'fit',
-                items:[{
-	                xtype: 'chartpanel',
-		            height:300
-                }]
-            },{
-                title: 'New radios for the week',
-                layout:'fit',
-                items:[{
-	                xtype: 'chartpanel',
-	    	        height:300
-                }]
-            }, {
-                title: 'New radios for the month',
-                layout:'fit',
-                items:[{
-                	xtype: 'chartpanel',
-                	height:300
-                }]
+                id:'stats-keyfigures',
+                reload: function(panel) {
+                	panel.load({
+                		url: '/yabackoffice/keyfigures/',
+                		text: gettext('Loading...')
+                	});
+                },
+            	tools:[{
+            		id: 'refresh',
+            		handler: function(event, toolEl, panel) {
+            			panel.reload(panel);
+            		}
+            	}],
             }]
         }],
         updateData : function(component) {
         	Ext.getCmp('stats-latest-radios').getStore().reload();
         	Ext.getCmp('stats-biggest-radios').getStore().reload();
+        	
+        	var keyfigures = Ext.getCmp('stats-keyfigures'); 
+        	keyfigures.reload(keyfigures);
 		}
 	};	
 }
