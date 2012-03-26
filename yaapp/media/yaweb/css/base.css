@@ -54,14 +54,15 @@ a:hover {
 	margin-left: auto;
 	margin-right:auto;
 }
-#middle #deco {
+#deco {
 	position:relative;
 	width: 100%;
 	height: 100px;
 	background-position:top;
 	background-repeat:no-repeat;
 	background-size:100%;
-}
+    background-image:url(/media/yaweb/images/backCD.jpg)
+ }
 #footer #content {
 	position:relative;
 	width: 1000px;
