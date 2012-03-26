@@ -18,12 +18,12 @@ from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid
 from yabackoffice.models import BackofficeRadio
+from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 import simplejson as json
 import utils as yabackoffice_utils
-from yabase import settings as yabase_settings
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -420,7 +420,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "ready_radio_count": Radio.objects.filter(ready=True).count(),
         "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
         "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
-        "favorite_count": RadioUser.objects.filter(favorite=True).count()
+        "favorite_count": RadioUser.objects.filter(favorite=True).count(),
+        "yasound_friend_count": UserProfile.objects.all().aggregate(Count('friends'))['friends__count']
     }, context_instance=RequestContext(request))  
 
 
