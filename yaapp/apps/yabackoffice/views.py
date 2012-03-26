@@ -56,22 +56,15 @@ def radio_songs(request, radio_id):
     if request.method == 'GET':
         qs = SongInstance.objects.filter(playlist__radio=radio)
 
-        name = request.REQUEST.get('name')
-        artist_name = request.REQUEST.get('artist_name')
-        album_name = request.REQUEST.get('album_name')
         yasound_song_id = request.REQUEST.get('yasound_song_id')
         
-        if name:
-            qs = qs.filter(metadata__name__icontains=name)
-        if artist_name:
-            qs = qs.filter(metadata__artist_name__icontains=artist_name)
-        if album_name:
-            qs = qs.filter(metadata__album_name__icontains=album_name)
-        
+        filters = [('name', 'metadata__name'),
+                   ('artist_name', 'metadata__artist_name'),
+                   ('album_name', 'metadata__album_name')]
         if yasound_song_id:
             qs = qs.filter(metadata__yasound_song_id=yasound_song_id)
         grid = SongInstanceGrid()
-        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
         return resp
 
