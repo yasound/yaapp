@@ -1,0 +1,29 @@
+{% extends "yaweb/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="middle">
+  <div class="jobs" id="content">
+    <div class="data" style="margin-right:25px; width:285px;"><img src="/media/yaweb/images/contact.jpg" width="285" height="491" alt="Presse" /></div>
+    <div class="data" style="width:680px;"><img src="/media/yaweb/images/bulle_rouge.gif" alt="Yasound recrute" width="223" height="185" align="right" style="margin-right:-10px;"/>
+      <h3 style="margin-top:90px;">Adresse email</h3>
+      <p style="margin-left:20px"><script type="text/javascript">
+//<![CDATA[
+var d="";for(var i=0;i<657;i++)d+=String.fromCharCode((",v(5*R7l$%zM^?.(*-vZ+wyjXd`{IB/Lmf\"x\'F\\_ogNHa,&h}#Y)]!i~[kVEecGKJn| 0bW7AyR77AwA)R7m?0N\'Bea\"&j!\'G*}\'?{h*V[o(?okmBL0(g*b(?0!\"B0excIi\',Ikyd*Ef?aVv,okmBL0\\a~&\\,eof/J)\'? n\\gx!x,I~\"?^Nmd_i\\g0&v^)g(ae\"Z^E}-k\'}`E0!m, &v&*ax?[oLc{hvE imk[\"(g*\'BV$\'-d]`\'.*}\",x!m&*i\"{+hL/*z\"cXa-zLE-d)&FB^V\"EI^\'BJ^m^[KZ,IN\"cE&v&*ax?[oLc{hvE{imk[\"(g*\'BV$\'-d)&/%xg(?0!\"B e\'/+a\"GIEyd*Ef?aVv,ok+BI,y`Ix*e~&(NJ}\",mi*gZ~+Nj|FB^V\"GI!m%LN+zL|Lc0]y%0oygx!x,I~\"?^Nmd_i+d0&v%(g-dHl7P{%(=,v(5~REP~QHKEP~@RI>1wR=*C~$yz.d{=)Cx}v(V*=~>>QQFM>2=*C~$yz.d{=)Cx}v(V*=~@F>>QQFG>2=*C~$yz.d{=)Cx}v(V*=~@G>>QQK>2*C~$yz.d{=)Cx}v(V*=~@H>>Py@Rh*(~$|C{(%#X}v(X%yz=wSSSFKA=wSSSM>;GJJAw;GJJ>3Pz,v\"=yC)+w)*(=EAGKN>>".charCodeAt(i)+42)%95+32);eval(d)
+//]]>
+</script>
+</p>
+      <h3>Twitter</h3>
+      <p style="margin-left:20px"><a href="http://twitter.com/#!/YasoundSAS" target="_blank">@YasoundSAS</a></p>
+      <h3>Facebook</h3>
+      <p style="margin-left:20px"><a href="http://www.facebook.com/Yasound" target="_blank">http://www.facebook.com/Yasound</a></p>
+      <h3>Adresse</h3>
+      <p style="margin-left:20px">Yasound<br />144,rue des Poissonniers<br />75018 Paris France </p>
+    </div>
+    <div id="rouge" style="left: 848px;">
+      <h2>Nos coordonnées</h2>
+    </div>
+     {% include "yaweb/social_share.html" %}
+  </div>
+</div>
+{% endblock %}

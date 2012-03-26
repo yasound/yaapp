@@ -1,0 +1,317 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>YASOUND | Ma radio, c'est moi</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile." />
+<meta name="Author" content="Yasound SAS" />
+<meta name="copyright" content="Yasound SAS" />
+<meta http-equiv="Cache-control" content="public" />
+<meta name="language" content="french" />
+<meta property="og:title" content="YASOUND : N'écoutez plus seul votre musique."/>
+<meta property="og:type" content="Compagnie"/>
+<meta property="og:url" content="http://yasound.com/fr"/>
+<meta property="og:image" content="http://yasound.com/fr/og.jpg"/>
+<meta property="og:site_name" content="YASOUND : Ma radio, c'est moi."/>
+<meta property="fb:admins" content="USER_ID"/>
+<meta property="og:description"
+content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile."/>
+<link rel="icon" type="image/jpeg" href="icon.jpg" />
+<link href="/media/yaweb/css/intro.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/media/yaweb/js/mootools-core-1.4.5-full-nocompat.js"></script>
+<script type="text/javascript" src="/media/yaweb/js/mootools-more-1.4.0.1.js"></script>
+<script type="text/javascript">
+// GOOGLE ANALYTICS
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4211339-12']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  
+// ANIMATION
+var pBack = new Array('left','left','center','left');
+var mrCont = new Array('10%','10%','auto','10%');
+var slide = 1;
+var animX = new Array (0,100,-100,100,-100);
+var removedVideo1 = new Object();
+var removedVideo2 = new Object();
+var wx = 0;
+var y = 0; 
+var z = 0;
+
+function goToSlide(n) {
+    $('droite').set('onclick', '');
+    $('gauche').set('onclick', '');
+    $('droite').setStyle('display', 'none');
+    $('gauche').setStyle('display', 'none');
+    $('imgBack'+slide).set('tween', {duration: 500});
+    $('imgBack'+n).set('tween', {duration: 500});
+    $('imgBack'+slide).fade(0);
+    $('imgBack'+n).fade(1);
+    $('puce'+slide).set('class','puce');
+    if (slide==1) 
+    {
+        removedVideo1 = $('video1').dispose();
+    }
+    else if (slide==2) 
+    {
+        removedVideo2 = $('video2').dispose();
+    }
+
+    y1 = $('content'+slide).getPosition().y;
+    y2 = $('content'+n).getPosition().y;
+    $('content'+slide).set('tween', {duration: 500});
+    $('content'+n).set('tween', {duration: 1000});
+    $('content'+slide).fade(0);
+    $('content'+n).fade(1);
+    var screen1 = new Fx.Tween($('iphone'+n), {
+        property: 'top',
+        duration: 500,
+        transition:'sine:out'
+        }
+    );
+    var screen2 = new Fx.Tween($('iphone'+slide), {
+        property: 'top',
+        duration: 500,
+        transition:'sine:out',
+        onComplete: function(){
+            $('droite').setStyle('display', 'block');
+            $('gauche').setStyle('display', 'block');
+            $('droite').set('class', 'd'+n);
+            $('gauche').set('class', 'g'+n);
+            $('droite').set('onclick', 'goToSlide('+(n+1)+')');
+            $('gauche').set('onclick', 'goToSlide('+(n-1)+')');
+            if (n==1) {
+                removedVideo1.inject($('screen1'));
+            }
+           else if (n==2) {
+           removedVideo2.inject($('screen2'));
+           }
+
+        }
+        }
+    );
+    screen1.start(-353,0);
+    screen2.start(0,353);
+    slide = n;  
+    $('puce'+slide).set('class','puceactive');
+}
+
+function resize() {
+    var wx = window.getSize().x; 
+    var y = parseInt((window.getSize().y - 449)/2); 
+    var z = parseInt((window.getSize().y - 50)/2);
+    if (wx<1200) {       
+        $('title1').setStyle('font-size','32px');
+        $('title1').setStyle('line-height','32px');
+    }
+    if (wx-350-40<820) {
+        var x = wx-50-820;
+        var xb = x-350;
+    } else {
+        var x = parseInt((wx - 820)/2)+175;
+        var xb = 0;
+    }
+    
+    $('imgBack').setStyle('top', y+'px');
+    $('fleches').setStyle('top',z+'px');
+    $('appstore').setStyle('top',(y+470)+'px'); 
+    $('appstore').setStyle('left',(x+169)+'px'); 
+    Array.each ($$('h1'), function (title,index) {
+        title.setStyle('width', (x+500)+'px');
+    });
+    $('iphone').setStyle('top',(y-60)+'px');
+    $('iphone').setStyle('left',(x+546)+'px');
+    for (i=1; i<5; i++) { 
+        $('content'+i).setStyle('top',y+'px');
+        $('content'+i).setStyle('left',x+'px');
+        $('imgBack'+i).setStyle('left',xb+'px');
+    }
+}
+
+window.addEvent('domready', function() {
+    resize();
+    for (i=2; i<5; i++) {
+        $('imgBack'+i).fade('hide');
+        $('content'+i).fade('hide');;
+        $('content'+i).setStyle('display','block');
+    }
+    $('droite').set('class', 'd1');
+    $('gauche').set('class', 'g1');
+    $('droite').set('onclick', 'goToSlide(2)');
+    $('content1').setStyle('display','block');
+    $('imgBack').setStyle('display','block');
+    $('content1').fade(1);
+});
+
+window.addEvent('resize', function() {
+    resize();
+});
+
+</script>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+  {lang: 'fr'}
+</script></head>
+<body>
+<!--<img src="/media/yaweb/images/intro/background1.jpg" width="1920" height="1000" alt="Background" class="superbg"/>-->
+<div id="imgBack">
+<div id="imgBack4"><img src="/media/yaweb/images/intro/background4.jpg" width="2000" height="449" /></div>
+<div id="imgBack3"><img src="/media/yaweb/images/intro/background3.jpg" width="2000" height="449" /></div>
+<div id="imgBack2"><img src="/media/yaweb/images/intro/background2.jpg" width="2000" height="449" /></div>
+<div id="imgBack1"><img src="/media/yaweb/images/intro/background1.jpg" width="2000" height="449" /></div>
+</div>
+<div id="logo"><a href="#" onClick="goToSlide(1)"><img src="/media/yaweb/images/intro/logo.png" width="215" height="52" alt="Logo Yasound" /></a></div>
+<div id="content2">
+<h1 id="title2">Je crée ma radio en un instant</h1>
+<div class="screen" id="screen2">
+
+<div class="video" id="video2">
+<object width="480" height="270" id="youtube">
+<param name="movie" value="http://www.youtube.com/v/YkFaWMN6Rsg?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0">
+</param>
+<param name="allowFullScreen" value="true">
+</param>
+<param name="allowscriptaccess" value="always">
+</param>
+<embed src="http://www.youtube.com/v/YkFaWMN6Rsg?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0" type="application/x-shockwave-flash" width="480" height="270" allowscriptaccess="always" allowfullscreen="true"></embed>
+</object>
+</div>
+
+</div>
+<div id="text2">
+<table width="400" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" height="60" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon21.png" width="49" height="50" /></td>
+<td width="340" align="left" valign="middle">J'installe gratuitement l'application sur mon mobile</td>
+</tr>
+<tr>
+<td height="60" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon22.png" width="49" height="50" /></td>
+<td align="left" valign="middle">Je choisis les morceaux que j'aime</td>
+</tr>
+<tr>
+<td height="60" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon23.png" width="49" height="48" /></td>
+<td align="left" valign="middle">Ma radio est créée : elle est gratuite, légale, diffusée 24/7 sur mobiles et internet</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="content3" style="display:block">
+<h1 id="title3">Je communique avec mes amis</h1>
+<div class="screen" style="background:url(/media/yaweb/images/intro/bvideo3.png) center top no-repeat;" id="screen3">
+<div class="video" id="video3"><img src="/media/yaweb/images/intro/screen3.jpg" width="480" height="274" /></div>
+</div>
+<div id="text3">
+<table width="400" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" height="45" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon31.png" width="35" height="35" /></td>
+<td width="340" align="left" valign="middle">Je vois qui écoute ma radio</td>
+</tr>
+<tr>
+<td height="45" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon32.png" width="35" height="35" /></td>
+<td align="left" valign="middle">Je discute en direct avec la communauté</td>
+</tr>
+<tr>
+<td height="45" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon33.png" width="35" height="35" /></td>
+<td align="left" valign="middle">Je partage l'écoute avec mes amis Facebook</td>
+</tr>
+<tr>
+<td height="45" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon34.png" width="35" height="35" /></td>
+<td align="left" valign="middle">J'ai accès aux stats de ma radio</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="content4">
+<div id="screen4" style="position:absolute; top:50px; left:-30px">
+<div id="text4">
+<table width="540" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td height="100" align="center" valign="middle" style="text-align: right; color: rgb(51,51,51)">Je découvre une multitude de radios,<br/>de styles et de nouveaux talents...</td>
+</tr>
+</table>
+</div>
+
+</div>
+</div>
+<div id="content1">
+<h1 id="title1">Avec Yasound, transformer votre mobile<br/>
+en station de radio est un jeu d'enfants</h1>
+<div class="screen" id="screen1">
+<div class="video" id="video1">
+<object width="480" height="270" id="youtube">
+<param name="movie" value="http://www.youtube.com/v/ysEpLi4ZWhs?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0">
+</param>
+<param name="allowFullScreen" value="true">
+</param>
+<param name="allowscriptaccess" value="always">
+</param>
+<embed src="http://www.youtube.com/v/ysEpLi4ZWhs?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0" type="application/x-shockwave-flash" width="480" height="270" allowscriptaccess="always" allowfullscreen="true"></embed>
+</object>
+</div>
+</div>
+<div id="text1">
+<table width="360" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" height="60" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon11.png" width="49" height="50" /></td>
+<td width="300" align="left" valign="middle">Je crée ma radio en un instant,<br />
+c'est simple et gratuit</td>
+</tr>
+<tr>
+<td height="60" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon12.png" width="49" height="50" /></td>
+<td align="left" valign="middle">Je communique avec mes amis</td>
+</tr>
+<tr>
+<td height="60" align="left" valign="middle"><img src="/media/yaweb/images/intro/icon13.png" width="49" height="48" /></td>
+<td align="left" valign="middle">Je découvre une multitude de radios,<br />
+de styles et de nouveaux talents</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="iphone">
+<div id="iphonescreen">
+<div id="iphone4"><img src="/media/yaweb/images/intro/Selection.jpg" width="235" height="353" /></div>
+<div id="iphone3"><img src="/media/yaweb/images/intro/MesAmis.jpg" width="235" height="353" /></div>
+<div id="iphone2"><img src="/media/yaweb/images/intro/JeCreeMaRadio.jpg" width="235" height="353" /></div>
+<div id="iphone1"><img src="/media/yaweb/images/intro/WallRadio.jpg" width="235" height="353" /></div>
+</div>
+</div>
+<div id="fleches">
+<div id="gauche">&nbsp;</div>
+<div id="droite">&nbsp;</div>
+</div>
+<div id="appstore"><a href="http://itunes.apple.com/us/app/yasound/id492680161?ls=1&mt=8"><img src="/media/yaweb/images/intro/appstore_now.png" width="167" height="58"/></a></div>
+<div id="footer">
+<div id="puces">
+<div id="puce1" class="puceactive" onclick="goToSlide(1)"></div>
+<div id="puce2" class="puce" onclick="goToSlide(2)"></div>
+<div id="puce3" class="puce" onclick="goToSlide(3)"></div>
+<div id="puce4" class="puce" onclick="goToSlide(4)"></div>
+</div>
+<div id="menu"><a href="{% url about %}">À propos de nous</a> | <a href="{% url jobs %}">Jobs</a> | <a href="{% url press %}">Presse</a> | <a href="{% url contact %}">Contact</a></div>
+</div>
+<div id="reseaux">
+  <div id="gone">
+    <g:plusone size="medium"></g:plusone>
+  </div>
+  <div id="tweeter"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-lang="fr">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></div>
+  <div id="fb">
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like" data-href="http://www.facebook.com/yasound" data-send="true" data-width="700" data-show-faces="false" data-font="arial"></div>
+  </div>
+</div>
+</body>
+</html>

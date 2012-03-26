@@ -1,0 +1,25 @@
+{% extends "yaweb/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="middle">
+  <div class="corpo" id="content">
+  <img src="/media/yaweb/images/backContentCorpo.jpg" width="1000" height="384" alt="Bureaux open space | Yasound | © 2011" />
+  <div class="data" style="margin-right:70px; width:217px;" id="JM"><img src="/media/yaweb/images/Jean-Marc_Plueger.jpg" width="217" height="297" alt="Jean-Marc_Plueger" />
+  <h3>Jean-Marc_Plueger</h3>
+  Cofondateur, Président<br /><br />Jean-Marc a fondé la webagency CSTech et le site de musique à la demande Jiwa.<br />A part créer des startups, il aime bien aussi voyager...
+  </div>
+  <div class="data" style="margin-right:105px; width:217px;" id="Seb"><img src="/media/yaweb/images/Sebastien_Metrot.jpg" width="217" height="297" alt="Sébastien Métrot" />
+  <h3>Sébastien Métrot</h3>
+  Cofondateur, Directeur Technique<br /><br />Après avoir développé de nombreux logiciels de musique et assuré la R&D audio d'éditeurs de jeux vidéos, il rejoint la startup MXP4 où il devient Senior Director of Technology.<br />Quand il ne code pas en C++, il pratique les langues orientales et la musique.
+  </div>
+  <div class="data" style="width:360px; vertical-align:middle;" id="descriptif"><p>MP3, webradios, Youtube ou sites de streaming, les moyens pour écouter de la musique sur le net se sont multipliés. Pourtant ce n'est pas vraiment possible de partager son écoute en temps réel. Yasound appartient à une nouvelle génération de sites de musique : la génération de l'écoute sociale, qui offre à ses utilisateurs la possibilité de communiquer et d'échanger autour d'une même écoute.<br /><br /><br />Yasound a été fondé en 2011 par Jean-Marc Plueger et Sébastien Métrot.</p></div>
+  <div class="data" style="height:40px;width:960px;"></div>
+  <div id="rouge"><h2>Yasound est un nouveau service qui vous permet de créer votre radio musicale en un instant et d'échanger en temps réel avec vos amis.</h2>
+  </div>
+     {% include "yaweb/social_share.html" %}
+ 
+  </div>
+  <div id="deco" style="background-image:url(/media/yaweb/images/backCD.jpg)"></div>
+</div>
+{% endblock %}

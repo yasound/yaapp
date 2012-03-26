@@ -1,0 +1,7 @@
+@charset "utf-8";
+
+#footer.home {
+	background-image:url(../images/backFooter.gif);
+	background-position : left top;
+	background-repeat: repeat-x;
+}
