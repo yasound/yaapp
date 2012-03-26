@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config version="1" xmlns="http://www.draftlight.net/dnex/config/ns/0/">
+  <init autoplay="0" volume="80" continue="1" />
+  <color bg="#202020" icon="#ffffff" marker="#BA4709" text="#ffff00" bars="#0000ff" 
+  skin="0" skinurl="myskin.jpg" />
+  <playlist static="0" media="audio" type="m3u">http://ys-web01-vbo.alionis.net:8000/ubik.m3u</playlist>
+</config>

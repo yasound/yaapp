@@ -1,0 +1,280 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	padding: 0px;
+	margin: 0px;
+	font-family:Lucida Grande, Helvetica Neue, Helvetica, sans-serif;
+	font-size:16px;
+	background-color:#FFF;
+}
+#imgBack {
+	position: fixed;
+	width: 100%;
+	height: 449px;
+	top:2000x;
+	left:0px;
+	overflow:hidden;
+	display:none;
+}
+#imgBack1, #imgBack2, #imgBack3, #imgBack4 {
+	width:2000px;
+	height:449px;
+	position:absolute;
+	top: 0px;
+	left: 0px;
+}
+#logo {
+	width: 220px;;
+	width: 60px;
+	top: 5px;
+	left: 5px;
+	position: fixed;
+}
+img.superbg {
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:-1;
+}
+#footer {
+	height: 40px;
+	width: 100%;
+	left: 0px;
+	bottom: 0px;
+	background-color: #FFF;
+	position: fixed;
+}
+#footer #menu {
+	padding-right:20px;
+	bottom:0px;
+	font-size:12px;
+	color:#666;
+	line-height:40px;
+	text-align:right;
+	right: 0px;
+	width: 300px;
+	overflow: hidden;
+	position:absolute;
+	height:40px;
+}
+#footer #menu a {
+	text-decoration:none;
+	color:#666;
+}
+#footer #menu a:hover {
+	text-decoration:none;
+	color:#ef7b2b;
+}
+#footer #puces {
+	text-align: center;
+	bottom:5px;
+	width: 100%;
+	position:absolute;
+}
+#footer #puces .puce {
+	width:17px;
+	height:17px;
+	margin-left:4px;
+	margin-right:4px;
+	background:url(../images/intro/puce.png) bottom center no-repeat;
+	display: inline-block;
+	cursor:pointer;
+}
+#footer #puces .puceactive {
+	width:17px;
+	height:17px;
+	margin-left:4px;
+	margin-right:4px;
+	background:url(../images/intro/puce.png) top center no-repeat;
+	display: inline-block;
+	cursor: default;
+}
+#fleches {
+	position:fixed;
+	left:0px;
+	top:0px;
+	height:50px;
+	width:100%;
+}
+#fleches #gauche {
+	position: absolute;
+	width:41px;
+	height:50px;
+	top:0px;
+	left:0px
+}
+#fleches #droite {
+	position:absolute;
+	width:41px;
+	height:50px;
+	top:0px;
+	right:0px
+}
+#fleches #gauche.g1 {
+	display:none;
+}
+#fleches #gauche.g2 {
+	background:url(../images/intro/fg2.png) no-repeat;
+	cursor:pointer;
+	display:block;
+}
+#fleches #gauche.g3 {
+	background:url(../images/intro/fg3.png) no-repeat;
+	cursor:pointer;
+	display:block;
+}
+#fleches #gauche.g4 {
+	background:url(../images/intro/fg4.png) no-repeat;
+	cursor:pointer;
+	display:block;
+}
+#fleches #droite.d1 {
+	background:url(../images/intro/fd1.png) no-repeat;
+	cursor:pointer;
+	display:block;
+}
+#fleches #droite.d2 {
+	background:url(../images/intro/fd2.png) no-repeat;
+	cursor:pointer;
+	display:block;
+}
+#fleches #droite.d3 {
+	background:url(../images/intro/fd3.png) no-repeat;
+	cursor:pointer;
+	display:block;
+}
+#fleches #droite.d4 {
+	display:none;
+}
+#content1, #content2, #content3, #content4 {
+	position:fixed;
+	width: 820px;
+	height:449px;
+	color:#010c1e;
+	text-align: left;
+	top: 2000px;
+	display:none;
+}
+#content2 {
+	color:#FFF;
+}
+#content3 {
+	color:#FFF;
+}
+#content4 {
+	color:#FFF;
+	text-align:right;
+	font-size: 28px;
+	font-weight:bold;
+}
+#contentmargin1, #contentmargin2, #contentmargin3, #contentmargin4 {
+	position:absolute;
+	width: 505px;
+	height:40px;
+	right:10%;
+	background:none;
+	background-color:transparent;
+	display:none;
+}
+h1 {
+	position:absolute;
+    font-size:22pt;
+    line-height: 24pt;
+	right:320px;
+	bottom: 470px;
+	font-weight:normal;
+	margin:0px;
+	text-align:right;
+}
+#content1 h1 {
+	color:rgb(52,52,52);
+}
+#content2 h1 {
+	color:#8c8673;
+}
+#content3 h1 {
+	color:#04615c;
+}
+
+#content4 h1 {
+	color:#402212;
+}
+.screen {
+	position:relative;
+	width:505px;
+	height:285px;
+	margin-top:-20px;
+	margin-bottom:0px;
+	background:url(../images/intro/bvideo1.png) center top no-repeat;
+	background-color:transparent;
+}
+.video {
+	position:absolute;
+	left:13px;
+	top:5px;
+	background:#000;
+	width: 480px;
+	height: 274px;
+}
+#video1 {
+	top:7px;
+	background:#f2f2f0;
+	height: 270px;
+}
+#iphone {
+	position:fixed;
+	width: 274px;
+	height: 624px;
+	background:url(../images/intro/iphone.png) top center no-repeat;
+	left:0px;
+	top:2000px;
+}
+#iphonescreen {
+	overflow:hidden;
+	position:absolute;
+	top: 96px;
+	left: 23px;
+	width: 235px;
+	height:353px;
+}
+#iphone1, #iphone2, #iphone3, #iphone4 {
+	position:absolute;
+	top: 0px;
+	left: 0px;
+	width: 235px;
+	height:353px;
+	background:#FFF;
+}
+#text1, #text2, #text3, #text4 {
+	position:relative;
+	width:505px;
+	margin-left:00px	
+}
+#appstore {
+	width:167px;
+	height:53px;
+	position: absolute;
+	top:2000px;
+}
+
+#reseaux {
+	position: absolute;
+	top:0px;
+	right: 0px;
+	width : 800px;
+	height: 30px;
+	text-align:left;
+	padding: 0px;
+}
+#reseaux #gone {
+	position: absolute;
+	left:0px;
+}
+#reseaux #tweeter {
+	position: absolute;
+	left:70px;
+}
+#reseaux #fb {
+	position: absolute;
+	left:185px;
+}

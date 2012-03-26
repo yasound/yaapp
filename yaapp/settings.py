@@ -290,6 +290,7 @@ INSTALLED_APPS = (
     'yasearch',
     'yainvitation',
     'yareport',
+    'yaweb',
     'kombu.transport.django',
 )
 

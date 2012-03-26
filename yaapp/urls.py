@@ -114,7 +114,9 @@ urlpatterns = patterns('',
     (r'^status/', 'yabase.views.status'),
 
     # web front end
-    url(r'^$', 'yabase.views.web_index', name='web_index'),
+    url(r'^$', 'yaweb.views.index', name='index'),
+    url(r'^', include('yaweb.urls')),
+
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
@@ -123,6 +125,8 @@ urlpatterns = patterns('',
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
     (r'^invitation/', include('yainvitation.urls')),
+    
+    (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
     
     url(r'', include('social_auth.urls')),

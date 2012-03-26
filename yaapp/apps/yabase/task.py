@@ -1,21 +1,23 @@
 from account.models import Device
 from celery.task import task
 from django.db import transaction
+from shutil import rmtree
 from struct import unpack_from
+from utils import flush_transaction
 from yabase.models import SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
 from yasearch.utils import get_simplified_name
-from utils import flush_transaction
+import import_utils
+import logging
+import os
 import re
+import settings as yabase_settings
+import string
 import sys
 import time
 import zlib
-import string
-import settings as yabase_settings
-import import_utils
 import zlib
 
-import logging
 logger = logging.getLogger("yaapp.yabase")
 
 @task
@@ -190,11 +192,15 @@ def process_need_sync_songs():
     return process_need_sync_songs_exec()
 
 @task
-def process_upload_song(binary, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
-    sm, _messages = import_utils.import_song(binary=binary, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
+def process_upload_song(filepath, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
+    logger.debug('processing %s' % (filepath))
+    sm, _messages = import_utils.import_song(filepath=filepath, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
     if song_id and sm:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)
-        
+    path = os.path.dirname(filepath)
+    logger.debug('deleting %s' % (path))
+    rmtree(path)
+    
 @task
 def generate_preview(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
