@@ -1,4 +1,6 @@
-{% extends "yaweb/base.html" %} {% load i18n %} {% block content %}
+{% extends "yaweb/base.html" %} {% load i18n %} 
+{% block title %}{% trans "Contact" %}{% endblock %}
+{% block content %}
 <div id="middle">
 	<div class="jobs" id="content">
 		<div class="data" style="margin-right: 25px; width: 285px;">
@@ -8,7 +10,7 @@
 		<div class="data" style="width: 680px;">
 			<img src="/media/yaweb/images/bulle_rouge.gif" alt="Yasound recrute"
 				width="223" height="185" align="right" style="margin-right: -10px;" />
-			<h3 style="margin-top: 90px;">Adresse email</h3>
+			<h3 style="margin-top: 90px;">{% trans "Email Address" %}</h3>
 			<p style="margin-left: 20px">
 				<script type="text/javascript">
 					//         
@@ -29,13 +31,13 @@
 			<p style="margin-left: 20px">
 				<a href="http://www.facebook.com/Yasound" target="_blank">http://www.facebook.com/Yasound</a>
 			</p>
-			<h3>Adresse</h3>
+			<h3>{% trans "Address" %}</h3>
 			<p style="margin-left: 20px">
 				Yasound<br />144,rue des Poissonniers<br />75018 Paris France
 			</p>
 		</div>
 		<div id="rouge" style="left: 848px;">
-			<h2>Nos coordonnées</h2>
+			<h2>{% trans "Contact us" %}</h2>
 		</div>
 		{% include "yaweb/social_share.html" %}
 	</div>

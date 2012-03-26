@@ -1,4 +1,6 @@
-{% extends "yaweb/base.html" %} {% load i18n %} {% block content %}
+{% extends "yaweb/base.html" %} {% load i18n %} 
+{% block title %}{% trans "Press" %}{% endblock %}
+{% block content %}
 <div id="middle">
 	<div class="jobs" id="content">
 		<div class="data" style="margin-right: 25px; width: 285px;">
@@ -9,7 +11,7 @@
 			<img src="/media/yaweb/images/bulle_rouge.gif" alt="Yasound recrute"
 				width="223" height="185" align="right" style="margin-right: -10px;" />
 			<p style="margin-top: 90px;">
-				Vous pouvez adresser vos demandes d'information à
+				{% trans "Address your inquiries to" %}
 				<script type="text/javascript">
 					//         
 					var d = "";
@@ -21,36 +23,36 @@
 					//
 				</script>
 			</p>
-			<h3>Logotype</h3>
+			<h3>{% trans "Logo" %}</h3>
 			<ul>
-				<li><a href="/media/yaweb/presse/logo_Yasound.eps">Format
+				<li><a href="{% url download 'media/yaweb/presse/logo_Yasound.eps' %}">Format
 						EPS</a></li>
-				<li><a href="/media/yaweb/presse/logo_Yasound.jpg">Jpeg</a></li>
-				<li><a href="/media/yaweb/presse/logo_Yasound.png">PNG</a></li>
+				<li><a href="{% url download 'media/yaweb/presse/logo_Yasound.jpg' %}">Jpeg</a></li>
+				<li><a href="{% url download 'media/yaweb/presse/logo_Yasound.png' %}">PNG</a></li>
 			</ul>
-			<h3>Photographies en haute résolution</h3>
+			<h3>{% trans "High resolution photos" %}</h3>
 			<table width="660" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="220" height="286" align="center" valign="middle"><a
 						href="/media/yaweb/presse/jean-marc_plueger.tif"><img
-							src="/media/yaweb/presse/jean-marc_plueger.jpg"
+							src="{% url download 'media/yaweb/presse/jean-marc_plueger.jpg' %}"
 							alt="Jean-Marc Plueger" width="180" height="246" border="0" /></a><br />
 						Jean-Marc Plueger</td>
 					<td width="220" height="286" align="center" valign="middle"><a
-						href="/media/yaweb/presse/sebastien_metrot.tif"><img
+						href="{% url download 'media/yaweb/presse/sebastien_metrot.tif' %}"><img
 							src="/media/yaweb/presse/sebastien_metrot.jpg"
 							alt="Sébastien Métrot" width="180" height="246" border="0" /></a><br />
 						Sébastien Métrot</td>
 					<td width="220" height="286" align="center" valign="middle"><a
-						href="/media/yaweb/presse/bureau.tif"><img
-							src="/media/yaweb/presse/bureau.jpg" alt="Bureau" width="180"
-							height="246" border="0" /></a><br /> Bureau</td>
+						href="{% url download 'media/yaweb/presse/bureau.tif' %}"><img
+							src="/media/yaweb/presse/bureau.jpg" alt="{% trans 'Workstation' %}" width="180"
+							height="246" border="0" /></a><br /> {% trans 'Workstation' %}</td>
 				</tr>
 				<tr>
 					<td width="220" height="200" align="center" valign="middle"><a
-						href="/media/yaweb/presse/presse/studio.jpg"><img
-							src="/media/yaweb/presse/studiomini.jpg" alt="Le studio"
-							width="180" height="119" border="0" /></a><br /> Le studio<br /></td>
+						href="{% url download 'media/yaweb/presse/studio.jpg' %}"><img
+							src="/media/yaweb/presse/studiomini.jpg" alt="{% trans 'Office' %}"
+							width="180" height="119" border="0" /></a><br /> {% trans 'Office' %}<br /></td>
 					<td width="220" height="200" align="center" valign="middle">&nbsp;</td>
 					<td width="220" height="200" align="center" valign="middle"><br /></td>
 				</tr>
@@ -58,7 +60,7 @@
 			<p>&nbsp;</p>
 		</div>
 		<div id="rouge" style="left: 853px;">
-			<h2>Pour la presse</h2>
+			<h2>{% trans "For the Media" %}</h2>
 		</div>
 		<div id="reseaux">{% include "yaweb/social_share.html" %}</div>
 	</div>

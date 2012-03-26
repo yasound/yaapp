@@ -1,4 +1,6 @@
-{% extends "yaweb/base.html" %} {% load i18n %} {% block content %}
+{% extends "yaweb/base.html" %} {% load i18n %} 
+{% block title %}{% trans "Careers" %}{% endblock %}
+{% block content %}
 <div id="middle">
 	<div class="jobs" id="content">
 		<div class="data" style="margin-right: 25px; width: 452px;">
@@ -8,13 +10,12 @@
 		<div class="data" style="width: 500px;">
 			<img src="/media/yaweb/images/bulle_rouge.gif" alt="Yasound recrute"
 				width="223" height="185" align="right" style="margin-right: -25px" />
-			<p style="margin-top: 90px;">
-				Vous travaillerez en nos locaux de Paris 18ème sous la supervision
-				de notre Directeur Technique et rejoindrez une petite équipe
-				flexible, compétente et motivée par un projet passionant.<br />
+			<p style="margin-top: 90px;">{% blocktrans %}
+				Work in our Paris office and join our small and talented team
+				working on exciting new projects with our CTO.?{% endblocktrans %}<br/>
 			</p>
 			<p>
-				Intéressez ? Envoyez nous un email à
+				{% trans "Write us at" %}
 				<script type="text/javascript">
 					//         
 					var d = "";
@@ -26,46 +27,50 @@
 					//
 				</script>
 			</p>
-			<h3>Développeur mobile</h3>
-			<p>Vous participerez au développement du service Yasound sur
-				mobile (iOS + Android)</p>
+			{% blocktrans %}
+			<h3>Mobile Software Developer</h3>
+			<p>You will take part in the development of Yasound's mobile
+				service (iOS + Android)</p>
 			<ul>
-				<li>Maitrise du C++.</li>
-				<li>Connaissances d'ObjectiveC et de JNI appréciées.</li>
-				<li>Au moins une première expérience pratique de dev sur iOS ou
-					Android.</li>
-				<li>Goût et talent pour le développement d'interfaces
-					graphiques originales et efficaces.</li>
-				<li>Goût pour le dev graphique et audio.</li>
-				<li>Bonne connaissances des problématiques de streaming audio.</li>
-				<li>Outils de gestion revisions: Git + Github.</li>
-				<li>Sensibilité musicale.</li>
-				<li>Anglais technique requis.</li>
-				<li>Curieux, rigoureux, efficace, passionné et sympa.<br />
+				<li>Good C++ developer</li>
+				<li>Knowledge of ObjectiveC and JNI appreciated.</li>
+				<li>At least basic practical experience with dev on iOS or
+					Android</li>
+				<li>Taste and talent for developing innovative and effective
+					graphical user interfaces.</li>
+				<li>Taste for graphic and audio development</li>
+				<li>An understanding of the challenges of streaming audio.</li>
+				<li>Revision control systems: Git + Github.</li>
+				<li>Love of music</li>
+				<li>Tech English required.</li>
+				<li>Must be curious, hard-working, efficient, passionate, and
+					friendly. <br />
 				</li>
 			</ul>
-			<h3>Développeur web et serveur d'application</h3>
-			<p>Vous participerez au développement du service Yasound (web et
-				serveur).</p>
+			<h3>Web and Server Application Developer</h3>
+			<p>You will take part in the development of the Yasound service
+				(web server).</p>
 			<ul>
-				<li>Maitrise: Python, Node/Javascript, Php, HTML 5, CSS.</li>
-				<li>Bonne connaissance du dev de serveurs d'application sur
-					linux.</li>
-				<li>Algorithmique / optimisation / scalabilité.</li>
-				<li>Bonne connaissances des problématiques de streaming audio
-					sur le web (Icecast2, rstp, etc)</li>
-				<li>SQL (mysql / postgresql).</li>
-				<li>Outils de gestion revisions: Git + Github.</li>
-				<li>Anglais technique requis.</li>
-				<li>Sensibilité musicale.</li>
-				<li>Curieux, rigoureux, efficace, passionné et sympa.<br />
+				<li>Good knowledge of Python, Node/Javascript, PHP, HTML 5,
+					CSS.</li>
+				<li>Good knowledge of dev application servers on Linux.</li>
+				<li>Algorithmic / optimization / scalability.</li>
+				<li>An understanding of the challenges of streaming audio on
+					the web (Icecast2, RSTP, etc.)</li>
+				<li>SQL (MySQL / PostgreSQL).</li>
+				<li>Revision control systems: Git + Github.</li>
+				<li>Tech English required.</li>
+				<li>Love of music.</li>
+				<li>Must be curious, hard-working, efficient, passionate, and
+					friendly. <br />
 				</li>
 			</ul>
-			<h3>Stagiaires</h3>
+			<h3>Interns</h3>
 			<p>
-				Vous recherchez un stage dans le domaine du développement web ou
-				mobile, marketing online ou encore community management ? Envoyez
-				nous un email à
+				Interested in an internship in the field in web and mobile
+				development, online marketing, or online community management? Send
+				us an email at
+            {% endblocktrans %}
 				<script type="text/javascript">
 					//         
 					var d = "";
@@ -79,9 +84,9 @@
 			</p>
 		</div>
 		<div id="rouge">
-			<h2>Yasound recrute</h2>
+			<h2>{% trans "Yasound's hiring!" %}</h2>
 		</div>
 		<div id="reseaux">{% include "yaweb/social_share.html" %}</div>
 	</div>
 </div>
-	{% endblock %} >
+{% endblock %} >
