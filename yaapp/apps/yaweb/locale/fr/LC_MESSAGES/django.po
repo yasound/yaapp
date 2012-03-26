@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-26 13:46+0200\n"
+"POT-Creation-Date: 2012-03-26 14:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,43 +74,59 @@ msgid ""
 msgstr "Yasound est un nouveau service qui vous permet de créer votre radio musicale "
 "en un instant et d'échanger en temps réel avec vos amis."
 
+#: templates/yaweb/base.html:7
+#: templates/yaweb/base.html.py:11
+msgid "YASOUND : There’s no need to listen to music alone anymore"
+msgstr "YASOUND : N'écoutez plus seul votre musique."
+
+#: templates/yaweb/base.html:8
+msgid "Company"
+msgstr "Compagnie"
+
+#: templates/yaweb/base.html:14
+msgid ""
+"With Yasound, there’s no need to listen to music alone anymore. Create your "
+"own radio station instantly and share with your friends in real time online "
+"and on your phone."
+msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile."
+
 #: templates/yaweb/base.html:58
 #: templates/yaweb/base.html.py:60
-#: templates/yaweb/base.html:103
-#: templates/yaweb/base.html.py:105
+#: templates/yaweb/base.html:102
+#: templates/yaweb/base.html.py:104
 msgid "About us"
 msgstr "A propos de nous"
 
 #: templates/yaweb/base.html:63
 #: templates/yaweb/base.html.py:65
-#: templates/yaweb/base.html:108
-#: templates/yaweb/base.html.py:110
+#: templates/yaweb/base.html:107
+#: templates/yaweb/base.html.py:109
 #: templates/yaweb/jobs.html:2
 msgid "Careers"
 msgstr "Jobs"
 
 #: templates/yaweb/base.html:68
 #: templates/yaweb/base.html.py:70
-#: templates/yaweb/base.html:113
-#: templates/yaweb/base.html.py:115
+#: templates/yaweb/base.html:112
+#: templates/yaweb/base.html.py:114
 #: templates/yaweb/press.html:2
 msgid "Press"
 msgstr "Presse"
 
 #: templates/yaweb/base.html:73
 #: templates/yaweb/base.html.py:75
-#: templates/yaweb/base.html:118
-#: templates/yaweb/base.html.py:120
+#: templates/yaweb/base.html:117
+#: templates/yaweb/base.html.py:119
 #: templates/yaweb/contact.html:2
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/yaweb/base.html:98
-#: templates/yaweb/base.html.py:100
+#: templates/yaweb/base.html:97
+#: templates/yaweb/base.html.py:99
 msgid "Home page"
 msgstr "Accueil"
 
-#: templates/yaweb/base.html:123
+#: templates/yaweb/base.html:122
 msgid "© 2011 - All rights reserved"
 msgstr "© 2011 - Tous droits réservés"
 
@@ -186,37 +202,32 @@ msgid ""
 "\t\t\t\tdevelopment, online marketing, or online community management? Send\n"
 "\t\t\t\tus an email at\n"
 "            "
-msgstr "\n<h3>Développeur mobile</h3>"
-"        <p>Vous participerez au développement du service Yasound sur mobile (iOS + Android)</p>"
-"      <ul>"
-"        <li>Maitrise du C++.</li>"
-"        <li>          Connaissances d'ObjectiveC et de JNI appréciées.</li>"
-"        <li>          Au moins une première expérience pratique de dev sur iOS ou Android.</li>"
-"        <li>          Goût et talent pour le développement d'interfaces graphiques originales et efficaces.</li>"
-"        <li>          Goût pour le dev graphique et audio.</li>"
-"        <li>          Bonne connaissances des problématiques de streaming audio.</li>"
-"        <li>          Outils de gestion revisions: Git + Github.</li>"
-"        <li>          Sensibilité musicale.</li>"
-"        <li>          Anglais technique requis.</li>"
-"        <li>          Curieux, rigoureux, efficace, passionné et sympa.<br />"
-"        </li>"
-"      </ul>"
-"      <h3>Développeur web et serveur d'application</h3>"
-"        <p>Vous participerez au développement du service Yasound (web et serveur).</p>"
-"      <ul>"
-"        <li>Maitrise: Python, Node/Javascript, Php, HTML 5, CSS.</li>"
-"        <li> Bonne connaissance du dev de serveurs d'application sur linux.</li>"
-"        <li> Algorithmique / optimisation / scalabilité.</li>"
-"        <li> Bonne connaissances des problématiques de streaming audio sur le web (Icecast2, rstp, etc)</li>"
-"        <li> SQL (mysql / postgresql).</li>"
-"        <li> Outils de gestion revisions: Git + Github.</li>"
-"        <li> Anglais technique requis.</li>"
-"        <li> Sensibilité musicale.</li>"
-"        <li> Curieux, rigoureux, efficace, passionné et sympa.<br />"
-"        </li>"
-"      </ul>"
-"      <h3>Stagiaires</h3>"
-"      <p>Vous recherchez un stage dans le domaine du développement web ou mobile, marketing online ou encore community management ? Envoyez nous un email à "
+msgstr "\n"
+"<h3>Développeur mobile</h3>        <p>Vous participerez au développement du "
+"service Yasound sur mobile (iOS + Android)</p>      <ul>        <li>Maitrise "
+"du C++.</li>        <li>          Connaissances d'ObjectiveC et de JNI "
+"appréciées.</li>        <li>          Au moins une première expérience "
+"pratique de dev sur iOS ou Android.</li>        <li>          Goût et talent "
+"pour le développement d'interfaces graphiques originales et efficaces.</"
+"li>        <li>          Goût pour le dev graphique et audio.</li>        "
+"<li>          Bonne connaissances des problématiques de streaming audio.</"
+"li>        <li>          Outils de gestion revisions: Git + Github.</"
+"li>        <li>          Sensibilité musicale.</li>        <li>          "
+"Anglais technique requis.</li>        <li>          Curieux, rigoureux, "
+"efficace, passionné et sympa.<br />        </li>      </ul>      "
+"<h3>Développeur web et serveur d'application</h3>        <p>Vous "
+"participerez au développement du service Yasound (web et serveur).</p>      "
+"<ul>        <li>Maitrise: Python, Node/Javascript, Php, HTML 5, CSS.</"
+"li>        <li> Bonne connaissance du dev de serveurs d'application sur "
+"linux.</li>        <li> Algorithmique / optimisation / scalabilité.</"
+"li>        <li> Bonne connaissances des problématiques de streaming audio "
+"sur le web (Icecast2, rstp, etc)</li>        <li> SQL (mysql / postgresql).</"
+"li>        <li> Outils de gestion revisions: Git + Github.</li>        <li> "
+"Anglais technique requis.</li>        <li> Sensibilité musicale.</li>        "
+"<li> Curieux, rigoureux, efficace, passionné et sympa.<br />        </"
+"li>      </ul>      <h3>Stagiaires</h3>      <p>Vous recherchez un stage "
+"dans le domaine du développement web ou mobile, marketing online ou encore "
+"community management ? Envoyez nous un email à "
 
 #: templates/yaweb/jobs.html:87
 msgid "Yasound's hiring!"
