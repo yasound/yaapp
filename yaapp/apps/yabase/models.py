@@ -718,6 +718,7 @@ class Radio(models.Model):
         url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
         return url
         
+        
     class Meta:
         db_name = u'default'
         
@@ -799,7 +800,6 @@ class RadioUser(models.Model):
     radio = models.ForeignKey(Radio, verbose_name=_('radio'))
     user = models.ForeignKey(User, verbose_name=_('user'))
     
-    
     mood = models.CharField(max_length=1, choices=yabase_settings.MOOD_CHOICES, default=yabase_settings.MOOD_NEUTRAL)
     favorite = models.BooleanField(default=False)
     connected = models.BooleanField(default=False)
@@ -821,7 +821,7 @@ class RadioUser(models.Model):
         same_favorite = False
         just_connected = False
         just_started_listening = False
-        if self.pk is not None:
+        if self.pk is not None: # ie : not RadioUser creation
             orig = RadioUser.objects.get(pk=self.pk)
             if orig.favorite == self.favorite:
                 same_favorite = True
@@ -829,15 +829,15 @@ class RadioUser(models.Model):
                 just_connected = True
             if self.listening == True and orig.listening == False:
                 just_started_listening = True 
+        else:
+            if self.connected == True:
+                just_connected = True
+            if self.listening == True:
+                just_started_listening = True 
         super(RadioUser, self).save(*args, **kwargs)
         if not same_favorite:
             radio = self.radio
-            if self.favorite:
-                radio.favorites += 1
-            else:
-                radio.favorites -= 1
-                if radio.favorites < 0:
-                    radio.favorites = 0
+            radio.favorites = RadioUser.objects.filter(radio=radio, favorite=True).count()
             radio.save()
             
         if just_connected:
