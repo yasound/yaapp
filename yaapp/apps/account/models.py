@@ -161,9 +161,11 @@ class UserProfile(models.Model):
         
     def scan_friends(self):
         logger.debug('scanning %s' % (unicode(self.id)))
+        friend_count = 0
+        yasound_friend_count = 0
         if self.account_type == account_settings.ACCOUNT_TYPE_YASOUND:
             logger.debug('skipping scan_friends of %s, account = %s' % (unicode(self.id), self.account_type))
-            return
+            return friend_count, yasound_friend_count
         
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             graph = GraphAPI(self.facebook_token)
@@ -172,15 +174,17 @@ class UserProfile(models.Model):
                 friends_response = graph.get('me/friends')
             except GraphAPI.Error:
                 logger.error('GraphAPI exception error')
-                return
+                return friend_count, yasound_friend_count
             if not friends_response.has_key('data'):
                 logger.info('No friend data')
-                return
+                return friend_count, yasound_friend_count
             friends_data = friends_response['data']
-            logger.debug('found %d facebook friends', len(friends_data))
+            friend_count = len(friends_data)
+            logger.debug('found %d facebook friends', friend_count)
             friends_ids = [f['id'] for f in friends_data]
             friends = User.objects.filter(userprofile__facebook_uid__in=friends_ids)
-            logger.debug('among them, %d are registered at yasound', len(friends))
+            yasound_friend_count = len(friends)
+            logger.debug('among them, %d are registered at yasound', yasound_friend_count)
 
             self.friends = friends
             self.save()
@@ -197,6 +201,7 @@ class UserProfile(models.Model):
             friends = User.objects.filter(userprofile__twitter_uid__in=friends_ids)
             self.friends = friends
             self.save()
+        return friend_count, yasound_friend_count
             
     def update_with_facebook_picture(self):
         if self.account_type != account_settings.ACCOUNT_TYPE_FACEBOOK:

@@ -1,9 +1,10 @@
 from account.models import UserProfile
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.test import TestCase
-
 from yasearch.indexer import erase_index
 import settings as account_settings
+import task
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -101,4 +102,8 @@ class TestFacebook(TestCase):
         
         self.assertTrue(self.seb in self.jerome.get_profile().friends.all())
         self.assertTrue(self.jerome in self.seb.get_profile().friends.all())
-        
+    
+    def test_scan_task(self):
+        task.scan_friends_task()
+        self.assertEquals(cache.get('total_friend_count'), 16)
+        self.assertEquals(cache.get('total_yasound_friend_count'), 1)

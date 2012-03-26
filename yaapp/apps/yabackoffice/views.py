@@ -1,5 +1,4 @@
 from account.models import UserProfile
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -14,6 +13,7 @@ from django.shortcuts import render_to_response, get_object_or_404, \
     get_list_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
@@ -21,13 +21,14 @@ from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid
 from yabackoffice.models import BackofficeRadio
 from yabase import settings as yabase_settings
-from yabase.models import Radio, SongInstance, WallEvent, RadioUser,\
+from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
+import datetime
 import simplejson as json
 import utils as yabackoffice_utils
-import datetime
+from django.core.cache import cache
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -418,6 +419,9 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     except:
         overall_listening_time_str = _('Unavailable')
         
+    total_friend_count = cache.get('total_friend_count')
+    if total_friend_count is None:
+        total_friend_count = _('Unavailable')
         
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
@@ -428,7 +432,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "favorite_count": RadioUser.objects.filter(favorite=True).count(),
         "yasound_friend_count": UserProfile.objects.all().aggregate(Count('friends'))['friends__count'],
         "listening_time": overall_listening_time_str,
-        "uploaded_song_count" : YasoundSong.objects.filter(id__gt=2059600).count()
+        "uploaded_song_count" : YasoundSong.objects.filter(id__gt=2059600).count(),
+        "total_friend_count": total_friend_count
     }, context_instance=RequestContext(request))  
 
 
