@@ -1,4 +1,5 @@
 from account.models import UserProfile
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -6,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
+from django.db.models.aggregates import Sum
 from django.http import HttpResponseRedirect, HttpResponseRedirect, HttpResponse, \
     HttpResponseForbidden, Http404
 from django.shortcuts import render_to_response, get_object_or_404, \
@@ -19,11 +21,13 @@ from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid
 from yabackoffice.models import BackofficeRadio
 from yabase import settings as yabase_settings
-from yabase.models import Radio, SongInstance, WallEvent, RadioUser
+from yabase.models import Radio, SongInstance, WallEvent, RadioUser,\
+    SongMetadata
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 import simplejson as json
 import utils as yabackoffice_utils
+import datetime
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -407,6 +411,14 @@ def radios_stats_created(request):
 def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     if not request.user.is_superuser:
         raise Http404()
+    
+    overall_listening_time = Radio.objects.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
+    try:
+        overall_listening_time_str = datetime.timedelta(overall_listening_time)
+    except:
+        overall_listening_time_str = _('Unavailable')
+        
+        
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
         "radio_count": Radio.objects.all().count(),
@@ -414,7 +426,9 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
         "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
         "favorite_count": RadioUser.objects.filter(favorite=True).count(),
-        "yasound_friend_count": UserProfile.objects.all().aggregate(Count('friends'))['friends__count']
+        "yasound_friend_count": UserProfile.objects.all().aggregate(Count('friends'))['friends__count'],
+        "listening_time": overall_listening_time_str,
+        "uploaded_song_count" : YasoundSong.objects.filter(id__gt=2059600).count()
     }, context_instance=RequestContext(request))  
 
 
