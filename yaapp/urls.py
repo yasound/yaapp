@@ -133,6 +133,10 @@ urlpatterns = patterns('',
     url(r'^login/$', 'account.views.login', name="login"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
 
+    # facebook update notification
+    url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
+    
+
     (r'^robots\.txt$', direct_to_template,
      {'template': 'robots.txt', 'mimetype': 'text/plain'}),
 )

@@ -218,7 +218,11 @@ class UserProfile(models.Model):
     def update_with_social_picture(self):
         if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             self.update_with_facebook_picture()
-            
+    
+    def update_with_social_data(self):
+        self.update_with_social_picture()
+        self.scan_friends()
+        
     def authenticated(self):
         d = datetime.datetime.now()
         self.last_authentication_date = d
