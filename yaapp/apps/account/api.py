@@ -153,7 +153,7 @@ class SocialAuthentication(Authentication):
             email = params[EMAIL_PARAM_NAME]
         
         username = build_social_username(uid, account_type)
-        if account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+        if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
             
             if not facebook_profile:
@@ -205,7 +205,7 @@ class SocialAuthentication(Authentication):
                 radio.create_name(user)
                 print 'facebook user created'
                 return True
-        elif account_type == account_settings.ACCOUNT_TYPE_TWITTER:            
+        elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:            
             TOKEN_SECRET_PARAM_NAME = 'token_secret'
             if not params.has_key(TOKEN_SECRET_PARAM_NAME):
                 return False
