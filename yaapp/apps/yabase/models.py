@@ -514,6 +514,7 @@ class Radio(models.Model):
         self.save()
         
         song.last_play_time = datetime.datetime.now()
+        song.play_count += 1
         song.save()
         self.fill_next_songs_queue()
         
