@@ -417,6 +417,12 @@ class TestImportCover(TestCase):
         self.assertIsNotNone(data)
         self.assertEquals(extension, '.jpg')
 
+    def test_mp3_with_cover2(self):
+        importer = SongImporter()
+        data, extension = importer.find_song_cover_data('./apps/yabase/fixtures/artwork/with_cover2.mp3')
+        self.assertIsNotNone(data)
+        self.assertEquals(extension, '.png')
+
     def test_m4a_without_cover(self):
         importer = SongImporter()
         data, extension = importer.find_song_cover_data('./apps/yabase/fixtures/artwork/without_cover.m4a')
