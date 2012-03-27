@@ -65,7 +65,7 @@ class Command(BaseCommand):
                              object='user', 
                              fields='email,friends,name,picture', 
                              callback_url=callback_url,
-                             secret_token=settings.FACEBOOK_REALTIME_VERIFY_TOKEN) 
+                             verify_token=settings.FACEBOOK_REALTIME_VERIFY_TOKEN) 
             logger.info(res)
         logger.info("done")        
         
