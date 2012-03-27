@@ -63,7 +63,7 @@ class Command(BaseCommand):
             )
             res = graph.post('subscriptions', 
                              object='user', 
-                             fields='email,friends,name,picture', 
+                             fields='email,friends,name', 
                              callback_url=callback_url,
                              verify_token=settings.FACEBOOK_REALTIME_VERIFY_TOKEN) 
             logger.info(res)
