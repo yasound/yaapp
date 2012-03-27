@@ -1,0 +1,45 @@
+{% load i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>{% trans "YASOUND | Sounds like you" %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="Yasound SAS" />
+<meta name="copyright" content="Yasound SAS" />
+<meta http-equiv="Cache-control" content="public" />
+<link rel="icon" type="image/jpeg" href="/media/yaweb/mobile/images/icon.jpg" />
+<link href="/media/yaweb/mobile/css/mobile.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <img id="logo" src="/media/yaweb/mobile/images/logo.png"/>
+
+<p id="chapo">
+{% trans "With Yasound, <br/>turn your smartphone into a radio station." %}
+</p>
+
+<div id="video">
+
+
+<param name="movie" value="http://www.youtube.com/v/ysEpLi4ZWhs?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0">
+</param>
+<param name="allowFullScreen" value="true">
+</param>
+<param name="allowscriptaccess" value="always">
+</param>
+<embed class="embed" src="http://www.youtube.com/watch?v=ysEpLi4ZWhs" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed>
+
+</div>
+
+    <a href="http://itunes.apple.com/us/app/yasound/id492680161?ls=1&mt=8"><img class="button" src="/media/yaweb/mobile/images/{{request.LANGUAGE_CODE}}/now_appStore.png"/></a>
+
+</div>
+    
+</body>
+
+</html>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-26 14:57+0200\n"
+"POT-Creation-Date: 2012-03-27 06:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,7 +88,9 @@ msgid ""
 "With Yasound, there’s no need to listen to music alone anymore. Create your "
 "own radio station instantly and share with your friends in real time online "
 "and on your phone."
-msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile."
+msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
+"amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre "
+"mobile."
 
 #: templates/yaweb/base.html:58
 #: templates/yaweb/base.html.py:60
@@ -141,6 +143,14 @@ msgstr "Adresse"
 #: templates/yaweb/contact.html:40
 msgid "Contact us"
 msgstr "Nos coordonnées"
+
+#: templates/yaweb/index_mobile.html:6
+msgid "YASOUND | Sounds like you"
+msgstr "YASOUND | Ma radio, c'est moi"
+
+#: templates/yaweb/index_mobile.html:23
+msgid "With Yasound, <br/>turn your smartphone into a radio station."
+msgstr "Avec Yasound, <br/>transformez votre mobile en station de radio."
 
 #: templates/yaweb/jobs.html:13
 msgid ""

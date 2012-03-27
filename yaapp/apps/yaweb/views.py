@@ -4,8 +4,12 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import settings as yaweb_settings
 import mimetypes, os
+from django_mobile import get_flavour
 
-def index(request, template_name='yaweb/index.html'):
+def index(request, template_name='yaweb/index.html', template_name_mobile='yaweb/index_mobile.html'):
+    if get_flavour() == 'mobile':
+        template_name = template_name_mobile
+
     return render_to_response(template_name, {
         'current_page': 'index',
     }, context_instance=RequestContext(request))  

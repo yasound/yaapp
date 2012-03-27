@@ -15,7 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from forms import SelectionForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata
+from shutil import rmtree
 from task import process_playlists, process_upload_song
+from tempfile import mkdtemp
 from yaref.models import YasoundSong
 import datetime
 import import_utils
@@ -26,8 +28,6 @@ import settings as yabase_settings
 import time
 import uuid
 import yabase.settings as yabase_settings
-from tempfile import mkdtemp
-from shutil import rmtree
 
 
 logger = logging.getLogger("yaapp.yabase")

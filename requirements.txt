@@ -25,3 +25,4 @@ sorl-thumbnail
 unidecode
 fuzzy
 kombu
+django-mobile
