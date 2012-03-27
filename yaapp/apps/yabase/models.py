@@ -297,6 +297,11 @@ class RadioManager(models.Manager):
             for metadata in metadatas:
                 song_instance = SongInstance(metadata=metadata, playlist=playlist)
                 song_instance.save()
+                
+    def fix_favorites(self):
+        for r in self.all():
+            r.favorites = RadioUser.objects.filter(radio=r, favorite=True).count()
+            r.save()
 
 class Radio(models.Model):
     objects = RadioManager()
