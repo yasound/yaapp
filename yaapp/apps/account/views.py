@@ -88,12 +88,17 @@ def _parse_facebook_item(item):
     
 def facebook_update(request):
     if request.method == 'GET':
-        try:
-            if request.GET['hub_mode'] == 'subscribe' and \
-               request.GET['hub_verify_token'] == settings.FACEBOOK_REALTIME_VERIFY_TOKEN:
-                    return HttpResponse(request.GET['hub_challenge'])
-        except Exception, _e:
-            return HttpResponseForbidden()
+        logger.debug('received facebook_update verification')
+        hub_mode = request.REQUEST.get('hub_mode')
+        hub_verify_token = request.REQUEST.get('hub_verify_token')
+        hub_challenge = request.REQUEST.get('hub_challenge')
+        logger.debug('hub_mode = %s' % (hub_mode))
+        logger.debug('hub_verify_token = %s' % (hub_verify_token))
+        logger.debug('hub_challenge = %s' % (hub_challenge))
+        if hub_mode == 'subscribe' and \
+           hub_verify_token == settings.FACEBOOK_REALTIME_VERIFY_TOKEN:
+            return HttpResponse(hub_challenge)
+        return HttpResponseForbidden()
 
     elif request.method == 'POST':
         logger.debug('received update from facebook')
