@@ -1,33 +1,35 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save, pre_delete
-from tastypie.models import create_api_key
-from tastypie.models import ApiKey
-from yabase.models import Radio, RadioUser
 from django.conf import settings as yaapp_settings
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
+from django.db import models
+from django.db.models.aggregates import Count
+from django.db.models.signals import post_save, pre_delete
+from django.utils.translation import ugettext_lazy as _
+from facepy import GraphAPI
+from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+from social_auth.signals import socialauth_not_registered
+from sorl.thumbnail import ImageField, get_thumbnail
+from tastypie.models import ApiKey, create_api_key
+from yabase.models import Radio, RadioUser
+import datetime
+import json
+import logging
 import settings as account_settings
 import tweepy
-from facepy import GraphAPI
-import json
 import urllib
-from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 
-from social_auth.signals import socialauth_not_registered
-from sorl.thumbnail import ImageField
-from sorl.thumbnail import get_thumbnail
 
-from django.core.files.base import ContentFile
-import datetime
 
-import logging
 logger = logging.getLogger("yaapp.account")
 
 class UserProfileManager(models.Manager):
+    def yasound_friend_count(self):
+        return self.all().aggregate(Count('friends'))['friends__count']
+    
     def search_user_fuzzy(self, search_text, limit=5):
         users = yasearch_search.search_user(search_text, remove_common_words=True)
         results = []
