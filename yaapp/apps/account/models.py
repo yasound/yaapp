@@ -46,6 +46,33 @@ class UserProfileManager(models.Manager):
         return sorted_results[:limit]
 
 class UserProfile(models.Model):
+    """
+    Store usefule informations about user.
+    
+    account_type can handle multiple values :
+     * single ACCOUNT_TYPE_* values
+     * multiple ACCOUNT_MULT_* values
+     
+    Example of valid account_type:
+    
+    >> account_type = 'TWITTER'   # only twitter
+    >> account_type = 'TW,FB'     # twitter and facebook
+    >> account_type = 'FACEBOOK'  # only facebook
+    >> account_type = 'FB'        # only facebook
+    >> account_type = 'FB,TW,YA'  # facebook, twitter, yasound
+    
+    Instead of checking the account_type field, you should use the following property:
+    
+    >> facebook_enabled
+    >> twitter_enabled
+    >> yasound_enabled
+    
+    The following methods handle the account_type values:
+    
+    >> add_account_type()
+    >> remove_account_type()
+    
+    """
     objects = UserProfileManager()
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(max_length = 60, blank=True)
@@ -78,6 +105,9 @@ class UserProfile(models.Model):
             account_settings.ACCOUNT_MULT_YASOUND in self.account_type
         
     def convert_to_multi_account_type(self, commit=True):
+        """
+        Convert a single account type to a potential multi account type
+        """
         account_type = self.account_type
         if account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
             account_type = account_settings.ACCOUNT_MULT_FACEBOOK
