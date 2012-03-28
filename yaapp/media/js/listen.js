@@ -2,20 +2,13 @@ $(document).ready(function() {
 	soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs live
 	soundManager.preferFlash = true;
 	soundManager.useHTML5Audio = true;
-	soundManager.debugMode = true;
+	soundManager.debugMode = false;
+	soundManager.useFlashBlock = true;
 	var mySound = undefined;
 	var soundConfig = {
 	    id: 'yasoundMainPlay',
 	    url: g_radio_url,
 	    stream: true,
-	    onplay: function() {
-	    	$('#play i').removeClass('icon-pause');
-	    	$('#play i').addClass('icon-stop');
-	    },
-	    onstop: function() {
-	    	$('#play i').removeClass('icon-stop');
-	    	$('#play i').addClass('icon-play');
-	    }
 	}
 	soundManager.onready(function(){
 	  mySound = soundManager.createSound(soundConfig);
@@ -24,17 +17,18 @@ $(document).ready(function() {
 	});
 
 	soundManager.ontimeout(function(){
-		alert('Error, cannot load stream, please reload page');
 	});
 
 	$('#play').click(function() {
 	  if (typeof mySound === "undefined") {
 		  mySound = soundManager.createSound(soundConfig);
 		  mySound.play();
+  		  $('#play i').removeClass('icon-pause').addClass('icon-stop');
 	   	  $('#volume-position').css("width", mySound.volume + "%");
 	  } else {
 		  mySound.destruct();
 		  mySound = undefined;
+	      $('#play i').removeClass('icon-stop').addClass('icon-play');
 	  }
 	});
 	
