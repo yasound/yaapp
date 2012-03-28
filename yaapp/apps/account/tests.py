@@ -1,6 +1,7 @@
 from account.models import UserProfile
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from yasearch.indexer import erase_index
 import settings as account_settings
@@ -196,3 +197,82 @@ class TestFacebook(TestCase):
         task.scan_friends_task()
         self.assertEquals(cache.get('total_friend_count'), 16)
         self.assertEquals(cache.get('total_yasound_friend_count'), 1)
+
+    def test_facebook_update(self):
+        json = """
+{
+"object": "user",
+"entry": 
+[
+    {
+        "uid": 1335845740,
+        "changed_fields": 
+        [
+            "name",
+            "picture"
+        ],
+       "time": 232323
+    },
+    {
+        "uid": 1234,
+        "changed_fields": 
+        [
+            "friends"
+        ],
+       "time": 232325
+    }
+]
+}
+"""        
+        self.client.post(reverse('facebook_update'), json, content_type='application/json')             
+
+        json = """
+{
+"object": "user",
+"entry": 
+    {
+        "uid": 1335845740,
+        "changed_fields": 
+        [
+            "name",
+            "picture"
+        ],
+       "time": 232323
+    }
+}
+"""        
+        self.client.post(reverse('facebook_update'), json, content_type='application/json')             
+
+        json = """
+[{
+"object": "user",
+"entry": 
+    {
+        "uid": 1335845740,
+        "changed_fields": 
+        [
+            "name",
+            "picture"
+        ],
+       "time": 232323
+    }
+}]
+"""        
+        self.client.post(reverse('facebook_update'), json, content_type='application/json')             
+
+        json = """
+[{
+"object": "user",
+"entry": 
+    {
+        "uid": 1460646148,
+        "changed_fields": 
+        [
+            "name",
+            "picture"
+        ],
+       "time": 232323
+    }
+}]
+"""        
+        self.client.post(reverse('facebook_update'), json, content_type='application/json')             

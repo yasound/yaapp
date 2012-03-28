@@ -1,12 +1,17 @@
 from check_request import check_api_key_Authentication, check_http_method
-from django.http import HttpResponse
+from django.conf import settings
+from django.contrib.messages.api import get_messages
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from models import User, UserProfile
-import datetime
-from django.contrib.messages.api import get_messages
 from social_auth import __version__ as version
+import datetime
+import simplejson
+
+import logging
+logger = logging.getLogger("yaapp.account")
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -56,3 +61,53 @@ def error(request, template_name='account/login_error.html'):
                                              'messages': messages},
                               RequestContext(request))
     
+def _parse_facebook_item(item):
+    if 'object' not in item:
+        return
+    
+    object_value = item['object']
+    if object_value != 'user':
+        return
+    
+    if 'entry' not in item:
+        return
+    
+    entries = item['entry']
+    if type(entries) != type([]):
+        entries = [entries]
+    for entry in entries:
+        if 'uid' in entry:
+            uid = entry['uid']
+            try:
+                logger.debug("looking for info about %s" % (uid))
+                user_profile = UserProfile.objects.get(facebook_uid=uid)
+                user_profile.update_with_social_data()
+            except:
+                logger.error("cannot find user profile with given uid: %s" % (uid))
+                pass
+    
+def facebook_update(request):
+    if request.method == 'GET':
+        logger.debug('received facebook_update verification')
+        hub_mode = request.REQUEST.get('hub_mode')
+        hub_verify_token = request.REQUEST.get('hub_verify_token')
+        hub_challenge = request.REQUEST.get('hub_challenge')
+        logger.debug('hub_mode = %s' % (hub_mode))
+        logger.debug('hub_verify_token = %s' % (hub_verify_token))
+        logger.debug('hub_challenge = %s' % (hub_challenge))
+        if hub_mode == 'subscribe' and \
+           hub_verify_token == settings.FACEBOOK_REALTIME_VERIFY_TOKEN:
+            return HttpResponse(hub_challenge)
+        return HttpResponseForbidden()
+
+    elif request.method == 'POST':
+        logger.debug('received update from facebook')
+        json_data =  simplejson.loads(request.read())
+        logger.debug(json_data)
+        
+        if type(json_data) == type([]):
+            for item in json_data:
+                _parse_facebook_item(item)
+        else:
+            _parse_facebook_item(json_data) 
+        return HttpResponse("OK")
