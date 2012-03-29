@@ -1,20 +1,14 @@
 from account.models import UserProfile
-from django.contrib.auth.models import User
-from yabase import settings as yabase_settings
-from yabase.models import Radio, WallEvent, RadioUser
 from django.conf import settings
-from yabase import signals as yabase_signals
-
+from django.contrib.auth.models import User
+from yabase import settings as yabase_settings, signals as yabase_signals
+from yabase.models import Radio, WallEvent, RadioUser
+from django.db.models import signals
 
 class MetricsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
-        
-        self.metrics_glob           = self.db.metrics.glob
-        self.metrics_radio_hourly   = self.db.metrics.radio.hourly
-        self.metrics_radio_daily    = self.db.metrics.radio.daily
-        self.metrics_radio_monthly  = self.db.metrics.radio.monthly
-        self.metrics_radio_yearly   = self.db.metrics.radio.yearly
+        self.metrics_glob = self.db.metrics.glob
         
     def _get_hour_timestamp(self):
         return None
@@ -48,11 +42,56 @@ class MetricsManager():
 
 def user_stopped_listening_handler(radio, user, duration):
     metrics = MetricsManager()
-    metrics.inc_global_value('overall_listening_time', duration)
-    metrics.inc_radio_value('listening_time, duration')
-    
+    metrics.inc_global_value('listening_time', duration)
 yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
 
+def new_wall_event_handler(wall_event):
+    metrics = MetricsManager()
+    we_type = wall_event.type
+    if we_type == yabase_settings.EVENT_MESSAGE:
+        metrics.inc_global_value('new_wall_messages', 1)
+    elif we_type == yabase_settings.EVENT_LIKE:
+        metrics.inc_global_value('new_song_like', 1)
+yabase_signals.new_wall_event.connect(new_wall_event_handler)
+
+def new_user_profile_handler(sender, instance, created, **kwargs):
+    if created:
+        metrics = MetricsManager()
+        metrics.inc_global_value('new_users', 1)
+signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+
+def new_radio_handler(sender, instance, created, **kwargs):
+    if created:
+        metrics = MetricsManager()
+        metrics.inc_global_value('new_radios', 1)
+signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+
+
+def dislike_radio_handler(radio, user):
+    metrics = MetricsManager()
+    metrics.inc_global_value('new_radio_dislike', 1)
+yabase_signals.dislike_radio.connect(dislike_radio_handler)
+
+def like_radio_handler(radio, user):
+    metrics = MetricsManager()
+    metrics.inc_global_value('new_radio_like', 1)
+yabase_signals.dislike_radio.connect(like_radio_handler)
+
+def neutral_like_radio_handler(radio, user):
+    metrics = MetricsManager()
+    metrics.inc_global_value('new_radio_neutral_like', 1)
+yabase_signals.dislike_radio.connect(neutral_like_radio_handler)
+
+
+def favorite_radio_handler(radio, user):
+    metrics = MetricsManager()
+    metrics.inc_global_value('new_favorite_radio', 1)
+yabase_signals.favorite_radio.connect(favorite_radio_handler)
+
+def not_favorite_radio_handler(radio, user):
+    metrics = MetricsManager()
+    metrics.inc_global_value('new_not_favorite_radio', 1)
+yabase_signals.favorite_radio.connect(not_favorite_radio_handler)
 #def build_daily_metrics():
 #    overall_listening_time = Radio.objects.overall_listening_time()
 #    yasound_friend_count = UserProfile.objects.yasound_friend_count()

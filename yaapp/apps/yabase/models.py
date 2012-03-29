@@ -969,7 +969,10 @@ class WallEvent(models.Model):
     class Meta:
         db_name = u'default'
 
-
+def new_wall_event_handler(sender, instance, created, **kwargs):
+    if created:
+        yabase_signals.new_wall_event.send(instance)
+signals.post_save.connect(new_wall_event_handler, sender=WallEvent)
 
 class NextSong(models.Model):
     radio = models.ForeignKey(Radio)
