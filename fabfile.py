@@ -21,7 +21,6 @@ env.user = "customer"
 WEBSITE_PATH = "/data/vhosts/y/yasound.com/root/"
 APP_PATH = "yaapp"
 GIT_PATH = "git@github.com:yasound/yaapp.git"
-BRANCH = "iguane"
 
 def test():
     """Test application
@@ -82,6 +81,29 @@ def restart_all():
     """[DISTANT] restart services
     """
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("/etc/init.d/yaapp restart")
+        run("/etc/init.d/celeryd restart")
+        run("/etc/init.d/celerybeat restart")
+
+def deploy_dev()
+    """[DISTANT] Update distant dev django env
+    """
+    env.forward_agent = 'True'
+    env.hosts = [
+        'sd-14796.dedibox.fr',
+    ]
+    env.user = "customer"
+
+    WEBSITE_PATH = "/var/www/dev.yasound.com/root/"
+    APP_PATH = "yaapp"
+    GIT_PATH = "git@github.com:yasound/yaapp.git"
+    
+    with cd(WEBSITE_PATH):
+        run("git checkout dev")
+        run("git pull")
+        run("./vtenv.sh")
+    with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("DJANGO_MODE='development' ./manage.py collectstatic --noinput")
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
