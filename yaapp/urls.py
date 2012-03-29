@@ -54,7 +54,7 @@ radio_enabled_playlist = RadioEnabledPlaylistResource()
 radio_all_playlist = RadioAllPlaylistResource()
 playlist_matched_songs = MatchedSongResource()
 
-Radio.objects.unlock_all()
+#Radio.objects.unlock_all()
 
 js_info_dict = {
     'packages': ('yabackoffice',),
