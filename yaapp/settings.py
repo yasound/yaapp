@@ -80,12 +80,6 @@ if LOCAL_MODE:
                 'PASSWORD': 'root',                  # Not used with sqlite3.
                 'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
                 'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
-#                'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#                'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
-#                'USER': '',                      # Not used with sqlite3.
-#                'PASSWORD': '',                  # Not used with sqlite3.
-#                'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#                'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
             },
             'yasound': {
                 'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -96,7 +90,31 @@ if LOCAL_MODE:
                 'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
             }
         }
-else:
+elif DEVELOPMENT_MODE:
+    # Celery config:
+    CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task")
+    BROKER_URL = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND = "redis"
+    CELERY_REDIS_HOST = "localhost"
+    CELERY_REDIS_PORT = 6379
+    CELERY_REDIS_DB = 0
+    CELERY_TASK_RESULT_EXPIRES = 10
+
+    # Databases config:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
+        },
+        'yasound': {
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
+        }
+    }
+elif PRODUCTION_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
     CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task")
@@ -567,6 +585,10 @@ if PRODUCTION_MODE:
     SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
     SONG_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/song-cover/'
+elif DEVELOPMENT_MODE:
+    SONGS_ROOT = '/home/customer/data/song/'
+    ALBUM_COVERS_ROOT = '/home/customer/data/album-cover/'
+    SONG_COVERS_ROOT = '/home/customer/data/song-cover/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
