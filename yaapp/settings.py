@@ -24,7 +24,7 @@ LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 TEST_MODE = 'test' in sys.argv
 USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
-if PRODUCTION_MODE:
+if PRODUCTION_MODE or DEVELOPMENT_MODE:
     DEBUG = False
 else:
     DEBUG = True
