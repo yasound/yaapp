@@ -22,7 +22,7 @@ class TestModels(TestCase):
         invitation = Invitation(fullname='fullname',
                                 user=self.user,
                                 email='test@yasound.com',
-                                key='key',
+                                invitation_key='key',
                                 radio=radio)
         invitation.save()
         self.assertEqual(radio.creator, None)
