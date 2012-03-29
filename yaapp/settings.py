@@ -457,21 +457,27 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details'
 )
 
-THUMBNAIL_KEY_DBCOLUMN = 'thumb_key'
+
+# thumbnail
+THUMBNAIL_KEY_DBCOLUMN = 'thumb_key' # key is a mysql reserved keyword and break replication
 PICTURE_FOLDER = 'pictures'
 if PRODUCTION_MODE:
     # use shared folder on prod servers
     PICTURE_FOLDER = 'pictures'
     THUMBNAIL_PREFIX = 'cache/'
     
-
-YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
-YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
-
+# twitter
+if PRODUCTION_MODE:
+    YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
+    YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
+elif DEVELOPMENT_MODE or LOCAL_MODE:
+    YASOUND_TWITTER_APP_CONSUMER_KEY = 'iLkxaRcY8QKku0UhaMvPQ'
+    YASOUND_TWITTER_APP_CONSUMER_SECRET = 'rZYlrG4KXIat3nNJ3U8qXniQBSkJu8PjI1v7sCTHg'
+    
 if LOCAL_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
 elif DEVELOPMENT_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
  
