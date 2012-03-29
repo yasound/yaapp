@@ -453,6 +453,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details'
 )
 
+THUMBNAIL_KEY_DBCOLUMN = 'thumb_key'
 PICTURE_FOLDER = 'pictures'
 if PRODUCTION_MODE:
     # use shared folder on prod servers
