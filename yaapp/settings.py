@@ -471,7 +471,7 @@ YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOm
 if LOCAL_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
 elif DEVELOPMENT_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
  
