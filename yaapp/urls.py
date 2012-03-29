@@ -115,7 +115,11 @@ urlpatterns = patterns('',
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
+    
+    # special case for iOS client
     url(r'^legal/eula.html$', 'yaweb.views.eula', name='eula'),
+    url(r'^fr/images/logo.png$', 'yaweb.views.logo', name='logo'),
+    
     url(r'^', include('yaweb.urls')),
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
