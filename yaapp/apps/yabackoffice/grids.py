@@ -41,7 +41,7 @@ class InvitationGrid(grids.ModelGrid):
             'fullname',
             'user',
             'email',
-            'key',
+            'invitation_key',
             'radio',
             'subject',
             'message',

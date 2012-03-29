@@ -27,29 +27,29 @@ class Invitation(models.Model):
     fullname = models.CharField(_('Recipient fullname'), max_length=255)
     user = models.OneToOneField(User, verbose_name=_('user'), blank=True, null=True)
     email = models.CharField(_('email'), max_length=255, blank=True)
-    key = models.CharField(_('key'), max_length=40, unique=True, blank=True)
+    invitation_key = models.CharField(_('invitation key'), max_length=40, unique=True, blank=True)
     radio = models.ForeignKey(Radio, blank=True, null=True)
     sent = models.DateTimeField(_('sent date'), null=True, blank=True)
     subject = models.CharField(_('subject'), max_length=255, blank=True)
     message = models.TextField(_('message'), blank=True)
     
     def save(self, *args, **kwargs):
-        if not self.key:
+        if not self.invitation_key:
             salt = sha_constructor(str(random())).hexdigest()[:5]
-            self.key = sha_constructor(salt + self.email).hexdigest()
+            self.invitation_key = sha_constructor(salt + self.email).hexdigest()
         super(Invitation, self).save(*args, **kwargs)
 
     def generate_key(self, commit=False):
         salt = sha_constructor(str(random())).hexdigest()[:5]
-        self.key = sha_constructor(salt + self.email).hexdigest()
+        self.invitation_key = sha_constructor(salt + self.email).hexdigest()
         if commit:
             self.save()
         
     def generate_message(self, commit=False):
-        if not self.key:
+        if not self.invitation_key:
             self.generate_key(commit=True)
             
-        path = reverse("yainvitation_accept", args=[self.key])
+        path = reverse("yainvitation_accept", args=[self.invitation_key])
         current_site = Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         invitation_url = u"%s://%s%s" % (
@@ -62,7 +62,7 @@ class Invitation(models.Model):
             "email": self.email,
             "invitation_url": invitation_url,
             "current_site": current_site,
-            "key": self.key,
+            "key": self.invitation_key,
         }
         subject = render_to_string("yainvitation/mail/email_invitation_subject.txt", context)
         

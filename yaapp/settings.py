@@ -24,7 +24,7 @@ LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 TEST_MODE = 'test' in sys.argv
 USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
-if PRODUCTION_MODE:
+if PRODUCTION_MODE or DEVELOPMENT_MODE:
     DEBUG = False
 else:
     DEBUG = True
@@ -80,12 +80,6 @@ if LOCAL_MODE:
                 'PASSWORD': 'root',                  # Not used with sqlite3.
                 'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
                 'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
-#                'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#                'NAME': os.path.join(PROJECT_PATH, 'db.dat'),                      # Or path to database file if using sqlite3.
-#                'USER': '',                      # Not used with sqlite3.
-#                'PASSWORD': '',                  # Not used with sqlite3.
-#                'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#                'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
             },
             'yasound': {
                 'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -96,7 +90,45 @@ if LOCAL_MODE:
                 'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
             }
         }
-else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'yaapp-memory-cache'
+        }
+    }
+
+elif DEVELOPMENT_MODE:
+    # Celery config:
+    CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
+    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task")
+    BROKER_URL = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND = "redis"
+    CELERY_REDIS_HOST = "localhost"
+    CELERY_REDIS_PORT = 6379
+    CELERY_REDIS_DB = 0
+    CELERY_TASK_RESULT_EXPIRES = 10
+
+    # Databases config:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
+        },
+        'yasound': {
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'yasound',                      # Or path to database file if using sqlite3.
+            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
+        }
+    }
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'yaapp-memory-cache'
+        }
+    }
+    
+elif PRODUCTION_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
     CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task")
@@ -391,7 +423,11 @@ if PRODUCTION_MODE:
     FACEBOOK_APP_ID              = '296167703762159'
     FACEBOOK_API_SECRET          = 'af4d20f383ed42cabfb4bf4b960bb03f'
     FACEBOOK_REALTIME_VERIFY_TOKEN = 'P6bSsjBqNRvKJWL'
-if LOCAL_MODE:
+elif DEVELOPMENT_MODE:
+    FACEBOOK_APP_ID              = '352524858117964'
+    FACEBOOK_API_SECRET          = '687fbb99c25598cee5425ab24fec2f99'
+    FACEBOOK_REALTIME_VERIFY_TOKEN = 'P6bSsjBqNRvKJWL'
+else:
     # myapp.com:8000
     FACEBOOK_APP_ID='256873614391089'
     FACEBOOK_API_SECRET='7e591216eeaa551cc8c4ed10a0f5c490'
@@ -421,6 +457,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details'
 )
 
+THUMBNAIL_KEY_DBCOLUMN = 'thumb_key'
 PICTURE_FOLDER = 'pictures'
 if PRODUCTION_MODE:
     # use shared folder on prod servers
@@ -444,6 +481,8 @@ SOUTH_TESTS_MIGRATE=False
 from pymongo.connection import Connection
 if PRODUCTION_MODE:
     MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@yas-sql-01,yas-sql-02/yasound').yasound
+elif DEVELOPMENT_MODE:
+    MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@localhost/yasound').yasound
 else:
     MONGO_DB = Connection().yasound
 
@@ -567,6 +606,10 @@ if PRODUCTION_MODE:
     SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
     SONG_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/song-cover/'
+elif DEVELOPMENT_MODE:
+    SONGS_ROOT = '/home/customer/data/song/'
+    ALBUM_COVERS_ROOT = '/home/customer/data/album-cover/'
+    SONG_COVERS_ROOT = '/home/customer/data/song-cover/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
