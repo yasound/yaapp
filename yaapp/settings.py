@@ -90,6 +90,13 @@ if LOCAL_MODE:
                 'PORT': '8889',                      # Set to empty string for default. Not used with sqlite3.
             }
         }
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'yaapp-memory-cache'
+        }
+    }
+
 elif DEVELOPMENT_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
@@ -114,6 +121,13 @@ elif DEVELOPMENT_MODE:
             'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
         }
     }
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'yaapp-memory-cache'
+        }
+    }
+    
 elif PRODUCTION_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
