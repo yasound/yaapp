@@ -33,6 +33,7 @@ TEMPLATE_DEBUG = DEBUG
 
 DEFAULT_FROM_EMAIL = "Yasound Notification <noreply@yasound.com>"
 SERVER_EMAIL = "dev@yasound.com"
+EMAIL_CONFIRMATION_DAYS = 2
 
 ADMINS = (
     ('Sebastien Métrot', 'seb@yasound.com'),
