@@ -87,6 +87,11 @@ class SignupResource(ModelResource):
         user_resource = super(SignupResource, self).obj_create(bundle, request, **kwargs)
         user = user_resource.obj
         user.set_password(user.password) # encrypt password
+        
+        # last_name is username in fact
+        # username contains email in fact
+        user.username = bundle['last_name']
+        user.email = bundle['username']
         user.save()
             
         user_profile = user.userprofile
