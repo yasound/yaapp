@@ -137,13 +137,22 @@ urlpatterns = patterns('',
     url(r'', include('social_auth.urls')),
     url(r'^login/$', 'account.views.login', name="login"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
+    url(r'^passreset/$','account.views.password_reset', name='lost_password'),
+    url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','account.views.password_reset_confirm', name='reset_password_confirm'),
 
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
     
-
+    #email confirmation
+    (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
+     
     (r'^robots\.txt$', direct_to_template,
      {'template': 'robots.txt', 'mimetype': 'text/plain'}),
+)
+
+# captcha urls
+urlpatterns += patterns('',
+    url(r'^captcha/', include('captcha.urls')),
 )
 
 if settings.LOCAL_MODE:

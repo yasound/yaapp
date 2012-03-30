@@ -31,7 +31,7 @@ else:
 
 TEMPLATE_DEBUG = DEBUG
 
-DEFAULT_FROM_EMAIL = "dev@yasound.com"
+DEFAULT_FROM_EMAIL = "Yasound Notification <noreply@yasound.com>"
 SERVER_EMAIL = "dev@yasound.com"
 
 ADMINS = (
@@ -328,6 +328,8 @@ INSTALLED_APPS = (
     'yaweb',
     'kombu.transport.django',
     'django_mobile',
+    'captcha',
+    'emailconfirmation',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -415,7 +417,9 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
     'social_auth.backends.facebook.FacebookBackend',
+    'account.backends.EmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -444,7 +448,7 @@ SOCIAL_AUTH_USERNAME_FIXER = lambda u: slugify(u)
 SOCIAL_AUTH_EXPIRATION = 'expires'
 SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/'
-SOCIAL_AUTH_ENABLED_BACKENDS = ( 'facebook', )
+SOCIAL_AUTH_ENABLED_BACKENDS = ( 'facebook', 'twitter', )
 AUTH_PROFILE_MODULE = 'account.UserProfile'
 
 SOCIAL_AUTH_PIPELINE = (
@@ -457,6 +461,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details'
 )
 
+DEFAULT_HTTP_PROTOCOL = 'https'
 
 # thumbnail
 THUMBNAIL_KEY_DBCOLUMN = 'thumb_key' # key is a mysql reserved keyword and break replication

@@ -39,26 +39,22 @@
 			</form>
         </div>   
         <div class='span4'>
-			    <form class="well">
+			    <form class="well" method='post'>{% csrf_token %}
 			    <fieldset>
 			    <legend>{% trans "Login using existing account" %}</legend>
-			    <input type="text" class="span3" placeholder="{% trans 'Email' %}"/>
-                <input type="text" class="span3" placeholder="{% trans 'Password' %}"/>
-                <br/>
+			    {{login_form}}
+                <input type='hidden' name='action' value='login'/>
 			    <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
 			    <a href='/'>{% trans "Lost password ?" %}</a>
                 </fieldset>
 			    </form>
             </div>
         <div class='span4'>
-                <form class="well">
+                <form class="well" method='post'>{% csrf_token %}
                 <fieldset>
                 <legend>{% trans "Create a new account" %}</legend>
-                <input type="text" class="span3" placeholder="{% trans 'Username' %}"/>
-                <input type="text" class="span3" placeholder="{% trans 'Email' %}"/>
-                <input type="text" class="span3" placeholder="{% trans 'Password' %}"/>
-                <input type="text" class="span3" placeholder="{% trans 'Password (again)' %}"/>
-                <br/>
+                {{ signup_form }} 
+                <input type='hidden' name='action' value='signup'/>
                 <button type="submit" class="btn btn-primary">{% trans "Register" %}</button>
                 </fieldset>
                 </form>

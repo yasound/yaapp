@@ -27,6 +27,13 @@ import datetime
 import logging
 logger = logging.getLogger("yaapp.account")
 
+class EmailUser(User):
+    class Meta:
+        proxy = True
+
+    def __unicode__(self):
+        return self.email
+
 class UserProfileManager(models.Manager):
     def search_user_fuzzy(self, search_text, limit=5):
         users = yasearch_search.search_user(search_text, remove_common_words=True)
