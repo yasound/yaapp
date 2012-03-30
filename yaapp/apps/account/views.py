@@ -20,10 +20,19 @@ import datetime
 import logging
 import simplejson
 from django.contrib.auth import login as auth_login
-
+from django.forms.util import ErrorList
 logger = logging.getLogger("yaapp.account")
 
 PICTURE_FILE_TAG = 'picture'
+
+
+class DivErrorList(ErrorList):
+    def __unicode__(self):
+        return self.as_divs()
+    def as_divs(self):
+        if not self: return u''
+        return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
+
 
 @csrf_exempt
 def set_user_picture(request, user_id):
@@ -62,8 +71,8 @@ def get_subscription(request):
 def login(request, template_name='account/login.html'):
     next = request.REQUEST.get('next')
 
-    login_form = LoginForm(prefix='login')
-    signup_form = SignupForm(prefix='signup')
+    login_form = LoginForm(prefix='login', error_class=DivErrorList)
+    signup_form = SignupForm(prefix='signup', error_class=DivErrorList)
     if request.method == "POST":
         action = request.REQUEST.get('action')
         if action == 'login':
@@ -76,12 +85,12 @@ def login(request, template_name='account/login.html'):
             # light security check -- make sure redirect_to isn't garabage.
             if not redirect_to or "://" in redirect_to or " " in redirect_to:
                 redirect_to = default_redirect_to
-            login_form = LoginForm(request.POST, prefix='login')
+            login_form = LoginForm(request.POST, prefix='login', error_class=DivErrorList)
             if login_form.login(request):
                 messages.success(request, _(u"Successfully logged in as %(username)s.") % {'username': request.user.username})
                 return HttpResponseRedirect(redirect_to)
         elif action == 'signup':
-            signup_form = SignupForm(request.POST, prefix='signup')
+            signup_form = SignupForm(request.POST, prefix='signup', error_class=DivErrorList)
             if signup_form.is_valid():
                 username, email = signup_form.save()
                 messages.info(request, _("Confirmation email sent to %s" % email))
@@ -168,7 +177,7 @@ def password_reset(request, is_admin_site=False,
     if post_reset_redirect is None:
         post_reset_redirect = reverse('login')
     if request.method == "POST":
-        form = password_reset_form(request.POST)
+        form = password_reset_form(request.POST, error_class=DivErrorList)
         if form.is_valid():
             opts = {
                 'use_https': request.is_secure(),

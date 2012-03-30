@@ -146,3 +146,26 @@ footer #menu a:hover {
     margin-bottom:24px;
     min-height:170px;
 }
+
+#signup-form input {
+	margin-bottom:0;
+}
+
+#signup-form button {
+    margin-top:9px;
+}
+
+
+#signup-form .helptext {
+	font-size:80%;
+    margin-bottom:9px;
+    display:block;
+}
+
+.errorlist .error {
+    color: red;	
+}
+
+.errorlist + input {
+	border:2px solid red;
+}
