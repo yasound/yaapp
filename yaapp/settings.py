@@ -461,8 +461,11 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details'
 )
 
-DEFAULT_HTTP_PROTOCOL = 'https'
-
+if PRODUCTION_MODE:
+    DEFAULT_HTTP_PROTOCOL = 'https'
+else:
+    DEFAULT_HTTP_PROTOCOL = 'http'
+    
 # thumbnail
 THUMBNAIL_KEY_DBCOLUMN = 'thumb_key' # key is a mysql reserved keyword and break replication
 PICTURE_FOLDER = 'pictures'
