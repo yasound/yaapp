@@ -90,8 +90,8 @@ class SignupResource(ModelResource):
         
         # last_name is username in fact
         # username contains email in fact
-        user.username = bundle['last_name']
-        user.email = bundle['username']
+        user.username = bundle.data['last_name']
+        user.email = bundle.data['username']
         user.save()
             
         user_profile = user.userprofile
