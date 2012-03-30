@@ -132,3 +132,17 @@ footer #menu a:hover {
 	transition: width 0s ease;
 }
 
+
+#social-login {
+    margin-top: 24px;
+    background-color: #F5F5F5;
+    border-radius: 6px 6px 6px 6px;
+    padding: 40px;
+    padding-top:60px;
+    padding-bottom:60px;
+    background-image: url(/media/yaweb/images/intro/icon12.png);
+    background-repeat: no-repeat;
+    background-position: 10px 10px;
+    margin-bottom:24px;
+    min-height:170px;
+}
