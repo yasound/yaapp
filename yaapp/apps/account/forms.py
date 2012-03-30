@@ -87,6 +87,7 @@ class ChangeLanguageForm(UserProfileForm):
         self.user.message_set.create(message=ugettext(u"Language successfully updated."))
 
 class SignupForm(forms.Form):
+    username = forms.CharField(label=_("Username"), widget=forms.TextInput(), help_text=_('Name displayed at Yasound'))
     email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(), help_text=_('Please enter a valid and existing email.'))
     password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(), help_text=_('Only alphanum characters.<em>Ex: pwn4_n00b</em>'))
     password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(), help_text=_('Must be the same as above.'))
@@ -107,8 +108,8 @@ class SignupForm(forms.Form):
     def save(self):
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
-        if email:
-            username = sha1(str(email)).hexdigest()[:30]
+        username = self.cleaned_data["username"]
+        if email and username:
             new_user = EmailUser.objects.create_user(username, email, password)
             user = EmailUser.objects.get(email=email)
             user.is_active = False
