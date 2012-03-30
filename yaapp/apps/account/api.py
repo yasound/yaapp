@@ -70,6 +70,11 @@ class SignupAuthentication(Authentication):
             return False
         if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
             return False
+        
+        email = request.REQUEST.get('email')
+        if User.objects.filter(email=email).count() > 0:
+            return False
+        
         return True
 
 class SignupResource(ModelResource):
