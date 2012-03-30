@@ -45,7 +45,7 @@
 			    {{login_form}}
                 <input type='hidden' name='action' value='login'/>
 			    <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
-			    <a href='/'>{% trans "Lost password ?" %}</a>
+			    <a href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
                 </fieldset>
 			    </form>
             </div>
