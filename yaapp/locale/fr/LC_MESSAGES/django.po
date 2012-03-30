@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-30 14:54+0200\n"
+"POT-Creation-Date: 2012-03-30 15:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr "Se déconnecter"
 
 #: templates/account/login.html:4
 #: templates/account/login.html.py:11
-#: templates/account/login.html:47
+#: templates/account/login.html:52
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
 msgid "Login"
@@ -55,23 +55,27 @@ msgstr "Se connecter"
 msgid "Please choose your prefered login method below"
 msgstr "Veuillez sélectionner votre méthode d'authentification ci-dessous"
 
-#: templates/account/login.html:21
+#: templates/account/login.html:20
+msgid "You are already authenticated"
+msgstr "Vous êtes déjà authentifié"
+
+#: templates/account/login.html:26
 msgid "Social login services"
 msgstr "Authentification via un réseau social"
 
-#: templates/account/login.html:44
+#: templates/account/login.html:49
 msgid "Login using existing account"
 msgstr "S'authentifier en utilisant un compte existant"
 
-#: templates/account/login.html:48
+#: templates/account/login.html:53
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
 
-#: templates/account/login.html:55
+#: templates/account/login.html:60
 msgid "Create a new account"
 msgstr "Créer un nouveau compte"
 
-#: templates/account/login.html:58
+#: templates/account/login.html:63
 msgid "Register"
 msgstr "Creer un compte"
 
@@ -110,8 +114,8 @@ msgid ""
 "complete process.\n"
 "\t\t\t\t"
 msgstr "\n"
-"\t\t\t\t"
-"Merci pour votre inscription, un email vient d'être envoyé à %(email)s afin de compléter le processus.\n"
+"\t\t\t\tMerci pour votre inscription, un email vient d'être envoyé à "
+"%(email)s afin de compléter le processus.\n"
 "\t\t\t\t"
 
 #: templates/emailconfirmation/confirm_email.html:4
@@ -129,8 +133,9 @@ msgid ""
 "Somebody at %(site_name)s has given this as an email address.\n"
 "\n"
 "To confirm this is correct, go to %(activate_url)s\n"
-msgstr "Une personne sur le site %(site_name)s a indiqué cette adresse email afin de s'inscrire.\n."
-"Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
+msgstr "Une personne sur le site %(site_name)s a indiqué cette adresse email afin de "
+"s'inscrire.\n"
+".Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
 
 #: templates/emailconfirmation/email_confirmation_subject.txt:1
 #, python-format

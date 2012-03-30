@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-30 15:00+0200\n"
+"POT-Creation-Date: 2012-03-30 15:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: forms.py:33
-#: forms.py:59
-#: forms.py:90
+#: forms.py:33 forms.py:59 forms.py:90
 msgid "Email"
 msgstr "Email"
 
-#: forms.py:34
-#: forms.py:91
-#: forms.py:128
+#: forms.py:34 forms.py:91 forms.py:128
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -58,8 +54,7 @@ msgstr "Veuillez saisir un email valide."
 msgid "Only alphanum characters.<em>Ex: pwn4_n00b</em>"
 msgstr "Seulement des caractères alpha-numériques.<em>Ex: pwn4_n00b</em>"
 
-#: forms.py:92
-#: forms.py:129
+#: forms.py:92 forms.py:129
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
@@ -83,7 +78,8 @@ msgstr "E-mail"
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr "Cet email n'a pas de compte associé. Etes-vous sur de vous être enregistré ?"
+msgstr ""
+"Cet email n'a pas de compte associé. Etes-vous sur de vous être enregistré ?"
 
 #: forms.py:229
 #, python-format
@@ -126,8 +122,7 @@ msgstr "Confirmation du nouveau mot de passe"
 msgid "The two password fields didn't match."
 msgstr "Les deux mots de passe ne correspondent pas."
 
-#: models.py:84
-#: models.py:369
+#: models.py:84 models.py:369
 msgid "user"
 msgstr "utilisateur"
 
@@ -156,4 +151,3 @@ msgstr "Un email vient d'être envoyé afin de réinitialiser votre mot de passe
 #: views.py:230
 msgid "Your password has been successfully reset."
 msgstr "Votre mot de passe à été réinitialisé avec succès."
-
