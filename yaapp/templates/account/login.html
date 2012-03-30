@@ -15,6 +15,11 @@
         </div>
     </div>
     <div class='row'>
+        {% if request.user.is_authenticated %}
+        <div class='span12'>
+        <p>{% trans "You are already authenticated" %}</p>
+        </div>
+        {% else %}
         <div class='span4'>
                 <form class="well">
                 <fieldset>
@@ -59,6 +64,7 @@
                 </fieldset>
                 </form>
         </div>
+        {% endif %}
     </div>    
     
 {% endblock %}
