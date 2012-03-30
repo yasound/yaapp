@@ -200,6 +200,23 @@ def not_favorite_radio(request, radio_id):
     res = '%s (user) has not %s (radio) as favorite anymore\n' % (request.user, radio)
     return HttpResponse(res)
 
+@csrf_exempt
+def radio_shared(request, radio_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+
+    try:
+        radio = Radio.objects.get(id=radio_id)
+    except Radio.DoesNotExist:
+        return HttpResponseNotFound()
+
+    radio.shared(request.user)
+    res = 'user %s has shared radio %s' % (request.user.userprofile.name, radio.name)
+    return HttpResponse(res)
+
 
 
 # SONG USER

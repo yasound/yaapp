@@ -90,3 +90,43 @@ def test():
     #c.close()
 
 
+def get_deprecated_devices(sandbox=True):
+    deprecated = []
+    host_name = 'feedback.sandbox.push.apple.com' if sandbox else 'feedback.push.apple.com'
+    s = socket()
+    c = ssl.wrap_socket(s,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c.connect((host_name, 2196))
+    
+    print 'get_deprecated_devices'
+    buff = None
+    keep_reading = True
+    while keep_reading:
+        r = c.read()
+        if r:
+            if buffer:
+                buff = struct.pack('!%ds%ds' % (len(buffer), len(r)), buffer, r)
+            else:
+                buff = r
+        else:
+            keep_reading = False
+    
+    c.close()
+    
+    if not buff:
+        print 'no data read'
+        return None
+            
+    offset = 0
+    available = len(buff)
+    while available > 0:
+        feedback_time, token_length = struct.unpack_from('!lh', buff, offset)
+        device_token = struct.unpack_from('%ds' % token_length, buff, offset + 6)[0]
+        deprecated.append((datetime.datetime.fromtimestamp(feedback_time), device_token))
+        block_size = 4 + 2 + token_length
+        offset += block_size
+        available -= block_size    
+        
+    print 'get_deprecated_devices DONE'
+    return deprecated

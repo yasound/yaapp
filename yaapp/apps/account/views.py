@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from models import User, UserProfile
+from models import User, UserProfile, Device
 import datetime
 from django.contrib.messages.api import get_messages
 from social_auth import __version__ as version
+import json
+import settings as account_settings
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -55,4 +57,32 @@ def error(request, template_name='account/login_error.html'):
     return render_to_response(template_name, {'version': version,
                                              'messages': messages},
                               RequestContext(request))
+    
+@csrf_exempt
+def send_ios_push_notif_token(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    print 'send_ios_push_notif_token'
+    data = request.POST.keys()[0]
+    post_data_dict = json.loads(data)
+    device_token = post_data_dict.get('device_token', None)
+    device_token_type = post_data_dict.get('device_token_type', None)
+    if not device_token or not device_token_type:
+        return HttpResponse('bad data')
+    
+    print 'device_token=%s' % device_token
+    print 'device_token_type=%s' % device_token_type
+    
+    if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_DEVELOPMENT:
+        return HttpResponse('bad data')
+    
+    device, created = Device.objects.get_or_create(user=request.user, ios_token=device_token, ios_token_type=device_token_type)
+    device.set_registered_now()
+    
+    res = 'send_ios_push_notif_token OK'
+    return HttpResponse(res)
     

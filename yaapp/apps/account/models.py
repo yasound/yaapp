@@ -24,6 +24,8 @@ from sorl.thumbnail import get_thumbnail
 from django.core.files.base import ContentFile
 import datetime
 
+from yabase.apns import get_deprecated_devices
+
 import logging
 logger = logging.getLogger("yaapp.account")
 
@@ -256,7 +258,54 @@ class UserProfile(models.Model):
     def build_picture_filename(self):
         filename = 'userprofile_%d_picture.png' % self.id
         return filename
+    
+    def radio_is_ready(self, radio):
+        for f in self.friends:
+            friend_profile = f.userprofile
+            friend_profile.my_friend_created_radio(friend_profile, radio)
+            
+    def logged(self):
+        print 'user %s is logged' % self.name
+        for f in self.friends:
+            friend_profile = f.userprofile
+            friend_profile.my_friend_is_online(self)
+    
+    def store_ios_device(self, device_token, token_type):
+        device, created = Device.objects.get_or_create(user=self.user, ios_token=device_token, ios_token_type=token_type)
+        device.set_registered_now()
+    
+    def user_in_my_radio(self, user_profile, radio):
+        if user_profile.user in self.friends.all():
+            self._friend_in_my_radio_internal(user_profile, radio)
+        else:
+            self._user_in_my_radio_internal(user_profile, radio)
+            
+    def _friend_in_my_radio_internal(self, friend_profile, radio):
+        print 'friend %s is in radio %s' % (friend_profile.name, radio.name)
         
+    def _user_in_my_radio_internal(self, user_profile, radio):
+        print 'user %s is in radio %s' % (user_profile.name, radio.name)
+        
+        
+    def my_friend_is_online(self, friend_profile):
+        print 'friend %s is now online' % friend_profile.name
+        
+    def message_posted_in_my_radio(self, wall_message):
+        user_profile = wall_message.user.user_profile
+        radio = wall_message.radio
+        print 'user %s wrote a message in radio %s: "%s"' % (user_profile.name, radio.name, wall_message.text)
+        
+    def song_liked_in_my_radio(self, user_profile, radio, song):
+        print 'user %s liked a song in radio %s: "%s"' % (user_profile.name, radio.name, song.metadata.name)
+        
+    def my_radio_added_in_favorites(self, user_profile, radio):
+        print 'user %s added radio %s in favorites' % (user_profile.name, radio.name)
+        
+    def my_radio_shared(self, user_profile, radio):
+        print 'user %s shared radio %s' % (user_profile.name, radio.name)
+        
+    def my_friend_created_radio(self, friend_profile, radio):
+        print 'friend %s created radio %s' % (friend_profile.name, radio.name)
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
@@ -271,16 +320,58 @@ post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_api_key, sender=User)
 post_save.connect(create_radio, sender=User)
 
+class DeviceManager(models.Manager):
+    def for_user(self, user):
+        return self.filter(user=user)
+    
+    def for_userprofile(self, profile):
+        return self.filter(user=profile.user)
+    
+    def delete_deprecated(self, sandbox=True):
+        token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX if sandbox else account_settings.IOS_TOKEN_TYPE_DEVELOPMENT
+        apns_deprecated = get_deprecated_devices(sandbox)
+        if not apns_deprecated:
+            return
+        for i in apns_deprecated:
+            feedback_time = i[0]
+            device_token = i[1]
+            try:
+                device = self.get(ios_token=device_token, ios_token_type=token_type)
+                if device.registration_date < feedback_time:
+                    device.delete()
+            except:
+                pass
+        
+    
 class Device(models.Model):
     """
     Represent a device (iphone, ipad, ..)
     """
+    objects = DeviceManager() 
     user = models.ForeignKey(User, verbose_name=_('user'))
-    uuid = models.CharField(_('uuid'), max_length=255)
+    ios_token = models.CharField(_('ios device token'), max_length=255)
+    ios_token_type = models.CharField(max_length=16, choices=account_settings.IOS_TOKEN_TYPE_CHOICES)
+    registration_date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         verbose_name = _('device')
-        unique_together = ('user', 'uuid')
+        unique_together = ('user', 'ios_token')
+        
+    def is_sandbox(self):
+        return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_SANDBOX
+    
+    def is_development(self):
+        return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_DEVELOPMENT
+    
+    def set_registered_now(self):
+        self.registration_date = datetime.datetime.now()
+        self.save()
+        
+    def save(self, *args, **kwargs):
+        creation = (self.pk == None)
+        super(Device, self).save(*args, **kwargs)
+        if creation:
+            Device.objects.filter(ios_token=self.ios_token).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):  
     if isinstance(instance, UserProfile):

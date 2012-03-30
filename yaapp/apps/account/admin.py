@@ -8,7 +8,7 @@ class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class DeviceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'uuid')
-    search_fields = ['user__username', 'uuid']
+    list_display = ('user', 'ios_token')
+    search_fields = ['user__username', 'ios_token']
 admin.site.register(Device, DeviceAdmin)
     

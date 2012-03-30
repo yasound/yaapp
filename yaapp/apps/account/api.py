@@ -113,6 +113,8 @@ class LoginResource(ModelResource):
         userprofile = user.userprofile        
         userprofile.fill_user_bundle(bundle)
         
+        userprofile.logged()
+        
         add_api_key_to_bundle(user, bundle)
         return bundle
     
@@ -126,6 +128,9 @@ def build_social_username(uid, account_type):
     
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
+        import pdb
+        pdb.set_trace()
+        authenticated = False
         # Application Cookie authentication:
         cookies = request.COOKIES
         if not cookies.has_key(APP_KEY_COOKIE_NAME):
@@ -176,7 +181,7 @@ class SocialAuthentication(Authentication):
                 profile.facebook_token = token
                 profile.save()
                 request.user = user
-                return True
+                authenticated = True
             except User.DoesNotExist:
                 user = User.objects.create(username=username)
                 if email:
@@ -204,7 +209,7 @@ class SocialAuthentication(Authentication):
                 radio = Radio.objects.filter(creator=user.id)[0]
                 radio.create_name(user)
                 print 'facebook user created'
-                return True
+                authenticated = True
         elif account_type == account_settings.ACCOUNT_TYPE_TWITTER:            
             TOKEN_SECRET_PARAM_NAME = 'token_secret'
             if not params.has_key(TOKEN_SECRET_PARAM_NAME):
@@ -229,7 +234,7 @@ class SocialAuthentication(Authentication):
                 profile.facebook_token = token
                 profile.save()
                 request.user = user
-                return True
+                authenticated = True
             except User.DoesNotExist:
                 user = User.objects.create(username=username)
                 if email:
@@ -249,9 +254,14 @@ class SocialAuthentication(Authentication):
                 
                 radio = Radio.objects.filter(creator=user.id)[0]
                 radio.create_name(user)
-                return True
+                authenticated = True
+        else:
+            return False
         
-        return False
+        if authenticated:
+            profile.logged()
+                
+        return authenticated
     
 class LoginSocialResource(ModelResource):
     class Meta: 
