@@ -71,10 +71,6 @@ class SignupAuthentication(Authentication):
         if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
             return False
         
-        email = request.REQUEST.get('email')
-        if User.objects.filter(email=email).count() > 0:
-            return False
-        
         return True
 
 class SignupResource(ModelResource):
@@ -89,6 +85,10 @@ class SignupResource(ModelResource):
         
     def obj_create(self, bundle, request=None, **kwargs):
         #test if user already exist
+        email = bundle.data['email']
+        if User.objects.filter(email=email).count() > 0:
+            return bundle
+
         user_resource = super(SignupResource, self).obj_create(bundle, request, **kwargs)
         user = user_resource.obj
         user.set_password(user.password) # encrypt password
