@@ -226,7 +226,7 @@ class SocialAuthentication(Authentication):
             try:
                 user = User.objects.get(username=username)
                 profile = user.userprofile
-                profile.facebook_token = token
+                profile.twitter_token = token
                 profile.save()
                 request.user = user
                 return True
