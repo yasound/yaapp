@@ -57,7 +57,7 @@ class BinaryData:
 
 @transaction.commit_on_success
 def process_playlists_exec(radio, content_compressed):
-    logger.info("decompress playlist")
+    logger.info("decompress playlist for radio %d" % (radio.id))
     
     try:
         content_uncompressed = zlib.decompress(content_compressed)
