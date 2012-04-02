@@ -135,6 +135,9 @@ class EmailConfirmationManager(models.Manager):
     def delete_expired_confirmations(self):
         for confirmation in self.all():
             if confirmation.key_expired():
+                user = User.objects.get(id=confirmation.email_address.user.id)
+                user.is_active = False
+                user.save()
                 confirmation.delete()
     
     def resend_confirmations(self):
@@ -153,7 +156,7 @@ class EmailConfirmation(models.Model):
     def resend_expired(self):
         expiration_date = self.sent + datetime.timedelta(
             days=settings.EMAIL_RESEND_CONFIRMATION_DAYS)
-        return expiration_date >= datetime.datetime.now() and self.retries == 0
+        return expiration_date <= datetime.datetime.now() and self.retries == 0
     resend_expired.boolean = True
     
     def key_expired(self):
@@ -195,7 +198,7 @@ class EmailConfirmation(models.Model):
             "emailconfirmation/email_confirmation_message.txt", context)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email_address.email])
         self.retries = self.retries + 1
-        
+        self.save()
         
     def __unicode__(self):
         return u"confirmation for %s" % self.email_address
