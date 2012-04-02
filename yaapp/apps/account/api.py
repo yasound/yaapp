@@ -102,12 +102,15 @@ class SignupResource(ModelResource):
     def obj_create(self, bundle, request=None, **kwargs):
         #test if user already exist
         email = bundle.data['email']
+        password = bundle.data['password']
         if User.objects.filter(email=email).count() > 0:
             return bundle
 
         user_resource = super(SignupResource, self).obj_create(bundle, request, **kwargs)
+        
         user = user_resource.obj
-        user.set_password(user.password) # encrypt password
+        user.set_password(password) # encrypt password
+        user.save()
         
         # send confirmation email
         EmailAddress.objects.add_email(user, user.email)
