@@ -94,7 +94,7 @@ class SignupResource(ModelResource):
         queryset = User.objects.all()
         resource_name = 'signup'
         include_resource_uri = False
-        fields = ['id', 'username', 'last_name', 'password']
+        fields = ['id', 'username', 'last_name', 'password', 'email']
         authentication = SignupAuthentication()
         authorization = Authorization()
         allowed_methods = ['post']
