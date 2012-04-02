@@ -1,22 +1,24 @@
-from tastypie import fields
-from tastypie.resources import ModelResource, Resource
-from models import UserProfile
-from django.contrib.auth.models import User
-from django.conf.urls.defaults import url
-from django.shortcuts import get_object_or_404
-from tastypie.utils import trailing_slash
-import datetime
-from tastypie.authentication import Authentication
-from tastypie.authorization import Authorization, ReadOnlyAuthorization
-from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
-from tastypie.models import ApiKey
-from tastypie.serializers import Serializer
-from yabase.models import Radio
-import settings as account_settings
 from django.conf import settings as yaapp_settings
+from django.conf.urls.defaults import url
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from emailconfirmation.models import EmailAddress
+from models import UserProfile
+from tastypie import fields
+from tastypie.authentication import ApiKeyAuthentication, BasicAuthentication, \
+    Authentication
+from tastypie.authorization import Authorization, ReadOnlyAuthorization, \
+    DjangoAuthorization
+from tastypie.models import ApiKey
+from tastypie.resources import ModelResource, Resource
+from tastypie.serializers import Serializer
+from tastypie.utils import trailing_slash
+from yabase.models import Radio
+import datetime
 import json
-import urllib
+import settings as account_settings
 import tweepy
+import urllib
 
 APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
@@ -26,9 +28,23 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
     def is_authenticated(self, request, **kwargs):
         authenticated = super(YasoundApiKeyAuthentication, self).is_authenticated(request, **kwargs)
         if authenticated:
+            # inactive users should be kicked out
+            if not request.user.is_active:
+                return False
+            
             userprofile = request.user.userprofile
             userprofile.authenticated()
         return authenticated
+
+class YasoundBasicAuthentication(BasicAuthentication):
+    def is_authenticated(self, request, **kwargs):
+        authenticated = super(YasoundBasicAuthentication, self).is_authenticated(request, **kwargs)
+        if authenticated:
+            # inactive users should be kicked out
+            if not request.user.is_active:
+                return False
+        return authenticated
+    
 
 
 class UserResource(ModelResource):
@@ -96,6 +112,9 @@ class SignupResource(ModelResource):
         user.username = bundle.data['name']
         user.email = bundle.data['email']
         user.save()
+        
+        # send confirmation email
+        EmailAddress.objects.add_email(user, user.email)
             
         user_profile = user.userprofile
         user_profile.update_with_bundle(bundle, True)
@@ -112,8 +131,7 @@ class LoginResource(ModelResource):
         include_resource_uri = False
         fields = ['id', 'username']
         allowed_methods = ['get']
-        authentication = BasicAuthentication()
-        
+        authentication = YasoundBasicAuthentication()
         
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
