@@ -13,12 +13,14 @@ from tastypie.models import ApiKey
 from tastypie.resources import ModelResource, Resource
 from tastypie.serializers import Serializer
 from tastypie.utils import trailing_slash
+from tastypie.validation import Validation
 from yabase.models import Radio
 import datetime
 import json
 import settings as account_settings
 import tweepy
 import urllib
+from django.utils.translation import ugettext_lazy as _
 
 APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
@@ -89,6 +91,30 @@ class SignupAuthentication(Authentication):
         
         return True
 
+class SignupValidation(Validation):
+    def is_valid(self, bundle, request=None):
+        if not bundle.data:
+            return {'__all__': _('Empty data')}
+
+        error = ''
+            
+        email = bundle.data['email']
+        username = bundle.data['username']
+        password = bundle.data['password']
+        if not password.isalpha():
+            error = _('Password should contains only alphanumeric characters')
+        
+        if not username.isalpha():
+            error = _('Username should contains only alphanumeric characters')
+
+        if User.objects.filter(email=email).count() > 0:
+            error = _('A user already exists with this email')
+
+        if User.objects.filter(username=username).count() > 0:
+            error = _('A user already exists with this username')
+
+        return error
+
 class SignupResource(ModelResource):
     class Meta: 
         queryset = User.objects.all()
@@ -97,18 +123,16 @@ class SignupResource(ModelResource):
         fields = ['id', 'username', 'last_name', 'password', 'email']
         authentication = SignupAuthentication()
         authorization = Authorization()
-        allowed_methods = ['post']
+        validation = SignupValidation()
+        allowed_methods = ['post', 'get']
         
     def obj_create(self, bundle, request=None, **kwargs):
         #test if user already exist
-        email = bundle.data['email']
-        password = bundle.data['password']
-        if User.objects.filter(email=email).count() > 0:
-            return bundle
 
         user_resource = super(SignupResource, self).obj_create(bundle, request, **kwargs)
         
         user = user_resource.obj
+        password = bundle.data['password']
         user.set_password(password) # encrypt password
         user.save()
         
