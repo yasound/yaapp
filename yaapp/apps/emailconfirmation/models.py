@@ -136,15 +136,25 @@ class EmailConfirmationManager(models.Manager):
         for confirmation in self.all():
             if confirmation.key_expired():
                 confirmation.delete()
-
+    
+    def resend_confirmations(self):
+        for confirmation in self.all():
+            if confirmation.resend_expired():
+                confirmation.resend()
 
 class EmailConfirmation(models.Model):
+    objects = EmailConfirmationManager()
     
     email_address = models.ForeignKey(EmailAddress)
     sent = models.DateTimeField()
     confirmation_key = models.CharField(max_length=40)
-    
-    objects = EmailConfirmationManager()
+    retries = models.SmallIntegerField(default=0)
+
+    def resend_expired(self):
+        expiration_date = self.sent + datetime.timedelta(
+            days=settings.EMAIL_RESEND_CONFIRMATION_DAYS)
+        return expiration_date >= datetime.datetime.now() and self.retries == 0
+    resend_expired.boolean = True
     
     def key_expired(self):
         expiration_date = self.sent + datetime.timedelta(
@@ -152,6 +162,41 @@ class EmailConfirmation(models.Model):
         return expiration_date <= datetime.datetime.now()
     key_expired.boolean = True
     
+    def resend(self):
+        confirmation_key = self.confirmation_key
+        email_address = self.email_address
+        
+        current_site = Site.objects.get_current()
+        # check for the url with the dotted view path
+        try:
+            path = reverse("emailconfirmation.views.confirm_email",
+                args=[confirmation_key])
+        except NoReverseMatch:
+            # or get path with named urlconf instead
+            path = reverse(
+                "emailconfirmation_confirm_email", args=[confirmation_key])
+        protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
+        activate_url = u"%s://%s%s" % (
+            protocol,
+            unicode(current_site.domain),
+            path
+        )
+        context = {
+            "user": email_address.user,
+            "activate_url": activate_url,
+            "current_site": current_site,
+            "confirmation_key": confirmation_key,
+        }
+        subject = render_to_string(
+            "emailconfirmation/email_confirmation_subject.txt", context)
+        # remove superfluous line breaks
+        subject = "".join(subject.splitlines())
+        message = render_to_string(
+            "emailconfirmation/email_confirmation_message.txt", context)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email_address.email])
+        self.retries = self.retries + 1
+        
+        
     def __unicode__(self):
         return u"confirmation for %s" % self.email_address
     
