@@ -109,10 +109,6 @@ class SignupResource(ModelResource):
         user = user_resource.obj
         user.set_password(user.password) # encrypt password
         
-        user.username = bundle.data['name']
-        user.email = bundle.data['email']
-        user.save()
-        
         # send confirmation email
         EmailAddress.objects.add_email(user, user.email)
             
