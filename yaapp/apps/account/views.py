@@ -21,6 +21,7 @@ import logging
 import simplejson
 from django.contrib.auth import login as auth_login
 from django.forms.util import ErrorList
+from django_mobile import get_flavour
 logger = logging.getLogger("yaapp.account")
 
 PICTURE_FILE_TAG = 'picture'
@@ -167,6 +168,7 @@ def facebook_update(request):
 @csrf_protect
 def password_reset(request, is_admin_site=False,
                    template_name='account/password_reset_form.html',
+                   template_name_mobile='account/password_reset_form_mobile.html',
                    email_template_name='account/password_reset_email.html',
                    password_reset_form=PasswordResetForm,
                    token_generator=default_token_generator,
@@ -174,6 +176,9 @@ def password_reset(request, is_admin_site=False,
                    from_email=None,
                    current_app=None,
                    extra_context=None):
+    if get_flavour() == 'mobile':
+        template_name = template_name_mobile
+    
     if post_reset_redirect is None:
         post_reset_redirect = reverse('login')
     if request.method == "POST":
@@ -204,6 +209,7 @@ def password_reset(request, is_admin_site=False,
 @never_cache
 def password_reset_confirm(request, uidb36=None, token=None,
                            template_name='account/password_reset_confirm.html',
+                           template_name_mobile='account/password_reset_confirm_mobile.html',
                            token_generator=default_token_generator,
                            set_password_form=SetPasswordForm,
                            post_reset_redirect=None,
@@ -213,6 +219,9 @@ def password_reset_confirm(request, uidb36=None, token=None,
     form for entering a new password.
     """
     assert uidb36 is not None and token is not None # checked by URLconf
+    if get_flavour() == 'mobile':
+        template_name = template_name_mobile
+
     if post_reset_redirect is None:
         post_reset_redirect = '/'
     try:
