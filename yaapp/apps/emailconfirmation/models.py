@@ -135,14 +135,15 @@ class EmailConfirmationManager(models.Manager):
     def delete_expired_confirmations(self):
         for confirmation in self.all():
             if confirmation.key_expired():
-                user = User.objects.get(id=confirmation.email_address.user.id)
-                user.is_active = False
-                user.save()
+                if not confirmation.email_address.verified and confirmation.email_address.primary:
+                    user = User.objects.get(id=confirmation.email_address.user.id)
+                    user.is_active = False
+                    user.save()
                 confirmation.delete()
     
     def resend_confirmations(self):
         for confirmation in self.all():
-            if confirmation.resend_expired():
+            if confirmation.resend_expired() and not confirmation.email_address.verified:
                 confirmation.resend()
 
 class EmailConfirmation(models.Model):
