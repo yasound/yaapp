@@ -577,10 +577,6 @@ else:
         }
     elif hostname == 'yas-web-03':
         CELERYBEAT_SCHEDULE = {
-            "scan_friends_regularly": {
-                "task": "account.task.scan_friends_task",
-                "schedule": crontab(minute=0, hour='*'),
-            },
             "resend_confirmations": {
                 "task": "emailconfirmation.task.resend_confirmations_task",
                 "schedule": crontab(minute=0, hour='10'),

@@ -43,13 +43,17 @@ SONG_FILE_TAG = 'song'
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
     status = asyncRes.state
-    progress = 0.5
+    metadata = asyncRes.info
+    if metadata is not None and 'progress' in metadata:
+        progress = metadata['progress']
+    else:
+        progress = 0.0
     message = 'updating...'
     response_dict = {}
     response_dict['status'] = status
     response_dict['progress'] = progress
     if message:
-   	 response_dict['message'] = message
+        response_dict['message'] = message
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
