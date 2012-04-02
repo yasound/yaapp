@@ -550,13 +550,14 @@ else:
                 "schedule": crontab(minute=0, hour='*'),
             },
         }
-    elif hostname == 'yas-web-03':
-        CELERYBEAT_SCHEDULE = {
-            "scan_friends_regularly": {
-                "task": "account.task.scan_friends_task",
-                "schedule": crontab(minute=0, hour='*'),
-            },
-        }
+# facebook polling is disabled right now, update callback shoud be used instead
+#    elif hostname == 'yas-web-03':
+#        CELERYBEAT_SCHEDULE = {
+#            "scan_friends_regularly": {
+#                "task": "account.task.scan_friends_task",
+#                "schedule": crontab(minute=0, hour='*'),
+#            },
+#        }
     elif hostname == 'yas-web-04':
         CELERYBEAT_SCHEDULE = {
             "check_users_are_alive": {
