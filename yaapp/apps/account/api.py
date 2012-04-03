@@ -1,22 +1,26 @@
-from tastypie import fields
-from tastypie.resources import ModelResource, Resource
-from models import UserProfile
-from django.contrib.auth.models import User
-from django.conf.urls.defaults import url
-from django.shortcuts import get_object_or_404
-from tastypie.utils import trailing_slash
-import datetime
-from tastypie.authentication import Authentication
-from tastypie.authorization import Authorization, ReadOnlyAuthorization
-from tastypie.authentication import ApiKeyAuthentication , BasicAuthentication
-from tastypie.models import ApiKey
-from tastypie.serializers import Serializer
-from yabase.models import Radio
-import settings as account_settings
 from django.conf import settings as yaapp_settings
+from django.conf.urls.defaults import url
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from emailconfirmation.models import EmailAddress
+from models import UserProfile
+from tastypie import fields
+from tastypie.authentication import ApiKeyAuthentication, BasicAuthentication, \
+    Authentication
+from tastypie.authorization import Authorization, ReadOnlyAuthorization, \
+    DjangoAuthorization
+from tastypie.models import ApiKey
+from tastypie.resources import ModelResource, Resource
+from tastypie.serializers import Serializer
+from tastypie.utils import trailing_slash
+from tastypie.validation import Validation
+from yabase.models import Radio
+import datetime
 import json
-import urllib
+import settings as account_settings
 import tweepy
+import urllib
+from django.utils.translation import ugettext_lazy as _
 
 APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
@@ -26,9 +30,23 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
     def is_authenticated(self, request, **kwargs):
         authenticated = super(YasoundApiKeyAuthentication, self).is_authenticated(request, **kwargs)
         if authenticated:
+            # inactive users should be kicked out
+            if not request.user.is_active:
+                return False
+            
             userprofile = request.user.userprofile
             userprofile.authenticated()
         return authenticated
+
+class YasoundBasicAuthentication(BasicAuthentication):
+    def is_authenticated(self, request, **kwargs):
+        authenticated = super(YasoundBasicAuthentication, self).is_authenticated(request, **kwargs)
+        if authenticated:
+            # inactive users should be kicked out
+            if not request.user.is_active:
+                return False
+        return authenticated
+    
 
 
 class UserResource(ModelResource):
@@ -70,24 +88,56 @@ class SignupAuthentication(Authentication):
             return False
         if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
             return False
+        
         return True
+
+class SignupValidation(Validation):
+    def is_valid(self, bundle, request=None):
+        if not bundle.data:
+            return {'__all__': _('Empty data')}
+
+        error = ''
+            
+        email = bundle.data['email']
+        username = bundle.data['username']
+        password = bundle.data['password']
+        if not password.isalpha():
+            error = _('Password should contains only alphanumeric characters')
+        
+        if not username.isalpha():
+            error = _('Username should contains only alphanumeric characters')
+
+        if User.objects.filter(email=email).count() > 0:
+            error = _('A user already exists with this email')
+
+        if User.objects.filter(username=username).count() > 0:
+            error = _('A user already exists with this username')
+
+        return error
 
 class SignupResource(ModelResource):
     class Meta: 
         queryset = User.objects.all()
         resource_name = 'signup'
         include_resource_uri = False
-        fields = ['id', 'username', 'last_name', 'password']
+        fields = ['id', 'username', 'last_name', 'password', 'email']
         authentication = SignupAuthentication()
         authorization = Authorization()
-        allowed_methods = ['post']
+        validation = SignupValidation()
+        allowed_methods = ['post', 'get']
         
     def obj_create(self, bundle, request=None, **kwargs):
         #test if user already exist
+
         user_resource = super(SignupResource, self).obj_create(bundle, request, **kwargs)
+        
         user = user_resource.obj
-        user.set_password(user.password) # encrypt password
+        password = bundle.data['password']
+        user.set_password(password) # encrypt password
         user.save()
+        
+        # send confirmation email
+        EmailAddress.objects.add_email(user, user.email)
             
         user_profile = user.userprofile
         user_profile.update_with_bundle(bundle, True)
@@ -104,8 +154,7 @@ class LoginResource(ModelResource):
         include_resource_uri = False
         fields = ['id', 'username']
         allowed_methods = ['get']
-        authentication = BasicAuthentication()
-        
+        authentication = YasoundBasicAuthentication()
         
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
@@ -153,7 +202,7 @@ class SocialAuthentication(Authentication):
             email = params[EMAIL_PARAM_NAME]
         
         username = build_social_username(uid, account_type)
-        if account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+        if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
             
             if not facebook_profile:
@@ -205,7 +254,7 @@ class SocialAuthentication(Authentication):
                 radio.create_name(user)
                 print 'facebook user created'
                 return True
-        elif account_type == account_settings.ACCOUNT_TYPE_TWITTER:            
+        elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:            
             TOKEN_SECRET_PARAM_NAME = 'token_secret'
             if not params.has_key(TOKEN_SECRET_PARAM_NAME):
                 return False
@@ -226,7 +275,7 @@ class SocialAuthentication(Authentication):
             try:
                 user = User.objects.get(username=username)
                 profile = user.userprofile
-                profile.facebook_token = token
+                profile.twitter_token = token
                 profile.save()
                 request.user = user
                 return True

@@ -56,8 +56,8 @@ class BinaryData:
 
 
 @transaction.commit_on_success
-def process_playlists_exec(radio, content_compressed):
-    logger.info("decompress playlist")
+def process_playlists_exec(radio, content_compressed, task=None):
+    logger.info("decompress playlist for radio %d" % (radio.id))
     
     try:
         content_uncompressed = zlib.decompress(content_compressed)
@@ -91,9 +91,15 @@ def process_playlists_exec(radio, content_compressed):
 
     # let's play with content
     data = BinaryData(content_uncompressed)
+    data_len = float(len(data.data))
 
     while not data.is_done():
         tag = data.get_tag()
+
+        if task:
+            progress = float(data.offset) / data_len
+            task.update_state(state="PENDING", meta={"progress": "%.2f" % progress})
+            
         if tag == UUID_TAG:
             uuid = data.get_string()
             if radio.creator:
@@ -165,7 +171,7 @@ def process_playlists_exec(radio, content_compressed):
 
 @task
 def process_playlists(radio, content_compressed):
-    return process_playlists_exec(radio, content_compressed)
+    return process_playlists_exec(radio, content_compressed, task=process_playlists)
 
 
 def process_need_sync_songs_exec():

@@ -64,6 +64,95 @@ class TestProfile(TestCase):
         users = UserProfile.objects.search_user_fuzzy('babar')
         self.assertEquals(len(users), 1)
                 
+class TestMultiAccount(TestCase):                
+    def setUp(self):
+        erase_index()
+
+        # jbl
+        jerome = User(email="jbl@yasound.com", username="jerome", is_superuser=False, is_staff=False)
+        jerome.set_password('jerome')
+        jerome.save()
+        self.assertEqual(jerome.get_profile(), UserProfile.objects.get(id=1))
+        self.jerome = jerome
+        
+    def test_convert(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
+        profile.save()
+
+        self.assertTrue(profile.facebook_enabled)
+        self.assertFalse(profile.twitter_enabled)
+        self.assertFalse(profile.yasound_enabled)
+        
+        profile.convert_to_multi_account_type()
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK)
+
+        self.assertTrue(profile.facebook_enabled)
+        self.assertFalse(profile.twitter_enabled)
+        self.assertFalse(profile.yasound_enabled)
+        
+    def test_multi_add(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = account_settings.ACCOUNT_MULT_FACEBOOK
+        profile.save()
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+        
+        self.assertTrue(profile.facebook_enabled)
+        self.assertTrue(profile.twitter_enabled)
+        self.assertFalse(profile.yasound_enabled)
+
+    def test_multi_add_from_none(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = None
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
+        
+        self.assertFalse(profile.facebook_enabled)
+        self.assertTrue(profile.twitter_enabled)
+        self.assertFalse(profile.yasound_enabled)
+
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
+        
+    def test_multi_remove(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = account_settings.ACCOUNT_MULT_FACEBOOK
+        profile.save()
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+        
+        self.assertTrue(profile.facebook_enabled)
+        self.assertTrue(profile.twitter_enabled)
+        self.assertFalse(profile.yasound_enabled)
+        
+        profile.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
+
+        
+        self.assertFalse(profile.facebook_enabled)
+        self.assertTrue(profile.twitter_enabled)
+        self.assertFalse(profile.yasound_enabled)
+        
+        
+    def test_multi_from_old(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
+        profile.save()
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+        
+
+    def test_multi_from_old_and_remove(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
+        profile.save()
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+
+        profile.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
+
 class TestFacebook(TestCase): 
     def setUp(self):
         erase_index()

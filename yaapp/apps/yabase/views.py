@@ -29,6 +29,9 @@ import time
 import uuid
 import yabase.settings as yabase_settings
 from yabase import signals as yabase_signals
+from django.core.cache import cache
+
+GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -39,13 +42,17 @@ SONG_FILE_TAG = 'song'
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
     status = asyncRes.state
-    progress = 0.5
+    metadata = asyncRes.info
+    if metadata is not None and 'progress' in metadata:
+        progress = metadata['progress']
+    else:
+        progress = 0.0
     message = 'updating...'
     response_dict = {}
     response_dict['status'] = status
     response_dict['progress'] = progress
     if message:
-   	 response_dict['message'] = message
+        response_dict['message'] = message
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
@@ -342,24 +349,23 @@ def get_song_status(request, song_id):
     return HttpResponse(res)
 
 
-@unlock_radio_on_exception
 @csrf_exempt
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
-    i = 0
-    while radio.is_locked:
-        time.sleep(3)
-        i = i+1
-        if i > 2:
-            break
-    
-    if radio.is_locked:
+
+    lock_id = "get_next_song_%d" % (radio.id)
+    acquire_lock = lambda: cache.add(lock_id, "true", GET_NEXT_SONG_LOCK_EXPIRE)
+    release_lock = lambda: cache.delete(lock_id)
+
+    if not acquire_lock():
+        logger.info('get_next_song locked for radio %d' % (radio.id))
         return HttpResponse('computing next songs already set', status=404)
-    
-    radio.lock()
-    nextsong = radio.get_next_song()
-    radio.unlock()
-    
+
+    try:
+        nextsong = radio.get_next_song()
+    finally:
+        release_lock()
+        
     if not nextsong:
         return HttpResponse('cannot find next song', status=404)
     
