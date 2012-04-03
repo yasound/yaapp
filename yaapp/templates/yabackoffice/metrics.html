@@ -1,0 +1,99 @@
+{% load i18n %}
+<div class="inner-page">
+<h1>{% trans "Metrics" %}</h1>
+<table width="100%" id='certificate-table' class='table zebra-striped'>
+    <thead>
+        <tr style="background:#eeeeee;">
+            <th style="width: 20%;">
+                {% trans "Figure" %}
+            </th>
+            {% for metric in metrics %}
+            <th style="width: 80px;"> 
+                {{ metric.timestamp }}
+            </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {% trans "New users" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_users }}
+            </td>
+            {% endfor %}
+        </tr>
+        
+        <tr>
+            <td>
+                {% trans "New radios" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_radios }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Listening time" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.listening_time }}
+            </td>
+            {% endfor %}
+        </tr>
+
+
+        <tr>
+            <td>
+                {% trans "Wall messages" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_wall_messages }}
+            </td>
+            {% endfor %}
+        </tr>
+
+
+        <tr>
+            <td>
+                {% trans "Song likes" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_song_like }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Radio likes / dislike / neutral" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_radio_like }} /  {{ metric.new_radio_dislike }} /  {{ metric.new_radio_neutral }} 
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Radio favorites / un-favorites" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_favorite_radio }} /  {{ metric.new_not_favorite_radio }} 
+            </td>
+            {% endfor %}
+        </tr>
+
+    </tbody>
+</table>
+</div>
