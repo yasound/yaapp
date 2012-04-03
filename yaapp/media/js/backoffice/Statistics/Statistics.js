@@ -9,7 +9,25 @@
 //------------------------------------------
 // UI
 //------------------------------------------
-
+Yasound.Statistics.UI.Metrics = function() {
+    return {
+        title: gettext('Key figures'),
+        layout:'fit',
+        id:'stats-metrics',
+        reload: function(panel) {
+            panel.load({
+                url: '/yabackoffice/keyfigures/',
+                text: gettext('Loading...')
+            });
+        },
+        tools:[{
+            id: 'refresh',
+            handler: function(event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        }]
+    };
+};
 
 Yasound.Statistics.UI.Panel = function() {
     return {
@@ -73,7 +91,7 @@ Yasound.Statistics.UI.Panel = function() {
             			panel.reload(panel);
             		}
             	}],
-            }]
+            }, Yasound.Statistics.UI.Metrics()]
         }],
         updateData : function(component) {
         	Ext.getCmp('stats-latest-radios').getStore().reload();
@@ -81,6 +99,7 @@ Yasound.Statistics.UI.Panel = function() {
         	
         	var keyfigures = Ext.getCmp('stats-keyfigures'); 
         	keyfigures.reload(keyfigures);
+        	
 		}
 	};	
 }
