@@ -352,6 +352,13 @@ def get_next_song(request, radio_id):
     finally:
         release_lock()
         
+    song_instance = radio.current_song
+    if song_instance:
+        song_dict = song_instance.song_description
+        if song_dict:
+            song_json = json.dumps(song_dict)
+            cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
+        
     if not nextsong:
         return HttpResponse('cannot find next song', status=404)
     
@@ -447,15 +454,10 @@ def get_current_song(request, radio_id):
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
     
-    radio = get_object_or_404(Radio, id=radio_id)
-    song_instance = radio.current_song
-    if not song_instance:
-        return HttpResponseNotFound()
-    song_dict = song_instance.song_description
-    if not song_dict:
+    song_json = cache.get('radio_%s.current_song.json' % (str(radio_id)), None)
+    if not song_json:
         return HttpResponseNotFound()
     
-    song_json = json.dumps(song_dict)
     return HttpResponse(song_json)
 
 
