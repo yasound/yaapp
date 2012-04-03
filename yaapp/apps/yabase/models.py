@@ -22,7 +22,9 @@ import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 import signals as yabase_signals
-#from account.models import UserProfile
+from django.core.cache import cache
+import json
+
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -69,6 +71,33 @@ class SongInstanceManager(models.Manager):
                                     yasound_song_id=yasound_song.id)
             metadata.save()
         SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata)
+
+    def get_current_song_json(self, radio_id):
+        song_json = cache.get('radio_%s.current_song.json' % (str(radio_id)), None)
+        if song_json is not None:
+            return song_json
+        else:
+            try:
+                radio = Radio.objects.get(id=radio_id)
+            except Radio.DoesNotExist:
+                return None
+            
+            song_instance = radio.current_song
+            if song_instance:
+                song_dict = song_instance.song_description
+                if song_dict:
+                    song_json = json.dumps(song_dict)
+                    cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
+                    return song_json
+        return None
+    
+    def set_current_song_json(self, radio_id, song_instance):
+        if song_instance:
+            song_dict = song_instance.song_description
+            if song_dict:
+                song_json = json.dumps(song_dict)
+                cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
+
 
 class SongInstance(models.Model):
     objects = SongInstanceManager()
@@ -521,6 +550,10 @@ class Radio(models.Model):
         # update current song
         self.current_song = song
         self.current_song_play_date = datetime.datetime.now()
+        
+        # TODO: use a signal instead
+        SongInstance.objects.set_current_song_json(self.id, song)
+        
         self.save()
         
         song.last_play_time = datetime.datetime.now()

@@ -1,13 +1,13 @@
 from celery.result import AsyncResult
 from check_request import check_api_key_Authentication, check_http_method
-from decorators import unlock_radio_on_exception
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect
+    HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -18,18 +18,14 @@ from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist
 from shutil import rmtree
 from task import process_playlists, process_upload_song
 from tempfile import mkdtemp
+from yabase import signals as yabase_signals
 from yaref.models import YasoundSong
-import datetime
 import import_utils
 import json
 import logging
 import os
 import settings as yabase_settings
-import time
 import uuid
-import yabase.settings as yabase_settings
-from yabase import signals as yabase_signals
-from django.core.cache import cache
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -461,15 +457,10 @@ def get_current_song(request, radio_id):
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
     
-    radio = get_object_or_404(Radio, id=radio_id)
-    song_instance = radio.current_song
-    if not song_instance:
-        return HttpResponseNotFound()
-    song_dict = song_instance.song_description
-    if not song_dict:
+    song_json = SongInstance.objects.get_current_song_json(radio_id)
+    if song_json is None:
         return HttpResponseNotFound()
     
-    song_json = json.dumps(song_dict)
     return HttpResponse(song_json)
 
 
