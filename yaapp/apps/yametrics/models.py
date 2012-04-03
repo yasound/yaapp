@@ -4,23 +4,30 @@ from django.contrib.auth.models import User
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, WallEvent, RadioUser
 from django.db.models import signals
+import datetime
+
 
 class MetricsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.metrics_glob = self.db.metrics.glob
+        self.metrics_glob.ensure_index("timestamp", unique=True)
         
     def _get_hour_timestamp(self):
-        return None
+        now = datetime.datetime.now()
+        return now.strftime('%Y-%m-%d-%H:00')
     
     def _get_day_timestamp(self):
-        return None
+        now = datetime.datetime.now()
+        return now.strftime('%Y-%m-%d')
     
     def _get_month_timestamp(self):
-        return None
+        now = datetime.datetime.now()
+        return now.strftime('%Y-%m')
 
     def _get_year_timestamp(self):
-        return None
+        now = datetime.datetime.now()
+        return now.strftime('%Y')
     
     def _generate_timestamps(self):
         return [self._get_hour_timestamp(),
@@ -28,6 +35,9 @@ class MetricsManager():
                 self._get_month_timestamp(),
                 self._get_year_timestamp()]
     
+    def erase_global_metrics(self):
+        self.metrics_glob.drop()
+        
     def inc_global_value(self, key, value):
         collection = self.metrics_glob
         
@@ -39,7 +49,10 @@ class MetricsManager():
                 "$inc": {key: value}
             }, upsert=True, safe=True)
 
-
+    def get_metrics_for_timestamp(self, timestamp):
+        collection = self.metrics_glob
+        return collection.find_one({'timestamp': timestamp})
+    
 def user_stopped_listening_handler(radio, user, duration):
     metrics = MetricsManager()
     metrics.inc_global_value('listening_time', duration)
