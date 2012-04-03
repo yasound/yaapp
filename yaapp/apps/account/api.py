@@ -22,6 +22,9 @@ import tweepy
 import urllib
 from django.utils.translation import ugettext_lazy as _
 
+import logging
+logger = logging.getLogger("yaapp.account")
+
 APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
 
@@ -96,16 +99,10 @@ class SignupValidation(Validation):
         if not bundle.data:
             return {'__all__': _('Empty data')}
 
-        error = ''
+        error = u''
             
         email = bundle.data['email']
         username = bundle.data['username']
-        password = bundle.data['password']
-        if not password.isalpha():
-            error = _('Password should contains only alphanumeric characters')
-        
-        if not username.isalpha():
-            error = _('Username should contains only alphanumeric characters')
 
         if User.objects.filter(email=email).count() > 0:
             error = _('A user already exists with this email')
@@ -113,6 +110,8 @@ class SignupValidation(Validation):
         if User.objects.filter(username=username).count() > 0:
             error = _('A user already exists with this username')
 
+        if len(error) > 0:
+            logger.info(unicode(error))
         return error
 
 class SignupResource(ModelResource):
