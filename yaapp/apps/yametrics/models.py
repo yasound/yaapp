@@ -8,6 +8,9 @@ import datetime
 
 
 class MetricsManager():
+    """
+    Helper class to store and retrieve key-value metrics
+    """
     def __init__(self):
         self.db = settings.MONGO_DB
         self.metrics_glob = self.db.metrics.glob
@@ -53,12 +56,14 @@ class MetricsManager():
         collection = self.metrics_glob
         return collection.find_one({'timestamp': timestamp})
     
-def user_stopped_listening_handler(radio, user, duration):
+## Event handlers
+
+def user_stopped_listening_handler(radio, user, duration, **kwargs):
     metrics = MetricsManager()
     metrics.inc_global_value('listening_time', duration)
 yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
 
-def new_wall_event_handler(wall_event):
+def new_wall_event_handler(wall_event, **kwargs):
     metrics = MetricsManager()
     we_type = wall_event.type
     if we_type == yabase_settings.EVENT_MESSAGE:
@@ -77,54 +82,30 @@ def new_radio_handler(sender, instance, created, **kwargs):
     if created:
         metrics = MetricsManager()
         metrics.inc_global_value('new_radios', 1)
-signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+signals.post_save.connect(new_radio_handler, sender=Radio)
 
-
-def dislike_radio_handler(radio, user):
+def dislike_radio_handler(radio, user, **kwargs):
     metrics = MetricsManager()
     metrics.inc_global_value('new_radio_dislike', 1)
 yabase_signals.dislike_radio.connect(dislike_radio_handler)
 
-def like_radio_handler(radio, user):
+def like_radio_handler(radio, user, **kwargs):
     metrics = MetricsManager()
     metrics.inc_global_value('new_radio_like', 1)
 yabase_signals.dislike_radio.connect(like_radio_handler)
 
-def neutral_like_radio_handler(radio, user):
+def neutral_like_radio_handler(radio, user, **kwargs):
     metrics = MetricsManager()
     metrics.inc_global_value('new_radio_neutral_like', 1)
 yabase_signals.dislike_radio.connect(neutral_like_radio_handler)
 
 
-def favorite_radio_handler(radio, user):
+def favorite_radio_handler(radio, user, **kwargs):
     metrics = MetricsManager()
     metrics.inc_global_value('new_favorite_radio', 1)
 yabase_signals.favorite_radio.connect(favorite_radio_handler)
 
-def not_favorite_radio_handler(radio, user):
+def not_favorite_radio_handler(radio, user, **kwargs):
     metrics = MetricsManager()
     metrics.inc_global_value('new_not_favorite_radio', 1)
 yabase_signals.favorite_radio.connect(not_favorite_radio_handler)
-#def build_daily_metrics():
-#    overall_listening_time = Radio.objects.overall_listening_time()
-#    yasound_friend_count = UserProfile.objects.yasound_friend_count()
-#    user_count = User.objects.filter(is_active=True).count()
-#    radio_count = Radio.objects.all().count()        
-#    ready_radio_count = Radio.objects.filter(ready=True).count()
-#    wall_message_count = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count()
-#    wall_like_count = WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count()
-#    favorite_count = RadioUser.objects.filter(favorite=True).count()
-        
-#    return render_to_response(template_name, {
-#        "user_count": User.objects.filter(is_active=True).count(),
-#        "radio_count": Radio.objects.all().count(),
-#        "ready_radio_count": Radio.objects.filter(ready=True).count(),
-#        "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
-#        "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
-#        "favorite_count": RadioUser.objects.filter(favorite=True).count(),
-#        "yasound_friend_count": UserProfile.objects.all().aggregate(Count('friends'))['friends__count'],
-#        "listening_time": overall_listening_time_str,
-#        "uploaded_song_count" : YasoundSong.objects.filter(id__gt=2059600).count(),
-#        "total_friend_count": total_friend_count
-#
-#    
