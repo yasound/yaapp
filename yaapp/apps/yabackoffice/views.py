@@ -29,6 +29,7 @@ import datetime
 import simplejson as json
 import utils as yabackoffice_utils
 from django.core.cache import cache
+from yametrics.models import MetricsManager
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -437,3 +438,16 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     }, context_instance=RequestContext(request))  
 
 
+@csrf_exempt
+@login_required
+def metrics(request, template_name='yabackoffice/metrics.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    mm = MetricsManager()
+    metrics = mm.get_current_metrics()
+            
+    return render_to_response(template_name, {
+        "metrics": metrics,
+    }, context_instance=RequestContext(request)) 
+    

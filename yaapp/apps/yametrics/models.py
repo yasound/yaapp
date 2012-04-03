@@ -56,6 +56,16 @@ class MetricsManager():
         collection = self.metrics_glob
         return collection.find_one({'timestamp': timestamp})
     
+    def get_current_metrics(self):
+        collection = self.metrics_glob
+        timestamps = self._generate_timestamps()
+        metrics = []
+        for timestamp in timestamps:
+            metric = collection.find_one({'timestamp': timestamp})
+            if metric:
+                metrics.append(metric)
+        return metrics
+        
 ## Event handlers
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):

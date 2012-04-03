@@ -27,4 +27,5 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^users', 'users'),
 
     url(r'^keyfigures/', 'keyfigures'),
+    url(r'^metrics/', 'metrics'),
 )

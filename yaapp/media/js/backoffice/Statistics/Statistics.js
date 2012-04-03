@@ -11,12 +11,12 @@
 //------------------------------------------
 Yasound.Statistics.UI.Metrics = function() {
     return {
-        title: gettext('Key figures'),
+        title: gettext('Metrics'),
         layout:'fit',
         id:'stats-metrics',
         reload: function(panel) {
             panel.load({
-                url: '/yabackoffice/keyfigures/',
+                url: '/yabackoffice/metrics/',
                 text: gettext('Loading...')
             });
         },
@@ -37,7 +37,7 @@ Yasound.Statistics.UI.Panel = function() {
         items:[{
             columnWidth:.50,
             style:'padding:10px 0 10px 10px',
-            items:[{
+            items:[Yasound.Statistics.UI.Metrics(), {
                 title: gettext('Latests radios'),
                 layout:'fit',
             	tools:[{
@@ -91,7 +91,7 @@ Yasound.Statistics.UI.Panel = function() {
             			panel.reload(panel);
             		}
             	}],
-            }, Yasound.Statistics.UI.Metrics()]
+            }]
         }],
         updateData : function(component) {
         	Ext.getCmp('stats-latest-radios').getStore().reload();
@@ -100,6 +100,8 @@ Yasound.Statistics.UI.Panel = function() {
         	var keyfigures = Ext.getCmp('stats-keyfigures'); 
         	keyfigures.reload(keyfigures);
         	
+        	var metrics = Ext.getCmp('stats-metrics'); 
+            metrics.reload(metrics);
 		}
 	};	
 }
