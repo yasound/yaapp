@@ -278,6 +278,10 @@ MIDDLEWARE_CLASSES = (
     'django_mobile.middleware.SetFlavourMiddleware',
 )
 
+if LOCAL_MODE or DEVELOPMENT_MODE:
+    # ios 4 send double slashes. Nginx on prod server handle it gracefully, not on dev & local
+    MIDDLEWARE_CLASSES += ('yabase.middleware.DoubleSlashMiddleware',)
+    
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
