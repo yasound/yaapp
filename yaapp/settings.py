@@ -335,6 +335,7 @@ INSTALLED_APPS = (
     'django_mobile',
     'captcha',
     'emailconfirmation',
+    'yametrics',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

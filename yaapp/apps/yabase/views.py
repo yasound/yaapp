@@ -28,11 +28,10 @@ import settings as yabase_settings
 import time
 import uuid
 import yabase.settings as yabase_settings
-
+from yabase import signals as yabase_signals
 from django.core.cache import cache
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
-
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -129,6 +128,9 @@ def like_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.mood = yabase_settings.MOOD_LIKE
     radio_user.save()
+    
+    yabase_signals.like_radio.send(radio, request.user)
+
     res = '%s (user) likes %s (radio)\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -148,6 +150,9 @@ def neutral_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.mood = yabase_settings.MOOD_NEUTRAL
     radio_user.save()
+    
+    yabase_signals.neutral_like_radio.send(radio, request.user)
+
     res = '%s (user) does not like nor dislike %s (radio)\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -167,6 +172,9 @@ def dislike_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.mood = yabase_settings.MOOD_DISLIKE
     radio_user.save()
+    
+    yabase_signals.dislike_radio.send(radio, request.user)
+    
     res = '%s (user) dislikes %s (radio)\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -186,6 +194,9 @@ def favorite_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.favorite = True
     radio_user.save()
+    
+    yabase_signals.favorite_radio.send(radio, request.user)
+    
     res = '%s (user) has %s (radio) as favorite\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -205,6 +216,9 @@ def not_favorite_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.favorite = False
     radio_user.save()
+    
+    yabase_signals.not_favorite_radio.send(radio, request.user)
+
     res = '%s (user) has not %s (radio) as favorite anymore\n' % (request.user, radio)
     return HttpResponse(res)
 
