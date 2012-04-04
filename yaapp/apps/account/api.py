@@ -218,7 +218,7 @@ class SocialAuthentication(Authentication):
                 return False
             
             try:
-                profile = UserProfile.objects.get(facebook_token=token)
+                profile = UserProfile.objects.get(facebook_uid=uid)
                 user = profile.user
                 profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
                 profile.facebook_token = token
@@ -272,7 +272,7 @@ class SocialAuthentication(Authentication):
                 return False
             
             try:
-                profile = UserProfile.objects.get(twitter_token=token)
+                profile = UserProfile.objects.get(twitter_uid=uid)
                 user = profile.user
                 profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
                 profile.twitter_token = token
