@@ -143,7 +143,7 @@ class UserProfile(models.Model):
         if commit:
             self.save()
         
-    def remove_account_type(self, account_type_to_remove):
+    def remove_account_type(self, account_type_to_remove, commit=True):
         account_type = self.account_type
         if account_type in account_settings.SINGLE_ACCOUNT_TYPES:
             account_type = self.convert_to_multi_account_type(commit=False)
@@ -154,8 +154,132 @@ class UserProfile(models.Model):
         if account_type_to_remove in accounts:
             accounts.remove(account_type_to_remove)
         self.account_type = account_settings.ACCOUNT_TYPE_SEPARATOR.join(accounts)
-        self.save()
+        if commit:
+            self.save()
     
+    def add_facebook_account(self, uid, token):
+        try:
+            facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
+        except:
+            return False
+        
+        if not facebook_profile:
+            return False
+        
+        if facebook_profile.has_key('error'):
+            logger.error(facebook_profile['error'])
+            return False
+        
+        if not facebook_profile.has_key('id'):
+            logger.error('no "id" attribute in facebook profile')
+            return False
+        if facebook_profile['id'] != uid:
+            logger.error('uid does not match')
+            return False
+        
+        if UserProfile.objects.filter(facebook_uid=uid).count() > 0:
+            logger.error('facebook account already attached to other account')
+            return False
+        
+        self.facebook_uid = uid
+        self.facebook_token = token
+        self.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
+        self.save()
+            
+        try:
+            self.scan_friends()
+        except:
+            pass
+        
+        try:
+            if self.picture is None:
+                self.update_with_social_picture()
+        except:
+            pass
+    
+        return True
+    
+    def remove_facebook_account(self):
+        if not self.yasound_enabled and not self.twitter_enabled:
+            return False
+        self.facebook_uid = None
+        self.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
+        self.facebook_token = ''
+        self.facebook_uid = ''
+        
+        # TODO: refresh friends
+        self.save()
+        
+    def add_twitter_account(self, uid, token, token_secret):
+        auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+        auth.set_access_token(token, token_secret)
+        api = tweepy.API(auth)
+        res = api.verify_credentials()
+        print res
+        if (not res) or (res == False):
+            return False
+        if res.id != int(uid):
+            logger.error('res id does not match for twitter')
+        
+        if UserProfile.objects.filter(twitter_uid=uid).count() > 0:
+            logger.error('twitter account already attached to other account')
+            return False
+        
+        self.twitter_uid = uid
+        self.twitter_token = token
+        self.twitter_token_secret = token_secret
+        self.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
+        self.save()
+
+        try:
+            self.scan_friends()
+        except:
+            pass
+        
+        try:
+            if self.picture is None:
+                self.update_with_social_picture()
+        except:
+            pass
+    
+        return True
+
+    def remove_twitter_account(self):
+        if not self.yasound_enabled and not self.facebook_enabled:
+            return False
+        self.twitter_uid = ''
+        self.twitter_token = ''
+        self.twitter_token_secret = ''
+        self.remove_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
+
+        # TODO: refresh friends
+        self.save()
+        
+    def add_yasound_account(self, email, password):
+        if User.objects.filter(email=email).count() > 0:
+            logger.error('yasound account already attached to other account')
+            return False
+        
+        self.user.email = email
+        self.user.set_password(password)
+        self.user.save()
+        self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
+        return True
+
+    def remove_yasound_account(self):
+        if not self.twitter_enabled and not self.facebook_enabled:
+            return False
+        
+        self.user.set_password(None)
+        self.user.email = ''
+        self.user.save()
+
+        self.remove_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=False)
+        
+        # TODO: refresh friends
+        self.save()
+        return True
+        
     def __unicode__(self):
         if self.name:
             return self.name

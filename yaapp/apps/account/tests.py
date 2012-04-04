@@ -134,7 +134,6 @@ class TestMultiAccount(TestCase):
         self.assertTrue(profile.twitter_enabled)
         self.assertFalse(profile.yasound_enabled)
         
-        
     def test_multi_from_old(self):
         profile = self.jerome.get_profile()
         profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
@@ -153,6 +152,43 @@ class TestMultiAccount(TestCase):
         profile.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
         self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
 
+    def test_add_remove_account(self):
+        profile = self.jerome.get_profile()
+        profile.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
+        
+        self.assertFalse(profile.facebook_enabled)
+        self.assertTrue(profile.yasound_enabled)
+
+        # add facebook account
+        profile.add_facebook_account(uid='1460646148',
+                                     token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4')
+        
+        self.assertTrue(profile.facebook_enabled)
+        self.assertTrue(profile.yasound_enabled)
+        
+        # remove it
+        profile.remove_facebook_account()
+
+        self.assertFalse(profile.facebook_enabled)
+        self.assertTrue(profile.yasound_enabled)
+        
+        # trying to remove yasound account, last account so it is impossible
+        self.assertFalse(profile.remove_yasound_account())
+        
+        self.assertFalse(profile.facebook_enabled)
+        self.assertTrue(profile.yasound_enabled)
+
+        # let's test the yasound removal
+        profile.add_facebook_account(uid='1460646148',
+                                     token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4')
+        
+        self.assertTrue(profile.remove_yasound_account())
+        self.assertFalse(profile.remove_facebook_account())
+        
+        self.assertTrue(profile.facebook_enabled)
+        self.assertFalse(profile.yasound_enabled)
+    
+        
 class TestFacebook(TestCase): 
     def setUp(self):
         erase_index()
@@ -275,4 +311,5 @@ class TestFacebook(TestCase):
     }
 }]
 """        
-        self.client.post(reverse('facebook_update'), json, content_type='application/json')             
+        self.client.post(reverse('facebook_update'), json, content_type='application/json')   
+               

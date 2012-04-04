@@ -18,3 +18,6 @@ SUBSCRIPTION_PREMIUM = 'premium'
 
 GROUP_NAME_VIP = 'vip'
 
+APP_KEY_COOKIE_NAME = 'app_key'
+APP_KEY_IPHONE = 'yasound_iphone_app'
+

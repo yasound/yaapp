@@ -18,14 +18,17 @@ from models import User, UserProfile
 from social_auth import __version__ as version
 import datetime
 import logging
-import simplejson
+import json
 from django.contrib.auth import login as auth_login
 from django.forms.util import ErrorList
 from django_mobile import get_flavour
+import urllib
+from tastypie.http import HttpBadRequest
+
 logger = logging.getLogger("yaapp.account")
 
 PICTURE_FILE_TAG = 'picture'
-
+import settings as account_settings
 
 class DivErrorList(ErrorList):
     def __unicode__(self):
@@ -155,7 +158,7 @@ def facebook_update(request):
 
     elif request.method == 'POST':
         logger.debug('received update from facebook')
-        json_data =  simplejson.loads(request.read())
+        json_data =  json.loads(request.read())
         logger.debug(json_data)
         
         if type(json_data) == type([]):
@@ -253,3 +256,66 @@ def password_reset_confirm(request, uidb36=None, token=None,
     return render_to_response(template_name, context,
                               context_instance=RequestContext(request, current_app=current_app))
         
+        
+@csrf_exempt
+def associate(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    cookies = request.COOKIES
+    if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+        return False
+    if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
+        return False
+
+    user = request.user
+    profile = user.get_profile()
+    
+    account_type = request.REQUEST.get('account_type')
+    if not account_type:
+        return HttpBadRequest()
+    
+    uid = request.REQUEST.get('uid')
+    token = request.REQUEST.get('token')
+    token_secret = request.REQUEST.get('token_secret')
+    email = request.REQUEST.get('email')
+    username = request.REQUEST.get('username')
+    password = request.REQUEST.get('password')
+    
+    if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
+        profile.add_facebook_account(uid, token)
+    elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
+        profile.add_twitter_account(uid, token, token_secret)
+    elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
+        profile.add_yasound_account(email, username, password)
+
+    return HttpBadRequest()
+
+
+@csrf_exempt
+def dissociate(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    cookies = request.COOKIES
+    if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+        return False
+    if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
+        return False
+
+    user = request.user
+    profile = user.get_profile()
+
+    account_type = request.REQUEST.get('account_type')
+    if not account_type:
+        return HttpBadRequest()
+
+    if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
+        profile.remove_facebook_account()
+    elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
+        profile.remove_twitter_account()
+    elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
+        profile.remove_yasound_account()
+        
+    
+    

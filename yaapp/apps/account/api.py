@@ -25,8 +25,6 @@ from django.utils.translation import ugettext_lazy as _
 import logging
 logger = logging.getLogger("yaapp.account")
 
-APP_KEY_COOKIE_NAME = 'app_key'
-APP_KEY_IPHONE = 'yasound_iphone_app'
 
 
 class YasoundApiKeyAuthentication(ApiKeyAuthentication):
@@ -87,9 +85,9 @@ class SignupAuthentication(Authentication):
         print 'signup authentication'
         print request.COOKIES
         cookies = request.COOKIES
-        if not cookies.has_key(APP_KEY_COOKIE_NAME):
+        if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
             return False
-        if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
+        if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
             return False
         
         return True
@@ -176,9 +174,9 @@ class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         # Application Cookie authentication:
         cookies = request.COOKIES
-        if not cookies.has_key(APP_KEY_COOKIE_NAME):
+        if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
             return False
-        if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
+        if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
             return False
         # Social account verification:
         ACCOUNT_TYPE_PARAM_NAME = 'account_type'
