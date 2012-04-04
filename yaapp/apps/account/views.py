@@ -282,14 +282,18 @@ def associate(request):
     username = request.REQUEST.get('username')
     password = request.REQUEST.get('password')
     
+    res = False
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
-        profile.add_facebook_account(uid, token)
+        res = profile.add_facebook_account(uid, token)
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
-        profile.add_twitter_account(uid, token, token_secret)
+        res = profile.add_twitter_account(uid, token, token_secret)
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
-        profile.add_yasound_account(email, username, password)
+        res = profile.add_yasound_account(email, username, password)
 
-    return HttpBadRequest()
+    if res:
+        return HttpResponse("OK")
+    else:
+        return HttpBadRequest()
 
 
 @csrf_exempt
@@ -309,13 +313,18 @@ def dissociate(request):
     account_type = request.REQUEST.get('account_type')
     if not account_type:
         return HttpBadRequest()
-
+    
+    res = False
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
-        profile.remove_facebook_account()
+        res = profile.remove_facebook_account()
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
-        profile.remove_twitter_account()
+        res = profile.remove_twitter_account()
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
-        profile.remove_yasound_account()
+        res = profile.remove_yasound_account()
         
+    if res:
+        return HttpResponse("OK")
+    else:
+        return HttpBadRequest()
     
     
