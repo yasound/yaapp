@@ -139,6 +139,15 @@ class EmailConfirmationManager(models.Manager):
                     user = User.objects.get(id=confirmation.email_address.user.id)
                     user.is_active = False
                     user.save()
+
+                    # send an email
+                    try:
+                        subject = 'user %d disabled' % (user.id)
+                        message = 'the user %d (username = %s, email: %s) has been disabled because of missing confirmation' % (user.id, user.username, user.email)
+                        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, settings.MANAGERS)
+                    except:
+                        pass
+                    
                 confirmation.delete()
     
     def resend_confirmations(self):
