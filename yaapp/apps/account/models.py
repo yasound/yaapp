@@ -86,7 +86,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(max_length = 60, blank=True)
     url = models.URLField(null=True, blank=True)
-    account_type = models.CharField(max_length=20, default=account_settings.ACCOUNT_TYPE_YASOUND)
+    account_type = models.CharField(max_length=20, blank=True)
     twitter_uid = models.CharField(max_length=60, null=True, blank=True)
     facebook_uid = models.CharField(max_length=60, null=True, blank=True)
     twitter_token = models.CharField(max_length=256, blank=True)
@@ -129,7 +129,7 @@ class UserProfile(models.Model):
             self.save()
         return account_type
         
-    def add_account_type(self, new_account_type):
+    def add_account_type(self, new_account_type, commit=True):
         account_type = self.account_type
         if account_type in account_settings.SINGLE_ACCOUNT_TYPES:
             account_type = self.convert_to_multi_account_type(commit=False)
@@ -140,7 +140,8 @@ class UserProfile(models.Model):
         if new_account_type not in accounts:
             accounts.append(new_account_type)
         self.account_type = account_settings.ACCOUNT_TYPE_SEPARATOR.join(accounts)
-        self.save()
+        if commit:
+            self.save()
         
     def remove_account_type(self, account_type_to_remove):
         account_type = self.account_type

@@ -180,7 +180,6 @@ class SocialAuthentication(Authentication):
             return False
         if cookies[APP_KEY_COOKIE_NAME] != APP_KEY_IPHONE:
             return False
-        
         # Social account verification:
         ACCOUNT_TYPE_PARAM_NAME = 'account_type'
         UID_PARAM_NAME = 'uid'
@@ -219,13 +218,14 @@ class SocialAuthentication(Authentication):
                 return False
             
             try:
-                user = User.objects.get(username=username)
-                profile = user.userprofile
+                profile = UserProfile.objects.get(facebook_token=token)
+                user = profile.user
+                profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
                 profile.facebook_token = token
                 profile.save()
                 request.user = user
                 return True
-            except User.DoesNotExist:
+            except UserProfile.DoesNotExist:
                 user = User.objects.create(username=username)
                 if email:
                     user.email = email
@@ -233,7 +233,7 @@ class SocialAuthentication(Authentication):
                 profile = user.userprofile
                 profile.facebook_uid = uid
                 profile.facebook_token = token
-                profile.account_type = account_type
+                profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
                 profile.name = name
                 profile.save()
                 
@@ -272,13 +272,14 @@ class SocialAuthentication(Authentication):
                 return False
             
             try:
-                user = User.objects.get(username=username)
-                profile = user.userprofile
+                profile = UserProfile.objects.get(twitter_token=token)
+                user = profile.user
+                profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
                 profile.twitter_token = token
                 profile.save()
                 request.user = user
                 return True
-            except User.DoesNotExist:
+            except UserProfile.DoesNotExist:
                 user = User.objects.create(username=username)
                 if email:
                     user.email = email
@@ -287,7 +288,7 @@ class SocialAuthentication(Authentication):
                 profile.twitter_uid = uid
                 profile.twitter_token = token
                 profile.twitter_token_secret = token_secret
-                profile.account_type = account_type
+                profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
                 profile.name = name
                 profile.save()
                 profile.scan_friends()
