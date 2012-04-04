@@ -47,11 +47,18 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+CELERY_IMPORTS = (
+    "yabase.task", 
+    "stats.task", 
+    "account.task", 
+    "emailconfirmation.task", 
+    "yametrics.task",
+)
+
 if LOCAL_MODE:
     # Celery config:
     BROKER_URL = "django://"
     BROKER_BACKEND = "django"
-    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task", "emailconfirmation.task")
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10
@@ -105,7 +112,6 @@ if LOCAL_MODE:
 elif DEVELOPMENT_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
-    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task", "emailconfirmation.task")
     BROKER_URL = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND = "redis"
     CELERY_REDIS_HOST = "localhost"
@@ -136,7 +142,6 @@ elif DEVELOPMENT_MODE:
 elif PRODUCTION_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
-    CELERY_IMPORTS = ("yabase.task", "stats.task", "account.task", "emailconfirmation.task")
     BROKER_URL = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND = "redis"
     CELERY_REDIS_HOST = "localhost"
@@ -183,7 +188,9 @@ if not TEST_MODE:
 else:
     # the test router enable syncdb for yasound database
     DATABASE_ROUTERS = ['yabase.router.YaappRouterForTest']
-
+    
+    # celery should be sync when running tests
+    CELERY_ALWAYS_EAGER = True
 
 
 # Local time zone for this installation. Choices can be found here:
