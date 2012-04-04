@@ -264,10 +264,9 @@ def associate(request):
 
     cookies = request.COOKIES
     if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
-        return False
+        return HttpResponse(status=401)
     if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
-        return False
-
+        return HttpResponse(status=401)
     user = request.user
     profile = user.get_profile()
     
@@ -303,9 +302,9 @@ def dissociate(request):
 
     cookies = request.COOKIES
     if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
-        return False
+        return HttpResponse(status=401)
     if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
-        return False
+        return HttpResponse(status=401)
 
     user = request.user
     profile = user.get_profile()
