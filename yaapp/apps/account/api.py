@@ -58,7 +58,6 @@ class UserResource(ModelResource):
         resource_name = 'user'
         fields = ['id']
         include_resource_uri = False
-        allowed_methods = []
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
 
