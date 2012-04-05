@@ -197,8 +197,10 @@ class SocialAuthentication(Authentication):
         # Application Cookie authentication:
         cookies = request.COOKIES
         if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+            logger.error('no cookies')
             return False
         if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
+            logger.error('no cookies')
             return False
         # Social account verification:
         ACCOUNT_TYPE_PARAM_NAME = 'account_type'
@@ -208,6 +210,7 @@ class SocialAuthentication(Authentication):
         EMAIL_PARAM_NAME = 'email'
         
         params = request.GET
+        logger.debug('params = %s' % (params))
         if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
             return False
         
@@ -220,21 +223,23 @@ class SocialAuthentication(Authentication):
             email = params[EMAIL_PARAM_NAME]
         
         username = build_random_username()
+        logger.debug('params = %s' % (params))
         if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
             
             if not facebook_profile:
+                logger.error('cannot communicate with facebook')
                 return False
             
             if facebook_profile.has_key('error'):
-                print facebook_profile['error']
+                logger.error('cannot communicate with facebook: %s' %(facebook_profile['error']))
                 return False
             
             if not facebook_profile.has_key('id'):
-                print 'no "id" attribute in facebook profile'
+                logger.error('no "id" attribute in facebook profile')
                 return False
             if facebook_profile['id'] != uid:
-                print 'uid does not match'
+                logger.error('uid does not match')
                 return False
             
             try:
@@ -271,7 +276,7 @@ class SocialAuthentication(Authentication):
                 
                 radio = Radio.objects.filter(creator=user.id)[0]
                 radio.create_name(user)
-                print 'facebook user created'
+                logger.info('facebook user created')
                 authenticated = True
         elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:            
             TOKEN_SECRET_PARAM_NAME = 'token_secret'
@@ -283,12 +288,11 @@ class SocialAuthentication(Authentication):
             auth.set_access_token(token, token_secret)
             api = tweepy.API(auth)
             res = api.verify_credentials()
-            print 'verify_credentials:'
-            print res
             if (not res) or (res == False):
+                logger.error('cannot communicate with twitter')
                 return False
             if res.id != int(uid):
-                print 'res id does not match'
+                logger.error('res id does not match')
                 return False
             
             try:
