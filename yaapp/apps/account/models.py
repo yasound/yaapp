@@ -508,10 +508,12 @@ class UserProfile(models.Model):
             friend_profile.my_friend_created_radio(friend_profile, radio)
             
     def logged(self):
-        print 'user %s is logged' % self.name
         for f in self.friends.all():
-            friend_profile = f.userprofile
-            friend_profile.my_friend_is_online(self)
+            try:
+                friend_profile = f.userprofile
+                friend_profile.my_friend_is_online(self)
+            except:
+                pass
     
     def store_ios_device(self, device_token, token_type):
         device, created = Device.objects.get_or_create(user=self.user, ios_token=device_token, ios_token_type=token_type)
