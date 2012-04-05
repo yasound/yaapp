@@ -72,10 +72,10 @@ def process_playlists_exec(radio, content_compressed, task=None):
     SONG_TAG = 'SONG'
     REMOVE_PLAYLIST = 'REMV'
     REMOTE_PLAYLIST = 'RLST'
+    UUID_TAG = 'UUID'
         
     artist_name = None
     album_name = None
-
 
     count = 0
     found = 0
@@ -98,7 +98,9 @@ def process_playlists_exec(radio, content_compressed, task=None):
             progress = float(data.offset) / data_len
             task.update_state(state="PENDING", meta={"progress": "%.2f" % progress})
             
-        if tag == PLAYLIST_TAG:
+        if tag == UUID_TAG:
+            _uuid = data.get_string()
+        elif tag == PLAYLIST_TAG:            
             _device_playlist_name = data.get_string()
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
