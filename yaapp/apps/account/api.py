@@ -20,6 +20,8 @@ import json
 import settings as account_settings
 import tweepy
 import urllib
+import uuid
+
 from django.utils.translation import ugettext_lazy as _
 
 import logging
@@ -144,6 +146,7 @@ class SignupResource(ModelResource):
         
         user = user_resource.obj
         password = bundle.data['password']
+        user.username = build_random_username()
         user.set_password(password) # encrypt password
         user.save()
         
@@ -180,9 +183,11 @@ class LoginResource(ModelResource):
         return object_list.filter(id=request.user.id)
     
  
-def build_social_username(uid, account_type):
-        username = '{0}@{1}'.format(uid, account_type)
-        return username   
+def build_random_username():
+        candidate = uuid.uuid4().hex[:30]
+        if User.objects.filter(username=candidate).count() > 0:
+            build_random_username()
+        return candidate
     
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
@@ -211,7 +216,7 @@ class SocialAuthentication(Authentication):
         if params.has_key(EMAIL_PARAM_NAME):
             email = params[EMAIL_PARAM_NAME]
         
-        username = build_social_username(uid, account_type)
+        username = build_random_username()
         if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
             
