@@ -1,32 +1,36 @@
+from datetime import timedelta
 from django.conf import settings as yaapp_settings
 from django.contrib.auth.models import User
 from django.db import models, transaction
-from django.db.models import signals
+from django.db.models import Q, signals
+from django.db.models.aggregates import Sum
 from django.utils.translation import ugettext_lazy as _
+from sorl.thumbnail import get_thumbnail
+from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
+from yaref.models import YasoundSong
+from yareport.task import task_report_song
 import datetime
-from datetime import timedelta
+import django.dispatch
+import django.db.models.options as options
+import logging
 import random
 import settings as yabase_settings
 import string
-from yaref.models import YasoundSong
-from stats.models import RadioListeningStat
-from django.db.models import Q
+import uuid
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-from sorl.thumbnail import get_thumbnail
-from yareport.task import task_report_song
+import signals as yabase_signals
+from django.core.cache import cache
+import json
 
-#from account.models import UserProfile
-import uuid
 
-import logging
 logger = logging.getLogger("yaapp.yabase")
 
-import django.db.models.options as options
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
+
 
 class SongMetadata(models.Model):    
     name = models.CharField(max_length=255)
@@ -67,6 +71,33 @@ class SongInstanceManager(models.Manager):
                                     yasound_song_id=yasound_song.id)
             metadata.save()
         SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata)
+
+    def get_current_song_json(self, radio_id):
+        song_json = cache.get('radio_%s.current_song.json' % (str(radio_id)), None)
+        if song_json is not None:
+            return song_json
+        else:
+            try:
+                radio = Radio.objects.get(id=radio_id)
+            except Radio.DoesNotExist:
+                return None
+            
+            song_instance = radio.current_song
+            if song_instance:
+                song_dict = song_instance.song_description
+                if song_dict:
+                    song_json = json.dumps(song_dict)
+                    cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
+                    return song_json
+        return None
+    
+    def set_current_song_json(self, radio_id, song_instance):
+        if song_instance:
+            song_dict = song_instance.song_description
+            if song_dict:
+                song_json = json.dumps(song_dict)
+                cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
+
 
 class SongInstance(models.Model):
     objects = SongInstanceManager()
@@ -251,6 +282,9 @@ class Playlist(models.Model):
 RADIO_NEXT_SONGS_COUNT = 1
 
 class RadioManager(models.Manager):
+    def overall_listening_time(self):
+        return self.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
+    
     def radio_for_user(self, user):
         return self.filter(creator=user)[:1][0]
     
@@ -526,6 +560,10 @@ class Radio(models.Model):
         # update current song
         self.current_song = song
         self.current_song_play_date = datetime.datetime.now()
+        
+        # TODO: use a signal instead
+        SongInstance.objects.set_current_song_json(self.id, song)
+        
         self.save()
         
         song.last_play_time = datetime.datetime.now()
@@ -651,6 +689,7 @@ class Radio(models.Model):
             
         self.overall_listening_time += listening_duration
         self.save() 
+        yabase_signals.user_stopped_listening.send(sender=self, radio=self, user=self, duration=listening_duration)
         
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.userprofile.name, self.name)
@@ -999,7 +1038,10 @@ class WallEvent(models.Model):
     class Meta:
         db_name = u'default'
 
-
+def new_wall_event_handler(sender, instance, created, **kwargs):
+    if created:
+        yabase_signals.new_wall_event.send(sender=instance, wall_event=instance)
+signals.post_save.connect(new_wall_event_handler, sender=WallEvent)
 
 class NextSong(models.Model):
     radio = models.ForeignKey(Radio)

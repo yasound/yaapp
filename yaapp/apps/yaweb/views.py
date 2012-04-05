@@ -43,6 +43,15 @@ def redirect(request, url=''):
         redirected_url = reverse(urls[url]) 
     return HttpResponseRedirect(redirected_url)
 
+def eula(request, template_name='yaweb/eula.html'):
+    return render_to_response(template_name, {
+        'current_page': 'eula',
+    }, context_instance=RequestContext(request))  
+
+def logo(request):
+    return HttpResponseRedirect('/media/yaweb/images/logo.png')
+
+
 def download(request, filename):
     file = open(filename,"r")
     mimetype = mimetypes.guess_type(filename)[0]

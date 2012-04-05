@@ -1,25 +1,27 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save, pre_delete
-from tastypie.models import create_api_key
-from tastypie.models import ApiKey
-from yabase.models import Radio, RadioUser
 from django.conf import settings as yaapp_settings
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
+from django.db import models
+from django.db.models.aggregates import Count
+from django.db.models.signals import post_save, pre_delete
+from django.utils.translation import ugettext_lazy as _
+from facepy import GraphAPI
+from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+from social_auth.signals import socialauth_not_registered
+from sorl.thumbnail import ImageField, get_thumbnail
+from tastypie.models import ApiKey, create_api_key
+from yabase.models import Radio, RadioUser
+import datetime
+import json
+import logging
 import settings as account_settings
 import tweepy
-from facepy import GraphAPI
-import json
 import urllib
-from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 
-from social_auth.signals import socialauth_not_registered
-from sorl.thumbnail import ImageField
-from sorl.thumbnail import get_thumbnail
 
 from bitfield import BitField
 
@@ -33,7 +35,17 @@ logger = logging.getLogger("yaapp.account")
 
 YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'
 
+class EmailUser(User):
+    class Meta:
+        proxy = True
+
+    def __unicode__(self):
+        return self.email
+
 class UserProfileManager(models.Manager):
+    def yasound_friend_count(self):
+        return self.all().aggregate(Count('friends'))['friends__count']
+    
     def search_user_fuzzy(self, search_text, limit=5):
         users = yasearch_search.search_user(search_text, remove_common_words=True)
         results = []
@@ -52,11 +64,38 @@ class UserProfileManager(models.Manager):
         return sorted_results[:limit]
 
 class UserProfile(models.Model):
+    """
+    Store usefule informations about user.
+    
+    account_type can handle multiple values :
+     * single ACCOUNT_TYPE_* values
+     * multiple ACCOUNT_MULT_* values
+     
+    Example of valid account_type:
+    
+    >> account_type = 'TWITTER'   # only twitter
+    >> account_type = 'TW,FB'     # twitter and facebook
+    >> account_type = 'FACEBOOK'  # only facebook
+    >> account_type = 'FB'        # only facebook
+    >> account_type = 'FB,TW,YA'  # facebook, twitter, yasound
+    
+    Instead of checking the account_type field, you should use the following property:
+    
+    >> facebook_enabled
+    >> twitter_enabled
+    >> yasound_enabled
+    
+    The following methods handle the account_type values:
+    
+    >> add_account_type()
+    >> remove_account_type()
+    
+    """
     objects = UserProfileManager()
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(max_length = 60, blank=True)
     url = models.URLField(null=True, blank=True)
-    account_type = models.CharField(max_length=20, default=account_settings.ACCOUNT_TYPE_YASOUND)
+    account_type = models.CharField(max_length=20, blank=True)
     twitter_uid = models.CharField(max_length=60, null=True, blank=True)
     facebook_uid = models.CharField(max_length=60, null=True, blank=True)
     twitter_token = models.CharField(max_length=256, blank=True)
@@ -80,6 +119,191 @@ class UserProfile(models.Model):
         default=(2+4+8+16+32+64+128)
     )
     
+    @property
+    def facebook_enabled(self):
+        return account_settings.ACCOUNT_TYPE_FACEBOOK in self.account_type or \
+            account_settings.ACCOUNT_MULT_FACEBOOK in self.account_type
+        
+    @property
+    def twitter_enabled(self):
+        return account_settings.ACCOUNT_TYPE_TWITTER in self.account_type or \
+            account_settings.ACCOUNT_MULT_TWITTER in self.account_type
+
+    @property
+    def yasound_enabled(self):
+        return account_settings.ACCOUNT_TYPE_YASOUND in self.account_type or \
+            account_settings.ACCOUNT_MULT_YASOUND in self.account_type
+        
+    def convert_to_multi_account_type(self, commit=True):
+        """
+        Convert a single account type to a potential multi account type
+        """
+        account_type = self.account_type
+        if account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+            account_type = account_settings.ACCOUNT_MULT_FACEBOOK
+        elif account_type == account_settings.ACCOUNT_TYPE_TWITTER:
+            account_type = account_settings.ACCOUNT_MULT_TWITTER
+        elif account_type == account_settings.ACCOUNT_TYPE_YASOUND:
+            account_type = account_settings.ACCOUNT_MULT_YASOUND
+        if commit:
+            self.account_type = account_type
+            self.save()
+        return account_type
+        
+    def add_account_type(self, new_account_type, commit=True):
+        account_type = self.account_type
+        if account_type in account_settings.SINGLE_ACCOUNT_TYPES:
+            account_type = self.convert_to_multi_account_type(commit=False)
+        
+        accounts = []
+        if account_type is not None:
+            accounts = account_type.split(account_settings.ACCOUNT_TYPE_SEPARATOR)
+        if new_account_type not in accounts:
+            accounts.append(new_account_type)
+        self.account_type = account_settings.ACCOUNT_TYPE_SEPARATOR.join(accounts)
+        if commit:
+            self.save()
+        
+    def remove_account_type(self, account_type_to_remove, commit=True):
+        account_type = self.account_type
+        if account_type in account_settings.SINGLE_ACCOUNT_TYPES:
+            account_type = self.convert_to_multi_account_type(commit=False)
+
+        accounts = []
+        if account_type is not None:
+            accounts = account_type.split(account_settings.ACCOUNT_TYPE_SEPARATOR)
+        if account_type_to_remove in accounts:
+            accounts.remove(account_type_to_remove)
+        self.account_type = account_settings.ACCOUNT_TYPE_SEPARATOR.join(accounts)
+        if commit:
+            self.save()
+    
+    def add_facebook_account(self, uid, token):
+        try:
+            facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
+        except:
+            return False
+        
+        if not facebook_profile:
+            return False
+        
+        if facebook_profile.has_key('error'):
+            logger.error(facebook_profile['error'])
+            return False
+        
+        if not facebook_profile.has_key('id'):
+            logger.error('no "id" attribute in facebook profile')
+            return False
+        if facebook_profile['id'] != uid:
+            logger.error('uid does not match')
+            return False
+        
+        if UserProfile.objects.filter(facebook_uid=uid).count() > 0:
+            logger.error('facebook account already attached to other account')
+            return False
+        
+        self.facebook_uid = uid
+        self.facebook_token = token
+        self.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
+        self.save()
+            
+        try:
+            self.scan_friends()
+        except:
+            pass
+        
+        try:
+            if self.picture is None:
+                self.update_with_social_picture()
+        except:
+            pass
+    
+        return True
+    
+    def remove_facebook_account(self):
+        if (self.yasound_enabled == False) and (self.twitter_enabled == False):
+            return False
+
+        self.facebook_uid = None
+        self.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
+        self.facebook_token = ''
+        self.facebook_uid = ''
+        
+        # TODO: refresh friends
+        self.save()
+        return True
+        
+    def add_twitter_account(self, uid, token, token_secret):
+        auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+        auth.set_access_token(token, token_secret)
+        api = tweepy.API(auth)
+        res = api.verify_credentials()
+        print res
+        if (not res) or (res == False):
+            return False
+        if res.id != int(uid):
+            logger.error('res id does not match for twitter')
+        
+        if UserProfile.objects.filter(twitter_uid=uid).count() > 0:
+            logger.error('twitter account already attached to other account')
+            return False
+        
+        self.twitter_uid = uid
+        self.twitter_token = token
+        self.twitter_token_secret = token_secret
+        self.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
+        self.save()
+
+        try:
+            self.scan_friends()
+        except:
+            pass
+        
+        try:
+            if self.picture is None:
+                self.update_with_social_picture()
+        except:
+            pass
+    
+        return True
+
+    def remove_twitter_account(self):
+        if (self.yasound_enabled == False) and (self.facebook_enabled == False):
+            return False
+        self.twitter_uid = ''
+        self.twitter_token = ''
+        self.twitter_token_secret = ''
+        self.remove_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
+
+        # TODO: refresh friends
+        self.save()
+        return True
+    
+    def add_yasound_account(self, email, password):
+        if User.objects.filter(email=email).count() > 0:
+            logger.error('yasound account already attached to other account')
+            return False
+        
+        self.user.email = email
+        self.user.set_password(password)
+        self.user.save()
+        self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
+        return True
+
+    def remove_yasound_account(self):
+        if (self.twitter_enabled == False) and (self.facebook_enabled == False):
+            return False
+        
+        self.user.set_password(None)
+        self.user.email = ''
+        self.user.save()
+
+        self.remove_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=False)
+        
+        # TODO: refresh friends
+        self.save()
+        return True
+        
     def __unicode__(self):
         if self.name:
             return self.name
@@ -151,6 +375,7 @@ class UserProfile(models.Model):
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
+        
                    
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
@@ -181,11 +406,7 @@ class UserProfile(models.Model):
         logger.debug('scanning %s' % (unicode(self.id)))
         friend_count = 0
         yasound_friend_count = 0
-        if self.account_type == account_settings.ACCOUNT_TYPE_YASOUND:
-            logger.debug('skipping scan_friends of %s, account = %s' % (unicode(self.id), self.account_type))
-            return friend_count, yasound_friend_count
-        
-        if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+        if self.facebook_enabled:
             graph = GraphAPI(self.facebook_token)
             
             try:
@@ -211,7 +432,7 @@ class UserProfile(models.Model):
                 profile.friends.add(self.user)
                 profile.save()
             
-        elif self.account_type == account_settings.ACCOUNT_TYPE_TWITTER:
+        if self.twitter_enabled:
             auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
             auth.set_access_token(self.twitter_token, self.twitter_token_secret)
             api = tweepy.API(auth)
@@ -222,7 +443,7 @@ class UserProfile(models.Model):
         return friend_count, yasound_friend_count
             
     def update_with_facebook_picture(self):
-        if self.account_type != account_settings.ACCOUNT_TYPE_FACEBOOK:
+        if not self.facebook_enabled:
             return
         graph = GraphAPI(self.facebook_token)
         img = graph.get('me/picture?type=large')
@@ -234,9 +455,13 @@ class UserProfile(models.Model):
         radio.save()
         
     def update_with_social_picture(self):
-        if self.account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
+        if self.facebook_enabled:
             self.update_with_facebook_picture()
-            
+    
+    def update_with_social_data(self):
+        self.update_with_social_picture()
+        self.scan_friends()
+        
     def authenticated(self):
         d = datetime.datetime.now()
         self.last_authentication_date = d

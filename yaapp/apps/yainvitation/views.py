@@ -8,7 +8,7 @@ from models import Invitation
 
 @login_required
 def accept(request, key, template_name='yainvitation/accept.html'):
-    invitation = get_object_or_404(Invitation, key=key)    
+    invitation = get_object_or_404(Invitation, invitation_key=key)    
     invitation.accept(request.user)
     
     return render_to_response(template_name, {

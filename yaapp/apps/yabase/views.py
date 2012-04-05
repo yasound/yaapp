@@ -1,13 +1,13 @@
 from celery.result import AsyncResult
 from check_request import check_api_key_Authentication, check_http_method
-from decorators import unlock_radio_on_exception
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect
+    HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -18,17 +18,16 @@ from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist
 from shutil import rmtree
 from task import process_playlists, process_upload_song
 from tempfile import mkdtemp
+from yabase import signals as yabase_signals
 from yaref.models import YasoundSong
-import datetime
 import import_utils
 import json
 import logging
 import os
 import settings as yabase_settings
-import time
 import uuid
-import yabase.settings as yabase_settings
 
+GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -39,13 +38,17 @@ SONG_FILE_TAG = 'song'
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
     status = asyncRes.state
-    progress = 0.5
+    metadata = asyncRes.info
+    if metadata is not None and 'progress' in metadata:
+        progress = metadata['progress']
+    else:
+        progress = 0.0
     message = 'updating...'
     response_dict = {}
     response_dict['status'] = status
     response_dict['progress'] = progress
     if message:
-   	 response_dict['message'] = message
+        response_dict['message'] = message
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
@@ -121,6 +124,9 @@ def like_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.mood = yabase_settings.MOOD_LIKE
     radio_user.save()
+    
+    yabase_signals.like_radio.send(sender=radio, radio=radio, user=request.user)
+
     res = '%s (user) likes %s (radio)\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -140,6 +146,9 @@ def neutral_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.mood = yabase_settings.MOOD_NEUTRAL
     radio_user.save()
+    
+    yabase_signals.neutral_like_radio.send(sender=radio, radio=radio, user=request.user)
+
     res = '%s (user) does not like nor dislike %s (radio)\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -159,6 +168,9 @@ def dislike_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.mood = yabase_settings.MOOD_DISLIKE
     radio_user.save()
+    
+    yabase_signals.dislike_radio.send(sender=radio, radio=radio, user=request.user)
+    
     res = '%s (user) dislikes %s (radio)\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -178,6 +190,9 @@ def favorite_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.favorite = True
     radio_user.save()
+    
+    yabase_signals.favorite_radio.send(sender=radio, radio=radio, user=request.user)
+    
     res = '%s (user) has %s (radio) as favorite\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -197,6 +212,9 @@ def not_favorite_radio(request, radio_id):
     radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.favorite = False
     radio_user.save()
+    
+    yabase_signals.not_favorite_radio.send(sender=radio, radio=radio, user=request.user)
+
     res = '%s (user) has not %s (radio) as favorite anymore\n' % (request.user, radio)
     return HttpResponse(res)
 
@@ -344,24 +362,23 @@ def get_song_status(request, song_id):
     return HttpResponse(res)
 
 
-@unlock_radio_on_exception
 @csrf_exempt
 def get_next_song(request, radio_id):
     radio = get_object_or_404(Radio, uuid=radio_id)
-    i = 0
-    while radio.is_locked:
-        time.sleep(3)
-        i = i+1
-        if i > 2:
-            break
-    
-    if radio.is_locked:
+
+    lock_id = "get_next_song_%d" % (radio.id)
+    acquire_lock = lambda: cache.add(lock_id, "true", GET_NEXT_SONG_LOCK_EXPIRE)
+    release_lock = lambda: cache.delete(lock_id)
+
+    if not acquire_lock():
+        logger.info('get_next_song locked for radio %d' % (radio.id))
         return HttpResponse('computing next songs already set', status=404)
-    
-    radio.lock()
-    nextsong = radio.get_next_song()
-    radio.unlock()
-    
+
+    try:
+        nextsong = radio.get_next_song()
+    finally:
+        release_lock()
+        
     if not nextsong:
         return HttpResponse('cannot find next song', status=404)
     
@@ -457,15 +474,10 @@ def get_current_song(request, radio_id):
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
     
-    radio = get_object_or_404(Radio, id=radio_id)
-    song_instance = radio.current_song
-    if not song_instance:
-        return HttpResponseNotFound()
-    song_dict = song_instance.song_description
-    if not song_dict:
+    song_json = SongInstance.objects.get_current_song_json(radio_id)
+    if song_json is None:
         return HttpResponseNotFound()
     
-    song_json = json.dumps(song_dict)
     return HttpResponse(song_json)
 
 

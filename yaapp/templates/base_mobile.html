@@ -1,0 +1,67 @@
+{% load i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
+<head>
+    <title>{% block head_title %}Home{% endblock %} — Yasound</title>
+    <link rel="icon" type="image/png" href="/media/yaweb/images/favicon.png" />
+	<meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile." />
+	<meta name="Author" content="Yasound SAS" />
+	<meta name="copyright" content="Yasound SAS" />
+	<meta http-equiv="Cache-control" content="public" />
+	<meta name="language" content="french" />
+	<meta property="og:title" content="YASOUND : N'écoutez plus seul votre musique."/>
+	<meta property="og:type" content="Compagnie"/>
+	<meta property="og:url" content="http://yasound.com/fr"/>
+	<meta property="og:image" content="http://yasound.com/fr/og.jpg"/>
+	<meta property="og:site_name" content="YASOUND : Ma radio, c'est moi."/>
+	
+	<meta property="fb:admins" content="USER_ID"/>
+	<meta property="og:description"
+	      content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile."/>
+
+    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/media/css/style.css"/>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{% block body %}
+<div class='container-fluid'>
+    <div class='row-fluid'>
+        <div class='span12'>
+        <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+    <div class='row-fluid'>
+        <div id='appstore'>
+        <a href="http://itunes.apple.com/fr/app/yasound/id492680161?mt=8&uo=4" target="itunes_store">
+        <img src='/media/images/available-appstore-fr.png' alt='{% trans "available on appstore" %}'/>
+        </a>
+        </div>
+    </div>    
+    
+    <footer>
+      <div id="menu">
+      {% if request.user.is_authenticated %}<a href="{% url logout %}">{% trans "Logout" %}</a> | {% endif %} <a href="http://yasound.com/fr/a_propos_de_nous.php">À propos de nous</a> | <a href="http://yasound.com/fr/jobs.php">Jobs</a> | <a href="http://yasound.com/fr/presse.php">Presse</a> | <a href="http://yasound.com/fr/contact.php">Contact</a>
+      </div>
+    </footer>
+</div>
+</body>
+{% endblock %}
+
+<script type="text/javascript">
+// GOOGLE ANALYTICS
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4211339-12']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</html>
+

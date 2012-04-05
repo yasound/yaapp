@@ -306,6 +306,36 @@ class FavoriteRadioResource(ModelResource):
         user = request.user
         return object_list.filter(radiouser__user=user, radiouser__favorite=True)
 
+class UserFavoriteRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
+    picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'favorite_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+        authentication = YasoundApiKeyAuthentication()
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+            'ready': ('exact',),
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def obj_get_list(self, request=None, **kwargs):
+        user_id = kwargs.pop('user_id')
+        return self.get_object_list(request).filter(radiouser__user__id=user_id, radiouser__favorite=True)
+
+
+
 class FriendRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)

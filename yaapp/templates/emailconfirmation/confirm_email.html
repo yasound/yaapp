@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Email confirmation" %}{% endblock %}
+
+{% block content %}
+    <div class='row'>
+        <div class='span12'>
+            <div class='page-header'>
+               <h1>{% trans "Email confirmation" %}
+               </h1>
+            </div>
+		    {% if email_address %}
+		    <p>You have confirmed that {{ email_address.email }} is an email address for user '{{ email_address.user }}'.</p>
+		    {% else %}
+		    <p>{% trans "Invalid confirmation key." %}</p>
+		    {% endif %}
+        </div>
+    </div>
+{% endblock %}

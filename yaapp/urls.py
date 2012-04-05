@@ -10,7 +10,8 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     RadioLikerResource, RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, SearchRadioBySongResource, \
     RadioCurrentUserResource, \
     WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
-    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource, EditSongResource
+    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource, EditSongResource, \
+    UserFavoriteRadioResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from stats.api import RadioListeningStatResource
@@ -47,6 +48,7 @@ radio_next_songs = RadioNextSongsResource()
 wall_event = RadioWallEventResource()
 radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
+
 current_users = RadioCurrentUserResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
@@ -54,7 +56,9 @@ radio_enabled_playlist = RadioEnabledPlaylistResource()
 radio_all_playlist = RadioAllPlaylistResource()
 playlist_matched_songs = MatchedSongResource()
 
-Radio.objects.unlock_all()
+
+user_favorite_radios = UserFavoriteRadioResource()
+#Radio.objects.unlock_all()
 
 js_info_dict = {
     'packages': ('yabackoffice',),
@@ -79,6 +83,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists_update/$', 'yabase.views.upload_playlists'),
     url(r'^api/v1/task/(?P<task_id>\S+)/$', 'yabase.views.task_status'),
     url(r'^api/v1/user/(?P<user_id>\d+)/picture/$', 'account.views.set_user_picture'),
+    url(r'^api/v1/user/(?P<user_id>\d+)/', include(user_favorite_radios.urls)),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/picture/$', 'yabase.views.set_radio_picture'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/liker/$', 'yabase.views.like_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/neutral/$', 'yabase.views.neutral_radio'),
@@ -110,6 +115,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/buy_link/$', 'yabase.views.buy_link', name='buy_link'),
     url(r'^api/v1/song_instance/(?P<song_instance_id>\d+)/cover/$', 'yabase.views.song_instance_cover'),
+    url(r'^api/v1/account/association/$', 'account.views.associate'),
+    url(r'^api/v1/account/dissociation/$', 'account.views.dissociate'),
     (r'^api/', include(api.urls)),
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
     (r'^status/', 'yabase.views.status'),
@@ -120,6 +127,11 @@ urlpatterns = patterns('',
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
+    
+    # special case for iOS client
+    url(r'^legal/eula.html$', 'yaweb.views.eula', name='eula'),
+    url(r'^fr/images/logo.png$', 'yaweb.views.logo', name='logo'),
+    
     url(r'^', include('yaweb.urls')),
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
@@ -137,9 +149,22 @@ urlpatterns = patterns('',
     url(r'', include('social_auth.urls')),
     url(r'^login/$', 'account.views.login', name="login"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
+    url(r'^passreset/$','account.views.password_reset', name='lost_password'),
+    url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','account.views.password_reset_confirm', name='reset_password_confirm'),
 
+    # facebook update notification
+    url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
+    
+    #email confirmation
+    (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
+     
     (r'^robots\.txt$', direct_to_template,
      {'template': 'robots.txt', 'mimetype': 'text/plain'}),
+)
+
+# captcha urls
+urlpatterns += patterns('',
+    url(r'^captcha/', include('captcha.urls')),
 )
 
 if settings.LOCAL_MODE:
