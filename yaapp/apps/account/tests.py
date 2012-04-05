@@ -173,7 +173,8 @@ class TestMultiAccount(TestCase):
         self.assertTrue(profile.yasound_enabled)
         
         # trying to remove yasound account, last account so it is impossible
-        self.assertFalse(profile.remove_yasound_account())
+        res, message = profile.remove_yasound_account()
+        self.assertFalse(res)
         
         self.assertFalse(profile.facebook_enabled)
         self.assertTrue(profile.yasound_enabled)
@@ -182,8 +183,10 @@ class TestMultiAccount(TestCase):
         profile.add_facebook_account(uid='1460646148',
                                      token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4')
         
-        self.assertTrue(profile.remove_yasound_account())
-        self.assertFalse(profile.remove_facebook_account())
+        res, message = profile.remove_yasound_account()
+        self.assertTrue(res)
+        res, message = profile.remove_facebook_account()
+        self.assertFalse(res)
         
         self.assertTrue(profile.facebook_enabled)
         self.assertFalse(profile.yasound_enabled)

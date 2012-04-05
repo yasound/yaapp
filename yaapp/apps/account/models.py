@@ -21,6 +21,7 @@ import urllib
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from django.utils.translation import ugettext_lazy as _
 
 
 from bitfield import BitField
@@ -182,25 +183,25 @@ class UserProfile(models.Model):
         try:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
         except:
-            return False
+            return False, _('Cannot communicate with facebook')
         
         if not facebook_profile:
-            return False
+            return False, _('Cannot get informations from facebook')
         
         if facebook_profile.has_key('error'):
             logger.error(facebook_profile['error'])
-            return False
+            return False, _('Cannot get informations from facebook')
         
         if not facebook_profile.has_key('id'):
             logger.error('no "id" attribute in facebook profile')
-            return False
+            return False, _('Cannot get informations from facebook')
         if facebook_profile['id'] != uid:
             logger.error('uid does not match')
-            return False
+            return False, _('Facebook identification mismatch')
         
         if UserProfile.objects.filter(facebook_uid=uid).count() > 0:
             logger.error('facebook account already attached to other account')
-            return False
+            return False, _('The Facebook account is already attached to another account.')
         
         self.facebook_uid = uid
         self.facebook_token = token
@@ -218,11 +219,11 @@ class UserProfile(models.Model):
         except:
             pass
     
-        return True
+        return True, _('OK')
     
     def remove_facebook_account(self):
         if (self.yasound_enabled == False) and (self.twitter_enabled == False):
-            return False
+            return False, _('This is the last account, removal is impossible')
 
         self.facebook_uid = None
         self.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
@@ -231,7 +232,7 @@ class UserProfile(models.Model):
         
         # TODO: refresh friends
         self.save()
-        return True
+        return True, _('OK')
         
     def add_twitter_account(self, uid, token, token_secret):
         auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
@@ -240,13 +241,14 @@ class UserProfile(models.Model):
         res = api.verify_credentials()
         print res
         if (not res) or (res == False):
-            return False
+            return False, _('Cannot communicate with Twitter')
         if res.id != int(uid):
             logger.error('res id does not match for twitter')
+            return False, _('Twitter account mismatch')
         
         if UserProfile.objects.filter(twitter_uid=uid).count() > 0:
             logger.error('twitter account already attached to other account')
-            return False
+            return False, _('The twitter account is already attached to another account.')
         
         self.twitter_uid = uid
         self.twitter_token = token
@@ -265,7 +267,7 @@ class UserProfile(models.Model):
         except:
             pass
     
-        return True
+        return True, _('OK')
 
     def remove_twitter_account(self):
         if (self.yasound_enabled == False) and (self.facebook_enabled == False):
@@ -277,22 +279,22 @@ class UserProfile(models.Model):
 
         # TODO: refresh friends
         self.save()
-        return True
+        return True, _('OK')
     
     def add_yasound_account(self, email, password):
         if User.objects.filter(email=email).count() > 0:
             logger.error('yasound account already attached to other account')
-            return False
+            return False, _('An account already exists with this email')
         
         self.user.email = email
         self.user.set_password(password)
         self.user.save()
         self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
-        return True
+        return True, _('OK')
 
     def remove_yasound_account(self):
         if (self.twitter_enabled == False) and (self.facebook_enabled == False):
-            return False
+            return False, _('This is the last account, removal is impossible')
         
         self.user.set_password(None)
         self.user.email = ''
@@ -302,7 +304,7 @@ class UserProfile(models.Model):
         
         # TODO: refresh friends
         self.save()
-        return True
+        return True, _('OK')
         
     def __unicode__(self):
         if self.name:

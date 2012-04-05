@@ -343,7 +343,7 @@ def associate(request):
     
     account_type = request.REQUEST.get('account_type')
     if not account_type:
-        return HttpBadRequest()
+        return HttpBadRequest(_('Account type is missing from request'))
     
     uid = request.REQUEST.get('uid')
     token = request.REQUEST.get('token')
@@ -352,17 +352,19 @@ def associate(request):
     password = request.REQUEST.get('password')
 
     res = False
+    message = _('Unknown error')
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
-        res = profile.add_facebook_account(uid, token)
+        res, message = profile.add_facebook_account(uid, token)
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
-        res = profile.add_twitter_account(uid, token, token_secret)
+        res, message = profile.add_twitter_account(uid, token, token_secret)
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
-        res = profile.add_yasound_account(email, password)
+        res, message = profile.add_yasound_account(email, password)
 
     if res:
-        return HttpResponse("OK")
+        message = _('OK')
+        return HttpResponse(message)
     else:
-        return HttpBadRequest()
+        return HttpBadRequest(message)
 
 
 @csrf_exempt
@@ -381,19 +383,21 @@ def dissociate(request):
 
     account_type = request.REQUEST.get('account_type')
     if not account_type:
-        return HttpBadRequest()
+        return HttpBadRequest(_('Account type is missing from request'))
     
     res = False
+    message = _('Unknown error')
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
-        res = profile.remove_facebook_account()
+        res, message = profile.remove_facebook_account()
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
-        res = profile.remove_twitter_account()
+        res, message = profile.remove_twitter_account()
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
-        res = profile.remove_yasound_account()
+        res, message = profile.remove_yasound_account()
         
     if res:
-        return HttpResponse("OK")
+        message = _('OK')
+        return HttpResponse(message)
     else:
-        return HttpBadRequest()
+        return HttpBadRequest(message)
     
     
