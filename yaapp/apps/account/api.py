@@ -56,9 +56,9 @@ class UserResource(ModelResource):
         resource_name = 'user'
         fields = ['id']
         include_resource_uri = False
-        allowed_methods = []
-        authentication = YasoundApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization()
+#        allowed_methods = []
+#        authentication = YasoundApiKeyAuthentication()
+#        authorization = ReadOnlyAuthorization()
 
 
     def dehydrate(self, bundle):
@@ -66,6 +66,20 @@ class UserResource(ModelResource):
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
         userprofile.fill_user_bundle(bundle)
+        
+
+        own_radio = userprofile.own_radio
+        if own_radio:
+            radio_bundle = {'id': own_radio.id,
+                            'name': own_radio.name}
+            bundle.data['own_radio'] = radio_bundle
+
+        current_radio = userprofile.current_radio
+        if current_radio:
+            radio_bundle = {'id': current_radio.id,
+                            'name': current_radio.name}
+            bundle.data['current_radio'] = radio_bundle
+        
         return bundle
     
     def obj_update(self, bundle, request=None, **kwargs):
