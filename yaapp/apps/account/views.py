@@ -20,7 +20,7 @@ import json
 import settings as account_settings
 
 from django.utils.http import base36_to_int
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from models import User, UserProfile
@@ -362,9 +362,9 @@ def associate(request):
 
     if res:
         message = _('OK')
-        return HttpResponse(message)
+        return HttpResponse(unicode(message))
     else:
-        return HttpBadRequest(message)
+        return HttpBadRequest(unicode(message))
 
 
 @csrf_exempt
@@ -396,8 +396,8 @@ def dissociate(request):
         
     if res:
         message = _('OK')
-        return HttpResponse(message)
+        return HttpResponse(unicode(message))
     else:
-        return HttpBadRequest(message)
+        return HttpBadRequest(unicode(message))
     
     
