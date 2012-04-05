@@ -34,7 +34,9 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
  
         alert_payload = alert
         if action_loc_key or loc_key or loc_args:
-            alert_payload = {'body' : alert}
+            alert_payload = {}
+            if alert:
+                alert_payload['body'] = alert
             if action_loc_key:
                 alert_payload['action-loc-key'] = action_loc_key
             if loc_key:
@@ -77,7 +79,7 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
 
 def test():
 # aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd
-    send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Hello!', sandbox=True)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello!', sandbox=True)
     #host_name = 'gateway.sandbox.push.apple.com'
     #s = socket()
     #c = ssl.wrap_socket(s,
@@ -89,4 +91,112 @@ def test():
     #send_message('aef2f0422172bb9776891a9efddfdd8d8cb73cc29e9582d68c49365df534b2dd', 'Bleh!', sandbox=True, passed_socket=c)
     #c.close()
 
+def test2():
+    host_name = 'gateway.sandbox.push.apple.com'
+    s1 = socket()
+    c1 = ssl.wrap_socket(s1,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c1.connect((host_name, 2195))
+    
+    s2 = socket()
+    c2 = ssl.wrap_socket(s2,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c2.connect((host_name, 2195))
+    
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 !', sandbox=True, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 !', sandbox=True, passed_socket=c2)
+    
+    c1.close()
+    c2.close()
+    
+def test3():
+    host_name = 'gateway.sandbox.push.apple.com'
+    s1 = socket()
+    c1 = ssl.wrap_socket(s1,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c1.connect((host_name, 2195))
+    
+    s2 = socket()
+    c2 = ssl.wrap_socket(s2,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c2.connect((host_name, 2195))
+    
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 a!', sandbox=True, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 b!', sandbox=True, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 c!', sandbox=True, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 d!', sandbox=True, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 e!', sandbox=True, passed_socket=c1)
+    
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 a!', sandbox=True, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 b!', sandbox=True, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 c!', sandbox=True, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 d!', sandbox=True, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 e!', sandbox=True, passed_socket=c2)
+    
+    c1.close()
+    c2.close()
+    
+    s3 = socket()
+    c3 = ssl.wrap_socket(s3,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c3.connect((host_name, 2195))
+    
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 a!', sandbox=True, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 b!', sandbox=True, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 c!', sandbox=True, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 d!', sandbox=True, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 e!', sandbox=True, passed_socket=c3)
+    c3.close()
+    
 
+def get_deprecated_devices(sandbox=True):
+    deprecated = []
+    host_name = 'feedback.sandbox.push.apple.com' if sandbox else 'feedback.push.apple.com'
+    s = socket()
+    c = ssl.wrap_socket(s,
+                        ssl_version=ssl.PROTOCOL_SSLv3,
+                        certfile=settings.IPHONE_APN_PUSH_CERT)
+    c.connect((host_name, 2196))
+    
+    print repr(c.getpeername())
+    print c.cipher()
+    import pprint
+    print pprint.pformat(c.getpeercert())
+    
+    print 'get_deprecated_devices'
+    buff = None
+    keep_reading = True
+    while keep_reading:
+        r = c.read()
+        print'r lenth: %d' % len(r)
+        if r:
+            if buff:
+                buff = struct.pack('!%ds%ds' % (len(buff), len(r)), buff, r)
+            else:
+                buff = r
+        else:
+            keep_reading = False
+    
+    c.close()
+    
+    if not buff:
+        print 'no data read'
+        return []
+            
+    offset = 0
+    available = len(buff)
+    while available > 0:
+        feedback_time, token_length = struct.unpack_from('!lh', buff, offset)
+        device_token = struct.unpack_from('%ds' % token_length, buff, offset + 6)[0]
+        deprecated.append((datetime.datetime.fromtimestamp(feedback_time), device_token))
+        block_size = 4 + 2 + token_length
+        offset += block_size
+        available -= block_size    
+        
+    print 'get_deprecated_devices DONE'
+    return deprecated

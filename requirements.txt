@@ -26,4 +26,5 @@ unidecode
 fuzzy
 kombu
 django-mobile
+django-bitfield
 django-simple-captcha

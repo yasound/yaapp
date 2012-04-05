@@ -170,6 +170,11 @@ class SongInstance(models.Model):
         self.dislikes = dislikes
         self.save()
         
+    def liked(self, user):
+        radio = self.playlist.radio
+        radio_creator_profile = radio.creator.userprofile
+        radio_creator_profile.song_liked_in_my_radio(user.userprofile, self, radio)
+        
 class SongUserManager(models.Manager):
     def likers(self, song):
         return self.filter(song=song, mood=yabase_settings.MOOD_LIKE)
@@ -205,6 +210,7 @@ class SongUser(models.Model):
                     song_instance.dislikes = max(song_instance.dislikes, 0)
                 if self.mood == yabase_settings.MOOD_LIKE:
                     song_instance.likes += 1
+                    self.song.liked(self.user)
                 elif self.mood == yabase_settings.MOOD_DISLIKE:
                     song_instance.dislikes += 1
                 song_instance.save()
@@ -391,6 +397,7 @@ class Radio(models.Model):
     
     def save(self, *args, **kwargs):
         update_mongo = False
+        ready_changed = False
         if not self.pk:
             # creation
             self.leaderboard_rank = Radio.objects.count()
@@ -401,6 +408,7 @@ class Radio(models.Model):
             genre_changed = self.genre != saved.genre
             tags_changed = self.tags != saved.tags
             update_mongo = name_changed or genre_changed or tags_changed
+            ready_changed = self.ready != saved.ready
             
         if not self.uuid:
             self.uuid = uuid.uuid4().hex
@@ -408,6 +416,8 @@ class Radio(models.Model):
         super(Radio, self).save(*args, **kwargs)
         if update_mongo:
             self.build_fuzzy_index(upsert=True)
+        if ready_changed:
+            self.now_ready()
     
     @property
     def is_valid(self):
@@ -681,6 +691,14 @@ class Radio(models.Model):
         self.save() 
         yabase_signals.user_stopped_listening.send(sender=self, radio=self, user=self, duration=listening_duration)
         
+    def user_connection(self, user):
+        print 'user %s entered radio %s' % (user.userprofile.name, self.name)
+        creator = self.creator
+        if not creator:
+            return
+        creator_profile = creator.userprofile
+        creator_profile.user_in_my_radio(creator_profile, self)
+        
 
     def create_listening_stat(self):
         favorites = RadioUser.objects.get_favorite().filter(radio=self).count()
@@ -762,6 +780,16 @@ class Radio(models.Model):
     def stream_url(self):
         url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
         return url
+    
+    def added_in_favorites(self, user):
+        creator_profile = self.creator.userprofile
+        creator_profile.my_radio_added_in_favorites(user.userprofile, self)
+        
+    def now_ready(self):
+        self.creator.userprofile.radio_is_ready(self)
+        
+    def shared(self, user):
+        self.creator.userprofile.my_radio_shared(user.userprofile, self)
         
         
     class Meta:
@@ -884,10 +912,13 @@ class RadioUser(models.Model):
             radio = self.radio
             radio.favorites = RadioUser.objects.filter(radio=radio, favorite=True).count()
             radio.save()
+            if self.favorite:
+                radio.added_in_favorites(self.user)
             
         if just_connected:
             radio_users = RadioUser.objects.filter(user=self.user, connected=True).exclude(id=self.id)
             radio_users.update(connected=False)
+            self.radio.user_connection(self.user)
         if just_started_listening:
             radio_users = RadioUser.objects.filter(user=self.user, listening=True).exclude(id=self.id)
             radio_users.update(listening=False)
@@ -998,6 +1029,11 @@ class WallEvent(models.Model):
                 except YasoundSong.DoesNotExist:
                     pass
             self.save()
+            if self.type == yabase_settings.EVENT_MESSAGE:
+                radio_creator = self.radio.creator
+                if radio_creator:
+                    radio_creator_profile = radio_creator.userprofile
+                    radio_creator_profile.message_posted_in_my_radio(self)
 
     class Meta:
         db_name = u'default'

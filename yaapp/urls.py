@@ -90,6 +90,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/disliker/$', 'yabase.views.dislike_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/favorite/$', 'yabase.views.favorite_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/not_favorite/$', 'yabase.views.not_favorite_radio'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/shared/$', 'yabase.views.radio_shared'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/favorite_song/$', 'yabase.views.add_song_to_favorites'),
     url(r'^api/v1/radio/(?P<radio_id>\S+)/get_next_song/$', 'yabase.views.get_next_song'),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_next_songs.urls)),
@@ -119,6 +120,10 @@ urlpatterns = patterns('',
     (r'^api/', include(api.urls)),
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
     (r'^status/', 'yabase.views.status'),
+    
+    url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
+    url(r'^api/v1/notifications_preferences/$', 'account.views.get_notifications_preferences'),
+    url(r'^api/v1/set_notifications_preferences/$', 'account.views.set_notifications_preferences'),
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
