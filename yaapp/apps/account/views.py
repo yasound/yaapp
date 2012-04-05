@@ -66,16 +66,12 @@ def send_ios_push_notif_token(request):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
-    print 'send_ios_push_notif_token'
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     device_token = post_data_dict.get('device_token', None)
     device_token_type = post_data_dict.get('device_token_type', None)
     if not device_token or not device_token_type:
         return HttpResponse('bad data')
-    
-    print 'device_token=%s' % device_token
-    print 'device_token_type=%s' % device_token_type
     
     if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_DEVELOPMENT:
         return HttpResponse('bad data')
@@ -84,5 +80,35 @@ def send_ios_push_notif_token(request):
     device.set_registered_now()
     
     res = 'send_ios_push_notif_token OK'
+    return HttpResponse(res)
+
+
+def get_notifications_preferences(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    user_profile = request.user.userprofile
+    res = user_profile.notif_preferences()
+    response = json.dumps(res)
+    return HttpResponse(response)
+
+@csrf_exempt
+def set_notifications_preferences(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    data = request.POST.keys()[0]
+    post_data_dict = json.loads(data)
+    print post_data_dict
+    user_profile = request.user.userprofile
+    user_profile.set_notif_preferences(post_data_dict)
+    
+    res = 'update_notifications_preferences OK'
     return HttpResponse(res)
     

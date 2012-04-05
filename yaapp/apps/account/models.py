@@ -21,13 +21,17 @@ from social_auth.signals import socialauth_not_registered
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import get_thumbnail
 
+from bitfield import BitField
+
 from django.core.files.base import ContentFile
 import datetime
 
-from yabase.apns import get_deprecated_devices
+from yabase.apns import get_deprecated_devices, send_message
 
 import logging
 logger = logging.getLogger("yaapp.account")
+
+YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'
 
 class UserProfileManager(models.Manager):
     def search_user_fuzzy(self, search_text, limit=5):
@@ -63,6 +67,18 @@ class UserProfile(models.Model):
     email_confirmed = models.BooleanField(default=False)
     friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
     last_authentication_date = models.DateTimeField(null=True, blank=True)
+    notifications_preferences = BitField(flags=(
+        'user_in_radio',
+        'friend_in_radio',
+        'friend_online',
+        'message_posted',
+        'song_liked',
+        'radio_in_favorites',
+        'radio_shared',
+        'friend_created_radio'
+        ),
+        default=(2+4+8+16+32+64+128)
+    )
     
     def __unicode__(self):
         if self.name:
@@ -260,19 +276,27 @@ class UserProfile(models.Model):
         return filename
     
     def radio_is_ready(self, radio):
-        for f in self.friends:
+        for f in self.friends.all():
             friend_profile = f.userprofile
             friend_profile.my_friend_created_radio(friend_profile, radio)
             
     def logged(self):
         print 'user %s is logged' % self.name
-        for f in self.friends:
+        for f in self.friends.all():
             friend_profile = f.userprofile
             friend_profile.my_friend_is_online(self)
     
     def store_ios_device(self, device_token, token_type):
         device, created = Device.objects.get_or_create(user=self.user, ios_token=device_token, ios_token_type=token_type)
         device.set_registered_now()
+        
+    def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
+        devices = Device.objects.for_userprofile(self)
+        for d in devices:
+            if d.ios_token and d.ios_token_type:
+                sandbox = d.is_sandbox()
+                token = d.ios_token
+                send_message(token, message, sandbox=sandbox, custom_params=custom_params, action_loc_key=action_loc_key, loc_key=loc_key, loc_args=loc_args)
     
     def user_in_my_radio(self, user_profile, radio):
         if user_profile.user in self.friends.all():
@@ -281,31 +305,144 @@ class UserProfile(models.Model):
             self._user_in_my_radio_internal(user_profile, radio)
             
     def _friend_in_my_radio_internal(self, friend_profile, radio):
-        print 'friend %s is in radio %s' % (friend_profile.name, radio.name)
-        
+        if not self.notifications_preferences.friend_in_radio:
+            return
+        if friend_profile == self:
+            return
+        if self.connected_radio == radio:
+            return
+        custom_params = {}
+        custom_params['user_id'] = friend_profile.user.id
+        custom_params['radio_id'] = radio.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_FIR', loc_args=[friend_profile.name])
+
     def _user_in_my_radio_internal(self, user_profile, radio):
-        print 'user %s is in radio %s' % (user_profile.name, radio.name)
+        if not self.notifications_preferences.user_in_radio:
+            return
+        if user_profile == self:
+            return
+        if self.connected_radio == radio:
+            return
+        custom_params = {}
+        custom_params['user_id'] = user_profile.user.id
+        custom_params['radio_id'] = radio.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_UIR', loc_args=[user_profile.name])
         
         
     def my_friend_is_online(self, friend_profile):
-        print 'friend %s is now online' % friend_profile.name
+        if not self.notifications_preferences.friend_online:
+            return
+        if friend_profile == self:
+            return
+        custom_params = {}
+        custom_params['user_id'] = friend_profile.user.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_FOn', loc_args=[friend_profile.name])
         
     def message_posted_in_my_radio(self, wall_message):
-        user_profile = wall_message.user.user_profile
+        if not self.notifications_preferences.message_posted:
+            return
+        user_profile = wall_message.user.userprofile
         radio = wall_message.radio
-        print 'user %s wrote a message in radio %s: "%s"' % (user_profile.name, radio.name, wall_message.text)
+        
+        #MatTest: following lines commented to test easily
+#        if user_profile == self:
+#            return
+#        if self.connected_radio == radio:
+#            return
+        custom_params = {}
+        custom_params['uID'] = user_profile.user.id
+        custom_params['rID'] = radio.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key="APNs_Msg", loc_args=[user_profile.name])
         
     def song_liked_in_my_radio(self, user_profile, radio, song):
-        print 'user %s liked a song in radio %s: "%s"' % (user_profile.name, radio.name, song.metadata.name)
+        if not self.notifications_preferences.song_liked:
+            return
+        if user_profile == self:
+            return
+        if self.connected_radio == radio:
+            return
+        custom_params = {}
+        custom_params['uID'] = user_profile.user.id
+        custom_params['rID'] = radio.id
+        custom_params['sID'] = song.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_Sng', loc_args=[user_profile.name, song.metadata.name])
         
     def my_radio_added_in_favorites(self, user_profile, radio):
-        print 'user %s added radio %s in favorites' % (user_profile.name, radio.name)
+        if not self.notifications_preferences.radio_in_favorites:
+            return
+        if user_profile == self:
+            return
+        custom_params = {}
+        custom_params['uID'] = user_profile.user.id
+        custom_params['rID'] = radio.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_RIF', loc_args=[user_profile.name])
         
     def my_radio_shared(self, user_profile, radio):
-        print 'user %s shared radio %s' % (user_profile.name, radio.name)
+        if not self.notifications_preferences.radio_shared:
+            return
+        if user_profile == self:
+            return
+        custom_params = {}
+        custom_params['uID'] = user_profile.user.id
+        custom_params['rID'] = radio.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_RSh', loc_args=[user_profile.name])
         
     def my_friend_created_radio(self, friend_profile, radio):
-        print 'friend %s created radio %s' % (friend_profile.name, radio.name)
+        if not self.notifications_preferences.friend_created_radio:
+            return
+        custom_params = {}
+        custom_params['uID'] = friend_profile.user.id
+        custom_params['rID'] = radio.id
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_FCR', loc_args=[friend_profile.name])
+        
+    def message_from_yasound(self, url_param):
+        custom_params = {}
+        custom_params['url'] = url_param
+        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key='APNs_YAS')
+        
+        
+    def notif_preferences(self):
+        prefs = {}
+        prefs['user_in_radio'] = True if self.notifications_preferences.user_in_radio else False
+        prefs['friend_in_radio'] = True if self.notifications_preferences.friend_in_radio else False
+        prefs['friend_online'] = True if self.notifications_preferences.friend_online else False
+        prefs['message_posted'] = True if self.notifications_preferences.message_posted else False
+        prefs['song_liked'] = True if self.notifications_preferences.song_liked else False
+        prefs['radio_in_favorites'] = True if self.notifications_preferences.radio_in_favorites else False
+        prefs['radio_shared'] = True if self.notifications_preferences.radio_shared else False
+        prefs['friend_created_radio'] = True if self.notifications_preferences.friend_created_radio else False
+        return prefs
+    
+    def set_notif_preferences(self, pref_dict):
+        user_in_radio = pref_dict.get('user_in_radio', None)
+        friend_in_radio = pref_dict.get('friend_in_radio', None)
+        friend_online = pref_dict.get('friend_online', None)
+        message_posted = pref_dict.get('message_posted', None)
+        song_liked = pref_dict.get('song_liked', None)
+        radio_in_favorites = pref_dict.get('radio_in_favorites', None)
+        radio_shared = pref_dict.get('radio_shared', None)
+        friend_created_radio = pref_dict.get('friend_created_radio', None)
+        
+        if user_in_radio != None:
+            self.notifications_preferences.user_in_radio = user_in_radio
+        if friend_in_radio != None:
+            self.notifications_preferences.friend_in_radio = friend_in_radio
+        if friend_online != None:
+            self.notifications_preferences.friend_online = friend_online
+        if message_posted != None:
+            self.notifications_preferences.message_posted = message_posted
+        if song_liked != None:
+            self.notifications_preferences.song_liked = song_liked
+        if radio_in_favorites != None:
+            self.notifications_preferences.radio_in_favorites = radio_in_favorites
+        if radio_shared != None:
+            self.notifications_preferences.radio_shared = radio_shared
+        if friend_created_radio != None:
+            self.notifications_preferences.friend_created_radio = friend_created_radio 
+        self.save()
+        
+        
+        
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
@@ -330,8 +467,6 @@ class DeviceManager(models.Manager):
     def delete_deprecated(self, sandbox=True):
         token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX if sandbox else account_settings.IOS_TOKEN_TYPE_DEVELOPMENT
         apns_deprecated = get_deprecated_devices(sandbox)
-        if not apns_deprecated:
-            return
         for i in apns_deprecated:
             feedback_time = i[0]
             device_token = i[1]
@@ -372,6 +507,9 @@ class Device(models.Model):
         super(Device, self).save(*args, **kwargs)
         if creation:
             Device.objects.filter(ios_token=self.ios_token).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
+            
+    def __unicode__(self):
+        return u'%s - %s (%s)' % (self.user.userprofile.name, self.ios_token, self.ios_token_type);
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):  
     if isinstance(instance, UserProfile):

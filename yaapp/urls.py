@@ -115,6 +115,8 @@ urlpatterns = patterns('',
     (r'^status/', 'yabase.views.status'),
     
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
+    url(r'^api/v1/notifications_preferences/$', 'account.views.get_notifications_preferences'),
+    url(r'^api/v1/set_notifications_preferences/$', 'account.views.set_notifications_preferences'),
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),

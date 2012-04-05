@@ -128,8 +128,6 @@ def build_social_username(uid, account_type):
     
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        import pdb
-        pdb.set_trace()
         authenticated = False
         # Application Cookie authentication:
         cookies = request.COOKIES
