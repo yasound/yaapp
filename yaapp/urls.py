@@ -10,7 +10,8 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     RadioLikerResource, RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, SearchRadioBySongResource, \
     RadioCurrentUserResource, \
     WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
-    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource, EditSongResource
+    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource, EditSongResource, \
+    UserFavoriteRadioResource
 from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
 from account.friend_api import FriendResource
 from stats.api import RadioListeningStatResource
@@ -47,6 +48,7 @@ radio_next_songs = RadioNextSongsResource()
 wall_event = RadioWallEventResource()
 radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
+
 current_users = RadioCurrentUserResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
@@ -54,6 +56,8 @@ radio_enabled_playlist = RadioEnabledPlaylistResource()
 radio_all_playlist = RadioAllPlaylistResource()
 playlist_matched_songs = MatchedSongResource()
 
+
+user_favorite_radios = UserFavoriteRadioResource()
 #Radio.objects.unlock_all()
 
 js_info_dict = {
@@ -79,6 +83,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_id>\d+)/playlists_update/$', 'yabase.views.upload_playlists'),
     url(r'^api/v1/task/(?P<task_id>\S+)/$', 'yabase.views.task_status'),
     url(r'^api/v1/user/(?P<user_id>\d+)/picture/$', 'account.views.set_user_picture'),
+    url(r'^api/v1/user/(?P<user_id>\d+)/', include(user_favorite_radios.urls)),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/picture/$', 'yabase.views.set_radio_picture'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/liker/$', 'yabase.views.like_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/neutral/$', 'yabase.views.neutral_radio'),
