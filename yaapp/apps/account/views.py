@@ -261,7 +261,7 @@ def password_reset_confirm(request, uidb36=None, token=None,
 def associate(request):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
-
+    
     cookies = request.COOKIES
     if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
         return HttpResponse(status=401)
@@ -278,16 +278,15 @@ def associate(request):
     token = request.REQUEST.get('token')
     token_secret = request.REQUEST.get('token_secret')
     email = request.REQUEST.get('email')
-    username = request.REQUEST.get('username')
     password = request.REQUEST.get('password')
-    
+
     res = False
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
         res = profile.add_facebook_account(uid, token)
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
         res = profile.add_twitter_account(uid, token, token_secret)
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
-        res = profile.add_yasound_account(email, username, password)
+        res = profile.add_yasound_account(email, password)
 
     if res:
         return HttpResponse("OK")
