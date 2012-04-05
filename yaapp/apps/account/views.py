@@ -140,13 +140,18 @@ def send_ios_push_notif_token(request):
     post_data_dict = json.loads(data)
     device_token = post_data_dict.get('device_token', None)
     device_token_type = post_data_dict.get('device_token_type', None)
+    device_uuid = post_data_dict.get('uuid', None)
     if not device_token or not device_token_type:
         return HttpResponse('bad data')
     
     if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_DEVELOPMENT:
         return HttpResponse('bad data')
     
-    device, created = Device.objects.get_or_create(user=request.user, ios_token=device_token, ios_token_type=device_token_type)
+    
+    device, created = Device.objects.get_or_create(user=request.user, uuid=device_uuid)
+    device.ios_token = device_token
+    device.ios_token_type = device_token_type
+    device.save()
     device.set_registered_now()
     
     res = 'send_ios_push_notif_token OK'

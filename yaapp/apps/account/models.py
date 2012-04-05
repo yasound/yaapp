@@ -709,6 +709,7 @@ class Device(models.Model):
     """
     objects = DeviceManager() 
     user = models.ForeignKey(User, verbose_name=_('user'))
+    uuid = models.CharField(_('ios device uuid'), max_length=255)
     ios_token = models.CharField(_('ios device token'), max_length=255)
     ios_token_type = models.CharField(max_length=16, choices=account_settings.IOS_TOKEN_TYPE_CHOICES)
     registration_date = models.DateTimeField(auto_now_add=True)
@@ -729,12 +730,17 @@ class Device(models.Model):
         
     def save(self, *args, **kwargs):
         creation = (self.pk == None)
+        token_just_set = creation
+        if not creation:
+            old_token = Device.objects.get(pk=self.pk).ios_token
+            token_just_set = old_token != self.ios_token
         super(Device, self).save(*args, **kwargs)
-        if creation:
+        if token_just_set:
             Device.objects.filter(ios_token=self.ios_token).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
             
     def __unicode__(self):
         return u'%s - %s (%s)' % (self.user.userprofile.name, self.ios_token, self.ios_token_type);
+    
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):  
     if isinstance(instance, UserProfile):
