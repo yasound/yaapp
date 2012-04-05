@@ -200,8 +200,9 @@ class UserProfile(models.Model):
         return True
     
     def remove_facebook_account(self):
-        if not self.yasound_enabled and not self.twitter_enabled:
+        if (self.yasound_enabled == False) and (self.twitter_enabled == False):
             return False
+
         self.facebook_uid = None
         self.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
         self.facebook_token = ''
@@ -209,6 +210,7 @@ class UserProfile(models.Model):
         
         # TODO: refresh friends
         self.save()
+        return True
         
     def add_twitter_account(self, uid, token, token_secret):
         auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
@@ -245,7 +247,7 @@ class UserProfile(models.Model):
         return True
 
     def remove_twitter_account(self):
-        if not self.yasound_enabled and not self.facebook_enabled:
+        if (self.yasound_enabled == False) and (self.facebook_enabled == False):
             return False
         self.twitter_uid = ''
         self.twitter_token = ''
@@ -254,7 +256,8 @@ class UserProfile(models.Model):
 
         # TODO: refresh friends
         self.save()
-        
+        return True
+    
     def add_yasound_account(self, email, password):
         if User.objects.filter(email=email).count() > 0:
             logger.error('yasound account already attached to other account')
@@ -267,7 +270,7 @@ class UserProfile(models.Model):
         return True
 
     def remove_yasound_account(self):
-        if not self.twitter_enabled and not self.facebook_enabled:
+        if (self.twitter_enabled == False) and (self.facebook_enabled == False):
             return False
         
         self.user.set_password(None)
@@ -351,6 +354,7 @@ class UserProfile(models.Model):
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
+        
                    
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
