@@ -4,7 +4,8 @@ from sorl.thumbnail.admin import AdminImageMixin
 
 class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = ('id', 'user', 'name', 'twitter_uid', 'facebook_uid')
-    search_fields = ['user__username']
+    search_fields = ['user__username'],
+    exclude = ('notifications_preferences',)
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class DeviceAdmin(admin.ModelAdmin):
