@@ -373,7 +373,10 @@ class UserProfile(models.Model):
             try:
                 picture_url = get_thumbnail(self.picture, '100x100', crop='center').url
             except:
-                pass
+                picture_url = yaapp_settings.DEFAULT_IMAGE
+        else:
+            picture_url = yaapp_settings.DEFAULT_IMAGE
+            
         bundle.data['picture'] = picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
