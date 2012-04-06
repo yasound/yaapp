@@ -199,7 +199,7 @@ class AddEmailForm(forms.Form):
         return EmailAddress.objects.add_email(self.user, self.cleaned_data["email"])
         
 class PasswordResetForm(forms.Form):
-    email = forms.EmailField(label=_("E-mail"), max_length=75)
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': _('Username')}), max_length=75)
 
     def clean_email(self):
         """

@@ -150,7 +150,9 @@ footer #menu a:hover {
 	display: block;
 }
 
-#signup-form label {
+#signup-form label
+,#passreset-form label
+ {
 	display: none;
 }
 .errorlist .error {
