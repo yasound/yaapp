@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-06 16:29+0200\n"
+"POT-Creation-Date: 2012-04-06 16:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,14 +145,17 @@ msgid "Invalid confirmation key."
 msgstr "Clef de confirmation invalide"
 
 #: templates/emailconfirmation/email_confirmation_message.txt:1
-#, python-format
 msgid ""
 "Somebody at %(site_name)s has given this as an email address.\n"
 "\n"
 "To confirm this is correct, go to %(activate_url)s\n"
+"\n"
+"The Yasound team.\n"
 msgstr "Une personne sur le site %(site_name)s a indiqué cette adresse email afin de "
 "s'inscrire.\n"
-".Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
+"Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
+"\n"
+"L'équipe Yasound.\n"
 
 #: templates/emailconfirmation/email_confirmation_subject.txt:1
 #, python-format
