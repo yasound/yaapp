@@ -275,7 +275,7 @@ def password_reset(request, is_admin_site=False,
         template_name = template_name_mobile
     
     if post_reset_redirect is None:
-        post_reset_redirect = reverse('login')
+        post_reset_redirect = reverse('lost_password')
     if request.method == "POST":
         form = password_reset_form(request.POST, error_class=DivErrorList)
         if form.is_valid():

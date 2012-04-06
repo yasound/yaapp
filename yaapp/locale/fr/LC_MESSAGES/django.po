@@ -81,7 +81,7 @@ msgstr "Nouveau ici ? Créer un compte"
 
 #: templates/account/login.html:42
 msgid "You can login using your existing accounts:"
-msgstr "Vous pouvez aussi vous connecter en utiliser vos compte existants :"
+msgstr "Vous pouvez aussi vous connecter en utilisant vos compte existants :"
 
 #: templates/account/password_reset_confirm.html:4
 #: templates/account/password_reset_confirm_mobile.html:4

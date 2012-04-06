@@ -61,6 +61,10 @@
             </div>
     </div>    
 
+   </div>
+</div>
+
+<div class='container-fluid'>
     <div class='row-fluid'>
         <div id='appstore'>
         <a href="http://itunes.apple.com/fr/app/yasound/id492680161?mt=8&uo=4" target="itunes_store">
@@ -68,10 +72,6 @@
         </a>
         </div>
     </div>    
-   </div>
-</div>
-
-<div class='container-fluid'>
     <footer>
       <div id="menu">
       {% if request.user.is_authenticated %}<a href="{% url logout %}">{% trans "Logout" %}</a> | {% endif %} <a href="http://yasound.com/fr/a_propos_de_nous.php">À propos de nous</a> | <a href="http://yasound.com/fr/jobs.php">Jobs</a> | <a href="http://yasound.com/fr/presse.php">Presse</a> | <a href="http://yasound.com/fr/contact.php">Contact</a>
