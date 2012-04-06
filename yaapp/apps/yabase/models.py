@@ -623,7 +623,20 @@ class Radio(models.Model):
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
-        
+    
+    def as_dict(self):
+        likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'likes': likes,
+            'favorites': self.favorites,
+            'nb_current_users' : self.nb_current_users,
+            'tags' : self.tags_to_string(),
+            'stream_url' : self.stream_url,
+        }
+        return data
+    
     def update_with_data(self, data):
         if 'description' in data:
             self.description = data['description']
