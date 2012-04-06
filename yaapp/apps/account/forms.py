@@ -30,8 +30,8 @@ def _generate_password():
 
 class LoginForm(forms.Form):
 
-    email = forms.CharField(label=_("Email"), max_length=75, widget=forms.TextInput())
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(render_value=False))
+    email = forms.CharField(label=_("Email"), max_length=75, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(render_value=False, attrs={'placeholder': _('Password')}))
     user = None
 
     def clean(self):
@@ -93,12 +93,15 @@ class SignupForm(forms.Form):
     password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(attrs={'placeholder': _('Password (again)')}))
     captcha = CaptchaField()
         
+    def clean_username(self):
+        profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
+        if profiles.count() > 0:
+            raise forms.ValidationError(u"This username is already taken. Please choose another.")
+        return self.cleaned_data["username"]
+    
     def clean_email(self):
         user = User.objects.filter(email__exact=self.cleaned_data["email"])
         if not user:
-            profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
-            if profiles.count() > 0:
-                raise forms.ValidationError(u"This username is already taken. Please choose another.")
             
             return self.cleaned_data["email"]
         raise forms.ValidationError(u"This email is already taken. Please choose another.")

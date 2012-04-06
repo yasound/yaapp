@@ -26,10 +26,9 @@
                 <p>{% trans "You are already authenticated" %}.
                 <a href='{% url logout%}'>{% trans "Logout" %}</a></p>
                 {% endif %}
-                <form method='post'>{% csrf_token %}
+                <form id='login-form' method='post'>{% csrf_token %}
                 <fieldset>
-                <input id="id_login-email" type="text" maxlength="75" name="login-email" placeholder="{% trans 'Email' %}">
-                <input id="id_login-password" type="password" name="login-password" placeholder="{% trans 'Password' %}">
+                {{ login_form }}
                 
                 <br/>
                 <input type='hidden' name='action' value='login'/>
