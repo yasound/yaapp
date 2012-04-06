@@ -11,7 +11,6 @@ from django.http import HttpResponse, HttpResponseForbidden, \
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 
-from django.views.decorators.csrf import csrf_exempt
 from models import User, UserProfile, Device
 import datetime
 from django.contrib.messages.api import get_messages
@@ -212,7 +211,8 @@ def _parse_facebook_item(item):
             except:
                 logger.error("cannot find user profile with given uid: %s" % (uid))
                 pass
-    
+
+@csrf_exempt
 def facebook_update(request):
     if request.method == 'GET':
         logger.debug('received facebook_update verification')
