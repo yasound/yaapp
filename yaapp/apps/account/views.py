@@ -372,6 +372,7 @@ def associate(request):
     email = request.REQUEST.get('email')
     password = request.REQUEST.get('password')
 
+    request.debug(request.REQUEST)
     res = False
     message = _('Unknown error')
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
