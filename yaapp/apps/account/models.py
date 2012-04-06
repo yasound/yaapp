@@ -688,8 +688,11 @@ def create_radio(sender, instance, created, **kwargs):
         radio.save()
 
 post_save.connect(create_user_profile, sender=User)
+post_save.connect(create_user_profile, sender=EmailUser)
 post_save.connect(create_api_key, sender=User)
+post_save.connect(create_api_key, sender=EmailUser)
 post_save.connect(create_radio, sender=User)
+post_save.connect(create_radio, sender=EmailUser)
 
 class DeviceManager(models.Manager):
     def for_user(self, user):

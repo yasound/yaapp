@@ -96,6 +96,10 @@ class SignupForm(forms.Form):
     def clean_email(self):
         user = User.objects.filter(email__exact=self.cleaned_data["email"])
         if not user:
+            profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
+            if profiles.count() > 0:
+                raise forms.ValidationError(u"This username is already taken. Please choose another.")
+            
             return self.cleaned_data["email"]
         raise forms.ValidationError(u"This email is already taken. Please choose another.")
 
@@ -106,14 +110,20 @@ class SignupForm(forms.Form):
         return self.cleaned_data
 
     def save(self):
+        from api import build_random_username
+        
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
-        username = self.cleaned_data["username"]
+        username = build_random_username()
         if email and username:
             new_user = EmailUser.objects.create_user(username, email, password)
             user = EmailUser.objects.get(email=email)
             user.is_active = False
             user.save()
+            
+            user.get_profile().name = self.cleaned_data["username"]
+            user.get_profile().save()
+            
             EmailAddress.objects.add_email(new_user, email)
             
             return username, email
