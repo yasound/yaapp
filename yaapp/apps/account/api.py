@@ -69,10 +69,10 @@ class UserResource(ModelResource):
         userprofile.fill_user_bundle(bundle)
         
         own_radio = userprofile.own_radio
-        if own_radio:
+        if own_radio and own_radio.ready:
             bundle.data['own_radio'] = own_radio.as_dict()
         current_radio = userprofile.current_radio
-        if current_radio:
+        if current_radio and current_radio.ready:
             bundle.data['current_radio'] = current_radio.as_dict()
         
         return bundle
