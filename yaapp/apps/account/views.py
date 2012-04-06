@@ -216,9 +216,9 @@ def _parse_facebook_item(item):
 def facebook_update(request):
     if request.method == 'GET':
         logger.debug('received facebook_update verification')
-        hub_mode = request.REQUEST.get('hub_mode')
-        hub_verify_token = request.REQUEST.get('hub_verify_token')
-        hub_challenge = request.REQUEST.get('hub_challenge')
+        hub_mode = request.REQUEST.get('hub.mode')
+        hub_verify_token = request.REQUEST.get('hub.verify_token')
+        hub_challenge = request.REQUEST.get('hub.challenge')
         logger.debug('hub_mode = %s' % (hub_mode))
         logger.debug('hub_verify_token = %s' % (hub_verify_token))
         logger.debug('hub_challenge = %s' % (hub_challenge))
