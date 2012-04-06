@@ -177,6 +177,13 @@ footer #menu a:hover {
     padding-top:60px;
 }
 
+.login-back3 {
+    background-image: url(/media/yaweb/images/intro/background3.jpg);
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+    padding-top:60px;
+}
+
 .well-center {
 	min-height: 20px;
 	padding: 19px;
