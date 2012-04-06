@@ -434,6 +434,8 @@ class UserProfile(models.Model):
             self.save()
             for user in friends.all():
                 profile = user.userprofile
+                if profile is None:
+                    continue
                 profile.friends.add(self.user)
                 profile.save()
             
