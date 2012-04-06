@@ -225,3 +225,7 @@ footer #menu a:hover {
 .well-center a.first {
 	margin-bottom:20px;
 }
+
+.well-center a.btn-auth {
+	width:142px;
+}
