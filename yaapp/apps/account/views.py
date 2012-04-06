@@ -119,7 +119,28 @@ def login(request, template_name='account/login.html'):
         'next': next,
     }, context_instance=RequestContext(request))    
     
+def signup(request, template_name='account/signup.html'):
+    next = request.REQUEST.get('next')
 
+    signup_form = SignupForm(prefix='signup', error_class=DivErrorList)
+    if request.method == "POST":
+        action = request.REQUEST.get('action')
+        if action == 'signup':
+            signup_form = SignupForm(request.POST, prefix='signup', error_class=DivErrorList)
+            if signup_form.is_valid():
+                username, email = signup_form.save()
+                messages.info(request, _("Confirmation email sent to %s" % email))
+                return render_to_response("account/registered.html", {
+                    "username": username,
+                    "email": email,
+                    'next': next,
+                }, context_instance=RequestContext(request))
+            
+    return render_to_response(template_name, {
+        "signup_form": signup_form,
+        'next': next,
+    }, context_instance=RequestContext(request))
+    
 def error(request, template_name='account/login_error.html'):
     messages = get_messages(request)
     return render_to_response(template_name, {'version': version,

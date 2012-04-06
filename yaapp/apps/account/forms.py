@@ -87,10 +87,10 @@ class ChangeLanguageForm(UserProfileForm):
         self.user.message_set.create(message=ugettext(u"Language successfully updated."))
 
 class SignupForm(forms.Form):
-    username = forms.CharField(label=_("Username"), widget=forms.TextInput(), help_text=_('Name displayed at Yasound'))
-    email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(), help_text=_('Please enter a valid and existing email.'))
-    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(), help_text=_('Only alphanum characters.<em>Ex: pwn4_n00b</em>'))
-    password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(), help_text=_('Must be the same as above.'))
+    username = forms.CharField(label=_("Username"), widget=forms.TextInput(attrs={'placeholder': _('Username')}))
+    email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
+    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
+    password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(attrs={'placeholder': _('Password (again)')}))
     captcha = CaptchaField()
         
     def clean_email(self):

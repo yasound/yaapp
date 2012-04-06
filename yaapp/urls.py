@@ -148,6 +148,7 @@ urlpatterns = patterns('',
     
     url(r'', include('social_auth.urls')),
     url(r'^login/$', 'account.views.login', name="login"),
+    url(r'^signup/$', 'account.views.signup', name="signup"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
     url(r'^passreset/$','account.views.password_reset', name='lost_password'),
     url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','account.views.password_reset_confirm', name='reset_password_confirm'),
