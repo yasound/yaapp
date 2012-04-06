@@ -221,7 +221,7 @@ class SocialAuthentication(Authentication):
         if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             logger.debug('account type : facebook')
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
-            
+            logger.debug('facebook profile = %s' % (facebook_profile))
             if not facebook_profile:
                 logger.error('cannot communicate with facebook')
                 return False
