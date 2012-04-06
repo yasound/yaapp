@@ -38,18 +38,22 @@
                 </form>
                 <a class='' href='{% url signup %}'>{% trans "New user ? create a new account now" %}</a>
                <hr/>
+               
+            <p>{% trans "You can login using your existing accounts:" %}</p>
             {% if next %}   
-            <a class="btn-auth btn-facebook" href="{% url socialauth_begin 'facebook' %}?next={{ next }}" rel="nofollow">
+            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}?next={{ next }}" rel="nofollow">
             facebook
             </a>
-            <a class="btn-auth btn-twitter"  href="{% url socialauth_begin 'twitter' %}?next={{ next }}" rel="nofollow">
+            
+            <a class="btn-auth btn-twitter large"  href="{% url socialauth_begin 'twitter' %}?next={{ next }}" rel="nofollow">
             twitter
             </a>
             {% else %}
-            <a class="btn-auth btn-facebook" href="{% url socialauth_begin 'facebook' %}" rel="nofollow">
+            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}" rel="nofollow">
             facebook
             </a>
-            <a class="btn-auth btn-twitter" href="{% url socialauth_begin 'twitter' %}" rel="nofollow">
+            
+            <a class="btn-auth btn-twitter large" href="{% url socialauth_begin 'twitter' %}" rel="nofollow">
             twitter
             </a>
             {% endif %}

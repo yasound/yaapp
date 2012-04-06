@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-06 16:05+0200\n"
+"POT-Creation-Date: 2012-04-06 16:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgstr "Erreur interne."
 
 #: templates/base.html:45
 #: templates/base_mobile.html:40
-#: templates/account/login.html:63
+#: templates/account/login.html:67
 #: templates/account/password_reset_form.html:36
 #: templates/account/signup.html:45
 msgid "available on appstore"
@@ -45,7 +45,7 @@ msgstr "disponible sur l'appstore"
 #: templates/base.html:52
 #: templates/base_mobile.html:47
 #: templates/account/login.html:27
-#: templates/account/login.html.py:73
+#: templates/account/login.html.py:77
 #: templates/account/password_reset_form.html:23
 #: templates/account/password_reset_form.html:46
 #: templates/account/signup.html:27
@@ -78,6 +78,10 @@ msgstr "Mot de passe perdu ?"
 #: templates/account/login.html:39
 msgid "New user ? create a new account now"
 msgstr "Nouveau ici ? Créer un compte"
+
+#: templates/account/login.html:42
+msgid "You can login using your existing accounts:"
+msgstr "Vous pouvez aussi vous connecter en utiliser vos compte existants :"
 
 #: templates/account/password_reset_confirm.html:4
 #: templates/account/password_reset_confirm_mobile.html:4

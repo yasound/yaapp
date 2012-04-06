@@ -221,3 +221,7 @@ footer #menu a:hover {
 	position:relative;
 	top:-8px;
 }
+
+.well-center a.first {
+	margin-bottom:20px;
+}
