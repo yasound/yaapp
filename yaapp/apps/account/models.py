@@ -282,7 +282,7 @@ class UserProfile(models.Model):
         return True, _('OK')
     
     def add_yasound_account(self, email, password):
-        if User.objects.filter(email=email).count() > 0:
+        if User.objects.filter(email=email).exclude(id=self.user.id).count() > 0:
             logger.error('yasound account already attached to other account')
             return False, _('An account already exists with this email')
         
