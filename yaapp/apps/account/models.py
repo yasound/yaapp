@@ -576,11 +576,10 @@ class UserProfile(models.Model):
         user_profile = wall_message.user.userprofile
         radio = wall_message.radio
         
-        #MatTest: following lines commented to test easily
-#        if user_profile == self:
-#            return
-#        if self.connected_radio == radio:
-#            return
+        if user_profile == self:
+            return
+        if self.connected_radio == radio:
+            return
         custom_params = {}
         custom_params['uID'] = user_profile.user.id
         custom_params['rID'] = radio.id
