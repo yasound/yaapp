@@ -35,13 +35,13 @@ footer #menu a:hover {
 	background-color: #F5F5F5;
 	border-radius: 6px 6px 6px 6px;
 	padding: 40px;
-	padding-top:60px;
-	padding-bottom:60px;
+	padding-top: 60px;
+	padding-bottom: 60px;
 	background-image: url(/media/images/icon-radio.png);
 	background-repeat: no-repeat;
 	background-position: 10px 10px;
-	margin-bottom:24px;
-    min-height:170px;
+	margin-bottom: 24px;
+	min-height: 170px;
 }
 
 #radio p {
@@ -64,20 +64,17 @@ footer #menu a:hover {
 	text-align: center;
 }
 
-
 #player {
-	margin-top: 24px; background-color : #F5F5F5;
+	margin-top: 24px;
+	background-color: #F5F5F5;
 	border-radius: 6px 6px 6px 6px;
 	padding: 60px;
 	background-image: url(/media/images/icon-on-air.png);
 	background-repeat: no-repeat;
 	background-position: 10px 10px;
 	background-color: #F5F5F5;
-    margin-bottom:24px;
+	margin-bottom: 24px;
 }
-
-
-
 
 #player p {
 	font-size: 18px;
@@ -91,7 +88,8 @@ footer #menu a:hover {
 }
 
 #track-picture .btn-group {
-	padding-top: 12px; width : 106px;
+	padding-top: 12px;
+	width: 106px;
 	margin: 0px auto;
 	width: 106px;
 }
@@ -121,7 +119,7 @@ footer #menu a:hover {
 }
 
 #btn-buy {
-	width:128px;
+	width: 128px;
 }
 
 .no-ease .bar {
@@ -132,40 +130,102 @@ footer #menu a:hover {
 	transition: width 0s ease;
 }
 
-
 #social-login {
-    margin-top: 24px;
-    background-color: #F5F5F5;
-    border-radius: 6px 6px 6px 6px;
-    padding: 40px;
-    padding-top:60px;
-    padding-bottom:60px;
-    background-image: url(/media/yaweb/images/intro/icon12.png);
-    background-repeat: no-repeat;
-    background-position: 10px 10px;
-    margin-bottom:24px;
-    min-height:170px;
+	margin-top: 24px;
+	background-color: #F5F5F5;
+	border-radius: 6px 6px 6px 6px;
+	padding: 40px;
+	padding-top: 60px;
+	padding-bottom: 60px;
+	background-image: url(/media/yaweb/images/intro/icon12.png);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	margin-bottom: 24px;
+	min-height: 170px;
 }
-
-#signup-form input {
-	margin-bottom:0;
-}
-
-#signup-form button {
-    margin-top:9px;
-}
-
 
 #signup-form .helptext {
-	font-size:80%;
-    margin-bottom:9px;
-    display:block;
+	font-size: 80%;
+	margin-bottom: 9px;
+	display: block;
 }
 
+#login-form label
+,#signup-form label
+,#passreset-form label
+ {
+	display: none;
+}
 .errorlist .error {
-    color: red;	
+	color: red;
 }
 
-.errorlist + input {
-	border:2px solid red;
+.errorlist+input {
+	border: 2px solid red;
+}
+
+.login-back {
+	background-image: url(/media/yaweb/images/intro/background4.jpg);
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	padding-top:60px;
+}
+
+.login-back2 {
+    background-image: url(/media/yaweb/images/intro/background2.jpg);
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+    padding-top:60px;
+}
+
+.login-back3 {
+    background-image: url(/media/yaweb/images/intro/background3.jpg);
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+    padding-top:60px;
+}
+
+.well-center {
+	min-height: 20px;
+	padding: 19px;
+	margin-bottom: 20px;
+	background-color: rgba(245, 245,245, 0.8);
+	border: 1px solid #eee;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	width:270px;
+    margin: 0px auto;
+    padding-left:30px;
+    margin-bottom:30px;
+}
+
+
+.well-center form,
+.well-center-signup forim {
+	margin-top:12px;
+}
+
+.well blockquote {
+	border-color: #ddd;
+	border-color: rgba(0, 0, 0, 0.15);
+}
+
+
+#id_signup-captcha_1 {
+	width:120px;
+	position:relative;
+	top:-8px;
+}
+
+.well-center a.first {
+	margin-bottom:20px;
+}
+
+.well-center a.btn-auth {
+	width:142px;
 }

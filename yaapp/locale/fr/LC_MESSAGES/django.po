@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-30 15:41+0200\n"
+"POT-Creation-Date: 2012-04-06 16:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,69 +35,80 @@ msgid "Internal error."
 msgstr "Erreur interne."
 
 #: templates/base.html:45
+#: templates/base_mobile.html:40
+#: templates/account/login.html:67
+#: templates/account/password_reset_form.html:36
+#: templates/account/signup.html:45
 msgid "available on appstore"
 msgstr "disponible sur l'appstore"
 
 #: templates/base.html:52
+#: templates/base_mobile.html:47
+#: templates/account/login.html:27
+#: templates/account/login.html.py:77
+#: templates/account/password_reset_form.html:23
+#: templates/account/password_reset_form.html:46
+#: templates/account/signup.html:27
+#: templates/account/signup.html.py:55
 #: templates/web/menu.html:16
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: templates/account/login.html:4
-#: templates/account/login.html.py:11
-#: templates/account/login.html:52
+#: templates/account/login.html:8
+#: templates/account/login.html.py:35
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
 msgid "Login"
 msgstr "Se connecter"
 
-#: templates/account/login.html:12
-msgid "Please choose your prefered login method below"
-msgstr "Veuillez sélectionner votre méthode d'authentification ci-dessous"
+#: templates/account/login.html:24
+msgid "Welcome to Yasound"
+msgstr "Bienvenue sur Yasound"
 
-#: templates/account/login.html:20
+#: templates/account/login.html:26
+#: templates/account/password_reset_form.html:22
+#: templates/account/signup.html:26
 msgid "You are already authenticated"
 msgstr "Vous êtes déjà authentifié"
 
-#: templates/account/login.html:26
-msgid "Social login services"
-msgstr "Authentification via un réseau social"
-
-#: templates/account/login.html:49
-msgid "Login using existing account"
-msgstr "S'authentifier en utilisant un compte existant"
-
-#: templates/account/login.html:53
+#: templates/account/login.html:36
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
 
-#: templates/account/login.html:60
-msgid "Create a new account"
-msgstr "Créer un nouveau compte"
+#: templates/account/login.html:39
+msgid "New user ? create a new account now"
+msgstr "Nouveau ici ? Créer un compte"
 
-#: templates/account/login.html:63
-msgid "Register"
-msgstr "Creer un compte"
+#: templates/account/login.html:42
+msgid "You can login using your existing accounts:"
+msgstr "Vous pouvez aussi vous connecter en utiliser vos compte existants :"
 
 #: templates/account/password_reset_confirm.html:4
+#: templates/account/password_reset_confirm_mobile.html:4
 #: templates/account/password_reset_form.html:4
+#: templates/account/password_reset_form_mobile.html:4
 msgid "Password reset"
 msgstr "Réinitialisation du mot de passe"
 
 #: templates/account/password_reset_confirm.html:10
+#: templates/account/password_reset_confirm_mobile.html:10
 msgid "Reset password confirmation"
 msgstr "Confirmation de la réinitialisation"
 
 #: templates/account/password_reset_confirm.html:17
-#: templates/account/password_reset_form.html:16
+#: templates/account/password_reset_confirm_mobile.html:18
+#: templates/account/password_reset_form.html:20
+#: templates/account/password_reset_form.html:27
+#: templates/account/password_reset_form_mobile.html:17
 msgid "Reset"
 msgstr "Réinitialiser"
 
 #: templates/account/password_reset_confirm.html:21
+#: templates/account/password_reset_confirm_mobile.html:22
 msgid "The password reset link was invalid"
 msgstr "Le lien de réinitialisation du mot de passe est invalide"
 
-#: templates/account/password_reset_form.html:10
+#: templates/account/password_reset_form_mobile.html:10
 msgid "Reset password"
 msgstr "Réinitialiser le mot de passe"
 
@@ -118,6 +129,12 @@ msgstr "\n"
 "%(email)s afin de compléter le processus.\n"
 "\t\t\t\t"
 
+#: templates/account/signup.html:8
+#: templates/account/signup.html.py:24
+#: templates/account/signup.html:36
+msgid "Signup"
+msgstr "S'inscrire"
+
 #: templates/emailconfirmation/confirm_email.html:4
 #: templates/emailconfirmation/confirm_email.html:10
 msgid "Email confirmation"
@@ -128,14 +145,17 @@ msgid "Invalid confirmation key."
 msgstr "Clef de confirmation invalide"
 
 #: templates/emailconfirmation/email_confirmation_message.txt:1
-#, python-format
 msgid ""
 "Somebody at %(site_name)s has given this as an email address.\n"
 "\n"
 "To confirm this is correct, go to %(activate_url)s\n"
+"\n"
+"The Yasound team.\n"
 msgstr "Une personne sur le site %(site_name)s a indiqué cette adresse email afin de "
 "s'inscrire.\n"
-".Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
+"Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
+"\n"
+"L'équipe Yasound.\n"
 
 #: templates/emailconfirmation/email_confirmation_subject.txt:1
 #, python-format
@@ -321,6 +341,7 @@ msgid "Key figures"
 msgstr "Chiffres clef"
 
 #: templates/yabackoffice/keyfigures.html:8
+#: templates/yabackoffice/metrics.html:8
 msgid "Figure"
 msgstr "Indicateur"
 
@@ -365,8 +386,38 @@ msgid "Total Friend count"
 msgstr "Nombre total d'amis"
 
 #: templates/yabackoffice/keyfigures.html:90
+#: templates/yabackoffice/metrics.html:42
 msgid "Listening time"
 msgstr "Temps d'écoute"
+
+#: templates/yabackoffice/metrics.html:3
+msgid "Metrics"
+msgstr ""
+
+#: templates/yabackoffice/metrics.html:20
+msgid "New users"
+msgstr ""
+
+#: templates/yabackoffice/metrics.html:31
+#, fuzzy
+msgid "New radios"
+msgstr "Ma radio"
+
+#: templates/yabackoffice/metrics.html:54
+msgid "Wall messages"
+msgstr ""
+
+#: templates/yabackoffice/metrics.html:66
+msgid "Song likes"
+msgstr ""
+
+#: templates/yabackoffice/metrics.html:77
+msgid "Radio likes / dislike / neutral"
+msgstr ""
+
+#: templates/yabackoffice/metrics.html:88
+msgid "Radio favorites / un-favorites"
+msgstr ""
 
 #: templates/yabase/buy_link_not_found.html:4
 msgid "Sorry, item not available"

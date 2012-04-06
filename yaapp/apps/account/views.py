@@ -11,7 +11,6 @@ from django.http import HttpResponse, HttpResponseForbidden, \
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 
-from django.views.decorators.csrf import csrf_exempt
 from models import User, UserProfile, Device
 import datetime
 from django.contrib.messages.api import get_messages
@@ -120,7 +119,28 @@ def login(request, template_name='account/login.html'):
         'next': next,
     }, context_instance=RequestContext(request))    
     
+def signup(request, template_name='account/signup.html'):
+    next = request.REQUEST.get('next')
 
+    signup_form = SignupForm(prefix='signup', error_class=DivErrorList)
+    if request.method == "POST":
+        action = request.REQUEST.get('action')
+        if action == 'signup':
+            signup_form = SignupForm(request.POST, prefix='signup', error_class=DivErrorList)
+            if signup_form.is_valid():
+                username, email = signup_form.save()
+                messages.info(request, _("Confirmation email sent to %s" % email))
+                return render_to_response("account/registered.html", {
+                    "username": username,
+                    "email": email,
+                    'next': next,
+                }, context_instance=RequestContext(request))
+            
+    return render_to_response(template_name, {
+        "signup_form": signup_form,
+        'next': next,
+    }, context_instance=RequestContext(request))
+    
 def error(request, template_name='account/login_error.html'):
     messages = get_messages(request)
     return render_to_response(template_name, {'version': version,
@@ -212,13 +232,14 @@ def _parse_facebook_item(item):
             except:
                 logger.error("cannot find user profile with given uid: %s" % (uid))
                 pass
-    
+
+@csrf_exempt
 def facebook_update(request):
     if request.method == 'GET':
         logger.debug('received facebook_update verification')
-        hub_mode = request.REQUEST.get('hub_mode')
-        hub_verify_token = request.REQUEST.get('hub_verify_token')
-        hub_challenge = request.REQUEST.get('hub_challenge')
+        hub_mode = request.REQUEST.get('hub.mode')
+        hub_verify_token = request.REQUEST.get('hub.verify_token')
+        hub_challenge = request.REQUEST.get('hub.challenge')
         logger.debug('hub_mode = %s' % (hub_mode))
         logger.debug('hub_verify_token = %s' % (hub_verify_token))
         logger.debug('hub_challenge = %s' % (hub_challenge))

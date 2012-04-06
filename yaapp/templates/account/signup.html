@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
 {% endblock %}
 
-{% block head_title %}{% trans "Login" %}{% endblock %}
+{% block head_title %}{% trans "Signup" %}{% endblock %}
 
 
 {% block body %}
@@ -16,48 +16,26 @@
         </div>
     </div>
 </div>
-<div class='container-fluid login-back'>
+<div class='container-fluid login-back2'>
     <div class='row-fluid'>
         <div class='span12'>
         
             <div class='well-center'>
-                <h2>{% trans "Welcome to Yasound" %}</h2>
+                <h2>{% trans "Signup" %}</h2>
                 {% if request.user.is_authenticated %}
                 <p>{% trans "You are already authenticated" %}.
                 <a href='{% url logout%}'>{% trans "Logout" %}</a></p>
                 {% endif %}
-                <form id='login-form' method='post'>{% csrf_token %}
+                <form id='signup-form' method='post'>{% csrf_token %}
                 <fieldset>
-                {{ login_form }}
+                
+			    {{ signup_form }}
                 
                 <br/>
-                <input type='hidden' name='action' value='login'/>
-                <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
-                <a href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
+                <input type='hidden' name='action' value='signup'/>
+                <button type="submit" class="btn btn-primary">{% trans "Signup" %}</button>
                 </fieldset>
                 </form>
-                <a class='' href='{% url signup %}'>{% trans "New user ? create a new account now" %}</a>
-               <hr/>
-               
-            <p>{% trans "You can login using your existing accounts:" %}</p>
-            {% if next %}   
-            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}?next={{ next }}" rel="nofollow">
-            facebook
-            </a>
-            
-            <a class="btn-auth btn-twitter large"  href="{% url socialauth_begin 'twitter' %}?next={{ next }}" rel="nofollow">
-            twitter
-            </a>
-            {% else %}
-            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}" rel="nofollow">
-            facebook
-            </a>
-            
-            <a class="btn-auth btn-twitter large" href="{% url socialauth_begin 'twitter' %}" rel="nofollow">
-            twitter
-            </a>
-            {% endif %}
-                
             </div>
     </div>    
 
@@ -68,7 +46,7 @@
         </a>
         </div>
     </div>    
-   </div>
+  </div>
 </div>
 
 <div class='container-fluid'>

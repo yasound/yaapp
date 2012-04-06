@@ -30,8 +30,8 @@ def _generate_password():
 
 class LoginForm(forms.Form):
 
-    email = forms.CharField(label=_("Email"), max_length=75, widget=forms.TextInput())
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(render_value=False))
+    email = forms.CharField(label=_("Email"), max_length=75, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(render_value=False, attrs={'placeholder': _('Password')}))
     user = None
 
     def clean(self):
@@ -87,15 +87,22 @@ class ChangeLanguageForm(UserProfileForm):
         self.user.message_set.create(message=ugettext(u"Language successfully updated."))
 
 class SignupForm(forms.Form):
-    username = forms.CharField(label=_("Username"), widget=forms.TextInput(), help_text=_('Name displayed at Yasound'))
-    email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(), help_text=_('Please enter a valid and existing email.'))
-    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(), help_text=_('Only alphanum characters.<em>Ex: pwn4_n00b</em>'))
-    password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(), help_text=_('Must be the same as above.'))
+    username = forms.CharField(label=_("Username"), widget=forms.TextInput(attrs={'placeholder': _('Username')}))
+    email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
+    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
+    password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(attrs={'placeholder': _('Password (again)')}))
     captcha = CaptchaField()
         
+    def clean_username(self):
+        profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
+        if profiles.count() > 0:
+            raise forms.ValidationError(u"This username is already taken. Please choose another.")
+        return self.cleaned_data["username"]
+    
     def clean_email(self):
         user = User.objects.filter(email__exact=self.cleaned_data["email"])
         if not user:
+            
             return self.cleaned_data["email"]
         raise forms.ValidationError(u"This email is already taken. Please choose another.")
 
@@ -106,14 +113,20 @@ class SignupForm(forms.Form):
         return self.cleaned_data
 
     def save(self):
+        from api import build_random_username
+        
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
-        username = self.cleaned_data["username"]
+        username = build_random_username()
         if email and username:
             new_user = EmailUser.objects.create_user(username, email, password)
             user = EmailUser.objects.get(email=email)
             user.is_active = False
             user.save()
+            
+            user.get_profile().name = self.cleaned_data["username"]
+            user.get_profile().save()
+            
             EmailAddress.objects.add_email(new_user, email)
             
             return username, email
@@ -189,7 +202,7 @@ class AddEmailForm(forms.Form):
         return EmailAddress.objects.add_email(self.user, self.cleaned_data["email"])
         
 class PasswordResetForm(forms.Form):
-    email = forms.EmailField(label=_("E-mail"), max_length=75)
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': _('Username')}), max_length=75)
 
     def clean_email(self):
         """
