@@ -408,6 +408,9 @@ class UserProfile(models.Model):
         bundle.data['name'] = self.name
         
     def fill_user_bundle_with_login_infos(self, bundle):
+        if self.user:
+            bundle.data['username'] = self.user.username
+        
         if self.facebook_uid:
             bundle.data['facebook_uid'] = self.facebook_uid
             
