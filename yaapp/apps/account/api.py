@@ -170,12 +170,7 @@ class LoginResource(ModelResource):
         userprofile.fill_user_bundle(bundle)
 
         # add social stuff        
-        bundle.data['facebook_uid'] = userprofile.facebook_uid
-        bundle.data['facebook_token'] = userprofile.facebook_token
-
-        bundle.data['twitter_uid'] = userprofile.twitter_uid
-        bundle.data['twitter_token'] = userprofile.twitter_token
-        bundle.data['twitter_token_secret'] = userprofile.twitter_token_secret
+        userprofile.fill_user_bundle_with_login_infos(bundle)     
         
         userprofile.logged()
         
@@ -349,13 +344,8 @@ class LoginSocialResource(ModelResource):
         userprofile.fill_user_bundle(bundle)
         
         # add specific login informations
-        # add social stuff        
-        bundle.data['facebook_uid'] = userprofile.facebook_uid
-        bundle.data['facebook_token'] = userprofile.facebook_token
-
-        bundle.data['twitter_uid'] = userprofile.twitter_uid
-        bundle.data['twitter_token'] = userprofile.twitter_token
-        bundle.data['twitter_token_secret'] = userprofile.twitter_token_secret
+        # add social stuff   
+        userprofile.fill_user_bundle_with_login_infos(bundle)     
         
         add_api_key_to_bundle(user, bundle)
         print 'login social dehydrate OK'

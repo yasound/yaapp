@@ -386,7 +386,26 @@ class UserProfile(models.Model):
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
         
-                   
+    def fill_user_bundle_with_login_infos(self, bundle):
+        if self.facebook_uid:
+            bundle.data['facebook_uid'] = self.facebook_uid
+            
+        if self.facebook_token:
+            bundle.data['facebook_token'] = self.facebook_token
+
+        if self.twitter_id:
+            bundle.data['twitter_uid'] = self.twitter_uid
+            
+        if self.twitter_token:
+            bundle.data['twitter_token'] = self.twitter_token
+            
+        if self.twitter_token_secret:
+            bundle.data['twitter_token_secret'] = self.twitter_token_secret
+        
+        if self.user and self.user.email:
+            bundle.data['email'] = self.user.email
+            
+           
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
             self.bio_text = bundle.data['bio_text']
