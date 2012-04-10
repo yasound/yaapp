@@ -108,4 +108,4 @@ yabase_signals.favorite_radio.connect(favorite_radio_handler)
 
 def not_favorite_radio_handler(radio, user, **kwargs):
     async_inc_global_value.delay('new_not_favorite_radio', 1)
-yabase_signals.favorite_radio.connect(not_favorite_radio_handler)
+yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
