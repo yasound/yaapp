@@ -737,7 +737,7 @@ class Device(models.Model):
     def is_sandbox(self):
         return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_SANDBOX
     
-    def is_development(self):
+    def is_production(self):
         return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_PRODUCTION
     
     def set_registered_now(self):
