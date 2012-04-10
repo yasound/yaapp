@@ -173,7 +173,7 @@ class SongInstance(models.Model):
     def liked(self, user):
         radio = self.playlist.radio
         radio_creator_profile = radio.creator.userprofile
-        radio_creator_profile.song_liked_in_my_radio(user.userprofile, self, radio)
+        radio_creator_profile.song_liked_in_my_radio(user.userprofile, radio, self)
         
 class SongUserManager(models.Manager):
     def likers(self, song):
