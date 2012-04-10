@@ -420,7 +420,7 @@ class UserProfile(models.Model):
         if self.facebook_token:
             bundle.data['facebook_token'] = self.facebook_token
 
-        if self.twitter_id:
+        if self.twitter_uid:
             bundle.data['twitter_uid'] = self.twitter_uid
             
         if self.twitter_token:
