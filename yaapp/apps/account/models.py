@@ -95,12 +95,22 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(max_length = 60, blank=True)
     url = models.URLField(null=True, blank=True)
+    
     account_type = models.CharField(max_length=20, blank=True)
     twitter_uid = models.CharField(max_length=60, null=True, blank=True)
-    facebook_uid = models.CharField(max_length=60, null=True, blank=True)
     twitter_token = models.CharField(max_length=256, blank=True)
     twitter_token_secret = models.CharField(max_length=256, blank=True)
+    twitter_username = models.CharField(max_length=30, blank=True)
+    twitter_email = models.EmailField(blank=True)
+
+    facebook_uid = models.CharField(max_length=60, null=True, blank=True)
     facebook_token = models.CharField(max_length=256, blank=True)
+    facebook_username = models.CharField(max_length=100, blank=True)
+    facebook_email = models.EmailField(blank=True)
+
+    yasound_username = models.CharField(max_length=128, blank=True)
+    yasound_email = models.EmailField(blank=True)
+    
     bio_text = models.TextField(null=True, blank=True)
     picture = ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(default=False)
@@ -178,7 +188,7 @@ class UserProfile(models.Model):
         if commit:
             self.save()
     
-    def add_facebook_account(self, uid, token):
+    def add_facebook_account(self, uid, token, username, email):
         try:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
         except:
@@ -204,6 +214,8 @@ class UserProfile(models.Model):
         
         self.facebook_uid = uid
         self.facebook_token = token
+        self.username = username
+        self.email = email
         self.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
         self.save()
             
@@ -228,12 +240,14 @@ class UserProfile(models.Model):
         self.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
         self.facebook_token = ''
         self.facebook_uid = ''
+        self.facebook_username = ''
+        self.facebook_email = ''
         
         # TODO: refresh friends
         self.save()
         return True, _('OK')
         
-    def add_twitter_account(self, uid, token, token_secret):
+    def add_twitter_account(self, uid, token, token_secret, username, email):
         auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
         auth.set_access_token(token, token_secret)
         api = tweepy.API(auth)
@@ -252,6 +266,8 @@ class UserProfile(models.Model):
         self.twitter_uid = uid
         self.twitter_token = token
         self.twitter_token_secret = token_secret
+        self.twitter_username = username
+        self.twitter_email = email
         self.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
         self.save()
 
@@ -274,13 +290,15 @@ class UserProfile(models.Model):
         self.twitter_uid = ''
         self.twitter_token = ''
         self.twitter_token_secret = ''
+        self.twitter_email = ''
+        self.twitter_username = ''
         self.remove_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
 
         # TODO: refresh friends
         self.save()
         return True, _('OK')
     
-    def add_yasound_account(self, email, password):
+    def add_yasound_account(self, username, email, password):
         if User.objects.filter(email=email).exclude(id=self.user.id).count() > 0:
             logger.error('yasound account already attached to other account')
             return False, _('An account already exists with this email')
@@ -288,7 +306,11 @@ class UserProfile(models.Model):
         self.user.email = email
         self.user.set_password(password)
         self.user.save()
-        self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
+
+        self.yasound_email = email
+        self.yasound_username = username
+        self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=False)
+        self.save()
         
         EmailAddress.objects.add_email(self.user, email)
         
@@ -300,6 +322,7 @@ class UserProfile(models.Model):
         
         self.user.set_password(None)
         self.user.email = ''
+        self.yasound_email = ''
         self.user.save()
 
         self.remove_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=False)
@@ -390,6 +413,12 @@ class UserProfile(models.Model):
         if self.facebook_uid:
             bundle.data['facebook_uid'] = self.facebook_uid
             
+        if self.facebook_email:
+            bundle.data['facebook_email'] = self.facebook_email
+
+        if self.facebook_username:
+            bundle.data['facebook_username'] = self.facebook_username
+            
         if self.facebook_token:
             bundle.data['facebook_token'] = self.facebook_token
 
@@ -402,8 +431,17 @@ class UserProfile(models.Model):
         if self.twitter_token_secret:
             bundle.data['twitter_token_secret'] = self.twitter_token_secret
         
-        if self.user and self.user.email:
-            bundle.data['email'] = self.user.email
+        if self.twitter_email:
+            bundle.data['twitter_email'] = self.twitter_email
+
+        if self.twitter_username:
+            bundle.data['twitter_username'] = self.twitter_username
+            
+        if self.yasound_yusername:
+            bundle.data['yasound_username'] = self.yasound_username
+
+        if self.yasound_email:
+            bundle.data['yasound_email'] = self.yasound_email
             
            
     def update_with_bundle(self, bundle, created):

@@ -147,6 +147,10 @@ class SignupResource(ModelResource):
         EmailAddress.objects.add_email(user, user.email)
             
         user_profile = user.userprofile
+        
+        user_profile.yasound_username = bundle.data['username']
+        user_profile.yasound_email = bundle.data['email']
+        
         user_profile.update_with_bundle(bundle, True)
         
         radio = Radio.objects.filter(creator=user.id)[0]
@@ -254,6 +258,8 @@ class SocialAuthentication(Authentication):
                 profile = user.userprofile
                 profile.facebook_uid = uid
                 profile.facebook_token = token
+                profile.facebook_username = name
+                profile.facebook_email = email
                 profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
                 profile.name = name
                 profile.save()
@@ -308,6 +314,8 @@ class SocialAuthentication(Authentication):
                 profile.twitter_uid = uid
                 profile.twitter_token = token
                 profile.twitter_token_secret = token_secret
+                profile.twitter_username = name
+                profile.twitter_email = email
                 profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
                 profile.name = name
                 profile.save()
