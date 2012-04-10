@@ -107,6 +107,7 @@ class UserProfile(models.Model):
     facebook_token = models.CharField(max_length=256, blank=True)
     facebook_username = models.CharField(max_length=100, blank=True)
     facebook_email = models.EmailField(blank=True)
+    facebook_expiration_date = models.CharField(max_length=35, blank=True)
 
     yasound_email = models.EmailField(blank=True)
     
@@ -187,7 +188,7 @@ class UserProfile(models.Model):
         if commit:
             self.save()
     
-    def add_facebook_account(self, uid, token, username, email):
+    def add_facebook_account(self, uid, token, username, email, expiration_date):
         try:
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
         except:
@@ -215,6 +216,7 @@ class UserProfile(models.Model):
         self.facebook_token = token
         self.facebook_username = username
         self.facebook_email = email
+        self.facebook_expiration_date = expiration_date
         self.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
         self.save()
             
@@ -422,6 +424,9 @@ class UserProfile(models.Model):
             
         if self.facebook_token:
             bundle.data['facebook_token'] = self.facebook_token
+
+        if self.facebook_expiration_date:
+            bundle.data['facebook_expiration_date'] = self.facebook_expiration_date
 
         if self.twitter_uid:
             bundle.data['twitter_uid'] = self.twitter_uid
