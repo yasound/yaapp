@@ -213,8 +213,8 @@ class UserProfile(models.Model):
         
         self.facebook_uid = uid
         self.facebook_token = token
-        self.username = username
-        self.email = email
+        self.facebook_username = username
+        self.facebook_email = email
         self.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
         self.save()
             
