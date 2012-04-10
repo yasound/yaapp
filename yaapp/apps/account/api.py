@@ -75,6 +75,9 @@ class UserResource(ModelResource):
         if current_radio and current_radio.ready:
             bundle.data['current_radio'] = current_radio.as_dict()
         
+        if bundle.request.user.id == userID:
+            userprofile.fill_user_bundle_with_login_infos(bundle)
+        
         return bundle
     
     def obj_update(self, bundle, request=None, **kwargs):
