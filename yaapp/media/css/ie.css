@@ -1,0 +1,4 @@
+#login-form label,#signup-form label,#passreset-form label {
+    display: inline;
+}
+

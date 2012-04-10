@@ -203,7 +203,6 @@ class SocialAuthentication(Authentication):
         EMAIL_PARAM_NAME = 'email'
         
         params = request.GET
-        logger.debug('params = %s' % (params))
         if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
             logger.error('missing informations')
             return False
@@ -217,11 +216,9 @@ class SocialAuthentication(Authentication):
             email = params[EMAIL_PARAM_NAME]
         
         username = build_random_username()
-        logger.debug('params = %s' % (params))
         if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             logger.debug('account type : facebook')
             facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
-            logger.debug('facebook profile = %s' % (facebook_profile))
             if not facebook_profile:
                 logger.error('cannot communicate with facebook')
                 return False
