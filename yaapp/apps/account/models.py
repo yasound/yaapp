@@ -1,19 +1,24 @@
+from bitfield import BitField
 from django.conf import settings as yaapp_settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, ContentFile
 from django.db import models
 from django.db.models.aggregates import Count
 from django.db.models.signals import post_save, pre_delete
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext_lazy as _
+from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 from social_auth.signals import socialauth_not_registered
 from sorl.thumbnail import ImageField, get_thumbnail
 from tastypie.models import ApiKey, create_api_key
+from yabase.apns import get_deprecated_devices, send_message
 from yabase.models import Radio, RadioUser
 import datetime
+import datetime
 import json
+import logging
 import logging
 import settings as account_settings
 import tweepy
@@ -21,17 +26,11 @@ import urllib
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-from django.utils.translation import ugettext_lazy as _
 
 
-from bitfield import BitField
 
-from django.core.files.base import ContentFile
-import datetime
 
-from yabase.apns import get_deprecated_devices, send_message
 
-import logging
 logger = logging.getLogger("yaapp.account")
 
 YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'
@@ -282,7 +281,7 @@ class UserProfile(models.Model):
         return True, _('OK')
     
     def add_yasound_account(self, email, password):
-        if User.objects.filter(email=email).count() > 0:
+        if User.objects.filter(email=email).exclude(id=self.user.id).count() > 0:
             logger.error('yasound account already attached to other account')
             return False, _('An account already exists with this email')
         
@@ -290,6 +289,9 @@ class UserProfile(models.Model):
         self.user.set_password(password)
         self.user.save()
         self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
+        
+        EmailAddress.objects.add_email(self.user, email)
+        
         return True, _('OK')
 
     def remove_yasound_account(self):
@@ -304,6 +306,9 @@ class UserProfile(models.Model):
         
         # TODO: refresh friends
         self.save()
+        
+        EmailAddress.objects.filter(user=self.user).delete()
+        
         return True, _('OK')
         
     def __unicode__(self):

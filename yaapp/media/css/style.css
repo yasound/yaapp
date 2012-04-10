@@ -144,18 +144,20 @@ footer #menu a:hover {
 	min-height: 170px;
 }
 
-#signup-form .helptext {
-	font-size: 80%;
-	margin-bottom: 9px;
-	display: block;
+#signup-form input,#login-form input,#passreset-form input {
+	width: 91%;
 }
 
-#login-form label
-,#signup-form label
-,#passreset-form label
- {
+#signup-form button,#login-form button,#passreset-form button {
+	width: 95%;
+	margin-top: 4px;
+}
+
+#login-form label,#signup-form label,#passreset-form label {
 	display: none;
 }
+
+
 .errorlist .error {
 	color: red;
 }
@@ -168,28 +170,28 @@ footer #menu a:hover {
 	background-image: url(/media/yaweb/images/intro/background4.jpg);
 	background-repeat: no-repeat;
 	background-position: 0% 50%;
-	padding-top:60px;
+	padding-top: 60px;
 }
 
 .login-back2 {
-    background-image: url(/media/yaweb/images/intro/background2.jpg);
-    background-repeat: no-repeat;
-    background-position: 0% 50%;
-    padding-top:60px;
+	background-image: url(/media/yaweb/images/intro/background2.jpg);
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	padding-top: 60px;
 }
 
 .login-back3 {
-    background-image: url(/media/yaweb/images/intro/background3.jpg);
-    background-repeat: no-repeat;
-    background-position: 0% 50%;
-    padding-top:60px;
+	background-image: url(/media/yaweb/images/intro/background3.jpg);
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	padding-top: 60px;
 }
 
 .well-center {
 	min-height: 20px;
 	padding: 19px;
 	margin-bottom: 20px;
-	background-color: rgba(245, 245,245, 0.8);
+	background-color: rgba(245, 245, 245, 0.8);
 	border: 1px solid #eee;
 	border: 1px solid rgba(0, 0, 0, 0.05);
 	-webkit-border-radius: 4px;
@@ -198,16 +200,21 @@ footer #menu a:hover {
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-	width:270px;
-    margin: 0px auto;
-    padding-left:30px;
-    margin-bottom:30px;
+	width: 280px;
+	margin: 0px auto;
+	padding-left: 30px;
+	margin-bottom: 50px;
 }
 
+.well-center form {
+	margin-top: 12px;
+}
 
-.well-center form,
-.well-center-signup forim {
-	margin-top:12px;
+.well-center p,.well-center h2 {
+	text-align: center;
+}
+.well-center h2 {
+	margin-bottom:12px;
 }
 
 .well blockquote {
@@ -215,17 +222,20 @@ footer #menu a:hover {
 	border-color: rgba(0, 0, 0, 0.15);
 }
 
-
 #id_signup-captcha_1 {
-	width:120px;
-	position:relative;
-	top:-8px;
+	width: 120px;
+	position: relative;
+	top: -8px;
 }
 
 .well-center a.first {
-	margin-bottom:20px;
+	margin-bottom: 12px;
 }
 
 .well-center a.btn-auth {
-	width:142px;
+	width: 84%;
+}
+
+.well-center hr {
+	width:94%;
 }

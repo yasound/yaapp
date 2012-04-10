@@ -90,8 +90,6 @@ class SignupForm(forms.Form):
     username = forms.CharField(label=_("Username"), widget=forms.TextInput(attrs={'placeholder': _('Username')}))
     email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
     password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
-    password2 = forms.CharField(label=_("Password (again)"), widget=forms.PasswordInput(attrs={'placeholder': _('Password (again)')}))
-    captcha = CaptchaField()
         
     def clean_username(self):
         profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
@@ -105,12 +103,6 @@ class SignupForm(forms.Form):
             
             return self.cleaned_data["email"]
         raise forms.ValidationError(u"This email is already taken. Please choose another.")
-
-    def clean(self):
-        if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
-            if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
-                raise forms.ValidationError(u"You must type the same password each time.")
-        return self.cleaned_data
 
     def save(self):
         from api import build_random_username
@@ -202,7 +194,7 @@ class AddEmailForm(forms.Form):
         return EmailAddress.objects.add_email(self.user, self.cleaned_data["email"])
         
 class PasswordResetForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': _('Username')}), max_length=75)
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': _('Email')}), max_length=75)
 
     def clean_email(self):
         """

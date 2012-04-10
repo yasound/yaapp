@@ -191,6 +191,19 @@ class TestMultiAccount(TestCase):
         self.assertTrue(profile.facebook_enabled)
         self.assertFalse(profile.yasound_enabled)
     
+        # remove yasound account
+        res, message = profile.remove_yasound_account()
+        self.assertTrue(res)
+        
+        self.jerome.email = 'jbl@yasound.com'
+        self.jerome.save()
+        
+
+        # re-add with same address
+        res, message = profile.add_yasound_account('jbl@yasound.com', 'password')
+        self.assertTrue(res)
+        
+        
         
 class TestFacebook(TestCase): 
     def setUp(self):
@@ -234,7 +247,7 @@ class TestFacebook(TestCase):
     
     def test_scan_task(self):
         task.scan_friends_task()
-        self.assertEquals(cache.get('total_friend_count'), 16)
+        self.assertEquals(cache.get('total_friend_count'), 20)
         self.assertEquals(cache.get('total_yasound_friend_count'), 1)
 
     def test_facebook_update(self):
