@@ -21,11 +21,31 @@
         <div class='span12'>
         
             <div class='well-center'>
-                <h2>{% trans "Signup" %}</h2>
+                <h2>{% trans "Yasound" %}</h2>
                 {% if request.user.is_authenticated %}
                 <p>{% trans "You are already authenticated" %}.
                 <a href='{% url logout%}'>{% trans "Logout" %}</a></p>
                 {% endif %}
+                
+	            {% if next %}   
+	            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}?next={{ next }}" rel="nofollow">
+	            {% trans "Signup with Facebook" %}
+	            </a>
+	            
+	            <a class="btn-auth btn-twitter large"  href="{% url socialauth_begin 'twitter' %}?next={{ next }}" rel="nofollow">
+                {% trans "Signup with Twitter" %}
+	            </a>
+	            {% else %}
+	            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}" rel="nofollow">
+                {% trans "Signup with Facebook" %}
+	            </a>
+	            
+	            <a class="btn-auth btn-twitter large" href="{% url socialauth_begin 'twitter' %}" rel="nofollow">
+                {% trans "Signup with Twitter" %}
+	            </a>
+	            {% endif %}
+                
+                <hr/>     
                 <form id='signup-form' method='post'>{% csrf_token %}
                 <fieldset>
                 

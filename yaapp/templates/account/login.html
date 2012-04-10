@@ -26,6 +26,26 @@
                 <p>{% trans "You are already authenticated" %}.
                 <a href='{% url logout%}'>{% trans "Logout" %}</a></p>
                 {% endif %}
+                
+                {% if next %}   
+                <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}?next={{ next }}" rel="nofollow">
+                {% trans "Login with Facebook" %}
+                </a>
+                
+                <a class="btn-auth btn-twitter large"  href="{% url socialauth_begin 'twitter' %}?next={{ next }}" rel="nofollow">
+                {% trans "Login with Twitter" %}
+                </a>
+                {% else %}
+                <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}" rel="nofollow">
+                {% trans "Login with Facebook" %}
+                </a>
+                
+                <a class="btn-auth btn-twitter large" href="{% url socialauth_begin 'twitter' %}" rel="nofollow">
+                {% trans "Login with Twitter" %}
+                </a>
+                {% endif %}
+                          
+                <hr/>     
                 <form id='login-form' method='post'>{% csrf_token %}
                 <fieldset>
                 {{ login_form }}
@@ -33,31 +53,13 @@
                 <br/>
                 <input type='hidden' name='action' value='login'/>
                 <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
-                <a href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
                 </fieldset>
                 </form>
+                <p>
+                <a href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
+                <br/>
                 <a class='' href='{% url signup %}'>{% trans "New user ? create a new account now" %}</a>
-               <hr/>
-               
-            <p>{% trans "You can login using your existing accounts:" %}</p>
-            {% if next %}   
-            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}?next={{ next }}" rel="nofollow">
-            facebook
-            </a>
-            
-            <a class="btn-auth btn-twitter large"  href="{% url socialauth_begin 'twitter' %}?next={{ next }}" rel="nofollow">
-            twitter
-            </a>
-            {% else %}
-            <a class="btn-auth btn-facebook large first" href="{% url socialauth_begin 'facebook' %}" rel="nofollow">
-            facebook
-            </a>
-            
-            <a class="btn-auth btn-twitter large" href="{% url socialauth_begin 'twitter' %}" rel="nofollow">
-            twitter
-            </a>
-            {% endif %}
-                
+                </p>                            
             </div>
     </div>    
 

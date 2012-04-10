@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-06 16:54+0200\n"
+"POT-Creation-Date: 2012-04-10 07:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,26 +36,26 @@ msgstr "Erreur interne."
 
 #: templates/base.html:45
 #: templates/base_mobile.html:40
-#: templates/account/login.html:67
-#: templates/account/password_reset_form.html:36
-#: templates/account/signup.html:45
+#: templates/account/login.html:72
+#: templates/account/password_reset_form.html:50
+#: templates/account/signup.html:68
 msgid "available on appstore"
 msgstr "disponible sur l'appstore"
 
 #: templates/base.html:52
 #: templates/base_mobile.html:47
 #: templates/account/login.html:27
-#: templates/account/login.html.py:77
-#: templates/account/password_reset_form.html:23
-#: templates/account/password_reset_form.html:46
+#: templates/account/login.html.py:78
+#: templates/account/password_reset_form.html:30
+#: templates/account/password_reset_form.html:56
 #: templates/account/signup.html:27
-#: templates/account/signup.html.py:55
+#: templates/account/signup.html.py:74
 #: templates/web/menu.html:16
 msgid "Logout"
 msgstr "Se déconnecter"
 
 #: templates/account/login.html:8
-#: templates/account/login.html.py:35
+#: templates/account/login.html.py:54
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
 msgid "Login"
@@ -66,22 +66,28 @@ msgid "Welcome to Yasound"
 msgstr "Bienvenue sur Yasound"
 
 #: templates/account/login.html:26
-#: templates/account/password_reset_form.html:22
+#: templates/account/password_reset_form.html:29
 #: templates/account/signup.html:26
 msgid "You are already authenticated"
 msgstr "Vous êtes déjà authentifié"
 
+#: templates/account/login.html:32
+#: templates/account/login.html.py:40
+msgid "Login with Facebook"
+msgstr "Se connecter avec Facebook"
+
 #: templates/account/login.html:36
+#: templates/account/login.html.py:44
+msgid "Login with Twitter"
+msgstr "Se connecter avec Twitter"
+
+#: templates/account/login.html:58
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
 
-#: templates/account/login.html:39
+#: templates/account/login.html:60
 msgid "New user ? create a new account now"
 msgstr "Nouveau ici ? Créer un compte"
-
-#: templates/account/login.html:42
-msgid "You can login using your existing accounts:"
-msgstr "Vous pouvez aussi vous connecter en utilisant vos compte existants :"
 
 #: templates/account/password_reset_confirm.html:4
 #: templates/account/password_reset_confirm_mobile.html:4
@@ -97,8 +103,7 @@ msgstr "Confirmation de la réinitialisation"
 
 #: templates/account/password_reset_confirm.html:17
 #: templates/account/password_reset_confirm_mobile.html:18
-#: templates/account/password_reset_form.html:20
-#: templates/account/password_reset_form.html:27
+#: templates/account/password_reset_form.html:36
 #: templates/account/password_reset_form_mobile.html:17
 msgid "Reset"
 msgstr "Réinitialiser"
@@ -107,6 +112,10 @@ msgstr "Réinitialiser"
 #: templates/account/password_reset_confirm_mobile.html:22
 msgid "The password reset link was invalid"
 msgstr "Le lien de réinitialisation du mot de passe est invalide"
+
+#: templates/account/password_reset_form.html:20
+msgid "Lost password"
+msgstr "Mot de passe perdu"
 
 #: templates/account/password_reset_form_mobile.html:10
 msgid "Reset password"
@@ -130,10 +139,23 @@ msgstr "\n"
 "\t\t\t\t"
 
 #: templates/account/signup.html:8
-#: templates/account/signup.html.py:24
-#: templates/account/signup.html:36
+#: templates/account/signup.html.py:55
 msgid "Signup"
 msgstr "S'inscrire"
+
+#: templates/account/signup.html:24
+msgid "Yasound"
+msgstr "Yasound"
+
+#: templates/account/signup.html:32
+#: templates/account/signup.html.py:40
+msgid "Signup with Facebook"
+msgstr "S'inscrire avec Facebook"
+
+#: templates/account/signup.html:36
+#: templates/account/signup.html.py:44
+msgid "Signup with Twitter"
+msgstr "S'inscrire avec Twitter"
 
 #: templates/emailconfirmation/confirm_email.html:4
 #: templates/emailconfirmation/confirm_email.html:10
@@ -145,6 +167,7 @@ msgid "Invalid confirmation key."
 msgstr "Clef de confirmation invalide"
 
 #: templates/emailconfirmation/email_confirmation_message.txt:1
+#, python-format
 msgid ""
 "Somebody at %(site_name)s has given this as an email address.\n"
 "\n"
