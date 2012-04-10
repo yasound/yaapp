@@ -208,6 +208,7 @@ class SocialAuthentication(Authentication):
         TOKEN_PARAM_NAME = 'token'
         NAME_PARAM_NAME = 'name'
         EMAIL_PARAM_NAME = 'email'
+        EXPIRATION_DATE = 'expiration_date'
         
         params = request.GET
         if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
@@ -221,6 +222,8 @@ class SocialAuthentication(Authentication):
         email = None
         if params.has_key(EMAIL_PARAM_NAME):
             email = params[EMAIL_PARAM_NAME]
+            
+        expiration_date = params.get(EXPIRATION_DATE)
         
         username = build_random_username()
         if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
@@ -246,6 +249,9 @@ class SocialAuthentication(Authentication):
                 user = profile.user
                 profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
                 profile.facebook_token = token
+                profile.facebook_username = name
+                profile.facebook_email = email
+                profile.facebook_expiration_date = expiration_date
                 profile.save()
                 request.user = user
                 authenticated = True
@@ -260,6 +266,7 @@ class SocialAuthentication(Authentication):
                 profile.facebook_token = token
                 profile.facebook_username = name
                 profile.facebook_email = email
+                profile.facebook_expiration_date = expiration_date
                 profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK, commit=False)
                 profile.name = name
                 profile.save()
@@ -302,6 +309,9 @@ class SocialAuthentication(Authentication):
                 user = profile.user
                 profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER, commit=False)
                 profile.twitter_token = token
+                profile.twitter_token_secret = token_secret
+                profile.twitter_username = name
+                profile.twitter_email = email
                 profile.save()
                 request.user = user
                 authenticated = True
