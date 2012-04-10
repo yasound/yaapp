@@ -435,9 +435,6 @@ class UserProfile(models.Model):
         if self.twitter_username:
             bundle.data['twitter_username'] = self.twitter_username
             
-        if self.yasound_yusername:
-            bundle.data['yasound_username'] = self.yasound_username
-
         if self.yasound_email:
             bundle.data['yasound_email'] = self.yasound_email
             
