@@ -380,7 +380,7 @@ def associate(request):
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
         res, message = profile.add_twitter_account(uid, token, token_secret, username, email)
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
-        res, message = profile.add_yasound_account(username, email, password)
+        res, message = profile.add_yasound_account(email, password)
 
     if res:
         message = _('OK')

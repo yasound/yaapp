@@ -108,7 +108,6 @@ class UserProfile(models.Model):
     facebook_username = models.CharField(max_length=100, blank=True)
     facebook_email = models.EmailField(blank=True)
 
-    yasound_username = models.CharField(max_length=128, blank=True)
     yasound_email = models.EmailField(blank=True)
     
     bio_text = models.TextField(null=True, blank=True)
@@ -298,7 +297,7 @@ class UserProfile(models.Model):
         self.save()
         return True, _('OK')
     
-    def add_yasound_account(self, username, email, password):
+    def add_yasound_account(self, email, password):
         if User.objects.filter(email=email).exclude(id=self.user.id).count() > 0:
             logger.error('yasound account already attached to other account')
             return False, _('An account already exists with this email')
@@ -308,7 +307,6 @@ class UserProfile(models.Model):
         self.user.save()
 
         self.yasound_email = email
-        self.yasound_username = username
         self.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=False)
         self.save()
         

@@ -147,10 +147,7 @@ class SignupResource(ModelResource):
         EmailAddress.objects.add_email(user, user.email)
             
         user_profile = user.userprofile
-        
-        user_profile.yasound_username = bundle.data['username']
         user_profile.yasound_email = bundle.data['email']
-        
         user_profile.update_with_bundle(bundle, True)
         
         radio = Radio.objects.filter(creator=user.id)[0]
