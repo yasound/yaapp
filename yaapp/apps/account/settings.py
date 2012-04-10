@@ -21,11 +21,11 @@ SUBSCRIPTION_PREMIUM = 'premium'
 GROUP_NAME_VIP = 'vip'
 
 IOS_TOKEN_TYPE_SANDBOX = 'sandbox'
-IOS_TOKEN_TYPE_DEVELOPMENT = 'development'
+IOS_TOKEN_TYPE_PRODUCTION = 'production'
 
 IOS_TOKEN_TYPE_CHOICES = (
                 (IOS_TOKEN_TYPE_SANDBOX, _('Sandbox')),
-                (IOS_TOKEN_TYPE_DEVELOPMENT, _('Development'))
+                (IOS_TOKEN_TYPE_PRODUCTION, _('Production'))
                 )
 
 APP_KEY_COOKIE_NAME = 'app_key'

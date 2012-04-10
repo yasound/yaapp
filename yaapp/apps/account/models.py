@@ -706,7 +706,7 @@ class DeviceManager(models.Manager):
         return self.filter(user=profile.user)
     
     def delete_deprecated(self, sandbox=True):
-        token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX if sandbox else account_settings.IOS_TOKEN_TYPE_DEVELOPMENT
+        token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX if sandbox else account_settings.IOS_TOKEN_TYPE_PRODUCTION
         apns_deprecated = get_deprecated_devices(sandbox)
         for i in apns_deprecated:
             feedback_time = i[0]
@@ -738,7 +738,7 @@ class Device(models.Model):
         return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_SANDBOX
     
     def is_development(self):
-        return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_DEVELOPMENT
+        return self.ios_token_type == account_settings.IOS_TOKEN_TYPE_PRODUCTION
     
     def set_registered_now(self):
         self.registration_date = datetime.datetime.now()

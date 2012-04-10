@@ -164,7 +164,7 @@ def send_ios_push_notif_token(request):
     if not device_token or not device_token_type:
         return HttpResponse('bad data')
     
-    if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_DEVELOPMENT:
+    if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_PRODUCTION:
         return HttpResponse('bad data')
     
     
