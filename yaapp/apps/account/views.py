@@ -372,11 +372,12 @@ def associate(request):
     email = request.REQUEST.get('email')
     username = request.REQUEST.get('username')
     password = request.REQUEST.get('password')
+    expiration_date = request.REQUEST.get('expiration_date')
 
     res = False
     message = _('Unknown error')
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
-        res, message = profile.add_facebook_account(uid, token, username, email)
+        res, message = profile.add_facebook_account(uid, token, username, email, expiration_date)
     elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
         res, message = profile.add_twitter_account(uid, token, token_secret, username, email)
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
