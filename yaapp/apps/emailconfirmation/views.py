@@ -17,8 +17,7 @@ def confirm_email(request, confirmation_key):
         user.save()
         email_address.user.backend='django.contrib.auth.backends.ModelBackend'
         login(request, email_address.user)
-        return HttpResponseRedirect('/')
-    
+
     return render_to_response("emailconfirmation/confirm_email.html", {
         "email_address": email_address,
     }, context_instance=RequestContext(request))
