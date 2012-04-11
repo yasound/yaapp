@@ -11,7 +11,9 @@
                </h1>
             </div>
 		    {% if email_address %}
-		    <p>You have confirmed that {{ email_address.email }} is an email address for user '{{ email_address.user }}'.</p>
+		    <p>
+		    {% trans "Congratulations, your account is now activated." %}
+		    </p>
 		    {% else %}
 		    <p>{% trans "Invalid confirmation key." %}</p>
 		    {% endif %}
