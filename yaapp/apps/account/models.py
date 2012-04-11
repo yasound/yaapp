@@ -208,7 +208,7 @@ class UserProfile(models.Model):
             logger.error('uid does not match')
             return False, _('Facebook identification mismatch')
         
-        if UserProfile.objects.filter(facebook_uid=uid).count() > 0:
+        if UserProfile.objects.filter(facebook_uid=uid).exclude(id=self.id).count() > 0:
             logger.error('facebook account already attached to other account')
             return False, _('The Facebook account is already attached to another account.')
         
@@ -260,7 +260,7 @@ class UserProfile(models.Model):
             logger.error('res id does not match for twitter')
             return False, _('Twitter account mismatch')
         
-        if UserProfile.objects.filter(twitter_uid=uid).count() > 0:
+        if UserProfile.objects.filter(twitter_uid=uid).exclude(id=self.id).count() > 0:
             logger.error('twitter account already attached to other account')
             return False, _('The twitter account is already attached to another account.')
         

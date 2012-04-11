@@ -210,6 +210,23 @@ class TestMultiAccount(TestCase):
         self.assertTrue(res)
         
         
+        # re-add facebook
+        # let's test the yasound removal
+        profile.add_facebook_account(uid='1460646148',
+                                     token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4',
+                                     username='toto',
+                                     email='jerome@blondon.fr',
+                                     expiration_date='now')
+        self.assertTrue(profile.facebook_enabled)
+
+        res, _message =  profile.add_facebook_account(uid='1460646148',
+                                     token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4',
+                                     username='toto',
+                                     email='jerome@blondon.fr',
+                                     expiration_date='now')
+        self.assertTrue(res)
+        self.assertTrue(profile.facebook_enabled)
+        
         
 class TestFacebook(TestCase): 
     def setUp(self):
