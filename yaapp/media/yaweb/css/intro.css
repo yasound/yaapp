@@ -6,6 +6,8 @@ body {
 	font-family:Lucida Grande, Helvetica Neue, Helvetica, sans-serif;
 	font-size:16px;
 	background-color:#FFF;
+	overflow-y: scroll;
+    overflow-x: hidden; 
 }
 #imgBack {
 	position: fixed;
