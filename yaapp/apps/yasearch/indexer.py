@@ -24,9 +24,9 @@ def build_index_radios():
     
 def build_index_users():
     db = settings.MONGO_DB
-    db.radios.ensure_index("db_id")
-    db.radios.ensure_index("name_dms")
-    db.radios.ensure_index("all_dms")
+    db.users.ensure_index("db_id")
+    db.users.ensure_index("name_dms")
+    db.users.ensure_index("all_dms")
     
 
 
@@ -148,11 +148,11 @@ def get_last_song_doc():
 
 def get_last_radio_doc():
     db = settings.MONGO_DB
-    return db.radios.find().sort([("$natural", DESCENDING)]).limit(1)
+    return db.radios.find().sort([("db_id", DESCENDING)]).limit(1)
 
 def get_last_user_doc():
     db = settings.MONGO_DB
-    return db.users.find().sort([("$natural", DESCENDING)]).limit(1)
+    return db.users.find().sort([("db_id", DESCENDING)]).limit(1)
 
 def erase_index(skip_songs=False):
     db = settings.MONGO_DB
