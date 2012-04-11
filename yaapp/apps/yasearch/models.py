@@ -107,7 +107,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
 #
 #    User
 #
-    users = User.objects.all()
+    users = User.objects.filter(userprofile__isnull=False)
 #    last_indexed = UserProfile.objects.last_indexed_user()
     doc = yasearch_indexer.get_last_user_doc()
     last_indexed = None
@@ -116,15 +116,14 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     
     if last_indexed:
         logger.info("last indexed user = %d" % (last_indexed.id))
-        users = users.filter(id__gt=last_indexed.id)
+        users = users.filter(id__gt=last_indexed.id, userprofile__isnull=False)
     count = users.count()
     logger.info("processing %d users" % (count))
     if count > 0:
         start = time()
         if upsert:
             for i, user in enumerate(yasearch_utils.queryset_iterator(users)):
-                if user.userprofile:
-                    user.userprofile.build_fuzzy_index(upsert=True)
+                user.userprofile.build_fuzzy_index(upsert=True)
                 if i % 10000 == 0 and i != 0:
                     elapsed = time() - start
                     logger.info("processed %d/%d (%d%%) users in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
@@ -132,8 +131,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
         else:
             bulk = indexer.begin_bulk_insert()
             for i, user in enumerate(yasearch_utils.queryset_iterator(users)):
-                if user.userprofile:
-                    bulk.append(user.userprofile.build_fuzzy_index(upsert=False, insert=False))
+                bulk.append(user.userprofile.build_fuzzy_index(upsert=False, insert=False))
                 if i % 10000 == 0 and i != 0:
                     indexer.commit_bulk_insert_users(bulk)
                     bulk = indexer.begin_bulk_insert()
