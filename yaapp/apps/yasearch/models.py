@@ -123,7 +123,8 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
         start = time()
         if upsert:
             for i, user in enumerate(yasearch_utils.queryset_iterator(users)):
-                user.userprofile.build_fuzzy_index(upsert=True)
+                if user.userprofile:
+                    user.userprofile.build_fuzzy_index(upsert=True)
                 if i % 10000 == 0 and i != 0:
                     elapsed = time() - start
                     logger.info("processed %d/%d (%d%%) users in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
@@ -131,7 +132,8 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
         else:
             bulk = indexer.begin_bulk_insert()
             for i, user in enumerate(yasearch_utils.queryset_iterator(users)):
-                bulk.append(user.userprofile.build_fuzzy_index(upsert=False, insert=False))
+                if user.userprofile:
+                    bulk.append(user.userprofile.build_fuzzy_index(upsert=False, insert=False))
                 if i % 10000 == 0 and i != 0:
                     indexer.commit_bulk_insert_users(bulk)
                     bulk = indexer.begin_bulk_insert()
