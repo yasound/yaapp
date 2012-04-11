@@ -2,11 +2,21 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from django.views.decorators.csrf import csrf_exempt
+
 import settings as yaweb_settings
 import mimetypes, os
 from django_mobile import get_flavour
 
+import logging
+logger = logging.getLogger("yaapp.yaweb")
+
+
+@csrf_exempt
 def index(request, template_name='yaweb/index.html', template_name_mobile='yaweb/index_mobile.html'):
+    if request.method == 'POST':
+        logger.info('received POST request for index page : %s' % request.REQUEST)
+        
     if get_flavour() == 'mobile':
         template_name = template_name_mobile
 

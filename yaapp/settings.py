@@ -403,6 +403,14 @@ LOGGING = {
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.log'),
             'formatter': 'verbose'
         },     
+        'file_yaweb':{
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024*10000, 
+            'backupCount': 10,
+            'filename': os.path.join(PROJECT_PATH, 'logs/yaweb.log'),
+            'formatter': 'verbose'
+        },     
     },
     'loggers': {
         'django': {
@@ -427,6 +435,11 @@ LOGGING = {
         },
         'yaapp.account': {
             'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.yaweb': {
+            'handlers': ['console', 'file_yaweb'],
             'level': 'DEBUG',
             'propagate': False,
         },
