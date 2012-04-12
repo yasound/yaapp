@@ -416,7 +416,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     
     overall_listening_time = Radio.objects.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
     try:
-        overall_listening_time_str = datetime.timedelta(overall_listening_time)
+        overall_listening_time_str = datetime.timedelta(seconds=overall_listening_time)
     except:
         overall_listening_time_str = _('Unavailable')
         
