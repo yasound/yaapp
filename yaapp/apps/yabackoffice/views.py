@@ -446,7 +446,14 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = MetricsManager()
     metrics = mm.get_current_metrics()
-            
+    for metric in metrics:
+        if 'listening_time' in metric:
+            try:
+                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
+                metric['listening_time'] = formatted_time
+            except:
+                pass
+              
     return render_to_response(template_name, {
         "metrics": metrics,
     }, context_instance=RequestContext(request)) 
