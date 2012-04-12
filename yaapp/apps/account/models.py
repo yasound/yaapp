@@ -497,12 +497,6 @@ class UserProfile(models.Model):
 
             self.friends = friends
             self.save()
-            for user in friends.all():
-                profile = user.userprofile
-                if profile is None:
-                    continue
-                profile.friends.add(self.user)
-                profile.save()
             
         if self.twitter_enabled:
             auth = tweepy.OAuthHandler(yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_KEY, yaapp_settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
@@ -510,8 +504,17 @@ class UserProfile(models.Model):
             api = tweepy.API(auth)
             friends_ids = api.friends_ids()
             friends = User.objects.filter(userprofile__twitter_uid__in=friends_ids)
-            self.friends = friends
+            for friend in friends:
+                self.friends.add(friend)
             self.save()
+
+        for user in friends.all():
+            profile = user.userprofile
+            if profile is None:
+                continue
+            profile.friends.add(self.user)
+            profile.save()
+            
         return friend_count, yasound_friend_count
             
     def update_with_facebook_picture(self):
