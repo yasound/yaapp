@@ -363,10 +363,10 @@ class UserProfile(models.Model):
     
     @property
     def own_radio(self):
-        own_radios = Radio.objects.filter(creator=self.user)
-        if own_radios.count() == 0:
+        try:
+            return Radio.objects.filter(creator=self.user)[:1][0]
+        except:
             return None
-        return own_radios[0]        
     
     @property
     def current_radio(self):
@@ -377,24 +377,24 @@ class UserProfile(models.Model):
     
     @property
     def listened_radio(self):
-        radio_users = RadioUser.objects.filter(user=self.user, listening=True, radio__ready=True)
-        if radio_users.count() == 0:
+        try:
+            r =  RadioUser.objects.filter(user=self.user, listening=True, radio__ready=True)[:1][0].radio
+            if not r.is_valid:
+                return None
+            return r
+        except:
             return None
-        r = radio_users[0].radio
-        if not r.is_valid:
-            return None
-        return r
     
     @property
     def connected_radio(self):
-        radio_users = RadioUser.objects.filter(user=self.user, connected=True, radio__ready=True)
-        if radio_users.count() == 0:
+        try:
+            r = RadioUser.objects.filter(user=self.user, connected=True, radio__ready=True)[:1][0].radio
+            if not r.is_valid:
+                return None
+            return r
+        except:
             return None
-        r = radio_users[0].radio
-        if not r.is_valid:
-            return None
-        return r
-    
+        
     def fill_user_bundle(self, bundle):
         picture_url = None
         if self.picture:

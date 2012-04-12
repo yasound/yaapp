@@ -3,8 +3,10 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from yabase.models import RadioUser
 from yasearch.indexer import erase_index
 import settings as account_settings
+from yabase import tests_utils as yabase_tests_utils
 import task
 
 class TestProfile(TestCase):
@@ -352,3 +354,44 @@ class TestFacebook(TestCase):
 """        
         self.client.post(reverse('facebook_update'), json, content_type='application/json')   
                
+class TestCurrentRadio(TestCase):                
+    def setUp(self):
+        # jbl
+        user = User(email="jbl@yasound.com", username="jerome", is_superuser=False, is_staff=False)
+        user.set_password('jerome')
+        user.save()
+        self.user = user
+        
+    def test_current_radio(self):
+        user_profile = self.user.get_profile()
+        owned_radio = user_profile.own_radio
+        self.assertEquals(owned_radio.id, 1)
+        
+        playlist = yabase_tests_utils.generate_playlist()
+        playlist.radio = owned_radio
+        playlist.save()
+        owned_radio.ready = True
+        owned_radio.save()
+        self.assertTrue(owned_radio.is_valid)
+        
+        self.assertIsNone(user_profile.current_radio)
+        
+        RadioUser.objects.create(user=self.user, listening=True, radio=owned_radio)
+        
+        self.assertEquals(user_profile.listened_radio, owned_radio) 
+        self.assertEquals(user_profile.current_radio, owned_radio)
+        
+        RadioUser.objects.filter(user=self.user).update(listening=False)
+        self.assertIsNone(user_profile.listened_radio) 
+        self.assertIsNone(user_profile.current_radio)
+
+        RadioUser.objects.filter(user=self.user).update(connected=True)
+        self.assertEquals(user_profile.connected_radio, owned_radio) 
+        self.assertEquals(user_profile.current_radio, owned_radio)
+        
+        
+        
+        
+        
+        
+        
