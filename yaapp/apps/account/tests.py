@@ -270,7 +270,7 @@ class TestFacebook(TestCase):
     
     def test_scan_task(self):
         task.scan_friends_task()
-        self.assertEquals(cache.get('total_friend_count'), 20)
+        self.assertGreater(cache.get('total_friend_count'), 20)
         self.assertEquals(cache.get('total_yasound_friend_count'), 1)
 
     def test_facebook_update(self):
