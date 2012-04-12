@@ -633,6 +633,7 @@ class Radio(models.Model):
             'favorites': self.favorites,
             'nb_current_users' : self.nb_current_users,
             'tags' : self.tags_to_string(),
+            'picture': self.picture_url,
             'stream_url' : self.stream_url,
         }
         return data
