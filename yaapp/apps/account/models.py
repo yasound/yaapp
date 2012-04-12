@@ -508,7 +508,7 @@ class UserProfile(models.Model):
                 self.friends.add(friend)
             self.save()
 
-        for user in friends.all():
+        for user in self.friends.all():
             profile = user.userprofile
             if profile is None:
                 continue
