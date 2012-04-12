@@ -185,17 +185,20 @@ class TestMultiAccount(TestCase):
         self.assertTrue(profile.yasound_enabled)
 
         # let's test the yasound removal
-        profile.add_facebook_account(uid='1460646148',
+        res, _message = profile.add_facebook_account(uid='1460646148',
                                      token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4',
                                      username='toto',
                                      email='jerome@blondon.fr',
                                      expiration_date='now')
-        
+        if res == False:
+            # sometimes, facebook is unavailable
+            print _message
+
         res, message = profile.remove_yasound_account()
         self.assertTrue(res)
         res, message = profile.remove_facebook_account()
         self.assertFalse(res)
-        
+    
         self.assertTrue(profile.facebook_enabled)
         self.assertFalse(profile.yasound_enabled)
     
