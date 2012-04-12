@@ -65,10 +65,11 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
             passed_socket.write(msg)
         else:
             host_name = 'gateway.sandbox.push.apple.com' if sandbox else 'gateway.push.apple.com'
+            certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
             s = socket()
             c = ssl.wrap_socket(s,
                                 ssl_version=ssl.PROTOCOL_SSLv3,
-                                certfile=settings.IPHONE_APN_PUSH_CERT)
+                                certfile=certif_file)
             c.connect((host_name, 2195))
             c.write(msg)
             c.close()
@@ -92,50 +93,54 @@ def test():
     #c.close()
 
 def test2():
+    sandbox = True
+    certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
     host_name = 'gateway.sandbox.push.apple.com'
     s1 = socket()
     c1 = ssl.wrap_socket(s1,
                         ssl_version=ssl.PROTOCOL_SSLv3,
-                        certfile=settings.IPHONE_APN_PUSH_CERT)
+                        certfile=certif_file)
     c1.connect((host_name, 2195))
     
     s2 = socket()
     c2 = ssl.wrap_socket(s2,
                         ssl_version=ssl.PROTOCOL_SSLv3,
-                        certfile=settings.IPHONE_APN_PUSH_CERT)
+                        certfile=certif_file)
     c2.connect((host_name, 2195))
     
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 !', sandbox=True, passed_socket=c1)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 !', sandbox=True, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 !', sandbox=sandbox, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 !', sandbox=sandbox, passed_socket=c2)
     
     c1.close()
     c2.close()
     
 def test3():
+    sandbox = True
+    certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
     host_name = 'gateway.sandbox.push.apple.com'
     s1 = socket()
     c1 = ssl.wrap_socket(s1,
                         ssl_version=ssl.PROTOCOL_SSLv3,
-                        certfile=settings.IPHONE_APN_PUSH_CERT)
+                        certfile=certif_file)
     c1.connect((host_name, 2195))
     
     s2 = socket()
     c2 = ssl.wrap_socket(s2,
                         ssl_version=ssl.PROTOCOL_SSLv3,
-                        certfile=settings.IPHONE_APN_PUSH_CERT)
+                        certfile=certif_file)
     c2.connect((host_name, 2195))
     
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 a!', sandbox=True, passed_socket=c1)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 b!', sandbox=True, passed_socket=c1)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 c!', sandbox=True, passed_socket=c1)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 d!', sandbox=True, passed_socket=c1)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 e!', sandbox=True, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 a!', sandbox=sandbox, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 b!', sandbox=sandbox, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 c!', sandbox=sandbox, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 d!', sandbox=sandbox, passed_socket=c1)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 1 e!', sandbox=sandbox, passed_socket=c1)
     
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 a!', sandbox=True, passed_socket=c2)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 b!', sandbox=True, passed_socket=c2)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 c!', sandbox=True, passed_socket=c2)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 d!', sandbox=True, passed_socket=c2)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 e!', sandbox=True, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 a!', sandbox=sandbox, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 b!', sandbox=sandbox, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 c!', sandbox=sandbox, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 d!', sandbox=sandbox, passed_socket=c2)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 2 e!', sandbox=sandbox, passed_socket=c2)
     
     c1.close()
     c2.close()
@@ -143,24 +148,25 @@ def test3():
     s3 = socket()
     c3 = ssl.wrap_socket(s3,
                         ssl_version=ssl.PROTOCOL_SSLv3,
-                        certfile=settings.IPHONE_APN_PUSH_CERT)
+                        certfile=certif_file)
     c3.connect((host_name, 2195))
     
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 a!', sandbox=True, passed_socket=c3)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 b!', sandbox=True, passed_socket=c3)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 c!', sandbox=True, passed_socket=c3)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 d!', sandbox=True, passed_socket=c3)
-    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 e!', sandbox=True, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 a!', sandbox=sandbox, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 b!', sandbox=sandbox, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 c!', sandbox=sandbox, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 d!', sandbox=sandbox, passed_socket=c3)
+    send_message('09a95beae4592774dd36843b9573dd8066a7b59cb135fd3e7e5326606a82c417', 'Hello 3 e!', sandbox=sandbox, passed_socket=c3)
     c3.close()
     
 
 def get_deprecated_devices(sandbox=True):
     deprecated = []
+    certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
     host_name = 'feedback.sandbox.push.apple.com' if sandbox else 'feedback.push.apple.com'
     s = socket()
     c = ssl.wrap_socket(s,
                         ssl_version=ssl.PROTOCOL_SSLv3,
-                        certfile=settings.IPHONE_APN_PUSH_CERT)
+                        certfile=certif_file)
     c.connect((host_name, 2196))
     
     print repr(c.getpeername())

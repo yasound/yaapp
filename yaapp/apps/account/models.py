@@ -584,10 +584,6 @@ class UserProfile(models.Model):
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
-    
-    def store_ios_device(self, device_token, token_type):
-        device, created = Device.objects.get_or_create(user=self.user, ios_token=device_token, ios_token_type=token_type)
-        device.set_registered_now()
         
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
         devices = Device.objects.for_userprofile(self)
@@ -777,6 +773,12 @@ class DeviceManager(models.Manager):
                     device.delete()
             except:
                 pass
+            
+    def store_ios_token(self, user, device_uuid, device_token_type, device_token):
+        device, created = self.get_or_create(user=user, uuid=device_uuid, ios_token_type=device_token_type)
+        device.ios_token = device_token
+        device.save()
+        device.set_registered_now()
         
     
 class Device(models.Model):
