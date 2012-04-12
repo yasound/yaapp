@@ -1,4 +1,4 @@
-from account.models import UserProfile
+from account.models import UserProfile, Device
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -393,8 +393,56 @@ class TestCurrentRadio(TestCase):
         self.assertEquals(user_profile.current_radio, owned_radio)
         
         
+class TestDevice(TestCase):
+    def setUp(self):
+        erase_index()
         
+    def test_ios_token_creation(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
         
+        uuid = 'UUID9876543210'
+        ios_token = 'TOKEN0123456789'
+        ios_token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX
+        
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token)
+        self.assertEquals(Device.objects.count(), 1)
+        
+    def test_ios_token_save(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        
+        uuid = 'UUID9876543210'
+        ios_token = 'TOKEN0123456789'
+        ios_token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX
+        
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token)
+        
+        # save again
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token)
+        
+        # must contain only one device 
+        self.assertEquals(Device.objects.count(), 1)
+        
+    def test_ios_token_sandbox_production(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        
+        uuid = 'UUID9876543210'
+        
+        ios_token_sandbox = 'SANDBOX_0123456789'
+        ios_token_prod = 'PRODUCTION_0123456789'
+        
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX, device_token=ios_token_sandbox)
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION, device_token=ios_token_prod)
+        self.assertEquals(Device.objects.filter(user=user, uuid=uuid).count(), 2)
+        self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX).count(), 1)
+        self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION).count(), 1)
+
+   
         
         
         
