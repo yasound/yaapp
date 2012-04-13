@@ -130,6 +130,7 @@ urlpatterns = patterns('',
     
     # special case for iOS client
     url(r'^legal/eula.html$', 'yaweb.views.eula', name='eula'),
+    url(r'^legal/privacy.html$', 'yaweb.views.privacy', name='privacy'),
     url(r'^fr/images/logo.png$', 'yaweb.views.logo', name='logo'),
     
     url(r'^', include('yaweb.urls')),

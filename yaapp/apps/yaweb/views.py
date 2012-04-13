@@ -58,6 +58,11 @@ def eula(request, template_name='yaweb/eula.html'):
         'current_page': 'eula',
     }, context_instance=RequestContext(request))  
 
+def privacy(request, template_name='yaweb/privacy.html'):
+    return render_to_response(template_name, {
+        'current_page': 'eula',
+    }, context_instance=RequestContext(request))  
+
 def logo(request):
     return HttpResponseRedirect('/media/yaweb/images/logo.png')
 
