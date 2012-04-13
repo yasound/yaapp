@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block extra_head %}
+    <script type="text/javascript">
+        var g_radio_url = '{{ radio_url }}';
+        var g_radio_id = '{{ radio.id }}';
+        
+        var lbl_mute = "{% trans 'Mute' %}";
+        var lbl_unmute = "{% trans 'Unmute' %}";
+        var lbl_play = "{% trans 'Play' %}";
+        var lbl_stop = "{% trans 'Stop' %}";
+    </script>
+    <link rel="stylesheet" href="/media/css/flashblock.css"/>
+    <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/media/js/jquery.timers.js"></script>
+    <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
+	<script type="text/javascript" src="/media/js/json2.js"></script>
+	<script type="text/javascript" src="/media/js/underscore-1.3.1.js"></script>
+	<script type="text/javascript" src="/media/js/backbone.js"></script>
+	<script type="text/javascript" src="/media/js/backbone-localstorage.js"></script>
+    
+{% endblock %}
+{% block head_title %}{% trans "Yasound" %}{% endblock %}
+{% block body %}
+
+{% endblock %}
+

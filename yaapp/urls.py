@@ -136,6 +136,7 @@ urlpatterns = patterns('',
     url(r'^', include('yaweb.urls')),
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
+    (r'^app/$', 'yabase.views.web_app'),
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
     
