@@ -523,11 +523,10 @@ class UserProfile(models.Model):
         graph = GraphAPI(self.facebook_token)
         img = graph.get('me/picture?type=large')
         f = ContentFile(img)
-        filename = unicode(datetime.datetime.now()) + '.jpg' # set 'jpg' extension by default (for now, don't know how to know which image format we get)
-        self.picture.save(filename, f, save=True)
-        radio = Radio.objects.get(creator=self.user)
-        radio.picture = self.picture
-        radio.save()
+        self.set_picture(f)
+        radios = Radio.objects.filter(creator=self.user)
+        for r in radios:
+            r.set_picture(f)
         
     def update_with_social_picture(self):
         if self.facebook_enabled:
@@ -536,6 +535,12 @@ class UserProfile(models.Model):
     def update_with_social_data(self):
         self.update_with_social_picture()
         self.scan_friends()
+        
+    def set_picture(self, data):
+        filename = self.build_picture_filename()
+        if self.picture and len(self.picture.name) > 0:
+            self.picture.delete(save=True)
+        self.picture.save(filename, data, save=True)
         
     def authenticated(self):
         d = datetime.datetime.now()
