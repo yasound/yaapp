@@ -93,19 +93,23 @@ def set_radio_picture(request, radio_id):
     # todo: delete old file
 #    import pdb
 #    pdb.set_trace()
-#    if radio.picture and len(radio.picture.name) > 0:
-#        print 'radio picture delete'
-#        radio.picture.delete(save=True)
-#    print 'radio picture save'
+    if radio.picture and len(radio.picture.name) > 0:
+        print 'radio picture delete'
+        radio.picture.delete(save=True)
+    print 'radio picture save'
     radio.picture.save(filename, f, save=True)
+    print 'radio picture saved'
     
     # for now, set also the UserProfile picture
+    print 'save userprofile picture'
     userprofile = radio.creator.userprofile
     # todo: delete old file
     filename = userprofile.build_picture_filename()
     userprofile.picture.save(filename, f, save=True)
+    print 'userprofile picture saved'
 
     res = 'picture OK for radio: %s' % unicode(radio)
+    print res
     return HttpResponse(res)
 
 @csrf_exempt
