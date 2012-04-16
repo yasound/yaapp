@@ -69,22 +69,22 @@ def upload_playlists(request, radio_id):
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
-    print 'set_radio_picture'
+    logger.debug('set_radio_picture')
     if not check_api_key_Authentication(request):
-        print 'set_radio_picture: athentication error'
+        logger.debug('set_radio_picture: athentication error')
         return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
-        print 'set_radio_picture: http method error'
+        logger.debug('set_radio_picture: http method error')
         return HttpResponse(status=405)
 
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
-        print 'set_radio_picture: radio does not exist'
+        logger.debug('set_radio_picture: radio does not exist')
         return HttpResponse('radio does not exist')
 
     if not request.FILES.has_key(PICTURE_FILE_TAG):
-        print 'set_radio_picture: request does not contain picture file'
+        logger.debug('set_radio_picture: request does not contain picture file')
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
@@ -94,22 +94,22 @@ def set_radio_picture(request, radio_id):
 #    import pdb
 #    pdb.set_trace()
     if radio.picture and len(radio.picture.name) > 0:
-        print 'radio picture delete'
+        logger.debug('radio picture delete')
         radio.picture.delete(save=True)
-    print 'radio picture save'
+    logger.debug('radio picture save')
     radio.picture.save(filename, f, save=True)
-    print 'radio picture saved'
+    logger.debug('radio picture saved')
     
     # for now, set also the UserProfile picture
-    print 'save userprofile picture'
+    logger.debug('save userprofile picture')
     userprofile = radio.creator.userprofile
     # todo: delete old file
     filename = userprofile.build_picture_filename()
     userprofile.picture.save(filename, f, save=True)
-    print 'userprofile picture saved'
+    logger.debug('userprofile picture saved')
 
     res = 'picture OK for radio: %s' % unicode(radio)
-    print res
+    logger.debug(res)
     return HttpResponse(res)
 
 @csrf_exempt
