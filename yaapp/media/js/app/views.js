@@ -3,7 +3,6 @@ Namespace('Yasound.Views');
 Yasound.Views.Radio = Backbone.View.extend({
     tagName : 'div',
     className : 'radio',
-
     events : {},
 
     initialize : function() {

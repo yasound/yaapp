@@ -61,7 +61,7 @@ user_favorite_radios = UserFavoriteRadioResource()
 #Radio.objects.unlock_all()
 
 js_info_dict = {
-    'packages': ('yabackoffice',),
+    'packages': ('yabackoffice', 'yabase',),
 }
 
 urlpatterns = patterns('',

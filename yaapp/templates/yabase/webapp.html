@@ -5,15 +5,7 @@
 {% load straight_include %}
 
 {% block extra_head %}
-    <script type="text/javascript">
-        var g_radio_url = '{{ radio_url }}';
-        var g_radio_id = '{{ radio.id }}';
-        
-        var lbl_mute = "{% trans 'Mute' %}";
-        var lbl_unmute = "{% trans 'Unmute' %}";
-        var lbl_play = "{% trans 'Play' %}";
-        var lbl_stop = "{% trans 'Stop' %}";
-    </script>
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
 {% compressed_js 'webapp-all' %}
 
@@ -42,7 +34,7 @@
             </div>
         </div>
         <div class='span8'>
-            <div id='track'>
+            <div id='player'>
             </div>
 			<div id='wall'>
 			wall

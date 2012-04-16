@@ -5,6 +5,14 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
 });
 
 Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
+    defaults: {
+        'i18n_buy': function() {
+            return gettext('Buy on iTunes');
+        },
+        'i18n_by': function() {
+            return gettext('By');
+        }
+    },
     url: function() {
         return '/api/v1/radio/' + this.get('radioId') + '/current_song/'
     }
