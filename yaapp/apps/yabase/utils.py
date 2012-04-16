@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.db import transaction
 
 @transaction.commit_manually
@@ -16,3 +17,17 @@ def flush_transaction():
     
     """
     transaction.commit()
+
+def atomic_inc(instance, field, value):
+    """
+    atomic increment field value
+    
+    example :
+
+    radio = Radio.objects.get(id=75)
+    yabase_utils.atomic_inc(radio, 'anonymous_audience', 1)
+    
+    """
+    new_value = F(field)+value
+    kwargs = {field:new_value}
+    instance.__class__.objects.filter(id=instance.id).update(**kwargs)

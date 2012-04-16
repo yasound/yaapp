@@ -21,6 +21,7 @@ import uuid
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from yabase import utils as yabase_utils
 import signals as yabase_signals
 from django.core.cache import cache
 import json
@@ -675,35 +676,33 @@ class Radio(models.Model):
     
     def user_started_listening(self, user):
         if not user.is_anonymous():
-            radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
+            radio_user, _created = RadioUser.objects.get_or_create(radio=self, user=user)
             radio_user.listening = True
             radio_user.save()
         else:
-            self.anonymous_audience += 1
-            self.save()
+            yabase_utils.atomic_inc(self, 'anonymous_audience', 1)
         
         audience = self.audience_total
         if audience > self.audience_peak:
             self.audience_peak = audience
         if audience > self.current_audience_peak:
             self.current_audience_peak = audience
-        
-        self.current_connections += 1    
         self.save()
+        
+        yabase_utils.atomic_inc(self, 'current_connections', 1)
             
     def user_stopped_listening(self, user, listening_duration):
         if not user.is_anonymous():
-            radio_user, created = RadioUser.objects.get_or_create(radio=self, user=user)
+            radio_user, _created = RadioUser.objects.get_or_create(radio=self, user=user)
             radio_user.listening = False
             radio_user.save()
         else:
-            self.anonymous_audience -= 1
+            yabase_utils.atomic_inc(self, 'anonymous_audience', -1)
             if self.anonymous_audience < 0:
                 self.anonymous_audience = 0
-            self.save()
-            
-        self.overall_listening_time += listening_duration
-        self.save() 
+                self.save()
+        
+        yabase_utils.atomic_inc(self, 'overall_listening_time', listening_duration)
         yabase_signals.user_stopped_listening.send(sender=self, radio=self, user=self, duration=listening_duration)
         
     def user_connection(self, user):
