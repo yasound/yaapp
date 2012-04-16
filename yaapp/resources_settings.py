@@ -67,10 +67,8 @@ COMPRESS_JS = {
             'js/backbone-min.js',
             'js/backbone-tastypie.js',
             'js/Namespace.js',
-            'js/app/models/Radio.js',
-            'js/app/models/WallEvent.js',
-            'js/app/views/WallEvent.js',
-            'js/app/views/Wall.js',
+            'js/app/models.js',
+            'js/app/views.js',
             'js/app/app.js',
         ]
     }
