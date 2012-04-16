@@ -30,8 +30,19 @@ logger = logging.getLogger("yaapp.account")
 
 
 class YasoundApiKeyAuthentication(ApiKeyAuthentication):
+    """
+    This class allow authentication with 2 ways:
+    * standard (ie django web login)
+    * api key (handled by tastypie)
+      
+    See https://github.com/toastdriven/django-tastypie/issues/197 for more info
+    """
     def is_authenticated(self, request, **kwargs):
-        authenticated = super(YasoundApiKeyAuthentication, self).is_authenticated(request, **kwargs)
+        if request.user.is_authenticated():
+            authenticated = True
+        if not authenticated:
+            authenticated = super(YasoundApiKeyAuthentication, self).is_authenticated(request, **kwargs)
+            
         if authenticated:
             # inactive users should be kicked out
             if not request.user.is_active:
@@ -40,6 +51,12 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
             userprofile = request.user.userprofile
             userprofile.authenticated()
         return authenticated
+
+    def get_identifier(self, request):
+        if request.user.is_authenticated():
+            return request.user.username
+        else:
+            return super(YasoundApiKeyAuthentication, self).get_identifier(request)
 
 class YasoundBasicAuthentication(BasicAuthentication):
     def is_authenticated(self, request, **kwargs):
