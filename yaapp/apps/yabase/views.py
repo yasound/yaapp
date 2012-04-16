@@ -690,7 +690,20 @@ def song_instance_cover(request, song_instance_id):
     
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = None
+    try:
+        radio = Radio.objects.get(uuid=radio_uuid)
+    except Radio.DoesNotExist:
+        if len(radio_uuid) > 4:
+            radios = Radio.objects.filter(uuid__startswith=radio_uuid)[:1]
+            if radios.count() > 0:
+                radio = radios[0]
+                url = reverse('yabase.views.web_listen', args=[radio.uuid])
+                return HttpResponseRedirect(url)
+
+    if radio is None:
+        raise Http404
+
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
         "radio": radio,
