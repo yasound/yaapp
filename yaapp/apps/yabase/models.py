@@ -773,6 +773,12 @@ class Radio(models.Model):
                 return yaapp_settings.DEFAULT_IMAGE
         else:
             return yaapp_settings.DEFAULT_IMAGE
+        
+    def set_picture(self, data):
+        filename = self.build_picture_filename()
+        if self.picture and len(self.picture.name) > 0:
+            self.picture.delete(save=True)
+        self.picture.save(filename, data, save=True)
             
     
     def build_fuzzy_index(self, upsert=False, insert=True):
