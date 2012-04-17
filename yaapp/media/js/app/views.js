@@ -166,9 +166,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     initialize : function() {
         this.model.bind('change', this.render, this);
     },
-
     render : function() {
-        $(this.el).html(ich.wallEventTemplate(this.model.toJSON()));
+        $(this.el).hide().html(ich.wallEventTemplate(this.model.toJSON())).fadeIn(200);
         return this;
     }
 });
