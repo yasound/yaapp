@@ -429,8 +429,7 @@ class WallEventResource(ModelResource):
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=False)
-#    song = fields.ForeignKey(SongInstanceResource, 'song', full=True, null=True)
-#    user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
+
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date')
         resource_name = 'wall'
