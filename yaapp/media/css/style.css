@@ -239,3 +239,24 @@ footer #menu a:hover {
 .well-center hr {
 	width:94%;
 }
+
+.clear {
+	clear: both;
+}
+
+.wall-event-message img {
+	float:left;
+	margin-right:20px;
+	margin-bottom:20px;
+}
+
+.wall-event-message .date {
+	float:right;
+}
+
+.wall-event-message h2 {
+	font-size:14px;
+}
+
+.wall-event-message p {
+}
