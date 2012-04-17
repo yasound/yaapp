@@ -21,13 +21,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     volumeMouseDown : false,
 
     events : {
-        "click #play": "play",        
-        "click #inc": "inc",        
-        "click #dec": "dec",
-        "click #like": "like",
+        "click #play" : "play",
+        "click #inc" : "inc",
+        "click #dec" : "dec",
+        "click #like" : "like",
         "mousedown #volume-control" : "volumeControl",
         "mouseup" : 'mouseUp',
-        "mousemove" : "mouseMove"   
+        "mousemove" : "mouseMove"
     },
 
     initialize : function() {
@@ -38,8 +38,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         return this;
     },
-    
-    play:function() {
+
+    play : function() {
         if (typeof Yasound.App.MySound === "undefined") {
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
@@ -51,8 +51,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound = undefined;
         }
     },
-    
-    inc: function() {
+
+    inc : function() {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -64,8 +64,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound.setVolume(100);
         }
     },
-    
-    dec: function() {
+
+    dec : function() {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -77,8 +77,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound.setVolume(0);
         }
     },
-    
-    resizeVolumeBar: function(event) {
+
+    resizeVolumeBar : function(event) {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -96,26 +96,26 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         Yasound.App.MySound.setVolume(soundVolume);
     },
 
-    mouseUp: function(event) {
+    mouseUp : function(event) {
         if (this.volumeMouseDown) {
             $('body').css('cursor', 'auto');
             this.volumeMouseDown = false;
         }
     },
 
-    mouseMove: function(event) {
+    mouseMove : function(event) {
         if (!this.volumeMouseDown) {
             return;
         }
         this.resizeVolumeBar(event);
     },
 
-    volumeControl: function(event) {
+    volumeControl : function(event) {
         this.volumeMouseDown = true;
         this.resizeVolumeBar(event);
     },
-    
-    like: function(event) {
+
+    like : function(event) {
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
@@ -130,31 +130,31 @@ Yasound.Views.WallEvents = Backbone.View.extend({
         this.collection.bind('reset', this.addAll, this);
         this.views = [];
     },
-    
+
     addAll : function() {
         this.collection.each(this.addOne);
     },
-    
-    clear: function() {
+
+    clear : function() {
         _.map(this.views, function(view) {
             view.remove();
         })
         this.views = [];
     },
-    
+
     addOne : function(wallEvent) {
         var view = new Yasound.Views.WallEvent({
             model : wallEvent
         });
-        
+
         $(this.el).prepend(view.render().el);
         this.views.push(view);
-        
+
         if (this.views.length >= this.collection.limit) {
             this.views[0].remove();
             this.views.splice(0, 1)
         }
-        
+
         view.bind('all', this.rethrow, this);
     },
 
@@ -179,3 +179,32 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     }
 });
 
+Yasound.Views.WallInput = Backbone.View.extend({
+    tagName : 'div',
+    events : {
+        'click .btn' : 'submit'
+    },
+    
+    submit : function(e) {
+        if (this.radioUUID) {
+            var message = $('input[type=text]', this.el).val();
+            var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
+            $.post(url, {
+                message: message,
+                success: function() { 
+                    $('input[type=text]', this.el).val('');    
+                }
+            });
+        } else {
+            alert('no radio!')
+        }
+    },
+    
+    initialize : function() {
+    },
+
+    render : function() {
+        $(this.el).html(ich.wallInputTemplate());
+        return this;
+    }
+});

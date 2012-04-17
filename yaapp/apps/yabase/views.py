@@ -277,6 +277,20 @@ def like_song(request, song_id):
     return HttpResponse(res)
 
 @csrf_exempt
+def post_message(request, radio_id):
+    if not request.user.is_authenticated():
+        if not check_api_key_Authentication(request):
+            return HttpResponse(status=401)
+
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    message = request.REQUEST.get('message')
+    radio = get_object_or_404(Radio, uuid=radio_id)
+    radio.post_message(request.user, message)
+    return HttpResponse(status=200)
+
+@csrf_exempt
 def neutral_song(request, song_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)

@@ -31,7 +31,8 @@ $(document).ready(function() {
         },
 
         currentRadio : new Yasound.Data.Models.Radio({
-            id : 0
+            id : 0,
+            uuid: 0
         }),
 
         setCurrentRadioId : function(id) {
@@ -73,6 +74,10 @@ $(document).ready(function() {
                         model : this.currentRadio,
                         el : $('#radio')
                     }),
+                    wallInputView : new Yasound.Views.WallInput({
+                        model : this.currentRadio,
+                        el : $('#wall-input')
+                    }),
                     currentSong : new Yasound.Data.Models.CurrentSong(),
                     wallEvents : new Yasound.Data.Models.WallEvents(),
                 }
@@ -85,12 +90,20 @@ $(document).ready(function() {
                     model : this.radioContext.currentSong,
                     el : $('#player')
                 })
+
                 var that = this;
+                
+                this.currentRadio.on('change:uuid', function(model, uuid) {
+                    that.radioContext.wallInputView.radioUUID = uuid;
+                    that.radioContext.wallInputView.render();
+                })
+                
                 setInterval(function() {
                     that.radioContext.currentSong.fetch();
                     that.radioContext.wallEvents.fetch();
                 }, 10000);
             }
+            this.radioContext.radioUUID = 0;
             this.radioContext.wallEventsView.clear();
             this.radioContext.currentSong.set('radioId', id);
             this.radioContext.currentSong.fetch();
@@ -98,6 +111,7 @@ $(document).ready(function() {
             this.setCurrentRadioId(id);
             this.radioContext.wallEvents.setRadio(this.currentRadio);
             this.radioContext.wallEvents.fetch();
+            this.radioContext.wallInputView.render();
         }
     });
 

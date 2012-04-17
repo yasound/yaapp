@@ -811,6 +811,12 @@ class Radio(models.Model):
     def shared(self, user):
         self.creator.userprofile.my_radio_shared(user.userprofile, self)
         
+    def post_message(self, user, message):
+        WallEvent(radio=self,
+                  start_date=datetime.datetime.now(), 
+                  type=yabase_settings.EVENT_MESSAGE, 
+                  user=user, 
+                  text=message).save()
         
     class Meta:
         db_name = u'default'
@@ -1030,7 +1036,7 @@ class WallEvent(models.Model):
         
         if creation:
             if self.user:
-                self .user_name = self.user.userprofile.name
+                self.user_name = self.user.userprofile.name
                 self.user_picture = self.user.userprofile.picture
             if self.song:
                 yasound_song_id = self.song.metadata.yasound_song_id

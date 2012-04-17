@@ -20,6 +20,10 @@
    <script type="text/html" id="trackTemplate">
       {% straight_include "yabase/app/track.mustache" %}
    </script>
+
+   <script type="text/html" id="wallInputTemplate">
+      {% straight_include "yabase/app/wallInput.mustache" %}
+   </script>
     
 {% endblock %}
 {% block head_title %}{% trans "Yasound" %}{% endblock %}
@@ -35,6 +39,9 @@
         </div>
         <div class='span8'>
             <div id='player'>
+            </div>
+            <div id='wall-input'>
+            coucou
             </div>
 			<div id='wall'>
 			</div>
