@@ -73,6 +73,7 @@ $(document).ready(function() {
             this.buildCommonContext();
             
             if (!this.radioContext) {
+                var that = this;
                 this.radioContext = {
                     radioView : new Yasound.Views.Radio({
                         model : this.currentRadio,
@@ -82,15 +83,17 @@ $(document).ready(function() {
                         model : this.currentRadio,
                         el : $('#wall-input')
                     }),
-                    currentSong : new Yasound.Data.Models.CurrentSong(),
+                    currentSong : new Yasound.Data.Models.CurrentSong()
                 };
+                
+                this.radioContext.wallPosted = function() {
+                    that.radioContext.wallEvents.fetch();
+                }
 
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model : this.radioContext.currentSong,
                     el : $('#player')
                 })
-
-                var that = this;
 
                 setInterval(function() {
                     that.radioContext.currentSong.fetch();
@@ -111,11 +114,10 @@ $(document).ready(function() {
                         that.radioContext.wallEvents.fetch();
                     }, 10000);
 
-                    $.subscribe("/wall/posted", function() {
-                        that.radioContext.wallEvents.fetch();
-                    });
                 }
             }
+            
+            
             this.radioContext.radioUUID = 0;
             this.radioContext.currentSong.set('radioId', id);
             this.radioContext.currentSong.fetch();
@@ -123,6 +125,9 @@ $(document).ready(function() {
             this.setCurrentRadioId(id);
 
             if (this.commonContext.userAuthenticated) {
+                $.unsubscribe('/wall/posted', this.radioContext.wallPosted);
+                $.subscribe("/wall/posted", this.radioContext.wallPosted);
+
                 this.radioContext.wallEventsView.clear();
                 this.radioContext.wallEvents.setRadio(this.currentRadio);
                 this.radioContext.wallEvents.fetch();

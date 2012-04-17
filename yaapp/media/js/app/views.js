@@ -203,6 +203,7 @@ Yasound.Views.WallInput = Backbone.View.extend({
         } else {
             alert('no radio!')
         }
+        e.preventDefault();
     },
     
     initialize : function() {

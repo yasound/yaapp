@@ -24,6 +24,7 @@ Yasound.Data.Models.WallEvents = Backbone.Collection.extend({
         return '/api/v1/radio/' + this.radio.get('id') + '/wall/?id__gt=' + lastId + '&limit=' + this.limit;
     },
     setRadio:function(radio) {
+        this.reset();
         this.radio = radio;
         this.lastId = 0;
     },

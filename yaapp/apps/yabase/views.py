@@ -738,6 +738,8 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     }, context_instance=RequestContext(request))    
 
 def web_app(request, template_name='yabase/webapp.html'):
+    if not request.user.is_superuser:
+        raise Http404
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))    
     
