@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Count
+from django.db.models.fields import FieldDoesNotExist
 from django.test import TestCase
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
@@ -17,6 +18,7 @@ import import_utils
 import os
 import settings as yabase_settings
 import simplejson as json
+import utils as yabase_utils
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -161,7 +163,23 @@ class TestModels(TestCase):
         self.assertEquals(self.radio.playlists.count(), 1)
         self.assertEquals(SongInstance.objects.all().count(), 30*3)
         self.assertEquals(self.radio.default_playlist.song_count, 30*3)
+   
+    def test_atomic_inc(self):
+        radio = self.radio
+        yabase_utils.atomic_inc(radio, 'overall_listening_time', 1000)
+
+        radio2 = Radio()
+        radio2.save()
+        yabase_utils.atomic_inc(radio2, 'overall_listening_time', 3000)
         
+        self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 1000)
+        self.assertEquals(Radio.objects.get(id=radio2.id).overall_listening_time, 3000)
+       
+        yabase_utils.atomic_inc(radio, 'overall_listening_time', -1000)
+        self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 0)
+
+        self.assertRaises(FieldDoesNotExist,yabase_utils.atomic_inc, radio, 'overall_listening_time1', -1000)
+            
    
 class TestNextSong(TestCase):
     multi_db = True

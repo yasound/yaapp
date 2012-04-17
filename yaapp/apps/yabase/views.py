@@ -69,43 +69,53 @@ def upload_playlists(request, radio_id):
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
-    print 'set_radio_picture'
+    logger.debug('set_radio_picture')
     if not check_api_key_Authentication(request):
-        print 'set_radio_picture: athentication error'
+        logger.debug('set_radio_picture: athentication error')
         return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
-        print 'set_radio_picture: http method error'
+        logger.debug('set_radio_picture: http method error')
         return HttpResponse(status=405)
 
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
-        print 'set_radio_picture: radio does not exist'
+        logger.debug('set_radio_picture: radio does not exist')
         return HttpResponse('radio does not exist')
 
     if not request.FILES.has_key(PICTURE_FILE_TAG):
-        print 'set_radio_picture: request does not contain picture file'
+        logger.debug('set_radio_picture: request does not contain picture file')
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
-    filename = radio.build_picture_filename()
+#    filename = radio.build_picture_filename()
+    
+    radio.set_picture(f)
+    
+    # for now, set also the UserProfile picture
+    userprofile = radio.creator.userprofile
+    userprofile.set_picture(f)
 
     # todo: delete old file
 #    import pdb
 #    pdb.set_trace()
 #    if radio.picture and len(radio.picture.name) > 0:
-#        print 'radio picture delete'
+#        logger.debug('radio picture delete')
 #        radio.picture.delete(save=True)
-#    print 'radio picture save'
-    radio.picture.save(filename, f, save=True)
-    
-    # for now, set also the UserProfile picture
-    userprofile = radio.creator.userprofile
-    # todo: delete old file
-    filename = userprofile.build_picture_filename()
-    userprofile.picture.save(filename, f, save=True)
+#    logger.debug('radio picture save')
+#    radio.picture.save(filename, f, save=True)
+#    logger.debug('radio picture saved')
+#    
+#    # for now, set also the UserProfile picture
+#    logger.debug('save userprofile picture')
+#    userprofile = radio.creator.userprofile
+#    # todo: delete old file
+#    filename = userprofile.build_picture_filename()
+#    userprofile.picture.save(filename, f, save=True)
+#    logger.debug('userprofile picture saved')
 
     res = 'picture OK for radio: %s' % unicode(radio)
+    logger.debug(res)
     return HttpResponse(res)
 
 @csrf_exempt
@@ -690,7 +700,20 @@ def song_instance_cover(request, song_instance_id):
     
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = None
+    try:
+        radio = Radio.objects.get(uuid=radio_uuid)
+    except Radio.DoesNotExist:
+        if len(radio_uuid) > 4:
+            radios = Radio.objects.filter(uuid__startswith=radio_uuid)[:1]
+            if radios.count() > 0:
+                radio = radios[0]
+                url = reverse('yabase.views.web_listen', args=[radio.uuid])
+                return HttpResponseRedirect(url)
+
+    if radio is None:
+        raise Http404
+
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
         "radio": radio,
