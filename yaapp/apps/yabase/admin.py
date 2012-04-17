@@ -45,6 +45,8 @@ admin.site.register(SongInstance, SongInstanceAdmin)
     
 class WallEventAdmin(admin.ModelAdmin):
     list_display = ('radio', 'type', 'start_date', 'song', 'user', 'text')
+    raw_id_fields = ('radio', 'user', 'song')
+
 admin.site.register(WallEvent, WallEventAdmin)
 
 class NextSongAdmin(admin.ModelAdmin):
