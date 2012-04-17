@@ -18,8 +18,16 @@ Yasound.Views.Radio = Backbone.View.extend({
 Yasound.Views.CurrentSong = Backbone.View.extend({
     tagName : 'div',
     className : 'track',
+    volumeMouseDown : false,
 
-    events : {},
+    events : {
+        "click #play": "play",        
+        "click #inc": "inc",        
+        "click #dec": "dec",  
+        "mousedown #volume-control" : "volumeControl",
+        "mouseup" : 'mouseUp',
+        "mousemove" : "mouseMove"   
+    },
 
     initialize : function() {
         this.model.bind('change', this.render, this);
@@ -28,6 +36,82 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     render : function() {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         return this;
+    },
+    
+    play:function() {
+        if (typeof Yasound.App.MySound === "undefined") {
+            Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+            Yasound.App.MySound.play();
+            $('#play i').removeClass('icon-play').addClass('icon-stop');
+            $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
+        } else {
+            $('#play i').removeClass('icon-stop').addClass('icon-play');
+            Yasound.App.MySound.destruct();
+            Yasound.App.MySound = undefined;
+        }
+    },
+    
+    inc: function() {
+        if (typeof Yasound.App.MySound === "undefined") {
+            return;
+        }
+        if (Yasound.App.MySound.volume <= 90) {
+            $('#volume-position').css("width", Yasound.App.MySound.volume + 10 + "%");
+            Yasound.App.MySound.setVolume(Yasound.App.MySound.volume + 10);
+        } else {
+            $('#volume-position').css("width", "100%");
+            Yasound.App.MySound.setVolume(100);
+        }
+    },
+    
+    dec: function() {
+        if (typeof Yasound.App.MySound === "undefined") {
+            return;
+        }
+        if (Yasound.App.MySound.volume >= 10) {
+            $('#volume-position').css("width", Yasound.App.MySound.volume - 10 + "%");
+            Yasound.App.MySound.setVolume(Yasound.App.MySound.volume - 10);
+        } else {
+            $('#volume-position').css("width", "0%");
+            Yasound.App.MySound.setVolume(0);
+        }
+    },
+    
+    resizeVolumeBar: function(event) {
+        if (typeof Yasound.App.MySound === "undefined") {
+            return;
+        }
+        $('body').css('cursor', 'pointer');
+        var $volumeControl = $('#volume-control');
+        var position = event.pageX;
+        var left = $volumeControl.position().left;
+        var width = $volumeControl.width();
+
+        var relativePosition = position - left;
+        var soundVolume = Math.floor(relativePosition * 100 / width)
+        var percentage = soundVolume + "%";
+        $('#volume-position').css("width", percentage);
+
+        Yasound.App.MySound.setVolume(soundVolume);
+    },
+
+    mouseUp: function(event) {
+        if (this.volumeMouseDown) {
+            $('body').css('cursor', 'auto');
+            this.volumeMouseDown = false;
+        }
+    },
+
+    mouseMove: function(event) {
+        if (!this.volumeMouseDown) {
+            return;
+        }
+        this.resizeVolumeBar(event);
+    },
+
+    volumeControl: function(event) {
+        this.volumeMouseDown = true;
+        this.resizeVolumeBar(event);
     }
 });
 
