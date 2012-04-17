@@ -66,6 +66,7 @@ COMPRESS_JS = {
             'js/underscore-1.3.1.js',
             'js/backbone-min.js',
             'js/backbone-tastypie.js',
+            'js/pubsub.js',
             'js/Namespace.js',
             'js/app/models.js',
             'js/app/views.js',

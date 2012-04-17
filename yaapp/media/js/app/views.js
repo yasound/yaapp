@@ -186,13 +186,18 @@ Yasound.Views.WallInput = Backbone.View.extend({
     },
     
     submit : function(e) {
+        var $button = $('.btn', this.el);
+        $button.attr('disabled', 'disable')
         if (this.radioUUID) {
-            var message = $('input[type=text]', this.el).val();
+            var $input = $('input[type=text]', this.el)
+            var message = $input.val();
             var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
             $.post(url, {
                 message: message,
                 success: function() { 
-                    $('input[type=text]', this.el).val('');    
+                    $input.val('');  
+                    $button.removeAttr('disabled');
+                    $.publish('/wall/posted');
                 }
             });
         } else {

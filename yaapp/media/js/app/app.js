@@ -102,6 +102,10 @@ $(document).ready(function() {
                     that.radioContext.currentSong.fetch();
                     that.radioContext.wallEvents.fetch();
                 }, 10000);
+                
+                $.subscribe("/wall/posted", function() {
+                    that.radioContext.wallEvents.fetch();
+                });
             }
             this.radioContext.radioUUID = 0;
             this.radioContext.wallEventsView.clear();
