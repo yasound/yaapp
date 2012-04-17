@@ -69,18 +69,6 @@ class PlaylistResource(ModelResource):
         authentication = YasoundApiKeyAuthentication()
         allowed_methods = []
 
-
-
-
-class RadioAuthorization(Authorization):
-    def is_authorized(self, request, object=None):
-        return True
-
-    def apply_limits(self, request, object_list):
-        if request.method != 'GET':
-            return object_list.filter(creator=request.user)
-        return object_list
-
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
@@ -92,7 +80,7 @@ class RadioResource(ModelResource):
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
-        authorization = RadioAuthorization()
+        authorization = Authorization()
         allowed_methods = ['get', 'put']
         filtering = {
             'creator': ALL,
