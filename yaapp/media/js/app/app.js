@@ -91,11 +91,12 @@ $(document).ready(function() {
                     that.radioContext.wallEvents.fetch();
                 }, 10000);
             }
+            this.radioContext.wallEventsView.clear();
             this.radioContext.currentSong.set('radioId', id);
             this.radioContext.currentSong.fetch();
             this.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
             this.setCurrentRadioId(id);
-            this.radioContext.wallEvents.radio = this.currentRadio;
+            this.radioContext.wallEvents.setRadio(this.currentRadio);
             this.radioContext.wallEvents.fetch();
         }
     });

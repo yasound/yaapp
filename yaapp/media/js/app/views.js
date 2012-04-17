@@ -128,6 +128,13 @@ Yasound.Views.WallEvents = Backbone.View.extend({
         this.collection.each(this.addOne);
     },
     
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.remove();
+        })
+        this.views = [];
+    },
+    
     addOne : function(wallEvent) {
         var view = new Yasound.Views.WallEvent({
             model : wallEvent
