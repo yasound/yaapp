@@ -51,7 +51,7 @@ $(document).ready(function() {
         search : function(query, page) {
         },
 
-        radio : function(id) {
+        buildCommonContext: function() {
             if (!this.commonContext) {
                 this.commonContext = {};
                 this.commonContext.streamFunction = function(model, stream_url) {
@@ -67,7 +67,11 @@ $(document).ready(function() {
                 this.commonContext.userAuthenticated = g_authenticated;
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
-
+        },
+        
+        radio : function(id) {
+            this.buildCommonContext();
+            
             if (!this.radioContext) {
                 this.radioContext = {
                     radioView : new Yasound.Views.Radio({
@@ -130,7 +134,6 @@ $(document).ready(function() {
     var router = new Yasound.App.Workspace();
 
     soundManager.onready(function() {
-        console.debug('soundManager.onready');
         Backbone.history.start({
             pushState : false,
             root : '/app/',

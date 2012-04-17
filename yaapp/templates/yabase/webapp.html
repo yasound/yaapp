@@ -14,20 +14,20 @@
 
 
    <script type="text/html" id="radioTemplate">
-      {% straight_include "yabase/app/radio.mustache" %}
+      {% include "yabase/app/radio.mustache" %}
    </script>
 
    <script type="text/html" id="trackTemplate">
-      {% straight_include "yabase/app/track.mustache" %}
+      {% include "yabase/app/track.mustache" %}
    </script>
 
 {% if request.user.is_authenticated %}
    <script type="text/html" id="wallInputTemplate">
-      {% straight_include "yabase/app/wallInput.mustache" %}
+      {% include "yabase/app/wallInput.mustache" %}
    </script>
     
    <script type="text/html" id="wallEventTemplate">
-      {% straight_include "yabase/app/wallEvent.mustache" %}
+      {% include "yabase/app/wallEvent.mustache" %}
    </script>
 {% endif %}
 
