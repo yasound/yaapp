@@ -23,7 +23,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     events : {
         "click #play": "play",        
         "click #inc": "inc",        
-        "click #dec": "dec",  
+        "click #dec": "dec",
+        "click #like": "like",
         "mousedown #volume-control" : "volumeControl",
         "mouseup" : 'mouseUp',
         "mousemove" : "mouseMove"   
@@ -112,6 +113,12 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     volumeControl: function(event) {
         this.volumeMouseDown = true;
         this.resizeVolumeBar(event);
+    },
+    
+    like: function(event) {
+        var songId = this.model.get('id');
+        var url = '/api/v1/song/' + songId + '/liker/';
+        $.post(url);
     }
 });
 

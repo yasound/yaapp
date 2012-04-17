@@ -250,8 +250,9 @@ def radio_shared(request, radio_id):
 # SONG USER
 @csrf_exempt
 def like_song(request, song_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
+    if not request.user.is_authenticated():
+        if not check_api_key_Authentication(request):
+            return HttpResponse(status=401)
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
