@@ -395,17 +395,19 @@ class UserProfile(models.Model):
         except:
             return None
         
-    def fill_user_bundle(self, bundle):
-        picture_url = None
+    @property
+    def picture_url(self):
         if self.picture:
             try:
-                picture_url = get_thumbnail(self.picture, '100x100', crop='center').url
+                url = get_thumbnail(self.picture, '100x100', crop='center').url
             except:
-                picture_url = yaapp_settings.DEFAULT_IMAGE
+                url = yaapp_settings.DEFAULT_IMAGE
         else:
-            picture_url = yaapp_settings.DEFAULT_IMAGE
-            
-        bundle.data['picture'] = picture_url
+            url = yaapp_settings.DEFAULT_IMAGE
+        return url
+    
+    def fill_user_bundle(self, bundle):
+        bundle.data['picture'] = self.picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
         

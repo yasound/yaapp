@@ -1,9 +1,10 @@
+{% load i18n %}  
    <div id='track-picture' class='thumbnail'>
        <img id='track-image' src='<% cover %>' width="160px" height="160px"/>
    </div>
    <div id='track-details'>
        <h2><span id='track-name'><% name %></span></h2>
-       <p><% i18n_by %> <strong><span id='track-artist'><% artist %></span></strong> - <strong><span id='track-album'></span></strong></p>
+       <p>{% trans "By" %} <strong><span id='track-artist'><% artist %></span></strong> - <strong><span id='track-album'></span></strong></p>
        <div class="btn-toolbar">
        <div class="btn-group">
           <a class="btn" id='play'><i class="icon-play"></i></a>
@@ -15,7 +16,7 @@
        <div class="btn-group">
        <a class="btn" id='btn-buy' href="<% buy_link %>" target='_blank'>
         <i class="icon-shopping-cart"></i>
-        <% i18n_buy %>
+        {% trans 'Buy on iTunes' %}
         </a>
         </div>
           <div class="progress no-ease" id='volume-control' onmousedown="return false">

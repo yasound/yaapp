@@ -1060,6 +1060,17 @@ class WallEvent(models.Model):
                 if radio_creator:
                     radio_creator_profile = radio_creator.userprofile
                     radio_creator_profile.message_posted_in_my_radio(self)
+    
+    @property
+    def user_picture_url(self):
+        if self.user_picture:
+            try:
+                url = get_thumbnail(self.user_picture, '100x100', crop='center').url
+            except:
+                url = yaapp_settings.DEFAULT_IMAGE
+        else:
+            url = yaapp_settings.DEFAULT_IMAGE
+        return url
 
     class Meta:
         db_name = u'default'

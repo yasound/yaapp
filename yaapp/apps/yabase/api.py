@@ -433,7 +433,7 @@ class RadioWallEventResource(ModelResource):
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date')
         resource_name = 'wall'
-        fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'user_picture', 'text', 'animated_emoticon', 'picture', 'radio']
+        fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization = ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
@@ -459,6 +459,7 @@ class RadioWallEventResource(ModelResource):
         bundle.data['radio_id'] = event.radio.id
         bundle.data['user_id'] = user_id
         bundle.data['song_id'] = song_id
+        bundle.data['user_picture'] = event.user_picture_url
         return bundle
 
 
