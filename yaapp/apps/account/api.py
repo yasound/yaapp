@@ -38,6 +38,7 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
     See https://github.com/toastdriven/django-tastypie/issues/197 for more info
     """
     def is_authenticated(self, request, **kwargs):
+        authenticated = False
         if request.user.is_authenticated():
             authenticated = True
         if not authenticated:
@@ -57,6 +58,7 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
             return request.user.username
         else:
             return super(YasoundApiKeyAuthentication, self).get_identifier(request)
+
 
 class YasoundBasicAuthentication(BasicAuthentication):
     def is_authenticated(self, request, **kwargs):
