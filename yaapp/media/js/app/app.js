@@ -74,7 +74,7 @@ $(document).ready(function() {
                         el : $('#radio')
                     }),
                     currentSong : new Yasound.Data.Models.CurrentSong(),
-                    wallEvents : new Yasound.Data.Models.WallEvents()
+                    wallEvents : new Yasound.Data.Models.WallEvents(),
                 }
                 this.radioContext.wallEventsView = new Yasound.Views.WallEvents({
                     collection : this.radioContext.wallEvents,
@@ -85,10 +85,10 @@ $(document).ready(function() {
                     model : this.radioContext.currentSong,
                     el : $('#player')
                 })
-
                 var that = this;
                 setInterval(function() {
                     that.radioContext.currentSong.fetch();
+                    that.radioContext.wallEvents.fetch();
                 }, 10000);
             }
             this.radioContext.currentSong.set('radioId', id);
