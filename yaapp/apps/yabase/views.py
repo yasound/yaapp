@@ -737,10 +737,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "fans": radio.radiouser_set.filter(favorite=True).count()
     }, context_instance=RequestContext(request))    
 
-@login_required
 def web_app(request, template_name='yabase/webapp.html'):
-    if not request.user.is_superuser:
-        raise Http404
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))    
     

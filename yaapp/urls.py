@@ -6,7 +6,7 @@ from django.contrib import admin
 from tastypie.api import Api
 from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
-    RadioResource, SelectedRadioResource, TopRadioResource, FavoriteRadioResource, FriendRadioResource,\
+    PublicRadioResource, RadioResource, SelectedRadioResource, TopRadioResource, FavoriteRadioResource, FriendRadioResource,\
     RadioLikerResource, RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, SearchRadioBySongResource, \
     RadioCurrentUserResource, \
     WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
@@ -26,6 +26,7 @@ api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(RadioResource())
+api.register(PublicRadioResource())
 api.register(SearchRadioResource())
 api.register(SearchRadioByUserResource())
 api.register(SearchRadioBySongResource())

@@ -1,7 +1,7 @@
 Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.Radio = Backbone.Model.extend({
-    urlRoot : '/api/v1/radio/'
+    urlRoot : '/api/v1/public_radio/'
 });
 
 Yasound.Data.Models.CurrentSong = Backbone.Model.extend({

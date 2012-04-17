@@ -1,25 +1,25 @@
-from tastypie import fields
-from tastypie.resources import ModelResource
-from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, NextSong, RadioUser, SongUser, FeaturedRadio
-from yaref.models import YasoundSong
-from django.contrib.auth.models import User
+from account.api import UserResource, YasoundApiKeyAuthentication
 from django.conf.urls.defaults import url
-from django.shortcuts import get_object_or_404
-from tastypie.utils import trailing_slash
-import datetime
-from tastypie.authentication import Authentication
-from tastypie.authorization import DjangoAuthorization, Authorization, ReadOnlyAuthorization
-import settings as yabase_settings
-from account.api import UserResource
-from tastypie.authentication import ApiKeyAuthentication 
-from account.api import YasoundApiKeyAuthentication
-from tastypie.resources import ModelResource, ALL
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
-from django.http import HttpResponse
-import json
 from django.db.models import Q
-from yasearch.models import search_radio, search_radio_by_user, search_radio_by_song
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404
+from tastypie import fields, http
+from tastypie.authentication import ApiKeyAuthentication, Authentication
+from tastypie.authorization import DjangoAuthorization, Authorization, \
+    ReadOnlyAuthorization
+from tastypie.exceptions import ImmediateHttpResponse
+from tastypie.resources import ModelResource, ModelResource, ALL
+from tastypie.utils import trailing_slash
+from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, \
+    NextSong, RadioUser, SongUser, FeaturedRadio
+from yaref.models import YasoundSong
+from yasearch.models import search_radio, search_radio_by_user, \
+    search_radio_by_song
+import datetime
+import json
+import settings as yabase_settings
 
 class SongMetadataResource(ModelResource):
     class Meta:
@@ -72,8 +72,14 @@ class PlaylistResource(ModelResource):
 
 
 
+class RadioAuthorization(Authorization):
+    def is_authorized(self, request, object=None):
+        return True
 
-
+    def apply_limits(self, request, object_list):
+        if request.method != 'GET':
+            return object_list.filter(creator=request.user)
+        return object_list
 
 class RadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
@@ -86,7 +92,7 @@ class RadioResource(ModelResource):
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
-        authorization = Authorization()
+        authorization = RadioAuthorization()
         allowed_methods = ['get', 'put']
         filtering = {
             'creator': ALL,
@@ -118,6 +124,30 @@ class RadioResource(ModelResource):
         radio = Radio.objects.get(pk=radioID)
         radio.fill_bundle(bundle)
         return bundle
+
+class PublicRadioResource(ModelResource):
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
+    picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    
+    class Meta:
+        queryset = Radio.objects.filter(creator__isnull=False)
+        resource_name = 'public_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', ]
+        include_resource_uri = False;
+        authorization = ReadOnlyAuthorization()
+        filtering = {
+            'creator': ALL,
+            'genre': ALL,
+            'name': ('contains',),
+            'ready': ('exact',),
+        }
+        
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
 
 class SearchRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)

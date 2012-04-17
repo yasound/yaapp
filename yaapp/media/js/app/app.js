@@ -32,7 +32,7 @@ $(document).ready(function() {
 
         currentRadio : new Yasound.Data.Models.Radio({
             id : 0,
-            uuid: 0
+            uuid : 0
         }),
 
         setCurrentRadioId : function(id) {
@@ -64,7 +64,7 @@ $(document).ready(function() {
                     $('#play i').removeClass('icon-play').addClass('icon-stop');
                     $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
                 };
-
+                this.commonContext.userAuthenticated = g_authenticated;
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
 
@@ -79,12 +79,7 @@ $(document).ready(function() {
                         el : $('#wall-input')
                     }),
                     currentSong : new Yasound.Data.Models.CurrentSong(),
-                    wallEvents : new Yasound.Data.Models.WallEvents(),
-                }
-                this.radioContext.wallEventsView = new Yasound.Views.WallEvents({
-                    collection : this.radioContext.wallEvents,
-                    el : $('#wall')
-                });
+                };
 
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model : this.radioContext.currentSong,
@@ -92,30 +87,43 @@ $(document).ready(function() {
                 })
 
                 var that = this;
-                
-                this.currentRadio.on('change:uuid', function(model, uuid) {
-                    that.radioContext.wallInputView.radioUUID = uuid;
-                    that.radioContext.wallInputView.render();
-                })
-                
+
                 setInterval(function() {
                     that.radioContext.currentSong.fetch();
-                    that.radioContext.wallEvents.fetch();
                 }, 10000);
-                
-                $.subscribe("/wall/posted", function() {
-                    that.radioContext.wallEvents.fetch();
-                });
+
+                if (this.commonContext.userAuthenticated) {
+                    this.radioContext.wallEvents = new Yasound.Data.Models.WallEvents();
+                    this.radioContext.wallEventsView = new Yasound.Views.WallEvents({
+                        collection : this.radioContext.wallEvents,
+                        el : $('#wall')
+                    });
+
+                    this.currentRadio.on('change:uuid', function(model, uuid) {
+                        that.radioContext.wallInputView.radioUUID = uuid;
+                        that.radioContext.wallInputView.render();
+                    })
+                    setInterval(function() {
+                        that.radioContext.wallEvents.fetch();
+                    }, 10000);
+
+                    $.subscribe("/wall/posted", function() {
+                        that.radioContext.wallEvents.fetch();
+                    });
+                }
             }
             this.radioContext.radioUUID = 0;
-            this.radioContext.wallEventsView.clear();
             this.radioContext.currentSong.set('radioId', id);
             this.radioContext.currentSong.fetch();
             this.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
             this.setCurrentRadioId(id);
-            this.radioContext.wallEvents.setRadio(this.currentRadio);
-            this.radioContext.wallEvents.fetch();
-            this.radioContext.wallInputView.render();
+
+            if (this.commonContext.userAuthenticated) {
+                this.radioContext.wallEventsView.clear();
+                this.radioContext.wallEvents.setRadio(this.currentRadio);
+                this.radioContext.wallEvents.fetch();
+                this.radioContext.wallInputView.render();
+            }
         }
     });
 
