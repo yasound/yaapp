@@ -36,6 +36,12 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     render : function() {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
+        if (Yasound.App.MySound) {
+            if (Yasound.App.MySound.playState == 1) {
+                $('#play i').removeClass('icon-play').addClass('icon-stop');
+            }
+            $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
+        }
         return this;
     },
 

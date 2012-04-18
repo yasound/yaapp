@@ -130,6 +130,11 @@ class PublicRadioResource(ModelResource):
             'ready': ('exact',),
         }
         
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<uuid>\S+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
+        
     def dehydrate(self, bundle):
         radioID = bundle.data['id'];
         radio = Radio.objects.get(pk=radioID)

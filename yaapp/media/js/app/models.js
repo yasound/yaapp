@@ -1,6 +1,7 @@
 Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.Radio = Backbone.Model.extend({
+    idAttribute: 'uuid',
     urlRoot : '/api/v1/public_radio/'
 });
 

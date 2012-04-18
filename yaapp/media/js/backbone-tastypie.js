@@ -72,16 +72,23 @@
 	
 	Backbone.Model.prototype.url = function() {
 		// Use the id if possible
-		var url = this.id;
-		
+	    var url = undefined;
+	    if (this.id != 'resource_uri') {
+    		var idField = this.idAttribute;
+    		if (!idField) {
+    		    idField = 'id';
+    		}
+	    } else {
+            url = this.id;
+	    }
 		// If there's no idAttribute, use the 'urlRoot'. Fallback to try to have the collection construct a url.
 		// Explicitly add the 'id' attribute if the model has one.
 		if ( !url ) {
 			url = this.urlRoot;
 			url = url || this.collection && ( _.isFunction( this.collection.url ) ? this.collection.url() : this.collection.url );
 
-			if ( url && this.has( 'id' ) ) {
-				url = addSlash( url ) + this.get( 'id' );
+			if ( url && this.has( idField ) ) {
+				url = addSlash( url ) + this.get( idField );
 			}
 		}
 

@@ -27,16 +27,15 @@ $(document).ready(function() {
     Yasound.App.Workspace = Backbone.Router.extend({
         routes : {
             "" : "index",
-            "radio/:id" : "radio"
+            "radio/:uuid" : "radio"
         },
 
         currentRadio : new Yasound.Data.Models.Radio({
-            id : 0,
             uuid : 0
         }),
 
-        setCurrentRadioId : function(id) {
-            this.currentRadio.set('id', id);
+        setCurrentRadioUUID : function(uuid) {
+            this.currentRadio.set('uuid', uuid);
             this.currentRadio.fetch();
         },
 
@@ -60,16 +59,13 @@ $(document).ready(function() {
                     }
                     Yasound.App.SoundConfig.url = stream_url;
                     Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-                    Yasound.App.MySound.play();
-                    $('#play i').removeClass('icon-play').addClass('icon-stop');
-                    $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
                 };
                 this.commonContext.userAuthenticated = g_authenticated;
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
         },
         
-        radio : function(id) {
+        radio : function(uuid) {
             this.buildCommonContext();
             
             if (!this.radioContext) {
@@ -110,27 +106,33 @@ $(document).ready(function() {
                         that.radioContext.wallInputView.radioUUID = uuid;
                         that.radioContext.wallInputView.render();
                     })
+
+                    this.currentRadio.on('change:id', function(model, id) {
+                        that.radioContext.wallEvents.setRadio(that.currentRadio);
+                        that.radioContext.wallEvents.fetch();
+                    })
+
+                    
                     setInterval(function() {
                         that.radioContext.wallEvents.fetch();
                     }, 10000);
 
                 }
+                this.currentRadio.on('change:id', function(model, id) {
+                    that.radioContext.currentSong.set('radioId', id);
+                    that.radioContext.currentSong.fetch();
+                    that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
+                });
             }
             
-            
             this.radioContext.radioUUID = 0;
-            this.radioContext.currentSong.set('radioId', id);
-            this.radioContext.currentSong.fetch();
-            this.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
-            this.setCurrentRadioId(id);
+            this.setCurrentRadioUUID(uuid);
 
             if (this.commonContext.userAuthenticated) {
                 $.unsubscribe('/wall/posted', this.radioContext.wallPosted);
                 $.subscribe("/wall/posted", this.radioContext.wallPosted);
 
                 this.radioContext.wallEventsView.clear();
-                this.radioContext.wallEvents.setRadio(this.currentRadio);
-                this.radioContext.wallEvents.fetch();
                 this.radioContext.wallInputView.render();
             }
         }
