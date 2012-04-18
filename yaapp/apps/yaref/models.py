@@ -155,15 +155,12 @@ class YasoundSongManager(models.Manager):
     
     def search_fuzzy(self, search_text, limit=25, exclude_song_ids=[]):
         print 'search fuzzy "%s"' % search_text
-        songs = yasearch_search.search_song(search_text, remove_common_words=True)
+        songs = yasearch_search.search_song(search_text, remove_common_words=True, exclude_ids=exclude_song_ids)
         results = []
         if not search_text:
             return results
 
-        for s in songs:
-            if s["db_id"] in exclude_song_ids:
-                continue
-            
+        for s in songs:            
             song_info_list = []
             if s["name"] is not None:
                 song_info_list.append(s["name"])
