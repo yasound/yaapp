@@ -214,12 +214,20 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         this.model.bind('change', this.render, this);
     },
     render : function() {
+        var data = this.model.toJSON();
+        var timeZone = '+01:00';
+        if (moment().isDST()) {
+            timeZone = '+02:00';
+        }
+        var date = moment(this.model.get('start_date') + timeZone);
+        data.formatted_start_date = date.format('LLLL');
+
         if (this.model.get('type') == 'M') {
-            $(this.el).hide().html(ich.wallEventTemplateMessage(this.model.toJSON())).fadeIn(200);
+            $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
         } else if (this.model.get('type') == 'S') {
-            $(this.el).hide().html(ich.wallEventTemplateSong(this.model.toJSON())).fadeIn(200);
+            $(this.el).hide().html(ich.wallEventTemplateSong(data)).fadeIn(200);
         } else if (this.model.get('type') == 'L') {
-            $(this.el).hide().html(ich.wallEventTemplateLike(this.model.toJSON())).fadeIn(200);
+            $(this.el).hide().html(ich.wallEventTemplateLike(data)).fadeIn(200);
         }
         return this;
     }

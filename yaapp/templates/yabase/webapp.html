@@ -7,8 +7,10 @@
 {% block extra_head %}
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
-{% compressed_js 'webapp-all' %}
+    {% compressed_js 'webapp-all' %}
     <script type="text/javascript">
+        moment.lang('{{request.LANGUAGE_CODE}}');
+
        var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};   
     </script>
 

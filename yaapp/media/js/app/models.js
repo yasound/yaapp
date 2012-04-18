@@ -11,7 +11,8 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
     }
 });
 
-Yasound.Data.Models.WallEvent = Backbone.Model.extend({});
+Yasound.Data.Models.WallEvent = Backbone.Model.extend({
+});
 
 Yasound.Data.Models.WallEvents = Backbone.Collection.extend({
     model : Yasound.Data.Models.WallEvent,
