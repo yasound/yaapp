@@ -73,11 +73,11 @@ $(document).ready(function() {
                 this.radioContext = {
                     radioView : new Yasound.Views.Radio({
                         model : this.currentRadio,
-                        el : $('#radio')
+                        el : $('#webapp-radio')
                     }),
                     wallInputView : new Yasound.Views.WallInput({
                         model : this.currentRadio,
-                        el : $('#wall-input')
+                        el : $('#webapp-wall-input')
                     }),
                     currentSong : new Yasound.Data.Models.CurrentSong()
                 };
@@ -88,7 +88,7 @@ $(document).ready(function() {
 
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model : this.radioContext.currentSong,
-                    el : $('#player')
+                    el : $('#webapp-player')
                 })
 
                 setInterval(function() {

@@ -7,6 +7,7 @@
 {% block extra_head %}
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
+    <link rel="stylesheet" href="/media/css/webapp.css"/>
     {% compressed_js 'webapp-all' %}
     <script type="text/javascript">
         moment.lang('{{request.LANGUAGE_CODE}}');
@@ -42,19 +43,26 @@
 {% endblock %}
 {% block head_title %}{% trans "Yasound" %}{% endblock %}
 {% block body %}
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+            <a href='/' class='brand'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+          <div class="nav-collapse">
+            <p class="navbar-text pull-right">{% if request.user.is_authenticated %}{% trans "Logged in as" %} <a href="#">{{ request.user.userprofile }}</a>{% else %}{% trans "Not logged" %}{% endif %}</p>
+          </div><!--/.nav-collapse -->
+            <div id='webapp-player'></div>
+        </div>
+      </div>
+    </div>
+    
 <div class='container-fluid'>
     <div class='row-fluid'>
-       <a href='/'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
-    </div>
-    <div class='row-fluid'>
         <div class='span4'>
-            <div id='radio'>
+            <div id='webapp-radio'>
             </div>
         </div>
         <div class='span8'>
-            <div id='player'>
-            </div>
-            <div id='wall-input'>
+            <div id='webapp-wall-input'>
             </div>
 			<div id='wall'>
 			</div>

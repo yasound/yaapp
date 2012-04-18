@@ -1,0 +1,71 @@
+body {
+	margin-top:80px;
+}
+
+#webapp-player {
+	
+}
+
+#webapp-player .picture {
+	float:left;
+	margin-top:4px;
+	margin-right: 12px;
+}
+
+
+#webapp-player #player-title {
+	color: white;
+}
+
+#webapp-player #details {
+	margin-top:4px;
+	float:left;
+}
+
+#webapp-radio {
+    margin-top: 24px;
+    background-color: #F5F5F5;
+    border-radius: 6px 6px 6px 6px;
+    padding: 40px;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background-image: url(/media/images/icon-radio.png);
+    background-repeat: no-repeat;
+    background-position: 10px 10px;
+    margin-bottom: 24px;
+    min-height: 170px;
+}
+
+#webapp-radio p {
+    font-size: 10px;
+    font-weight: 200;
+    line-height: 27px;
+}
+
+#webapp-radio-picture {
+    width: 212px;
+    margin: 0px auto;
+}
+
+#webapp-radio-title {
+    margin-left: 10px;
+    text-align: center;
+}
+
+#webapp-radio-title h1 {
+    font-size: 16px;
+}
+
+#webapp-wall-input {
+    margin-top: 24px;
+}
+   
+.wall-event-message {
+	border-bottom: 1px solid #eeeeee;
+	margin-bottom:12px;
+}
+
+.brand {
+	margin-top:10px;
+}
+    
