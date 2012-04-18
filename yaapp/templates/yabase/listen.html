@@ -22,6 +22,14 @@
 {% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
 {% block content %}
     <div class='row'>
+        {% if request.user.is_superuser %}
+        <div class='span12'>
+	    <div class="alert">
+	    <strong>Hello superuser</strong> <a href='{{ new_page }}'>Do you want to try out new web page ?</a>
+	    </div>
+	    </div>
+            
+        {% endif %}
         <div class='span4'>
 		   <div id="radio">
 		       <div id='radio-picture' class='thumbnail'>

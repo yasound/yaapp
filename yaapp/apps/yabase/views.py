@@ -736,7 +736,8 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "radio": radio,
         "radio_url": radio_url,
         "listeners": radio.radiouser_set.filter(listening=True).count(),
-        "fans": radio.radiouser_set.filter(favorite=True).count()
+        "fans": radio.radiouser_set.filter(favorite=True).count(),
+        "new_page": '/app/#radio/%s' % (radio_uuid)
     }, context_instance=RequestContext(request))    
 
 def web_app(request, template_name='yabase/webapp.html'):
