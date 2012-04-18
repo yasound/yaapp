@@ -67,7 +67,6 @@ COMPRESS_JS = {
             'js/underscore-1.3.1.js',
             'js/moment.min.js',
             'js/moment-lang-all.min.js',
-            'js/iso8601.js',
             'js/backbone-min.js',
             'js/backbone-tastypie.js',
             'js/pubsub.js',
