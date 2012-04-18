@@ -68,4 +68,10 @@ body {
 .brand {
 	margin-top:10px;
 }
+
+#volume-control {
+    width: 300px;
+    cursor: pointer;
+}
+
     
