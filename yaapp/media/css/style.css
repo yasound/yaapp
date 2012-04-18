@@ -57,11 +57,11 @@ footer #menu a:hover {
 
 #radio-title {
 	margin-left: 10px;
+	text-align: center;
 }
 
 #radio-title h1 {
 	font-size: 16px;
-	text-align: center;
 }
 
 #player {

@@ -1,6 +1,16 @@
+{% load i18n %}
    <div id='radio-picture' class='thumbnail'>
        <img src="<% picture %>" width="256px" height="256px"/>
    </div>
    <div id='radio-title'>
-       <h1><% name %></h1>
-    </div>
+        <h1><% name %></h1>
+   <a class="btn" id='btn-favorite'>
+    <i class="icon-star-empty"></i>
+    {% trans 'Add to favorite' %}
+   </a>
+   <a class="btn" id='btn-unfavorite'>
+    <i class="icon-star"></i>
+    {% trans 'Remove from favorite' %}
+   </a>
+   </div>
+   

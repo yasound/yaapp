@@ -3,14 +3,48 @@ Namespace('Yasound.Views');
 Yasound.Views.Radio = Backbone.View.extend({
     tagName : 'div',
     className : 'radio',
-    events : {},
+    events : {
+        "click #btn-favorite": "addToFavorite",
+        "click #btn-unfavorite": "removeFromFavorite"
+    },
 
     initialize : function() {
         this.model.bind('change', this.render, this);
     },
 
+    addToFavorite: function(e) {
+        var url = '/api/v1/radio/' + this.model.get('id') + '/favorite/';
+        $.post(url, {
+            success: function() { 
+                $('#btn-favorite', this.el).hide();
+                $('#btn-unfavorite', this.el).show();
+                $.publish('/radio/favorite');
+            }
+        });
+        e.preventDefault();
+    },
+    
+    removeFromFavorite: function(e) {
+        var url = '/api/v1/radio/' + this.model.get('id') + '/not_favorite/';
+        $.post(url, {
+            success: function() { 
+                $('#btn-unfavorite', this.el).hide();
+                $('#btn-favorite', this.el).show();
+                $.publish('/radio/not_favorite');
+            }
+        });
+        e.preventDefault();
+    },
+    
     render : function() {
         $(this.el).html(ich.radioTemplate(this.model.toJSON()));
+        if (this.model.get('favorite')) {
+            $('#btn-favorite', this.el).hide();
+            $('#btn-unfavorite', this.el).show();
+        } else {
+            $('#btn-unfavorite', this.el).hide();
+            $('#btn-favorite', this.el).show();
+        }
         return this;
     }
 });

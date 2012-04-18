@@ -114,13 +114,12 @@ class RadioResource(ModelResource):
         return bundle
 
 class PublicRadioResource(ModelResource):
-    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False)
         resource_name = 'public_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', ]
+        fields = ['id', 'name', 'description', 'genre', 'theme', 'uuid', 'tags', ]
         include_resource_uri = False;
         authorization = ReadOnlyAuthorization()
         filtering = {
@@ -139,6 +138,11 @@ class PublicRadioResource(ModelResource):
         radioID = bundle.data['id'];
         radio = Radio.objects.get(pk=radioID)
         radio.fill_bundle(bundle)
+
+        bundle.data['favorite'] = False
+        if bundle.request.user.is_authenticated:
+            if RadioUser.objects.filter(radio__id=radioID, user=bundle.request.user, favorite=True).count() > 0:
+                bundle.data['favorite'] = True
         return bundle
     
 
