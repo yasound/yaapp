@@ -214,7 +214,13 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         this.model.bind('change', this.render, this);
     },
     render : function() {
-        $(this.el).hide().html(ich.wallEventTemplate(this.model.toJSON())).fadeIn(200);
+        if (this.model.get('type') == 'M') {
+            $(this.el).hide().html(ich.wallEventTemplateMessage(this.model.toJSON())).fadeIn(200);
+        } else if (this.model.get('type') == 'S') {
+            $(this.el).hide().html(ich.wallEventTemplateSong(this.model.toJSON())).fadeIn(200);
+        } else if (this.model.get('type') == 'L') {
+            $(this.el).hide().html(ich.wallEventTemplateLike(this.model.toJSON())).fadeIn(200);
+        }
         return this;
     }
 });

@@ -26,8 +26,14 @@
       {% include "yabase/app/wallInput.mustache" %}
    </script>
     
-   <script type="text/html" id="wallEventTemplate">
-      {% include "yabase/app/wallEvent.mustache" %}
+   <script type="text/html" id="wallEventTemplateMessage">
+      {% include "yabase/app/wallEvent.message.mustache" %}
+   </script>
+   <script type="text/html" id="wallEventTemplateLike">
+      {% include "yabase/app/wallEvent.like.mustache" %}
+   </script>
+   <script type="text/html" id="wallEventTemplateSong">
+      {% include "yabase/app/wallEvent.song.mustache" %}
    </script>
 {% endif %}
 
