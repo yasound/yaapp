@@ -5,16 +5,15 @@ from models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, \
 class PlaylistAdmin(admin.ModelAdmin):
     list_display = ('name', 'source', 'radio', 'enabled', 'sync_date', 'CRC' )
     search_fields = ( 'name', 'source', )
-    list_filter = ('radio',)
+    raw_id_fields = ('radio',)
 admin.site.register(Playlist, PlaylistAdmin)
 
     
 class RadioAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'creator', 'url', 'uuid', 'ready')
     search_fields = ['name']
-    raw_id_fields = ('current_song',)
+    raw_id_fields = ('current_song', 'creator')
     exclude = ('next_songs', )
-    list_filter = ('creator', 'ready')
 admin.site.register(Radio, RadioAdmin)
     
 
@@ -26,8 +25,8 @@ admin.site.register(SongMetadata, SongMetadataAdmin)
 class SongInstanceAdmin(admin.ModelAdmin):
     list_display = ('id', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'yasound_song_id', 'need_sync')
     list_filter = ('playlist', 'need_sync')
-    list_editable = ('playlist',)
     search_fields = ('song', 'metadata__yasound_song_id', 'metadata__name', 'metadata__album_name', 'metadata__artist_name')
+    raw_id_fields = ('metadata', 'playlist')
     
     def metadata_name(self, obj):
         return obj.metadata.name
@@ -46,14 +45,14 @@ admin.site.register(SongInstance, SongInstanceAdmin)
 class WallEventAdmin(admin.ModelAdmin):
     list_display = ('radio', 'type', 'start_date', 'song', 'user', 'text')
     raw_id_fields = ('radio', 'user', 'song')
-
 admin.site.register(WallEvent, WallEventAdmin)
 
 class NextSongAdmin(admin.ModelAdmin):
-    list_filter = ('radio',)
+    raw_id_fields = ('radio', 'song')
 admin.site.register(NextSong, NextSongAdmin)
     
 class FeaturedRadioInline(admin.TabularInline):
+    raw_id_fields = ('radio',)
     model = FeaturedRadio
     extra = 1    
     
@@ -67,5 +66,11 @@ admin.site.register(FeaturedContent, FeaturedContentAdmin)
 
 
 # basic admin     
-admin.site.register(RadioUser)
-admin.site.register(SongUser)
+class RadioUserAdmin(admin.ModelAdmin):
+    raw_id_fields = ('radio', 'user')
+admin.site.register(RadioUser, RadioUserAdmin)
+
+
+class SongUserAdmin(admin.ModelAdmin):
+    raw_id_fields = ('song', 'user')
+admin.site.register(SongUser, SongUserAdmin)
