@@ -153,14 +153,14 @@ class YasoundSongManager(models.Manager):
             self._max_song = song
         return song
     
-    def search_fuzzy(self, search_text, limit=25):
+    def search_fuzzy(self, search_text, limit=25, exclude_song_ids=[]):
         print 'search fuzzy "%s"' % search_text
-        songs = yasearch_search.search_song(search_text, remove_common_words=True)
+        songs = yasearch_search.search_song(search_text, remove_common_words=True, exclude_ids=exclude_song_ids)
         results = []
         if not search_text:
             return results
 
-        for s in songs:
+        for s in songs:            
             song_info_list = []
             if s["name"] is not None:
                 song_info_list.append(s["name"])
@@ -183,8 +183,12 @@ class YasoundSongManager(models.Manager):
         exact_count = len(songs)
         
         if exact_count < limit:
+            exclude_ids = []
+            for s in songs:
+                exclude_ids.append(s.id)
+                
             fuzzy_limit = limit - exact_count
-            res = self.search_fuzzy(search_text, fuzzy_limit)
+            res = self.search_fuzzy(search_text, fuzzy_limit, exclude_song_ids=exclude_ids)
             best_score = None
             for i in res:
                 song_id = i[0]["db_id"]

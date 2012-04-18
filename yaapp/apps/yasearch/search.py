@@ -43,14 +43,14 @@ def find_song(name, album, artist, remove_common_words=True):
 # SEARCH
 #
    
-def search_song(search_text, remove_common_words=True):
+def search_song(search_text, remove_common_words=True, exclude_ids=[]):
     db = settings.MONGO_DB
     dms_search = yasearch_utils.build_dms(search_text, remove_common_words)
     
     if not search_text or len(dms_search) == 0:
         return []
 
-    res = db.songs.find({"all_dms":{"$all": dms_search}}, 
+    res = db.songs.find({ "all_dms":{"$all": dms_search}, "db_id":{"$nin": exclude_ids} }, 
                          {
                         "db_id": True,
                         "name": True,
