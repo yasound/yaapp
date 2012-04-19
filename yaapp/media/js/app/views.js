@@ -177,7 +177,7 @@ Yasound.Views.WallEvents = Backbone.View.extend({
 
     clear : function() {
         _.map(this.views, function(view) {
-            view.remove();
+            view.close();
         })
         this.views = [];
     },
@@ -191,7 +191,7 @@ Yasound.Views.WallEvents = Backbone.View.extend({
         this.views.push(view);
 
         if (this.views.length >= this.collection.limit) {
-            this.views[0].remove();
+            this.views[0].close();
             this.views.splice(0, 1)
         }
 

@@ -1,6 +1,11 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
 
+    Backbone.View.prototype.close = function(){
+        this.remove();
+        this.unbind();
+      }
+    
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
     soundManager.preferFlash = true;
     soundManager.useHTML5Audio = true;
