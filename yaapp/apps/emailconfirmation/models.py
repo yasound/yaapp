@@ -250,9 +250,11 @@ class EmailTemplate(models.Model):
     
     EMAIL_TYPE_FIRST = 0 
     EMAIL_TYPE_LAST = 1
+    EMAIL_TYPE_LOST = 1
     EMAIL_TYPE_CHOICES = (
-        (EMAIL_TYPE_FIRST, _('First mail')),
-        (EMAIL_TYPE_LAST, _('Last mail')),
+        (EMAIL_TYPE_FIRST, _('First confirmation email')),
+        (EMAIL_TYPE_LAST, _('Last confirmation mail')),
+        (EMAIL_TYPE_LOST, _('Lost password email')),
     )
     
     email_type = models.SmallIntegerField(choices=EMAIL_TYPE_CHOICES, default=EMAIL_TYPE_FIRST)

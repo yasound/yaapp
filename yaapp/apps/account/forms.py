@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import smart_unicode
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext_lazy as _, ugettext
-from emailconfirmation.models import EmailAddress
+from emailconfirmation.models import EmailAddress, EmailTemplate
 from models import UserProfile, EmailUser
 from random import choice
 from string import letters
@@ -222,7 +222,6 @@ class PasswordResetForm(forms.Form):
                 domain = current_site.domain
             else:
                 site_name = domain = domain_override
-            t = loader.get_template(email_template_name)
             c = {
                 'email': user.email,
                 'domain': domain,
@@ -232,8 +231,9 @@ class PasswordResetForm(forms.Form):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            send_mail(_("Password reset on %s") % site_name,
-                t.render(Context(c)), from_email, [user.email])
+            
+            subject, message = EmailTemplate.objects.generate_mail(EmailTemplate.EMAIL_TYPE_LOST, c)
+            send_mail(subject, message, from_email, [user.email])
         
 class ChangePasswordForm(UserForm):
 
