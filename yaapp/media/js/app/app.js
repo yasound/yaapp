@@ -40,8 +40,15 @@ $(document).ready(function() {
         }),
 
         setCurrentRadioUUID : function(uuid) {
+            this.currentRadio.disconnect();
             this.currentRadio.set('uuid', uuid);
-            this.currentRadio.fetch();
+
+            var radio = this.currentRadio;
+            this.currentRadio.fetch({
+                success: function() {
+                    radio.connect();
+                }
+            });
         },
 
         index : function() {
