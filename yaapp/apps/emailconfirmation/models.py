@@ -250,7 +250,7 @@ class EmailTemplate(models.Model):
     
     EMAIL_TYPE_FIRST = 0 
     EMAIL_TYPE_LAST = 1
-    EMAIL_TYPE_LOST = 1
+    EMAIL_TYPE_LOST = 2
     EMAIL_TYPE_CHOICES = (
         (EMAIL_TYPE_FIRST, _('First confirmation email')),
         (EMAIL_TYPE_LAST, _('Last confirmation mail')),
