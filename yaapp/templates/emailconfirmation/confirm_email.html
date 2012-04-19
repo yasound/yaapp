@@ -11,9 +11,21 @@
                </h1>
             </div>
 		    {% if email_address %}
-		    <p>
-		    {% trans "Congratulations, your account is now activated." %}
-		    </p>
+            <div id="video-confirm">
+			<object width="480" height="270" id="youtube">
+			<param name="movie" value="http://www.youtube.com/v/YkFaWMN6Rsg?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0">
+			</param>
+			<param name="allowFullScreen" value="true">
+			</param>
+			<param name="allowscriptaccess" value="always">
+			</param>
+			<embed src="http://www.youtube.com/v/YkFaWMN6Rsg?version=3&amp;hl=fr_FR&amp;rel=0&amp;autohide=1&amp;color2=f2f2f0&amp;showinfo=0" type="application/x-shockwave-flash" width="480" height="270" allowscriptaccess="always" allowfullscreen="true"></embed>
+			</object>
+            </div>
+            <div id='text-confirm'>
+            {% trans "Your registration is <strong>completed</strong>. You can now create your radio on Yasound and share it with your friends." %}
+            </div>
+
 		    {% else %}
 		    <p>{% trans "Invalid confirmation key." %}</p>
 		    {% endif %}

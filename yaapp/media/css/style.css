@@ -260,3 +260,14 @@ footer #menu a:hover {
 
 .wall-event-message p {
 }
+
+
+#video-confirm {
+	float:right;
+	margin-left:16px;
+}
+
+#text-confirm {
+    font-size: 20px;
+    line-height:28px;
+}

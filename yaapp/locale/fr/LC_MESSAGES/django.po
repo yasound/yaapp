@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-11 11:13+0200\n"
+"POT-Creation-Date: 2012-04-19 14:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,6 +144,7 @@ msgid "Signup"
 msgstr "S'inscrire"
 
 #: templates/account/signup.html:24
+#: templates/yabase/webapp.html:44
 msgid "Yasound"
 msgstr "Yasound"
 
@@ -162,11 +163,13 @@ msgstr "S'inscrire avec Twitter"
 msgid "Email confirmation"
 msgstr "Confirmation d'email"
 
-#: templates/emailconfirmation/confirm_email.html:15
-msgid "Congratulations, your account is now activated."
-msgstr "Féliciations, votre compte est maintenant activé."
+#: templates/emailconfirmation/confirm_email.html:26
+msgid ""
+"Your registration is <strong>completed</strong>. You can now create your "
+"radio on Yasound and share it with your friends."
+msgstr "Votre inscription a bien été <strong>confirmée</strong>, vous pouvez désormais créer votre radio sur Yasound et la partager avec vos amis."
 
-#: templates/emailconfirmation/confirm_email.html:18
+#: templates/emailconfirmation/confirm_email.html:30
 msgid "Invalid confirmation key."
 msgstr "Clef de confirmation invalide"
 
@@ -259,8 +262,8 @@ msgstr "Rien pour le moment"
 
 #: templates/web/index.html:12
 #: templates/yabase/buy_link_not_found.html:12
-#: templates/yabase/listen.html:30
-#: templates/yabase/listen.html.py:33
+#: templates/yabase/listen.html:38
+#: templates/yabase/listen.html.py:41
 msgid "Radio logo"
 msgstr "Logo de la radio"
 
@@ -314,7 +317,7 @@ msgid "Welcome"
 msgstr "Bienvenue"
 
 #: templates/web/radio.html:5
-#: templates/yabase/listen.html:49
+#: templates/yabase/listen.html:57
 msgid "By"
 msgstr "Par"
 
@@ -419,20 +422,19 @@ msgstr "Temps d'écoute"
 
 #: templates/yabackoffice/metrics.html:3
 msgid "Metrics"
-msgstr ""
+msgstr "Métriques"
 
 #: templates/yabackoffice/metrics.html:20
 msgid "New users"
-msgstr ""
+msgstr "Nouveaux utilisateurs"
 
 #: templates/yabackoffice/metrics.html:31
-#, fuzzy
 msgid "New radios"
-msgstr "Ma radio"
+msgstr "Nouvelles radios"
 
 #: templates/yabackoffice/metrics.html:54
 msgid "Wall messages"
-msgstr ""
+msgstr "Messages sur le wall"
 
 #: templates/yabackoffice/metrics.html:66
 msgid "Song likes"
@@ -458,17 +460,25 @@ msgstr "Morceau indisponible pour achat"
 msgid "This item cannot be purchased right now, try later."
 msgstr "Ce morceau ne peut être acheté actuellement, veuillez réessayer plus tard."
 
-#: templates/yabase/listen.html:45
+#: templates/yabase/listen.html:53
 msgid "Track logo"
 msgstr "Logo du morceau"
 
-#: templates/yabase/listen.html:48
+#: templates/yabase/listen.html:56
 msgid "No name"
 msgstr "Sans nom"
 
-#: templates/yabase/listen.html:60
+#: templates/yabase/listen.html:68
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
+
+#: templates/yabase/webapp.html:51
+msgid "Logged in as"
+msgstr "Connecté en tant que"
+
+#: templates/yabase/webapp.html:51
+msgid "Not logged"
+msgstr "Non connecté"
 
 #: templates/yainvitation/mail/email_invitation_message.txt:1
 #, python-format
