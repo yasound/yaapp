@@ -14,6 +14,10 @@ from django.contrib.auth.models import User
 
 from emailconfirmation.signals import email_confirmed, email_confirmation_sent
 
+from django.template import Context, Template
+
+from transmeta import TransMeta
+
 # this code based in-part on django-registration
 
 class EmailAddressManager(models.Manager):
@@ -114,12 +118,11 @@ class EmailConfirmationManager(models.Manager):
             "current_site": current_site,
             "confirmation_key": confirmation_key,
         }
-        subject = render_to_string(
-            "emailconfirmation/email_confirmation_subject.txt", context)
+        
+        subject, message = EmailTemplate.objects.generate_mail(EmailTemplate.EMAIL_TYPE_FIRST, context)
+
         # remove superfluous line breaks
         subject = "".join(subject.splitlines())
-        message = render_to_string(
-            "emailconfirmation/email_confirmation_message.txt", context)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email_address.email])
         confirmation = self.create(
             email_address=email_address,
@@ -200,12 +203,10 @@ class EmailConfirmation(models.Model):
             "current_site": current_site,
             "confirmation_key": confirmation_key,
         }
-        subject = render_to_string(
-            "emailconfirmation/email_confirmation_subject.txt", context)
+        subject, message = EmailTemplate.objects.generate_mail(EmailTemplate.EMAIL_TYPE_LAST, context)
+
         # remove superfluous line breaks
         subject = "".join(subject.splitlines())
-        message = render_to_string(
-            "emailconfirmation/email_confirmation_message.txt", context)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email_address.email])
         self.retries = self.retries + 1
         self.save()
@@ -216,3 +217,51 @@ class EmailConfirmation(models.Model):
     class Meta:
         verbose_name = _("email confirmation")
         verbose_name_plural = _("email confirmations")
+        
+
+class EmailTemplateManager(models.Manager):
+    
+    def generate_mail(self, email_type, context_dict):
+        """
+        return subject, mail
+        """
+        try:
+            template = self.get(email_type=email_type, activated=True)
+        except:
+            return '', ''
+        
+        
+        tpl_subject = Template(template.subject)
+        tpl_body = Template(template.body)
+        
+        context = Context(context_dict)
+        
+        return tpl_subject.render(context), tpl_body.render(context) 
+        
+        
+class EmailTemplate(models.Model):
+    objects = EmailTemplateManager()
+
+    __metaclass__ = TransMeta
+
+    subject = models.CharField(_('subject'), max_length=255)
+    body = models.TextField(_('body'))
+    activated = models.BooleanField(_('activated'), default=True)
+    
+    EMAIL_TYPE_FIRST = 0 
+    EMAIL_TYPE_LAST = 1
+    EMAIL_TYPE_CHOICES = (
+        (EMAIL_TYPE_FIRST, _('First mail')),
+        (EMAIL_TYPE_LAST, _('Last mail')),
+    )
+    
+    email_type = models.SmallIntegerField(choices=EMAIL_TYPE_CHOICES, default=EMAIL_TYPE_FIRST)
+    
+    class Meta:
+        translate = ('subject', 'body',)    
+    
+    def save(self, *args, **kwargs):
+        if self.activated:
+            EmailTemplate.objects.filter(email_type=self.email_type).exclude(id=self.id).update(activated=False)
+        super(EmailTemplate, self).save(*args, **kwargs)
+    
