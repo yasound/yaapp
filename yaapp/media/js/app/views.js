@@ -80,6 +80,10 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         return share;
     },
     
+    generateFacebookText: function() {
+        return generateTwitterText();
+    }
+    
     generateSocialShare: function() {
         if (!this.radio) {
             $('#tweet').hide();    
@@ -91,7 +95,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                 };
             $('#tweet', this.el).show(); 
             $('#tweet', this.el).attr('href', "http://twitter.com/share?" + $.param(twitterParams));
-            $('meta[name=description]').attr('description', 'this is facebook description man');
+            $('meta[name=description]').attr('description', this.generateFacebookText());
         }
     },
     
