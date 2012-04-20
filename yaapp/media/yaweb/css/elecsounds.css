@@ -1,0 +1,31 @@
+#background {
+    width: 100%; 
+    height: 100%; 
+	position: fixed;
+	z-index: -1;
+    left: 0px; 
+    top: 0px; 
+}
+
+.stretch {
+    width:100%;
+    height:100%;
+}
+
+#nicolas {
+    width: 18%;
+    height: 52%;
+    position: absolute;
+    top: 48%;
+    left: 0;
+    cursor: pointer;
+}
+
+#francois {
+    width: 20%;
+    height: 52%;
+    position: absolute;
+    top: 48%;
+    left: 80%;
+    cursor: pointer;
+}

@@ -60,7 +60,17 @@ def eula(request, template_name='yaweb/eula.html'):
 
 def privacy(request, template_name='yaweb/privacy.html'):
     return render_to_response(template_name, {
-        'current_page': 'eula',
+        'current_page': 'privacy',
+    }, context_instance=RequestContext(request))  
+
+def elecsounds(request, template_name='yaweb/elecsounds.html'):
+    return render_to_response(template_name, {
+        'current_page': 'elecsounds',
+    }, context_instance=RequestContext(request))  
+
+def elecsounds_terms(request, template_name='yaweb/elecsounds_terms.html'):
+    return render_to_response(template_name, {
+        'current_page': 'elecsounds_terms',
     }, context_instance=RequestContext(request))  
 
 def logo(request):
@@ -75,3 +85,4 @@ def download(request, filename):
     response = HttpResponse(file.read(), mimetype=mimetype)
     response["Content-Disposition"]= "attachment; filename=%s" % os.path.split(filename)[1]
     return response
+
