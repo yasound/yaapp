@@ -12,5 +12,8 @@ jQuery(document).ready(function() {
     jQuery("#nicolas").click(function() {
         window.open('https://api.yasound.com/listen/6fa46bfa1f824879b503e2aebbff7411');
     });
+    jQuery("#francois").click(function() {
+        window.open('https://api.yasound.com/listen/29b1e874c84740958b0d4363654376ae');
+    });
     
 });
