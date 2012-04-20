@@ -100,9 +100,11 @@ $(document).ready(function() {
 
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model : this.radioContext.currentSong,
+                    radio: this.currentRadio,
                     el : $('#webapp-player')
                 })
-
+                this.radioContext.currentSongView.radio = this.currentRadio;
+                
                 setInterval(function() {
                     that.radioContext.currentSong.fetch();
                 }, 10000);

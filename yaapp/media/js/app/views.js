@@ -67,14 +67,38 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     initialize : function() {
         this.model.bind('change', this.render, this);
     },
-
+    
+    generateTwitterText: function() {
+        if (!this.radio) {
+            return '';
+        }
+        
+        var share = gettext('I am listening to');
+        share += ' ' + this.model.get('name') + ', ';
+        share += gettext('by') + ' ' + this.model.get('artist') + ' ';
+        share += gettext('on') + ' ' + this.radio.get('name');
+        return share;
+    },
+    
+    generateSocialShare: function() {
+        if (!this.radio) {
+            $('#tweet').hide();    
+        } else {
+            var twitterParams = { 
+                    url: encodeURIComponent(window.location), 
+                    text: this.generateTwitterText(),
+                    hashtags: 'yasound'
+                };
+            $('#tweet', this.el).show(); 
+            $('#tweet', this.el).attr('href', "http://twitter.com/share?" + $.param(twitterParams));
+            $('meta[name=description]').attr('description', 'this is facebook description man');
+        }
+    },
+    
     render : function() {
-        $('#share-twitter').attr('data-text', 'this is a test');
-        $('meta[name=description]').attr('description', 'this is facebook description man');
-
-        
-        
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
+        this.generateSocialShare();
+
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
                 $('#play i').removeClass('icon-play').addClass('icon-stop');

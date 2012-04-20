@@ -22,10 +22,21 @@ body {
 	float:left;
 }
 
+#webapp-player #tweet img {
+	position: relative;
+	top: -2px;
+}
+
+#webapp-player .fb-like {
+    position: relative;
+    top: -5px;
+	
+}
+
 .share {
 	float:left;
-	margin-top:32px;
-	margin-left:32px;
+	margin-right:12px;
+	margin-top:2px;
 }
 
 #webapp-radio {
