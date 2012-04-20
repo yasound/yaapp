@@ -81,8 +81,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     },
     
     generateFacebookText: function() {
-        return generateTwitterText();
-    }
+        return this.generateTwitterText();
+    },
     
     generateSocialShare: function() {
         if (!this.radio) {
