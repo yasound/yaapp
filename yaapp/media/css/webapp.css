@@ -22,6 +22,12 @@ body {
 	float:left;
 }
 
+.share {
+	float:left;
+	margin-top:32px;
+	margin-left:32px;
+}
+
 #webapp-radio {
     margin-top: 24px;
     background-color: #F5F5F5;

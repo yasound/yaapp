@@ -69,6 +69,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     },
 
     render : function() {
+        $('#share-twitter').attr('data-text', 'this is a test');
+        $('meta[name=description]').attr('description', 'this is facebook description man');
+
+        
+        
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {

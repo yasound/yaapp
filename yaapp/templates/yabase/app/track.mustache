@@ -1,8 +1,12 @@
 {% load i18n %}  
+
+
    <div class='picture'>
        <img id='track-image' src='<% cover %>' width="84px" height="84px"/>
    </div>
+
    <div id='details'>
+
        <div id='player-title'>
        <% name %> {% trans "By" %} 
        <strong><span id='track-artist'><% artist %></span></strong> - <strong>
@@ -25,6 +29,6 @@
           <div class="progress no-ease" id='volume-control' onmousedown="return false">
             <div class="bar" id='volume-position' style="width: 0%;" onmousedown="return false"></div>
           </div>
-
        </div>
    </div> 
+

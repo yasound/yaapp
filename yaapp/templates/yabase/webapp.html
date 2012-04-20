@@ -5,6 +5,8 @@
 {% load straight_include %}
 
 {% block extra_head %}
+    <link rel="image_src" href="/media/yaweb/images/logo.png" />
+        
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/webapp.css"/>
@@ -38,6 +40,8 @@
    <script type="text/html" id="wallEventTemplateSong">
       {% include "yabase/app/wallEvent.song.mustache" %}
    </script>
+   
+   
 {% endif %}
 
 {% endblock %}
@@ -50,7 +54,16 @@
           <div class="nav-collapse">
             <p class="navbar-text pull-right">{% if request.user.is_authenticated %}{% trans "Logged in as" %} <a href="#">{{ request.user.userprofile }}</a>{% else %}{% trans "Not logged" %}{% endif %}</p>
           </div><!--/.nav-collapse -->
-            <div id='webapp-player'></div>
+            <div id='webapp-player'>
+            </div>
+			<div class="share">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-text="hi world"  data-lang="fr" data-count="none">Tweeter</a>
+                <br/>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+                <div class="fb-like" data-send="true" data-width="450" data-show-faces="false" data-colorscheme="dark"></div>
+
+			</div>
         </div>
       </div>
     </div>
@@ -74,6 +87,14 @@
     </footer>
 </div>
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=296167703762159";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 {% endblock %}
 
