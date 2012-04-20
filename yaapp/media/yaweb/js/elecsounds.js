@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-    jQuery("a.boxed").fancybox({
+    var f = jQuery("a.boxed").fancybox({
         'speedIn'       :   200, 
         'speedOut'      :   200,
         'width'         :   1517,
@@ -9,4 +9,7 @@ jQuery(document).ready(function() {
     
     jQuery("a.boxed").trigger('click');
 
+    jQuery(window).resize(function() {
+        jQuery.fancybox.resize();
+    });
 });

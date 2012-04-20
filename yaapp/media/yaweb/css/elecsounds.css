@@ -13,19 +13,25 @@
 }
 
 #nicolas {
-    width: 18%;
-    height: 52%;
-    position: absolute;
-    top: 48%;
-    left: 0;
+	position:absolute;
+	bottom:12px;
+	left:42px;
     cursor: pointer;
 }
 
 #francois {
-    width: 20%;
-    height: 52%;
-    position: absolute;
-    top: 48%;
-    left: 80%;
+    position:absolute;
+    bottom:12px;
+    right:42px;
     cursor: pointer;
+}
+
+
+#terms {
+	width: 124px;
+    margin-left:-62px;
+    text-align: center;
+	position:absolute;
+	right:12px;
+    top:8px;
 }

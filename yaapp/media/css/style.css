@@ -271,3 +271,31 @@ footer #menu a:hover {
     font-size: 20px;
     line-height:28px;
 }
+
+#elec-logo {
+	float:right;
+}
+
+ul.es-blogs {
+	margin-top:18px;
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 27px;
+}
+
+ul.es-blogs li {
+	margin-bottom:12px;
+	margin-left:32px;
+}
+
+#es-haveblog {
+	float:right;
+	width:200px;
+	text-align:right;
+}
+
+#es-follow {
+    margin-left:32px;
+    margin-top:20px;
+    margin-bottom:20px;
+}
