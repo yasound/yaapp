@@ -60,6 +60,7 @@ COMPRESS_JS = {
         'source_filenames': [
             'js/jquery-1.7.1.min.js',
             'js/jquery.timers.js',
+            'js/socket.io.js',
             'js/sm/soundmanager2-nodebug-jsmin.js',
             'js/json2.js',
             'js/mustache-django-friendly.js',

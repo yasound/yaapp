@@ -1,6 +1,12 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
-
+    var socket = io.connect('http://localhost:9000/radio');
+    socket.emit('subscribe', {'radio_id': 2});
+    socket.on('wall_event', function (data) {
+      console.log(data);
+    });
+    
+    
     Backbone.View.prototype.close = function(){
         this.remove();
         this.unbind();
