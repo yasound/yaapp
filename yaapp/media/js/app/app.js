@@ -1,7 +1,7 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
     var socket = io.connect('http://localhost:9000/radio');
-    socket.emit('subscribe', {'radio_id': 2});
+    socket.emit('subscribe', {'radio_id': 75});
     socket.on('wall_event', function (data) {
       console.log(data);
     });
