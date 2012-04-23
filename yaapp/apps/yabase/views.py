@@ -500,7 +500,7 @@ def stop_listening_to_radio(request, radio_uuid):
     return HttpResponse(res)
 
 def get_current_song(request, radio_id):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated():
         if not check_api_key_Authentication(request):
             return HttpResponse(status=401)
 
@@ -515,7 +515,7 @@ def get_current_song(request, radio_id):
 
 
 def buy_link(request, radio_id):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated():
         if not check_api_key_Authentication(request):
             return HttpResponse(status=401)
 
