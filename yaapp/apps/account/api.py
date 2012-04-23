@@ -21,6 +21,7 @@ import settings as account_settings
 import tweepy
 import urllib
 import uuid
+import time
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -210,6 +211,24 @@ def build_random_username():
             build_random_username()
         return candidate
     
+def _download_facebook_profile(token):
+    facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
+    if not facebook_profile:
+        logger.error('cannot communicate with facebook')
+        return None
+    
+    if facebook_profile.has_key('error'):
+        logger.error('cannot communicate with facebook: %s' %(facebook_profile['error']))
+        return None
+    
+    if not facebook_profile.has_key('id'):
+        logger.error('no "id" attribute in facebook profile')
+        logger.error(facebook_profile)
+        return None
+
+    return facebook_profile
+        
+    
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         authenticated = False
@@ -247,18 +266,19 @@ class SocialAuthentication(Authentication):
         username = build_random_username()
         if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
             logger.debug('account type : facebook')
-            facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
+            
+            max_retry = 3
+            retry = 0
+            while retry < max_retry:
+                facebook_profile = _download_facebook_profile(token)
+                if facebook_profile is not None:
+                    break
+                time.sleep(1)
+                retry += 1
+                
             if not facebook_profile:
-                logger.error('cannot communicate with facebook')
                 return False
             
-            if facebook_profile.has_key('error'):
-                logger.error('cannot communicate with facebook: %s' %(facebook_profile['error']))
-                return False
-            
-            if not facebook_profile.has_key('id'):
-                logger.error('no "id" attribute in facebook profile')
-                return False
             if facebook_profile['id'] != uid:
                 logger.error('uid does not match')
                 return False
