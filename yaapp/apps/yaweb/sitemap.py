@@ -14,6 +14,10 @@ class StaticSitemap(sitemaps.Sitemap):
         self._items = {}
         self._initialize()
 
+    def protocol(self):
+        # will work only in django 1.4
+        return settings.DEFAULT_HTTP_PROTOCOL
+    
     def _initialize(self):
         for p in self.patterns:
             if getattr(p, 'name', None) is not None and 'template_name' in p.default_args:
