@@ -416,9 +416,8 @@ def get_next_song(request, radio_id):
 
 @csrf_exempt
 def connect_to_radio(request, radio_id):
-    if not request.user.is_authenticated:
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
@@ -433,9 +432,8 @@ def connect_to_radio(request, radio_id):
     
 @csrf_exempt
 def disconnect_from_radio(request, radio_id):
-    if not request.user.is_authenticated:
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
