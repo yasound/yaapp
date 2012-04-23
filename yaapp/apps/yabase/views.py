@@ -843,3 +843,25 @@ def status(request):
     User.objects.all()[:1]
     YasoundSong.objects.all()[:1]
     return HttpResponse('OK')
+
+
+def delete_song_instance(request, song_instance_id):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['put']):
+        return HttpResponse(status=405)
+    
+    song = get_object_or_404(SongInstance, pk=song_instance_id)
+    song.delete()
+    
+    # if radio has no more songs, set ready to False
+    radio = song.playlist.radio
+    song_count = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id__gt=0).count()
+    if song_count == 0:
+        radio.ready = False
+        radio.save()
+    
+    response = {'success':True}
+    res = json.dumps(response)
+    return HttpResponse(res)
+    
