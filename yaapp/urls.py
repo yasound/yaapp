@@ -1,22 +1,25 @@
+from account.api import UserResource, LoginResource, SignupResource, \
+    LoginSocialResource
+from account.friend_api import FriendResource
 from django.conf import settings
-
-from django.views.generic.simple import direct_to_template
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
+from django.views.generic.simple import direct_to_template
+from os import path
+from stats.api import RadioListeningStatResource
 from tastypie.api import Api
 from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
-    PublicRadioResource, RadioResource, SelectedRadioResource, TopRadioResource, FavoriteRadioResource, FriendRadioResource,\
-    RadioLikerResource, RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, SearchRadioBySongResource, \
-    RadioCurrentUserResource, \
-    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, RadioEnabledPlaylistResource, \
-    RadioAllPlaylistResource, LeaderBoardResource, MatchedSongResource, SearchSongResource, EditSongResource, \
+    PublicRadioResource, RadioResource, SelectedRadioResource, TopRadioResource, \
+    FavoriteRadioResource, FriendRadioResource, RadioLikerResource, \
+    RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, \
+    SearchRadioBySongResource, RadioCurrentUserResource, WallEventResource, \
+    RadioUserResource, SongUserResource, NextSongResource, \
+    RadioEnabledPlaylistResource, RadioAllPlaylistResource, LeaderBoardResource, \
+    MatchedSongResource, SearchSongResource, EditSongResource, \
     UserFavoriteRadioResource
-from account.api import UserResource, LoginResource, SignupResource, LoginSocialResource
-from account.friend_api import FriendResource
-from stats.api import RadioListeningStatResource
 from yabase.models import Radio
-from os import path
+from yaweb.sitemap import StaticSitemap
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
@@ -162,7 +165,6 @@ urlpatterns = patterns('',
     
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
-     
 )
 
 if settings.PRODUCTION_MODE:
@@ -174,6 +176,16 @@ else:
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.forbidden.txt', 'mimetype': 'text/plain'}),
     )
     
+# sitemap
+from yaweb import urls as yaweb_urls
+sitemaps = {
+    'yaweb': StaticSitemap(yaweb_urls.urlpatterns),
+}
+
+urlpatterns += patterns('django.contrib.sitemaps.views',
+    (r'^sitemap\.xml$', 'sitemap', {'sitemaps': sitemaps}),
+)
+
 
 
 # captcha urls
