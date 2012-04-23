@@ -772,7 +772,7 @@ class EditSongResource(ModelResource):
         include_resource_uri = False
         authorization= Authorization()
         authentication = YasoundApiKeyAuthentication()
-        allowed_methods = ['put', 'delete']
+        allowed_methods = ['put']
     
     
 #YASOUND_SONG_ID_PARAM_NAME = 'yasound_song'
