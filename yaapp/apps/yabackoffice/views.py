@@ -424,6 +424,10 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     if total_friend_count is None:
         total_friend_count = _('Unavailable')
         
+    facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
+    twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
+    yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
+    
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
         "radio_count": Radio.objects.all().count(),
@@ -434,7 +438,10 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "yasound_friend_count": UserProfile.objects.all().aggregate(Count('friends'))['friends__count'],
         "listening_time": overall_listening_time_str,
         "uploaded_song_count" : YasoundSong.objects.filter(id__gt=2059600).count(),
-        "total_friend_count": total_friend_count
+        "total_friend_count": total_friend_count,
+        "facebook_user_count": facebook_user_count,
+        "twitter_user_count": twitter_user_count,
+        "yasound_user_count": yasound_user_count
     }, context_instance=RequestContext(request))  
 
 
