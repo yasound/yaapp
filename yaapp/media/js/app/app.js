@@ -156,7 +156,7 @@ $(document).ready(function() {
 
     soundManager.onready(function() {
         Backbone.history.start({
-            pushState : false,
+            pushState : true,
             root : '/app/',
             silent : false
         });
