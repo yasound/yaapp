@@ -163,9 +163,18 @@ urlpatterns = patterns('',
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
      
-    (r'^robots\.txt$', direct_to_template,
-     {'template': 'robots.txt', 'mimetype': 'text/plain'}),
 )
+
+if settings.PRODUCTION_MODE:
+    urlpatterns += patterns('',
+        url(r'^robots\.txt$', direct_to_template, {'template': 'robots.txt', 'mimetype': 'text/plain'}),
+    )
+else:
+    urlpatterns += patterns('',
+        url(r'^robots\.txt$', direct_to_template, {'template': 'robots.forbidden.txt', 'mimetype': 'text/plain'}),
+    )
+    
+
 
 # captcha urls
 urlpatterns += patterns('',

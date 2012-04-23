@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /yaref
-Disallow: /app
+Disallow: /yaref/
