@@ -126,7 +126,7 @@ urlpatterns = patterns('',
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
     (r'^status/', 'yabase.views.status'),
     
-    url(r'^api/v1/song/(?P<song_instance_id>\d+)/delete/$', 'yabase.views.delete_song_instance'),
+    url(r'^api/v1/delete_song/(?P<song_instance_id>\d+)/$', 'yabase.views.delete_song_instance'),
     
     
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
