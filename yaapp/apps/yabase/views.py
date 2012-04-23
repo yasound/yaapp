@@ -738,7 +738,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "new_page": '/app/#radio/%s' % (radio_uuid)
     }, context_instance=RequestContext(request))    
 
-def web_app(request, template_name='yabase/webapp.html'):
+def web_app(request, radio_uuid=None, template_name='yabase/webapp.html'):
     if not request.user.is_superuser:
         raise Http404
     return render_to_response(template_name, {
