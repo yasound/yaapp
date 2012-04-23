@@ -852,6 +852,10 @@ def delete_song_instance(request, song_instance_id):
         return HttpResponse(status=405)
     
     song = get_object_or_404(SongInstance, pk=song_instance_id)
+    
+    if request.user != song.playlist.radio.creator:
+        return HttpResponse(status=401)
+    
     song.delete()
     
     # if radio has no more songs, set ready to False
