@@ -3,6 +3,7 @@ jQuery(document).ready(function() {
         jQuery('#unlightbox').show();
     } else {
         jQuery('#unlightbox').hide();
+        jQuery('a#logo').attr('href', '/');
     }
     
     jQuery("#unlightbox a").click(function() {

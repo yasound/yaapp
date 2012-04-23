@@ -28,10 +28,10 @@
 
 
 #terms {
-	width: 124px;
-    margin-left:-62px;
-    text-align: center;
+	width: 142px;
 	position:absolute;
-	right:12px;
-    top:8px;
+	bottom: 12px;
+	left:50%;
+    margin-left:-82px;
+    text-align: center;
 }
