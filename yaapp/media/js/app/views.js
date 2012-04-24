@@ -301,3 +301,53 @@ Yasound.Views.WallInput = Backbone.View.extend({
         return this;
     }
 });
+
+
+Yasound.Views.RadioUsers = Backbone.View.extend({
+    initialize : function() {
+        _.bindAll(this, 'addOne', 'addAll');
+
+        this.collection.bind('add', this.addOne);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+    },
+
+    addAll : function() {
+        this.collection.each(this.addOne);
+    },
+
+    clear : function() {
+        _.map(this.views, function(view) {
+            view.close();
+        })
+        this.views = [];
+    },
+
+    addOne : function(radioUser) {
+        var view = new Yasound.Views.RadioUser({
+            model : radioUser
+        });
+
+        $(this.el).prepend(view.render().el);
+        this.views.push(view);
+
+        if (this.views.length >= this.collection.limit) {
+            this.views[0].close();
+            this.views.splice(0, 1)
+        }
+    }
+});
+
+Yasound.Views.RadioUser = Backbone.View.extend({
+    tagName : 'li',
+    className : 'radio-user',
+    events : {},
+    initialize : function() {
+        this.model.bind('change', this.render, this);
+    },
+    render : function() {
+        var data = this.model.toJSON();
+        $(this.el).hide().html(ich.radioUserTemplate(data)).fadeIn(200);
+        return this;
+    }
+});

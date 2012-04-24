@@ -41,6 +41,9 @@
       {% include "yabase/app/wallEvent.song.mustache" %}
    </script>
    
+   <script type="text/html" id="radioUserTemplate">
+      {% include "yabase/app/radioUser.mustache" %}
+   </script>
    
 {% endif %}
 
@@ -64,6 +67,8 @@
     <div class='row-fluid'>
         <div class='span4'>
             <div id='webapp-radio'>
+            </div>
+            <div id='webapp-radio-users'>
             </div>
         </div>
         <div class='span8'>

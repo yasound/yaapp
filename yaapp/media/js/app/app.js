@@ -116,17 +116,22 @@ $(document).ready(function() {
                         el : $('#wall')
                     });
 
+                    this.radioContext.radioUsers = new Yasound.Data.Models.RadioUsers();
+                    this.radioContext.radioUsersView = new Yasound.Views.RadioUsers({
+                        collection : this.radioContext.radioUsers,
+                        el : $('#webapp-radio-users')
+                    })
+                    
                     this.currentRadio.on('change:uuid', function(model, uuid) {
                         that.radioContext.wallInputView.radioUUID = uuid;
                         that.radioContext.wallInputView.render();
                     })
 
                     this.currentRadio.on('change:id', function(model, id) {
-                        that.radioContext.wallEvents.setRadio(that.currentRadio);
-                        that.radioContext.wallEvents.fetch();
+                        that.radioContext.wallEvents.setRadio(that.currentRadio).fetch();
+                        that.radioContext.radioUsers.setRadio(that.currentRadio).fetch();
                     })
 
-                    
                     setInterval(function() {
                         that.radioContext.wallEvents.fetch();
                     }, 10000);

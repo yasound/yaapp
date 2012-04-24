@@ -45,6 +45,7 @@ Yasound.Data.Models.WallEvents = Backbone.Collection.extend({
         this.reset();
         this.radio = radio;
         this.lastId = 0;
+        return this;
     },
     
     findLastId : function() {
@@ -60,3 +61,24 @@ Yasound.Data.Models.WallEvents = Backbone.Collection.extend({
         return wallEvent.get("id");
     }
 });
+
+Yasound.Data.Models.RadioUser = Backbone.Model.extend({});
+Yasound.Data.Models.RadioUsers = Backbone.Collection.extend({
+    model : Yasound.Data.Models.RadioUser,
+    limit : 25,
+    url : function() {
+        return '/api/v1/radio/' + this.radio.get('id') + '/current_user/';
+    },
+
+    setRadio:function(radio) {
+        this.reset();
+        this.radio = radio;
+        return this;
+    },
+    
+    comparator : function(radioUser) {
+        return radioUser.get("id");
+    }
+});
+
+
