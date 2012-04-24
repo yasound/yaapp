@@ -465,3 +465,16 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
         "metrics": metrics,
     }, context_instance=RequestContext(request)) 
     
+@csrf_exempt
+@login_required
+def small_metrics(request):
+    if not request.user.is_superuser:
+        raise Http404
+    user_count = User.objects.all().count()
+    response_dict = {
+        'user_count': user_count
+    }
+    response = json.dumps(response_dict)
+    return HttpResponse(response, mimetype='application/json')
+    
+    
