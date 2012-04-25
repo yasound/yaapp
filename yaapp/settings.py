@@ -39,6 +39,12 @@ if DEVELOPMENT_MODE:
 EMAIL_CONFIRMATION_DAYS = 4
 EMAIL_RESEND_CONFIRMATION_DAYS = 2
 
+if DEVELOPMENT_MODE:
+    EMAIL_HOST = 'smtp.critsend.com'
+    EMAIL_PORT = 25
+    EMAIL_HOST_USER = 'dev@yasound.com'
+    EMAIL_HOST_PASSWORD = 'w9t4vOT9OywDRZ4Yl9uP'
+    
 ADMINS = (
     ('Sebastien Métrot', 'seb@yasound.com'),
     ('Jerome Blondon', 'jerome@yasound.com'),
