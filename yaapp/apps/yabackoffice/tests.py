@@ -33,6 +33,22 @@ class TestRadioDeleted(TestCase):
         r = c.post(reverse('yabackoffice.views.radio_remove_songs', args=[1]))
         self.assertEquals(r.status_code, 200)
         
+
+class TestMetrics(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        
+    def test_light_metrics(self):
+        res = self.client.get(reverse('light_metrics'))
+        self.assertContains(res, '"user_count": 1')
+        
+        user = User(email='toto@yasound.com', username='toto')
+        user.save()
+        
+        res = self.client.get(reverse('light_metrics'))
+        self.assertContains(res, '"user_count": 2')
         
         
         
