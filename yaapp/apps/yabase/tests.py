@@ -171,13 +171,17 @@ class TestModels(TestCase):
         radio2 = Radio()
         radio2.save()
         atomic_inc(radio2, 'overall_listening_time', 3000)
+
+        self.assertEquals(radio.overall_listening_time, 1000)
+        self.assertEquals(radio2.overall_listening_time, 3000)
         
         self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 1000)
         self.assertEquals(Radio.objects.get(id=radio2.id).overall_listening_time, 3000)
        
         atomic_inc(radio, 'overall_listening_time', -1000)
+        self.assertEquals(radio.overall_listening_time, 0)
+        
         self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 0)
-
         self.assertRaises(FieldDoesNotExist, atomic_inc, radio, 'overall_listening_time1', -1000)
             
    

@@ -32,6 +32,8 @@ def atomic_inc(instance, field, value):
     new_value = F(field)+value
     kwargs = {field:new_value}
     instance.__class__.objects.filter(id=instance.id).update(**kwargs)
+    new_value = instance.__class__.objects.filter(id=instance.id).values_list(field, flat=True)[0]
+    setattr(instance, field, new_value)
     
 def queryset_iterator(queryset, chunksize=1000):
     """
