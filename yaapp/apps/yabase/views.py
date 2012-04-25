@@ -833,9 +833,6 @@ def status(request):
 
 @check_api_key(methods=['PUT', 'DELETE'])
 def delete_song_instance(request, song_instance_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-    
     song = get_object_or_404(SongInstance, pk=song_instance_id)
     
     if request.user != song.playlist.radio.creator:
