@@ -11,7 +11,6 @@ from taggit.managers import TaggableManager
 from yaref.models import YasoundSong
 from yareport.task import task_report_song
 import datetime
-import django.dispatch
 import django.db.models.options as options
 import logging
 import random
@@ -21,11 +20,10 @@ import uuid
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-from yabase import utils as yabase_utils
 import signals as yabase_signals
 from django.core.cache import cache
 import json
-
+from yacore.database import atomic_inc
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -680,7 +678,7 @@ class Radio(models.Model):
             radio_user.listening = True
             radio_user.save()
         else:
-            yabase_utils.atomic_inc(self, 'anonymous_audience', 1)
+            atomic_inc(self, 'anonymous_audience', 1)
         
         audience = self.audience_total
         if audience > self.audience_peak:
@@ -689,7 +687,7 @@ class Radio(models.Model):
             self.current_audience_peak = audience
         self.save()
         
-        yabase_utils.atomic_inc(self, 'current_connections', 1)
+        atomic_inc(self, 'current_connections', 1)
             
     def user_stopped_listening(self, user, listening_duration):
         if not user.is_anonymous():
@@ -697,12 +695,12 @@ class Radio(models.Model):
             radio_user.listening = False
             radio_user.save()
         else:
-            yabase_utils.atomic_inc(self, 'anonymous_audience', -1)
+            atomic_inc(self, 'anonymous_audience', -1)
             if self.anonymous_audience < 0:
                 self.anonymous_audience = 0
                 self.save()
         
-        yabase_utils.atomic_inc(self, 'overall_listening_time', listening_duration)
+        atomic_inc(self, 'overall_listening_time', listening_duration)
         yabase_signals.user_stopped_listening.send(sender=self, radio=self, user=self, duration=listening_duration)
         
     def user_connection(self, user):

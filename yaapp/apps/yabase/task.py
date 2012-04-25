@@ -3,7 +3,7 @@ from celery.task import task
 from django.db import transaction
 from shutil import rmtree
 from struct import unpack_from
-from utils import flush_transaction
+from yacore.database import flush_transaction
 from yabase.models import SongMetadata, SongInstance, update_leaderboard
 from yaref.models import YasoundSong
 from yasearch.utils import get_simplified_name

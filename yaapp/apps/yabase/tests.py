@@ -18,7 +18,7 @@ import import_utils
 import os
 import settings as yabase_settings
 import simplejson as json
-import utils as yabase_utils
+from yacore.database import atomic_inc
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -166,19 +166,19 @@ class TestModels(TestCase):
    
     def test_atomic_inc(self):
         radio = self.radio
-        yabase_utils.atomic_inc(radio, 'overall_listening_time', 1000)
+        atomic_inc(radio, 'overall_listening_time', 1000)
 
         radio2 = Radio()
         radio2.save()
-        yabase_utils.atomic_inc(radio2, 'overall_listening_time', 3000)
+        atomic_inc(radio2, 'overall_listening_time', 3000)
         
         self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 1000)
         self.assertEquals(Radio.objects.get(id=radio2.id).overall_listening_time, 3000)
        
-        yabase_utils.atomic_inc(radio, 'overall_listening_time', -1000)
+        atomic_inc(radio, 'overall_listening_time', -1000)
         self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 0)
 
-        self.assertRaises(FieldDoesNotExist,yabase_utils.atomic_inc, radio, 'overall_listening_time1', -1000)
+        self.assertRaises(FieldDoesNotExist, atomic_inc, radio, 'overall_listening_time1', -1000)
             
    
 class TestNextSong(TestCase):

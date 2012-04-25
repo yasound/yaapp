@@ -3,7 +3,7 @@ from optparse import make_option
 from yabase import task
 from yabase.models import Playlist, Radio, SongMetadata
 from yaref.models import YasoundSong
-from yaref.utils import queryset_iterator
+from yacore.database import queryset_iterator
 import logging
 
 from yabase.models import Radio
