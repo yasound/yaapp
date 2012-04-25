@@ -77,7 +77,7 @@ from yaref.models import YasoundSong, YasoundArtist, YasoundAlbum, YasoundGenre,
 from yasearch.models import build_mongodb_index
 from yaref.utils import convert_filename_to_filepath
 from yasearch.utils import get_simplified_name
-from utils import flush_transaction
+from yacore.database import flush_transaction
 import datetime
 import hashlib
 import logging

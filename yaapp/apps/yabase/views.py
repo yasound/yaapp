@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_http_methods
 from celery.result import AsyncResult
 from check_request import check_api_key_Authentication, check_http_method
 from django.conf import settings
@@ -26,6 +27,7 @@ import logging
 import os
 import settings as yabase_settings
 import uuid
+from yacore.decorators import check_api_key
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -185,20 +187,14 @@ def dislike_radio(request, radio_id):
     return HttpResponse(res)
 
 @csrf_exempt
+@check_api_key(methods=['POST'], login_required=True)
 def favorite_radio(request, radio_id):
-    if not request.user.is_authenticated():
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
         return HttpResponseNotFound()
 
-    radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.favorite = True
     radio_user.save()
     
@@ -208,20 +204,14 @@ def favorite_radio(request, radio_id):
     return HttpResponse(res)
 
 @csrf_exempt
+@check_api_key(methods=['POST'], login_required=True)
 def not_favorite_radio(request, radio_id):
-    if not request.user.is_authenticated():
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
         return HttpResponseNotFound()
 
-    radio_user, created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
     radio_user.favorite = False
     radio_user.save()
     
@@ -512,12 +502,8 @@ def get_current_song(request, radio_id):
     return HttpResponse(song_json)
 
 
+@check_api_key(methods=['GET',], login_required=False)
 def buy_link(request, radio_id):
-    check_api_key_Authentication(request)
-
-    if not check_http_method(request, ['get']):
-        return HttpResponse(status=405)
-    
     radio = get_object_or_404(Radio, id=radio_id)
     song_instance = radio.current_song
     if not song_instance:
@@ -845,11 +831,10 @@ def status(request):
     return HttpResponse('OK')
 
 
+@check_api_key(methods=['PUT', 'DELETE'])
 def delete_song_instance(request, song_instance_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
-    if not check_http_method(request, ['delete', 'put']):
-        return HttpResponse(status=405)
     
     song = get_object_or_404(SongInstance, pk=song_instance_id)
     

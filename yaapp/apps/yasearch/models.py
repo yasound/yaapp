@@ -1,15 +1,12 @@
-from django.db import models
 from django.contrib.auth.models import User
-#from django.conf import settings
-#from fuzzywuzzy import fuzz
 from yaref.models import YasoundSong
 from yabase.models import Radio
 from account.models import UserProfile
 import indexer
 import logging
 from time import time
-import utils as yasearch_utils
 import indexer as yasearch_indexer
+from yacore.database import queryset_iterator
 
 from django.core.cache import cache
 
@@ -51,7 +48,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
         if count > 0:
             start = time()
             if upsert:
-                for i, song in enumerate(yasearch_utils.queryset_iterator(songs)):
+                for i, song in enumerate(queryset_iterator(songs)):
                     song.build_fuzzy_index(upsert=True)
                     if i % 10000 == 0 and i != 0:
                         elapsed = time() - start
@@ -59,7 +56,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                         start = time()
             else:
                 bulk = indexer.begin_bulk_insert()
-                for i, song in enumerate(yasearch_utils.queryset_iterator(songs)):
+                for i, song in enumerate(queryset_iterator(songs)):
                     bulk.append(song.build_fuzzy_index(upsert=False, insert=False))
                     if i % 10000 == 0 and i != 0:
                         indexer.commit_bulk_insert_songs(bulk)
@@ -84,7 +81,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     if count > 0:
         start = time()
         if upsert:
-            for i, radio in enumerate(yasearch_utils.queryset_iterator(radios)):
+            for i, radio in enumerate(queryset_iterator(radios)):
                 radio.build_fuzzy_index(upsert=True)
                 if i % 10000 == 0 and i != 0:
                     elapsed = time() - start
@@ -92,7 +89,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                     start = time()
         else:
             bulk = indexer.begin_bulk_insert()
-            for i, radio in enumerate(yasearch_utils.queryset_iterator(radios)):
+            for i, radio in enumerate(queryset_iterator(radios)):
                 bulk.append(radio.build_fuzzy_index(upsert=False, insert=False))
                 if i % 10000 == 0 and i != 0:
                     indexer.commit_bulk_insert_radios(bulk)
@@ -122,7 +119,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     if count > 0:
         start = time()
         if upsert:
-            for i, user in enumerate(yasearch_utils.queryset_iterator(users)):
+            for i, user in enumerate(queryset_iterator(users)):
                 user.userprofile.build_fuzzy_index(upsert=True)
                 if i % 10000 == 0 and i != 0:
                     elapsed = time() - start
@@ -130,7 +127,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                     start = time()
         else:
             bulk = indexer.begin_bulk_insert()
-            for i, user in enumerate(yasearch_utils.queryset_iterator(users)):
+            for i, user in enumerate(queryset_iterator(users)):
                 bulk.append(user.userprofile.build_fuzzy_index(upsert=False, insert=False))
                 if i % 10000 == 0 and i != 0:
                     indexer.commit_bulk_insert_users(bulk)
