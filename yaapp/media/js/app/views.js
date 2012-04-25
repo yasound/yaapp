@@ -89,7 +89,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#tweet').hide();    
         } else {
             var twitterParams = { 
-                    url: encodeURIComponent(window.location), 
+                    url:  '' + window.location, 
                     text: this.generateTwitterText(),
                     hashtags: 'yasound'
                 };
