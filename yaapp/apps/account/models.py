@@ -483,8 +483,11 @@ class UserProfile(models.Model):
             
             try:
                 friends_response = graph.get('me/friends')
-            except GraphAPI.Error:
+            except GraphAPI.FacebookError:
                 logger.error('GraphAPI exception error')
+                return friend_count, yasound_friend_count
+            except GraphAPI.HTTPError:
+                logger.error('GraphAPI exception error (http)')
                 return friend_count, yasound_friend_count
             if not friends_response.has_key('data'):
                 logger.info('No friend data')
