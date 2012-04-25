@@ -1,7 +1,7 @@
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.utils.decorators import available_attrs
 from django.utils.functional import wraps
-from http import check_api_key_Authentication
+from http import check_api_key_Authentication, coerce_put_post
 import logging
 logger = logging.getLogger("yaapp.yacore")
 
@@ -27,6 +27,8 @@ def check_api_key(methods=['GET', 'POST', 'PUT', 'DELETE'], login_required=True)
                 
                 if not authorized:
                     return HttpResponse(status=401)
+            
+            coerce_put_post(request)                
             
             return func(request, *args, **kwargs)
         return wraps(func, assigned=available_attrs(func))(inner)
