@@ -466,10 +466,7 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     }, context_instance=RequestContext(request)) 
     
 @csrf_exempt
-@login_required
-def small_metrics(request):
-    if not request.user.is_superuser:
-        raise Http404
+def light_metrics(request):
     user_count = User.objects.all().count()
     response_dict = {
         'user_count': user_count
