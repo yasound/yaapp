@@ -171,6 +171,9 @@ urlpatterns = patterns('',
     
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
+    
+    #yamenu
+    (r'^app_menu/$', 'yamenu.views.menu_description'),
 )
 
 if settings.PRODUCTION_MODE:
