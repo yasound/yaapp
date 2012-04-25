@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_http_methods
 from celery.result import AsyncResult
 from check_request import check_api_key_Authentication, check_http_method
 from django.conf import settings
@@ -845,11 +846,10 @@ def status(request):
     return HttpResponse('OK')
 
 
+@require_http_methods(["PUT", "DELETE"])
 def delete_song_instance(request, song_instance_id):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
-    if not check_http_method(request, ['delete', 'put']):
-        return HttpResponse(status=405)
     
     song = get_object_or_404(SongInstance, pk=song_instance_id)
     
