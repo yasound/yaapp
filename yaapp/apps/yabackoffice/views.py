@@ -428,7 +428,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
     connected_user_count = RadioUser.objects.filter(connected=True).count()
-    
+    anonymous_user_count = Radio.objects.filter(anonymous_audience__gt=0).count()
     
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
@@ -445,6 +445,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "twitter_user_count": twitter_user_count,
         "yasound_user_count": yasound_user_count,
         "connected_user_count": connected_user_count,
+        "anonymous_user_count": anonymous_user_count,
     }, context_instance=RequestContext(request))  
 
 
