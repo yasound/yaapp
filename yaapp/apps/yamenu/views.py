@@ -15,8 +15,10 @@ def menu_description(request):
     elif menu == None:
         groups = []
         menu = mm.get_menu(language, groups)
-    sections = menu['sections']
+    if menu == None:
+        return Http404()
     
+    sections = menu['sections']
     if not sections:
         return Http404()
     
