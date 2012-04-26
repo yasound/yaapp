@@ -146,6 +146,7 @@ urlpatterns = patterns('',
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
     (r'^app/$', 'yabase.views.web_app'),
     url(r'^app/radio/(?P<radio_uuid>\S+)$', 'yabase.views.web_app', name='webapp_radio'),
+    url(r'^app/search/(?P<query>\S+)$', 'yabase.views.web_app', name='webapp_search'),
     
     
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
