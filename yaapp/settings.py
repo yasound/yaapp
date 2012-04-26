@@ -21,7 +21,7 @@ DJANGO_MODE = os.environ.get('DJANGO_MODE', False)
 PRODUCTION_MODE = ( DJANGO_MODE == 'production' )
 DEVELOPMENT_MODE = ( DJANGO_MODE == 'development' )
 LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
-TEST_MODE = 'test' in sys.argv
+TEST_MODE = 'test' in sys.argv or 'jenkins' in sys.argv
 USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
 if PRODUCTION_MODE or DEVELOPMENT_MODE:
@@ -328,6 +328,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.sitemaps',
     'django_extensions',
+    'django_jenkins',
     'extjs',
     'compress',
     'south',
@@ -702,5 +703,13 @@ else:
 ITUNES_BASE_URL="http://itunes.apple.com/search"
 TRADEDOUBLER_URL="http://clk.tradedoubler.com/click?p=23753&a=2007583&url="
 TRADEDOUBLER_ID="partnerId=2003"
+
+# test
+TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
+IGNORE_TESTS = (
+    # Apps to ignore. example : 'django.contrib.auth',
+    'django_extensions',
+)
+
 
 

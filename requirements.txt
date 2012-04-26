@@ -29,3 +29,5 @@ django-mobile
 django-bitfield
 django-simple-captcha
 django-transmeta
+django-jenkins
+django-ignoretests
