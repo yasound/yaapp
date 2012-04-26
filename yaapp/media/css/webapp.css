@@ -78,7 +78,9 @@ body {
 }
 
 #wall {
+	list-style: none;
 }
+
    
 .wall-event-message {
 	border-bottom: 1px solid #eeeeee;
