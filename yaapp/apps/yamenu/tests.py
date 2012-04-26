@@ -18,8 +18,8 @@ class TestMenus(TestCase):
     def setUp(self):
         mm = MenusManager()
         mm.clear()
-        self.menu_fr = {'sections': [{'name': 'Ma radio', 'entries': [{'image': '', 'type': 'my_radio', 'name': 'Ma Radio'}]}, {'name': 'Radios', 'entries': [{'image': '', 'type': 'friends', 'name': 'Mes amis'}, {'params': {'url': '/api/v1/favorite_radio'}, 'image': '', 'type': 'radio_list', 'name': 'Mes favoris'}, {'params': {'url': '/api/v1/selected_radio'}, 'image': '', 'type': 'radio_list', 'name': 'Sélection'}, {'params': {'url': '/api/v1/top_radio'}, 'image': '', 'type': 'radio_list', 'name': 'Top'}, {'image': '', 'type': 'search_radio', 'name': 'Recherche'}]}, {'name': 'Moi', 'entries': [{'image': '', 'type': 'notifications', 'name': 'Mes notifications'}, {'image': '', 'type': 'stats', 'name': 'Mes statistiques'}, {'image': '', 'type': 'programming', 'name': 'Ma programmation'}, {'image': '', 'type': 'settings', 'name': 'Paramètres'}]}, {'name': 'Divers', 'entries': [{'params': {'url': 'legal/eula.html'}, 'image': '', 'type': 'web_page', 'name': u"Conditions d'utilisation"}, {'image': '', 'type': 'logout', 'name': 'Se déconnecter'}]}], 'name': 'default', 'language': 'fr'}
-        self.menu_en = {'sections': [{'name': 'My radio', 'entries': [{'image': '', 'type': 'my_radio', 'name': 'My Radio'}]}, {'name': 'Radios', 'entries': [{'image': '', 'type': 'friends', 'name': 'My friends'}, {'type': 'radio_list', 'image': '', 'params': {'url': '/api/v1/favorite_radio'}, 'name': 'My favorites'}, {'type': 'radio_list', 'image': '', 'params': {'url': '/api/v1/selected_radio'}, 'name': 'Selection'}, {'type': 'radio_list', 'image': '', 'params': {'url': '/api/v1/top_radio'}, 'name': 'Top'}, {'image': '', 'type': 'search_radio', 'name': 'Search'}]}, {'name': 'Me', 'entries': [{'image': '', 'type': 'notifications', 'name': 'My notifications'}, {'image': '', 'type': 'stats', 'name': 'My stats'}, {'image': '', 'type': 'programming', 'name': 'Programming'}, {'image': '', 'type': 'settings', 'name': 'Settings'}]}, {'name': 'Miscellaneous', 'entries': [{'type': 'web_page', 'image': '', 'params': {'url': 'legal/eula.html'}, 'name': 'Terms of Use'}, {'image': '', 'type': 'logout', 'name': 'Log out'}]}], 'name': 'default', 'language': 'en'}
+        self.menu_fr = mm.default('fr')
+        self.menu_en = mm.default('en')
         
     def test_add_menu(self):
         """
@@ -49,10 +49,10 @@ class TestMenus(TestCase):
         """
         mm = MenusManager()
         self.assertEqual(mm.menus_count(), 0)
-        name = self.menu_fr['name']
+        groups = self.menu_fr['group_ids']
         language = self.menu_fr['language']
         mm.add_menu(self.menu_fr)
-        x = mm.get_menu(name, language)
+        x = mm.get_menu(language, groups)
         self.assertIsNotNone(x)
         
     def test_update_menu(self):
@@ -61,10 +61,10 @@ class TestMenus(TestCase):
         """
         mm = MenusManager()
         self.assertEqual(mm.menus_count(), 0)
-        name = self.menu_fr['name']
+        groups = self.menu_fr['group_ids']
         language = self.menu_fr['language']
         mm.add_menu(self.menu_fr)
-        x = mm.get_menu(name, language)
+        x = mm.get_menu(language, groups)
         
         new_radio_name = 'La meilleure radio'
         x['sections'][0]['name'] = new_radio_name
@@ -74,7 +74,7 @@ class TestMenus(TestCase):
         
         mm.update_menu(x)
         
-        y = mm.get_menu(name, language)
+        y = mm.get_menu(language, groups)
         self.assertEqual(y['sections'][0]['name'], new_radio_name)
         self.assertEqual(y['sections'][1]['entries'][1]['params']['url'], new_favorite_url)
         
