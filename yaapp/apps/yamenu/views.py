@@ -12,7 +12,8 @@ def menu_description(request):
     if menu == None:
         language = 'en'
         menu = mm.get_menu(name, language)
-    sections = mm['sections']
+    sections = menu['sections']
+    
     if not sections:
         return Http404()
     
