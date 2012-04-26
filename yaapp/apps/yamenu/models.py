@@ -24,7 +24,13 @@ class MenusManager():
     Helper class to store and retrieve application menu descriptions
     """
     def __init__(self):
-        self.menus = settings.MONGO_DB.menus        
+        self.menus = settings.MONGO_DB.menus  
+        
+    def clear(self):
+        self.menus.drop()
+        
+    def menus_count(self):
+        return self.menus.count()      
     
     def add_menu_string(self, json_desc_string, overwrite=False):
         json_desc = json.loads(json_desc_string)
