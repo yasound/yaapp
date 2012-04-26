@@ -710,6 +710,6 @@ IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
     'django_extensions',
 )
-
+JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 
 
