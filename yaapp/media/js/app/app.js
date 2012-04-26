@@ -144,8 +144,7 @@ $(document).ready(function() {
                 });
                 
                 setInterval(function() {
-                    that.radioContext.wallEvents.page = 0;
-                    that.radioContext.wallEvents.fetch();
+                    that.radioContext.wallEvents.fetchFirst();
                 }, 10000);
                 
             }

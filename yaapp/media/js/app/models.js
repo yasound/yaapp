@@ -74,7 +74,8 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     
     parse: function(response) {
         var results = response.objects;
-        this.totalPage = response.meta.total_count; 
+        this.totalCount = response.meta.total_count;
+        this.totalPages = this.totalCount / this.perPage;
         return results;
     },
     setRadio: function(radio) {
@@ -95,6 +96,20 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     },
     comparator: function(wallEvent) {
         return wallEvent.get("id");
+    },
+    
+    fetchFirst: function() {
+        var savedPage = this.page;
+        this.page = 0;
+        var that = this;
+        this.fetch({
+            success: function() {
+                that.page = savedPage;
+            },
+            error: function() {
+                that.page = savedPage;
+            }
+        })
     }
 
 });

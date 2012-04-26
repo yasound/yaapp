@@ -321,7 +321,14 @@ Yasound.Views.Pagination = Backbone.View.extend({
     },
 
     render: function() {
-        this.$el.html(ich.paginationTemplate(this.collection.info()));
+        var info = this.collection.info();
+        var page = info.page;
+        var totalPages = info.totalPages;
+        if (page < totalPages) {
+            this.$el.html(ich.paginationTemplate());
+        } else {
+            this.$el.html('');
+        }
     },
 
     updateSortBy: function(e) {
