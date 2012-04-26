@@ -112,7 +112,6 @@ $(document).ready(function() {
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                 });
             }
-            
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
         }

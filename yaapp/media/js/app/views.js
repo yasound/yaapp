@@ -565,6 +565,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         });
 
         if (this.wallEventsView) {
+            this.wallEventsView.clear();
             this.wallEventsView.close();
         }
         this.wallEventsView = new Yasound.Views.PaginatedWallEvents({
