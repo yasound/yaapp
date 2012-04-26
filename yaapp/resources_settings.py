@@ -70,6 +70,7 @@ COMPRESS_JS = {
             'js/backbone-min.js',
             'js/backbone-tastypie.js',
             'js/backbone.paginator.js',
+            'bootstrap/js/bootstrap.min.js',
             'js/pubsub.js',
             'js/Namespace.js',
             'js/app/models.js',

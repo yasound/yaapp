@@ -1,6 +1,7 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
-
+    $('.dropdown-toggle').dropdown();
+    
     Backbone.View.prototype.close = function(){
         this.remove();
         this.unbind();
@@ -72,6 +73,8 @@ $(document).ready(function() {
                     Yasound.App.SoundConfig.url = stream_url;
                     Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
                 };
+                
+                this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.userAuthenticated = g_authenticated;
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
@@ -115,8 +118,7 @@ $(document).ready(function() {
         }
     });
 
-    var router = new Yasound.App.Workspace();
-
+    Yasound.App.Router = new Yasound.App.Workspace();
     soundManager.onready(function() {
         Backbone.history.start({
             pushState : true,

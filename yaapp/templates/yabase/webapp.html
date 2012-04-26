@@ -14,7 +14,7 @@
     <script type="text/javascript">
         moment.lang('{{request.LANGUAGE_CODE}}');
 
-       var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};   
+       var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};
     </script>
 
 
@@ -63,7 +63,27 @@
         <div class="container-fluid">
             <a href='/' class='brand'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
           <div class="nav-collapse">
-            <p class="navbar-text pull-right">{% if request.user.is_authenticated %}{% trans "Logged in as" %} <a href="#">{{ request.user.userprofile }}</a>{% else %}{% trans "Not logged" %}{% endif %}</p>
+            <div class="btn-group pull-right" id='user-menu'>
+                {% if request.user.is_authenticated %}
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-user"></i>
+                            {{ request.user.userprofile }} 
+                        <span class="caret"></span> </a>
+						<ul class="dropdown-menu">
+							<li><a href="{% url webapp_radio user_uuid %}" id='btn-my-radio' yasound:uuid='{{ user_uuid }}'>{% trans "My radio" %}</a></li>
+							<li><a href="#">{% trans "My favorites" %}</a></li>
+							<li><a href="#">{% trans "My friends" %}</a></li>
+	                        <li class="divider"></li>
+    						<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
+						</ul>
+                {% else %}
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-user"></i>
+                            {% trans "Not logged" %}
+                        <span class="caret"></span> </a>
+                {% endif %}                
+            </div>
+                        
           </div><!--/.nav-collapse -->
             <div id='webapp-player'>
             </div>

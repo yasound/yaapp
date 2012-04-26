@@ -1,5 +1,18 @@
 Namespace('Yasound.Views');
 
+Yasound.Views.UserMenu = Backbone.View.extend({
+    el: '#user-menu',
+    events: {
+        'click #btn-my-radio': 'onMyRadio',
+    },
+    onMyRadio: function(e) {
+        e.preventDefault();
+        var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
+        console.log(uuid);
+        Yasound.App.Router.navigate("radio/" + uuid, {trigger: true});
+    }
+});
+
 Yasound.Views.WallInput = Backbone.View.extend({
     tagName: 'div',
     events: {
@@ -494,25 +507,34 @@ Yasound.Views.RadioUser = Backbone.View.extend({
 Yasound.Views.RadioPage = Backbone.View.extend({
     radioUsers: new Yasound.Data.Models.RadioUsers({}),
     wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
+    intervalId: undefined,
+    wallPosted: undefined,
 
     initialize: function() {
         this.model.bind('change', this.render, this);
-        var that = this;
-        this.intervalId = setInterval(function() {
-            that.wallEvents.fetchFirst();
-        }, 10000);
+    },
+    
+    reset: function() {
+        if (this.wallPosted) {
+            $.unsubscribe('/wall/posted', this.wallPosted);
+        }
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
+    },
 
+    render: function() {
+        this.reset();
+        
         var that = this;
         var wallPosted = function() {
             that.wallEvents.page = 0;
             that.wallEvents.fetch();
         }
-
-        $.unsubscribe('/wall/posted', wallPosted);
+        this.wallPosted = wallPosted;
         $.subscribe("/wall/posted", wallPosted);
-    },
-
-    render: function() {
+        
+        
         $(this.el).html(ich.radioPageTemplate());
 
         if (this.wallInputView) {
@@ -569,5 +591,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.radioUsersView.render();
         this.wallEventsView.render();
         this.paginationView.render();
+        
+        this.intervalId = setInterval(function() {
+            that.wallEvents.fetchFirst();
+        }, 10000);
+        
     }
 });
