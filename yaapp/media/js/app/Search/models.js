@@ -8,7 +8,7 @@ Yasound.Data.Models.RadioSearchResults = Backbone.Paginator.requestPager.extend(
     perPage: 25,
     page:0,
     lastId: 0,
-    queryAttribute: 'search'
+    queryAttribute: 'search',
     
     parse: function(response) {
         var results = response.objects;

@@ -96,6 +96,20 @@ $(document).ready(function() {
                 this.currentView.close();
                 this.currentView = undefined;
             }
+            
+            if (!this.currentView) {
+                var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
+                radioSearchResults.setQuery(query);
+                
+                this.currentView = new Yasound.Views.SearchPage({
+                    tagName: 'div',
+                    className: 'row-fluid',
+                    model: radioSearchResults
+                });
+                $('#webapp-content').prepend(this.currentView.el);
+                radioSearchResults.fetch();
+            }
+            
         },
 
         radio: function(uuid) {

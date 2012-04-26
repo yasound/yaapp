@@ -31,6 +31,9 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     initialize: function() {
         this.model.bind('change', this.render, this);
     },
+    onClose: function() {
+        this.model.unbind('change', this.render);
+    },
     render: function() {
         $(this.el).hide().html(ich.radioCellTemplateMessage(data)).fadeIn(200);
         return this;
@@ -44,6 +47,10 @@ Yasound.Views.SearchResults = Backbone.View.extend({
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
         this.views = [];
+    },
+    onClose: function() {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
     },
 
     addAll: function() {
@@ -95,5 +102,26 @@ Yasound.Views.SearchResults = Backbone.View.extend({
             $(this.el).append(view.render().el);
         }
         this.views.push(view);
+    }
+});
+
+Yasound.Views.SearchPage = Backbone.View.extend({
+    name: 'searchpage',
+    initialize: function() {
+        _.bindAll(this, 'render');
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function() {
+        this.model.unbind('change', this.render);
+    },
+
+    reset: function() {
+    },
+
+    render: function() {
+        this.reset();
+        $(this.el).html(ich.searchPageTemplate());
+        return this;
     }
 });

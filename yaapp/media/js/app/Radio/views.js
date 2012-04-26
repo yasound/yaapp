@@ -636,6 +636,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.intervalId = setInterval(function() {
             that.wallEvents.fetchFirst();
         }, 10000);
-
+        
+        return this;
     }
 });
