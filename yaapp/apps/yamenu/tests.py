@@ -53,7 +53,7 @@ class TestMenus(TestCase):
         language = self.menu_fr['language']
         mm.add_menu(self.menu_fr)
         x = mm.get_menu(name, language)
-        self.assertEqual(x != None, True)
+        self.assertIsNotNone(x)
         
     def test_update_menu(self):
         """
@@ -93,14 +93,14 @@ class TestMenus(TestCase):
         api_key = ApiKey.objects.get(user=user)
         c = Client()
         response = c.post('/api/v1/app_menu/')
-        self.assertEqual(response.status_code == 200, False)
+        self.assertNotEquals(response.status_code, 200)
         response = c.get('/api/v1/app_menu/')
-        self.assertEqual(response.status_code == 200, False)
+        self.assertNotEquals(response.status_code, 200)
         
         response = c.get('/api/v1/app_menu/', {'username':user.username, 'api_key':api_key.key})
         self.assertEqual(response.status_code, 200)
         
         menu_desc = json.loads(response.content)
-        self.assertEqual(menu_desc != None, True)
+        self.assertIsNotNone(menu_desc)
         
         
