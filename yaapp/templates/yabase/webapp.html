@@ -48,6 +48,10 @@
    <script type='text/html' id='paginationTemplate'>
      {% include "yabase/app/pagination.mustache" %}
    </script>
+
+   <script type='text/html' id='radioPageTemplate'>
+     {% include "yabase/app/radioPage.mustache" %}
+   </script>
    
 {% endif %}
 
@@ -68,22 +72,7 @@
     </div>
     
 <div class='container-fluid'>
-    <div class='row-fluid'>
-        <div class='span4'>
-            <div id='webapp-radio'>
-            </div>
-            <div class='well'>
-            <ul id='webapp-radio-users' class='thumbnails'></ul>
-            </div>
-        </div>
-        <div class='span8'>
-            <div id='webapp-wall-input'>
-            </div>
-			<div>
-			<ul id='wall'></ul>
-			</div>
-			<div id='pagination'></div>
-        </div>
+    <div id='webapp-content' class='row-fluid'>
     </div>
     <hr>
     <footer>

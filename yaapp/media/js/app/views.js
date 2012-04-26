@@ -1,5 +1,47 @@
 Namespace('Yasound.Views');
 
+Yasound.Views.WallInput = Backbone.View.extend({
+    tagName: 'div',
+    events: {
+        'click #submit': 'submit',
+        'click #refresh': 'refreshWall'
+    },
+
+    submit: function(e) {
+        var $button = $('.btn', this.el);
+        $button.attr('disabled', 'disable')
+        if (this.radioUUID) {
+            var $input = $('input[type=text]', this.el)
+            var message = $input.val();
+            var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
+            $.post(url, {
+                message: message,
+                success: function() {
+                    $input.val('');
+                    $button.removeAttr('disabled');
+                    $.publish('/wall/posted');
+                }
+            });
+        } else {
+            alert('no radio!')
+        }
+        e.preventDefault();
+    },
+
+    refreshWall: function(e) {
+        $.publish('/wall/posted');
+        e.preventDefault();
+    },
+
+    initialize: function() {
+    },
+
+    render: function() {
+        $(this.el).html(ich.wallInputTemplate());
+        return this;
+    }
+});
+
 Yasound.Views.Radio = Backbone.View.extend({
     tagName: 'div',
     className: 'radio',
@@ -269,7 +311,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
             // do not insert duplicated content
             return;
         }
-        
+
         var view = new Yasound.Views.WallEvent({
             model: wallEvent
         });
@@ -281,19 +323,19 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         if (lastView) {
             var lastId = lastView.model.id;
         }
-        if (currentId >= lastId) { 
+        if (currentId >= lastId) {
             $(this.el).prepend(view.render().el);
-            // in case of prepend, it means that the wall has been refreshed with new item
-            // so we remove the last one in order to avoid infinite addition to the wall
+            // in case of prepend, it means that the wall has been refreshed
+            // with new item
+            // so we remove the last one in order to avoid infinite addition to
+            // the wall
             if (this.views.length >= this.collection.perPage) {
                 this.views[0].close();
                 this.views.splice(0, 1)
             }
-        } 
-        else {
+        } else {
             $(this.el).append(view.render().el);
         }
-        
 
         this.views.push(view);
 
@@ -390,55 +432,12 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         data.formatted_start_date = date.format('LLLL');
 
         if (this.model.get('type') == 'M') {
-            //$(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
-            $(this.el).html(ich.wallEventTemplateMessage(data))
+            $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
         } else if (this.model.get('type') == 'S') {
             $(this.el).hide().html(ich.wallEventTemplateSong(data)).fadeIn(200);
         } else if (this.model.get('type') == 'L') {
             $(this.el).hide().html(ich.wallEventTemplateLike(data)).fadeIn(200);
         }
-        return this;
-    }
-});
-
-Yasound.Views.WallInput = Backbone.View.extend({
-    tagName: 'div',
-    events: {
-        'click #submit': 'submit',
-        'click #refresh': 'refreshWall'
-    },
-
-    submit: function(e) {
-        var $button = $('.btn', this.el);
-        $button.attr('disabled', 'disable')
-        if (this.radioUUID) {
-            var $input = $('input[type=text]', this.el)
-            var message = $input.val();
-            var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
-            $.post(url, {
-                message: message,
-                success: function() {
-                    $input.val('');
-                    $button.removeAttr('disabled');
-                    $.publish('/wall/posted');
-                }
-            });
-        } else {
-            alert('no radio!')
-        }
-        e.preventDefault();
-    },
-    
-    refreshWall: function(e) {
-        $.publish('/wall/posted');
-        e.preventDefault();
-    },
-    
-    initialize: function() {
-    },
-
-    render: function() {
-        $(this.el).html(ich.wallInputTemplate());
         return this;
     }
 });
@@ -489,5 +488,86 @@ Yasound.Views.RadioUser = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.radioUserTemplate(data)).fadeIn(200);
         return this;
+    }
+});
+
+Yasound.Views.RadioPage = Backbone.View.extend({
+    radioUsers: new Yasound.Data.Models.RadioUsers({}),
+    wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
+
+    initialize: function() {
+        this.model.bind('change', this.render, this);
+        var that = this;
+        this.intervalId = setInterval(function() {
+            that.wallEvents.fetchFirst();
+        }, 10000);
+
+        var that = this;
+        var wallPosted = function() {
+            that.wallEvents.page = 0;
+            that.wallEvents.fetch();
+        }
+
+        $.unsubscribe('/wall/posted', wallPosted);
+        $.subscribe("/wall/posted", wallPosted);
+    },
+
+    render: function() {
+        $(this.el).html(ich.radioPageTemplate());
+
+        if (this.wallInputView) {
+            this.wallInputView.close();
+        }
+        this.wallInputView = new Yasound.Views.WallInput({
+            model: this.model,
+            el: $('#webapp-wall-input', this.el)
+        });
+        this.wallInputView.radioUUID = this.model.get('uuid');
+
+        if (this.radioView) {
+            this.radioView.close()
+        }
+        this.radioView = new Yasound.Views.Radio({
+            model: this.model,
+            el: $('#webapp-radio', this.el)
+        })
+
+        if (this.radioUsersView) {
+            this.radioUsersView.close();
+        }
+
+        this.radioUsers.radio = this.model;
+        this.radioUsersView = new Yasound.Views.RadioUsers({
+            collection: this.radioUsers,
+            el: $('#webapp-radio-users', this.el)
+        });
+
+        if (this.wallEventsView) {
+            this.wallEventsView.close();
+        }
+        this.wallEventsView = new Yasound.Views.PaginatedWallEvents({
+            collection: this.wallEvents,
+            el: $('#wall', this.el)
+        });
+        this.wallEvents.setRadio(this.model);
+
+        if (this.paginationView) {
+            this.paginationView.close();
+        }
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.wallEvents,
+            el: $('#pagination', this.el)
+        });
+
+        if (this.model.get('id')) {
+            this.wallEvents.fetch();
+            this.radioUsers.fetch();
+        }
+
+        this.wallInputView.render();
+        this.radioView.render();
+        this.radioUsersView.render();
+        this.wallEventsView.render();
+        this.paginationView.render();
     }
 });

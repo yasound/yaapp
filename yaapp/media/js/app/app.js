@@ -79,26 +79,17 @@ $(document).ready(function() {
         
         radio : function(uuid) {
             this.buildCommonContext();
-            
             if (!this.radioContext) {
                 var that = this;
                 this.radioContext = {
-                    radioView : new Yasound.Views.Radio({
-                        model : this.currentRadio,
-                        el : $('#webapp-radio')
-                    }),
-                    wallInputView : new Yasound.Views.WallInput({
-                        model : this.currentRadio,
-                        el : $('#webapp-wall-input')
-                    }),
+                    radioPage: new Yasound.Views.RadioPage({
+                        el: $('#webapp-content'),
+                        model: this.currentRadio,
+                        userAuthenticated: this.commonContext.userAuthenticated
+                    }),                  
                     currentSong : new Yasound.Data.Models.CurrentSong()
                 };
                 
-                this.radioContext.wallPosted = function() {
-                    that.radioContext.wallEvents.page = 0;
-                    that.radioContext.wallEvents.fetch();
-                }
-
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model : this.radioContext.currentSong,
                     radio: this.currentRadio,
@@ -111,55 +102,16 @@ $(document).ready(function() {
                 }, 10000);
 
                 if (this.commonContext.userAuthenticated) {
-                    this.radioContext.wallEvents = new Yasound.Data.Models.PaginatedWallEvents();
-                    this.radioContext.wallEventsView = new Yasound.Views.PaginatedWallEvents({
-                        collection : this.radioContext.wallEvents,
-                        el : $('#wall')
-                    });
-                    this.radioContext.paginationView = new Yasound.Views.Pagination({
-                        collection : this.radioContext.wallEvents,
-                        el : $('#pagination')
-                    });
-
-                    this.radioContext.radioUsers = new Yasound.Data.Models.RadioUsers();
-                    this.radioContext.radioUsersView = new Yasound.Views.RadioUsers({
-                        collection : this.radioContext.radioUsers,
-                        el : $('#webapp-radio-users')
-                    })
-                    
-                    this.currentRadio.on('change:uuid', function(model, uuid) {
-                        that.radioContext.wallInputView.radioUUID = uuid;
-                        that.radioContext.wallInputView.render();
-                    })
-
-                    this.currentRadio.on('change:id', function(model, id) {
-                        that.radioContext.wallEvents.setRadio(that.currentRadio).fetch();
-                        that.radioContext.radioUsers.setRadio(that.currentRadio).fetch();
-                    })
                 }
                 this.currentRadio.on('change:id', function(model, id) {
                     that.radioContext.currentSong.set('radioId', id);
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                 });
-                
-                setInterval(function() {
-                    that.radioContext.wallEvents.fetchFirst();
-                }, 10000);
-                
             }
             
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
-
-            if (this.commonContext.userAuthenticated) {
-                $.unsubscribe('/wall/posted', this.radioContext.wallPosted);
-                $.subscribe("/wall/posted", this.radioContext.wallPosted);
-
-                this.radioContext.wallEventsView.clear();
-                this.radioContext.wallInputView.render();
-                this.radioContext.paginationView.render();
-            }
         }
     });
 
