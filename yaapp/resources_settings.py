@@ -75,6 +75,7 @@ COMPRESS_JS = {
             'js/Namespace.js',
             'js/app/Radio/models.js',
             'js/app/Radio/views.js',
+            'js/app/Search/views.js',
             'js/app/app.js',
         ]
     }

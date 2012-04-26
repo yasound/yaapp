@@ -33,12 +33,14 @@ $(document).ready(function() {
     Yasound.App.Workspace = Backbone.Router.extend({
         routes : {
             "" : "index",
-            "radio/:uuid" : "radio"
+            "radio/:uuid" : "radio",
+            "search/:query": "search"
         },
 
         currentRadio : new Yasound.Data.Models.Radio({
             uuid : 0
         }),
+        currentView: undefined,
 
         setCurrentRadioUUID : function(uuid) {
             this.currentRadio.disconnect();
@@ -60,8 +62,6 @@ $(document).ready(function() {
             $('#wall').html('Help');
         },
 
-        search : function(query, page) {
-        },
 
         buildCommonContext: function() {
             if (!this.commonContext) {
@@ -75,21 +75,27 @@ $(document).ready(function() {
                 };
                 
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
+                this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.userAuthenticated = g_authenticated;
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
         },
+        
+        search : function(query) {
+            this.buildCommonContext();
+            if (this.currentView && this.currentView != this.searchContext ) {
+                this.currentView.reset();
+                this.currentView.close();
+                this.currentView = undefined;
+            }
+        },
+        
         
         radio : function(uuid) {
             this.buildCommonContext();
             if (!this.radioContext) {
                 var that = this;
                 this.radioContext = {
-                    radioPage: new Yasound.Views.RadioPage({
-                        el: $('#webapp-content'),
-                        model: this.currentRadio,
-                        userAuthenticated: this.commonContext.userAuthenticated
-                    }),                  
                     currentSong : new Yasound.Data.Models.CurrentSong()
                 };
                 
@@ -112,6 +118,24 @@ $(document).ready(function() {
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                 });
             }
+            
+            if (this.currentView && this.currentView.name != 'radiopage') {
+                this.currentView.reset();
+                this.currentView.close();
+                this.currentView = undefined;
+            }
+            
+            if (!this.currentView) {
+                this.currentView = new Yasound.Views.RadioPage({
+                    tagName: 'div',
+                    className: 'row-fluid',
+                    model: this.currentRadio,
+                    userAuthenticated: this.commonContext.userAuthenticated
+                });
+                $('#webapp-content').prepend(this.currentView.el);
+                this.currentView.render();
+            }
+
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
         }
