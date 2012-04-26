@@ -76,6 +76,9 @@ body {
 #webapp-wall-input {
     margin-top: 24px;
 }
+
+#wall {
+}
    
 .wall-event-message {
 	border-bottom: 1px solid #eeeeee;

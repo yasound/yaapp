@@ -95,6 +95,7 @@ $(document).ready(function() {
                 };
                 
                 this.radioContext.wallPosted = function() {
+                    that.radioContext.wallEvents.page = 0;
                     that.radioContext.wallEvents.fetch();
                 }
 
@@ -110,10 +111,14 @@ $(document).ready(function() {
                 }, 10000);
 
                 if (this.commonContext.userAuthenticated) {
-                    this.radioContext.wallEvents = new Yasound.Data.Models.WallEvents();
-                    this.radioContext.wallEventsView = new Yasound.Views.WallEvents({
+                    this.radioContext.wallEvents = new Yasound.Data.Models.PaginatedWallEvents();
+                    this.radioContext.wallEventsView = new Yasound.Views.PaginatedWallEvents({
                         collection : this.radioContext.wallEvents,
                         el : $('#wall')
+                    });
+                    this.radioContext.paginationView = new Yasound.Views.Pagination({
+                        collection : this.radioContext.wallEvents,
+                        el : $('#pagination')
                     });
 
                     this.radioContext.radioUsers = new Yasound.Data.Models.RadioUsers();
@@ -131,17 +136,18 @@ $(document).ready(function() {
                         that.radioContext.wallEvents.setRadio(that.currentRadio).fetch();
                         that.radioContext.radioUsers.setRadio(that.currentRadio).fetch();
                     })
-
-                    setInterval(function() {
-                        that.radioContext.wallEvents.fetch();
-                    }, 10000);
-
                 }
                 this.currentRadio.on('change:id', function(model, id) {
                     that.radioContext.currentSong.set('radioId', id);
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                 });
+                
+                setInterval(function() {
+                    that.radioContext.wallEvents.page = 0;
+                    that.radioContext.wallEvents.fetch();
+                }, 10000);
+                
             }
             
             this.radioContext.radioUUID = 0;
@@ -153,6 +159,7 @@ $(document).ready(function() {
 
                 this.radioContext.wallEventsView.clear();
                 this.radioContext.wallInputView.render();
+                this.radioContext.paginationView.render();
             }
         }
     });

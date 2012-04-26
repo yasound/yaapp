@@ -69,6 +69,7 @@ COMPRESS_JS = {
             'js/moment-lang-all.min.js',
             'js/backbone-min.js',
             'js/backbone-tastypie.js',
+            'js/backbone.paginator.js',
             'js/pubsub.js',
             'js/Namespace.js',
             'js/app/models.js',

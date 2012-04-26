@@ -45,6 +45,10 @@
       {% include "yabase/app/radioUser.mustache" %}
    </script>
    
+   <script type='text/html' id='paginationTemplate'>
+     {% include "yabase/app/pagination.mustache" %}
+   </script>
+   
 {% endif %}
 
 {% endblock %}
@@ -77,6 +81,7 @@
             </div>
 			<div id='wall'>
 			</div>
+			<div id='pagination'></div>
         </div>
     </div>
     <hr>

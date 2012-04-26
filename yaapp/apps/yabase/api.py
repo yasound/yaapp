@@ -18,6 +18,7 @@ from yaref.models import YasoundSong
 from yasearch.models import search_radio, search_radio_by_user, \
     search_radio_by_song
 import datetime
+from tastypie.paginator import Paginator
 import json
 import settings as yabase_settings
 
@@ -438,7 +439,8 @@ class RadioWallEventResource(ModelResource):
         filtering = {
             'radio': 'exact',
             'id': 'lt,gt',
-            }
+        }
+        paginator_class = Paginator
 
     def dispatch(self, request_type, request, **kwargs):
         radio = kwargs.pop('radio')

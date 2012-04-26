@@ -1,21 +1,21 @@
 Namespace('Yasound.Views');
 
 Yasound.Views.Radio = Backbone.View.extend({
-    tagName : 'div',
-    className : 'radio',
-    events : {
+    tagName: 'div',
+    className: 'radio',
+    events: {
         "click #btn-favorite": "addToFavorite",
         "click #btn-unfavorite": "removeFromFavorite"
     },
 
-    initialize : function() {
+    initialize: function() {
         this.model.bind('change', this.render, this);
     },
 
     addToFavorite: function(e) {
         var url = '/api/v1/radio/' + this.model.get('id') + '/favorite/';
         $.post(url, {
-            success: function() { 
+            success: function() {
                 $('#btn-favorite', this.el).hide();
                 $('#btn-unfavorite', this.el).show();
                 $.publish('/radio/favorite');
@@ -23,11 +23,11 @@ Yasound.Views.Radio = Backbone.View.extend({
         });
         e.preventDefault();
     },
-    
+
     removeFromFavorite: function(e) {
         var url = '/api/v1/radio/' + this.model.get('id') + '/not_favorite/';
         $.post(url, {
-            success: function() { 
+            success: function() {
                 $('#btn-unfavorite', this.el).hide();
                 $('#btn-favorite', this.el).show();
                 $.publish('/radio/not_favorite');
@@ -35,8 +35,8 @@ Yasound.Views.Radio = Backbone.View.extend({
         });
         e.preventDefault();
     },
-    
-    render : function() {
+
+    render: function() {
         $(this.el).html(ich.radioTemplate(this.model.toJSON()));
         if (this.model.get('favorite')) {
             $('#btn-favorite', this.el).hide();
@@ -50,56 +50,56 @@ Yasound.Views.Radio = Backbone.View.extend({
 });
 
 Yasound.Views.CurrentSong = Backbone.View.extend({
-    tagName : 'div',
-    className : 'track',
-    volumeMouseDown : false,
+    tagName: 'div',
+    className: 'track',
+    volumeMouseDown: false,
 
-    events : {
-        "click #play" : "play",
-        "click #inc" : "inc",
-        "click #dec" : "dec",
-        "click #like" : "like",
-        "mousedown #volume-control" : "volumeControl",
-        "mouseup" : 'mouseUp',
-        "mousemove" : "mouseMove"
+    events: {
+        "click #play": "play",
+        "click #inc": "inc",
+        "click #dec": "dec",
+        "click #like": "like",
+        "mousedown #volume-control": "volumeControl",
+        "mouseup": 'mouseUp',
+        "mousemove": "mouseMove"
     },
 
-    initialize : function() {
+    initialize: function() {
         this.model.bind('change', this.render, this);
     },
-    
+
     generateTwitterText: function() {
         if (!this.radio) {
             return '';
         }
-        
+
         var share = gettext('I am listening to');
         share += ' ' + this.model.get('name') + ', ';
         share += gettext('by') + ' ' + this.model.get('artist') + ' ';
         share += gettext('on') + ' ' + this.radio.get('name');
         return share;
     },
-    
+
     generateFacebookText: function() {
         return this.generateTwitterText();
     },
-    
+
     generateSocialShare: function() {
         if (!this.radio) {
-            $('#tweet').hide();    
+            $('#tweet').hide();
         } else {
-            var twitterParams = { 
-                    url:  '' + window.location, 
-                    text: this.generateTwitterText(),
-                    hashtags: 'yasound'
-                };
-            $('#tweet', this.el).show(); 
+            var twitterParams = {
+                url: '' + window.location,
+                text: this.generateTwitterText(),
+                hashtags: 'yasound'
+            };
+            $('#tweet', this.el).show();
             $('#tweet', this.el).attr('href', "http://twitter.com/share?" + $.param(twitterParams));
             $('meta[name=description]').attr('description', this.generateFacebookText());
         }
     },
-    
-    render : function() {
+
+    render: function() {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         this.generateSocialShare();
 
@@ -112,7 +112,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         return this;
     },
 
-    play : function() {
+    play: function() {
         if (typeof Yasound.App.MySound === "undefined") {
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
@@ -125,7 +125,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    inc : function() {
+    inc: function() {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -138,7 +138,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    dec : function() {
+    dec: function() {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -151,7 +151,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    resizeVolumeBar : function(event) {
+    resizeVolumeBar: function(event) {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -169,26 +169,26 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         Yasound.App.MySound.setVolume(soundVolume);
     },
 
-    mouseUp : function(event) {
+    mouseUp: function(event) {
         if (this.volumeMouseDown) {
             $('body').css('cursor', 'auto');
             this.volumeMouseDown = false;
         }
     },
 
-    mouseMove : function(event) {
+    mouseMove: function(event) {
         if (!this.volumeMouseDown) {
             return;
         }
         this.resizeVolumeBar(event);
     },
 
-    volumeControl : function(event) {
+    volumeControl: function(event) {
         this.volumeMouseDown = true;
         this.resizeVolumeBar(event);
     },
 
-    like : function(event) {
+    like: function(event) {
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
@@ -196,7 +196,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 });
 
 Yasound.Views.WallEvents = Backbone.View.extend({
-    initialize : function() {
+    initialize: function() {
         _.bindAll(this, 'addOne', 'addAll');
 
         this.collection.bind('add', this.addOne);
@@ -204,20 +204,20 @@ Yasound.Views.WallEvents = Backbone.View.extend({
         this.views = [];
     },
 
-    addAll : function() {
+    addAll: function() {
         this.collection.each(this.addOne);
     },
 
-    clear : function() {
+    clear: function() {
         _.map(this.views, function(view) {
             view.close();
         })
         this.views = [];
     },
 
-    addOne : function(wallEvent) {
+    addOne: function(wallEvent) {
         var view = new Yasound.Views.WallEvent({
-            model : wallEvent
+            model: wallEvent
         });
 
         $(this.el).prepend(view.render().el);
@@ -231,22 +231,149 @@ Yasound.Views.WallEvents = Backbone.View.extend({
         view.bind('all', this.rethrow, this);
     },
 
-    rethrow : function() {
+    rethrow: function() {
         this.trigger.apply(this, arguments);
     }
 
 });
 
+Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'addOne', 'addAll');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+    },
+
+    addAll: function() {
+        this.collection.each(this.addOne);
+    },
+
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.close();
+        })
+        this.views = [];
+    },
+
+    addOne: function(wallEvent) {
+        var currentId = wallEvent.id;
+
+        var found = _.find(this.views, function(view) {
+            if (view.model.id == wallEvent.id) {
+                return true;
+            }
+        })
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+        
+        var view = new Yasound.Views.WallEvent({
+            model: wallEvent
+        });
+
+        var lastView = _.max(this.views, function(view) {
+            return view.model.get('id');
+        });
+        var lastId = 0;
+        if (lastView) {
+            var lastId = lastView.model.id;
+        }
+        if (currentId >= lastId) { 
+            $(this.el).prepend(view.render().el);
+            // in case of prepend, it means that the wall has been refreshed with new item
+            // so we remove the last one in order to avoid infinite addition to the wall
+            if (this.views.length >= this.collection.perPage) {
+                this.views[0].close();
+                this.views.splice(0, 1)
+            }
+        } 
+        else {
+            $(this.el).append(view.render().el);
+        }
+        
+
+        this.views.push(view);
+
+    }
+});
+
+Yasound.Views.Pagination = Backbone.View.extend({
+    events: {
+        'click a.servernext': 'nextResultPage',
+        'click a.serverprevious': 'previousResultPage',
+        'click a.orderUpdate': 'updateSortBy',
+        'click a.serverlast': 'gotoLast',
+        'click a.page': 'gotoPage',
+        'click a.serverfirst': 'gotoFirst',
+        'click a.serverpage': 'gotoPage',
+        'click .serverhowmany a': 'changeCount'
+
+    },
+
+    tagName: 'aside',
+
+    initialize: function() {
+        this.collection.on('reset', this.render, this);
+        this.collection.on('change', this.render, this);
+    },
+
+    render: function() {
+        this.$el.html(ich.paginationTemplate(this.collection.info()));
+    },
+
+    updateSortBy: function(e) {
+        e.preventDefault();
+        var currentSort = $('#sortByField').val();
+        this.collection.updateOrder(currentSort);
+    },
+
+    nextResultPage: function(e) {
+        e.preventDefault();
+        this.collection.requestNextPage();
+    },
+
+    previousResultPage: function(e) {
+        e.preventDefault();
+        this.collection.requestPreviousPage();
+    },
+
+    gotoFirst: function(e) {
+        e.preventDefault();
+        this.collection.goTo(this.collection.information.firstPage);
+    },
+
+    gotoLast: function(e) {
+        e.preventDefault();
+        this.collection.goTo(this.collection.information.lastPage);
+    },
+
+    gotoPage: function(e) {
+        e.preventDefault();
+        var page = $(e.target).text();
+        this.collection.goTo(page);
+    },
+
+    changeCount: function(e) {
+        e.preventDefault();
+        var per = $(e.target).text();
+        this.collection.howManyPer(per);
+    }
+
+});
+
 Yasound.Views.WallEvent = Backbone.View.extend({
-    tagName : 'li',
-    className : 'wall-event',
+    tagName: 'li',
+    className: 'wall-event',
 
-    events : {},
+    events: {},
 
-    initialize : function() {
+    initialize: function() {
         this.model.bind('change', this.render, this);
     },
-    render : function() {
+    render: function() {
         var data = this.model.toJSON();
         var timeZone = '+01:00';
         if (moment().isDST()) {
@@ -256,7 +383,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         data.formatted_start_date = date.format('LLLL');
 
         if (this.model.get('type') == 'M') {
-            $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
+            //$(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
+            $(this.el).html(ich.wallEventTemplateMessage(data))
         } else if (this.model.get('type') == 'S') {
             $(this.el).hide().html(ich.wallEventTemplateSong(data)).fadeIn(200);
         } else if (this.model.get('type') == 'L') {
@@ -267,12 +395,13 @@ Yasound.Views.WallEvent = Backbone.View.extend({
 });
 
 Yasound.Views.WallInput = Backbone.View.extend({
-    tagName : 'div',
-    events : {
-        'click .btn' : 'submit'
+    tagName: 'div',
+    events: {
+        'click #submit': 'submit',
+        'click #refresh': 'refreshWall'
     },
-    
-    submit : function(e) {
+
+    submit: function(e) {
         var $button = $('.btn', this.el);
         $button.attr('disabled', 'disable')
         if (this.radioUUID) {
@@ -281,8 +410,8 @@ Yasound.Views.WallInput = Backbone.View.extend({
             var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
             $.post(url, {
                 message: message,
-                success: function() { 
-                    $input.val('');  
+                success: function() {
+                    $input.val('');
                     $button.removeAttr('disabled');
                     $.publish('/wall/posted');
                 }
@@ -293,18 +422,22 @@ Yasound.Views.WallInput = Backbone.View.extend({
         e.preventDefault();
     },
     
-    initialize : function() {
+    refreshWall: function(e) {
+        $.publish('/wall/posted');
+        e.preventDefault();
+    },
+    
+    initialize: function() {
     },
 
-    render : function() {
+    render: function() {
         $(this.el).html(ich.wallInputTemplate());
         return this;
     }
 });
 
-
 Yasound.Views.RadioUsers = Backbone.View.extend({
-    initialize : function() {
+    initialize: function() {
         _.bindAll(this, 'addOne', 'addAll');
 
         this.collection.bind('add', this.addOne);
@@ -312,20 +445,20 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
         this.views = [];
     },
 
-    addAll : function() {
+    addAll: function() {
         this.collection.each(this.addOne);
     },
 
-    clear : function() {
+    clear: function() {
         _.map(this.views, function(view) {
             view.close();
         })
         this.views = [];
     },
 
-    addOne : function(radioUser) {
+    addOne: function(radioUser) {
         var view = new Yasound.Views.RadioUser({
-            model : radioUser
+            model: radioUser
         });
 
         $(this.el).prepend(view.render().el);
@@ -339,13 +472,13 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
 });
 
 Yasound.Views.RadioUser = Backbone.View.extend({
-    tagName : 'li',
-    className : 'radio-user',
-    events : {},
-    initialize : function() {
+    tagName: 'li',
+    className: 'radio-user',
+    events: {},
+    initialize: function() {
         this.model.bind('change', this.render, this);
     },
-    render : function() {
+    render: function() {
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.radioUserTemplate(data)).fadeIn(200);
         return this;
