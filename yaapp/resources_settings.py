@@ -73,8 +73,8 @@ COMPRESS_JS = {
             'bootstrap/js/bootstrap.min.js',
             'js/pubsub.js',
             'js/Namespace.js',
-            'js/app/models.js',
-            'js/app/views.js',
+            'js/app/Radio/models.js',
+            'js/app/Radio/views.js',
             'js/app/app.js',
         ]
     }
