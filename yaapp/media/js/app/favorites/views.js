@@ -85,7 +85,8 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
 
     render: function() {
         this.reset();
-        $(this.el).html(ich.searchPageTemplate());
+        console.log('foo')
+        $(this.el).html(ich.favoritesPageTemplate());
         
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,

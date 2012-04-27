@@ -38,12 +38,19 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 Yasound.Views.UserMenu = Backbone.View.extend({
     el: '#user-menu',
     events: {
-        'click #btn-my-radio': 'onMyRadio',
+        'click #btn-my-radio': 'myRadio',
+        'click #btn-favorites': 'favorites'
     },
-    onMyRadio: function(e) {
+    myRadio: function(e) {
         e.preventDefault();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
         Yasound.App.Router.navigate("radio/" + uuid, {
+            trigger: true
+        });
+    },
+    favorites: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('favorites/', {
             trigger: true
         });
     }

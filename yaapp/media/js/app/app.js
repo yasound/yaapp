@@ -38,7 +38,8 @@ $(document).ready(function() {
         routes: {
             "": "index",
             "radio/:uuid": "radio",
-            "search/:query": "search"
+            "search/:query": "search",
+            "favorites/": "favorites"
         },
 
         currentRadio: new Yasound.Data.Models.Radio({
@@ -113,6 +114,19 @@ $(document).ready(function() {
             $('#webapp-content').prepend(this.currentView.render().el);
         },
 
+        favorites: function() {
+            this.clearView();
+            
+            var radios = new Yasound.Data.Models.Favorites({});
+            
+            this.currentView = new Yasound.Views.FavoritesPage({
+                tagName: 'div',
+                className: 'row-fluid',
+                collection: radios
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
+        
         radio: function(uuid) {
             this.clearView();
 
