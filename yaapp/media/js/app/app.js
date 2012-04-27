@@ -1,5 +1,9 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
+    
+    /**
+     * component initalization
+     */
     $('.dropdown-toggle').dropdown();
 
     Backbone.View.prototype.close = function() {
@@ -22,10 +26,11 @@ $(document).ready(function() {
         url: undefined,
         autoPlay: true,
         autoLoad: true,
-        volume: 100,
+        volume: 100, // volume is saved across different streams
         stream: true
     };
 
+    // called in case of problem with flash player (flashblock for instance)
     soundManager.ontimeout(function() {
         if (!(typeof Yasound.App.MySound === "undefined")) {
             Yasound.App.MySound.destruct();
@@ -34,6 +39,9 @@ $(document).ready(function() {
         $('#play i').removeClass('icon-stop').addClass('icon-play');
     });
 
+    /**
+     * Application controller
+     */
     Yasound.App.Workspace = Backbone.Router.extend({
         routes: {
             "": "index",
@@ -53,7 +61,7 @@ $(document).ready(function() {
                 'uuid': uuid,
                 'id': 0
             }, {
-                silent: true
+                silent: true // do not send 'change' event now, fetch will do it right after
             });
 
             var radio = this.currentRadio;
@@ -66,12 +74,11 @@ $(document).ready(function() {
 
         index: function() {
             this.clearView();
+            
+            // TODO: add a welcome page
         },
 
-        help: function() {
-            $('#wall').html('Help');
-        },
-        
+        // this function must be called between every routes
         clearView: function() {
             this.buildCommonContext();
             if (this.currentView) {
@@ -81,6 +88,7 @@ $(document).ready(function() {
             }
         },
 
+        // build common stuff for every views (radio)
         buildCommonContext: function() {
             if (!this.commonContext) {
                 this.commonContext = {};
@@ -100,6 +108,7 @@ $(document).ready(function() {
             }
         },
 
+        // search page
         search: function(query) {
             this.clearView();
             
@@ -114,6 +123,7 @@ $(document).ready(function() {
             $('#webapp-content').prepend(this.currentView.render().el);
         },
 
+        // ower favorites page
         favorites: function() {
             this.clearView();
             
@@ -127,6 +137,7 @@ $(document).ready(function() {
             $('#webapp-content').prepend(this.currentView.render().el);
         },
         
+        // radio details page
         radio: function(uuid) {
             this.clearView();
 
@@ -169,6 +180,7 @@ $(document).ready(function() {
         }
     });
 
+    // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
     soundManager.onready(function() {
         Backbone.history.start({
