@@ -5,7 +5,7 @@ Yasound.Data.Models.Favorites = Backbone.Paginator.requestPager.extend({
     url: '/api/v1/favorite_radio/',
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
-    perPage: 25,
+    perPage: 125,
     page:0,
     lastId: 0,
     queryAttribute: 'search',
