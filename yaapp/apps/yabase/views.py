@@ -732,7 +732,8 @@ def web_app(request, radio_uuid=None, query=None, template_name='yabase/webapp.h
         user_uuid = request.user.get_profile().own_radio.uuid
     
     return render_to_response(template_name, {
-        'user_uuid': user_uuid
+        'user_uuid': user_uuid,
+        'current_uuid': radio_uuid,
     }, context_instance=RequestContext(request))    
     
 def radios(request, template_name='web/radios.html'):

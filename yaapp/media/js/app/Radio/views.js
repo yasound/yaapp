@@ -118,6 +118,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #inc": "inc",
         "click #dec": "dec",
         "click #like": "like",
+        "click #track-image-link": "displayRadio",
         "mousedown #volume-control": "volumeControl",
         "mouseup": 'mouseUp',
         "mousemove": "mouseMove"
@@ -258,6 +259,19 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
+    },
+
+    displayRadio: function(event) {
+        event.preventDefault();
+        var radio = Yasound.App.Router.currentRadio;
+        if (radio) {
+            var uuid = this.radio.get('uuid');
+            if (uuid) {
+                Yasound.App.Router.navigate("radio/" + uuid, {
+                    trigger: true
+                });
+            }
+        }
     }
 });
 
