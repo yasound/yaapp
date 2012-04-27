@@ -102,6 +102,7 @@ body {
 }
 
 ul .radio-cell {
+    list-style: none;
 	width:148px;
 	float:left;
 	margin-right:16px;
