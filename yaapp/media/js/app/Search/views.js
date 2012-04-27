@@ -26,7 +26,9 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     tagName: 'li',
     className: 'radio-cell',
 
-    events: {},
+    events: {
+        'click .radio-cell': 'onRadio'
+    },
 
     initialize: function() {
         this.model.bind('change', this.render, this);
@@ -35,8 +37,16 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         this.model.unbind('change', this.render);
     },
     render: function() {
-        $(this.el).hide().html(ich.radioCellTemplateMessage(data)).fadeIn(200);
+        var data = this.model.toJSON();
+        $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
         return this;
+    },
+    onRadio: function(e) {
+        e.preventDefault();
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid, {
+            trigger: true
+        });
     }
 });
 
@@ -107,21 +117,32 @@ Yasound.Views.SearchResults = Backbone.View.extend({
 
 Yasound.Views.SearchPage = Backbone.View.extend({
     name: 'searchpage',
+    
     initialize: function() {
         _.bindAll(this, 'render');
-        this.model.bind('change', this.render, this);
     },
 
     onClose: function() {
-        this.model.unbind('change', this.render);
     },
 
     reset: function() {
+        if (this.resultsView) {
+            this.resultsView.close();
+            this.resultsViews = undefined;
+        }
     },
 
     render: function() {
         this.reset();
         $(this.el).html(ich.searchPageTemplate());
+        
+        this.resultsView = new Yasound.Views.SearchResults({
+            collection: this.collection,
+            el: $('#results', this.el)
+        });
+        
+        this.collection.fetch();
+        
         return this;
     }
 });

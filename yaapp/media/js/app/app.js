@@ -104,10 +104,9 @@ $(document).ready(function() {
                 this.currentView = new Yasound.Views.SearchPage({
                     tagName: 'div',
                     className: 'row-fluid',
-                    model: radioSearchResults
+                    collection: radioSearchResults
                 });
-                $('#webapp-content').prepend(this.currentView.el);
-                radioSearchResults.fetch();
+                $('#webapp-content').prepend(this.currentView.render().el);
             }
             
         },
