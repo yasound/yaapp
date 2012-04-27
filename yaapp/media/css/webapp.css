@@ -100,4 +100,21 @@ body {
 #tbar-search {
 	margin-top:16px;
 }
-    
+
+ul .radio-cell {
+	width:148px;
+	float:left;
+	margin-right:16px;
+	cursor: pointer;
+}
+
+ul .radio-cell img {
+	margin-top:12px;
+}
+
+ul .radio-cell:hover {
+	background-color: #efefef;
+}
+ul .radio-cell .caption h5 {
+	text-align: center;
+}
