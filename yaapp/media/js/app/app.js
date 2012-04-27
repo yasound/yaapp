@@ -64,11 +64,20 @@ $(document).ready(function() {
         },
 
         index: function() {
-            $('#wall').html('Welcome');
+            this.clearView();
         },
 
         help: function() {
             $('#wall').html('Help');
+        },
+        
+        clearView: function() {
+            this.buildCommonContext();
+            if (this.currentView) {
+                this.currentView.reset();
+                this.currentView.close();
+                this.currentView = undefined;
+            }
         },
 
         buildCommonContext: function() {
@@ -91,34 +100,21 @@ $(document).ready(function() {
         },
 
         search: function(query) {
-            this.buildCommonContext();
-            if (this.currentView) {
-                this.currentView.reset();
-                this.currentView.close();
-                this.currentView = undefined;
-            }
+            this.clearView();
             
-            if (!this.currentView) {
-                var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
-                radioSearchResults.setQuery(query);
-                
-                this.currentView = new Yasound.Views.SearchPage({
-                    tagName: 'div',
-                    className: 'row-fluid',
-                    collection: radioSearchResults
-                });
-                $('#webapp-content').prepend(this.currentView.render().el);
-            }
+            var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
+            radioSearchResults.setQuery(query);
             
+            this.currentView = new Yasound.Views.SearchPage({
+                tagName: 'div',
+                className: 'row-fluid',
+                collection: radioSearchResults
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
         },
 
         radio: function(uuid) {
-            this.buildCommonContext();
-            if (this.currentView) {
-                this.currentView.reset();
-                this.currentView.close();
-                this.currentView = undefined;
-            }
+            this.clearView();
 
             if (!this.radioContext) {
                 var that = this;
@@ -146,15 +142,13 @@ $(document).ready(function() {
                 });
             }
 
-            if (!this.currentView) {
-                this.currentView = new Yasound.Views.RadioPage({
-                    tagName: 'div',
-                    className: 'row-fluid',
-                    model: this.currentRadio,
-                    userAuthenticated: this.commonContext.userAuthenticated
-                });
-                $('#webapp-content').prepend(this.currentView.el);
-            }
+            this.currentView = new Yasound.Views.RadioPage({
+                tagName: 'div',
+                className: 'row-fluid',
+                model: this.currentRadio,
+                userAuthenticated: this.commonContext.userAuthenticated
+            });
+            $('#webapp-content').prepend(this.currentView.el);
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);

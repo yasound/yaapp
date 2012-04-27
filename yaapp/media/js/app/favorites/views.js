@@ -1,34 +1,7 @@
 Namespace('Yasound.Views');
 
-Yasound.Views.RadioCell = Backbone.View.extend({
-    tagName: 'li',
-    className: 'radio-cell',
 
-    events: {
-        'click .radio-cell': 'onRadio'
-    },
-
-    initialize: function() {
-        this.model.bind('change', this.render, this);
-    },
-    onClose: function() {
-        this.model.unbind('change', this.render);
-    },
-    render: function() {
-        var data = this.model.toJSON();
-        $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
-        return this;
-    },
-    onRadio: function(e) {
-        e.preventDefault();
-        var uuid = this.model.get('uuid');
-        Yasound.App.Router.navigate("radio/" + uuid, {
-            trigger: true
-        });
-    }
-});
-
-Yasound.Views.SearchResults = Backbone.View.extend({
+Yasound.Views.Favorites = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'addOne', 'addAll');
 
@@ -93,8 +66,8 @@ Yasound.Views.SearchResults = Backbone.View.extend({
     }
 });
 
-Yasound.Views.SearchPage = Backbone.View.extend({
-    name: 'searchpage',
+Yasound.Views.FavoritesPage = Backbone.View.extend({
+    name: 'favoritepage',
     
     initialize: function() {
         _.bindAll(this, 'render');
