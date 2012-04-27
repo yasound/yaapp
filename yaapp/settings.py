@@ -666,9 +666,7 @@ else :
     
 COMPRESS_VERSION = True
 from resources_settings import COMPRESS_JS, COMPRESS_CSS
-# Remove filters. We just need concatenated files
-COMPRESS_JS_FILTERS = ()
-COMPRESS_CSS_FILTERS = ()
+COMPRESS_CSS_FILTERS = () # no css compression
     
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
