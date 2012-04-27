@@ -199,6 +199,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#volume-position').css("width", "100%");
             Yasound.App.MySound.setVolume(100);
         }
+        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
     dec: function() {
@@ -212,6 +213,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#volume-position').css("width", "0%");
             Yasound.App.MySound.setVolume(0);
         }
+        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
     resizeVolumeBar: function(event) {
@@ -230,6 +232,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         $('#volume-position').css("width", percentage);
 
         Yasound.App.MySound.setVolume(soundVolume);
+        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
     mouseUp: function(event) {
@@ -308,7 +311,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         this.collection.bind('reset', this.addAll, this);
         this.views = [];
     },
-    
+
     onClose: function() {
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
@@ -387,7 +390,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
         this.collection.on('reset', this.render, this);
         this.collection.on('change', this.render, this);
     },
-    
+
     onClose: function() {
         this.collection.unbind('change', this.render);
         this.collection.unbind('reset', this.render);
@@ -453,11 +456,11 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     initialize: function() {
         this.model.bind('change', this.render, this);
     },
-    
+
     onClose: function() {
         this.model.unbind('change', this.render);
     },
-    
+
     render: function() {
         var data = this.model.toJSON();
         var timeZone = '+01:00';
@@ -486,7 +489,7 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
         this.collection.bind('reset', this.addAll);
         this.views = [];
     },
-    
+
     onClose: function() {
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
@@ -530,7 +533,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     onClose: function() {
         this.model.unbind('change', this.render);
     },
-    
+
     render: function() {
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.radioUserTemplate(data)).fadeIn(200);
@@ -548,7 +551,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     initialize: function() {
         this.model.bind('change', this.render, this);
     },
-    
+
     onClose: function() {
         this.model.unbind('change', this.render);
     },
@@ -636,7 +639,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.intervalId = setInterval(function() {
             that.wallEvents.fetchFirst();
         }, 10000);
-        
+
         return this;
     }
 });

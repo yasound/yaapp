@@ -22,6 +22,7 @@ $(document).ready(function() {
         url: undefined,
         autoPlay: true,
         autoLoad: true,
+        volume: 100,
         stream: true
     };
 
