@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
 from django.db.models.aggregates import Sum
@@ -24,12 +25,12 @@ from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
 from yainvitation.models import Invitation
+from yametrics.models import MetricsManager
 from yaref.models import YasoundSong
 import datetime
+import requests
 import simplejson as json
 import utils as yabackoffice_utils
-from django.core.cache import cache
-from yametrics.models import MetricsManager
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -427,8 +428,9 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
-    connected_user_count = RadioUser.objects.filter(connected=True).count()
-    anonymous_user_count = Radio.objects.filter(anonymous_audience__gt=0).count()
+
+    r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
+    streamer_status = r.text
     
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
@@ -444,8 +446,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "facebook_user_count": facebook_user_count,
         "twitter_user_count": twitter_user_count,
         "yasound_user_count": yasound_user_count,
-        "connected_user_count": connected_user_count,
-        "anonymous_user_count": anonymous_user_count,
+        "streamer_status": streamer_status,
     }, context_instance=RequestContext(request))  
 
 

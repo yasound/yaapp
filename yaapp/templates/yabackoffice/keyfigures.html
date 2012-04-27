@@ -15,29 +15,20 @@
     <tbody>
         <tr>
             <td>
+                {% trans "Streamer status" %}
+            </td>
+            <td>
+            {{streamer_status}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
                 {% trans "User count" %}
             </td>
             <td>
             {{user_count}} 
             </td>
         </tr>
-        <tr>
-            <td>
-                {% trans "Connected users" %}
-            </td>
-            <td>
-            {{connected_user_count}} 
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {% trans "Anonymous users" %}
-            </td>
-            <td>
-            {{anonymous_user_count}} 
-            </td>
-        </tr>
-        
         <tr>
             <td>
                 {% trans "Radio count" %}
