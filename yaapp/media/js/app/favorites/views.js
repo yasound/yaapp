@@ -1,22 +1,28 @@
 Namespace('Yasound.Views');
 
-Yasound.Views.SearchMenu = Backbone.View.extend({
-    el: '#tbar-search',
+Yasound.Views.RadioCell = Backbone.View.extend({
+    tagName: 'li',
+    className: 'radio-cell',
+
     events: {
-        'keypress #search-input': 'search'
+        'click .radio-cell': 'onRadio'
     },
-    search: function(e) {
-        if (e.keyCode != 13)
-            return;
 
-        var value = $('#search-input', this.el).val();
-        if (!value)
-            return;
-
-        $('#search-input', this.el).val('');
+    initialize: function() {
+        this.model.bind('change', this.render, this);
+    },
+    onClose: function() {
+        this.model.unbind('change', this.render);
+    },
+    render: function() {
+        var data = this.model.toJSON();
+        $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
+        return this;
+    },
+    onRadio: function(e) {
         e.preventDefault();
-
-        Yasound.App.Router.navigate("search/" + value, {
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid, {
             trigger: true
         });
     }
