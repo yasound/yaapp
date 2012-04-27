@@ -114,7 +114,7 @@ ul .radio-cell img {
 	margin-top:12px;
 }
 
-ul .radio-cell:hover {
+ul .radio-cell .thumbnail:hover {
 	background-color: #efefef;
 }
 ul .radio-cell .caption h5 {
