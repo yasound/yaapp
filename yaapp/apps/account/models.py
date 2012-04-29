@@ -287,7 +287,8 @@ class UserProfile(models.Model):
 
     def remove_twitter_account(self):
         if (self.yasound_enabled == False) and (self.facebook_enabled == False):
-            return False
+            return False, _('This is the last account, removal is impossible')
+        
         self.twitter_uid = ''
         self.twitter_token = ''
         self.twitter_token_secret = ''
