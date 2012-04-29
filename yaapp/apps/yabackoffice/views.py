@@ -429,9 +429,12 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
 
-    r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
-    streamer_status = r.text
-    
+    try:
+        r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
+        streamer_status = r.text
+    except:
+        streamer_status = _('Unavailable')
+        
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
         "radio_count": Radio.objects.all().count(),
