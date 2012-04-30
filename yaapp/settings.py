@@ -530,10 +530,16 @@ elif DEVELOPMENT_MODE or LOCAL_MODE:
     
 if LOCAL_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
+    YASOUND_PUSH_URL = 'http://localhost:9000/'
+    ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
+    YASOUND_PUSH_URL = '/push/'
+    ENABLE_PUSH = False
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
+    YASOUND_PUSH_URL = '/push/'
+    ENABLE_PUSH = False
 
 
 # constants needed by django-social-auth, see https://github.com/omab/django-social-auth#twitter

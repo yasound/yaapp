@@ -82,6 +82,7 @@ COMPRESS_JS = {
             'js/app/search/views.js',
             'js/app/favorites/views.js',
             'js/app/favorites/models.js',
+            'js/app/push.js',
             'js/app/app.js',
         ]
     }

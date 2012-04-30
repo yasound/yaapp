@@ -25,8 +25,9 @@ from django.core.cache import cache
 import json
 from yacore.database import atomic_inc
 
-from redis import Redis
-REDIS_HOST = getattr(yaapp_settings, 'REDIS_HOST', 'localhost')
+if yaapp_settings.ENABLE_PUSH:
+    from push import install_handlers
+    install_handlers()
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -94,12 +95,13 @@ class SongInstanceManager(models.Manager):
         return None
     
     def set_current_song_json(self, radio_id, song_instance):
+        song_json = None
         if song_instance:
             song_dict = song_instance.song_description
             if song_dict:
                 song_json = json.dumps(song_dict)
                 cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
-
+        return song_json
 
 class SongInstance(models.Model):
     objects = SongInstanceManager()
@@ -564,7 +566,9 @@ class Radio(models.Model):
         self.current_song_play_date = datetime.datetime.now()
         
         # TODO: use a signal instead
-        SongInstance.objects.set_current_song_json(self.id, song)
+        song_json = SongInstance.objects.set_current_song_json(self.id, song)
+        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json)
+        
         
         self.save()
         
@@ -1061,6 +1065,8 @@ class WallEvent(models.Model):
                 if radio_creator:
                     radio_creator_profile = radio_creator.userprofile
                     radio_creator_profile.message_posted_in_my_radio(self)
+            
+            yabase_signals.new_wall_event.send(sender=self, wall_event=self)
     
     @property
     def user_picture_url(self):
@@ -1075,11 +1081,6 @@ class WallEvent(models.Model):
 
     class Meta:
         db_name = u'default'
-
-def new_wall_event_handler(sender, instance, created, **kwargs):
-    if created:
-        yabase_signals.new_wall_event.send(sender=instance, wall_event=instance)
-signals.post_save.connect(new_wall_event_handler, sender=WallEvent)
 
 class NextSong(models.Model):
     radio = models.ForeignKey(Radio)
@@ -1177,12 +1178,4 @@ class FeaturedRadio(models.Model):
         unique_together = ('featured_content', 'radio')
         ordering = ['order',]
         db_name = u'default'
-     
-     
-def push_wall_event(wall_event, **kwargs):
-    red = Redis(REDIS_HOST)
-    channel = 'radio.%s' % (wall_event.radio.id)
-    print "publishing message to %s" % (channel) 
-    red.publish(channel, [wall_event.id])
-yabase_signals.new_wall_event.connect(push_wall_event)
 

@@ -12,9 +12,10 @@
     <link rel="stylesheet" href="/media/css/webapp.css"/>
     {% compressed_js 'webapp-all' %}
     <script type="text/javascript">
-        moment.lang('{{request.LANGUAGE_CODE}}');
-
+       moment.lang('{{request.LANGUAGE_CODE}}');
        var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};
+       var g_push_url = '{{ push_url }}';
+       var g_enable_push = {% if enable_push %}true{% else %}false{% endif %};
     </script>
 
 

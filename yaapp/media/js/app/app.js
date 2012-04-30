@@ -1,11 +1,6 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
 
-    var socket = io.connect('http://localhost:9000/radio');
-    socket.emit('subscribe', {'radio_id': 75});
-    socket.on('wall_event', function (data) {
-      console.log(data);
-    });
     
     /**
      * component initalization
@@ -93,13 +88,16 @@ $(document).ready(function() {
                 this.currentView = undefined;
             }
         },
+        
+        pushManager: new Yasound.App.PushManager({
+            enablePush: g_enable_push
+        }),
 
         // build common stuff for every views (radio)
         buildCommonContext: function() {
             if (!this.commonContext) {
                 this.commonContext = {};
                 this.commonContext.streamFunction = function(model, stream_url) {
-                    console.log('streamFunction')
                     if (!(typeof Yasound.App.MySound === "undefined")) {
                         Yasound.App.MySound.destruct();
                     }
@@ -160,16 +158,14 @@ $(document).ready(function() {
                 })
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
-                setInterval(function() {
-                    that.radioContext.currentSong.fetch();
-                }, 10000);
-
                 if (this.commonContext.userAuthenticated) {
                 }
                 this.currentRadio.on('change:id', function(model, id) {
+                    model.currentSong = that.radioContext.currentSong;
                     that.radioContext.currentSong.set('radioId', id);
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
+                    that.pushManager.monitorRadio(model);
                 });
             }
 
@@ -186,8 +182,10 @@ $(document).ready(function() {
         }
     });
 
+    
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
+
     soundManager.onready(function() {
         Backbone.history.start({
             pushState: true,

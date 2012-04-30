@@ -731,8 +731,13 @@ def web_app(request, radio_uuid=None, query=None, template_name='yabase/webapp.h
     if request.user.is_authenticated():
         user_uuid = request.user.get_profile().own_radio.uuid
     
+    push_url = settings.YASOUND_PUSH_URL
+    enable_push = settings.ENABLE_PUSH
+    
     return render_to_response(template_name, {
         'user_uuid': user_uuid,
+        'push_url': push_url,
+        'enable_push': enable_push,
         'current_uuid': radio_uuid,
     }, context_instance=RequestContext(request))    
     
