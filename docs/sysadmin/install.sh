@@ -9,4 +9,4 @@ cp ./etc/nginx/sites-available/yaapp /etc/nginx/sites-available/
 
 # nginx
 cd /etc/nginx/sites-enabled
-ln -s yaapp ../sites-available/yaapp
+ln -s ../sites-available/yaapp yaapp 
