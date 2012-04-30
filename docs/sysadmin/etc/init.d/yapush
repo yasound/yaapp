@@ -2,95 +2,27 @@
 # ============================================
 #  yapush - Starts the push daemon.
 # ============================================
-#
-# :Usage: /etc/init.d/push {start|stop|restart}
-#
 
-### BEGIN INIT INFO
-# Provides:          yapush
-# Required-Start:    $network $local_fs $remote_fs
-# Required-Stop:     $network $local_fs $remote_fs
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: yapush task worker daemon
-### END INIT INFO
-
-#set -e
-
-YAPUSH_PID_FILE="/tmp/yapush@%n.pid"
-YAPUSH_LOG_FILE="/home/customer/logs/yapush/yapush@%n.log"
-YAPUSH_LOG_LEVEL="INFO"
-YAPUSH_CHDIR="/var/www/push.yasound.com/root/yapush"
-YAPUSHCTL="$YAPUSH_CHDIR/run.py"
-YAPUSH_USER="customer"
-YAPUSH_GROUP="customer"
-
-# /etc/init.d/yapush: start and stop the yapush daemon.
-
-
-whoami=$(whoami)
-
-if ! [ "x${whoami}" = "xroot" -o "x${whoami}" = "xcustomer" ];then
-  echo "error id"
-  exit 2
-fi
-
-YAPUSH_LOG_DIR=`dirname $YAPUSH_LOG_FILE`
-YAPUSH_PID_DIR=`dirname $YAPUSH_PID_FILE`
-if [ ! -d "$YAPUSH_LOG_DIR" ]; then
-    mkdir -p $YAPUSH_LOG_DIR
-fi
-if [ ! -d "$YAPUSH_PID_DIR" ]; then
-    mkdir -p $YAPUSH_PID_DIR
-fi
-
-
-check_dev_null() {
-    if [ ! -c /dev/null ]; then
-        echo "/dev/null is not a character device!"
-        exit 1
-    fi
-}
-
-export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
-
-stop_yapush () {
-    kill `cat $YAPUSH_PID_FILE`
-}
-
-start_yapush () {
-    CMD="$YAPUSHCTL"
-
-    if [ "x${whoami}" = "xroot" ];then
-	su ${YAPUSH_USER} -c "${CMD}"
-    else
-	${CMD}
-    fi
-}
-
-restart_workers () {
-    stop_yapush
-    start_yapush
-}
+DAEMON=/usr/bin/python2.6
+ARGS="/var/www/push.yasound.com/root/yapush/run.py"
+PIDFILE=/tmp/yapush.pid
 
 case "$1" in
-    start)
-        check_dev_null
-        start_yapush
+  start)
+    echo "Starting server"
+    /sbin/start-stop-daemon --start --pidfile $PIDFILE \
+        --user customer --group customer \
+        -b --make-pidfile \
+        --chuid customer \
+        --exec $DAEMON $ARGS
     ;;
-
-    stop)
-        check_dev_null
-        stop_yapush
+  stop)
+    echo "Stopping server"
+    /sbin/start-stop-daemon --stop --pidfile $PIDFILE --verbose
     ;;
-    restart)
-        check_dev_null
-        restart_yapush
-    ;;
-
-    *)
-        echo "Usage: /etc/init.d/yapush {start|stop|restart}"
-        exit 1
+  *)
+    echo "Usage: /etc/init.d/yapush {start|stop}"
+    exit 1
     ;;
 esac
 
