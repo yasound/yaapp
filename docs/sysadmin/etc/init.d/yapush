@@ -17,13 +17,13 @@
 
 #set -e
 
-YAPUSH_PID_FILE     =       "/tmp/yapush@%n.pid"
-YAPUSH_LOG_FILE     =       "/home/customer/logs/yapush/yapush@%n.log"
-YAPUSH_LOG_LEVEL    =       "INFO"
-YAPUSH_CHDIR        =       "/var/www/push.yasound.com/root/yapush"
-YAPUSHCTL           =       "$YAPUSH_CHDIR/run.py"
-YAPUSH_USER         =       "customer"
-YAPUSH_GROUP        =       "customer"
+YAPUSH_PID_FILE="/tmp/yapush@%n.pid"
+YAPUSH_LOG_FILE="/home/customer/logs/yapush/yapush@%n.log"
+YAPUSH_LOG_LEVEL="INFO"
+YAPUSH_CHDIR="/var/www/push.yasound.com/root/yapush"
+YAPUSHCTL="$YAPUSH_CHDIR/run.py"
+YAPUSH_USER="customer"
+YAPUSH_GROUP="customer"
 
 # /etc/init.d/yapush: start and stop the yapush daemon.
 
