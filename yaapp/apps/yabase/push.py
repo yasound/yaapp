@@ -27,7 +27,13 @@ def push_wall_event(wall_event, **kwargs):
 def push_current_song(radio, song_json, **kwargs):
     red = Redis(REDIS_HOST)
     channel = 'radio.%s' % (radio.id)
-    red.publish(channel, ['song_json', song_json])
+    data = {
+        'event_type': 'song',
+        'data':  json.loads(song_json)
+    }
+    
+    json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
+    red.publish(channel, json_data)
     
 
 def install_handlers():

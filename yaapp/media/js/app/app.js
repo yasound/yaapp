@@ -150,6 +150,16 @@ $(document).ready(function() {
                 this.radioContext = {
                     currentSong: new Yasound.Data.Models.CurrentSong()
                 };
+                
+                if (Yasound.App.Router.pushManager.enablePush) {
+                    Yasound.App.Router.pushManager.on('song', function(msg) {
+                        that.radioContext.currentSong.reset(msg);
+                    });
+                } else {
+                    setInterval(function() {
+                        that.radioContext.currentSong.fetch();
+                    }, 10000);
+                }
 
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model: this.radioContext.currentSong,
