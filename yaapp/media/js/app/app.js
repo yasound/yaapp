@@ -127,7 +127,7 @@ $(document).ready(function() {
             $('#webapp-content').prepend(this.currentView.render().el);
         },
 
-        // ower favorites page
+        // owner favorites page
         favorites: function() {
             this.clearView();
             

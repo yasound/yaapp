@@ -7,6 +7,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
     idAttribute: 'uuid',
     urlRoot: '/api/v1/public_radio/',
 
+    // notify server that user is connected to radio
     connect: function() {
         var id = this.get('id');
         if (id > 0) {
@@ -15,6 +16,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
         }
     },
 
+    // notify server that user is not connected anymore
     disconnect: function() {
         var id = this.get('id');
         if (id > 0) {
@@ -32,6 +34,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
         return '/api/v1/radio/' + this.get('radioId') + '/current_song/';
     },
     
+    // the current song will auto-refresh with either polling or push system
     initialize: function() {
         var that = this;
         if (Yasound.App.Router.pushManager.enablePush) {
