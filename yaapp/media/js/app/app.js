@@ -1,12 +1,18 @@
 $(document).ready(function() {
     Namespace('Yasound.App');
+
+    var socket = io.connect('http://localhost:9000/radio');
+    socket.emit('subscribe', {'radio_id': 75});
+    socket.on('wall_event', function (data) {
+      console.log(data);
+    });
     
     /**
      * component initalization
      */
     $('.dropdown-toggle').dropdown();
 
-    Backbone.View.prototype.close = function() {
+    Backbone.View.prototype.close = function(){
         this.remove();
         this.unbind();
         if (this.onClose) {

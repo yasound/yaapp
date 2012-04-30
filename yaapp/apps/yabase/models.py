@@ -25,6 +25,9 @@ from django.core.cache import cache
 import json
 from yacore.database import atomic_inc
 
+from redis import Redis
+REDIS_HOST = getattr(yaapp_settings, 'REDIS_HOST', 'localhost')
+
 logger = logging.getLogger("yaapp.yabase")
 
 if not 'db_name' in options.DEFAULT_NAMES:
@@ -1174,4 +1177,12 @@ class FeaturedRadio(models.Model):
         unique_together = ('featured_content', 'radio')
         ordering = ['order',]
         db_name = u'default'
-        
+     
+     
+def push_wall_event(wall_event, **kwargs):
+    red = Redis(REDIS_HOST)
+    channel = 'radio.%s' % (wall_event.radio.id)
+    print "publishing message to %s" % (channel) 
+    red.publish(channel, [wall_event.id])
+yabase_signals.new_wall_event.connect(push_wall_event)
+
