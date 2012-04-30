@@ -43,7 +43,7 @@ Yasound.App.PushManager = Class({
     unMonitorRadio: function() {
         if (this.enablePush) {
             this.socket.emit('unsubscribe', {
-                'radio_id': this.radio.get('radioId')
+                'radio_id': this.radio.get('id')
             });
         }
     },
