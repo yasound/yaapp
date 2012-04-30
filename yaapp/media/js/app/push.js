@@ -40,10 +40,8 @@ Yasound.App.PushManager = Class({
         this.trigger(data.event_type, data.data);
     },
 
-    unMonitorCurrentSong: function() {
-        if (!this.enablePush) {
-            clearInterval(this.radioPollingIntervalID);
-        } else {
+    unMonitorRadio: function() {
+        if (this.enablePush) {
             this.socket.emit('unsubscribe', {
                 'radio_id': this.radio.get('radioId')
             });
@@ -57,12 +55,7 @@ Yasound.App.PushManager = Class({
 
         this.radio = radio;
 
-        if (!this.enablePush) {
-            var that = this;
-            this.radioPollingIntervalID = setInterval(function() {
-                radio.currentSong.fetch();
-            }, 10000);
-        } else {
+        if (this.enablePush) {
             this.socket.emit('subscribe', {
                 'radio_id': this.radio.get('id')
             });

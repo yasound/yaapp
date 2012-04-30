@@ -30,5 +30,19 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
 Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
     url: function() {
         return '/api/v1/radio/' + this.get('radioId') + '/current_song/';
+    },
+    
+    initialize: function() {
+        var that = this
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.on('song', function(msg) {
+                that.reset(msg);
+            });
+        } else {
+            setInterval(function() {
+                that.fetch();
+            }, 10000);
+        }
     }
+    
 });
