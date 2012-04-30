@@ -33,7 +33,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
     },
     
     initialize: function() {
-        var that = this
+        var that = this;
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('song', function(msg) {
                 that.reset(msg);
