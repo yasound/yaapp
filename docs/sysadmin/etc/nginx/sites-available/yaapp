@@ -25,6 +25,10 @@ server {
         }
     }
 
+    location /push/ {
+        proxy_pass http://localhost:9000;
+    }
+
     # what to serve if upstream is not available or crashes
     error_page 500 502 503 504 /media/50x.html;
 }
