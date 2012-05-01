@@ -37,7 +37,7 @@ Yasound.App.PushManager = Class({
     onRadioEvent: function(message) {
         raw_data = message.data;
         data = JSON.parse(raw_data);
-        this.trigger(data.event_type, data.data);
+        this.trigger(data.event_type, JSON.parse(data.data));
     },
 
     unMonitorRadio: function() {

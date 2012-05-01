@@ -300,7 +300,9 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         if (moment().isDST()) {
             timeZone = '+02:00';
         }
-        var date = moment(this.model.get('start_date') + timeZone);
+        // if start_date contains microsecond precision, we remove it
+        var start_date = this.model.get('start_date').substr(0, 19);
+        var date = moment(start_date + timeZone);
         data.formatted_start_date = date.format('LLLL');
 
         if (this.model.get('type') == 'M') {

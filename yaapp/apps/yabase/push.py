@@ -19,7 +19,7 @@ def push_wall_event(wall_event, **kwargs):
     serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
     data = {
         'event_type': 'wall_event',
-        'data':  json.loads(serialized_we[0])
+        'data':  serialized_we[0]
     }
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
     red.publish(channel, json_data)
@@ -29,13 +29,12 @@ def push_current_song(radio, song_json, **kwargs):
     channel = 'radio.%s' % (radio.id)
     data = {
         'event_type': 'song',
-        'data':  json.loads(song_json)
+        'data': song_json
     }
     
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
     red.publish(channel, json_data)
     
-
 def install_handlers():
     yabase_signals.new_wall_event.connect(push_wall_event)
     yabase_signals.new_current_song.connect(push_current_song)
