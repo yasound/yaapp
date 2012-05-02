@@ -428,6 +428,10 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
+    
+    song_metadata_count = SongMetadata.objects.all().count()
+    unmatched_song_metadata_count = SongMetadata.objects.filter(yasound_song_id__isnull=True).count()
+    matched_songs_ratio = '%.2f' % (100*float(unmatched_song_metadata_count)/float(song_metadata_count))
 
     try:
         r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
@@ -450,6 +454,9 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "twitter_user_count": twitter_user_count,
         "yasound_user_count": yasound_user_count,
         "streamer_status": streamer_status,
+        "song_metadata_count": song_metadata_count,
+        "unmatched_song_metadata_count": unmatched_song_metadata_count,
+        "matched_songs_ratio": matched_songs_ratio,
     }, context_instance=RequestContext(request))  
 
 

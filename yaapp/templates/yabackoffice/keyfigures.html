@@ -125,6 +125,30 @@
             {{yasound_user_count}} 
             </td>
         </tr>
+        <tr>
+            <td>
+                {% trans "Songs used" %}
+            </td>
+            <td>
+            {{song_metadata_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Unmatched songs" %}
+            </td>
+            <td>
+            {{unmatched_song_metadata_count}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans "Matched songs ratio" %}
+            </td>
+            <td>
+            {{matched_songs_ratio}} % 
+            </td>
+        </tr>
     </tbody>
 </table>
 </div>
