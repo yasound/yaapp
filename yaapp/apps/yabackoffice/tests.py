@@ -42,13 +42,13 @@ class TestMetrics(TestCase):
         
     def test_light_metrics(self):
         res = self.client.get(reverse('light_metrics'))
-        self.assertContains(res, '"user_count": 1')
+        self.assertContains(res, "<div class='user_count'>1</div>")
         
         user = User(email='toto@yasound.com', username='toto')
         user.save()
         
         res = self.client.get(reverse('light_metrics'))
-        self.assertContains(res, 'user_count')
+        self.assertContains(res, "<div class='user_count'>2</div>")
         
         
         
