@@ -538,7 +538,7 @@ elif DEVELOPMENT_MODE:
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
-    YASOUND_PUSH_URL = '/push/'
+    YASOUND_PUSH_URL = 'https://api.yasound.com:9090/'
     ENABLE_PUSH = False
 
 
