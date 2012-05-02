@@ -474,12 +474,19 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     }, context_instance=RequestContext(request)) 
     
 @csrf_exempt
-def light_metrics(request):
+def light_metrics(request, template_name='yabackoffice/light_metrics.html'):
     user_count = User.objects.all().count()
-    response_dict = {
-        'user_count': user_count
-    }
-    response = json.dumps(response_dict)
-    return HttpResponse(response, mimetype='application/json')
+    overall_listening_time = Radio.objects.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
+    try:
+        overall_listening_time_str = datetime.timedelta(seconds=overall_listening_time)
+    except:
+        overall_listening_time_str = _('Unavailable')
+    
+    return render_to_response(template_name, {
+        'user_count': user_count,
+        "ready_radio_count": Radio.objects.filter(ready=True).count(),
+        "listening_time": unicode(overall_listening_time_str),
+        "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
+    }, context_instance=RequestContext(request)) 
     
     
