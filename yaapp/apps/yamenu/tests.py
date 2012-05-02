@@ -103,4 +103,28 @@ class TestMenus(TestCase):
         menu_desc = json.loads(response.content)
         self.assertIsNotNone(menu_desc)
         
+    def test_app_info(self):
+        app_id = 'com.yasound.yasound'
+        app_version_min = '1.2.3'
+        app_version_max = '1.2.6'
+        
+        first_section_name = 'myFirstSection'
+        
+        menu = self.menu_en
+        menu['app'] = {'app_id':app_id, 'app_version':{'min':app_version_min, 'max':app_version_max}}
+        menu['sections'][0]['name'] = first_section_name
+        mm = MenusManager()
+        mm.add_menu(menu)
+        
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        api_key = ApiKey.objects.get(user=user)
+        c = Client()
+        
+        response = c.get('/api/v1/app_menu/', {'username':user.username, 'api_key':api_key.key, 'app_id':app_id, 'app_version':'1.2.4'})
+        data = json.loads(response.content)
+        self.assertEquals(data[0]['name'], first_section_name)
+        self.assertEqual(response.status_code, 200)
+        
         
