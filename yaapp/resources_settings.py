@@ -53,6 +53,9 @@ COMPRESS_JS = {
             'js/backoffice/Users/UserField.js',
             'js/backoffice/Statistics/Statistics.js',
             'js/backoffice/Statistics/Chart.js',
+            'js/backoffice/Menus/MenuGrid.js',
+            'js/backoffice/Menus/MenuForm.js',
+            'js/backoffice/Menus/Menus.js',
         ]
     },
     'webapp-all': {
