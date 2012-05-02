@@ -19,6 +19,8 @@ def check_api_key(methods=['GET', 'POST', 'PUT', 'DELETE'], login_required=True)
                 )
                 return HttpResponseNotAllowed(methods)
             
+            coerce_put_post(request)                
+
             authorized = check_api_key_Authentication(request)
             
             if login_required:
@@ -27,8 +29,6 @@ def check_api_key(methods=['GET', 'POST', 'PUT', 'DELETE'], login_required=True)
                 
                 if not authorized:
                     return HttpResponse(status=401)
-            
-            coerce_put_post(request)                
             
             return func(request, *args, **kwargs)
         return wraps(func, assigned=available_attrs(func))(inner)

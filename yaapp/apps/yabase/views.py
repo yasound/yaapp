@@ -269,14 +269,8 @@ def like_song(request, song_id):
     return HttpResponse(res)
 
 @csrf_exempt
+@check_api_key(methods=['POST',])
 def post_message(request, radio_id):
-    if not request.user.is_authenticated():
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-    
     message = request.REQUEST.get('message')
     radio = get_object_or_404(Radio, uuid=radio_id)
     radio.post_message(request.user, message)
@@ -725,12 +719,11 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     }, context_instance=RequestContext(request))    
 
 def web_app(request, radio_uuid=None, query=None, template_name='yabase/webapp.html'):
-    if not request.user.is_superuser:
-        raise Http404
-    
     if request.user.is_authenticated():
         user_uuid = request.user.get_profile().own_radio.uuid
-    
+    else:
+        user_uuid = 0
+        
     push_url = settings.YASOUND_PUSH_URL
     enable_push = settings.ENABLE_PUSH
     

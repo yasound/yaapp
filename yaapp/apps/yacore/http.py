@@ -40,10 +40,13 @@ def coerce_put_post(request):
         
 
 def check_api_key_Authentication(request):
-    if not ('username' in request.GET and 'api_key' in request.GET):
+    request.app_version = request.REQUEST.get('app_version')
+    request.app_id = request.REQUEST.get('app_id')
+
+    if not ('username' in request.REQUEST and 'api_key' in request.REQUEST):
         return False
-    username = request.GET['username']
-    key = request.GET['api_key']
+    username = request.REQUEST.get('username')
+    key = request.REQUEST.get('api_key')
     try:
         user = User.objects.get(username=username)
         api_key = ApiKey.objects.get(user=user)
