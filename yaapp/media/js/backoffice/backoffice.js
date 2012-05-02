@@ -7,6 +7,7 @@ Ext.namespace("Yasound.Invitations.UI", "Yasound.Invitations.Handler", "Yasound.
 Ext.namespace("Yasound.Users.UI", "Yasound.Users.Handler", "Yasound.Users.Data");
 Ext.namespace("Yasound.Statistics.UI", "Yasound.Statistics.Handler", "Yasound.Statistics.Data");
 Ext.namespace("Yasound.Utils");
+Ext.namespace("Yasound.Menus.UI", "Yasound.Menus.Handler", "Yasound.Menus.Data");
 
 
 //------------------------------------------
@@ -165,6 +166,30 @@ Ext.onReady(function(){
         })]    		
     };
     
+    var tabPanelMenus = {
+            id: 'menus-tab',
+            expanded: false,
+            listeners: {
+                'tabchange': function(tabPanel, tab){
+                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                }
+            },
+            items: [{
+                title: gettext('Menus'),
+                id: 'menus-top-panel',
+                style: 'padding: 10px;',
+                listeners: {
+                    'activate': function(p){
+                        var tabPanel = p.findParentByType('grouptab');
+                        var nextItem = p.nextSibling();
+                        tabPanel.setActiveTab(nextItem);
+                    }
+                }
+            }, Ext.apply(Yasound.Menus.UI.Panel(), {
+                iconCls: 'x-icon-templates'
+            })]    		
+        };
+    
     var tabPanels = {
         xtype: 'grouptabpanel',
         id: 'group-panel',
@@ -179,7 +204,8 @@ Ext.onReady(function(){
     tabPanels.items.push(tabPanelRadios, 
     					 tabPanelSearchEngine,
     					 tabPanelInvitations,
-    					 tabPanelStatistics);
+    					 tabPanelStatistics,
+    					 tabPanelMenus);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',
