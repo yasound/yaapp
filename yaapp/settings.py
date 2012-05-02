@@ -534,7 +534,7 @@ if LOCAL_MODE:
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
-    YASOUND_PUSH_URL = '/push/'
+    YASOUND_PUSH_URL = 'http://dev.yasound.com:9090/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
