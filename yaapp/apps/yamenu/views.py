@@ -8,13 +8,10 @@ def menu_description(request):
     mm = MenusManager()
     groups = list(request.user.groups.values_list('id', flat=True))
     language = request.LANGUAGE_CODE
-    menu = mm.get_menu(language, groups)
-    if menu == None:
-        language = 'en'
-        menu = mm.get_menu(language, groups)
-    elif menu == None:
-        groups = []
-        menu = mm.get_menu(language, groups)
+    app_id = request.app_id
+    app_version = request.app_version
+    menu = mm.get_menu(language, groups, app_id=app_id, app_version=app_version)
+    
     if menu == None:
         return Http404()
     

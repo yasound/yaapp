@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 import json
+from distutils.version import StrictVersion
+from Image import NONE
 
 ##############################
 ### list of menu entry type
@@ -37,39 +39,63 @@ class MenusManager():
         return self.add_menu(json_desc, overwrite)
     
     def add_menu(self, json_desc, overwrite=False):
-        if not json_desc.has_key('group_ids') or not json_desc.has_key('name') or not json_desc.has_key('language'):
+        if not json_desc.has_key('name') or not json_desc.has_key('language'):
             return False
         
-        group_ids = json_desc['group_ids']
-        group_ids.sort()
-        name = json_desc['name']
-        language = json_desc['language']
-        existing_menus = self.menus.find({'group_ids':group_ids, 'name':name, 'language':language})
-        if existing_menus.count() > 0:
-            if not overwrite:
-                return False
-            else:
-                self.menus.remove({'group_ids':group_ids, 'name':name, 'language':language})
         self.menus.insert(json_desc)
         return True
     
-    def get_menu(self, language, groups=[]):
+    def _get_menu_internal(self, language, groups, app_id, app_version):
         groups.sort() 
-        existing_menus = self.menus.find({'group_ids':{'$in':groups}, 'language':language})
-        if existing_menus.count() == 0:  
-            existing_menus = self.menus.find({'group_ids':[], 'language':language})
-        if existing_menus.count() == 0:
+        if groups:
+            if len(groups) > 0:
+                if app_id:
+                    menus = self.menus.find({'language':language, 'group_ids':{'$in':groups}, 'app.app_id':app_id})
+                else:
+                    menus = self.menus.find({'language':language, 'group_ids':{'$in':groups}})
+            else:
+                if app_id:
+                    menus = self.menus.find({'language':language, 'group_ids':groups, 'app.app_id':app_id})
+                else:
+                    menus = self.menus.find({'language':language, 'group_ids':groups})
+        elif app_id:
+            menus = self.menus.find({'language':language, 'app.app_id':app_id})
+        else:
+            menus = self.menus.find({'language':language})
+        
+        version = StrictVersion(app_version) if app_version else None
+        final_menus = []
+        for m in menus:
+            if version:
+                if version < StrictVersion(m['app']['app_version']['min']) or version > StrictVersion(m['app']['app_version']['max']):
+                    continue
+            final_menus.append(m)
+                
+            
+        if len(final_menus) == 0:
             return None
-        return existing_menus[0] 
-
+        return final_menus[0]
+    
+    def get_menu(self, language, groups=[], app_id=None, app_version=None, strict_search=False):
+        m = self._get_menu_internal(language, groups, app_id, app_version)
+        if strict_search:
+            return m
+        
+        if m == None:
+            m = self._get_menu_internal(language, [], app_id, app_version)
+        if m == None:
+            m = self._get_menu_internal(language, [], app_id, None)
+        if m == None:
+            m = self._get_menu_internal(language, [], None, None)
+        return m
+        
+            
     def update_menu(self, json_desc):
-        if not json_desc.has_key('group_ids') or not json_desc.has_key('name') or not json_desc.has_key('language'):
+        if not json_desc.has_key('_id'):
             return False
         
-        group_ids = json_desc['group_ids']
-        name = json_desc['name']
-        language = json_desc['language']
-        self.menus.update({'group_ids':group_ids, 'name':name, 'language':language}, json_desc, True, True) # upsert, multi
+        obj_id = json_desc['_id']
+        self.menus.update({'_id':obj_id}, json_desc, True, True) # upsert, multi
         return True
     
     def defaults(self):
