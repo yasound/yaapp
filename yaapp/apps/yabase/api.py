@@ -141,7 +141,7 @@ class PublicRadioResource(ModelResource):
         radio.fill_bundle(bundle)
 
         bundle.data['favorite'] = False
-        if bundle.request.user.is_authenticated:
+        if bundle.request.user.is_authenticated():
             if RadioUser.objects.filter(radio__id=radioID, user=bundle.request.user, favorite=True).count() > 0:
                 bundle.data['favorite'] = True
         return bundle
