@@ -431,7 +431,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     
     song_metadata_count = SongMetadata.objects.all().count()
     unmatched_song_metadata_count = SongMetadata.objects.filter(yasound_song_id__isnull=True).count()
-    matched_songs_ratio = '%.2f' % (100*float(unmatched_song_metadata_count)/float(song_metadata_count))
+    matched_songs_ratio = '%.2f' % (100-(100*float(unmatched_song_metadata_count)/float(song_metadata_count)))
 
     try:
         r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
