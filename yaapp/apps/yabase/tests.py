@@ -19,6 +19,7 @@ import os
 import settings as yabase_settings
 import simplejson as json
 from yacore.database import atomic_inc
+from mock import Mock, patch
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -205,18 +206,25 @@ class TestNextSong(TestCase):
         self.assertEqual(res.status_code, 404)
 
     def test_view_not_empty_radio(self):
-        playlist = generate_playlist(song_count=5)
-        self.radio.playlists.add(playlist)
+        redis = Mock(name='redis')
+        redis.publish = Mock()      
 
-        ns = NextSong(song=SongInstance.objects.get(id=1), radio=self.radio, order=1)
-        ns.save()
-        self.assertEqual(self.radio.next_songs.count(), 1)
+        with patch('yabase.push.Redis') as mock_redis:
+            mock_redis.return_value = redis
+                        
+            playlist = generate_playlist(song_count=5)
+            self.radio.playlists.add(playlist)
+    
+            ns = NextSong(song=SongInstance.objects.get(id=1), radio=self.radio, order=1)
+            ns.save()
+            self.assertEqual(self.radio.next_songs.count(), 1)
+    
+            res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
+            self.assertEqual(res.status_code, 200)
 
-        res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
-        self.assertEqual(res.status_code, 200)
-
-        res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
-        self.assertEqual(res.status_code, 200)
+            res = self.client.get(reverse('yabase.views.get_next_song', args=['radio1']))
+            self.assertEqual(res.status_code, 200)
+        
         
     def test_find_new_song(self):
         playlist = generate_playlist(song_count=5)

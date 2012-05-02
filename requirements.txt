@@ -32,3 +32,4 @@ django-transmeta
 django-jenkins
 django-ignoretests
 redis
+mock
