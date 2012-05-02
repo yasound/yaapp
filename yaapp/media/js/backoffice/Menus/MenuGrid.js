@@ -59,7 +59,7 @@ Yasound.Menus.UI.menuColumnModel = function(sm) {
     return cm;
 };
 
-Yasound.Menu.UI.MenuFilters = function(){
+Yasound.Menus.UI.MenuFilters = function(){
     return new Ext.ux.grid.GridFilters({
         encode: false,
         local: true,
