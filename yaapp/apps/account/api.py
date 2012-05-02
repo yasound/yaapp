@@ -28,6 +28,9 @@ from django.utils.translation import ugettext_lazy as _
 import logging
 logger = logging.getLogger("yaapp.account")
 
+def fill_app_infos(request):
+    request.app_version = request.REQUEST.get('app_version')
+    request.app_id = request.REQUEST.get('app_id')
 
 
 class YasoundApiKeyAuthentication(ApiKeyAuthentication):
@@ -39,8 +42,7 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
     See https://github.com/toastdriven/django-tastypie/issues/197 for more info
     """
     def is_authenticated(self, request, **kwargs):
-        request.app_version = request.REQUEST.get('app_version')
-        request.app_id = request.REQUEST.get('app_id')
+        fill_app_infos(request)
 
         authenticated = False
         if request.user.is_authenticated():
@@ -66,9 +68,8 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
 
 class YasoundBasicAuthentication(BasicAuthentication):
     def is_authenticated(self, request, **kwargs):
-        request.app_version = request.REQUEST.get('app_version')
-        request.app_id = request.REQUEST.get('app_id')
-
+        fill_app_infos(request)
+        
         authenticated = super(YasoundBasicAuthentication, self).is_authenticated(request, **kwargs)
         if authenticated:
             # inactive users should be kicked out
@@ -121,6 +122,8 @@ def add_api_key_to_bundle(user, bundle):
 class SignupAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         print 'signup authentication'
+        fill_app_infos(request)
+        
         print request.COOKIES
         cookies = request.COOKIES
         if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
@@ -238,6 +241,8 @@ def _download_facebook_profile(token):
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         authenticated = False
+        fill_app_infos(request)
+        
         # Application Cookie authentication:
         cookies = request.COOKIES
         if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
