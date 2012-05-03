@@ -25,7 +25,7 @@ from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
 from yainvitation.models import Invitation
-from yametrics.models import MetricsManager
+from yametrics.models import GlobalMetricsManager, TopMissingSongsManager
 from yaref.models import YasoundSong
 import datetime
 import requests
@@ -466,7 +466,7 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     if not request.user.is_superuser:
         raise Http404()
     
-    mm = MetricsManager()
+    mm = GlobalMetricsManager()
     metrics = mm.get_current_metrics()
     for metric in metrics:
         if 'listening_time' in metric:
@@ -504,19 +504,21 @@ def songmetadata_top_missing(request):
         raise Http404
     
     if request.method == 'GET':
-        qs = SongMetadata.objects.filter(yasound_song_id__isnull=True).annotate(Count('songinstance')).order_by('-songinstance__count')[:10]
+        tm =TopMissingSongsManager()
+        qs = tm.all()
         data = []
         for metadata in qs:
-            data.append({
-                'id': metadata.id,
-                'name': metadata.name,
-                'artist_name': metadata.artist_name,
-                'album_name': metadata.album_name,
-                'songinstance__count': metadata.songinstance__count
-            })
+            if SongMetadata.objects.filter(id=metadata['db_id'], yasound_song_id__isnull=False).count() == 0:
+                data.append({
+                    'id': metadata['db_id'],
+                    'name': metadata['name'],
+                    'artist_name': metadata['artist_name'],
+                    'album_name': metadata['album_name'],
+                    'songinstance__count': metadata['songinstance__count']
+                })
         response = {
             'data': data,
-            'results': len(qs), 
+            'results': qs.count(), 
             'success': True
         }            
         resp = utils.JsonResponse(json.dumps(response))

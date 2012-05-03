@@ -605,6 +605,10 @@ if not PRODUCTION_MODE:
             "task": "emailconfirmation.task.delete_expired_confirmations_task",
             "schedule": crontab(minute=0, hour='12'),
         },
+        "calculate_top_missing_songs": {
+            "task": "yametrics.task.calculate_top_missing_songs_task",
+            "schedule": crontab(minute=0, hour='03'),
+        },
     }
 else:
     import socket   
@@ -655,6 +659,14 @@ else:
                 "schedule": crontab(minute=0, hour='*'),
             },
         }
+    elif hostname == 'yas-web-07':
+        CELERYBEAT_SCHEDULE = {
+            "calculate_top_missing_songs": {
+                "task": "yametrics.task.calculate_top_missing_songs_task",
+                "schedule": crontab(minute=0, hour='03'),
+            },
+        }
+    
     
 UPLOAD_SONG_FOLDER = '/tmp/'
 if PRODUCTION_MODE:
