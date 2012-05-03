@@ -8,8 +8,7 @@ var Class = function (methods) {
         this.initialize.apply(this, arguments);
     };
 
-    var property = 0;
-    for (property in methods) {
+    for (var property in methods) {
         klass.prototype[property] = methods[property];
     }
 
@@ -39,8 +38,8 @@ Yasound.App.PushManager = Class({
     },
 
     onRadioEvent: function (message) {
-        raw_data = message.data;
-        data = JSON.parse(raw_data);
+        var raw_data = message.data;
+        var data = JSON.parse(raw_data);
         this.trigger(data.event_type, JSON.parse(data.data));
     },
 
