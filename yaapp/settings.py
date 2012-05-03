@@ -670,7 +670,6 @@ if PRODUCTION_MODE :
 else :
     COMPRESS = False
     
-COMPRESS= True
 COMPRESS_VERSION = True
 from resources_settings import COMPRESS_JS, COMPRESS_CSS
 #COMPRESS_JS_FILTERS = ()
