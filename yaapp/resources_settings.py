@@ -61,7 +61,7 @@ COMPRESS_JS = {
         ]
     },
     'webapp-all': {
-        'output_filename': 'backoffice-all.?.js',
+        'output_filename': 'webapp-all.?.js',
         'source_filenames': [
             'js/jquery-1.7.1.min.js',
             'js/jquery.timers.js',
