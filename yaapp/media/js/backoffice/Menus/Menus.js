@@ -174,6 +174,13 @@ Yasound.Menus.UI.Panel = function() {
 //		}
 //	});
 	
+	
+	var menusGrid = Ext.ComponentMgr.create({
+	region:'center',
+	id: 'menus-grid',
+	xtype:'menugrid'	
+	});
+	
 	return {
 		xtype : 'panel',
 		title : gettext('Menus management'),
@@ -184,6 +191,7 @@ Yasound.Menus.UI.Panel = function() {
 		split: true,
         defaults: {autoScroll:true},
 //        activeItem: 0,
+        items:[menusGrid],
 //		items:[{
 //				layout:'border',
 //				title: gettext('Pending'),

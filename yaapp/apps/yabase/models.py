@@ -24,6 +24,7 @@ import signals as yabase_signals
 from django.core.cache import cache
 import json
 from yacore.database import atomic_inc
+import os
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -1178,4 +1179,25 @@ class FeaturedRadio(models.Model):
         unique_together = ('featured_content', 'radio')
         ordering = ['order',]
         db_name = u'default'
+
+class ApnsCertificateManager(models.Manager):
+    def certificate_file(self, application_id, is_sandbox):
+        certifs = self.filter(application_id=application_id, sandbox=is_sandbox)
+        if certifs.count() == 0:
+            return None
+        f = certifs[0].certificate_file
+        full_path = os.path.join(yaapp_settings.PROJECT_PATH, f)
+        return full_path
+    
+    def install_defaults(self):
+        self.get_or_create(application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/prod.pem')
+        self.get_or_create(application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/dev.pem')
+
+class ApnsCertificate(models.Model):
+    application_id = models.CharField(max_length=127)
+    sandbox = models.BooleanField()
+    certificate_file = models.CharField(max_length=255)
+    objects = ApnsCertificateManager()
+    
+
 

@@ -12,6 +12,7 @@ from django.test import Client
 from django.contrib.auth.models import User
 from tastypie.models import ApiKey
 import json
+from yabase import settings as yabase_settings
 
 
 class TestMenus(TestCase):
@@ -104,7 +105,7 @@ class TestMenus(TestCase):
         self.assertIsNotNone(menu_desc)
         
     def test_app_info(self):
-        app_id = 'com.yasound.yasound'
+        app_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
         app_version_min = '1.2.3'
         app_version_max = '1.2.6'
         

@@ -8,9 +8,6 @@ djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
 
-IPHONE_APN_PUSH_CERT_DEV = os.path.join(PROJECT_PATH, "certificates/dev.pem")
-IPHONE_APN_PUSH_CERT_PROD = os.path.join(PROJECT_PATH, "certificates/prod.pem")
-
 
 # Theses settings are different with env variables
 #
