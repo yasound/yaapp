@@ -670,10 +670,12 @@ if PRODUCTION_MODE :
 else :
     COMPRESS = False
     
+COMPRESS= True
 COMPRESS_VERSION = True
 from resources_settings import COMPRESS_JS, COMPRESS_CSS
+#COMPRESS_JS_FILTERS = ()
 COMPRESS_CSS_FILTERS = () # no css compression
-    
+
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
 FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ar 24000 -ab 64000 -y' # convert option when generating mp3 preview
