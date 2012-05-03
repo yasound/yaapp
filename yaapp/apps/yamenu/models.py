@@ -66,8 +66,8 @@ class MenusManager():
         version = StrictVersion(app_version) if app_version else None
         final_menus = []
         for m in menus:
-            if version:
-                if version < StrictVersion(m['app']['app_version']['min']) or version > StrictVersion(m['app']['app_version']['max']):
+            if version and m.has_key('app') and m['app'].has_key('app_version'):
+                if (m['app']['app_version'].has_key('min') and version < StrictVersion(m['app']['app_version']['min'])) or ( m['app']['app_version'].has_key('max') and version > StrictVersion(m['app']['app_version']['max'])):
                     continue
             final_menus.append(m)
                 

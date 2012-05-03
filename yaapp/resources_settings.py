@@ -56,6 +56,8 @@ COMPRESS_JS = {
             'js/backoffice/Menus/MenuGrid.js',
             'js/backoffice/Menus/MenuForm.js',
             'js/backoffice/Menus/Menus.js',
+            'js/backoffice/Song/MissingSongMetadataGrid.js',
+            'js/backoffice/Song/MissingSongs.js',
         ]
     },
     'webapp-all': {

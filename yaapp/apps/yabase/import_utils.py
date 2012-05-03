@@ -92,6 +92,10 @@ import mimetypes
 logger = logging.getLogger("yaapp.yabase")
 
 class SongImporter:
+    """
+    Helper class which allow to import & extract cover
+    """
+    
     _messages = u''
         
     def _log(self, message):
@@ -321,7 +325,7 @@ class SongImporter:
     def get_messages(self):
         return self._messages
     
-    def import_song(self, filepath, metadata=None, convert=True, allow_unknown_song=False):
+    def import_song(self, filepath, metadata=None, convert=True, allow_unknown_song=False, song_metadata_id=None):
         """
         import song without metadata
         """
@@ -332,10 +336,16 @@ class SongImporter:
         if convert==True:
             self._convert_to_mp3(filepath, destination)
             metadata = uploader.get_file_infos(destination, metadata)
-            sm, messages = self.process_song(metadata, filepath=destination, allow_unknown_song=allow_unknown_song)
+            sm, messages = self.process_song(metadata, 
+                                             filepath=destination, 
+                                             allow_unknown_song=allow_unknown_song,
+                                             song_metadata_id=song_metadata_id)
         else:
             metadata = uploader.get_file_infos(filepath, metadata)
-            sm, messages = self.process_song(metadata, filepath=filepath, allow_unknown_song=allow_unknown_song)
+            sm, messages = self.process_song(metadata, 
+                                             filepath=filepath, 
+                                             allow_unknown_song=allow_unknown_song,
+                                             song_metadata_id=song_metadata_id)
             
         return sm, messages
     
@@ -402,7 +412,7 @@ class SongImporter:
             
 
 
-    def process_song(self, metadata, filepath=None, allow_unknown_song=False):
+    def process_song(self, metadata, filepath=None, allow_unknown_song=False, song_metadata_id=None):
         """
         * import song file, 
         * create YasoundSong, 
@@ -474,27 +484,36 @@ class SongImporter:
         # avoid stale data        
         flush_transaction()
         
-        # first check for an existing SongMetadata
-        try:
-            sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
-            if sm.yasound_song_id:
-                try:
-                    YasoundSong.objects.get(id=sm.yasound_song_id)
-                    self._log(_("song already in database: %s") % (sm.yasound_song_id))
+        sm = None
+        if song_metadata_id:
+            try:
+                sm = SongMetadata.objects.get(id=song_metadata_id)
+                self._log(_("song metadata given and found : %s") % (song_metadata_id))
+            except SongMetadata.DoesNotExist:
+                self._log(_("song metadata does not exists : %s") % (song_metadata_id))
 
-                    # creating song instance if needed
-                    self._create_song_instance(sm, metadata)
-                    
-                    return sm, self.get_messages()
-                except YasoundSong.DoesNotExist:
-                    self._log(_("song metadata already in database, but no YasoundSong"))
-        except SongMetadata.DoesNotExist:
-            sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name)
-            sm.save()
-            self._log(_('creating SongMetadata, id = %s') % (sm.id))
-        except SongMetadata.MultipleObjectsReturned:
-            sm = SongMetadata.objects.filter(name=name, artist_name=artist_name, album_name=album_name)[0]
-            self._log(_('multiple objects, choosing id = %s') % (sm.id))
+        if not sm:        
+            # first check for an existing SongMetadata
+            try:
+                sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
+                if sm.yasound_song_id:
+                    try:
+                        YasoundSong.objects.get(id=sm.yasound_song_id)
+                        self._log(_("song already in database: %s") % (sm.yasound_song_id))
+    
+                        # creating song instance if needed
+                        self._create_song_instance(sm, metadata)
+                        
+                        return sm, self.get_messages()
+                    except YasoundSong.DoesNotExist:
+                        self._log(_("song metadata already in database, but no YasoundSong"))
+            except SongMetadata.DoesNotExist:
+                sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name)
+                sm.save()
+                self._log(_('creating SongMetadata, id = %s') % (sm.id))
+            except SongMetadata.MultipleObjectsReturned:
+                sm = SongMetadata.objects.filter(name=name, artist_name=artist_name, album_name=album_name)[0]
+                self._log(_('multiple objects, choosing id = %s') % (sm.id))
             
             
         # create artist with info from echonest and lastfm
@@ -580,7 +599,7 @@ class SongImporter:
                 yasound_genre, created = YasoundGenre.objects.get_or_create(name_canonical=genre_canonical, defaults={'name': genre})
                 if created:
                     self._log("creating genre: %s" % (genre))
-                song_genre, created = YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
+                _song_genre, created = YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
                 if created:
                     self._log("genre %s associated with song %s" % (genre, song))
                     
@@ -687,9 +706,12 @@ class SongImporter:
         logger.info("extracting song cover from %d (%s) : done" % (yasound_song.id, yasound_song))
 
 
-def import_song(filepath, metadata, convert, allow_unknown_song=False):    
+def import_song(filepath, metadata, convert, allow_unknown_song=False, song_metadata_id=None): 
+    """
+    import song and extract cover
+    """   
     importer = SongImporter()
-    sm, messages = importer.import_song(filepath, metadata, convert, allow_unknown_song) 
+    sm, messages = importer.import_song(filepath, metadata, convert, allow_unknown_song, song_metadata_id=song_metadata_id) 
     if sm and sm.yasound_song_id:
         try:
             yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)

@@ -1,7 +1,7 @@
 from account.models import UserProfile
 from extjs import grids
 from yabackoffice.models import BackofficeRadio
-from yabase.models import SongInstance, Radio
+from yabase.models import SongInstance, Radio, SongMetadata
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 
@@ -16,7 +16,6 @@ class SongInstanceGrid(grids.ModelGrid):
         'album_name' : 'metadata__album_name',
         'yasound_song_id': 'metadata__yasound_song_id'
     }
-    
     
 class RadioGrid(grids.ModelGrid):
     model = BackofficeRadio
@@ -60,9 +59,7 @@ class YasoundSongGrid(grids.ModelGrid):
             'name',
             'artist_name',
             'album_name',
-            ]
-    mapping = {
-    }
+    ]
     
 class UserProfileGrid(grids.ModelGrid):
     model = UserProfile

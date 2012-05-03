@@ -7,7 +7,7 @@ from django.core import serializers
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
-from django.db.models.aggregates import Sum
+from django.db.models.aggregates import Sum, Count
 from django.http import HttpResponseRedirect, HttpResponseRedirect, HttpResponse, \
     HttpResponseForbidden, Http404
 from django.shortcuts import render_to_response, get_object_or_404, \
@@ -497,3 +497,29 @@ def light_metrics(request, template_name='yabackoffice/light_metrics.html'):
     }, context_instance=RequestContext(request)) 
     
     
+@csrf_exempt
+@login_required
+def songmetadata_top_missing(request):
+    if not request.user.is_superuser:
+        raise Http404
+    
+    if request.method == 'GET':
+        qs = SongMetadata.objects.filter(yasound_song_id__isnull=True).annotate(Count('songinstance')).order_by('-songinstance__count')[:10]
+        data = []
+        for metadata in qs:
+            data.append({
+                'id': metadata.id,
+                'name': metadata.name,
+                'artist_name': metadata.artist_name,
+                'album_name': metadata.album_name,
+                'songinstance__count': metadata.songinstance__count
+            })
+        response = {
+            'data': data,
+            'results': len(qs), 
+            'success': True
+        }            
+        resp = utils.JsonResponse(json.dumps(response))
+        return resp
+    
+    raise Http404

@@ -33,6 +33,13 @@ Yasound.Upload.UI.FilePanel = Ext.extend(Ext.form.FormPanel, {
     		buttons : [{
 				text : gettext('Import'),
 				handler : function(btn, event) {
+				    var params = {};
+				    if (those.songMetadataId) {
+				        params = {
+				           'song_metadata_id': those.songMetadataId 
+				        }
+				    }
+				    
 					if (fp.getForm().isValid()) {
 						those.fireEvent('uploadStarted', fp);
 						fp.getForm().submit({
@@ -55,7 +62,7 @@ Yasound.Upload.UI.FilePanel = Ext.extend(Ext.form.FormPanel, {
 									those.fireEvent('uploadFailure', fp, 'Transmission error');
 								}
 							},
-							params : {}
+							params : params
 						});
 					}
 				}}]
