@@ -590,6 +590,7 @@ def upload_song_ajax(request):
         raise Http404
     radio_id = request.REQUEST.get('radio_id')
     radio_name = request.REQUEST.get('radio_name')
+    song_metadata_id = request.REQUEST.get('song_metadata_id')
     creator_profile_id = request.REQUEST.get('creator_profile_id')
     
     metadata = {
@@ -608,7 +609,20 @@ def upload_song_ajax(request):
     
     if 'file' in request.FILES:    
         f = request.FILES['file']
-        sm, messages = import_utils.import_song(binary=f, metadata=metadata, convert=True, allow_unknown_song=True)
+        directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
+        _path, extension = os.path.splitext(f.name)
+        source = u'%s/s%s' % (directory, extension)
+        source_f = open(source , 'wb')
+        for chunk in f.chunks():
+            source_f.write(chunk)
+        source_f.close()
+
+        _sm, messages = import_utils.import_song(filepath=source, 
+                                                 metadata=metadata, 
+                                                 convert=True, 
+                                                 allow_unknown_song=True,
+                                                 song_metadata_id=song_metadata_id)
+        rmtree(directory)
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': unicode(messages)
@@ -624,7 +638,11 @@ def upload_song_ajax(request):
                 source_f.write(chunk)
             source_f.close()
             
-            sm, messages = import_utils.import_song(filepath=source, metadata=metadata, convert=True, allow_unknown_song=True)
+            sm, messages = import_utils.import_song(filepath=source, 
+                                                    metadata=metadata, 
+                                                    convert=True, 
+                                                    allow_unknown_song=True,
+                                                    song_metadata_id=song_metadata_id)
             rmtree(directory)
             
             global_message = global_message + messages + '\n'

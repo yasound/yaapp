@@ -84,7 +84,10 @@ Ext.onReady(function(){
         }), Ext.apply(Yasound.Backoffice.UI.UnmatchedSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Unmatched songs')
-        }),Ext.apply(Yasound.Upload.UI.UploadSongsPanel(), {
+        }),Ext.apply(Yasound.Backoffice.UI.MissingSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Missing songs')
+        }), Ext.apply(Yasound.Upload.UI.UploadSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Upload new songs to yasound')
         })]
