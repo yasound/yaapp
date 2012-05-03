@@ -16,7 +16,8 @@ pymongo
 django-extensions
 django-iphone-push
 -e git+https://github.com/jbl2024/django-extjs#egg=django-extjs
-django-compress
+django-pipeline == 1.1.27
+jsmin
 simplejson
 django-social-auth
 requests
