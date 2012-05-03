@@ -737,6 +737,9 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     }, context_instance=RequestContext(request))    
 
 def web_app(request, radio_uuid=None, query=None, template_name='yabase/webapp.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+    
     if request.user.is_authenticated():
         user_uuid = request.user.get_profile().own_radio.uuid
     else:
