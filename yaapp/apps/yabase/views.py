@@ -1,6 +1,5 @@
 from django.views.decorators.http import require_http_methods
 from celery.result import AsyncResult
-from check_request import check_api_key_Authentication, check_http_method
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -28,6 +27,7 @@ import os
 import settings as yabase_settings
 import uuid
 from yacore.decorators import check_api_key
+from yacore.http import check_api_key_Authentication, check_http_method
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 

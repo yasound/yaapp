@@ -1,6 +1,10 @@
 from tastypie.models import ApiKey
 from django.contrib.auth.models import User
 
+def fill_app_infos(request):
+    request.app_version = request.REQUEST.get('app_version')
+    request.app_id = request.REQUEST.get('app_id')
+    
 def coerce_put_post(request):
     """
     Django doesn't particularly understand REST.

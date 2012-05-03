@@ -11,7 +11,7 @@ from models import YasoundSong
 from time import time
 from settings import FUZZY_KEY
 from django.utils import simplejson
-from check_request import check_api_key_Authentication, check_http_method
+from yacore.http import check_api_key_Authentication, check_http_method
 from yaref.models import YasoundAlbum
 
 @login_required

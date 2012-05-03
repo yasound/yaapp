@@ -67,7 +67,7 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True, application_
             passed_socket.write(msg)
         else:
             host_name = 'gateway.sandbox.push.apple.com' if sandbox else 'gateway.push.apple.com'
-            certif_file = ApnsCertificate.certificate_file(application_id, sandbox)
+            certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
             s = socket()
             c = ssl.wrap_socket(s,
                                 ssl_version=ssl.PROTOCOL_SSLv3,
@@ -97,7 +97,7 @@ def test():
 def test2():
     sandbox = True
     application_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
-    certif_file = ApnsCertificate.certificate_file(application_id, sandbox)
+    certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
     host_name = 'gateway.sandbox.push.apple.com'
     s1 = socket()
     c1 = ssl.wrap_socket(s1,
@@ -120,7 +120,7 @@ def test2():
 def test3():
     sandbox = True
     application_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
-    certif_file = ApnsCertificate.certificate_file(application_id, sandbox)
+    certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
     host_name = 'gateway.sandbox.push.apple.com'
     s1 = socket()
     c1 = ssl.wrap_socket(s1,
@@ -166,7 +166,7 @@ def test3():
 def get_deprecated_devices(sandbox=True, application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER):
     deprecated = []
     
-    certif_file = ApnsCertificate.certificate_file(application_id, sandbox)
+    certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
     host_name = 'feedback.sandbox.push.apple.com' if sandbox else 'feedback.push.apple.com'
     s = socket()
     c = ssl.wrap_socket(s,

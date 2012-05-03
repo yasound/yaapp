@@ -1,6 +1,5 @@
 from account.forms import LoginForm, SignupForm, PasswordResetForm, \
     SetPasswordForm
-from check_request import check_api_key_Authentication, check_http_method
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
@@ -32,6 +31,7 @@ from django.forms.util import ErrorList
 from django_mobile import get_flavour
 import urllib
 from tastypie.http import HttpBadRequest
+from yacore.http import check_api_key_Authentication, check_http_method
 
 logger = logging.getLogger("yaapp.account")
 

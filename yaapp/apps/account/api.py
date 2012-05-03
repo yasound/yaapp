@@ -22,15 +22,14 @@ import tweepy
 import urllib
 import uuid
 import time
+from yacore.http import fill_app_infos
 
 from django.utils.translation import ugettext_lazy as _
 
 import logging
 logger = logging.getLogger("yaapp.account")
 
-def fill_app_infos(request):
-    request.app_version = request.REQUEST.get('app_version')
-    request.app_id = request.REQUEST.get('app_id')
+
 
 
 class YasoundApiKeyAuthentication(ApiKeyAuthentication):
