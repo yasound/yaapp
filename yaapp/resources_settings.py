@@ -1,5 +1,5 @@
-COMPRESS_CSS = { }
-COMPRESS_JS = { 
+PIPELINE_CSS = { }
+PIPELINE_JS = { 
     'backoffice-all': {
         'output_filename': 'backoffice-all.?.js',
         'source_filenames': [
@@ -67,7 +67,6 @@ COMPRESS_JS = {
             'js/jquery.timers.js',
             'js/moment.min.js',
             'js/moment-lang-all.min.js',
-            'js/socket.io.js',
             'js/sm/soundmanager2-nodebug-jsmin.js',
             'js/json2.js',
             'js/mustache-django-friendly.js',
@@ -77,6 +76,7 @@ COMPRESS_JS = {
             'js/backbone-tastypie.js',
             'js/backbone.paginator.js',
             'bootstrap/js/bootstrap.min.js',
+            'js/socket.io.js',
             'js/pubsub.js',
             'js/Namespace.js',
             'js/app/common/models.js',

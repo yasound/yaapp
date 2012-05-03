@@ -330,7 +330,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'django_jenkins',
     'extjs',
-    'compress',
+    'pipeline',
     'south',
     'account',
     'wall',
@@ -664,16 +664,17 @@ if PRODUCTION_MODE:
 API_LIMIT_PER_PAGE = 0 # no pagination for now
 
 
-# compress
+# pipeline
 if PRODUCTION_MODE :
-    COMPRESS = True
+    PIPELINE = True
 else :
-    COMPRESS = False
+    PIPELINE = False
 
-COMPRESS_VERSION = True
-from resources_settings import COMPRESS_JS, COMPRESS_CSS
-#COMPRESS_JS_FILTERS = ()
-COMPRESS_CSS_FILTERS = () # no css compression
+PIPELINE_ROOT=MEDIA_ROOT
+PIPELINE_VERSION=True
+from resources_settings import PIPELINE_JS, PIPELINE_JS
+PIPELINE_JS_COMPRESSOR = () #'pipeline.compressors.jsmin.JSMinCompressor'
+PIPELINE_CSS_COMPRESSOR = () # no css compression
 
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
