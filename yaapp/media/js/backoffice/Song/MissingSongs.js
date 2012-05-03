@@ -57,6 +57,7 @@ Yasound.Backoffice.UI.MissingSongsPanel = function() {
             },
             tbar: [ {
                 iconCls: 'silk-arrow-refresh',
+                text: gettext('Refresh'),
                 handler: function(btn, e) {
                     var grid = btn.ownerCt.ownerCt;
                     grid.getStore().reload();                    
