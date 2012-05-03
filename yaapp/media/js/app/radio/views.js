@@ -62,10 +62,11 @@ Yasound.Views.Radio = Backbone.View.extend({
 
     addToFavorite: function(e) {
         var url = '/api/v1/radio/' + this.model.get('id') + '/favorite/';
+        var that = this;
         $.post(url, {
             success: function() {
-                $('#btn-favorite', this.el).hide();
-                $('#btn-unfavorite', this.el).show();
+                $('#btn-favorite', that.el).hide();
+                $('#btn-unfavorite', that.el).show();
                 $.publish('/radio/favorite');
             }
         });
@@ -74,10 +75,11 @@ Yasound.Views.Radio = Backbone.View.extend({
 
     removeFromFavorite: function(e) {
         var url = '/api/v1/radio/' + this.model.get('id') + '/not_favorite/';
+        var that = this;
         $.post(url, {
             success: function() {
-                $('#btn-unfavorite', this.el).hide();
-                $('#btn-favorite', this.el).show();
+                $('#btn-unfavorite', that.el).hide();
+                $('#btn-favorite', that.el).show();
                 $.publish('/radio/not_favorite');
             }
         });
