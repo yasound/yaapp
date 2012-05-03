@@ -1,3 +1,7 @@
+"use strict";
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
+
 Namespace('Yasound.Data.Models');
 
 /**
@@ -8,7 +12,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
     urlRoot: '/api/v1/public_radio/',
 
     // notify server that user is connected to radio
-    connect: function() {
+    connect: function () {
         var id = this.get('id');
         if (id > 0) {
             var url = '/api/v1/radio/' + id + '/connect/';
@@ -17,7 +21,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
     },
 
     // notify server that user is not connected anymore
-    disconnect: function() {
+    disconnect: function () {
         var id = this.get('id');
         if (id > 0) {
             var url = '/api/v1/radio/' + id + '/disconnect/';
@@ -30,22 +34,22 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
  * The song on air
  */
 Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
-    url: function() {
+    url: function () {
         return '/api/v1/radio/' + this.get('radioId') + '/current_song/';
     },
-    
+
     // the current song will auto-refresh with either polling or push system
-    initialize: function() {
+    initialize: function () {
         var that = this;
         if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.on('song', function(msg) {
+            Yasound.App.Router.pushManager.on('song', function (msg) {
                 that.reset(msg);
             });
         } else {
-            setInterval(function() {
+            setInterval(function () {
                 that.fetch();
             }, 10000);
         }
     }
-    
+
 });

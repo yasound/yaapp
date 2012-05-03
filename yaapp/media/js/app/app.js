@@ -1,19 +1,22 @@
-$(document).ready(function() {
+"use strict";
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
+$(document).ready(function () {
     Namespace('Yasound.App');
 
-    
     /**
      * component initalization
      */
     $('.dropdown-toggle').dropdown();
 
-    Backbone.View.prototype.close = function(){
+    Backbone.View.prototype.close = function () {
         this.remove();
         this.unbind();
         if (this.onClose) {
             this.onClose();
         }
     }
+
 
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
     soundManager.preferFlash = true;
@@ -32,7 +35,7 @@ $(document).ready(function() {
     };
 
     // called in case of problem with flash player (flashblock for instance)
-    soundManager.ontimeout(function() {
+    soundManager.ontimeout(function () {
         if (!(typeof Yasound.App.MySound === "undefined")) {
             Yasound.App.MySound.destruct();
         }
@@ -56,31 +59,32 @@ $(document).ready(function() {
         }),
         currentView: undefined,
 
-        setCurrentRadioUUID: function(uuid) {
+        setCurrentRadioUUID: function (uuid) {
             this.currentRadio.disconnect();
             this.currentRadio.set({
                 'uuid': uuid,
                 'id': 0
             }, {
-                silent: true // do not send 'change' event now, fetch will do it right after
+                silent: true
+            // do not send 'change' event now, fetch will do it right after
             });
 
             var radio = this.currentRadio;
             this.currentRadio.fetch({
-                success: function() {
+                success: function () {
                     radio.connect();
                 }
             });
         },
 
-        index: function() {
+        index: function () {
             this.clearView();
-            
+
             // TODO: add a welcome page
         },
 
         // this function must be called between every routes
-        clearView: function() {
+        clearView: function () {
             this.buildCommonContext();
             if (this.currentView) {
                 this.currentView.reset();
@@ -88,16 +92,16 @@ $(document).ready(function() {
                 this.currentView = undefined;
             }
         },
-        
+
         pushManager: new Yasound.App.PushManager({
             enablePush: g_enable_push
         }),
 
         // build common stuff for every views (radio)
-        buildCommonContext: function() {
+        buildCommonContext: function () {
             if (!this.commonContext) {
                 this.commonContext = {};
-                this.commonContext.streamFunction = function(model, stream_url) {
+                this.commonContext.streamFunction = function (model, stream_url) {
                     if (!(typeof Yasound.App.MySound === "undefined")) {
                         Yasound.App.MySound.destruct();
                     }
@@ -113,12 +117,12 @@ $(document).ready(function() {
         },
 
         // search page
-        search: function(query) {
+        search: function (query) {
             this.clearView();
-            
+
             var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
             radioSearchResults.setQuery(query);
-            
+
             this.currentView = new Yasound.Views.SearchPage({
                 tagName: 'div',
                 className: 'row-fluid',
@@ -128,11 +132,11 @@ $(document).ready(function() {
         },
 
         // owner favorites page
-        favorites: function() {
+        favorites: function () {
             this.clearView();
-            
+
             var radios = new Yasound.Data.Models.Favorites({});
-            
+
             this.currentView = new Yasound.Views.FavoritesPage({
                 tagName: 'div',
                 className: 'row-fluid',
@@ -140,9 +144,9 @@ $(document).ready(function() {
             });
             $('#webapp-content').prepend(this.currentView.render().el);
         },
-        
+
         // radio details page
-        radio: function(uuid) {
+        radio: function (uuid) {
             this.clearView();
 
             if (!this.radioContext) {
@@ -160,7 +164,7 @@ $(document).ready(function() {
 
                 if (this.commonContext.userAuthenticated) {
                 }
-                this.currentRadio.on('change:id', function(model, id) {
+                this.currentRadio.on('change:id', function (model, id) {
                     model.currentSong = that.radioContext.currentSong;
                     that.radioContext.currentSong.set('radioId', id);
                     that.radioContext.currentSong.fetch();
@@ -182,11 +186,10 @@ $(document).ready(function() {
         }
     });
 
-    
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
 
-    soundManager.onready(function() {
+    soundManager.onready(function () {
         Backbone.history.start({
             pushState: true,
             root: '/app/',
