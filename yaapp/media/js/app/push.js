@@ -1,18 +1,21 @@
+"use strict";
+/*jslint forin: true, nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 Namespace('Yasound.App');
 
-var Class = function(methods) {
-    var klass = function() {
+var Class = function (methods) {
+    var klass = function () {
         this.initialize.apply(this, arguments);
     };
 
-    for ( var property in methods) {
+    for (var property in methods) {
         klass.prototype[property] = methods[property];
     }
 
-    if (!klass.prototype.initialize)
-        klass.prototype.initialize = function() {
+    if (!klass.prototype.initialize) {
+        klass.prototype.initialize = function () {
         };
-
+    }
     return klass;
 };
 
@@ -22,10 +25,10 @@ Yasound.App.PushManager = Class({
     radioPollingIntervalID: undefined,
     socket: undefined,
 
-    initialize: function(options) {
+    initialize: function (options) {
         _.extend(this, options);
         _.extend(this, Backbone.Events);
-        
+
         if (this.enablePush) {
             _.bindAll(this, 'onRadioEvent');
 
@@ -34,13 +37,13 @@ Yasound.App.PushManager = Class({
         }
     },
 
-    onRadioEvent: function(message) {
-        raw_data = message.data;
-        data = JSON.parse(raw_data);
+    onRadioEvent: function (message) {
+        var raw_data = message.data;
+        var data = JSON.parse(raw_data);
         this.trigger(data.event_type, JSON.parse(data.data));
     },
 
-    unMonitorRadio: function() {
+    unMonitorRadio: function () {
         if (this.enablePush) {
             this.socket.emit('unsubscribe', {
                 'radio_id': this.radio.get('id')
@@ -48,7 +51,7 @@ Yasound.App.PushManager = Class({
         }
     },
 
-    monitorRadio: function(radio) {
+    monitorRadio: function (radio) {
         if (this.radio) {
             this.unMonitorRadio();
         }
@@ -61,4 +64,4 @@ Yasound.App.PushManager = Class({
             });
         }
     }
-})
+});

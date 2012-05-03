@@ -1,3 +1,6 @@
+"use strict";
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.Favorites = Backbone.Paginator.requestPager.extend({
@@ -46,7 +49,6 @@ Yasound.Data.Models.Favorites = Backbone.Paginator.requestPager.extend({
             error: function() {
                 that.page = savedPage;
             }
-        })
+        });
     }
-
 });

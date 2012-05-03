@@ -1,3 +1,6 @@
+"use strict";
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 Namespace('Yasound.Data.Models');
 
 
@@ -83,9 +86,8 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
             error: function() {
                 that.page = savedPage;
             }
-        })
+        });
     }
-
 });
 
 Yasound.Data.Models.RadioUser = Backbone.Model.extend({});

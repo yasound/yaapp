@@ -1,3 +1,6 @@
+"use strict";
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 Namespace('Yasound.Views');
 
 
@@ -21,7 +24,7 @@ Yasound.Views.Favorites = Backbone.View.extend({
     clear: function() {
         _.map(this.views, function(view) {
             view.close();
-        })
+        });
         this.views = [];
     },
 
@@ -32,7 +35,7 @@ Yasound.Views.Favorites = Backbone.View.extend({
             if (view.model.id == radio.id) {
                 return true;
             }
-        })
+        });
         if (found) {
             // do not insert duplicated content
             return;
@@ -47,7 +50,7 @@ Yasound.Views.Favorites = Backbone.View.extend({
         });
         var lastId = 0;
         if (lastView) {
-            var lastId = lastView.model.id;
+            lastId = lastView.model.id;
         }
         if (currentId >= lastId) {
             $(this.el).prepend(view.render().el);
@@ -57,7 +60,7 @@ Yasound.Views.Favorites = Backbone.View.extend({
             // the wall
             if (this.views.length >= this.collection.perPage) {
                 this.views[0].close();
-                this.views.splice(0, 1)
+                this.views.splice(0, 1);
             }
         } else {
             $(this.el).append(view.render().el);

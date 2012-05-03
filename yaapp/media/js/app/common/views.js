@@ -1,3 +1,7 @@
+"use strict";
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
+
 Namespace('Yasound.Views');
 
 /**
@@ -179,7 +183,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         var width = $volumeControl.width();
 
         var relativePosition = position - left;
-        var soundVolume = Math.floor(relativePosition * 100 / width)
+        var soundVolume = Math.floor(relativePosition * 100 / width);
         var percentage = soundVolume + "%";
         $('#volume-position').css("width", percentage);
 
