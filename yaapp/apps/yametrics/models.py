@@ -1,13 +1,14 @@
+from pymongo import DESCENDING
 from account.models import UserProfile
 from django.conf import settings
 from django.contrib.auth.models import User
-from yabase import settings as yabase_settings, signals as yabase_signals
-from yabase.models import Radio, WallEvent, RadioUser
-from django.db.models import signals
-import datetime
+from django.db.models import Q, Count, signals
 from task import async_inc_global_value
+from yabase import settings as yabase_settings, signals as yabase_signals
+from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
+import datetime
 
-class MetricsManager():
+class GlobalMetricsManager():
     """
     Helper class to store and retrieve key-value metrics
     """
@@ -66,6 +67,33 @@ class MetricsManager():
                 metrics.append(metric)
         return metrics
       
+      
+class TopMissingSongsManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.topmissingsongs = self.db.metrics.topmissingsongs
+        self.topmissingsongs.ensure_index("db_id", unique=True)
+        
+    def calculate(self, limit=100):
+        collection = self.topmissingsongs
+        collection.drop()
+        qs = SongMetadata.objects.filter(yasound_song_id__isnull=True).annotate(Count('songinstance')).order_by('-songinstance__count')[:limit]
+        for metadata in qs:
+            doc = {
+                'db_id': metadata.id,
+                'name': metadata.name,
+                'artist_name': metadata.artist_name,
+                'album_name': metadata.album_name,
+                'songinstance__count': metadata.songinstance__count
+            }
+            collection.update({"db_id": metadata.id},
+                              {"$set": doc}, upsert=True, safe=True)
+    def all(self):
+        collection = self.topmissingsongs
+        docs = collection.find().sort([('songinstance__count', DESCENDING)])
+        return docs
+    
+    
 ## Event handlers
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
