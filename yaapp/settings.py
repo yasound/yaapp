@@ -673,7 +673,7 @@ else :
 PIPELINE_ROOT=MEDIA_ROOT
 PIPELINE_VERSION=True
 from resources_settings import PIPELINE_JS, PIPELINE_JS
-PIPELINE_JS_COMPRESSOR = () #'pipeline.compressors.jsmin.JSMinCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 PIPELINE_CSS_COMPRESSOR = () # no css compression
 
 # FFMPEG settings
