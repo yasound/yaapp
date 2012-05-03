@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-20 15:48+0200\n"
+"POT-Creation-Date: 2012-05-03 11:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,58 +18,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/views.js:76
+#: js/app/common/views.js:91
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/views.js:78
+#: js/app/common/views.js:93
 msgid "by"
 msgstr "par"
 
-#: js/app/views.js:79
+#: js/app/common/views.js:94
 msgid "on"
 msgstr "sur"
 
-#: js/backoffice/backoffice.js:65
+#: js/backoffice/backoffice.js:66
 #: js/backoffice/Radio/Radios.js:292
 #: js/backoffice/Radio/UnmatchedSongs.js:21
 msgid "Radios"
 msgstr "Radios"
 
-#: js/backoffice/backoffice.js:67
+#: js/backoffice/backoffice.js:68
 msgid "Song management"
 msgstr "Gestion des chansons"
 
-#: js/backoffice/backoffice.js:81
+#: js/backoffice/backoffice.js:82
 #: js/backoffice/Radio/UnmatchedSongs.js:38
 msgid "Unmatched songs"
 msgstr "Chansons non détectées"
 
-#: js/backoffice/backoffice.js:84
+#: js/backoffice/backoffice.js:85
+#: js/backoffice/Song/MissingSongs.js:44
+msgid "Missing songs"
+msgstr "Chansons manquantes"
+
+#: js/backoffice/backoffice.js:88
 msgid "Upload new songs to yasound"
 msgstr "Envoyer les nouvelles chansons vers yasound"
 
-#: js/backoffice/backoffice.js:97
+#: js/backoffice/backoffice.js:101
 msgid "Search engine"
 msgstr "Moteur de recherche"
 
-#: js/backoffice/backoffice.js:99
+#: js/backoffice/backoffice.js:103
 msgid "Search engine tools"
 msgstr "Outils de recherche"
 
-#: js/backoffice/backoffice.js:123
+#: js/backoffice/backoffice.js:127
 #: js/backoffice/Invitations/Invitations.js:182
 msgid "Invitations"
 msgstr "Invitations"
 
-#: js/backoffice/backoffice.js:147
+#: js/backoffice/backoffice.js:151
 #: js/backoffice/Statistics/Statistics.js:34
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: js/backoffice/backoffice.js:149
+#: js/backoffice/backoffice.js:153
 msgid "Useful stats"
 msgstr "Statistiques utiles"
+
+#: js/backoffice/backoffice.js:177
+#: js/backoffice/Menus/Menus.js:180
+msgid "Menus"
+msgstr "Menus"
 
 #: js/backoffice/Invitations/InvitationForm.js:28
 msgid "Enter name of VIP"
@@ -101,7 +111,7 @@ msgstr "Sauver"
 
 #: js/backoffice/Invitations/InvitationForm.js:63
 #: js/backoffice/Radio/RadioForm.js:58
-#: js/backoffice/Upload/Upload.js:41
+#: js/backoffice/Upload/Upload.js:48
 msgid "Sending informations..."
 msgstr "Transmission des informations..."
 
@@ -111,6 +121,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: js/backoffice/Invitations/InvitationGrid.js:30
+#: js/backoffice/Menus/MenuGrid.js:23
 #: js/backoffice/Radio/RadioGrid.js:47
 #: js/backoffice/Users/UserGrid.js:27
 msgid "Name"
@@ -133,6 +144,7 @@ msgid "Sent at"
 msgstr "Envoyée le"
 
 #: js/backoffice/Invitations/InvitationGrid.js:133
+#: js/backoffice/Menus/MenuGrid.js:111
 #: js/backoffice/Radio/SongInstanceGrid.js:97
 #: js/backoffice/Radio/YasoundSongGrid.js:95
 #: js/backoffice/Users/UserGrid.js:115
@@ -140,6 +152,7 @@ msgid "Displaying {0} - {1} of {2}"
 msgstr "Affichage de {0} - {1} sur {2}"
 
 #: js/backoffice/Invitations/InvitationGrid.js:134
+#: js/backoffice/Menus/MenuGrid.js:112
 #: js/backoffice/Radio/SongInstanceGrid.js:98
 #: js/backoffice/Radio/YasoundSongGrid.js:96
 #: js/backoffice/Users/UserGrid.js:116
@@ -212,6 +225,18 @@ msgstr "Envoyées"
 msgid "Accepted"
 msgstr "Acceptées"
 
+#: js/backoffice/Menus/MenuGrid.js:33
+msgid "Language"
+msgstr "Langue"
+
+#: js/backoffice/Menus/MenuGrid.js:43
+msgid "Groups"
+msgstr "Groupes"
+
+#: js/backoffice/Menus/Menus.js:177
+msgid "Menus management"
+msgstr "Gestion des menus"
+
 #: js/backoffice/Radio/RadioForm.js:26
 msgid "Enter radio name"
 msgstr "Entrez le nom de la radio"
@@ -233,7 +258,7 @@ msgid "Select files or folder"
 msgstr "Sélectionner des fichiers ou un répertoire"
 
 #: js/backoffice/Radio/RadioForm.js:43
-#: js/backoffice/Upload/Upload.js:96
+#: js/backoffice/Upload/Upload.js:103
 msgid "Upload songs"
 msgstr "Importer des chansons"
 
@@ -320,16 +345,19 @@ msgstr "Gestion des radios"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:9
 #: js/backoffice/Radio/YasoundSongGrid.js:19
+#: js/backoffice/Song/MissingSongMetadataGrid.js:8
 msgid "Track"
 msgstr "Piste"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:19
 #: js/backoffice/Radio/YasoundSongGrid.js:28
+#: js/backoffice/Song/MissingSongMetadataGrid.js:13
 msgid "Album"
 msgstr "Album"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:29
 #: js/backoffice/Radio/YasoundSongGrid.js:37
+#: js/backoffice/Song/MissingSongMetadataGrid.js:18
 msgid "Artist"
 msgstr "Artiste"
 
@@ -339,6 +367,7 @@ msgstr "Id de chanson"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:106
 #: js/backoffice/Radio/YasoundSongGrid.js:105
+#: js/backoffice/Song/MissingSongMetadataGrid.js:61
 #, perl-brace-format
 msgid ""
 "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"elements\" : "
@@ -353,6 +382,22 @@ msgstr "Chanson"
 #: js/backoffice/SearchEngine/SearchEngine.js:16
 msgid "Fuzzy song search"
 msgstr "Recherche floue"
+
+#: js/backoffice/Song/MissingSongMetadataGrid.js:23
+msgid "Count"
+msgstr "Total"
+
+#: js/backoffice/Song/MissingSongs.js:48
+msgid "Most missing songs"
+msgstr "Chansons manquantes les plus demandées"
+
+#: js/backoffice/Song/MissingSongs.js:59
+msgid "Refresh"
+msgstr "Rafraichir"
+
+#: js/backoffice/Song/MissingSongs.js:68
+msgid "Upload file"
+msgstr "Importer un titre"
 
 #: js/backoffice/Statistics/Statistics.js:13
 msgid "Metrics"
@@ -383,11 +428,11 @@ msgstr "Sélectionner un fichier"
 msgid "Import"
 msgstr "Importer"
 
-#: js/backoffice/Upload/Upload.js:89
+#: js/backoffice/Upload/Upload.js:96
 msgid "Import results"
 msgstr "Résultats de l'import"
 
-#: js/backoffice/Upload/Upload.js:112
+#: js/backoffice/Upload/Upload.js:119
 msgid "Upload started\n"
 msgstr "Import démarré\n"
 
