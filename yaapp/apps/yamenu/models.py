@@ -3,6 +3,9 @@ from django.conf import settings
 import json
 from distutils.version import StrictVersion
 from Image import NONE
+import yabase.settings as yabase_settings
+from account.models import get_techtour_group
+from yabase.models import Radio
 
 ##############################
 ### list of menu entry type
@@ -113,6 +116,42 @@ class MenusManager():
     def install_defaults(self):
         for i in self.defaults():
             self.add_menu(i, overwrite=True)
+            
+    def install_techtour(self):
+        techtour_section_fr = {'name': 'Tech Tour', 'entries': []}
+        techtour_section_en = {'name': 'Tech Tour', 'entries': []}
+        
+        # add entry for 'Techtour lounge' radio
+        try:
+            techtour_radio = Radio.objects.get(name__iexact='Techtour Lounge')
+            techtour_radio_id = techtour_radio.id
+            
+            radio_entry_fr = {'image': 'IconMyRadio', 'type': 'radio', 'id': 'myRadio', 'name': 'Techtour lounge', 'params':{'radio_id':techtour_radio_id}}
+            techtour_section_fr['entries'].append(radio_entry_fr)
+            
+            radio_entry_en = {'image': 'IconMyRadio', 'type': 'radio', 'id': 'myRadio', 'name': 'Techtour lounge', 'params':{'radio_id':techtour_radio_id}}
+            techtour_section_en['entries'].append(radio_entry_en)
+        except Radio.DoesNotExist:
+            pass
+        
+        # add entry for techtour radio list
+        techtour_group = get_techtour_group()
+        techtour_group_ids = [techtour_group.id] 
+        
+        radios_techtour_fr = {'image': 'IconRadioFavorites', 'type': 'radio_list', 'id': 'radiosTechtour', 'name': 'radios Techtour', 'params':{'url':'api/v1/techtour_radio', 'genre_selection': False}}
+        techtour_section_fr['entries'].append(radios_techtour_fr)
+        
+        radios_techtour_en = {'image': 'IconRadioFavorites', 'type': 'radio_list', 'id': 'radiosTechtour', 'name': 'Techtour radios', 'params':{'url':'api/v1/techtour_radio', 'genre_selection': False}}
+        techtour_section_en['entries'].append(radios_techtour_en)
+                
+        # menus with techtour section
+        techtour_fr = {'sections': [{'name': 'Ma radio', 'entries': [{'image': 'IconMyRadio', 'type': 'my_radio', 'id': 'myRadio', 'name': 'Ma radio'}]}, techtour_section_fr, {'name': 'Radios', 'entries': [{'image': 'IconRadiosFriends', 'type': 'friends', 'id': 'radioMyFriends', 'name': 'Mes amis'}, {'params': {'url': '/api/v1/favorite_radio', 'genre_selection': False}, 'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radioMyFavorites', 'name': 'Mes favoris'}, {'params': {'url': '/api/v1/selected_radio'}, 'image': 'IconRadiosSelection', 'type': 'radio_list', 'id': 'radioSelection', 'name': 'S\xc3\xa9lection'}, {'params': {'url': '/api/v1/top_radio'}, 'image': 'IconLeaderboard', 'type': 'radio_list', 'id': 'radioTop', 'name': 'Top'}, {'image': 'IconRadiosSearch', 'type': 'search_radio', 'id': 'radioSearch', 'name': 'Recherche'}]}, {'name': 'Moi', 'entries': [{'image': 'IconMeNotifs', 'type': 'notifications', 'id': 'meNotifications', 'name': 'Mes notifications'}, {'image': 'IconMeStats', 'type': 'stats', 'id': 'meStats', 'name': 'Mes statistiques'}, {'image': 'IconMePlaylists', 'type': 'programming', 'id': 'meProgramming', 'name': 'Ma programmation'}, {'image': 'IconMeSettings', 'type': 'settings', 'id': 'meSettings', 'name': 'Param\xc3\xa8tres'}]}, {'name': 'Divers', 'entries': [{'params': {'url': 'legal/eula.html'}, 'image': 'IconMiscLegal', 'type': 'web_page', 'id': 'miscLegal', 'name': "Conditions d'utilisation"}, {'image': 'IconMiscLogout', 'type': 'logout', 'id': 'miscLogout', 'name': 'Se d\xc3\xa9connecter'}]}], 'name': 'default', 'language': 'fr', 'group_ids':techtour_group_ids, 'app':{'app_id':yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER}}
+        techtour_en = {'sections': [{'name': 'My radio', 'entries': [{'image': 'IconMyRadio', 'type': 'my_radio', 'id': 'myRadio', 'name': 'My radio'}]}, techtour_section_en, {'name': 'Radios', 'entries': [{'image': 'IconRadiosFriends', 'type': 'friends', 'id': 'radioMyFriends', 'name': 'My friends'}, {'params': {'url': '/api/v1/favorite_radio', 'genre_selection': False}, 'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radioMyFavorites', 'name': 'My favorites'}, {'params': {'url': '/api/v1/selected_radio'}, 'image': 'IconRadiosSelection', 'type': 'radio_list', 'id': 'radioSelection', 'name': 'Selection'}, {'params': {'url': '/api/v1/top_radio'}, 'image': 'IconLeaderboard', 'type': 'radio_list', 'id': 'radioTop', 'name': 'Top'}, {'image': 'IconRadiosSearch', 'type': 'search_radio', 'id': 'radioSearch', 'name': 'Search'}]}, {'name': 'Me', 'entries': [{'image': 'IconMeNotifs', 'type': 'notifications', 'id': 'meNotifications', 'name': 'My notifications'}, {'image': 'IconMeStats', 'type': 'stats', 'id': 'meStats', 'name': 'My stats'}, {'image': 'IconMePlaylists', 'type': 'programming', 'id': 'meProgramming', 'name': 'Programming'}, {'image': 'IconMeSettings', 'type': 'settings', 'id': 'meSettings', 'name': 'Settings'}]}, {'name': 'Miscellaneous', 'entries': [{'params': {'url': 'legal/eula.html'}, 'image': 'IconMiscLegal', 'type': 'web_page', 'id': 'miscLegal', 'name': 'Terms of Use'}, {'image': 'IconMiscLogout', 'type': 'logout', 'id': 'miscLogout', 'name': 'Log out'}]}], 'name': 'default', 'language': 'en', 'group_ids':techtour_group_ids, 'app':{'app_id':yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER}}
+        self.add_menu(techtour_fr, overwrite=True)
+        self.add_menu(techtour_en, overwrite=True)
+            
+            
+    
         
        
 

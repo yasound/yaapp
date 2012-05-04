@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.conf import settings as yaapp_settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import models, transaction
 from django.db.models import Q, signals
 from django.db.models.aggregates import Sum
@@ -367,6 +367,15 @@ class RadioManager(models.Manager):
         for r in self.all():
             r.favorites = RadioUser.objects.filter(radio=r, favorite=True).count()
             r.save()
+            
+    def techtour(self):
+        try:
+            g = Group.objects.get(name=yabase_settings.TECH_TOUR_GROUP_NAME)
+        except:
+            return []
+        users = g.user_set.all()
+        radios = self.filter(creator__in=users)
+        return radios
 
 class Radio(models.Model):
     objects = RadioManager()
