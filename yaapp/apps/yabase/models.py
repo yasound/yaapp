@@ -1201,6 +1201,10 @@ class ApnsCertificateManager(models.Manager):
     def install_defaults(self):
         self.get_or_create(application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/prod.pem')
         self.get_or_create(application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/dev.pem')
+        
+    def install_tech_tour(self):
+        self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/techtour/prod.pem')
+        self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/techtour/dev.pem')
 
 class ApnsCertificate(models.Model):
     application_id = models.CharField(max_length=127)
