@@ -902,29 +902,33 @@ class TestWallPost(TestCase):
         self.radio = radio
     
     def test_like_song(self):
-        song = SongInstance.objects.get(id=1)
-        
-        self.client.post(reverse('yabase.views.like_song', args=[song.id]))
-        self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 1)
-
-        self.client.post(reverse('yabase.views.like_song', args=[song.id]))
-        self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 1)
-
-        song = SongInstance.objects.get(id=2)
-
-        self.client.post(reverse('yabase.views.like_song', args=[song.id]))
-        self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 2)
-
-        self.client.post(reverse('yabase.views.like_song', args=[song.id]))
-        self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 2)
-
-        song = SongInstance.objects.get(id=1)
-
-        self.client.post(reverse('yabase.views.like_song', args=[song.id]))
-        self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
-
-        self.client.post(reverse('yabase.views.like_song', args=[song.id]))
-        self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
+        redis = Mock(name='redis')
+        redis.publish = Mock()      
+        with patch('yabase.push.Redis') as mock_redis:
+            mock_redis.return_value = redis
+            song = SongInstance.objects.get(id=1)
+            
+            self.client.post(reverse('yabase.views.like_song', args=[song.id]))
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 1)
+    
+            self.client.post(reverse('yabase.views.like_song', args=[song.id]))
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 1)
+    
+            song = SongInstance.objects.get(id=2)
+    
+            self.client.post(reverse('yabase.views.like_song', args=[song.id]))
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 2)
+    
+            self.client.post(reverse('yabase.views.like_song', args=[song.id]))
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 2)
+    
+            song = SongInstance.objects.get(id=1)
+    
+            self.client.post(reverse('yabase.views.like_song', args=[song.id]))
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
+    
+            self.client.post(reverse('yabase.views.like_song', args=[song.id]))
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
 
 class TestDuplicate(TestCase):
     def setUp(self):
