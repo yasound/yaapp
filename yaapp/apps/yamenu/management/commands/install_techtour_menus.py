@@ -7,7 +7,7 @@ class Command(BaseCommand):
     """
     Update action states
     """
-    help = "Install techtour menu descriptions"
+    help = "Install tech tour menu descriptions"
     args = ''
 
     def handle(self, *app_labels, **options):
