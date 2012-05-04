@@ -1,7 +1,7 @@
 from bitfield import BitField
 from django.conf import settings as yaapp_settings
 from django.contrib.auth import login
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.files.base import ContentFile, ContentFile
 from django.db import models
 from django.db.models.aggregates import Count
@@ -599,6 +599,10 @@ class UserProfile(models.Model):
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
+    
+    def add_to_group(self, group_name):
+        g = Group.objects.get_or_create(name=group_name)
+        g.user_set.add(self.user)
         
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
         devices = Device.objects.for_userprofile(self)
