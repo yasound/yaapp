@@ -127,6 +127,8 @@ urlpatterns = patterns('',
     (r'^status/', 'yabase.views.status'),
     
     url(r'^api/v1/delete_song/(?P<song_instance_id>\d+)/$', 'yabase.views.delete_song_instance'),
+
+    url(r'^api/v1/notify_missing_song/$', 'yabase.views.notify_missing_song'),
     
     
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),

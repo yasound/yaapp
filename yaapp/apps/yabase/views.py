@@ -869,4 +869,14 @@ def delete_song_instance(request, song_instance_id):
     response = {'success':True}
     res = json.dumps(response)
     return HttpResponse(res)
+
+@csrf_exempt
+def notify_missing_song(request):
+    local_logger = logging.getLogger("yaapp.missing_songs")
+    name = request.REQUEST.get('name')
+    local_logger.info('missing: %s' % name)
+    
+    return HttpResponse('OK')
+    
+    
     
