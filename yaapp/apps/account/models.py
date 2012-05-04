@@ -803,7 +803,10 @@ class DeviceManager(models.Manager):
                 pass
             
     def store_ios_token(self, user, device_uuid, device_token_type, device_token, app_identifier):
-        device, created = self.get_or_create(user=user, uuid=device_uuid, ios_token_type=device_token_type, application_identifier=app_identifier)
+        device, _created = self.get_or_create(user=user, uuid=device_uuid)
+
+        device.ios_token_type = device_token_type
+        device.application_identifier = app_identifier
         device.ios_token = device_token
         device.save()
         device.set_registered_now()
