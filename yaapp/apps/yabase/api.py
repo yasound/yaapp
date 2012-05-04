@@ -391,6 +391,35 @@ class FriendRadioResource(ModelResource):
     def apply_authorization_limits(self, request, object_list):
         user = request.user
         return object_list.filter(creator__in=user.userprofile.friends.all())
+    
+class TechTourRadioResource(ModelResource):
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
+    picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'techtour_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+#        authentication = YasoundApiKeyAuthentication()
+        authentication = Authentication()
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+            'ready': ('exact',),
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    def get_object_list(self, request):
+        radios = Radio.objects.techtour()
+        return radios
 
 
 class WallEventResource(ModelResource):

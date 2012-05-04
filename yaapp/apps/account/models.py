@@ -774,6 +774,10 @@ post_save.connect(create_api_key, sender=EmailUser)
 post_save.connect(create_radio, sender=User)
 post_save.connect(create_radio, sender=EmailUser)
 
+def get_techtour_group():
+    g, created = Group.objects.get_or_create(name=yabase_settings.TECH_TOUR_GROUP_NAME)
+    return g
+
 class DeviceManager(models.Manager):
     def for_user(self, user):
         return self.filter(user=user)
