@@ -225,11 +225,16 @@ Yasound.Views.Pagination = Backbone.View.extend({
     tagName: 'aside',
 
     initialize: function() {
+        _.bindAll(this, 'scroll');
+
+        $(window).on('scroll', this.scroll);
+        
         this.collection.on('reset', this.render, this);
         this.collection.on('change', this.render, this);
     },
 
     onClose: function() {
+        $(window).off('scroll', this.scroll);
         this.collection.unbind('change', this.render);
         this.collection.unbind('reset', this.render);
     },
@@ -281,8 +286,16 @@ Yasound.Views.Pagination = Backbone.View.extend({
         e.preventDefault();
         var per = $(e.target).text();
         this.collection.howManyPer(per);
+    },
+    scroll: function(event) {
+        console.log('scroll');
+        var height = $(document).height();
+        var scrollHeight = $(window).scrollTop() + $(window).height();
+        
+        if (scrollHeight >= height) {
+            this.collection.requestNextPage();
+        }
     }
-
 });
 
 Yasound.Views.WallEvent = Backbone.View.extend({
