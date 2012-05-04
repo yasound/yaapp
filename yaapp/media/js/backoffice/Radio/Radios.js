@@ -41,6 +41,29 @@ Yasound.Radios.Handler.RemoveSong = function(radioId, selected) {
    });
 };
 
+Yasound.Radios.Handler.DuplicateRadio = function(radioId) {
+    Ext.Msg.show({
+         title: gettext('Confirmation'),
+         msg: gettext('Do you want to duplicate this radio ?'),
+         buttons: Ext.Msg.YESNOCANCEL,
+         fn: function(b, text){
+             if (b == 'yes') {
+                 ids = [];
+                 Ext.Ajax.request({
+                     url: String.format('/yabackoffice/radios/{0}/duplicate/', radioId),
+                     success: function(result, request){
+                         Ext.getCmp('radios-songgrid').getStore().reload();
+                     },
+                     failure: function(result, request){
+                     },
+                     method: 'POST',
+                     timeout: 1000 * 60 * 5
+                 });
+             }
+         }
+    });
+ };
+ 
 Yasound.Radios.Handler.RemoveAllSongs = function(radioId) {
    Ext.Msg.show({
         title: gettext('Confirmation'),
@@ -215,6 +238,16 @@ Yasound.Radios.UI.RadiosPanel = function() {
 			   });
     		}
     	}, {
+            text: gettext('Duplicate'),
+            disabled: true,
+            ref: '../duplicateButton',
+            iconCls: 'silk-page-copy',
+            handler: function(b, e) {
+                var grid = b.ownerCt.ownerCt;
+                var record = grid.getSelectionModel().getSelected();
+                Yasound.Radios.Handler.DuplicateRadio(record.data.id);
+            }
+    	},{
     		text: gettext('Delete'),
     		disabled: true,
     		ref: '../deleteButton',
@@ -244,9 +277,11 @@ Yasound.Radios.UI.RadiosPanel = function() {
     			radioForm.updateForm(record);
     			radioForm.setDisabled(false);
     			grid.deleteButton.setDisabled(false);
+                grid.duplicateButton.setDisabled(false);
     		},
     		'unselected': function(grid) {
     			grid.deleteButton.setDisabled(true);
+                grid.duplicateButton.setDisabled(true);
     		}
     	}		
 	});

@@ -925,5 +925,39 @@ class TestWallPost(TestCase):
 
         self.client.post(reverse('yabase.views.like_song', args=[song.id]))
         self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
+
+class TestDuplicate(TestCase):
+    def setUp(self):
+        erase_index()
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user 
+        self.key = ApiKey.objects.get(user=self.user).key
+        self.username = self.user.username       
+
+
+        radio = Radio.objects.radio_for_user(self.user)
+        playlist = generate_playlist(song_count=100)
+        playlist.radio = radio
+        playlist.save()
+
+        self.radio = radio
+    
+    def test_duplicate(self):
+        song_count = SongInstance.objects.all().count()
+        song_metadata = SongMetadata.objects.all().count()
+        self.assertEquals(song_count, 100)
+        self.assertEquals(song_metadata, 100)
+
+        new_radio = self.radio.duplicate()
+        self.assertEquals(new_radio.name, u'%s - copy' % self.radio.name)
+
+        song_count = SongInstance.objects.all().count()
+        song_metadata = SongMetadata.objects.all().count()
+        self.assertEquals(song_count, 200)
+        self.assertEquals(song_metadata, 100)
+        
         
         

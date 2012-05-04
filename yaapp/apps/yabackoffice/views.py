@@ -164,6 +164,24 @@ def radio_add_songs(request, radio_id):
 
 @csrf_exempt
 @login_required
+def radio_duplicate(request, radio_id):
+    """
+    add yasound song to radio
+    """
+    if not request.user.is_superuser:
+        raise Http404()
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        radio.duplicate()
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
+@csrf_exempt
+@login_required
 def radios(request, radio_id=None):
     if not request.user.is_superuser:
         raise Http404()

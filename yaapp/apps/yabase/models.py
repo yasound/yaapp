@@ -179,7 +179,15 @@ class SongInstance(models.Model):
         radio = self.playlist.radio
         radio_creator_profile = radio.creator.userprofile
         radio_creator_profile.song_liked_in_my_radio(user_profile=user.userprofile, radio=radio, song=self)
-        
+       
+    def duplicate(self, playlist):
+        new_song = self.__class__.objects.create(playlist=playlist, 
+                                                 order=self.order,
+                                                 need_sync=self.need_sync,
+                                                 metadata=self.metadata,
+                                                 enabled=self.enabled)
+        return new_song
+         
 class SongUserManager(models.Manager):
     def likers(self, song):
         return self.filter(song=song, mood=yabase_settings.MOOD_LIKE)
@@ -268,6 +276,18 @@ class Playlist(models.Model):
     @property
     def unmatched_song_count(self):
         return SongInstance.objects.filter(playlist=self, song__isnull=True).count()
+    
+    def duplicate(self, radio):
+        new_playlist = self.__class__.objects.create(name=self.name,
+                                                     source=self.source,
+                                                     enabled=self.enabled,
+                                                     sync_date=self.sync_date,
+                                                     CRC=self.CRC,
+                                                     radio=radio)
+        songs = SongInstance.objects.filter(playlist=self)
+        for song in songs:
+            song.duplicate(new_playlist)
+        return new_playlist
     
     def __unicode__(self):
         return u'%s - %s' % (self.name, self.radio)
@@ -824,6 +844,23 @@ class Radio(models.Model):
                   user=user, 
                   text=message).save()
         
+    def duplicate(self):
+        new_radio = self.__class__.objects.create(creator=self.creator,
+                                                  ready=self.ready,
+                                                  name=u'%s - copy' % self.name,
+                                                  picture=self.picture,
+                                                  url=self.url,
+                                                  description=self.description,
+                                                  genre=self.genre,
+                                                  theme=self.theme)
+        new_radio.tags.set(self.tags.all())
+        
+        playlists = Playlist.objects.filter(radio=self)
+        for playlist in playlists:
+            new_playlist = playlist.duplicate(new_radio)
+            new_playlist.save()
+        return new_radio
+    
     class Meta:
         db_name = u'default'
         
