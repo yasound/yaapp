@@ -449,7 +449,11 @@ class UserProfile(models.Model):
             
         if self.yasound_email:
             bundle.data['yasound_email'] = self.yasound_email
-            
+        
+        if bundle.request and hasattr(bundle.request, 'app_id'):
+            app_id = bundle.request.app_id
+            if app_id == yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER:
+                self.add_to_group(yabase_settings.TECH_TOUR_GROUP_NAME)
            
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
@@ -601,7 +605,7 @@ class UserProfile(models.Model):
                 pass
     
     def add_to_group(self, group_name):
-        g = Group.objects.get_or_create(name=group_name)
+        g, _created = Group.objects.get_or_create(name=group_name)
         g.user_set.add(self.user)
         
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
