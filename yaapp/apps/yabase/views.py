@@ -241,14 +241,8 @@ def radio_shared(request, radio_id):
 
 # SONG USER
 @csrf_exempt
+@check_api_key(methods=['POST',])
 def like_song(request, song_id):
-    if not request.user.is_authenticated():
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-
     try:
         song = SongInstance.objects.get(id=song_id)
     except SongInstance.DoesNotExist:
@@ -262,7 +256,7 @@ def like_song(request, song_id):
     song_user.save()
     
     # add like event in wall
-    if old_mood != yabase_settings.MOOD_LIKE and radio is not None:
+    if radio is not None:
         WallEvent.objects.add_like_event(radio, song, request.user)
     
     res = '%s (user) likes %s (song)\n' % (request.user, song)

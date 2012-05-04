@@ -982,9 +982,18 @@ class WallEventManager(models.Manager):
         self.create(radio=radio, type=yabase_settings.EVENT_LIKE, song=song, user=user)
         
     def add_like_event(self, radio, song, user):
-        self.add_current_song_event(radio)
-        self.create_like_event(radio, song, user)
+        can_add = True
+
+        # we cannot allow consecutive duplicate like event for a song        
+        previous_likes = self.filter(type=yabase_settings.EVENT_LIKE, radio=radio, user=user).order_by('-start_date')[:1]
+        if previous_likes.count() != 0:
+            previous = previous_likes[0]
+            if previous.song_id == song.id:
+                can_add = False
         
+        if can_add:
+            self.add_current_song_event(radio)
+            self.create_like_event(radio, song, user)
   
     class Meta:
         db_name = u'default'
