@@ -25,15 +25,12 @@ class StaticSitemap(sitemaps.Sitemap):
 
     def _get_modification_date(self, p):
         template = p.default_args['template_name']
-        print template
         template_path = self._get_template_path(template)
-        print template_path
         mtime = os.stat(template_path).st_mtime
         return datetime.datetime.fromtimestamp(mtime)
 
     def _get_template_path(self, template_path):
         path = os.path.join(settings.PROJECT_PATH + '/apps/yaweb/templates/', template_path)
-        print path
         if os.path.exists(path):
             return path
 
