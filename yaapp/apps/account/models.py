@@ -805,9 +805,10 @@ class DeviceManager(models.Manager):
     def store_ios_token(self, user, device_uuid, device_token_type, device_token, app_identifier):
         if app_identifier is None:
             app_identifier = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
+            
         device, _created = self.get_or_create(user=user, uuid=device_uuid)
-        device.ios_token_type = device_token_type
-        device.application_identifier = app_identifier
+        device.ios_token_type=device_token_type
+        device.application_identifier=app_identifier
         device.ios_token = device_token
         device.save()
         device.set_registered_now()
