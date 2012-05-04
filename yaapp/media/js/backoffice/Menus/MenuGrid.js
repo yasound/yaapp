@@ -19,7 +19,7 @@ Yasound.Menus.Data.MenuStore = function(url) {
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Menus.UI.menuColumnModel = function(sm) {
+Yasound.Menus.UI.MenuColumnModel = function(sm) {
 	var cm = [{
         header: gettext('Name'),
         dataIndex: 'name',
@@ -114,8 +114,7 @@ Yasound.Menus.UI.MenuGrid = Ext.extend(Ext.grid.GridPanel, {
             }),            
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.Menus.UI.MenuColumnModel(this.checkboxSelect ? sm : null,
-            		this.hideColumnUser, this.hideColumnSent)),
+            cm: new Ext.grid.ColumnModel(Yasound.Menus.UI.MenuColumnModel(this.checkboxSelect ? sm : null)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,

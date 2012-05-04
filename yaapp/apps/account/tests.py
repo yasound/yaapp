@@ -8,6 +8,7 @@ from yasearch.indexer import erase_index
 import settings as account_settings
 from yabase import tests_utils as yabase_tests_utils
 import task
+import yabase.settings as yabase_settings
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -405,8 +406,9 @@ class TestDevice(TestCase):
         uuid = 'UUID9876543210'
         ios_token = 'TOKEN0123456789'
         ios_token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX
+        app_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
         
-        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token)
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token, app_identifier=app_id)
         self.assertEquals(Device.objects.count(), 1)
         
     def test_ios_token_save(self):
@@ -417,11 +419,12 @@ class TestDevice(TestCase):
         uuid = 'UUID9876543210'
         ios_token = 'TOKEN0123456789'
         ios_token_type = account_settings.IOS_TOKEN_TYPE_SANDBOX
+        app_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
         
-        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token)
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token, app_identifier=app_id)
         
         # save again
-        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token)
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=ios_token_type, device_token=ios_token, app_identifier=app_id)
         
         # must contain only one device 
         self.assertEquals(Device.objects.count(), 1)
@@ -435,9 +438,10 @@ class TestDevice(TestCase):
         
         ios_token_sandbox = 'SANDBOX_0123456789'
         ios_token_prod = 'PRODUCTION_0123456789'
+        app_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
         
-        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX, device_token=ios_token_sandbox)
-        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION, device_token=ios_token_prod)
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX, device_token=ios_token_sandbox, app_identifier=app_id)
+        Device.objects.store_ios_token(user, device_uuid=uuid, device_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION, device_token=ios_token_prod, app_identifier=app_id)
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid).count(), 2)
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX).count(), 1)
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION).count(), 1)

@@ -9,8 +9,10 @@ import struct
 import ssl
 import binascii
 import json
+from yabase import settings as yabase_settings
+from yabase.models import ApnsCertificate
  
-def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
+def send_message(udid, alert, badge=0, sound="chime", sandbox=True, application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER,
                         custom_params={}, action_loc_key=None, loc_key=None,
                         loc_args=[], passed_socket=None):
         """
@@ -65,7 +67,7 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True,
             passed_socket.write(msg)
         else:
             host_name = 'gateway.sandbox.push.apple.com' if sandbox else 'gateway.push.apple.com'
-            certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
+            certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
             s = socket()
             c = ssl.wrap_socket(s,
                                 ssl_version=ssl.PROTOCOL_SSLv3,
@@ -94,7 +96,8 @@ def test():
 
 def test2():
     sandbox = True
-    certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
+    application_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
+    certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
     host_name = 'gateway.sandbox.push.apple.com'
     s1 = socket()
     c1 = ssl.wrap_socket(s1,
@@ -116,7 +119,8 @@ def test2():
     
 def test3():
     sandbox = True
-    certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
+    application_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
+    certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
     host_name = 'gateway.sandbox.push.apple.com'
     s1 = socket()
     c1 = ssl.wrap_socket(s1,
@@ -159,9 +163,10 @@ def test3():
     c3.close()
     
 
-def get_deprecated_devices(sandbox=True):
+def get_deprecated_devices(sandbox=True, application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER):
     deprecated = []
-    certif_file = settings.IPHONE_APN_PUSH_CERT_DEV if sandbox else settings.IPHONE_APN_PUSH_CERT_PROD
+    
+    certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
     host_name = 'feedback.sandbox.push.apple.com' if sandbox else 'feedback.push.apple.com'
     s = socket()
     c = ssl.wrap_socket(s,

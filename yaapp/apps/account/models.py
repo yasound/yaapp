@@ -1,7 +1,7 @@
 from bitfield import BitField
 from django.conf import settings as yaapp_settings
 from django.contrib.auth import login
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.files.base import ContentFile, ContentFile
 from django.db import models
 from django.db.models.aggregates import Count
@@ -26,6 +26,7 @@ import urllib
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+import yabase.settings as yabase_settings
 
 
 
@@ -598,6 +599,10 @@ class UserProfile(models.Model):
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
+    
+    def add_to_group(self, group_name):
+        g = Group.objects.get_or_create(name=group_name)
+        g.user_set.add(self.user)
         
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
         devices = Device.objects.for_userprofile(self)
@@ -605,7 +610,8 @@ class UserProfile(models.Model):
             if d.ios_token and d.ios_token_type:
                 sandbox = d.is_sandbox()
                 token = d.ios_token
-                send_message(token, message, sandbox=sandbox, custom_params=custom_params, action_loc_key=action_loc_key, loc_key=loc_key, loc_args=loc_args)
+                app_id = d.application_identifier
+                send_message(token, message, sandbox=sandbox, application_id=app_id, custom_params=custom_params, action_loc_key=action_loc_key, loc_key=loc_key, loc_args=loc_args)
     
     def user_in_my_radio(self, user_profile, radio):
         if user_profile.user in self.friends.all():
@@ -788,8 +794,8 @@ class DeviceManager(models.Manager):
             except:
                 pass
             
-    def store_ios_token(self, user, device_uuid, device_token_type, device_token):
-        device, created = self.get_or_create(user=user, uuid=device_uuid, ios_token_type=device_token_type)
+    def store_ios_token(self, user, device_uuid, device_token_type, device_token, app_identifier):
+        device, created = self.get_or_create(user=user, uuid=device_uuid, ios_token_type=device_token_type, application_identifier=app_identifier)
         device.ios_token = device_token
         device.save()
         device.set_registered_now()
@@ -805,6 +811,7 @@ class Device(models.Model):
     ios_token = models.CharField(_('ios device token'), max_length=255)
     ios_token_type = models.CharField(max_length=16, choices=account_settings.IOS_TOKEN_TYPE_CHOICES)
     registration_date = models.DateTimeField(auto_now_add=True)
+    application_identifier = models.CharField(_('ios application identifier'), max_length=127, default=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER)
     
     class Meta:
         verbose_name = _('device')
@@ -828,10 +835,10 @@ class Device(models.Model):
             token_just_set = old_token != self.ios_token
         super(Device, self).save(*args, **kwargs)
         if token_just_set:
-            Device.objects.filter(ios_token=self.ios_token).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
+            Device.objects.filter(ios_token=self.ios_token, application_identifier=self.application_identifier).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
             
     def __unicode__(self):
-        return u'%s - %s (%s)' % (self.user.userprofile.name, self.ios_token, self.ios_token_type);
+        return u'%s - %s - %s (%s)' % (self.user.userprofile.name, self.application_identifier, self.ios_token, self.ios_token_type);
     
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):  

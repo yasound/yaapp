@@ -30,3 +30,8 @@ UPLOAD_KEY='weeriwjwsdiwew9ei9nksxsdwxj,.29x2jdnjweapnfnhshdf'
 DEFAULT_FILENAME='file'
 
 TOP_RADIOS_LIMIT = 25
+
+IPHONE_DEFAULT_APPLICATION_IDENTIFIER = 'com.yasound.yasound'
+IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER = 'com.yasound.techtour'
+
+TECH_TOUR_GROUP_NAME = 'techtour'

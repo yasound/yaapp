@@ -8,9 +8,6 @@ djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
 
-IPHONE_APN_PUSH_CERT_DEV = os.path.join(PROJECT_PATH, "certificates/dev.pem")
-IPHONE_APN_PUSH_CERT_PROD = os.path.join(PROJECT_PATH, "certificates/prod.pem")
-
 
 # Theses settings are different with env variables
 #
@@ -420,6 +417,14 @@ LOGGING = {
             'filename': os.path.join(PROJECT_PATH, 'logs/yaweb.log'),
             'formatter': 'verbose'
         },     
+        'file_missing_songs':{
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024*10000, 
+            'backupCount': 10,
+            'filename': os.path.join(PROJECT_PATH, 'logs/missing_songs.log'),
+            'formatter': 'verbose'
+        },     
     },
     'loggers': {
         'django': {
@@ -454,6 +459,11 @@ LOGGING = {
         },
         'yaapp.yacore': {
             'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.missing_songs': {
+            'handlers': ['console', 'file_missing_songs'],
             'level': 'DEBUG',
             'propagate': False,
         },

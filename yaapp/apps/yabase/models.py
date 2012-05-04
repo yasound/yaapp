@@ -24,6 +24,7 @@ import signals as yabase_signals
 from django.core.cache import cache
 import json
 from yacore.database import atomic_inc
+import os
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -178,7 +179,15 @@ class SongInstance(models.Model):
         radio = self.playlist.radio
         radio_creator_profile = radio.creator.userprofile
         radio_creator_profile.song_liked_in_my_radio(user_profile=user.userprofile, radio=radio, song=self)
-        
+       
+    def duplicate(self, playlist):
+        new_song = self.__class__.objects.create(playlist=playlist, 
+                                                 order=self.order,
+                                                 need_sync=self.need_sync,
+                                                 metadata=self.metadata,
+                                                 enabled=self.enabled)
+        return new_song
+         
 class SongUserManager(models.Manager):
     def likers(self, song):
         return self.filter(song=song, mood=yabase_settings.MOOD_LIKE)
@@ -267,6 +276,18 @@ class Playlist(models.Model):
     @property
     def unmatched_song_count(self):
         return SongInstance.objects.filter(playlist=self, song__isnull=True).count()
+    
+    def duplicate(self, radio):
+        new_playlist = self.__class__.objects.create(name=self.name,
+                                                     source=self.source,
+                                                     enabled=self.enabled,
+                                                     sync_date=self.sync_date,
+                                                     CRC=self.CRC,
+                                                     radio=radio)
+        songs = SongInstance.objects.filter(playlist=self)
+        for song in songs:
+            song.duplicate(new_playlist)
+        return new_playlist
     
     def __unicode__(self):
         return u'%s - %s' % (self.name, self.radio)
@@ -823,6 +844,23 @@ class Radio(models.Model):
                   user=user, 
                   text=message).save()
         
+    def duplicate(self):
+        new_radio = self.__class__.objects.create(creator=self.creator,
+                                                  ready=self.ready,
+                                                  name=u'%s - copy' % self.name,
+                                                  picture=self.picture,
+                                                  url=self.url,
+                                                  description=self.description,
+                                                  genre=self.genre,
+                                                  theme=self.theme)
+        new_radio.tags.set(self.tags.all())
+        
+        playlists = Playlist.objects.filter(radio=self)
+        for playlist in playlists:
+            new_playlist = playlist.duplicate(new_radio)
+            new_playlist.save()
+        return new_radio
+    
     class Meta:
         db_name = u'default'
         
@@ -981,9 +1019,18 @@ class WallEventManager(models.Manager):
         self.create(radio=radio, type=yabase_settings.EVENT_LIKE, song=song, user=user)
         
     def add_like_event(self, radio, song, user):
-        self.add_current_song_event(radio)
-        self.create_like_event(radio, song, user)
+        can_add = True
+
+        # we cannot allow consecutive duplicate like event for a song        
+        previous_likes = self.filter(type=yabase_settings.EVENT_LIKE, radio=radio, user=user).order_by('-start_date')[:1]
+        if previous_likes.count() != 0:
+            previous = previous_likes[0]
+            if previous.song_id == song.id:
+                can_add = False
         
+        if can_add:
+            self.add_current_song_event(radio)
+            self.create_like_event(radio, song, user)
   
     class Meta:
         db_name = u'default'
@@ -1178,4 +1225,29 @@ class FeaturedRadio(models.Model):
         unique_together = ('featured_content', 'radio')
         ordering = ['order',]
         db_name = u'default'
+
+class ApnsCertificateManager(models.Manager):
+    def certificate_file(self, application_id, is_sandbox):
+        certifs = self.filter(application_id=application_id, sandbox=is_sandbox)
+        if certifs.count() == 0:
+            return None
+        f = certifs[0].certificate_file
+        full_path = os.path.join(yaapp_settings.PROJECT_PATH, f)
+        return full_path
+    
+    def install_defaults(self):
+        self.get_or_create(application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/prod.pem')
+        self.get_or_create(application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/dev.pem')
+        
+    def install_tech_tour(self):
+        self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/techtour/prod.pem')
+        self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/techtour/dev.pem')
+
+class ApnsCertificate(models.Model):
+    application_id = models.CharField(max_length=127)
+    sandbox = models.BooleanField()
+    certificate_file = models.CharField(max_length=255)
+    objects = ApnsCertificateManager()
+    
+
 

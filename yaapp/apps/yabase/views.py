@@ -1,6 +1,5 @@
 from django.views.decorators.http import require_http_methods
 from celery.result import AsyncResult
-from check_request import check_api_key_Authentication, check_http_method
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -28,6 +27,7 @@ import os
 import settings as yabase_settings
 import uuid
 from yacore.decorators import check_api_key
+from yacore.http import check_api_key_Authentication, check_http_method
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -241,14 +241,8 @@ def radio_shared(request, radio_id):
 
 # SONG USER
 @csrf_exempt
+@check_api_key(methods=['POST',])
 def like_song(request, song_id):
-    if not request.user.is_authenticated():
-        if not check_api_key_Authentication(request):
-            return HttpResponse(status=401)
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-
     try:
         song = SongInstance.objects.get(id=song_id)
     except SongInstance.DoesNotExist:
@@ -262,7 +256,7 @@ def like_song(request, song_id):
     song_user.save()
     
     # add like event in wall
-    if old_mood != yabase_settings.MOOD_LIKE and radio is not None:
+    if radio is not None:
         WallEvent.objects.add_like_event(radio, song, request.user)
     
     res = '%s (user) likes %s (song)\n' % (request.user, song)
@@ -875,4 +869,14 @@ def delete_song_instance(request, song_instance_id):
     response = {'success':True}
     res = json.dumps(response)
     return HttpResponse(res)
+
+@csrf_exempt
+def notify_missing_song(request):
+    local_logger = logging.getLogger("yaapp.missing_songs")
+    name = request.REQUEST.get('name')
+    local_logger.info('missing: %s' % name)
+    
+    return HttpResponse('OK')
+    
+    
     
