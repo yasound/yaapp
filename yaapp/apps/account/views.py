@@ -32,6 +32,8 @@ from django_mobile import get_flavour
 import urllib
 from tastypie.http import HttpBadRequest
 from yacore.http import check_api_key_Authentication, check_http_method
+import yabase
+import yabase.settings as yabase_settings
 
 logger = logging.getLogger("yaapp.account")
 
@@ -166,7 +168,9 @@ def send_ios_push_notif_token(request):
     
     if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_PRODUCTION:
         return HttpResponse('bad data')
-    app_id = request.app_id
+    app_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
+    if hasattr(request, 'app_id'):
+        app_id = request.app_id
     
     Device.objects.store_ios_token(request.user, device_uuid, device_token_type, device_token, app_identifier=app_id)
     res = 'send_ios_push_notif_token OK'
