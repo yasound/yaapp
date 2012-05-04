@@ -682,6 +682,7 @@ if PRODUCTION_MODE :
 else :
     PIPELINE = False
 
+PIPELINE=False
 PIPELINE_ROOT=MEDIA_ROOT
 PIPELINE_VERSION=True
 from resources_settings import PIPELINE_JS, PIPELINE_JS
