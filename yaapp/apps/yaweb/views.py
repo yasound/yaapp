@@ -73,6 +73,11 @@ def elecsounds_terms(request, template_name='yaweb/elecsounds_terms.html'):
         'current_page': 'elecsounds_terms',
     }, context_instance=RequestContext(request))  
 
+def elecsounds_winner(request, template_name='yaweb/elecsounds_winner.html'):
+    return render_to_response(template_name, {
+        'current_page': 'elecsounds_winner',
+    }, context_instance=RequestContext(request))  
+
 def logo(request):
     return HttpResponseRedirect('/media/yaweb/images/logo.png')
 

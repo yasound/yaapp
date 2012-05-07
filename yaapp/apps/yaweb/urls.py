@@ -7,6 +7,7 @@ urlpatterns = patterns('yaweb.views',
     url(r'^contact/$', 'contact', {'template_name': 'yaweb/contact.html'}, name='contact'),
     url(r'^elecsounds/$', 'elecsounds', {'template_name': 'yaweb/elecsounds.html'}, name='elecsounds'),
     url(r'^elecsounds/terms$', 'elecsounds_terms', {'template_name': 'yaweb/elecsounds_terms.html'}, name='elecsounds_terms'),
+    url(r'^elecsounds/winner', 'elecsounds_winner', {'template_name': 'yaweb/elecsounds_winner.html'}, name='elecsounds_winner'),
     
     url(r'^download/(?P<filename>.*)$', 'download', name='download'),
 
