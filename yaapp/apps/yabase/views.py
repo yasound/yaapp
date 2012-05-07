@@ -742,11 +742,17 @@ def web_app(request, radio_uuid=None, query=None, template_name='yabase/webapp.h
     push_url = settings.YASOUND_PUSH_URL
     enable_push = settings.ENABLE_PUSH
     
+    facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
+    facebook_share_link = request.build_absolute_uri(reverse('webapp'))
+    
     return render_to_response(template_name, {
         'user_uuid': user_uuid,
         'push_url': push_url,
         'enable_push': enable_push,
         'current_uuid': radio_uuid,
+        'facebook_app_id': settings.FACEBOOK_APP_ID,
+        'facebook_share_picture': facebook_share_picture,
+        'facebook_share_link': facebook_share_link
     }, context_instance=RequestContext(request))    
     
 def radios(request, template_name='web/radios.html'):

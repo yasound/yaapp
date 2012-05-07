@@ -138,10 +138,10 @@ class MenusManager():
         techtour_group = get_techtour_group()
         techtour_group_ids = [techtour_group.id] 
         
-        radios_techtour_fr = {'image': 'IconRadioFavorites', 'type': 'radio_list', 'id': 'radiosTechtour', 'name': 'radios Techtour', 'params':{'url':'api/v1/techtour_radio', 'genre_selection': False}}
+        radios_techtour_fr = {'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radiosTechtour', 'name': 'Radios Techtour', 'params':{'url':'api/v1/techtour_radio', 'genre_selection': False}}
         techtour_section_fr['entries'].append(radios_techtour_fr)
         
-        radios_techtour_en = {'image': 'IconRadioFavorites', 'type': 'radio_list', 'id': 'radiosTechtour', 'name': 'Techtour radios', 'params':{'url':'api/v1/techtour_radio', 'genre_selection': False}}
+        radios_techtour_en = {'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radiosTechtour', 'name': 'Techtour radios', 'params':{'url':'api/v1/techtour_radio', 'genre_selection': False}}
         techtour_section_en['entries'].append(radios_techtour_en)
                 
         # menus with techtour section

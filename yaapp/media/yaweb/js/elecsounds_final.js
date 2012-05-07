@@ -4,8 +4,11 @@ jQuery(document).ready(function() {
     var f = jQuery("a.boxed").fancybox({
         'speedIn' : 200,
         'speedOut' : 200,
-        'width' : 1517,
-        'height' : 817,
+        'padding': 0,
+        'margin': 0,
+        'width' : 728,
+        'height' : 392,
+        'scrolling': 'no',
         'overlayShow' : true,
         onStart : function() {
             if (isIpad) {

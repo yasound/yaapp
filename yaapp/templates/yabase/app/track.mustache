@@ -25,9 +25,12 @@
         {% trans 'Buy on iTunes' %}
         </a>
         </div>
-        <a href="http://twitter.com/share" id="tweet" target="_blank" ><img src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" /></a>
-        <div class="fb-like" data-send="false" data-layout="button_count" data-width="45" data-show-faces="false" data-colorscheme="dark"></div>
-        
+       <div class="btn-group">
+        <a class="btn btn-auth btn-twitter" href="http://twitter.com/share" id="tweet" target="_blank" >{% trans "twitter" %}</a>
+       </div>
+       <div class="btn-group">
+        <a class="btn btn-auth btn-facebook" id='fb_share' href="#" rel="nofollow">{% trans "share" %}</a>
+       </div>        
           <div class="progress no-ease" id='volume-control' onmousedown="return false">
             <div class="bar" id='volume-position' style="width: 0%;" onmousedown="return false"></div>
           </div>

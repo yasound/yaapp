@@ -147,7 +147,7 @@ urlpatterns = patterns('',
     url(r'^', include('yaweb.urls')),
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
-    (r'^app/$', 'yabase.views.web_app'),
+    url(r'^app/$', 'yabase.views.web_app', name='webapp'),
     url(r'^app/radio/(?P<radio_uuid>\S+)$', 'yabase.views.web_app', name='webapp_radio'),
     url(r'^app/search/(?P<query>\S+)$', 'yabase.views.web_app', name='webapp_search'),
     url(r'^app/favorites/$', 'yabase.views.web_app', name='webapp_favorites'),

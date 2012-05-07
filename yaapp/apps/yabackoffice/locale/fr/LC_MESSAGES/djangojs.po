@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-03 11:41+0200\n"
+"POT-Creation-Date: 2012-05-07 14:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,20 +18,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/common/views.js:91
+#: js/app/common/views.js:98
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/common/views.js:93
+#: js/app/common/views.js:100
 msgid "by"
 msgstr "par"
 
-#: js/app/common/views.js:94
+#: js/app/common/views.js:101
 msgid "on"
 msgstr "sur"
 
+#: js/app/common/views.js:250
+msgid "Yasound share"
+msgstr "Partage Yasound"
+
 #: js/backoffice/backoffice.js:66
-#: js/backoffice/Radio/Radios.js:292
+#: js/backoffice/Radio/Radios.js:327
 #: js/backoffice/Radio/UnmatchedSongs.js:21
 msgid "Radios"
 msgstr "Radios"
@@ -77,7 +81,7 @@ msgid "Useful stats"
 msgstr "Statistiques utiles"
 
 #: js/backoffice/backoffice.js:177
-#: js/backoffice/Menus/Menus.js:180
+#: js/backoffice/Menus/Menus.js:187
 msgid "Menus"
 msgstr "Menus"
 
@@ -165,10 +169,11 @@ msgstr "Rien à afficher"
 #: js/backoffice/Invitations/Invitations.js:124
 #: js/backoffice/Radio/Radios.js:13
 #: js/backoffice/Radio/Radios.js.py:44
-#: js/backoffice/Radio/Radios.js:68
-#: js/backoffice/Radio/Radios.js.py:92
-#: js/backoffice/Radio/Radios.js:200
-#: js/backoffice/Radio/Radios.js.py:222
+#: js/backoffice/Radio/Radios.js:67
+#: js/backoffice/Radio/Radios.js.py:91
+#: js/backoffice/Radio/Radios.js:115
+#: js/backoffice/Radio/Radios.js.py:223
+#: js/backoffice/Radio/Radios.js:255
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -201,7 +206,7 @@ msgid "New VIP"
 msgstr "Nouveau VIP"
 
 #: js/backoffice/Invitations/Invitations.js:118
-#: js/backoffice/Radio/Radios.js:216
+#: js/backoffice/Radio/Radios.js:249
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -233,7 +238,7 @@ msgstr "Langue"
 msgid "Groups"
 msgstr "Groupes"
 
-#: js/backoffice/Menus/Menus.js:177
+#: js/backoffice/Menus/Menus.js:184
 msgid "Menus management"
 msgstr "Gestion des menus"
 
@@ -288,58 +293,66 @@ msgid "Do you want to remove songs from radio"
 msgstr "Voulez-vous supprimer les chansons de la radio ?"
 
 #: js/backoffice/Radio/Radios.js:45
+msgid "Do you want to duplicate this radio ?"
+msgstr "Voulez-vous dupliquer cette radio ?"
+
+#: js/backoffice/Radio/Radios.js:68
 msgid "Do you want to remove all songs from radio"
 msgstr "Voulez-vous supprimer toutes les chansons de la radio ?"
 
-#: js/backoffice/Radio/Radios.js:69
+#: js/backoffice/Radio/Radios.js:92
 msgid "Do you want to find and remove duplicates from radio"
 msgstr "Voulez-vous supprimer les doublons de la radio ?"
 
-#: js/backoffice/Radio/Radios.js:93
+#: js/backoffice/Radio/Radios.js:116
 msgid "Do you want to add songs to radio"
 msgstr "Voulez-vous ajouter les chansons à la radio ?"
 
-#: js/backoffice/Radio/Radios.js:128
+#: js/backoffice/Radio/Radios.js:151
 msgid "Songs assigned to radio"
 msgstr "Chansons assignées à la radio"
 
-#: js/backoffice/Radio/Radios.js:130
+#: js/backoffice/Radio/Radios.js:153
 msgid "Remove from radio"
 msgstr "Supprimer de la radio"
 
-#: js/backoffice/Radio/Radios.js:140
+#: js/backoffice/Radio/Radios.js:163
 msgid "Remove all songs from radio"
 msgstr "Supprimer toutes les chansons de la radio"
 
-#: js/backoffice/Radio/Radios.js:149
+#: js/backoffice/Radio/Radios.js:172
 msgid "Remove duplicate songs from radio"
 msgstr "Supprimer les doublons de la radio"
 
-#: js/backoffice/Radio/Radios.js:196
+#: js/backoffice/Radio/Radios.js:219
 msgid "Create new radio"
 msgstr "Créer une nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:201
+#: js/backoffice/Radio/Radios.js:224
 msgid "Do you want to create new radio ?"
 msgstr "Voulez-vous créer une radio ?"
 
-#: js/backoffice/Radio/Radios.js:208
+#: js/backoffice/Radio/Radios.js:231
 msgid "New radio"
 msgstr "Nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:223
+#: js/backoffice/Radio/Radios.js:239
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#: js/backoffice/Radio/Radios.js:256
 msgid "Do you want to delete radio ?"
 msgstr "Voulez-vous supprimer la radio ?"
 
-#: js/backoffice/Radio/Radios.js:258
+#: js/backoffice/Radio/Radios.js:293
 msgid "Available songs"
 msgstr "Chansons disponibles"
 
-#: js/backoffice/Radio/Radios.js:262
+#: js/backoffice/Radio/Radios.js:297
 msgid "Add to radio"
 msgstr "Ajouter à la radio"
 
-#: js/backoffice/Radio/Radios.js:285
+#: js/backoffice/Radio/Radios.js:320
 msgid "Radios management"
 msgstr "Gestion des radios"
 

@@ -491,6 +491,8 @@ else:
     FACEBOOK_API_SECRET='7e591216eeaa551cc8c4ed10a0f5c490'
     FACEBOOK_REALTIME_VERIFY_TOKEN = 'P6bSsjBqNRvKJWL'
 
+FACEBOOK_SHARE_PICTURE = '/media/yaweb/images/logo.png'
+
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'

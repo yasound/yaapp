@@ -1,6 +1,9 @@
 "use strict";
-/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
-/*extern Ext, $ */
+/*
+ * jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true,
+ * evil: true, undef: true, white: true, newcap: true
+ */
+/* extern Ext, $ */
 
 Namespace('Yasound.Views');
 
@@ -15,18 +18,18 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         'click .radio-cell': 'onRadio'
     },
 
-    initialize: function() {
+    initialize: function () {
         this.model.bind('change', this.render, this);
     },
-    onClose: function() {
+    onClose: function () {
         this.model.unbind('change', this.render);
     },
-    render: function() {
+    render: function () {
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
         return this;
     },
-    onRadio: function(e) {
+    onRadio: function (e) {
         e.preventDefault();
         var uuid = this.model.get('uuid');
         Yasound.App.Router.navigate("radio/" + uuid, {
@@ -34,7 +37,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         });
     }
 });
-
 
 /**
  * User menu handler
@@ -45,14 +47,14 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         'click #btn-my-radio': 'myRadio',
         'click #btn-favorites': 'favorites'
     },
-    myRadio: function(e) {
+    myRadio: function (e) {
         e.preventDefault();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
         Yasound.App.Router.navigate("radio/" + uuid, {
             trigger: true
         });
     },
-    favorites: function(e) {
+    favorites: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('favorites/', {
             trigger: true
@@ -76,18 +78,19 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #track-image-link": "displayRadio",
         "mousedown #volume-control": "volumeControl",
         "mouseup": 'mouseUp',
-        "mousemove": "mouseMove"
+        "mousemove": "mouseMove",
+        "click #fb_share": "facebookShare"
     },
 
-    initialize: function() {
+    initialize: function () {
         this.model.bind('change', this.render, this);
     },
 
-    onClose: function() {
+    onClose: function () {
         this.model.unbind('change', this.render);
     },
 
-    generateTwitterText: function() {
+    generateTwitterText: function () {
         if (!this.radio) {
             return '';
         }
@@ -99,11 +102,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         return share;
     },
 
-    generateFacebookText: function() {
+    generateFacebookText: function () {
         return this.generateTwitterText();
     },
 
-    generateSocialShare: function() {
+    generateSocialShare: function () {
         if (!this.radio) {
             $('#tweet').hide();
         } else {
@@ -118,7 +121,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    render: function() {
+    render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         this.generateSocialShare();
 
@@ -128,10 +131,20 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             }
             $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
         }
+        
+        // hide social buttons if current song is empty
+        if (this.model.get('id')) {
+            $('#tweet', this.el).show();
+            $('#fb_share', this.el).show();
+        } else {
+            $('#tweet', this.el).hide();
+            $('#fb_share', this.el).hide();
+        }
+        
         return this;
     },
 
-    play: function() {
+    play: function () {
         if (typeof Yasound.App.MySound === "undefined") {
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
@@ -144,7 +157,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    inc: function() {
+    inc: function () {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -158,7 +171,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
-    dec: function() {
+    dec: function () {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -172,7 +185,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
-    resizeVolumeBar: function(event) {
+    resizeVolumeBar: function (event) {
         if (typeof Yasound.App.MySound === "undefined") {
             return;
         }
@@ -191,32 +204,32 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
-    mouseUp: function(event) {
+    mouseUp: function (event) {
         if (this.volumeMouseDown) {
             $('body').css('cursor', 'auto');
             this.volumeMouseDown = false;
         }
     },
 
-    mouseMove: function(event) {
+    mouseMove: function (event) {
         if (!this.volumeMouseDown) {
             return;
         }
         this.resizeVolumeBar(event);
     },
 
-    volumeControl: function(event) {
+    volumeControl: function (event) {
         this.volumeMouseDown = true;
         this.resizeVolumeBar(event);
     },
 
-    like: function(event) {
+    like: function (event) {
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
     },
 
-    displayRadio: function(event) {
+    displayRadio: function (event) {
         event.preventDefault();
         var radio = Yasound.App.Router.currentRadio;
         if (radio) {
@@ -227,5 +240,21 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                 });
             }
         }
+    },
+
+    facebookShare: function (event) {
+        event.preventDefault();
+        var obj = {
+            method: 'feed',
+            link: Yasound.App.FacebookShare.link + this.radio.get('uuid'),
+            picture: Yasound.App.FacebookShare.picture,
+            name: gettext('Yasound share'),
+            caption: this.generateFacebookText(),
+            description: ''
+        };
+        console.log(obj)
+        function callback (response) {
+        }
+        FB.ui(obj, callback);
     }
 });
