@@ -21,7 +21,7 @@ Yasound.Views.SearchMenu = Backbone.View.extend({
         $('#search-input', this.el).val('');
         e.preventDefault();
 
-        Yasound.App.Router.navigate("search/" + value, {
+        Yasound.App.Router.navigate("search/" + value + '/', {
             trigger: true
         });
     }
