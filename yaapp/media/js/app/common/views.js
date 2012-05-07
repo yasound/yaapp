@@ -131,6 +131,16 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             }
             $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
         }
+        
+        // hide social buttons if current song is empty
+        if (this.model.get('id')) {
+            $('#tweet', this.el).show();
+            $('#fb_share', this.el).show();
+        } else {
+            $('#tweet', this.el).hide();
+            $('#fb_share', this.el).hide();
+        }
+        
         return this;
     },
 
@@ -236,17 +246,15 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         event.preventDefault();
         var obj = {
             method: 'feed',
-            link: Yasound.App.FacebookShare.link,
+            link: Yasound.App.FacebookShare.link + this.radio.get('uuid'),
             picture: Yasound.App.FacebookShare.picture,
-            name: 'Yasound share',
+            name: gettext('Yasound share'),
             caption: this.generateFacebookText(),
-            description: 'Using Dialogs to interact with users.'
+            description: ''
         };
-
+        console.log(obj)
         function callback (response) {
-            //document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
         }
-
         FB.ui(obj, callback);
     }
 });
