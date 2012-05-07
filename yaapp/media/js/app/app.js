@@ -55,7 +55,7 @@ $(document).ready(function () {
     Yasound.App.Workspace = Backbone.Router.extend({
         routes: {
             "": "index",
-            "radio/:uuid/": "radio",
+            "radio/:uuid/*args": "radio",
             "search/:query/": "search",
             "favorites/": "favorites"
         },
