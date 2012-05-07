@@ -32,7 +32,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     onRadio: function (e) {
         e.preventDefault();
         var uuid = this.model.get('uuid');
-        Yasound.App.Router.navigate("radio/" + uuid, {
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
         });
     }
@@ -50,7 +50,7 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     myRadio: function (e) {
         e.preventDefault();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
-        Yasound.App.Router.navigate("radio/" + uuid, {
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
         });
     },
@@ -235,7 +235,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (radio) {
             var uuid = this.radio.get('uuid');
             if (uuid) {
-                Yasound.App.Router.navigate("radio/" + uuid, {
+                Yasound.App.Router.navigate("radio/" + uuid + '/', {
                     trigger: true
                 });
             }
@@ -244,9 +244,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     facebookShare: function (event) {
         event.preventDefault();
+        
+        var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
         var obj = {
             method: 'feed',
-            link: Yasound.App.FacebookShare.link + this.radio.get('uuid'),
+            link: link,
             picture: Yasound.App.FacebookShare.picture,
             name: gettext('Yasound share'),
             caption: this.generateFacebookText(),
