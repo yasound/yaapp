@@ -4,6 +4,12 @@
 $(document).ready(function () {
     Namespace('Yasound.App');
 
+    // global initializations
+    Yasound.App.FacebookShare = {
+        picture: g_facebook_share_picture,
+        link: g_facebook_share_link
+    };
+    
     /**
      * component initalization
      */

@@ -10,6 +10,7 @@
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/webapp.css"/>
+    <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
     
     <script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
@@ -35,6 +36,8 @@
        var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};
        var g_push_url = '{{ push_url }}';
        var g_enable_push = {% if enable_push %}true{% else %}false{% endif %};
+       var g_facebook_share_picture = '{{ facebook_share_picture}}';
+       var g_facebook_share_link = '{{ facebook_share_link}}';
     </script>
 
 
@@ -90,6 +93,32 @@
 {% endblock %}
 {% block head_title %}{% trans "Yasound" %}{% endblock %}
 {% block body %}
+
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ facebook_app_id }}', // App ID
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+</script>
+
+
+
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -138,15 +167,6 @@
     <p>&copy; Yasound 2012</p>
     </footer>
 </div>
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=296167703762159";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 {% endblock %}
 
