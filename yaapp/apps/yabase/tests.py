@@ -859,6 +859,33 @@ class TestRadioDeleted(TestCase):
         results = Radio.objects.search_fuzzy('toto')
         self.assertEquals(len(results), 1)
         
+class TestSongInstanceDeleted(TestCase):
+    def setUp(self):
+        erase_index()
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user   
+    
+    def test_current_song(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        
+        playlist = generate_playlist(song_count=100)
+        playlist.radio = radio
+        playlist.save()
+        
+        si = SongInstance.objects.get(id=1)
+
+        radio.current_song = si
+        radio.save()
+        
+        si.delete()
+
+        radio = Radio.objects.get(id=radio.id)        
+        self.assertEquals(radio.current_song_id, None)
+
+
 class TestApi(TestCase):
     def setUp(self):
         erase_index()

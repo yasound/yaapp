@@ -86,7 +86,12 @@ class SongInstanceManager(models.Manager):
             except Radio.DoesNotExist:
                 return None
             
-            song_instance = radio.current_song
+            song_instance = None
+            try:
+                song_instance = radio.current_song
+            except SongInstance.DoesNotExist:
+                logger.error('radio.current_song failed for radio %s' % (radio.id))
+
             if song_instance:
                 song_dict = song_instance.song_description
                 if song_dict:
