@@ -115,6 +115,16 @@ class SongInstanceManager(models.Manager):
         if song_instance:
             song_dict = song_instance.song_description
             if song_dict:
+                live_key = 'radio_%s.live' % (str(radio_id))
+                live_data = cache.get(live_key)
+                if live_data:
+                    try:
+                        song_dict['name'] = live_data['name']
+                        song_dict['artist'] = live_data['artist']
+                        song_dict['album'] = live_data['album']
+                    except:
+                        pass
+
                 song_json = json.dumps(song_dict)
                 cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
         return song_json
