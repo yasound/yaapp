@@ -348,6 +348,7 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
     },
 
     addAll: function() {
+        this.clear();
         this.collection.each(this.addOne);
     },
 
@@ -398,7 +399,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
 
     render: function() {
         var data = this.model.toJSON();
-        $(this.el).hide().html(ich.radioUserTemplate(data)).fadeIn(200);
+        $(this.el).html(ich.radioUserTemplate(data));
         return this;
     }
 });
