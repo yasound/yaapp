@@ -1074,7 +1074,7 @@ class WallEventManager(models.Manager):
         song_events = self.get_song_events(radio).order_by('-start_date').all()
         if not radio.is_live():
             current_song = radio.current_song
-            if current_song and (len(song_events) == 0 or current_song.id != song_events[0].song.id):
+            if current_song and (len(song_events) == 0 or current_song.id != song_events[0].song_id):
                 s = radio.current_song
                 song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
                 song_event.start_date = radio.current_song_play_date
