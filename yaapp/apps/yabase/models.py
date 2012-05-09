@@ -905,14 +905,26 @@ class Radio(models.Model):
         if not enabled:
             cache.delete(key)
         else:
+            sm = SongMetadata.objects.create(name=name,
+                                        album_name=album,
+                                        artist_name=artist)
+            playlist, _created = self.get_or_create_default_playlist()
+            si = SongInstance.objects.create(metadata=sm, playlist=playlist)
+
             data = {
                 'name': name,
-                'id': id,
+                'id': si.id,
                 'album': album,
                 'artist': artist,
                 'cover': '/media/images/on_air.png'
             }
+            
+            if not self.ready:
+                self.ready = True
+                self.save()
+
             cache.set(key, data, 100*60)
+                
             
     def is_live(self):
         key = 'radio_%s.live' % (str(self.id))
