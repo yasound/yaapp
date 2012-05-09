@@ -56,6 +56,7 @@ $(document).ready(function () {
         routes: {
             "": "index",
             "radio/:uuid/*args": "radio",
+            "radio/:uuid": "radio",
             "search/:query/": "search",
             "favorites/": "favorites"
         },
