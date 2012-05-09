@@ -686,7 +686,7 @@ class TestImport(TestCase):
         self.assertEquals(yasound_song.name, 'my mp3')
         
         sm2, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
-        self.assertEquals(sm2, sm)
+        self.assertEquals(sm2.yasound_song_id, sm.yasound_song_id)
 
     def test_import_with_duplicated_metatadas(self):
         importer = SongImporter()
