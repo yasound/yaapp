@@ -492,30 +492,10 @@ class SongImporter:
             except SongMetadata.DoesNotExist:
                 self._log(_("song metadata does not exists : %s") % (song_metadata_id))
 
-        if not sm:        
-            # first check for an existing SongMetadata
-            try:
-                sm = SongMetadata.objects.get(name=name, artist_name=artist_name, album_name=album_name)
-                if sm.yasound_song_id:
-                    try:
-                        YasoundSong.objects.get(id=sm.yasound_song_id)
-                        self._log(_("song already in database: %s") % (sm.yasound_song_id))
-    
-                        # creating song instance if needed
-                        self._create_song_instance(sm, metadata)
+        if not sm:      
+            # create new song metadata
+            sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name)
                         
-                        return sm, self.get_messages()
-                    except YasoundSong.DoesNotExist:
-                        self._log(_("song metadata already in database, but no YasoundSong"))
-            except SongMetadata.DoesNotExist:
-                sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name)
-                sm.save()
-                self._log(_('creating SongMetadata, id = %s') % (sm.id))
-            except SongMetadata.MultipleObjectsReturned:
-                sm = SongMetadata.objects.filter(name=name, artist_name=artist_name, album_name=album_name)[0]
-                self._log(_('multiple objects, choosing id = %s') % (sm.id))
-            
-            
         # create artist with info from echonest and lastfm
         self._log(_('looking for artist'))
         artist = self._get_or_create_artist(metadata)
