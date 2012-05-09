@@ -95,10 +95,10 @@ class SongInstanceManager(models.Manager):
             if song_instance:
                 song_dict = song_instance.song_description
                 if song_dict:
-                    live_key = 'radio_%s.live' % (str(radio_id))
-                    live_data = cache.get(live_key)
+                    live_data = radio.live_data()
                     if live_data:
                         try:
+                            song_dict['id'] = live_data['id']
                             song_dict['name'] = live_data['name']
                             song_dict['artist'] = live_data['artist']
                             song_dict['album'] = live_data['album']
@@ -116,10 +116,11 @@ class SongInstanceManager(models.Manager):
         if song_instance:
             song_dict = song_instance.song_description
             if song_dict:
-                live_key = 'radio_%s.live' % (str(radio_id))
-                live_data = cache.get(live_key)
+                radio = Radio.objects.get(id=radio_id)
+                live_data = radio.live_data()
                 if live_data:
                     try:
+                        song_dict['id'] = live_data['id']
                         song_dict['name'] = live_data['name']
                         song_dict['artist'] = live_data['artist']
                         song_dict['album'] = live_data['album']
@@ -897,7 +898,7 @@ class Radio(models.Model):
             new_playlist.save()
         return new_radio
     
-    def set_live(self, enabled=False, name=None, album=None, artist=None):
+    def set_live(self, enabled=False, name=None, album=None, artist=None, id=None):
         key = 'radio_%s.live' % (str(self.id))
         current_song_key = 'radio_%s.current_song.json' % (str(self.id))
         cache.delete(current_song_key)
@@ -906,12 +907,23 @@ class Radio(models.Model):
         else:
             data = {
                 'name': name,
+                'id': id,
                 'album': album,
                 'artist': artist,
                 'cover': '/media/images/on_air.png'
             }
             cache.set(key, data, 100*60)
             
+    def is_live(self):
+        key = 'radio_%s.live' % (str(self.id))
+        if cache.get(key) is not None:
+            return True
+        return False
+    
+    def live_data(self):
+        key = 'radio_%s.live' % (str(self.id))
+        return cache.get(key)
+    
     class Meta:
         db_name = u'default'
         
@@ -1060,14 +1072,50 @@ class WallEventManager(models.Manager):
     
     def add_current_song_event(self, radio):
         song_events = self.get_song_events(radio).order_by('-start_date').all()
-        if radio.current_song and (len(song_events) == 0 or radio.current_song != song_events[0].song):
-            s = radio.current_song
-            song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
-            song_event.start_date = radio.current_song_play_date
-            song_event.save()
+        if not radio.is_live():
+            current_song = radio.current_song
+            if current_song and (len(song_events) == 0 or current_song.id != song_events[0].song.id):
+                s = radio.current_song
+                song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
+                song_event.start_date = radio.current_song_play_date
+                song_event.save()
+        else:
+            live_data = radio.live_data()
+            if not live_data:
+                return
+            
+            if len(song_events) == 0 or live_data['name'] != song_events[0].song_name:
+                song_name = live_data['name']
+                song_artist = live_data['artist']
+                song_album = live_data['album']
+    
+                song_event = WallEvent.objects.create(radio=radio, 
+                                                      type=yabase_settings.EVENT_SONG, 
+                                                      song_name=song_name,
+                                                      song_artist=song_artist,
+                                                      song_album=song_album)
+                song_event.start_date = datetime.datetime.now()
+                song_event.save()
+                
             
     def create_like_event(self, radio, song, user):
-        self.create(radio=radio, type=yabase_settings.EVENT_LIKE, song=song, user=user)
+        if not radio.is_live():
+            self.create(radio=radio, type=yabase_settings.EVENT_LIKE, song=song, user=user)
+        else:
+            live_data = radio.live_data()
+            if not live_data:
+                return
+            song_name = live_data['name']
+            song_artist = live_data['artist']
+            song_album = live_data['album']
+            self.create(radio=radio, 
+                        type=yabase_settings.EVENT_LIKE, 
+                        user=user,
+                        song_name=song_name,
+                        song_artist=song_artist,
+                        song_album=song_album)
+
+            
         
     def add_like_event(self, radio, song, user):
         can_add = True
@@ -1076,8 +1124,16 @@ class WallEventManager(models.Manager):
         previous_likes = self.filter(type=yabase_settings.EVENT_LIKE, radio=radio, user=user).order_by('-start_date')[:1]
         if previous_likes.count() != 0:
             previous = previous_likes[0]
-            if previous.song_id == song.id:
-                can_add = False
+            
+            if not radio.is_live():
+                song_id = song.id
+                if previous.song_id == song_id:
+                    can_add = False
+            else:
+                live_data = radio.live_data()
+                if previous.song_name == live_data['name'] and previous.song_artist == live_data['artist'] and previous.song_album == live_data['album']:
+                    can_add = False
+                
         
         if can_add:
             self.add_current_song_event(radio)
