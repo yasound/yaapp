@@ -95,6 +95,11 @@ class SongInstanceManager(models.Manager):
             if song_instance:
                 song_dict = song_instance.song_description
                 if song_dict:
+                    if radio.uuid in yaapp_settings.LIVE_RADIOS:
+                        song_dict['name'] = unicode(_('On Air'))
+                        song_dict['artist'] = ''
+                        song_dict['album'] = ''
+                    
                     song_json = json.dumps(song_dict)
                     cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
                     return song_json
