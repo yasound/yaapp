@@ -885,4 +885,18 @@ def notify_missing_song(request):
     return HttpResponse('OK')
     
     
+@csrf_exempt
+def radio_live(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    action = request.REQUEST.get('action')
+    if action and action == 'stop':
+        radio.set_live(enabled=False)
+    else :
+        name = request.REQUEST.get('name')
+        artist = request.REQUEST.get('artist')
+        album = request.REQUEST.get('album')
+        radio.set_live(enabled=True, name=name, album=album, artist=artist)
+    return HttpResponse('OK')
+    
+    
     

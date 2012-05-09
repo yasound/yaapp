@@ -724,10 +724,6 @@ else:
     
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 
-LIVE_RADIOS = ('4ecf1fb5726046be96f51e75003be0e6', 
-               'ce68c12adce8450fab688ac222740cdf',
-               '458f58dee8b0414d803077eeffb00e03')
-
 # temp files
 if PRODUCTION_MODE:
     TEMP_DIRECTORY = '/data/tmp/'
