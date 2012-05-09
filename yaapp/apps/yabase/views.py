@@ -251,7 +251,6 @@ def like_song(request, song_id):
     radio = song.playlist.radio
     if radio and not radio.is_live():
         song_user, _created = SongUser.objects.get_or_create(song=song, user=request.user)
-        old_mood = song_user.mood
         song_user.mood = yabase_settings.MOOD_LIKE
         song_user.save()
     
