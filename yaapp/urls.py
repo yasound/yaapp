@@ -114,6 +114,10 @@ urlpatterns = patterns('',
     url(r'^api/v1/song/(?P<song_id>\d+)/disliker/$', 'yabase.views.dislike_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/status/$', 'yabase.views.get_song_status'),
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
+    
+    # live
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),
+
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/connect/$', 'yabase.views.connect_to_radio'),
@@ -130,6 +134,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/delete_song/(?P<song_instance_id>\d+)/$', 'yabase.views.delete_song_instance'),
 
     url(r'^api/v1/notify_missing_song/$', 'yabase.views.notify_missing_song'),
+    
+    
     
     
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),

@@ -95,10 +95,15 @@ class SongInstanceManager(models.Manager):
             if song_instance:
                 song_dict = song_instance.song_description
                 if song_dict:
-                    if radio.uuid in yaapp_settings.LIVE_RADIOS:
-                        song_dict['name'] = unicode(_('On Air'))
-                        song_dict['artist'] = ''
-                        song_dict['album'] = ''
+                    live_key = 'radio_%s.live' % (str(radio_id))
+                    live_data = cache.get(live_key)
+                    if live_data:
+                        try:
+                            song_dict['name'] = live_data['name']
+                            song_dict['artist'] = live_data['artist']
+                            song_dict['album'] = live_data['album']
+                        except:
+                            pass
                     
                     song_json = json.dumps(song_dict)
                     cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
@@ -880,6 +885,20 @@ class Radio(models.Model):
             new_playlist.save()
         return new_radio
     
+    def set_live(self, enabled=False, name=None, album=None, artist=None):
+        key = 'radio_%s.live' % (str(self.id))
+        current_song_key = 'radio_%s.current_song.json' % (str(self.id))
+        cache.delete(current_song_key)
+        if not enabled:
+            cache.delete(key)
+        else:
+            data = {
+                'name': name,
+                'album': album,
+                'artist': artist
+            }
+            cache.set(key, data, 100*60)
+            
     class Meta:
         db_name = u'default'
         
