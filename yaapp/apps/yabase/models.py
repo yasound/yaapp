@@ -102,6 +102,7 @@ class SongInstanceManager(models.Manager):
                             song_dict['name'] = live_data['name']
                             song_dict['artist'] = live_data['artist']
                             song_dict['album'] = live_data['album']
+                            song_dict['cover'] = live_data['cover']
                         except:
                             pass
                     
@@ -122,6 +123,7 @@ class SongInstanceManager(models.Manager):
                         song_dict['name'] = live_data['name']
                         song_dict['artist'] = live_data['artist']
                         song_dict['album'] = live_data['album']
+                        song_dict['cover'] = live_data['cover']
                     except:
                         pass
 
@@ -905,7 +907,8 @@ class Radio(models.Model):
             data = {
                 'name': name,
                 'album': album,
-                'artist': artist
+                'artist': artist,
+                'cover': '/media/images/on_air.png'
             }
             cache.set(key, data, 100*60)
             
