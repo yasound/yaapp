@@ -288,7 +288,6 @@ Yasound.Views.Pagination = Backbone.View.extend({
         this.collection.howManyPer(per);
     },
     scroll: function(event) {
-        console.log('scroll');
         var height = $(document).height();
         var scrollHeight = $(window).scrollTop() + $(window).height();
         
@@ -349,7 +348,6 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
     },
 
     addAll: function() {
-        this.clear();
         this.collection.each(this.addOne);
     },
 
@@ -361,6 +359,17 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
     },
 
     addOne: function(radioUser) {
+        var found = _.find(this.views, function(view) {
+            if (view.model.id == radioUser.id) {
+                return true;
+            }
+        });
+        
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+        
         var view = new Yasound.Views.RadioUser({
             model: radioUser
         });
@@ -500,6 +509,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         } else {
             this.intervalId = setInterval(function() {
                 that.wallEvents.fetchFirst();
+                that.radioUsers.fetch();
             }, 10000);
         }
 
