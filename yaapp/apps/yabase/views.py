@@ -246,14 +246,14 @@ def like_song(request, song_id):
     try:
         song = SongInstance.objects.get(id=song_id)
     except SongInstance.DoesNotExist:
-        return HttpResponseNotFound()
+        song = None
 
     radio = song.playlist.radio
-
-    song_user, _created = SongUser.objects.get_or_create(song=song, user=request.user)
-    old_mood = song_user.mood
-    song_user.mood = yabase_settings.MOOD_LIKE
-    song_user.save()
+    if radio and not radio.is_live():
+        song_user, _created = SongUser.objects.get_or_create(song=song, user=request.user)
+        old_mood = song_user.mood
+        song_user.mood = yabase_settings.MOOD_LIKE
+        song_user.save()
     
     # add like event in wall
     if radio is not None:
@@ -895,7 +895,12 @@ def radio_live(request, radio_uuid):
         name = request.REQUEST.get('name')
         artist = request.REQUEST.get('artist')
         album = request.REQUEST.get('album')
-        radio.set_live(enabled=True, name=name, album=album, artist=artist)
+        
+        id = None
+        if radio.current_song:
+            id = radio.current_song.id
+        
+        radio.set_live(enabled=True, name=name, album=album, artist=artist, id=id)
     return HttpResponse('OK')
     
     
