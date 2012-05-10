@@ -3,6 +3,27 @@
 /*extern Ext, $ */
 Namespace('Yasound.Views');
 
+/**
+ * User zone
+ */
+Yasound.Views.User = Backbone.View.extend({
+    tagName: 'div',
+    className: 'radio',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        $(this.el).html(ich.userTemplate(this.model.toJSON()));
+        return this;
+    }
+});
 
 /**
  * Profile page
@@ -23,6 +44,25 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     render: function() {
         this.reset();
         $(this.el).html(ich.profilePageTemplate());
+        
+        this.userView = new Yasound.Views.User({
+            model: this.model,
+            el: $('#webapp-radio', this.el)
+        });
+        
+        this.currentRadioView = new Yasound.Views.RadioCell({
+            model: this.model.currentRadio,
+            el: $('#current-radio', this.el)
+        });
+
+        this.ownerRadioView = new Yasound.Views.RadioCell({
+            model: this.model.currentRadio,
+            el: $('#owner-radio', this.el)
+        });
+        
+        
+        
+        this.model.fetch();
         return this;
     }
 });
