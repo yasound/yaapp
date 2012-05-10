@@ -697,6 +697,10 @@ def reject_song(request, song_instance):
     radio = song_instance.playlist.radio
     radio.reject_song(song_instance)
     
+    res = {'success': True}
+    response = json.dumps(res)
+    return HttpResponse(response)
+    
 
 def song_instance_cover(request, song_instance_id):
     if not check_api_key_Authentication(request):
