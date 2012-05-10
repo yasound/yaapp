@@ -55,9 +55,9 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             el: $('#current-radio', this.el)
         });
 
-        this.ownerRadioView = new Yasound.Views.RadioCell({
-            model: this.model.currentRadio,
-            el: $('#owner-radio', this.el)
+        this.ownRadioView = new Yasound.Views.RadioCell({
+            model: this.model.ownRadio,
+            el: $('#own-radio', this.el)
         });
         
         
