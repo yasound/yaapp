@@ -93,7 +93,6 @@ class TopMissingSongsManager():
         docs = collection.find().sort([('songinstance__count', DESCENDING)])
         return docs
     
-    
 ## Event handlers
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):

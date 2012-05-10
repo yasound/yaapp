@@ -25,6 +25,7 @@ from django.core.cache import cache
 import json
 from yacore.database import atomic_inc
 import os
+from yametrics.matching_errors import MatchingErrorsManager
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -941,6 +942,16 @@ class Radio(models.Model):
     def live_data(self):
         key = 'radio_%s.live' % (str(self.id))
         return cache.get(key)
+    
+    def reject_song(self, song_instance):
+        yasound_song_id = song_instance.metadata.yasound_song_id
+        try:
+            yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+            manager = MatchingErrorsManager()
+            manager.song_rejected(yasound_song)
+        except YasoundSong.DoesNotExist:
+                pass
+        song_instance.delete()
     
     class Meta:
         db_name = u'default'
