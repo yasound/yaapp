@@ -690,7 +690,9 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
 
 
 @check_api_key(methods=['GET'], login_required=True)
-def reject_song(request, song_instance):
+def reject_song(request, song_id):
+    song_instance = get_object_or_404(SongInstance, id=song_id)
+    
     if request.user != song_instance.playlist.radio.creator:
         return HttpNotFound()
     
