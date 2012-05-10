@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-10 07:12+0200\n"
+"POT-Creation-Date: 2012-05-10 07:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,11 +136,15 @@ msgstr "© 2011 - Tous droits réservés"
 msgid "Email Address"
 msgstr "Adresse email"
 
-#: templates/yaweb/contact.html:34
+#: templates/yaweb/contact.html:26
+msgid "Partnerships"
+msgstr "Partenariats"
+
+#: templates/yaweb/contact.html:41
 msgid "Address"
 msgstr "Adresse"
 
-#: templates/yaweb/contact.html:40
+#: templates/yaweb/contact.html:47
 msgid "Contact us"
 msgstr "Nos coordonnées"
 
