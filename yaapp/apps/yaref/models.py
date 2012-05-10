@@ -20,6 +20,7 @@ from sorl.thumbnail import get_thumbnail
 from django.core.files import File
 from django.db.models import Q
 import buylink
+import os
 
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
@@ -259,6 +260,15 @@ class YasoundSong(models.Model):
 
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_song(self, upsert, insert)
+
+    def get_song_path(self):
+        return os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
+    
+    def get_song_preview_path(self):
+        song_path = os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
+        name, extension = os.path.splitext(song_path)
+        preview = u'%s_preview64%s' % (name, extension)
+        return preview
 
     class Meta:
         db_table = u'yasound_song'
