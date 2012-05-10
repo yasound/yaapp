@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-06 09:28+0200\n"
+"POT-Creation-Date: 2012-05-10 07:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,7 +269,35 @@ msgstr "Bureau"
 msgid "Office"
 msgstr "Le studio"
 
+#: templates/yaweb/press.html:60
+msgid "Press Releases"
+msgstr "Communiqués de presse"
+
+#: templates/yaweb/press.html:62
+msgid "Corporate"
+msgstr "Institutionnel"
+
 #: templates/yaweb/press.html:63
+msgid "Launch"
+msgstr "Lancement"
+
+#: templates/yaweb/press.html:64
+msgid "New version"
+msgstr "Nouvelle version"
+
+#: templates/yaweb/press.html:66
+msgid "Press Reviews"
+msgstr "Revue de presse"
+
+#: templates/yaweb/press.html:68
+msgid "Press review (march 2012)"
+msgstr "Revue de presse (mars 2012)"
+
+#: templates/yaweb/press.html:69
+msgid "Weblogs review (march 2012)"
+msgstr "Revue de web (mars 2012)"
+
+#: templates/yaweb/press.html:74
 msgid "For the Media"
 msgstr "Pour la presse"
 
