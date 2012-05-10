@@ -1,6 +1,9 @@
 "use strict";
-/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
-/*extern Ext, $ */
+/*
+ * jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true,
+ * evil: true, undef: true, white: true, newcap: true
+ */
+/* extern Ext, $ */
 $(document).ready(function () {
     Namespace('Yasound.App');
 
@@ -58,7 +61,8 @@ $(document).ready(function () {
             "radio/:uuid/*args": "radio",
             "radio/:uuid": "radio",
             "search/:query/": "search",
-            "favorites/": "favorites"
+            "favorites/": "favorites",
+            "profile/:id/": "profile",
         },
 
         currentRadio: new Yasound.Data.Models.Radio({
@@ -148,6 +152,17 @@ $(document).ready(function () {
                 tagName: 'div',
                 className: 'row-fluid',
                 collection: radios
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
+        
+        // profile page
+        profile: function (id) {
+            this.clearView();
+            this.currentView = new Yasound.Views.ProfilePage({
+                tagName: 'div',
+                className: 'row-fluid',
+                model: new Yasound.Data.Models.User({id:id})
             });
             $('#webapp-content').prepend(this.currentView.render().el);
         },

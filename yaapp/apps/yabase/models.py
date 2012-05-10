@@ -697,6 +697,7 @@ class Radio(models.Model):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         data = {
             'id': self.id,
+            'uuid': self.uuid,
             'name': self.name,
             'likes': likes,
             'favorites': self.favorites,
