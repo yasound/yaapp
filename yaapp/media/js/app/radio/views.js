@@ -53,7 +53,8 @@ Yasound.Views.Radio = Backbone.View.extend({
     className: 'radio',
     events: {
         "click #btn-favorite": "addToFavorite",
-        "click #btn-unfavorite": "removeFromFavorite"
+        "click #btn-unfavorite": "removeFromFavorite",
+        "click #webapp-radio-title a": "selectUser"
     },
 
     initialize: function () {
@@ -87,6 +88,12 @@ Yasound.Views.Radio = Backbone.View.extend({
             }
         });
         e.preventDefault();
+    },
+    selectUser: function (event) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.model.get('creator').id + '/', {
+            trigger: true
+        });
     },
 
     render: function () {
