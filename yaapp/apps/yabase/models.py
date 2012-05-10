@@ -173,6 +173,15 @@ class SongInstance(models.Model):
         desc_dict['name'] = song.name
         desc_dict['artist'] = song.artist_name
         desc_dict['album'] = song.album_name
+        desc_dict['likes'] = self.likes
+        desc_dict['enabled'] = self.enabled
+        desc_dict['frequency'] = self.frequency
+        if self.last_play_time is None:
+            desc_dict['last_play_time'] = None
+        else:
+            desc_dict['last_play_time'] = self.last_play_time.isoformat()
+        
+        
         cover = None
         if song.cover_filename:
             cover = song.cover_url
