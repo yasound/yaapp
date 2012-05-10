@@ -116,11 +116,12 @@ class RadioResource(ModelResource):
 
 class PublicRadioResource(ModelResource):
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
     
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False)
         resource_name = 'public_radio'
-        fields = ['id', 'name', 'description', 'genre', 'theme', 'uuid', 'tags', ]
+        fields = ['id', 'name', 'description', 'genre', 'theme', 'uuid', 'tags',]
         include_resource_uri = False;
         authorization = ReadOnlyAuthorization()
         filtering = {
