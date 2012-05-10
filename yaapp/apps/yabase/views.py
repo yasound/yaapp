@@ -28,6 +28,7 @@ import settings as yabase_settings
 import uuid
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
+from tastypie.http import HttpNotFound
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -686,6 +687,16 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
+
+
+@check_api_key(methods=['GET'], login_required=True)
+def reject_song(request, song_instance):
+    if request.user != song_instance.playlist.radio.creator:
+        return HttpNotFound()
+    
+    radio = song_instance.playlist.radio
+    radio.reject_song(song_instance)
+    
 
 def song_instance_cover(request, song_instance_id):
     if not check_api_key_Authentication(request):

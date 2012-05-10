@@ -135,6 +135,7 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/notify_missing_song/$', 'yabase.views.notify_missing_song'),
     
+    url(r'^api/v1/reject_song/(?P<song_id>\d+)/$', 'yabase.views.reject_song'),
     
     
     
