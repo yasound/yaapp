@@ -507,12 +507,14 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             Yasound.App.Router.pushManager.on('wall_event', function(msg) {
                 that.wallEvents.reset(msg);
             });
-        } else {
-            this.intervalId = setInterval(function() {
-                that.wallEvents.fetchFirst();
-                that.radioUsers.fetch();
-            }, 10000);
         }
+
+        this.intervalId = setInterval(function() {
+            if (!Yasound.App.Router.pushManager.enablePush) {
+                that.wallEvents.fetchFirst();
+            }
+            that.radioUsers.fetch();
+        }, 10000);
 
         return this;
     }
