@@ -948,7 +948,7 @@ class Radio(models.Model):
         try:
             yasound_song = YasoundSong.objects.get(id=yasound_song_id)
             manager = MatchingErrorsManager()
-            manager.reject_count(yasound_song)
+            manager.song_rejected(yasound_song)
         except YasoundSong.DoesNotExist:
                 pass
         song_instance.delete()
