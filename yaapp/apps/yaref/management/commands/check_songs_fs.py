@@ -19,13 +19,19 @@ class Command(BaseCommand):
     Check state of songs on filesystem
     """
     option_list = BaseCommand.option_list + (
+        make_option('-s', '--start_id', dest='start_id',
+            default=0, help="start id"),
     )
     help = "Scan songs and check integry on filesystem"
     args = ''
 
     def handle(self, *app_labels, **options):
-        songs = YasoundSong.objects.all();
-        count = songs.count()
+        start_id = int(options.get('start_id', 0))
+        if start_id > 0:
+            songs = YasoundSong.objects.filter(id__gte=start_id)
+        else:
+            songs = YasoundSong.objects.all()
+        count = songs.count() 
         logger.info("processing %d song instances" % (count))
         
         if count == 0:
