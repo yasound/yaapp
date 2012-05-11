@@ -1,16 +1,24 @@
 {% load i18n %}
+<div class='row-fluid'>
 <div class='span4'>
     <div id='webapp-radio'></div>
 </div>
 <div class='span8'>
-    <h2>{% trans "His Radio" %}</h2>
+    <h2>{% trans "Radio" %}</h2>
     <div id='own-radio'>
     </div>
-    <h2>{% trans "Current radio" %}</h2>
+    <h2>{% trans "Currently listening to" %}</h2>
     <div id='current-radio'>
     </div>
     <div>
-    <ul id='wall'></ul>
+</div>
+</div>
+<div class='row-fluid'>
+
+<div class='span12'>
+    <h2>{% trans "Favorites" %}</h2>
+    <ul id='favorites'></ul>
     </div>
     <div id='pagination'></div>
+</div>
 </div>

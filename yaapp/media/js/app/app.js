@@ -166,7 +166,6 @@ $(document).ready(function () {
             this.clearView();
             this.currentView = new Yasound.Views.ProfilePage({
                 tagName: 'div',
-                className: 'row-fluid',
                 model: new Yasound.Data.Models.User({username:username})
             });
             $('#webapp-content').prepend(this.currentView.render().el);

@@ -60,9 +60,20 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             el: $('#own-radio', this.el)
         });
         
+        var favorites = new Yasound.Data.Models.Favorites({});
+        
+        this.favoritesView = new Yasound.Views.Favorites({
+            collection: favorites,
+            el: $('#favorites', this.el)
+        });
         
         
-        this.model.fetch();
+        this.model.fetch({
+            success: function(model, response) {
+                favorites.url = '/api/v1/user/' + model.get('id') + '/favorite_radio/';
+                favorites.fetch();
+            }
+        });
         return this;
     }
 });
