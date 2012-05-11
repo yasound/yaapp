@@ -7,9 +7,9 @@
 Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.User = Backbone.Model.extend({
-    idAttribute: 'id',
+    idAttribute: 'username',
     url: function () {
-        return '/api/v1/user/' + this.id + '/';
+        return '/api/v1/public_user/' + this.id + '/';
     },
     initialize: function () {
         _.bindAll(this, 'fetchSuccess');

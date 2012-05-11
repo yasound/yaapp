@@ -13,6 +13,8 @@ $(document).ready(function () {
         link: g_facebook_share_link
     };
     
+    Yasound.App.userAuthenticated = g_authenticated;
+    
     /**
      * component initalization
      */
@@ -62,7 +64,7 @@ $(document).ready(function () {
             "radio/:uuid": "radio",
             "search/:query/": "search",
             "favorites/": "favorites",
-            "profile/:id/": "profile",
+            "profile/:username/": "profile",
         },
 
         currentRadio: new Yasound.Data.Models.Radio({
@@ -71,7 +73,9 @@ $(document).ready(function () {
         currentView: undefined,
 
         setCurrentRadioUUID: function (uuid) {
-            this.currentRadio.disconnect();
+            if (Yasound.App.userAuthenticated) {
+                this.currentRadio.disconnect();
+            }
             this.currentRadio.set({
                 'uuid': uuid,
                 'id': 0
@@ -83,7 +87,9 @@ $(document).ready(function () {
             var radio = this.currentRadio;
             this.currentRadio.fetch({
                 success: function () {
-                    radio.connect();
+                    if (Yasound.App.userAuthenticated) {
+                        radio.connect();
+                    }
                 }
             });
         },
@@ -122,7 +128,6 @@ $(document).ready(function () {
 
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
-                this.commonContext.userAuthenticated = g_authenticated;
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
         },
@@ -157,12 +162,12 @@ $(document).ready(function () {
         },
         
         // profile page
-        profile: function (id) {
+        profile: function (username) {
             this.clearView();
             this.currentView = new Yasound.Views.ProfilePage({
                 tagName: 'div',
                 className: 'row-fluid',
-                model: new Yasound.Data.Models.User({id:id})
+                model: new Yasound.Data.Models.User({username:username})
             });
             $('#webapp-content').prepend(this.currentView.render().el);
         },
@@ -184,8 +189,6 @@ $(document).ready(function () {
                 })
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
-                if (this.commonContext.userAuthenticated) {
-                }
                 this.currentRadio.on('change:id', function (model, id) {
                     model.currentSong = that.radioContext.currentSong;
                     that.radioContext.currentSong.set('radioId', id);
@@ -198,8 +201,7 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.RadioPage({
                 tagName: 'div',
                 className: 'row-fluid',
-                model: this.currentRadio,
-                userAuthenticated: this.commonContext.userAuthenticated
+                model: this.currentRadio
             });
             $('#webapp-content').prepend(this.currentView.el);
 

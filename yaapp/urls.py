@@ -1,4 +1,4 @@
-from account.api import UserResource, LoginResource, SignupResource, \
+from account.api import UserResource, LoginResource, SignupResource, PublicUserResource, \
     LoginSocialResource
 from account.friend_api import FriendResource
 from django.conf import settings
@@ -28,6 +28,7 @@ api = Api(api_name='v1')
 api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserResource())
+api.register(PublicUserResource())
 api.register(RadioResource())
 api.register(PublicRadioResource())
 api.register(SearchRadioResource())
