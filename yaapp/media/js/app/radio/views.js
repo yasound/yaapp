@@ -523,7 +523,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         });
 
         if (this.model.get('id')) {
-            this.wallEvents.fetch();
+            this.wallEvents.goTo(0);
             this.radioUsers.fetch();
         }
 
