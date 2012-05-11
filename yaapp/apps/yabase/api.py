@@ -158,7 +158,6 @@ class SearchRadioResource(ModelResource):
         resource_name = 'search_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -457,6 +456,7 @@ class WallEventResource(ModelResource):
 
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=False)
+    user_username = fields.CharField(attribute='username', default=None, readonly=True)
 
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date')
@@ -464,7 +464,6 @@ class RadioWallEventResource(ModelResource):
         fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
         authorization = ReadOnlyAuthorization()
-        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         filtering = {
             'radio': 'exact',
@@ -601,7 +600,6 @@ class RadioCurrentUserResource(ModelResource):
         resource_name = 'current_user'
         fields = ['id']
         authorization= ReadOnlyAuthorization()
-        authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['get']
         include_resource_uri = False
     
