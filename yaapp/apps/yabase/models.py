@@ -5,7 +5,7 @@ from django.db import models, transaction
 from django.db.models import Q, signals
 from django.db.models.aggregates import Sum
 from django.utils.translation import ugettext_lazy as _
-from sorl.thumbnail import get_thumbnail
+from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
 from yaref.models import YasoundSong
@@ -849,6 +849,7 @@ class Radio(models.Model):
         if self.picture and len(self.picture.name) > 0:
             self.picture.delete(save=True)
         self.picture.save(filename, data, save=True)
+        delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
             
     
     def build_fuzzy_index(self, upsert=False, insert=True):
