@@ -39,13 +39,48 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 });
 
 /**
+ * UserCell - display a user in a list
+ */
+Yasound.Views.UserCell = Backbone.View.extend({
+    tagName: 'li',
+    className: 'user-cell',
+    events: {
+        'click .user-cell': 'onUser'
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).hide().html(ich.userCellTemplate(data)).fadeIn(200);
+        return this;
+    },
+
+    onUser: function (e) {
+        e.preventDefault();
+        var username = this.model.get('username');
+        console.log(this.model)
+        Yasound.App.Router.navigate("profile/" + username + '/', {
+            trigger: true
+        });
+    }
+});
+
+/**
  * User menu handler
  */
 Yasound.Views.UserMenu = Backbone.View.extend({
     el: '#user-menu',
     events: {
         'click #btn-my-radio': 'myRadio',
-        'click #btn-favorites': 'favorites'
+        'click #btn-favorites': 'favorites',
+        'click #btn-friends': 'friends'
     },
     myRadio: function (e) {
         e.preventDefault();
@@ -59,7 +94,14 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         Yasound.App.Router.navigate('favorites/', {
             trigger: true
         });
+    },
+    friends: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('friends/', {
+            trigger: true
+        });
     }
+
 });
 
 /**
@@ -131,7 +173,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             }
             $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
         }
-        
+
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
             $('#tweet', this.el).show();
@@ -140,7 +182,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#tweet', this.el).hide();
             $('#fb_share', this.el).hide();
         }
-        
+
         return this;
     },
 
@@ -244,7 +286,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     facebookShare: function (event) {
         event.preventDefault();
-        
+
         var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
         var obj = {
             method: 'feed',

@@ -65,6 +65,7 @@ $(document).ready(function () {
             "search/:query/": "search",
             "favorites/": "favorites",
             "profile/:username/": "profile",
+            "friends/": "friends",
         },
 
         currentRadio: new Yasound.Data.Models.Radio({
@@ -161,6 +162,20 @@ $(document).ready(function () {
             $('#webapp-content').prepend(this.currentView.render().el);
         },
         
+        // owner friends page
+        friends: function () {
+            this.clearView();
+
+            var friends = new Yasound.Data.Models.Friends({});
+
+            this.currentView = new Yasound.Views.FriendsPage({
+                tagName: 'div',
+                className: 'row-fluid',
+                collection: friends
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
+
         // profile page
         profile: function (username) {
             this.clearView();

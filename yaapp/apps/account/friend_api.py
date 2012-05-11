@@ -8,6 +8,7 @@ from tastypie.authentication import ApiKeyAuthentication
 
 from yabase.models import Radio
 from yabase.api import RadioResource
+from api import YasoundApiKeyAuthentication
 
 class FriendResource(ModelResource):
     current_radio = fields.ForeignKey(RadioResource, attribute='current_radio', full=True, null=True)
@@ -18,7 +19,7 @@ class FriendResource(ModelResource):
         fields = ['name']
         include_resource_uri = False
         allowed_methods = ['get']
-        authentication = ApiKeyAuthentication()
+        authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization() 
         
     def get_object_list(self, request):
