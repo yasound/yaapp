@@ -412,6 +412,7 @@ class UserProfile(models.Model):
         bundle.data['picture'] = self.picture_url
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
+        bundle.data['username'] = self.user.username
         
     def fill_user_bundle_with_login_infos(self, bundle):
         if self.user:
