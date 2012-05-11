@@ -11,7 +11,7 @@ from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 from social_auth.signals import socialauth_not_registered
-from sorl.thumbnail import ImageField, get_thumbnail
+from sorl.thumbnail import ImageField, get_thumbnail, delete
 from tastypie.models import ApiKey, create_api_key
 from yabase.apns import get_deprecated_devices, send_message
 from yabase.models import Radio, RadioUser
@@ -553,6 +553,7 @@ class UserProfile(models.Model):
         if self.picture and len(self.picture.name) > 0:
             self.picture.delete(save=True)
         self.picture.save(filename, data, save=True)
+        delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
         
     def authenticated(self):
         d = datetime.datetime.now()
