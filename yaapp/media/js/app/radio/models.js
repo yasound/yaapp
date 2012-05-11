@@ -8,38 +8,6 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
     idAttribute: 'id'
 });
 
-Yasound.Data.Models.WallEvents = Backbone.Collection.extend({
-    model: Yasound.Data.Models.WallEvent,
-    lastId: 0,
-    limit: 25,
-    url: function() {
-        var lastId = this.findLastId();
-        if (!lastId) {
-            lastId = this.lastId;
-        }
-        return '/api/v1/radio/' + this.radio.get('id') + '/wall/?id__gt=' + lastId + '&limit=' + this.limit;
-    },
-    setRadio: function(radio) {
-        this.reset();
-        this.radio = radio;
-        this.lastId = 0;
-        return this;
-    },
-
-    findLastId: function() {
-        var lastObject = this.max(function(event) {
-            return event.get('id');
-        });
-        if (lastObject) {
-            this.lastId = lastObject.get('id');
-            return lastObject.get('id');
-        }
-    },
-    comparator: function(wallEvent) {
-        return wallEvent.get("id");
-    }
-});
-
 Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.WallEvent,
     url: '/api/v1/radio/0/wall/',
@@ -47,7 +15,6 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     skipAttribute: 'offset',
     perPage: 25,
     page:0,
-    lastId: 0,
     
     parse: function(response) {
         var results = response.objects;
@@ -58,19 +25,10 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     setRadio: function(radio) {
         this.reset();
         this.radio = radio;
-        this.lastId = 0;
         this.url = '/api/v1/radio/' + this.radio.get('id') + '/wall/';
         return this;
     },
-    findLastId: function() {
-        var lastObject = this.max(function(event) {
-            return event.get('id');
-        });
-        if (lastObject) {
-            this.lastId = lastObject.get('id');
-            return lastObject.get('id');
-        }
-    },
+
     comparator: function(wallEvent) {
         return wallEvent.get("id");
     },
