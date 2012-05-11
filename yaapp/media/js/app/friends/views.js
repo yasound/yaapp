@@ -32,7 +32,7 @@ Yasound.Views.Friends = Backbone.View.extend({
         var currentId = user.id;
 
         var found = _.find(this.views, function(view) {
-            if (view.model.id == user.id) {
+            if (view.model.get('username') == user.get('username')) {
                 return true;
             }
         });
