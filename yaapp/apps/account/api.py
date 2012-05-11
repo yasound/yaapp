@@ -113,6 +113,26 @@ class UserResource(ModelResource):
         user_profile.update_with_bundle(bundle, False)
         return user_resource
     
+class PublicUserResource(UserResource):
+    """
+    This resource is the public version of the user resource : 
+    
+    * anonymous access allowed
+    * access by username instead of id in order to avoid easy guess of our data
+    """
+    class Meta:
+        queryset = User.objects.all()
+        resource_name = 'public_user'
+        fields = ['id']
+        include_resource_uri = False
+        authorization = ReadOnlyAuthorization()
+        
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<username>\S+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
+    
+        
 def add_api_key_to_bundle(user, bundle):
     k = ApiKey.objects.get(user=user).key
     bundle.data['api_key'] = k
