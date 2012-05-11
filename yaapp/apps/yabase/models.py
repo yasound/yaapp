@@ -1261,7 +1261,13 @@ class WallEvent(models.Model):
         else:
             url = yaapp_settings.DEFAULT_IMAGE
         return url
-
+    
+    @property
+    def username(self):
+        if self.user:
+            return self.user.username
+        return None
+        
     class Meta:
         db_name = u'default'
 

@@ -54,7 +54,7 @@ Yasound.Views.Radio = Backbone.View.extend({
     events: {
         "click #btn-favorite": "addToFavorite",
         "click #btn-unfavorite": "removeFromFavorite",
-        "click #webapp-radio-title a": "selectUser"
+        "click #webapp-radio-title a h1": "selectUser"
     },
 
     initialize: function () {
@@ -91,7 +91,7 @@ Yasound.Views.Radio = Backbone.View.extend({
     },
     selectUser: function (event) {
         event.preventDefault();
-        Yasound.App.Router.navigate("profile/" + this.model.get('creator').id + '/', {
+        Yasound.App.Router.navigate("profile/" + this.model.get('creator').username + '/', {
             trigger: true
         });
     },
@@ -345,7 +345,7 @@ Yasound.Views.WallEvent = Backbone.View.extend({
 
     selectUser: function (event) {
         event.preventDefault();
-        Yasound.App.Router.navigate("profile/" + this.model.get('user_id') + '/', {
+        Yasound.App.Router.navigate("profile/" + this.model.get('user_username') + '/', {
             trigger: true
         });
     }
@@ -427,7 +427,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     },
     selectUser: function (event) {
         event.preventDefault();
-        Yasound.App.Router.navigate("profile/" + this.model.get('id') + '/', {
+        Yasound.App.Router.navigate("profile/" + this.model.get('username') + '/', {
             trigger: true
         });
     }    
@@ -439,7 +439,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
     intervalId: undefined,
     wallPosted: undefined,
-
+    
     initialize: function () {
         this.model.bind('change', this.render, this);
     },
@@ -494,12 +494,14 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
         $(this.el).html(ich.radioPageTemplate());
 
-        this.wallInputView = new Yasound.Views.WallInput({
-            model: this.model,
-            el: $('#webapp-wall-input', this.el)
-        });
-        this.wallInputView.radioUUID = this.model.get('uuid');
-
+        if (Yasound.App.userAuthenticated) {
+            this.wallInputView = new Yasound.Views.WallInput({
+                model: this.model,
+                el: $('#webapp-wall-input', this.el)
+            });
+            this.wallInputView.radioUUID = this.model.get('uuid');
+            this.wallInputView.render();
+        }
         this.radioView = new Yasound.Views.Radio({
             model: this.model,
             el: $('#webapp-radio', this.el)
@@ -527,7 +529,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.radioUsers.fetch();
         }
 
-        this.wallInputView.render();
         this.radioView.render();
         this.wallEventsView.render();
         this.paginationView.render();
