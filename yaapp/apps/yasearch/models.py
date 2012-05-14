@@ -152,7 +152,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     
     
 def search_radio(search_text, radio_min_score=40, ready_radios_only=True, radios_with_creator_only=True):
-    radio_results = Radio.objects.search_fuzzy(search_text, 5)
+    radio_results = Radio.objects.search_fuzzy(search_text, 20)
     radios = []
     for r in radio_results:
         radio_id = r[0]["db_id"]
