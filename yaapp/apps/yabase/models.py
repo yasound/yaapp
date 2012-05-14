@@ -237,6 +237,7 @@ def song_instance_deleted(sender, instance, created=None, **kwargs):
         if radio.current_song_id == song_instance.id:
             radio.current_song = None
             radio.save()
+            radio.clear_current_song_json_cache()
     except:
         logger.error('no radio or playlist for song instance %s' % (song_instance.id))
 
@@ -971,8 +972,12 @@ class Radio(models.Model):
             manager = MatchingErrorsManager()
             manager.song_rejected(yasound_song)
         except YasoundSong.DoesNotExist:
-                pass
+            pass
         song_instance.delete()
+    
+    def clear_current_song_json_cache(self):
+        key = 'radio_%s.current_song.json' % (str(self.id))
+        cache.delete(key)
     
     class Meta:
         db_name = u'default'
