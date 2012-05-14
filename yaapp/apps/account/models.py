@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile, ContentFile
 from django.db import models
 from django.db.models.aggregates import Count
 from django.db.models.signals import post_save, pre_delete
-from django.utils.translation import ugettext_lazy as _, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
