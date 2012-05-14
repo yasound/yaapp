@@ -221,6 +221,26 @@ class SongInstance(models.Model):
                                                  metadata=self.metadata,
                                                  enabled=self.enabled)
         return new_song
+
+def song_instance_deleted(sender, instance, created=None, **kwargs):
+    """
+    when a song instance is deleted, we must be sure that
+    the radio.current_song is set to NULL 
+    """ 
+    if isinstance(instance, SongInstance):
+        song_instance = instance
+    else:
+        return
+    
+    try:
+        radio = song_instance.playlist.radio
+        if radio.current_song_id == song_instance.id:
+            radio.current_song = None
+            radio.save()
+    except:
+        logger.error('no radio or playlist for song instance %s' % (song_instance.id))
+
+signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
          
 class SongUserManager(models.Manager):
     def likers(self, song):
