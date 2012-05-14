@@ -683,7 +683,18 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     if not album_name:
         album_name = ''
     
-    metadata, _created = SongMetadata.objects.get_or_create(yasound_song_id=yasound_song_id, name=name, artist_name=artist_name, album_name=album_name)
+    try:
+        metadata, _created = SongMetadata.objects.get_or_create(yasound_song_id=yasound_song_id, 
+                                                                name=name, 
+                                                                artist_name=artist_name, 
+                                                                album_name=album_name)
+    except SongMetadata.MultipleObjectsReturned:
+        # we have multiple candidates, let's take the first one
+        metadata = SongMetadata.objects.filter(yasound_song_id=yasound_song_id,
+                                               name=name,
+                                               artist_name=artist_name,
+                                               album_name=album_name)[0]
+        
     song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata)
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
