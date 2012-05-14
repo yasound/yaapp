@@ -9,7 +9,8 @@ from tastypie import fields, http
 from tastypie.authentication import ApiKeyAuthentication, Authentication
 from tastypie.authorization import DjangoAuthorization, Authorization, \
     ReadOnlyAuthorization
-from tastypie.exceptions import ImmediateHttpResponse
+from tastypie.exceptions import ImmediateHttpResponse, NotFound
+from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource, ModelResource, ALL
 from tastypie.utils import trailing_slash
 from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, \
@@ -18,7 +19,6 @@ from yaref.models import YasoundSong
 from yasearch.models import search_radio, search_radio_by_user, \
     search_radio_by_song
 import datetime
-from tastypie.paginator import Paginator
 import json
 import settings as yabase_settings
 
@@ -671,10 +671,14 @@ class SongUserResource(ModelResource):
         self.is_authenticated(request)
         
         song_id = kwargs.pop('song_id')
-        song = get_object_or_404(SongInstance, id=song_id)
+        
+        try:
+            song = SongInstance.objects.get(id=song_id)
+        except SongInstance.DoesNotExist:
+            raise NotFound('get_song_user: cannot find song instance %s' % (song_id))
         
         # create SongUser object if it does not exist
-        song_user, created = SongUser.objects.get_or_create(song=song, user=request.user)
+        _song_user, _created = SongUser.objects.get_or_create(song=song, user=request.user)
         
         resource = SongUserResource() 
         return resource.get_detail(request, song=song, user=request.user)
