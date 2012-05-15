@@ -6,6 +6,11 @@ def async_inc_global_value(key, value):
     mm = GlobalMetricsManager()
     mm.inc_global_value(key, value)
 
+@task(ignore_result=True)
+def async_inc_radio_value(radio_id, key, value):  
+    from models import RadioMetricsManager
+    rm = RadioMetricsManager()
+    rm.inc_value(radio_id, key, value)
 
 @task
 def calculate_top_missing_songs_task():
