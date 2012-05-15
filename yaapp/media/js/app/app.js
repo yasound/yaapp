@@ -20,6 +20,13 @@ $(document).ready(function () {
      */
     $('.dropdown-toggle').dropdown();
 
+    $('#btn-webapp').click(function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('', {
+            trigger: true
+        });
+    })
+    
     Backbone.View.prototype.close = function () {
         this.remove();
         this.unbind();
