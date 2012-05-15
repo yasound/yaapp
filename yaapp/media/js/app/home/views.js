@@ -82,6 +82,15 @@ Yasound.Views.HomePage = Backbone.View.extend({
             el: $('#selected-radios', this.el)
         });
         
+        if (Yasound.App.userAuthenticated) {
+            this.favorites = new Yasound.Data.Models.Favorites({});
+            this.favoritesViews = new Yasound.Views.SearchResults({
+                collection: this.favorites,
+                el: $('#favorites', this.el)
+            });
+            this.favorites.fetch();
+        }
+        
         this.selectedRadios.fetch();
         
         return this;
