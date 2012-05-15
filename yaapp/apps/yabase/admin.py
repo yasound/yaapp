@@ -58,10 +58,10 @@ class FeaturedRadioInline(admin.TabularInline):
     extra = 1    
     
 class FeaturedContentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'activated')
+    list_display = ('id', 'name', 'activated', 'ftype')
     search_fields = ['name']
-    list_filter = ('activated',)
-    list_editable = ('activated',)
+    list_filter = ('activated', 'ftype')
+    list_editable = ('activated', 'ftype')
     inlines = [FeaturedRadioInline]    
 admin.site.register(FeaturedContent, FeaturedContentAdmin)
 

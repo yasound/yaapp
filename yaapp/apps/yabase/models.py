@@ -1366,6 +1366,7 @@ class FeaturedContent(models.Model):
     name = models.CharField(_('name'), max_length=255)
     description = models.TextField(_('description'), blank=True)
     activated = models.BooleanField(_('activated'), default=False)
+    ftype = models.CharField(max_length=1, choices=yabase_settings.FEATURED_CHOICES, default=yabase_settings.FEATURED_SELECTION)
     radios = models.ManyToManyField(Radio, through='FeaturedRadio', blank=True, null=True)
 
     def __unicode__(self):
@@ -1373,7 +1374,7 @@ class FeaturedContent(models.Model):
 
     def save(self, *args, **kwargs):
         if self.activated:
-            FeaturedContent.objects.exclude(id=self.id).update(activated=False)
+            FeaturedContent.objects.filter(ftype=self.ftype).exclude(id=self.id).update(activated=False)
         super(FeaturedContent, self).save(*args, **kwargs)
             
     class Meta:
@@ -1384,6 +1385,7 @@ class FeaturedRadio(models.Model):
     featured_content = models.ForeignKey(FeaturedContent, verbose_name=_('featured content'))
     radio = models.ForeignKey(Radio, verbose_name=_('radio'))
     order = models.IntegerField(_('order'), default=0)
+    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
 
     def __unicode__(self):
         return u'%s - %s' % (self.featured_content, self.radio);

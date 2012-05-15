@@ -247,6 +247,9 @@ class SearchRadioBySongResource(ModelResource):
         return self.get_object_list(request)
     
 class SelectedRadioResource(ModelResource):
+    """
+    Display radios in 'selection' menu
+    """
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
@@ -272,7 +275,38 @@ class SelectedRadioResource(ModelResource):
     
     
     def get_object_list(self, request):
-        obj_list = super(SelectedRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True).order_by('featuredradio__order')
+        obj_list = super(SelectedRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
+        return obj_list
+
+class SelectedWebRadioResource(ModelResource):
+    """
+    Display radios in 'selection' webapp homepage
+    """
+    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
+    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
+    picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    
+    class Meta:
+        queryset = Radio.objects.ready_objects()
+        resource_name = 'selected_web_radio'
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        include_resource_uri = False;
+        authorization = ReadOnlyAuthorization()
+        allowed_methods = ['get']
+        filtering = {
+            'genre': ALL,
+            'ready': ('exact',),
+        }        
+
+    def dehydrate(self, bundle):
+        radioID = bundle.data['id'];
+        radio = Radio.objects.get(pk=radioID)
+        radio.fill_bundle(bundle)
+        return bundle
+    
+    
+    def get_object_list(self, request):
+        obj_list = super(SelectedWebRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_HOMEPAGE).order_by('featuredradio__order')
         return obj_list
     
 class TopRadioResource(ModelResource):
