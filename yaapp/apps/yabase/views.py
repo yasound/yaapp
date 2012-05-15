@@ -708,6 +708,7 @@ def reject_song(request, song_id):
     if request.user != song_instance.playlist.radio.creator:
         return HttpNotFound()
     
+    logging.getLogger("yaapp.yabase.delete_song").info('rejecting song instance %s' % song_instance.id)    
     radio = song_instance.playlist.radio
     radio.reject_song(song_instance)
     
@@ -892,6 +893,7 @@ def delete_song_instance(request, song_instance_id):
     if request.user != song.playlist.radio.creator:
         return HttpResponse(status=401)
     
+    logging.getLogger("yaapp.yabase.delete_song").info('deleting song instance %s' % song.id)    
     song.delete()
     
     # if radio has no more songs, set ready to False
