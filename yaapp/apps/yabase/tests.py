@@ -635,7 +635,7 @@ class TestImport(TestCase):
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -653,7 +653,7 @@ class TestImport(TestCase):
             'album': 'my album',
             'radio_id': '1',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -668,14 +668,14 @@ class TestImport(TestCase):
         
     def test_import_same_song(self):
         importer = SongImporter()
-        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
+        filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'
         
         metadata = {
             'title': 'my mp3',
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -685,7 +685,7 @@ class TestImport(TestCase):
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.name, 'my mp3')
         
-        sm2, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm2, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         self.assertEquals(sm2.yasound_song_id, sm.yasound_song_id)
 
     def test_import_with_duplicated_metatadas(self):
@@ -702,7 +702,7 @@ class TestImport(TestCase):
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -712,14 +712,14 @@ class TestImport(TestCase):
 
     def test_import_same_song_with_different_name(self):
         importer = SongImporter()
-        filepath = './apps/yabase/fixtures/mp3/without_metadata.mp3'
+        filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'
         
         metadata = {
             'title': 'my mp3',
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         
         self.assertIsNotNone(sm.yasound_song_id)
         self.assertEquals(sm.name, 'my mp3')
@@ -734,7 +734,7 @@ class TestImport(TestCase):
             'artist': 'my other artist',
             'album': 'my other album',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         self.assertEquals(sm.yasound_song_id, yasound_song.id)
         self.assertEquals(sm.name, 'my other mp3')
         self.assertEquals(sm.artist_name, 'my other artist')
@@ -752,7 +752,7 @@ class TestImport(TestCase):
             'artist': 'my artist',
             'album': 'my album',
         }
-        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=False)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         self.assertIsNotNone(sm.yasound_song_id)
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertIsNone(yasound_song.owner_id)
