@@ -10,7 +10,8 @@ from stats.api import RadioListeningStatResource
 from tastypie.api import Api
 from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
-    PublicRadioResource, RadioResource, SelectedRadioResource, TopRadioResource, \
+    PublicRadioResource, RadioResource, SelectedRadioResource, \
+    SelectedWebRadioResource, TopRadioResource, \
     FavoriteRadioResource, FriendRadioResource, TechTourRadioResource, RadioLikerResource, \
     RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, \
     SearchRadioBySongResource, RadioCurrentUserResource, WallEventResource, \
@@ -34,6 +35,7 @@ api.register(PublicRadioResource())
 api.register(SearchRadioResource())
 api.register(SearchRadioByUserResource())
 api.register(SearchRadioBySongResource())
+api.register(SelectedWebRadioResource())
 api.register(SelectedRadioResource())
 api.register(TopRadioResource())
 api.register(FavoriteRadioResource())
