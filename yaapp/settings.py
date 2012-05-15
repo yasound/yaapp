@@ -425,6 +425,14 @@ LOGGING = {
             'filename': os.path.join(PROJECT_PATH, 'logs/missing_songs.log'),
             'formatter': 'verbose'
         },     
+        'file_delete_song':{
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024*10000, 
+            'backupCount': 10,
+            'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.delete_song.log'),
+            'formatter': 'verbose'
+        },     
     },
     'loggers': {
         'django': {
@@ -447,6 +455,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yabase.delete_song': {
+            'handlers': ['console', 'file_delete_song'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },                
         'yaapp.account': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
