@@ -81,6 +81,12 @@ Yasound.Views.HomePage = Backbone.View.extend({
             collection: this.selectedRadios,
             el: $('#selected-radios', this.el)
         });
+
+        this.mostActiveRadios = new Yasound.Data.Models.MostActiveRadios({});
+        this.mosteActiveRadiosView = new Yasound.Views.SelectedRadios({
+            collection: this.mostActiveRadios,
+            el: $('#most-active-radios', this.el)
+        });
         
         if (Yasound.App.userAuthenticated) {
             this.favorites = new Yasound.Data.Models.Favorites({});
@@ -92,7 +98,7 @@ Yasound.Views.HomePage = Backbone.View.extend({
         }
         
         this.selectedRadios.fetch();
-        
+        this.mostActiveRadios.fetch();
         return this;
     }
 });
