@@ -1385,6 +1385,7 @@ class FeaturedRadio(models.Model):
     featured_content = models.ForeignKey(FeaturedContent, verbose_name=_('featured content'))
     radio = models.ForeignKey(Radio, verbose_name=_('radio'))
     order = models.IntegerField(_('order'), default=0)
+    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
 
     def __unicode__(self):
         return u'%s - %s' % (self.featured_content, self.radio);
