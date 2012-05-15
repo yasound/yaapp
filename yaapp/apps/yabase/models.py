@@ -374,6 +374,9 @@ class RadioManager(models.Manager):
     def ready_objects(self):
         return self.filter(ready=True, creator__isnull=False)
     
+    def most_actives(self):
+        return self.filter(ready=True).order_by('-current_connections')
+    
     def last_indexed(self):
         doc = yasearch_indexer.get_last_radio_doc()
         if doc and doc.count() > 0:
