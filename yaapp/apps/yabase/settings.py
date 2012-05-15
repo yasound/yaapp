@@ -43,5 +43,4 @@ FEATURED_HOMEPAGE  = 'H'
 FEATURED_CHOICES = (
     (FEATURED_SELECTION, _('Selection')),
     (FEATURED_HOMEPAGE, _('Homepage')),
-    (EVENT_LIKE, _('Like')),
 )
