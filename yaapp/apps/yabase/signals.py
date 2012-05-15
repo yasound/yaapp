@@ -1,5 +1,6 @@
 import django.dispatch
 
+user_started_listening  = django.dispatch.Signal(providing_args=['radio', 'user'])
 user_stopped_listening  = django.dispatch.Signal(providing_args=['radio', 'user', 'duration'])
 new_wall_event          = django.dispatch.Signal(providing_args=['wall_event'])
 dislike_radio           = django.dispatch.Signal(providing_args=['radio', 'user'])

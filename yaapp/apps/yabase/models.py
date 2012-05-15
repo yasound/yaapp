@@ -375,7 +375,11 @@ class RadioManager(models.Manager):
         return self.filter(ready=True, creator__isnull=False)
     
     def most_actives(self):
-        return self.filter(ready=True).order_by('-current_connections')
+        from yametrics.models import RadioMetricsManager
+        rm = RadioMetricsManager()
+        results = rm.filter('current_users', limit=5, id_only=True)
+        ids = [res['db_id'] for res in results]
+        return self.filter(id__in=ids).order_by('-current_connections')
     
     def last_indexed(self):
         doc = yasearch_indexer.get_last_radio_doc()
@@ -784,6 +788,7 @@ class Radio(models.Model):
         self.save()
         
         atomic_inc(self, 'current_connections', 1)
+        yabase_signals.user_started_listening.send(sender=self, radio=self, user=self)
             
     def user_stopped_listening(self, user, listening_duration):
         if not user.is_anonymous():

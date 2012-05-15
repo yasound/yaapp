@@ -3,7 +3,7 @@ from account.models import UserProfile
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q, Count, signals
-from task import async_inc_global_value
+from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
 import datetime
@@ -92,11 +92,48 @@ class TopMissingSongsManager():
         collection = self.topmissingsongs
         docs = collection.find().sort([('songinstance__count', DESCENDING)])
         return docs
+
+class RadioMetricsManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.radios = self.db.metrics.radios
+        self.radios.ensure_index("db_id", unique=True)
+    
+    def erase_metrics(self):
+        self.radios.drop()
+        
+    def inc_value(self, radio_id, key, value):
+        collection = self.radios
+        collection.update({"db_id": radio_id}, 
+                          {"$inc": {key: value}}, 
+                          upsert=True,
+                          safe=True)
+    
+    def metrics(self, radio_id):
+        """
+        return metrics for given radio
+        """
+        collection = self.radios
+        metric = collection.find_one({'db_id': radio_id})
+        return metric
+    
+    def filter(self, key='db_id', id_only=True, limit=5):
+        collection = self.radios
+        if id_only:
+            return collection.find({}, {'db_id': True}).sort([(key, DESCENDING)]).limit(limit)
+        else:
+            return collection.find().sort([(key, DESCENDING)]).limit(limit)
+        
+        
     
 ## Event handlers
+def user_started_listening_handler(radio, user, **kwargs):
+    async_inc_radio_value.delay(radio.id, 'current_users', 1)
+yabase_signals.user_started_listening.connect(user_started_listening_handler)
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
+    async_inc_radio_value.delay(radio.id, 'current_users', -1)
 yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
 
 def new_wall_event_handler(wall_event, **kwargs):

@@ -3,7 +3,7 @@ from django.test import TestCase
 from models import GlobalMetricsManager
 from yabase import tests_utils as yabase_tests_utils
 from yabase.models import Radio, SongMetadata
-from yametrics.models import TopMissingSongsManager
+from yametrics.models import TopMissingSongsManager, RadioMetricsManager
 import datetime
 
 class TestGlobalMetricsManager(TestCase):
@@ -50,6 +50,46 @@ class TestGlobalMetricsManager(TestCase):
         
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_radios'], 3)
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_users'], 1)
+        
+        
+class TestRadioMetricsManager(TestCase):
+    def setUp(self):
+        rm = RadioMetricsManager()
+        rm.erase_metrics()
+
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+    
+    def test_inc_radio_value(self):
+        rm = RadioMetricsManager()
+
+        rm.inc_value(1, "val1", 10)
+        rm.inc_value(1, "val2", 12)
+
+        self.assertEquals(rm.metrics(1)['val1'], 10)
+        self.assertEquals(rm.metrics(1)['val2'], 12)
+
+        rm.inc_value(1, "val1", 10)
+        rm.inc_value(1, "val2", 12)
+
+        self.assertEquals(rm.metrics(1)['val1'], 20)
+        self.assertEquals(rm.metrics(1)['val2'], 24)
+
+
+        rm.inc_value(2, "val1", 10)
+        rm.inc_value(2, "val2", 12)
+
+        self.assertEquals(rm.metrics(1)['val1'], 20)
+        self.assertEquals(rm.metrics(1)['val2'], 24)
+
+        self.assertEquals(rm.metrics(2)['val1'], 10)
+        self.assertEquals(rm.metrics(2)['val2'], 12)
+
+        data = rm.filter(key='val1', id_only=True)
+        self.assertEquals(data[0]['db_id'], 1)
         
 class TestTopMissingSongsManager(TestCase):
     def setUp(self):
