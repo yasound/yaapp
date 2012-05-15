@@ -35,3 +35,13 @@ IPHONE_DEFAULT_APPLICATION_IDENTIFIER = 'com.yasound.yasound'
 IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER = 'com.yasound.techtour'
 
 TECH_TOUR_GROUP_NAME = 'techtour'
+
+
+# feature stuff
+FEATURED_SELECTION = 'S'
+FEATURED_HOMEPAGE  = 'H'
+FEATURED_CHOICES = (
+    (FEATURED_SELECTION, _('Selection')),
+    (FEATURED_HOMEPAGE, _('Homepage')),
+    (EVENT_LIKE, _('Like')),
+)

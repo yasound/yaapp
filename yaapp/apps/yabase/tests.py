@@ -343,6 +343,7 @@ class TestFeaturedModels(TestCase):
         featured_content1.save()
         
         self.assertEquals(featured_content1.activated, False)
+        self.assertEquals(featured_content1.ftype, yabase_settings.FEATURED_SELECTION)
         
         featured_content1.activated = True
         featured_content1.save()
@@ -367,6 +368,19 @@ class TestFeaturedModels(TestCase):
         featured_content2 = FeaturedContent.objects.get(id=featured_content2.id)
         self.assertEquals(featured_content1.activated, True)
         self.assertEquals(featured_content2.activated, False)
+        
+        
+        # another featured content but with other type,
+        # does not update activated field on other featured contents
+        featured_content3 = FeaturedContent(name='featured_2', 
+                                            activated=True, 
+                                            ftype=yabase_settings.FEATURED_HOMEPAGE) 
+        featured_content3.save()
+
+        self.assertEquals(featured_content1.activated, True)
+        self.assertEquals(featured_content2.activated, False)
+        self.assertEquals(featured_content3.activated, True)
+
         
 class TestImportPlaylist(TestCase):
     def setUp(self):

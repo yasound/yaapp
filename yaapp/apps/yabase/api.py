@@ -247,6 +247,9 @@ class SearchRadioBySongResource(ModelResource):
         return self.get_object_list(request)
     
 class SelectedRadioResource(ModelResource):
+    """
+    Display radios in 'selection' menu
+    """
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
@@ -272,7 +275,7 @@ class SelectedRadioResource(ModelResource):
     
     
     def get_object_list(self, request):
-        obj_list = super(SelectedRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True).order_by('featuredradio__order')
+        obj_list = super(SelectedRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True, ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
         return obj_list
     
 class TopRadioResource(ModelResource):
