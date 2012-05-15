@@ -24,7 +24,6 @@ admin.site.register(SongMetadata, SongMetadataAdmin)
 
 class SongInstanceAdmin(admin.ModelAdmin):
     list_display = ('id', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'yasound_song_id', 'need_sync')
-    list_filter = ('playlist', 'need_sync')
     search_fields = ('song', 'metadata__yasound_song_id', 'metadata__name', 'metadata__album_name', 'metadata__artist_name')
     raw_id_fields = ('metadata', 'playlist')
     
