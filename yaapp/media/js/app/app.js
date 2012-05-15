@@ -98,7 +98,10 @@ $(document).ready(function () {
         index: function () {
             this.clearView();
 
-            // TODO: add a welcome page
+            this.currentView = new Yasound.Views.HomePage({
+                tagName: 'div'
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
         },
 
         // this function must be called between every routes

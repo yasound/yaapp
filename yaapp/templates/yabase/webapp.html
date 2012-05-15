@@ -91,6 +91,9 @@
      {% include "yabase/app/searchPage.mustache" %}
    </script>
 
+   <script type='text/html' id='homePageTemplate'>
+     {% include "yabase/app/home/homePage.mustache" %}
+   </script>
 
 {% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
