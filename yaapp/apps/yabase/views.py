@@ -2,7 +2,7 @@ from django.views.decorators.http import require_http_methods
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -29,6 +29,8 @@ import uuid
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
 from tastypie.http import HttpNotFound
+
+from account import settings as account_settings
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -761,7 +763,8 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
 
 def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html'):
     if not request.user.is_superuser:
-        raise Http404()
+        if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
+            raise Http404()
     
     if request.user.is_authenticated():
         user_uuid = request.user.get_profile().own_radio.uuid
