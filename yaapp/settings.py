@@ -748,6 +748,11 @@ ITUNES_BASE_URL="http://itunes.apple.com/search"
 TRADEDOUBLER_URL="http://clk.tradedoubler.com/click?p=23753&a=2007583&url="
 TRADEDOUBLER_ID="partnerId=2003"
 
+GEOIP_DATABASE = os.path.join(PROJECT_PATH, 'GeoIP.dat')
+GEOIP_LOOKUP = 'REMOTE_ADDR' 
+if DJANGO_MODE == 'PRODUCTION':
+    GEOIP_LOOKUP = 'HTTP_X_REAL_IP' 
+    
 # test
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
