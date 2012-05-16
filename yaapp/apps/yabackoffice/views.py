@@ -497,6 +497,26 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     return render_to_response(template_name, {
         "metrics": metrics,
     }, context_instance=RequestContext(request)) 
+
+@csrf_exempt
+@login_required
+def past_month_metrics(request, template_name='yabackoffice/metrics.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    mm = GlobalMetricsManager()
+    metrics = mm.get_past_month_metrics()
+    for metric in metrics:
+        if 'listening_time' in metric:
+            try:
+                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
+                metric['listening_time'] = formatted_time
+            except:
+                pass
+    
+    return render_to_response(template_name, {
+        "metrics": metrics,
+    }, context_instance=RequestContext(request)) 
     
 @csrf_exempt
 def light_metrics(request, template_name='yabackoffice/light_metrics.html'):

@@ -71,6 +71,17 @@ def deploy():
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
 
+def update():
+    """[DISTANT] Update distant django env
+    """
+    with cd(WEBSITE_PATH):
+        run("git checkout %s" % (BRANCH))
+        run("git pull")
+        run("./vtenv.sh")
+    with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
+        run("/etc/init.d/yaapp restart")
+
 def restart_all():
     """[DISTANT] restart services
     """
@@ -78,6 +89,15 @@ def restart_all():
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
+
+def restart_celery():
+    """[DISTANT] restart services
+    """
+    with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
+        run("/etc/init.d/celeryd restart")
+        run("/etc/init.d/celerybeat restart")
+
+
 
 def test():
     """[DISTANT] restart services

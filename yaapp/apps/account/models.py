@@ -596,7 +596,7 @@ class UserProfile(models.Model):
     def radio_is_ready(self, radio):
         for f in self.friends.all():
             friend_profile = f.userprofile
-            friend_profile.my_friend_created_radio(friend_profile, radio)
+            friend_profile.my_friend_created_radio(self, radio)
             
     def logged(self):
         for f in self.friends.all():
