@@ -25,6 +25,7 @@ Yasound.Views.SelectedRadios = Backbone.View.extend({
     },
 
     addAll: function () {
+        $('.loading-mask', this.el).remove();
         this.clear();
         this.collection.each(this.addOne);
     },
