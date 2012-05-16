@@ -18,7 +18,7 @@ admin.site.register(Radio, RadioAdmin)
     
 
 class SongMetadataAdmin(admin.ModelAdmin):
-    list_display = ('name', 'artist_name', 'album_name', 'yasound_song_id', )
+    list_display = ('name', 'artist_name', 'album_name', 'yasound_song_id', 'hash_name')
     search_fields = ( 'name', 'artist_name', 'album_name', )
 admin.site.register(SongMetadata, SongMetadataAdmin)
 
