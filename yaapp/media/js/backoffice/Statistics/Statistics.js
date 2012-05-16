@@ -53,7 +53,7 @@ Yasound.Statistics.UI.PastMonthMetrics = function () {
 
 Yasound.Statistics.UI.PastYearMetrics = function () {
     return {
-        title: gettext('Last year metrics'),
+        title: gettext('Last 12 months metrics'),
         layout: 'fit',
         id: 'stats-past-year-metrics',
         autoScroll: true,

@@ -42,19 +42,20 @@ class GlobalMetricsManager():
     
     def _generate_past_month_timestamps(self, start_date=None):
         if start_date is None:
-            start_date = datetime.datetime.now()
+            start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
         timestamps = []
-        last_month = start_date + datetime.timedelta(weeks=-4)
+        last_month = start_date + datetime.timedelta(weeks=-8)
         for dt in rrule.rrule(rrule.DAILY, dtstart=last_month, until=start_date):
             timestamps.append(dt.strftime('%Y-%m-%d'))
         return timestamps
     
     def _generate_past_year_timestamps(self, start_date=None):
         if start_date is None:
-            start_date = datetime.datetime.now()
+            start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
         timestamps = []
-        last_month = start_date + datetime.timedelta(weeks=-52)
+        last_month = start_date + datetime.timedelta(weeks=-53)
         for dt in rrule.rrule(rrule.MONTHLY, dtstart=last_month, until=start_date):
+            print dt
             timestamps.append(dt.strftime('%Y-%m'))
         return timestamps
 
