@@ -29,9 +29,10 @@ def get_notification(request, notif_id):
 
 @check_api_key(methods=['PUT'])
 def update_notification(request, notif_id):
-    print 'update_notification view'
-    if len(request.POST.keys()) > 1: 
-        data = request.POST # for the tests in yamessage.test.py
+    if len(request.POST.keys()) > 1: # for the tests in yamessage.test.py
+        data = {}
+        for k in request.POST:
+            data[k] = request.POST.get(k)
     else:
         data = json.loads(request.POST.keys()[0]) # strange stuff !!! but it works with requests from ios
     m = NotificationsManager()
