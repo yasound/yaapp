@@ -51,6 +51,26 @@ Yasound.Statistics.UI.PastMonthMetrics = function () {
     };
 };
 
+Yasound.Statistics.UI.PastYearMetrics = function () {
+    return {
+        title: gettext('Last 12 months metrics'),
+        layout: 'fit',
+        id: 'stats-past-year-metrics',
+        autoScroll: true,
+        reload: function (panel) {
+            panel.load({
+                url: '/yabackoffice/past_year_metrics/',
+                text: gettext('Loading...')
+            });
+        },
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ]
+    };
+};
 Yasound.Statistics.UI.Panel = function () {
     return {
         xtype: 'portal',
@@ -59,7 +79,7 @@ Yasound.Statistics.UI.Panel = function () {
         items: [ {
             columnWidth: .50,
             style: 'padding:10px 0 10px 10px',
-            items: [ Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), {
+            items: [ Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
                 title: gettext('Latests radios'),
                 layout: 'fit',
                 tools: [ {
@@ -127,6 +147,9 @@ Yasound.Statistics.UI.Panel = function () {
 
             var pastMonthMetrics = Ext.getCmp('stats-past-month-metrics');
             pastMonthMetrics.reload(pastMonthMetrics);
+
+            var pastYearMetrics = Ext.getCmp('stats-past-year-metrics');
+            pastYearMetrics.reload(pastYearMetrics);
         }
     };
 }
