@@ -12,3 +12,11 @@ class SelectionForm(forms.Form):
     genre =  forms.ChoiceField(label=_('Genre'), choices=get_genres(),
                                required=False,
                                widget=forms.Select(attrs={"placeHolder": _('Genre')}))
+
+class SettingsRadioForm(forms.ModelForm):
+    genre =  forms.ChoiceField(label=_('Genre'), choices=get_genres(),
+                               required=False,
+                               widget=forms.Select(attrs={"placeHolder": _('Genre')}))
+    class Meta:
+        model = Radio
+        fields = ('name', 'genre', 'picture', 'description', 'tags')    

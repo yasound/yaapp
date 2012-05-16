@@ -12,7 +12,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from forms import SelectionForm
+from forms import SelectionForm, SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata
 from shutil import rmtree
@@ -777,6 +777,10 @@ def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='y
     facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
     facebook_share_link = request.build_absolute_uri(reverse('webapp'))
     
+    settings_radio_form = None
+    if request.user.is_authenticated():
+        settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
+        
     return render_to_response(template_name, {
         'user_uuid': user_uuid,
         'user_id' : user_id,
@@ -785,7 +789,8 @@ def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='y
         'current_uuid': radio_uuid,
         'facebook_app_id': settings.FACEBOOK_APP_ID,
         'facebook_share_picture': facebook_share_picture,
-        'facebook_share_link': facebook_share_link
+        'facebook_share_link': facebook_share_link,
+        'settings_radio_form': settings_radio_form
     }, context_instance=RequestContext(request))    
     
 def radios(request, template_name='web/radios.html'):

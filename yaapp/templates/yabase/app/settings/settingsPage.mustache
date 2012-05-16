@@ -2,5 +2,15 @@
 <div class='row-fluid'>
     <div class='span12'>
         <h1>Settings</h1>
+        
+        <form id='settings-radio-form' method='post'>{% csrf_token %}
+        <fieldset>
+            {{ settings_radio_form }}
+        </fieldset>
+        <br/>
+        <input type='hidden' name='action' value='radio'/>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+        </fieldset>
+        </form>
     </div>
 </div>    
