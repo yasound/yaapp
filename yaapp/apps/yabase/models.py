@@ -25,6 +25,7 @@ from django.core.cache import cache
 import json
 from yacore.database import atomic_inc
 import os
+import md5
 from yametrics.matching_errors import MatchingErrorsManager
 
 if yaapp_settings.ENABLE_PUSH:
@@ -36,8 +37,14 @@ logger = logging.getLogger("yaapp.yabase")
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
-
+class SongMetadataManager(models.Manager):
+    def build_hash_name(self):
+        qs = self.filter(hash_name__isnull=True)
+        for sm in qs:
+            sm.calculate_hash_name(commit=True)
+            
 class SongMetadata(models.Model):    
+    objects = SongMetadataManager()
     name = models.CharField(max_length=255)
     artist_name = models.CharField(max_length=255, blank=True)
     album_name = models.CharField(max_length=255, blank=True)
@@ -53,6 +60,20 @@ class SongMetadata(models.Model):
     picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     
     yasound_song_id = models.IntegerField(_('yasound song id'), null=True, blank=True) # song ID in the Song db
+    
+    hash_name = models.CharField(max_length=32, blank=True, null=True)
+    
+    def calculate_hash_name(self, commit=True):
+        hash_name = md5.new()
+        hash_name.update(self.song_name)
+        hash_name.update(self.album_name)
+        hash_name.update(self.artist_name)
+        hash_name = hash_name.hexdigest()
+        if commit:
+            self.hash_name = hash_name
+            self.save()
+        return hash_name
+        
     
     def __unicode__(self):
         return self.name

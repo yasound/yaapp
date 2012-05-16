@@ -17,7 +17,7 @@ import sys
 import time
 import zlib
 import zlib
-
+import md5
 logger = logging.getLogger("yaapp.yabase")
 
 @task
@@ -112,16 +112,26 @@ def process_playlists_exec(radio, content_compressed, task=None):
             order = data.get_int32()
             song_name = data.get_string()
             song_name_simplified = get_simplified_name(song_name)
-
-            raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE name=%s and artist_name=%s and album_name=%s",
-                                           [song_name,
+            
+            
+            hash_name = md5.new()
+            hash_name.update(song_name)
+            hash_name.update(album_name)
+            hash_name.update(artist_name)
+            hash_name_hex = hash_name.hexdigest()
+            
+            raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE hash_name=%s AND name=%s AND artist_name=%s AND album_name=%s",
+                                           [hash_name_hex,
+                                            song_name,
                                             artist_name,
                                             album_name])
             if raw and len(list(raw)) > 0:
                 metadata = list(raw)[0]
             else:
-                metadata = SongMetadata(name=song_name, artist_name=artist_name, album_name=album_name)
-                metadata.save()
+                metadata = SongMetadata.objects.create(name=song_name, 
+                                                       artist_name=artist_name, 
+                                                       album_name=album_name,
+                                                       hash_name=hash_name_hex)
 
             raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
                                            [playlist.id,
