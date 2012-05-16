@@ -1,22 +1,23 @@
-import datetime
-from random import random
-
 from django.conf import settings
-from django.db import models, IntegrityError
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, NoReverseMatch
+from django.db import models, IntegrityError
+from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import gettext_lazy as _
-
-from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
-
 from emailconfirmation.signals import email_confirmed, email_confirmation_sent
-
-from django.template import Context, Template
-
+from random import random
 from transmeta import TransMeta
+from yabase.models import RadioUser
+import datetime
+
+
+
+
+
 
 # this code based in-part on django-registration
 
@@ -141,6 +142,10 @@ class EmailConfirmationManager(models.Manager):
                 if not confirmation.email_address.verified and confirmation.email_address.primary:
                     user = User.objects.get(id=confirmation.email_address.user.id)
                     user.is_active = False
+                    
+                    # remove all favorites from this probably fake user
+                    RadioUser.objects.filter(user=user).update(favorite=False)
+                    
                     user.save()
 
                     # send an email
