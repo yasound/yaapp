@@ -14,6 +14,7 @@ $(document).ready(function () {
     };
     
     Yasound.App.userAuthenticated = g_authenticated;
+    Yasound.App.username = g_username;
     
     /**
      * component initalization

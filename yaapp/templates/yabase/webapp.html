@@ -34,6 +34,7 @@
     <script type="text/javascript">
        moment.lang('{{request.LANGUAGE_CODE}}');
        var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};
+       var g_username = '{% if request.user.is_authenticated %}{{request.user.username}}{% endif %}';
        var g_push_url = '{{ push_url }}';
        var g_enable_push = {% if enable_push %}true{% else %}false{% endif %};
        var g_facebook_share_picture = '{{ facebook_share_picture}}';
@@ -155,7 +156,11 @@
 							<li><a href="{% url webapp_radio user_uuid %}" id='btn-my-radio' yasound:uuid='{{ user_uuid }}'>{% trans "My radio" %}</a></li>
 							<li><a href="{% url webapp_favorites %}" id='btn-favorites'>{% trans "My favorites" %}</a></li>
 							<li><a href="{% url webapp_friends %}" id='btn-friends'>{% trans "My friends" %}</a></li>
+							{% if request.user.is_authenticated %}
 	                        <li class="divider"></li>
+                            <li><a href="{% url webapp_profile request.user.username %}" id='btn-my-profile'>{% trans "My profile" %}</a></li>
+                            {% endif %}
+                            <li class="divider"></li>
     						<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
 						</ul>
                 {% else %}
