@@ -34,3 +34,4 @@ django-jenkins
 django-ignoretests
 redis
 mock
+python-dateutil<=1

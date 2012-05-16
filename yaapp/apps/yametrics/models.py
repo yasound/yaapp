@@ -7,6 +7,7 @@ from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
 import datetime
+from dateutil import rrule
 
 class GlobalMetricsManager():
     """
@@ -39,6 +40,15 @@ class GlobalMetricsManager():
                 self._get_month_timestamp(),
                 self._get_year_timestamp()]
     
+    def _generate_past_month_timestamps(self, start_date=None):
+        if start_date is None:
+            start_date = datetime.datetime.now()
+        timestamps = []
+        last_month = start_date + datetime.timedelta(weeks=-4)
+        for dt in rrule.rrule(rrule.DAILY, dtstart=last_month, until=start_date):
+            timestamps.append(dt.strftime('%Y-%m-%d'))
+        return timestamps
+    
     def erase_global_metrics(self):
         self.metrics_glob.drop()
         
@@ -66,7 +76,16 @@ class GlobalMetricsManager():
             if metric:
                 metrics.append(metric)
         return metrics
-      
+    
+    def get_past_month_metrics(self):
+        collection = self.metrics_glob
+        timestamps = self._generate_past_month_timestamps()
+        metrics = []
+        for timestamp in timestamps:
+            metric = collection.find_one({'timestamp': timestamp})
+            if metric:
+                metrics.append(metric)
+        return metrics
       
 class TopMissingSongsManager():
     def __init__(self):
