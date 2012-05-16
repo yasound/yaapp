@@ -353,6 +353,7 @@ INSTALLED_APPS = (
     'emailconfirmation',
     'yametrics',
     'yamenu',
+    'yamessage',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

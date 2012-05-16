@@ -146,6 +146,11 @@ urlpatterns = patterns('',
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
     url(r'^api/v1/notifications_preferences/$', 'account.views.get_notifications_preferences'),
     url(r'^api/v1/set_notifications_preferences/$', 'account.views.set_notifications_preferences'),
+    
+    url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
+    url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
+    url(r'^api/v1/update_notification/(?P<notif_id>\S+)/$', 'yamessage.views.update_notification'),
+    url(r'^api/v1/delete_notification/(?P<notif_id>\S+)/$', 'yamessage.views.delete_notification'),
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
