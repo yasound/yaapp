@@ -75,6 +75,8 @@ PIPELINE_JS = {
             'js/app/friends/models.js',
             'js/app/profile/views.js',
             'js/app/profile/models.js',
+            'js/app/settings/views.js',
+            'js/app/settings/models.js',
             'js/app/home/views.js',
             'js/app/home/models.js',
             'js/app/push.js',
