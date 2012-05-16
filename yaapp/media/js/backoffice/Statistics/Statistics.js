@@ -14,6 +14,7 @@ Yasound.Statistics.UI.Metrics = function () {
         title: gettext('Metrics'),
         layout: 'fit',
         id: 'stats-metrics',
+        autoScroll: true,
         reload: function (panel) {
             panel.load({
                 url: '/yabackoffice/metrics/',
@@ -34,6 +35,7 @@ Yasound.Statistics.UI.PastMonthMetrics = function () {
         title: gettext('Last month metrics'),
         layout: 'fit',
         id: 'stats-past-month-metrics',
+        autoScroll: true,
         reload: function (panel) {
             panel.load({
                 url: '/yabackoffice/past_month_metrics/',
