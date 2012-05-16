@@ -155,6 +155,8 @@ def radio_add_songs(request, radio_id):
         playlist, _created = radio.get_or_create_default_playlist()
         for yasound_song in yasound_songs:
             SongInstance.objects.create_from_yasound_song(playlist, yasound_song)
+        radio.ready=True
+        radio.save()
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': ''
