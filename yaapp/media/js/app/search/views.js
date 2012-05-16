@@ -41,6 +41,7 @@ Yasound.Views.SearchResults = Backbone.View.extend({
     },
 
     addAll: function() {
+        $('.loading-mask', this.el).remove();
         this.collection.each(this.addOne);
     },
 

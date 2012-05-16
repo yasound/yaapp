@@ -80,7 +80,8 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     events: {
         'click #btn-my-radio': 'myRadio',
         'click #btn-favorites': 'favorites',
-        'click #btn-friends': 'friends'
+        'click #btn-friends': 'friends',
+        'click #btn-my-profile': 'myProfile'
     },
     myRadio: function (e) {
         e.preventDefault();
@@ -100,8 +101,13 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         Yasound.App.Router.navigate('friends/', {
             trigger: true
         });
+    },
+    myProfile: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('profile/' + Yasound.App.username + '/', {
+            trigger: true
+        });
     }
-
 });
 
 /**

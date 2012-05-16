@@ -14,6 +14,7 @@ $(document).ready(function () {
     };
     
     Yasound.App.userAuthenticated = g_authenticated;
+    Yasound.App.username = g_username;
     
     /**
      * component initalization
@@ -72,6 +73,7 @@ $(document).ready(function () {
             "search/:query/": "search",
             "favorites/": "favorites",
             "profile/:username/": "profile",
+            "settings/": "settings",
             "friends/": "friends",
         },
 
@@ -102,14 +104,6 @@ $(document).ready(function () {
             });
         },
 
-        index: function () {
-            this.clearView();
-
-            this.currentView = new Yasound.Views.HomePage({
-                tagName: 'div'
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
-        },
 
         // this function must be called between every routes
         clearView: function () {
@@ -142,6 +136,25 @@ $(document).ready(function () {
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
         },
+        
+        index: function () {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.HomePage({
+                tagName: 'div'
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
+
+        settings: function () {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.SettingsPage({
+                tagName: 'div'
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
+        
 
         // search page
         search: function (query) {
