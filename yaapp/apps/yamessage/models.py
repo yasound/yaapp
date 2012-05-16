@@ -10,6 +10,7 @@ class NotificationsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.notifications = self.db.notifications
+        self.notifications.ensure_index("date")
         
         
     def add_notification(self, recipient_user_id, notif_type, params=None):
