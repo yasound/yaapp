@@ -13,6 +13,9 @@ class NotificationsManager():
         
         
     def add_notification(self, recipient_user_id, notif_type, params=None):
+        if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:
+            print 'NotificationManager is disabled (settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False)'
+            return;
         text = self.text_for_notification(notif_type, params)
         d = datetime.datetime.now()
         notif = {'type':notif_type,
