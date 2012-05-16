@@ -27,6 +27,7 @@ from yacore.database import atomic_inc
 import os
 import md5
 from yametrics.matching_errors import MatchingErrorsManager
+from yasearch.utils import get_simplified_name
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -65,9 +66,9 @@ class SongMetadata(models.Model):
     
     def calculate_hash_name(self, commit=True):
         hash_name = md5.new()
-        hash_name.update(self.song_name)
-        hash_name.update(self.album_name)
-        hash_name.update(self.artist_name)
+        hash_name.update(get_simplified_name(self.name))
+        hash_name.update(get_simplified_name(self.album_name))
+        hash_name.update(get_simplified_name(self.artist_name))
         hash_name = hash_name.hexdigest()
         if commit:
             self.hash_name = hash_name

@@ -113,11 +113,10 @@ def process_playlists_exec(radio, content_compressed, task=None):
             song_name = data.get_string()
             song_name_simplified = get_simplified_name(song_name)
             
-            
             hash_name = md5.new()
-            hash_name.update(song_name)
-            hash_name.update(album_name)
-            hash_name.update(artist_name)
+            hash_name.update(song_name_simplified)
+            hash_name.update(album_name_simplified)
+            hash_name.update(artist_name_simplified)
             hash_name_hex = hash_name.hexdigest()
             
             raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE hash_name=%s AND name=%s AND artist_name=%s AND album_name=%s",
