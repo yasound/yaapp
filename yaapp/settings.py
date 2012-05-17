@@ -65,6 +65,8 @@ if LOCAL_MODE:
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10
+    
+    YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = True
 
     # Databases config:
     if not USE_MYSQL_IN_LOCAL_MODE:
@@ -121,6 +123,8 @@ elif DEVELOPMENT_MODE:
     CELERY_REDIS_PORT = 6379
     CELERY_REDIS_DB = 0
     CELERY_TASK_RESULT_EXPIRES = 10
+    
+    YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = True
 
     # Databases config:
     DATABASES = {
@@ -151,6 +155,8 @@ elif PRODUCTION_MODE:
     CELERY_REDIS_PORT = 6379
     CELERY_REDIS_DB = 0
     CELERY_TASK_RESULT_EXPIRES = 10
+    
+    YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False
 
     # Databases config:
     DATABASES = {
@@ -353,6 +359,7 @@ INSTALLED_APPS = (
     'emailconfirmation',
     'yametrics',
     'yamenu',
+    'yamessage',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
