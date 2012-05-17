@@ -1,11 +1,10 @@
+from bson import json_util
+from django.http import HttpResponseNotFound, HttpResponse
 from models import NotificationsManager
 from yacore.decorators import check_api_key
-from django.http import HttpResponseNotFound, HttpResponse
-#from yacore.json import MongoAwareEncoder
 import json
+from yacore.json import MongoAwareEncoder
 
-class MongoAwareEncoder():
-    pass
 
 @check_api_key(methods=['GET'])
 def get_notifications(request):
@@ -16,8 +15,6 @@ def get_notifications(request):
     limit = request.GET.get('limit', None)
     notif_cursor = m.notifications_for_recipient(request.user.id, count=limit, skip=skip, date_greater_than=date_greater_than, date_lower_than=date_lower_than)
     notifs = list(notif_cursor)
-#    encoder = YasounJsonEncoder()
-#    res = encoder.encode(notifs)
     res = json.dumps(notifs, cls=MongoAwareEncoder)
     return HttpResponse(res)
 
