@@ -164,8 +164,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
             
-    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)
-    if songs_ok.count() > 0:
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
+    if len(songs_ok) > 0:
         radio.ready = True
         radio.save()
         radio.fill_next_songs_queue()
