@@ -1,8 +1,11 @@
 from models import NotificationsManager
 from yacore.decorators import check_api_key
 from django.http import HttpResponseNotFound, HttpResponse
-from yacore.json import MongoAwareEncoder
+#from yacore.json import MongoAwareEncoder
 import json
+
+class MongoAwareEncoder():
+    pass
 
 @check_api_key(methods=['GET'])
 def get_notifications(request):
