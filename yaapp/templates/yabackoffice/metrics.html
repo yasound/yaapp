@@ -48,6 +48,49 @@
             {% endfor %}
         </tr>
 
+        <tr>
+            <td>
+                {% trans "Average duration" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.average_duration }} 
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Notifications activated on device" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.device_notifications_activated }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Notifications disabled on device" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.device_notifications_disabled }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Device count" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.device_count }}
+            </td>
+            {% endfor %}
+        </tr>
 
         <tr>
             <td>
@@ -90,6 +133,17 @@
             {% for metric in metrics %}
             <td>
                 {{ metric.new_favorite_radio }} /  {{ metric.new_not_favorite_radio }} 
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Animator actions" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_animator_activity }}
             </td>
             {% endfor %}
         </tr>

@@ -65,6 +65,8 @@ def upload_playlists(request, radio_id):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
+
     radio = get_object_or_404(Radio, pk=radio_id)
     data = request.FILES['playlists_data']
     content_compressed = data.read()
@@ -81,6 +83,8 @@ def set_radio_picture(request, radio_id):
     if not check_http_method(request, ['post']):
         logger.debug('set_radio_picture: http method error')
         return HttpResponse(status=405)
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
 
     try:
         radio = Radio.objects.get(id=radio_id)
@@ -548,6 +552,7 @@ def upload_song(request, song_id=None):
         logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
         
     json_data = {}
     data = request.REQUEST.get('data')
@@ -656,7 +661,9 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
         return HttpResponse(status=401)
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
-    
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
+
     radio_id = int(radio_id)
     playlist_index = int(playlist_index)
     yasound_song_id = int(yasound_song_id)
@@ -709,6 +716,8 @@ def reject_song(request, song_id):
     
     if request.user != song_instance.playlist.radio.creator:
         return HttpNotFound()
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
     
     logging.getLogger("yaapp.yabase.delete_song").info('rejecting song instance %s' % song_instance.id)    
     radio = song_instance.playlist.radio
@@ -900,6 +909,8 @@ def delete_song_instance(request, song_instance_id):
     
     if request.user != song.playlist.radio.creator:
         return HttpResponse(status=401)
+    
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
     
     logging.getLogger("yaapp.yabase.delete_song").info('deleting song instance %s' % song.id)    
     song.delete()

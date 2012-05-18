@@ -1,4 +1,4 @@
-from account.models import UserProfile
+from account.models import UserProfile, Device
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -448,6 +448,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
+
+    device_notifications_activated = Device.objects.filter(ios_token__gt=0).count()
     
     song_metadata_count = SongMetadata.objects.all().count()
     unmatched_song_metadata_count = SongMetadata.objects.filter(yasound_song_id__isnull=True).count()
@@ -461,7 +463,6 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
-        "radio_count": Radio.objects.all().count(),
         "ready_radio_count": Radio.objects.filter(ready=True).count(),
         "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
         "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
@@ -477,8 +478,26 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "song_metadata_count": song_metadata_count,
         "unmatched_song_metadata_count": unmatched_song_metadata_count,
         "matched_songs_ratio": matched_songs_ratio,
+        "device_notifications_activated" : device_notifications_activated,
     }, context_instance=RequestContext(request))  
 
+
+def _format_metrics(metrics):
+    for metric in metrics:
+        if 'listening_time' in metric:
+            try:
+                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
+                metric['listening_time'] = formatted_time
+            except:
+                pass
+            
+            if 'listening_count' in metric:
+                listening_time = float(metric['listening_time'])
+                listening_count = float(metric['listening_count'])
+    
+                average_duration = listening_time / listening_count
+                metric['average_duration'] = average_duration
+    return metrics        
 
 @csrf_exempt
 @login_required
@@ -488,13 +507,7 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = GlobalMetricsManager()
     metrics = mm.get_current_metrics()
-    for metric in metrics:
-        if 'listening_time' in metric:
-            try:
-                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
-                metric['listening_time'] = formatted_time
-            except:
-                pass
+    _format_metrics(metrics)
               
     return render_to_response(template_name, {
         "metrics": metrics,
@@ -508,13 +521,7 @@ def past_month_metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = GlobalMetricsManager()
     metrics = mm.get_past_month_metrics()
-    for metric in metrics:
-        if 'listening_time' in metric:
-            try:
-                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
-                metric['listening_time'] = formatted_time
-            except:
-                pass
+    _format_metrics(metrics)
     
     return render_to_response(template_name, {
         "metrics": metrics,
@@ -528,13 +535,7 @@ def past_year_metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = GlobalMetricsManager()
     metrics = mm.get_past_year_metrics()
-    for metric in metrics:
-        if 'listening_time' in metric:
-            try:
-                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
-                metric['listening_time'] = formatted_time
-            except:
-                pass
+    _format_metrics(metrics)
     
     return render_to_response(template_name, {
         "metrics": metrics,

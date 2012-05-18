@@ -25,7 +25,7 @@ class TestGlobalMetricsManager(TestCase):
         now = datetime.datetime.now()
         year = now.strftime('%Y')
         month = now.strftime('%Y-%m')
-        
+        day = now.strftime('%Y-%m-%d')
         self.assertEquals(mm.get_metrics_for_timestamp(year)['val1'], 10)
         self.assertEquals(mm.get_metrics_for_timestamp(year)['val2'], 12)
         self.assertEquals(mm.get_metrics_for_timestamp(month)['val1'], 10)
@@ -38,6 +38,12 @@ class TestGlobalMetricsManager(TestCase):
         self.assertEquals(mm.get_metrics_for_timestamp(year)['val2'], 24)
         self.assertEquals(mm.get_metrics_for_timestamp(month)['val1'], 20)
         self.assertEquals(mm.get_metrics_for_timestamp(month)['val2'], 24)
+
+        mm.set_daily_value("daily_val1", 100)
+        self.assertEquals(mm.get_metrics_for_timestamp(day)['daily_val1'], 100)
+
+        mm.set_daily_value("daily_val1", 200)
+        self.assertEquals(mm.get_metrics_for_timestamp(day)['daily_val1'], 200)
         
     def test_sample_metrics(self):
         mm = GlobalMetricsManager()
