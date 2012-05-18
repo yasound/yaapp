@@ -49,6 +49,23 @@ class GlobalMetricsManager():
         for dt in rrule.rrule(rrule.DAILY, dtstart=last_month, until=start_date):
             timestamps.append(dt.strftime('%Y-%m-%d'))
         return timestamps
+
+    def _generate_graph_timestamps(self, start_date=None):
+        if start_date is None:
+            start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
+        timestamps = []
+        
+        day = start_date + datetime.timedelta(days=-90)
+        timestamps.append(day.strftime('%Y-%m-%d'))
+
+        day = start_date + datetime.timedelta(days=-15)
+        timestamps.append(day.strftime('%Y-%m-%d'))
+
+        day = start_date + datetime.timedelta(days=-3)
+        timestamps.append(day.strftime('%Y-%m-%d'))
+
+        timestamps.append(start_date.strftime('%Y-%m-%d'))
+        return timestamps
     
     def _generate_past_year_timestamps(self, start_date=None):
         if start_date is None:
@@ -124,7 +141,18 @@ class GlobalMetricsManager():
             metric = collection.find_one({'timestamp': timestamp})
             if metric:
                 metrics.append(metric)
-        return metrics      
+        return metrics    
+    
+    def get_graph_metrics(self):
+        collection = self.metrics_glob
+        timestamps = self._generate_graph_timestamps()
+        metrics = []
+        for timestamp in timestamps:
+            metric = collection.find_one({'timestamp': timestamp})
+            if metric:
+                metrics.append(metric)
+        return metrics    
+      
 class TopMissingSongsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -232,6 +260,9 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
 def new_animator_activity(user, **kwargs):
     async_inc_global_value.delay('new_animator_activity', 1)
 
+def new_share(radio, user, **kwargs):
+    async_inc_global_value.delay('new_share', 1)
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
     yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
@@ -244,6 +275,7 @@ def install_handlers():
     yabase_signals.favorite_radio.connect(favorite_radio_handler)
     yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
     yabase_signals.new_animator_activity.connect(new_animator_activity)
+    yabase_signals.radio_shared.connect(new_share)
     account_signals.new_device_registered.connect(new_device_registered)
     
 install_handlers()

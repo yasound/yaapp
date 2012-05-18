@@ -608,3 +608,26 @@ def songmetadata_top_missing(request):
         return resp
     
     raise Http404
+
+
+@csrf_exempt
+@login_required
+def metrics_graph_animators(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    mm = GlobalMetricsManager()
+    metrics = mm.get_graph_metrics()
+    data = []    
+    for metric in metrics: 
+        data.append({
+            'timestamp': metric['timestamp'],
+            'animator_activity': metric['new_animator_activity']
+        })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp

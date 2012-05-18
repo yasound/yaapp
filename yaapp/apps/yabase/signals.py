@@ -10,3 +10,4 @@ favorite_radio          = django.dispatch.Signal(providing_args=['radio', 'user'
 not_favorite_radio      = django.dispatch.Signal(providing_args=['radio', 'user'])
 new_current_song        = django.dispatch.Signal(providing_args=['radio', 'song_json'])
 new_animator_activity   = django.dispatch.Signal(providing_args=['user',])
+radio_shared            = django.dispatch.Signal(providing_args=['radio', 'user'])
