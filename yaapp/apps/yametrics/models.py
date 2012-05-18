@@ -260,6 +260,9 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
 def new_animator_activity(user, **kwargs):
     async_inc_global_value.delay('new_animator_activity', 1)
 
+def new_share(radio, user, **kwargs):
+    async_inc_global_value.delay('new_share', 1)
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
     yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
@@ -272,6 +275,7 @@ def install_handlers():
     yabase_signals.favorite_radio.connect(favorite_radio_handler)
     yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
     yabase_signals.new_animator_activity.connect(new_animator_activity)
+    yabase_signals.radio_shared.connect(new_share)
     account_signals.new_device_registered.connect(new_device_registered)
     
 install_handlers()

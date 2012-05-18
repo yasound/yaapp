@@ -931,6 +931,7 @@ class Radio(models.Model):
         self.creator.userprofile.radio_is_ready(self)
         
     def shared(self, user):
+        yabase_signals.radio_shared.send(sender=self, radio=self, user=user)
         self.creator.userprofile.my_radio_shared(user.userprofile, self)
         
     def post_message(self, user, message):
