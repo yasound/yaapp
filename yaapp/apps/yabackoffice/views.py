@@ -461,6 +461,11 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     unmatched_song_metadata_count = SongMetadata.objects.filter(yasound_song_id__isnull=True).count()
     matched_songs_ratio = '%.2f' % (100-(100*float(unmatched_song_metadata_count)/float(song_metadata_count)))
 
+    ready_radio_count = Radio.objects.filter(ready=True).count()
+    total_radio = Radio.objects.all().count()
+    
+    ready_radio_ratio = '%.2f' %  ( 100 * float(ready_radio_count) / float(total_radio) ) 
+
     try:
         r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
         streamer_status = r.text
@@ -469,7 +474,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
-        "ready_radio_count": Radio.objects.filter(ready=True).count(),
+        "ready_radio_count": ready_radio_count,
+        "ready_radio_ratio" : ready_radio_ratio,
         "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
         "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
         "favorite_count": RadioUser.objects.filter(favorite=True).count(),
