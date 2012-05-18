@@ -566,20 +566,20 @@ class Radio(models.Model):
     def find_new_song(self):
         next_songs = NextSong.objects.filter(radio=self).values_list('song', flat=True)
         time_limit = datetime.datetime.now() - timedelta(hours=3)
-        songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).exclude(last_play_time__gt=time_limit).exclude(id__in=next_songs).order_by('last_play_time')
+        songs_queryset = SongInstance.objects.filter(playlist__radio=self, metadata__yasound_song_id__gt=0, enabled=True).exclude(last_play_time__gt=time_limit).exclude(id__in=next_songs).order_by('last_play_time')
         if self.current_song:
             songs_queryset = songs_queryset.exclude(id=self.current_song.id)
         
         count = songs_queryset.count() 
         
         if count == 0:
-            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).exclude(id__in=next_songs).order_by('last_play_time') # try without time limit
+            songs_queryset = SongInstance.objects.filter(playlist__radio=self, metadata__yasound_song_id__gt=0, enabled=True).exclude(id__in=next_songs).order_by('last_play_time') # try without time limit
             if self.current_song:
                 songs_queryset = songs_queryset.exclude(id=self.current_song.id)
             count = songs_queryset.count() 
           
         if count == 0: 
-            songs_queryset = SongInstance.objects.filter(playlist__in=self.playlists.all(), metadata__yasound_song_id__gt=0, enabled=True).order_by('last_play_time') # try including current song and next songs
+            songs_queryset = SongInstance.objects.filter(playlist__radio=self, metadata__yasound_song_id__gt=0, enabled=True).order_by('last_play_time') # try including current song and next songs
             count = songs_queryset.count() 
           
         if count == 0:
