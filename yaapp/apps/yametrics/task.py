@@ -1,5 +1,6 @@
 from account.models import Device
 from celery.task import task
+from yabase.models import Radio
 
 @task(ignore_result=True)
 def async_inc_global_value(key, value):  
@@ -26,3 +27,6 @@ def daily_metrics():
 
     device_count = Device.objects.filter(ios_token__gte=0).count()
     mm.set_daily_value('device_count', device_count)
+    
+    ready_radio_count = Radio.objects.filter(ready=True).count()
+    mm.set_daily_value('ready_radio_count', ready_radio_count)
