@@ -228,13 +228,9 @@ def not_favorite_radio(request, radio_id):
     return HttpResponse(res)
 
 @csrf_exempt
+@check_api_key(methods=['POST',])
 def radio_shared(request, radio_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-
+    share_type = request.REQUEST.get('type')
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:

@@ -260,8 +260,10 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
 def new_animator_activity(user, **kwargs):
     async_inc_global_value.delay('new_animator_activity', 1)
 
-def new_share(radio, user, **kwargs):
+def new_share(radio, user, share_type, **kwargs):
     async_inc_global_value.delay('new_share', 1)
+    key = 'new_share_%s' % (str(share_type))
+    async_inc_global_value.delay(key, 1)
 
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
