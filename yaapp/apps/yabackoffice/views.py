@@ -644,9 +644,22 @@ def metrics_graph_shares(request):
     data = []    
     for metric in metrics:
         if 'new_share' in metric:
+            new_share_facebook = 0
+            new_share_twitter = 0
+            new_share_email = 0
+            if 'new_share_facebook' in metric:
+                new_share_facebook = metric['new_share_facebook']
+            if 'new_share_twitter' in metric:
+                new_share_twitter = metric['new_share_twitter']
+            if 'new_share_email' in metric:
+                new_share_email = metric['new_share_email']
+            
             data.append({
                 'timestamp': metric['timestamp'],
-                'new_share': metric['new_share']
+                'new_share': metric['new_share'],
+                'new_share_facebook': new_share_facebook,
+                'new_share_twitter': new_share_twitter,
+                'new_share_email': new_share_email,
             })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,

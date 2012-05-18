@@ -77,7 +77,7 @@ Yasound.Statistics.UI.PastYearMetrics = function () {
 
 Yasound.Statistics.UI.AnimatorsGraph = function () {
     var chart = Ext.ComponentMgr.create({
-        height:300,
+        height: 300,
         xtype: 'chartpanel',
         url: '/yabackoffice/metrics/graphs/animators/',
         fields: [ 'timestamp', 'animator_activity' ],
@@ -102,13 +102,33 @@ Yasound.Statistics.UI.AnimatorsGraph = function () {
 
 Yasound.Statistics.UI.SharesGraph = function () {
     var chart = Ext.ComponentMgr.create({
-        height:300,
-        xtype: 'chartpanel',
-        url: '/yabackoffice/metrics/graphs/shares/',
-        fields: [ 'timestamp', 'new_share' ],
+        height: 300,
+        xtype: 'stackedbarchart',
+        store: new Ext.data.JsonStore({
+            url: '/yabackoffice/metrics/graphs/shares/',
+            root: 'data',
+            idProperty: 'timestamp',
+            fields: [ 'timestamp', 'new_share_facebook', 'new_share_twitter', 'new_share_email' ]
+        }),
         xField: 'timestamp',
-        yField: 'new_share'
+        yAxis: new Ext.chart.NumericAxis({
+            stackingEnabled: true
+        }),
+        series: [ {
+            yField: 'new_share_facebook',
+            displayName: 'Facebook'
+        }, {
+            yField: 'new_share_twitter',
+            displayName: 'Twitter'
+        }, {
+            yField: 'new_share_email',
+            displayName: 'email'
+        } ],
+        reload: function(component) {
+            component.store.load();
+        }
     });
+
     return {
         title: gettext('Share activity'),
         id: 'shares-graph',
@@ -130,50 +150,52 @@ Yasound.Statistics.UI.Panel = function () {
         xtype: 'portal',
         title: gettext('Statistics'),
         id: 'statistics-panel',
-        items: [ {
-            columnWidth: .50,
-            style: 'padding:10px 0 10px 10px',
-            items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.SharesGraph(), Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
-                title: gettext('Latests radios'),
-                collapsed: true,
-                layout: 'fit',
-                tools: [ {
-                    id: 'refresh',
-                    handler: function (event, toolEl, panel) {
-                        Ext.getCmp('stats-latest-radios').getStore().reload();
-                    }
+        items: [
+                {
+                    columnWidth: .50,
+                    style: 'padding:10px 0 10px 10px',
+                    items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.SharesGraph(), Yasound.Statistics.UI.Metrics(),
+                            Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
+                                title: gettext('Latests radios'),
+                                collapsed: true,
+                                layout: 'fit',
+                                tools: [ {
+                                    id: 'refresh',
+                                    handler: function (event, toolEl, panel) {
+                                        Ext.getCmp('stats-latest-radios').getStore().reload();
+                                    }
+                                } ],
+                                items: [ {
+                                    xtype: 'radiogrid',
+                                    url: '/yabackoffice/radios?rtype=latest',
+                                    collapsed: true,
+                                    id: 'stats-latest-radios',
+                                    enablePagination: true,
+                                    enableFilters: false,
+                                    height: 400
+                                } ]
+                            } ]
+                }, {
+                    columnWidth: .50,
+                    style: 'padding:10px 0 10px 10px',
+                    items: [ {
+                        title: gettext('Key figures'),
+                        layout: 'fit',
+                        id: 'stats-keyfigures',
+                        reload: function (panel) {
+                            panel.load({
+                                url: '/yabackoffice/keyfigures/',
+                                text: gettext('Loading...')
+                            });
+                        },
+                        tools: [ {
+                            id: 'refresh',
+                            handler: function (event, toolEl, panel) {
+                                panel.reload(panel);
+                            }
+                        } ],
+                    } ]
                 } ],
-                items: [ {
-                    xtype: 'radiogrid',
-                    url: '/yabackoffice/radios?rtype=latest',
-                    collapsed: true,
-                    id: 'stats-latest-radios',
-                    enablePagination: true,
-                    enableFilters: false,
-                    height: 400
-                } ]
-            }]
-        }, {
-            columnWidth: .50,
-            style: 'padding:10px 0 10px 10px',
-            items: [ {
-                title: gettext('Key figures'),
-                layout: 'fit',
-                id: 'stats-keyfigures',
-                reload: function (panel) {
-                    panel.load({
-                        url: '/yabackoffice/keyfigures/',
-                        text: gettext('Loading...')
-                    });
-                },
-                tools: [ {
-                    id: 'refresh',
-                    handler: function (event, toolEl, panel) {
-                        panel.reload(panel);
-                    }
-                } ],
-            } ]
-        } ],
         updateData: function (component) {
             Ext.getCmp('stats-latest-radios').getStore().reload();
 
