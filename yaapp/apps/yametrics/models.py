@@ -211,6 +211,9 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
     else:
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
+def new_animator_activity(user, **kwargs):
+    async_inc_global_value.delay('new_animator_activity', 1)
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
     yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
@@ -222,6 +225,7 @@ def install_handlers():
     yabase_signals.dislike_radio.connect(neutral_like_radio_handler)
     yabase_signals.favorite_radio.connect(favorite_radio_handler)
     yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
+    yabase_signals.new_animator_activity.connect(new_animator_activity)
     account_signals.new_device_registered.connect(new_device_registered)
     
 install_handlers()
