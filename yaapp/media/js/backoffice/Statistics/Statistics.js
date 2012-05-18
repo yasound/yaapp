@@ -71,6 +71,31 @@ Yasound.Statistics.UI.PastYearMetrics = function () {
         } ]
     };
 };
+
+Yasound.Statistics.UI.AnimatorsGraph = function () {
+    var chart = Ext.ComponentMgr.create({
+        xtype: 'chartpanel',
+        url: '/yabackoffice/metrics/graphs/animators/',
+        fields: [ 'timestamp', 'animator_activity' ],
+        xField: 'timestamp',
+        yField: 'animator_activity'
+    });
+    return {
+        title: gettext('Radio animators activity'),
+        id: 'animators-graph',
+        items: [ chart ],
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ],
+        reload: function (component) {
+            chart.reload(chart);
+        }
+    }
+}
+
 Yasound.Statistics.UI.Panel = function () {
     return {
         xtype: 'portal',
@@ -79,7 +104,7 @@ Yasound.Statistics.UI.Panel = function () {
         items: [ {
             columnWidth: .50,
             style: 'padding:10px 0 10px 10px',
-            items: [ Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
+            items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
                 title: gettext('Latests radios'),
                 layout: 'fit',
                 tools: [ {
@@ -150,6 +175,10 @@ Yasound.Statistics.UI.Panel = function () {
 
             var pastYearMetrics = Ext.getCmp('stats-past-year-metrics');
             pastYearMetrics.reload(pastYearMetrics);
+
+            var animatorsGraph = Ext.getCmp('animators-graph');
+            animatorsGraph.reload(animatorsGraph);
+
         }
     };
 }
