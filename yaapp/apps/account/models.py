@@ -898,7 +898,6 @@ class Device(models.Model):
     def set_registered_now(self):
         self.registration_date = datetime.datetime.now()
         self.save()
-        account_signals.new_device_registered.send(sender=self, user=self.user, uuid=self.uuid, ios_token=self.ios_token)
         
     def save(self, *args, **kwargs):
         creation = (self.pk == None)
@@ -908,6 +907,7 @@ class Device(models.Model):
             token_just_set = old_token != self.ios_token
         super(Device, self).save(*args, **kwargs)
         if token_just_set:
+            account_signals.new_device_registered.send(sender=self, user=self.user, uuid=self.uuid, ios_token=self.ios_token)
             Device.objects.filter(ios_token=self.ios_token, application_identifier=self.application_identifier).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
             
     def __unicode__(self):
