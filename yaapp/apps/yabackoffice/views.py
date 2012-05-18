@@ -485,18 +485,22 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
 def _format_metrics(metrics):
     for metric in metrics:
         if 'listening_time' in metric:
+            if 'listening_count' in metric:
+                try:
+                    listening_time = float(metric['listening_time'])
+                    listening_count = float(metric['listening_count'])
+        
+                    average_duration = listening_time / listening_count
+                    metric['average_duration'] = average_duration
+                except:
+                    pass
+
             try:
                 formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
                 metric['listening_time'] = formatted_time
             except:
                 pass
             
-            if 'listening_count' in metric:
-                listening_time = float(metric['listening_time'])
-                listening_count = float(metric['listening_count'])
-    
-                average_duration = listening_time / listening_count
-                metric['average_duration'] = average_duration
     return metrics        
 
 @csrf_exempt
