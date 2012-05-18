@@ -74,6 +74,7 @@ Yasound.Statistics.UI.PastYearMetrics = function () {
 
 Yasound.Statistics.UI.AnimatorsGraph = function () {
     var chart = Ext.ComponentMgr.create({
+        height:300,
         xtype: 'chartpanel',
         url: '/yabackoffice/metrics/graphs/animators/',
         fields: [ 'timestamp', 'animator_activity' ],
@@ -83,6 +84,31 @@ Yasound.Statistics.UI.AnimatorsGraph = function () {
     return {
         title: gettext('Radio animators activity'),
         id: 'animators-graph',
+        items: [ chart ],
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ],
+        reload: function (component) {
+            chart.reload(chart);
+        }
+    }
+}
+
+Yasound.Statistics.UI.SharesGraph = function () {
+    var chart = Ext.ComponentMgr.create({
+        height:300,
+        xtype: 'chartpanel',
+        url: '/yabackoffice/metrics/graphs/shares/',
+        fields: [ 'timestamp', 'new_share' ],
+        xField: 'timestamp',
+        yField: 'new_share'
+    });
+    return {
+        title: gettext('Share activity'),
+        id: 'shares-graph',
         items: [ chart ],
         tools: [ {
             id: 'refresh',
@@ -142,7 +168,7 @@ Yasound.Statistics.UI.Panel = function () {
         }, {
             columnWidth: .50,
             style: 'padding:10px 0 10px 10px',
-            items: [ {
+            items: [ Yasound.Statistics.UI.SharesGraph(), {
                 title: gettext('Key figures'),
                 layout: 'fit',
                 id: 'stats-keyfigures',
@@ -179,6 +205,8 @@ Yasound.Statistics.UI.Panel = function () {
             var animatorsGraph = Ext.getCmp('animators-graph');
             animatorsGraph.reload(animatorsGraph);
 
+            var sharesGraph = Ext.getCmp('shares-graph');
+            sharesGraph.reload(sharesGraph);
         }
     };
 }

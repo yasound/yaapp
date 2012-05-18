@@ -148,6 +148,17 @@
             {% endfor %}
         </tr>
 
+        <tr>
+            <td>
+                {% trans "New shares" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_share }}
+            </td>
+            {% endfor %}
+        </tr>
+
     </tbody>
 </table>
 </div>
