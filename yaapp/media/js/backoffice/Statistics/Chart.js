@@ -26,7 +26,7 @@ Yasound.Statistics.UI.ChartPanel = Ext.extend(Ext.Panel, {
 
         var config = {
             items: [ {
-                xtype: 'linechart',
+                xtype: 'columnchart',
                 store: this.store,
                 xField: this.xField,
                 yField: this.yField,

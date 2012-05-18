@@ -52,7 +52,7 @@ class GlobalMetricsManager():
 
     def _generate_graph_timestamps(self, start_date=None):
         if start_date is None:
-            start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
+            start_date = datetime.datetime.now()
         timestamps = []
         
         day = start_date + datetime.timedelta(days=-90)

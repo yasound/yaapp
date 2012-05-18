@@ -620,10 +620,34 @@ def metrics_graph_animators(request):
     metrics = mm.get_graph_metrics()
     data = []    
     for metric in metrics: 
-        data.append({
-            'timestamp': metric['timestamp'],
-            'animator_activity': metric['new_animator_activity']
-        })
+        if 'new_animator_activity' in metric:
+            data.append({
+                'timestamp': metric['timestamp'],
+                'animator_activity': metric['new_animator_activity']
+            })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
+def metrics_graph_shares(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    mm = GlobalMetricsManager()
+    metrics = mm.get_graph_metrics()
+    data = []    
+    for metric in metrics:
+        if 'new_share' in metric:
+            data.append({
+                'timestamp': metric['timestamp'],
+                'new_share': metric['new_share']
+            })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
