@@ -16,6 +16,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from emailconfirmation.models import EmailConfirmation, EmailAddress
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm, InvitationForm
@@ -448,6 +449,11 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
+    
+    confirmed_emails = EmailAddress.objects.filter(verified=True).count()
+    email_address_count = EmailAddress.objects.all().count()
+    not_confirmed_emails = EmailAddress.objects.filter(verified=False).count()
+    confirmed_emails_ratio = '%.2f' % ( 100 * float(confirmed_emails) / float(email_address_count) ) 
 
     device_notifications_activated = Device.objects.filter(ios_token__gt=0).count()
     
@@ -479,6 +485,10 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "unmatched_song_metadata_count": unmatched_song_metadata_count,
         "matched_songs_ratio": matched_songs_ratio,
         "device_notifications_activated" : device_notifications_activated,
+        "confirmed_emails" : confirmed_emails,
+        "not_confirmed_emails": not_confirmed_emails,
+        "email_address_count": email_address_count,
+        "confirmed_emails_ratio": confirmed_emails_ratio
     }, context_instance=RequestContext(request))  
 
 
