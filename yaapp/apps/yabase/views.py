@@ -236,7 +236,7 @@ def radio_shared(request, radio_id):
     except Radio.DoesNotExist:
         return HttpResponseNotFound()
 
-    radio.shared(request.user)
+    radio.shared(request.user, share_type)
     res = 'user %s has shared radio %s' % (request.user.userprofile.name, radio.name)
     return HttpResponse(res)
 
