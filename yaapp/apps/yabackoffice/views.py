@@ -463,7 +463,6 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
-        "radio_count": Radio.objects.all().count(),
         "ready_radio_count": Radio.objects.filter(ready=True).count(),
         "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
         "wall_like_count": WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(),
