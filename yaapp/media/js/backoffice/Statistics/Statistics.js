@@ -12,6 +12,7 @@
 Yasound.Statistics.UI.Metrics = function () {
     return {
         title: gettext('Metrics'),
+        collapsed: true,
         layout: 'fit',
         id: 'stats-metrics',
         autoScroll: true,
@@ -33,6 +34,7 @@ Yasound.Statistics.UI.Metrics = function () {
 Yasound.Statistics.UI.PastMonthMetrics = function () {
     return {
         title: gettext('Last month metrics'),
+        collapsed: true,
         layout: 'fit',
         id: 'stats-past-month-metrics',
         autoScroll: true,
@@ -54,6 +56,7 @@ Yasound.Statistics.UI.PastMonthMetrics = function () {
 Yasound.Statistics.UI.PastYearMetrics = function () {
     return {
         title: gettext('Last 12 months metrics'),
+        collapsed: true,
         layout: 'fit',
         id: 'stats-past-year-metrics',
         autoScroll: true,
@@ -130,8 +133,9 @@ Yasound.Statistics.UI.Panel = function () {
         items: [ {
             columnWidth: .50,
             style: 'padding:10px 0 10px 10px',
-            items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
+            items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.SharesGraph(), Yasound.Statistics.UI.Metrics(), Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
                 title: gettext('Latests radios'),
+                collapsed: true,
                 layout: 'fit',
                 tools: [ {
                     id: 'refresh',
@@ -142,33 +146,17 @@ Yasound.Statistics.UI.Panel = function () {
                 items: [ {
                     xtype: 'radiogrid',
                     url: '/yabackoffice/radios?rtype=latest',
+                    collapsed: true,
                     id: 'stats-latest-radios',
                     enablePagination: true,
                     enableFilters: false,
                     height: 400
                 } ]
-            }, {
-                title: gettext('Biggest radios'),
-                layout: 'fit',
-                tools: [ {
-                    id: 'refresh',
-                    handler: function (event, toolEl, panel) {
-                        Ext.getCmp('stats-biggest-radios').getStore().reload();
-                    }
-                } ],
-                items: [ {
-                    xtype: 'radiogrid',
-                    url: '/yabackoffice/radios?rtype=biggest',
-                    id: 'stats-biggest-radios',
-                    enablePagination: true,
-                    enableFilters: false,
-                    height: 400
-                } ]
-            } ]
+            }]
         }, {
             columnWidth: .50,
             style: 'padding:10px 0 10px 10px',
-            items: [ Yasound.Statistics.UI.SharesGraph(), {
+            items: [ {
                 title: gettext('Key figures'),
                 layout: 'fit',
                 id: 'stats-keyfigures',
@@ -188,7 +176,6 @@ Yasound.Statistics.UI.Panel = function () {
         } ],
         updateData: function (component) {
             Ext.getCmp('stats-latest-radios').getStore().reload();
-            Ext.getCmp('stats-biggest-radios').getStore().reload();
 
             var keyfigures = Ext.getCmp('stats-keyfigures');
             keyfigures.reload(keyfigures);
