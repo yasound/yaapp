@@ -84,6 +84,8 @@ def set_radio_picture(request, radio_id):
         logger.debug('set_radio_picture: http method error')
         return HttpResponse(status=405)
 
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
+
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:

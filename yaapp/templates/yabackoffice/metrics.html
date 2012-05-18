@@ -126,6 +126,17 @@
             {% endfor %}
         </tr>
 
+        <tr>
+            <td>
+                {% trans "Animator actions" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_animator_activity }}
+            </td>
+            {% endfor %}
+        </tr>
+
     </tbody>
 </table>
 </div>
