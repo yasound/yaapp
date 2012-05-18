@@ -65,9 +65,11 @@ def upload_playlists(request, radio_id):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
-
     radio = get_object_or_404(Radio, pk=radio_id)
+
+    if radio.ready:
+        yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
+    
     data = request.FILES['playlists_data']
     content_compressed = data.read()
     asyncRes = process_playlists.delay(radio, content_compressed)
@@ -83,8 +85,6 @@ def set_radio_picture(request, radio_id):
     if not check_http_method(request, ['post']):
         logger.debug('set_radio_picture: http method error')
         return HttpResponse(status=405)
-
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
 
     try:
         radio = Radio.objects.get(id=radio_id)
