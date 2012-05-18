@@ -82,6 +82,16 @@ class GlobalMetricsManager():
             "$set": {key: value}
         }, upsert=True, safe=True)
 
+    def set_value(self, key, value):
+        collection = self.metrics_glob
+        timestamps = self._generate_timestamps()
+        for timestamp in timestamps:
+            collection.update({
+                "timestamp": timestamp
+            }, {
+                "$set": {key: value}
+            }, upsert=True, safe=True)
+
     def get_metrics_for_timestamp(self, timestamp):
         collection = self.metrics_glob
         return collection.find_one({'timestamp': timestamp})
