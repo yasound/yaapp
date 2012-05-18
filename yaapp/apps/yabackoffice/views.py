@@ -491,6 +491,8 @@ def _format_metrics(metrics):
                     listening_count = float(metric['listening_count'])
         
                     average_duration = listening_time / listening_count
+                    formatted_time = datetime.timedelta(seconds=int(average_duration))
+
                     metric['average_duration'] = average_duration
                 except:
                     pass
