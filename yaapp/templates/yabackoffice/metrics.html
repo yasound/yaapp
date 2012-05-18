@@ -59,6 +59,27 @@
             {% endfor %}
         </tr>
 
+        <tr>
+            <td>
+                {% trans "Notifications activated on device" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.device_notifications_activated }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Notifications disabled on device" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.device_notifications_disabled }}
+            </td>
+            {% endfor %}
+        </tr>
 
         <tr>
             <td>

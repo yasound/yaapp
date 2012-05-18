@@ -30,6 +30,7 @@ import yabase.settings as yabase_settings
 import yamessage.settings as yamessage_settings
 from yamessage.models import NotificationsManager 
 
+import signals as account_signals
 
 
 
@@ -897,6 +898,7 @@ class Device(models.Model):
     def set_registered_now(self):
         self.registration_date = datetime.datetime.now()
         self.save()
+        account_signals.new_device_registered.send(sender=self, user=self.user, uuid=self.uuid, ios_token=self.ios_token)
         
     def save(self, *args, **kwargs):
         creation = (self.pk == None)

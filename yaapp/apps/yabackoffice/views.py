@@ -1,4 +1,4 @@
-from account.models import UserProfile
+from account.models import UserProfile, Device
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -448,6 +448,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
+
+    device_notifications_activated = Device.objects.filter(ios_token__gt=0).count()
     
     song_metadata_count = SongMetadata.objects.all().count()
     unmatched_song_metadata_count = SongMetadata.objects.filter(yasound_song_id__isnull=True).count()
@@ -477,6 +479,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "song_metadata_count": song_metadata_count,
         "unmatched_song_metadata_count": unmatched_song_metadata_count,
         "matched_songs_ratio": matched_songs_ratio,
+        "device_notifications_activated" : device_notifications_activated,
     }, context_instance=RequestContext(request))  
 
 

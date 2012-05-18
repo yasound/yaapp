@@ -1,13 +1,14 @@
-from pymongo import DESCENDING
 from account.models import UserProfile
+from dateutil import rrule
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q, Count, signals
+from pymongo import DESCENDING
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
+from account import signals as account_signals
 import datetime
-from dateutil import rrule
 
 class GlobalMetricsManager():
     """
@@ -167,14 +168,12 @@ class RadioMetricsManager():
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
-yabase_signals.user_started_listening.connect(user_started_listening_handler)
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
     async_inc_global_value.delay('listening_count', 1)
 
     async_inc_radio_value.delay(radio.id, 'current_users', -1)
-yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
 
 def new_wall_event_handler(wall_event, **kwargs):
     we_type = wall_event.type
@@ -182,34 +181,47 @@ def new_wall_event_handler(wall_event, **kwargs):
         async_inc_global_value.delay('new_wall_messages', 1)
     elif we_type == yabase_settings.EVENT_LIKE:
         async_inc_global_value.delay('new_song_like', 1)
-yabase_signals.new_wall_event.connect(new_wall_event_handler)
 
 def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
         async_inc_global_value.delay('new_users', 1)
-signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
 
 def new_radio_handler(sender, instance, created, **kwargs):
     if created:
         async_inc_global_value.delay('new_radios', 1)
-signals.post_save.connect(new_radio_handler, sender=Radio)
 
-def dislike_radio_handler(radio, user, **kwargs):
+def dislike_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_dislike', 1)
-yabase_signals.dislike_radio.connect(dislike_radio_handler)
 
-def like_radio_handler(radio, user, **kwargs):
+def like_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_like', 1)
-yabase_signals.dislike_radio.connect(like_radio_handler)
 
-def neutral_like_radio_handler(radio, user, **kwargs):
+def neutral_like_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_neutral_like', 1)
-yabase_signals.dislike_radio.connect(neutral_like_radio_handler)
 
-def favorite_radio_handler(radio, user, **kwargs):
+def favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_favorite_radio', 1)
-yabase_signals.favorite_radio.connect(favorite_radio_handler)
 
-def not_favorite_radio_handler(radio, user, **kwargs):
+def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_not_favorite_radio', 1)
-yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
+
+def new_device_registered(sender, user, uuid, ios_token, **kwargs):
+    if len(ios_token) > 0:
+        async_inc_global_value.delay('device_notifications_activated', 1)
+    else:
+        async_inc_global_value.delay('device_notifications_disabled', 1)
+
+def install_handlers():
+    yabase_signals.user_started_listening.connect(user_started_listening_handler)
+    yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
+    yabase_signals.new_wall_event.connect(new_wall_event_handler)
+    signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+    signals.post_save.connect(new_radio_handler, sender=Radio)
+    yabase_signals.dislike_radio.connect(dislike_radio_handler)
+    yabase_signals.dislike_radio.connect(like_radio_handler)
+    yabase_signals.dislike_radio.connect(neutral_like_radio_handler)
+    yabase_signals.favorite_radio.connect(favorite_radio_handler)
+    yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
+    account_signals.new_device_registered.connect(new_device_registered)
+    
+install_handlers()
