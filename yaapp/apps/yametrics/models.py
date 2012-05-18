@@ -49,6 +49,23 @@ class GlobalMetricsManager():
         for dt in rrule.rrule(rrule.DAILY, dtstart=last_month, until=start_date):
             timestamps.append(dt.strftime('%Y-%m-%d'))
         return timestamps
+
+    def _generate_graph_timestamps(self, start_date=None):
+        if start_date is None:
+            start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
+        timestamps = []
+        
+        day = start_date + datetime.timedelta(days=-90)
+        timestamps.append(day.strftime('%Y-%m-%d'))
+
+        day = start_date + datetime.timedelta(days=-15)
+        timestamps.append(day.strftime('%Y-%m-%d'))
+
+        day = start_date + datetime.timedelta(days=-3)
+        timestamps.append(day.strftime('%Y-%m-%d'))
+
+        timestamps.append(start_date.strftime('%Y-%m-%d'))
+        return timestamps
     
     def _generate_past_year_timestamps(self, start_date=None):
         if start_date is None:
@@ -124,7 +141,18 @@ class GlobalMetricsManager():
             metric = collection.find_one({'timestamp': timestamp})
             if metric:
                 metrics.append(metric)
-        return metrics      
+        return metrics    
+    
+    def get_graph_metrics(self):
+        collection = self.metrics_glob
+        timestamps = self._generate_graph_timestamps()
+        metrics = []
+        for timestamp in timestamps:
+            metric = collection.find_one({'timestamp': timestamp})
+            if metric:
+                metrics.append(metric)
+        return metrics    
+      
 class TopMissingSongsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
