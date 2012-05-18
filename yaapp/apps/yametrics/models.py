@@ -171,6 +171,8 @@ yabase_signals.user_started_listening.connect(user_started_listening_handler)
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
+    async_inc_global_value.delay('listening_count', 1)
+
     async_inc_radio_value.delay(radio.id, 'current_users', -1)
 yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
 

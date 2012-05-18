@@ -480,6 +480,23 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     }, context_instance=RequestContext(request))  
 
 
+def _format_metrics(metrics):
+    for metric in metrics:
+        if 'listening_time' in metric:
+            try:
+                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
+                metric['listening_time'] = formatted_time
+            except:
+                pass
+            
+            if 'listening_count' in metric:
+                listening_time = float(metric['listening_time'])
+                listening_count = float(metric['listening_count'])
+    
+                average_duration = listening_time / listening_count
+                metric['average_duration'] = average_duration
+    return metrics        
+
 @csrf_exempt
 @login_required
 def metrics(request, template_name='yabackoffice/metrics.html'):
@@ -488,13 +505,7 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = GlobalMetricsManager()
     metrics = mm.get_current_metrics()
-    for metric in metrics:
-        if 'listening_time' in metric:
-            try:
-                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
-                metric['listening_time'] = formatted_time
-            except:
-                pass
+    _format_metrics(metrics)
               
     return render_to_response(template_name, {
         "metrics": metrics,
@@ -508,13 +519,7 @@ def past_month_metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = GlobalMetricsManager()
     metrics = mm.get_past_month_metrics()
-    for metric in metrics:
-        if 'listening_time' in metric:
-            try:
-                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
-                metric['listening_time'] = formatted_time
-            except:
-                pass
+    _format_metrics(metrics)
     
     return render_to_response(template_name, {
         "metrics": metrics,
@@ -528,13 +533,7 @@ def past_year_metrics(request, template_name='yabackoffice/metrics.html'):
     
     mm = GlobalMetricsManager()
     metrics = mm.get_past_year_metrics()
-    for metric in metrics:
-        if 'listening_time' in metric:
-            try:
-                formatted_time = datetime.timedelta(seconds=int(metric['listening_time']))
-                metric['listening_time'] = formatted_time
-            except:
-                pass
+    _format_metrics(metrics)
     
     return render_to_response(template_name, {
         "metrics": metrics,

@@ -48,6 +48,17 @@
             {% endfor %}
         </tr>
 
+        <tr>
+            <td>
+                {% trans "Average duration" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.average_duration }} 
+            </td>
+            {% endfor %}
+        </tr>
+
 
         <tr>
             <td>
