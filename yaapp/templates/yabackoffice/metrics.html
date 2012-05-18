@@ -83,6 +83,17 @@
 
         <tr>
             <td>
+                {% trans "Device count" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.device_count }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
                 {% trans "Wall messages" %}
             </td>
             {% for metric in metrics %}

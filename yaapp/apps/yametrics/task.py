@@ -1,3 +1,4 @@
+from account.models import Device
 from celery.task import task
 
 @task(ignore_result=True)
@@ -18,3 +19,10 @@ def calculate_top_missing_songs_task():
     tm = TopMissingSongsManager()
     tm.calculate()
         
+@task
+def daily_metrics():
+    from models import GlobalMetricsManager
+    mm = GlobalMetricsManager()
+
+    device_count = Device.objects.filter(ios_token__gte=0).count()
+    mm.set_daily_value('device_count', device_count)

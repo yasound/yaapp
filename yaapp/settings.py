@@ -641,6 +641,11 @@ if not PRODUCTION_MODE:
             "task": "yametrics.task.calculate_top_missing_songs_task",
             "schedule": crontab(minute=0, hour='03'),
         },
+        "daily-metrics": {
+            "task": "yametrics.task.daily_metrics",
+            "schedule": crontab(minute=0, hour='05'),
+        },
+                           
     }
 else:
     import socket   
@@ -682,6 +687,10 @@ else:
             "build-mongodb-index": {
                 "task": "yasearch.task.build_mongodb_index",
                 "schedule": crontab(minute="*/30"),
+            },
+            "daily-metrics": {
+                "task": "yametrics.task.daily_metrics",
+                "schedule": crontab(minute=0, hour='05'),
             },
         }
     elif hostname == 'yas-web-06':

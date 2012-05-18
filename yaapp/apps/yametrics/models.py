@@ -74,6 +74,14 @@ class GlobalMetricsManager():
                 "$inc": {key: value}
             }, upsert=True, safe=True)
 
+    def set_daily_value(self, key, value):
+        collection = self.metrics_glob
+        collection.update({
+            "timestamp": self._get_day_timestamp()
+        }, {
+            "$set": {key: value}
+        }, upsert=True, safe=True)
+
     def get_metrics_for_timestamp(self, timestamp):
         collection = self.metrics_glob
         return collection.find_one({'timestamp': timestamp})
