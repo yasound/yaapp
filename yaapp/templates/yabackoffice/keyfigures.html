@@ -127,6 +127,15 @@
         </tr>
         <tr>
             <td>
+                {% trans "Email confirmation ratio" %}
+            </td>
+            <td>
+            {{confirmed_emails_ratio}}% ({{ confirmed_emails }}/{{ email_address_count }}) 
+            </td>
+        </tr>
+
+        <tr>
+            <td>
                 {% trans "Songs used" %}
             </td>
             <td>
