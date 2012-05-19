@@ -633,10 +633,10 @@ if not PRODUCTION_MODE:
             "task": "emailconfirmation.task.resend_confirmations_task",
             "schedule": crontab(minute=0, hour='10'),
         },
-        "delete_expired_confirmations": {
-            "task": "emailconfirmation.task.delete_expired_confirmations_task",
-            "schedule": crontab(minute=0, hour='12'),
-        },
+#        "delete_expired_confirmations": {
+#            "task": "emailconfirmation.task.delete_expired_confirmations_task",
+#            "schedule": crontab(minute=0, hour='12'),
+#        },
         "calculate_top_missing_songs": {
             "task": "yametrics.task.calculate_top_missing_songs_task",
             "schedule": crontab(minute=0, hour='03'),
@@ -670,10 +670,10 @@ else:
                 "task": "emailconfirmation.task.resend_confirmations_task",
                 "schedule": crontab(minute=0, hour='10'),
             },
-            "delete_expired_confirmations": {
-                "task": "emailconfirmation.task.delete_expired_confirmations_task",
-                "schedule": crontab(minute=0, hour='12'),
-            },
+#            "delete_expired_confirmations": {
+#                "task": "emailconfirmation.task.delete_expired_confirmations_task",
+#                "schedule": crontab(minute=0, hour='12'),
+#            },
         }
     elif hostname == 'yas-web-04':
         CELERYBEAT_SCHEDULE = {
