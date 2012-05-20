@@ -9,11 +9,11 @@
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Users.UI.UsersPanel = function () {
+Yasound.Moderation.UI.UsersPanel = function () {
     return {
         xtype: 'panel',
         title: gettext('Users'),
-        id: 'users-panel',
+        id: 'moderation-users-panel',
         layout: 'border',
         items: [ {
             xtype: 'usergrid',

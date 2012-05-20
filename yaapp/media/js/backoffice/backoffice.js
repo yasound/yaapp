@@ -8,6 +8,7 @@ Ext.namespace("Yasound.Users.UI", "Yasound.Users.Handler", "Yasound.Users.Data")
 Ext.namespace("Yasound.Statistics.UI", "Yasound.Statistics.Handler", "Yasound.Statistics.Data");
 Ext.namespace("Yasound.Utils");
 Ext.namespace("Yasound.Menus.UI", "Yasound.Menus.Handler", "Yasound.Menus.Data");
+Ext.namespace("Yasound.Moderation.UI", "Yasound.Moderation.Handler", "Yasound.Moderation.Data");
 
 
 //------------------------------------------
@@ -164,7 +165,9 @@ Ext.onReady(function(){
                         tabPanel.setActiveTab(nextItem);
                     }
                 }
-            }, Ext.apply(Yasound.Users.UI.UsersPanel(), {
+            }, Ext.apply(Yasound.Moderation.UI.UsersPanel(), {
+                iconCls: 'x-icon-templates'
+            }), Ext.apply(Yasound.Moderation.UI.RadiosPanel(), {
                 iconCls: 'x-icon-templates'
             })]         
         }    
