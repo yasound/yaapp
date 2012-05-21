@@ -770,7 +770,9 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
 def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html'):
     if not request.user.is_superuser:
         if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
-            raise Http404()
+            if radio_uuid:
+                return HttpResponseRedirect(reverse('yabase.views.web_listen', args=[radio_uuid]))
+            raise Http404
     
     if request.user.is_authenticated():
         user_uuid = request.user.get_profile().own_radio.uuid
