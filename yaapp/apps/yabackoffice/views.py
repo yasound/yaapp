@@ -617,7 +617,7 @@ def metrics_graph_animators(request):
         raise Http404()
     
     mm = GlobalMetricsManager()
-    metrics = mm.get_graph_metrics()
+    metrics = mm.get_graph_metrics(['new_animator_activity'])
     data = []    
     for metric in metrics: 
         if 'new_animator_activity' in metric:
@@ -640,7 +640,7 @@ def metrics_graph_shares(request):
         raise Http404()
     
     mm = GlobalMetricsManager()
-    metrics = mm.get_graph_metrics()
+    metrics = mm.get_graph_metrics(['new_share', 'new_share_facebook', 'new_share_twitter', 'new_share_email'])
     data = []    
     for metric in metrics:
         if 'new_share' in metric:
@@ -661,6 +661,7 @@ def metrics_graph_shares(request):
                 'new_share_twitter': new_share_twitter,
                 'new_share_email': new_share_email,
             })
+    print data
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,

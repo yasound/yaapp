@@ -57,6 +57,24 @@ class TestGlobalMetricsManager(TestCase):
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_radios'], 3)
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_users'], 1)
         
+    def test_graph_metrics(self):
+        mm = GlobalMetricsManager()
+        now = datetime.datetime.now()
+        timestamps = mm._generate_graph_timestamps(now)
+        self.assertEquals(len(timestamps), 90)
+        collection = mm.metrics_glob
+        for timestamp in timestamps:
+            collection.update({
+                "timestamp": timestamp
+            }, {
+                "$set": {'key': 100}
+            }, upsert=True, safe=True)
+
+        data = mm.get_graph_metrics(['key'])
+        self.assertEquals(len(data), 5)
+        print data
+
+        
         
 class TestRadioMetricsManager(TestCase):
     def setUp(self):
