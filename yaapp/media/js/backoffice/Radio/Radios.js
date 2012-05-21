@@ -319,7 +319,7 @@ Yasound.Radios.UI.RadiosPanel = function() {
 	
 	return {
 		xtype : 'panel',
-		title : gettext('Radios management'),
+		title : gettext('Programming'),
 		id : 'radios-panel',
 		layout : 'border',
 		items : [ {

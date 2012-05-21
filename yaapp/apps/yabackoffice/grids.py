@@ -1,7 +1,7 @@
 from account.models import UserProfile
 from extjs import grids
 from yabackoffice.models import BackofficeRadio
-from yabase.models import SongInstance, Radio, SongMetadata
+from yabase.models import SongInstance, Radio, SongMetadata, WallEvent
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 
@@ -74,3 +74,14 @@ class UserProfileGrid(grids.ModelGrid):
             'user_id': 'user__id',
             'is_superuser': 'user__is_superuser',
     }
+
+class WallEventGrid(grids.ModelGrid):
+    model = WallEvent
+    list_mapping=[
+            'id',
+            'type',
+            'user_name',
+            'text',
+            ]
+    exclude = ['picture', 'user_picture']
+    mapping = {}

@@ -8,6 +8,8 @@ Ext.namespace("Yasound.Users.UI", "Yasound.Users.Handler", "Yasound.Users.Data")
 Ext.namespace("Yasound.Statistics.UI", "Yasound.Statistics.Handler", "Yasound.Statistics.Data");
 Ext.namespace("Yasound.Utils");
 Ext.namespace("Yasound.Menus.UI", "Yasound.Menus.Handler", "Yasound.Menus.Data");
+Ext.namespace("Yasound.Moderation.UI", "Yasound.Moderation.Handler", "Yasound.Moderation.Data");
+Ext.namespace("Yasound.WallEvents.UI", "Yasound.WallEvents.Handler", "Yasound.WallEvents.Data");
 
 
 //------------------------------------------
@@ -143,6 +145,34 @@ Ext.onReady(function(){
         })]    		
     };
     
+    var tabPanelModeration = {
+            id: 'moderation-tab',
+            expanded: false,
+            listeners: {
+                'tabchange': function(tabPanel, tab){
+                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                }
+            },
+            items: [{
+                title: gettext('Moderation'),
+                id: 'moderation-top-panel',
+                tabTip: gettext('Moderation'),
+                style: 'padding: 10px;',
+                html: '<h1>Moderation</h1>',
+                listeners: {
+                    'activate': function(p){
+                        var tabPanel = p.findParentByType('grouptab');
+                        var nextItem = p.nextSibling();
+                        tabPanel.setActiveTab(nextItem);
+                    }
+                }
+            }, Ext.apply(Yasound.Moderation.UI.UsersPanel(), {
+                iconCls: 'x-icon-templates'
+            }), Ext.apply(Yasound.Moderation.UI.RadiosPanel(), {
+                iconCls: 'x-icon-templates'
+            })]         
+        }    
+    
     var tabPanelStatistics = {
         id: 'statistics-tab',
         expanded: false,
@@ -208,6 +238,7 @@ Ext.onReady(function(){
     					 tabPanelSearchEngine,
     					 tabPanelInvitations,
     					 tabPanelStatistics,
+    					 tabPanelModeration,
     					 tabPanelMenus);
 
     var viewport = new Ext.Viewport({
