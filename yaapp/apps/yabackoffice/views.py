@@ -20,7 +20,7 @@ from emailconfirmation.models import EmailConfirmation, EmailAddress
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm, InvitationForm
-from yabackoffice.grids import UserProfileGrid
+from yabackoffice.grids import UserProfileGrid, WallEventGrid
 from yabackoffice.models import BackofficeRadio
 from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
@@ -404,6 +404,23 @@ def users(request, user_id=None):
         qs = UserProfile.objects.all()
         filters = ['name', 'facebook_uid']
         grid = UserProfileGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    raise Http404 
+
+@csrf_exempt
+@login_required
+def wall_events(request, user_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+    if request.method == 'GET':
+        qs = WallEvent.objects.all()
+        filters = ['type', 
+                   'user_name', 
+                   ('user_id', 'user__id'),
+                   ('radio_id', 'radio__id'),]
+        grid = WallEventGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
         return resp

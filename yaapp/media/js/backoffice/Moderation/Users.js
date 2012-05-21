@@ -17,11 +17,20 @@ Yasound.Moderation.UI.UsersPanel = function () {
         layout: 'border',
         items: [ {
             xtype: 'usergrid',
-            region: 'center'
+            region: 'center',
+            listeners: {
+                'selected': function(grid, id, record) {
+                    var wallEventGrid = grid.nextSibling();
+                    wallEventGrid.setParams({
+                        'user_id': id
+                    })
+                    wallEventGrid.reload();
+                }
+            }
         }, {
             xtype: 'walleventgrid',
             region: 'east',
-            width: 400,
+            width: 600,
             split: true,
         } ],
         updateData: function (component) {

@@ -17,7 +17,21 @@ Yasound.Moderation.UI.RadiosPanel = function () {
         layout: 'border',
         items: [ {
             xtype: 'radiogrid',
-            region: 'center'
+            region: 'center',
+            listeners: {
+                'selected': function (grid, id, record) {
+                    var wallEventGrid = grid.nextSibling();
+                    wallEventGrid.setParams({
+                        'radio_id': id
+                    })
+                    wallEventGrid.reload();
+                }
+            }
+        }, {
+            xtype: 'walleventgrid',
+            region: 'east',
+            width: 600,
+            split: true,
         } ],
         updateData: function (component) {
         }

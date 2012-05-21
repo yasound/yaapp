@@ -147,7 +147,14 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
 
         this.getBottomToolbar().pageSize = gridRows;
         this.getStore().reload({ params:{ start:0, limit:gridRows } });
+    },
+    setParams: function(additionalParams) {
+        this.getStore().additionalParams = additionalParams;
+    },
+    reload: function() {
+        this.getStore().reload();
     }
+    
     
 });
 Ext.reg('walleventgrid', Yasound.WallEvents.UI.WallEventGrid);

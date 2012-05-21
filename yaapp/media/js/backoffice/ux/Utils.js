@@ -23,6 +23,7 @@ Yasound.Utils.SimpleStore = function(url, fields) {
             url: url,
             method: 'GET'
         }),
+        additionalParams: {},
         listeners: {
             beforewrite: function(store, action, records, options, arg){
             },
@@ -33,6 +34,8 @@ Yasound.Utils.SimpleStore = function(url, fields) {
                 if (!options.params.limit) {
                     store.baseParams.limit = store.pageSize;
                 }
+                
+                Ext.apply(store.baseParams, store.additionalParams);
             }
         }
     });	
