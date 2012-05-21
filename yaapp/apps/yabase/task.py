@@ -66,6 +66,10 @@ def process_playlists_exec(radio, content_compressed, task=None):
         return
 
     logger.info('*** process_playlists ***')
+
+    start = time.time()
+    
+    
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
@@ -176,7 +180,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
     else:
         logger.info('no existing songs found')
 
-    logger.info('found: %d - not found: %d - total: %d' % (found, notfound, count))
+    elapsed = time.time() - start
+    logger.info('found: %d - not found: %d - total: %d in in %s seconds' % (found, notfound, count, elapsed))
 
 
 
