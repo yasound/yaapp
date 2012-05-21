@@ -18,6 +18,11 @@ Yasound.Moderation.UI.UsersPanel = function () {
         items: [ {
             xtype: 'usergrid',
             region: 'center'
+        }, {
+            xtype: 'walleventgrid',
+            region: 'east',
+            width: 400,
+            split: true,
         } ],
         updateData: function (component) {
         }

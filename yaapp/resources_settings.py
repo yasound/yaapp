@@ -51,6 +51,7 @@ PIPELINE_JS = {
             'js/backoffice/Invitations/Invitations.js',
             'js/backoffice/Users/UserGrid.js',
             'js/backoffice/Users/UserField.js',
+            'js/backoffice/WallEvent/WallEventGrid.js',
             'js/backoffice/Moderation/Users.js',
             'js/backoffice/Moderation/Radios.js',
             'js/backoffice/Statistics/Statistics.js',

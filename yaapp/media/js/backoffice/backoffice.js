@@ -9,6 +9,7 @@ Ext.namespace("Yasound.Statistics.UI", "Yasound.Statistics.Handler", "Yasound.St
 Ext.namespace("Yasound.Utils");
 Ext.namespace("Yasound.Menus.UI", "Yasound.Menus.Handler", "Yasound.Menus.Data");
 Ext.namespace("Yasound.Moderation.UI", "Yasound.Moderation.Handler", "Yasound.Moderation.Data");
+Ext.namespace("Yasound.WallEvents.UI", "Yasound.WallEvents.Handler", "Yasound.WallEvents.Data");
 
 
 //------------------------------------------
