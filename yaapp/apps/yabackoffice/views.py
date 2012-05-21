@@ -415,9 +415,8 @@ def wall_events(request, user_id=None):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
-        qs = WallEvent.objects.all()
-        filters = ['type', 
-                   'user_name', 
+        qs = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)
+        filters = ['user_name', 
                    ('user_id', 'user__id'),
                    ('radio_id', 'radio__id'),
                    'text']

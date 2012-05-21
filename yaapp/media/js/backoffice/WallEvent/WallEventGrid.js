@@ -2,18 +2,18 @@
 // Datastore
 //------------------------------------------
 
-Yasound.WallEvents.Data.WallEventStore = function() {
-    var fields = ['id',{
-                    name: 'start_date',
-                    type: 'date',
-                    dateFormat: 'Y-m-d H:i:s'
-                  },
-                  'radio',
-                  'type',
-                  'user_name',
-                  'text'];
+Yasound.WallEvents.Data.WallEventStore = function () {
+    var fields = [ 'id', {
+        name: 'start_date',
+        type: 'date',
+        dateFormat: 'Y-m-d H:i:s'
+    }, 'radio', 'type', 'user_name', 'text' ];
     var url = '/yabackoffice/wall_events/';
-    return new Yasound.Utils.SimpleStore(url, fields);
+    var sortInfo = {
+        field: 'start_date',
+        direction: 'DESC'
+    };
+    return new Yasound.Utils.SimpleStore(url, fields, sortInfo);
 };
 
 // ------------------------------------------
@@ -23,8 +23,8 @@ Yasound.WallEvents.Data.WallEventStore = function() {
 // ------------------------------------------
 // UI
 // ------------------------------------------
-Yasound.WallEvents.UI.WallEventColumnModel = function(sm) {
-    var cm = [{
+Yasound.WallEvents.UI.WallEventColumnModel = function (sm) {
+    var cm = [ {
         header: gettext('Date'),
         dataIndex: 'start_date',
         xtype: 'datecolumn',
@@ -35,22 +35,12 @@ Yasound.WallEvents.UI.WallEventColumnModel = function(sm) {
         header: gettext('Radio'),
         dataIndex: 'radio',
         sortable: true,
-        width: 100,
+        width: 50,
         filterable: true,
         filter: {
             xtype: "textfield",
             filterName: "radio"
-        }           
-    }, {
-        header: gettext('Type'),
-        dataIndex: 'type',
-        sortable: true,
-        width: 40,
-        filterable: true,
-        filter: {
-            xtype: "textfield",
-            filterName: "type"
-        }           
+        }
     }, {
         header: gettext('User'),
         dataIndex: 'user_name',
@@ -60,43 +50,42 @@ Yasound.WallEvents.UI.WallEventColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "user_name"
-        }           
+        }
     }, {
         header: gettext('Text'),
         dataIndex: 'text',
         sortable: true,
         filterable: true,
-        width: 50,
+        width: 150,
         filter: {
             xtype: "textfield",
             filterName: "text"
-        }           
-    }];
-    
+        }
+    } ];
+
     if (sm) {
-        cm.splice(0, 0, sm); 
+        cm.splice(0, 0, sm);
     }
-    
+
     return cm;
 };
-
 
 Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
     singleSelect: true,
     checkboxSelect: true,
     tbar: [],
-    initComponent: function() {
+    initComponent: function () {
         this.addEvents('selected', 'deselected');
         this.pageSize = 25;
         this.store = Yasound.WallEvents.Data.WallEventStore();
         this.store.pageSize = this.pageSize;
-        
+
         var sm = new Ext.grid.CheckboxSelectionModel({
             singleSelect: this.singleSelect,
             listeners: {
-                selectionchange: function(sm){
-                    Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('selected', this.grid, record.data.id, record);                         
+                selectionchange: function (sm) {
+                    Ext.each(sm.getSelections(), function (record) {
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);
                     }, this);
                     if (!sm.hasSelection()) {
                         this.grid.fireEvent('deselected', this.grid);
@@ -104,7 +93,7 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             }
         });
-        
+
         var config = {
             tbar: this.tbar,
             bbar: new Ext.PagingToolbar({
@@ -113,7 +102,7 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
                 displayInfo: true,
                 displayMsg: gettext('Displaying {0} - {1} of {2}'),
                 emptyMsg: gettext("Nothing to display")
-            }),            
+            }),
             loadMask: false,
             sm: sm,
             cm: new Ext.grid.ColumnModel(Yasound.WallEvents.UI.WallEventColumnModel(this.checkboxSelect ? sm : null)),
@@ -122,12 +111,12 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [new Ext.ux.grid.GridHeaderFilters()],
+            plugins: [ new Ext.ux.grid.GridHeaderFilters() ],
             listeners: {
-                show: function(component) {
+                show: function (component) {
                     component.calculatePageSize();
                 },
-                resize: function(component) {
+                resize: function (component) {
                     component.calculatePageSize();
                 }
             }
@@ -136,25 +125,29 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.WallEvents.UI.WallEventGrid.superclass.initComponent.apply(this, arguments);
     },
-    calculatePageSize: function() {
+    calculatePageSize: function () {
         if (!this.isVisible()) {
             return;
         }
         var bodyHeight = this.getHeight();
-        var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50+20;
+        var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50 + 20;
         var rowHeight = 21;
-        var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+        var gridRows = parseInt((bodyHeight - heightOther) / rowHeight);
 
         this.getBottomToolbar().pageSize = gridRows;
-        this.getStore().reload({ params:{ start:0, limit:gridRows } });
+        this.getStore().reload({
+            params: {
+                start: 0,
+                limit: gridRows
+            }
+        });
     },
-    setParams: function(additionalParams) {
+    setParams: function (additionalParams) {
         this.getStore().additionalParams = additionalParams;
     },
-    reload: function() {
+    reload: function () {
         this.getStore().reload();
     }
-    
-    
+
 });
 Ext.reg('walleventgrid', Yasound.WallEvents.UI.WallEventGrid);
