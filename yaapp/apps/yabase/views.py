@@ -230,7 +230,8 @@ def not_favorite_radio(request, radio_id):
 @csrf_exempt
 @check_api_key(methods=['POST',])
 def radio_shared(request, radio_id):
-    share_type = request.REQUEST.get('type')
+    json_data = json.loads(request.raw_post_data)
+    share_type = json_data['type']
     try:
         radio = Radio.objects.get(id=radio_id)
     except Radio.DoesNotExist:
