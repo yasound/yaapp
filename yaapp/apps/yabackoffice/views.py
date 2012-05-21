@@ -419,7 +419,8 @@ def wall_events(request, user_id=None):
         filters = ['type', 
                    'user_name', 
                    ('user_id', 'user__id'),
-                   ('radio_id', 'radio__id'),]
+                   ('radio_id', 'radio__id'),
+                   'text']
         grid = WallEventGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
