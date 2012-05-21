@@ -110,18 +110,18 @@ Yasound.Statistics.UI.SharesGraph = function () {
             idProperty: 'timestamp',
             fields: [ 'timestamp', 'new_share_facebook', 'new_share_twitter', 'new_share_email' ]
         }),
-        xField: 'timestamp',
-        yAxis: new Ext.chart.NumericAxis({
+        yField: 'timestamp',
+        xAxis: new Ext.chart.NumericAxis({
             stackingEnabled: true
         }),
         series: [ {
-            yField: 'new_share_facebook',
+            xField: 'new_share_facebook',
             displayName: 'Facebook'
         }, {
-            yField: 'new_share_twitter',
+            xField: 'new_share_twitter',
             displayName: 'Twitter'
         }, {
-            yField: 'new_share_email',
+            xField: 'new_share_email',
             displayName: 'email'
         } ],
         reload: function(component) {

@@ -55,16 +55,10 @@ class GlobalMetricsManager():
             start_date = datetime.datetime.now()
         timestamps = []
         
-        day = start_date + datetime.timedelta(days=-90)
-        timestamps.append(day.strftime('%Y-%m-%d'))
+        day = start_date + datetime.timedelta(days=-(90-1))
+        for dt in rrule.rrule(rrule.DAILY, dtstart=day, until=start_date):
+            timestamps.append(dt.strftime('%Y-%m-%d'))
 
-        day = start_date + datetime.timedelta(days=-15)
-        timestamps.append(day.strftime('%Y-%m-%d'))
-
-        day = start_date + datetime.timedelta(days=-3)
-        timestamps.append(day.strftime('%Y-%m-%d'))
-
-        timestamps.append(start_date.strftime('%Y-%m-%d'))
         return timestamps
     
     def _generate_past_year_timestamps(self, start_date=None):
@@ -73,7 +67,6 @@ class GlobalMetricsManager():
         timestamps = []
         last_month = start_date + datetime.timedelta(weeks=-53)
         for dt in rrule.rrule(rrule.MONTHLY, dtstart=last_month, until=start_date):
-            print dt
             timestamps.append(dt.strftime('%Y-%m'))
         return timestamps
 
@@ -143,15 +136,43 @@ class GlobalMetricsManager():
                 metrics.append(metric)
         return metrics    
     
-    def get_graph_metrics(self):
+    def get_graph_metrics(self, keys):
         collection = self.metrics_glob
         timestamps = self._generate_graph_timestamps()
-        metrics = []
-        for timestamp in timestamps:
+        data = [{
+            'timestamp': '-90'
+        }, {
+            'timestamp' : '-15'
+        }, {
+            'timestamp': '-7'
+        }, {
+            'timestamp' : '-3'
+        }, {
+            'timestamp': '-1'
+        }]
+        
+        for item in data:
+            for key in keys:
+                item[key] = 0
+        
+        current_timestamp = 0
+        for i, timestamp in enumerate(timestamps):
+            if i ==  len(timestamps)-15:
+                current_timestamp += 1
+            if i ==  len(timestamps)-7:
+                current_timestamp += 1
+            if i ==  len(timestamps)-3:
+                current_timestamp += 1
+            if i == len(timestamps)-1:
+                current_timestamp += 1
+
             metric = collection.find_one({'timestamp': timestamp})
             if metric:
-                metrics.append(metric)
-        return metrics    
+                for key in keys:
+                    if key in metric:
+                        value = metric[key]
+                        data[current_timestamp][key] = data[current_timestamp][key] + value
+        return data    
       
 class TopMissingSongsManager():
     def __init__(self):
