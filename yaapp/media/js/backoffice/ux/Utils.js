@@ -1,6 +1,11 @@
 
-
-Yasound.Utils.SimpleStore = function(url, fields) {
+Yasound.Utils.SimpleStore = function (url, fields, sortInfo) {
+    if (!sortInfo) {
+        sortInfo = {
+            field: 'id',
+            direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+        };
+    }
     return new Ext.data.GroupingStore({
         reader: new Ext.data.JsonReader({
             idProperty: 'id',
@@ -12,10 +17,7 @@ Yasound.Utils.SimpleStore = function(url, fields) {
             encode: true,
             writeAllFields: true
         }),
-        sortInfo: {
-            field: 'id',
-            direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
-        },
+        sortInfo: sortInfo,
         autoLoad: false,
         remoteSort: true,
         restful: true,
@@ -25,18 +27,18 @@ Yasound.Utils.SimpleStore = function(url, fields) {
         }),
         additionalParams: {},
         listeners: {
-            beforewrite: function(store, action, records, options, arg){
+            beforewrite: function (store, action, records, options, arg) {
             },
-            beforeLoad: function(store, options){
-				if (!options.params.start) {
-					store.baseParams.start = 0;
-				}
+            beforeLoad: function (store, options) {
+                if (!options.params.start) {
+                    store.baseParams.start = 0;
+                }
                 if (!options.params.limit) {
                     store.baseParams.limit = store.pageSize;
                 }
-                
+
                 Ext.apply(store.baseParams, store.additionalParams);
             }
         }
-    });	
+    });
 }
