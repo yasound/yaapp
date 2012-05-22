@@ -53,19 +53,7 @@ Yasound.Views.Friends = Backbone.View.extend({
         if (lastView) {
             lastId = lastView.model.id;
         }
-        if (currentId >= lastId) {
-            $(this.el).prepend(view.render().el);
-            // in case of prepend, it means that the wall has been refreshed
-            // with new item
-            // so we remove the last one in order to avoid infinite addition to
-            // the wall
-            if (this.views.length >= this.collection.perPage) {
-                this.views[0].close();
-                this.views.splice(0, 1);
-            }
-        } else {
-            $(this.el).append(view.render().el);
-        }
+        $(this.el).append(view.render().el);
         this.views.push(view);
     }
 });
@@ -94,6 +82,11 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         this.resultsView = new Yasound.Views.Friends({
             collection: this.collection,
             el: $('#results', this.el)
+        });
+        
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.collection,
+            el: $('#pagination', this.el)
         });
         
         this.collection.fetch();

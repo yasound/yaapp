@@ -8,7 +8,7 @@ Yasound.Data.Models.Friends = Backbone.Paginator.requestPager.extend({
     url: '/api/v1/friend/',
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
-    perPage: 125,
+    perPage: 25,
     page:0,
     lastId: 0,
     queryAttribute: 'search',
