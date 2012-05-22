@@ -460,7 +460,7 @@ class RadioManager(models.Manager):
         users = g.user_set.all()
         radios = self.filter(creator__in=users)
         return radios
-
+    
 class Radio(models.Model):
     objects = RadioManager()
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
@@ -1009,6 +1009,10 @@ class Radio(models.Model):
     def clear_current_song_json_cache(self):
         key = 'radio_%s.current_song.json' % (str(self.id))
         cache.delete(key)
+    
+    def fix_favorites(self):
+        self.favorites = RadioUser.objects.filter(radio=self, favorite=True).count()
+        self.save()
     
     class Meta:
         db_name = u'default'
