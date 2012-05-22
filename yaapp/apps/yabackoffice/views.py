@@ -403,6 +403,7 @@ def users(request, user_id=None):
     if request.method == 'GET':
         qs = UserProfile.objects.all()
         filters = ['name', 'facebook_uid',
+                   ('email', 'user__email'),
                    ('is_active', 'user__is_active'),
                    ('is_superuser', 'user__is_superuser')]
         grid = UserProfileGrid()
