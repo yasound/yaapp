@@ -95,6 +95,11 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
             el: $('#results', this.el)
         });
         
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.collection,
+            el: $('#pagination', this.el)
+        });
+        
         this.collection.fetch();
         
         return this;

@@ -238,7 +238,6 @@ Yasound.Views.Pagination = Backbone.View.extend({
         _.bindAll(this, 'scroll');
 
         $(window).on('scroll', this.scroll);
-
         this.collection.on('reset', this.render, this);
         this.collection.on('change', this.render, this);
     },
