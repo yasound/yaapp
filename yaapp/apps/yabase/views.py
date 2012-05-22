@@ -1,4 +1,5 @@
-from django.views.decorators.http import require_http_methods
+from account import settings as account_settings
+from account.models import UserProfile
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -12,13 +13,18 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from forms import SelectionForm, SettingsRadioForm
+from django.views.decorators.http import require_http_methods
+from forms import SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata
 from shutil import rmtree
 from task import process_playlists, process_upload_song
+from tastypie.http import HttpNotFound
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
+from yabase.forms import SettingsUserForm
+from yacore.decorators import check_api_key
+from yacore.http import check_api_key_Authentication, check_http_method
 from yaref.models import YasoundSong
 import import_utils
 import json
@@ -26,11 +32,7 @@ import logging
 import os
 import settings as yabase_settings
 import uuid
-from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method
-from tastypie.http import HttpNotFound
 
-from account import settings as account_settings
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -785,10 +787,26 @@ def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='y
     facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
     facebook_share_link = request.build_absolute_uri(reverse('webapp'))
     
+    
     settings_radio_form = None
+    settings_user_form = None
     if request.user.is_authenticated():
         settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
-        
+        settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
+
+    if request.method == 'POST':
+        action = request.REQUEST.get('action')
+        if action == 'settings_radio':
+            settings_radio_form = SettingsRadioForm(request.POST, request.FILES, instance=Radio.objects.radio_for_user(request.user))
+            if settings_radio_form.is_valid():
+                settings_radio_form.save()
+                return HttpResponseRedirect(reverse('webapp_settings'))
+        elif action == 'settings_user':
+            settings_user_form = SettingsUserForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
+            if settings_user_form.is_valid():
+                settings_user_form.save()
+                return HttpResponseRedirect(reverse('webapp_settings'))
+            
     return render_to_response(template_name, {
         'user_uuid': user_uuid,
         'user_id' : user_id,
@@ -798,7 +816,8 @@ def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='y
         'facebook_app_id': settings.FACEBOOK_APP_ID,
         'facebook_share_picture': facebook_share_picture,
         'facebook_share_link': facebook_share_link,
-        'settings_radio_form': settings_radio_form
+        'settings_radio_form': settings_radio_form,
+        'settings_user_form': settings_user_form
     }, context_instance=RequestContext(request))    
     
 def radios(request, template_name='web/radios.html'):
@@ -828,44 +847,6 @@ def web_myradio(request, radio_uuid=None, template_name='web/my_radio.html'):
         "fans": radio.radiouser_set.filter(favorite=True).count()
     }, context_instance=RequestContext(request))    
 
-@login_required
-def web_friends(request, template_name='web/friends.html'):
-    friends = request.user.userprofile.friends.all()
-    return render_to_response(template_name, {
-        "friends": friends,
-    }, context_instance=RequestContext(request))    
-    
-@login_required
-def web_favorites(request, template_name='web/favorites.html'):
-    radios = Radio.objects.filter(radiouser__user=request.user, radiouser__favorite=True)
-    return render_to_response(template_name, {
-        "radios": radios,
-    }, context_instance=RequestContext(request))    
-
-
-@login_required
-def web_selections(request, template_name='web/selections.html', form_class=SelectionForm):
-    form = form_class(request.REQUEST)
-    radios = Radio.objects.filter(radiouser__user=request.user, radiouser__favorite=True)
-    if form.is_valid():
-        genre = form.cleaned_data['genre']
-        if len(genre) > 0:
-            radios = Radio.objects.filter(radiouser__user=request.user, radiouser__favorite=True, genre=genre)
-    return render_to_response(template_name, {
-        "radios": radios,
-        "form": form,
-    }, context_instance=RequestContext(request))    
-
-@login_required
-def web_favorite(request, radio_uuid, template_name='web/favorite.html'):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
-    return render_to_response(template_name, {
-        "radio": radio,
-        "radio_url": radio_url,
-        "listeners": radio.radiouser_set.filter(listening=True).count(),
-        "fans": radio.radiouser_set.filter(favorite=True).count()
-    }, context_instance=RequestContext(request))    
 
 def web_terms(request, template_name='web/terms.html'):
     return render_to_response(template_name, {

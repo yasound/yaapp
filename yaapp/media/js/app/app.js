@@ -75,6 +75,7 @@ $(document).ready(function () {
             "profile/:username/": "profile",
             "settings/": "settings",
             "friends/": "friends",
+            "*args": "index"
         },
 
         currentRadio: new Yasound.Data.Models.Radio({

@@ -360,6 +360,7 @@ INSTALLED_APPS = (
     'yametrics',
     'yamenu',
     'yamessage',
+    'bootstrap',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
