@@ -25,7 +25,6 @@ def generate_grid_rows_json(request, grid, qs, filters=[]):
     (start, limit) = get_limit(request)
     for item in filters:
         if type(item) == type((1,1)):
-            print 'item = %s, len(item) = %d' % (item, len(item))
             
             if len(item) == 2:
                 param, new_param = item

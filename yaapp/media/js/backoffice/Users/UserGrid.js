@@ -6,6 +6,9 @@ Yasound.Users.Data.UserStore = function() {
 	var fields = ['id', 
 	              'name', 
 	              'account_type',
+	              'email',
+	              'is_active',
+	              'date_joined',
 	              'facebook_uid', {
 					name: 'last_authentication_date',
 					type: 'date',
@@ -35,6 +38,16 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
             filterName: "name"
         }        	
     }, {
+        header: gettext('Email'),
+        dataIndex: 'email',
+        sortable: true,
+        width: 40,
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "email"
+        }           
+    }, {
         header: gettext('Facebook UID'),
         dataIndex: 'facebook_uid',
         sortable: true,
@@ -44,6 +57,13 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
             xtype: "textfield",
             filterName: "facebook_uid"
         }        	
+    }, {
+        header: gettext('Join date'),
+        dataIndex: 'date_joined',
+        xtype: 'datecolumn',
+        format: 'd/m/Y H:i:s',
+        sortable: true,
+        width: 50
     }, {
         header: gettext('Last authentication'),
         dataIndex: 'last_authentication_date',
@@ -61,6 +81,17 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         		return gettext('Yes');
         	}
         	return gettext('No');
+        }
+    }, {
+        header: gettext('Actived?'),
+        dataIndex: 'is_active',
+        sortable: true,
+        width: 50,
+        renderer: function(value, p, record){
+            if (value) {
+                return gettext('Yes');
+            }
+            return gettext('No');
         }
     }];
 	
