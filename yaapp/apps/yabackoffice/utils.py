@@ -19,15 +19,22 @@ def generate_grid_rows_json(request, grid, qs, filters=[]):
     """
     generate a filtered & limited queryset
     example filters: 
-        filters = [('unit_name', 'unit__name'), 'username']
+        filters = [('unit_name', 'unit__name'), 'username',
+                   ('unit_id', 'id', 'exact')]
     """
     (start, limit) = get_limit(request)
     for item in filters:
         if type(item) == type((1,1)):
-            param, new_param = item
+            print 'item = %s, len(item) = %d' % (item, len(item))
+            
+            if len(item) == 2:
+                param, new_param = item
+                comparison_operator = 'icontains'
+            elif len(item) == 3:
+                (param, new_param, comparison_operator) = item
             value = request.REQUEST.get(param, None)
             if value:
-                kwargs = {'%s__%s' % (str(new_param), 'icontains'): value,}
+                kwargs = {'%s__%s' % (str(new_param), comparison_operator): value,}
                 qs = qs.filter(**kwargs)
         else:
             value = request.REQUEST.get(item, None)
@@ -40,12 +47,16 @@ def generate_grid_rows_json(request, grid, qs, filters=[]):
         sort = request.REQUEST.get('sort')
         for item in filters:
             if type(item) == type((1,1)):
-                param, new_param = item
+                if len(item) == 2:
+                    param, new_param = item
+                    comparison_operator = 'icontains'
+                else:
+                    (param, new_param, comparison_operator) = item
                 if param == sort:
                     dj_sort = new_param
                 value = request.REQUEST.get(param, None)
                 if value:
-                    kwargs = {'%s__%s' % (str(new_param), 'icontains'): value,}
+                    kwargs = {'%s__%s' % (str(new_param), comparison_operator): value,}
                     qs = qs.filter(**kwargs)
             else:
                 if item == sort:
