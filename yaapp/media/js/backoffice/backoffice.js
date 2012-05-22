@@ -173,6 +173,32 @@ Ext.onReady(function(){
             })]         
         }    
     
+    var tabPanelUsers = {
+            id: 'user-tab',
+            expanded: false,
+            listeners: {
+                'tabchange': function(tabPanel, tab){
+                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                }
+            },
+            items: [{
+                title: gettext('Users'),
+                id: 'user-top-panel',
+                tabTip: gettext('Users'),
+                style: 'padding: 10px;',
+                html: '<h1>Users</h1>',
+                listeners: {
+                    'activate': function(p){
+                        var tabPanel = p.findParentByType('grouptab');
+                        var nextItem = p.nextSibling();
+                        tabPanel.setActiveTab(nextItem);
+                    }
+                }
+            }, Ext.apply(Yasound.Users.UI.UsersPanel(), {
+                iconCls: 'x-icon-templates'
+            })]         
+        }    
+
     var tabPanelStatistics = {
         id: 'statistics-tab',
         expanded: false,
@@ -239,6 +265,7 @@ Ext.onReady(function(){
     					 tabPanelInvitations,
     					 tabPanelStatistics,
     					 tabPanelModeration,
+    					 tabPanelUsers,
     					 tabPanelMenus);
 
     var viewport = new Ext.Viewport({

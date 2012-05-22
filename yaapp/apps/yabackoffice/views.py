@@ -402,11 +402,30 @@ def users(request, user_id=None):
         raise Http404()
     if request.method == 'GET':
         qs = UserProfile.objects.all()
-        filters = ['name', 'facebook_uid']
+        filters = ['name', 'facebook_uid',
+                   ('is_active', 'user__is_active'),
+                   ('is_superuser', 'user__is_superuser')]
         grid = UserProfileGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
         return resp
+    elif request.method == 'POST' and not user_id:
+        action = request.REQUEST.get('action')
+        if action == 'disable':
+            ids = request.REQUEST.getlist('users_id')
+            User.objects.filter(userprofile__id__in=ids).update(is_active=False)
+        if action == 'fake':
+            ids = request.REQUEST.getlist('users_id')
+            User.objects.filter(userprofile__id__in=ids).update(is_active=False)
+            RadioUser.objects.filter(user__userprofile__id__in=ids).update(favorite=False)
+        elif action == 'enable':
+            ids = request.REQUEST.getlist('users_id')
+            User.objects.filter(userprofile__id__in=ids).update(is_active=True)
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
     raise Http404 
 
 @csrf_exempt
@@ -425,7 +444,6 @@ def wall_events(request, wall_event_id=None):
         resp = utils.JsonResponse(jsonr)
         return resp
     elif request.method == 'DELETE':
-        print wall_event_id
         we = get_object_or_404(WallEvent, id=wall_event_id)
         we.delete()
         data = {"success":True,"message":"ok","data":[]}
@@ -685,7 +703,6 @@ def metrics_graph_shares(request):
                 'new_share_twitter': new_share_twitter,
                 'new_share_email': new_share_email,
             })
-    print data
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,

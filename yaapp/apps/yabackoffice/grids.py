@@ -73,6 +73,9 @@ class UserProfileGrid(grids.ModelGrid):
             'name': 'fullname',
             'user_id': 'user__id',
             'is_superuser': 'user__is_superuser',
+            'is_active': 'user__is_active',
+            'date_joined': 'user__date_joined',
+            'email': 'user__email',
     }
 
 class WallEventGrid(grids.ModelGrid):
