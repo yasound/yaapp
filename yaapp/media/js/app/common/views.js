@@ -68,7 +68,6 @@ Yasound.Views.UserCell = Backbone.View.extend({
     onUser: function (e) {
         e.preventDefault();
         var username = this.model.get('username');
-        console.log(this.model)
         Yasound.App.Router.navigate("profile/" + username + '/', {
             trigger: true
         });
@@ -312,7 +311,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             caption: this.generateFacebookText(),
             description: ''
         };
-        console.log(obj)
         function callback (response) {
         }
         FB.ui(obj, callback);

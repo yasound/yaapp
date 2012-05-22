@@ -62,9 +62,13 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         
         var favorites = new Yasound.Data.Models.Favorites({});
         
-        this.favoritesView = new Yasound.Views.Favorites({
+        this.favoritesView = new Yasound.Views.SearchResults({
             collection: favorites,
             el: $('#favorites', this.el)
+        });
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: favorites,
+            el: $('#pagination', this.el)
         });
         
         
