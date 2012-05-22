@@ -417,8 +417,8 @@ def wall_events(request, user_id=None):
     if request.method == 'GET':
         qs = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)
         filters = ['user_name', 
-                   ('user_id', 'user__id'),
-                   ('radio_id', 'radio__id'),
+                   ('user_id', 'user__id', 'exact'),
+                   ('radio_id', 'radio__id', 'exact'),
                    'text']
         grid = WallEventGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
