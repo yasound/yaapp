@@ -8,7 +8,7 @@ Yasound.WallEvents.Data.WallEventStore = function () {
         type: 'date',
         dateFormat: 'Y-m-d H:i:s'
     }, 'radio', 'type', 'user_name', 'text' ];
-    var url = '/yabackoffice/wall_events/';
+    var url = '/yabackoffice/wall_events';
     var sortInfo = {
         field: 'start_date',
         direction: 'DESC'
