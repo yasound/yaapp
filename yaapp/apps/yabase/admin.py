@@ -68,6 +68,7 @@ admin.site.register(FeaturedContent, FeaturedContentAdmin)
 
 # basic admin     
 class RadioUserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'radio', 'user', 'favorite')
     raw_id_fields = ('radio', 'user')
 admin.site.register(RadioUser, RadioUserAdmin)
 

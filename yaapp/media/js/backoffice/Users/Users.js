@@ -111,6 +111,7 @@ Yasound.Users.UI.UsersPanel = function () {
         items: [ {
             xtype: 'usergrid',
             id:'users-usergrid',
+            singleSelect: false,
             title: gettext('Users'),
             checkboxSelect: false,
             region: 'center',
