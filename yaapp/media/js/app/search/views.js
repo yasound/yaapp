@@ -68,27 +68,7 @@ Yasound.Views.SearchResults = Backbone.View.extend({
         var view = new Yasound.Views.RadioCell({
             model: radio
         });
-
-        var lastView = _.max(this.views, function(view) {
-            return view.model.get('id');
-        });
-        var lastId = 0;
-        if (lastView) {
-            lastId = lastView.model.id;
-        }
-        if (currentId >= lastId) {
-            $(this.el).prepend(view.render().el);
-            // in case of prepend, it means that the wall has been refreshed
-            // with new item
-            // so we remove the last one in order to avoid infinite addition to
-            // the wall
-            if (this.views.length >= this.collection.perPage) {
-                this.views[0].close();
-                this.views.splice(0, 1);
-            }
-        } else {
-            $(this.el).append(view.render().el);
-        }
+        $(this.el).append(view.render().el);
         this.views.push(view);
     }
 });

@@ -95,9 +95,13 @@ Yasound.Views.HomePage = Backbone.View.extend({
                 collection: this.favorites,
                 el: $('#favorites', this.el)
             });
+            this.paginationView = new Yasound.Views.Pagination({
+                collection: this.favorites,
+                el: $('#pagination', this.el)
+            });
             this.favorites.fetch();
         }
-        
+     
         this.selectedRadios.fetch();
         this.mostActiveRadios.fetch();
         return this;

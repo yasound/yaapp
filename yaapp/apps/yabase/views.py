@@ -780,7 +780,7 @@ def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='y
         user_uuid = request.user.get_profile().own_radio.uuid
     else:
         user_uuid = 0
-        
+    
     push_url = settings.YASOUND_PUSH_URL
     enable_push = settings.ENABLE_PUSH
     

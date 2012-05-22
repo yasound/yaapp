@@ -439,7 +439,7 @@ class RadioManager(models.Manager):
             radio_uuid = uuid.uuid4().hex
             name = '____fake____%s' % radio_uuid
             logger.info("generating radio %s" % (name))
-            radio = Radio(name=name, ready=True, uuid=radio_uuid)
+            radio = Radio(name=name, ready=True, uuid=str(radio_uuid), creator=User.objects.all().order_by('?')[0])
             radio.save()
             playlist, _created = radio.get_or_create_default_playlist()
             metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:10]
