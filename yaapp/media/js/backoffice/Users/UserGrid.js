@@ -153,7 +153,15 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
-                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
+                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})'),
+                getRowClass: function(row, index){
+                    var data = row.data;
+                    var cls = '';
+                    if (!data.is_active) {
+                        cls = 'red';
+                    }
+                    return cls;
+                }                
             }),
         	plugins: [Yasound.Users.UI.UserFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
