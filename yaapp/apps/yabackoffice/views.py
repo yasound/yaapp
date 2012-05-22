@@ -417,7 +417,7 @@ def wall_events(request, wall_event_id=None):
     if request.method == 'GET':
         qs = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)
         filters = ['user_name', 
-                   ('user_id', 'user__id', 'exact'),
+                   ('user_id', 'user__userprofile__id', 'exact'),
                    ('radio_id', 'radio__id', 'exact'),
                    'text']
         grid = WallEventGrid()
