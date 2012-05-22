@@ -474,7 +474,7 @@ class Radio(models.Model):
     url = models.URLField(null=True, blank=True)
     uuid = models.CharField(max_length=48, blank=True)
     description = models.TextField(blank=True)
-    genre = models.CharField(max_length=255, blank=True, default='style_all')
+    genre = models.CharField(max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
     theme = models.CharField(max_length=255, blank=True)
     tags = TaggableManager(blank=True)
     

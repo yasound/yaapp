@@ -1,5 +1,41 @@
 from django.utils.translation import ugettext_lazy as _
 
+# Radio styles
+RADIO_STYLE_ALL         = 'style_all'
+RADIO_STYLE_CLASSICAL   = 'style_classique'
+RADIO_STYLE_BLUES       = 'style_blues'
+RADIO_STYLE_ALTERNATIVE = 'style_alternative'
+RADIO_STYLE_ELECTRO     = 'style_electro'
+RADIO_STYLE_FRENCH      = 'style_chanson_francaise'
+RADIO_STYLE_JAZZ        = 'style_jazz'
+RADIO_STYLE_POP         = 'style_pop'
+RADIO_STYLE_REGGAE      = 'style_reggae'
+RADIO_STYLE_ROCK        = 'style_rock'
+RADIO_STYLE_METAL       = 'style_metal'
+RADIO_STYLE_HIPHOP      = 'style_hiphop'
+RADIO_STYLE_RNBSOUL     = 'style_rnbsoul'
+RADIO_STYLE_WORLD       = 'style_world'
+RADIO_STYLE_MISC        = 'style_misc'
+
+RADIO_STYLE_CHOICES = (
+    (RADIO_STYLE_ALL, _('All')),
+    (RADIO_STYLE_CLASSICAL, _('Classical')),
+    (RADIO_STYLE_BLUES, _('Blues')),
+    (RADIO_STYLE_ALTERNATIVE, _('Alternative')),
+    (RADIO_STYLE_ELECTRO, _('Electro')),
+    (RADIO_STYLE_FRENCH, _('French Music')),
+    (RADIO_STYLE_JAZZ, _('Jazz')),
+    (RADIO_STYLE_POP, _('Pop')),
+    (RADIO_STYLE_REGGAE, _('Reggae')),
+    (RADIO_STYLE_ROCK, _('Rock')),
+    (RADIO_STYLE_METAL, _('Metal')),
+    (RADIO_STYLE_HIPHOP, _('Hip hop')),
+    (RADIO_STYLE_RNBSOUL, _('RnB / Soul')),
+    (RADIO_STYLE_WORLD, _('World')),
+    (RADIO_STYLE_MISC, _('Miscellaneous')),
+)
+
+# Mood
 MOOD_NEUTRAL = 'N'
 MOOD_LIKE = 'L'
 MOOD_DISLIKE = 'D'
