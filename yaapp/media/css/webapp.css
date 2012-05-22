@@ -125,9 +125,7 @@ ul .radio-cell .caption h5
 	text-align: center;
 }
 
-#settings-user-form {
+.cell-pagination {
+	float:left;
+	with: 148px;
 }
-
-#settings-radio-form {
-}
-
