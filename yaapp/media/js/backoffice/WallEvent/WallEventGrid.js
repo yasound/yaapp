@@ -23,14 +23,14 @@ Yasound.WallEvents.Data.WallEventStore = function () {
 // ------------------------------------------
 // UI
 // ------------------------------------------
-Yasound.WallEvents.UI.WallEventColumnModel = function (sm) {
-    var cm = [ {
+Yasound.WallEvents.UI.WallEventColumnModel = function (expander) {
+    var cm = [ expander, {
         header: gettext('Date'),
         dataIndex: 'start_date',
         xtype: 'datecolumn',
         format: 'd/m/Y H:i:s',
         sortable: true,
-        width: 50
+        width: 70
     }, {
         header: gettext('Radio'),
         dataIndex: 'radio',
@@ -62,23 +62,23 @@ Yasound.WallEvents.UI.WallEventColumnModel = function (sm) {
             filterName: "text"
         }
     } ];
-
-    if (sm) {
-        cm.splice(0, 0, sm);
-    }
-
     return cm;
 };
 
 Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
     singleSelect: true,
-    checkboxSelect: true,
+    checkboxSelect: false,
     tbar: [],
     initComponent: function () {
         this.addEvents('selected', 'deselected');
         this.pageSize = 25;
         this.store = Yasound.WallEvents.Data.WallEventStore();
         this.store.pageSize = this.pageSize;
+
+        var expander = new Ext.ux.grid.RowExpander({
+            tpl: new Ext.Template('<p><b>{text}</b></p>')
+        });
+        this.expander = expander;
 
         var sm = new Ext.grid.CheckboxSelectionModel({
             singleSelect: this.singleSelect,
@@ -93,6 +93,11 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             }
         });
+        
+        var that = this;
+        this.store.on('load', function() {
+            that.expandAllRows();
+        });
 
         var config = {
             tbar: this.tbar,
@@ -105,13 +110,13 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
             }),
             loadMask: false,
             sm: sm,
-            cm: new Ext.grid.ColumnModel(Yasound.WallEvents.UI.WallEventColumnModel(this.checkboxSelect ? sm : null)),
+            cm: new Ext.grid.ColumnModel(Yasound.WallEvents.UI.WallEventColumnModel(expander)),
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
             }),
-            plugins: [ new Ext.ux.grid.GridHeaderFilters() ],
+            plugins: [ expander, new Ext.ux.grid.GridHeaderFilters()],
             listeners: {
                 show: function (component) {
                     component.calculatePageSize();
@@ -147,6 +152,14 @@ Yasound.WallEvents.UI.WallEventGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     reload: function () {
         this.getStore().reload();
+    },
+    expandAllRows: function () {
+        var store = this.getStore();
+        var expander = this.expander;
+        var grid = this;
+        nRows = store.getCount();
+        for (i = 0; i < nRows; i++)
+            expander.expandRow(grid.view.getRow(i));
     }
 
 });

@@ -17,6 +17,7 @@ Yasound.Moderation.UI.UsersPanel = function () {
         layout: 'border',
         items: [ {
             xtype: 'usergrid',
+            checkboxSelect: false,
             region: 'center',
             listeners: {
                 'selected': function(grid, id, record) {

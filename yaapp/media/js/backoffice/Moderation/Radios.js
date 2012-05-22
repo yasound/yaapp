@@ -17,6 +17,7 @@ Yasound.Moderation.UI.RadiosPanel = function () {
         layout: 'border',
         items: [ {
             xtype: 'radiogrid',
+            checkboxSelect: false,
             region: 'center',
             listeners: {
                 'selected': function (grid, id, record) {
