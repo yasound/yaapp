@@ -411,7 +411,7 @@ def users(request, user_id=None):
 
 @csrf_exempt
 @login_required
-def wall_events(request, user_id=None):
+def wall_events(request, wall_event_id=None):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
@@ -423,6 +423,13 @@ def wall_events(request, user_id=None):
         grid = WallEventGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
+        return resp
+    elif request.method == 'DELETE':
+        print wall_event_id
+        we = get_object_or_404(WallEvent, id=wall_event_id)
+        we.delete()
+        data = {"success":True,"message":"ok","data":[]}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
     raise Http404 
 

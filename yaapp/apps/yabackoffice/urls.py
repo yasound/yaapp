@@ -28,7 +28,8 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^invitations/(?P<invitation_id>\d+)/send/$', 'invitation_send'),
     url(r'^users', 'users'),
 
-    url(r'^wall_events/', 'wall_events'),
+    url(r'^wall_events$', 'wall_events'),
+    url(r'^wall_events/(?P<wall_event_id>\d+)$', 'wall_events'),
 
     url(r'^keyfigures/', 'keyfigures'),
     url(r'^metrics/$', 'metrics'),
