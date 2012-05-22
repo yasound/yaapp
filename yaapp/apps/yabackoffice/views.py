@@ -418,7 +418,7 @@ def users(request, user_id=None):
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=False)
             RadioUser.objects.filter(user__userprofile__id__in=ids).update(favorite=False)
-            RadioUser.objects.filter(user__userprofile__id__in=ids).filter(type=yabase_settings.EVENT_LIKE).delete()
+            WallEvent.objects.filter(user__userprofile__id__in=ids).filter(type=yabase_settings.EVENT_LIKE).delete()
         elif action == 'enable':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=True)
