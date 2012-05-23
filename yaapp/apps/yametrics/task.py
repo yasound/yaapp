@@ -2,7 +2,6 @@ from account.models import Device
 from celery.task import task
 from yabase.models import Radio
 import datetime
-from yametrics.models import TimedMetricsManager
 
 @task(ignore_result=True)
 def async_inc_global_value(key, value):  
@@ -33,15 +32,18 @@ def daily_metrics():
     ready_radio_count = Radio.objects.filter(ready=True).count()
     mm.set_daily_value('ready_radio_count', ready_radio_count)
     
+    update_animator_activity()
+    
 @task(ignore_result=True)
 def async_animator_activity(user_id):
-    from models import UserMetricsManager
+    from models import UserMetricsManager, TimedMetricsManager
     
     um = UserMetricsManager()
     doc = um.get_doc(user_id)
-    
-    last_animator_activity_date = doc['last_animator_activity_date'] if 'last_animator_activity_date' in doc else None
-    last_animator_slot = doc['last_animator_activity_slot'] if 'last_animator_activity_slot' in doc else None
+    last_animator_activity_date, last_animator_slot = None, None
+    if doc:
+        last_animator_activity_date = doc['last_animator_activity_date'] if 'last_animator_activity_date' in doc else None
+        last_animator_slot = doc['last_animator_activity_slot'] if 'last_animator_activity_slot' in doc else None
     
     now = datetime.datetime.now()
     days = 0
@@ -53,24 +55,42 @@ def async_animator_activity(user_id):
             # we skip the same action from user within one hour
             return 
 
+    # update timed document
     tm = TimedMetricsManager()
     if last_animator_slot:
         tm.inc_value(last_animator_slot, 'animator_activity', -1)
     
-    if days >= 0:
-        slot = '24h'
-    elif days in range(1, 3):
-        slot = '3d'
-    elif days in range(4, 7):
-        slot = '7d'
-    elif days in range(8, 15):
-        slot = '15d'
-    else:
-        slot = '90d'
-    
+    slot = tm.slot(days)
     tm.inc_value(slot, 'animator_activity', 1)
     
+    # update currrent user document
     um.set_value(user_id, 'last_animator_activity_slot', slot)
     um.set_value(user_id, 'last_animator_activity_date', now)
     um.inc_value(user_id, 'animator_activity', 1)
+
+def update_animator_activity():
+    """
+    periodically move timed metrics from one slot to another
+    """
+    from models import UserMetricsManager, TimedMetricsManager
+    
+    um = UserMetricsManager()
+    tm = TimedMetricsManager()
+    now = datetime.datetime.now()
+    for doc in um.all():
+        # TODO: filter on inactive clients
+        last_animator_activity_date = doc['last_animator_activity_date'] if 'last_animator_activity_date' in doc else None
+        last_animator_activity_slot = doc['last_animator_activity_slot'] if 'last_animator_activity_slot' in doc else None
         
+        days = 0
+        if last_animator_activity_date:
+            diff = (now - last_animator_activity_date)
+            days = diff.days
+
+        slot = tm.slot(days)
+        
+        if last_animator_activity_slot != slot:
+            tm.inc_value(last_animator_activity_slot, 'animator_activity', -1)
+            tm.inc_value(slot, 'animator_activity', 1)
+        
+            

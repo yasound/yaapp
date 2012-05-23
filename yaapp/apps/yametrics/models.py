@@ -1,3 +1,4 @@
+from account import signals as account_signals
 from account.models import UserProfile
 from dateutil import rrule
 from django.conf import settings
@@ -7,7 +8,7 @@ from pymongo import DESCENDING
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
-from account import signals as account_signals
+from yametrics.task import async_animator_activity
 import datetime
 
 class GlobalMetricsManager():
@@ -259,8 +260,17 @@ class UserMetricsManager():
             return None
     def get_doc(self, user_id):
         return self.collection.find_one({'db_id': user_id})
+    
+    def all(self):
+        return self.collection.find()
        
 class TimedMetricsManager():       
+    SLOT_24H    = '24h'
+    SLOT_3D     = '3d'
+    SLOT_7D     = '7d'
+    SLOT_15D    = '15d'
+    SLOT_90D    = '90d'
+
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.metrics.timed
@@ -287,6 +297,18 @@ class TimedMetricsManager():
             return doc[key]
         except:
             return None
+        
+    def slot(self, days):
+        if days < 1:
+            return self.SLOT_24H
+        elif days in range(1, 3+1):
+            return self.SLOT_3D
+        elif days in range(4, 7+1):
+            return self.SLOT_7D
+        elif days in range(8, 15+1):
+            return self.SLOT_15D
+        else:
+            return self.SLOT_90D
         
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
@@ -335,6 +357,7 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
 def new_animator_activity(user, **kwargs):
+    async_animator_activity.delay(user.id)
     async_inc_global_value.delay('new_animator_activity', 1)
 
 def new_share(radio, user, share_type, **kwargs):
