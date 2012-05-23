@@ -229,9 +229,65 @@ class RadioMetricsManager():
             return collection.find({}, {'db_id': True}).sort([(key, DESCENDING)]).limit(limit)
         else:
             return collection.find().sort([(key, DESCENDING)]).limit(limit)
-        
-        
+
+class UserMetricsManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.metrics.users
+        self.collection.ensure_index("db_id", unique=True)
     
+    def erase_metrics(self):
+        self.collection.drop()
+        
+    def inc_value(self, user_id, key, value):
+        self.collection.update({"db_id": user_id}, 
+                               {"$inc": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def set_value(self, user_id, key, value):
+        self.collection.update({"db_id": user_id}, 
+                               {"$set": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def get_value(self, user_id, key):
+        doc = self.get_doc(user_id)
+        try:
+            return doc[key]
+        except:
+            return None
+    def get_doc(self, user_id):
+        return self.collection.find_one({'db_id': user_id})
+       
+class TimedMetricsManager():       
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.metrics.timed
+        self.collection.ensure_index("type", unique=True)
+    
+    def erase_metrics(self):
+        self.collection.drop()
+        
+    def inc_value(self, ttype, key, value):
+        self.collection.update({"type": ttype}, 
+                               {"$inc": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def set_value(self, ttype, key, value):
+        self.collection.update({"type": ttype}, 
+                               {"$set": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def get_value(self, ttype, key):
+        doc = self.collection.find_one({'type': ttype})
+        try:
+            return doc[key]
+        except:
+            return None
+        
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
