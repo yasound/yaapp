@@ -296,6 +296,9 @@ class TimedMetricsManager():
             return doc[key]
         except:
             return None
+
+    def all(self):
+        return self.collection.find()
         
     def slot(self, days):
         if days < 1:
@@ -364,6 +367,7 @@ def new_share(radio, user, share_type, **kwargs):
     
     activity_key = 'share_%s_activity' % (share_type)
     async_activity.delay(user.id, activity_key)
+    async_activity.delay(user.id, 'share_activity')
     
     async_inc_global_value.delay('new_share', 1)
     key = 'new_share_%s' % (str(share_type))

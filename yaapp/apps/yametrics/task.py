@@ -106,6 +106,9 @@ def update_activities(activities):
             last_animator_activity_date = doc[key_last_date] if key_last_date in doc else None
             last_animator_activity_slot = doc[key_last_slot] if key_last_slot in doc else None
             
+            if last_animator_activity_slot is None or last_animator_activity_date is None:
+                continue
+            
             days = 0
             if last_animator_activity_date:
                 diff = (now - last_animator_activity_date)
