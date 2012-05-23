@@ -3,10 +3,10 @@ from django.test import TestCase
 from models import GlobalMetricsManager
 from yabase import tests_utils as yabase_tests_utils
 from yabase.models import Radio, SongMetadata
-from yametrics.models import TopMissingSongsManager, RadioMetricsManager,\
+from yametrics.models import TopMissingSongsManager, RadioMetricsManager, \
     TimedMetricsManager, UserMetricsManager
+from yametrics.task import async_activity, update_activities
 import datetime
-from task import async_animator_activity, update_animator_activity
 
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
@@ -155,15 +155,32 @@ class TestTimedMetrics(TestCase):
         um = UserMetricsManager()
         um.erase_metrics()
         
+    def test_slots(self):
+        tm = TimedMetricsManager()
+        self.assertEquals(tm.slot(0), tm.SLOT_24H)
+        self.assertEquals(tm.slot(1), tm.SLOT_3D)
+        self.assertEquals(tm.slot(2), tm.SLOT_3D)
+        self.assertEquals(tm.slot(3), tm.SLOT_3D)
+        
+        self.assertEquals(tm.slot(4), tm.SLOT_7D)
+        self.assertEquals(tm.slot(5), tm.SLOT_7D)
+        self.assertEquals(tm.slot(7), tm.SLOT_7D)
+
+        self.assertEquals(tm.slot(8), tm.SLOT_15D)
+        self.assertEquals(tm.slot(15), tm.SLOT_15D)
+ 
+        self.assertEquals(tm.slot(16), tm.SLOT_90D)
+        self.assertEquals(tm.slot(160), tm.SLOT_90D)
+        
     def test_async_animator_activity(self):
-        async_animator_activity(self.user.id)
+        async_activity(self.user.id, 'animator_activity')
         
         tm = TimedMetricsManager()
         docs = tm.collection.find()
         self.assertEquals(docs.count(), 1)
         self.assertEquals(docs[0]['animator_activity'], 1)
 
-        async_animator_activity(self.user.id)
+        async_activity(self.user.id, 'animator_activity')
 
         um = UserMetricsManager()
         user_doc = um.get_doc(self.user.id)
@@ -174,7 +191,7 @@ class TestTimedMetrics(TestCase):
         past = now + datetime.timedelta(days=-3)
         um.set_value(self.user.id, 'last_animator_activity_date', past)
 
-        update_animator_activity()
+        update_activities(['animator_activity'])
         docs = tm.collection.find()
         self.assertEquals(docs.count(), 2)
         for doc in docs:

@@ -32,18 +32,37 @@ def daily_metrics():
     ready_radio_count = Radio.objects.filter(ready=True).count()
     mm.set_daily_value('ready_radio_count', ready_radio_count)
     
-    update_animator_activity()
+    update_activities(['listen_activity',
+                       'animator_activity', 
+                       'share_facebook_activity',
+                       'share_twitter_activity',
+                       'share_email_activity',
+                       ])
     
 @task(ignore_result=True)
-def async_animator_activity(user_id):
+def async_activity(user_id, activity):
+    """
+    Process activity (animator for instance) :
+    
+    * update user document with the following fields:
+      * last_activity_date
+      * last_activity_slot
+      * activity
+    * update timed documents with the following fields:
+      * activity
+    """
     from models import UserMetricsManager, TimedMetricsManager
     
     um = UserMetricsManager()
     doc = um.get_doc(user_id)
-    last_animator_activity_date, last_animator_slot = None, None
+    
+    key_last_date = 'last_%s_date' % (activity) 
+    key_last_slot = 'last_%s_slot' % (activity) 
+    
+    last_animator_activity_date, last_animator_activity_slot = None, None
     if doc:
-        last_animator_activity_date = doc['last_animator_activity_date'] if 'last_animator_activity_date' in doc else None
-        last_animator_slot = doc['last_animator_activity_slot'] if 'last_animator_activity_slot' in doc else None
+        last_animator_activity_date = doc[key_last_date] if key_last_date in doc else None
+        last_animator_activity_slot = doc[key_last_slot] if key_last_slot in doc else None
     
     now = datetime.datetime.now()
     days = 0
@@ -57,20 +76,22 @@ def async_animator_activity(user_id):
 
     # update timed document
     tm = TimedMetricsManager()
-    if last_animator_slot:
-        tm.inc_value(last_animator_slot, 'animator_activity', -1)
+    if last_animator_activity_slot:
+        # remove from previous slot
+        tm.inc_value(last_animator_activity_slot, activity, -1)
     
+    # add to current slot
     slot = tm.slot(days)
-    tm.inc_value(slot, 'animator_activity', 1)
+    tm.inc_value(slot, activity, 1)
     
     # update currrent user document
-    um.set_value(user_id, 'last_animator_activity_slot', slot)
-    um.set_value(user_id, 'last_animator_activity_date', now)
-    um.inc_value(user_id, 'animator_activity', 1)
+    um.set_value(user_id, key_last_slot, slot)
+    um.set_value(user_id, key_last_date, now)
+    um.inc_value(user_id, activity, 1)
 
-def update_animator_activity():
+def update_activities(activities):
     """
-    periodically move timed metrics from one slot to another
+    Periodically move timed metrics from one slot to another
     """
     from models import UserMetricsManager, TimedMetricsManager
     
@@ -79,18 +100,21 @@ def update_animator_activity():
     now = datetime.datetime.now()
     for doc in um.all():
         # TODO: filter on inactive clients
-        last_animator_activity_date = doc['last_animator_activity_date'] if 'last_animator_activity_date' in doc else None
-        last_animator_activity_slot = doc['last_animator_activity_slot'] if 'last_animator_activity_slot' in doc else None
-        
-        days = 0
-        if last_animator_activity_date:
-            diff = (now - last_animator_activity_date)
-            days = diff.days
-
-        slot = tm.slot(days)
-        
-        if last_animator_activity_slot != slot:
-            tm.inc_value(last_animator_activity_slot, 'animator_activity', -1)
-            tm.inc_value(slot, 'animator_activity', 1)
-        
+        for activity in activities:
+            key_last_date = 'last_%s_date' % (activity) 
+            key_last_slot = 'last_%s_slot' % (activity) 
+            last_animator_activity_date = doc[key_last_date] if key_last_date in doc else None
+            last_animator_activity_slot = doc[key_last_slot] if key_last_slot in doc else None
+            
+            days = 0
+            if last_animator_activity_date:
+                diff = (now - last_animator_activity_date)
+                days = diff.days
+    
+            slot = tm.slot(days)
+            
+            if last_animator_activity_slot != slot:
+                tm.inc_value(last_animator_activity_slot, activity, -1)
+                tm.inc_value(slot, activity, 1)
+            
             

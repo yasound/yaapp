@@ -2,13 +2,12 @@ from account import signals as account_signals
 from account.models import UserProfile
 from dateutil import rrule
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.db.models import Q, Count, signals
+from django.db.models import Count, signals
 from pymongo import DESCENDING
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
-from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
-from yametrics.task import async_animator_activity
+from yabase.models import Radio, SongMetadata
+from yametrics.task import async_activity
 import datetime
 
 class GlobalMetricsManager():
@@ -312,6 +311,7 @@ class TimedMetricsManager():
         
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
+    async_activity.delay(user.id, 'listen_activity')
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
@@ -357,10 +357,14 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
 def new_animator_activity(user, **kwargs):
-    async_animator_activity.delay(user.id)
+    async_activity.delay(user.id, 'animator_activity')
     async_inc_global_value.delay('new_animator_activity', 1)
 
 def new_share(radio, user, share_type, **kwargs):
+    
+    activity_key = 'share_%s_activity' % (share_type)
+    async_activity.delay(user.id, activity_key)
+    
     async_inc_global_value.delay('new_share', 1)
     key = 'new_share_%s' % (str(share_type))
     async_inc_global_value.delay(key, 1)
