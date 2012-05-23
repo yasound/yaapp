@@ -120,7 +120,7 @@
 
 <div id="fb-root"></div>
 <script>
-  window.fbAsyncInit = function() {
+/*   window.fbAsyncInit = function() {
     FB.init({
       appId      : '{{ facebook_app_id }}', // App ID
       status     : true, // check login status
@@ -139,7 +139,7 @@
      js.src = "//connect.facebook.net/en_US/all.js";
      ref.parentNode.insertBefore(js, ref);
    }(document));
-</script>
+ */</script>
 
 
 
@@ -191,16 +191,18 @@
 				<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
 				<a class="addthis_counter addthis_pill_style"></a>
 				</div>
-				<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+<!-- 				<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
 				<script type="text/javascript" src="https://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f910520446e8625"></script>
-				<!-- AddThis Button END -->
+ -->				<!-- AddThis Button END -->
             
             </div>
         </div>
       </div>
     </div>
     
-<div class='container-fluid' id='webapp-content'>
+<div class='container-fluid' id='webapp-content'>{% block content%}{%endblock%}
+</div>
+<div class='container-fluid'>
     <hr>
     <footer>
     <p>&copy; Yasound 2012</p>

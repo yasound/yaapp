@@ -34,7 +34,6 @@ import settings as yabase_settings
 import uuid
 from django.views.generic.base import View
 
-
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
@@ -820,7 +819,11 @@ class WebAppView(View):
         return context, 'yabase/webapp.html'  
 
     def search(self, request, context, *args, **kwargs):
-        return context, 'yabase/webapp.html'  
+        from yasearch.models import search_radio
+        query = kwargs['query']
+        
+        result = search_radio(query)
+        return context, 'yabase/app/searchPage.html'  
 
 
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home'):
