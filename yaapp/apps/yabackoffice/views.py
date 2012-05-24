@@ -686,6 +686,28 @@ def metrics_graph_animators(request):
 
 @csrf_exempt
 @login_required
+def metrics_graph_listen(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    tm = TimedMetricsManager()
+    metrics = tm.all()
+    data = []    
+    for metric in metrics: 
+        data.append({
+            'timestamp': metric['type'],
+            'listen_activity': metric['listen_activity'] if 'listen_activity' in metric else 0 
+        })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
 def metrics_graph_shares(request):
     if not request.user.is_superuser:
         raise Http404()
