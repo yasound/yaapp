@@ -1,4 +1,4 @@
-from celery.decorators import task
+from celery.task import task
 
 # async stuff
 @task(ignore_result=True)
