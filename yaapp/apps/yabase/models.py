@@ -1453,6 +1453,6 @@ class ApnsCertificate(models.Model):
     sandbox = models.BooleanField()
     certificate_file = models.CharField(max_length=255)
     objects = ApnsCertificateManager()
+
+        
     
-
-

@@ -56,6 +56,7 @@ CELERY_IMPORTS = (
     "account.task", 
     "emailconfirmation.task", 
     "yametrics.task",
+    "yahistory.task",
 )
 
 if LOCAL_MODE:
@@ -344,6 +345,7 @@ INSTALLED_APPS = (
     'djcelery',
     'taggit',
     'test_utils',
+    'bootstrap',
     #'django-iphone-push',
     'yagraph',
     'yabackoffice',
@@ -360,7 +362,7 @@ INSTALLED_APPS = (
     'yametrics',
     'yamenu',
     'yamessage',
-    'bootstrap',
+    'yahistory',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

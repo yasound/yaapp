@@ -7,7 +7,7 @@ from pymongo import DESCENDING
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, SongMetadata
-from yametrics.task import async_activity
+from yametrics.task import async_activity, async_check_if_new_listener
 import datetime
 
 class GlobalMetricsManager():
@@ -322,6 +322,7 @@ class TimedMetricsManager():
 def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
         async_activity.delay(user.id, 'listen_activity')
+        async_check_if_new_listener(user.id)
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
 
 def user_stopped_listening_handler(sender, radio, user, duration, **kwargs):

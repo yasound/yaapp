@@ -2,6 +2,7 @@ from account.models import Device
 from celery.task import task
 from yabase.models import Radio
 import datetime
+from yahistory.models import UserHistory
 
 @task(ignore_result=True)
 def async_inc_global_value(key, value):  
@@ -119,5 +120,14 @@ def update_activities(activities):
             if last_animator_activity_slot != slot:
                 tm.inc_value(last_animator_activity_slot, activity, -1)
                 tm.inc_value(slot, activity, 1)
-            
-            
+    
+@task(ignore_result=True)        
+def async_check_if_new_listener(user_id):
+    """
+    Check if it is the first listening time for the user
+    """
+    uh = UserHistory()
+    docs = uh.history_for_user(user_id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
+    if docs is None or docs.count() == 0:
+        async_inc_global_value('new_listeners', 1)
+        
