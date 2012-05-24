@@ -1,4 +1,5 @@
 Ext.BLANK_IMAGE_URL = '/media/extjs/resources/images/default/s.gif';
+Ext.chart.Chart.CHART_URL = '/media/extjs/resources/charts.swf';
 Ext.namespace("Yasound.Backoffice.UI", "Yasound.Backoffice.Handler", "Yasound.Backoffice.Data");
 Ext.namespace("Yasound.Radios.UI", "Yasound.Radios.Handler", "Yasound.Radios.Data");
 Ext.namespace("Yasound.Upload.UI", "Yasound.Upload.Handler", "Yasound.Upload.Data");
