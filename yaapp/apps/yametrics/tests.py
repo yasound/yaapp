@@ -169,8 +169,13 @@ class TestTimedMetrics(TestCase):
         self.assertEquals(tm.slot(8), tm.SLOT_15D)
         self.assertEquals(tm.slot(15), tm.SLOT_15D)
  
-        self.assertEquals(tm.slot(16), tm.SLOT_90D)
-        self.assertEquals(tm.slot(160), tm.SLOT_90D)
+        self.assertEquals(tm.slot(16), tm.SLOT_30D)
+        self.assertEquals(tm.slot(20), tm.SLOT_30D)
+
+        self.assertEquals(tm.slot(31), tm.SLOT_90D)
+        self.assertEquals(tm.slot(40), tm.SLOT_90D)
+
+        self.assertEquals(tm.slot(160), tm.SLOT_90D_MORE)
         
     def test_async_animator_activity(self):
         async_activity(self.user.id, 'animator_activity')

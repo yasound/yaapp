@@ -264,11 +264,13 @@ class UserMetricsManager():
         return self.collection.find()
        
 class TimedMetricsManager():       
-    SLOT_24H    = '24h'
-    SLOT_3D     = '3d'
-    SLOT_7D     = '7d'
-    SLOT_15D    = '15d'
-    SLOT_90D    = '90d'
+    SLOT_24H        = '24h'
+    SLOT_3D         = '3d'
+    SLOT_7D         = '7d'
+    SLOT_15D        = '15d'
+    SLOT_30D        = '30d'
+    SLOT_90D        = '90d'
+    SLOT_90D_MORE   = '90d_more'
 
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -309,8 +311,12 @@ class TimedMetricsManager():
             return self.SLOT_7D
         elif days in range(8, 15+1):
             return self.SLOT_15D
-        else:
+        elif days in range(16, 30+1):
+            return self.SLOT_30D
+        elif days in range(31, 90+1):
             return self.SLOT_90D
+        else:
+            return self.SLOT_90D_MORE
         
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
