@@ -20,8 +20,17 @@ case "$1" in
     echo "Stopping server"
     /sbin/start-stop-daemon --stop --pidfile $PIDFILE --verbose
     ;;
+  restart)
+    echo "Restarting server"
+    /sbin/start-stop-daemon --stop --pidfile $PIDFILE --verbose
+    /sbin/start-stop-daemon --start --pidfile $PIDFILE \
+        --user customer --group customer \
+        -b --make-pidfile \
+        --chuid customer \
+        --exec $DAEMON $ARGS
+    ;;
   *)
-    echo "Usage: /etc/init.d/yapush {start|stop}"
+    echo "Usage: /etc/init.d/yapush {start|stop|restart}"
     exit 1
     ;;
 esac
