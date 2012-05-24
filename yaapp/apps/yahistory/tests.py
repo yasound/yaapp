@@ -28,4 +28,7 @@ class TestGlobalMetricsManager(TestCase):
         doc = docs[0]
 
         self.assertEquals(doc['db_id'], self.user.id)
+
+        docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
+        self.assertEquals(docs.count(), 1)
                 

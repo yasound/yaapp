@@ -33,13 +33,19 @@ class UserHistory():
         }
         self.add_event(user_id, UserHistory.ETYPE_LISTEN_RADIO, 'radio', data)
     
-    def history_for_user(self, user_id, start_date=None, end_date=None):
-        if end_date is None:
-            end_date = datetime.date.now()
-        if start_date is None:
-            start_date = start_date + datetime.timedelta(days=-1)
-        return self.collection.find({'db_id': user_id,
-                                      'date': {"$gte": start_date, "$lte": end_date}}).sort([('start_date', DESCENDING)])
+    def history_for_user(self, user_id, start_date=None, end_date=None, infinite=False, etype=None):
+        query = {'db_id': user_id}
+        if not infinite:
+            if end_date is None:
+                end_date = datetime.date.now()
+            if start_date is None:
+                start_date = start_date + datetime.timedelta(days=-1)
+                
+            query['date'] = {"$gte": start_date, "$lte": end_date}
+        if etype:
+            query['type'] = etype
+            
+        return self.collection.find(query).sort([('start_date', DESCENDING)])
     
 # event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):

@@ -39,6 +39,18 @@
 
         <tr>
             <td>
+                {% trans "Number of people who have already listened to at least one radio" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_listeners }}
+            </td>
+            {% endfor %}
+        </tr>
+
+
+        <tr>
+            <td>
                 {% trans "Listening time" %}
             </td>
             {% for metric in metrics %}
