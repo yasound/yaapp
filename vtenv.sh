@@ -28,7 +28,7 @@ else
     cd ../../..
 fi
 if [ ! -f ./fab ];then
-    echo " * Now you can type ./fab prepare to init your dir"
+    echo " * Now you can type ./local_install.sh to init your *local* installation"
     ln -s vtenv/bin/fab fab
 fi
 echo " * Done"
