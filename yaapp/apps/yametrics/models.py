@@ -320,7 +320,8 @@ class TimedMetricsManager():
         
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
-    async_activity.delay(user.id, 'listen_activity')
+    if not user.is_anonymous():
+        async_activity.delay(user.id, 'listen_activity')
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
