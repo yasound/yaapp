@@ -22,7 +22,7 @@ case "$1" in
     ;;
   restart)
     echo "Restarting server"
-    /sbin/start-stop-daemon --stop --pidfile $PIDFILE --verbose
+    /sbin/start-stop-daemon --stop --pidfile $PIDFILE --verbose --oknodo
     /sbin/start-stop-daemon --start --pidfile $PIDFILE \
         --user customer --group customer \
         -b --make-pidfile \
