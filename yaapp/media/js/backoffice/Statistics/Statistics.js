@@ -100,6 +100,31 @@ Yasound.Statistics.UI.AnimatorsGraph = function () {
     }
 }
 
+Yasound.Statistics.UI.ListenGraph = function () {
+    var chart = Ext.ComponentMgr.create({
+        height: 300,
+        xtype: 'chartpanel',
+        url: '/yabackoffice/metrics/graphs/listen/',
+        fields: [ 'timestamp', 'listen_activity' ],
+        xField: 'timestamp',
+        yField: 'listen_activity'
+    });
+    return {
+        title: gettext('Listen activity'),
+        id: 'listen-graph',
+        items: [ chart ],
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ],
+        reload: function (component) {
+            chart.reload(chart);
+        }
+    }
+}
+
 Yasound.Statistics.UI.SharesGraph = function () {
     var chart = Ext.ComponentMgr.create({
         height: 300,
@@ -178,7 +203,7 @@ Yasound.Statistics.UI.Panel = function () {
                 }, {
                     columnWidth: .50,
                     style: 'padding:10px 0 10px 10px',
-                    items: [ {
+                    items: [ Yasound.Statistics.UI.ListenGraph(), {
                         title: gettext('Key figures'),
                         layout: 'fit',
                         id: 'stats-keyfigures',
@@ -216,6 +241,9 @@ Yasound.Statistics.UI.Panel = function () {
 
             var sharesGraph = Ext.getCmp('shares-graph');
             sharesGraph.reload(sharesGraph);
+
+            var listenGraph = Ext.getCmp('listen-graph');
+            listenGraph.reload(listenGraph);
         }
     };
 }
