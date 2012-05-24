@@ -1,13 +1,13 @@
+from account import signals as account_signals
 from account.models import UserProfile
 from dateutil import rrule
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.db.models import Q, Count, signals
+from django.db.models import Count, signals
 from pymongo import DESCENDING
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
-from yabase.models import Radio, WallEvent, RadioUser, SongMetadata
-from account import signals as account_signals
+from yabase.models import Radio, SongMetadata
+from yametrics.task import async_activity
 import datetime
 
 class GlobalMetricsManager():
@@ -229,11 +229,98 @@ class RadioMetricsManager():
             return collection.find({}, {'db_id': True}).sort([(key, DESCENDING)]).limit(limit)
         else:
             return collection.find().sort([(key, DESCENDING)]).limit(limit)
-        
-        
+
+class UserMetricsManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.metrics.users
+        self.collection.ensure_index("db_id", unique=True)
     
+    def erase_metrics(self):
+        self.collection.drop()
+        
+    def inc_value(self, user_id, key, value):
+        self.collection.update({"db_id": user_id}, 
+                               {"$inc": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def set_value(self, user_id, key, value):
+        self.collection.update({"db_id": user_id}, 
+                               {"$set": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def get_value(self, user_id, key):
+        doc = self.get_doc(user_id)
+        try:
+            return doc[key]
+        except:
+            return None
+    def get_doc(self, user_id):
+        return self.collection.find_one({'db_id': user_id})
+    
+    def all(self):
+        return self.collection.find()
+       
+class TimedMetricsManager():       
+    SLOT_24H        = '24h'
+    SLOT_3D         = '3d'
+    SLOT_7D         = '7d'
+    SLOT_15D        = '15d'
+    SLOT_30D        = '30d'
+    SLOT_90D        = '90d'
+    SLOT_90D_MORE   = '90d_more'
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.metrics.timed
+        self.collection.ensure_index("type", unique=True)
+    
+    def erase_metrics(self):
+        self.collection.drop()
+        
+    def inc_value(self, ttype, key, value):
+        self.collection.update({"type": ttype}, 
+                               {"$inc": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def set_value(self, ttype, key, value):
+        self.collection.update({"type": ttype}, 
+                               {"$set": {key: value}}, 
+                               upsert=True,
+                               safe=True)
+        
+    def get_value(self, ttype, key):
+        doc = self.collection.find_one({'type': ttype})
+        try:
+            return doc[key]
+        except:
+            return None
+
+    def all(self):
+        return self.collection.find()
+        
+    def slot(self, days):
+        if days < 1:
+            return self.SLOT_24H
+        elif days in range(1, 3+1):
+            return self.SLOT_3D
+        elif days in range(4, 7+1):
+            return self.SLOT_7D
+        elif days in range(8, 15+1):
+            return self.SLOT_15D
+        elif days in range(16, 30+1):
+            return self.SLOT_30D
+        elif days in range(31, 90+1):
+            return self.SLOT_90D
+        else:
+            return self.SLOT_90D_MORE
+        
 ## Event handlers
 def user_started_listening_handler(radio, user, **kwargs):
+    async_activity.delay(user.id, 'listen_activity')
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
 
 def user_stopped_listening_handler(radio, user, duration, **kwargs):
@@ -279,9 +366,15 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
 def new_animator_activity(user, **kwargs):
+    async_activity.delay(user.id, 'animator_activity')
     async_inc_global_value.delay('new_animator_activity', 1)
 
 def new_share(radio, user, share_type, **kwargs):
+    
+    activity_key = 'share_%s_activity' % (share_type)
+    async_activity.delay(user.id, activity_key)
+    async_activity.delay(user.id, 'share_activity')
+    
     async_inc_global_value.delay('new_share', 1)
     key = 'new_share_%s' % (str(share_type))
     async_inc_global_value.delay(key, 1)

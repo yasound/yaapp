@@ -26,7 +26,8 @@ from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
 from yainvitation.models import Invitation
-from yametrics.models import GlobalMetricsManager, TopMissingSongsManager
+from yametrics.models import GlobalMetricsManager, TopMissingSongsManager,\
+    TimedMetricsManager
 from yaref.models import YasoundSong
 import datetime
 import requests
@@ -667,15 +668,14 @@ def metrics_graph_animators(request):
     if not request.user.is_superuser:
         raise Http404()
     
-    mm = GlobalMetricsManager()
-    metrics = mm.get_graph_metrics(['new_animator_activity'])
+    tm = TimedMetricsManager()
+    metrics = tm.all()
     data = []    
     for metric in metrics: 
-        if 'new_animator_activity' in metric:
-            data.append({
-                'timestamp': metric['timestamp'],
-                'animator_activity': metric['new_animator_activity']
-            })
+        data.append({
+            'timestamp': metric['type'],
+            'animator_activity': metric['animator_activity'] if 'animator_activity' in metric else 0 
+        })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
@@ -690,28 +690,17 @@ def metrics_graph_shares(request):
     if not request.user.is_superuser:
         raise Http404()
     
-    mm = GlobalMetricsManager()
-    metrics = mm.get_graph_metrics(['new_share', 'new_share_facebook', 'new_share_twitter', 'new_share_email'])
+    tm = TimedMetricsManager()
+    metrics = tm.all()
     data = []    
     for metric in metrics:
-        if 'new_share' in metric:
-            new_share_facebook = 0
-            new_share_twitter = 0
-            new_share_email = 0
-            if 'new_share_facebook' in metric:
-                new_share_facebook = metric['new_share_facebook']
-            if 'new_share_twitter' in metric:
-                new_share_twitter = metric['new_share_twitter']
-            if 'new_share_email' in metric:
-                new_share_email = metric['new_share_email']
-            
-            data.append({
-                'timestamp': metric['timestamp'],
-                'new_share': metric['new_share'],
-                'new_share_facebook': new_share_facebook,
-                'new_share_twitter': new_share_twitter,
-                'new_share_email': new_share_email,
-            })
+        data.append({
+            'timestamp': metric['type'],
+            'share_activity': metric['share_activity'] if 'share_activity' in metric else 0,
+            'share_facebook_activity': metric['share_facebook_activity'] if 'share_facebook_activity' in metric else 0,
+            'share_twitter_activity': metric['share_twitter_activity'] if 'share_twitter_activity' in metric else 0,
+            'share_email_activity': metric['share_email_activity'] if 'share_email_activity' in metric else 0,
+        })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
