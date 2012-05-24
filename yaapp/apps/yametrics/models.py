@@ -319,18 +319,18 @@ class TimedMetricsManager():
             return self.SLOT_90D_MORE
         
 ## Event handlers
-def user_started_listening_handler(radio, user, **kwargs):
+def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
         async_activity.delay(user.id, 'listen_activity')
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
 
-def user_stopped_listening_handler(radio, user, duration, **kwargs):
+def user_stopped_listening_handler(sender, radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
     async_inc_global_value.delay('listening_count', 1)
 
     async_inc_radio_value.delay(radio.id, 'current_users', -1)
 
-def new_wall_event_handler(wall_event, **kwargs):
+def new_wall_event_handler(sender, wall_event, **kwargs):
     we_type = wall_event.type
     if we_type == yabase_settings.EVENT_MESSAGE:
         async_inc_global_value.delay('new_wall_messages', 1)
@@ -366,11 +366,11 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
     else:
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
-def new_animator_activity(user, **kwargs):
+def new_animator_activity(sender, user, **kwargs):
     async_activity.delay(user.id, 'animator_activity')
     async_inc_global_value.delay('new_animator_activity', 1)
 
-def new_share(radio, user, share_type, **kwargs):
+def new_share(sender, radio, user, share_type, **kwargs):
     
     activity_key = 'share_%s_activity' % (share_type)
     async_activity.delay(user.id, activity_key)
