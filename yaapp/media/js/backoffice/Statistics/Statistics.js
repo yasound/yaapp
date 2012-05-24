@@ -128,25 +128,25 @@ Yasound.Statistics.UI.ListenGraph = function () {
 Yasound.Statistics.UI.SharesGraph = function () {
     var chart = Ext.ComponentMgr.create({
         height: 300,
-        xtype: 'stackedbarchart',
+        xtype: 'stackedcolumnchart',
         store: new Ext.data.JsonStore({
             url: '/yabackoffice/metrics/graphs/shares/',
             root: 'data',
             idProperty: 'timestamp',
             fields: [ 'timestamp', 'share_facebook_activity', 'share_twitter_activity', 'share_email_activity' ]
         }),
-        yField: 'timestamp',
-        xAxis: new Ext.chart.NumericAxis({
-            stackingEnabled: true
+        xField: 'timestamp',
+        yAxis: new Ext.chart.NumericAxis({
+            stackingEnabled: false
         }),
         series: [ {
-            xField: 'share_facebook_activity',
+            yField: 'share_facebook_activity',
             displayName: 'Facebook'
         }, {
-            xField: 'share_twitter_activity',
+            yField: 'share_twitter_activity',
             displayName: 'Twitter'
         }, {
-            xField: 'share_email_activity',
+            yField: 'share_email_activity',
             displayName: 'email'
         } ],
         reload: function(component) {
