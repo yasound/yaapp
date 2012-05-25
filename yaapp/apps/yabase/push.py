@@ -6,10 +6,9 @@ import json
 
 logger = logging.getLogger("yaapp.yabase")
 
-REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
 
 def push_wall_event(wall_event, **kwargs):
-    red = Redis(REDIS_HOST)
+    red = Redis(host=settings.PUSH_REDIS_HOST, db=settings.PUSH_REDIS_DB)
     channel = 'radio.%s' % (wall_event.radio.id)
     logger.info("publishing message to %s" % (channel)) 
     
@@ -25,7 +24,7 @@ def push_wall_event(wall_event, **kwargs):
     red.publish(channel, json_data)
 
 def push_current_song(radio, song_json, **kwargs):
-    red = Redis(REDIS_HOST)
+    red = Redis(host=settings.PUSH_REDIS_HOST, db=settings.PUSH_REDIS_DB)
     channel = 'radio.%s' % (radio.id)
     data = {
         'event_type': 'song',
