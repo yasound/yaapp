@@ -1321,7 +1321,7 @@ class WallEvent(models.Model):
         }
         subject, message = EmailTemplate.objects.generate_mail(EmailTemplate.EMAIL_TYPE_ABUSE, context)
         subject = "".join(subject.splitlines())
-        send_mail(subject, message, yaapp_settings.DEFAULT_FROM_EMAIL, [yaapp_settings.MODERATORS])
+        send_mail(subject, message, yaapp_settings.DEFAULT_FROM_EMAIL, [a[1] for a in yaapp_settings.MODERATORS])
         
     @property
     def user_picture_url(self):
