@@ -300,9 +300,18 @@ def delete_message(request, message_id):
 
 @check_api_key(methods=['POST',])
 def report_message_as_abuse(request, message_id):
+    logger.debug('report_message_as_abuse called with message_id %s' % (message_id))
+
     wall_event = get_object_or_404(WallEvent, pk=message_id)
+    logger.debug('wall event found: %s' % (message_id))
+    
+    logger.debug('reporting message message')
     wall_event.report_as_abuse(request.user)
+    
+    logger.debug('logging information into metrics')
     yabase_signals.new_moderator_abuse_msg_activity.send(sender=request.user, user=request.user)
+    
+    logger.debug('ok, done')
     response = {'success':True}
     res = json.dumps(response)
     return HttpResponse(res)
