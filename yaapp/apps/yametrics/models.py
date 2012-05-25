@@ -371,6 +371,10 @@ def new_animator_activity(sender, user, **kwargs):
     async_activity.delay(user.id, 'animator_activity')
     async_inc_global_value.delay('new_animator_activity', 1)
 
+def new_moderator_del_msg_activity(sender, user, **kwargs):
+    async_activity.delay(user.id, 'moderator_del_msg_activity')
+    async_inc_global_value.delay('new_moderator_del_msg_activity', 1)
+
 def new_share(sender, radio, user, share_type, **kwargs):
     
     activity_key = 'share_%s_activity' % (share_type)
@@ -393,6 +397,7 @@ def install_handlers():
     yabase_signals.favorite_radio.connect(favorite_radio_handler)
     yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
     yabase_signals.new_animator_activity.connect(new_animator_activity)
+    yabase_signals.new_moderator_del_msg_activity.connect(new_moderator_del_msg_activity)
     yabase_signals.radio_shared.connect(new_share)
     account_signals.new_device_registered.connect(new_device_registered)
     
