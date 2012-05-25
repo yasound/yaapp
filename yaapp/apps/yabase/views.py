@@ -298,6 +298,7 @@ def delete_message(request, message_id):
     res = json.dumps(response)
     return HttpResponse(res)
 
+@csrf_exempt
 @check_api_key(methods=['POST',])
 def report_message_as_abuse(request, message_id):
     logger.debug('report_message_as_abuse called with message_id %s' % (message_id))
