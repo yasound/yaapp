@@ -971,6 +971,38 @@ class TestWallPost(TestCase):
             self.client.post(reverse('yabase.views.like_song', args=[song.id]))
             self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
 
+    def test_post_message(self):
+        redis = Mock(name='redis')
+        redis.publish = Mock()      
+        with patch('yabase.push.Redis') as mock_redis:
+            mock_redis.return_value = redis
+
+            # post message            
+            res = self.client.post(reverse('yabase.views.post_message', args=[self.radio.uuid]), {'message': 'hello, world'})
+            self.assertEquals(res.status_code, 200)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 1)
+            
+            # delete posted message
+            message = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)[0]
+            
+            res = self.client.delete(reverse('yabase.views.delete_message', args=[message.id]))
+            self.assertEquals(res.status_code, 200)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 0)
+            
+            
+            # post to another radio
+            other_radio = Radio.objects.create(name='other')
+            res = self.client.post(reverse('yabase.views.post_message', args=[other_radio.uuid]), {'message': 'hello, world'})
+            self.assertEquals(res.status_code, 200)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 1)
+            
+            # delete posted message : impossible because user is not the owner of radio
+            message = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE, radio=other_radio)[0]
+            
+            res = self.client.delete(reverse('yabase.views.delete_message', args=[message.id]))
+            self.assertEquals(res.status_code, 401)
+            
+
 class TestDuplicate(TestCase):
     def setUp(self):
         erase_index()
