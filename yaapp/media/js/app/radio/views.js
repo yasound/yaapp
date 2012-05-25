@@ -207,15 +207,14 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
             // so we remove the last one in order to avoid infinite addition to
             // the wall
             if (this.views.length >= this.collection.perPage) {
-                this.views[0].close();
-                this.views.splice(0, 1);
+                var lastView = this.views.pop();
+                lastView.close();
             }
+            this.views.splice(0,0, view);
         } else {
             $(this.el).append(view.render().el);
+            this.views.push(view);
         }
-
-        this.views.push(view);
-
     }
 });
 
