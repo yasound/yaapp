@@ -50,6 +50,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+MODERATORS = (
+    ('Jerome Blondon', 'jerome@yasound.com'),
+)
+
 CELERY_IMPORTS = (
     "yabase.task", 
     "stats.task", 
@@ -562,7 +566,10 @@ if PRODUCTION_MODE:
 elif DEVELOPMENT_MODE or LOCAL_MODE:
     YASOUND_TWITTER_APP_CONSUMER_KEY = 'iLkxaRcY8QKku0UhaMvPQ'
     YASOUND_TWITTER_APP_CONSUMER_SECRET = 'rZYlrG4KXIat3nNJ3U8qXniQBSkJu8PjI1v7sCTHg'
-    
+
+PUSH_REDIS_HOST = 'localhost'
+PUSH_REDIS_DB = 0
+
 if LOCAL_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
     YASOUND_PUSH_URL = 'http://localhost:9000/'
@@ -575,6 +582,8 @@ elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
     YASOUND_PUSH_URL = 'https://api.yasound.com:9000/'
     ENABLE_PUSH = True
+    PUSH_REDIS_HOST = 'yas-sql-01'
+    PUSH_REDIS_DB = 2
 
 
 # constants needed by django-social-auth, see https://github.com/omab/django-social-auth#twitter

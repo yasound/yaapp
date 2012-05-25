@@ -38,6 +38,8 @@ def daily_metrics():
                        'share_facebook_activity',
                        'share_twitter_activity',
                        'share_email_activity',
+                       'moderator_del_msg_activity',
+                       'moderator_abuse_msg_activity',
                        ])
     
 @task(ignore_result=True)

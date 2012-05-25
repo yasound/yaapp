@@ -1002,7 +1002,21 @@ class TestWallPost(TestCase):
             res = self.client.delete(reverse('yabase.views.delete_message', args=[message.id]))
             self.assertEquals(res.status_code, 401)
             
+    def test_report_message(self):
+        redis = Mock(name='redis')
+        redis.publish = Mock()      
+        with patch('yabase.push.Redis') as mock_redis:
+            mock_redis.return_value = redis
 
+            # post message            
+            res = self.client.post(reverse('yabase.views.post_message', args=[self.radio.uuid]), {'message': 'hello, world'})
+            self.assertEquals(res.status_code, 200)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 1)
+            
+            message = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)[0]
+            res = self.client.post(reverse('yabase.views.report_message_as_abuse', args=[message.id]))
+            self.assertEquals(res.status_code, 200)
+            
 class TestDuplicate(TestCase):
     def setUp(self):
         erase_index()
