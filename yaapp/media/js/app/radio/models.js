@@ -26,11 +26,12 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
         this.reset();
         this.radio = radio;
         this.url = '/api/v1/radio/' + this.radio.get('id') + '/wall/';
+        
         return this;
     },
 
     comparator: function(wallEvent) {
-        return wallEvent.get("id");
+        return -parseInt(wallEvent.get("id"));
     },
     
     fetchFirst: function() {
