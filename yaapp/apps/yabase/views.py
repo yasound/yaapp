@@ -278,14 +278,21 @@ def post_message(request, radio_id):
 
 @check_api_key(methods=['PUT', 'DELETE'])
 def delete_message(request, message_id):
+    logger.debug('delete_message called with message_id %s' % (message_id))
     wall_event = get_object_or_404(WallEvent, pk=message_id)
+    logger.debug('wall event found' % (message_id))
     
     if request.user != wall_event.radio.creator:
+        logger.debug('user is not the owner of the radio, delete is impossible')
         return HttpResponse(status=401)
     
-    yabase_signals.new_moderator_del_msg_activity.send(sender=request.user, user=request.user)
-    
+    logger.debug('deleting message')
     wall_event.delete()
+
+    logger.debug('logging information into metrics')
+    yabase_signals.new_moderator_del_msg_activity.send(sender=request.user, user=request.user)
+
+    logger.debug('ok, done')
     
     response = {'success':True}
     res = json.dumps(response)
