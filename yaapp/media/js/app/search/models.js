@@ -34,8 +34,8 @@ Yasound.Data.Models.RadioSearchResults = Backbone.Paginator.requestPager.extend(
             return lastObject.get('id');
         }
     },
-    comparator: function(wallEvent) {
-        return wallEvent.get("id");
+    comparator: function(obj) {
+        return -parseInt(obj.get("id"));
     },
     
     fetchFirst: function() {
