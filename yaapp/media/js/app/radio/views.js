@@ -192,15 +192,17 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         var view = new Yasound.Views.WallEvent({
             model: wallEvent
         });
-
-        var lastView = _.max(this.views, function (view) {
-            return view.model.get('id');
-        });
-        var lastId = 0;
-        if (lastView) {
-            lastId = lastView.model.id;
+        
+        var insertOnTop = false;
+        if (this.views.length > 0) {
+            var lastId = parseInt(this.views[0].model.get('id'));
+            var currentId = parseInt(wallEvent.id);
+            if (currentId > lastId) {
+                insertOnTop = true;
+            }
         }
-        if (currentId >= lastId) {
+        
+        if (insertOnTop) {
             $(this.el).prepend(view.render().el);
             // in case of prepend, it means that the wall has been refreshed
             // with new item
