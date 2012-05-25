@@ -291,6 +291,15 @@ def delete_message(request, message_id):
     res = json.dumps(response)
     return HttpResponse(res)
 
+@check_api_key(methods=['POST',])
+def report_message_as_abuse(request, message_id):
+    wall_event = get_object_or_404(WallEvent, pk=message_id)
+    wall_event.report_as_abuse(request.user)
+    yabase_signals.new_moderator_abuse_msg_activity.send(sender=request.user, user=request.user)
+    response = {'success':True}
+    res = json.dumps(response)
+    return HttpResponse(res)
+
 @csrf_exempt
 def neutral_song(request, song_id):
     if not check_api_key_Authentication(request):

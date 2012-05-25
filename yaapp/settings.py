@@ -50,6 +50,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+MODERATORS = (
+    ('Jerome Blondon', 'jerome@yasound.com'),
+)
+
 CELERY_IMPORTS = (
     "yabase.task", 
     "stats.task", 

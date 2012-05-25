@@ -28,6 +28,7 @@ import os
 import md5
 from yametrics.matching_errors import MatchingErrorsManager
 from yasearch.utils import get_simplified_name
+from django.core.mail import send_mail
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -1312,6 +1313,16 @@ class WallEvent(models.Model):
             
             yabase_signals.new_wall_event.send(sender=self, wall_event=self)
     
+    def report_as_abuse(self, user):
+        from emailconfirmation.models import EmailTemplate
+        context = {
+            "user": user,
+            "message": self,
+        }
+        subject, message = EmailTemplate.objects.generate_mail(EmailTemplate.EMAIL_TYPE_ABUSE, context)
+        subject = "".join(subject.splitlines())
+        send_mail(subject, message, yaapp_settings.DEFAULT_FROM_EMAIL, [yaapp_settings.MODERATORS])
+        
     @property
     def user_picture_url(self):
         if self.user_picture:
