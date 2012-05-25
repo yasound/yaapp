@@ -280,7 +280,7 @@ def post_message(request, radio_id):
 def delete_message(request, message_id):
     logger.debug('delete_message called with message_id %s' % (message_id))
     wall_event = get_object_or_404(WallEvent, pk=message_id)
-    logger.debug('wall event found' % (message_id))
+    logger.debug('wall event found: %s' % (message_id))
     
     if request.user != wall_event.radio.creator:
         logger.debug('user is not the owner of the radio, delete is impossible')
