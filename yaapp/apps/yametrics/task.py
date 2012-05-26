@@ -35,6 +35,7 @@ def daily_metrics():
     
     update_activities(['listen_activity',
                        'animator_activity', 
+                       'share_activity',
                        'share_facebook_activity',
                        'share_twitter_activity',
                        'share_email_activity',
@@ -122,6 +123,9 @@ def update_activities(activities):
             if last_animator_activity_slot != slot:
                 tm.inc_value(last_animator_activity_slot, activity, -1)
                 tm.inc_value(slot, activity, 1)
+                
+                # replace last lost with new one
+                um.set_value(doc['db_id'], key_last_slot, slot)
     
 @task(ignore_result=True)        
 def async_check_if_new_listener(user_id):
