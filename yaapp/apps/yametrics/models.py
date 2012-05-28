@@ -287,6 +287,15 @@ class UserMetricsManager():
         self.collection.map_reduce(map_func, reduce_func, output)
     
     def messages_stats(self):
+        """
+        return messages like :
+        
+        {'_id':20, 'value': 12} 
+        
+        which means :
+        
+        12 users have posted 20 messages
+        """
         return self.db.metrics.messages_stats.find()
     
 class TimedMetricsManager():       
