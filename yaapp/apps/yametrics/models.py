@@ -271,7 +271,9 @@ class UserMetricsManager():
         
         map_func = Code("""
         function() {
-            emit(this.wall_message_activity, 1);
+            if (this.wall_message_activity) {
+                emit(this.wall_message_activity, 1);
+            }
         }
 """)
         
