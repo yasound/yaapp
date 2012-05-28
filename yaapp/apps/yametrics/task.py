@@ -3,6 +3,7 @@ from celery.task import task
 from yabase.models import Radio
 import datetime
 from yahistory.models import UserHistory
+import settings as yametrics_settings
 
 @task(ignore_result=True)
 def async_inc_global_value(key, value):  
@@ -33,15 +34,7 @@ def daily_metrics():
     ready_radio_count = Radio.objects.filter(ready=True).count()
     mm.set_daily_value('ready_radio_count', ready_radio_count)
     
-    update_activities(['listen_activity',
-                       'animator_activity', 
-                       'share_activity',
-                       'share_facebook_activity',
-                       'share_twitter_activity',
-                       'share_email_activity',
-                       'moderator_del_msg_activity',
-                       'moderator_abuse_msg_activity',
-                       ])
+    update_activities()
     
 @task(ignore_result=True)
 def async_activity(user_id, activity):
@@ -93,11 +86,13 @@ def async_activity(user_id, activity):
     um.set_value(user_id, key_last_date, now)
     um.inc_value(user_id, activity, 1)
 
-def update_activities(activities):
+def update_activities():
     """
     Periodically move timed metrics from one slot to another
     """
     from models import UserMetricsManager, TimedMetricsManager
+    
+    activities = yametrics_settings.ACTIVITIES
     
     um = UserMetricsManager()
     tm = TimedMetricsManager()
