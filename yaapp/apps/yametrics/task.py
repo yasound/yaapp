@@ -35,9 +35,10 @@ def daily_metrics():
     mm.set_daily_value('ready_radio_count', ready_radio_count)
     
     update_activities()
+    update_messages_stats()
     
 @task(ignore_result=True)
-def async_activity(user_id, activity):
+def async_activity(user_id, activity, throttle=True):
     """
     Process activity (animator for instance) :
     
@@ -47,6 +48,9 @@ def async_activity(user_id, activity):
       * activity
     * update timed documents with the following fields:
       * activity
+      
+      
+    if ``throttle`` is True then the same activity cannot be logged twice within one hour
     """
     from models import UserMetricsManager, TimedMetricsManager
     
@@ -66,10 +70,12 @@ def async_activity(user_id, activity):
     if last_animator_activity_date:
         diff = (now - last_animator_activity_date)
         days = diff.days
-        last_action = diff.total_seconds()
-        if last_action < 60*60:
-            # we skip the same action from user within one hour
-            return 
+        
+        if throttle:
+            last_action = diff.total_seconds()
+            if last_action < 60*60:
+                # we skip the same action from user within one hour
+                return 
 
     # update timed document
     tm = TimedMetricsManager()
@@ -131,4 +137,10 @@ def async_check_if_new_listener(user_id):
     docs = uh.history_for_user(user_id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
     if docs is None or docs.count() == 0:
         async_inc_global_value('new_listeners', 1)
+        
+def update_messages_stats():
+    from models import UserMetricsManager
+    um = UserMetricsManager()
+    um.update_messages_stats()
+    
         

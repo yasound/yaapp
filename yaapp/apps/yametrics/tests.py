@@ -220,3 +220,40 @@ class TestTimedMetrics(TestCase):
                 self.assertEquals(ttype, tm.SLOT_3D)
                 self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 1)
                 
+    def test_messages_stats(self):
+        async_activity(self.user.id, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
+
+        um = UserMetricsManager()
+        stats = um.messages_stats()
+        self.assertEquals(stats.count(), 0)
+        
+        um.update_messages_stats()
+        
+        stats = um.messages_stats()
+        self.assertEquals(stats.count(), 1)
+        doc = stats[0]
+        self.assertEquals(doc['_id'], 1)
+        self.assertEquals(doc['value'], 1)
+
+        # fake user
+        async_activity(42, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
+        um.update_messages_stats()
+        stats = um.messages_stats()
+        self.assertEquals(stats.count(), 1)
+        doc = stats[0]
+        self.assertEquals(doc['_id'], 1)
+        self.assertEquals(doc['value'], 2)
+        
+        async_activity(42, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
+        um.update_messages_stats()
+        stats = um.messages_stats()
+        
+        self.assertEquals(stats.count(), 2)
+        doc = stats[0]
+        self.assertEquals(doc['_id'], 1)
+        self.assertEquals(doc['value'], 1)
+
+        doc = stats[1]
+        self.assertEquals(doc['_id'], 2)
+        self.assertEquals(doc['value'], 1)
+                
