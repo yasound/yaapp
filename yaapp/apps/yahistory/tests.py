@@ -31,4 +31,46 @@ class TestGlobalMetricsManager(TestCase):
 
         docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
         self.assertEquals(docs.count(), 1)
+
+    def test_add_post_message_event(self):
+        uh = UserHistory()
+        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        uh.add_post_message_event(user_id=self.user.id, radio_uuid=r.uuid, message=u'hello, word')
+
+        now = datetime.datetime.now()
+        yesterday = now + datetime.timedelta(days=-1)
+        
+        docs = uh.history_for_user(self.user.id, start_date=yesterday, end_date=now)
+        self.assertEquals(docs.count(), 1)
+        
+        doc = docs[0]
+
+        self.assertEquals(doc['db_id'], self.user.id)
+
+        docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_MESSAGE)
+        self.assertEquals(docs.count(), 1)
+
+        docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LIKE_SONG)
+        self.assertEquals(docs.count(), 0)
+
+    def test_add_like_song_event(self):
+        uh = UserHistory()
+        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        uh.add_like_song_event(user_id=self.user.id, song_id=42)
+
+        now = datetime.datetime.now()
+        yesterday = now + datetime.timedelta(days=-1)
+        
+        docs = uh.history_for_user(self.user.id, start_date=yesterday, end_date=now)
+        self.assertEquals(docs.count(), 1)
+        
+        doc = docs[0]
+
+        self.assertEquals(doc['db_id'], self.user.id)
+
+        docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LIKE_SONG)
+        self.assertEquals(docs.count(), 1)
+
+        docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
+        self.assertEquals(docs.count(), 0)
                 
