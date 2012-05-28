@@ -8,6 +8,7 @@ from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, SongMetadata
 from yametrics.task import async_activity, async_check_if_new_listener
+import settings as yametrics_settings
 import datetime
 
 class GlobalMetricsManager():
@@ -321,7 +322,7 @@ class TimedMetricsManager():
 ## Event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
-        async_activity.delay(user.id, 'listen_activity')
+        async_activity.delay(user.id, yametrics_settings.ACTIVITY_LISTEN)
         async_check_if_new_listener(user.id)
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
 
@@ -335,8 +336,17 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
     we_type = wall_event.type
     if we_type == yabase_settings.EVENT_MESSAGE:
         async_inc_global_value.delay('new_wall_messages', 1)
+        
+        user = wall_event.user
+        if not user.is_anonymous():
+            async_activity.delay(user.id, yametrics_settings.ACTIVITY_WALL_MESSAGE)
+        
     elif we_type == yabase_settings.EVENT_LIKE:
         async_inc_global_value.delay('new_song_like', 1)
+
+        user = wall_event.user
+        if not user.is_anonymous():
+            async_activity.delay(user.id, yametrics_settings.ACTIVITY_SONG_LIKE)
 
 def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
@@ -368,22 +378,22 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
 def new_animator_activity(sender, user, **kwargs):
-    async_activity.delay(user.id, 'animator_activity')
+    async_activity.delay(user.id, yametrics_settings.ACTIVITY_ANIMATOR)
     async_inc_global_value.delay('new_animator_activity', 1)
 
 def new_moderator_del_msg_activity(sender, user, **kwargs):
-    async_activity.delay(user.id, 'moderator_del_msg_activity')
+    async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_DEL_MSG)
     async_inc_global_value.delay('new_moderator_del_msg_activity', 1)
 
 def new_moderator_abuse_msg_activity(sender, user, **kwargs):
-    async_activity.delay(user.id, 'moderator_abuse_msg_activity')
+    async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_ABUSE_MSG)
     async_inc_global_value.delay('new_moderator_abuse_msg_activity', 1)
 
 def new_share(sender, radio, user, share_type, **kwargs):
     
     activity_key = 'share_%s_activity' % (share_type)
     async_activity.delay(user.id, activity_key)
-    async_activity.delay(user.id, 'share_activity')
+    async_activity.delay(user.id, yametrics_settings.ACTIVITY_SHARE)
     
     async_inc_global_value.delay('new_share', 1)
     key = 'new_share_%s' % (str(share_type))

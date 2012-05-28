@@ -7,6 +7,7 @@ from yametrics.models import TopMissingSongsManager, RadioMetricsManager, \
     TimedMetricsManager, UserMetricsManager
 from yametrics.task import async_activity, update_activities
 import datetime
+import settings as yametrics_settings
 
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
@@ -178,32 +179,44 @@ class TestTimedMetrics(TestCase):
         self.assertEquals(tm.slot(160), tm.SLOT_90D_MORE)
         
     def test_async_animator_activity(self):
-        async_activity(self.user.id, 'animator_activity')
+        async_activity(self.user.id, yametrics_settings.ACTIVITY_ANIMATOR)
         
         tm = TimedMetricsManager()
         docs = tm.collection.find()
         self.assertEquals(docs.count(), 1)
-        self.assertEquals(docs[0]['animator_activity'], 1)
+        self.assertEquals(docs[0][yametrics_settings.ACTIVITY_ANIMATOR], 1)
 
-        async_activity(self.user.id, 'animator_activity')
+        async_activity(self.user.id, yametrics_settings.ACTIVITY_ANIMATOR)
 
         um = UserMetricsManager()
         user_doc = um.get_doc(self.user.id)
-        self.assertEquals(user_doc['animator_activity'], 1)
+        self.assertEquals(user_doc[yametrics_settings.ACTIVITY_ANIMATOR], 1)
         self.assertEquals(user_doc['last_animator_activity_slot'], tm.SLOT_24H)
 
         now = datetime.datetime.now()
         past = now + datetime.timedelta(days=-3)
         um.set_value(self.user.id, 'last_animator_activity_date', past)
 
-        update_activities(['animator_activity'])
+        update_activities()
         docs = tm.collection.find()
         self.assertEquals(docs.count(), 2)
         for doc in docs:
             ttype = doc['type']
             if ttype == tm.SLOT_24H:
-                self.assertEquals(doc['animator_activity'], 0)
+                self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 0)
             else:
                 self.assertEquals(ttype, tm.SLOT_3D)
-                self.assertEquals(doc['animator_activity'], 1)
+                self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 1)
+
+        # idempotent action
+        update_activities()
+        docs = tm.collection.find()
+        self.assertEquals(docs.count(), 2)
+        for doc in docs:
+            ttype = doc['type']
+            if ttype == tm.SLOT_24H:
+                self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 0)
+            else:
+                self.assertEquals(ttype, tm.SLOT_3D)
+                self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 1)
                 
