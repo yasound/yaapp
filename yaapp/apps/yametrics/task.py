@@ -66,11 +66,8 @@ def async_activity(user_id, activity, throttle=True):
         last_animator_activity_slot = doc[key_last_slot] if key_last_slot in doc else None
     
     now = datetime.datetime.now()
-    days = 0
     if last_animator_activity_date:
         diff = (now - last_animator_activity_date)
-        days = diff.days
-        
         if throttle:
             last_action = diff.total_seconds()
             if last_action < 60*60:
@@ -84,7 +81,7 @@ def async_activity(user_id, activity, throttle=True):
         tm.inc_value(last_animator_activity_slot, activity, -1)
     
     # add to current slot
-    slot = tm.slot(days)
+    slot = tm.slot(days=0)
     tm.inc_value(slot, activity, 1)
     
     # update currrent user document
