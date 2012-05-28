@@ -1,6 +1,6 @@
 from account.models import UserProfile, Device
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
@@ -27,7 +27,7 @@ from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
 from yainvitation.models import Invitation
 from yametrics.models import GlobalMetricsManager, TopMissingSongsManager,\
-    TimedMetricsManager
+    TimedMetricsManager, UserMetricsManager
 from yaref.models import YasoundSong
 import datetime
 import requests
@@ -675,6 +675,29 @@ def metrics_graph_animators(request):
         data.append({
             'timestamp': metric['type'],
             'animator_activity': metric['animator_activity'] if 'animator_activity' in metric else 0 
+        })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+
+@csrf_exempt
+@login_required
+def metrics_graph_posts(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    um  = UserMetricsManager()
+    metrics = um.messages_stats()
+    data = []    
+    for metric in metrics:
+        data.append({
+            'message_count': metric['_id'],
+            'user_count': metric['value'] 
         })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,

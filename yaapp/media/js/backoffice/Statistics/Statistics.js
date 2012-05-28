@@ -125,6 +125,30 @@ Yasound.Statistics.UI.ListenGraph = function () {
     }
 }
 
+Yasound.Statistics.UI.PostsGraph = function () {
+    var chart = Ext.ComponentMgr.create({
+        height: 300,
+        xtype: 'chartpanel',
+        url: '/yabackoffice/metrics/graphs/posts/',
+        fields: [ 'message_count', 'user_count' ],
+        xField: 'message_count',
+        yField: 'user_count'
+    });
+    return {
+        title: gettext('Message count per user'),
+        id: 'posts-graph',
+        items: [ chart ],
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ],
+        reload: function (component) {
+            chart.reload(chart);
+        }
+    }
+}
 Yasound.Statistics.UI.SharesGraph = function () {
     var chart = Ext.ComponentMgr.create({
         height: 300,
@@ -179,7 +203,10 @@ Yasound.Statistics.UI.Panel = function () {
                 {
                     columnWidth: .50,
                     style: 'padding:10px 0 10px 10px',
-                    items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.SharesGraph(), Yasound.Statistics.UI.Metrics(),
+                    items: [ Yasound.Statistics.UI.AnimatorsGraph(), 
+                             Yasound.Statistics.UI.SharesGraph(), 
+                             Yasound.Statistics.UI.PostsGraph(),
+                             Yasound.Statistics.UI.Metrics(),
                             Yasound.Statistics.UI.PastMonthMetrics(), Yasound.Statistics.UI.PastYearMetrics(), {
                                 title: gettext('Latests radios'),
                                 collapsed: true,
