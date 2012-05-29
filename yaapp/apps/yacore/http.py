@@ -1,5 +1,7 @@
-from tastypie.models import ApiKey
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from tastypie.models import ApiKey
 
 def fill_app_infos(request):
     request.app_version = request.REQUEST.get('app_version')
@@ -68,3 +70,14 @@ def check_http_method(request, allowed_methods):
     allowed = request.method in allowed_methods or request.method.lower() in allowed_methods or request.method.higher() in allowed_methods
     return allowed
         
+        
+def absolute_url(url):
+    """
+    return absolute url : 
+    
+    /myurl --> https://api.yasound.com/myurl
+    
+    """
+    current_site = Site.objects.get_current()
+    protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
+    absolute_url = u"%s://%s%s" % (protocol, unicode(current_site.domain), url)

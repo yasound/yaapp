@@ -61,6 +61,7 @@ CELERY_IMPORTS = (
     "emailconfirmation.task", 
     "yametrics.task",
     "yahistory.task",
+    "yagraph.task",
 )
 
 if LOCAL_MODE:
@@ -314,6 +315,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "social_auth.context_processors.social_auth_by_type_backends",
     "yabase.context_processors.my_radios",
+    "yabase.context_processors.facebook",
 )
 
 TEMPLATE_DIRS = (
