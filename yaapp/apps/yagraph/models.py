@@ -1,4 +1,4 @@
-from django.db import models
+from django.conf import settings
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yagraph.task import async_post_message
 
@@ -15,4 +15,6 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
 
 def install_handlers():
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
-install_handlers()    
+
+if settings.FACEBOOK_OPEN_GRAPH_ENABLED:
+    install_handlers()    
