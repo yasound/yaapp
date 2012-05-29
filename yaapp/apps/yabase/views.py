@@ -32,7 +32,7 @@ import logging
 import os
 import settings as yabase_settings
 import uuid
-
+from django.views.generic.base import View
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -810,32 +810,88 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "new_page": '/app/#radio/%s' % (radio_uuid)
     }, context_instance=RequestContext(request))    
 
-def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html'):
-    if not request.user.is_superuser:
-        if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
-            if radio_uuid:
-                return HttpResponseRedirect(reverse('yabase.views.web_listen', args=[radio_uuid]))
-            raise Http404
+class WebAppView(View):
+    """ Class based view for web app.
+    """
+    def _check_auth(self, request, radio_uuid=None):
+        """
+        centralized auth checking function
+        """
+        if not request.user.is_superuser:
+            if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
+                if radio_uuid:
+                    return HttpResponseRedirect(reverse('yabase.views.web_listen', args=[radio_uuid]))
+                raise Http404
     
-    if request.user.is_authenticated():
-        user_uuid = request.user.get_profile().own_radio.uuid
-    else:
-        user_uuid = 0
-    
-    push_url = settings.YASOUND_PUSH_URL
-    enable_push = settings.ENABLE_PUSH
-    
-    facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
-    facebook_share_link = request.build_absolute_uri(reverse('webapp'))
-    
-    
-    settings_radio_form = None
-    settings_user_form = None
-    if request.user.is_authenticated():
-        settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
-        settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
+    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
+        """
+        GET method dispatcher. Calls related methods for specific pages
+        """
+        self._check_auth(request, radio_uuid)
+        if request.user.is_authenticated():
+            user_uuid = request.user.get_profile().own_radio.uuid
+        else:
+            user_uuid = 0
+        
+        push_url = settings.YASOUND_PUSH_URL
+        enable_push = settings.ENABLE_PUSH
+        
+        facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
+        facebook_share_link = request.build_absolute_uri(reverse('webapp'))
 
-    if request.method == 'POST':
+        settings_radio_form = None
+        settings_user_form = None
+        if request.user.is_authenticated():
+            settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
+            settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
+
+        context = {
+            'user_uuid': user_uuid,
+            'user_id' : user_id,
+            'push_url': push_url,
+            'enable_push': enable_push,
+            'current_uuid': radio_uuid,
+            'facebook_app_id': settings.FACEBOOK_APP_ID,
+            'facebook_share_picture': facebook_share_picture,
+            'facebook_share_link': facebook_share_link,
+            'settings_radio_form': settings_radio_form,
+            'settings_user_form': settings_user_form
+        }
+        
+        if hasattr(self, page):
+            handler = getattr(self, page)
+            context, template_name = handler(request, context, *args, **kwargs)
+                            
+        return render_to_response(template_name, context, context_instance=RequestContext(request))           
+
+    def home(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
+    def radio(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
+    def search(self, request, context, *args, **kwargs):
+        from yasearch.models import search_radio
+        query = kwargs['query']
+        
+        result = search_radio(query)
+        return context, 'yabase/app/searchPage.html'  
+
+    def favorites(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
+    def friends(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
+    def profile(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+    
+    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home'):
+        """
+        POST method dispatcher. Save data from profile page right now.
+        """
+        self._check_auth(request, radio_uuid)
+
         action = request.REQUEST.get('action')
         if action == 'settings_radio':
             settings_radio_form = SettingsRadioForm(request.POST, request.FILES, instance=Radio.objects.radio_for_user(request.user))
@@ -846,20 +902,7 @@ def web_app(request, radio_uuid=None, query=None, user_id=None, template_name='y
             settings_user_form = SettingsUserForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
             if settings_user_form.is_valid():
                 settings_user_form.save()
-                return HttpResponseRedirect(reverse('webapp_settings'))
-            
-    return render_to_response(template_name, {
-        'user_uuid': user_uuid,
-        'user_id' : user_id,
-        'push_url': push_url,
-        'enable_push': enable_push,
-        'current_uuid': radio_uuid,
-        'facebook_app_id': settings.FACEBOOK_APP_ID,
-        'facebook_share_picture': facebook_share_picture,
-        'facebook_share_link': facebook_share_link,
-        'settings_radio_form': settings_radio_form,
-        'settings_user_form': settings_user_form
-    }, context_instance=RequestContext(request))    
+                return HttpResponseRedirect(reverse('webapp_settings'))    
     
 def radios(request, template_name='web/radios.html'):
     return render_to_response(template_name, {

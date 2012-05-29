@@ -101,8 +101,7 @@ body {
 	margin-top:16px;
 }
 
-ul .radio-cell
-,ul .user-cell {
+ul .radio-cell {
     list-style: none;
 	width:148px;
 	float:left;
@@ -111,8 +110,7 @@ ul .radio-cell
 	margin-bottom:12px;
 }
 
-ul .radio-cell img
-,ul .user-cell img {
+ul .radio-cell img {
 	margin-top:12px;
 }
 
@@ -128,4 +126,43 @@ ul .radio-cell .caption h5
 .cell-pagination {
 	float:left;
 	with: 148px;
+}
+
+ul .user-cell {
+    list-style: none;
+    height: 100px;
+    width: 100px;
+    float:left;
+    margin-right:16px;
+    cursor: pointer;
+    margin-bottom:12px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+ul .user-cell .caption {
+	position:relative;
+	top:0px;
+	background-color: black;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+   -webkit-transition: top 0.5s ease;
+      -moz-transition: top 0.5s ease;
+       -ms-transition: top 0.5s ease;
+        -o-transition: top 0.5s ease;
+           transition: top 0.5s ease;
+}
+
+ul .user-cell .caption h5 {
+	color: white;
+	font-size:16px;
+	font-weight: normal;
+}
+
+ul .user-cell:hover .caption {
+   top: -65px;
 }

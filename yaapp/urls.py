@@ -1,5 +1,5 @@
-from account.api import UserResource, LoginResource, SignupResource, PublicUserResource, \
-    LoginSocialResource
+from account.api import UserResource, LoginResource, SignupResource, \
+    PublicUserResource, LoginSocialResource
 from account.friend_api import FriendResource
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
@@ -12,14 +12,16 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     PublicRadioResource, RadioResource, SelectedRadioResource, \
     SelectedWebRadioResource, TopRadioResource, MostActiveRadioResource, \
-    FavoriteRadioResource, FriendRadioResource, TechTourRadioResource, RadioLikerResource, \
-    RadioFavoriteResource, SearchRadioResource, SearchRadioByUserResource, \
-    SearchRadioBySongResource, RadioCurrentUserResource, WallEventResource, \
-    RadioUserResource, SongUserResource, NextSongResource, \
+    FavoriteRadioResource, FriendRadioResource, TechTourRadioResource, \
+    RadioLikerResource, RadioFavoriteResource, SearchRadioResource, \
+    SearchRadioByUserResource, SearchRadioBySongResource, RadioCurrentUserResource, \
+    WallEventResource, RadioUserResource, SongUserResource, NextSongResource, \
     RadioEnabledPlaylistResource, RadioAllPlaylistResource, LeaderBoardResource, \
     MatchedSongResource, SearchSongResource, EditSongResource, \
     UserFavoriteRadioResource
 from yabase.models import Radio
+from yabase.views import WebAppView
+from yaweb import urls as yaweb_urls
 from yaweb.sitemap import StaticSitemap
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -165,13 +167,13 @@ urlpatterns = patterns('',
     url(r'^', include('yaweb.urls')),
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
-    url(r'^app/$', 'yabase.views.web_app', name='webapp'),
-    url(r'^app/radio/(?P<radio_uuid>\S+)/$', 'yabase.views.web_app', name='webapp_radio'),
-    url(r'^app/search/(?P<query>\S+)/$', 'yabase.views.web_app', name='webapp_search'),
-    url(r'^app/favorites/$', 'yabase.views.web_app', name='webapp_favorites'),
-    url(r'^app/friends/$', 'yabase.views.web_app', name='webapp_friends'),
-    url(r'^app/settings/$', 'yabase.views.web_app', name='webapp_settings'),
-    url(r'^app/profile/(?P<user_id>\S+)/$', 'yabase.views.web_app', name='webapp_profile'),
+    url(r'^app/$', WebAppView.as_view(), {'page': 'home'}, name='webapp'),
+    url(r'^app/radio/(?P<radio_uuid>\S+)/$', WebAppView.as_view(),  {'page': 'radio'}, name='webapp_radio'),
+    url(r'^app/search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_search'),
+    url(r'^app/favorites/$', WebAppView.as_view(), {'page': 'favorites'}, name='webapp_favorites'),
+    url(r'^app/friends/$', WebAppView.as_view(), {'page': 'friends'}, name='webapp_friends'),
+    url(r'^app/settings/$', WebAppView.as_view(), {'page': 'setingss'}, name='webapp_settings'),
+    url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
     
     
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
@@ -212,7 +214,6 @@ else:
     )
     
 # sitemap
-from yaweb import urls as yaweb_urls
 sitemaps = {
     'yaweb': StaticSitemap(yaweb_urls.urlpatterns),
 }
