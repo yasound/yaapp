@@ -132,7 +132,9 @@ Yasound.Statistics.UI.PostsGraph = function () {
         url: '/yabackoffice/metrics/graphs/posts/',
         fields: [ 'message_count', 'user_count' ],
         xField: 'message_count',
-        yField: 'user_count'
+        yField: 'user_count',
+        xTitle: gettext('Number of messages'),
+        yTitle: gettext('Users'),
     });
     return {
         title: gettext('Message count per user'),
