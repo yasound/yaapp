@@ -868,7 +868,10 @@ class WebAppView(View):
         return context, 'yabase/webapp.html'  
 
     def radio(self, request, context, *args, **kwargs):
-        return context, 'yabase/webapp.html'  
+        radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        context['radio'] = radio
+        context['radio_picture_absolute_url'] = request.build_absolute_uri(radio.picture_url)
+        return context, 'yabase/app/radio/radio.html'  
 
     def search(self, request, context, *args, **kwargs):
         from yasearch.models import search_radio

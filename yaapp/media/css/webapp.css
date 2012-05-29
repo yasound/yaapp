@@ -64,6 +64,18 @@ body {
     margin: 0px auto;
 }
 
+#webapp-user-picture {
+    width: 212px;
+    height: 212px;
+    margin: 0px auto;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    overflow:hidden;
+    border:2px solid #c1c1c1;
+}
+
+
 #webapp-radio-title {
     margin-left: 10px;
     text-align: center;
@@ -86,6 +98,14 @@ body {
 .wall-event-message {
 	border-bottom: 1px solid #eeeeee;
 	margin-bottom:12px;
+}
+.wall-event-message img.user {
+	margin-top:8px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    overflow:hidden;
+    border:1px solid #c1c1c1;
 }
 
 .brand {
