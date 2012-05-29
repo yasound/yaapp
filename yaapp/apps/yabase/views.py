@@ -801,13 +801,16 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     if radio is None:
         raise Http404
 
+    radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
+
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
         "radio": radio,
         "radio_url": radio_url,
         "listeners": radio.radiouser_set.filter(listening=True).count(),
         "fans": radio.radiouser_set.filter(favorite=True).count(),
-        "new_page": '/app/#radio/%s' % (radio_uuid)
+        "new_page": '/app/#radio/%s' % (radio_uuid),
+        "radio_picture_absolute_url": radio_picture_absolute_url,
     }, context_instance=RequestContext(request))    
 
 class WebAppView(View):
