@@ -3,6 +3,8 @@ from celery.task import task
 from django.core.urlresolvers import reverse
 from facepy import GraphAPI
 from yacore.http import absolute_url
+from django.conf import settings
+
 
 @task(ignore_result=True)
 def async_post_message(user_id, radio_uuid, message):
@@ -22,4 +24,5 @@ def async_post_message(user_id, radio_uuid, message):
     data = {
        'radio':radio_url
     }
-    graph.post(path='me/yasoundev:post_a_message', data=data)
+    path = 'me/%s:post_a_message' % (settings.FACEBOOK_APP_NAMESPACE)
+    graph.post(path=path, data=data)
