@@ -81,3 +81,4 @@ def absolute_url(url):
     current_site = Site.objects.get_current()
     protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
     absolute_url = u"%s://%s%s" % (protocol, unicode(current_site.domain), url)
+    return absolute_url

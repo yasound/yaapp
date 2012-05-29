@@ -14,9 +14,12 @@ def async_post_message(user_id, radio_uuid, message):
     if not user_profile.facebook_enabled or len(user_profile.facebook_token) <= 0:
         return
     
-    radio_url = absolute_url(reverse('webapp_radio', args=radio_uuid)) 
+    radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
     
     facebook_token = user_profile.facebook_token
     graph = GraphAPI(facebook_token)
-    graph.post(path='me/yasoundev:post_a_message',
-               radio=radio_url)
+    
+    data = {
+       'radio':radio_url
+    }
+    graph.post(path='me/yasoundev:post_a_message', data=data)
