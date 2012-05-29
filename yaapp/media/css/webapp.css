@@ -114,8 +114,7 @@ ul .radio-cell img {
 	margin-top:12px;
 }
 
-ul .radio-cell .thumbnail:hover
-,ul .user-cell .thumbnail:hover {
+ul .radio-cell .thumbnail:hover {
 	background-color: #efefef;
 }
 ul .radio-cell .caption h5
@@ -133,15 +132,16 @@ ul .user-cell {
     height: 100px;
     width: 100px;
     float:left;
-    margin-right:16px;
+     margin-right:16px;
     cursor: pointer;
     margin-bottom:12px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
+    
+    border:1px solid #c1c1c1;
     overflow: hidden;
 }
-
 
 ul .user-cell .caption {
 	position:relative;

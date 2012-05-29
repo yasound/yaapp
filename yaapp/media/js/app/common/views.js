@@ -48,7 +48,7 @@ Yasound.Views.UserCell = Backbone.View.extend({
     tagName: 'li',
     className: 'user-cell',
     events: {
-        'click .user-cell': 'onUser'
+        'click .user-cell-inner': 'onUser'
     },
 
     initialize: function () {
@@ -61,7 +61,7 @@ Yasound.Views.UserCell = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        $(this.el).hide().html(ich.userCellTemplate(data)).fadeIn(200);
+        $(this.el).html(ich.userCellTemplate(data));
         return this;
     },
 
