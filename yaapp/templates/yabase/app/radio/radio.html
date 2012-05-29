@@ -7,6 +7,7 @@
   <meta property="og:url"    content="{{ request.build_absolute_uri }}" /> 
   <meta property="og:title"  content="{{ radio|striptags }}" /> 
   <meta property="og:image"  content="{{ radio_picture_absolute_url }}" /> 
+  <meta property="og:audio"  content="{{ radio.stream_url }}" /> 
 {% endblock %}
 
 
