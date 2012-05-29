@@ -1,13 +1,19 @@
 from account.models import UserProfile
 from celery.task import task
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from facepy import GraphAPI
 from yacore.http import absolute_url
-from django.conf import settings
 import logging
 logger = logging.getLogger("yaapp.yagraph")
 
 def _facebook_token(user_id):
+    # temp
+    user = User.objects.get(id=user_id)
+    if not user.is_superuser:
+        return None
+    
     try:
         user_profile = UserProfile.objects.get(user__id=user_id)
     except:
