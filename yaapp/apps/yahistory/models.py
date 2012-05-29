@@ -95,10 +95,10 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
     elif we_type == yabase_settings.EVENT_LIKE:
         async_add_like_song_event.delay(user.id, wall_event.song.id)
 
-def favorite_radio_handler(sender, radio, user):
+def favorite_radio_handler(sender, radio, user, **kwargs):
     async_add_favorite_radio_event.delay(user.id, radio.uuid)
     
-def not_favorite_radio_handler(sender, radio, user):
+def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_add_not_favorite_radio_event.delay(user.id, radio.uuid)
 
 def install_handlers():
