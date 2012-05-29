@@ -1263,7 +1263,7 @@ class WallEvent(models.Model):
         if self.type == yabase_settings.EVENT_MESSAGE:
             s = '(%s) %s: "%s"' % (self.radio.name, self.user_name, self.text)
         elif self.	type == yabase_settings.EVENT_SONG:
-            s = '(%s) song: "%s - %s - %s"' % (self.radio.name, self.song_name, self.song_artist, self.song_album)
+            s = '%s - %s - %s' % (self.song_name, self.song_artist, self.song_album)
         return s
     
     @property

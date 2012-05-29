@@ -491,6 +491,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yagraph': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'yaapp.missing_songs': {
             'handlers': ['console', 'file_missing_songs'],
             'level': 'DEBUG',
@@ -511,17 +516,20 @@ if PRODUCTION_MODE:
     FACEBOOK_API_SECRET          = 'af4d20f383ed42cabfb4bf4b960bb03f'
     FACEBOOK_REALTIME_VERIFY_TOKEN = 'P6bSsjBqNRvKJWL'
     FACEBOOK_OPEN_GRAPH_ENABLED  = False
+    FACEBOOK_APP_NAMESPACE       = 'yasound'
 elif DEVELOPMENT_MODE:
     FACEBOOK_APP_ID              = '352524858117964'
     FACEBOOK_API_SECRET          = '687fbb99c25598cee5425ab24fec2f99'
     FACEBOOK_REALTIME_VERIFY_TOKEN = 'P6bSsjBqNRvKJWL'
     FACEBOOK_OPEN_GRAPH_ENABLED  = True
+    FACEBOOK_APP_NAMESPACE       = 'yasoundev'
 else:
     # myapp.com:8000
     FACEBOOK_APP_ID='256873614391089'
     FACEBOOK_API_SECRET='7e591216eeaa551cc8c4ed10a0f5c490'
     FACEBOOK_REALTIME_VERIFY_TOKEN = 'P6bSsjBqNRvKJWL'
     FACEBOOK_OPEN_GRAPH_ENABLED  = False
+    FACEBOOK_APP_NAMESPACE       = 'yasoundev'
 
 FACEBOOK_SHARE_PICTURE = '/media/yaweb/images/logo.png'
 
