@@ -7,7 +7,7 @@ from yacore.http import absolute_url
 @task(ignore_result=True)
 def async_post_message(user_id, radio_uuid, message):
     try:
-        user_profile = UserProfile.objects.get(user_id=user_id)
+        user_profile = UserProfile.objects.get(user__id=user_id)
     except:
         return
     
