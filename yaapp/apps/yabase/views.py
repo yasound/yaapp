@@ -815,19 +815,25 @@ class WebAppView(View):
     """
     def _check_auth(self, request, radio_uuid=None):
         """
-        centralized auth checking function
+        centralized auth checking function,
+        
+        return True, None if ok or False, redirect page else
         """
         if not request.user.is_superuser:
             if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
                 if radio_uuid:
-                    return HttpResponseRedirect(reverse('yabase.views.web_listen', args=[radio_uuid]))
+                    return False, HttpResponseRedirect(reverse('yabase.views.web_listen', args=[radio_uuid]))
                 raise Http404
+        return True, None
     
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
         """
-        self._check_auth(request, radio_uuid)
+        authorized, redirection = self._check_auth(request, radio_uuid)
+        if not authorized:
+            return redirection
+        
         if request.user.is_authenticated():
             user_uuid = request.user.get_profile().own_radio.uuid
         else:

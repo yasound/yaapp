@@ -24,3 +24,4 @@ yaapp/media/pictures/*
 yaapp/logs/*.log
 yaapp/logs/*.log.*
 *.old
+yaapp/media/statics/*

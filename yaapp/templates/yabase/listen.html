@@ -3,6 +3,16 @@
 {% load thumbnail %}
 
 {% block extra_head %}
+
+{% block fb_open_graph %}
+  <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" /> 
+  <meta property="og:type"   content="yasoundev:radio" /> 
+  <meta property="og:url"    content="{{ request.build_absolute_uri }}" /> 
+  <meta property="og:title"  content="{{ radio }}" /> 
+  <meta property="og:image"  content="{{ radio_picture_absolute_url }}" /> 
+{% endblock %}
+
+
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
         var g_radio_id = '{{ radio.id }}';
