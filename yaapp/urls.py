@@ -168,12 +168,12 @@ urlpatterns = patterns('',
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)', 'yabase.views.web_listen'),
     url(r'^app/$', WebAppView.as_view(), {'page': 'home'}, name='webapp'),
-    url(r'^app/radio/(?P<radio_uuid>\S+)/$', 'yabase.views.web_app', name='webapp_radio'),
+    url(r'^app/radio/(?P<radio_uuid>\S+)/$', WebAppView.as_view(),  {'page': 'radio'}, name='webapp_radio'),
     url(r'^app/search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_search'),
-    url(r'^app/favorites/$', 'yabase.views.web_app', name='webapp_favorites'),
-    url(r'^app/friends/$', 'yabase.views.web_app', name='webapp_friends'),
-    url(r'^app/settings/$', 'yabase.views.web_app', name='webapp_settings'),
-    url(r'^app/profile/(?P<user_id>\S+)/$', 'yabase.views.web_app', name='webapp_profile'),
+    url(r'^app/favorites/$', WebAppView.as_view(), {'page': 'favorites'}, name='webapp_favorites'),
+    url(r'^app/friends/$', WebAppView.as_view(), {'page': 'friends'}, name='webapp_friends'),
+    url(r'^app/settings/$', WebAppView.as_view(), {'page': 'setingss'}, name='webapp_settings'),
+    url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
     
     
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
