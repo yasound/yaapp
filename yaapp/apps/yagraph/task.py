@@ -40,14 +40,19 @@ def async_post_message(user_id, radio_uuid, message):
     path = 'me/%s:post_message' % (settings.FACEBOOK_APP_NAMESPACE)
 
     graph = GraphAPI(facebook_token)
-    res = graph.post(path=path, data=data)
-    logger.debug(res)
+    try:
+        res = graph.post(path=path, data=data)
+        logger.debug(res)
+    except GraphAPI.FacebookError as e:
+        logger.info(e)
+    logger.debug('done')
     
 @task(ignore_result=True)
 def async_listen(user_id, radio_uuid, song_title):
     logger.debug('async_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     facebook_token = _facebook_token(user_id)
     if facebook_token is None:
+        logger.debug('no facebook token, exiting')
         return
 
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
@@ -57,9 +62,14 @@ def async_listen(user_id, radio_uuid, song_title):
     }
     path = 'me/%s:listen' % (settings.FACEBOOK_APP_NAMESPACE)
 
+    logger.debug('calling graph api')
     graph = GraphAPI(facebook_token)
-    res = graph.post(path=path, data=data)
-    logger.debug(res)
+    try:
+        res = graph.post(path=path, data=data)
+        logger.debug(res)
+    except GraphAPI.FacebookError as e:
+        logger.info(e)
+    logger.debug('done')
 
 @task(ignore_result=True)
 def async_like_song(user_id, radio_uuid, song_title):
@@ -76,5 +86,10 @@ def async_like_song(user_id, radio_uuid, song_title):
     path = 'me/%s:like' % (settings.FACEBOOK_APP_NAMESPACE)
 
     graph = GraphAPI(facebook_token)
-    res = graph.post(path=path, data=data)
-    logger.debug(res)
+    try:
+        res = graph.post(path=path, data=data)
+        logger.debug(res)
+    except GraphAPI.FacebookError as e:
+        logger.info(e)
+    logger.debug('done')
+        

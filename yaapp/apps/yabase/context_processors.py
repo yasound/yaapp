@@ -12,5 +12,6 @@ def my_radios(request):
     
 def facebook(request):
     return {
-        'FACEBOOK_APP_ID': settings.FACEBOOK_APP_ID
+        'FACEBOOK_APP_ID': settings.FACEBOOK_APP_ID,
+        'FACEBOOK_APP_NAMESPACE': settings.FACEBOOK_APP_NAMESPACE
     }

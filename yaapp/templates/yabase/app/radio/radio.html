@@ -3,7 +3,7 @@
 
 {% block fb_open_graph %}
   <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" /> 
-  <meta property="og:type"   content="yasoundev:radio" /> 
+  <meta property="og:type"   content="{{ FACEBOOK_APP_NAMESPACE}}:radio" /> 
   <meta property="og:url"    content="{{ request.build_absolute_uri }}" /> 
   <meta property="og:title"  content="{{ radio|striptags }}" /> 
   <meta property="og:image"  content="{{ radio_picture_absolute_url }}" /> 
