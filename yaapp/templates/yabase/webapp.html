@@ -5,6 +5,8 @@
 {% load straight_include %}
 
 {% block extra_head %}
+    {% block fb_open_graph %}{% endblock %}
+    
     <link rel="image_src" href="/media/yaweb/images/logo.png" />
         
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
