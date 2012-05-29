@@ -15,6 +15,8 @@ Yasound.Statistics.UI.ChartPanel = Ext.extend(Ext.Panel, {
     fields: [ 'timestamp', 'created_radios' ],
     xField: 'timestamp',
     yField: 'created_radios',
+    xTitle: undefined,
+    yTitle: undefined,
 
     initComponent: function () {
         this.store = new Ext.data.JsonStore({
@@ -30,6 +32,12 @@ Yasound.Statistics.UI.ChartPanel = Ext.extend(Ext.Panel, {
                 store: this.store,
                 xField: this.xField,
                 yField: this.yField,
+                xAxis: new Ext.chart.CategoryAxis({
+                    title: this.xTitle
+                }),
+                yAxis: new Ext.chart.NumericAxis({
+                    title: this.yTitle
+                }),
                 listeners: {
                     itemclick: function (o) {
                         var rec = store.getAt(o.index);
