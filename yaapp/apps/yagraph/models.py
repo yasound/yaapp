@@ -16,7 +16,7 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         song_title = unicode(wall_event)
         async_like_song.delay(user.id, wall_event.radio.uuid, song_title)
         
-def user_started_listening_handler(sender, radio, user):
+def user_started_listening_handler(sender, radio, user, **kwargs):
     if user is None:
         return
     if user.is_anonymous():
