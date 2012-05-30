@@ -82,3 +82,20 @@ def async_like_song(user_id, radio_uuid, song_title):
         logger.info(e)
     logger.debug('done')
         
+@task(ignore_result=True)
+def async_animator_activity(user_id, radio_uuid):
+    logger.debug('async_animator_activity: user = %s, radio = %s' % (user_id, radio_uuid))
+    facebook_token = _facebook_token(user_id)
+    if facebook_token is None:
+        return
+
+    radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
+    path = 'me/%s:update_programming' % (settings.FACEBOOK_APP_NAMESPACE)
+
+    graph = GraphAPI(facebook_token)
+    try:
+        res = graph.post(path=path, radio=radio_url)
+        logger.debug(res)
+    except GraphAPI.FacebookError as e:
+        logger.info(e)
+    logger.debug('done')

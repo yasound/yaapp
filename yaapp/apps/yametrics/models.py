@@ -413,7 +413,7 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
     else:
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
-def new_animator_activity(sender, user, **kwargs):
+def new_animator_activity(sender, user, radio, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_ANIMATOR)
     async_inc_global_value.delay('new_animator_activity', 1)
 

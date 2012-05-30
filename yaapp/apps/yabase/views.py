@@ -71,7 +71,7 @@ def upload_playlists(request, radio_id):
     radio = get_object_or_404(Radio, pk=radio_id)
 
     if radio.ready:
-        yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
+        yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
     
     data = request.FILES['playlists_data']
     content_compressed = data.read()
@@ -593,7 +593,13 @@ def upload_song(request, song_id=None):
         logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
+    radio = None
+    try:
+        radio = Radio.objects.radio_for_user(request.user)
+    except:
+        logger.info('no radio for user %s' % (request.user))
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
         
     json_data = {}
     data = request.REQUEST.get('data')
@@ -703,12 +709,13 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
 
     radio_id = int(radio_id)
     playlist_index = int(playlist_index)
     yasound_song_id = int(yasound_song_id)
     radio = get_object_or_404(Radio, id=radio_id)
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
     
     playlists = Playlist.objects.filter(radio=radio)
     if playlist_index > playlists.count():
@@ -757,12 +764,12 @@ def reject_song(request, song_id):
     
     if request.user != song_instance.playlist.radio.creator:
         return HttpNotFound()
-
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
     
     logging.getLogger("yaapp.yabase.delete_song").info('rejecting song instance %s' % song_instance.id)    
     radio = song_instance.playlist.radio
     radio.reject_song(song_instance)
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
     
     res = {'success': True}
     response = json.dumps(res)
@@ -1059,13 +1066,15 @@ def delete_song_instance(request, song_instance_id):
     if request.user != song.playlist.radio.creator:
         return HttpResponse(status=401)
     
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user)
     
     logging.getLogger("yaapp.yabase.delete_song").info('deleting song instance %s' % song.id)    
     song.delete()
     
     # if radio has no more songs, set ready to False
     radio = song.playlist.radio
+
+    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
+    
     song_count = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id__gt=0).count()
     if song_count == 0:
         radio.ready = False
