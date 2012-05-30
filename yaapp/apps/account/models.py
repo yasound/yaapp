@@ -112,7 +112,7 @@ class UserProfile(models.Model):
     facebook_email = models.EmailField(blank=True)
     facebook_expiration_date = models.CharField(max_length=35, blank=True)
 
-    yasound_email = models.EmailField(blank=True)
+    yasound_email = models.EmailField(_('Email'), blank=True)
     
     bio_text = models.TextField(null=True, blank=True)
     picture = ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
