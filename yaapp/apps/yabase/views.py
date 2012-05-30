@@ -23,7 +23,8 @@ from task import process_playlists, process_upload_song
 from tastypie.http import HttpNotFound
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
-from yabase.forms import SettingsUserForm, SettingsFacebookForm
+from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
+    SettingsTwitterForm
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
 from yaref.models import YasoundSong
@@ -851,12 +852,20 @@ class WebAppView(View):
         settings_radio_form = None
         settings_user_form = None
         settings_facebook_form = None
+        settings_twitter_form = None
+        display_associate_facebook = False
+        display_associate_twitter = False
         if request.user.is_authenticated():
+            display_associate_facebook = not request.user.get_profile().facebook_enabled
+            display_associate_twitter = not request.user.get_profile().twitter_enabled        
+
             settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
             settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
             if request.user.get_profile().facebook_enabled:
                 settings_facebook_form = SettingsFacebookForm(user_profile=request.user.get_profile())
-
+            if request.user.get_profile().twitter_enabled:
+                settings_twitter_form = SettingsTwitterForm(user_profile=request.user.get_profile())
+        
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -869,6 +878,9 @@ class WebAppView(View):
             'settings_radio_form': settings_radio_form,
             'settings_user_form': settings_user_form,
             'settings_facebook_form': settings_facebook_form,
+            'settings_twitter_form': settings_twitter_form,
+            'display_associate_facebook' : display_associate_facebook,
+            'display_associate_twitter' : display_associate_twitter
         }
         
         if hasattr(self, page):
@@ -902,7 +914,7 @@ class WebAppView(View):
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'  
     
-    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home'):
+    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.
         """
@@ -910,6 +922,27 @@ class WebAppView(View):
         
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('webapp'))
+        
+        user_uuid = request.user.get_profile().own_radio.uuid
+        
+        push_url = settings.YASOUND_PUSH_URL
+        enable_push = settings.ENABLE_PUSH
+        
+        facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
+        facebook_share_link = request.build_absolute_uri(reverse('webapp'))
+
+        settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
+        settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
+        settings_facebook_form = None
+        settings_twitter_form = None
+        if request.user.get_profile().facebook_enabled:
+            settings_facebook_form = SettingsFacebookForm(user_profile=request.user.get_profile())
+        if request.user.get_profile().twitter_enabled:
+            settings_twitter_form = SettingsTwitterForm(user_profile=request.user.get_profile())
+
+        display_associate_facebook = not request.user.get_profile().facebook_enabled
+        display_associate_twitter = not request.user.get_profile().twitter_enabled        
+
         
         action = request.REQUEST.get('action')
         if action == 'settings_radio':
@@ -927,6 +960,34 @@ class WebAppView(View):
             if settings_facebook_form.is_valid():
                 settings_facebook_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
+        elif action == 'settings_twitter':
+            settings_twitter_form = SettingsTwitterForm(request.user.get_profile(), request.POST)
+            if settings_twitter_form.is_valid():
+                settings_twitter_form.save()
+                return HttpResponseRedirect(reverse('webapp_settings'))
+
+        context = {
+            'user_uuid': user_uuid,
+            'user_id' : user_id,
+            'push_url': push_url,
+            'enable_push': enable_push,
+            'current_uuid': radio_uuid,
+            'facebook_app_id': settings.FACEBOOK_APP_ID,
+            'facebook_share_picture': facebook_share_picture,
+            'facebook_share_link': facebook_share_link,
+            'settings_radio_form': settings_radio_form,
+            'settings_user_form': settings_user_form,
+            'settings_facebook_form': settings_facebook_form,
+            'settings_twitter_form': settings_twitter_form,
+            'display_associate_facebook' : display_associate_facebook,
+            'display_associate_twitter' : display_associate_twitter
+        }
+        
+        if hasattr(self, page):
+            handler = getattr(self, page)
+            context, template_name = handler(request, context, *args, **kwargs)
+                            
+        return render_to_response(template_name, context, context_instance=RequestContext(request))           
                 
 def radios(request, template_name='web/radios.html'):
     return render_to_response(template_name, {

@@ -14,12 +14,23 @@ class SettingsRadioForm(BootstrapModelForm):
         )
 
 class SettingsUserForm(BootstrapModelForm):
+    password1 = forms.CharField(label=_("Password"), required=False, widget=forms.PasswordInput())
+    password2 = forms.CharField(label=_("Password (again)"), required=False, widget=forms.PasswordInput())
+
     class Meta:
         model = UserProfile
-        fields = ('name', 'bio_text', 'picture')
+        fields = ('name', 'bio_text', 'picture', 'yasound_email')
         layout = (
-            Fieldset(_('Profile'), 'name', 'bio_text', 'picture'),
+            Fieldset(_('Profile'), 'name', 'bio_text', 'picture', 'yasound_email', 'password1', 'password2'),
         )
+        
+    def clean(self):
+        if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
+            if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
+                raise forms.ValidationError(u"You must type the same password each time.")
+            
+        return self.cleaned_data
+        
 
 class SettingsFacebookForm(BootstrapForm):
     fb_share_listen = forms.BooleanField(label=_("Listen"), required=False)
@@ -42,7 +53,17 @@ class SettingsFacebookForm(BootstrapForm):
         }
         super(SettingsFacebookForm, self).__init__(initial=initial, *args, **kwargs)
         
+    def clean(self):
+        if 'remove' in self.data:
+            success, message = self.user_profile.remove_facebook_account()
+            if not success: 
+                raise forms.ValidationError(message)
+
+        return self.cleaned_data
+       
+    
     def save(self):
+        
         fb_share_listen = self.cleaned_data['fb_share_listen']
         fb_share_like_song = self.cleaned_data['fb_share_like_song']
         fb_share_post_message = self.cleaned_data['fb_share_post_message']
@@ -52,3 +73,27 @@ class SettingsFacebookForm(BootstrapForm):
         self.user_profile.notifications_preferences.fb_share_post_message = fb_share_post_message
         
         self.user_profile.save()
+        
+class SettingsTwitterForm(BootstrapForm):
+    class Meta:
+        layout = (
+            Fieldset(_('Twitter share options'), ),
+        )
+
+    def __init__(self, user_profile=None, *args, **kwargs):
+        self.user_profile = user_profile
+        initial = {
+        }
+        super(SettingsTwitterForm, self).__init__(initial=initial, *args, **kwargs)
+        
+    def clean(self):
+        if 'remove' in self.data:
+            success, message = self.user_profile.remove_twitter_account()
+            if not success: 
+                raise forms.ValidationError(message)
+
+        return self.cleaned_data
+       
+    
+    def save(self):
+        pass
