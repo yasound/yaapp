@@ -9,12 +9,23 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
     We hack it to associate with existing users (by checking the profile fields)
     or create new but with our profile info inside 
     """
+    backend_name = backend.name.lower()
     if user:
+        if backend_name == 'facebook':
+            profile = user.get_profile()
+            if profile and not profile.facebook_enabled:
+                profile.facebook_uid = uid
+                profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
+                profile.save()
+        elif backend_name == 'twitter':
+            profile = user.get_profile()
+            if profile and not profile.twitter_enabled:
+                profile.twitter_uid = uid
+                profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+                profile.save()
         return {'user': user}
     if not username:
         return None
-    
-    backend_name = backend.name.lower()
     
     if backend_name == 'facebook':
         try:
