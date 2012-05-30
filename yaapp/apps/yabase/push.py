@@ -23,7 +23,7 @@ def push_wall_event(wall_event, **kwargs):
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
     red.publish(channel, json_data)
 
-def push_current_song(radio, song_json, **kwargs):
+def push_current_song(radio, song_json, song, **kwargs):
     red = Redis(host=settings.PUSH_REDIS_HOST, db=settings.PUSH_REDIS_DB)
     channel = 'radio.%s' % (radio.id)
     data = {

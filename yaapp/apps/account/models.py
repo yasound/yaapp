@@ -10,7 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
-from social_auth.signals import socialauth_not_registered
 from sorl.thumbnail import ImageField, get_thumbnail, delete
 from tastypie.models import ApiKey, create_api_key
 from yabase.apns import get_deprecated_devices, send_message
@@ -128,7 +127,10 @@ class UserProfile(models.Model):
         'song_liked',
         'radio_in_favorites',
         'radio_shared',
-        'friend_created_radio'
+        'friend_created_radio',
+        'fb_share_listen',
+        'fb_share_like_song',
+        'fb_share_post_message',
         ),
         default=(2+8+16+32+64+128)
     ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128)
@@ -250,6 +252,10 @@ class UserProfile(models.Model):
         
         # TODO: refresh friends
         self.save()
+        
+        # remove social-auth account
+        self.user.social_auth.filter(provider='facebook').delete()
+        
         return True, _('OK')
         
     def add_twitter_account(self, uid, token, token_secret, username, email):
@@ -302,6 +308,10 @@ class UserProfile(models.Model):
 
         # TODO: refresh friends
         self.save()
+        
+        # remove social-auth account
+        self.user.social_auth.filter(provider='twitter').delete()
+
         return True, _('OK')
     
     def add_yasound_account(self, email, password):
