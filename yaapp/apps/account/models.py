@@ -128,7 +128,10 @@ class UserProfile(models.Model):
         'song_liked',
         'radio_in_favorites',
         'radio_shared',
-        'friend_created_radio'
+        'friend_created_radio',
+        'fb_share_listen',
+        'fb_share_like_song',
+        'fb_share_post_message',
         ),
         default=(2+8+16+32+64+128)
     ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128)
