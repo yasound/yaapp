@@ -14,6 +14,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.generic.base import View
 from forms import SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata
@@ -22,7 +23,7 @@ from task import process_playlists, process_upload_song
 from tastypie.http import HttpNotFound
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
-from yabase.forms import SettingsUserForm
+from yabase.forms import SettingsUserForm, SettingsFacebookForm
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
 from yaref.models import YasoundSong
@@ -32,7 +33,6 @@ import logging
 import os
 import settings as yabase_settings
 import uuid
-from django.views.generic.base import View
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -850,9 +850,12 @@ class WebAppView(View):
 
         settings_radio_form = None
         settings_user_form = None
+        settings_facebook_form = None
         if request.user.is_authenticated():
             settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
             settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
+            if request.user.get_profile().facebook_enabled:
+                settings_facebook_form = SettingsFacebookForm(user_profile=request.user.get_profile())
 
         context = {
             'user_uuid': user_uuid,
@@ -864,7 +867,8 @@ class WebAppView(View):
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
             'settings_radio_form': settings_radio_form,
-            'settings_user_form': settings_user_form
+            'settings_user_form': settings_user_form,
+            'settings_facebook_form': settings_facebook_form,
         }
         
         if hasattr(self, page):
@@ -903,7 +907,10 @@ class WebAppView(View):
         POST method dispatcher. Save data from profile page right now.
         """
         self._check_auth(request, radio_uuid)
-
+        
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('webapp'))
+        
         action = request.REQUEST.get('action')
         if action == 'settings_radio':
             settings_radio_form = SettingsRadioForm(request.POST, request.FILES, instance=Radio.objects.radio_for_user(request.user))
@@ -915,7 +922,12 @@ class WebAppView(View):
             if settings_user_form.is_valid():
                 settings_user_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))    
-    
+        elif action == 'settings_facebook':
+            settings_facebook_form = SettingsFacebookForm(request.user.get_profile(), request.POST)
+            if settings_facebook_form.is_valid():
+                settings_facebook_form.save()
+                return HttpResponseRedirect(reverse('webapp_settings'))
+                
 def radios(request, template_name='web/radios.html'):
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))    

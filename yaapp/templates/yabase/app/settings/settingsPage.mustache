@@ -7,6 +7,16 @@
 
 <div class='row-fluid'>
     <div class='span6'>
+        {% if settings_facebook_form %}
+        <form id='settings-facebook-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
+            {{ settings_facebook_form }}
+            <div class="form-actions">
+                <input type='hidden' name='action' value='settings_facebook'/>
+                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+            </div>
+        </form>
+        {% endif %}
+
         <form id='settings-user-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
             {{ settings_user_form }}
             <div class="form-actions">
