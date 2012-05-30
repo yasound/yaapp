@@ -8,7 +8,7 @@ like_radio              = django.dispatch.Signal(providing_args=['radio', 'user'
 neutral_like_radio      = django.dispatch.Signal(providing_args=['radio', 'user'])
 favorite_radio          = django.dispatch.Signal(providing_args=['radio', 'user'])
 not_favorite_radio      = django.dispatch.Signal(providing_args=['radio', 'user'])
-new_current_song        = django.dispatch.Signal(providing_args=['radio', 'song_json'])
+new_current_song        = django.dispatch.Signal(providing_args=['radio', 'song_json', 'song'])
 
 radio_shared            = django.dispatch.Signal(providing_args=['radio', 'user', 'share_type'])
 
@@ -19,3 +19,6 @@ new_animator_activity    = django.dispatch.Signal(providing_args=['user',])
 new_animator_upload_song = django.dispatch.Signal(providing_args=['user', 'song'])
 new_animator_delete_song = django.dispatch.Signal(providing_args=['user', 'song'])
 new_animator_add_song    = django.dispatch.Signal(providing_args=['user', 'song'])
+
+
+user_started_listening_song = django.dispatch.Signal(providing_args=['radio', 'user', 'song'])

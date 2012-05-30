@@ -4,7 +4,8 @@ from django.db import transaction
 from shutil import rmtree
 from struct import unpack_from
 from yacore.database import flush_transaction
-from yabase.models import SongMetadata, SongInstance, update_leaderboard
+from models import SongMetadata, SongInstance, update_leaderboard,\
+    RadioUser
 from yaref.models import YasoundSong
 from yasearch.utils import get_simplified_name
 import import_utils
@@ -18,6 +19,7 @@ import time
 import zlib
 import zlib
 import md5
+import signals as yabase_signals
 logger = logging.getLogger("yaapp.yabase")
 
 @task
@@ -232,3 +234,20 @@ def generate_preview(yasound_song_id):
 def extract_song_cover(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
     import_utils.extract_song_cover(yasound_song)
+    
+@task(ignore_result=True)
+def async_dispatch_user_started_listening_song(radio, song):
+    """
+    Generate user_started_listening_song signals
+
+    """
+    rus = RadioUser.objects.filter(radio=radio, listening=True).select_related()
+    for ru in rus:
+        yabase_signals.user_started_listening_song.send(sender=ru.radio, 
+                                                        radio=ru.radio,
+                                                        user=ru.user, 
+                                                        song=song)
+
+
+
+        

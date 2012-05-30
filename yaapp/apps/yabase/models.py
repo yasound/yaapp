@@ -1,6 +1,8 @@
 from datetime import timedelta
 from django.conf import settings as yaapp_settings
 from django.contrib.auth.models import User, Group
+from django.core.cache import cache
+from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models import Q, signals
 from django.db.models.aggregates import Sum
@@ -8,27 +10,25 @@ from django.utils.translation import ugettext_lazy as _
 from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
+from yacore.database import atomic_inc
+from yametrics.matching_errors import MatchingErrorsManager
 from yaref.models import YasoundSong
 from yareport.task import task_report_song
+from yasearch.utils import get_simplified_name
 import datetime
 import django.db.models.options as options
+import json
 import logging
+import md5
+import os
 import random
 import settings as yabase_settings
+import signals as yabase_signals
 import string
 import uuid
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-import signals as yabase_signals
-from django.core.cache import cache
-import json
-from yacore.database import atomic_inc
-import os
-import md5
-from yametrics.matching_errors import MatchingErrorsManager
-from yasearch.utils import get_simplified_name
-from django.core.mail import send_mail
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -682,11 +682,11 @@ class Radio(models.Model):
         
         # TODO: use a signal instead
         song_json = SongInstance.objects.set_current_song_json(self.id, song)
-        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json)
-        
         
         self.save()
         
+        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song)
+
         song.last_play_time = datetime.datetime.now()
         song.play_count += 1
         song.save()
@@ -1465,5 +1465,9 @@ class ApnsCertificate(models.Model):
     certificate_file = models.CharField(max_length=255)
     objects = ApnsCertificateManager()
 
+def new_current_song_handler(sender, radio, song_json, song, **kwargs):
+    from yabase.task import async_dispatch_user_started_listening_song
+    async_dispatch_user_started_listening_song.delay(radio, song)
+yabase_signals.new_current_song.connect(new_current_song_handler)
         
     
