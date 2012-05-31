@@ -1,6 +1,9 @@
 "use strict";
-/*jslint forin: true, nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
-/*extern Ext, $ */
+/*
+ * jslint forin: true, nomen: true, vars: true, bitwise: true, browser: true,
+ * eqeq: true, evil: true, undef: true, white: true, newcap: true
+ */
+/* extern Ext, $ */
 Namespace('Yasound.App');
 
 var Class = function (methods) {
@@ -8,7 +11,7 @@ var Class = function (methods) {
         this.initialize.apply(this, arguments);
     };
 
-    for (var property in methods) {
+    for ( var property in methods) {
         klass.prototype[property] = methods[property];
     }
 
@@ -23,17 +26,23 @@ Yasound.App.PushManager = Class({
     enablePush: false,
     radio: undefined,
     radioPollingIntervalID: undefined,
-    socket: undefined,
+    socketRadio: undefined,
+    socketUser: undefined,
 
     initialize: function (options) {
         _.extend(this, options);
         _.extend(this, Backbone.Events);
 
         if (this.enablePush) {
-            _.bindAll(this, 'onRadioEvent');
+            _.bindAll(this, 'onRadioEvent', 'onUserEvent');
 
-            this.socket = io.connect(g_push_url + 'radio');
-            this.socket.on('radio_event', this.onRadioEvent);
+            this.socketRadio = io.connect(g_push_url + 'radio');
+            this.socketRadio.on('radio_event', this.onRadioEvent);
+
+            this.socketUser = io.connect(g_push_url + 'me');
+            this.socketUser.on('user_event', this.onUserEvent);
+            this.socketUser.emit('subscribe', {});
+
         }
     },
 
@@ -45,7 +54,7 @@ Yasound.App.PushManager = Class({
 
     unMonitorRadio: function () {
         if (this.enablePush) {
-            this.socket.emit('unsubscribe', {
+            this.socketRadio.emit('unsubscribe', {
                 'radio_id': this.radio.get('id')
             });
         }
@@ -59,9 +68,19 @@ Yasound.App.PushManager = Class({
         this.radio = radio;
 
         if (this.enablePush) {
-            this.socket.emit('subscribe', {
+            this.socketRadio.emit('subscribe', {
                 'radio_id': this.radio.get('id')
             });
         }
-    }
+    },
+
+    onUserEvent: function (message) {
+        console.log(message);
+        var raw_data = message.data;
+        var data = JSON.parse(raw_data);
+        console.log('onUserEvent');
+        console.log(data);
+        this.trigger(data.event_type, JSON.parse(data.data));
+    },
+
 });

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from redis import Redis
 from yacore.json import MongoAwareEncoder
 import json
@@ -15,7 +16,9 @@ def new_notification_handler(sender, notification, **kwargs):
     if recipient is None:
         return
     
-    channel = 'user.%s' % (recipient)
+    user = User.objects.get(userprofile__id=recipient)
+    
+    channel = 'user.%s' % (user.id)
     logger.info("publishing message to %s" % (channel)) 
     
     data = {

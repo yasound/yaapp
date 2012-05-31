@@ -205,7 +205,7 @@ urlpatterns = patterns('',
     (r'^api/v1/app_menu/$', 'yamenu.views.menu_description'),
 
     # internal stuff
-    url(r'^api/v1/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
+    url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
 
 )
 

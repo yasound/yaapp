@@ -415,6 +415,7 @@ def dissociate(request):
     else:
         return HttpBadRequest(unicode(message))
 
+@csrf_exempt
 def user_authenticated(request):
     decoded = simplejson.loads(request.raw_post_data)
     sessionid = decoded['sessionid']
