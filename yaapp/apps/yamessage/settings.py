@@ -9,6 +9,7 @@ TYPE_NOTIF_RADIO_IN_FAVORITES   = 'type_notif_radio_in_favorites'
 TYPE_NOTIF_RADIO_SHARED         = 'type_notif_radio_shared'
 TYPE_NOTIF_FRIEND_CREATED_RADIO = 'type_notif_friend_created_radio'
 TYPE_NOTIF_MESSAGE_FROM_YASOUND = 'type_notif_message_from_yasound'
+TYPE_NOTIF_MESSAGE_FROM_USER    = 'type_notif_message_from_user'
 
 APNS_LOC_KEY_FRIEND_IN_RADIO      = 'APNs_FIR'
 APNS_LOC_KEY_USER_IN_RADIO        = 'APNs_UIR'
@@ -19,6 +20,7 @@ APNS_LOC_KEY_RADIO_IN_FAVORITES   = 'APNs_RIF'
 APNS_LOC_KEY_RADIO_SHARED         = 'APNs_RSh'
 APNS_LOC_KEY_FRIEND_CREATED_RADIO = 'APNs_FCR'
 APNS_LOC_KEY_MESSAGE_FROM_YASOUND = 'APNs_YAS'
+APNS_LOC_KEY_MESSAGE_FROM_USER    = 'APNs_USR'
 
 
 TEXT_NOTIF_FRIEND_IN_RADIO      = _("%(user_name)s is listening to your radio")
@@ -30,6 +32,9 @@ TEXT_NOTIF_RADIO_IN_FAVORITES   = _("%s added your radio as a favorite")
 TEXT_NOTIF_RADIO_SHARED         = _("%(user_name)s shared your radio")
 TEXT_NOTIF_FRIEND_CREATED_RADIO = _("%(user_name)s created his radio")
 TEXT_NOTIF_MESSAGE_FROM_YASOUND = _("you have a message from Yasound")
+TEXT_NOTIF_MESSAGE_FROM_USER    = _("%s")
+
+YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'
 
 NOTIF_INFOS = {
                TYPE_NOTIF_FRIEND_IN_RADIO: {
@@ -67,5 +72,9 @@ NOTIF_INFOS = {
                TYPE_NOTIF_MESSAGE_FROM_YASOUND: {
                                             'text': TEXT_NOTIF_MESSAGE_FROM_YASOUND,
                                             'loc_key': APNS_LOC_KEY_MESSAGE_FROM_YASOUND
+                                            },
+               TYPE_NOTIF_MESSAGE_FROM_USER: {
+                                            'text': TEXT_NOTIF_MESSAGE_FROM_USER,
+                                            'loc_key': APNS_LOC_KEY_MESSAGE_FROM_USER
                                             },
                }

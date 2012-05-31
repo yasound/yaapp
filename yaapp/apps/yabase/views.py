@@ -1111,5 +1111,14 @@ def radio_live(request, radio_uuid):
         radio.set_live(enabled=True, name=name, album=album, artist=artist, id=id)
     return HttpResponse('OK')
     
+@csrf_exempt
+@check_api_key(methods=['POST',])
+def radio_broadcast_message(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if radio.creator != request.user:
+        return HttpResponse(status=403)
     
+    message = request.REQUEST.get('message')
+    radio.broadcast_message(message)
+    return HttpResponse('OK')
     

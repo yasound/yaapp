@@ -624,6 +624,21 @@ class UserProfile(models.Model):
         g, _created = Group.objects.get_or_create(name=group_name)
         g.user_set.add(self.user)
         
+    def send_message(self, sender, message):
+        m = NotificationsManager()
+        custom_params = {
+            'sender_id': sender.id,
+            'text': message
+        }
+        m.add_notification(self.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_USER, message)
+        self.send_APNs_message(message=message, 
+                               custom_params={
+                                    yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params
+                               }, 
+                               loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_USER, 
+                               loc_args=[])
+        
+        
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
         devices = Device.objects.for_userprofile(self)
         for d in devices:

@@ -1,8 +1,8 @@
-from django.conf import settings
-import settings as yamessage_settings  
-import datetime 
-from pymongo import DESCENDING
 from bson.objectid import ObjectId
+from django.conf import settings
+from pymongo import DESCENDING
+import datetime
+import settings as yamessage_settings
 
 
 class NotificationsManager():
@@ -11,7 +11,6 @@ class NotificationsManager():
         self.db = settings.MONGO_DB
         self.notifications = self.db.notifications
         self.notifications.ensure_index("date")
-        
         
     def add_notification(self, recipient_user_id, notif_type, params=None):
         if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:

@@ -1014,9 +1014,14 @@ class Radio(models.Model):
     def fix_favorites(self):
         self.favorites = RadioUser.objects.filter(radio=self, favorite=True).count()
         self.save()
+        
+    def broadcast_message(self, message):
+        from task import async_radio_broadcast_message
+        async_radio_broadcast_message(self, message)  
     
     class Meta:
         db_name = u'default'
+        
         
 def test_random(nb_elements=50, nb_tests=50):
     print 'test random'

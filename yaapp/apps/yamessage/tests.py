@@ -15,6 +15,18 @@ class TestNotifications(TestCase):
     def setUp(self):
         m = NotificationsManager()
         m.notifications.drop()
+
+    def test_send_message(self):
+        m = NotificationsManager()
+        self.assertEqual(m.notifications.count(), 0)
+        
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        
+        user.get_profile().send_message(sender=user, message='hello, world')
+        self.assertEqual(m.notifications.count(), 1)
+        
         
     def test_add_notif(self):
         """
