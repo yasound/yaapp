@@ -203,6 +203,10 @@ urlpatterns = patterns('',
     
     #yamenu
     (r'^api/v1/app_menu/$', 'yamenu.views.menu_description'),
+
+    # internal stuff
+    url(r'^api/v1/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
+
 )
 
 if settings.PRODUCTION_MODE:

@@ -2,44 +2,37 @@ from account.forms import LoginForm, SignupForm, PasswordResetForm, \
     SetPasswordForm
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import login as auth_login
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.api import get_messages
+from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseForbidden, \
+from django.forms.util import ErrorList
+from django.http import Http404, HttpResponse, HttpResponseForbidden, \
     HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
-
-from models import User, UserProfile, Device
-import datetime
-from django.contrib.messages.api import get_messages
-from social_auth import __version__ as version
-import json
-import settings as account_settings
-
+from django.utils import simplejson
 from django.utils.http import base36_to_int
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from models import User, UserProfile
-from social_auth import __version__ as version
-import datetime
-import logging
-import json
-from django.contrib.auth import login as auth_login
-from django.forms.util import ErrorList
 from django_mobile import get_flavour
-import urllib
+from models import User, UserProfile, Device
+from social_auth import __version__ as version
 from tastypie.http import HttpBadRequest
 from yacore.http import check_api_key_Authentication, check_http_method
-import yabase
+import datetime
+import json
+import logging
+import settings as account_settings
 import yabase.settings as yabase_settings
+
 
 logger = logging.getLogger("yaapp.account")
 
 
 PICTURE_FILE_TAG = 'picture'
-import settings as account_settings
 
 class DivErrorList(ErrorList):
     def __unicode__(self):
@@ -421,5 +414,22 @@ def dissociate(request):
         return HttpResponse(unicode(message))
     else:
         return HttpBadRequest(unicode(message))
+
+def user_authenticated(request):
+    decoded = simplejson.loads(request.raw_post_data)
+    sessionid = decoded['sessionid']
+    key = decoded['key']
+    if key != account_settings.AUTH_SERVER_KEY:
+        return HttpResponseForbidden()
+ 
+    s = Session.objects.get(pk=sessionid)
+    if not '_auth_user_id'in s.get_decoded():
+        raise Http404
     
+    u = User.objects.get(id=s.get_decoded()['_auth_user_id'])
+    to_json = {
+        "user_id": u.id,
+    }
+    return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+        
     
