@@ -131,6 +131,7 @@ class UserProfile(models.Model):
         'fb_share_listen',
         'fb_share_like_song',
         'fb_share_post_message',
+        'fb_share_animator_activity',
         ),
         default=(2+8+16+32+64+128)
     ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128)
@@ -622,6 +623,21 @@ class UserProfile(models.Model):
     def add_to_group(self, group_name):
         g, _created = Group.objects.get_or_create(name=group_name)
         g.user_set.add(self.user)
+        
+    def send_message(self, sender, message):
+        m = NotificationsManager()
+        custom_params = {
+            'sender_id': sender.id,
+            'text': message
+        }
+        m.add_notification(self.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_USER, message)
+        self.send_APNs_message(message=message, 
+                               custom_params={
+                                    yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params
+                               }, 
+                               loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_USER, 
+                               loc_args=[])
+        
         
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
         devices = Device.objects.for_userprofile(self)

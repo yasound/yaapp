@@ -403,6 +403,13 @@ class RadioManager(models.Manager):
         results = rm.filter('current_users', limit=5, id_only=True)
         ids = [res['db_id'] for res in results]
         return self.filter(id__in=ids).order_by('-current_connections')
+
+    def most_popular_today(self):
+        from yametrics.models import RadioMetricsManager
+        rm = RadioMetricsManager()
+        results = rm.filter('daily_popularity', limit=5, id_only=True)
+        ids = [res['db_id'] for res in results]
+        return self.filter(id__in=ids)
     
     def last_indexed(self):
         doc = yasearch_indexer.get_last_radio_doc()
@@ -1014,9 +1021,14 @@ class Radio(models.Model):
     def fix_favorites(self):
         self.favorites = RadioUser.objects.filter(radio=self, favorite=True).count()
         self.save()
+        
+    def broadcast_message(self, message):
+        from task import async_radio_broadcast_message
+        async_radio_broadcast_message(self, message)  
     
     class Meta:
         db_name = u'default'
+        
         
 def test_random(nb_elements=50, nb_tests=50):
     print 'test random'

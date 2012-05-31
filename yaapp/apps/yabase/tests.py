@@ -1050,5 +1050,21 @@ class TestDuplicate(TestCase):
         self.assertEquals(song_count, 200)
         self.assertEquals(song_metadata, 100)
         
+class TestBroadcastMessage(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+          
+    def test_broadcast_not_owner(self):
+        other_radio = Radio.objects.create(name='other')
+        res = self.client.post(reverse('yabase.views.radio_broadcast_message', args=[other_radio.uuid]), {'message': 'hello, world'})
+        self.assertEquals(res.status_code, 403)
         
+    def test_broadcast_ok(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        res = self.client.post(reverse('yabase.views.radio_broadcast_message', args=[radio.uuid]), {'message': 'hello, world'})
+        self.assertEquals(res.status_code, 200)
         

@@ -124,6 +124,7 @@ urlpatterns = patterns('',
     # live
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),
 
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/connect/$', 'yabase.views.connect_to_radio'),
@@ -202,6 +203,10 @@ urlpatterns = patterns('',
     
     #yamenu
     (r'^api/v1/app_menu/$', 'yamenu.views.menu_description'),
+
+    # internal stuff
+    url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
+
 )
 
 if settings.PRODUCTION_MODE:
