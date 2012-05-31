@@ -3,7 +3,11 @@ from django.conf import settings
 from pymongo import DESCENDING
 import datetime
 import settings as yamessage_settings
+import signals as yamessage_signals
 
+if settings.ENABLE_PUSH:
+    from push import install_handlers
+    install_handlers()
 
 class NotificationsManager():
     
@@ -26,6 +30,7 @@ class NotificationsManager():
                  'params':params
                  }
         self.notifications.insert(notif)
+        yamessage_signals.new_notification.send(sender=self, notification=notif)
         
     def text_for_notification(self, notification_type, params):
         raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['text'])
