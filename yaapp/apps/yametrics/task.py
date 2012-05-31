@@ -36,6 +36,7 @@ def daily_metrics():
     
     update_activities()
     update_messages_stats()
+    reset_daily_popularity()
     
 @task(ignore_result=True)
 def async_activity(user_id, activity, throttle=True):
@@ -141,3 +142,7 @@ def update_messages_stats():
     um.update_messages_stats()
     
         
+def reset_daily_popularity():
+    from models import RadioMetricsManager
+    rm = RadioMetricsManager()
+    rm.reset_daily_popularity()

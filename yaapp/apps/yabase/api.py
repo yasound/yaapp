@@ -318,7 +318,7 @@ class MostActiveRadioResource(ModelResource):
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
-        queryset = Radio.objects.most_actives()
+        queryset = Radio.objects.most_popular_today()
         resource_name = 'most_active_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;

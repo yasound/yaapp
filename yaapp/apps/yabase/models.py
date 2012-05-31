@@ -403,6 +403,13 @@ class RadioManager(models.Manager):
         results = rm.filter('current_users', limit=5, id_only=True)
         ids = [res['db_id'] for res in results]
         return self.filter(id__in=ids).order_by('-current_connections')
+
+    def most_popular_today(self):
+        from yametrics.models import RadioMetricsManager
+        rm = RadioMetricsManager()
+        results = rm.filter('daily_popularity', limit=5, id_only=True)
+        ids = [res['db_id'] for res in results]
+        return self.filter(id__in=ids)
     
     def last_indexed(self):
         doc = yasearch_indexer.get_last_radio_doc()

@@ -232,6 +232,10 @@ class RadioMetricsManager():
         else:
             return collection.find().sort([(key, DESCENDING)]).limit(limit)
 
+    def reset_daily_popularity(self):
+        collection = self.radios
+        collection.update({}, {'$set': {'daily_popularity': 0}}, multi=True)
+        
 class UserMetricsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -361,6 +365,7 @@ def user_started_listening_handler(sender, radio, user, **kwargs):
         async_activity.delay(user.id, yametrics_settings.ACTIVITY_LISTEN)
         async_check_if_new_listener(user.id)
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
+    async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
 
 def user_stopped_listening_handler(sender, radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
@@ -383,6 +388,8 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         user = wall_event.user
         if not user.is_anonymous():
             async_activity.delay(user.id, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
+    
+    async_inc_radio_value.delay(wall_event.radio.id, 'daily_popularity', 1)
 
 def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
@@ -403,7 +410,8 @@ def neutral_like_radio_handler(sender, radio, user, **kwargs):
 
 def favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_favorite_radio', 1)
-
+    async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
+    
 def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_not_favorite_radio', 1)
 
