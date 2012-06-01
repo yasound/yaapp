@@ -53,8 +53,8 @@ def async_listen(user_id, radio_uuid, song_title):
         return
 
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
-#    path = 'me/%s:listen' % (settings.FACEBOOK_APP_NAMESPACE)
-    path = 'me/music.listens'
+    path = 'me/%s:play' % (settings.FACEBOOK_APP_NAMESPACE)
+#    path = 'me/music.listens'
 
     logger.debug('calling graph api')
     graph = GraphAPI(facebook_token)
