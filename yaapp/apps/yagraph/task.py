@@ -67,18 +67,19 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
     logger.debug('done')
 
 @task(ignore_result=True)
-def async_like_song(user_id, radio_uuid, song_title):
+def async_like_song(user_id, radio_uuid, song_title, song_id):
     logger.debug('async_like_song: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     facebook_token = _facebook_token(user_id)
     if facebook_token is None:
         return
 
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
+    song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
     path = 'me/%s:like' % (settings.FACEBOOK_APP_NAMESPACE)
 
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path, radio_station=radio_url, song=song_title)
+        res = graph.post(path=path, radio_station=radio_url, song=song_url)
         logger.debug(res)
     except GraphAPI.FacebookError as e:
         logger.info(e)

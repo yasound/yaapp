@@ -9,7 +9,6 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         return
     if user.is_anonymous():
         return
-
     
     we_type = wall_event.type
     if we_type == yabase_settings.EVENT_MESSAGE:
@@ -20,7 +19,7 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         if not user.get_profile().notifications_preferences.fb_share_like_song:
             return    
         song_title = unicode(wall_event)
-        async_like_song.delay(user.id, wall_event.radio.uuid, song_title)
+        async_like_song.delay(user.id, wall_event.radio.uuid, song_title, wall_event.song.id)
         
 def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
     if user is None:
