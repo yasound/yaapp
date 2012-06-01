@@ -117,6 +117,17 @@ class TestRadioMetricsManager(TestCase):
         data = rm.filter(key='val1', id_only=True)
         self.assertEquals(data[0]['db_id'], 1)
         
+    def test_daily_popularity(self):
+        rm = RadioMetricsManager()
+
+        rm.inc_value(1, "daily_popularity", 10)
+        self.assertEquals(rm.metrics(1)['daily_popularity'], 10)
+        
+        rm.reset_daily_popularity()
+        self.assertEquals(rm.metrics(1)['daily_popularity'], 0)
+        
+        
+        
 class TestTopMissingSongsManager(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
