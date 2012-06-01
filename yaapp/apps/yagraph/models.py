@@ -34,7 +34,7 @@ def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
         return    
     
     song_title = unicode(song)
-    async_listen.delay(user.id, radio.uuid, song_title)
+    async_listen.delay(user.id, radio.uuid, song_title, song.id)
 
 def new_animator_activity(sender, user, radio, **kwargs):
     if user is None or radio is None:
