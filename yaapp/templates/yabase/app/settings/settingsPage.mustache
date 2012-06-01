@@ -8,14 +8,30 @@
 <div class='row-fluid'>
     <div class='span6'>
         {% if settings_facebook_form %}
+        
         <form id='settings-facebook-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
             {{ settings_facebook_form }}
             <div class="form-actions">
                 <input type='hidden' name='action' value='settings_facebook'/>
                 <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
-                <button type="submit" name='remove' class="btn btn-danger">{% trans "Remove account" %}</button>
+                <button type="submit" name='remove' id='btn-remove-facebook' class="btn btn-danger">{% trans "Remove account" %}</button>
             </div>
         </form>
+
+       <div class="modal hide" id="modal-remove-facebook">
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>{% trans "Remove facebook account ?" %}</h3>
+          </div>
+          <div class="modal-body">
+            <p>{% trans "Do you want to remove your facebook account ?" %}</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">{% trans "No thank" %}</a>
+            <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+          </div>
+        </div>        
+         
         {% endif %}
 
         {% if settings_twitter_form %}
@@ -23,9 +39,23 @@
             {{ settings_twitter_form }}
             <div class="form-actions">
                 <input type='hidden' name='action' value='settings_twitter'/>
-                <button type="submit" name='remove' class="btn btn-danger">{% trans "Remove account" %}</button>
+                <button type="submit" name='remove' id='btn-remove-twitter' class="btn btn-danger">{% trans "Remove account" %}</button>
             </div>
         </form>
+
+       <div class="modal hide" id="modal-remove-twitter">
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>{% trans "Remove twitter account ?" %}</h3>
+          </div>
+          <div class="modal-body">
+            <p>{% trans "Do you want to remove your twitter account ?" %}</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">{% trans "No thank" %}</a>
+            <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+          </div>
+        </div>        
         {% endif %}
 
         <form id='settings-user-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
