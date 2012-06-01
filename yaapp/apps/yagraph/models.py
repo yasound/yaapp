@@ -27,6 +27,8 @@ def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
         return
     if user.is_anonymous():
         return
+    if song is None:
+        return
 
     if not user.get_profile().notifications_preferences.fb_share_listen:
         return    

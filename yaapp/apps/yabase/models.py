@@ -819,6 +819,7 @@ class Radio(models.Model):
         
         atomic_inc(self, 'current_connections', 1)
         yabase_signals.user_started_listening.send(sender=self, radio=self, user=user)
+        yabase_signals.user_started_listening_song.send(sender=self, radio=self, user=user, song=self.current_song)
             
     def user_stopped_listening(self, user, listening_duration):
         if not user.is_anonymous():
