@@ -38,7 +38,7 @@ def async_post_message(user_id, radio_uuid, message):
 
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path, radio=radio_url)
+        res = graph.post(path=path, radio_station=radio_url)
         logger.debug(res)
     except GraphAPI.FacebookError as e:
         logger.info(e)
@@ -53,12 +53,12 @@ def async_listen(user_id, radio_uuid, song_title):
         return
 
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
-    path = 'me/%s:play' % (settings.FACEBOOK_APP_NAMESPACE)
+    path = 'me/%s:listen' % (settings.FACEBOOK_APP_NAMESPACE)
 
     logger.debug('calling graph api')
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path, radio=radio_url, song=song_title)
+        res = graph.post(path=path, radio_station=radio_url, song=song_title)
         logger.debug(res)
     except GraphAPI.FacebookError as e:
         logger.info(e)
@@ -76,7 +76,7 @@ def async_like_song(user_id, radio_uuid, song_title):
 
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path, radio=radio_url, song=song_title)
+        res = graph.post(path=path, radio_station=radio_url, song=song_title)
         logger.debug(res)
     except GraphAPI.FacebookError as e:
         logger.info(e)
@@ -94,7 +94,7 @@ def async_animator_activity(user_id, radio_uuid):
 
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path, radio=radio_url)
+        res = graph.post(path=path, radio_station=radio_url)
         logger.debug(res)
     except GraphAPI.FacebookError as e:
         logger.info(e)
