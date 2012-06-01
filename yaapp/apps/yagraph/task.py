@@ -45,22 +45,17 @@ def async_post_message(user_id, radio_uuid, message):
     logger.debug('done')
     
 @task(ignore_result=True)
-def async_listen(user_id, radio_uuid, song_title):
-    from yabase.models import Radio
-    
+def async_listen(user_id, radio_uuid, song_title, song_id):
     logger.debug('async_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     facebook_token = _facebook_token(user_id)
     if facebook_token is None:
         logger.debug('no facebook token, exiting')
         return
 
-    radio = Radio.objects.get(uuid=radio_uuid)
-    song_id = radio.current_song.id
-
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
     song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
 
-    path = 'me/music.listens'
+    path = 'me/%s:play' % (settings.FACEBOOK_APP_NAMESPACE)
     
     logger.debug('calling graph api')
     graph = GraphAPI(facebook_token)
