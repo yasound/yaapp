@@ -6,11 +6,11 @@
 
 {% block fb_open_graph %}
   <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" /> 
-  <meta property="og:type"   content="radio_station" /> 
+  <meta property="og:type"   content="song" /> 
   <meta property="og:url"    content="{{ request.build_absolute_uri }}" /> 
-  <meta property="og:title"  content="{{ radio }}" /> 
+  <meta property="og:title"  content="{{ song }}" /> 
   <meta property="og:image"  content="{{ radio_picture_absolute_url }}" /> 
-  <meta property="og:audio"  content="{{ request.build_absolute_uri }}" /> 
+  <meta property="og:audio"  content="{{ radio.stream_url }}" /> 
   <meta property="og:audio:type" content="audio/vnd.facebook.bridge" />
 {% endblock %}
 

@@ -821,6 +821,24 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "radio_picture_absolute_url": radio_picture_absolute_url,
     }, context_instance=RequestContext(request))    
 
+def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.html'):
+    song_instance = get_object_or_404(SongInstance, id=song_instance_id)
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if song_instance.playlist.radio != radio:
+        raise Http404
+
+    radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
+
+    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid)
+    return render_to_response(template_name, {
+        "radio": radio,
+        "radio_url": radio_url,
+        "listeners": radio.radiouser_set.filter(listening=True).count(),
+        "fans": radio.radiouser_set.filter(favorite=True).count(),
+        "new_page": '/app/#radio/%s' % (radio.uuid),
+        "song": song_instance,
+        "radio_picture_absolute_url": radio_picture_absolute_url,
+    }, context_instance=RequestContext(request)) 
 class WebAppView(View):
     """ Class based view for web app.
     """
