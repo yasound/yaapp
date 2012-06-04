@@ -407,7 +407,7 @@ class RadioManager(models.Manager):
     def most_popular_today(self):
         from yametrics.models import RadioMetricsManager
         rm = RadioMetricsManager()
-        results = rm.filter('daily_popularity', limit=5, id_only=True)
+        results = rm.filter('daily_popularity', limit=yabase_settings.MOST_ACTIVE_RADIOS_LIMIT, id_only=True)
         ids = [res['db_id'] for res in results]
         return self.filter(id__in=ids)
     

@@ -125,13 +125,16 @@ ul .radio-cell {
     list-style: none;
 	width:148px;
 	float:left;
-	margin-right:16px;
 	cursor: pointer;
 	margin-bottom:12px;
 }
 
 ul .radio-cell img {
 	margin-top:12px;
+}
+
+ul .radio-cell .thumbnail {
+	background-color: white;
 }
 
 ul .radio-cell .thumbnail:hover {
