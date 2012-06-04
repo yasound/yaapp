@@ -506,8 +506,6 @@ def stop_listening_to_radio(request, radio_uuid):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     
-    logger.debug('stop_listening_to_radio (uid=%s): %s', radio_uuid, request.REQUEST)
-    
     LISTENING_DURATION_PARAM_NAME = 'listening_duration'
     listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
     
