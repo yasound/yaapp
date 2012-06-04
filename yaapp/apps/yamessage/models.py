@@ -16,7 +16,7 @@ class NotificationsManager():
         self.notifications = self.db.notifications
         self.notifications.ensure_index("date")
         
-    def add_notification(self, recipient_user_id, notif_type, params=None):
+    def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None):
         if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:
             print 'NotificationManager is disabled (settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False)'
             return;
@@ -26,6 +26,7 @@ class NotificationsManager():
                  'text':text,
                  'date':d,
                  'dest_user_id':recipient_user_id,
+                 'from_user_id':from_user_id,
                  'read':False,
                  'params':params
                  }
