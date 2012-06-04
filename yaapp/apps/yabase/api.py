@@ -57,7 +57,7 @@ class SongInstanceResource(ModelResource):
         
     def dehydrate(self, bundle):
         song = bundle.obj
-        song.fill_bundle(bundle)
+        bundle.data = song.song_description
         return bundle
 
 class PlaylistResource(ModelResource):
@@ -848,21 +848,8 @@ class MatchedSongResource(ModelResource):
         return song_instances
     
     def dehydrate(self, bundle):
-        song_instance = bundle.obj
-        
-        bundle.data['name'] = song_instance.metadata.name
-        bundle.data['artist'] = song_instance.metadata.artist_name
-        bundle.data['album'] = song_instance.metadata.album_name
-
-#        if yasound_song.album:
-#            cover = yasound_song.album.cover_url
-#        elif yasound_song.cover_filename:
-#            cover = yasound_song.cover_url
-#        else:
-#            cover = None
-        cover = None
-        bundle.data['cover'] = cover
-    
+        song_instance = bundle.obj       
+        bundle.data = song_instance.song_description
         return bundle
         
     
