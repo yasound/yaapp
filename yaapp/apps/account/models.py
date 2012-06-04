@@ -630,7 +630,11 @@ class UserProfile(models.Model):
             'sender_id': sender.id,
             'text': message
         }
-        m.add_notification(self.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_USER, message)
+        m.add_notification(recipient_user_id=self.id, 
+                           notif_type=yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_USER,
+                           params=message,
+                           from_user_id=sender.id)
+        
         self.send_APNs_message(message=message, 
                                custom_params={
                                     yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params
