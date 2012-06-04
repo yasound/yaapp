@@ -1,6 +1,5 @@
 from bson.objectid import ObjectId
 from django.conf import settings
-from django.contrib.auth.models import User
 from pymongo import DESCENDING
 import datetime
 import settings as yamessage_settings
@@ -18,12 +17,9 @@ class NotificationsManager():
         self.notifications.ensure_index("date")
         
     def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None):
-        try:
-            if not User.objects.get(id=recipient_user_id).is_superuser:
-                return
-        except:
-            pass
-        
+        if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:
+            print 'NotificationManager is disabled (settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False)'
+            return;
         text = self.text_for_notification(notif_type, params)
         d = datetime.datetime.now()
         notif = {'type':notif_type,
