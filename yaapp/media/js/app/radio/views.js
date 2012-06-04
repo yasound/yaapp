@@ -239,6 +239,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
         _.bindAll(this, 'scroll');
 
         $(window).on('scroll', this.scroll);
+        this.locked = true;
         this.collection.on('reset', this.render, this);
         this.collection.on('change', this.render, this);
     },
@@ -250,6 +251,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
     },
 
     render: function () {
+        this.locked = false;
         var info = this.collection.info();
         var page = info.page;
         var totalPages = info.totalPages;
@@ -298,10 +300,14 @@ Yasound.Views.Pagination = Backbone.View.extend({
         this.collection.howManyPer(per);
     },
     scroll: function (event) {
+        if (this.locked) {
+            return;
+        }
         var height = $(document).height();
         var scrollHeight = $(window).scrollTop() + $(window).height();
 
         if (scrollHeight >= height) {
+            this.locked = true;
             this.collection.requestNextPage();
         }
     }
