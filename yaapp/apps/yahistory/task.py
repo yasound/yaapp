@@ -36,3 +36,10 @@ def async_add_share_event(user_id, radio_uuid, share_type):
     from yahistory.models import UserHistory
     uh = UserHistory()
     uh.add_share_event.delay(user_id, radio_uuid, share_type)
+
+@task(ignore_result=True)
+def async_add_animator_event(user_id, radio_uuid):
+    from yahistory.models import UserHistory
+    uh = UserHistory()
+    uh.add_animator_event(user_id, radio_uuid)
+

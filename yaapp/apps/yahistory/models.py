@@ -14,6 +14,7 @@ class UserHistory():
     ETYPE_FAVORITE_RADIO     = 'favorite_radio'
     ETYPE_NOT_FAVORITE_RADIO = 'not_favorite_radio'
     ETYPE_SHARE              = 'share'
+    ETYPE_ANIMATOR           = 'animator'
     
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -71,6 +72,12 @@ class UserHistory():
         }
         self.add_event(user_id, UserHistory.ETYPE_SHARE, 'radio', data)
 
+    def add_animator_event(self, user_id, radio_uuid):
+        data = {
+            'uuid': radio_uuid,
+        }
+        self.add_event(user_id, UserHistory.ETYPE_ANIMATOR, 'radio', data)
+
     def history_for_user(self, user_id, start_date=None, end_date=None, infinite=False, etype=None):
         query = {'db_id': user_id}
         if not infinite:
@@ -113,10 +120,14 @@ def not_favorite_radio_handler(sender, radio, user, **kwargs):
 def new_share(sender, radio, user, share_type, **kwargs):
     async_add_share_event.delay(user.id, radio.uuid, share_type=share_type)
 
+def new_animator_activity(sender, user, radio, **kwargs):
+    async_add_animator_event.delay(user.id, radio.uuid)
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
     yabase_signals.favorite_radio.connect(favorite_radio_handler)
     yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
     yabase_signals.radio_shared.connect(new_share)
+    yabase_signals.new_animator_activity.connect(new_animator_activity)
 install_handlers()    
