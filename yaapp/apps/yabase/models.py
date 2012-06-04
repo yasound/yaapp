@@ -178,15 +178,8 @@ class SongInstance(models.Model):
     class Meta:
         db_name = u'default'
         
-    def fill_bundle(self, bundle):        
-        if self.metadata:
-            bundle.data['name'] = self.metadata.name
-            bundle.data['artist'] = self.metadata.artist_name
-            bundle.data['album'] = self.metadata.album_name
-            bundle.data['song'] = self.metadata.yasound_song_id
-        
     @property
-    def song_description(self):
+    def song_description(self, include_cover=True):
         try:
             song = YasoundSong.objects.get(id=self.metadata.yasound_song_id)
         except YasoundSong.DoesNotExist:
@@ -197,17 +190,23 @@ class SongInstance(models.Model):
         desc_dict['name'] = song.name
         desc_dict['artist'] = song.artist_name
         desc_dict['album'] = song.album_name
+        desc_dict['name_client'] = self.metadata.name
+        desc_dict['artist_client'] = self.metadata.artist_name
+        desc_dict['album_client'] = self.metadata.album_name
         desc_dict['likes'] = self.likes
         desc_dict['enabled'] = self.enabled
         desc_dict['frequency'] = self.frequency
         desc_dict['last_play_time'] = self.last_play_time.isoformat() if self.last_play_time is not None else None
+        desc_dict['need_sync'] = self.need_sync
+        
         
         cover = None
-        if song.cover_filename:
-            cover = song.cover_url
-        if cover is None and song.album:
-            cover = song.album.cover_url
-            
+        if include_cover:
+            if song.cover_filename:
+                cover = song.cover_url
+            if cover is None and song.album:
+                cover = song.album.cover_url
+                
         if cover is None:
             cover = '/media/images/default_album.jpg'
         desc_dict['cover'] = cover
