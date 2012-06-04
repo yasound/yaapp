@@ -27,7 +27,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             var url = '/api/v1/radio/' + id + '/disconnect/';
             $.post(url);
         }
-    }
+    }    
 });
 
 /**

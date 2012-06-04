@@ -15,7 +15,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     className: 'radio-cell',
 
     events: {
-        'click .radio-cell': 'onRadio'
+        'click .thumbnail': 'onRadio'
     },
 
     initialize: function () {
@@ -26,8 +26,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
     render: function () {
         var data = this.model.toJSON();
-        if (data.name.length > 22) {
-            data.name = data.name.substr(0,22);
+        if (data.name.length > 18) {
+            data.name = _.str.prune(data.name, 18);
         }
         $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
         return this;

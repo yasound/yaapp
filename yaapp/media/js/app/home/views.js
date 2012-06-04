@@ -48,12 +48,12 @@ Yasound.Views.SelectedRadios = Backbone.View.extend({
             // do not insert duplicated content
             return;
         }
-
+        
         var view = new Yasound.Views.RadioCell({
             model: radio
         });
 
-        $(this.el).prepend(view.render().el);
+        $(this.el).append(view.render().el);
         this.views.push(view);
     }
 });
