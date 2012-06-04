@@ -4,7 +4,7 @@ from yabase import settings as yabase_settings, signals as yabase_signals
 from yahistory.task import async_add_listen_radio_event, \
     async_add_post_message_event, async_add_like_song_event, \
     async_add_favorite_radio_event, async_add_not_favorite_radio_event, \
-    async_add_share_event
+    async_add_share_event, async_add_animator_event
 import datetime
 
 class UserHistory():
