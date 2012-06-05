@@ -14,6 +14,12 @@
   <meta property="og:audio:type" content="application/mp3" />
   <meta property="{{ FACEBOOK_APP_NAMESPACE}}:radio_station" content="{{ radio_station_url }}" />
   <meta property="og:locale:alternate" content="fr_FR" />
+
+  <meta property="og:video:height" content="48" />
+  <meta property="og:video:width" content="48" /> 
+  <meta property="og:video:type" content="application/x-shockwave-flash" />
+  <meta property="og:video" content="{{ flash_player_absolute_url }}?mp3={{radio_url}}&showslider=0&showvolume=1&buttonwidth=24&height=48&volumewidth=24" />
+  
 {% endblock %}
 
 
