@@ -4,13 +4,20 @@
     <div id='webapp-radio'></div>
 </div>
 <div class='span8'>
-    <h2>{% trans "Radio" %}</h2>
-    <div id='own-radio'>
-    </div>
-    <h2>{% trans "Currently listening to" %}</h2>
-    <div id='current-radio'>
-    </div>
-    <div>
+    <ul class='thumbnails' id='profile-radios'>
+        <li>
+            <h4>{% trans "Radio" %}</h4>
+            <div id='own-radio' class='radio-cell'>
+            </div>
+        
+        </li>
+        <li>
+            <h4>{% trans "Currently listening to" %}</h4>
+            <div id='current-radio' class='radio-cell'>
+            </div>
+        </li>
+    </ul>
+
 </div>
 </div>
 <div class='row-fluid'>
