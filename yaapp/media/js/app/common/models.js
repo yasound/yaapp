@@ -27,7 +27,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             var url = '/api/v1/radio/' + id + '/disconnect/';
             $.post(url);
         }
-    }    
+    }
 });
 
 /**
@@ -50,6 +50,25 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
                 that.fetch();
             }, 10000);
         }
+    },
+    title: function() {
+        var model = this;
+        var context = {
+            name: function() {
+                var s = model.get('name');
+                if (!s) {
+                    return gettext('Unknown song');
+                }
+                return s;
+            },
+            artist: function() {
+                var s = model.get('artist');
+                if (!s) {
+                    return gettext('Unknown artist');
+                }
+                return s;
+            },
+        };
+        return Mustache.to_html(gettext('<%name%> by <%artist%> - Yasound'), context);
     }
-
 });

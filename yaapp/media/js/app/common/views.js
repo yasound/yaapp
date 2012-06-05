@@ -180,6 +180,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
+        $('title').text(this.model.title());
         this.generateSocialShare();
 
         if (Yasound.App.MySound) {
