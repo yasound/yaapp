@@ -1,0 +1,294 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-05 09:32+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: forms.py:13
+msgid "My radio"
+msgstr "Ma radio"
+
+#: forms.py:17
+msgid "Password"
+msgstr "Mot de passe"
+
+#: forms.py:18
+msgid "Password (again)"
+msgstr "Mot de passe (à nouveau)"
+
+#: forms.py:24
+msgid "Profile"
+msgstr "Profil"
+
+#: forms.py:36
+msgid "Listen"
+msgstr "J'écoute un morceau"
+
+#: forms.py:37
+msgid "Like song"
+msgstr "J'aime le morceau"
+
+#: forms.py:38
+msgid "Post message"
+msgstr "Je poste un message"
+
+#: forms.py:39
+msgid "Update programming"
+msgstr "Je mets à jour ma programmation"
+
+#: forms.py:42
+msgid "Facebook share options"
+msgstr "Options de partage de Facebook"
+
+#: forms.py:85
+msgid "Twitter share options"
+msgstr "Options de partage de twitter"
+
+#: import_utils.py:232
+msgid "no echonest info about artist"
+msgstr ""
+
+#: import_utils.py:238
+msgid "artist info not sufficient"
+msgstr ""
+
+#: import_utils.py:242
+msgid "no name for artist"
+msgstr ""
+
+#: import_utils.py:261
+msgid "no lastfm info about album"
+msgstr ""
+
+#: import_utils.py:266
+#, python-format
+msgid "album already in database (%d)"
+msgstr ""
+
+#: import_utils.py:286
+msgid "downloading album cover"
+msgstr ""
+
+#: import_utils.py:491
+#, python-format
+msgid "song metadata given and found : %s"
+msgstr ""
+
+#: import_utils.py:493
+#, python-format
+msgid "song metadata does not exists : %s"
+msgstr ""
+
+#: import_utils.py:500
+msgid "looking for artist"
+msgstr ""
+
+#: import_utils.py:503
+msgid "looking for album"
+msgstr ""
+
+#: import_utils.py:507
+msgid "looking for song"
+msgstr ""
+
+#: import_utils.py:516
+msgid "generating filename"
+msgstr ""
+
+#: import_utils.py:528
+msgid "creating YasoundSong"
+msgstr ""
+
+#: import_utils.py:558
+#, python-format
+msgid "YasoundSong generated, id = %s"
+msgstr ""
+
+#: import_utils.py:560
+msgid "generating file data"
+msgstr ""
+
+#: import_utils.py:566
+msgid "generating preview"
+msgstr ""
+
+#: import_utils.py:590
+msgid "Association between YasoundSong and SongMetadata done"
+msgstr ""
+
+#: import_utils.py:598
+msgid "Building mongodb index"
+msgstr ""
+
+#: models.py:64
+msgid "yasound song id"
+msgstr ""
+
+#: models.py:277
+msgid "song"
+msgstr ""
+
+#: models.py:278
+#: models.py:1109
+msgid "user"
+msgstr ""
+
+#: models.py:286
+msgid "Song user"
+msgstr ""
+
+#: models.py:473
+msgid "creator"
+msgstr ""
+
+#: models.py:474
+#: models.py:1422
+msgid "created"
+msgstr ""
+
+#: models.py:475
+#: models.py:1423
+msgid "updated"
+msgstr ""
+
+#: models.py:506
+msgid "current song"
+msgstr ""
+
+#: models.py:1108
+#: models.py:1444
+msgid "radio"
+msgstr ""
+
+#: models.py:1124
+msgid "Radio user"
+msgstr ""
+
+#: models.py:1424
+msgid "name"
+msgstr ""
+
+#: models.py:1425
+msgid "description"
+msgstr ""
+
+#: models.py:1426
+msgid "activated"
+msgstr ""
+
+#: models.py:1440
+#: models.py:1443
+msgid "featured content"
+msgstr ""
+
+#: models.py:1445
+msgid "order"
+msgstr ""
+
+#: models.py:1452
+msgid "featured radio"
+msgstr ""
+
+#: settings.py:21
+msgid "All"
+msgstr ""
+
+#: settings.py:22
+msgid "Classical"
+msgstr ""
+
+#: settings.py:23
+msgid "Blues"
+msgstr ""
+
+#: settings.py:24
+msgid "Alternative"
+msgstr ""
+
+#: settings.py:25
+msgid "Electro"
+msgstr ""
+
+#: settings.py:26
+msgid "French Music"
+msgstr ""
+
+#: settings.py:27
+msgid "Jazz"
+msgstr ""
+
+#: settings.py:28
+msgid "Pop"
+msgstr ""
+
+#: settings.py:29
+msgid "Reggae"
+msgstr ""
+
+#: settings.py:30
+msgid "Rock"
+msgstr ""
+
+#: settings.py:31
+msgid "Metal"
+msgstr ""
+
+#: settings.py:32
+msgid "Hip hop"
+msgstr ""
+
+#: settings.py:33
+msgid "RnB / Soul"
+msgstr ""
+
+#: settings.py:34
+msgid "World"
+msgstr ""
+
+#: settings.py:35
+msgid "Miscellaneous"
+msgstr ""
+
+#: settings.py:44
+#: settings.py:56
+msgid "Like"
+msgstr ""
+
+#: settings.py:45
+msgid "Dislike"
+msgstr ""
+
+#: settings.py:46
+msgid "Neutral"
+msgstr ""
+
+#: settings.py:54
+msgid "Message"
+msgstr ""
+
+#: settings.py:55
+msgid "Song"
+msgstr ""
+
+#: settings.py:81
+msgid "Selection"
+msgstr ""
+
+#: settings.py:82
+msgid "Homepage"
+msgstr ""
+

@@ -64,6 +64,18 @@ body {
     margin: 0px auto;
 }
 
+#webapp-radio-users li {
+    background-color: white;
+}
+#webapp-radio-users img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    
+    border:1px solid #c1c1c1;
+    overflow: hidden;
+}
+
 #webapp-user-picture {
     width: 212px;
     height: 212px;

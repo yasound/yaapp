@@ -63,6 +63,10 @@ Yasound.Views.SelectedRadios = Backbone.View.extend({
  * Home page
  */
 Yasound.Views.HomePage = Backbone.View.extend({
+    events: {
+        'click #favorites-link': 'favorites'
+    },
+
     initialize: function() {
         _.bindAll(this, 'render');
     },
@@ -105,5 +109,12 @@ Yasound.Views.HomePage = Backbone.View.extend({
         this.selectedRadios.fetch();
         this.mostActiveRadios.fetch();
         return this;
+    },
+    
+    favorites: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('favorites/', {
+            trigger: true
+        });
     }
 });
