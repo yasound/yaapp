@@ -11,6 +11,7 @@ from tastypie.models import ApiKey
 import json
 from httplib import HTTP
 from mock import Mock, patch
+from yabase.models import Radio
 
 class TestNotifications(TestCase):
     def setUp(self):
@@ -52,6 +53,46 @@ class TestNotifications(TestCase):
             m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
             self.assertEqual(m.notifications.count(), 1)
         
+    def test_add_notif_from_user(self):
+        """
+        Tests that a menu description can be added
+        """
+        redis = Mock(name='redis')
+        redis.publish = Mock()      
+
+        with patch('yamessage.push.Redis') as mock_redis:
+            mock_redis.return_value = redis
+            m = NotificationsManager()
+            self.assertEqual(m.notifications.count(), 0)
+            
+            user = User(email="test@yasound.com", username="username", is_superuser=False, is_staff=False)
+            user.save()
+            
+            profile = user.get_profile()
+            profile.name = 'username'
+            profile.notifications_preferences.friend_online = True
+            profile.notifications_preferences.user_in_radio = True
+            profile.save()
+            
+            radio = Radio.objects.radio_for_user(user)
+            
+            user2 = User(email="test2@yasound.com", username="username2", is_superuser=False, is_staff=False)
+            user2.save()
+            
+            profile2 = user2.get_profile()
+            profile2.name = 'username2'
+            profile2.save()
+
+            profile.my_friend_is_online(friend_profile=profile2)
+            
+            self.assertEqual(m.notifications.count(), 1)
+
+            profile._user_in_my_radio_internal(user_profile=profile2, radio=radio)
+            self.assertEqual(m.notifications.count(), 2)
+            
+            profile._friend_in_my_radio_internal(friend_profile=profile2, radio=radio)
+            self.assertEqual(m.notifications.count(), 3)
+
     def test_get_notif(self):
         """
         Tests that a menu description can be added
