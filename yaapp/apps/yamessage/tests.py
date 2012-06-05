@@ -192,10 +192,19 @@ class TestNotifications(TestCase):
             self.assertIsNotNone(n2)
             self.assertEqual(n2['read'], True)
             
-            # test get notif with id as a string
-            n3 = m.get_notification(str(notif_id))
+            n2['date'] = '2012-06-05T10:33:08'
+            n2_modified = m.update_notification(n2)
+            self.assertIsNotNone(n2_modified)
+            n3 = m.get_notification(notif_id)
             self.assertIsNotNone(n3)
             self.assertEqual(n3['read'], True)
+            self.assertIsNotNone(n3['date'])
+            
+            
+            # test get notif with id as a string
+            n4 = m.get_notification(str(notif_id))
+            self.assertIsNotNone(n4)
+            self.assertEqual(n4['read'], True)
         
     def test_delete_notification(self):
         redis = Mock(name='redis')
