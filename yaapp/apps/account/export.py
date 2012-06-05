@@ -32,7 +32,10 @@ def export_excel(qs):
         twitter_enabled = _('No')
         yasound_enabled = _('No')
         
-        profile = user.get_profile()
+        try:
+            profile = user.get_profile()
+        except:
+            pass
         if profile.facebook_enabled:
             facebook_enabled = _('Yes')
         if profile.twitter_enabled:
