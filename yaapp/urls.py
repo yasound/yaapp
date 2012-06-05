@@ -217,6 +217,7 @@ if settings.PRODUCTION_MODE:
 else:
     urlpatterns += patterns('',
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.forbidden.txt', 'mimetype': 'text/plain'}),
+        url(r'^channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='facebook_channel_url'),
     )
     
 # sitemap

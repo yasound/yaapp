@@ -896,6 +896,8 @@ class WebAppView(View):
             if request.user.get_profile().twitter_enabled:
                 settings_twitter_form = SettingsTwitterForm(user_profile=request.user.get_profile())
         
+        facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
+        
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -905,6 +907,7 @@ class WebAppView(View):
             'facebook_app_id': settings.FACEBOOK_APP_ID,
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
+            'facebook_channel_url': facebook_channel_url,
             'settings_radio_form': settings_radio_form,
             'settings_user_form': settings_user_form,
             'settings_facebook_form': settings_facebook_form,
@@ -996,6 +999,8 @@ class WebAppView(View):
                 settings_twitter_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
 
+        facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1005,6 +1010,7 @@ class WebAppView(View):
             'facebook_app_id': settings.FACEBOOK_APP_ID,
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
+            'facebook_channel_url': facebook_channel_url,
             'settings_radio_form': settings_radio_form,
             'settings_user_form': settings_user_form,
             'settings_facebook_form': settings_facebook_form,
