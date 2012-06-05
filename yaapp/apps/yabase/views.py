@@ -808,6 +808,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         raise Http404
 
     radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
+    flash_player_absolute_url = request.build_absolute_uri('/media/player.swf')
 
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
@@ -817,6 +818,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         "fans": radio.radiouser_set.filter(favorite=True).count(),
         "new_page": '/app/#radio/%s' % (radio_uuid),
         "radio_picture_absolute_url": radio_picture_absolute_url,
+        'flash_player_absolute_url': flash_player_absolute_url,
     }, context_instance=RequestContext(request))    
 
 def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.html'):
@@ -828,6 +830,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
     radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
     radio_absolute_url =  request.build_absolute_uri(reverse('yabase.views.web_listen', args=[radio_uuid]))
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid)
+    flash_player_absolute_url = request.build_absolute_uri('/media/player.swf')
 
     return render_to_response(template_name, {
         "radio": radio,
@@ -839,6 +842,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
         "radio_station_url":radio_absolute_url,
         "radio_url" : radio_url,
         "radio_picture_absolute_url": radio_picture_absolute_url,
+        'flash_player_absolute_url': flash_player_absolute_url,
     }, context_instance=RequestContext(request)) 
 class WebAppView(View):
     """ Class based view for web app.
