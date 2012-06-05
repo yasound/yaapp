@@ -1055,16 +1055,21 @@ def test_random(nb_elements=50, nb_tests=50):
     
               
 def update_leaderboard():
-    radios = Radio.objects.order_by('-favorites')    
+    radio_datas = Radio.objects.order_by('-favorites').values_list('id', 'favorites')
     current_rank = 0
     count = 0
     last_favorites = None
-    for r in radios:
-        if r.favorites != last_favorites:
+    for r in radio_datas:
+        radio_id = r[0]
+        favs = r[1]
+        if favs != last_favorites:
             current_rank = count + 1
-        Radio.objects.filter(id=r.id).update(leaderboard_rank=current_rank, leaderboard_favorites=r.favorites)            
+        Radio.objects.filter(id=radio_id).update(leaderboard_rank=current_rank, leaderboard_favorites=favs)
         count += 1
-        last_favorites = r.favorites
+        last_favorites = favs
+        
+    now = datetime.datetime.now()
+    elapsed = now - start
         
 def radio_deleted(sender, instance, created=None, **kwargs):  
     if isinstance(instance, Radio):
