@@ -73,7 +73,10 @@ class NotificationsManager():
             notif_data['_id'] = ObjectId(id_str)
         date_str = notif_data.get('date', None)
         if date_str and (isinstance(date_str, str) or isinstance(date_str, unicode)):
-            notif_data['date'] = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f")
+            if '.' in date_str:
+                notif_data['date'] = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f")
+            else:
+                notif_data['date'] = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
         
         self.notifications.update({'_id':notif_data['_id']}, notif_data)
         return self.get_notification(id_str)
