@@ -36,3 +36,4 @@ redis
 mock
 python-dateutil<=1
 -e git+https://github.com/earle/django-bootstrap.git#egg=bootstrap
+xlwt
