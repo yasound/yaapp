@@ -1062,9 +1062,7 @@ def update_leaderboard():
     for r in radios:
         if r.favorites != last_favorites:
             current_rank = count + 1
-        r.leaderboard_rank = current_rank
-        r.leaderboard_favorites = r.favorites
-        r.save()
+        Radio.objects.filter(id=r.id).update(leaderboard_rank=current_rank, leaderboard_favorites=r.favorites)            
         count += 1
         last_favorites = r.favorites
         
