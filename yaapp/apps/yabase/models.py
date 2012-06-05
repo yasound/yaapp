@@ -1069,7 +1069,6 @@ def update_leaderboard():
         last_favorites = favs
         
     now = datetime.datetime.now()
-    elapsed = now - start
         
 def radio_deleted(sender, instance, created=None, **kwargs):  
     if isinstance(instance, Radio):
