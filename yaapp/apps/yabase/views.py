@@ -650,7 +650,7 @@ def upload_song_ajax(request):
         if creator_profile_id:
             user = User.objects.get(userprofile__id=creator_profile_id)
             radio.creator = user
-            global_message = global_message + _('radio "%s" assigned to "%s"\n') % (radio, user)  
+            global_message = global_message + 'radio "%s" assigned to "%s"\n' % (radio, user)  
         radio.save()
              
     

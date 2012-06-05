@@ -247,7 +247,7 @@ class SongImporter:
         try:
             artist = YasoundArtist.objects.get(echonest_id=echonest_id)
         except YasoundArtist.DoesNotExist:
-            self._log(_("creating new artist (echonest_id=%s): %s") % (echonest_id, name))
+            self._log("creating new artist (echonest_id=%s): %s" % (echonest_id, name))
             artist = YasoundArtist(echonest_id=echonest_id,
                                    musicbrainz_id=mb_id,
                                    name=name,
@@ -479,7 +479,7 @@ class SongImporter:
         duration = metadata.get('duration')
         quality = self._get_quality(metadata)
 
-        self._log(_('echonest id = %s, lastfm_id = %s, musicbrainz_id = %s') % (echonest_id, lastfm_id, musicbrainz_id))
+        self._log('echonest id = %s, lastfm_id = %s, musicbrainz_id = %s' % (echonest_id, lastfm_id, musicbrainz_id))
         
         # avoid stale data        
         flush_transaction()
