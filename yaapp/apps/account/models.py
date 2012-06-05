@@ -630,7 +630,7 @@ class UserProfile(models.Model):
             'sender_id': sender.id,
             'text': message
         }
-        m.add_notification(recipient_user_id=self.id, 
+        m.add_notification(recipient_user_id=self.user.id, 
                            notif_type=yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_USER,
                            params=message,
                            from_user_id=sender.id)
