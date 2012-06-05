@@ -46,7 +46,7 @@ def export_excel(qs):
         email = user.email
         name = profile.name
 
-        ws.write(line, col+0, user.id, xlwt.easyxf('pattern: pattern solid, fore_colour red;'))
+        ws.write(line, col+0, user.id)
         ws.write(line, col+1, unicode(user.username))
         ws.write(line, col+2, name)
         ws.write(line, col+3, email)
