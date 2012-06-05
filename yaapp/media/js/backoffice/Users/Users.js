@@ -5,25 +5,25 @@
 //------------------------------------------
 // Handlers
 //------------------------------------------
-Yasound.Users.Handler.DisableUsers = function(selected) {
-   Ext.Msg.show({
+Yasound.Users.Handler.DisableUsers = function (selected) {
+    Ext.Msg.show({
         title: gettext('Confirmation'),
         msg: gettext('Do you want to disable the selected user(s)'),
         buttons: Ext.Msg.YESNOCANCEL,
-        fn: function(b, text){
+        fn: function (b, text) {
             if (b == 'yes') {
                 ids = [];
-                Ext.each(selected, function(record) {
+                Ext.each(selected, function (record) {
                     ids.push(record.data.id);
                 });
                 Ext.Ajax.request({
                     url: String.format('/yabackoffice/users/'),
-                    success: function(result, request){
+                    success: function (result, request) {
                         var data = result.responseText;
                         var json = Ext.decode(data);
                         Ext.getCmp('users-usergrid').getStore().reload();
                     },
-                    failure: function(result, request){
+                    failure: function (result, request) {
                     },
                     method: 'POST',
                     timeout: 1000 * 60 * 5,
@@ -34,74 +34,96 @@ Yasound.Users.Handler.DisableUsers = function(selected) {
                 });
             }
         }
-   });
+    });
 };
 
-Yasound.Users.Handler.FakeUsers = function(selected) {
+Yasound.Users.Handler.FakeUsers = function (selected) {
     Ext.Msg.show({
-         title: gettext('Confirmation'),
-         msg: gettext('Do you want to mark the user(s) as fake ?'),
-         buttons: Ext.Msg.YESNOCANCEL,
-         fn: function(b, text){
-             if (b == 'yes') {
-                 ids = [];
-                 Ext.each(selected, function(record) {
-                     ids.push(record.data.id);
-                 });
-                 Ext.Ajax.request({
-                     url: String.format('/yabackoffice/users/'),
-                     success: function(result, request){
-                         var data = result.responseText;
-                         var json = Ext.decode(data);
-                         Ext.getCmp('users-usergrid').getStore().reload();
-                     },
-                     failure: function(result, request){
-                     },
-                     method: 'POST',
-                     timeout: 1000 * 60 * 5,
-                     params: {
-                         users_id: ids,
-                         'action': 'fake'
-                     }
-                 });
-             }
-         }
+        title: gettext('Confirmation'),
+        msg: gettext('Do you want to mark the user(s) as fake ?'),
+        buttons: Ext.Msg.YESNOCANCEL,
+        fn: function (b, text) {
+            if (b == 'yes') {
+                ids = [];
+                Ext.each(selected, function (record) {
+                    ids.push(record.data.id);
+                });
+                Ext.Ajax.request({
+                    url: String.format('/yabackoffice/users/'),
+                    success: function (result, request) {
+                        var data = result.responseText;
+                        var json = Ext.decode(data);
+                        Ext.getCmp('users-usergrid').getStore().reload();
+                    },
+                    failure: function (result, request) {
+                    },
+                    method: 'POST',
+                    timeout: 1000 * 60 * 5,
+                    params: {
+                        users_id: ids,
+                        'action': 'fake'
+                    }
+                });
+            }
+        }
     });
- };
-Yasound.Users.Handler.EnableUsers = function(selected) {
+};
+
+Yasound.Users.Handler.ExportUsers = function (selected) {
+    ids = [];
+    Ext.each(selected, function (record) {
+        ids.push(record.data.id);
+    });
+    var maskingAjax = new Ext.data.Connection({});
+
+    maskingAjax.request({
+        disableCaching: true,
+        url: String.format('/yabackoffice/users/'),
+        form: Ext.fly('frmDummy'),
+        params: {
+            users_id: ids,
+            'action': 'export'
+        },
+        method: 'POST',
+        timeout: 1000 * 60 * 5,
+        isUpload: true
+    });    
+};
+
+Yasound.Users.Handler.EnableUsers = function (selected) {
     Ext.Msg.show({
-         title: gettext('Confirmation'),
-         msg: gettext('Do you want to enable the selected user(s)'),
-         buttons: Ext.Msg.YESNOCANCEL,
-         fn: function(b, text){
-             if (b == 'yes') {
-                 ids = [];
-                 Ext.each(selected, function(record) {
-                     ids.push(record.data.id);
-                 });
-                 Ext.Ajax.request({
-                     url: String.format('/yabackoffice/users/'),
-                     success: function(result, request){
-                         var data = result.responseText;
-                         var json = Ext.decode(data);
-                         Ext.getCmp('users-usergrid').getStore().reload();
-                     },
-                     failure: function(result, request){
-                     },
-                     method: 'POST',
-                     timeout: 1000 * 60 * 5,
-                     params: {
-                         users_id: ids,
-                         'action': 'enable'
-                     }
-                 });
-             }
-         }
+        title: gettext('Confirmation'),
+        msg: gettext('Do you want to enable the selected user(s)'),
+        buttons: Ext.Msg.YESNOCANCEL,
+        fn: function (b, text) {
+            if (b == 'yes') {
+                ids = [];
+                Ext.each(selected, function (record) {
+                    ids.push(record.data.id);
+                });
+                Ext.Ajax.request({
+                    url: String.format('/yabackoffice/users/'),
+                    success: function (result, request) {
+                        var data = result.responseText;
+                        var json = Ext.decode(data);
+                        Ext.getCmp('users-usergrid').getStore().reload();
+                    },
+                    failure: function (result, request) {
+                    },
+                    method: 'POST',
+                    timeout: 1000 * 60 * 5,
+                    params: {
+                        users_id: ids,
+                        'action': 'enable'
+                    }
+                });
+            }
+        }
     });
- };
-//------------------------------------------
+};
+// ------------------------------------------
 // UI
-//------------------------------------------
+// ------------------------------------------
 Yasound.Users.UI.UsersPanel = function () {
     return {
         xtype: 'panel',
@@ -110,7 +132,7 @@ Yasound.Users.UI.UsersPanel = function () {
         layout: 'border',
         items: [ {
             xtype: 'usergrid',
-            id:'users-usergrid',
+            id: 'users-usergrid',
             singleSelect: false,
             title: gettext('Users'),
             checkboxSelect: false,
@@ -145,20 +167,41 @@ Yasound.Users.UI.UsersPanel = function () {
                     selection = grid.getSelectionModel().getSelections();
                     Yasound.Users.Handler.FakeUsers(selection)
                 },
+            }, '-', {
+                text: gettext('Export selected users'),
+                ref: '../exportSelectedButton',
+                disabled: true,
+                iconCls: 'silk-page-excel',
+                handler: function (b, e) {
+                    var grid = b.ownerCt.ownerCt;
+                    selection = grid.getSelectionModel().getSelections();
+                    Yasound.Users.Handler.ExportUsers(selection)
+                },
+
+            }, {
+                text: gettext('Export all users'),
+                ref: '../exportButton',
+                iconCls: 'silk-page-copy',
+                handler: function (b, e) {
+                    Yasound.Users.Handler.ExportUsers([])
+                },
+
             } ],
             listeners: {
                 'selected': function (grid, id, record) {
                     grid.disableButton.setDisabled(false);
                     grid.enableButton.setDisabled(false);
                     grid.fakeButton.setDisabled(false);
+                    grid.exportSelectedButton.setDisabled(false);
                 },
                 'unselected': function (grid) {
                     grid.disableButton.setDisabled(true);
                     grid.enableButton.setDisabled(true);
                     grid.fakeButton.setDisabled(true);
+                    grid.exportSelectedButton.setDisabled(true);
                 }
-            }            
-        }],
+            }
+        } ],
         updateData: function (component) {
         }
     };

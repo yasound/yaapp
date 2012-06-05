@@ -33,6 +33,7 @@ import datetime
 import requests
 import simplejson as json
 import utils as yabackoffice_utils
+from account import export as account_export
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -418,7 +419,7 @@ def users(request, user_id=None):
         if action == 'disable':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=False)
-        if action == 'fake':
+        elif action == 'fake':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=False)
             RadioUser.objects.filter(user__userprofile__id__in=ids).update(favorite=False)
@@ -427,10 +428,20 @@ def users(request, user_id=None):
             radios = Radio.objects.filter(radiouser__user__userprofile__id__in=ids)
             for radio in radios:
                 radio.fix_favorites()
-
         elif action == 'enable':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=True)
+        elif action == 'export':
+            ids = request.REQUEST.getlist('users_id')
+            if len(ids) > 0 and len(ids[0]) > 0:
+                qs = User.objects.filter(userprofile__id__in=ids)
+            else:
+                qs = User.objects.filter(is_active=True)
+            data = account_export.export_excel(qs)
+            
+            response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+            response['Content-Disposition'] = 'attachment; filename=users.xls'
+            return response        
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': ''
