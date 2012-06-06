@@ -24,7 +24,9 @@ logger = logging.getLogger("yaapp.yabase")
 
 @task
 def leaderboard_update_task():
+    logger.info('leaderboard_update_task started')
     update_leaderboard()
+    logger.info('leaderboard_update_task finished')
     
 
 class BinaryData:
