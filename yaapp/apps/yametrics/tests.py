@@ -270,3 +270,43 @@ class TestTimedMetrics(TestCase):
                 
         mean = um.calculate_messages_per_user_mean()
         self.assertEquals(mean, 1.5)
+
+    def test_likes_stats(self):
+        async_activity(self.user.id, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
+
+        um = UserMetricsManager()
+        stats = um.likes_stats()
+        self.assertEquals(stats.count(), 0)
+        
+        um.update_likes_stats()
+        
+        stats = um.likes_stats()
+        self.assertEquals(stats.count(), 1)
+        doc = stats[0]
+        self.assertEquals(doc['_id'], 1)
+        self.assertEquals(doc['value'], 1)
+
+        # fake user
+        async_activity(42, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
+        um.update_likes_stats()
+        stats = um.likes_stats()
+        self.assertEquals(stats.count(), 1)
+        doc = stats[0]
+        self.assertEquals(doc['_id'], 1)
+        self.assertEquals(doc['value'], 2)
+        
+        async_activity(42, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
+        um.update_likes_stats()
+        stats = um.likes_stats()
+        
+        self.assertEquals(stats.count(), 2)
+        doc = stats[0]
+        self.assertEquals(doc['_id'], 1)
+        self.assertEquals(doc['value'], 1)
+
+        doc = stats[1]
+        self.assertEquals(doc['_id'], 2)
+        self.assertEquals(doc['value'], 1)
+                
+        mean = um.calculate_likes_per_user_mean()
+        self.assertEquals(mean, 1.5)        
