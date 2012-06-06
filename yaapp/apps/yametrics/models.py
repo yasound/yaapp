@@ -292,6 +292,18 @@ class UserMetricsManager():
 """)
         self.collection.map_reduce(map_func, reduce_func, output)
     
+    def calculate_messages_per_user_mean(self):
+        docs = self.db.metrics.messages_stats.find()
+        users_messages = 0.0
+        user_count = 0.0
+        for doc in docs:
+            messages = doc['_id']
+            users = doc['value']
+            users_messages = users_messages + (messages*users)
+            user_count = user_count + users
+        mean = users_messages / user_count
+        return mean
+    
     def messages_stats(self):
         """
         return messages like :

@@ -535,6 +535,9 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     except:
         streamer_status = _('Unavailable')
         
+    um = UserMetricsManager()
+    messages_per_user = um.calculate_messages_per_user_mean()
+    
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
         "ready_radio_count": ready_radio_count,
@@ -557,7 +560,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "confirmed_emails" : confirmed_emails,
         "not_confirmed_emails": not_confirmed_emails,
         "email_address_count": email_address_count,
-        "confirmed_emails_ratio": confirmed_emails_ratio
+        "confirmed_emails_ratio": confirmed_emails_ratio,
+        "messages_per_user": messages_per_user,
     }, context_instance=RequestContext(request))  
 
 

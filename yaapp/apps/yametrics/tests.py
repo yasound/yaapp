@@ -268,3 +268,5 @@ class TestTimedMetrics(TestCase):
         self.assertEquals(doc['_id'], 2)
         self.assertEquals(doc['value'], 1)
                 
+        mean = um.calculate_messages_per_user_mean()
+        self.assertEquals(mean, 1.5)
