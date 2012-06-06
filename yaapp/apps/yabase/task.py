@@ -1,4 +1,3 @@
-from django.db import transaction
 from celery.task import task
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -21,8 +20,8 @@ logger = logging.getLogger("yaapp.yabase")
 def leaderboard_update_task():
     logger.info('leaderboard_update_task started')
     flush_transaction()
-    with transaction.commit_on_success():
-        update_leaderboard()
+    update_leaderboard()
+    flush_transaction()
     logger.info('leaderboard_update_task finished')
     
 
