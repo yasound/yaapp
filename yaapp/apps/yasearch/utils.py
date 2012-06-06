@@ -67,7 +67,7 @@ def build_dms(sentence, remove_common_words=False, exceptions_list=None):
             value = dm[1]
             if value is not None and value not in dms:
                 dms.append(value)
-    return dms
+    return sorted(dms, key=len, reverse=True)
 
         
 def token_set_ratio(s1, s2, method):
