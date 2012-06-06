@@ -302,7 +302,9 @@ class UserMetricsManager():
             users = doc['value']
             users_messages = users_messages + (messages*users)
             user_count = user_count + users
-        mean = users_messages / user_count
+        mean = 0
+        if user_count > 0:
+            mean = users_messages / user_count
         return mean
     
     def messages_stats(self):
@@ -348,7 +350,9 @@ class UserMetricsManager():
             users = doc['value']
             users_likes = users_likes + (likes*users)
             user_count = user_count + users
-        mean = users_likes / user_count
+        mean = 0
+        if user_count > 0:
+            mean = users_likes / user_count
         return mean
     
     def likes_stats(self):

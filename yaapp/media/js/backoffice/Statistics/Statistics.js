@@ -165,7 +165,7 @@ Yasound.Statistics.UI.LikesGraph = function () {
     });
     return {
         title: gettext('Likes per user'),
-        id: 'posts-graph',
+        id: 'likes-graph',
         items: [ chart ],
         tools: [ {
             id: 'refresh',
@@ -286,6 +286,12 @@ Yasound.Statistics.UI.Panel = function () {
 
             var listenGraph = Ext.getCmp('listen-graph');
             listenGraph.reload(listenGraph);
+
+            var postsGraph = Ext.getCmp('posts-graph');
+            postsGraph.reload(postsGraph);
+        
+            var likesGraph = Ext.getCmp('likes-graph');
+            likesGraph.reload(likesGraph);
         }
     };
 }
