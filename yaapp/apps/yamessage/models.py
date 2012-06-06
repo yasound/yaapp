@@ -4,6 +4,8 @@ from pymongo import DESCENDING
 import datetime
 import settings as yamessage_settings
 import signals as yamessage_signals
+from django.contrib.auth.models import User
+from yabase.models import Radio
 
 if settings.ENABLE_PUSH:
     from push import install_handlers
@@ -16,10 +18,24 @@ class NotificationsManager():
         self.notifications = self.db.notifications
         self.notifications.ensure_index("date")
         
-    def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None):
+    def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None, from_radio_id=None):
         if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:
             print 'NotificationManager is disabled (settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False)'
             return;
+        from_user_name = None
+        if from_user_id is not None:
+            try:
+                u = User.objects.get(id=from_user_id)
+                from_user_name = u.userprofile.name
+            except User.DoesNotExist:
+                pass 
+        from_radio_name = None
+        if from_radio_id is not None:
+            try:
+                r = Radio.objects.get(id=from_radio_id)
+                from_radio_name = r.name
+            except Radio.DoesNotExist:
+                pass
         text = self.text_for_notification(notif_type, params)
         d = datetime.datetime.now()
         notif = {'type':notif_type,
@@ -27,6 +43,9 @@ class NotificationsManager():
                  'date':d,
                  'dest_user_id':recipient_user_id,
                  'from_user_id':from_user_id,
+                 'from_user_name':from_user_name,
+                 'from_radio_id':from_radio_id,
+                 'from_radio_name':from_radio_name,
                  'read':False,
                  'params':params
                  }

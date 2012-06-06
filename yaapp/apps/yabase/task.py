@@ -253,6 +253,6 @@ def async_radio_broadcast_message(radio, message):
     logger.debug('async_radio_broadcast_message: radio=%s, message=%s' % (radio, message))
     recipients = User.objects.filter(radiouser__radio=radio, radiouser__favorite=True)
     for recipient in recipients:
-        recipient.get_profile().send_message(sender=radio.creator, message=message)
+        recipient.get_profile().send_message(sender=radio.creator, radio=radio, message=message)
 
         
