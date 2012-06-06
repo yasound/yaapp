@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-06 16:02+0200\n"
+"POT-Creation-Date: 2012-06-06 08:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: api.py:107
+#: api.py:158
 msgid "Empty data"
-msgstr ""
+msgstr "Aucune donnée"
 
-#: api.py:115
+#: api.py:166
 msgid "A user already exists with this email"
 msgstr "Un utilisateur existe déjà avec cet email"
 
-#: api.py:118
+#: api.py:169
 msgid "A user already exists with this username"
 msgstr "Un utilisateur existe déjà avec cet identifiant"
 
+#: export.py:8
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: export.py:20
+msgid "Id"
+msgstr "Id"
+
+#: export.py:21
+#: forms.py:90
+msgid "Username"
+msgstr "Identifiant"
+
+#: export.py:22
+msgid "Name"
+msgstr "Nom"
+
+#: export.py:23
 #: forms.py:33
 #: forms.py:59
 #: forms.py:91
+#: forms.py:197
 msgid "Email"
 msgstr "Email"
 
+#: export.py:24
+msgid "Facebook ?"
+msgstr "Facebook ?"
+
+#: export.py:25
+msgid "Twitter ?"
+msgstr "Twitter ?"
+
+#: export.py:26
+msgid "Yasound ?"
+msgstr "Yasound ?"
+
+#: export.py:27
+msgid "Join date"
+msgstr "Date d'inscription"
+
+#: export.py:31
+#: export.py:32
+#: export.py:33
+msgid "No"
+msgstr "Non"
+
+#: export.py:40
+#: export.py:42
+#: export.py:44
+msgid "Yes"
+msgstr "Oui"
+
 #: forms.py:34
 #: forms.py:92
-#: forms.py:142
+#: forms.py:134
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -62,172 +109,250 @@ msgstr "Langue"
 msgid "Language successfully updated."
 msgstr "Langue changée avec succès"
 
-#: forms.py:90
-#: forms.py:205
-msgid "Username"
-msgstr "Identifiant"
-
-#: forms.py:93
-#: forms.py:143
+#: forms.py:135
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: forms.py:144
+#: forms.py:136
 msgid "Create an account with these informations ?"
 msgstr "Créer un compte avec ces informations ?"
 
-#: forms.py:145
+#: forms.py:137
 msgid "Register to newsletter ?"
-msgstr ""
+msgstr "S'enregistrer à la newsletter ?"
 
-#: forms.py:217
+#: forms.py:209
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr "Cet email n'a pas de compte associé. Etes-vous sur de vous être enregistré ?"
 
-#: forms.py:243
-#, python-format
-msgid "Password reset on %s"
-msgstr "Mot de passe réinitialisé sur %s"
-
-#: forms.py:248
+#: forms.py:240
 msgid "Current Password"
 msgstr "Mot de passe actuel"
 
-#: forms.py:249
+#: forms.py:241
 msgid "New Password"
 msgstr "Nouveau mot de passe"
 
-#: forms.py:250
+#: forms.py:242
 msgid "New Password (again)"
 msgstr "Nouveau mot de passe (à nouveau)"
 
-#: forms.py:254
+#: forms.py:246
 msgid "Please type your current password."
 msgstr "Veuillez saisir votre mot de passe actuel."
 
-#: forms.py:260
+#: forms.py:252
 msgid "You must type the same password each time."
 msgstr "Vous devez saisir le même mot de passe à chaque fois."
 
-#: forms.py:266
+#: forms.py:258
 msgid "Password successfully changed."
 msgstr "Mot de passe changé avec succès."
 
-#: forms.py:273
+#: forms.py:265
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
-#: forms.py:274
+#: forms.py:266
 msgid "New password confirmation"
 msgstr "Confirmation du nouveau mot de passe"
 
-#: forms.py:285
+#: forms.py:277
 msgid "The two password fields didn't match."
 msgstr "Les deux mots de passe ne correspondent pas."
 
-#: models.py:96
-#: models.py:723
+#: models.py:95
+#: models.py:941
 msgid "user"
 msgstr "utilisateur"
 
-#: models.py:186
+#: models.py:96
+msgid "name"
+msgstr "nom"
+
+#: models.py:97
+msgid "url"
+msgstr "url"
+
+#: models.py:99
+msgid "account type"
+msgstr "type de compte"
+
+#: models.py:100
+msgid "twitter uid"
+msgstr "uid twitter"
+
+#: models.py:101
+msgid "twitter token"
+msgstr "token twitter"
+
+#: models.py:102
+msgid "twitter token secret"
+msgstr "token twitter secret"
+
+#: models.py:103
+msgid "twitter username"
+msgstr "utilisateur twitter"
+
+#: models.py:104
+msgid "twitter email"
+msgstr "email twitter"
+
+#: models.py:106
+msgid "facebook uid"
+msgstr "uid facebook"
+
+#: models.py:107
+msgid "facebook token"
+msgstr "token facebook"
+
+#: models.py:108
+msgid "facebook username"
+msgstr "utilisateur facebook"
+
+#: models.py:109
+msgid "facebook email"
+msgstr "email facebook"
+
+#: models.py:110
+msgid "facebook expiration date"
+msgstr "date d'expiration facebook"
+
+#: models.py:112
+msgid "email"
+msgstr "email"
+
+#: models.py:114
+msgid "bio"
+msgstr "bio"
+
+#: models.py:115
+msgid "picture"
+msgstr "photo"
+
+#: models.py:116
+msgid "email confirmed"
+msgstr "email confirmé"
+
+#: models.py:117
+msgid "friends"
+msgstr "amis"
+
+#: models.py:118
+msgid "last authentication date"
+msgstr "dernière date d'authentification"
+
+#: models.py:199
 msgid "Cannot communicate with facebook"
 msgstr "Impossible de communiquer avec Facebook"
 
-#: models.py:189
-#: models.py:193
-#: models.py:197
+#: models.py:202
+#: models.py:206
+#: models.py:210
 msgid "Cannot get informations from facebook"
 msgstr "Impossible de récupérer les informations auprès de Facebook"
 
-#: models.py:200
+#: models.py:213
 msgid "Facebook identification mismatch"
 msgstr "Erreur d'identification Facebook"
 
-#: models.py:204
+#: models.py:217
 msgid "The Facebook account is already attached to another account."
 msgstr "Le compte facebook est actuellement attaché à un autre compte."
 
-#: models.py:222
-#: models.py:235
-#: models.py:270
-#: models.py:282
-#: models.py:293
-#: models.py:307
-#: views.py:385
-#: views.py:419
+#: models.py:238
+#: models.py:257
+#: models.py:294
+#: models.py:313
+#: models.py:330
+#: models.py:348
+#: views.py:379
+#: views.py:413
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
-#: models.py:226
-#: models.py:297
+#: models.py:242
+#: models.py:298
+#: models.py:334
 msgid "This is the last account, removal is impossible"
 msgstr "C'est le dernier compte, retrait impossible"
 
-#: models.py:244
+#: models.py:266
 msgid "Cannot communicate with Twitter"
 msgstr "Impossible de communiquer avec Twitter"
 
-#: models.py:247
+#: models.py:269
 msgid "Twitter account mismatch"
 msgstr "Compte twitter différent"
 
-#: models.py:251
+#: models.py:273
 msgid "The twitter account is already attached to another account."
 msgstr "Le compte twitter est déjà associé à un autre compte."
 
-#: models.py:287
+#: models.py:318
 msgid "An account already exists with this email"
 msgstr "Un compte existe déjà avec cet email"
 
-#: models.py:724
+#: models.py:942
 msgid "ios device uuid"
-msgstr ""
+msgstr "ios mobile uuid"
 
-#: models.py:725
+#: models.py:943
 msgid "ios device token"
-msgstr ""
+msgstr "iods mobile token"
 
-#: models.py:730
+#: models.py:944
+msgid "ios token type"
+msgstr "type de token ios"
+
+#: models.py:945
+msgid "registration date"
+msgstr "date d'inscription"
+
+#: models.py:946
+msgid "ios application identifier"
+msgstr "identifiant d'application ios"
+
+#: models.py:949
 msgid "device"
 msgstr "périphérique"
 
-#: settings.py:27
-msgid "Sandbox"
-msgstr ""
-
 #: settings.py:28
-msgid "Development"
-msgstr ""
+msgid "Sandbox"
+msgstr "Sandbox"
 
-#: views.py:103
+#: settings.py:29
+msgid "Production"
+msgstr "Production"
+
+#: views.py:98
 #, python-format
 msgid "Successfully logged in as %(username)s."
 msgstr "Connecté avec succès en tant que %(username)s."
 
-#: views.py:109
-#: views.py:132
+#: views.py:104
+#: views.py:127
 #, python-format
 msgid "Confirmation email sent to %s"
 msgstr "Mail de confirmation envoyé à %s"
 
-#: views.py:292
+#: views.py:284
 msgid "An email was sent to you to reset your password."
 msgstr "Un email vient d'être envoyé afin de réinitialiser votre mot de passe."
 
-#: views.py:334
+#: views.py:326
 msgid "Your password has been successfully reset."
 msgstr "Votre mot de passe à été réinitialisé avec succès."
 
-#: views.py:367
-#: views.py:407
+#: views.py:359
+#: views.py:401
 msgid "Account type is missing from request"
 msgstr "Type de compte inconnu"
 
-#: views.py:376
-#: views.py:410
+#: views.py:370
+#: views.py:404
 msgid "Unknown error"
-msgstr ""
+msgstr "Erreur inconnue"
 
