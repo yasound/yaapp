@@ -1055,7 +1055,7 @@ def test_random(nb_elements=50, nb_tests=50):
     
               
 def update_leaderboard():
-    radio_datas = Radio.objects.order_by('-favorites').values_list('id', 'favorites')
+    radio_datas = Radio.objects.all().order_by('-favorites').values_list('id', 'favorites')
     current_rank = 0
     count = 0
     last_favorites = None
