@@ -40,5 +40,6 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^metrics/graphs/shares/$', 'metrics_graph_shares'),
     url(r'^metrics/graphs/listen/$', 'metrics_graph_listen'),
     url(r'^metrics/graphs/posts/$', 'metrics_graph_posts'),
+    url(r'^metrics/graphs/likes/$', 'metrics_graph_likes'),
     url(r'^light_metrics/', 'light_metrics', name='light_metrics'),
 )

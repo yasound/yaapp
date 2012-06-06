@@ -151,6 +151,34 @@ Yasound.Statistics.UI.PostsGraph = function () {
         }
     }
 }
+
+Yasound.Statistics.UI.LikesGraph = function () {
+    var chart = Ext.ComponentMgr.create({
+        height: 300,
+        xtype: 'chartpanel',
+        url: '/yabackoffice/metrics/graphs/likes/',
+        fields: [ 'like_count', 'user_count' ],
+        xField: 'like_count',
+        yField: 'user_count',
+        xTitle: gettext('Number of likes'),
+        yTitle: gettext('Users'),
+    });
+    return {
+        title: gettext('Likes per user'),
+        id: 'posts-graph',
+        items: [ chart ],
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ],
+        reload: function (component) {
+            chart.reload(chart);
+        }
+    }
+}
+
 Yasound.Statistics.UI.SharesGraph = function () {
     var chart = Ext.ComponentMgr.create({
         height: 300,
@@ -226,7 +254,7 @@ Yasound.Statistics.UI.Panel = function () {
                 {
                     columnWidth: .33,
                     style: 'padding:10px 0 10px 10px',
-                    items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.PostsGraph(), Yasound.Statistics.UI.PastMonthMetrics(),
+                    items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.PostsGraph(), Yasound.Statistics.UI.LikesGraph(), Yasound.Statistics.UI.PastMonthMetrics(),
                             Yasound.Statistics.UI.PastYearMetrics() ]
                 }, {
                     columnWidth: .33,

@@ -245,6 +245,7 @@ class UserMetricsManager():
     def erase_metrics(self):
         self.collection.drop()
         self.db.metrics.messages_stats.drop()
+        self.db.metrics.likes_stats.drop()
         
     def inc_value(self, user_id, key, value):
         self.collection.update({"db_id": user_id}, 
@@ -306,7 +307,7 @@ class UserMetricsManager():
     
     def messages_stats(self):
         """
-        return messages like :
+        return docs like :
         
         {'_id':20, 'value': 12} 
         
@@ -316,6 +317,51 @@ class UserMetricsManager():
         """
         return self.db.metrics.messages_stats.find()
     
+    def update_likes_stats(self):
+        output = self.db.metrics.likes_stats.name
+        
+        map_func = Code("""
+        function() {
+            if (this.song_like_activity) {
+                emit(this.song_like_activity, 1);
+            }
+        }
+""")
+        
+        reduce_func = Code("""
+        function(key, values) {
+            var total = 0;
+            for (var i = 0; i < values.length; i++) {
+                total += values[i];
+            }
+            return total;
+        }
+""")
+        self.collection.map_reduce(map_func, reduce_func, output)
+    
+    def calculate_likes_per_user_mean(self):
+        docs = self.db.metrics.likes_stats.find()
+        users_likes = 0.0
+        user_count = 0.0
+        for doc in docs:
+            likes = doc['_id']
+            users = doc['value']
+            users_likes = users_likes + (likes*users)
+            user_count = user_count + users
+        mean = users_likes / user_count
+        return mean
+    
+    def likes_stats(self):
+        """
+        return docs like :
+        
+        {'_id':20, 'value': 12} 
+        
+        which means :
+        
+        12 users have likes 20 songs
+        """
+        return self.db.metrics.likes_stats.find()    
 class TimedMetricsManager():       
     SLOT_24H        = '24h'
     SLOT_3D         = '3d'

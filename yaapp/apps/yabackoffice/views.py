@@ -537,6 +537,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         
     um = UserMetricsManager()
     messages_per_user = um.calculate_messages_per_user_mean()
+    likes_per_user = um.calculate_likes_per_user_mean()
     
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
@@ -562,6 +563,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "email_address_count": email_address_count,
         "confirmed_emails_ratio": confirmed_emails_ratio,
         "messages_per_user": messages_per_user,
+        "likes_per_user": likes_per_user,
     }, context_instance=RequestContext(request))  
 
 
@@ -712,6 +714,28 @@ def metrics_graph_posts(request):
     for metric in metrics:
         data.append({
             'message_count': metric['_id'],
+            'user_count': metric['value'] 
+        })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
+def metrics_graph_likes(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    um  = UserMetricsManager()
+    metrics = um.likes_stats()
+    data = []    
+    for metric in metrics:
+        data.append({
+            'like_count': metric['_id'],
             'user_count': metric['value'] 
         })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
