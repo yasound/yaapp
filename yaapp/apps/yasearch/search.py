@@ -19,11 +19,11 @@ def find_song(name, album, artist, remove_common_words=True):
     if artist and len(dms_artist) > 0:
         query_items.append({"artist_dms":{"$all": dms_artist}})
 
-    if name and len(dms_name) > 0:
-        query_items.append({"song_dms":{"$all": dms_name}})
-
     if album and len(dms_album) > 0:
         query_items.append({"album_dms":{"$in": dms_album}})
+
+    if name and len(dms_name) > 0:
+        query_items.append({"song_dms":{"$all": dms_name}})
 
     if len(query_items) == 0:
         return []
