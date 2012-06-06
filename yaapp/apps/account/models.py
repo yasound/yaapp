@@ -1,8 +1,7 @@
 from bitfield import BitField
 from django.conf import settings as yaapp_settings
-from django.contrib.auth import login
 from django.contrib.auth.models import User, Group
-from django.core.files.base import ContentFile, ContentFile
+from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.aggregates import Count
 from django.db.models.signals import post_save, pre_delete
@@ -11,25 +10,23 @@ from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 from sorl.thumbnail import ImageField, get_thumbnail, delete
-from tastypie.models import ApiKey, create_api_key
+from tastypie.models import create_api_key
 from yabase.apns import get_deprecated_devices, send_message
 from yabase.models import Radio, RadioUser
-import datetime
+from yamessage.models import NotificationsManager
 import datetime
 import json
 import logging
-import logging
 import settings as account_settings
+import signals as account_signals
 import tweepy
 import urllib
+import yabase.settings as yabase_settings
+import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-import yabase.settings as yabase_settings
-import yamessage.settings as yamessage_settings
-from yamessage.models import NotificationsManager 
 
-import signals as account_signals
 
 
 
@@ -96,29 +93,29 @@ class UserProfile(models.Model):
     """
     objects = UserProfileManager()
     user = models.OneToOneField(User, verbose_name=_('user'))
-    name = models.CharField(max_length = 60, blank=True)
-    url = models.URLField(null=True, blank=True)
+    name = models.CharField(_('name'), max_length = 60, blank=True)
+    url = models.URLField(_('url'), null=True, blank=True)
     
-    account_type = models.CharField(max_length=20, blank=True)
-    twitter_uid = models.CharField(max_length=60, null=True, blank=True)
-    twitter_token = models.CharField(max_length=256, blank=True)
-    twitter_token_secret = models.CharField(max_length=256, blank=True)
-    twitter_username = models.CharField(max_length=30, blank=True)
-    twitter_email = models.EmailField(blank=True)
+    account_type = models.CharField(_('account type'), max_length=20, blank=True)
+    twitter_uid = models.CharField(_('twitter uid'), max_length=60, null=True, blank=True)
+    twitter_token = models.CharField(_('twitter token'), max_length=256, blank=True)
+    twitter_token_secret = models.CharField(_('twitter token secret'), max_length=256, blank=True)
+    twitter_username = models.CharField(_('twitter username'), max_length=30, blank=True)
+    twitter_email = models.EmailField(_('twitter email'), blank=True)
 
-    facebook_uid = models.CharField(max_length=60, null=True, blank=True)
-    facebook_token = models.CharField(max_length=256, blank=True)
-    facebook_username = models.CharField(max_length=100, blank=True)
-    facebook_email = models.EmailField(blank=True)
-    facebook_expiration_date = models.CharField(max_length=35, blank=True)
+    facebook_uid = models.CharField(_('facebook uid'), max_length=60, null=True, blank=True)
+    facebook_token = models.CharField(_('facebook token'),max_length=256, blank=True)
+    facebook_username = models.CharField(_('facebook username'),max_length=100, blank=True)
+    facebook_email = models.EmailField(_('facebook email'),blank=True)
+    facebook_expiration_date = models.CharField(_('facebook expiration date'),max_length=35, blank=True)
 
-    yasound_email = models.EmailField(_('Email'), blank=True)
+    yasound_email = models.EmailField(_('email'), blank=True)
     
-    bio_text = models.TextField(null=True, blank=True)
-    picture = ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
-    email_confirmed = models.BooleanField(default=False)
-    friends = models.ManyToManyField(User, related_name='friends_profile', null=True, blank=True)
-    last_authentication_date = models.DateTimeField(null=True, blank=True)
+    bio_text = models.TextField(_('bio'), null=True, blank=True)
+    picture = ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    email_confirmed = models.BooleanField(_('email confirmed'),default=False)
+    friends = models.ManyToManyField(User, verbose_name=_('friends'), related_name='friends_profile', null=True, blank=True)
+    last_authentication_date = models.DateTimeField(_('last authentication date'),null=True, blank=True)
     notifications_preferences = BitField(flags=(
         'user_in_radio',
         'friend_in_radio',
@@ -886,7 +883,7 @@ class UserProfile(models.Model):
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
-        profile, created = UserProfile.objects.get_or_create(user=instance)  
+        _profile, _created = UserProfile.objects.get_or_create(user=instance)  
 
 def create_radio(sender, instance, created, **kwargs):  
     if created:  
@@ -901,7 +898,7 @@ post_save.connect(create_radio, sender=User)
 post_save.connect(create_radio, sender=EmailUser)
 
 def get_techtour_group():
-    g, created = Group.objects.get_or_create(name=yabase_settings.TECH_TOUR_GROUP_NAME)
+    g, _created = Group.objects.get_or_create(name=yabase_settings.TECH_TOUR_GROUP_NAME)
     return g
 
 class DeviceManager(models.Manager):
@@ -944,8 +941,8 @@ class Device(models.Model):
     user = models.ForeignKey(User, verbose_name=_('user'))
     uuid = models.CharField(_('ios device uuid'), max_length=255)
     ios_token = models.CharField(_('ios device token'), max_length=255)
-    ios_token_type = models.CharField(max_length=16, choices=account_settings.IOS_TOKEN_TYPE_CHOICES)
-    registration_date = models.DateTimeField(auto_now_add=True)
+    ios_token_type = models.CharField(_('ios token type'), max_length=16, choices=account_settings.IOS_TOKEN_TYPE_CHOICES)
+    registration_date = models.DateTimeField(_('registration date'), auto_now_add=True)
     application_identifier = models.CharField(_('ios application identifier'), max_length=127, default=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER)
     
     class Meta:
