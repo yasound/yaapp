@@ -497,6 +497,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.stats': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'yaapp.missing_songs': {
             'handlers': ['console', 'file_missing_songs'],
             'level': 'DEBUG',
