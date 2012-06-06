@@ -70,7 +70,8 @@ def async_activity(user_id, activity, throttle=True):
     if last_animator_activity_date:
         diff = (now - last_animator_activity_date)
         if throttle:
-            last_action = diff.total_seconds()
+            total_seconds = diff.days * 86400 + diff.seconds
+            last_action = total_seconds
             if last_action < 60*60:
                 # we skip the same action from user within one hour
                 return 
