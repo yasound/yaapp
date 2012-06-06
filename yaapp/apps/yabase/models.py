@@ -1064,9 +1064,6 @@ def update_leaderboard():
         favs = r[1]
         if favs != last_favorites:
             current_rank = count + 1
-            
-        if radio_id == 165:
-            logger.info('radio 165, favorites = %d', favs)
         Radio.objects.filter(id=radio_id).update(leaderboard_rank=current_rank, leaderboard_favorites=favs)
         count += 1
         last_favorites = favs
