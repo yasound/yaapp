@@ -6,10 +6,9 @@ logger = logging.getLogger("yaapp.stats")
 @task
 def radio_listening_stats_task():
     logger.info('radio_listening_stats_task started')
-    radios = Radio.objects.all()
+    radios = Radio.objects.filter(ready=True)
     for radio in radios:
         if radio.id == 165:
             logger.info('radio 165 updated')
-        if radio.is_valid:
-            radio.create_listening_stat()
+        radio.create_listening_stat()
     logger.info('radio_listening_stats_task finished')
