@@ -1,4 +1,3 @@
-from account.models import Device
 from celery.task import task
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -12,19 +11,15 @@ import import_utils
 import logging
 import md5
 import os
-import re
-import settings as yabase_settings
 import signals as yabase_signals
-import string
-import sys
 import time
-import zlib
 import zlib
 logger = logging.getLogger("yaapp.yabase")
 
 @task
 def leaderboard_update_task():
     logger.info('leaderboard_update_task started')
+    flush_transaction()
     update_leaderboard()
     logger.info('leaderboard_update_task finished')
     
