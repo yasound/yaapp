@@ -62,6 +62,7 @@ CELERY_IMPORTS = (
     "yametrics.task",
     "yahistory.task",
     "yagraph.task",
+    "yasearch.task",
 )
 
 if LOCAL_MODE:
