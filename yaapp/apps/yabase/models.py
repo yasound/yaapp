@@ -850,11 +850,10 @@ class Radio(models.Model):
         stat = RadioListeningStat.objects.create(radio=self, overall_listening_time=self.overall_listening_time, audience_peak=self.current_audience_peak, connections=self.current_connections, favorites=favorites, likes=likes, dislikes=dislikes)
         
         # reset current audience peak
-        audience = self.audience_total
-        self.current_audience_peak = audience
         # reset current number of connections
-        self.current_connections = 0
-        self.save()
+        audience = self.audience_total
+        Radio.objects.filter(id=self.id).update(current_audience_peak=audience, current_connections=0)
+        
         return stat
     
     def relative_leaderboard(self):
