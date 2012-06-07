@@ -114,55 +114,61 @@ def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, repla
 def sacem_report(destination_folder='', start_date=None, end_date=None):
     allowed_characters = string.uppercase + '().-/'
     db = settings.MONGO_DB
-    radio_ids = db.reports.distinct("radio_id")
-    for radio_id in radio_ids:
-        query_dict = {}
-        query_dict["radio_id"] = radio_id
-        documents = db.reports.find(query_dict).sort('report_date', 1)    
-        radio_name = documents[0]["radio_name"]
-        filename = '%s_sacem_report.txt' % radio_name
-        if destination_folder and destination_folder != '':
-            path = os.path.join(destination_folder, filename)
-        else:
-            path = filename
-        f = open(path, 'w')
-        
-        if start_date or end_date:
+    
+    query_dict = {}
+    if start_date or end_date:
                 query_dict["report_date"] = {}
                 if start_date:
                     query_dict["report_date"]['$gte'] = start_date
                 if end_date:
                     query_dict["report_date"]['$lt'] = end_date
-        song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
-        
-        s = start_date
+            
+    # report start and end dates        
+    s = start_date
+    e = end_date
+    if not s or not e:
+        documents = db.reports.find(query_dict).sort('report_date', 1)
         if not s:
             s = documents[0]['report_date']
-        e = end_date
         if not e:
             e = documents[documents.count() - 1]['report_date']
+        
+    #
+    #    dest file
+    #
+    filename = 'sacem_report_%s.txt' % datetime.date.today().isoformat()
+    if destination_folder and destination_folder != '':
+        path = os.path.join(destination_folder, filename)
+    else:
+        path = filename
+    f = open(path, 'w')    
+        
+    #
+    #    report HEADER
+    #
+    declarant_code = yareport_settings.sacem_declarant_identifier_short
+    declarant_code = clean_string(declarant_code, allowed_characters)
+    report_start_date = s.strftime('%y%m%d')
+    report_end_date = e.strftime('%y%m%d')
+    report_start_hour = s.time().strftime('%H')
+    report_end_hour = e.time().strftime('%H')
+    
             
-        declarant_code = yareport_settings.sacem_declarant_identifier_short
-        declarant_code = clean_string(declarant_code, allowed_characters)
-        report_start_date = s.strftime('%y%m%d')
-        report_end_date = e.strftime('%y%m%d')
-        report_start_hour = s.time().strftime('%H')
-        report_end_hour = e.time().strftime('%H')
-        
-                
-        declarant_identifier = yareport_settings.sacem_declarant_identifier_full
-        declarant_identifier = clean_string(declarant_identifier, allowed_characters, char_count=30)
-        
-        declarant_address_1 = yareport_settings.sacem_declarant_address_line1
-        declarant_address_1 = clean_string(declarant_address_1, allowed_characters, char_count=25)
-        
-        declarant_address_2 = yareport_settings.sacem_declarant_address_line2
-        declarant_address_2 = clean_string(declarant_address_2, allowed_characters, char_count=25)
-        
-        report_header = '%s %s %s %s %s %s %s %s\r\n' % (declarant_code, report_start_date, report_end_date, report_start_hour, report_end_hour, declarant_identifier, declarant_address_1, declarant_address_2)
-        f.write(report_header)
-        
-        for song_id in song_ids:
+    declarant_identifier = yareport_settings.sacem_declarant_identifier_full
+    declarant_identifier = clean_string(declarant_identifier, allowed_characters, char_count=30)
+    
+    declarant_address_1 = yareport_settings.sacem_declarant_address_line1
+    declarant_address_1 = clean_string(declarant_address_1, allowed_characters, char_count=25)
+    
+    declarant_address_2 = yareport_settings.sacem_declarant_address_line2
+    declarant_address_2 = clean_string(declarant_address_2, allowed_characters, char_count=25)
+    
+    report_header = '%s %s %s %s %s %s %s %s\r\n' % (declarant_code, report_start_date, report_end_date, report_start_hour, report_end_hour, declarant_identifier, declarant_address_1, declarant_address_2)
+    f.write(report_header)
+    
+    
+    song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
+    for song_id in song_ids:
             q = query_dict
             q["yasound_song_id"] = song_id
             song_docs = db.reports.find(q)
@@ -195,7 +201,8 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
             
             report_row = '%s %s %s %s %s %s %s %s %s %s %s %s\r\n' % (song_name, count_str, song_number, duration_str, artist, composer, arranger, editor, genre, producer, catalog_number, bar_code)
             f.write(report_row)
-        f.close()
+    f.close()
     
+        
     
     
