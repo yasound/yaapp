@@ -10,8 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
+from taggit.models import TaggedItem, Tag
 from yacore.database import atomic_inc
-from yacore.tags import clean_tags
+from yacore.tags import clean_tags, clean_tag
 from yametrics.matching_errors import MatchingErrorsManager
 from yaref.models import YasoundSong
 from yareport.task import task_report_song
@@ -468,6 +469,26 @@ class RadioManager(models.Manager):
         users = g.user_set.all()
         radios = self.filter(creator__in=users)
         return radios
+    
+    def clean_tags(self):
+        qs = self.all()
+        for radio in qs:
+            tags = radio.tags.all()
+            to_remove = []
+            to_add = []
+            for tag in tags:
+                cleaned_tag = clean_tag(tag.name)
+                if len(cleaned_tag) == 0:
+                    to_remove.append(tag.name)
+                    continue
+                
+                if cleaned_tag != tag.name:
+                    to_remove.append(tag.name)
+                    to_add.append(cleaned_tag)
+            radio.tags.remove(*to_remove)
+            radio.tags.add(*to_add)
+        
+        
     
 class Radio(models.Model):
     objects = RadioManager()
