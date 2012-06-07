@@ -134,7 +134,6 @@ body {
 }
 
 #tbar-search {
-	margin-top:16px;
 }
 
 ul .radio-cell {
@@ -204,4 +203,8 @@ ul .user-cell .caption h5 {
 
 ul .user-cell:hover .caption {
    top: -65px;
+}
+
+#user-menu {
+	margin-top: 0px;
 }
