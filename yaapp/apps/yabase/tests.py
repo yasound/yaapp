@@ -1072,9 +1072,30 @@ class TestBroadcastMessage(TestCase):
         
 class TestTags(TestCase):
     def setUp(self):
-        pass
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
     
     def test_clean_tags(self):
-        tags = clean_tags(['', ' ', 'hi, there', '   tag   ', " طبيب "])
-        self.assertEquals(tags, ['hi, there', 'tag', "طبيب"])
+        tags = clean_tags(['', ' ', 'hi, there', '   tag   ', " طبيب ", " Rock "])
+        self.assertEquals(tags, ['hi, there', 'tag', "طبيب", 'rock'])
+        
+    def test_clean_radio(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        input_tags = [u'', u' ', u'hi, there', u'   tag   ', u" طبيب ", u" Rock ", u'ok']
+        
+        radio.tags.add(*input_tags)
+        tags = radio.tags.all()
+        for tag in tags:
+            self.assertTrue(tag.name in input_tags)
+        
+        Radio.objects.clean_tags()
+        cleaned_input_tags = [u'hi, there', u'tag', u"طبيب", u'rock', u'ok']
+        
+        tags = radio.tags.all()
+        self.assertEquals(tags.count(), len(cleaned_input_tags))
+        for tag in tags:
+            self.assertTrue(tag.name in cleaned_input_tags)
                         
