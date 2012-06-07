@@ -84,7 +84,9 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         'click #btn-favorites': 'favorites',
         'click #btn-friends': 'friends',
         'click #btn-my-profile': 'myProfile',
-        'click #btn-settings': 'settings'
+        'click #btn-settings': 'settings',
+        
+        'click #btn-notifications': 'notifications'
     },
     myRadio: function (e) {
         e.preventDefault();
@@ -114,6 +116,12 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     settings: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('settings/', {
+            trigger: true
+        });
+    },
+    notifications: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('notifications/', {
             trigger: true
         });
     }

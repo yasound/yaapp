@@ -844,6 +844,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
         "radio_picture_absolute_url": radio_picture_absolute_url,
         'flash_player_absolute_url': flash_player_absolute_url,
     }, context_instance=RequestContext(request)) 
+    
 class WebAppView(View):
     """ Class based view for web app.
     """
@@ -947,6 +948,12 @@ class WebAppView(View):
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'  
     
+    def settings(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
+    def notifications(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.

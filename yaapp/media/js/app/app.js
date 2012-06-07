@@ -75,6 +75,7 @@ $(document).ready(function () {
             "profile/:username/": "profile",
             "settings/": "settings",
             "friends/": "friends",
+            "notifications/": "notifications",
             "*args": "index"
         },
 
@@ -156,6 +157,14 @@ $(document).ready(function () {
             $('#webapp-content').prepend(this.currentView.render().el);
         },
         
+        notifications: function () {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.NotificationsPage({
+                tagName: 'div'
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
 
         // search page
         search: function (query) {
