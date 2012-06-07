@@ -81,6 +81,8 @@ PIPELINE_JS = {
             'js/app/profile/models.js',
             'js/app/settings/views.js',
             'js/app/settings/models.js',
+            'js/app/notifications/views.js',
+            'js/app/notifications/models.js',
             'js/app/home/views.js',
             'js/app/home/models.js',
             'js/app/push.js',

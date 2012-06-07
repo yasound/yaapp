@@ -174,7 +174,8 @@ urlpatterns = patterns('',
     url(r'^app/search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_search'),
     url(r'^app/favorites/$', WebAppView.as_view(), {'page': 'favorites'}, name='webapp_favorites'),
     url(r'^app/friends/$', WebAppView.as_view(), {'page': 'friends'}, name='webapp_friends'),
-    url(r'^app/settings/$', WebAppView.as_view(), {'page': 'setingss'}, name='webapp_settings'),
+    url(r'^app/settings/$', WebAppView.as_view(), {'page': 'settings'}, name='webapp_settings'),
+    url(r'^app/notifications/$', WebAppView.as_view(), {'page': 'notifications'}, name='webapp_notifications'),
     url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
     
     

@@ -117,6 +117,10 @@
    <script type="text/html" id="settingsPageTemplate">
       {% include "yabase/app/settings/settingsPage.mustache" %}
    </script>
+
+   <script type="text/html" id="notificationsPageTemplate">
+      {% include "yabase/app/notifications/notificationsPage.mustache" %}
+   </script>
 {% endif %}
 
 {% endblock %}
@@ -163,6 +167,10 @@
                         <i class="icon-eye-open"></i>
                            {% trans "Notifications" %}
                         <span class="caret"></span> </a>
+                        <ul class="dropdown-menu">
+                            <li class="divider"></li>
+                            <li><a href="{% url webapp_notifications %}" id='btn-notifications'>{% trans "All notifications" %}</a></li>
+                        </ul>
                         </div>
                                                 
                         <div class='btn-group'>
@@ -174,11 +182,9 @@
 							<li><a href="{% url webapp_radio user_uuid %}" id='btn-my-radio' yasound:uuid='{{ user_uuid }}'>{% trans "My radio" %}</a></li>
 							<li><a href="{% url webapp_favorites %}" id='btn-favorites'>{% trans "My favorites" %}</a></li>
 							<li><a href="{% url webapp_friends %}" id='btn-friends'>{% trans "My friends" %}</a></li>
-							{% if request.user.is_authenticated %}
 	                        <li class="divider"></li>
                             <li><a href="{% url webapp_profile request.user.username %}" id='btn-my-profile'>{% trans "My profile" %}</a></li>
                             <li><a href="{% url webapp_settings %}" id='btn-settings'>{% trans "Settings" %}</a></li>
-                            {% endif %}
                             <li class="divider"></li>
     						<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
 						</ul>
