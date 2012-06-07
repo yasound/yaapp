@@ -3,7 +3,7 @@ from bootstrap.forms import BootstrapModelForm, Fieldset, BootstrapForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from models import Radio
-
+from yacore.tags import clean_tags
 
 class SettingsRadioForm(BootstrapModelForm):
     class Meta:
@@ -12,6 +12,12 @@ class SettingsRadioForm(BootstrapModelForm):
         layout = (
             Fieldset(_('My radio'), 'name', 'genre', 'picture', 'description', 'tags'),
         )
+    
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        tags = clean_tags(tags)
+        self.cleaned_data['tags'] = tags
+        return tags
 
 class SettingsUserForm(BootstrapModelForm):
     password1 = forms.CharField(label=_("Password"), required=False, widget=forms.PasswordInput())
