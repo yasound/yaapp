@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.core.urlresolvers import reverse
@@ -20,6 +21,7 @@ import settings as yabase_settings
 import simplejson as json
 from yacore.database import atomic_inc
 from mock import Mock, patch
+from yacore.tags import clean_tags
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -1068,3 +1070,11 @@ class TestBroadcastMessage(TestCase):
         res = self.client.post(reverse('yabase.views.radio_broadcast_message', args=[radio.uuid]), {'message': 'hello, world'})
         self.assertEquals(res.status_code, 200)
         
+class TestTags(TestCase):
+    def setUp(self):
+        pass
+    
+    def test_clean_tags(self):
+        tags = clean_tags(['', ' ', 'hi, there', '   tag   ', " طبيب "])
+        self.assertEquals(tags, ['hi, there', 'tag', "طبيب"])
+                        

@@ -11,6 +11,7 @@ from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
 from yacore.database import atomic_inc
+from yacore.tags import clean_tags
 from yametrics.matching_errors import MatchingErrorsManager
 from yaref.models import YasoundSong
 from yareport.task import task_report_song
@@ -739,7 +740,7 @@ class Radio(models.Model):
     
     def set_tags(self, tags_string):
         separator = ','
-        tags_array = string.split(tags_string, separator)
+        tags_array = clean_tags(string.split(tags_string, separator))
         self.tags.clear()
         for tag in tags_array:
             self.tags.add(tag)
