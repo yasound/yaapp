@@ -69,6 +69,6 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
                 return s;
             },
         };
-        return Mustache.to_html(gettext('<%name%> by <%artist%> - Yasound'), context);
+        return _.template(gettext('<%= name%> by <%= artist%> - Yasound'), context);
     }
 });
