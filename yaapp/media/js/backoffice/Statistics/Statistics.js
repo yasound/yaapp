@@ -242,7 +242,26 @@ Yasound.Statistics.UI.KeyFigures = function () {
             }
         } ]
     }
+};
 
+Yasound.Statistics.UI.RadioTags = function () {
+    return {
+        title: gettext('Radio tags'),
+        layout: 'fit',
+        id: 'stats-radio-tags',
+        reload: function (panel) {
+            panel.load({
+                url: '/yabackoffice/radio_tags/',
+                text: gettext('Loading...')
+            });
+        },
+        tools: [ {
+            id: 'refresh',
+            handler: function (event, toolEl, panel) {
+                panel.reload(panel);
+            }
+        } ]
+    }
 };
 
 Yasound.Statistics.UI.Panel = function () {
@@ -255,7 +274,7 @@ Yasound.Statistics.UI.Panel = function () {
                     columnWidth: .33,
                     style: 'padding:10px 0 10px 10px',
                     items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.PostsGraph(), Yasound.Statistics.UI.LikesGraph(), Yasound.Statistics.UI.PastMonthMetrics(),
-                            Yasound.Statistics.UI.PastYearMetrics() ]
+                            Yasound.Statistics.UI.PastYearMetrics(), Yasound.Statistics.UI.RadioTags() ]
                 }, {
                     columnWidth: .33,
                     style: 'padding:10px 0 10px 10px',
@@ -268,6 +287,9 @@ Yasound.Statistics.UI.Panel = function () {
         updateData: function (component) {
             var keyfigures = Ext.getCmp('stats-keyfigures');
             keyfigures.reload(keyfigures);
+
+            var tags = Ext.getCmp('stats-radio-tags');
+            tags.reload(tags);
 
             var metrics = Ext.getCmp('stats-metrics');
             metrics.reload(metrics);

@@ -351,6 +351,7 @@ INSTALLED_APPS = (
     'tastypie',
     'djcelery',
     'taggit',
+    'taggit_templatetags',
     'test_utils',
     'bootstrap',
     #'django-iphone-push',
