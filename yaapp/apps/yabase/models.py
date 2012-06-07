@@ -472,6 +472,7 @@ class RadioManager(models.Manager):
     
     def clean_tags(self):
         qs = self.all()
+        logger.info('cleaning radio tags')
         for radio in qs:
             tags = radio.tags.all()
             to_remove = []
@@ -479,14 +480,17 @@ class RadioManager(models.Manager):
             for tag in tags:
                 cleaned_tag = clean_tag(tag.name)
                 if len(cleaned_tag) == 0:
+                    logger.info('removing "%s" from radio "%s"' % (tag.name, unicode(radio)))
                     to_remove.append(tag.name)
                     continue
                 
                 if cleaned_tag != tag.name:
+                    logger.info('"%s" --> "%s" for radio "%s"' % (tag.name, cleaned_tag, unicode(radio)))
                     to_remove.append(tag.name)
                     to_add.append(cleaned_tag)
             radio.tags.remove(*to_remove)
             radio.tags.add(*to_add)
+        logger.info('done')
         
         
     
