@@ -16,7 +16,7 @@ def new_notification_handler(sender, notification, **kwargs):
     if recipient is None:
         return
     
-    user = User.objects.get(userprofile__id=recipient)
+    user = User.objects.get(id=recipient)
     
     channel = 'user.%s' % (user.id)
     logger.info("publishing message to %s" % (channel)) 
