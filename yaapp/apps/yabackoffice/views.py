@@ -566,6 +566,14 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "likes_per_user": likes_per_user,
     }, context_instance=RequestContext(request))  
 
+@csrf_exempt
+@login_required
+def radio_tags(request, template_name='yabackoffice/radio_tags.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))  
 
 def _format_metrics(metrics):
     for metric in metrics:

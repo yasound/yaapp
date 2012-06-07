@@ -34,6 +34,7 @@ urlpatterns = patterns('yabackoffice.views',
 
     url(r'^keyfigures/', 'keyfigures'),
     url(r'^metrics/$', 'metrics'),
+    url(r'^radio_tags/', 'radio_tags'),
     url(r'^past_month_metrics/$', 'past_month_metrics'),
     url(r'^past_year_metrics/$', 'past_year_metrics'),
     url(r'^metrics/graphs/animators/$', 'metrics_graph_animators'),

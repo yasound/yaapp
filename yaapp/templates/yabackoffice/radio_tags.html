@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load taggit_extras %}
+{% get_taglist as tags for 'yabase.radio' %}
+<div class="inner-page">
+<h1>{% trans "Radio tags" %}</h1>
+<table width="100%" id='certificate-table' class='table zebra-striped'>
+    <thead>
+        <tr style="background:#eeeeee;">
+            <th style="width: 20%;">
+                {% trans "Key" %}
+            </th>
+            <th style="width: 80px;"> 
+                {% trans "Value" %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {% trans "Number of tags" %}
+            </td>
+            <td>
+                {{ tags.count }}
+            </td>
+        </tr>
+		{% for tag in tags %}
+        <tr>
+            <td>
+                {{ tag }}
+            </td>
+            <td>
+                {{ tag.num_times }}
+            </td>
+        </tr>
+		{% endfor %}
+    </tbody>
+</table>
+</div>
