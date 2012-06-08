@@ -10,6 +10,7 @@ ACTIVITY_SHARE               = 'share_activity'
 ACTIVITY_SHARE_FACEBOOK      = 'share_facebook_activity'
 ACTIVITY_SHARE_TWITTER       = 'share_twitter_activity'
 ACTIVITY_SHARE_EMAIL         = 'share_email_activity'
+ACTIVITY_ADD_TO_FAVORITES    = 'add_to_favorites_activity'
 
 ACTIVITIES = (
     ACTIVITY_LISTEN,

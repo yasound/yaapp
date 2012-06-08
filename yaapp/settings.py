@@ -678,6 +678,10 @@ if not PRODUCTION_MODE:
             "task": "yametrics.task.daily_metrics",
             "schedule": crontab(minute=0, hour='05'),
         },
+        "raido_popularity": {
+            "task": "yametrics.task.popularity_update_task",
+            "schedule": crontab(minute=0, hour='*'),
+        }
                            
     }
 else:
@@ -740,6 +744,16 @@ else:
                 "schedule": crontab(minute=0, hour='03'),
             },
         }
+    elif hostname == 'yas-web-08':
+        CELERYBEAT_SCHEDULE = {
+            "raido_popularity": {
+                "task": "yametrics.task.popularity_update_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+        }
+        
+        
+        
     
     
 UPLOAD_SONG_FOLDER = '/tmp/'
