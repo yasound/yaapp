@@ -9,16 +9,18 @@ $(document).ready(function() {
     var soundConfig = {
         id : 'yasoundMainPlay',
         url : g_radio_url,
-        autoPlay: true,
+        autoPlay: g_auto_play,
         autoLoad: true,
         stream : true,
     }
     
     soundManager.onready(function() {
         mySound = soundManager.createSound(soundConfig);
-        mySound.play();
-        $('#play i').removeClass('icon-play').addClass('icon-stop');
-        $('#volume-position').css("width", mySound.volume + "%");
+        if (g_auto_play) {
+            mySound.play();
+            $('#play i').removeClass('icon-play').addClass('icon-stop');
+            $('#volume-position').css("width", mySound.volume + "%");
+        }
     });
 
     soundManager.ontimeout(function() {
