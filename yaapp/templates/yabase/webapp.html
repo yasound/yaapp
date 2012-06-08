@@ -125,6 +125,10 @@
    <script type="text/html" id="notificationTemplate">
       {% include "yabase/app/notifications/notification.mustache" %}
    </script>
+
+   <script type="text/html" id="notificationMenuItemTemplate">
+      {% include "yabase/app/notifications/notificationMenuItem.mustache" %}
+   </script>
 {% endif %}
 
 {% endblock %}
@@ -171,7 +175,7 @@
                         <i class="icon-eye-open"></i>
                            {% trans "Notifications" %}
                         <span class="caret"></span> </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" id='notifications-menu'>
                             <li class="divider"></li>
                             <li><a href="{% url webapp_notifications %}" id='btn-notifications'>{% trans "All notifications" %}</a></li>
                         </ul>

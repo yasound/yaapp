@@ -78,9 +78,10 @@ Yasound.Views.Notifications = Backbone.View.extend({
         
         var insertOnTop = false;
         if (this.views.length > 0) {
-            var lastId = parseInt(this.views[0].model.get('id'));
-            var currentId = parseInt(notification.id);
-            if (currentId > lastId) {
+            var lastDate = this.views[0].model.getDate();
+            var currentDate = moment(notification.getDate());
+            var diff = lastDate.diff(currentDate, 'seconds');
+            if (diff < 0) {
                 insertOnTop = true;
             }
         }
@@ -119,6 +120,7 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
 
     render: function() {
         this.reset();
+        var that = this;
         $(this.el).html(ich.notificationsPageTemplate());
 
         this.notifications = new Yasound.Data.Models.Notifications({});
@@ -132,6 +134,13 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
         });
 
         this.notifications.fetch();
+        
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.on('notification', function (notification) {
+                that.notifications.reset(notification);
+            });
+        }
+        
         return this;
     }
 });
