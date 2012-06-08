@@ -40,6 +40,12 @@ def daily_metrics():
     update_likes_stats()
     
 @task(ignore_result=True)
+def popularity_update_task():
+    from models import RadioPopularityManager
+    manager = RadioPopularityManager()
+    manager.compute_progression()
+    
+@task(ignore_result=True)
 def async_activity(user_id, activity, throttle=True):
     """
     Process activity (animator for instance) :
@@ -152,3 +158,11 @@ def reset_daily_popularity():
     from models import RadioMetricsManager
     rm = RadioMetricsManager()
     rm.reset_daily_popularity()
+    
+    
+    
+@task(ignore_result=True)
+def async_radio_activity(radio_id, activity):
+    from models import RadioPopularityManager
+    manager = RadioPopularityManager()
+    manager.action(radio_id,activity)

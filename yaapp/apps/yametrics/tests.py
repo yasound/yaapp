@@ -4,7 +4,7 @@ from models import GlobalMetricsManager
 from yabase import tests_utils as yabase_tests_utils
 from yabase.models import Radio, SongMetadata
 from yametrics.models import TopMissingSongsManager, RadioMetricsManager, \
-    TimedMetricsManager, UserMetricsManager
+    TimedMetricsManager, UserMetricsManager, RadioPopularityManager
 from yametrics.task import async_activity, update_activities
 import datetime
 import settings as yametrics_settings
@@ -310,3 +310,157 @@ class TestTimedMetrics(TestCase):
                 
         mean = um.calculate_likes_per_user_mean()
         self.assertEquals(mean, 1.5)        
+        
+        
+class TestRadioPopularityManager(TestCase):
+    def setUp(self):
+        manager = RadioPopularityManager()
+        manager.drop()
+
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user    
+        
+        
+    def test_actions(self):
+        manager = RadioPopularityManager()
+        radio_id = 1 
+        
+        self.assertEquals(manager.radios.count(), 0)
+        manager.action(radio_id, yametrics_settings.ACTIVITY_LISTEN)
+        self.assertEquals(manager.radios.count(), 1)
+        manager.action(radio_id, yametrics_settings.ACTIVITY_LISTEN)
+        self.assertEquals(manager.radios.count(), 1)
+        
+        activity = manager.radios.find()[0]['activity']
+        self.assertGreater(activity, 0)
+        
+    def test_compute_progression_cleans_useless_documents(self):
+        manager = RadioPopularityManager()
+        radio_id_1 = 1
+        radio_id_2 = 2
+        radio_id_3 = 3
+        
+        self.assertEquals(manager.radios.count(), 0)
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        self.assertEquals(manager.radios.count(), 1)
+        
+        # check compute_progression removes documents without 'activity' or with 'activity' = 0
+        manager.radios.insert({'db_id': radio_id_2, 'bla':123})
+        self.assertEquals(manager.radios.count(), 2)
+        manager.radios.insert({'db_id': radio_id_3, 'activity':0})
+        self.assertEquals(manager.radios.count(), 3)
+        
+        manager.compute_progression()
+        self.assertEquals(manager.radios.count(), 1)
+        
+    def test_compute_progression1(self):
+        # simple case:
+        #    activity is non zero
+        #    last_activity exists
+        manager = RadioPopularityManager()
+        radio_id_1 = 1
+        activity = 55
+        last_activity = 20
+        
+        self.assertEquals(manager.radios.count(), 0)
+        manager.radios.insert({'db_id': radio_id_1, 'activity':activity, 'last_activity':last_activity})
+        manager.compute_progression()
+        self.assertEquals(manager.radios.count(), 1)
+        
+        
+        doc = manager.radios.find({'db_id': radio_id_1})[0]
+        self.assertEquals(doc['progression'], activity - last_activity)
+        
+    def test_compute_progression2(self):
+        # second case:
+        #    activity is non zero
+        #    last_activity DOES NOT exist
+        manager = RadioPopularityManager()
+        radio_id_1 = 1
+        activity = 55
+        
+        self.assertEquals(manager.radios.count(), 0)
+        manager.radios.insert({'db_id': radio_id_1, 'activity':activity})
+        manager.compute_progression()
+        self.assertEquals(manager.radios.count(), 1)
+        
+        
+        doc = manager.radios.find({'db_id': radio_id_1})[0]
+        self.assertEquals(doc['progression'], activity)
+        
+    def test_most_popular(self):
+        manager = RadioPopularityManager()
+        radio_id_1 = 1
+        radio_id_2 = 2
+        radio_id_3 = 3
+        radio_id_4 = 4
+        
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.compute_progression()
+        self.assertEquals(manager.radios.count(), 4)
+        
+        
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        
+        
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
+        
+        manager.compute_progression()
+        self.assertEquals(manager.radios.count(), 4)
+        
+        most_popular = manager.most_popular(db_only=False)
+        self.assertEquals(most_popular.count(True), 4)
+        doc0 = most_popular[0]
+        doc1 = most_popular[1]
+        doc2 = most_popular[2]
+        doc3 = most_popular[3]
+        self.assertGreaterEqual(doc0['progression'], doc1['progression'])
+        self.assertGreaterEqual(doc1['progression'], doc2['progression'])
+        self.assertGreaterEqual(doc2['progression'], doc3['progression'])
+        
+        most_popular = manager.most_popular(limit=2, db_only=False)
+        self.assertEquals(most_popular.count(True), 2)
+        
+        most_popular = manager.most_popular(skip=1, db_only=False)
+        self.assertEquals(most_popular.count(True), 3)
+        self.assertEquals(doc1, most_popular[0])
+        
+        most_popular = manager.most_popular(skip=1, limit=2, db_only=False)
+        self.assertEquals(most_popular.count(True), 2)
+        self.assertEquals(doc1, most_popular[0])
+        self.assertEquals(doc2, most_popular[1])
+        

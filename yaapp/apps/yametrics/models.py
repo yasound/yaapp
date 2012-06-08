@@ -8,7 +8,7 @@ from bson.code import Code
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, SongMetadata
-from yametrics.task import async_activity, async_check_if_new_listener
+from yametrics.task import async_activity, async_check_if_new_listener, async_radio_activity
 import settings as yametrics_settings
 import datetime
 
@@ -236,6 +236,58 @@ class RadioMetricsManager():
         collection = self.radios
         collection.update({}, {'$set': {'daily_popularity': 0}}, multi=True)
         
+
+class RadioPopularityManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.radios = self.db.metrics.radio_popularity
+        self.radios.ensure_index("db_id", unique=True)
+        
+    def drop(self):
+        self.radios.drop()
+        
+    def most_popular(self, limit=10, skip=0, db_only=True):
+        collection = self.radios
+        if db_only:
+            return collection.find({}, {'db_id': True}).sort([('progression', DESCENDING)]).skip(skip).limit(limit)
+        else:
+            return collection.find().sort([('progression', DESCENDING)]).skip(skip).limit(limit)
+            
+    def action(self, radio_id, activity_type):
+        inc = 0
+        if activity_type == yametrics_settings.ACTIVITY_LISTEN:
+            inc = 1
+        elif activity_type == yametrics_settings.ACTIVITY_WALL_MESSAGE:
+            inc = 5
+        elif activity_type == yametrics_settings.ACTIVITY_SONG_LIKE:
+            inc = 5
+        elif activity_type == yametrics_settings.ACTIVITY_SHARE:
+            inc = 8
+        elif activity_type == yametrics_settings.ACTIVITY_ADD_TO_FAVORITES:
+            inc = 8
+            
+        collection = self.radios
+        collection.update({"db_id": radio_id}, 
+                          {"$inc": {'activity': inc}}, 
+                          upsert=True,
+                          safe=True)
+        
+    def compute_progression(self):
+        collection = self.radios
+        collection.remove({'$or': [{'activity': {'$exists': False, }}, {'activity': 0}] })
+        
+        docs = collection.find()
+        for d in docs:
+            activity = d['activity']
+            last_activity = d.get('last_activity', 0)
+            new_progression = activity - last_activity
+            last_activity = activity
+            activity = 0
+            collection.update({'db_id': d['db_id']}, {'$set': {'progression': new_progression, 'activity': activity, 'last-activity': last_activity} })
+            
+            
+
+        
 class UserMetricsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -428,6 +480,7 @@ def user_started_listening_handler(sender, radio, user, **kwargs):
         async_check_if_new_listener(user.id)
     async_inc_radio_value.delay(radio.id, 'current_users', 1)
     async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
+    async_radio_activity(radio.id, yametrics_settings.ACTIVITY_LISTEN)
 
 def user_stopped_listening_handler(sender, radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
@@ -443,6 +496,8 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         user = wall_event.user
         if not user.is_anonymous():
             async_activity.delay(user.id, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
+            
+        async_radio_activity(wall_event.radio.id, yametrics_settings.ACTIVITY_WALL_MESSAGE)
         
     elif we_type == yabase_settings.EVENT_LIKE:
         async_inc_global_value.delay('new_song_like', 1)
@@ -450,6 +505,8 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         user = wall_event.user
         if not user.is_anonymous():
             async_activity.delay(user.id, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
+            
+        async_radio_activity(wall_event.radio.id, yametrics_settings.ACTIVITY_SONG_LIKE)
     
     async_inc_radio_value.delay(wall_event.radio.id, 'daily_popularity', 1)
 
@@ -473,6 +530,7 @@ def neutral_like_radio_handler(sender, radio, user, **kwargs):
 def favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_favorite_radio', 1)
     async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
+    async_radio_activity(radio.id, yametrics_settings.ACTIVITY_ADD_TO_FAVORITES)
     
 def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_not_favorite_radio', 1)
@@ -504,6 +562,8 @@ def new_share(sender, radio, user, share_type, **kwargs):
     async_inc_global_value.delay('new_share', 1)
     key = 'new_share_%s' % (str(share_type))
     async_inc_global_value.delay(key, 1)
+    
+    async_radio_activity(wall_event.radio.id, yametrics_settings.ACTIVITY_SHARE)
 
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)

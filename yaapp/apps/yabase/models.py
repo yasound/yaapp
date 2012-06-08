@@ -406,9 +406,9 @@ class RadioManager(models.Manager):
         return self.filter(id__in=ids).order_by('-current_connections')
 
     def most_popular_today(self):
-        from yametrics.models import RadioMetricsManager
-        rm = RadioMetricsManager()
-        results = rm.filter('daily_popularity', limit=yabase_settings.MOST_ACTIVE_RADIOS_LIMIT, id_only=True)
+        from yametrics.models import RadioPopularityManager
+        rm = RadioPopularityManager()
+        results = rm.most_popular(limit=yabase_settings.MOST_ACTIVE_RADIOS_LIMIT, db_only=True)
         ids = [res['db_id'] for res in results]
         return self.filter(id__in=ids)
     
