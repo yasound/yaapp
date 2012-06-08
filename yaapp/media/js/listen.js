@@ -10,7 +10,7 @@ $(document).ready(function() {
         id : 'yasoundMainPlay',
         url : g_radio_url,
         autoPlay: g_auto_play,
-        autoLoad: true,
+        autoLoad: g_auto_play,
         stream : true,
     }
     
