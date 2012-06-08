@@ -75,11 +75,8 @@ Yasound.App.PushManager = Class({
     },
 
     onUserEvent: function (message) {
-        console.log(message);
         var raw_data = message.data;
         var data = JSON.parse(raw_data);
-        console.log('onUserEvent');
-        console.log(data);
         this.trigger(data.event_type, JSON.parse(data.data));
     },
 
