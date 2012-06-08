@@ -15,8 +15,8 @@ $(document).ready(function() {
     }
     
     soundManager.onready(function() {
-        mySound = soundManager.createSound(soundConfig);
         if (g_auto_play) {
+            mySound = soundManager.createSound(soundConfig);
             mySound.play();
             $('#play i').removeClass('icon-play').addClass('icon-stop');
             $('#volume-position').css("width", mySound.volume + "%");
