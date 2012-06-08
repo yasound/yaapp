@@ -563,7 +563,7 @@ def new_share(sender, radio, user, share_type, **kwargs):
     key = 'new_share_%s' % (str(share_type))
     async_inc_global_value.delay(key, 1)
     
-    async_radio_activity(wall_event.radio.id, yametrics_settings.ACTIVITY_SHARE)
+    async_radio_activity(radio.id, yametrics_settings.ACTIVITY_SHARE)
 
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
