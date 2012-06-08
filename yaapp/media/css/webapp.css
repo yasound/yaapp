@@ -208,3 +208,12 @@ ul .user-cell:hover .caption {
 #user-menu {
 	margin-top: 0px;
 }
+
+ul#notifications{
+    list-style: none;
+    margin-left:0;
+}
+
+.alert .date {
+	float:right;
+}

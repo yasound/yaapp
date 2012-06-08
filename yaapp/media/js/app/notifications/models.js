@@ -18,6 +18,10 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
         var theDate = this.get('date').substr(0, 19);
         theDate = moment(theDate + timeZone);
         return theDate;
+    },
+    
+    getFormattedDate: function() {
+        return this.getDate().format('LLLL')
     }
 });
 
