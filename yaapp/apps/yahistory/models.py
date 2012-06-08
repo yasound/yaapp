@@ -121,7 +121,8 @@ def new_share(sender, radio, user, share_type, **kwargs):
     async_add_share_event.delay(user.id, radio.uuid, share_type=share_type)
 
 def new_animator_activity(sender, user, radio, **kwargs):
-    async_add_animator_event.delay(user.id, radio.uuid)
+    if radio is not None:
+        async_add_animator_event.delay(user.id, radio.uuid)
 
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
