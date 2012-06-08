@@ -215,7 +215,7 @@ class TestNotifications(TestCase):
             user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
             user.set_password('test')
             user.save()
-            
+
             m = NotificationsManager()
             m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
             m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
@@ -236,7 +236,33 @@ class TestNotifications(TestCase):
             m.delete_notification(str(notif_id)) # try with id as a string
             notifs = m.notifications_for_recipient(user.id)
             self.assertEqual(notifs.count(), original_count - 1)
-        
+
+    def test_delete_all_notifications(self):
+        redis = Mock(name='redis')
+        redis.publish = Mock()      
+
+        with patch('yamessage.push.Redis') as mock_redis:
+            mock_redis.return_value = redis
+            user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+            user.set_password('test')
+            user.save()
+
+            user2 = User(email="test2@yasound.com", username="test2", is_superuser=False, is_staff=False)
+            user2.set_password('test')
+            user2.save()
+            
+            m = NotificationsManager()
+            m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
+            m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
+            m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
+            m.add_notification(user2.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
+
+            m.delete_all_notifications(user.id)
+            notifs = m.notifications_for_recipient(user.id)
+            self.assertEqual(notifs.count(), 0)
+
+            notifs = m.notifications_for_recipient(user2.id)
+            self.assertEqual(notifs.count(), 1)
         
     def test_get_notifications_view(self):
         redis = Mock(name='redis')

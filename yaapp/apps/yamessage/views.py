@@ -55,3 +55,11 @@ def delete_notification(request, notif_id):
     response = {'succeeded': True}
     res = json.dumps(response)
     return HttpResponse(res)
+
+@check_api_key(methods=['DELETE'])
+def delete_all_notifications(request):
+    m = NotificationsManager()
+    m.delete_all_notifications(request.user.id)
+    response = {'succeeded': True}
+    res = json.dumps(response)
+    return HttpResponse(res)

@@ -17,6 +17,7 @@ class NotificationsManager():
         self.db = settings.MONGO_DB
         self.notifications = self.db.notifications
         self.notifications.ensure_index("date")
+        self.notifications.ensure_index("dest_user_id")
         
     def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None, from_radio_id=None):
         if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:
@@ -104,5 +105,8 @@ class NotificationsManager():
         if isinstance(notif_id, str) or isinstance(notif_id, unicode):
             notif_id = ObjectId(notif_id)
         self.notifications.remove({'_id':notif_id})
+    
+    def delete_all_notifications(self, user_id):
+        self.notifications.remove({'dest_user_id':user_id})
         
     

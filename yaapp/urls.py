@@ -156,6 +156,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
     url(r'^api/v1/update_notification/(?P<notif_id>\S+)/$', 'yamessage.views.update_notification'),
     url(r'^api/v1/delete_notification/(?P<notif_id>\S+)/$', 'yamessage.views.delete_notification'),
+    url(r'^api/v1/delete_all_notification/$', 'yamessage.views.delete_all_notification'),
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
