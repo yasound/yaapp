@@ -88,6 +88,18 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         
         'click #btn-notifications': 'notifications'
     },
+    initialize: function() {
+        _.bindAll(this, 'addNotificationItem');
+        
+        this.notificationMenuItems = [];
+        var that = this;
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.on('notification', function (notification) {
+                colibri(gettext('New notification received'));
+                that.addNotificationItem(notification)
+            });
+        }
+    },
     myRadio: function (e) {
         e.preventDefault();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
@@ -124,6 +136,28 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         Yasound.App.Router.navigate('notifications/', {
             trigger: true
         });
+    },
+    addNotificationItem: function(notification) {
+//        var view = new Yasound.Views.NotificationMenuItem({
+//            model: new Yasound.Data.Models.Notification(notification)
+//        });
+//        this.notificationMenuItems.slice(0, 0, view);
+//        $('#notifications-menu').append(view.render());
+//        if (this.notificationMenuItems.length >= 6) {
+//            var lastView = this.notificationMenuItems.pop();
+//            lastView.close();
+//        }
+    }
+});
+
+Yasound.Views.NotificationMenuItem = Backbone.View.extend({
+    tagName: 'li',
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+    render: function() {
+        $(this.el).html(ich.notificationMenuItemTemplate(this.model.toJSON()));
+        return this;
     }
 });
 
