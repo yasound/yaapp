@@ -594,10 +594,10 @@ def upload_song(request, song_id=None):
     radio = None
     try:
         radio = Radio.objects.radio_for_user(request.user)
+        yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
     except:
         logger.info('no radio for user %s' % (request.user))
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
         
     json_data = {}
     data = request.REQUEST.get('data')
