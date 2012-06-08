@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from redis import Redis
-from yacore.json import MongoAwareEncoder
+from yacore.api import MongoAwareEncoder
 import json
 import logging
 import signals as yamessage_signals
