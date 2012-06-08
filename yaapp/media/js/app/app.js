@@ -136,6 +136,12 @@ $(document).ready(function () {
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
+                
+                if (Yasound.App.Router.pushManager.enablePush) {
+                    Yasound.App.Router.pushManager.on('notification', function (notification) {
+                        colibri(gettext('New notification received'));
+                    });
+                }
             }
         },
         

@@ -7,6 +7,17 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
     idAttribute: "_id",
     url: function () {
         return '/api/v1/notifications/' + this.get('id') + '/';
+    },
+    
+    getDate: function() {
+        var timeZone = '+01:00';
+        if (moment().isDST()) {
+            timeZone = '+02:00';
+        }
+        // if start_date contains microsecond precision, we remove it
+        var theDate = this.get('date').substr(0, 19);
+        theDate = moment(theDate + timeZone);
+        return theDate;
     }
 });
 
@@ -24,9 +35,6 @@ Yasound.Data.Models.Notifications = Backbone.Paginator.requestPager.extend({
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
-    comparator: function(notification) {
-        return -parseInt(notification.get("id"));
-    },
     
     fetchFirst: function() {
         var savedPage = this.page;
@@ -40,5 +48,5 @@ Yasound.Data.Models.Notifications = Backbone.Paginator.requestPager.extend({
                 that.page = savedPage;
             }
         });
-    }
+    }    
 });
