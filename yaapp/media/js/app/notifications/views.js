@@ -48,6 +48,7 @@ Yasound.Views.Notifications = Backbone.View.extend({
     },
 
     addAll: function () {
+        $('.loading-mask', this.el).remove();
         this.collection.each(this.addOne);
     },
 
