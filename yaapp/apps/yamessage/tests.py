@@ -260,7 +260,9 @@ class TestNotifications(TestCase):
             data = json.loads(response.content)
             self.assertEqual(response.status_code, 200)
             self.assertIsNotNone(data)
-            self.assertEqual(len(data), 3)
+            self.assertEqual(len(data['objects']), 3)
+            self.assertTrue('meta' in data)
+            self.assertTrue('objects' in data)
         
     def test_get_notification_view(self):
         redis = Mock(name='redis')
