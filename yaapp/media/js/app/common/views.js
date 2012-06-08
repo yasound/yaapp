@@ -138,15 +138,15 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         });
     },
     addNotificationItem: function(notification) {
-//        var view = new Yasound.Views.NotificationMenuItem({
-//            model: new Yasound.Data.Models.Notification(notification)
-//        });
-//        this.notificationMenuItems.slice(0, 0, view);
-//        $('#notifications-menu').append(view.render());
-//        if (this.notificationMenuItems.length >= 6) {
-//            var lastView = this.notificationMenuItems.pop();
-//            lastView.close();
-//        }
+        var view = new Yasound.Views.NotificationMenuItem({
+            model: new Yasound.Data.Models.Notification(notification)
+        });
+        this.notificationMenuItems.slice(0, 0, view);
+        $('#notifications-menu').prepend(view.render().el);
+        if (this.notificationMenuItems.length >= 6) {
+            var lastView = this.notificationMenuItems.pop();
+            lastView.close();
+        }
     }
 });
 
