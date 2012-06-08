@@ -2,7 +2,7 @@ from bson import objectid
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 import datetime
-import json
+from django.utils import simplejson
 
 class MongoAwareEncoder(DjangoJSONEncoder):
     """JSON encoder class that adds support for Mongo objectids."""
@@ -36,5 +36,5 @@ def api_response(data, total_count=None, limit=None, offset=0, next_url=None, pr
         },
         'objects': data
     }
-    json_response = json.dumps(response, cls=MongoAwareEncoder)
+    json_response = simplejson.dumps(response, cls=MongoAwareEncoder)
     return HttpResponse(json_response, mimetype='application/json')
