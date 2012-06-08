@@ -169,6 +169,7 @@ urlpatterns = patterns('',
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<song_instance_id>\S+)$', 'yabase.views.web_song'),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_listen'),
+    (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_widget'),
     url(r'^app/$', WebAppView.as_view(), {'page': 'home'}, name='webapp'),
     url(r'^app/radio/(?P<radio_uuid>\S+)/$', WebAppView.as_view(),  {'page': 'radio'}, name='webapp_radio'),
     url(r'^app/search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_search'),
