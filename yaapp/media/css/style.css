@@ -64,7 +64,9 @@ footer #menu a:hover {
 	font-size: 16px;
 }
 
-#player {
+#player
+,#widget-player
+ {
 	margin-top: 24px;
 	background-color: #F5F5F5;
 	border-radius: 6px 6px 6px 6px;
@@ -76,10 +78,20 @@ footer #menu a:hover {
 	margin-bottom: 24px;
 }
 
-#player p {
+
+
+#player p
+ {
 	font-size: 18px;
 	font-weight: 200;
 	line-height: 27px;
+}
+
+#widget-player p
+ {
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 27px;
 }
 
 #track-picture {
@@ -113,10 +125,18 @@ footer #menu a:hover {
 	margin: 0px auto;
 }
 
-#volume-control {
+#player #volume-control {
     width: 264px;
 	cursor: pointer;
 }
+
+#widget-player #volume-control {
+    width: 104px;
+    cursor: pointer;
+    margin-left:8px;
+    margin-top:4px;
+}
+
 
 #btn-buy {
 	width: 128px;
