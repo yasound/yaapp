@@ -7,6 +7,7 @@ Yasound.Views.Notification = Backbone.View.extend({
     tagName: 'li',
     className: 'notification',
     events: {
+        "click .close": "onRemove"
     },
 
     initialize: function () {
@@ -23,6 +24,16 @@ Yasound.Views.Notification = Backbone.View.extend({
 
         $(this.el).hide().html(ich.notificationTemplate(data)).fadeIn(200);
         return this;
+    },
+    
+    onRemove: function() {
+        if (this.model.get('read') == false ) {
+            this.model.markAsRead();
+            colibri(gettext('Notification marked as read'));
+        } else {
+            colibri(gettext('Notification deleted'));
+            this.model.remove();
+        }
     }
 });
 
@@ -32,6 +43,7 @@ Yasound.Views.Notifications = Backbone.View.extend({
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
+        this.mode = 'unread';
         this.views = [];
     },
 
@@ -68,6 +80,7 @@ Yasound.Views.Notifications = Backbone.View.extend({
         var view = new Yasound.Views.Notification({
             model: notification
         });
+        view.mode = this.mode;
         
         var insertOnTop = false;
         if (this.views.length > 0) {
@@ -106,17 +119,35 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
     },
 
     onClose: function() {
+        Yasound.App.Router.pushManager.off('notification', this.onNotification, this);
+        this.notificationsToolbar.close();
+        this.notificationsView.close();
+        this.paginationView.close();
     },
 
     reset: function() {
     },
-
+    
+    onNotification: function(notification) {
+        console.log(this.notificationsView.mode);
+        if (this.notificationsView.mode == 'unread' && !notification.read) {
+            this.notifications.reset(notification);
+        } 
+        else if (this.notificationsView.mode != 'unread' && notification.read) {
+            this.notifications.reset(notification);
+        }
+        else if (this.notificationsView.mode == 'all') {
+            this.notifications.reset(notification);
+        }
+    },
+    
     render: function() {
         this.reset();
-        var that = this;
         $(this.el).html(ich.notificationsPageTemplate());
 
-        this.notifications = new Yasound.Data.Models.Notifications({});
+        this.notifications = new Yasound.Data.Models.Notifications({
+            type: 'unread'
+        });
         this.notificationsView = new Yasound.Views.Notifications({
             collection: this.notifications,
             el: $('#notifications', this.el)
@@ -126,14 +157,54 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
+        this.notificationsToolbar = new Yasound.Views.NotificationsToolbar({
+            el: $('#notifications-toolbar', this.el),
+            collection: this.notifications,
+        }).render();
+        this.notificationsToolbar.notificationsView = this.notificationsView; 
+
         this.notifications.fetch();
         
         if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.on('notification', function (notification) {
-                that.notifications.reset(notification);
-            });
+            Yasound.App.Router.pushManager.on('notification', this.onNotification, this);
         }
-        
         return this;
+    }
+});
+
+/**
+ * Notification buttons
+ */
+Yasound.Views.NotificationsToolbar = Backbone.View.extend({
+    el: '#notifications-toolbar',
+    events: {
+        'click #read': 'read',
+        'click #unread': 'unread',
+        'click #all': 'all'
+    },
+    render: function() {
+        $(this.el).html(ich.notificationsToolbarTemplate());
+        return this;
+    },
+    read: function(e) {
+        e.preventDefault();
+        this.notificationsView.clear();
+        this.notificationsView.mode = 'read';
+        this.collection.customParam1 = 'read';
+        this.collection.goTo(0);
+    },
+    unread: function(e) {
+        e.preventDefault();
+        this.notificationsView.clear();
+        this.notificationsView.mode = 'unread';
+        this.collection.customParam1 = 'unread';
+        this.collection.goTo(0);
+    },
+    all: function(e) {
+        e.preventDefault();
+        this.notificationsView.clear();
+        this.notificationsView.mode = 'all';
+        this.collection.customParam1 = 'all';
+        this.collection.goTo(0);
     }
 });

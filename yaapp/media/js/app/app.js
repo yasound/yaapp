@@ -161,7 +161,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.NotificationsPage({
-                tagName: 'div'
+                tagName: 'div',
             });
             $('#webapp-content').prepend(this.currentView.render().el);
         },

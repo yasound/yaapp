@@ -7,15 +7,22 @@ import json
 @check_api_key(methods=['GET'])
 def get_notifications(request):
     m = NotificationsManager()
-    date_greater_than = request.GET.get('date__gt', None)
-    date_lower_than = request.GET.get('date__lt', None)
+    date_greater_than = request.REQUEST.get('date__gt', None)
+    date_lower_than = request.REQUEST.get('date__lt', None)
     
-    offset = int(request.GET.get('offset', 0))
-    limit = request.GET.get('limit', None)
+    offset = int(request.REQUEST.get('offset', 0))
+    limit = request.REQUEST.get('limit', None)
+    read_status = request.REQUEST.get('read_status', 'all')
+    
     if limit is not None:
         limit = int(limit)
     
-    notif_cursor = m.notifications_for_recipient(request.user.id, count=limit, skip=offset, date_greater_than=date_greater_than, date_lower_than=date_lower_than)
+    notif_cursor = m.notifications_for_recipient(request.user.id, 
+                                                 count=limit, 
+                                                 skip=offset, 
+                                                 date_greater_than=date_greater_than, 
+                                                 date_lower_than=date_lower_than,
+                                                 read_status=read_status)
     notifs = list(notif_cursor)
     return api_response(notifs, limit=limit, offset=offset)
 

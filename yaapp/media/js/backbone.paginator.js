@@ -241,7 +241,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 				params = _.extend({
 				type: 'GET',
 				data: decodeURIComponent($.param(queryMap)),
-				url: this.url,
+				url: _.result(this, 'url'),
 				processData: false
 			}, options);
 

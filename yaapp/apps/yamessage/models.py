@@ -62,7 +62,7 @@ class NotificationsManager():
         return text
         
         
-    def notifications_for_recipient(self, user_id, count=None, skip=0, date_greater_than=None, date_lower_than=None):
+    def notifications_for_recipient(self, user_id, count=None, skip=0, date_greater_than=None, date_lower_than=None, read_status='all'):
         date_request = {}
         if date_greater_than is not None:
             date_request['$gt'] = date_greater_than
@@ -73,6 +73,13 @@ class NotificationsManager():
         request['dest_user_id'] = user_id
         if len(date_request) > 0:
             request['date'] = date_request
+
+        if read_status == 'read':
+            request['read'] = True
+        elif read_status == 'unread':
+            request['read'] = False
+        
+        print request
         if count is not None:
             notifications = self.notifications.find(request).sort([('date', DESCENDING)]).skip(skip).limit(count)
         else:
