@@ -41,7 +41,7 @@ msgstr "Partage Yasound"
 
 #: js/app/notifications/views.js:32
 msgid "Notification marked as read"
-msgstr "Notification est marquée comme lue"
+msgstr "Notification marquée comme lue"
 
 #: js/app/notifications/views.js:34
 msgid "Notification deleted"
