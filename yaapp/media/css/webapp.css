@@ -217,3 +217,15 @@ ul#notifications{
 .alert .date {
 	float:right;
 }
+
+#notifications-toolbar {
+	margin-top:4px;
+	margin-bottom:12px;
+}
+
+ul#notifications li div {
+    font-weight: bold;
+}
+ul#notifications .read {
+	font-weight: normal;
+}

@@ -22,16 +22,39 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
     
     getFormattedDate: function() {
         return this.getDate().format('LLLL')
+    },
+    
+    markAsRead: function() {
+        this.set({'read': true}, {silent: true});
+        var url = '/api/v1/update_notification/' + this.id + '/';
+        $.ajax({
+           url: url,
+           type: 'PUT',
+           dataType: 'json',
+           data: JSON.stringify(this.toJSON())
+        });
+    },
+    
+    remove: function() {
+        var url = '/api/v1/delete_notification/' + this.id + '/';
+        $.ajax({
+           url: url,
+           type: 'DELETE'
+        });
     }
+    
 });
 
 Yasound.Data.Models.Notifications = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.Notification,
-    url: '/api/v1/notifications/',
+    url: '/api/v1/notifications/', 
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
     perPage: 25,
     page:0,
+    customAttribute1: 'read_status',
+    customParam1: 'unread',
+    
     
     parse: function(response) {
         var results = response.objects;
