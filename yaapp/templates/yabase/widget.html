@@ -40,31 +40,23 @@
     <div class='row-fluid'>
         <div class='span12'>
             <a href='/' target='_blank'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
-           <div id='player'>
+           <div id='widget-player'>
                <div id='track-picture' class='thumbnail'>
-                   <img id='track-image' src="/media/images/default_image.png" width="160px" height="160px" alt='{% trans "Track logo" %}'/>
-               </div>
-               <div id='track-details'>
-                   <h2><span id='track-name'>{% trans "No name" %}</span></h2>
-                   <p>{% trans "By"%} <strong><span id='track-artist'></span></strong> - <strong><span id='track-album'></span></strong></p>
-                   <div class="btn-toolbar">
+                   <img id='track-image' src="/media/images/default_image.png" width="120px" height="120px" alt='{% trans "Track logo" %}'/>
                    <div class="btn-group">
                       <a class="btn" id='play'><i class="icon-play"></i></a>
                       <a class="btn" id='dec'><i class="icon-volume-down"></i></a>
                       <a class="btn" id='inc' ><i class="icon-volume-up"></i></a>
                    </div>
-
-                   <div class="btn-group">
-                   <a class="btn" id='btn-buy' href="{% url buy_link radio.id %}" target='_blank'>
-                    <i class="icon-shopping-cart"></i>
-                    {% trans "Buy on iTunes" %}
-                    </a>
-                    </div>
                       <div class="progress no-ease" id='volume-control' onmousedown="return false">
                         <div class="bar" id='volume-position' style="width: 0%;" onmousedown="return false"></div>
                       </div>
-                   </div>
+               </div>
+               <div id='track-details'>
+                   <h3><span id='track-name'>{% trans "No name" %}</span></h3>
+                   <p>{% trans "By"%} <strong><span id='track-artist'></span></strong> - <strong><span id='track-album'></span></strong></p>
                </div> 
+               <div class='clear'></div>
             </div> 
         </div>   
     </div>
