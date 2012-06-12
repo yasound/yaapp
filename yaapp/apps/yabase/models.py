@@ -181,7 +181,6 @@ class SongInstance(models.Model):
     class Meta:
         db_name = u'default'
         
-    @property
     def song_description(self, include_cover=True, info_from_yasound_db=True):
         try:
             song = YasoundSong.objects.get(id=self.metadata.yasound_song_id)
