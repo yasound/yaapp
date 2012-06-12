@@ -422,6 +422,23 @@ class UserProfile(models.Model):
             url = yaapp_settings.DEFAULT_IMAGE
         return url
     
+    def user_as_dict(self, full=False):
+        data = {
+                'id': self.user.id,
+                'picture': self.picture_url,
+                'name': self.name,
+                'username': self.user.username
+                }
+        
+        if full:
+            own_radio = self.own_radio
+            if own_radio and own_radio.ready:
+                data['own_radio'] = own_radio.as_dict()
+            current_radio = self.current_radio
+            if current_radio and current_radio.ready:
+                data['current_radio'] = current_radio.as_dict()
+        return data
+    
     def fill_user_bundle(self, bundle):
         bundle.data['picture'] = self.picture_url
         bundle.data['bio_text'] = self.bio_text

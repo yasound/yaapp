@@ -777,7 +777,7 @@ class Radio(models.Model):
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
     
-    def as_dict(self):
+    def as_dict(self, full=False):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         data = {
             'id': self.id,
@@ -791,6 +791,14 @@ class Radio(models.Model):
             'ready': self.ready,
             'stream_url' : self.stream_url,
         }
+        if full:
+            data['creator'] = self.creator.userprofile.user_as_dict(full=True)
+            data['description'] = self.description
+            data['genre'] = self.genre
+            data['theme'] = self.theme
+            data['audience_peak'] = self.audience_peak
+            data['overall_listening_time'] = self.overall_listening_time
+            data['created'] = self.created
         return data
     
     def update_with_data(self, data):
