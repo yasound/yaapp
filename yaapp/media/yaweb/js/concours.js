@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
         'padding': 0,
         'margin': 0,
         'width' : 728,
-        'height' : 392,
+        'height' : 300,
         'scrolling': 'no',
         'overlayShow' : true,
         onStart : function() {
