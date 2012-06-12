@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
+<link href="/media/yaweb/css/elecsounds.css" rel="stylesheet" type="text/css" />
+  <title>ElecSounds</title>
+</head>
+<body>
+
+<div id="background">
+    <a href='{% url elecsounds_terms %}'><img src='/media/yaweb/images/elecsounds/elecsounds_2jours.jpg' class='stretch' alt='Jeu Elecsounds' width='1517' height='817'/></a>
+</div>
+
+<a class="btn" id='nicolas' href="https://api.yasound.com/listen/6fa46bfa1f824879b503e2aebbff7411" target='_blank'>Ecouter sa radio</a>
+<a class="btn" id='francois' href="https://api.yasound.com/listen/29b1e874c84740958b0d4363654376ae" target='_blank'>Ecouter sa radio</a>
+
+<a class="btn" id='terms' href="{% url contest_station_terms %}">Détails du jeu concours</a>
+
+</body>
+</html>
