@@ -59,6 +59,36 @@ class SongInstanceResource(ModelResource):
         song = bundle.obj
         bundle.data = song.song_description
         return bundle
+    
+class ProgrammingResource(ModelResource):
+    metadata = fields.ForeignKey(SongMetadataResource, 'metadata', full=True)
+    playlist = fields.ForeignKey('yabase.api.PlaylistResource', 'playlist', full=False)
+    class Meta:
+        queryset = SongInstance.objects.none()
+        resource_name = 'my_programming'
+        fields = ['id', 
+                  'playlist', 
+                  'play_count', 
+                  'last_play_time', 
+                  'yasound_score', 
+                  'metadata',
+                  'need_sync',
+                  'likes',
+                  'dislikes']
+        include_resource_uri = False
+        filtering = {
+            'playlist': ALL,
+        }
+        authorization= ReadOnlyAuthorization()
+        authentication = YasoundApiKeyAuthentication()
+        allowed_methods = ['post', 'get']
+        
+    def get_object_list(self, request):
+        radio = Radio.objects.radio_for_user(request.user)
+        if radio is None:
+            raise NotFound()
+        return SongInstance.objects.filter(playlist__radio=radio)
+        
 
 class PlaylistResource(ModelResource):
     class Meta:
