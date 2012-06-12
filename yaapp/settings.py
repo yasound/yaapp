@@ -371,6 +371,11 @@ INSTALLED_APPS = (
     'yamenu',
     'yamessage',
     'yahistory',
+    
+    # newsletter,
+    'tinymce',
+    'tagging',
+    'emencia.django.newsletter',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -815,6 +820,9 @@ GEOIP_DATABASE = os.path.join(PROJECT_PATH, 'GeoIP.dat')
 GEOIP_LOOKUP = 'REMOTE_ADDR' 
 if DJANGO_MODE == 'PRODUCTION':
     GEOIP_LOOKUP = 'HTTP_X_REAL_IP' 
+    
+# newsletter
+NEWSLETTER_DEFAULT_HEADER_SENDER = 'Yasound Newsletter <noreply@yasound.com>'
     
 # test
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
