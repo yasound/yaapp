@@ -57,7 +57,8 @@ class SongInstanceResource(ModelResource):
         
     def dehydrate(self, bundle):
         song = bundle.obj
-        bundle.data = song.song_description
+        song_desc = song.song_description(info_from_yasound_db=False) # in this case, name/artist/album contain information from client playlists
+        bundle.data = song_desc
         return bundle
 
 class PlaylistResource(ModelResource):
@@ -546,7 +547,7 @@ class RadioNextSongsResource(ModelResource):
         return super(RadioNextSongsResource, self).dispatch(request_type, request, **kwargs)
     
     def dehydrate(self, bundle):
-        desc_dict = bundle.obj.song.song_description
+        desc_dict = bundle.obj.song.song_description(info_from_yasound_db=True)
         bundle.data['song'] = desc_dict
         return bundle
 
@@ -728,7 +729,7 @@ class SongUserResource(ModelResource):
     
     def dehydrate(self, bundle):
         song_user = bundle.obj
-        song_desc = song_user.song.song_description
+        song_desc = song_user.song.song_description(info_from_yasound_db=True)
         bundle.data['song'] = song_desc
         return bundle
 
@@ -820,7 +821,9 @@ class MatchedSongResource(ModelResource):
     
     def dehydrate(self, bundle):
         song_instance = bundle.obj       
-        bundle.data = song_instance.song_description
+        song_desc = song_instance.song_description(info_from_yasound_db=False) # in this case, name/artist/album contain information from client playlists
+        
+        bundle.data = song_desc
         return bundle
         
     
