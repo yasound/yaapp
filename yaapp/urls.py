@@ -1,5 +1,5 @@
 from account.api import UserResource, LoginResource, SignupResource, \
-    PublicUserResource, LoginSocialResource
+    PublicUserResource, PopularUserResource, LoginSocialResource
 from account.friend_api import FriendResource
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
@@ -32,6 +32,7 @@ api.register(SongInstanceResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(PublicUserResource())
+api.register(PopularUserResource())
 api.register(RadioResource())
 api.register(PublicRadioResource())
 api.register(SearchRadioResource())

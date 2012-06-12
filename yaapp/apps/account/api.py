@@ -131,7 +131,22 @@ class PublicUserResource(UserResource):
         return [
             url(r"^(?P<resource_name>%s)/(?P<username>\S+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
         ]
+
+class PopularUserResource(UserResource):
+    """
+    This resource is the "popular" version of the user resource : 
     
+    * anonymous access allowed
+    * most popular users first
+    
+    """
+    class Meta:
+        queryset = UserProfile.objects.popular_users()
+        resource_name = 'popular_user'
+        fields = ['id']
+        include_resource_uri = False
+        authorization = ReadOnlyAuthorization()
+        
         
 def add_api_key_to_bundle(user, bundle):
     k = ApiKey.objects.get(user=user).key

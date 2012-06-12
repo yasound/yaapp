@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.utils import simplejson as json
+from tastypie.models import ApiKey
+from yabase import tests_utils as yabase_tests_utils
 from yabase.models import RadioUser
 from yasearch.indexer import erase_index
 import settings as account_settings
-from yabase import tests_utils as yabase_tests_utils
 import task
 import yabase.settings as yabase_settings
 
@@ -446,6 +448,24 @@ class TestDevice(TestCase):
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX).count(), 1)
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION).count(), 1)
 
+class TestApi(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user 
+        self.key = ApiKey.objects.get(user=self.user).key
+        self.username = self.user.username       
+        
+    def testTopLimitation(self):
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'popular_user', 'api_name': 'v1',})
+        res = self.client.get(url,{'api_key': self.key, 'username': self.username})
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], User.objects.all().count())
    
         
         

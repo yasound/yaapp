@@ -63,6 +63,9 @@ class UserProfileManager(models.Manager):
         sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
         return sorted_results[:limit]
 
+    def popular_users(self):
+        return User.objects.filter(is_active=True)
+        
 class UserProfile(models.Model):
     """
     Store usefule informations about user.
