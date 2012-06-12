@@ -4,22 +4,16 @@
 Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.SongInstance = Backbone.Model.extend({
-    idAttribute: "id",
-    url: function () {
-        // TODO
-    },
+    idAttribute: "id"
 });
 
 Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.SongInstance,
-    url: '/api/v1/my_programming', 
+    url: '/api/v1/my_programming/', 
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
     perPage: 25,
     page:0,
-    customAttribute1: 'read_status',
-    customParam1: 'unread',
-    
     
     parse: function(response) {
         var results = response.objects;
