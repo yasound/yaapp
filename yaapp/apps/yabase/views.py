@@ -982,9 +982,6 @@ class WebAppView(View):
     def notifications(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'  
 
-    def programming(self, request, context, *args, **kwargs):
-        return context, 'yabase/webapp.html'  
-
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.
@@ -1188,3 +1185,19 @@ def radio_broadcast_message(request, radio_uuid):
     message = request.REQUEST.get('message')
     radio.broadcast_message(message)
     return HttpResponse('OK')
+    
+    
+@check_api_key(methods=['GET'], login_required=False)
+def most_active_radios(request):
+    from yametrics.models import RadioPopularityManager
+    limit = request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT)
+    skip = request.GET.get('skip', 0)
+    manager = RadioPopularityManager()
+    radio_info = manager.most_popular(limit=limit, skip=skip)
+    radio_data = []
+    for i in radio_info:
+        r = Radio.objects.get(id=i['db_id'])
+        radio_data.append(r.as_dict(full=True))
+    response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
+    return response
+    

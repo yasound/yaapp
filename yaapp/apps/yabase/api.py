@@ -57,7 +57,8 @@ class SongInstanceResource(ModelResource):
         
     def dehydrate(self, bundle):
         song = bundle.obj
-        bundle.data = song.song_description
+        song_desc = song.song_description(info_from_yasound_db=False) # in this case, name/artist/album contain information from client playlists
+        bundle.data = song_desc
         return bundle
     
 class ProgrammingResource(ModelResource):
@@ -338,35 +339,6 @@ class SelectedWebRadioResource(ModelResource):
     def get_object_list(self, request):
         obj_list = super(SelectedWebRadioResource, self).get_object_list(request).filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_HOMEPAGE).order_by('featuredradio__order')
         return obj_list
-    
-class MostActiveRadioResource(ModelResource):
-    """
-    
-    """
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
-    creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
-    picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
-    
-    class Meta:
-        queryset = Radio.objects.most_popular_today()
-        resource_name = 'most_active_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
-        include_resource_uri = False;
-        authorization = ReadOnlyAuthorization()
-        allowed_methods = ['get']
-        filtering = {
-            'genre': ALL,
-            'ready': ('exact',),
-        }        
-
-    def dehydrate(self, bundle):
-        radioID = bundle.data['id'];
-        radio = Radio.objects.get(pk=radioID)
-        radio.fill_bundle(bundle)
-        return bundle
-
-    def apply_sorting(self, obj_list, options=None):
-        return super(MostActiveRadioResource, self).apply_sorting(obj_list=obj_list, options=options)[:yabase_settings.MOST_ACTIVE_RADIOS_LIMIT]
         
 class TopRadioResource(ModelResource):
     playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
@@ -605,7 +577,7 @@ class RadioNextSongsResource(ModelResource):
         return super(RadioNextSongsResource, self).dispatch(request_type, request, **kwargs)
     
     def dehydrate(self, bundle):
-        desc_dict = bundle.obj.song.song_description
+        desc_dict = bundle.obj.song.song_description(info_from_yasound_db=True)
         bundle.data['song'] = desc_dict
         return bundle
 
@@ -787,7 +759,7 @@ class SongUserResource(ModelResource):
     
     def dehydrate(self, bundle):
         song_user = bundle.obj
-        song_desc = song_user.song.song_description
+        song_desc = song_user.song.song_description(info_from_yasound_db=True)
         bundle.data['song'] = song_desc
         return bundle
 
@@ -879,7 +851,9 @@ class MatchedSongResource(ModelResource):
     
     def dehydrate(self, bundle):
         song_instance = bundle.obj       
-        bundle.data = song_instance.song_description
+        song_desc = song_instance.song_description(info_from_yasound_db=False) # in this case, name/artist/album contain information from client playlists
+        
+        bundle.data = song_desc
         return bundle
         
     

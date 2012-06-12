@@ -119,7 +119,8 @@ class SongInstanceManager(models.Manager):
                 logger.error('radio.current_song failed for radio %s' % (radio.id))
 
             if song_instance:
-                song_dict = song_instance.song_description
+                # in this case, name/artist/album contain information from yasound db on the server
+                song_dict = song_instance.song_description(info_from_yasound_db=True)
                 if song_dict:
                     live_data = radio.live_data()
                     if live_data:
@@ -140,7 +141,7 @@ class SongInstanceManager(models.Manager):
     def set_current_song_json(self, radio_id, song_instance):
         song_json = None
         if song_instance:
-            song_dict = song_instance.song_description
+            song_dict = song_instance.song_description(info_from_yasound_db=True)
             if song_dict:
                 radio = Radio.objects.get(id=radio_id)
                 live_data = radio.live_data()
@@ -180,8 +181,7 @@ class SongInstance(models.Model):
     class Meta:
         db_name = u'default'
         
-    @property
-    def song_description(self, include_cover=True):
+    def song_description(self, include_cover=True, info_from_yasound_db=True):
         try:
             song = YasoundSong.objects.get(id=self.metadata.yasound_song_id)
         except YasoundSong.DoesNotExist:
@@ -189,12 +189,23 @@ class SongInstance(models.Model):
         
         desc_dict = {};
         desc_dict['id'] = self.id
-        desc_dict['name'] = song.name
-        desc_dict['artist'] = song.artist_name
-        desc_dict['album'] = song.album_name
+        
+        desc_dict['name_server'] = song.name
+        desc_dict['artist_server'] = song.artist_name
+        desc_dict['album_server'] = song.album_name
         desc_dict['name_client'] = self.metadata.name
         desc_dict['artist_client'] = self.metadata.artist_name
         desc_dict['album_client'] = self.metadata.album_name
+        
+        if info_from_yasound_db:
+            desc_dict['name'] = desc_dict['name_server']
+            desc_dict['artist'] = desc_dict['artist_server']
+            desc_dict['album'] = desc_dict['album_server']
+        else: # info from client's playlists
+            desc_dict['name'] = desc_dict['name_client']
+            desc_dict['artist'] = desc_dict['artist_client']
+            desc_dict['album'] = desc_dict['album_client']
+        
         desc_dict['likes'] = self.likes
         desc_dict['enabled'] = self.enabled
         desc_dict['frequency'] = self.frequency
@@ -777,7 +788,7 @@ class Radio(models.Model):
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
     
-    def as_dict(self):
+    def as_dict(self, full=False):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         data = {
             'id': self.id,
@@ -791,6 +802,14 @@ class Radio(models.Model):
             'ready': self.ready,
             'stream_url' : self.stream_url,
         }
+        if full:
+            data['creator'] = self.creator.userprofile.user_as_dict(full=True)
+            data['description'] = self.description
+            data['genre'] = self.genre
+            data['theme'] = self.theme
+            data['audience_peak'] = self.audience_peak
+            data['overall_listening_time'] = self.overall_listening_time
+            data['created'] = self.created
         return data
     
     def update_with_data(self, data):

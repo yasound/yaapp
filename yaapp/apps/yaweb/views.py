@@ -78,6 +78,16 @@ def elecsounds_winner(request, template_name='yaweb/elecsounds_winner.html'):
         'current_page': 'elecsounds_winner',
     }, context_instance=RequestContext(request))  
 
+def contest_station(request, template_name='yaweb/contest_station.html'):
+    return render_to_response(template_name, {
+        'current_page': 'contest_station',
+    }, context_instance=RequestContext(request))  
+
+def contest_station_terms(request, template_name='yaweb/contest_station_terms.html'):
+    return render_to_response(template_name, {
+        'current_page': 'contest_station_terms',
+    }, context_instance=RequestContext(request))  
+
 def logo(request):
     return HttpResponseRedirect('/media/yaweb/images/logo.png')
 
