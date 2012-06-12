@@ -21,5 +21,5 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.programmingPageTemplate());
         return this;
-    },
+    }
 });
