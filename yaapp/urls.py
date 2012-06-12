@@ -11,7 +11,7 @@ from tastypie.api import Api
 from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     SongMetadataResource, SongInstanceResource, PlaylistResource, \
     PublicRadioResource, RadioResource, SelectedRadioResource, \
-    SelectedWebRadioResource, TopRadioResource, MostActiveRadioResource, \
+    SelectedWebRadioResource, TopRadioResource, \
     FavoriteRadioResource, FriendRadioResource, TechTourRadioResource, \
     RadioLikerResource, RadioFavoriteResource, SearchRadioResource, \
     SearchRadioByUserResource, SearchRadioBySongResource, RadioCurrentUserResource, \
@@ -41,7 +41,6 @@ api.register(SearchRadioBySongResource())
 api.register(SelectedWebRadioResource())
 api.register(SelectedRadioResource())
 api.register(TopRadioResource())
-api.register(MostActiveRadioResource())
 api.register(FavoriteRadioResource())
 api.register(FriendRadioResource())
 api.register(TechTourRadioResource())
@@ -146,6 +145,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/notify_missing_song/$', 'yabase.views.notify_missing_song'),
     
     url(r'^api/v1/reject_song/(?P<song_id>\d+)/$', 'yabase.views.reject_song'),
+    
+    url(r'^api/v1/most_active_radio/$', 'yabase.views.most_active_radios'),
     
     
     

@@ -924,6 +924,30 @@ class TestApi(TestCase):
         decoded_data = json.loads(data)
         meta = decoded_data['meta']
         self.assertEquals(meta['total_count'], yabase_settings.TOP_RADIOS_LIMIT)
+        
+    def testMostActiveRadios(self):
+        Radio(name='test_radio', ready=True, creator=self.user).save()
+        radios = Radio.objects.filter(ready=True)
+        if radios.count() == 0:
+            return
+        radio_id = radios[0].id
+        
+        from yametrics.models import RadioPopularityManager
+        import yametrics.settings as yametrics_settings
+        m = RadioPopularityManager()
+        m.drop()
+        m.action(radio_id, yametrics_settings.ACTIVITY_ADD_TO_FAVORITES)
+
+        url = '/api/v1/most_active_radio/'
+        res = self.client.get(url)
+        self.assertEquals(res.status_code, 200)
+        
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertGreater(meta['total_count'], 0)
+        
+        m.drop()
 
 class TestWallPost(TestCase):
     def setUp(self):

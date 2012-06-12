@@ -27,6 +27,7 @@ from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
+from yacore.api import api_response
 from yaref.models import YasoundSong
 import import_utils
 import json
@@ -1184,4 +1185,19 @@ def radio_broadcast_message(request, radio_uuid):
     message = request.REQUEST.get('message')
     radio.broadcast_message(message)
     return HttpResponse('OK')
+    
+    
+@check_api_key(methods=['GET'], login_required=False)
+def most_active_radios(request):
+    from yametrics.models import RadioPopularityManager
+    limit = request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT)
+    skip = request.GET.get('skip', 0)
+    manager = RadioPopularityManager()
+    radio_info = manager.most_popular(limit=limit, skip=skip)
+    radio_data = []
+    for i in radio_info:
+        r = Radio.objects.get(id=i['db_id'])
+        radio_data.append(r.as_dict(full=True))
+    response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
+    return response
     
