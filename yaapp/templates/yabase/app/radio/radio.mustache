@@ -4,6 +4,7 @@
    </div>
    <div id='webapp-radio-title'>
         <h1><a href='/app/profile/<%#creator%><% username %><%/creator%>/'><% name %></a></h1>
+   {% if request.user.is_authenticated %}
    <a class="btn" id='btn-favorite'>
     <i class="icon-star-empty"></i>
     {% trans 'Add to favorite' %}
@@ -12,5 +13,6 @@
     <i class="icon-star"></i>
     {% trans 'Remove from favorite' %}
    </a>
+   {% endif %}
    </div>
    
