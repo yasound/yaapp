@@ -76,6 +76,7 @@ $(document).ready(function () {
             "settings/": "settings",
             "friends/": "friends",
             "notifications/": "notifications",
+            "programming/": "programming",
             "*args": "index"
         },
 
@@ -161,6 +162,15 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.NotificationsPage({
+                tagName: 'div',
+            });
+            $('#webapp-content').prepend(this.currentView.render().el);
+        },
+
+        programming: function () {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.ProgrammingPage({
                 tagName: 'div',
             });
             $('#webapp-content').prepend(this.currentView.render().el);

@@ -981,6 +981,9 @@ class WebAppView(View):
     def notifications(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'  
 
+    def programming(self, request, context, *args, **kwargs):
+        return context, 'yabase/webapp.html'  
+
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.
