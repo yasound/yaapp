@@ -829,6 +829,7 @@ TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
     'django_extensions',
+    'emencia.django.newsletter',
 )
 JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 
