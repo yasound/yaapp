@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-
+from django.conf import settings
 import settings as yaweb_settings
 import mimetypes, os
 from django_mobile import get_flavour
@@ -22,6 +22,7 @@ def index(request, template_name='yaweb/index.html', template_name_mobile='yaweb
 
     return render_to_response(template_name, {
         'current_page': 'index',
+        'production_mode': settings.PRODUCTION_MODE
     }, context_instance=RequestContext(request))  
 
 
