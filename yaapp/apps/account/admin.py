@@ -19,7 +19,8 @@ class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
                 contact, _created = Contact.objects.get_or_create(email=email,
                                                                  defaults={'first_name': first_name,
                                                                            'last_name': last_name,
-                                                                           'content_object': profile})
+                                                                           'content_object': profile,
+                                                                           'verified': True})
                 subscribers.append(contact)
         mailing, _created = MailingList.objects.get_or_create(name='all',
                                   defaults={'description': 'All users'})

@@ -928,7 +928,8 @@ def create_ml_contact(sender, instance, created, **kwargs):
             contact, _created = Contact.objects.get_or_create(email=email,
                                                              defaults={'first_name': first_name,
                                                                        'last_name': last_name,
-                                                                       'content_object': instance})
+                                                                       'content_object': instance,
+                                                                       'verified': True})
             mailing, created = MailingList.objects.get_or_create(name='all',
                                       defaults={'description': 'All users'})
             mailing.subscribers.add(contact)
