@@ -917,6 +917,24 @@ post_save.connect(create_api_key, sender=EmailUser)
 post_save.connect(create_radio, sender=User)
 post_save.connect(create_radio, sender=EmailUser)
 
+def create_ml_contact(sender, instance, created, **kwargs):
+    if created:
+        from emencia.django.newsletter.models import Contact
+        from emencia.django.newsletter.models import MailingList
+        email = instance.user.email
+        first_name = ''
+        last_name = instance.name
+        if email is not None:
+            contact, _created = Contact.objects.get_or_create(email=email,
+                                                             defaults={'first_name': first_name,
+                                                                       'last_name': last_name,
+                                                                       'content_object': instance})
+            mailing, created = MailingList.objects.get_or_create(name='all',
+                                      defaults={'description': 'All users'})
+            mailing.subscribers.add(contact)
+post_save.connect(create_ml_contact, sender=UserProfile)
+
+
 def get_techtour_group():
     g, _created = Group.objects.get_or_create(name=yabase_settings.TECH_TOUR_GROUP_NAME)
     return g
