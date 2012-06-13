@@ -18,7 +18,6 @@ Yasound.Views.SongInstance = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        console.log(data)
         $(this.el).hide().html(ich.songInstanceCellTemplate(data)).fadeIn(200);
         return this;
     }
