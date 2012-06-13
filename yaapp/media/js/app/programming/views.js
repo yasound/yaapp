@@ -89,7 +89,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         if (this.currentView) {
             this.currentView.close();
         }
-        $('#content', this.el).hide().html(ich.songInstancesTemplate()).fadeIn(200);
+        $('#content', this.el).html(ich.songInstancesTemplate());
         this.currentView = new Yasound.Views.SongInstances({
             collection: this.songInstances,
             el: $('#song-instances', this.el)
