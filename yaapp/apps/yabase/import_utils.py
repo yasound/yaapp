@@ -721,4 +721,18 @@ def extract_song_cover(yasound_song):
     importer = SongImporter()
     return importer.extract_song_cover(yasound_song)
 
+def parse_itunes_line(line):
+    line = line.strip()
+    items = line.split('\t')
+    name, album, artist = '', '', ''
+    try:
+        name = items[0].strip()
+        artist = items[2].strip()
+        album = items[3].strip()
+    except:
+        pass
+    return name, album, artist
+    
+            
+                
     
