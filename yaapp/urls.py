@@ -9,7 +9,7 @@ from os import path
 from stats.api import RadioListeningStatResource
 from tastypie.api import Api
 from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
-    SongMetadataResource, SongInstanceResource, PlaylistResource, \
+    SongMetadataResource, SongInstanceResource, ProgrammingResource, PlaylistResource, \
     PublicRadioResource, RadioResource, SelectedRadioResource, \
     SelectedWebRadioResource, TopRadioResource, \
     FavoriteRadioResource, FriendRadioResource, TechTourRadioResource, \
@@ -29,6 +29,7 @@ admin.autodiscover()
 api = Api(api_name='v1')
 #api.register(SongMetadataResource())
 api.register(SongInstanceResource())
+api.register(ProgrammingResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(PublicUserResource())
@@ -123,6 +124,7 @@ urlpatterns = patterns('',
     
     # live
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),
+    
 
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
@@ -180,6 +182,7 @@ urlpatterns = patterns('',
     url(r'^app/friends/$', WebAppView.as_view(), {'page': 'friends'}, name='webapp_friends'),
     url(r'^app/settings/$', WebAppView.as_view(), {'page': 'settings'}, name='webapp_settings'),
     url(r'^app/notifications/$', WebAppView.as_view(), {'page': 'notifications'}, name='webapp_notifications'),
+    url(r'^app/programming/$', WebAppView.as_view(), {'page': 'programming'}, name='webapp_programming'),
     url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
     
     

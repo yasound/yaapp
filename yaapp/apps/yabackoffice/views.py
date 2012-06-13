@@ -428,6 +428,12 @@ def users(request, user_id=None):
             radios = Radio.objects.filter(radiouser__user__userprofile__id__in=ids)
             for radio in radios:
                 radio.fix_favorites()
+
+            from emencia.django.newsletter.models import Contact
+            users = User.objects.filter(userprofile__id__in=ids)
+            for user in users:
+                Contact.objects.filter(email=user.email).delete()
+                
         elif action == 'enable':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=True)
