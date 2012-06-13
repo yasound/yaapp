@@ -10,7 +10,7 @@ from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
 from task import process_playlists_exec
 from tastypie.models import ApiKey
 from tests_utils import generate_playlist
-from yabase.import_utils import SongImporter, generate_default_filename
+from yabase.import_utils import SongImporter, generate_default_filename, parse_itunes_line
 from yabase.models import FeaturedContent, Playlist, SongMetadata, WallEvent
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
@@ -1122,4 +1122,13 @@ class TestTags(TestCase):
         self.assertEquals(tags.count(), len(cleaned_input_tags))
         for tag in tags:
             self.assertTrue(tag.name in cleaned_input_tags)
-                        
+      
+class TestParseItunes(TestCase):
+    def test_parse_line(self):
+        line = u'Vivement dimanche \t3:56\tDominique A\tLa Fossette\tChanson française      '
+        name, album, artist = parse_itunes_line(line)
+        self.assertEquals(name, u'Vivement dimanche')
+        self.assertEquals(artist, 'Dominique A')
+        self.assertEquals(album, 'La Fossette')
+        
+        
