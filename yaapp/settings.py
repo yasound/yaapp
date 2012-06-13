@@ -373,7 +373,7 @@ INSTALLED_APPS = (
     'yahistory',
     
     # newsletter,
-    'tinymce',
+    #'tinymce',
     'tagging',
     'emencia.django.newsletter',
 )
