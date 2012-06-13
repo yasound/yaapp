@@ -213,6 +213,9 @@ urlpatterns = patterns('',
     #yamenu
     (r'^api/v1/app_menu/$', 'yamenu.views.menu_description'),
 
+    # newsletters
+    url(r'^newsletters/', include('emencia.django.newsletter.urls')),    
+    
     # internal stuff
     url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
 
