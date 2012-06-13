@@ -38,5 +38,5 @@ mock
 python-dateutil<=1
 -e git+https://github.com/earle/django-bootstrap.git#egg=bootstrap
 xlwt
--e git+https://github.com/yasound/emencia-django-newsletter.git#egg=emencia-django-newsletter
+-e git+https://github.com/lynadge/emencia-django-newsletter.git#egg=emencia-django-newsletter
 django-tinymce
