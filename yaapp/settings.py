@@ -371,6 +371,11 @@ INSTALLED_APPS = (
     'yamenu',
     'yamessage',
     'yahistory',
+    
+    # newsletter,
+    'tinymce',
+    'tagging',
+    'emencia.django.newsletter',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -816,11 +821,15 @@ GEOIP_LOOKUP = 'REMOTE_ADDR'
 if DJANGO_MODE == 'PRODUCTION':
     GEOIP_LOOKUP = 'HTTP_X_REAL_IP' 
     
+# newsletter
+NEWSLETTER_DEFAULT_HEADER_SENDER = 'Yasound Newsletter <noreply@yasound.com>'
+    
 # test
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
     'django_extensions',
+    'emencia.django.newsletter',
 )
 JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 
