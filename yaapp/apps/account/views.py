@@ -57,10 +57,7 @@ def set_user_picture(request, user_id):
         return HttpResponse('request does not contain a picture file')
     
     f = request.FILES[PICTURE_FILE_TAG]
-    d = datetime.datetime.now()
-    filename = unicode(d) + '.png'
-    
-    user.userprofile.picture.save(filename, f)
+    user.userprofile.set_picture(f)
     
     res = 'picture OK for user: %s' % unicode(user)
     return HttpResponse(res)
