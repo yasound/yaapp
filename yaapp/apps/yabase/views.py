@@ -1103,7 +1103,9 @@ def radio_unmatched_song(request, radio_id):
 def status(request):
     users = User.objects.all()[:1]
     YasoundSong.objects.all()[:1]
-    logger.info('status, user count should be 1 : %d' % (users.count()))
+    
+    # fake stuff to check if database is ok
+    _count = users.count()
     return HttpResponse('OK')
 
 
