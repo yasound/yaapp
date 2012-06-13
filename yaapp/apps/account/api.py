@@ -85,7 +85,8 @@ class UserResource(ModelResource):
         fields = ['id']
         include_resource_uri = False
         authentication = YasoundApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization()
+        authorization = Authorization()
+        allowed_methods = ['get', 'put']
 
 
     def dehydrate(self, bundle):
@@ -107,6 +108,9 @@ class UserResource(ModelResource):
         return bundle
     
     def obj_update(self, bundle, request=None, **kwargs):
+        print 'UserResource.obj_update'
+        print 'bundle:'
+        print bundle
         user_resource = super(UserResource, self).obj_update(bundle, request, **kwargs)
         user = user_resource.obj        
         user_profile = user.userprofile

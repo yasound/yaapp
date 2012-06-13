@@ -74,14 +74,33 @@ Yasound.Views.SongInstances = Backbone.View.extend({
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onAll', 'onImportItunes');
     },
 
     onClose: function() {
         this.songInstancesView.close();
+        this.toolbar.close();
     },
 
     reset: function() {
+    },
+    
+    onAll: function() {
+        if (this.currentView) {
+            this.currentView.close();
+        }
+        $('#content', this.el).hide().html(ich.songInstancesTemplate()).fadeIn(200);
+        this.currentView = new Yasound.Views.SongInstances({
+            collection: this.songInstances,
+            el: $('#song-instances', this.el)
+        });
+        this.songInstances.fetch();
+    },
+    onImportItunes: function() {
+        if (this.currentView) {
+            this.currentView.close();
+        }
+        $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
     },
     
     render: function() {
@@ -90,12 +109,44 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         
         this.songInstances = new Yasound.Data.Models.SongInstances({});
         
-        this.songInstancesView = new Yasound.Views.SongInstances({
+        $('#content', this.el).hide().html(ich.songInstancesTemplate()).fadeIn(200);
+        this.currentView = new Yasound.Views.SongInstances({
             collection: this.songInstances,
             el: $('#song-instances', this.el)
         });
         
+        
+        this.toolbar = new Yasound.Views.ProgrammingToolbar({
+            el: $('#programming-toolbar', this.el)
+        }).render();
+        
+        this.toolbar.on('tracks', this.onAll);
+        this.toolbar.on('importItunes', this.onImportItunes);
+        
         this.songInstances.fetch();
         return this;
+    }
+});
+
+/**
+ * Programming menu
+ */
+Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
+    el: '#programming-toolbar',
+    events: {
+        'click #all': 'all',
+        'click #import-itunes': 'importItunes',
+    },
+    render: function() {
+        $(this.el).html(ich.programmingToolbarTemplate());
+        return this;
+    },
+    all: function(e) {
+        e.preventDefault();
+        this.trigger('tracks');
+    },
+    importItunes: function(e) {
+        e.preventDefault();
+        this.trigger('importItunes');
     }
 });

@@ -65,7 +65,7 @@ class ProgrammingResource(ModelResource):
     metadata = fields.ForeignKey(SongMetadataResource, 'metadata', full=True)
     playlist = fields.ForeignKey('yabase.api.PlaylistResource', 'playlist', full=False)
     class Meta:
-        queryset = SongInstance.objects.none()
+        queryset = SongInstance.objects.select_related().none()
         resource_name = 'my_programming'
         fields = ['id', 
                   'playlist', 
@@ -88,7 +88,7 @@ class ProgrammingResource(ModelResource):
         radio = Radio.objects.radio_for_user(request.user)
         if radio is None:
             raise NotFound()
-        return SongInstance.objects.filter(playlist__radio=radio)
+        return SongInstance.objects.select_related().filter(playlist__radio=radio)
         
 
 class PlaylistResource(ModelResource):

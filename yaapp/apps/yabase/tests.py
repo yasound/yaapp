@@ -1125,7 +1125,7 @@ class TestTags(TestCase):
       
 class TestParseItunes(TestCase):
     def test_parse_line(self):
-        line = u'Vivement dimanche \t3:56\tDominique A\tLa Fossette\tChanson française      '
+        line = u'Vivement dimanche \t \t3:56\tDominique A\tLa Fossette\tChanson française      '
         name, album, artist = parse_itunes_line(line)
         self.assertEquals(name, u'Vivement dimanche')
         self.assertEquals(artist, 'Dominique A')

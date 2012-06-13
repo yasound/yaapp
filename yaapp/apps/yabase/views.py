@@ -24,7 +24,7 @@ from tastypie.http import HttpNotFound
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
-    SettingsTwitterForm
+    SettingsTwitterForm, ImportItunesForm
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
 from yacore.api import api_response
@@ -100,32 +100,8 @@ def set_radio_picture(request, radio_id):
         logger.debug('set_radio_picture: request does not contain picture file')
         return HttpResponse('request does not contain a picture file')
 
-    f = request.FILES[PICTURE_FILE_TAG]
-#    filename = radio.build_picture_filename()
-    
+    f = request.FILES[PICTURE_FILE_TAG]    
     radio.set_picture(f)
-    
-    # for now, set also the UserProfile picture
-    userprofile = radio.creator.userprofile
-    userprofile.set_picture(f)
-
-    # todo: delete old file
-#    import pdb
-#    pdb.set_trace()
-#    if radio.picture and len(radio.picture.name) > 0:
-#        logger.debug('radio picture delete')
-#        radio.picture.delete(save=True)
-#    logger.debug('radio picture save')
-#    radio.picture.save(filename, f, save=True)
-#    logger.debug('radio picture saved')
-#    
-#    # for now, set also the UserProfile picture
-#    logger.debug('save userprofile picture')
-#    userprofile = radio.creator.userprofile
-#    # todo: delete old file
-#    filename = userprofile.build_picture_filename()
-#    userprofile.picture.save(filename, f, save=True)
-#    logger.debug('userprofile picture saved')
 
     res = 'picture OK for radio: %s' % unicode(radio)
     logger.debug(res)
@@ -942,7 +918,8 @@ class WebAppView(View):
             'settings_facebook_form': settings_facebook_form,
             'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
-            'display_associate_twitter' : display_associate_twitter
+            'display_associate_twitter' : display_associate_twitter,
+            'import_itunes_form': ImportItunesForm(user=request.user)
         }
         
         if hasattr(self, page):
@@ -1011,6 +988,8 @@ class WebAppView(View):
         display_associate_facebook = not request.user.get_profile().facebook_enabled
         display_associate_twitter = not request.user.get_profile().twitter_enabled        
 
+        import_itunes_form = ImportItunesForm()
+    
         
         action = request.REQUEST.get('action')
         if action == 'settings_radio':
@@ -1033,7 +1012,10 @@ class WebAppView(View):
             if settings_twitter_form.is_valid():
                 settings_twitter_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
-
+        elif action == 'import_itunes':
+            import_itunes_form = ImportItunesForm(request.user, request.POST)
+            if import_itunes_form.is_valid():
+                import_itunes_form.save()
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
         context = {
@@ -1051,7 +1033,8 @@ class WebAppView(View):
             'settings_facebook_form': settings_facebook_form,
             'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
-            'display_associate_twitter' : display_associate_twitter
+            'display_associate_twitter' : display_associate_twitter,
+            'import_itunes_form': import_itunes_form
         }
         
         if hasattr(self, page):
