@@ -100,32 +100,8 @@ def set_radio_picture(request, radio_id):
         logger.debug('set_radio_picture: request does not contain picture file')
         return HttpResponse('request does not contain a picture file')
 
-    f = request.FILES[PICTURE_FILE_TAG]
-#    filename = radio.build_picture_filename()
-    
+    f = request.FILES[PICTURE_FILE_TAG]    
     radio.set_picture(f)
-    
-    # for now, set also the UserProfile picture
-    userprofile = radio.creator.userprofile
-    userprofile.set_picture(f)
-
-    # todo: delete old file
-#    import pdb
-#    pdb.set_trace()
-#    if radio.picture and len(radio.picture.name) > 0:
-#        logger.debug('radio picture delete')
-#        radio.picture.delete(save=True)
-#    logger.debug('radio picture save')
-#    radio.picture.save(filename, f, save=True)
-#    logger.debug('radio picture saved')
-#    
-#    # for now, set also the UserProfile picture
-#    logger.debug('save userprofile picture')
-#    userprofile = radio.creator.userprofile
-#    # todo: delete old file
-#    filename = userprofile.build_picture_filename()
-#    userprofile.picture.save(filename, f, save=True)
-#    logger.debug('userprofile picture saved')
 
     res = 'picture OK for radio: %s' % unicode(radio)
     logger.debug(res)
