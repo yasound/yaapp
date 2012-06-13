@@ -218,7 +218,8 @@ ul#notifications{
 	float:right;
 }
 
-#notifications-toolbar {
+#notifications-toolbar
+,#programming-toolbar {
 	margin-top:4px;
 	margin-bottom:12px;
 }

@@ -24,7 +24,7 @@ from tastypie.http import HttpNotFound
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
-    SettingsTwitterForm
+    SettingsTwitterForm, ImportItunesForm
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
 from yacore.api import api_response
@@ -942,7 +942,8 @@ class WebAppView(View):
             'settings_facebook_form': settings_facebook_form,
             'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
-            'display_associate_twitter' : display_associate_twitter
+            'display_associate_twitter' : display_associate_twitter,
+            'import_itunes_form': ImportItunesForm(user=request.user)
         }
         
         if hasattr(self, page):
@@ -1011,6 +1012,8 @@ class WebAppView(View):
         display_associate_facebook = not request.user.get_profile().facebook_enabled
         display_associate_twitter = not request.user.get_profile().twitter_enabled        
 
+        import_itunes_form = ImportItunesForm()
+    
         
         action = request.REQUEST.get('action')
         if action == 'settings_radio':
@@ -1033,7 +1036,10 @@ class WebAppView(View):
             if settings_twitter_form.is_valid():
                 settings_twitter_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
-
+        elif action == 'import_itunes':
+            import_itunes_form = ImportItunesForm(request.user, request.POST)
+            if import_itunes_form.is_valid():
+                import_itunes_form.save()
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
         context = {
@@ -1051,7 +1057,8 @@ class WebAppView(View):
             'settings_facebook_form': settings_facebook_form,
             'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
-            'display_associate_twitter' : display_associate_twitter
+            'display_associate_twitter' : display_associate_twitter,
+            'import_itunes_form': import_itunes_form
         }
         
         if hasattr(self, page):

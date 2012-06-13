@@ -89,6 +89,8 @@ import subprocess as sub
 import uploader
 import uuid
 import mimetypes
+import md5
+
 logger = logging.getLogger("yaapp.yabase")
 
 class SongImporter:
@@ -727,12 +729,47 @@ def parse_itunes_line(line):
     name, album, artist = '', '', ''
     try:
         name = items[0].strip()
-        artist = items[2].strip()
-        album = items[3].strip()
+        artist = items[3].strip()
+        album = items[4].strip()
     except:
         pass
     return name, album, artist
     
-            
+def import_from_string(song_name, album_name, artist_name, playlist):
+    song_name_simplified = get_simplified_name(song_name)
+    album_name_simplified = get_simplified_name(album_name)
+    artist_name_simplified = get_simplified_name(artist_name)
+    
+    hash_name = md5.new()
+    hash_name.update(song_name_simplified)
+    hash_name.update(album_name_simplified)
+    hash_name.update(artist_name_simplified)
+    hash_name_hex = hash_name.hexdigest()
+    
+    raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE hash_name=%s AND name=%s AND artist_name=%s AND album_name=%s",
+                                   [hash_name_hex,
+                                    song_name,
+                                    artist_name,
+                                    album_name])
+    if raw and len(list(raw)) > 0:
+        metadata = list(raw)[0]
+        raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
+                                       [playlist.id,
+                                        metadata.id])
+        if raw and len(list(raw)) > 0:
+            song_instance = list(raw)[0]
+        else:
+            song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
+    else:
+        mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified, 
+                                                   album_name_simplified, 
+                                                   artist_name_simplified)
+        if mongo_doc:
+            metadata = SongMetadata.objects.create(name=song_name, 
+                                                   artist_name=artist_name, 
+                                                   album_name=album_name,
+                                                   hash_name=hash_name_hex,
+                                                   yasound_song_id=mongo_doc['db_id'])
+            song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
                 
     

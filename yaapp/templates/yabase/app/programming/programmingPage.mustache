@@ -2,21 +2,8 @@
 <div class='row-fluid'>
 <div class='span12'>
     <h1>{% trans "Programming" %}</h1>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>{% trans "Track" %}</th>
-                <th>{% trans "Album" %}</th>
-                <th>{% trans "Artist" %}</th>
-            </tr>
-        </thead>
-        <tbody id='song-instances'>
-            <tr class='loading-mask'>
-                <td><img  src='/media/images/loading.gif'/></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="btn-group" data-toggle="buttons-radio" id='programming-toolbar'>
+    </div>
+    <div id='content'></div>
 </div>
 </div>
