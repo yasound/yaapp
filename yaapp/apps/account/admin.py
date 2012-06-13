@@ -15,7 +15,7 @@ class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
             email = profile.user.email
             first_name = ''
             last_name = profile.name
-            if email is not None:
+            if email is not None and len(email) > 0:
                 contact, _created = Contact.objects.get_or_create(email=email,
                                                                  defaults={'first_name': first_name,
                                                                            'last_name': last_name,
