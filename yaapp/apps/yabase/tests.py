@@ -697,9 +697,10 @@ class TestImport(TestCase):
         self.assertEquals(sm.name, 'my mp3')
         self.assertEquals(sm.artist_name, 'my artist')
         self.assertEquals(sm.album_name, 'my album')
-
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.name, 'my mp3')
+
+        self.assertEquals(yasound_song.musicbrainz_id, '2a124411-41b8-4cbb-984b-6e10878d412b')
         
         sm2, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
         self.assertEquals(sm2.yasound_song_id, sm.yasound_song_id)

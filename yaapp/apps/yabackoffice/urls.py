@@ -43,4 +43,11 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^metrics/graphs/posts/$', 'metrics_graph_posts'),
     url(r'^metrics/graphs/likes/$', 'metrics_graph_likes'),
     url(r'^light_metrics/', 'light_metrics', name='light_metrics'),
+    
+    
+    url(r'^radio_activity_score_factors$', 'radio_activity_score_factors'),
+    url(r'^radio_activity_score_factors/(?P<coeff_id>\S+)$', 'radio_activity_score_factors'),
+    
+    
+    
 )
