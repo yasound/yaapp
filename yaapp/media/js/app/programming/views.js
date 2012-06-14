@@ -78,7 +78,9 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
     },
 
     onClose: function() {
-        this.songInstancesView.close();
+        if (this.currentView) {
+            this.currentView.close();
+        }
         this.toolbar.close();
     },
 
