@@ -111,9 +111,18 @@ class SongImporter:
         return data.get('artist_id')
     
     def _find_mb_id_for_song(self, metadata):
-        if not metadata['lastfm_data']:
+        lastfm_data = metadata.get('lastfm_data')
+        if not lastfm_data:
             return None
-        return metadata.get('mbid')
+        
+        mbid = lastfm_data.get('mbid')
+        if not mbid:
+            return None
+        
+        if type(mbid) == type([]):
+            return mbid[0]
+        else:
+            return mbid
     
     def _find_mb_id_for_artist(self, metadata):
         lastfm_data = metadata.get('lastfm_data')
