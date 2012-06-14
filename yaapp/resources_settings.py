@@ -62,6 +62,8 @@ PIPELINE_JS = {
             'js/backoffice/Menus/Menus.js',
             'js/backoffice/Song/MissingSongMetadataGrid.js',
             'js/backoffice/Song/MissingSongs.js',
+            'js/backoffice/RadioActivityScoreSettings/SettingsGrid.js',
+            'js/backoffice/RadioActivityScoreSettings/RadioActivityScoreSettings.js',
         ]
     },
     'webapp-all': {

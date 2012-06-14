@@ -8,6 +8,7 @@ from yametrics.models import TopMissingSongsManager, RadioMetricsManager, \
 from yametrics.task import async_activity, update_activities
 import datetime
 import settings as yametrics_settings
+from bson.objectid import ObjectId
 
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
@@ -316,6 +317,7 @@ class TestRadioPopularityManager(TestCase):
     def setUp(self):
         manager = RadioPopularityManager()
         manager.drop()
+        manager.drop_settings()
 
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
@@ -463,4 +465,30 @@ class TestRadioPopularityManager(TestCase):
         self.assertEquals(most_popular.count(True), 2)
         self.assertEquals(doc1, most_popular[0])
         self.assertEquals(doc2, most_popular[1])
+        
+    def test_settings(self):
+        manager = RadioPopularityManager()
+        factors = {
+                   yametrics_settings.ACTIVITY_LISTEN: manager.settings.find({'name':yametrics_settings.ACTIVITY_LISTEN})[0]['value'],
+                   yametrics_settings.ACTIVITY_SONG_LIKE: manager.settings.find({'name':yametrics_settings.ACTIVITY_SONG_LIKE})[0]['value'],
+                   yametrics_settings.ACTIVITY_WALL_MESSAGE: manager.settings.find({'name':yametrics_settings.ACTIVITY_WALL_MESSAGE})[0]['value'],
+                   yametrics_settings.ACTIVITY_SHARE: manager.settings.find({'name':yametrics_settings.ACTIVITY_SHARE})[0]['value'],
+                   yametrics_settings.ACTIVITY_ADD_TO_FAVORITES: manager.settings.find({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES})[0]['value']
+                   }
+        
+        # test RadioPopularityManager.action_score_coeff()
+        for k in factors:
+            self.assertEqual(factors[k], manager.action_score_coeff(k))
+            
+            
+        # test RadioPopularityManager.update_coeff_doc()
+        doc = manager.settings.find()[0]
+        coeff_id = str(doc['_id'])
+        val = 123
+        doc['value'] = val
+        manager.update_coeff_doc(coeff_id, doc)
+        
+        doc = manager.settings.find({'_id': ObjectId(coeff_id)})[0]
+        self.assertEquals(doc['value'], val)
+        
         

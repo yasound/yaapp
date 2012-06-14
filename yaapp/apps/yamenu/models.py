@@ -69,12 +69,20 @@ class MenusManager():
         version = StrictVersion(app_version) if app_version else None
         final_menus = []
         for m in menus:
-            if version and m.has_key('app') and m['app'].has_key('app_version'):
-                if (m['app']['app_version'].has_key('min') and version < StrictVersion(m['app']['app_version']['min'])) or ( m['app']['app_version'].has_key('max') and version > StrictVersion(m['app']['app_version']['max'])):
+            if version: # if a version is specified, the menu must follow this constraint
+                if not m.has_key('app'):
                     continue
+                if not m['app'].has_key('app_version'):
+                    continue
+                if m['app']['app_version'].has_key('min') and version < StrictVersion(m['app']['app_version']['min']):
+                    continue
+                if m['app']['app_version'].has_key('max') and version > StrictVersion(m['app']['app_version']['max']):
+                    continue
+            else:
+                if m.has_key('app') and m['app'].has_key('app_version'):
+                    continue # must not choose this menu because it has version restrictions and no version is given
             final_menus.append(m)
-                
-            
+                    
         if len(final_menus) == 0:
             return None
         return final_menus[0]
@@ -149,6 +157,83 @@ class MenusManager():
         techtour_en = {'sections': [{'name': 'My radio', 'entries': [{'image': 'IconMyRadio', 'type': 'my_radio', 'id': 'myRadio', 'name': 'My radio'}]}, techtour_section_en, {'name': 'Radios', 'entries': [{'image': 'IconRadiosFriends', 'type': 'friends', 'id': 'radioMyFriends', 'name': 'My friends'}, {'params': {'url': '/api/v1/favorite_radio', 'genre_selection': False}, 'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radioMyFavorites', 'name': 'My favorites'}, {'params': {'url': '/api/v1/selected_radio'}, 'image': 'IconRadiosSelection', 'type': 'radio_list', 'id': 'radioSelection', 'name': 'Selection'}, {'params': {'url': '/api/v1/top_radio'}, 'image': 'IconLeaderboard', 'type': 'radio_list', 'id': 'radioTop', 'name': 'Top'}, {'image': 'IconRadiosSearch', 'type': 'search_radio', 'id': 'radioSearch', 'name': 'Search'}]}, {'name': 'Me', 'entries': [{'image': 'IconMeNotifs', 'type': 'notifications', 'id': 'meNotifications', 'name': 'My notifications'}, {'image': 'IconMeStats', 'type': 'stats', 'id': 'meStats', 'name': 'My stats'}, {'image': 'IconMePlaylists', 'type': 'programming', 'id': 'meProgramming', 'name': 'Programming'}, {'image': 'IconMeSettings', 'type': 'settings', 'id': 'meSettings', 'name': 'Settings'}]}, {'name': 'Miscellaneous', 'entries': [{'params': {'url': 'legal/eula.html'}, 'image': 'IconMiscLegal', 'type': 'web_page', 'id': 'miscLegal', 'name': 'Terms of Use'}, {'image': 'IconMiscLogout', 'type': 'logout', 'id': 'miscLogout', 'name': 'Log out'}]}], 'name': 'default', 'language': 'en', 'group_ids':techtour_group_ids, 'app':{'app_id':yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER}}
         self.add_menu(techtour_fr, overwrite=True)
         self.add_menu(techtour_en, overwrite=True)
+        
+    
+    def install_v2(self):
+        fr = {
+              'name': 'v2',
+              'language': 'fr',
+              'group_ids': [],
+              'app': {
+                      'app_id': yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER,
+                      'app_version': {'min': '2.0'}
+                      },
+              'sections': [
+                            {'name': 'Session', 'entries': 
+                                [
+                                {'image': 'IconMiscLogout', 'type': 'logout', 'id': 'miscLogout', 'name': 'Se connecter'},
+                                {'image': 'IconMyRadio', 'type': 'my_radio', 'id': 'myRadio', 'name': 'Ma radio'}
+                                ]}, 
+                            {'name': 'Radios', 'entries': 
+                                [
+                                {'image': 'IconRadiosFriends', 'type': 'friends', 'id': 'radioMyFriends', 'name': 'Mes amis'}, 
+                                {'params': {'url': '/api/v1/favorite_radio', 'genre_selection': False}, 'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radioMyFavorites', 'name': 'Mes favoris'}, 
+                                {'params': {'url': '/api/v1/selected_radio'}, 'image': 'IconRadiosSelection', 'type': 'radio_list', 'id': 'radioSelection', 'name': 'S\xc3\xa9lection'}, 
+                                {'params': {'url': '/api/v1/top_radio'}, 'image': 'IconLeaderboard', 'type': 'radio_list', 'id': 'radioTop', 'name': 'Top'}, 
+                                {'image': 'IconRadiosSearch', 'type': 'search_radio', 'id': 'radioSearch', 'name': 'Recherche'}
+                                ]}, 
+                            {'name': 'Moi', 'entries': 
+                                [
+                                {'image': 'IconMeNotifs', 'type': 'notifications', 'id': 'meNotifications', 'name': 'Mes notifications'}, 
+                                {'image': 'IconMeStats', 'type': 'stats', 'id': 'meStats', 'name': 'Mes statistiques'}, 
+                                {'image': 'IconMePlaylists', 'type': 'programming', 'id': 'meProgramming', 'name': 'Ma programmation'}, 
+                                {'image': 'IconMeSettings', 'type': 'settings', 'id': 'meSettings', 'name': 'Param\xc3\xa8tres'}
+                                ]}, 
+                            {'name': 'Divers', 'entries': 
+                                [
+                                {'params': {'url': 'legal/eula.html'}, 'image': 'IconMiscLegal', 'type': 'web_page', 'id': 'miscLegal', 'name': "Conditions d'utilisation"}
+                                ]}
+                            ]
+              }
+        
+        en = {
+              'name': 'v2',
+              'language': 'en',
+              'group_ids': [],
+              'app': {
+                      'app_id': yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER,
+                      'app_version': {'min': '2.0'}
+                      },
+              'sections': [
+                            {'name': 'Session', 'entries': 
+                                [
+                                {'image': 'IconMiscLogout', 'type': 'logout', 'id': 'miscLogout', 'name': 'Log in'},
+                                {'image': 'IconMyRadio', 'type': 'my_radio', 'id': 'myRadio', 'name': 'My radio'}
+                                ]}, 
+                            {'name': 'Radios', 'entries': 
+                                [
+                                {'image': 'IconRadiosFriends', 'type': 'friends', 'id': 'radioMyFriends', 'name': 'My friends'}, 
+                                {'params': {'url': '/api/v1/favorite_radio', 'genre_selection': False}, 'image': 'IconRadiosFavorites', 'type': 'radio_list', 'id': 'radioMyFavorites', 'name': 'My favorites'}, 
+                                {'params': {'url': '/api/v1/selected_radio'}, 'image': 'IconRadiosSelection', 'type': 'radio_list', 'id': 'radioSelection', 'name': 'Selection'}, 
+                                {'params': {'url': '/api/v1/top_radio'}, 'image': 'IconLeaderboard', 'type': 'radio_list', 'id': 'radioTop', 'name': 'Top'}, 
+                                {'image': 'IconRadiosSearch', 'type': 'search_radio', 'id': 'radioSearch', 'name': 'Search'}
+                                ]}, 
+                            {'name': 'Me', 'entries': 
+                                [
+                                {'image': 'IconMeNotifs', 'type': 'notifications', 'id': 'meNotifications', 'name': 'My notifications'}, 
+                                {'image': 'IconMeStats', 'type': 'stats', 'id': 'meStats', 'name': 'My stats'}, 
+                                {'image': 'IconMePlaylists', 'type': 'programming', 'id': 'meProgramming', 'name': 'Programming'}, 
+                                {'image': 'IconMeSettings', 'type': 'settings', 'id': 'meSettings', 'name': 'Settings'}
+                                ]}, 
+                            {'name': 'Miscellaneous', 'entries': 
+                                [
+                                {'params': {'url': 'legal/eula.html'}, 'image': 'IconMiscLegal', 'type': 'web_page', 'id': 'miscLegal', 'name': 'Terms of Use'}
+                                ]}
+                            ]
+              }
+        
+        self.add_menu(fr, overwrite=True)
+        self.add_menu(en, overwrite=True)
             
             
     

@@ -128,4 +128,22 @@ class TestMenus(TestCase):
         self.assertEquals(data[0]['name'], first_section_name)
         self.assertEqual(response.status_code, 200)
         
+    def test_menus_v2(self):
+        mm = MenusManager()
+        mm.clear()
+        mm.install_defaults()
+        mm.install_v2()
+        self.assertEquals(mm.menus_count(), 4)
+        
+        menu = mm.get_menu('fr', app_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, app_version='1.8')
+        self.assertEquals(menu['name'], 'default')
+        menu = mm.get_menu('fr', app_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, app_version='1.8.89')
+        self.assertEquals(menu['name'], 'default')
+        
+        menu = mm.get_menu('fr', app_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, app_version='2.1')
+        self.assertEquals(menu['name'], 'v2')
+        menu = mm.get_menu('fr', app_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER, app_version='2.3.1')
+        self.assertEquals(menu['name'], 'v2')
+        
+        
         
