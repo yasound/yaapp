@@ -14,6 +14,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from forms import SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
@@ -865,6 +866,7 @@ class WebAppView(View):
                 raise Http404
         return True, None
     
+    @method_decorator(login_required)
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -959,6 +961,7 @@ class WebAppView(View):
     def notifications(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'  
 
+    @method_decorator(login_required)
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.
