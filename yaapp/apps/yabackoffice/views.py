@@ -34,6 +34,9 @@ import requests
 import simplejson as json
 import utils as yabackoffice_utils
 from account import export as account_export
+from yacore.api import MongoAwareEncoder
+from yacore.api import MongoAwareEncoder
+from yacore.http import coerce_put_post
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -806,3 +809,43 @@ def metrics_graph_shares(request):
     })
     resp = utils.JsonResponse(json_data)
     return resp
+
+
+@login_required
+def radio_activity_score_factors(request, coeff_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    from yametrics.models import RadioPopularityManager
+    manager = RadioPopularityManager()
+    
+    if request.method == 'GET':
+        coeffs = manager.coeff_documents()
+        data = []
+        for i in coeffs:
+            data.append({
+                         '_id': i['_id'],
+                         'name': i['name'],
+                         'value': i['value']
+                         })
+         
+        json_data = MongoAwareEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'data': data,
+            'results': len(data)
+        })
+        resp = utils.JsonResponse(json_data)
+        return resp  
+    elif request.method == 'PUT' and coeff_id is not None:
+        coerce_put_post(request)
+        data = request.REQUEST.get('data') 
+        decoded_data = json.loads(data)
+        manager.update_coeff_doc(coeff_id, decoded_data)
+        
+        res = {"success":True}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(res))
+        return utils.JsonResponse(resp)
+    
+    res = {"success":False}
+    resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(res))
+    return utils.JsonResponse(resp)

@@ -11,6 +11,7 @@ from yabase.models import Radio, SongMetadata
 from yametrics.task import async_activity, async_check_if_new_listener, async_radio_activity
 import settings as yametrics_settings
 import datetime
+from bson.objectid import ObjectId
 
 class GlobalMetricsManager():
     """
@@ -236,15 +237,34 @@ class RadioMetricsManager():
         collection = self.radios
         collection.update({}, {'$set': {'daily_popularity': 0}}, multi=True)
         
+        
+        
+        
 
 class RadioPopularityManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.radios = self.db.metrics.radio_popularity
         self.radios.ensure_index("db_id", unique=True)
+        self.settings = self.db.metrics.radio_popularity_settings
+        self.settings.ensure_index("name", unique=True)
         
+        if self.settings.find({'name':yametrics_settings.ACTIVITY_LISTEN}).count() == 0:
+            self.settings.insert({'name':yametrics_settings.ACTIVITY_LISTEN,'value':1})
+        if self.settings.find({'name':yametrics_settings.ACTIVITY_SONG_LIKE}).count() == 0:
+            self.settings.insert({'name':yametrics_settings.ACTIVITY_SONG_LIKE,'value':5})
+        if self.settings.find({'name':yametrics_settings.ACTIVITY_WALL_MESSAGE}).count() == 0:
+            self.settings.insert({'name':yametrics_settings.ACTIVITY_WALL_MESSAGE,'value':5})
+        if self.settings.find({'name':yametrics_settings.ACTIVITY_SHARE}).count() == 0:
+            self.settings.insert({'name':yametrics_settings.ACTIVITY_SHARE,'value':8})
+        if self.settings.find({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES}).count() == 0:
+            self.settings.insert({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES,'value':8})
+
     def drop(self):
         self.radios.drop()
+        
+    def drop_settings(self):
+        self.settings.drop()
         
     def most_popular(self, limit=10, skip=0, db_only=True):
         collection = self.radios
@@ -254,23 +274,34 @@ class RadioPopularityManager():
             return collection.find().sort([('progression', DESCENDING)]).skip(skip).limit(limit)
             
     def action(self, radio_id, activity_type):
-        inc = 0
-        if activity_type == yametrics_settings.ACTIVITY_LISTEN:
-            inc = 1
-        elif activity_type == yametrics_settings.ACTIVITY_WALL_MESSAGE:
-            inc = 5
-        elif activity_type == yametrics_settings.ACTIVITY_SONG_LIKE:
-            inc = 5
-        elif activity_type == yametrics_settings.ACTIVITY_SHARE:
-            inc = 8
-        elif activity_type == yametrics_settings.ACTIVITY_ADD_TO_FAVORITES:
-            inc = 8
+        inc = self.settings.find({'name':activity_type})[0]['value']
             
         collection = self.radios
         collection.update({"db_id": radio_id}, 
                           {"$inc": {'activity': inc}}, 
                           upsert=True,
                           safe=True)
+        
+        
+    def action_score_coeff(self, activity_type):
+        factor = self.settings.find({'name':activity_type})[0]['value']
+        return factor
+    
+    def coeff_documents(self):
+        docs = self.settings.find()
+        return docs
+    
+    def update_coeff_doc(self, coeff_id, new_doc):
+        if isinstance(coeff_id, str) or isinstance(coeff_id, unicode):
+            coeff_id = ObjectId(coeff_id)
+        new_doc['_id'] = coeff_id
+        val = new_doc['value']
+        if type(val) is not int:
+            return
+        if val < 0:
+            return
+        
+        self.settings.update({'_id':coeff_id}, new_doc)
         
     def compute_progression(self):
         collection = self.radios

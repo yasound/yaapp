@@ -1,14 +1,17 @@
 
-Yasound.Utils.SimpleStore = function (url, fields, sortInfo) {
+Yasound.Utils.SimpleStore = function (url, fields, sortInfo, idField) {
     if (!sortInfo) {
         sortInfo = {
             field: 'id',
             direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
         };
     }
+    if (!idField) {
+    	idField = 'id';
+    }
     return new Ext.data.GroupingStore({
         reader: new Ext.data.JsonReader({
-            idProperty: 'id',
+            idProperty: idField,
             fields: fields,
             root: 'data',
             totalProperty: 'results'

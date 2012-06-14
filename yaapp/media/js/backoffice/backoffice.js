@@ -11,7 +11,8 @@ Ext.namespace("Yasound.Utils");
 Ext.namespace("Yasound.Menus.UI", "Yasound.Menus.Handler", "Yasound.Menus.Data");
 Ext.namespace("Yasound.Moderation.UI", "Yasound.Moderation.Handler", "Yasound.Moderation.Data");
 Ext.namespace("Yasound.WallEvents.UI", "Yasound.WallEvents.Handler", "Yasound.WallEvents.Data");
-
+Ext.namespace("Yasound.RadioActivityScoreSettings.UI", "Yasound.RadioActivityScoreSettings.Handler", "Yasound.RadioActivityScoreSettings.Data");
+Ext.namespace("Yasound.Settings.UI", "Yasound.Settings.Handler", "Yasound.Settings.Data");
 
 //------------------------------------------
 // Datastore
@@ -250,6 +251,32 @@ Ext.onReady(function(){
             })]    		
         };
     
+    var tabPanelActivityScore = {
+            id: 'activity-score-tab',
+            expanded: false,
+            listeners: {
+                'tabchange': function(tabPanel, tab){
+                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                }
+            },
+            items: [{
+                title: gettext('Activity score factors'),
+                id: 'activity-score-top-panel',
+                tabTip: gettext('factors to compute radio activity score'),
+                style: 'padding: 10px;',
+                html: '<h1>Activity Score factors</h1>',
+                listeners: {
+                    'activate': function(p){
+                        var tabPanel = p.findParentByType('grouptab');
+                        var nextItem = p.nextSibling();
+                        tabPanel.setActiveTab(nextItem);
+                    }
+                }
+            }, Ext.apply(Yasound.RadioActivityScoreSettings.UI.Panel(), {
+                iconCls: 'x-icon-templates'
+            })]    		
+        };
+    
     var tabPanels = {
         xtype: 'grouptabpanel',
         id: 'group-panel',
@@ -267,7 +294,8 @@ Ext.onReady(function(){
     					 tabPanelStatistics,
     					 tabPanelModeration,
     					 tabPanelUsers,
-    					 tabPanelMenus);
+    					 tabPanelMenus,
+    					 tabPanelActivityScore);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',
@@ -293,7 +321,7 @@ Ext.onReady(function(){
                 region: 'center',
                 layout: 'fit',
                 items: [tabPanels]
-            }]
+            }]	
         }]
     });
     
