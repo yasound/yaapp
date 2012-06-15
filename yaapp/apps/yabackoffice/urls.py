@@ -48,6 +48,7 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^radio_activity_score_factors$', 'radio_activity_score_factors'),
     url(r'^radio_activity_score_factors/(?P<coeff_id>\S+)$', 'radio_activity_score_factors'),
     
+    url(r'^find_musicbrainz_id/$', 'find_musicbrainz_id'),
     
     
 )

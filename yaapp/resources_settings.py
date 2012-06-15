@@ -44,6 +44,7 @@ PIPELINE_JS = {
             'js/backoffice/Radio/YasoundSongGrid.js',
             'js/backoffice/Radio/UnmatchedSongs.js',
             'js/backoffice/Radio/Radios.js',
+            'js/backoffice/Radio/AllSongs.js',
             'js/backoffice/Upload/Upload.js',
             'js/backoffice/SearchEngine/SearchEngine.js',
             'js/backoffice/Invitations/InvitationGrid.js',

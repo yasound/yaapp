@@ -94,6 +94,9 @@ Ext.onReady(function(){
         }), Ext.apply(Yasound.Upload.UI.UploadSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Upload new songs to yasound')
+        }), Ext.apply(Yasound.Backoffice.UI.AllSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('All songs')
         })]
     };
 
