@@ -95,8 +95,9 @@ class TestMenus(TestCase):
         c = Client()
         response = c.post('/api/v1/app_menu/')
         self.assertNotEquals(response.status_code, 200)
+        
         response = c.get('/api/v1/app_menu/')
-        self.assertNotEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 200)
         
         response = c.get('/api/v1/app_menu/', {'username':user.username, 'api_key':api_key.key})
         self.assertEqual(response.status_code, 200)
