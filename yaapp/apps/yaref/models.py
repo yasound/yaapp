@@ -21,6 +21,7 @@ from django.core.files import File
 from django.db.models import Q
 import buylink
 import os
+from uploader import lastfm
 
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
@@ -269,6 +270,34 @@ class YasoundSong(models.Model):
         name, extension = os.path.splitext(song_path)
         preview = u'%s_preview64%s' % (name, extension)
         return preview
+
+
+    def find_mbid(self):
+        name, artist, mbid = self.name, self.artist_name, self.musicbrainz_id
+        if mbid is None or len(mbid) == 0:
+            metadata, valid = lastfm.find_by_name_artist(name=name, artist=artist)
+            if valid and metadata.get('id') == self.lastfm_id:
+                mbid = metadata.get('mbid')
+                return mbid
+        return None
+
+    def find_synonyms(self):
+        synonyms = []
+        name, artist, album, mbid = self.name, self.artist_name, self.album_name, self.musicbrainz_id
+        if len(mbid) > 0:
+            metadata, valid = lastfm.find_by_mbid(mbid=mbid)
+            if valid and self.lastfm_id and metadata.get('id') == self.lastfm_id:
+                s = {
+                    'name': metadata.get('name'),
+                    'artist': metadata.get('artist'),
+                    'album': metadata.get('album'),
+                }
+                if s['name'] != name or s['artist'] != artist or s['album'] != album:
+                    synonyms.append(s)
+        return synonyms
+            
+            
+        
 
     class Meta:
         db_table = u'yasound_song'
