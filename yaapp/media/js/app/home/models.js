@@ -21,9 +21,5 @@ Yasound.Data.Models.MostActiveRadios = Backbone.Collection.extend({
     model: Yasound.Data.Models.Radio,
     url: function() {
         return '/api/v1/most_active_radio/';
-    },
-
-    comparator: function(radioUser) {
-        return radioUser.get("id");
     }
 });
