@@ -1,5 +1,5 @@
 Yasound.Backoffice.Data.YasoundSongStore = function(url) {
-	var fields = ['id', 'name', 'artist_name', 'album_name'];
+	var fields = ['id', 'name', 'artist_name', 'album_name', 'lastfm_id', 'musicbrainz_id'];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -42,6 +42,26 @@ Yasound.Backoffice.UI.YasoundSongColumnModel = function(sm){
             xtype: "textfield",
             filterName: "artist_name"
         }        	
+    }, {
+        header: gettext('Lastfm id'),
+        dataIndex: 'lastfm_id',
+        width:20,
+        sortable: true,
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "lastfm_id"
+        }           
+    }, {
+        header: gettext('mb id'),
+        dataIndex: 'musicbrainz_id',
+        width:20,
+        sortable: true,
+        filterable: true,
+        filter: {
+            xtype: "textfield",
+            filterName: "musicbrainz_id"
+        }           
     }]);
 };
 

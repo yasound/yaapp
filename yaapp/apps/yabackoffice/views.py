@@ -37,6 +37,7 @@ from account import export as account_export
 from yacore.api import MongoAwareEncoder
 from yacore.api import MongoAwareEncoder
 from yacore.http import coerce_put_post
+from yaref import task
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -849,3 +850,16 @@ def radio_activity_score_factors(request, coeff_id=None):
     res = {"success":False}
     resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(res))
     return utils.JsonResponse(resp)
+
+@csrf_exempt
+def find_musicbrainz_id(request):
+    ids = request.REQUEST.getlist('ids')
+    for yasound_song in ids:
+        task.find_musicbrainz_id.delay(yasound_song)
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'message': ''
+    })
+    return HttpResponse(json_data, mimetype='application/json')
+         
+

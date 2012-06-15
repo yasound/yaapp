@@ -98,6 +98,7 @@ class MenusManager():
             m = self._get_menu_internal(language, [], app_id, None)
         if m == None:
             m = self._get_menu_internal(language, [], None, None)
+        
         return m
         
             
