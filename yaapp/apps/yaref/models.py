@@ -284,16 +284,23 @@ class YasoundSong(models.Model):
     def find_synonyms(self):
         synonyms = []
         name, artist, album, mbid = self.name, self.artist_name, self.album_name, self.musicbrainz_id
-        if len(mbid) > 0:
+        
+        valid = False
+        metadata = []
+        if mbid is not None and mbid > 0:
             metadata, valid = lastfm.find_by_mbid(mbid=mbid)
-            if valid and self.lastfm_id and metadata.get('id') == self.lastfm_id:
-                s = {
-                    'name': metadata.get('name'),
-                    'artist': metadata.get('artist'),
-                    'album': metadata.get('album'),
-                }
-                if s['name'] != name or s['artist'] != artist or s['album'] != album:
-                    synonyms.append(s)
+        else:
+            metadata, valid = lastfm.find_by_name_artist(name=name, artist=artist)
+        
+        if valid and self.lastfm_id and metadata.get('id') == self.lastfm_id:
+            s = {
+                'name': metadata.get('name'),
+                'artist': metadata.get('artist'),
+                'album': metadata.get('album'),
+            }
+            if s['name'] != name or s['artist'] != artist or s['album'] != album:
+                synonyms.append(s)
+            
         return synonyms
             
             
