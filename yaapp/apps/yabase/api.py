@@ -1,4 +1,4 @@
-from account.api import UserResource, YasoundApiKeyAuthentication
+from account.api import UserResource, YasoundApiKeyAuthentication, YasoundPublicAuthentication
 from django.conf.urls.defaults import url
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -189,6 +189,7 @@ class SearchRadioResource(ModelResource):
         resource_name = 'search_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
+        authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -290,7 +291,7 @@ class SelectedRadioResource(ModelResource):
         resource_name = 'selected_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = YasoundApiKeyAuthentication()
+        authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -350,7 +351,7 @@ class TopRadioResource(ModelResource):
         resource_name = 'top_radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-        authentication = YasoundApiKeyAuthentication()
+        authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
