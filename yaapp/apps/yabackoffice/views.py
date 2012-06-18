@@ -1,3 +1,4 @@
+from account import export as account_export
 from account.models import UserProfile, Device
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, UserManager
@@ -17,6 +18,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from emailconfirmation.models import EmailConfirmation, EmailAddress
+from emencia.django.newsletter.models import Contact
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
 from yabackoffice.forms import RadioForm, InvitationForm
@@ -25,19 +27,17 @@ from yabackoffice.models import BackofficeRadio
 from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
+from yacore.api import MongoAwareEncoder, MongoAwareEncoder
+from yacore.http import coerce_put_post
 from yainvitation.models import Invitation
-from yametrics.models import GlobalMetricsManager, TopMissingSongsManager,\
+from yametrics.models import GlobalMetricsManager, TopMissingSongsManager, \
     TimedMetricsManager, UserMetricsManager
+from yaref import task
 from yaref.models import YasoundSong
 import datetime
 import requests
 import simplejson as json
 import utils as yabackoffice_utils
-from account import export as account_export
-from yacore.api import MongoAwareEncoder
-from yacore.api import MongoAwareEncoder
-from yacore.http import coerce_put_post
-from yaref import task
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -549,6 +549,9 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     messages_per_user = um.calculate_messages_per_user_mean()
     likes_per_user = um.calculate_likes_per_user_mean()
     
+    email_count = User.objects.filter(email__contains='@').count()
+    newsletter_subscribers = Contact.objects.filter(subscriber=True).count()
+    
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
         "ready_radio_count": ready_radio_count,
@@ -574,6 +577,8 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "confirmed_emails_ratio": confirmed_emails_ratio,
         "messages_per_user": messages_per_user,
         "likes_per_user": likes_per_user,
+        "email_count": email_count,
+        "newsletter_subscribers": newsletter_subscribers,
     }, context_instance=RequestContext(request))  
 
 @csrf_exempt
