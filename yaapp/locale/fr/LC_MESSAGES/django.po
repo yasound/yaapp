@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-11 15:50+0200\n"
+"POT-Creation-Date: 2012-06-18 13:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr "disponible sur l'appstore"
 #: templates/account/signup.html:27
 #: templates/account/signup.html.py:75
 #: templates/web/menu.html:16
-#: templates/yabase/webapp.html:200
+#: templates/yabase/webapp.html:217
 msgid "Logout"
 msgstr "Se déconnecter"
 
@@ -146,7 +146,7 @@ msgid "Signup"
 msgstr "S'inscrire"
 
 #: templates/account/signup.html:24
-#: templates/yabase/webapp.html:138
+#: templates/yabase/webapp.html:154
 msgid "Yasound"
 msgstr "Yasound"
 
@@ -194,6 +194,280 @@ msgstr "Une personne sur le site %(site_name)s a indiqué cette adresse email af
 #, python-format
 msgid "Confirm email address for %(site_name)s"
 msgstr "Confirmer l'email pour %(site_name)s"
+
+#: templates/newsletter/base.html:26
+msgid "Yasound newsletter"
+msgstr "Newsletter Yasound"
+
+#: templates/newsletter/contact_import.html:7
+msgid "Home"
+msgstr "Accueil"
+
+#: templates/newsletter/contact_import.html:10
+msgid "Importation"
+msgstr "Importation"
+
+#: templates/newsletter/contact_import.html:24
+msgid "Excel"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:27
+msgid "Excel file (.xls)"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:31
+msgid "Import contacts from a Excel file."
+msgstr ""
+
+#: templates/newsletter/contact_import.html:32
+msgid "Columns are [email][last name][first name][tags]."
+msgstr ""
+
+#: templates/newsletter/contact_import.html:33
+#: templates/newsletter/contact_import.html:56
+#: templates/newsletter/contact_import.html:98
+msgid "All columns are optionnal excepting the email."
+msgstr ""
+
+#: templates/newsletter/contact_import.html:38
+#: templates/newsletter/contact_import.html:61
+#: templates/newsletter/contact_import.html:81
+#: templates/newsletter/contact_import.html:103
+msgid "Import"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:47
+msgid "Text"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:50
+msgid "Text file (.txt, .csv)"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:54
+msgid "Import contacts from a text file, or a CSV file."
+msgstr ""
+
+#: templates/newsletter/contact_import.html:55
+#: templates/newsletter/contact_import.html:97
+msgid ""
+"Columns are [email][last name][first name][tags], splitted by a dot coma."
+msgstr ""
+
+#: templates/newsletter/contact_import.html:70
+msgid "VCard"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:73
+msgid "VCard file (.cvf)"
+msgstr ""
+
+#: templates/newsletter/contact_import.html:77
+msgid ""
+"Import contacts from your favorite mail client, by providing a VCard file."
+msgstr ""
+
+#: templates/newsletter/contact_import.html:90
+#: templates/newsletter/contact_import.html:93
+msgid "Raw text"
+msgstr ""
+
+#: templates/newsletter/mailing_list_subscribe.html:4
+#: templates/newsletter/mailing_list_subscribe.html:7
+msgid "Subscription to mailing list"
+msgstr ""
+
+#: templates/newsletter/mailing_list_subscribe.html:10
+msgid "Thanks for your subscription!"
+msgstr ""
+
+#: templates/newsletter/mailing_list_subscribe.html:16
+msgid "Validate this form to subscribe to the mailing lists."
+msgstr ""
+
+#: templates/newsletter/mailing_list_subscribe.html:21
+#: templates/newsletter/subscriber_verification.html:19
+#: templates/newsletter/uuid_verification.html:18
+#: templates/newsletter/cms/subscription_form.html:20
+msgid "Subscribe"
+msgstr ""
+
+#: templates/newsletter/mailing_list_unsubscribe.html:4
+#: templates/newsletter/mailing_list_unsubscribe.html:7
+msgid "Unsubscription"
+msgstr ""
+
+#: templates/newsletter/mailing_list_unsubscribe.html:9
+msgid "You are unsubscribed for this mailing list."
+msgstr ""
+
+#: templates/newsletter/mailing_list_unsubscribe.html:11
+msgid "Validate this form to unsubscribe to this mailing list."
+msgstr ""
+
+#: templates/newsletter/mailing_list_unsubscribe.html:15
+msgid "Unsubscribe"
+msgstr ""
+
+#: templates/newsletter/newsletter_forbidden.html:4
+#: templates/newsletter/newsletter_forbidden.html:9
+msgid "You are not allowd to view this newsletter"
+msgstr ""
+
+#: templates/newsletter/newsletter_forbidden.html:7
+msgid "Forbidden"
+msgstr ""
+
+#: templates/newsletter/newsletter_historic.html:9
+#: templates/newsletter/newsletter_statistics.html:68
+msgid "Admin."
+msgstr ""
+
+#: templates/newsletter/newsletter_historic.html:23
+#: templates/web/radio.html:18
+msgid "Date"
+msgstr "Date"
+
+#: templates/newsletter/newsletter_historic.html:24
+msgid "Contact"
+msgstr ""
+
+#: templates/newsletter/newsletter_historic.html:25
+msgid "Action"
+msgstr "Action"
+
+#: templates/newsletter/newsletter_statistics.html:86
+msgid "Consultation histogram"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:89
+msgid "Period"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:112
+#: templates/newsletter/newsletter_statistics.html:113
+msgid "Broadcasting statistics"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:115
+msgid "Total openings"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:120
+msgid "Openings on site"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:125
+msgid "Total openings unique"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:130
+msgid "Unknow delivery"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:135
+msgid "Unsubscriptions"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:140
+msgid "Openings average"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:148
+#: templates/newsletter/newsletter_statistics.html:149
+msgid "Links statistics"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:151
+msgid "Total clicked links"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:156
+msgid "Total clicked links unique"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:161
+msgid "Clicked links by openings"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:166
+msgid "Clicked links average"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:178
+msgid "Report"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:180
+msgid "Download CSV report"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:185
+msgid "Informations"
+msgstr "Informations"
+
+#: templates/newsletter/newsletter_statistics.html:186
+msgid "Recipients"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:187
+msgid "View"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:188
+msgid "Status"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:190
+msgid "Sending date"
+msgstr "Date d'envoi"
+
+#: templates/newsletter/newsletter_statistics.html:193
+msgid "Tests sent"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:198
+msgid "Top Links"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:199
+msgid "Density map"
+msgstr ""
+
+#: templates/newsletter/newsletter_statistics.html:208
+msgid "No Top Links yet."
+msgstr ""
+
+#: templates/newsletter/subscriber_verification.html:6
+#: templates/newsletter/subscriber_verification.html:10
+msgid "Subscription to the newsletter"
+msgstr ""
+
+#: templates/newsletter/subscriber_verification.html:13
+#: templates/newsletter/uuid_verification.html:11
+msgid "Thanks for your email subscription!"
+msgstr ""
+
+#: templates/newsletter/subscriber_verification.html:15
+msgid "Validate this form to subscribe to the newsletter."
+msgstr ""
+
+#: templates/newsletter/uuid_verification.html:5
+#: templates/newsletter/uuid_verification.html:9
+msgid "Subscriber verification"
+msgstr ""
+
+#: templates/newsletter/uuid_verification.html:22
+msgid "No verification found"
+msgstr "Aucune vérification trouvée"
+
+#: templates/newsletter/uuid_verification.html:24
+msgid "Can't find the ID to verificate the email!"
+msgstr ""
+
+#: templates/newsletter/cms/subscription_form.html:8
+msgid "You have successfully subscribed to the mailing list!"
+msgstr ""
 
 #: templates/web/base.html:7
 #: templates/web/favorite.html:6
@@ -291,7 +565,7 @@ msgid "Yasound is coming soon."
 msgstr "Yasound arrive prochainement."
 
 #: templates/web/menu.html:4
-#: templates/yabase/webapp.html:193
+#: templates/yabase/webapp.html:209
 msgid "My radio"
 msgstr "Ma radio"
 
@@ -301,16 +575,16 @@ msgid "Radios"
 msgstr "Radios"
 
 #: templates/web/menu.html:10
-#: templates/yabase/webapp.html:195
+#: templates/yabase/webapp.html:211
 #: templates/yabase/app/friends/friendsPage.mustache:3
 msgid "My friends"
 msgstr "Mes amis"
 
 #: templates/web/menu.html:11
-#: templates/yabase/webapp.html:194
+#: templates/yabase/webapp.html:210
 #: templates/yabase/app/favoritesPage.mustache:3
 #: templates/yabase/app/home/homePage.html:24
-#: templates/yabase/app/home/homePage.mustache:25
+#: templates/yabase/app/home/homePage.mustache:26
 msgid "My favorites"
 msgstr "Mes favoris"
 
@@ -351,10 +625,6 @@ msgstr "Par"
 #: templates/web/radio.html:17
 msgid "Creator"
 msgstr "Créateur"
-
-#: templates/web/radio.html:18
-msgid "Date"
-msgstr "Date"
 
 #: templates/web/radio.html:19
 #: templates/web/selections.html:35
@@ -432,9 +702,8 @@ msgid "Message count"
 msgstr "Nombre de message"
 
 #: templates/yabackoffice/keyfigures.html:66
-#, fuzzy
 msgid "Messages per user"
-msgstr "Nombre de message"
+msgstr "Messages par utilisateur"
 
 #: templates/yabackoffice/keyfigures.html:74
 msgid "Like count"
@@ -442,7 +711,7 @@ msgstr "Nombre de J'aime"
 
 #: templates/yabackoffice/keyfigures.html:82
 msgid "Likes per user"
-msgstr ""
+msgstr "\"J'aime\" par utilisateur"
 
 #: templates/yabackoffice/keyfigures.html:90
 msgid "Favorites count"
@@ -488,6 +757,14 @@ msgstr "Morceaux non trouvés (fichier non présent sur le serveur)"
 #: templates/yabackoffice/keyfigures.html:171
 msgid "Matched songs ratio"
 msgstr "Ratio de correspondance"
+
+#: templates/yabackoffice/keyfigures.html:179
+msgid "Email addresses"
+msgstr "Adresses email"
+
+#: templates/yabackoffice/keyfigures.html:187
+msgid "Newsletter subscribers"
+msgstr "Abonnés à la newsletter"
 
 #: templates/yabackoffice/metrics.html:3
 msgid "Metrics"
@@ -546,18 +823,16 @@ msgid "New shares"
 msgstr "Nouveaux partages"
 
 #: templates/yabackoffice/radio_tags.html:5
-#, fuzzy
 msgid "Radio tags"
-msgstr "Radios"
+msgstr "Tags de radio"
 
 #: templates/yabackoffice/radio_tags.html:10
 msgid "Key"
-msgstr ""
+msgstr "Clef"
 
 #: templates/yabackoffice/radio_tags.html:20
-#, fuzzy
 msgid "Tags count"
-msgstr "Nombre d'utilisateurs"
+msgstr "Nombre de tags"
 
 #: templates/yabase/buy_link_not_found.html:4
 msgid "Sorry, item not available"
@@ -589,29 +864,33 @@ msgstr "Sans nom"
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
-#: templates/yabase/webapp.html:179
+#: templates/yabase/webapp.html:195
 #: templates/yabase/app/notifications/notificationsPage.mustache:4
 msgid "Notifications"
 msgstr "Notifications"
 
-#: templates/yabase/webapp.html:183
+#: templates/yabase/webapp.html:199
 msgid "All notifications"
 msgstr "Toutes les notifications"
 
-#: templates/yabase/webapp.html:197
+#: templates/yabase/webapp.html:213
+msgid "Radio programming"
+msgstr "Programmation de la radio"
+
+#: templates/yabase/webapp.html:214
 msgid "My profile"
 msgstr "Mon profil"
 
-#: templates/yabase/webapp.html:198
+#: templates/yabase/webapp.html:215
 #: templates/yabase/app/settings/settingsPage.mustache:4
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/yabase/webapp.html:206
+#: templates/yabase/webapp.html:223
 msgid "Not logged"
 msgstr "Non connecté"
 
-#: templates/yabase/webapp.html:212
+#: templates/yabase/webapp.html:229
 msgid "Search"
 msgstr "Recherche"
 
@@ -652,11 +931,39 @@ msgstr "Ecoute actuellement"
 msgid "Favorites"
 msgstr "Favoris"
 
-#: templates/yabase/app/radio/radio.mustache:9
+#: templates/yabase/app/programming/importFromItunes.mustache:6
+msgid "Send"
+msgstr "Envoyer"
+
+#: templates/yabase/app/programming/programmingPage.mustache:4
+msgid "Programming"
+msgstr "Programmation"
+
+#: templates/yabase/app/programming/programmingToolbar.mustache:2
+msgid "All tracks"
+msgstr "Toutes les pistes"
+
+#: templates/yabase/app/programming/programmingToolbar.mustache:3
+msgid "Import from iTunes"
+msgstr "Importer depuis iTunes"
+
+#: templates/yabase/app/programming/songInstances.mustache:5
+msgid "Track"
+msgstr "Piste"
+
+#: templates/yabase/app/programming/songInstances.mustache:6
+msgid "Album"
+msgstr "Album"
+
+#: templates/yabase/app/programming/songInstances.mustache:7
+msgid "Artist"
+msgstr "Artiste"
+
+#: templates/yabase/app/radio/radio.mustache:10
 msgid "Add to favorite"
 msgstr "Ajouter aux favoris"
 
-#: templates/yabase/app/radio/radio.mustache:13
+#: templates/yabase/app/radio/radio.mustache:14
 msgid "Remove from favorite"
 msgstr "Retirer des favoris"
 
