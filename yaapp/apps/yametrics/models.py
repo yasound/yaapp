@@ -503,6 +503,38 @@ class TimedMetricsManager():
             return self.SLOT_90D
         else:
             return self.SLOT_90D_MORE
+
+
+class AbuseManager():       
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.abuse
+        self.collection.ensure_index("db_id", unique=True)
+    
+    def drop(self):
+        self.collection.drop()
+        
+    def report_abuse(self, sender, wall_event):
+        now = datetime.datetime.now()
+        doc = {
+            'db_id': wall_event.id,
+            'date': now,
+            'sender': sender.id,
+            'radio': wall_event.radio.id,
+            'text': wall_event.text
+        }
+        
+        self.collection.update({"db_id": wall_event.id}, 
+                               doc, 
+                               upsert=True,
+                               safe=True)   
+    
+    def delete_abuse(self, wall_event_id):
+        self.collection.remove({'db_id': wall_event_id})
+        
+    def all(self):
+        return self.collection.find()
+        
         
 ## Event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):

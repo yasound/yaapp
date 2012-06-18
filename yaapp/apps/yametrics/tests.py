@@ -1,14 +1,15 @@
+from bson.objectid import ObjectId
 from django.contrib.auth.models import User
 from django.test import TestCase
 from models import GlobalMetricsManager
-from yabase import tests_utils as yabase_tests_utils
-from yabase.models import Radio, SongMetadata
+from yabase import settings as yabase_settings, \
+    tests_utils as yabase_tests_utils
+from yabase.models import Radio, SongMetadata, WallEvent
 from yametrics.models import TopMissingSongsManager, RadioMetricsManager, \
-    TimedMetricsManager, UserMetricsManager, RadioPopularityManager
+    TimedMetricsManager, UserMetricsManager, RadioPopularityManager, AbuseManager
 from yametrics.task import async_activity, update_activities
 import datetime
 import settings as yametrics_settings
-from bson.objectid import ObjectId
 
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
@@ -491,4 +492,37 @@ class TestRadioPopularityManager(TestCase):
         doc = manager.settings.find({'_id': ObjectId(coeff_id)})[0]
         self.assertEquals(doc['value'], val)
         
+class TestAbuseManager(TestCase):
+    def setUp(self):
+        manager = AbuseManager()
+        manager.drop()
+
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user    
+        
+        
+    def test_report_abuse(self):
+        radio = Radio.objects.radio_for_user(self.user)
+        wall_event = WallEvent(radio=radio, type=yabase_settings.EVENT_MESSAGE, text='hi, world', user=self.user)
+        
+        manager = AbuseManager()
+        manager.report_abuse(sender=self.user, wall_event=wall_event)
+        
+        abuses = manager.all()
+        self.assertEquals(abuses.count(), 1)
+        
+        results = [a for a in abuses]
+        abuse = results[0]
+        self.assertEquals(abuse.get('db_id'), wall_event.id)
+        self.assertEquals(abuse.get('radio'), wall_event.radio.id)
+        self.assertEquals(abuse.get('sender'), self.user.id)
+        self.assertEquals(abuse.get('text'), wall_event.text)
+        
+        
+        manager.delete_abuse(wall_event.id)
+        abuses = manager.all()
+        self.assertEquals(abuses.count(), 0)
         
