@@ -65,6 +65,10 @@ class UserProfileManager(models.Manager):
 
     def popular_users(self):
         return User.objects.filter(is_active=True)
+    
+    def broadcast_message_from_yasound(self, url):
+        for p in UserProfile.objects.all():
+            p.message_from_yasound(url_param=url)
         
 class UserProfile(models.Model):
     """
