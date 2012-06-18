@@ -89,6 +89,11 @@ def contest_station_terms(request, template_name='yaweb/contest_station_terms.ht
         'current_page': 'contest_station_terms',
     }, context_instance=RequestContext(request))  
 
+def contest_station_iphone(request, template_name='yaweb/contest_station_iphone.html'):
+    return render_to_response(template_name, {
+        'current_page': 'contest_station_iphone',
+    }, context_instance=RequestContext(request))  
+
 def logo(request):
     return HttpResponseRedirect('/media/yaweb/images/logo.png')
 
