@@ -13,7 +13,7 @@ new_current_song        = django.dispatch.Signal(providing_args=['radio', 'song_
 radio_shared            = django.dispatch.Signal(providing_args=['radio', 'user', 'share_type'])
 
 new_moderator_del_msg_activity   = django.dispatch.Signal(providing_args=['user',])
-new_moderator_abuse_msg_activity = django.dispatch.Signal(providing_args=['user',])
+new_moderator_abuse_msg_activity = django.dispatch.Signal(providing_args=['user', 'wall_event'])
 
 new_animator_activity    = django.dispatch.Signal(providing_args=['user', 'radio'])
 

@@ -23,7 +23,7 @@ def check_api_key(methods=['GET', 'POST', 'PUT', 'DELETE'], login_required=True)
 
             authorized = check_api_key_Authentication(request)
             if not authorized:
-                    authorized = request.user.is_authenticated()
+                authorized = request.user.is_authenticated()
             if login_required and not authorized:
                 return HttpResponse(status=401)
             

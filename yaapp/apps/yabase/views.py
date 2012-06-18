@@ -289,7 +289,7 @@ def report_message_as_abuse(request, message_id):
     wall_event.report_as_abuse(request.user)
     
     logger.debug('logging information into metrics')
-    yabase_signals.new_moderator_abuse_msg_activity.send(sender=request.user, user=request.user)
+    yabase_signals.new_moderator_abuse_msg_activity.send(sender=request.user, user=request.user, wall_event=wall_event)
     
     logger.debug('ok, done')
     response = {'success':True}

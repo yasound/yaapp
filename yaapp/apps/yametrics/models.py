@@ -1,17 +1,18 @@
 from account import signals as account_signals
 from account.models import UserProfile
+from bson.code import Code
+from bson.objectid import ObjectId
 from dateutil import rrule
 from django.conf import settings
 from django.db.models import Count, signals
 from pymongo import DESCENDING
-from bson.code import Code
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, SongMetadata
-from yametrics.task import async_activity, async_check_if_new_listener, async_radio_activity
-import settings as yametrics_settings
+from yametrics.task import async_activity, async_check_if_new_listener, \
+    async_radio_activity, async_report_abuse
 import datetime
-from bson.objectid import ObjectId
+import settings as yametrics_settings
 
 class GlobalMetricsManager():
     """
@@ -503,6 +504,38 @@ class TimedMetricsManager():
             return self.SLOT_90D
         else:
             return self.SLOT_90D_MORE
+
+
+class AbuseManager():       
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.abuse
+        self.collection.ensure_index("db_id", unique=True)
+    
+    def drop(self):
+        self.collection.drop()
+        
+    def report_abuse(self, sender, wall_event):
+        now = datetime.datetime.now()
+        doc = {
+            'db_id': wall_event.id,
+            'date': now,
+            'sender': sender.id,
+            'radio': wall_event.radio.id,
+            'text': wall_event.text
+        }
+        
+        self.collection.update({"db_id": wall_event.id}, 
+                               doc, 
+                               upsert=True,
+                               safe=True)   
+    
+    def delete_abuse(self, wall_event_id):
+        self.collection.remove({'db_id': wall_event_id})
+        
+    def all(self):
+        return self.collection.find()
+        
         
 ## Event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):
@@ -580,10 +613,12 @@ def new_moderator_del_msg_activity(sender, user, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_DEL_MSG, throttle=False)
     async_inc_global_value.delay('new_moderator_del_msg_activity', 1)
 
-def new_moderator_abuse_msg_activity(sender, user, **kwargs):
+def new_moderator_abuse_msg_activity(sender, user, wall_event, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_ABUSE_MSG, throttle=False)
     async_inc_global_value.delay('new_moderator_abuse_msg_activity', 1)
-
+    async_report_abuse.delay(user, wall_event)
+    
+    
 def new_share(sender, radio, user, share_type, **kwargs):
     
     activity_key = 'share_%s_activity' % (share_type)

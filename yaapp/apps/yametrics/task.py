@@ -159,10 +159,14 @@ def reset_daily_popularity():
     rm = RadioMetricsManager()
     rm.reset_daily_popularity()
     
-    
-    
 @task(ignore_result=True)
 def async_radio_activity(radio_id, activity):
     from models import RadioPopularityManager
     manager = RadioPopularityManager()
     manager.action(radio_id,activity)
+    
+@task(ignore_result=True)
+def async_report_abuse(user, wall_event):
+    from models import AbuseManager
+    manager = AbuseManager()
+    manager.report_abuse(sender=user, wall_event=wall_event)
