@@ -501,12 +501,8 @@ def stop_listening_to_radio(request, radio_uuid):
     res = '%s stopped listening to "%s" (listening duration = %d)' % (client, radio, listening_duration)
     return HttpResponse(res)
 
-def get_current_song(request, radio_id):
-    check_api_key_Authentication(request)
-
-    if not check_http_method(request, ['get']):
-        return HttpResponse(status=405)
-    
+@check_api_key(methods=['GET',], login_required=False)
+def get_current_song(request, radio_id):    
     song_json = SongInstance.objects.get_current_song_json(radio_id)
     if song_json is None:
         return HttpResponseNotFound()
@@ -752,12 +748,8 @@ def reject_song(request, song_id):
     return HttpResponse(response)
     
 
+@check_api_key(methods=['GET',], login_required=False)
 def song_instance_cover(request, song_instance_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-    if not check_http_method(request, ['get']):
-        return HttpResponse(status=405)
-    
     song_instance = get_object_or_404(SongInstance, id=song_instance_id)
     yasound_song = get_object_or_404(YasoundSong, id=song_instance.metadata.yasound_song_id)
     album = yasound_song.album

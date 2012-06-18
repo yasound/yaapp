@@ -529,6 +529,7 @@ class RadioWallEventResource(ModelResource):
         resource_name = 'wall'
         fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
+        authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
         filtering = {
@@ -616,7 +617,7 @@ class RadioLikerResource(ModelResource):
         fields = ['id']
         allowed_methods = ['get']
         authorization= ReadOnlyAuthorization()
-        authentication = YasoundApiKeyAuthentication()
+        authentication = YasoundPublicAuthentication()
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -641,7 +642,7 @@ class RadioFavoriteResource(ModelResource):
         fields = ['id']
         allowed_methods = ['get']
         authorization= ReadOnlyAuthorization()
-        authentication = YasoundApiKeyAuthentication()
+        authentication = YasoundPublicAuthentication()
         include_resource_uri = False
     
     def dispatch(self, request_type, request, **kwargs):
@@ -674,6 +675,7 @@ class RadioCurrentUserResource(ModelResource):
         queryset = User.objects.all()
         resource_name = 'current_user'
         fields = ['id']
+        authentication = YasoundPublicAuthentication()
         authorization= ReadOnlyAuthorization()
         allowed_methods = ['get']
         include_resource_uri = False
