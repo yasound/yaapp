@@ -856,7 +856,7 @@ class UserProfile(models.Model):
         
         # store notification
         m = NotificationsManager()
-        m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, params=None)
+        m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, params=custom_params)
         
         # send APNs notification
         self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_YASOUND)
