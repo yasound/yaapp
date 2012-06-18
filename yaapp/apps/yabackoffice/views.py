@@ -549,7 +549,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     messages_per_user = um.calculate_messages_per_user_mean()
     likes_per_user = um.calculate_likes_per_user_mean()
     
-    email_count = User.objects.filter(email__contains='@').count()
+    email_count = User.objects.filter(email__contains='@', is_active=True).count()
     newsletter_subscribers = Contact.objects.filter(subscriber=True).count()
     
     return render_to_response(template_name, {
