@@ -11,10 +11,10 @@ from django.http import Http404, HttpResponse, HttpResponseNotFound, \
     HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from forms import SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
@@ -26,15 +26,16 @@ from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm
+from yacore.api import api_response
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
-from yacore.api import api_response
 from yaref.models import YasoundSong
 import import_utils
 import json
 import logging
 import os
 import settings as yabase_settings
+from tastypie.models import ApiKey
 import uuid
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
@@ -898,8 +899,21 @@ class WebAppView(View):
         
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
         
+        username = None
+        api_key = None
+        
+        if request.user.is_authenticated():
+            username = request.user.username
+            try:
+                api_key = ApiKey.objects.get(user=request.user).key
+            except:
+                pass
+            
+            
         context = {
             'user_uuid': user_uuid,
+            'username': username,
+            'api_key': api_key,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,

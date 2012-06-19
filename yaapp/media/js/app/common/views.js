@@ -255,6 +255,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound.play();
             $('#play i').removeClass('icon-play').addClass('icon-stop');
             $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
+            
+            this.sendCustomHeaders();
+            
         } else {
             $('#play i').removeClass('icon-stop').addClass('icon-play');
             Yasound.App.MySound.destruct();
@@ -362,6 +365,27 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         function callback (response) {
         }
         FB.ui(obj, callback);
+    },
+    
+    sendCustomHeaders: function() {
+        var username = g_username;
+        var api_key = g_api_key;
+        
+        console.log('sendCustomHeaders')
+        var query = $.ajax({
+            type: 'GET',
+            url: Yasound.App.SoundConfig.url,
+            beforeSend: function (xhr) { 
+                xhr.setRequestHeader('username', username); 
+                xhr.setRequestHeader('api_key', api_key); 
+            },
+        });
+        console.log('ok')
+        var intervalId = setInterval(function () {
+            query.abort();
+            clearInterval(intervalId);
+            console.log('aborted')
+        }, 5000);
     }
 });
 
