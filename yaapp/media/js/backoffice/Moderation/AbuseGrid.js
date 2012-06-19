@@ -3,19 +3,14 @@
 //------------------------------------------
 
 Yasound.Moderation.Data.AbuseStore = function () {
-    var fields = [ '_id', {
-        name: 'start_date',
-        type: 'date',
-        dateFormat: 'Y-m-d H:i:s'
-    }, 'radio', 'type', 'user', 'text', 'sender' ];
+    var fields = [ '_id', 'date', 'radio', 'type', 'user', 'text', 'sender' ];
     var url = '/yabackoffice/abuse_notifications';
     var sortInfo = {
-        field: 'start_date',
+        field: 'date',
         direction: 'DESC'
     };
-    return new Yasound.Utils.SimpleStore(url, fields, sortInfo);
+    return new Yasound.Utils.SimpleStore(url, fields, sortInfo, '_id');
 };
-
 // ------------------------------------------
 // Handlers
 // ------------------------------------------
@@ -26,7 +21,7 @@ Yasound.Moderation.Data.AbuseStore = function () {
 Yasound.Moderation.UI.AbuseColumnModel = function (expander) {
     var cm = [ expander, {
         header: gettext('Date'),
-        dataIndex: 'start_date',
+        dataIndex: 'date',
         xtype: 'datecolumn',
         format: 'd/m/Y H:i:s',
         sortable: true,

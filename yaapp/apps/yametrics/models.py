@@ -531,9 +531,12 @@ class AbuseManager():
                                upsert=True,
                                safe=True)   
     
-    def delete_abuse(self, wall_event_id):
-        self.collection.remove({'db_id': wall_event_id})
+    def delete(self, id):
+        self.collection.remove(ObjectId(id), safe=True)
         
+    def get(self, id):
+        return self.collection.find_one({'_id': ObjectId(id)})
+    
     def all(self):
         return self.collection.find()
         

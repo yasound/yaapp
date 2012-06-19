@@ -50,6 +50,8 @@ urlpatterns = patterns('yabackoffice.views',
     
     url(r'^find_musicbrainz_id/$', 'find_musicbrainz_id'),
     
-    url(r'^abuse_notifications', 'abuse_notifications'),
+    url(r'^abuse_notifications$', 'abuse_notifications'),
+    url(r'^abuse/delete/$', 'delete_abuse_notification'),
+    url(r'^abuse/ignore/$', 'ignore_abuse_notification'),
     
 )

@@ -857,6 +857,7 @@ def radio_activity_score_factors(request, coeff_id=None):
     return utils.JsonResponse(resp)
 
 @csrf_exempt
+@login_required
 def find_musicbrainz_id(request):
     ids = request.REQUEST.getlist('ids')
     for yasound_song in ids:
@@ -868,7 +869,10 @@ def find_musicbrainz_id(request):
     return HttpResponse(json_data, mimetype='application/json')
          
 @csrf_exempt
+@login_required
 def abuse_notifications(request):
+    if not request.user.is_superuser:
+        raise Http404()
     manager = AbuseManager()
     abuse_notifications = manager.all()
     data = []    
@@ -884,12 +888,44 @@ def abuse_notifications(request):
             'user': unicode(user.get_profile()),
             'text': notification.get('text'),
         })
-    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+    json_data = json.dumps({
         'success': True,
         'data': data,
         'results': len(data)
-    })
+    }, cls=MongoAwareEncoder)
     resp = utils.JsonResponse(json_data)
     return resp
     
+@csrf_exempt
+@login_required
+def delete_abuse_notification(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    ids = request.REQUEST.getlist('notifications')
+    manager = AbuseManager()
+    for id in ids:
+        doc = manager.get(id)
+        try:
+            we = WallEvent.objects.get(id=doc.get('db_id'))
+            we.delete()
+        except WallEvent.DoesNotExist:
+            pass
+        manager.delete(id)
+        
+    data = {"success":True,"message":"ok","data":[]}
+    resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+    return resp
     
+@csrf_exempt
+@login_required
+def ignore_abuse_notification(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    ids = request.REQUEST.getlist('notifications')
+    manager = AbuseManager()
+    for id in ids:
+        manager.delete(id)
+        
+    data = {"success":True,"message":"ok","data":[]}
+    resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+    return resp
