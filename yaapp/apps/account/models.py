@@ -137,8 +137,8 @@ class UserProfile(models.Model):
         'fb_share_post_message',
         'fb_share_animator_activity',
         ),
-        default=(2+8+16+32+64+128)
-    ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128)
+        default=(2+8+16+32+64+128+256+512+1024+2048)
+    ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128) + YES (fb_share_listen=256) + YES (fb_share_like_song=512) + YES (fb_share_post_message=1024) + YES (fb_share_animator_activity=2048)
     
     @property
     def facebook_enabled(self):
@@ -903,6 +903,30 @@ class UserProfile(models.Model):
         self.save()
         
         
+    def facebook_share_preferences(self):
+        prefs = {
+                 'fb_share_listen':             True if self.notifications_preferences.fb_share_listen else False,
+                 'fb_share_like_song':          True if self.notifications_preferences.fb_share_like_song else False,
+                 'fb_share_post_message':       True if self.notifications_preferences.fb_share_post_message else False,
+                 'fb_share_animator_activity':  True if self.notifications_preferences.fb_share_animator_activity else False,
+                 }
+        return prefs
+    
+    def set_facebook_share_preferences(self, pref_dict):
+        fb_share_listen             = pref_dict.get('fb_share_listen', None)
+        fb_share_like_song          = pref_dict.get('fb_share_like_song', None)
+        fb_share_post_message       = pref_dict.get('fb_share_post_message', None)
+        fb_share_animator_activity  = pref_dict.get('fb_share_animator_activity', None)
+
+        if fb_share_listen is not None:
+            self.notifications_preferences.fb_share_listen = fb_share_listen
+        if fb_share_like_song is not None:
+            self.notifications_preferences.fb_share_like_song = fb_share_like_song
+        if fb_share_post_message is not None:
+            self.notifications_preferences.fb_share_post_message = fb_share_post_message
+        if fb_share_animator_activity is not None:
+            self.notifications_preferences.fb_share_animator_activity = fb_share_animator_activity
+        self.save()
         
 
 def create_user_profile(sender, instance, created, **kwargs):  

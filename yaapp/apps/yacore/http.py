@@ -67,8 +67,10 @@ def check_api_key_Authentication(request):
     return True
 
 def check_http_method(request, allowed_methods):
-    allowed = request.method in allowed_methods or request.method.lower() in allowed_methods or request.method.higher() in allowed_methods
-    return allowed
+    method = request.method.lower()
+    allowed = [x.lower() for x in allowed_methods]
+    ok = method in allowed
+    return ok
         
         
 def absolute_url(url):
