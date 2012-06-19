@@ -1211,7 +1211,9 @@ def notify_streamer(request):
         'username': username,
         'api_key': api_key
     }
-    requests.get(stream_url, headers=custom_headers)
+    logger.debug('notify_streamer: url = %s' % (stream_url))
+    r = requests.get(stream_url, headers=custom_headers)
+    logger.debug('result: %d' % (r.status_code))
     return HttpResponse('OK')
 
 @csrf_exempt
