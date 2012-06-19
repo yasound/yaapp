@@ -31,7 +31,7 @@ from yacore.api import MongoAwareEncoder, MongoAwareEncoder
 from yacore.http import coerce_put_post
 from yainvitation.models import Invitation
 from yametrics.models import GlobalMetricsManager, TopMissingSongsManager, \
-    TimedMetricsManager, UserMetricsManager
+    TimedMetricsManager, UserMetricsManager, AbuseManager
 from yaref import task
 from yaref.models import YasoundSong
 import datetime
@@ -857,6 +857,7 @@ def radio_activity_score_factors(request, coeff_id=None):
     return utils.JsonResponse(resp)
 
 @csrf_exempt
+@login_required
 def find_musicbrainz_id(request):
     ids = request.REQUEST.getlist('ids')
     for yasound_song in ids:
@@ -867,4 +868,64 @@ def find_musicbrainz_id(request):
     })
     return HttpResponse(json_data, mimetype='application/json')
          
-
+@csrf_exempt
+@login_required
+def abuse_notifications(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    manager = AbuseManager()
+    abuse_notifications = manager.all()
+    data = []    
+    for notification in abuse_notifications:
+        radio = Radio.objects.get(id=notification.get('radio'))
+        sender = User.objects.get(id=notification.get('sender'))
+        user = User.objects.get(id=notification.get('user'))
+        data.append({
+            '_id': notification.get('_id'),
+            'date': notification.get('date'),
+            'sender': unicode(sender.get_profile()),
+            'radio': unicode(radio),
+            'user': unicode(user.get_profile()),
+            'text': notification.get('text'),
+        })
+    json_data = json.dumps({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    }, cls=MongoAwareEncoder)
+    resp = utils.JsonResponse(json_data)
+    return resp
+    
+@csrf_exempt
+@login_required
+def delete_abuse_notification(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    ids = request.REQUEST.getlist('notifications')
+    manager = AbuseManager()
+    for id in ids:
+        doc = manager.get(id)
+        try:
+            we = WallEvent.objects.get(id=doc.get('db_id'))
+            we.delete()
+        except WallEvent.DoesNotExist:
+            pass
+        manager.delete(id)
+        
+    data = {"success":True,"message":"ok","data":[]}
+    resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+    return resp
+    
+@csrf_exempt
+@login_required
+def ignore_abuse_notification(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    ids = request.REQUEST.getlist('notifications')
+    manager = AbuseManager()
+    for id in ids:
+        manager.delete(id)
+        
+    data = {"success":True,"message":"ok","data":[]}
+    resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+    return resp

@@ -175,6 +175,8 @@ Ext.onReady(function(){
                 iconCls: 'x-icon-templates'
             }), Ext.apply(Yasound.Moderation.UI.RadiosPanel(), {
                 iconCls: 'x-icon-templates'
+            }), Ext.apply(Yasound.Moderation.UI.AbusePanel(), {
+                iconCls: 'x-icon-templates'
             })]         
         }    
     

@@ -510,7 +510,7 @@ class AbuseManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.abuse
-        self.collection.ensure_index("db_id", unique=True)
+        self.collection.ensure_index("db_id")
     
     def drop(self):
         self.collection.drop()
@@ -520,8 +520,9 @@ class AbuseManager():
         doc = {
             'db_id': wall_event.id,
             'date': now,
-            'sender': sender.id,
             'radio': wall_event.radio.id,
+            'sender': sender.id,
+            'user': wall_event.user.id,
             'text': wall_event.text
         }
         
@@ -530,9 +531,12 @@ class AbuseManager():
                                upsert=True,
                                safe=True)   
     
-    def delete_abuse(self, wall_event_id):
-        self.collection.remove({'db_id': wall_event_id})
+    def delete(self, id):
+        self.collection.remove(ObjectId(id), safe=True)
         
+    def get(self, id):
+        return self.collection.find_one({'_id': ObjectId(id)})
+    
     def all(self):
         return self.collection.find()
         
