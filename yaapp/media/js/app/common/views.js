@@ -386,7 +386,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                     radio_uuid: that.radio.get('uuid')
                 }
             });
-        }, 10000);
+        }, 60000);
 
     },
     
