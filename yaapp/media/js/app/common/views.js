@@ -193,6 +193,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     onClose: function () {
         this.model.unbind('change', this.render);
+        if (this.pingIntervalId) {
+            clearInterval(this.pingIntervalId);
+        }
     },
 
     generateTwitterText: function () {
@@ -233,6 +236,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
                 $('#play i').removeClass('icon-play').addClass('icon-stop');
+                
+                this.notifyStreamer();
             }
             $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
         }
@@ -245,6 +250,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#tweet', this.el).hide();
             $('#fb_share', this.el).hide();
         }
+        this.ping();
 
         return this;
     },
@@ -255,6 +261,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound.play();
             $('#play i').removeClass('icon-play').addClass('icon-stop');
             $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
+
+            this.notifyStreamer();
         } else {
             $('#play i').removeClass('icon-stop').addClass('icon-play');
             Yasound.App.MySound.destruct();
@@ -362,6 +370,34 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         function callback (response) {
         }
         FB.ui(obj, callback);
+    },
+    
+    ping: function() {
+        if (this.pingIntervalId) {
+            clearInterval(this.pingIntervalId);
+        }
+        
+        var that = this;
+        this.pingIntervalId = setInterval(function () {
+            var query = $.ajax({
+                type: 'POST',
+                url: '/api/v1/ping/',
+                data: {
+                    radio_uuid: that.radio.get('uuid')
+                }
+            });
+        }, 10000);
+
+    },
+    
+    notifyStreamer: function() {
+        var query = $.ajax({
+            type: 'POST',
+            url: '/api/v1/notify_streamer/',
+            data: {
+                radio_uuid: this.radio.get('uuid')
+            }
+        });
     }
 });
 

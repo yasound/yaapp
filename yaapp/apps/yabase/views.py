@@ -11,10 +11,10 @@ from django.http import Http404, HttpResponse, HttpResponseNotFound, \
     HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from forms import SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
@@ -26,16 +26,18 @@ from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm
+from yacore.api import api_response
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
-from yacore.api import api_response
 from yaref.models import YasoundSong
 import import_utils
 import json
 import logging
 import os
 import settings as yabase_settings
+from tastypie.models import ApiKey
 import uuid
+import requests
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -1182,4 +1184,49 @@ def most_active_radios(request):
         radio_data.append(r.as_dict(full=True))
     response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
     return response
+
+@csrf_exempt
+@check_api_key(methods=['POST',], login_required=True)
+def notify_streamer(request):
+    radio_uuid = request.REQUEST.get('radio_uuid')
+    if not radio_uuid:
+        raise Http404
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+
+    username = None
+    api_key = None
+        
+    if request.user.is_authenticated():
+        username = request.user.username
+        try:
+            api_key = ApiKey.objects.get(user=request.user).key
+        except:
+            pass
+    if username is None or api_key is None:
+        raise Http404
+    
+    stream_url = radio.stream_url
+    
+    custom_headers = {
+        'username': username,
+        'api_key': api_key
+    }
+    requests.get(stream_url, headers=custom_headers)
+    return HttpResponse('OK')
+
+@csrf_exempt
+@check_api_key(methods=['POST',], login_required=True)
+def ping(request):
+    radio_uuid = request.REQUEST.get('radio_uuid')
+    if not radio_uuid:
+        raise Http404
+    
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    profile = request.user.get_profile()
+    profile.authenticated()
+    
+    radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user.connected = True
+    radio_user.save()
+    return HttpResponse('OK')
     

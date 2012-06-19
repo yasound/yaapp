@@ -150,6 +150,8 @@ urlpatterns = patterns('',
     
     url(r'^api/v1/most_active_radio/$', 'yabase.views.most_active_radios'),
     
+    url(r'^api/v1/notify_streamer/$', 'yabase.views.notify_streamer'),
+    url(r'^api/v1/ping/$', 'yabase.views.ping'),
     
     
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
