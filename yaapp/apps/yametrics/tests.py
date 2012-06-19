@@ -519,6 +519,7 @@ class TestAbuseManager(TestCase):
         self.assertEquals(abuse.get('db_id'), wall_event.id)
         self.assertEquals(abuse.get('radio'), wall_event.radio.id)
         self.assertEquals(abuse.get('sender'), self.user.id)
+        self.assertEquals(abuse.get('user'), self.user.id)
         self.assertEquals(abuse.get('text'), wall_event.text)
         
         

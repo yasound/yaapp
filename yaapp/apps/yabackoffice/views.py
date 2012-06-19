@@ -31,7 +31,7 @@ from yacore.api import MongoAwareEncoder, MongoAwareEncoder
 from yacore.http import coerce_put_post
 from yainvitation.models import Invitation
 from yametrics.models import GlobalMetricsManager, TopMissingSongsManager, \
-    TimedMetricsManager, UserMetricsManager
+    TimedMetricsManager, UserMetricsManager, AbuseManager
 from yaref import task
 from yaref.models import YasoundSong
 import datetime
@@ -867,4 +867,29 @@ def find_musicbrainz_id(request):
     })
     return HttpResponse(json_data, mimetype='application/json')
          
-
+@csrf_exempt
+def abuse_notifications(request):
+    manager = AbuseManager()
+    abuse_notifications = manager.all()
+    data = []    
+    for notification in abuse_notifications:
+        radio = Radio.objects.get(id=notification.get('radio'))
+        sender = User.objects.get(id=notification.get('sender'))
+        user = User.objects.get(id=notification.get('user'))
+        data.append({
+            '_id': notification.get('_id'),
+            'date': notification.get('date'),
+            'sender': unicode(sender.get_profile()),
+            'radio': unicode(radio),
+            'user': unicode(user.get_profile()),
+            'text': notification.get('text'),
+        })
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': data,
+        'results': len(data)
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+    
+    

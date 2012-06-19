@@ -510,7 +510,7 @@ class AbuseManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.abuse
-        self.collection.ensure_index("db_id", unique=True)
+        self.collection.ensure_index("db_id")
     
     def drop(self):
         self.collection.drop()
@@ -520,8 +520,9 @@ class AbuseManager():
         doc = {
             'db_id': wall_event.id,
             'date': now,
-            'sender': sender.id,
             'radio': wall_event.radio.id,
+            'sender': sender.id,
+            'user': wall_event.user.id,
             'text': wall_event.text
         }
         
