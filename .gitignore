@@ -25,3 +25,6 @@ yaapp/logs/*.log
 yaapp/logs/*.log.*
 *.old
 yaapp/media/statics/*
+yaapp/media/uploads/*
+yaapp/.settings/*
+yaapp/media/*-all.*.js
