@@ -1,14 +1,19 @@
-from django.contrib.auth.models import User
-from yaref.models import YasoundSong
-from yabase.models import Radio
 from account.models import UserProfile
-import indexer
-import logging
-from time import time
-import indexer as yasearch_indexer
-from yacore.database import queryset_iterator
-
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.db.models.aggregates import Count
+from pymongo import ASCENDING, DESCENDING
+from time import time
+from yabase.models import Radio, SongMetadata, SongInstance
+from yacore.database import queryset_iterator
+from yaref.models import YasoundSong
+import indexer
+import indexer as yasearch_indexer
+import logging
+import utils as yasearch_utils
+import settings as yasearch_settings
+
 
 LOCK_EXPIRE = 60 * 10 # Lock expires in 10 minutes
 
@@ -196,5 +201,106 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
     radios = radio_queryset.filter(current_song__metadata__yasound_song_id__in=songs).order_by('-overall_listening_time')[:limit]
     return radios
     
+class MostPopularSongsManager():
+    COLLECTION_SIZE = 10000
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.search.mostpopularsongs
+        self.collection.ensure_index([("db_id", ASCENDING),("songinstance__count", DESCENDING)])
+        self.collection.ensure_index("db_id", unique=True)
+        self.collection.ensure_index("songinstance__count")
+        self.collection.songs.ensure_index("song_dms")
+        self.collection.songs.ensure_index("artist_dms") 
+        self.collection.songs.ensure_index("album_dms")
+
+    def drop(self):
+        self.collection.drop()
+                
+    def calculate(self):
+        limit = MostPopularSongsManager.COLLECTION_SIZE
+        self.collection.drop()
+        qs = SongMetadata.objects.filter(yasound_song_id__isnull=False).annotate(Count('songinstance')).order_by('-songinstance__count')[:limit]
+        for metadata in qs:
+            song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+            artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+            album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+            doc = {
+                'db_id': metadata.id,
+                'name': metadata.name,
+                'artist': metadata.artist_name,
+                'album': metadata.album_name,
+                'songinstance__count': metadata.songinstance__count,
+                'song_dms': song_dms,
+                'artist_dms': artist_dms,
+                'album_dms': album_dms
+            }
+            self.collection.insert(doc, safe=True)
     
+    def add_song(self, song_instance):
+        doc_count = self.collection.find().count()
+
+        metadata = song_instance.metadata
+        songinstance__count = SongInstance.objects.filter(metadata=metadata).count()
+
+        least_popular_doc = self.collection.findOne().sort('songinstance__count', ASCENDING)
+        if least_popular_doc and least_popular_doc.get('songinstance__count') > songinstance__count:
+            if doc_count >= MostPopularSongsManager.COLLECTION_SIZE:
+                self.delete(metadata.id)
+            return
+        
+        song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        doc = {
+            'db_id': metadata.id,
+            'name': metadata.name,
+            'artist': metadata.artist_name,
+            'album': metadata.album_name,
+            'songinstance__count': songinstance__count,
+            'song_dms': song_dms,
+            'artist_dms': artist_dms,
+            'album_dms': album_dms
+        }
+        self.collection.update({"db_id": metadata.id},
+                          {"$set": doc}, upsert=True, safe=True)
+        
+        if doc_count + 1 >  MostPopularSongsManager.COLLECTION_SIZE:
+            self.delete(least_popular_doc.get('db_id'))
+    
+    def delete(self, db_id):
+        self.collection.remove({'db_id': db_id}, safe=True)
+    
+    def all(self):
+        docs = self.collection.find().sort([('songinstance__count', DESCENDING)])
+        return docs
+    
+    def find(self, name, artist, album, remove_common_words=True):
+        dms_name = yasearch_utils.build_dms(name, remove_common_words)
+        dms_artist = yasearch_utils.build_dms(artist, remove_common_words)
+        dms_album = yasearch_utils.build_dms(album, remove_common_words)
+        
+        query_items = []
+        if artist and len(dms_artist) > 0:
+            query_items.append({"artist_dms":{"$all": dms_artist}})
+    
+        if album and len(dms_album) > 0:
+            query_items.append({"album_dms":{"$in": dms_album}})
+    
+        if name and len(dms_name) > 0:
+            query_items.append({"song_dms":{"$all": dms_name}})
+    
+        if len(query_items) == 0:
+            return []
+    
+        fields = {
+            "db_id": True,
+            "name": True,
+            "artist": True,
+            "album": True,
+        }
+        
+        res = self.collection.find_one({"$and":query_items}, fields)  
+        return res
+        
     
