@@ -37,6 +37,7 @@ import os
 import settings as yabase_settings
 from tastypie.models import ApiKey
 import uuid
+import requests
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -899,21 +900,8 @@ class WebAppView(View):
         
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
         
-        username = None
-        api_key = None
-        
-        if request.user.is_authenticated():
-            username = request.user.username
-            try:
-                api_key = ApiKey.objects.get(user=request.user).key
-            except:
-                pass
-            
-            
         context = {
             'user_uuid': user_uuid,
-            'username': username,
-            'api_key': api_key,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
@@ -1196,4 +1184,49 @@ def most_active_radios(request):
         radio_data.append(r.as_dict(full=True))
     response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
     return response
+
+@csrf_exempt
+@check_api_key(methods=['POST',], login_required=True)
+def notify_streamer(request):
+    radio_uuid = request.REQUEST.get('radio_uuid')
+    if not radio_uuid:
+        raise Http404
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+
+    username = None
+    api_key = None
+        
+    if request.user.is_authenticated():
+        username = request.user.username
+        try:
+            api_key = ApiKey.objects.get(user=request.user).key
+        except:
+            pass
+    if username is None or api_key is None:
+        raise Http404
+    
+    stream_url = radio.stream_url
+    
+    custom_headers = {
+        'username': username,
+        'api_key': api_key
+    }
+    requests.get(stream_url, headers=custom_headers)
+    return HttpResponse('OK')
+
+@csrf_exempt
+@check_api_key(methods=['POST',], login_required=True)
+def ping(request):
+    radio_uuid = request.REQUEST.get('radio_uuid')
+    if not radio_uuid:
+        raise Http404
+    
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    profile = request.user.get_profile()
+    profile.authenticated()
+    
+    radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+    radio_user.connected = True
+    radio_user.save()
+    return HttpResponse('OK')
     
