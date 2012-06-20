@@ -2,17 +2,19 @@ from account.models import UserProfile
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.db.models import signals
 from django.db.models.aggregates import Count
 from pymongo import ASCENDING, DESCENDING
 from time import time
 from yabase.models import Radio, SongMetadata, SongInstance
 from yacore.database import queryset_iterator
 from yaref.models import YasoundSong
+from yasearch.task import async_add_song, async_remove_song
 import indexer
 import indexer as yasearch_indexer
 import logging
-import utils as yasearch_utils
 import settings as yasearch_settings
+import utils as yasearch_utils
 
 
 LOCK_EXPIRE = 60 * 10 # Lock expires in 10 minutes
@@ -202,21 +204,21 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
     return radios
     
 class MostPopularSongsManager():
-    def __init__(self, max_size=10000):
-        self.max_size = max_size
+    def __init__(self):
+        self.max_size = settings.MOST_POPULAR_SONG_COLLECTION_SIZE
         self.db = settings.MONGO_DB
         self.collection = self.db.search.mostpopularsongs
         self.collection.ensure_index([("db_id", ASCENDING),("songinstance__count", DESCENDING)])
         self.collection.ensure_index("db_id", unique=True)
         self.collection.ensure_index("songinstance__count")
-        self.collection.songs.ensure_index("song_dms")
-        self.collection.songs.ensure_index("artist_dms") 
-        self.collection.songs.ensure_index("album_dms")
+        self.collection.ensure_index("song_dms")
+        self.collection.ensure_index("artist_dms") 
+        self.collection.ensure_index("album_dms")
 
     def drop(self):
         self.collection.drop()
                 
-    def calculate(self):
+    def populate(self):
         limit = self.max_size
         qs = SongMetadata.objects.filter(yasound_song_id__isnull=False).annotate(Count('songinstance')).order_by('-songinstance__count')[:limit]
 
@@ -237,6 +239,15 @@ class MostPopularSongsManager():
             }
             self.collection.insert(doc, safe=True)
     
+    def remove_song(self, metadata):
+        songinstance__count = SongInstance.objects.filter(metadata=metadata).count()
+        if songinstance__count <= 1:
+            self.delete(metadata.id)
+        else:
+            self.collection.update({'db_id': metadata.id}, 
+                                   {"$inc": {'songinstance__count': -1}},
+                                   upsert=True, safe=True)
+            
     def add_song(self, song_instance):
         doc_count = self.collection.find().count()
 
@@ -312,5 +323,17 @@ class MostPopularSongsManager():
         
         res = self.collection.find_one({"$and":query_items}, fields)  
         return res
+    
+def new_song_instance(sender, instance, created, **kwargs):
+    if created:
+        async_add_song.delay(instance)
+
+def song_instance_deleted(sender, instance, **kwargs):
+    async_remove_song.delay(instance.metadata)
+
+def install_handlers():
+    signals.post_save.connect(new_song_instance, sender=SongInstance)
+    signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
+install_handlers()    
         
     

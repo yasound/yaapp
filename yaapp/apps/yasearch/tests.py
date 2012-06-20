@@ -20,29 +20,12 @@ class TestMostPopularSong(TestCase):
         playlist.radio = radio
         playlist.save()
         
-        manager = MostPopularSongsManager(max_size=5)
-        
-        song_instance = SongInstance.objects.all()[0]
-        self.assertTrue(manager.add_song(song_instance))
-        song_instance = SongInstance.objects.all()[1]
-        self.assertTrue(manager.add_song(song_instance))
-        song_instance = SongInstance.objects.all()[2]
-        self.assertTrue(manager.add_song(song_instance))
-        song_instance = SongInstance.objects.all()[3]
-        self.assertTrue(manager.add_song(song_instance))
-        song_instance = SongInstance.objects.all()[4]
-        self.assertTrue(manager.add_song(song_instance))
-        song_instance = SongInstance.objects.all()[5]
-        self.assertFalse(manager.add_song(song_instance))
-        
-
+        manager = MostPopularSongsManager()
         self.assertEquals(manager.all().count(), 5)
-
 
         song_instance = SongInstance.objects.all()[6]
         other_song_instance = SongInstance.objects.create(metadata=song_instance.metadata, playlist=playlist)
 
-        self.assertTrue(manager.add_song(other_song_instance))
         self.assertEquals(manager.all().count(), 5)
         
         docs = manager.all()
@@ -51,17 +34,19 @@ class TestMostPopularSong(TestCase):
 
         song_instance = SongInstance.objects.all()[7]
         for _i in range(0, 10):
-            si = SongInstance.objects.create(metadata=song_instance.metadata, playlist=playlist)
-            manager.add_song(si)
+            SongInstance.objects.create(metadata=song_instance.metadata, playlist=playlist)
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 11)
         self.assertEquals(manager.all().count(), 5)
         
-        
-        manager.calculate()
+        manager.populate()
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 11)
         self.assertEquals(manager.all().count(), 5)
+        
+        song_instance.delete()
+        docs = manager.all()
+        self.assertEquals(docs[0].get('songinstance__count'), 10)
         
         
         

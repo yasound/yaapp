@@ -825,6 +825,11 @@ if DJANGO_MODE == 'PRODUCTION':
 # newsletter
 NEWSLETTER_DEFAULT_HEADER_SENDER = 'Yasound Newsletter <noreply@yasound.com>'
     
+# misc
+MOST_POPULAR_SONG_COLLECTION_SIZE = 10000
+if TEST_MODE:
+    MOST_POPULAR_SONG_COLLECTION_SIZE = 5    
+
 # test
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
