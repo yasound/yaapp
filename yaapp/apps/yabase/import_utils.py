@@ -533,7 +533,9 @@ class SongImporter:
                 song.replace(filepath, provided_fingerprint)
             
             if not sm:
+                self._log('creating songmetadata')
                 sm, _created = SongMetadata.objects.get_or_create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
+                self._log('creating songmetadata: done')
             
         else:
             if not sm:      
@@ -603,6 +605,7 @@ class SongImporter:
             song.save()
             
         # assign genre
+        self._log('assigning genres')
         genres = metadata.get('genres')
         if genres:
             for genre in genres:
@@ -613,9 +616,11 @@ class SongImporter:
                 _song_genre, created = YasoundSongGenre.objects.get_or_create(song=song, genre=yasound_genre)
                 if created:
                     self._log("genre %s associated with song %s" % (genre, song))
+        self._log('assigning genres: done')
                     
         
         # assign song id to metadata
+        self._log('association between YasoundSong and SongMetadata')
         sm.yasound_song_id = song.id
         sm.save()
         self._log(_('Association between YasoundSong and SongMetadata done'))
