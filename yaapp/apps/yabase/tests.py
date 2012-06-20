@@ -849,6 +849,32 @@ class TestImport(TestCase):
         new_path = yasound_song.get_song_path()
         self.assertEquals(path, new_path)
 
+    def test_queen(self):
+        importer = SongImporter()
+        filepath = './apps/yabase/fixtures/mp3/queen_bontampi.mp3'
+
+        metadata = {
+            'title': 'innuendo',
+            'artist': 'queen',
+            'album': 'my album',
+        }
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+        
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        rank = yasound_song.find_lastfm_rank()
+        self.assertTrue(rank < 0.8)
+
+        filepath = './apps/yabase/fixtures/mp3/queen_verygood.m4a'
+        metadata = uploader.get_file_infos(filepath)
+        new_sm, _message = importer.import_song(filepath, metadata=metadata, convert=True, allow_unknown_song=True)
+        self.assertIsNotNone(new_sm.yasound_song_id)
+        
+        new_yasound_song = YasoundSong.objects.get(id=new_sm.yasound_song_id)
+        rank = new_yasound_song.find_lastfm_rank()
+        self.assertTrue(rank > 0.9)
+        self.assertEquals(new_yasound_song.id, yasound_song.id)
+
 
 class TestRadioDeleted(TestCase):
     def setUp(self):
