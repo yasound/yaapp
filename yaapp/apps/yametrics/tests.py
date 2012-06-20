@@ -523,7 +523,7 @@ class TestAbuseManager(TestCase):
         self.assertEquals(abuse.get('text'), wall_event.text)
         
         
-        manager.delete_abuse(wall_event.id)
+        manager.delete(abuse.get('_id'))
         abuses = manager.all()
         self.assertEquals(abuses.count(), 0)
         
