@@ -829,6 +829,20 @@ class TestImport(TestCase):
         backup_name = u'%s_quarantine%s' % (name, extension)        
         self.assertTrue(os.path.exists(backup_name))
 
+        yasound_song.replace(filepath, yasound_song.lastfm_fingerprint_id)
+        backup_name = u'%s_quarantine%s' % (name, extension)        
+        self.assertTrue(os.path.exists(backup_name))
+        backup_name = u'%s_quarantine_1%s' % (name, extension)        
+        self.assertTrue(os.path.exists(backup_name))
+
+        yasound_song.replace(filepath, yasound_song.lastfm_fingerprint_id)
+        backup_name = u'%s_quarantine%s' % (name, extension)        
+        self.assertTrue(os.path.exists(backup_name))
+        backup_name = u'%s_quarantine_1%s' % (name, extension)        
+        self.assertTrue(os.path.exists(backup_name))
+        backup_name = u'%s_quarantine_2%s' % (name, extension)        
+        self.assertTrue(os.path.exists(backup_name))
+
     def test_replace_missing(self):
         importer = SongImporter()
         filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'

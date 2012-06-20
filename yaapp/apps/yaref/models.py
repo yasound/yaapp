@@ -325,6 +325,19 @@ class YasoundSong(models.Model):
             
         return synonyms
             
+    def find_backup_path(self):
+        song_path = self.get_song_path()
+        name, extension = os.path.splitext(song_path)
+        backup_path = u'%s_quarantine%s' % (name, extension)
+        path_exists = os.path.exists(backup_path)
+        i = 0
+        while path_exists:
+            i = i + 1
+            backup_path =  u'%s_quarantine_%d%s' % (name, i, extension)
+            path_exists = os.path.exists(backup_path)
+        return backup_path
+                
+            
     def replace(self, new_file, lastfm_fingerprint_id=None):
         if not os.path.exists(new_file):
             logger.info('new_file %s does not exist' % (new_file))
@@ -332,11 +345,10 @@ class YasoundSong(models.Model):
         
         logger.debug('file of %d is being replaced' % (self.id))
         song_path = self.get_song_path()
-        name, extension = os.path.splitext(song_path)
         path = os.path.dirname(song_path)
 
         if self.file_exists():        
-            backup_path = u'%s_quarantine%s' % (name, extension)        
+            backup_path = self.find_backup_path()
             shutil.copy(song_path, backup_path)
             logger.debug('original file saved at %s' % (backup_path))
         
