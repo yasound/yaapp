@@ -202,9 +202,8 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
     return radios
     
 class MostPopularSongsManager():
-    COLLECTION_SIZE = 10000
-
-    def __init__(self):
+    def __init__(self, max_size=10000):
+        self.max_size = max_size
         self.db = settings.MONGO_DB
         self.collection = self.db.search.mostpopularsongs
         self.collection.ensure_index([("db_id", ASCENDING),("songinstance__count", DESCENDING)])
@@ -218,9 +217,10 @@ class MostPopularSongsManager():
         self.collection.drop()
                 
     def calculate(self):
-        limit = MostPopularSongsManager.COLLECTION_SIZE
-        self.collection.drop()
+        limit = self.max_size
         qs = SongMetadata.objects.filter(yasound_song_id__isnull=False).annotate(Count('songinstance')).order_by('-songinstance__count')[:limit]
+
+        self.collection.drop()
         for metadata in qs:
             song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
             artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
@@ -241,13 +241,20 @@ class MostPopularSongsManager():
         doc_count = self.collection.find().count()
 
         metadata = song_instance.metadata
+        if not metadata.yasound_song_id > 0:
+            return False
+            
         songinstance__count = SongInstance.objects.filter(metadata=metadata).count()
 
-        least_popular_doc = self.collection.findOne().sort('songinstance__count', ASCENDING)
-        if least_popular_doc and least_popular_doc.get('songinstance__count') > songinstance__count:
-            if doc_count >= MostPopularSongsManager.COLLECTION_SIZE:
-                self.delete(metadata.id)
-            return
+        docs = self.collection.find().sort('songinstance__count', ASCENDING).limit(1)
+        least_popular_doc = None
+        try:
+            least_popular_doc = docs[0]
+        except:
+            pass
+        if least_popular_doc and least_popular_doc.get('songinstance__count') >= songinstance__count:
+            if doc_count >= self.max_size:
+                return False
         
         song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
@@ -265,8 +272,11 @@ class MostPopularSongsManager():
         self.collection.update({"db_id": metadata.id},
                           {"$set": doc}, upsert=True, safe=True)
         
-        if doc_count + 1 >  MostPopularSongsManager.COLLECTION_SIZE:
-            self.delete(least_popular_doc.get('db_id'))
+        doc_count = self.collection.find().count()
+        if doc_count >  self.max_size:
+            if least_popular_doc:
+                self.delete(least_popular_doc.get('db_id'))
+        return True
     
     def delete(self, db_id):
         self.collection.remove({'db_id': db_id}, safe=True)
