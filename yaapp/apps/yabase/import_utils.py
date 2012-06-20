@@ -534,7 +534,11 @@ class SongImporter:
             
             if not sm:
                 self._log('creating songmetadata: name=%s, artist_name=%s, album_name=%s, yasound_song_id=%s' % (name, artist_name, album_name, song.id))
-                sm, _created = SongMetadata.objects.get_or_create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
+                candidates = SongMetadata.objects.filter(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
+                if candidates.count() > 0:
+                    sm = candidates[0]
+                else:
+                    sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
                 self._log('creating songmetadata: done')
             
         else:
