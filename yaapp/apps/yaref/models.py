@@ -1,27 +1,28 @@
 """
 Contains models related to yasound database (ie all the songs)
 """
-from django.db import models
 from django.conf import settings
+from django.core.files import File
+from django.db import models
+from django.db.models import Q
 from fuzzywuzzy import fuzz
+from sorl.thumbnail import get_thumbnail
+from time import time
+from uploader import lastfm
+import buylink
+import django.db.models.options as options
+import json
+import logging
+import os
+import requests
+import shutil
+import string
+import utils as yaref_utils
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
-import logging
-from time import time
-import utils as yaref_utils
 import yasearch.utils as yasearch_utils
-import string
-import requests
-import json
 logger = logging.getLogger("yaapp.yaref")
 
-import django.db.models.options as options
-from sorl.thumbnail import get_thumbnail
-from django.core.files import File
-from django.db.models import Q
-import buylink
-import os
-from uploader import lastfm
 
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
@@ -271,6 +272,27 @@ class YasoundSong(models.Model):
         preview = u'%s_preview64%s' % (name, extension)
         return preview
 
+    def find_lastfm_fingerprintid(self):
+        song_path = os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
+        return lastfm.find_fingerprintid(song_path)
+
+    def find_lastfm_rank(self):
+        fingerprintid = self.lastfm_fingerprint_id
+        if fingerprintid is None:
+            fingerprintid = self.find_lastfm_fingerprintid()
+            if fingerprintid:
+                self.lastfm_fingerprint_id = fingerprintid
+                self.save()
+                
+        if not fingerprintid:
+            return None
+        
+        rank = 0.0
+        try:
+            rank = float(lastfm.find_rank(fingerprintid))
+        except:
+            pass
+        return rank
 
     def find_mbid(self):
         name, artist, mbid = self.name, self.artist_name, self.musicbrainz_id
@@ -303,7 +325,52 @@ class YasoundSong(models.Model):
             
         return synonyms
             
-            
+    def replace(self, new_file, lastfm_fingerprint_id=None):
+        if not os.path.exists(new_file):
+            logger.info('new_file %s does not exist' % (new_file))
+            return
+        
+        logger.debug('file of %d is being replaced' % (self.id))
+        song_path = self.get_song_path()
+        name, extension = os.path.splitext(song_path)
+        path = os.path.dirname(song_path)
+        
+        backup_path = u'%s_quarantine%s' % (name, extension)        
+        shutil.copy(song_path, backup_path)
+        logger.debug('original file saved at %s' % (backup_path))
+        
+        shutil.copy(new_file, song_path)
+        self.generate_preview()
+
+        # update db attributes
+        if lastfm_fingerprint_id is not None:
+            self.lastfm_fingerprint_id = lastfm_fingerprint_id
+        self.filesize = os.path.getsize(song_path)
+        self.save()
+        logger.debug('replacement of %s done' % (self.id))
+    
+    def get_filepath_for_preview(self):
+        song_path = self.get_song_path()
+        name, extension = os.path.splitext(song_path)
+        preview = u'%s_preview64%s' % (name, extension)
+        return preview
+
+    def generate_preview(self):
+        import subprocess as sub
+        source = self.get_song_path() 
+        destination = self.get_filepath_for_preview()
+        
+        logger.debug('generating preview for %s' % (source))
+        args = [settings.FFMPEG_BIN, 
+                '-i',
+                source]
+        args.extend(settings.FFMPEG_GENERATE_PREVIEW_OPTIONS.split(" "))
+        args.append(destination)
+        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
+        _output, errors = p.communicate()
+        if len(errors) == 0:
+            logger.error('error while generating preview of %d' % (self.id))
+            logger.error(errors)
         
 
     class Meta:

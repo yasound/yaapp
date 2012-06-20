@@ -22,6 +22,7 @@ import simplejson as json
 from yacore.database import atomic_inc
 from mock import Mock, patch
 from yacore.tags import clean_tags
+import uploader
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -566,12 +567,12 @@ class TestImport(TestCase):
         self.assertEquals(quality, 102)
         
     def test_generate_path(self):
-        import os
         importer = SongImporter()
-        filename, path = importer._generate_filename_and_path_for_song()
+        filename, _path = importer._generate_filename_and_path_for_song()
         self.assertEquals(len(filename), len('123456789.mp3'))
         
-        preview_path = importer._get_filepath_for_preview(path)
+        yasound_song = YasoundSong(filename=filename)
+        preview_path = yasound_song.get_filepath_for_preview()
         self.assertTrue(preview_path.find("preview64") > -1)
         self.assertEquals(len(os.path.basename(preview_path)), len('789_preview64.mp3'))
         
@@ -789,6 +790,41 @@ class TestImport(TestCase):
         self.assertIsNotNone(sm.yasound_song_id)
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.owner_id, self.user.id)
+
+    def test_rank(self):
+        importer = SongImporter()
+        filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'
+
+        metadata = uploader.get_file_infos(filepath)
+        
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+        
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertIsNotNone(yasound_song.lastfm_fingerprint_id)
+        self.assertEquals(yasound_song.lastfm_fingerprint_id, '43565867')
+        rank = yasound_song.find_lastfm_rank()
+        self.assertEquals(rank, 1.0)
+        
+    def test_replace(self):
+        importer = SongImporter()
+        filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'
+
+        metadata = uploader.get_file_infos(filepath)
+        
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+        
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+
+        yasound_song.replace(filepath, yasound_song.lastfm_fingerprint_id)
+        self.assertIsNotNone(yasound_song.lastfm_fingerprint_id)
+        self.assertEquals(yasound_song.lastfm_fingerprint_id, '43565867')
+
+        song_path = yasound_song.get_song_path()
+        name, extension = os.path.splitext(song_path)
+        backup_name = u'%s_quarantine%s' % (name, extension)        
+        self.assertTrue(os.path.exists(backup_name))
 
 class TestRadioDeleted(TestCase):
     def setUp(self):

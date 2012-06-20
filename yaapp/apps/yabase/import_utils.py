@@ -124,6 +124,23 @@ class SongImporter:
         else:
             return mbid
     
+    def _find_lastfm_fingerprintid(self, metadata):
+        lastfm_data = metadata.get('lastfm_data')
+        if not lastfm_data:
+            return None
+        return lastfm_data.get('fingerprintid')
+
+    def _find_lastfm_rank(self, metadata):
+        lastfm_data = metadata.get('lastfm_data')
+        if not lastfm_data:
+            return None
+        rank = 0.0
+        try:
+            rank = float(lastfm_data.get('rank'))
+        except:
+            pass
+        return rank
+    
     def _find_mb_id_for_artist(self, metadata):
         lastfm_data = metadata.get('lastfm_data')
         if not lastfm_data:
@@ -205,24 +222,6 @@ class SongImporter:
             path_exists = os.path.exists(path)
         return filename, path
     
-    def _get_filepath_for_preview(self, filepath):
-        name, extension = os.path.splitext(filepath)
-        preview = u'%s_preview64%s' % (name, extension)
-        return preview
-     
-    def _generate_preview(self, source, destination):
-        self._log('generating preview for %s' % (source))
-        args = [settings.FFMPEG_BIN, 
-                '-i',
-                source]
-        args.extend(settings.FFMPEG_GENERATE_PREVIEW_OPTIONS.split(" "))
-        args.append(destination)
-        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
-        output, errors = p.communicate()
-        if len(errors) == 0:
-            self._log(errors)
-            return False
-        return True    
         
     def _get_quality(self, metadata):
         quality = 0;
@@ -522,6 +521,14 @@ class SongImporter:
         if found:
             song = found
             self._log("Song already existing in database (id=%s)" % (song.id))
+            
+            if song.lastfm_id is not None:
+                server_rank = song.find_lastfm_rank()
+                provided_fingerprint = self._find_lastfm_fingerprintid(metadata)
+                provided_rank = self._find_lastfm_rank(metadata)
+                if provided_rank > server_rank and provided_fingerprint is not None:
+                    self._log('Provided song is better than original (%f > %f), replacing' % (provided_rank, server_rank))
+                    song.replace(filepath, provided_fingerprint)
         else:
             # generate filename and save mp3 to disk
             self._log(_('generating filename'))
@@ -535,11 +542,14 @@ class SongImporter:
             
             owner_id = self._get_owner_id(metadata=metadata, echonest_id=echonest_id, lastfm_id=lastfm_id)
             
+            lastfm_fingerprint_id = self._find_lastfm_fingerprintid(metadata)
+            
             # create song object
             self._log(_('creating YasoundSong'))
             song = YasoundSong(artist=artist,
                                album=album,
                                echonest_id=echonest_id,
+                               lastfm_fingerprint_id=lastfm_fingerprint_id,
                                lastfm_id=lastfm_id,
                                musicbrainz_id=musicbrainz_id,
                                filename=filename,
@@ -575,9 +585,8 @@ class SongImporter:
                 
             # generate 64kb preview
             self._log(_('generating preview'))
-            mp3_preview_path = self._get_filepath_for_preview(mp3_path)
-            self._generate_preview(mp3_path, mp3_preview_path)
-            self._log("generated mp3 preview file : %s" % (mp3_preview_path))
+            song.generate_preview()
+            self._log("generated mp3 preview file : %s" % (song.get_song_preview_path()))
             
             song.filesize = os.path.getsize(mp3_path)
             song.save()
@@ -609,13 +618,6 @@ class SongImporter:
         self._log(_('Building mongodb index'))
         build_mongodb_index()
         return sm, self.get_messages()
-    
-    def generate_preview(self, yasound_song):
-        filename = yasound_song.filename
-        
-        source = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
-        destination = self._get_filepath_for_preview(source)
-        self._generate_preview(source, destination) 
     
     def find_song_cover_data(self, filename):
         """
@@ -711,10 +713,6 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
             pass
         
     return sm, messages
-
-def generate_preview(yasound_song):
-    importer = SongImporter()
-    return importer.generate_preview(yasound_song)
     
 def generate_default_filename(metadata):
     now = datetime.datetime.now()
