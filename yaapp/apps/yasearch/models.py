@@ -246,7 +246,7 @@ class MostPopularSongsManager():
         else:
             self.collection.update({'db_id': metadata.id}, 
                                    {"$inc": {'songinstance__count': -1}},
-                                   upsert=True, safe=True)
+                                   safe=True)
             
     def add_song(self, song_instance):
         doc_count = self.collection.find().count()
