@@ -883,7 +883,7 @@ def abuse_notifications(request):
         if not user_id:
             wall_event_id = notification.get('db_id')
             try:
-                we = WallEvent.objects.get(wall_event_id)
+                we = WallEvent.objects.get(id=wall_event_id)
                 user = we.user
             except WallEvent.DoesNotExist:
                 continue
