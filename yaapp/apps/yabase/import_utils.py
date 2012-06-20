@@ -502,9 +502,6 @@ class SongImporter:
             except SongMetadata.DoesNotExist:
                 self._log(_("song metadata does not exists : %s") % (song_metadata_id))
 
-        if not sm:      
-            # create new song metadata
-            sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name)
                         
         # create artist with info from echonest and lastfm
         self._log(_('looking for artist'))
@@ -534,8 +531,16 @@ class SongImporter:
             if not song.file_exists():
                 self._log('original song is missing, using provided one')
                 song.replace(filepath, provided_fingerprint)
-                
+            
+            if not sm:
+                sm, _created = SongMetadata.objects.get_or_create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
+            
         else:
+            if not sm:      
+                # create new song metadata
+                sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name)
+
+            
             # generate filename and save mp3 to disk
             self._log(_('generating filename'))
             filename, mp3_path = self._generate_filename_and_path_for_song()

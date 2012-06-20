@@ -527,6 +527,7 @@ class TestImport(TestCase):
         except:
             pass
         
+        YasoundSong.objects.all().delete()
         erase_index()   
     
     def test_quality(self):
@@ -874,6 +875,17 @@ class TestImport(TestCase):
         rank = new_yasound_song.find_lastfm_rank()
         self.assertTrue(rank > 0.9)
         self.assertEquals(new_yasound_song.id, yasound_song.id)
+
+    def test_duplicate(self):
+        importer = SongImporter()
+
+        filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'
+        metadata = uploader.get_file_infos(filepath)
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+
+        new_sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertEquals(new_sm.id, sm.id)
 
 
 class TestRadioDeleted(TestCase):
