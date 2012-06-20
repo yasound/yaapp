@@ -533,7 +533,7 @@ class SongImporter:
                 song.replace(filepath, provided_fingerprint)
             
             if not sm:
-                self._log('creating songmetadata')
+                self._log('creating songmetadata: name=%s, artist_name=%s, album_name=%s, yasound_song_id=%s' % (name, artist_name, album_name, song.id))
                 sm, _created = SongMetadata.objects.get_or_create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
                 self._log('creating songmetadata: done')
             
