@@ -879,7 +879,17 @@ def abuse_notifications(request):
     for notification in abuse_notifications:
         radio = Radio.objects.get(id=notification.get('radio'))
         sender = User.objects.get(id=notification.get('sender'))
-        user = User.objects.get(id=notification.get('user'))
+        user_id = notification.get('user')
+        if not user_id:
+            wall_event_id = notification.get('db_id')
+            try:
+                we = WallEvent.objects.get(wall_event_id)
+                user = we.user
+            except WallEvent.DoesNotExist:
+                continue
+        else:
+            user = User.objects.get(id=notification.get('user'))
+            
         data.append({
             '_id': notification.get('_id'),
             'date': notification.get('date'),
