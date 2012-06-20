@@ -75,7 +75,7 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
 
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
     song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
-    path = 'me/%s:like' % (settings.FACEBOOK_APP_NAMESPACE)
+    path = 'me/like'
 
     graph = GraphAPI(facebook_token)
     try:
