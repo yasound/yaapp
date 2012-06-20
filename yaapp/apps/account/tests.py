@@ -11,6 +11,7 @@ from yasearch.indexer import erase_index
 import settings as account_settings
 import task
 import yabase.settings as yabase_settings
+from Carbon.Aliases import true
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -467,6 +468,107 @@ class TestApi(TestCase):
         meta = decoded_data['meta']
         self.assertEquals(meta['total_count'], User.objects.all().count())
    
+
+class TestFacebookSharePrefs(TestCase):                
+    def setUp(self):
+        erase_index()
+
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.user = user 
+        self.key = ApiKey.objects.get(user=self.user).key
+        self.username = self.user.username
         
+        
+    def test_facebook_share_prefs(self):
+        profile = self.user.userprofile
+        share_listen = profile.notifications_preferences.fb_share_listen
+        share_like = profile.notifications_preferences.fb_share_like_song
+        share_message = profile.notifications_preferences.fb_share_post_message
+        share_activity = profile.notifications_preferences.fb_share_animator_activity
+        
+        share_like = not share_like
+        share_message = not share_message
+        
+        pref_dict = {
+                     'fb_share_listen': share_listen,
+                     'fb_share_like_song': share_like,
+                     'fb_share_post_message': share_message,
+                     'fb_share_animator_activity': share_activity,
+                     }
+        profile.set_facebook_share_preferences(pref_dict)
+        
+        d = profile.facebook_share_preferences()
+        
+        self.assertEqual(d, pref_dict)
+        self.assertEqual(share_listen, profile.notifications_preferences.fb_share_listen)
+        self.assertEqual(share_like, profile.notifications_preferences.fb_share_like_song)
+        self.assertEqual(share_message, profile.notifications_preferences.fb_share_post_message)
+        self.assertEqual(share_activity, profile.notifications_preferences.fb_share_animator_activity)
+        
+    def test_security(self):
+        pref_dict = {
+                     'fb_share_listen': True,
+                     'fb_share_like_song': True,
+                     'fb_share_post_message': True,
+                     'fb_share_animator_activity': True,
+                     }
+        
+        res = self.client.get('/api/v1/facebook_share_preferences/')
+        self.assertEquals(res.status_code, 401)
+        
+        res = self.client.put('/api/v1/facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), pref_dict, content_type='application/json')
+        self.assertEquals(res.status_code, 405)
+        
+        res = self.client.delete('/api/v1/facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username))
+        self.assertEquals(res.status_code, 405)
+        
+        res = self.client.post('/api/v1/facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), pref_dict, content_type='application/json')
+        self.assertEquals(res.status_code, 405)
+        
+        res = self.client.get('/api/v1/facebook_share_preferences/',{'api_key': self.key, 'username': self.username})
+        self.assertEquals(res.status_code, 200)
+        
+        
+        res = self.client.post('/api/v1/facebook_share_preferences/', pref_dict)
+        self.assertEquals(res.status_code, 401)
+        
+        res = self.client.put('/api/v1/set_facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), pref_dict, content_type='application/json')
+        self.assertEquals(res.status_code, 405)
+        
+        res = self.client.delete('/api/v1/set_facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username))
+        self.assertEquals(res.status_code, 405)
+        
+        res = self.client.get('/api/v1/set_facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username))
+        self.assertEquals(res.status_code, 405)
+        
+        res = self.client.post('/api/v1/set_facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), json.dumps(pref_dict), content_type='application/json')
+        self.assertEquals(res.status_code, 200)
+        
+    def test_get_view(self):
+        profile = self.user.userprofile
+        res = self.client.get('/api/v1/facebook_share_preferences/',{'api_key': self.key, 'username': self.username})
+        self.assertEquals(res.status_code, 200)
+        prefs = json.loads(res.content)
+        self.assertEqual(prefs, profile.facebook_share_preferences())
+        
+    def test_post_view(self):
+        profile = self.user.userprofile
+        pref_dict = profile.facebook_share_preferences()
+        
+        share_listen = pref_dict['fb_share_listen']
+        pref_dict['fb_share_listen'] = not share_listen
+         
+        res = self.client.post('/api/v1/set_facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), json.dumps(pref_dict), content_type='application/json')
+        self.assertEquals(res.status_code, 200)
+        
+        profile = UserProfile.objects.get(id=profile.id)
+        prefs_now = profile.facebook_share_preferences()
+        self.assertEquals(pref_dict, prefs_now)
+        
+        
+        
+              
         
         

@@ -189,11 +189,36 @@ def set_notifications_preferences(request):
     
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
-    print post_data_dict
     user_profile = request.user.userprofile
     user_profile.set_notif_preferences(post_data_dict)
     
     res = 'update_notifications_preferences OK'
+    return HttpResponse(res)
+
+def get_facebook_share_preferences(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['get']):
+        return HttpResponse(status=405)
+    
+    user_profile = request.user.userprofile
+    res = user_profile.facebook_share_preferences()
+    response = json.dumps(res)
+    return HttpResponse(response)
+
+@csrf_exempt
+def set_facebook_share_preferences(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    
+    data = request.POST.keys()[0]
+    post_data_dict = json.loads(data)
+    user_profile = request.user.userprofile
+    user_profile.set_facebook_share_preferences(post_data_dict)
+    
+    res = 'update_facebook_share_preferences OK'
     return HttpResponse(res)
 
 

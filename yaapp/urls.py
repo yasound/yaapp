@@ -158,6 +158,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/notifications_preferences/$', 'account.views.get_notifications_preferences'),
     url(r'^api/v1/set_notifications_preferences/$', 'account.views.set_notifications_preferences'),
     
+    url(r'^api/v1/facebook_share_preferences/$', 'account.views.get_facebook_share_preferences'),
+    url(r'^api/v1/set_facebook_share_preferences/$', 'account.views.set_facebook_share_preferences'),
+    
     url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
     url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
     url(r'^api/v1/update_notification/(?P<notif_id>\S+)/$', 'yamessage.views.update_notification'),
