@@ -525,7 +525,7 @@ class SongImporter:
                 provided_fingerprint = self._find_lastfm_fingerprintid(metadata)
                 provided_rank = self._find_lastfm_rank(metadata)
                 if provided_rank > server_rank and provided_fingerprint is not None:
-                    self._log('provided song is better than original (%f > %f), replacing' % (provided_rank, server_rank))
+                    self._log('provided song is better than original (%r > %r), replacing' % (provided_rank, server_rank))
                     song.replace(filepath, provided_fingerprint)
               
             if not song.file_exists():

@@ -340,6 +340,9 @@ class YasoundSong(models.Model):
             shutil.copy(song_path, backup_path)
             logger.debug('original file saved at %s' % (backup_path))
         
+        if not os.path.exists(path):
+            logger.debug('creating path %s' % (path))
+            os.makedirs(path)
         shutil.copy(new_file, song_path)
         self.generate_preview()
 
