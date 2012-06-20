@@ -97,6 +97,9 @@ Ext.onReady(function(){
         }), Ext.apply(Yasound.Backoffice.UI.AllSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('All songs')
+        }), Ext.apply(Yasound.Backoffice.UI.MostPopularSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Most popular songs')
         })]
     };
 

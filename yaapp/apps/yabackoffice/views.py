@@ -38,6 +38,7 @@ import datetime
 import requests
 import simplejson as json
 import utils as yabackoffice_utils
+from yasearch.models import MostPopularSongsManager
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -701,6 +702,33 @@ def songmetadata_top_missing(request):
     
     raise Http404
 
+@csrf_exempt
+@login_required
+def songmetadata_most_popular(request):
+    if not request.user.is_superuser:
+        raise Http404
+    
+    if request.method == 'GET':
+        mm = MostPopularSongsManager()
+        qs = mm.all()
+        data = []
+        for metadata in qs:
+            data.append({
+                'id': metadata['db_id'],
+                'name': metadata['name'],
+                'artist_name': metadata['artist'],
+                'album_name': metadata['album'],
+                'songinstance__count': metadata['songinstance__count']
+            })
+        response = {
+            'data': data,
+            'results': qs.count(), 
+            'success': True
+        }            
+        resp = utils.JsonResponse(json.dumps(response))
+        return resp
+    
+    raise Http404
 
 @csrf_exempt
 @login_required
