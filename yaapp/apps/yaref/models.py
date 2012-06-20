@@ -334,10 +334,11 @@ class YasoundSong(models.Model):
         song_path = self.get_song_path()
         name, extension = os.path.splitext(song_path)
         path = os.path.dirname(song_path)
-        
-        backup_path = u'%s_quarantine%s' % (name, extension)        
-        shutil.copy(song_path, backup_path)
-        logger.debug('original file saved at %s' % (backup_path))
+
+        if self.file_exists():        
+            backup_path = u'%s_quarantine%s' % (name, extension)        
+            shutil.copy(song_path, backup_path)
+            logger.debug('original file saved at %s' % (backup_path))
         
         shutil.copy(new_file, song_path)
         self.generate_preview()
@@ -372,6 +373,9 @@ class YasoundSong(models.Model):
             logger.error('error while generating preview of %d' % (self.id))
             logger.error(errors)
         
+    def file_exists(self):
+        path = self.get_song_path()
+        return os.path.exists(path)
 
     class Meta:
         db_table = u'yasound_song'

@@ -522,13 +522,19 @@ class SongImporter:
             song = found
             self._log("Song already existing in database (id=%s)" % (song.id))
             
+            provided_fingerprint = None
             if song.lastfm_id is not None:
                 server_rank = song.find_lastfm_rank()
                 provided_fingerprint = self._find_lastfm_fingerprintid(metadata)
                 provided_rank = self._find_lastfm_rank(metadata)
                 if provided_rank > server_rank and provided_fingerprint is not None:
-                    self._log('Provided song is better than original (%f > %f), replacing' % (provided_rank, server_rank))
+                    self._log('provided song is better than original (%f > %f), replacing' % (provided_rank, server_rank))
                     song.replace(filepath, provided_fingerprint)
+              
+            if not song.file_exists():
+                self._log('original song is missing, using provided one')
+                song.replace(filepath, provided_fingerprint)
+                
         else:
             # generate filename and save mp3 to disk
             self._log(_('generating filename'))

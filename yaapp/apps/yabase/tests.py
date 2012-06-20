@@ -790,6 +790,8 @@ class TestImport(TestCase):
         self.assertIsNotNone(sm.yasound_song_id)
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
         self.assertEquals(yasound_song.owner_id, self.user.id)
+        
+        self.assertTrue(yasound_song.file_exists())
 
     def test_rank(self):
         importer = SongImporter()
@@ -825,6 +827,28 @@ class TestImport(TestCase):
         name, extension = os.path.splitext(song_path)
         backup_name = u'%s_quarantine%s' % (name, extension)        
         self.assertTrue(os.path.exists(backup_name))
+
+    def test_replace_missing(self):
+        importer = SongImporter()
+        filepath = './apps/yabase/fixtures/mp3/known_by_echonest_lastfm.mp3'
+
+        metadata = uploader.get_file_infos(filepath)
+        
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        self.assertTrue(yasound_song.file_exists())        
+        path = yasound_song.get_song_path()
+        os.remove(path)
+        self.assertFalse(yasound_song.file_exists())        
+
+        sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
+        self.assertIsNotNone(sm.yasound_song_id)
+        self.assertTrue(yasound_song.file_exists())        
+        new_path = yasound_song.get_song_path()
+        self.assertEquals(path, new_path)
+
 
 class TestRadioDeleted(TestCase):
     def setUp(self):
