@@ -38,7 +38,7 @@ class TestClassification(TestCase):
         
         doc = cm.all()[0]
         classification = doc.get('classification')
-        self.assertEquals(classification.get('genre_0'), 1)
+        self.assertEquals(classification.get('genre 0'), 1)
 
         song = YasoundSong.objects.get(id=2)        
         YasoundSongGenre.objects.create(song=song, genre=YasoundGenre.objects.get(id=1))
@@ -46,5 +46,5 @@ class TestClassification(TestCase):
         
         doc = cm.all()[0]
         classification = doc.get('classification')
-        self.assertEquals(classification.get('genre_0'), 2)
+        self.assertEquals(classification.get('genre 0'), 2)
         
