@@ -229,6 +229,7 @@ class MostPopularSongsManager():
             album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
             doc = {
                 'db_id': metadata.id,
+                'yasound_song_id': metadata.yasound_song_id,
                 'name': metadata.name,
                 'artist': metadata.artist_name,
                 'album': metadata.album_name,
@@ -272,6 +273,7 @@ class MostPopularSongsManager():
         album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         doc = {
             'db_id': metadata.id,
+            'yasound_song_id': metadata.yasound_song_id,
             'name': metadata.name,
             'artist': metadata.artist_name,
             'album': metadata.album_name,
@@ -316,6 +318,7 @@ class MostPopularSongsManager():
     
         fields = {
             "db_id": True,
+            "yasound_song_id": True,
             "name": True,
             "artist": True,
             "album": True,
