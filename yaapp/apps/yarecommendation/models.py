@@ -1,7 +1,9 @@
 from django.conf import settings
 from pymongo import DESCENDING
 from yabase.models import SongMetadata, Radio
+from yarecommendation.utils import top_matches
 from yaref.models import YasoundSong, YasoundGenre
+from yasearch.utils import get_simplified_name
 
 
 class ClassifiedRadiosManager():
@@ -21,8 +23,8 @@ class ClassifiedRadiosManager():
         for song in songs:
             genres = YasoundGenre.objects.filter(yasoundsonggenre__song=song)
             for genre in genres:
-                classification[genre.name_canonical] = classification.get(genre.name_canonical, 0) +1 
-        
+                genre_name = get_simplified_name(genre.name_canonical)
+                classification[genre_name] = classification.get(genre_name, 0) +1 
         if len(classification.keys()) > 0:
             doc = {
                 'db_id' : radio.id,
@@ -36,5 +38,16 @@ class ClassifiedRadiosManager():
         for radio in radios:
             self.add_radio(radio)
             
+    def calculate_similar_radios(self):
+        docs = list(self.all())
+        for doc in docs:
+            scores = top_matches(docs, doc, 10)
+            self.collection.update({'db_id': doc.get('db_id')}, 
+                                   {'$set': {
+                                        'similar_radios': scores
+                                    }}, 
+                                   upsert=True, 
+                                   safe=True)
+        
     def all(self):
         return self.collection.find()
