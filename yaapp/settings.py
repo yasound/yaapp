@@ -514,6 +514,12 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yarecommendation': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+                
     }
 }
 
