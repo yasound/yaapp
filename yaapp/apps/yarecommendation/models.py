@@ -17,7 +17,7 @@ class ClassifiedRadiosManager():
     
     def add_radio(self, radio):
         ids = list(SongMetadata.objects.filter(songinstance__playlist__radio=radio).values_list('yasound_song_id', flat=True))
-        songs = YasoundSong.objects.filter(id__in=ids)
+        songs = YasoundSong.objects.filter(id__in=ids).select_related()
         
         classification = {}
         for song in songs:
