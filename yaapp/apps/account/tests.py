@@ -11,7 +11,6 @@ from yasearch.indexer import erase_index
 import settings as account_settings
 import task
 import yabase.settings as yabase_settings
-from Carbon.Aliases import true
 
 class TestProfile(TestCase):
     def setUp(self):
