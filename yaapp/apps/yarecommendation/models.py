@@ -6,6 +6,8 @@ from yarecommendation.task import async_add_radio
 from yarecommendation.utils import top_matches
 from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
+import logging
+logger = logging.getLogger("yaapp.yarecommendation")
 
 
 class ClassifiedRadiosManager():
