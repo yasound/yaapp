@@ -11,6 +11,10 @@ class TestClassification(TestCase):
     def setUp(self):
         cm = ClassifiedRadiosManager()
         cm.drop()
+        
+        YasoundSong.objects.all().delete()
+        YasoundGenre.objects.all().delete()
+        
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
