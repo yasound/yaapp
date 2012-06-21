@@ -372,7 +372,7 @@ INSTALLED_APPS = (
     'yamenu',
     'yamessage',
     'yahistory',
-    
+    'yarecommendation',
     # newsletter,
     #'tinymce',
     'tagging',
