@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.db.models import signals
 from pymongo import DESCENDING
 from yabase.models import SongMetadata, Radio
+from yarecommendation.task import async_add_radio
 from yarecommendation.utils import top_matches
 from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
@@ -51,3 +53,12 @@ class ClassifiedRadiosManager():
         
     def all(self):
         return self.collection.find()
+    
+def new_radio(sender, instance, created, **kwargs):
+    if created:
+        async_add_radio.apply_async(args=[instance], countdown=60*60)
+
+def install_handlers():
+    signals.post_save.connect(new_radio, sender=Radio)
+install_handlers()    
+    
