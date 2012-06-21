@@ -1,9 +1,11 @@
 from celery.task import task
 from django.contrib.auth.models import User
 from django.db import transaction
-from models import SongMetadata, SongInstance, update_leaderboard, RadioUser
+from models import SongMetadata, SongInstance, update_leaderboard, RadioUser, \
+    Radio
 from shutil import rmtree
 from struct import unpack_from
+from yabase.import_utils import parse_itunes_line, import_from_string
 from yacore.database import flush_transaction
 from yaref.models import YasoundSong
 from yasearch.utils import get_simplified_name
@@ -253,4 +255,14 @@ def async_radio_broadcast_message(radio, message):
     for recipient in recipients:
         recipient.get_profile().send_message(sender=radio.creator, radio=radio, message=message)
 
+@task(ignore_result=True)
+def async_import_from_itunes(radio, data):
+    lines = data.split('\n')
+    for line in lines:
+        name, album, artist = parse_itunes_line(line)
+        logger.info('name=%s, album=%s, artist=%s' % (name, album, artist))
+        if len(name) > 0:
+            playlist, _created = radio.get_or_create_default_playlist()
+            import_from_string(name, album, artist, playlist)
+    
         

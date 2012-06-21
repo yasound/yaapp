@@ -2,12 +2,11 @@ from account.models import UserProfile
 from bootstrap.forms import BootstrapModelForm, Fieldset, BootstrapForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from import_utils import parse_itunes_line
 from models import Radio
+from yabase.task import async_import_from_itunes
 from yacore.tags import clean_tags
 import logging
 logger = logging.getLogger("yaapp.yabase")
-from import_utils import import_from_string
 
 class SettingsRadioForm(BootstrapModelForm):
     class Meta:
@@ -123,11 +122,4 @@ class ImportItunesForm(BootstrapForm):
 
     def save(self):
         tracks = self.cleaned_data['tracks']
-        lines = tracks.split('\n')
-        for line in lines:
-            name, album, artist = parse_itunes_line(line)
-            logger.info('name=%s, album=%s, artist=%s' % (name, album, artist))
-            if len(name) > 0:
-                radio = Radio.objects.radio_for_user(self.user)
-                playlist, _created = radio.get_or_create_default_playlist()
-                import_from_string(name, album, artist, playlist)
+        async_import_from_itunes.delay(radio=Radio.objects.radio_for_user(self.user), data=tracks)
