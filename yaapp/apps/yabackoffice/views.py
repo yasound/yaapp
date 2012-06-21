@@ -709,8 +709,11 @@ def songmetadata_most_popular(request):
         raise Http404
     
     if request.method == 'GET':
+        start = int(request.REQUEST.get('start', 0))
+        limit = int(request.REQUEST.get('limit', 25))
+        
         mm = MostPopularSongsManager()
-        qs = mm.all()
+        qs = mm.all(start, limit)
         data = []
         for metadata in qs:
             data.append({

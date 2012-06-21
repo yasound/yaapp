@@ -34,7 +34,9 @@ Yasound.Backoffice.UI.MostPopularSongMetadataGrid = Ext.extend(Ext.grid.GridPane
     tbar: [],
     initComponent: function() {
         this.addEvents('selected', 'unselected');
+        this.pageSize = 25;
         this.store = Yasound.Backoffice.Data.MostPopularSongMetadataStore(this.url);
+        this.store.pageSize = this.pageSize;
 
         var sm = new Ext.grid.RowSelectionModel({
             singleSelect: this.singleSelect,
@@ -52,6 +54,13 @@ Yasound.Backoffice.UI.MostPopularSongMetadataGrid = Ext.extend(Ext.grid.GridPane
 
         var config = {
             tbar: this.tbar,
+            bbar: new Ext.PagingToolbar({
+                pageSize: this.pageSize,
+                store: this.store,
+                displayInfo: true,
+                displayMsg: gettext('Displaying {0} - {1} of {2}'),
+                emptyMsg: gettext("Nothing to display")
+            }),            
             loadMask: true,
             sm: sm,
             cm: new Ext.grid.ColumnModel(Yasound.Backoffice.UI.MostPopularSongMetadataColumnModel()),
@@ -59,11 +68,29 @@ Yasound.Backoffice.UI.MostPopularSongMetadataGrid = Ext.extend(Ext.grid.GridPane
                 hideGroupedColumn: false,
                 forceFit: true,
                 groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})'),
-            })
+            }),
+            listeners: {
+                show: function(component) {
+                    component.calculatePageSize();
+                },
+                resize: function(component) {
+                    component.calculatePageSize();
+                }
+            }
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Backoffice.UI.MostPopularSongMetadataGrid.superclass.initComponent.apply(this, arguments);
+    },
+    calculatePageSize: function() {
+        var bodyHeight = this.getHeight();
+        var heightOther = 120+30;
+        var rowHeight = 20;
+        var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+
+        this.getBottomToolbar().pageSize = gridRows;
+        this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
+    
 });
 Ext.reg('mostpopularsongmetadatagrid', Yasound.Backoffice.UI.MostPopularSongMetadataGrid);

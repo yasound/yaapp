@@ -292,8 +292,8 @@ class MostPopularSongsManager():
     def delete(self, db_id):
         self.collection.remove({'db_id': db_id}, safe=True)
     
-    def all(self):
-        docs = self.collection.find().sort([('songinstance__count', DESCENDING)])
+    def all(self, start=0, limit=25):
+        docs = self.collection.find().skip(start).limit(limit).sort([('songinstance__count', DESCENDING)])
         return docs
     
     def find(self, name, artist, album, remove_common_words=True):
