@@ -422,7 +422,7 @@ def rejected_songs(request):
             reject_count = doc.get('reject_count')
             
             data.append({
-                'id': yasound_song,
+                'id': yasound_song.id,
                 'name': yasound_song.name,
                 'artist_name': yasound_song.artist_name,
                 'album_name': yasound_song.album_name,
