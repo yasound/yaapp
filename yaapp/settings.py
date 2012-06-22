@@ -52,6 +52,7 @@ MANAGERS = ADMINS
 
 MODERATORS = (
     ('Jerome Blondon', 'jerome@yasound.com'),
+    ('Astrid Fronteau', 'astrid@yasound.com'),
 )
 
 CELERY_IMPORTS = (
