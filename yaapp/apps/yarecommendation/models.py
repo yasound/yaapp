@@ -20,16 +20,15 @@ class ClassifiedRadiosManager():
         self.collection.drop()
     
     def add_radio(self, radio):
-        ids = list(SongMetadata.objects.filter(songinstance__playlist__radio=radio).values_list('yasound_song_id', flat=True))
-        songs = YasoundSong.objects.filter(id__in=ids).select_related()
-        
+        artists = SongMetadata.objects.filter(songinstance__playlist__radio=radio).exclude(artist_name='').values_list('artist_name', flat=True)
         classification = {}
-        for song in songs:
-            genres = YasoundGenre.objects.filter(yasoundsonggenre__song=song)
-            for genre in genres:
-                genre_name = get_simplified_name(genre.name_canonical)
-                classification[genre_name] = classification.get(genre_name, 0) +1 
-        if len(classification.keys()) > 0:
+        has_data = False
+        for artist in artists:
+            has_data = True
+            artist_name = get_simplified_name(artist) 
+            classification[artist_name] = classification.get(artist_name, 0) + 1
+
+        if has_data:
             doc = {
                 'db_id' : radio.id,
                 'classification': classification
