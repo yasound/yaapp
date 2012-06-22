@@ -54,6 +54,9 @@ class NotificationsManager():
         yamessage_signals.new_notification.send(sender=self, notification=notif)
         
     def text_for_notification(self, notification_type, params):
+        from django.utils import translation
+        translation.activate('fr')
+        
         raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['text'])
         if params is not None:
             text = raw_text % params
