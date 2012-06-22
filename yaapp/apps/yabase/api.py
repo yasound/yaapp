@@ -723,7 +723,6 @@ class RadioUserResource(ModelResource):
         
         resource = RadioUserResource() 
         return resource.get_detail(request, radio=radio, user=request.user)
-
    
 class SongUserResource(ModelResource): 
 #    song = fields.ForeignKey(SongInstanceResource, 'song', full=True)

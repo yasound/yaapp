@@ -1070,6 +1070,16 @@ class Radio(models.Model):
         from task import async_radio_broadcast_message
         async_radio_broadcast_message(self, message)  
     
+    def similar_radios(self):
+        from yarecommendation.models import ClassifiedRadiosManager
+        cm = ClassifiedRadiosManager()
+        doc = cm.radio_doc(self.id)
+        if doc is not None:
+            similar_radios = doc.get('similar_radios')
+            if similar_radios:
+                return Radio.objects.filter(id__in=similar_radios)
+        return Radio.objects.none()
+    
     class Meta:
         db_name = u'default'
         

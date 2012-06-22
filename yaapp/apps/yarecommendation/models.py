@@ -56,6 +56,9 @@ class ClassifiedRadiosManager():
     def all(self):
         return self.collection.find()
     
+    def radio_doc(self, radio_id):
+        return self.collection.find_one({'db_id': radio_id})
+    
 def new_radio(sender, instance, created, **kwargs):
     if created:
         async_add_radio.apply_async(args=[instance], countdown=60*60)

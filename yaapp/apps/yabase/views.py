@@ -1231,4 +1231,15 @@ def ping(request):
     radio_user.connected = True
     radio_user.save()
     return HttpResponse('OK')
+
+@check_api_key(methods=['GET',], login_required=False)
+def similar_radios(request, radio_uuid):    
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    similar_radios = radio.similar_radios()
+    
+    data = []
+    for radio in similar_radios:
+        data.append(radio.as_dict())
+    return api_response(data)
+
     

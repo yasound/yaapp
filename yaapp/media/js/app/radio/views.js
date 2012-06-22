@@ -367,6 +367,52 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
     }
 });
 
+Yasound.Views.SimilarRadios = Backbone.View.extend({
+    initialize: function () {
+        _.bindAll(this, 'addOne', 'addAll', 'clear');
+
+        this.collection.bind('add', this.addOne);
+        this.collection.bind('reset', this.addAll);
+        this.views = [];
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    addAll: function () {
+        this.clear();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (radio) {
+        var found = _.find(this.views, function (view) {
+            if (view.model.id == radio.id) {
+                return true;
+            }
+        });
+
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+
+        var view = new Yasound.Views.RadioCell({
+            model: radio
+        });
+
+        $(this.el).prepend(view.render().el);
+        this.views.push(view);
+    }
+});
 /**
  * User connected to radio cell
  */
@@ -401,6 +447,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     name: 'radiopage',
     radioUsers: new Yasound.Data.Models.RadioUsers({}),
     wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
+    similarRadios: new Yasound.Data.Models.SimilarRadios({}),
     intervalId: undefined,
     wallPosted: undefined,
     
@@ -436,6 +483,9 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         }
         if (this.paginationView) {
             this.paginationView.close();
+        }
+        if (this.similarRadiosView) {
+            this.similarRadiosView.close()
         }
 
         this.wallEvents.reset();
@@ -477,6 +527,13 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             el: $('#webapp-radio-users', this.el)
         });
 
+        this.similarRadios.radio = this.model;
+        this.similarRadiosView = new Yasound.Views.SimilarRadios({
+            collection: this.similarRadios,
+            el: $('#webapp-similar-radios', this.el)
+        });
+        this.similarRadios.fetch();
+        
         this.wallEventsView = new Yasound.Views.PaginatedWallEvents({
             collection: this.wallEvents,
             el: $('#wall', this.el)
