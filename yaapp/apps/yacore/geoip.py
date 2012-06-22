@@ -18,6 +18,8 @@ Usage examples:
 ''
 """
 from django.conf import settings
+import logging
+logger = logging.getLogger("yaapp.yabase")
 
 # List of country codes (indexed by GeoIP country ID number)
 countries = (
@@ -134,9 +136,11 @@ def can_login(request):
     if request.user.is_superuser:
         return True
 
-    if request_country(request) in settings.GEOIP_AUTHORIZED_COUNTRIES:
+    c = request_country(request)
+    if c in settings.GEOIP_AUTHORIZED_COUNTRIES:
         return True
-
+    else:
+        logger.info('login impossible for country "%s"' % (c))
     return False
     
 
