@@ -25,7 +25,7 @@ class ClassifiedRadiosManager():
         has_data = False
         for artist in artists:
             has_data = True
-            artist_name = get_simplified_name(artist) 
+            artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
             classification[artist_name] = classification.get(artist_name, 0) + 1
 
         if has_data:
