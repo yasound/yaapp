@@ -17,6 +17,7 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^songmetadata/most_popular/$', 'songmetadata_most_popular'),
 
     url(r'^yasound_songs$', 'yasound_songs'),
+    url(r'^rejected_songs$', 'rejected_songs'),
     
     url(r'^invitations/$', 'invitations', {'type': 'all'}),
     url(r'^invitations/pending$', 'invitations', {'type': 'pending'}),

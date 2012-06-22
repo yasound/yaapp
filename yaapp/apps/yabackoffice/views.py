@@ -27,7 +27,7 @@ from yabackoffice.models import BackofficeRadio
 from yabase import settings as yabase_settings
 from yabase.models import Radio, SongInstance, WallEvent, RadioUser, \
     SongMetadata
-from yacore.api import MongoAwareEncoder, MongoAwareEncoder
+from yacore.api import MongoAwareEncoder, MongoAwareEncoder, api_response
 from yacore.http import coerce_put_post
 from yainvitation.models import Invitation
 from yametrics.models import GlobalMetricsManager, TopMissingSongsManager, \
@@ -39,6 +39,7 @@ import requests
 import simplejson as json
 import utils as yabackoffice_utils
 from yasearch.models import MostPopularSongsManager
+from yametrics.matching_errors import MatchingErrorsManager
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -400,6 +401,34 @@ def yasound_songs(request, song_id=None):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
+    raise Http404   
+
+@csrf_exempt
+@login_required
+def rejected_songs(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    
+    if request.method == 'GET':
+        mm = MatchingErrorsManager()
+        skip = int(request.REQUEST.get('start', 0))
+        limit = int(request.REQUEST.get('limit', 25))
+        
+        docs = mm.all(skip=skip, limit=limit)
+
+        data = []
+        for doc in docs:
+            yasound_song = YasoundSong.objects.get(id=doc.get('yasound_song_id'))
+            reject_count = doc.get('reject_count')
+            
+            data.append({
+                'id': yasound_song,
+                'name': yasound_song.name,
+                'artist_name': yasound_song.artist_name,
+                'album_name': yasound_song.album_name,
+                'reject_count': reject_count,
+            })
+        return api_response(data, total_count=mm.count(), limit=limit, offset=skip)
     raise Http404   
 
 @csrf_exempt

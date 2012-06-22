@@ -1,3 +1,5 @@
+//------------------------------------------
+//------------------------------------------
 // Datastore
 //------------------------------------------
 
@@ -9,16 +11,16 @@
 // UI
 //------------------------------------------
 
-Yasound.Backoffice.UI.MostPopularSongsPanel = function() {
+Yasound.Backoffice.UI.RejectedSongsPanel = function() {
     return {
         xtype: 'panel',
         layout: 'border',
-        id: 'most-popular-songs-panel',
-        title: gettext('Most popular songs'),
+        id: 'rejected-songs-panel',
+        title: gettext('Rejected songs'),
         items: [ {
-            xtype: 'mostpopularsongmetadatagrid',
+            xtype: 'rejectedsonggrid',
             region: 'center',
-            title: gettext('Most popular songs'),
+            title: gettext('Rejected songs'),
             tbar: [ {
                 iconCls: 'silk-arrow-refresh',
                 text: gettext('Refresh'),
@@ -32,3 +34,4 @@ Yasound.Backoffice.UI.MostPopularSongsPanel = function() {
         }
     };
 };
+

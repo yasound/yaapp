@@ -67,6 +67,8 @@ PIPELINE_JS = {
             'js/backoffice/Song/MissingSongs.js',
             'js/backoffice/Song/MostPopularSongMetadataGrid.js',
             'js/backoffice/Song/MostPopularSongs.js',
+            'js/backoffice/Song/RejectedSongGrid.js',
+            'js/backoffice/Song/RejectedSongs.js',
             'js/backoffice/RadioActivityScoreSettings/SettingsGrid.js',
             'js/backoffice/RadioActivityScoreSettings/RadioActivityScoreSettings.js',
         ]

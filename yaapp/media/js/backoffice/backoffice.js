@@ -97,9 +97,6 @@ Ext.onReady(function(){
         }), Ext.apply(Yasound.Backoffice.UI.AllSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('All songs')
-        }), Ext.apply(Yasound.Backoffice.UI.MostPopularSongsPanel(), {
-            iconCls: 'x-icon-templates',
-            tabTip: gettext('Most popular songs')
         })]
     };
 
@@ -232,6 +229,12 @@ Ext.onReady(function(){
             }
         }, Ext.apply(Yasound.Statistics.UI.Panel(), {
             iconCls: 'x-icon-templates'
+        }), Ext.apply(Yasound.Backoffice.UI.MostPopularSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Most popular songs')
+        }), Ext.apply(Yasound.Backoffice.UI.RejectedSongsPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Rejected songs')
         })]    		
     };
     
