@@ -45,7 +45,6 @@ Yasound.Backoffice.UI.RejectedSongColumnModel = function(sm){
     }, {
         header: gettext('Reject count'),
         dataIndex: 'reject_count',
-        width:20,
         sortable: true,
         filterable: true,
         filter: {

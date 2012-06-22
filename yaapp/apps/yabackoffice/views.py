@@ -428,7 +428,13 @@ def rejected_songs(request):
                 'album_name': yasound_song.album_name,
                 'reject_count': reject_count,
             })
-        return api_response(data, total_count=mm.count(), limit=limit, offset=skip)
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'data': data,
+            'results': len(data)
+        })
+        resp = utils.JsonResponse(json_data)
+        return resp
     raise Http404   
 
 @csrf_exempt
