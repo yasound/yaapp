@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-14 18:07+0200\n"
+"POT-Creation-Date: 2012-06-22 18:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,41 +18,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: settings.py:24 settings.py:25
+#: settings.py:26
+#: settings.py:27
 #, python-format
 msgid "%(user_name)s is listening to your radio"
 msgstr "%(user_name)s écoute votre radio"
 
-#: settings.py:26
+#: settings.py:28
 #, python-format
 msgid "%(user_name)s is online on Yasound"
 msgstr "%(user_name)s s'est connecté à Yasound"
 
-#: settings.py:27
-#, fuzzy, python-format
-msgid "%s posted a message on your wall"
+#: settings.py:29
+msgid "%(user_name)s posted a message on your wall"
 msgstr "%(user_name)s a posté un message sur votre mur"
 
-#: settings.py:28
+#: settings.py:30
 #, python-format
 msgid "%(user_name)s liked '%(song_name)s' on your radio"
 msgstr "%(user_name)s aime votre titre '%(song_name)s'"
 
-#: settings.py:29
-#, fuzzy, python-format
-msgid "%s added your radio as a favorite"
+#: settings.py:31
+msgid "%(user_name)s added your radio as a favorite"
 msgstr "%(user_name)s a ajouté votre radio à ses favoris"
 
-#: settings.py:30
+#: settings.py:32
 #, python-format
 msgid "%(user_name)s shared your radio"
 msgstr "%(user_name)s a partagé votre radio"
 
-#: settings.py:31
+#: settings.py:33
 #, python-format
 msgid "%(user_name)s created his radio"
 msgstr "%(user_name)s a créé sa radio"
 
-#: settings.py:32
+#: settings.py:34
 msgid "you have a message from Yasound"
 msgstr "Yasound vous a envoyé un message"
+
+#: settings.py:35
+#, python-format
+msgid "%s"
+msgstr "%s"
+
