@@ -127,6 +127,19 @@ def country(ip, dbname=settings.GEOIP_DATABASE):
 def request_country(request):
     return country(request.META[settings.GEOIP_LOOKUP])
 
+def can_login(request):
+    if not (settings.PRODUCTION_MODE or settings.DEVELOPMENT_MODE):
+        return True
+    
+    if request.user.is_superuser:
+        return True
+
+    if request_country(request) in settings.GEOIP_AUTHORIZED_COUNTRIES:
+        return True
+
+    return False
+    
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()

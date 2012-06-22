@@ -12,13 +12,14 @@ from django.utils.encoding import smart_unicode
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext_lazy as _, ugettext
 from emailconfirmation.models import EmailAddress, EmailTemplate
+from hashlib import sha1
 from models import UserProfile, EmailUser
 from random import choice
 from string import letters
+from yacore.geoip import request_country, can_login
 import re
 alnum_re = re.compile(r'^\w+$')
 
-from hashlib import sha1
 
 def _generate_password():
     from random import choice
@@ -48,10 +49,11 @@ class LoginForm(forms.Form):
         return self.cleaned_data
 
     def login(self, request):
-        if self.is_valid():
-            login(request, self.user)
-            request.session.set_expiry(60 * 60 * 24 * 7 * 3)
-            return True
+        if can_login(request):
+            if self.is_valid():
+                login(request, self.user)
+                request.session.set_expiry(60 * 60 * 24 * 7 * 3)
+                return True
         return False
     
 

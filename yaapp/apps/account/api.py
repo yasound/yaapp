@@ -27,6 +27,7 @@ from yacore.http import fill_app_infos
 from django.utils.translation import ugettext_lazy as _
 
 import logging
+from yacore.geoip import can_login
 logger = logging.getLogger("yaapp.account")
 
 
@@ -80,6 +81,9 @@ class YasoundPublicAuthentication(YasoundApiKeyAuthentication):
 
 class YasoundBasicAuthentication(BasicAuthentication):
     def is_authenticated(self, request, **kwargs):
+        if not can_login(request):
+            return False
+        
         fill_app_infos(request)
         
         authenticated = super(YasoundBasicAuthentication, self).is_authenticated(request, **kwargs)
@@ -291,6 +295,9 @@ def _download_facebook_profile(token):
     
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
+        if not can_login(request):
+            return False
+        
         authenticated = False
         fill_app_infos(request)
         
