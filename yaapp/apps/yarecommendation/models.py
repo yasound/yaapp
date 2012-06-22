@@ -37,13 +37,23 @@ class ClassifiedRadiosManager():
     
     def populate(self):
         radios = Radio.objects.filter(ready=True)
+        count = radios.count()
+        logger.info('%d radios to compute' % (count))
         self.drop()
-        for radio in radios:
+        for i, radio in enumerate(radios):
+            if i % 1000 == 0:
+                logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
             self.add_radio(radio)
+        logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
+        logger.info('done')
             
     def calculate_similar_radios(self):
         docs = list(self.all())
-        for doc in docs:
+        count = len(docs)
+        logger.info('%d radios to compute' % (count))
+        for i,doc in enumerate(docs):
+            if i % 1000 == 0:
+                logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
             scores = top_matches(docs, doc, 10)
             self.collection.update({'db_id': doc.get('db_id')}, 
                                    {'$set': {
@@ -51,6 +61,8 @@ class ClassifiedRadiosManager():
                                     }}, 
                                    upsert=True, 
                                    safe=True)
+        logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
+        logger.info('done')
         
     def all(self):
         return self.collection.find()
