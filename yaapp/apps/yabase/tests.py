@@ -705,7 +705,7 @@ class TestImport(TestCase):
         self.assertEquals(yasound_song.musicbrainz_id, '2a124411-41b8-4cbb-984b-6e10878d412b')
         
         sm2, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
-        self.assertEquals(sm2.yasound_song_id, sm.yasound_song_id)
+        self.assertNotEquals(sm2.yasound_song_id, sm.yasound_song_id)
 
     def test_import_with_duplicated_metatadas(self):
         importer = SongImporter()
@@ -754,13 +754,13 @@ class TestImport(TestCase):
             'album': 'my other album',
         }
         sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
-        self.assertEquals(sm.yasound_song_id, yasound_song.id)
+        self.assertNotEquals(sm.yasound_song_id, yasound_song.id)
         self.assertEquals(sm.name, 'my other mp3')
         self.assertEquals(sm.artist_name, 'my other artist')
         self.assertEquals(sm.album_name, 'my other album')
         
         yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
-        self.assertEquals(yasound_song.name, 'my mp3')
+        self.assertEquals(yasound_song.name, 'my other mp3')
 
     def test_import_owner_id_is_none(self):
         importer = SongImporter()
@@ -888,7 +888,7 @@ class TestImport(TestCase):
         new_yasound_song = YasoundSong.objects.get(id=new_sm.yasound_song_id)
         rank = new_yasound_song.find_lastfm_rank()
         self.assertTrue(rank > 0.9)
-        self.assertEquals(new_yasound_song.id, yasound_song.id)
+        self.assertNotEquals(new_yasound_song.id, yasound_song.id)
 
     def test_duplicate(self):
         importer = SongImporter()
@@ -899,7 +899,7 @@ class TestImport(TestCase):
         self.assertIsNotNone(sm.yasound_song_id)
 
         new_sm, _message = importer.import_song(filepath, metadata=metadata, convert=False, allow_unknown_song=True)
-        self.assertEquals(new_sm.id, sm.id)
+        self.assertEquals(new_sm.id, 2)
 
 
 class TestRadioDeleted(TestCase):

@@ -367,6 +367,14 @@ class SongImporter:
         except:
             return None
         
+    def _find_songs_by_echonest_id(self, echonest_id):
+        if not echonest_id:
+            return []
+        try:
+            return YasoundSong.objects.filter(echonest_id=echonest_id)
+        except:
+            return []
+
     def _find_song_by_lastfm_id(self, lastfm_id):
         if not lastfm_id:
             return None
@@ -374,6 +382,14 @@ class SongImporter:
             return YasoundSong.objects.filter(lastfm_id=lastfm_id)[0]
         except:
             return None
+
+    def _find_songs_by_lastfm_id(self, lastfm_id):
+        if not lastfm_id:
+            return []
+        try:
+            return YasoundSong.objects.filter(lastfm_id=lastfm_id)
+        except:
+            return []
 
     def _create_song_instance(self, sm, metadata):
         if not sm:
@@ -421,6 +437,18 @@ class SongImporter:
                 return None
             
 
+    def _find_server_version(self, metadata):
+        lastfm_id = metadata.get('lastfm_id')
+        
+        candidates =  self._find_songs_by_lastfm_id(lastfm_id)
+        if len(candidates) == 0:
+            return None
+
+        for candidate in candidates:
+            song = candidate
+            if not song.file_exists():
+                return song
+        return None
 
     def process_song(self, metadata, filepath=None, allow_unknown_song=False, song_metadata_id=None):
         """
@@ -512,25 +540,12 @@ class SongImporter:
         
         # create yasound song
         self._log(_('looking for song'))
-        found = self._find_song_by_echonest_id(echonest_id)
-        if not found:
-            found = self._find_song_by_lastfm_id(lastfm_id)
+        found = self._find_server_version(metadata)
         if found:
             song = found
-            self._log("Song already existing in database (id=%s)" % (song.id))
-            
-            provided_fingerprint = None
-            if song.lastfm_id is not None:
-                server_rank = song.find_lastfm_rank()
-                provided_fingerprint = self._find_lastfm_fingerprintid(metadata)
-                provided_rank = self._find_lastfm_rank(metadata)
-                if provided_rank >= server_rank and provided_fingerprint is not None:
-                    self._log('provided song is better than original (%r >= %r), replacing' % (provided_rank, server_rank))
-                    song.replace(filepath, provided_fingerprint)
-              
-            if not song.file_exists():
-                self._log('original song is missing, using provided one')
-                song.replace(filepath, provided_fingerprint)
+            provided_fingerprint = self._find_lastfm_fingerprintid(metadata)
+            self._log("Song already existing in database (id=%s), replacing with provided version" % (song.id))
+            song.replace(filepath, provided_fingerprint)
             
             if not sm:
                 self._log('creating songmetadata: name=%s, artist_name=%s, album_name=%s, yasound_song_id=%s' % (name, artist_name, album_name, song.id))
@@ -540,7 +555,6 @@ class SongImporter:
                 else:
                     sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
                 self._log('creating songmetadata: done')
-            
         else:
             if not sm:      
                 # create new song metadata
