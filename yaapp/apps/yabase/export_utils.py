@@ -22,9 +22,17 @@ def export_pur(songs):
 
     line, col = 1, 0
     for item in songs:
+        name = item.get('name')
+        artist = item.get('artist')
+        if len(artist) <= 0:
+            continue
+        if 'piste' in artist.lower():
+            continue
+        if 'track' in name.lower():
+            continue
 
-        ws.write(line, col+0, item.get('name'))
-        ws.write(line, col+1, item.get('artist'))
+        ws.write(line, col+0, name)
+        ws.write(line, col+1, artist)
 
         line = line+1
 
