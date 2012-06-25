@@ -15,6 +15,7 @@ urlpatterns = patterns('yabackoffice.views',
 
     url(r'^songmetadata/top_missing/$', 'songmetadata_top_missing'),
     url(r'^songmetadata/most_popular/$', 'songmetadata_most_popular'),
+    url(r'^songmetadata/export_most_popular/$', 'songmetadata_export_most_popular'),
 
     url(r'^yasound_songs$', 'yasound_songs'),
     url(r'^rejected_songs$', 'rejected_songs'),

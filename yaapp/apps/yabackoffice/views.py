@@ -40,6 +40,7 @@ import simplejson as json
 import utils as yabackoffice_utils
 from yasearch.models import MostPopularSongsManager
 from yametrics.matching_errors import MatchingErrorsManager
+from yabase.export_utils import export_pur
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -770,6 +771,20 @@ def songmetadata_most_popular(request):
 
 @csrf_exempt
 @login_required
+def songmetadata_export_most_popular(request):
+    if not request.user.is_superuser:
+        raise Http404
+
+    mm = MostPopularSongsManager()
+    qs = mm.all(start=0, limit=10234)
+    data = export_pur(qs)
+    
+    response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=songs.xls'
+    return response        
+
+@csrf_exempt
+@login_required
 def metrics_graph_animators(request):
     if not request.user.is_superuser:
         raise Http404()
@@ -1005,3 +1020,4 @@ def ignore_abuse_notification(request):
     data = {"success":True,"message":"ok","data":[]}
     resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
     return resp
+
