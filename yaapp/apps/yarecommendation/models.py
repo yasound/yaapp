@@ -9,12 +9,12 @@ from yasearch.utils import get_simplified_name
 import logging
 logger = logging.getLogger("yaapp.yarecommendation")
 
-
 class ClassifiedRadiosManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.radios
         self.collection.ensure_index("db_id")
+        self.collection.ensure_index("main_genre")
     
     def drop(self):
         self.collection.drop()
@@ -22,18 +22,45 @@ class ClassifiedRadiosManager():
     def add_radio(self, radio):
         artists = SongMetadata.objects.filter(songinstance__playlist__radio=radio).exclude(artist_name='').values_list('artist_name', flat=True)
         classification = {}
-        has_data = False
         for artist in artists:
-            has_data = True
             artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
             classification[artist_name] = classification.get(artist_name, 0) + 1
 
-        if has_data:
-            doc = {
-                'db_id' : radio.id,
-                'classification': classification
-            }
-            self.collection.update({'db_id': radio.id}, {'$set': doc}, upsert=True, safe=True)
+        doc = {
+            'db_id' : radio.id,
+            'classification': classification
+        }
+        self.collection.update({'db_id': radio.id}, {'$set': doc}, upsert=True, safe=True)
+    
+        ids = list(SongMetadata.objects.filter(songinstance__playlist__radio=radio).values_list('yasound_song_id', flat=True))
+        songs = YasoundSong.objects.filter(id__in=ids).select_related()
+        genres_ratio = []
+        for song in songs:
+            genres = YasoundGenre.objects.filter(yasoundsonggenre__song=song)
+            for genre in genres:
+                genre_name = get_simplified_name(genre.name_canonical).replace('$', '').replace('.', '')
+                ratio = (genre_name, 1)
+                for existing_ratio in genres_ratio:
+                    if existing_ratio[0] == genre_name:
+                        genres_ratio.remove(existing_ratio)
+                        ratio = (ratio[0], ratio[1] + 1)
+                genres_ratio.append(ratio)
+        genres_ratio.sort() 
+        genres_ratio.reverse()
+        limit = genres_ratio[0:2]
+        count = len(limit)
+        main_genre, secondary_genre = '', ''
+        if count > 0:
+            main_genre = limit[0][0]
+        if count > 1:
+            secondary_genre = limit[1][0]
+
+        doc = {
+            'main_genre': main_genre,
+            'secondary_genre': secondary_genre,
+        }
+        self.collection.update({'db_id': radio.id}, {'$set': doc}, upsert=True, safe=True)
+           
     
     def populate(self):
         radios = Radio.objects.filter(ready=True)
