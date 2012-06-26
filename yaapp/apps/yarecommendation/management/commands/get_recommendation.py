@@ -18,19 +18,7 @@ class Command(BaseCommand):
     args = ''
 
     def handle(self, *app_labels, **options):
-        logger.info("processing radios")
+        logger.info("getting recommendation")
         cm = ClassifiedRadiosManager()
-        start = time()
-        cm.populate()
-        elapsed = time() - start
-        logger.info('done in %s secondes', str(elapsed))
-        logger.info("calculating similarities")
-        start = time()
-        cm.calculate_similar_radios()
-        elapsed = time() - start
-        logger.info('done in %s secondes', str(elapsed))
-        logger.info("processing done")
+        cm.find_similar_radios('jean', ['air'])
         logger.info("done")
-        
-
-        
