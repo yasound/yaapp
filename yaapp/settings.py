@@ -617,7 +617,7 @@ elif DEVELOPMENT_MODE:
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
     YASOUND_PUSH_URL = 'https://api.yasound.com:9000/'
-    YASOUND_RADIO_WEB_URL = 'http://yasound.com/listen/'
+    YASOUND_RADIO_WEB_URL = 'https://yasound.com/listen/'
     ENABLE_PUSH = True
     PUSH_REDIS_HOST = 'yas-sql-01'
     PUSH_REDIS_DB = 2
