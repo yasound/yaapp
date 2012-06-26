@@ -787,6 +787,7 @@ class Radio(models.Model):
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
+        bundle.data['web_url'] = self.web_url
     
     def as_dict(self, full=False):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
@@ -801,6 +802,7 @@ class Radio(models.Model):
             'picture': self.picture_url,
             'ready': self.ready,
             'stream_url' : self.stream_url,
+            'web_url': self.web_url,
         }
         if full:
             data['creator'] = self.creator.userprofile.user_as_dict(full=True)
@@ -975,6 +977,11 @@ class Radio(models.Model):
         url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
         return url
     
+    @property
+    def web_url(self):
+        url = yaapp_settings.YASOUND_RADIO_WEB_URL + self.uuid
+        return url
+
     def added_in_favorites(self, user):
         creator_profile = self.creator.userprofile
         creator_profile.my_radio_added_in_favorites(user.userprofile, self)

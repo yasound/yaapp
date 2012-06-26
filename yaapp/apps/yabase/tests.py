@@ -188,6 +188,10 @@ class TestModels(TestCase):
         self.assertEquals(Radio.objects.get(id=radio.id).overall_listening_time, 0)
         self.assertRaises(FieldDoesNotExist, atomic_inc, radio, 'overall_listening_time1', -1000)
             
+    def test_web_url(self):
+        radio = self.radio
+        url = radio.web_url
+        self.assertEquals(url, 'http://localhost:8000/listen/' + radio.uuid)
    
 class TestNextSong(TestCase):
     multi_db = True

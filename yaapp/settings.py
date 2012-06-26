@@ -607,14 +607,17 @@ PUSH_REDIS_DB = 0
 if LOCAL_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
     YASOUND_PUSH_URL = 'http://localhost:9000/'
+    YASOUND_RADIO_WEB_URL = 'http://localhost:8000/listen/'
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
     YASOUND_PUSH_URL = 'http://dev.yasound.com:9090/'
+    YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
     YASOUND_PUSH_URL = 'https://api.yasound.com:9000/'
+    YASOUND_RADIO_WEB_URL = 'http://yasound.com/listen/'
     ENABLE_PUSH = True
     PUSH_REDIS_HOST = 'yas-sql-01'
     PUSH_REDIS_DB = 2
