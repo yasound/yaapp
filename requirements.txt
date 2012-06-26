@@ -40,3 +40,4 @@ python-dateutil<=1
 xlwt
 -e git+https://github.com/lynadge/emencia-django-newsletter.git#egg=emencia-django-newsletter
 django-tinymce
+pygeoip

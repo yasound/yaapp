@@ -260,7 +260,7 @@ class LoginResource(ModelResource):
         # add social stuff        
         userprofile.fill_user_bundle_with_login_infos(bundle)     
         
-        userprofile.logged()
+        userprofile.logged(bundle.request)
         
         add_api_key_to_bundle(user, bundle)
         return bundle
@@ -449,7 +449,7 @@ class SocialAuthentication(Authentication):
             return False
         
         if authenticated:
-            profile.logged()
+            profile.logged(request)
                 
         return authenticated
     

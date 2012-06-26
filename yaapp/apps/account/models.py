@@ -26,7 +26,7 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-
+import math
 
 
 
@@ -69,6 +69,27 @@ class UserProfileManager(models.Manager):
     def broadcast_message_from_yasound(self, url):
         for p in UserProfile.objects.all():
             p.message_from_yasound(url_param=url)
+                    
+    def create_fake_users(self, count=10):
+        lat_count = math.sqrt(count)
+        lon_count = math.ceil(float(count) / float(lat_count))
+        lat_min = -90
+        lat_range = 180
+        lon_min = -180
+        lon_range = 360
+        
+        lat_inc = lat_range / lat_count
+        lon_inc = lon_range / lon_count
+        
+        for i in range(count):
+            lat = lat_min + lat_inc * (i % lat_count)
+            lon = lon_min + lon_inc * math.floor(i / lat_count)
+            u = User.objects.create(username='_____fake_____%d' % i)
+            p = u.userprofile
+            p.set_position(lat, lon)
+            
+    def remove_fake_users(self):
+        User.objects.filter(username__startswith='_____fake_____').delete()
         
 class UserProfile(models.Model):
     """
@@ -117,6 +138,10 @@ class UserProfile(models.Model):
     facebook_expiration_date = models.CharField(_('facebook expiration date'),max_length=35, blank=True)
 
     yasound_email = models.EmailField(_('email'), blank=True)
+    
+    city = models.CharField(max_length=128, blank=True)
+    latitude = models.FloatField(null=True) # degrees
+    longitude = models.FloatField(null=True) # degrees
     
     bio_text = models.TextField(_('bio'), null=True, blank=True)
     picture = ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
@@ -431,7 +456,10 @@ class UserProfile(models.Model):
                 'id': self.user.id,
                 'picture': self.picture_url,
                 'name': self.name,
-                'username': self.user.username
+                'username': self.user.username,
+                'city': self.city,
+                'latitude': self.latitude,
+                'longitude': self.longitude
                 }
         
         if full:
@@ -448,6 +476,9 @@ class UserProfile(models.Model):
         bundle.data['bio_text'] = self.bio_text
         bundle.data['name'] = self.name
         bundle.data['username'] = self.user.username
+        bundle.data['city'] = self.city
+        bundle.data['latitude'] = self.latitude
+        bundle.data['longitude'] = self.longitude
         
     def fill_user_bundle_with_login_infos(self, bundle):
         if self.user:
@@ -504,6 +535,12 @@ class UserProfile(models.Model):
             self.twitter_token = bundle.data['twitter_token']
         if bundle.data.has_key('name'):
             self.name = bundle.data['name']
+        if bundle.data.has_key('city'):
+            self.city = bundle.data['city']
+        if bundle.data.has_key('latitude'):
+            self.latitude = bundle.data['latitude']
+        if bundle.data.has_key('longitude'):
+            self.longitude = bundle.data['longitude']
             
         if created and bundle.data.has_key('account_type'):
             t = bundle.data['account_type']
@@ -633,13 +670,14 @@ class UserProfile(models.Model):
             friend_profile = f.userprofile
             friend_profile.my_friend_created_radio(self, radio)
             
-    def logged(self):
+    def logged(self, request):
         for f in self.friends.all():
             try:
                 friend_profile = f.userprofile
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
+        self.check_geo_localization(request)
     
     def add_to_group(self, group_name):
         g, _created = Group.objects.get_or_create(name=group_name)
@@ -927,6 +965,53 @@ class UserProfile(models.Model):
         if fb_share_animator_activity is not None:
             self.notifications_preferences.fb_share_animator_activity = fb_share_animator_activity
         self.save()
+        
+    def set_position(self, lat, lon, unit='degrees'):
+        if unit == 'radians':
+            lat = lat / math.pi * 180
+            lon = lon / math.pi * 180
+        self.latitude = lat
+        self.longitude = lon
+        self.save()
+        
+    def connected_userprofiles(self, skip=0, limit=20, ref_lat=None, ref_lon=None):
+        if ref_lat is None:
+            ref_lat = self.latitude
+        if ref_lon is None:
+            ref_lon = self.longitude
+            
+        dist_field_name = 'distance'
+        
+        a = 'POWER(SIN(0.5 * (%f - latitude) / 180.0 * PI()), 2) + %f * COS(latitude / 180.0 * PI()) * POWER(SIN(0.5 * (%f - longitude) / 180.0 * PI()), 2)' % (ref_lat, math.cos(ref_lat / 180.0 * math.pi), ref_lon)
+        formula = '%d * ATAN2(SQRT(%s), SQRT(1 - (%s)))' % (3856 * 2, a, a)
+        
+        id_condition = 'id <> %d' % self.id
+        lat_condition = 'AND latitude IS NOT NULL'
+        lon_condition = 'AND longitude IS NOT NULL'
+        time_condition = 'AND last_authentication_date >= DATE_SUB(NOW(), INTERVAL 10 MINUTE)'
+        
+        order_info = 'ORDER BY %s ASC' % dist_field_name
+        skip_info = ('OFFSET %d' % skip) if (skip is not None and skip > 0) else ''
+        limit_info = ('LIMIT %d' % limit) if (limit is not None) else ''
+        
+        format_params = {'formula': formula,
+                         'dist_field_name': dist_field_name,
+                         'id_cond': id_condition,
+                         'lat_cond': lat_condition,
+                         'lon_cond': lon_condition,
+                         'time_cond': time_condition,
+                         'order': order_info,
+                         'skip': skip_info,
+                         'limit': limit_info                         
+                         }
+        query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(skip)s %(limit)s' % format_params
+        raw = UserProfile.objects.raw(query)
+        profiles = list(raw)
+        return profiles
+    
+    def check_geo_localization(self, request):
+        from task import async_check_geo_localization
+        async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
         
 
 def create_user_profile(sender, instance, created, **kwargs):  
