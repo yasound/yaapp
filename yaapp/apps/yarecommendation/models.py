@@ -114,10 +114,7 @@ class ClassifiedRadiosManager():
                                 self._co_occurrences(artists, artists) + 
                                 self._co_occurrences(doc_artists, artists) / 
                                 self._co_occurrences(doc_artists, doc_artists))
-            if doc.get('db_id') == 143:
-                import pdb
-                pdb.set_trace()
-            
+
             if similarity > 0:
                 similarities.append((similarity, doc.get('db_id')))
         similarities.sort()
