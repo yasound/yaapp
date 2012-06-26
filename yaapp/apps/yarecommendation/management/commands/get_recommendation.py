@@ -20,6 +20,6 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         logger.info("getting recommendation")
         cm = ClassifiedRadiosManager()
-        reco = cm.find_similar_radios('jean', ['air', 'benjamin biolay', 'the cure'])
+        reco = cm.find_similar_radios(['air', 'benjamin biolay', 'the cure'])
         logger.info(reco)
         logger.info("done")
