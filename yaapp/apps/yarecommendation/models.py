@@ -64,9 +64,8 @@ class ClassifiedRadiosManager():
         radios = Radio.objects.filter(ready=True)
         count = radios.count()
         logger.info('%d radios to compute' % (count))
-        self.drop()
         for i, radio in enumerate(radios):
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
             self.add_radio(radio)
         logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
@@ -77,7 +76,7 @@ class ClassifiedRadiosManager():
         count = len(docs)
         logger.info('%d radios to compute' % (count))
         for i,doc in enumerate(docs):
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
             scores = top_matches(docs, doc, 10)
             self.collection.update({'db_id': doc.get('db_id')}, 
@@ -96,12 +95,11 @@ class ClassifiedRadiosManager():
     def _co_occurrences(self, a, b):
         return float(len(self._intersect(a, b)))
     
-    def find_similar_radios(self, username, artists):
+    def find_similar_radios(self, artists):
         artists_sanitized = []
         for artist in artists:
             artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
             artists_sanitized.append(artist_name)
-        username_sanitized = get_simplified_name(username).replace('.', '').replace('$', '')
         
         docs = self.collection.find()
         similarities = []
