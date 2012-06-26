@@ -9,7 +9,7 @@ from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
 from django.forms.util import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseForbidden, \
-    HttpResponseRedirect
+    HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 from django.utils import simplejson
@@ -27,7 +27,7 @@ import json
 import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
-
+from yacore.decorators import check_api_key
 
 logger = logging.getLogger("yaapp.account")
 
@@ -454,5 +454,16 @@ def user_authenticated(request):
         "user_id": u.id,
     }
     return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+
+@check_api_key(methods=['POST'], login_required=True)
+def update_localization(request):
+    data = request.POST.keys()[0]
+    obj = json.loads(data)
+    if not obj.has_key('latitude') or not obj.has_key('longitude'):
+        return HttpResponseNotFound()
+    lat = obj['latitude']
+    lon = obj['longitude']
+    unit = obj.get('unit', 'degrees')
+    request.user.userprofile.set_position(lat, lon, unit)
         
     

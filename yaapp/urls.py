@@ -209,6 +209,8 @@ urlpatterns = patterns('',
     url(r'^login-error/$', 'account.views.error', name='login-error'),
     url(r'^passreset/$','account.views.password_reset', name='lost_password'),
     url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','account.views.password_reset_confirm', name='reset_password_confirm'),
+    
+    url(r'^set_localization/$','account.views.update_localization'),
 
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
