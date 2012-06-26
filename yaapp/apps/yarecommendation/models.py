@@ -89,6 +89,13 @@ class ClassifiedRadiosManager():
         logger.info('computed %d radios (%d%%)', i+1, 100*(i+1)/count)
         logger.info('done')
         
+        
+    def _intersect(self, a, b):
+        return list(set(a) & set(b))
+        
+    def _co_occurrences(self, a, b):
+        return float(len(self._intersect(a, b)))
+    
     def find_similar_radios(self, username, artists):
         artists_sanitized = []
         for artist in artists:
@@ -96,62 +103,28 @@ class ClassifiedRadiosManager():
             artists_sanitized.append(artist_name)
         username_sanitized = get_simplified_name(username).replace('.', '').replace('$', '')
         
-        
-        map_func = Code("""
-function() {
-    var artists = %s;
-    var username = '%s';
-    var docArtists = this.artists;
-    
-    var intersect = function getIntersect(arr1, arr2) {
-        var r = [],
-            o = {},
-            l = arr2.length,
-            i, v;
-        for (i = 0; i < l; i++) {
-            o[arr2[i]] = true;
-        }
-        l = arr1.length;
-        for (i = 0; i < l; i++) {
-            v = arr1[i];
-            if (v in o) {
-                r.push(v);
-            }
-        }
-        return r;
-    };
+        docs = self.collection.find()
+        similarities = []
+        for doc in docs:
+            doc_artists = doc.get('artists')
+            if len(doc_artists) == 0:
+                continue
+            
+            similarity = 0.5 * (self._co_occurrences(artists, doc_artists) / 
+                                self._co_occurrences(artists, artists) + 
+                                self._co_occurrences(doc_artists, artists) / 
+                                self._co_occurrences(doc_artists, doc_artists))
+            if doc.get('db_id') == 143:
+                import pdb
+                pdb.set_trace()
+            
+            if similarity > 0:
+                similarities.append((similarity, doc.get('db_id')))
+        similarities.sort()
+        similarities.reverse()
+        similarities = similarities[0:20]
+        return similarities 
 
-    var cooc = function coOccurrences(v1, v2) {
-        return intersect(v1, v2).length;
-    };
-
-    var similarity = 0.5 * (cooc(artists, docArtists) / cooc(artists, artists) + cooc(docArtists, artists) / cooc(docArtists, docArtists));
-
-    if (similarity > 0) {
-        var doc = {
-            'db_id': this.db_id,
-            'similarity': similarity
-        };
-        emit(username, doc);
-    }
-}""" % (unicode(artists_sanitized), username_sanitized))
-        
-        print map_func
-        reduce_func = Code("""
-        function(key, values) {
-            var max_item = {'db_id':0, 'similarity':0};
-            for (var i = 0; i < values.length; i++) {
-                if (values[i]['similarity'] > max_item['similarity']) {
-                    max_item = values[i];
-                }  
-            }
-            return max_item;
-        }
-""")
-        output = {
-            'merge': 'recommendation.user'
-        }
-        self.collection.map_reduce(map_func, reduce_func, output)
         
         
     def all(self):
