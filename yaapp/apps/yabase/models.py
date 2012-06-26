@@ -462,7 +462,7 @@ class RadioManager(models.Manager):
             radio = Radio(name=name, ready=True, uuid=str(radio_uuid), creator=User.objects.all().order_by('?')[0])
             radio.save()
             playlist, _created = radio.get_or_create_default_playlist()
-            metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:10]
+            metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:500]
             for metadata in metadatas:
                 song_instance = SongInstance(metadata=metadata, playlist=playlist)
                 song_instance.save()
