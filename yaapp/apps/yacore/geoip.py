@@ -11,6 +11,8 @@ def ip_city_record(ip):
 
 def ip_coords(ip):
     record = ip_city_record(ip)
+    if record is None:
+        return None
     return (record['latitude'], record['longitude'])
 
 def ip_country(ip):

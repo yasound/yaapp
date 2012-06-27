@@ -31,4 +31,6 @@ def async_check_geo_localization(userprofile, ip):
     logger.info('async_check_geo_localization: need to use geoip to get latitude/longitude')
     from yacore.geoip import ip_coords
     coords = ip_coords(ip)
+    if coords is None:
+        return
     userprofile.set_position(coords[0], coords[1])
