@@ -142,8 +142,8 @@ class UserProfile(models.Model):
     yasound_email = models.EmailField(_('email'), blank=True)
     
     city = models.CharField(max_length=128, blank=True)
-    latitude = models.FloatField(null=True) # degrees
-    longitude = models.FloatField(null=True) # degrees
+    latitude = models.FloatField(null=True, blank=True) # degrees
+    longitude = models.FloatField(null=True, blank=True) # degrees
     
     language = models.CharField(_('language'), max_length=10, choices=yaapp_settings.LANGUAGES, default=yaapp_settings.DEFAULT_USER_LANGUAGE_CODE)
     
