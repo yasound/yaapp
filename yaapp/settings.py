@@ -387,6 +387,8 @@ LANGUAGES = (
     ('en', 'English'),
     ('fr', u'Français'),
 )
+DEFAULT_USER_LANGUAGE_CODE = 'fr'
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error.

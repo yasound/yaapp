@@ -143,6 +143,8 @@ class UserProfile(models.Model):
     latitude = models.FloatField(null=True) # degrees
     longitude = models.FloatField(null=True) # degrees
     
+    language = models.CharField(_('language'), max_length=10, choices=yaapp_settings.LANGUAGES, default=yaapp_settings.DEFAULT_USER_LANGUAGE_CODE)
+    
     bio_text = models.TextField(_('bio'), null=True, blank=True)
     picture = ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(_('email confirmed'),default=False)
