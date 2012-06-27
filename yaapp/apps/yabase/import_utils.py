@@ -783,6 +783,7 @@ def fast_import(song_name, album_name, artist_name, playlist):
     import songs by using the most popular songs collection instead of 
     searching in the whole database
     """
+    logger.debug('fast_import : %s - %s - %s' % (song_name, album_name, artist_name))
     mp = MostPopularSongsManager()
     song_instance = None
 
@@ -792,7 +793,9 @@ def fast_import(song_name, album_name, artist_name, playlist):
 
     doc = mp.find(name=song_name_simplified, artist=artist_name_simplified, album=album_name_simplified)
     if not doc:
+        logger.debug('fast_import failed')
         return song_instance
+    logger.debug('fast_import succeeded')
     
     metadata = SongMetadata.objects.get(id=doc.get('db_id'))
     raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
