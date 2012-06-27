@@ -730,7 +730,9 @@ class UserProfile(models.Model):
         
         # store notification
         notif_params = {
-            'user_name': unicode(friend_profile)
+            'user_name': unicode(friend_profile),
+            'user_id': friend_profile.user.id,
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, 
@@ -753,7 +755,9 @@ class UserProfile(models.Model):
         
         # store notification
         notif_params = {
-            'user_name': unicode(user_profile)
+            'user_name': unicode(user_profile),
+            'user_id': friend_profile.user.id,
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, 
@@ -775,7 +779,8 @@ class UserProfile(models.Model):
         # store notification
         m = NotificationsManager()
         notif_params = {
-            'user_name': unicode(friend_profile)
+            'user_name': unicode(friend_profile),
+            'user_id': friend_profile.user.id
         }
         m.add_notification(self.user.id, 
                            yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE, 
@@ -800,7 +805,9 @@ class UserProfile(models.Model):
         
         # store notification
         notif_params = {
-            'user_name': unicode(user_profile)
+            'user_name': unicode(user_profile),
+            'user_id': user_profile.user.id,
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_IN_WALL, notif_params)
@@ -823,7 +830,10 @@ class UserProfile(models.Model):
         # store notification
         notif_params = {
             'user_name': unicode(user_profile),
-            'song_name': unicode(song)
+            'song_name': unicode(song),
+            'user_id': user_profile.user.id,
+            'radio_id': radio.id,
+            'song_id': song.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_SONG_LIKED, notif_params)
@@ -842,7 +852,9 @@ class UserProfile(models.Model):
         
         # store notification
         notif_params = {
-            'user_name': unicode(user_profile)
+            'user_name': unicode(user_profile),
+            'user_id': user_profile.user.id,
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_RADIO_IN_FAVORITES, notif_params)
@@ -861,7 +873,9 @@ class UserProfile(models.Model):
         
         # store notification
         notif_params = {
-            'user_name': unicode(user_profile)
+            'user_name': unicode(user_profile),
+            'user_id': user_profile.user.id,
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_RADIO_SHARED, notif_params)
@@ -878,7 +892,9 @@ class UserProfile(models.Model):
         
         # store notification
         notif_params = {
-            'user_name': unicode(friend_profile)
+            'user_name': unicode(friend_profile),
+            'user_id': friend_profile.user.id,
+            'radio.id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, yamessage_settings.TYPE_NOTIF_FRIEND_CREATED_RADIO, notif_params)
