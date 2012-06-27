@@ -758,7 +758,7 @@ class UserProfile(models.Model):
         # store notification
         notif_params = {
             'user_name': unicode(user_profile),
-            'user_id': friend_profile.user.id,
+            'user_id': user_profile.user.id,
             'radio_id': radio.id
         }
         m = NotificationsManager()
