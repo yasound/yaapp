@@ -882,7 +882,7 @@ def metrics_graph_listen(request):
             'timestamp': metric['type'],
             'listen_activity': metric['listen_activity'] if 'listen_activity' in metric else 0 
         })
-    sorted(data, cmp=_compare_metrics)
+    data.sort(cmp=_compare_metrics)
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
@@ -908,7 +908,7 @@ def metrics_graph_shares(request):
             'share_twitter_activity': metric['share_twitter_activity'] if 'share_twitter_activity' in metric else 0,
             'share_email_activity': metric['share_email_activity'] if 'share_email_activity' in metric else 0,
         })
-    sorted(data, cmp=_compare_metrics)
+    data.sort(cmp=_compare_metrics)
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
