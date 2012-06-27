@@ -43,7 +43,6 @@ def async_check_geo_localization(userprofile, ip):
         return
     userprofile.set_position(coords[0], coords[1])
     
-    
 def _twitter_api(user_id):
     from models import UserProfile
 
@@ -116,3 +115,9 @@ def async_tw_animator_activity(user_id, radio_uuid):
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
 
     logger.debug('done')
+
+
+@task(ignore_result=True)
+def async_update_position_coords(userprofile):
+    userprofile.update_position_coords()
+

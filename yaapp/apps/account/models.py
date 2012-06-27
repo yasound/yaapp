@@ -30,12 +30,27 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-
+import math
+from django.conf import settings
 
 
 logger = logging.getLogger("yaapp.account")
 
 YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'
+
+def latitude_longitude_to_coords(lat, lon, unit='degrees'):
+    if lat is None or lon is None:
+        return (None, None, None)
+    if unit == 'degrees':
+        lat = math.radians(lat)
+        lon = math.radians(lon)
+        
+    x = math.cos(lat) * math.cos(lon)
+    y = math.cos(lat) * math.sin(lon)
+    z = math.sin(lat)
+    return (x, y, z)
+        
+        
 
 class EmailUser(User):
     class Meta:
@@ -144,6 +159,11 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=128, blank=True)
     latitude = models.FloatField(null=True, blank=True) # degrees
     longitude = models.FloatField(null=True, blank=True) # degrees
+    
+    # latitude and longitude converted to coordinates on a sphere with radius=1
+    x_coord = models.FloatField(null=True, blank=True)
+    y_coord = models.FloatField(null=True, blank=True)
+    z_coord = models.FloatField(null=True, blank=True)
     
     language = models.CharField(_('language'), max_length=10, choices=yaapp_settings.LANGUAGES, default=yaapp_settings.DEFAULT_USER_LANGUAGE_CODE)
     
@@ -659,15 +679,20 @@ class UserProfile(models.Model):
         return yasearch_indexer.remove_user(self.user)
     
     def save(self, *args, **kwargs):
+        creation = self.pk is None
         update_mongo = False
-        if self.pk:
+        coords_changed = creation
+        if not creation:
             saved = UserProfile.objects.get(pk=self.pk)
             name_changed = self.name != saved.name
             update_mongo = name_changed
+            coords_changed = (self.latitude != saved.latitude) or (self.longitude != saved.longitude)
             
         super(UserProfile, self).save(*args, **kwargs)
         if update_mongo:
             self.build_fuzzy_index(upsert=True)
+        if coords_changed:
+            self.position_changed()
         
     def build_picture_filename(self):
         filename = 'userprofile_%d_picture.png' % self.id
@@ -1014,13 +1039,16 @@ class UserProfile(models.Model):
         
     def set_position(self, lat, lon, unit='degrees'):
         if unit == 'radians':
-            lat = lat / math.pi * 180
-            lon = lon / math.pi * 180
+            lat = math.degrees(lat) # to degrees
+            lon = math.degrees(lon) # to degrees
         self.latitude = lat
         self.longitude = lon
         self.save()
         
-    def connected_userprofiles(self, skip=0, limit=20, ref_lat=None, ref_lon=None):
+    def connected_userprofiles(self, skip=0, limit=20, ref_lat=None, ref_lon=None, formula_type='chord'):
+        import datetime
+        start_date = datetime.datetime.now()
+        
         if ref_lat is None:
             ref_lat = self.latitude
         if ref_lon is None:
@@ -1028,8 +1056,22 @@ class UserProfile(models.Model):
             
         dist_field_name = 'distance'
         
-        a = 'POWER(SIN(0.5 * (%f - latitude) / 180.0 * PI()), 2) + %f * COS(latitude / 180.0 * PI()) * POWER(SIN(0.5 * (%f - longitude) / 180.0 * PI()), 2)' % (ref_lat, math.cos(ref_lat / 180.0 * math.pi), ref_lon)
-        formula = '%d * ATAN2(SQRT(%s), SQRT(1 - (%s)))' % (3856 * 2, a, a)
+        if formula_type == 'arc':
+            a = 'POWER(SIN(0.5 * (%f - latitude) / 180.0 * PI()), 2) + %f * COS(latitude / 180.0 * PI()) * POWER(SIN(0.5 * (%f - longitude) / 180.0 * PI()), 2)' % (ref_lat, math.cos(math.radians(ref_lat)), ref_lon)
+            formula = '%d * ATAN2(SQRT(%s), SQRT(1 - (%s)))' % (3856 * 2, a, a)
+        elif formula_type == 'chord':
+            ref_coords = latitude_longitude_to_coords(ref_lat, ref_lon, 'degrees')
+            if ref_coords[0] is None or ref_coords[1] is None or ref_coords[2] is None:
+                return None
+            formula_params = {'ref_x': ref_coords[0],
+                              'ref_y': ref_coords[1],
+                              'ref_z': ref_coords[2]
+                              }
+            formula = '(x_coord - %(ref_x)f) * (x_coord - %(ref_x)f) + (y_coord - %(ref_y)f) * (y_coord - %(ref_y)f) + (z_coord - %(ref_z)f) * (z_coord - %(ref_z)f)' % formula_params
+        else:
+            return None
+        
+        print formula
         
         id_condition = 'id <> %d' % self.id
         lat_condition = 'AND latitude IS NOT NULL'
@@ -1053,11 +1095,30 @@ class UserProfile(models.Model):
         query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(skip)s %(limit)s' % format_params
         raw = UserProfile.objects.raw(query)
         profiles = list(raw)
+        
+        now = datetime.datetime.now()
+        print 'connected_userprofiles: processing time = %s' % (now - start_date)
         return profiles
+    
     
     def check_geo_localization(self, request):
         from task import async_check_geo_localization
         async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
+        
+    def position_changed(self):
+        if self.latitude is None or self.longitude is None:
+            return
+        from task import async_update_position_coords
+        async_update_position_coords.delay(userprofile=self)
+    
+    def update_position_coords(self):
+        coords = latitude_longitude_to_coords(self.latitude, self.longitude, 'degrees')
+        
+        self.x_coord = coords[0]
+        self.y_coord = coords[1]
+        self.z_coord = coords[2]
+        self.save()
+        
         
 
 def create_user_profile(sender, instance, created, **kwargs):  
@@ -1231,7 +1292,4 @@ def install_handlers():
     yabase_signals.new_animator_activity.connect(new_animator_activity)
     
 install_handlers()
-
-
-
 
