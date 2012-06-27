@@ -1,3 +1,5 @@
+from account.task import async_tw_post_message, async_tw_like_song, \
+    async_tw_listen, async_tw_animator_activity
 from bitfield import BitField
 from django.conf import settings as yaapp_settings
 from django.contrib.auth.models import User, Group
@@ -11,12 +13,14 @@ from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 from sorl.thumbnail import ImageField, get_thumbnail, delete
 from tastypie.models import create_api_key
+from yabase import signals as yabase_signals
 from yabase.apns import get_deprecated_devices, send_message
 from yabase.models import Radio, RadioUser
 from yamessage.models import NotificationsManager
 import datetime
 import json
 import logging
+import math
 import settings as account_settings
 import signals as account_signals
 import tweepy
@@ -26,8 +30,6 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-import math
-
 
 
 
@@ -163,6 +165,10 @@ class UserProfile(models.Model):
         'fb_share_like_song',
         'fb_share_post_message',
         'fb_share_animator_activity',
+        'tw_share_listen',
+        'tw_share_like_song',
+        'tw_share_post_message',
+        'tw_share_animator_activity',
         ),
         default=(2+8+16+32+64+128+256+512+1024+2048)
     ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128) + YES (fb_share_listen=256) + YES (fb_share_like_song=512) + YES (fb_share_post_message=1024) + YES (fb_share_animator_activity=2048)
@@ -1063,12 +1069,6 @@ def create_radio(sender, instance, created, **kwargs):
         radio, created = Radio.objects.get_or_create(creator=instance)
         radio.save()
 
-post_save.connect(create_user_profile, sender=User)
-post_save.connect(create_user_profile, sender=EmailUser)
-post_save.connect(create_api_key, sender=User)
-post_save.connect(create_api_key, sender=EmailUser)
-post_save.connect(create_radio, sender=User)
-post_save.connect(create_radio, sender=EmailUser)
 
 def create_ml_contact(sender, instance, created, **kwargs):
     if created:
@@ -1086,7 +1086,6 @@ def create_ml_contact(sender, instance, created, **kwargs):
             mailing, created = MailingList.objects.get_or_create(name='all',
                                       defaults={'description': 'All users'})
             mailing.subscribers.add(contact)
-post_save.connect(create_ml_contact, sender=UserProfile)
 
 
 def get_techtour_group():
@@ -1172,7 +1171,66 @@ def user_profile_deleted(sender, instance, created=None, **kwargs):
     else:
         return
     user_profile.remove_from_fuzzy_index()
-pre_delete.connect(user_profile_deleted, sender=UserProfile)
+    
+def new_wall_event_handler(sender, wall_event, **kwargs):
+    user = wall_event.user
+    if user is None:
+        return
+    if user.is_anonymous():
+        return
+    
+    we_type = wall_event.type
+    if we_type == yabase_settings.EVENT_MESSAGE:
+        if not user.get_profile().notifications_preferences.tw_share_post_message:
+            return    
+        async_tw_post_message.delay(user.id, wall_event.radio.uuid, wall_event.text)
+    elif we_type == yabase_settings.EVENT_LIKE:
+        if not user.get_profile().notifications_preferences.tw_share_like_song:
+            return    
+        song_title = unicode(wall_event)
+        async_tw_like_song.delay(user.id, wall_event.radio.uuid, song_title, wall_event.song.id)
+        
+def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
+    if user is None:
+        return
+    if user.is_anonymous():
+        return
+    if song is None:
+        return
+
+    if not user.get_profile().notifications_preferences.tw_share_listen:
+        return    
+    
+    song_title = unicode(song)
+    async_tw_listen.delay(user.id, radio.uuid, song_title, song.id)
+
+def new_animator_activity(sender, user, radio, **kwargs):
+    if user is None or radio is None:
+        return
+    if user.is_anonymous():
+        return
+
+    if not user.get_profile().notifications_preferences.tw_share_animator_activity:
+        return    
+
+    async_tw_animator_activity.delay(user.id, radio.uuid)
+
+    
+def install_handlers():
+    post_save.connect(create_user_profile, sender=User)
+    post_save.connect(create_user_profile, sender=EmailUser)
+    post_save.connect(create_api_key, sender=User)
+    post_save.connect(create_api_key, sender=EmailUser)
+    post_save.connect(create_radio, sender=User)
+    post_save.connect(create_radio, sender=EmailUser)
+    post_save.connect(create_ml_contact, sender=UserProfile)
+    pre_delete.connect(user_profile_deleted, sender=UserProfile)
+    
+    yabase_signals.new_wall_event.connect(new_wall_event_handler)
+    yabase_signals.user_started_listening_song.connect(user_started_listening_song_handler)
+    yabase_signals.new_animator_activity.connect(new_animator_activity)
+    
+install_handlers()
 
 
 

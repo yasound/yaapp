@@ -89,14 +89,26 @@ class SettingsFacebookForm(BootstrapForm):
         self.user_profile.save()
         
 class SettingsTwitterForm(BootstrapForm):
+    tw_share_listen = forms.BooleanField(label=_("Listen"), required=False)
+    tw_share_like_song = forms.BooleanField(label=_("Like song"), required=False)
+    tw_share_post_message = forms.BooleanField(label=_("Post message"), required=False)
+    tw_share_animator_activity = forms.BooleanField(label=_("Update programming"), required=False)
     class Meta:
         layout = (
-            Fieldset(_('Twitter share options'), ),
+            Fieldset(_('Twitter share options'),
+                     'tw_share_listen', 
+                     'tw_share_like_song', 
+                     'tw_share_post_message',
+                     'tw_share_animator_activity'),
         )
 
     def __init__(self, user_profile=None, *args, **kwargs):
         self.user_profile = user_profile
         initial = {
+            'tw_share_listen': self.user_profile.notifications_preferences.tw_share_listen,
+            'tw_share_like_song': self.user_profile.notifications_preferences.tw_share_like_song,
+            'tw_share_post_message': self.user_profile.notifications_preferences.tw_share_post_message,
+            'tw_share_animator_activity': self.user_profile.notifications_preferences.tw_share_animator_activity,
         }
         super(SettingsTwitterForm, self).__init__(initial=initial, *args, **kwargs)
         
@@ -110,7 +122,17 @@ class SettingsTwitterForm(BootstrapForm):
        
     
     def save(self):
-        pass
+        tw_share_listen = self.cleaned_data['tw_share_listen']
+        tw_share_like_song = self.cleaned_data['tw_share_like_song']
+        tw_share_post_message = self.cleaned_data['tw_share_post_message']
+        tw_share_animator_activity = self.cleaned_data['tw_share_animator_activity']
+        
+        self.user_profile.notifications_preferences.tw_share_listen = tw_share_listen
+        self.user_profile.notifications_preferences.tw_share_like_song = tw_share_like_song
+        self.user_profile.notifications_preferences.tw_share_post_message = tw_share_post_message
+        self.user_profile.notifications_preferences.tw_share_animator_activity = tw_share_animator_activity
+        
+        self.user_profile.save()
     
 class ImportItunesForm(BootstrapForm):
     tracks = forms.CharField(label=_('Please paste from iTunes'), 
