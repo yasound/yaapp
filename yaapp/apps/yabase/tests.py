@@ -5,13 +5,18 @@ from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Count
 from django.db.models.fields import FieldDoesNotExist
 from django.test import TestCase
+from mock import Mock, patch
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
     RadioUser
 from task import process_playlists_exec
 from tastypie.models import ApiKey
 from tests_utils import generate_playlist
-from yabase.import_utils import SongImporter, generate_default_filename, parse_itunes_line
+from yabase.import_utils import SongImporter, generate_default_filename, \
+    parse_itunes_line
 from yabase.models import FeaturedContent, Playlist, SongMetadata, WallEvent
+from yabase.task import process_playlists
+from yacore.database import atomic_inc
+from yacore.tags import clean_tags
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
 from yasearch.indexer import erase_index, add_song
@@ -19,10 +24,8 @@ import import_utils
 import os
 import settings as yabase_settings
 import simplejson as json
-from yacore.database import atomic_inc
-from mock import Mock, patch
-from yacore.tags import clean_tags
 import uploader
+from yasearch.models import MostPopularSongsManager
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -431,15 +434,44 @@ class TestImportPlaylist(TestCase):
         process_playlists_exec(radio, content_compressed=content_compressed)
         self.assertEquals(SongInstance.objects.all().count(), 492)
         self.assertEquals(SongMetadata.objects.filter(yasound_song_id__isnull=True).count(), 491)
-     
-        tests = SongMetadata.objects.annotate(num=Count('songinstance'))
-        for test in tests:
-            if test.num >= 3:
-                print u'%d: %s: %d' % (test.id, test, test.num)
-                sis = SongInstance.objects.filter(metadata=test)
-                for si in sis:
-                    print u'%d:%s:%d' % (si.id, si, si.order)
 
+    def test_fast_import(self):
+        mm = MostPopularSongsManager()
+        mm.drop()
+        
+        self.user.is_superuser = True
+        self.user.save()
+        self.client.login(username="test", password="test")
+
+        song = yaref_test_utils.generate_yasound_song('one of a kind', 'meds', 'placebo')
+        add_song(song)
+        
+        self.assertEquals(SongInstance.objects.all().count(), 0)
+
+        radio = Radio.objects.radio_for_user(self.user)
+        f = open('./apps/yabase/fixtures/playlist.data')
+        content_compressed = f.read()
+        f.close()
+        
+        process_playlists_exec(radio, content_compressed=content_compressed)
+        
+        self.assertEquals(SongInstance.objects.all().count(), 492)
+        self.assertEquals(SongMetadata.objects.filter(yasound_song_id__isnull=True).count(), 491)
+        
+        # all songs are enabled
+        self.assertEquals(SongInstance.objects.filter(enabled=True).count(), 492)
+
+        doc = mm.find(name='one of a kind', artist='placebo', album='meds')
+        self.assertEquals(doc.get('yasound_song_id'), song.id)
+        
+        self.user.is_superuser = False
+        self.user.save()
+        self.client.login(username="test", password="test")
+
+        found, _notfound = process_playlists_exec(radio, content_compressed=content_compressed)
+        self.assertEquals(found, 1)
+
+        
 class TestImportCover(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)

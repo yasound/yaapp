@@ -1,17 +1,15 @@
 from celery.task import task
 from django.contrib.auth.models import User
 from django.db import transaction
-from models import SongMetadata, SongInstance, update_leaderboard, RadioUser, \
-    Radio
+from models import Playlist, SongInstance, update_leaderboard, RadioUser
 from shutil import rmtree
 from struct import unpack_from
-from yabase.import_utils import parse_itunes_line, import_from_string
+from yabase.import_utils import parse_itunes_line, import_from_string, \
+    fast_import
 from yacore.database import flush_transaction
 from yaref.models import YasoundSong
-from yasearch.utils import get_simplified_name
 import import_utils
 import logging
-import md5
 import os
 import signals as yabase_signals
 import time
@@ -97,6 +95,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
     data = BinaryData(content_uncompressed)
     data_len = float(len(data.data))
 
+    remaining_songs = []
+
     while not data.is_done():
         tag = data.get_tag()
 
@@ -110,65 +110,42 @@ def process_playlists_exec(radio, content_compressed, task=None):
             _device_playlist_name = data.get_string()
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
-            album_name_simplified = get_simplified_name(album_name)
         elif tag == ARTIST_TAG:
             artist_name = data.get_string()
-            artist_name_simplified = get_simplified_name(artist_name)
         elif tag == SONG_TAG:
-            order = data.get_int32()
+            _order = data.get_int32()
             song_name = data.get_string()
-            song_name_simplified = get_simplified_name(song_name)
-            
-            hash_name = md5.new()
-            hash_name.update(song_name_simplified)
-            hash_name.update(album_name_simplified)
-            hash_name.update(artist_name_simplified)
-            hash_name_hex = hash_name.hexdigest()
-            
-            raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE hash_name=%s AND name=%s AND artist_name=%s AND album_name=%s",
-                                           [hash_name_hex,
-                                            song_name,
-                                            artist_name,
-                                            album_name])
-            if raw and len(list(raw)) > 0:
-                metadata = list(raw)[0]
-            else:
-                metadata = SongMetadata.objects.create(name=song_name, 
-                                                       artist_name=artist_name, 
-                                                       album_name=album_name,
-                                                       hash_name=hash_name_hex)
 
-            raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
-                                           [playlist.id,
-                                            metadata.id])
-            if raw and len(list(raw)) > 0:
-                song_instance = list(raw)[0]
+            creator = radio.creator
+            if creator is not None and creator.is_superuser:
+                song_instance = fast_import(song_name=song_name, 
+                                            album_name=album_name,
+                                            artist_name=artist_name,
+                                            playlist=playlist)
+                
+                if not song_instance:
+                    remaining_songs.append({
+                        'song_name': song_name,
+                        'album_name': album_name,
+                        'artist_name': artist_name,
+                    })
             else:
-                song_instance = SongInstance(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
-
-            if metadata.yasound_song_id == None:
-                song_name_simplified = get_simplified_name(song_name)
-                count += 1
-                # let's go fuzzy
-                mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified, 
-                                                           album_name_simplified, 
-                                                           artist_name_simplified)
-                if not mongo_doc:
-                    notfound += 1
-                else:
-                    metadata.yasound_song_id = mongo_doc['db_id']
-                    metadata.save()
-                    
-                    song_instance.need_sync = False
-                    found +=1
-                    
-            song_instance.save()
+                song_instance = import_from_string(song_name=song_name, 
+                                                   album_name=album_name,
+                                                   artist_name=artist_name,
+                                                   playlist=playlist)
+            if song_instance:
+                found += 1
+            else:
+                notfound +=1
+                
         elif tag == REMOVE_PLAYLIST:
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
         elif tag == REMOTE_PLAYLIST:
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
+
             
     logger.info('playlist parsing finished, computing ready flag')
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
@@ -185,8 +162,33 @@ def process_playlists_exec(radio, content_compressed, task=None):
     elapsed = time.time() - start
     logger.info('found: %d - not found: %d - total: %d in in %s seconds' % (found, notfound, count, elapsed))
 
+    if len(remaining_songs) > 0:
+        logger.info('launching task for remaining songs')
+        async_find_remaining_songs.delay(remaining_songs, playlist.id)
+    return found, notfound
 
-
+@task
+def async_find_remaining_songs(songs, playlist_id):
+    playlist = Playlist.objects.get(id=playlist_id)
+    for song in songs:
+        song_name = song.get('song_name')
+        artist_name = song.get('artist_name')
+        album_name = song.get('album_name')
+        
+        import_from_string(song_name=song_name, 
+                           album_name=album_name,
+                           artist_name=artist_name,
+                           playlist=playlist)        
+    radio = playlist.radio
+    if radio.ready:
+        return
+    
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
+    if len(songs_ok) > 0:
+        radio.ready = True
+        radio.save()
+        radio.fill_next_songs_queue()
+        
 @task
 def process_playlists(radio, content_compressed):
     return process_playlists_exec(radio, content_compressed, task=process_playlists)
