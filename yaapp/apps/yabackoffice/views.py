@@ -783,6 +783,20 @@ def songmetadata_export_most_popular(request):
     response['Content-Disposition'] = 'attachment; filename=songs.xls'
     return response        
 
+def _compare_metrics(m1, m2):
+    order = [
+        TimedMetricsManager.SLOT_24H,
+        TimedMetricsManager.SLOT_3D,
+        TimedMetricsManager.SLOT_7D,
+        TimedMetricsManager.SLOT_15D,
+        TimedMetricsManager.SLOT_30D,
+        TimedMetricsManager.SLOT_90D,
+        TimedMetricsManager.SLOT_90D_MORE, 
+    ]
+    order1 = order.index(m1.get('timestamp'))
+    order2 = order.index(m2.get('timestamp'))
+    return cmp(order1, order2)
+
 @csrf_exempt
 @login_required
 def metrics_graph_animators(request):
@@ -797,6 +811,9 @@ def metrics_graph_animators(request):
             'timestamp': metric['type'],
             'animator_activity': metric['animator_activity'] if 'animator_activity' in metric else 0 
         })
+ 
+    sorted(data, cmp=_compare_metrics)
+    
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
@@ -820,6 +837,7 @@ def metrics_graph_posts(request):
             'message_count': metric['_id'],
             'user_count': metric['value'] 
         })
+
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
@@ -864,6 +882,7 @@ def metrics_graph_listen(request):
             'timestamp': metric['type'],
             'listen_activity': metric['listen_activity'] if 'listen_activity' in metric else 0 
         })
+    sorted(data, cmp=_compare_metrics)
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
@@ -889,6 +908,7 @@ def metrics_graph_shares(request):
             'share_twitter_activity': metric['share_twitter_activity'] if 'share_twitter_activity' in metric else 0,
             'share_email_activity': metric['share_email_activity'] if 'share_email_activity' in metric else 0,
         })
+    sorted(data, cmp=_compare_metrics)
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
