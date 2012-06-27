@@ -812,7 +812,7 @@ def metrics_graph_animators(request):
             'animator_activity': metric['animator_activity'] if 'animator_activity' in metric else 0 
         })
  
-    sorted(data, cmp=_compare_metrics)
+    data.sort(cmp=_compare_metrics)
     
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
