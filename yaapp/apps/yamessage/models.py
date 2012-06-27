@@ -1,11 +1,11 @@
 from bson.objectid import ObjectId
 from django.conf import settings
+from django.contrib.auth.models import User
 from pymongo import DESCENDING
+from yabase.models import Radio
 import datetime
 import settings as yamessage_settings
 import signals as yamessage_signals
-from django.contrib.auth.models import User
-from yabase.models import Radio
 
 if settings.ENABLE_PUSH:
     from push import install_handlers
@@ -19,7 +19,10 @@ class NotificationsManager():
         self.notifications.ensure_index("date")
         self.notifications.ensure_index("dest_user_id")
         
-    def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None, from_radio_id=None):
+    def add_notification(self, recipient_user_id, notif_type, params=None, from_user_id=None, from_radio_id=None, language='fr'):
+        from django.utils import translation
+        translation.activate(language)
+         
         if settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED == False:
             print 'NotificationManager is disabled (settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False)'
             return;
@@ -30,6 +33,7 @@ class NotificationsManager():
                 from_user_name = u.userprofile.name
             except User.DoesNotExist:
                 pass 
+    
         from_radio_name = None
         if from_radio_id is not None:
             try:
@@ -54,8 +58,6 @@ class NotificationsManager():
         yamessage_signals.new_notification.send(sender=self, notification=notif)
         
     def text_for_notification(self, notification_type, params):
-        from django.utils import translation
-        translation.activate('fr')
         
         raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['text'])
         if params is not None:
