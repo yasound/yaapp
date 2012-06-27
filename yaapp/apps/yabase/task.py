@@ -1,17 +1,15 @@
 from celery.task import task
 from django.contrib.auth.models import User
 from django.db import transaction
-from models import SongMetadata, SongInstance, update_leaderboard, RadioUser, \
-    Radio
+from models import Playlist, SongInstance, update_leaderboard, RadioUser
 from shutil import rmtree
 from struct import unpack_from
-from yabase.import_utils import parse_itunes_line, import_from_string
+from yabase.import_utils import parse_itunes_line, import_from_string, \
+    fast_import
 from yacore.database import flush_transaction
 from yaref.models import YasoundSong
-from yasearch.utils import get_simplified_name
 import import_utils
 import logging
-import md5
 import os
 import signals as yabase_signals
 import time
@@ -97,6 +95,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
     data = BinaryData(content_uncompressed)
     data_len = float(len(data.data))
 
+    remaining_songs = []
+
     while not data.is_done():
         tag = data.get_tag()
 
@@ -116,10 +116,24 @@ def process_playlists_exec(radio, content_compressed, task=None):
             _order = data.get_int32()
             song_name = data.get_string()
 
-            song_instance = import_from_string(song_name=song_name, 
-                                               album_name=album_name,
-                                               artist_name=artist_name,
-                                               playlist=playlist)
+            creator = radio.creator
+            if creator is not None and creator.is_superuser:
+                song_instance = fast_import(song_name=song_name, 
+                                            album_name=album_name,
+                                            artist_name=artist_name,
+                                            playlist=playlist)
+                
+                if not song_instance:
+                    remaining_songs.append({
+                        'song_name': song_name,
+                        'album_name': album_name,
+                        'artist_name': artist_name,
+                    })
+            else:
+                song_instance = import_from_string(song_name=song_name, 
+                                                   album_name=album_name,
+                                                   artist_name=artist_name,
+                                                   playlist=playlist)
             if song_instance:
                 found += 1
             else:
@@ -131,6 +145,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
         elif tag == REMOTE_PLAYLIST:
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
+
             
     logger.info('playlist parsing finished, computing ready flag')
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
@@ -147,8 +162,33 @@ def process_playlists_exec(radio, content_compressed, task=None):
     elapsed = time.time() - start
     logger.info('found: %d - not found: %d - total: %d in in %s seconds' % (found, notfound, count, elapsed))
 
+    if len(remaining_songs) > 0:
+        logger.info('launching task for remaining songs')
+        async_find_remaining_songs.delay(remaining_songs, playlist.id)
+    return found, notfound
 
-
+@task
+def async_find_remaining_songs(songs, playlist_id):
+    playlist = Playlist.objects.get(id=playlist_id)
+    for song in songs:
+        song_name = song.get('song_name')
+        artist_name = song.get('artist_name')
+        album_name = song.get('album_name')
+        
+        import_from_string(song_name=song_name, 
+                           album_name=album_name,
+                           artist_name=artist_name,
+                           playlist=playlist)        
+    radio = playlist.radio
+    if radio.ready:
+        return
+    
+    songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
+    if len(songs_ok) > 0:
+        radio.ready = True
+        radio.save()
+        radio.fill_next_songs_queue()
+        
 @task
 def process_playlists(radio, content_compressed):
     return process_playlists_exec(radio, content_compressed, task=process_playlists)

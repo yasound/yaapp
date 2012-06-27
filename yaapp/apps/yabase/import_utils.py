@@ -90,6 +90,7 @@ import uploader
 import uuid
 import mimetypes
 import md5
+from yasearch.models import MostPopularSongsManager
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -776,6 +777,35 @@ def parse_itunes_line(line):
         pass
     return name, album, artist
     
+    
+def fast_import(song_name, album_name, artist_name, playlist):
+    """
+    import songs by using the most popular songs collection instead of 
+    searching in the whole database
+    """
+    mp = MostPopularSongsManager()
+    song_instance = None
+
+    song_name_simplified = get_simplified_name(song_name)
+    album_name_simplified = get_simplified_name(album_name)
+    artist_name_simplified = get_simplified_name(artist_name)
+
+    doc = mp.find(name=song_name_simplified, artist=artist_name_simplified, album=album_name_simplified)
+    if not doc:
+        return song_instance
+    
+    metadata = SongMetadata.objects.get(id=doc.get('db_id'))
+    raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
+                                   [playlist.id,
+                                    metadata.id])
+    if raw and len(list(raw)) > 0:
+        song_instance = list(raw)[0]
+    else:
+        song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
+    
+    return song_instance
+    
+    
 def import_from_string(song_name, album_name, artist_name, playlist):
     song_name_simplified = get_simplified_name(song_name)
     album_name_simplified = get_simplified_name(album_name)
@@ -799,6 +829,14 @@ def import_from_string(song_name, album_name, artist_name, playlist):
                                                artist_name=artist_name,
                                                album_name=album_name,
                                                hash_name=hash_name_hex)
+
+    if metadata.yasound_song_id is None:
+        mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified, 
+                                                   album_name_simplified, 
+                                                   artist_name_simplified)
+        if mongo_doc is not None:
+            metadata.yasound_song_id = mongo_doc.get('db_id')
+            metadata.save()
         
     raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
                                    [playlist.id,
@@ -808,12 +846,6 @@ def import_from_string(song_name, album_name, artist_name, playlist):
     else:
         song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
 
-    if metadata.yasound_song_id is None:
-        mongo_doc = YasoundSong.objects.find_fuzzy(song_name_simplified, 
-                                                   album_name_simplified, 
-                                                   artist_name_simplified)
-        if mongo_doc is not None:
-            SongMetadata.objects.filter(id=metadata.id).update(yasound_song_id = mongo_doc.get('db_id'))
 
     return song_instance 
     

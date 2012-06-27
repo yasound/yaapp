@@ -255,7 +255,7 @@ class MostPopularSongsManager():
         metadata = song_instance.metadata
         if not metadata.yasound_song_id > 0:
             return False
-            
+        
         songinstance__count = SongInstance.objects.filter(metadata=metadata).count()
 
         docs = self.collection.find().sort('songinstance__count', ASCENDING).limit(1)
