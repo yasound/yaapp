@@ -1,3 +1,4 @@
+from account.api import build_random_username
 from account.models import UserProfile
 from django.contrib.auth.models import User
 import settings as account_settings
@@ -10,6 +11,8 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
     or create new but with our profile info inside 
     """
     backend_name = backend.name.lower()
+    
+    # existing user
     if user:
         if backend_name == 'facebook':
             profile = user.get_profile()
@@ -27,13 +30,14 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
     if not username:
         return None
     
+    # new user
     if backend_name == 'facebook':
         try:
             profile = UserProfile.objects.get(facebook_uid=uid)
             user = profile.user
             return {'user': user}
         except UserProfile.DoesNotExist:
-            user = User.objects.create_user(username=username, email=details.get('email'))
+            user = User.objects.create_user(username=build_random_username, email=details.get('email'))
             user.first_name = details.get('first_name')
             user.last_name = details.get('last_name')
             user.save()
@@ -51,7 +55,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             user = profile.user
             return {'user': user}
         except UserProfile.DoesNotExist:
-            user = User.objects.create_user(username=username, email=details.get('email'))
+            user = User.objects.create_user(username=build_random_username, email=details.get('email'))
             user.first_name = details.get('first_name')
             user.last_name = details.get('last_name')
             user.save()
