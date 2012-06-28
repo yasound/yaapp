@@ -530,7 +530,7 @@ class TestFacebookSharePrefs(TestCase):
         self.assertEquals(res.status_code, 200)
         
         
-        res = self.client.post('/api/v1/facebook_share_preferences/', pref_dict)
+        res = self.client.post('/api/v1/set_facebook_share_preferences/', pref_dict)
         self.assertEquals(res.status_code, 401)
         
         res = self.client.put('/api/v1/set_facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), pref_dict, content_type='application/json')
