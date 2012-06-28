@@ -107,6 +107,50 @@ class UserProfileManager(models.Manager):
     def remove_fake_users(self):
         User.objects.filter(username__startswith='_____fake_____').delete()
         
+    def connected_userprofiles(self, ref_lat, ref_lon, skip=0, limit=20, exclude_profile=None, formula_type='chord', time_condition_enabled=True):  
+        if ref_lat is None or ref_lon is None:
+            return None          
+        dist_field_name = 'distance'
+        
+        if formula_type == 'arc':
+            a = 'POWER(SIN(0.5 * (%f - latitude) / 180.0 * PI()), 2) + %f * COS(latitude / 180.0 * PI()) * POWER(SIN(0.5 * (%f - longitude) / 180.0 * PI()), 2)' % (ref_lat, math.cos(math.radians(ref_lat)), ref_lon)
+            formula = '%d * ATAN2(SQRT(%s), SQRT(1 - (%s)))' % (3856 * 2, a, a)
+        elif formula_type == 'chord':
+            ref_coords = latitude_longitude_to_coords(ref_lat, ref_lon, 'degrees')
+            if ref_coords[0] is None or ref_coords[1] is None or ref_coords[2] is None:
+                return None
+            formula_params = {'ref_x': ref_coords[0],
+                              'ref_y': ref_coords[1],
+                              'ref_z': ref_coords[2]
+                              }
+            formula = '(x_coord - %(ref_x)f) * (x_coord - %(ref_x)f) + (y_coord - %(ref_y)f) * (y_coord - %(ref_y)f) + (z_coord - %(ref_z)f) * (z_coord - %(ref_z)f)' % formula_params
+        else:
+            return None
+        
+        id_condition = 'id <> %d AND' % exclude_profile.id if exclude_profile is not None else ''
+        lat_condition = 'latitude IS NOT NULL AND'
+        lon_condition = 'longitude IS NOT NULL AND'
+        time_condition = 'last_authentication_date >= DATE_SUB(NOW(), INTERVAL 10 MINUTE)' if time_condition_enabled else ''
+        
+        order_info = 'ORDER BY %s ASC' % dist_field_name
+        skip_info = ('OFFSET %d' % skip) if (skip is not None and skip > 0) else ''
+        limit_info = ('LIMIT %d' % limit) if (limit is not None) else ''
+        
+        format_params = {'formula': formula,
+                         'dist_field_name': dist_field_name,
+                         'id_cond': id_condition,
+                         'lat_cond': lat_condition,
+                         'lon_cond': lon_condition,
+                         'time_cond': time_condition,
+                         'order': order_info,
+                         'skip': skip_info,
+                         'limit': limit_info                         
+                         }
+        query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(skip)s %(limit)s' % format_params
+        raw = UserProfile.objects.raw(query)
+        profiles = list(raw)
+        return profiles
+        
 class UserProfile(models.Model):
     """
     Store usefule informations about user.
@@ -1044,52 +1088,11 @@ class UserProfile(models.Model):
         self.longitude = lon
         self.save()
         
-    def connected_userprofiles(self, skip=0, limit=20, ref_lat=None, ref_lon=None, formula_type='chord', time_condition_enabled=True):        
-        if ref_lat is None:
-            ref_lat = self.latitude
-        if ref_lon is None:
-            ref_lon = self.longitude
-            
-        dist_field_name = 'distance'
+    def connected_userprofiles(self, skip=0, limit=20, formula_type='chord', time_condition_enabled=True):
+        lat = self.latitude
+        lon = self.longitude
+        return UserProfile.objects.connected_userprofiles(ref_lat=lat, ref_lon=lon, skip=skip, limit=limit, exclude_profile=self, formula_type=formula_type, time_condition_enabled=time_condition_enabled)
         
-        if formula_type == 'arc':
-            a = 'POWER(SIN(0.5 * (%f - latitude) / 180.0 * PI()), 2) + %f * COS(latitude / 180.0 * PI()) * POWER(SIN(0.5 * (%f - longitude) / 180.0 * PI()), 2)' % (ref_lat, math.cos(math.radians(ref_lat)), ref_lon)
-            formula = '%d * ATAN2(SQRT(%s), SQRT(1 - (%s)))' % (3856 * 2, a, a)
-        elif formula_type == 'chord':
-            ref_coords = latitude_longitude_to_coords(ref_lat, ref_lon, 'degrees')
-            if ref_coords[0] is None or ref_coords[1] is None or ref_coords[2] is None:
-                return None
-            formula_params = {'ref_x': ref_coords[0],
-                              'ref_y': ref_coords[1],
-                              'ref_z': ref_coords[2]
-                              }
-            formula = '(x_coord - %(ref_x)f) * (x_coord - %(ref_x)f) + (y_coord - %(ref_y)f) * (y_coord - %(ref_y)f) + (z_coord - %(ref_z)f) * (z_coord - %(ref_z)f)' % formula_params
-        else:
-            return None
-        
-        id_condition = 'id <> %d' % self.id
-        lat_condition = 'AND latitude IS NOT NULL'
-        lon_condition = 'AND longitude IS NOT NULL'
-        time_condition = 'AND last_authentication_date >= DATE_SUB(NOW(), INTERVAL 10 MINUTE)' if time_condition_enabled else ''
-        
-        order_info = 'ORDER BY %s ASC' % dist_field_name
-        skip_info = ('OFFSET %d' % skip) if (skip is not None and skip > 0) else ''
-        limit_info = ('LIMIT %d' % limit) if (limit is not None) else ''
-        
-        format_params = {'formula': formula,
-                         'dist_field_name': dist_field_name,
-                         'id_cond': id_condition,
-                         'lat_cond': lat_condition,
-                         'lon_cond': lon_condition,
-                         'time_cond': time_condition,
-                         'order': order_info,
-                         'skip': skip_info,
-                         'limit': limit_info                         
-                         }
-        query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(skip)s %(limit)s' % format_params
-        raw = UserProfile.objects.raw(query)
-        profiles = list(raw)
-        return profiles
     
     
     def check_geo_localization(self, request):

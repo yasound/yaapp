@@ -467,17 +467,26 @@ def update_localization(request):
     unit = obj.get('unit', 'degrees')
     request.user.userprofile.set_position(lat, lon, unit)
     
-@check_api_key(methods=['GET'], login_required=True)
+@check_api_key(methods=['GET'], login_required=False)
 def connected_users_by_distance(request):
     skip = request.GET.get('skip', 0)
     limit = request.GET.get('limit', 20)
     
-    userprofile = request.user.userprofile
-    print userprofile
-    profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
+    if request.user and request.user.is_authenticated():
+        userprofile = request.user.userprofile
+        profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
+    else:
+        from yacore.geoip import ip_coords
+        ip = request.META[settings.GEOIP_LOOKUP]
+        coords = ip_coords(ip)
+        if coords is None:
+            profiles = None
+        else:
+            profiles = UserProfile.objects.connected_userprofiles(coords[0], coords[1], skip=skip, limit=limit)
     data = []
-    for p in profiles:
-        data.append(p.user_as_dict(full=True))
+    if profiles:
+        for p in profiles:
+            data.append(p.user_as_dict(full=True))
     return api_response(data, limit=limit, offset=skip)
     
         
