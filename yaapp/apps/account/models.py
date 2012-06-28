@@ -1290,6 +1290,11 @@ def new_social_user(sender, user, response, details, **kwargs):
         profile.twitter_token = token
         profile.twitter_token_secret = token_secret
         profile.save()
+    elif backend_name == 'facebook':
+        access_token = response.get('access_token')
+        profile = user.get_profile()
+        profile.facebook_token = access_token
+        profile.save()
     
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
