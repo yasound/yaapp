@@ -1279,14 +1279,17 @@ def new_animator_activity(sender, user, radio, **kwargs):
 
     
 def new_social_user(sender, user, response, details, **kwargs):
-    logger.info('new_social_user')
-    logger.info('user = ')
-    logger.info(user)
-    logger.info('response = ')
-    logger.info(response)
-    logger.info('details =')
-    logger.info(details)
-    
+    backend_name = sender.name.lower()
+    if backend_name == 'twitter':
+        access_token = response.get('access_token')
+        tokens = dict(tok.split('=') for tok in access_token.split('&'))
+        token = tokens.get('oauth_token')
+        token_secret = tokens.get('oauth_token_secret')
+        
+        profile = user.get_profile()
+        profile.twitter_token = token
+        profile.twitter_token_secret = token_secret
+        profile.save()
     
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
