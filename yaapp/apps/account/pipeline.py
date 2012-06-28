@@ -37,7 +37,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             user = profile.user
             return {'user': user}
         except UserProfile.DoesNotExist:
-            user = User.objects.create_user(username=build_random_username, email=details.get('email'))
+            user = User.objects.create_user(username=build_random_username(), email=details.get('email'))
             user.first_name = details.get('first_name')
             user.last_name = details.get('last_name')
             user.save()
@@ -55,7 +55,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             user = profile.user
             return {'user': user}
         except UserProfile.DoesNotExist:
-            user = User.objects.create_user(username=build_random_username, email=details.get('email'))
+            user = User.objects.create_user(username=build_random_username(), email=details.get('email'))
             user.first_name = details.get('first_name')
             user.last_name = details.get('last_name')
             user.save()
