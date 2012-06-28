@@ -1,7 +1,7 @@
 from account.task import async_tw_post_message, async_tw_like_song, \
     async_tw_listen, async_tw_animator_activity
 from bitfield import BitField
-from django.conf import settings as yaapp_settings
+from django.conf import settings, settings as yaapp_settings
 from django.contrib.auth.models import User, Group
 from django.core.files.base import ContentFile
 from django.db import models
@@ -21,6 +21,7 @@ import datetime
 import json
 import logging
 import math
+import math
 import settings as account_settings
 import signals as account_signals
 import tweepy
@@ -30,9 +31,7 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-import math
-from django.conf import settings
-
+from social_auth.signals import socialauth_registered
 
 logger = logging.getLogger("yaapp.account")
 
@@ -1279,6 +1278,16 @@ def new_animator_activity(sender, user, radio, **kwargs):
     async_tw_animator_activity.delay(user.id, radio.uuid)
 
     
+def new_social_user(sender, user, response, details, **kwargs):
+    logger.info('new_social_user')
+    logger.info('user = ')
+    logger.info(user)
+    logger.info('response = ')
+    logger.info(response)
+    logger.info('details =')
+    logger.info(details)
+    
+    
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
     post_save.connect(create_user_profile, sender=EmailUser)
@@ -1293,5 +1302,6 @@ def install_handlers():
     yabase_signals.user_started_listening_song.connect(user_started_listening_song_handler)
     yabase_signals.new_animator_activity.connect(new_animator_activity)
     
+    socialauth_registered.connect(new_social_user)
 install_handlers()
 
