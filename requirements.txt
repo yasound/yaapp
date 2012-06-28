@@ -41,3 +41,4 @@ xlwt
 -e git+https://github.com/lynadge/emencia-django-newsletter.git#egg=emencia-django-newsletter
 django-tinymce
 pygeoip
+-e git+https://github.com/alastair/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs

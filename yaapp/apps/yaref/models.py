@@ -2,25 +2,21 @@
 Contains models related to yasound database (ie all the songs)
 """
 from django.conf import settings
-from django.core.files import File
 from django.db import models
 from django.db.models import Q
 from fuzzywuzzy import fuzz
 from sorl.thumbnail import get_thumbnail
-from time import time
 from uploader import lastfm
 import buylink
 import django.db.models.options as options
-import json
 import logging
 import os
-import requests
-import shutil
 import string
 import utils as yaref_utils
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+import musicbrainzngs
 logger = logging.getLogger("yaapp.yaref")
 
 
@@ -303,25 +299,65 @@ class YasoundSong(models.Model):
                 return mbid
         return None
 
-    def find_synonyms(self):
-        synonyms = []
-        name, artist, album, mbid = self.name, self.artist_name, self.album_name, self.musicbrainz_id
-        
+    def _lastfm_data(self):
+        name, artist, mbid = self.name, self.artist_name, self.musicbrainz_id
         valid = False
         metadata = []
         if mbid is not None and mbid > 0:
             metadata, valid = lastfm.find_by_mbid(mbid=mbid)
         else:
             metadata, valid = lastfm.find_by_name_artist(name=name, artist=artist)
-        
+
+        s = None        
         if valid and self.lastfm_id and metadata.get('id') == self.lastfm_id:
             s = {
                 'name': metadata.get('name'),
                 'artist': metadata.get('artist'),
                 'album': metadata.get('album'),
             }
-            if s['name'] != name or s['artist'] != artist or s['album'] != album:
-                synonyms.append(s)
+        return s
+    
+    def _musicbrainz_data(self):
+        musicbrainzngs.set_useragent("Yasound", "0.1", "https://yasound.com")
+        s = None
+        mbid = self.musicbrainz_id
+        if not mbid:
+            return s
+
+        name, album, artist = '', '', ''
+        try:        
+            data = musicbrainzngs.get_recording_by_id(mbid, includes=['artists', 'releases'])
+            artist = data.get('recording').get('artist-credit')[0].get('artist').get('name')
+            album = data.get('recording').get('release-list')[0].get('title')
+            name = data.get('recording').get('title')
+        except:
+            pass
+        
+        if name != '' or artist != '' or album != '':
+            s =  {
+                'name': name,
+                'album': album,
+                'artist': artist
+            }
+        return s
+        
+    def find_synonyms(self):
+        name, artist, album = self.name.lower(), self.artist_name.lower(), self.album_name.lower()
+        synonyms = []
+        
+        lastfm_data = self._lastfm_data()
+        if lastfm_data:
+            if lastfm_data['name'].lower() != name \
+                or lastfm_data['artist'].lower() != artist \
+                or lastfm_data['album'].lower() != album:
+                synonyms.append(lastfm_data)
+
+        musicbrainz_data = self._musicbrainz_data()
+        if musicbrainz_data:
+            if musicbrainz_data['name'].lower() != name \
+               or musicbrainz_data['artist'].lower() != artist \
+               or musicbrainz_data['album'].lower() != album:
+                synonyms.append(musicbrainz_data)
             
         return synonyms
             
