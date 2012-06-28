@@ -10,13 +10,14 @@ from uploader import lastfm
 import buylink
 import django.db.models.options as options
 import logging
+import musicbrainzngs
 import os
+import shutil
 import string
 import utils as yaref_utils
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-import musicbrainzngs
 logger = logging.getLogger("yaapp.yaref")
 
 

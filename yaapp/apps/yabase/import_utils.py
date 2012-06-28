@@ -91,6 +91,7 @@ import uuid
 import mimetypes
 import md5
 from yasearch.models import MostPopularSongsManager
+from yaref.task import async_find_synonyms
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -746,6 +747,8 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
             importer.extract_song_cover(yasound_song, filepath)
         except:
             pass
+        async_find_synonyms.delay(sm.yasound_song_id)
+        
         
     return sm, messages
     
