@@ -49,10 +49,6 @@ def async_check_geo_localization(userprofile, ip):
 def _twitter_api(user_id):
     from models import UserProfile
 
-    user = User.objects.get(id=user_id)
-    if not user.is_superuser:
-        return None
-    
     try:
         user_profile = UserProfile.objects.get(user__id=user_id)
     except:
