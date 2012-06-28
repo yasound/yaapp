@@ -28,6 +28,7 @@ import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
 from yacore.decorators import check_api_key
+from yacore.api import api_response
 
 logger = logging.getLogger("yaapp.account")
 
@@ -465,5 +466,19 @@ def update_localization(request):
     lon = obj['longitude']
     unit = obj.get('unit', 'degrees')
     request.user.userprofile.set_position(lat, lon, unit)
+    
+@check_api_key(methods=['GET'], login_required=True)
+def connected_users_by_distance(request):
+    skip = request.GET.get('skip', 0)
+    limit = request.GET.get('limit', 20)
+    
+    userprofile = request.user.userprofile
+    print userprofile
+    profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
+    data = []
+    for p in profiles:
+        data.append(p.user_as_dict(full=True))
+    return api_response(data, limit=limit, offset=skip)
+    
         
     

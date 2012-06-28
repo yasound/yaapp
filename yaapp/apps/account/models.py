@@ -1044,10 +1044,7 @@ class UserProfile(models.Model):
         self.longitude = lon
         self.save()
         
-    def connected_userprofiles(self, skip=0, limit=20, ref_lat=None, ref_lon=None, formula_type='chord'):
-        import datetime
-        start_date = datetime.datetime.now()
-        
+    def connected_userprofiles(self, skip=0, limit=20, ref_lat=None, ref_lon=None, formula_type='chord', time_condition_enabled=True):        
         if ref_lat is None:
             ref_lat = self.latitude
         if ref_lon is None:
@@ -1070,12 +1067,10 @@ class UserProfile(models.Model):
         else:
             return None
         
-        print formula
-        
         id_condition = 'id <> %d' % self.id
         lat_condition = 'AND latitude IS NOT NULL'
         lon_condition = 'AND longitude IS NOT NULL'
-        time_condition = 'AND last_authentication_date >= DATE_SUB(NOW(), INTERVAL 10 MINUTE)'
+        time_condition = 'AND last_authentication_date >= DATE_SUB(NOW(), INTERVAL 10 MINUTE)' if time_condition_enabled else ''
         
         order_info = 'ORDER BY %s ASC' % dist_field_name
         skip_info = ('OFFSET %d' % skip) if (skip is not None and skip > 0) else ''
@@ -1094,9 +1089,6 @@ class UserProfile(models.Model):
         query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(skip)s %(limit)s' % format_params
         raw = UserProfile.objects.raw(query)
         profiles = list(raw)
-        
-        now = datetime.datetime.now()
-        print 'connected_userprofiles: processing time = %s' % (now - start_date)
         return profiles
     
     
