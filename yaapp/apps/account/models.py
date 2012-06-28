@@ -1187,8 +1187,9 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
     elif we_type == yabase_settings.EVENT_LIKE:
         if not user.get_profile().notifications_preferences.tw_share_like_song:
             return    
-        song_title = unicode(wall_event)
-        async_tw_like_song.delay(user.id, wall_event.radio.uuid, song_title, wall_event.song.id)
+        song_title = wall_event.song.metadata.name
+        artist = wall_event.song.metadata.artist_name
+        async_tw_like_song.delay(user.id, wall_event.radio.uuid, song_title, artist)
         
 def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
     if user is None:
@@ -1202,7 +1203,8 @@ def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
         return    
     
     song_title = unicode(song)
-    async_tw_listen.delay(user.id, radio.uuid, song_title, song.id)
+    artist =  song.metadata.artist_name
+    async_tw_listen.delay(user.id, radio.uuid, song_title, artist)
 
 def new_animator_activity(sender, user, radio, **kwargs):
     if user is None or radio is None:

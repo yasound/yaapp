@@ -3,9 +3,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
+from yabase.models import SongInstance
 from yacore.http import absolute_url
 import logging
 import tweepy
+from django.utils import translation
 
 logger = logging.getLogger("yaapp.account")
 
@@ -74,36 +77,56 @@ def _twitter_api(user_id):
         return api
     else:
         return None
-    
+
+def _set_language(user_id):
+    from models import UserProfile
+    user_profile = UserProfile.objects.get(user__id=user_id)
+    language = user_profile.language
+    translation.activate(language)
+
 @task(ignore_result=True)
 def async_tw_post_message(user_id, radio_uuid, message):
     logger.debug('async_tw_post_message: user = %s, radio = %s, message = %s' % (user_id, radio_uuid, message))
     api = _twitter_api(user_id)
     if api is None:
         return
+
+    _set_language(user_id)
     
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
+    tweet = _('I posted a message on %(url)s #yasound') % {'url': radio_url}
+    logger.info(tweet)
+    api.update_status(status=tweet)
     logger.debug('done')
     
 @task(ignore_result=True)
-def async_tw_listen(user_id, radio_uuid, song_title, song_id):
+def async_tw_listen(user_id, radio_uuid, song_title, artist):
     logger.debug('async_tw_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     api = _twitter_api(user_id)
     if api is None:
         return
+
+    _set_language(user_id)
     
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
+    tweet = _('I am listening to %(song)s by %(artist)s on %(url)s #yasound') % {'song':song_title[:7], 'artist':artist[:7], 'url': radio_url}
+    api.update_status(status=tweet)
+    
     logger.debug('done')
 
 @task(ignore_result=True)
-def async_tw_like_song(user_id, radio_uuid, song_title, song_id):
+def async_tw_like_song(user_id, radio_uuid, song_title, artist):
     logger.debug('async_tw_like_song: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     api = _twitter_api(user_id)
     if api is None:
         return
 
+    _set_language(user_id)
+
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
-    song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
+    tweet = _('I like %(song)s by %(artist)s on %(url)s #yasound') % {'song':song_title[:7], 'artist':artist[:7], 'url':radio_url}
+    api.update_status(status=tweet)
+
     logger.debug('done')
         
 @task(ignore_result=True)
@@ -113,6 +136,10 @@ def async_tw_animator_activity(user_id, radio_uuid):
     if api is None:
         return
 
+    _set_language(user_id)
+
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
+    tweet = _('I have updated my playist on %(url)s #yasound') % {'url':radio_url}
+    api.update_status(status=tweet)
 
     logger.debug('done')
