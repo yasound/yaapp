@@ -342,7 +342,11 @@ class YasoundSong(models.Model):
         return s
         
     def find_synonyms(self):
-        name, artist, album = self.name.lower(), self.artist_name.lower(), self.album_name.lower()
+        name, artist, album = self.name, self.artist_name, self.album_name
+        name = name.lower() if name is not None else ''
+        artist = artist.lower() if artist is not None else ''
+        album = album.lower() if album is not None else ''
+        
         synonyms = []
         
         lastfm_data = self._lastfm_data()

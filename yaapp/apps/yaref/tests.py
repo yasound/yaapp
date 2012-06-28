@@ -105,7 +105,7 @@ class TestFind(TestCase):
     def test_find_synonyms(self):
         s = YasoundSong(name='hi', artist_name='world', lastfm_id='1019817', musicbrainz_id='028523f5-23b3-4910-adc1-46d932e2fb55')
         synonyms = s.find_synonyms()
-        self.assertEquals(len(synonyms), 1)
+        self.assertEquals(len(synonyms), 2)
         metadata = synonyms[0]
         self.assertEquals(metadata.get('name'), 'Believe')
         self.assertEquals(metadata.get('artist'), 'Cher')
