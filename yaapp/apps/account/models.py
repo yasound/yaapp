@@ -1080,6 +1080,31 @@ class UserProfile(models.Model):
             self.notifications_preferences.fb_share_animator_activity = fb_share_animator_activity
         self.save()
         
+    def twitter_share_preferences(self):
+        prefs = {
+                 'tw_share_listen':             True if self.notifications_preferences.tw_share_listen else False,
+                 'tw_share_like_song':          True if self.notifications_preferences.tw_share_like_song else False,
+                 'tw_share_post_message':       True if self.notifications_preferences.tw_share_post_message else False,
+                 'tw_share_animator_activity':  True if self.notifications_preferences.tw_share_animator_activity else False,
+                 }
+        return prefs
+    
+    def set_twitter_share_preferences(self, pref_dict):
+        tw_share_listen             = pref_dict.get('tw_share_listen', None)
+        tw_share_like_song          = pref_dict.get('tw_share_like_song', None)
+        tw_share_post_message       = pref_dict.get('tw_share_post_message', None)
+        tw_share_animator_activity  = pref_dict.get('tw_share_animator_activity', None)
+
+        if tw_share_listen is not None:
+            self.notifications_preferences.tw_share_listen = tw_share_listen
+        if tw_share_like_song is not None:
+            self.notifications_preferences.tw_share_like_song = tw_share_like_song
+        if tw_share_post_message is not None:
+            self.notifications_preferences.tw_share_post_message = tw_share_post_message
+        if tw_share_animator_activity is not None:
+            self.notifications_preferences.tw_share_animator_activity = tw_share_animator_activity
+        self.save()
+        
     def set_position(self, lat, lon, unit='degrees'):
         if unit == 'radians':
             lat = math.degrees(lat) # to degrees

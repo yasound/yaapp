@@ -29,6 +29,7 @@ import settings as account_settings
 import yabase.settings as yabase_settings
 from yacore.decorators import check_api_key
 from yacore.api import api_response
+from yacore.decorators import check_api_key
 
 logger = logging.getLogger("yaapp.account")
 
@@ -196,30 +197,41 @@ def set_notifications_preferences(request):
     res = 'update_notifications_preferences OK'
     return HttpResponse(res)
 
-def get_facebook_share_preferences(request):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-    if not check_http_method(request, ['get']):
-        return HttpResponse(status=405)
-    
+
+@check_api_key(methods=['GET'], login_required=True)
+def get_facebook_share_preferences(request):    
     user_profile = request.user.userprofile
     res = user_profile.facebook_share_preferences()
     response = json.dumps(res)
     return HttpResponse(response)
 
+@check_api_key(methods=['POST'], login_required=True)
 @csrf_exempt
-def set_facebook_share_preferences(request):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-    
+def set_facebook_share_preferences(request):    
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     user_profile = request.user.userprofile
     user_profile.set_facebook_share_preferences(post_data_dict)
     
     res = 'update_facebook_share_preferences OK'
+    return HttpResponse(res)
+
+@check_api_key(methods=['GET'], login_required=True)
+def get_twitter_share_preferences(request):    
+    user_profile = request.user.userprofile
+    res = user_profile.twitter_share_preferences()
+    response = json.dumps(res)
+    return HttpResponse(response)
+
+@check_api_key(methods=['POST'], login_required=True)
+@csrf_exempt
+def set_twitter_share_preferences(request):    
+    data = request.POST.keys()[0]
+    post_data_dict = json.loads(data)
+    user_profile = request.user.userprofile
+    user_profile.set_twitter_share_preferences(post_data_dict)
+    
+    res = 'update_twitter_share_preferences OK'
     return HttpResponse(res)
 
 
