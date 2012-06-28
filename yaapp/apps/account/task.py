@@ -88,13 +88,14 @@ def async_tw_post_message(user_id, radio_uuid, message):
     logger.debug('async_tw_post_message: user = %s, radio = %s, message = %s' % (user_id, radio_uuid, message))
     api = _twitter_api(user_id)
     if api is None:
+        logger.debug('no twitter api access for user %d' % (user_id))
         return
 
     _set_language(user_id)
     
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
     tweet = _('I posted a message on %(url)s #yasound') % {'url': radio_url}
-    logger.info(tweet)
+    logger.debug(tweet)
     api.update_status(status=tweet)
     logger.debug('done')
     
@@ -103,6 +104,7 @@ def async_tw_listen(user_id, radio_uuid, song_title, artist):
     logger.debug('async_tw_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     api = _twitter_api(user_id)
     if api is None:
+        logger.debug('no twitter api access for user %d' % (user_id))
         return
 
     _set_language(user_id)
@@ -118,6 +120,7 @@ def async_tw_like_song(user_id, radio_uuid, song_title, artist):
     logger.debug('async_tw_like_song: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
     api = _twitter_api(user_id)
     if api is None:
+        logger.debug('no twitter api access for user %d' % (user_id))
         return
 
     _set_language(user_id)
@@ -133,6 +136,7 @@ def async_tw_animator_activity(user_id, radio_uuid):
     logger.debug('async_tw_animator_activity: user = %s, radio = %s' % (user_id, radio_uuid))
     api = _twitter_api(user_id)
     if api is None:
+        logger.debug('no twitter api access for user %d' % (user_id))
         return
 
     _set_language(user_id)
