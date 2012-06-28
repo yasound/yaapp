@@ -55,13 +55,15 @@ def _twitter_api(user_id):
         logger.debug('cannot find profile for user %s' % (user_id))
         return None
     
-    if user_profile.twitter_enabled:
+    if not user_profile.twitter_enabled:
+        logger.debug('the user account %s is not twitter enabled' % (user_id))
         return None
     
     token = user_profile.twitter_token
     token_secret = user_profile.twitter_token_secret
     
     if token is None or token_secret is None:
+        logger.debug('the user account %s is missing tokens' % (user_id))
         return None
     
     auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
@@ -71,6 +73,7 @@ def _twitter_api(user_id):
     if res:
         return api
     else:
+        logger.debug('wrong twitter credentials for user account %s' % (user_id))
         return None
 
 def _set_language(user_id):
