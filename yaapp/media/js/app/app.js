@@ -242,7 +242,7 @@ $(document).ready(function () {
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio,
-                    el: $('#webapp-player')
+                    el: $('#player')
                 })
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
