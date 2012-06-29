@@ -41,6 +41,7 @@ import utils as yabackoffice_utils
 from yasearch.models import MostPopularSongsManager
 from yametrics.matching_errors import MatchingErrorsManager
 from yabase.export_utils import export_pur
+from yahistory.models import UserHistory
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -494,6 +495,33 @@ def users(request, user_id=None):
             'message': ''
         })
         return HttpResponse(json_data, mimetype='application/json')
+    raise Http404 
+
+@login_required
+def users_history(request, user_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+    if request.method == 'GET':
+        start = int(request.REQUEST.get('start', 0))
+        limit = int(request.REQUEST.get('limit', 25))
+        
+        uh = UserHistory()
+        qs = uh.all(start, limit)
+        data = []
+        for doc in qs:
+            data.append({
+                'username': unicode(UserProfile.objects.get(user__id=doc.get('db_id'))),
+                'date': doc.get('date'),
+                'type': doc.get('type')
+            })
+        json_data = MongoAwareEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'data': data,
+            'results': len(data)
+        })
+        resp = utils.JsonResponse(json_data)
+        return resp  
+
     raise Http404 
 
 @csrf_exempt

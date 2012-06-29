@@ -203,6 +203,8 @@ Ext.onReady(function(){
                 }
             }, Ext.apply(Yasound.Users.UI.UsersPanel(), {
                 iconCls: 'x-icon-templates'
+            }), Ext.apply(Yasound.Users.UI.HistoryPanel(), {
+                iconCls: 'x-icon-templates'
             })]         
         }    
 

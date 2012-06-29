@@ -78,6 +78,11 @@ class UserHistory():
         }
         self.add_event(user_id, UserHistory.ETYPE_ANIMATOR, 'radio', data)
 
+    def all(self, start=0, limit=25):
+        docs = self.collection.find().skip(start).limit(limit).sort([('date', DESCENDING)])
+        return docs
+        
+
     def history_for_user(self, user_id, start_date=None, end_date=None, infinite=False, etype=None):
         query = {'db_id': user_id}
         if not infinite:
