@@ -13,6 +13,9 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     events: {
         'click #btn-remove-facebook': 'removeFacebook',
         'click #btn-remove-twitter': 'removeTwitter',
+        'submit #settings-facebook-form': 'submitFacebook',
+        'submit #settings-twitter-form': 'submitTwitter'
+        
     },
     initialize: function () {
         _.bindAll(this, 'render');
@@ -47,5 +50,25 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
             $('#btn-remove-twitter').attr('id', 'foo').trigger('click');
         });
         return false;
+    },
+    submitFacebook: function(e) {
+        e.preventDefault();
+        var form = $('#settings-facebook-form', this.el);
+        var url = window.location.href
+        $.post(url, form.serializeArray(), function() {
+            colibri(gettext('Facebook settings saved'));
+        }).error(function() {
+            colibri(gettext('Error while saving Facebook settings', 'colibri-error'));
+        });
+    },
+    submitTwitter: function(e) {
+        e.preventDefault();
+        var form = $('#settings-twitter-form', this.el);
+        var url = window.location.href
+        $.post(url, form.serializeArray(), function() {
+            colibri(gettext('Twitter settings saved'));
+        }).error(function() {
+            colibri(gettext('Error while saving Twitter settings', 'colibri-error'));
+        });
     }
 });
