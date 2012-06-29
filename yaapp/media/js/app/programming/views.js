@@ -117,6 +117,11 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             el: $('#song-instances', this.el)
         });
         
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.songInstances,
+            el: $('#pagination', this.el)
+        });
+        
         
         this.toolbar = new Yasound.Views.ProgrammingToolbar({
             el: $('#programming-toolbar', this.el)
