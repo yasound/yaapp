@@ -1,3 +1,6 @@
+/**
+ * Common
+ */
 body {
 	margin-top: 80px;
 }
@@ -8,10 +11,105 @@ body {
 	margin-top: 2px;
 }
 
+.cell-pagination {
+	float: left;
+	with: 148px;
+}
+
 #profile-radios {
 	margin-top: 24px;
 }
 
+/**
+ * Header
+ */
+#header .navbar-inner {
+	background-image: url(/media/app/images/header_bg.png);
+	background-repeat: repeat-x;
+	height: 76px;
+}
+
+#header .brand {
+	margin: 0;
+	padding: 0;
+}
+
+.brand {
+	margin-top: 10px;
+}
+
+#tbar-search {
+	margin-top: -14px;
+}
+
+/**
+ * Footer
+ */
+#footer {
+	background-image: url(/media/app/images/footer_bg.png);
+	background-repeat: repeat-x;
+	color: white;
+	height: 150px;
+}
+
+/**
+ * Player
+ */
+#player .picture {
+	float: left;
+	margin-left: 12px;
+	margin-top: 20px;
+	margin-right: 12px;
+}
+
+#player .picture img {
+	width: 36px;
+	height: 36px;
+}
+
+#player #player-title {
+	color: white;
+}
+
+#player #details {
+	margin-top: 4px;
+	float: left;
+}
+
+#player #tweet img {
+	position: relative;
+	top: -2px;
+}
+
+#player .fb-like {
+	position: relative;
+	top: -5px;
+}
+
+#player .no-ease .bar {
+	-webkit-transition: width 0s ease;
+	-moz-transition: width 0s ease;
+	-ms-transition: width 0s ease;
+	-o-transition: width 0s ease;
+	transition: width 0s ease;
+}
+
+#player #title-volume {
+	width: 150px;
+	overflow: hidden;
+	float: left;
+	margin-top: -8px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+#player #volume-control {
+	cursor: pointer;
+}
+
+/**
+ * Radio page
+ */
 #webapp-radio {
 	margin-top: 24px;
 	background-color: #F5F5F5;
@@ -92,14 +190,6 @@ body {
 	border: 1px solid #c1c1c1;
 }
 
-.brand {
-	margin-top: 10px;
-}
-
-#tbar-search {
-    margin-top:-14px;	
-}
-
 ul .radio-cell {
 	list-style: none;
 	width: 148px;
@@ -124,11 +214,9 @@ ul .radio-cell .caption h5,ul .user-cell .caption h5 {
 	text-align: center;
 }
 
-.cell-pagination {
-	float: left;
-	with: 148px;
-}
-
+/**
+ * User cell
+ */
 ul .user-cell {
 	list-style: none;
 	height: 100px;
@@ -172,6 +260,9 @@ ul .user-cell:hover .caption {
 	margin-top: 0px;
 }
 
+/**
+ * Notifications
+ */
 ul#notifications {
 	list-style: none;
 	margin-left: 0;
@@ -192,75 +283,4 @@ ul#notifications li div {
 
 ul#notifications .read {
 	font-weight: normal;
-}
-
-#header .navbar-inner {
-	background-image: url(/media/app/images/header_bg.png);
-	background-repeat: repeat-x;
-	height: 76px;
-}
-
-#header .brand {
-	margin: 0;
-	padding: 0;
-}
-
-#footer {
-	background-image: url(/media/app/images/footer_bg.png);
-	background-repeat: repeat-x;
-	color: white;
-	height: 150px;
-}
-
-/* Player */
-#player .picture {
-	float: left;
-	margin-left: 12px;
-	margin-top: 20px;
-	margin-right: 12px;
-}
-
-#player .picture img {
-	width: 36px;
-	height: 36px;
-}
-
-#player #player-title {
-	color: white;
-}
-
-#player #details {
-	margin-top: 4px;
-	float: left;
-}
-
-#player #tweet img {
-	position: relative;
-	top: -2px;
-}
-
-#player .fb-like {
-	position: relative;
-	top: -5px;
-}
-
-.no-ease .bar {
-	-webkit-transition: width 0s ease;
-	-moz-transition: width 0s ease;
-	-ms-transition: width 0s ease;
-	-o-transition: width 0s ease;
-	transition: width 0s ease;
-}
-
-#player #title-volume {
-	width: 150px;
-	overflow: hidden;
-	float: left;
-	margin-top: -8px;
-	margin-left: 4px;
-	margin-right: 4px;
-}
-
-#player #volume-control {
-	cursor: pointer;
 }
