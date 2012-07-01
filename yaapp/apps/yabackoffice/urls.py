@@ -32,7 +32,6 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^users$', 'users'),
     url(r'^users/$', 'users'),
     url(r'^users/history/$', 'users_history'),
-    url(r'^users/(?P<user_id>\d+)$/history/$', 'users_history'),
 
     url(r'^wall_events$', 'wall_events'),
     url(r'^wall_events/(?P<wall_event_id>\d+)$', 'wall_events'),

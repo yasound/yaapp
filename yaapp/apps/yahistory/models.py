@@ -78,8 +78,13 @@ class UserHistory():
         }
         self.add_event(user_id, UserHistory.ETYPE_ANIMATOR, 'radio', data)
 
-    def all(self, start=0, limit=25):
-        docs = self.collection.find().skip(start).limit(limit).sort([('date', DESCENDING)])
+    def all(self, user_id=None, start=0, limit=25):
+        if user_id:
+            print user_id
+            docs = self.collection.find({'db_id': user_id}).skip(start).limit(limit).sort([('date', DESCENDING)])
+            print docs.count()
+        else:
+            docs = self.collection.find().skip(start).limit(limit).sort([('date', DESCENDING)])
         return docs
         
 

@@ -498,21 +498,51 @@ def users(request, user_id=None):
     raise Http404 
 
 @login_required
-def users_history(request, user_id=None):
+def users_history(request):
     if not request.user.is_superuser:
         raise Http404()
     if request.method == 'GET':
         start = int(request.REQUEST.get('start', 0))
         limit = int(request.REQUEST.get('limit', 25))
         
+        user_id = int(request.REQUEST.get('user_id', 0))
         uh = UserHistory()
-        qs = uh.all(start, limit)
+        qs = []
+        if user_id > 0:
+            qs = uh.all(user_id=user_id, start=start, limit=limit)
         data = []
         for doc in qs:
+            radio = ''
+            message = ''
+            song = ''
+            share_type = ''
+            
+            history_type = doc.get('type')
+            if history_type == UserHistory.ETYPE_MESSAGE:
+                message = doc.get('message').get('message') 
+                radio = Radio.objects.get(uuid=doc.get('message').get('uuid'))
+            elif history_type == UserHistory.ETYPE_LISTEN_RADIO:
+                radio = Radio.objects.get(uuid=doc.get('radio').get('uuid'))
+            elif history_type == UserHistory.ETYPE_LIKE_SONG:
+                song = SongInstance.objects.get(id=doc.get('song').get('db_id'))
+            elif history_type == UserHistory.ETYPE_FAVORITE_RADIO:
+                radio = Radio.objects.get(uuid=doc.get('radio').get('uuid'))
+            elif history_type == UserHistory.ETYPE_NOT_FAVORITE_RADIO:
+                radio = Radio.objects.get(uuid=doc.get('radio').get('uuid'))
+            elif history_type == UserHistory.ETYPE_SHARE:
+                radio = Radio.objects.get(uuid=doc.get('radio').get('uuid'))
+                share_type = Radio.objects.get(uuid=doc.get('radio').get('share_type'))
+            elif history_type == UserHistory.ETYPE_ANIMATOR:
+                radio = Radio.objects.get(uuid=doc.get('radio').get('uuid'))
+                
             data.append({
                 'username': unicode(UserProfile.objects.get(user__id=doc.get('db_id'))),
                 'date': doc.get('date'),
-                'type': doc.get('type')
+                'type': history_type,
+                'message': message,
+                'radio': unicode(radio),
+                'song': unicode(song),
+                'share_type': unicode(share_type)
             })
         json_data = MongoAwareEncoder(ensure_ascii=False).encode({
             'success': True,

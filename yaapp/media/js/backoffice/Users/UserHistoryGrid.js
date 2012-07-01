@@ -1,5 +1,5 @@
 Yasound.Users.Data.HistoryStore = function(url) {
-    var fields = [ 'username', 'radio', 'date', 'type' ];
+    var fields = [ 'username', 'radio', 'date', 'type', 'message', 'song', 'share_type' ];
     return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -10,22 +10,37 @@ Yasound.Users.UI.HistoryColumnModel = function() {
         xtype: 'datecolumn',
         format: 'd/m/Y H:i:s',
         sortable: false,
-        width: 20
+        width: 30
     }, {
         header: gettext('Type'),
         dataIndex: 'type',
         sortable: false,
-        width: 60
+        width: 30
     }, {
         header: gettext('Username'),
         dataIndex: 'username',
         sortable: false,
-        width: 60,
+        width: 30,
     }, {
         header: gettext('Radio'),
         dataIndex: 'radio',
         sortable: false,
-        width: 20
+        width: 30
+    }, {
+        header: gettext('Message'),
+        dataIndex: 'message',
+        sortable: false,
+        width: 60
+    }, {
+        header: gettext('Song'),
+        dataIndex: 'song',
+        sortable: false,
+        width: 60
+    }, {
+        header: gettext('Share type'),
+        dataIndex: 'share_type',
+        sortable: false,
+        width: 60
     } ]);
 };
 
@@ -92,7 +107,12 @@ Yasound.Users.UI.HistoryGrid = Ext.extend(Ext.grid.GridPanel, {
 
         this.getBottomToolbar().pageSize = gridRows;
         this.getStore().reload({ params:{ start:0, limit:gridRows } });
+    },
+    setParams: function (additionalParams) {
+        this.getStore().additionalParams = additionalParams;
+    },
+    reload: function () {
+        this.getStore().reload();
     }
-    
 });
 Ext.reg('userhistorygrid', Yasound.Users.UI.HistoryGrid);
