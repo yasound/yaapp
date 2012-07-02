@@ -103,8 +103,10 @@ def upload_artist_list(request):
     binary = BinaryData(content_uncompressed)
     artists = []
     while not binary.is_done():
+        tag = binary.get_string()
         a = binary.get_string()
-        artists.append(a)
+        if tag == 'ARTS':
+            artists.append(a)
         
     print 'upload_artist_list'
     print 'artists:'
