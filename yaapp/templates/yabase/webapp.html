@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/media/css/webapp.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
     <link rel="stylesheet" href="/media/js/colibri/colibri.css"/>
+    <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
     
     <script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
@@ -33,6 +34,7 @@
     <script type="text/javascript" src='/media/js/pubsub.js'></script>
     <script type="text/javascript" src='/media/js/Namespace.js'></script>
     <script type="text/javascript" src='/media/js/colibri/colibri.js'></script>
+    <script type="text/javascript" src='/media/js/chosen/chosen.jquery.min.js'></script>
 
     
     {% compressed_js 'webapp-all' %}
@@ -144,6 +146,9 @@
    </script>
    <script type="text/html" id="programmingToolbarTemplate">
       {% include "yabase/app/programming/programmingToolbar.mustache" %}
+   </script>
+   <script type="text/html" id="programmingFiltersTemplate">
+      {% include "yabase/app/programming/programmingFilters.mustache" %}
    </script>
    <script type="text/html" id="importFromItunesTemplate">
       {% include "yabase/app/programming/importFromItunes.mustache" %}

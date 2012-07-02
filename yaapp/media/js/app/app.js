@@ -174,6 +174,7 @@ $(document).ready(function () {
                 tagName: 'div',
             });
             $('#webapp-content').prepend(this.currentView.render().el);
+            this.currentView.show();
         },
 
         // search page
