@@ -123,7 +123,6 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
         
-        
         this.toolbar = new Yasound.Views.ProgrammingToolbar({
             el: $('#programming-toolbar', this.el)
         }).render();
@@ -172,11 +171,10 @@ Yasound.Views.ProgrammingFilters = Backbone.View.extend({
     },
     render: function() {
         $(this.el).html(ich.programmingFiltersTemplate());
-        
+        this.$('#album-select').chosen();
+        this.$('#artist-select').chosen();
         return this;
     },
     show: function() {
-      $('#album-select', this.el).chosen();
-      $('#artist-select', this.el).chosen();
     }
 });

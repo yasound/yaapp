@@ -107,7 +107,6 @@ $(document).ready(function () {
             });
         },
 
-
         // this function must be called between every routes
         clearView: function () {
             this.buildCommonContext();
@@ -116,6 +115,7 @@ $(document).ready(function () {
                 this.currentView.close();
                 this.currentView = undefined;
             }
+            $('#webapp-container').append("<div class='container-fluid' id='webapp-content'/>")
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -144,37 +144,32 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.HomePage({
-                tagName: 'div'
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+                el: '#webapp-content'
+            }).render();
         },
 
         settings: function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.SettingsPage({
-                tagName: 'div'
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+                el: '#webapp-content'
+            }).render();
         },
         
         notifications: function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.NotificationsPage({
-                tagName: 'div',
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+                el: '#webapp-content'
+            }).render();
         },
 
         programming: function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.ProgrammingPage({
-                tagName: 'div',
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
-            this.currentView.show();
+                el: '#webapp-content'
+            }).render();
         },
 
         // search page
@@ -185,11 +180,9 @@ $(document).ready(function () {
             radioSearchResults.setQuery(query);
 
             this.currentView = new Yasound.Views.SearchPage({
-                tagName: 'div',
-                className: 'row-fluid',
+                el: '#webapp-content',
                 collection: radioSearchResults
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+            }).render();
         },
 
         // owner favorites page
@@ -199,11 +192,9 @@ $(document).ready(function () {
             var radios = new Yasound.Data.Models.Favorites({});
 
             this.currentView = new Yasound.Views.FavoritesPage({
-                tagName: 'div',
-                className: 'row-fluid',
+                el: '#webapp-content',
                 collection: radios
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+            }).render();
         },
         
         // owner friends page
@@ -213,21 +204,18 @@ $(document).ready(function () {
             var friends = new Yasound.Data.Models.Friends({});
 
             this.currentView = new Yasound.Views.FriendsPage({
-                tagName: 'div',
-                className: 'row-fluid',
-                collection: friends
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+                collection: friends,
+                el: '#webapp-content'
+            }).render();
         },
 
         // profile page
         profile: function (username) {
             this.clearView();
             this.currentView = new Yasound.Views.ProfilePage({
-                tagName: 'div',
-                model: new Yasound.Data.Models.User({username:username})
-            });
-            $('#webapp-content').prepend(this.currentView.render().el);
+                model: new Yasound.Data.Models.User({username:username}),
+                el: '#webapp-content'
+            }).render();
         },
 
         // radio details page
@@ -257,11 +245,9 @@ $(document).ready(function () {
             }
 
             this.currentView = new Yasound.Views.RadioPage({
-                tagName: 'div',
-                className: 'row-fluid',
-                model: this.currentRadio
-            });
-            $('#webapp-content').prepend(this.currentView.el);
+                model: this.currentRadio,
+                el: '#webapp-content'
+            }).render();
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
