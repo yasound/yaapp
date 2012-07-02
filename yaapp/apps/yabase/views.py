@@ -105,8 +105,9 @@ def upload_artist_list(request):
     while not binary.is_done():
         tag = binary.get_tag()
         a = binary.get_string()
+        song_count = binary.get_int16()
         if tag == 'ARTS':
-            artists.append(a)
+            artists.append((a, song_count))
         
     logger.info('upload_artist_list')
     logger.info('artists:')
