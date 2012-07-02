@@ -56,7 +56,7 @@ class TestGlobalMetricsManager(TestCase):
     def test_add_like_song_event(self):
         uh = UserHistory()
         r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
-        uh.add_like_song_event(user_id=self.user.id, song_id=42)
+        uh.add_like_song_event(user_id=self.user.id, radio_uuid=r.uuid, song_id=42)
 
         now = datetime.datetime.now()
         yesterday = now + datetime.timedelta(days=-1)

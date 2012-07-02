@@ -512,59 +512,19 @@ def users_history(request):
             qs = uh.all(user_id=user_id, start=start, limit=limit)
         data = []
         for doc in qs:
-            radio = ''
-            message = ''
-            song = ''
-            share_type = ''
-            
+            user_name = doc.get('user_name')
             history_type = doc.get('type')
-            if history_type == UserHistory.ETYPE_MESSAGE:
-                message = doc.get('message').get('message')
-                uuid = doc.get('message').get('uuid')
-                try: 
-                    radio = Radio.objects.get(uuid=uuid)
-                except Radio.DoesNotExist:
-                    radio = uuid
-                    
-            elif history_type == UserHistory.ETYPE_LISTEN_RADIO:
-                uuid = doc.get('radio').get('uuid')
-                try: 
-                    radio = Radio.objects.get(uuid=uuid)
-                except Radio.DoesNotExist:
-                    radio = uuid
-            elif history_type == UserHistory.ETYPE_LIKE_SONG:
-                try:
-                    song = SongInstance.objects.get(id=doc.get('song').get('db_id'))
-                except SongInstance.DoesNotExist:
-                    song = ''
-            elif history_type == UserHistory.ETYPE_FAVORITE_RADIO:
-                uuid = doc.get('radio').get('uuid')
-                try: 
-                    radio = Radio.objects.get(uuid=uuid)
-                except Radio.DoesNotExist:
-                    radio = uuid
-            elif history_type == UserHistory.ETYPE_NOT_FAVORITE_RADIO:
-                uuid = doc.get('radio').get('uuid')
-                try: 
-                    radio = Radio.objects.get(uuid=uuid)
-                except Radio.DoesNotExist:
-                    radio = uuid
-            elif history_type == UserHistory.ETYPE_SHARE:
-                uuid = doc.get('radio').get('uuid')
-                try: 
-                    radio = Radio.objects.get(uuid=uuid)
-                except Radio.DoesNotExist:
-                    radio = uuid
-                share_type = Radio.objects.get(uuid=doc.get('radio').get('share_type'))
-            elif history_type == UserHistory.ETYPE_ANIMATOR:
-                uuid = doc.get('radio').get('uuid')
-                try: 
-                    radio = Radio.objects.get(uuid=uuid)
-                except Radio.DoesNotExist:
-                    radio = uuid
+            details = doc.get('data')
+            if not details:
+                continue
+            
+            radio = details.get('radio_name', '')
+            message = details.get('message', '')
+            song = details.get('song_name', '')
+            share_type = details.get('share_type', '')
                 
             data.append({
-                'username': unicode(UserProfile.objects.get(user__id=doc.get('db_id'))),
+                'username': user_name,
                 'date': doc.get('date'),
                 'type': history_type,
                 'message': message,
