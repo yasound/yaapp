@@ -14,6 +14,7 @@ import os
 import signals as yabase_signals
 import time
 import zlib
+from yabase import settings as yabase_settings
 logger = logging.getLogger("yaapp.yabase")
 
 @task(ignore_result=True)
@@ -259,6 +260,11 @@ def async_radio_broadcast_message(radio, message):
 
 @task(ignore_result=True)
 def async_import_from_itunes(radio, data):
+    yabase_signals.new_animator_activity.send(sender=radio, 
+                                              user=radio.creator, 
+                                              radio=radio,
+                                              atype=yabase_settings.ANIMATOR_TYPE_IMPORT_ITUNES)
+    
     lines = data.split('\n')
     for line in lines:
         name, album, artist = parse_itunes_line(line)

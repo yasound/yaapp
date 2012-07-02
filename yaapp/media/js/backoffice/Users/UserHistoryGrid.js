@@ -1,5 +1,12 @@
 Yasound.Users.Data.HistoryStore = function(url) {
-    var fields = [ 'username', 'radio', 'date', 'type', 'message', 'song', 'share_type' ];
+    var fields = [ 'username', 
+                   'radio', 
+                   'date', 
+                   'type', 
+                   'message', 
+                   'song', 
+                   'share_type',
+                   'atype'];
     return new Yasound.Utils.SimpleStore(url, fields);
 };
 
@@ -14,6 +21,11 @@ Yasound.Users.UI.HistoryColumnModel = function() {
     }, {
         header: gettext('Type'),
         dataIndex: 'type',
+        sortable: false,
+        width: 30
+    }, {
+        header: gettext('Animator type'),
+        dataIndex: 'atype',
         sortable: false,
         width: 30
     }, {

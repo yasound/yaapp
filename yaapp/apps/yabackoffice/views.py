@@ -522,11 +522,13 @@ def users_history(request):
             message = details.get('message', '')
             song = details.get('song_name', '')
             share_type = details.get('share_type', '')
+            atype = details.get('atype', '')
                 
             data.append({
                 'username': user_name,
                 'date': doc.get('date'),
                 'type': history_type,
+                'atype': atype,
                 'message': message,
                 'radio': unicode(radio),
                 'song': unicode(song),

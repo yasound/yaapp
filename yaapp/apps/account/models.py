@@ -1274,6 +1274,9 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         async_tw_like_song.delay(user.id, wall_event.radio.uuid, song_title, artist)
         
 def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
+    """
+    Publish listening event on twitter
+    """
     if user is None:
         return
     if user.is_anonymous():
@@ -1289,6 +1292,9 @@ def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
     async_tw_listen.delay(user.id, radio.uuid, song_title, artist)
 
 def new_animator_activity(sender, user, radio, **kwargs):
+    """
+    Publish animator activity on twitter
+    """
     if user is None or radio is None:
         return
     if user.is_anonymous():

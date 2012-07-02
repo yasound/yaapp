@@ -36,6 +36,9 @@ def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
     async_listen.delay(user.id, radio.uuid, song_title, song.id)
 
 def new_animator_activity(sender, user, radio, **kwargs):
+    """
+    Publish animator activity on Facebook
+    """
     if user is None or radio is None:
         return
     if user.is_anonymous():

@@ -7,7 +7,10 @@ from yahistory.task import async_add_listen_radio_event, \
     async_add_post_message_event, async_add_like_song_event, \
     async_add_favorite_radio_event, async_add_not_favorite_radio_event, \
     async_add_share_event, async_add_animator_event
+from yaref.models import YasoundSong
 import datetime
+import logging
+logger = logging.getLogger("yaapp.yabase")
 
 class UserHistory():
     ETYPE_LISTEN_RADIO       = 'listen'
@@ -154,11 +157,23 @@ class UserHistory():
         }
         self.add_event(user_id, UserHistory.ETYPE_SHARE, data)
 
-    def add_animator_event(self, user_id, radio_uuid):
+    def add_animator_event(self, user_id, radio_uuid, atype, details=None):
         data = {
             'radio_uuid': radio_uuid,
             'radio_name': self._get_radio_name(radio_uuid),
+            'atype': atype
         }
+        if details is not None:
+            if atype in [yabase_settings.ANIMATOR_TYPE_REJECT_SONG, yabase_settings.ANIMATOR_TYPE_DELETE_SONG]:
+                song_instance = details.get('song_instance', '')
+                data['song_name'] = unicode(song_instance)
+            elif atype == yabase_settings.ANIMATOR_TYPE_ADD_SONG:
+                yasound_song_id = details.get('yasound_song_id', None)
+                if yasound_song_id:
+                    data['song_name'] = unicode(YasoundSong.objects.get(id=yasound_song_id))
+        
+        logger.info('storing')
+        logger.info(data)
         self.add_event(user_id, UserHistory.ETYPE_ANIMATOR, data)
 
     def all(self, user_id=None, start=0, limit=25):
@@ -213,9 +228,9 @@ def not_favorite_radio_handler(sender, radio, user, **kwargs):
 def new_share(sender, radio, user, share_type, **kwargs):
     async_add_share_event.delay(user.id, radio.uuid, share_type=share_type)
 
-def new_animator_activity(sender, user, radio, **kwargs):
+def new_animator_activity(sender, user, radio, atype, details=None, **kwargs):
     if radio is not None:
-        async_add_animator_event.delay(user.id, radio.uuid)
+        async_add_animator_event.delay(user.id, radio.uuid, atype, details=details)
 
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
