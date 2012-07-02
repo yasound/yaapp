@@ -111,6 +111,8 @@ def upload_artist_list(request):
     print 'upload_artist_list'
     print 'artists:'
     print artists
+    
+    return HttpResponse('artist list ok')
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
