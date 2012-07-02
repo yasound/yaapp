@@ -43,3 +43,8 @@ def async_add_animator_event(user_id, radio_uuid, atype, details):
     uh = UserHistory()
     uh.add_animator_event(user_id, radio_uuid, atype, details)
 
+@task(ignore_result=True)
+def async_add_buy_link_event(user_id, radio_uuid, song_id):
+    from yahistory.models import UserHistory
+    uh = UserHistory()
+    uh.add_buy_link_event(user_id, radio_uuid, song_id)

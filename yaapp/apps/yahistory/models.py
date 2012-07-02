@@ -6,11 +6,11 @@ from yabase.models import Radio, SongInstance
 from yahistory.task import async_add_listen_radio_event, \
     async_add_post_message_event, async_add_like_song_event, \
     async_add_favorite_radio_event, async_add_not_favorite_radio_event, \
-    async_add_share_event, async_add_animator_event
+    async_add_share_event, async_add_animator_event, async_add_buy_link_event
 from yaref.models import YasoundSong
 import datetime
-
 import logging
+
 logger = logging.getLogger("yaapp.yahistory")
 
 class UserHistory():
@@ -21,6 +21,7 @@ class UserHistory():
     ETYPE_NOT_FAVORITE_RADIO = 'not_favorite_radio'
     ETYPE_SHARE              = 'share'
     ETYPE_ANIMATOR           = 'animator'
+    ETYPE_BUY_LINK           = 'buy_link'
     
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -136,6 +137,16 @@ class UserHistory():
         }
         self.add_event(user_id, UserHistory.ETYPE_LIKE_SONG, data)
 
+    def add_buy_link_event(self, user_id, radio_uuid, song_id):
+        logger.info('add_buy_link_event')
+        data = {
+            'song_id': song_id,
+            'radio_uuid': radio_uuid,
+            'radio_name': self._get_radio_name(radio_uuid),
+            'song_name': self._get_song_name(song_id)
+        }
+        self.add_event(user_id, UserHistory.ETYPE_BUY_LINK, data)
+
     def add_favorite_radio_event(self, user_id, radio_uuid):
         data = {
             'radio_uuid': radio_uuid,
@@ -231,6 +242,10 @@ def new_animator_activity(sender, user, radio, atype, details=None, **kwargs):
     if radio is not None:
         async_add_animator_event.delay(user.id, radio.uuid, atype, details=details)
 
+def buy_link_handler(sender, radio, user, song_instance, **kwargs):
+    async_add_buy_link_event.delay(user.id, radio.uuid, song_instance)
+        
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
@@ -238,4 +253,5 @@ def install_handlers():
     yabase_signals.not_favorite_radio.connect(not_favorite_radio_handler)
     yabase_signals.radio_shared.connect(new_share)
     yabase_signals.new_animator_activity.connect(new_animator_activity)
+    yabase_signals.buy_link.connect(buy_link_handler)
 install_handlers()    
