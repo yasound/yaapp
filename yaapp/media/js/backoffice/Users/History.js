@@ -25,7 +25,7 @@ Yasound.Users.UI.HistoryPanel = function () {
                 'selected': function (grid, id, record) {
                     var historyGrid = grid.nextSibling();
                     historyGrid.setParams({
-                        'user_id': id
+                        'user_id': record.data.user_id
                     })
                     historyGrid.reload();
                 },

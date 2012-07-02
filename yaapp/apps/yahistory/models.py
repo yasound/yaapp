@@ -202,7 +202,7 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         async_add_post_message_event.delay(user.id, wall_event.radio.uuid, wall_event.text)
         
     elif we_type == yabase_settings.EVENT_LIKE:
-        async_add_like_song_event.delay(user.id, wall_event.radio_uuid, wall_event.song.id)
+        async_add_like_song_event.delay(user.id, wall_event.radio.uuid, wall_event.song.id)
 
 def favorite_radio_handler(sender, radio, user, **kwargs):
     async_add_favorite_radio_event.delay(user.id, radio.uuid)
