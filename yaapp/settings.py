@@ -66,6 +66,7 @@ CELERY_IMPORTS = (
     "yasearch.task",
     "yaref.task",
 )
+CELERY_SEND_TASK_ERROR_EMAILS = True
 
 if LOCAL_MODE:
     # Celery config:
