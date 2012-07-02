@@ -260,6 +260,8 @@ class RadioPopularityManager():
             self.settings.insert({'name':yametrics_settings.ACTIVITY_SHARE,'value':8})
         if self.settings.find({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES}).count() == 0:
             self.settings.insert({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES,'value':8})
+        if self.settings.find({'name':yametrics_settings.ACTIVITY_BUY_LINK}).count() == 0:
+            self.settings.insert({'name':yametrics_settings.ACTIVITY_BUY_LINK,'value':0})
 
     def drop(self):
         self.radios.drop()
