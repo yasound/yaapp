@@ -522,6 +522,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yahistory': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
                 
     }
 }
@@ -849,6 +854,7 @@ IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
     'django_extensions',
     'emencia.django.newsletter',
+    'bootstrap',
 )
 JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 

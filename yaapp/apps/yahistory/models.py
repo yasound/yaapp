@@ -9,8 +9,9 @@ from yahistory.task import async_add_listen_radio_event, \
     async_add_share_event, async_add_animator_event
 from yaref.models import YasoundSong
 import datetime
+
 import logging
-logger = logging.getLogger("yaapp.yabase")
+logger = logging.getLogger("yaapp.yahistory")
 
 class UserHistory():
     ETYPE_LISTEN_RADIO       = 'listen'
@@ -172,8 +173,6 @@ class UserHistory():
                 if yasound_song_id:
                     data['song_name'] = unicode(YasoundSong.objects.get(id=yasound_song_id))
         
-        logger.info('storing')
-        logger.info(data)
         self.add_event(user_id, UserHistory.ETYPE_ANIMATOR, data)
 
     def all(self, user_id=None, start=0, limit=25):
