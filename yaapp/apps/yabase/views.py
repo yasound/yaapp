@@ -108,9 +108,9 @@ def upload_artist_list(request):
         if tag == 'ARTS':
             artists.append(a)
         
-    print 'upload_artist_list'
-    print 'artists:'
-    print artists
+    logger.info('upload_artist_list')
+    logger.info('artists:')
+    logger.info(artists)
     
     return HttpResponse('artist list ok')
 
