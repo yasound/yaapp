@@ -170,6 +170,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/update_notification/(?P<notif_id>\S+)/$', 'yamessage.views.update_notification'),
     url(r'^api/v1/delete_notification/(?P<notif_id>\S+)/$', 'yamessage.views.delete_notification'),
     url(r'^api/v1/delete_all_notifications/$', 'yamessage.views.delete_all_notifications'),
+    
+    url(r'^api/v1/artist_list/$', 'yabase.views.upload_artist_list'), 
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
