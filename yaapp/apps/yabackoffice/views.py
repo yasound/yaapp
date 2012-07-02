@@ -508,7 +508,9 @@ def users_history(request):
         user_id = int(request.REQUEST.get('user_id', 0))
         uh = UserHistory()
         qs = []
+        count = 0
         if user_id > 0:
+            count = uh.all(user_id=user_id).count()
             qs = uh.all(user_id=user_id, start=start, limit=limit)
         data = []
         for doc in qs:
@@ -537,7 +539,7 @@ def users_history(request):
         json_data = MongoAwareEncoder(ensure_ascii=False).encode({
             'success': True,
             'data': data,
-            'results': len(data)
+            'results': count
         })
         resp = utils.JsonResponse(json_data)
         return resp  
