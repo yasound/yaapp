@@ -134,8 +134,8 @@ class UserHistory():
 
     def add_favorite_radio_event(self, user_id, radio_uuid):
         data = {
-            'uuid': radio_uuid,
-            'name': self._get_radio_name(radio_uuid),
+            'radio_uuid': radio_uuid,
+            'radio_name': self._get_radio_name(radio_uuid),
         }
         self.add_event(user_id, UserHistory.ETYPE_FAVORITE_RADIO, data)
 
