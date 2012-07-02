@@ -1,7 +1,7 @@
 Yasound.Users.Data.HistoryStore = function(url) {
     var fields = [ 'username', 
                    'radio', 
-                   'date', 
+                   {name:'date', type: 'date', dateFormat: 'Y-m-dTH:i:s.u'}, 
                    'type', 
                    'message', 
                    'song', 
