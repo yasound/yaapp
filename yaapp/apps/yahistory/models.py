@@ -138,7 +138,6 @@ class UserHistory():
         self.add_event(user_id, UserHistory.ETYPE_LIKE_SONG, data)
 
     def add_buy_link_event(self, user_id, radio_uuid, song_id):
-        logger.info('add_buy_link_event')
         data = {
             'song_id': song_id,
             'radio_uuid': radio_uuid,
