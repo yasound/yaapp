@@ -147,7 +147,3 @@ def async_tw_animator_activity(user_id, radio_uuid):
     logger.debug('done')
 
 
-@task(ignore_result=True)
-def async_update_position_coords(userprofile):
-    userprofile.update_position_coords()
-

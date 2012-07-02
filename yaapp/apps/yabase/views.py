@@ -38,6 +38,8 @@ import settings as yabase_settings
 from tastypie.models import ApiKey
 import uuid
 import requests
+import zlib
+from yacore.binary import BinaryData
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -85,6 +87,28 @@ def upload_playlists(request, radio_id):
     asyncRes = process_playlists.delay(radio, content_compressed)
 
     return HttpResponse(asyncRes.task_id)
+
+@csrf_exempt
+@check_api_key(methods='POST', login_required=False)
+def upload_artist_list(request):
+    data = request.FILES['artists_data']
+    content_compressed = data.read()
+    
+    try:
+        content_uncompressed = zlib.decompress(content_compressed)
+    except Exception, e:
+        logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
+        return
+    
+    binary = BinaryData(content_uncompressed)
+    artists = []
+    while not binary.is_done():
+        a = binary.get_string()
+        artists.append(a)
+        
+    print 'upload_artist_list'
+    print 'artists:'
+    print artists
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):

@@ -1129,16 +1129,11 @@ class UserProfile(models.Model):
         
         if self.latitude is None or self.longitude is None:
             return
-        from task import async_update_position_coords
-        async_update_position_coords.delay(userprofile=self)
+        self.update_position_coords()
     
-    def update_position_coords(self):
+    def update_position_coords(self, save=True):
         coords = latitude_longitude_to_coords(self.latitude, self.longitude, 'degrees')
-        
-        self.x_coord = coords[0]
-        self.y_coord = coords[1]
-        self.z_coord = coords[2]
-        self.save()
+        UserProfile.objects.filter(id=self.id).update(x_coord=coords[0], y_coord=coords[1], z_coord=coords[2])
         
         
 
