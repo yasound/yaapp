@@ -550,6 +550,12 @@ def user_started_listening_handler(sender, radio, user, **kwargs):
     async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_LISTEN)
 
+def buy_link_handler(sender, radio, user, **kwargs):
+    if not user.is_anonymous():
+        async_activity.delay(user.id, yametrics_settings.ACTIVITY_BUY_LINK, throttle=False)
+    async_inc_radio_value.delay(radio.id, 'buy_link_count', 1)
+    async_radio_activity(radio.id, yametrics_settings.ACTIVITY_BUY_LINK)
+
 def user_stopped_listening_handler(sender, radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
     async_inc_global_value.delay('listening_count', 1)
@@ -650,6 +656,7 @@ def install_handlers():
     yabase_signals.new_moderator_del_msg_activity.connect(new_moderator_del_msg_activity)
     yabase_signals.new_moderator_abuse_msg_activity.connect(new_moderator_abuse_msg_activity)
     yabase_signals.radio_shared.connect(new_share)
+    yabase_signals.buy_link.connect(buy_link_handler)
     account_signals.new_device_registered.connect(new_device_registered)
     
 install_handlers()

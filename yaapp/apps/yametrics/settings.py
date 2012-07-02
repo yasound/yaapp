@@ -11,6 +11,7 @@ ACTIVITY_SHARE_FACEBOOK      = 'share_facebook_activity'
 ACTIVITY_SHARE_TWITTER       = 'share_twitter_activity'
 ACTIVITY_SHARE_EMAIL         = 'share_email_activity'
 ACTIVITY_ADD_TO_FAVORITES    = 'add_to_favorites_activity'
+ACTIVITY_BUY_LINK            = 'buy_link_activity'
 
 ACTIVITIES = (
     ACTIVITY_LISTEN,
@@ -23,4 +24,5 @@ ACTIVITIES = (
     ACTIVITY_SHARE_FACEBOOK,
     ACTIVITY_SHARE_TWITTER,
     ACTIVITY_SHARE_EMAIL,
+    ACTIVITY_BUY_LINK,
 )

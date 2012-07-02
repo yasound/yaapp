@@ -516,6 +516,9 @@ def get_current_song(request, radio_id):
 def buy_link(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)
     song_instance = radio.current_song
+    
+    yabase_signals.buy_link.send(sender=request.user, radio=radio, user=request.user, song_instance=song_instance)
+    
     if not song_instance:
         return HttpResponseRedirect(reverse('buy_link_not_found'))
 
