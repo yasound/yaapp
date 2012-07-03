@@ -128,7 +128,11 @@ def similar_radios(request):
     logger.info('artists:')
     logger.info(artists)
     
-    return api_response(data)
+    logger.info('radios:')
+    logger.info(data)
+    
+#    return api_response(data)
+    return HttpResponse('ok')
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
