@@ -122,15 +122,7 @@ def similar_radios_from_artist_list(request):
             radio = Radio.objects.get(id=r)
             data.append(radio.as_dict())
         except:
-            pass
-        
-    logger.info('upload_artist_list')
-    logger.info('artists:')
-    logger.info(artists)
-    
-    logger.info('radios:')
-    logger.info(data)
-    
+            pass    
     return api_response(data)
 
 @csrf_exempt
