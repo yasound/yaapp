@@ -40,7 +40,7 @@ import uuid
 import requests
 import zlib
 from yacore.binary import BinaryData
-from yarecommendation import ClassifiedRadiosManager
+from yarecommendation.models import ClassifiedRadiosManager
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
