@@ -96,21 +96,23 @@ class ClassifiedRadiosManager():
         return float(len(self._intersect(a, b)))
     
     def find_similar_radios(self, artists):
+        similarities = []
+        if len(artists) == 0:
+            return similarities
         artists_sanitized = []
         for artist in artists:
             artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
             artists_sanitized.append(artist_name)
         
         docs = self.collection.find()
-        similarities = []
         for doc in docs:
             doc_artists = doc.get('artists')
             if len(doc_artists) == 0:
                 continue
             
-            similarity = 0.5 * (self._co_occurrences(artists, doc_artists) / 
-                                self._co_occurrences(artists, artists) + 
-                                self._co_occurrences(doc_artists, artists) / 
+            similarity = 0.5 * (self._co_occurrences(artists_sanitized, doc_artists) / 
+                                self._co_occurrences(artists_sanitized, artists_sanitized) + 
+                                self._co_occurrences(doc_artists, artists_sanitized) / 
                                 self._co_occurrences(doc_artists, doc_artists))
 
             if similarity > 0:
