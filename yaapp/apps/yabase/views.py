@@ -90,8 +90,11 @@ def upload_playlists(request, radio_id):
     return HttpResponse(asyncRes.task_id)
 
 @csrf_exempt
-@check_api_key(methods='POST', login_required=False)
 def similar_radios(request):
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    check_api_key_Authentication(request)
+    
     data = request.FILES['artists_data']
     content_compressed = data.read()
     
