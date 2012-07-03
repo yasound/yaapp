@@ -90,7 +90,7 @@ def upload_playlists(request, radio_id):
     return HttpResponse(asyncRes.task_id)
 
 @csrf_exempt
-def similar_radios(request):
+def similar_radios_from_artist_list(request):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     check_api_key_Authentication(request)
@@ -131,8 +131,7 @@ def similar_radios(request):
     logger.info('radios:')
     logger.info(data)
     
-#    return api_response(data)
-    return HttpResponse('ok')
+    return api_response(data)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
