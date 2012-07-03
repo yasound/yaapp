@@ -40,6 +40,7 @@ import uuid
 import requests
 import zlib
 from yacore.binary import BinaryData
+from yarecommandation import ClassifiedRadiosManager
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -90,7 +91,7 @@ def upload_playlists(request, radio_id):
 
 @csrf_exempt
 @check_api_key(methods='POST', login_required=False)
-def upload_artist_list(request):
+def similar_radios(request):
     data = request.FILES['artists_data']
     content_compressed = data.read()
     
@@ -107,13 +108,24 @@ def upload_artist_list(request):
         a = binary.get_string()
         song_count = binary.get_int16()
         if tag == 'ARTS':
-            artists.append((a, song_count))
+            artists.append(a)
+            
+    m = ClassifiedRadiosManager()
+    res = m.find_similar_radios(artists)
+    radio_ids = [x[1] for x in res]
+    data = []
+    for r in radio_ids:
+        try:
+            radio = Radio.objects.get(id=r)
+            data.append(radio.as_dict())
+        except:
+            pass
         
     logger.info('upload_artist_list')
     logger.info('artists:')
     logger.info(artists)
     
-    return HttpResponse('artist list ok')
+    return api_response(data)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
