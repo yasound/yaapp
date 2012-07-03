@@ -103,12 +103,17 @@ def upload_artist_list(request):
     binary = BinaryData(content_uncompressed)
     artists = []
     while not binary.is_done():
+        tag = binary.get_tag()
         a = binary.get_string()
-        artists.append(a)
+        song_count = binary.get_int16()
+        if tag == 'ARTS':
+            artists.append((a, song_count))
         
-    print 'upload_artist_list'
-    print 'artists:'
-    print artists
+    logger.info('upload_artist_list')
+    logger.info('artists:')
+    logger.info(artists)
+    
+    return HttpResponse('artist list ok')
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):

@@ -242,6 +242,10 @@ def new_animator_activity(sender, user, radio, atype, details=None, **kwargs):
         async_add_animator_event.delay(user.id, radio.uuid, atype, details=details)
 
 def buy_link_handler(sender, radio, user, song_instance, **kwargs):
+    if user is None:
+        return
+    if user.is_anonymous():
+        return
     async_add_buy_link_event.delay(user.id, radio.uuid, song_instance.id)
         
 
