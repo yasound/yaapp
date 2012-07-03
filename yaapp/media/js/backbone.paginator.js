@@ -215,34 +215,43 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 	// data service (e.g an API)
 	//
 	Paginator.requestPager = Backbone.Collection.extend({
-
 		sync: function ( method, model, options ) {
-
+		    var type = this.type || 'GET';
+		    var json = this.json == true || false;
 			var queryMap = {}, params;
-				queryMap[this.perPageAttribute] =  this.perPage;
-				queryMap[this.skipAttribute] = this.page * this.perPage;
-				
-				if (this.sortField) {
-				    queryMap[this.orderAttribute] =  this.sortField;
-				}
-				if (this.customParam1) {
-				    queryMap[this.customAttribute1] =  this.customParam1;
-				}
-				if (this.format) {
-				    queryMap[this.formatAttribute] =  this.format;
-				}
-				if (this.customParam2) {
-				    queryMap[this.customAttribute2] = this.customParam2;
-				}
-				if (this.query) {
-				    queryMap[this.queryAttribute] =  this.query;
-				}
-
-				params = _.extend({
-				type: 'GET',
-				data: decodeURIComponent($.param(queryMap)),
+			queryMap[this.perPageAttribute] =  this.perPage;
+			queryMap[this.skipAttribute] = this.page * this.perPage;
+			
+			if (this.sortField) {
+			    queryMap[this.orderAttribute] =  this.sortField;
+			}
+			if (this.customParam1) {
+			    queryMap[this.customAttribute1] =  this.customParam1;
+			}
+			if (this.format) {
+			    queryMap[this.formatAttribute] =  this.format;
+			}
+			if (this.customParam2) {
+			    queryMap[this.customAttribute2] = this.customParam2;
+			}
+			if (this.query) {
+			    queryMap[this.queryAttribute] =  this.query;
+			}
+			if (this.params) {
+			    _.extend(queryMap, this.params);
+			}
+			
+			var data = queryMap;
+			if (json) {
+			    data = JSON.stringify(data);
+			}
+			
+			params = _.extend({
+				type: type,
+                data: data,
 				url: _.result(this, 'url'),
-				processData: false
+				processData: true,
+				traditional: true
 			}, options);
 
 			return $.ajax(params);

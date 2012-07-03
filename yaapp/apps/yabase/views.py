@@ -1311,4 +1311,50 @@ def similar_radios(request, radio_uuid):
         data.append(radio.as_dict())
     return api_response(data)
 
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST',], login_required=True)
+def my_programming(request):
+    radio = Radio.objects.radio_for_user(request.user)
+    if not radio:
+        raise Http404
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    
+    artists = request.REQUEST.getlist('artist')
+    albums = request.REQUEST.getlist('album')
+    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio)
+    if artists:
+        qs = qs.filter(artist_name__in=artists)
+    if albums:
+        qs = qs.filter(album_name__in=albums)
+    tracks = qs.values('id', 'name', 'album_name', 'artist_name').distinct()
+    total_count = tracks.count() 
+    response = api_response(list(tracks[offset:offset+limit]), total_count, limit=limit, offset=offset)
+    return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def my_programming_artists(request):
+    radio = Radio.objects.radio_for_user(request.user)
+    if not radio:
+        raise Http404
+    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio).distinct()
+    artists = qs.values('artist_name').distinct()
+    total_count = artists.count()
+    response = api_response(list(artists), total_count)
+    return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def my_programming_albums(request):
+    radio = Radio.objects.radio_for_user(request.user)
+    if not radio:
+        raise Http404
+    
+    artists = request.REQUEST.getlist('artist')
+    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio)
+    if artists:
+        qs = qs.filter(artist_name__in=artists)
+    albums = qs.values('album_name').distinct()
+    total_count = albums.count()
+    response = api_response(list(albums), total_count)
+    return response
     

@@ -29,7 +29,6 @@ admin.autodiscover()
 api = Api(api_name='v1')
 #api.register(SongMetadataResource())
 api.register(SongInstanceResource())
-api.register(ProgrammingResource())
 api.register(PlaylistResource())
 api.register(UserResource())
 api.register(PublicUserResource())
@@ -218,6 +217,12 @@ urlpatterns = patterns('',
     url(r'^api/v1/set_localization/$','account.views.update_localization'),
     
     url(r'^api/v1/connected_users/$','account.views.connected_users_by_distance'),
+
+    # programming
+    url(r'^api/v1/my_programming/$', 'yabase.views.my_programming'),
+    url(r'^api/v1/my_programming/artists/$', 'yabase.views.my_programming_artists'),
+    url(r'^api/v1/my_programming/albums/$', 'yabase.views.my_programming_albums'),
+    
 
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
