@@ -74,7 +74,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     initialize: function() {
-        _.bindAll(this, 'render', 'onAll', 'onImportItunes');
+        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'artistsSelected');
     },
 
     onClose: function() {
@@ -82,6 +82,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             this.currentView.close();
         }
         this.toolbar.close();
+        this.filters.off('artistsSelected', this.artistsSelected)
         this.filters.close();
     },
 
@@ -97,12 +98,15 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             collection: this.songInstances,
             el: $('#song-instances', this.el)
         }).render();
+        this.filters.on('artistsSelected', this.artistsSelected);
+        
         this.songInstances.fetch();
     },
     onImportItunes: function() {
         if (this.currentView) {
             this.currentView.close();
         }
+        this.filters.off('artistsSelected', this.artistsSelected)
         $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
     },
     
@@ -133,14 +137,16 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             el: $('#programming-filters', this.el)
         }).render();
 
+        this.filters.on('artistsSelected', this.artistsSelected)
+        
         this.songInstances.fetch();
         
         return this;
     },
-    show: function() {
-        this.filters.show();
+    artistsSelected: function(artists) {
+        this.currentView.clear();
+        this.songInstances.filterArtists(artists);
     }
-    
 });
 
 /**
@@ -166,15 +172,96 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     }
 });
 
+/**
+ * Programming filters
+ */
 Yasound.Views.ProgrammingFilters = Backbone.View.extend({
-    events: {
+    initialize: function() {
+        _.bindAll(this, 'render', 'artistsSelected');
     },
+    onClose: function () {
+        this.artistsView.close();
+        this.off('artistsSelected', this.artistsSelected);
+    },    
     render: function() {
         $(this.el).html(ich.programmingFiltersTemplate());
-        this.$('#album-select').chosen();
-        this.$('#artist-select').chosen();
+
+        this.artists = new Yasound.Data.Models.ProgrammingArtists({});
+        this.artistsView = new Yasound.Views.ProgrammingFilterArtists({
+            collection:this.artists,
+            el: $('#artist-select', this.el)
+        });
+        
+        this.artistsView.on('artistsSelected', this.artistsSelected);
+        this.artists.fetch();
+        
         return this;
     },
-    show: function() {
+    artistsSelected: function(artists) {
+        this.trigger('artistsSelected', artists)
+    }
+});
+
+Yasound.Views.ProgrammingFilterArtists = Backbone.View.extend({
+    events: {
+        'change': 'selected'
+    },
+    initialize: function () {
+        _.bindAll(this, 'addOne', 'addAll', 'selected');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+        $(this.el).chosen();
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    addAll: function () {
+        $(this.el).hide();
+        this.collection.each(this.addOne);
+        $(this.el).trigger("liszt:updated");
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (artist) {
+        var view = new Yasound.Views.ProgrammingFilterArtist({
+            model: artist
+        });
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    },
+    selected: function(e) {
+        var artists = $(this.el).val();
+        this.trigger('artistsSelected', artists);
+    }
+});
+
+Yasound.Views.ProgrammingFilterArtist = Backbone.View.extend({
+    tagName: 'option',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var name = this.model.get('artist_name');
+        $(this.el).html(name)
+        return this;
     }
 });
