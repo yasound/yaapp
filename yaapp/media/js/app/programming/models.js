@@ -23,9 +23,18 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
         return results;
     },
     filterArtists: function(artists) {
-        this.params = {};
         if (artists) {
             _.extend(this.params, {artist:artists});
+        } else {
+            _.extend(this.params, {artist:undefined});
+        }
+        this.goTo(0);
+    },
+    filterAlbums: function(albums) {
+        if (albums) {
+            _.extend(this.params, {album:albums});
+        } else {
+            _.extend(this.params, {album:undefined});
         }
         this.goTo(0);
     }
@@ -37,4 +46,25 @@ Yasound.Data.Models.ProgrammingArtist = Backbone.Model.extend({});
 Yasound.Data.Models.ProgrammingArtists = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingArtist,
     url: '/api/v1/my_programming/artists/'    
+});
+
+Yasound.Data.Models.ProgrammingAlbum = Backbone.Model.extend({});
+
+Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
+    model: Yasound.Data.Models.ProgrammingAlbum,
+    url: '/api/v1/my_programming/albums/',
+    filterArtists: function(artists) {
+        var params = {}
+        if (artists) {
+            params = {
+                data: {
+                    artist: artists
+                },
+                traditional: true,
+                processData: true
+            };
+        }
+        console.log(params)
+        this.fetch(params);
+    }
 });
