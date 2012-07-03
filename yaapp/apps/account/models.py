@@ -986,7 +986,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(friend_profile),
             'user_id': friend_profile.user.id,
-            'radio.id': radio.id
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, 
