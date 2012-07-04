@@ -10,52 +10,59 @@ from yasearch.utils import get_simplified_name
 import logging
 logger = logging.getLogger("yaapp.yarecommendation")
 
+
+class MapArtistManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.recommendation.map_artist
+        self.collection.ensure_index("code", unique=True)
+        self.collection.ensure_index("artist", unique=True)
+    def drop(self):
+        self.collection.drop()
+
+    def next_code(self):
+        next_code = 0
+        last_docs = self.collection.find().sort([('code', DESCENDING)]).limit(1)
+        if last_docs.count() != 0:
+            next_code = last_docs[0].get('code') + 1
+        return  next_code
+
+    def artist_code(self, artist_name):
+        code = None
+        doc = self.collection.find_one({'artist': artist_name})
+        if doc is None:
+            code = self.next_code()
+            doc = {
+                'code': code,
+                'artist': artist_name
+            }
+            self.collection.insert(doc, safe=True)
+        else:
+            code = doc.get('code')
+        return code
+
 class ClassifiedRadiosManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.radios
         self.collection.ensure_index("db_id")
-    
     def drop(self):
         self.collection.drop()
     
     def add_radio(self, radio):
+        ma = MapArtistManager()
         artists = SongMetadata.objects.filter(songinstance__playlist__radio=radio).exclude(artist_name='').values_list('artist_name', flat=True)
         classification = {}
         artist_list = []
         for artist in artists:
             artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
-            classification[artist_name] = classification.get(artist_name, 0) + 1
-            artist_list.append(artist_name)
+            artist_code = ma.artist_code(artist_name)
+            classification[str(artist_code)] = classification.get(str(artist_code), 0) + 1
+            artist_list.append(artist_code)
         doc = {
             'db_id' : radio.id,
             'classification': classification,
             'artists': list(set(artist_list))
-        }
-        self.collection.update({'db_id': radio.id}, {'$set': doc}, upsert=True, safe=True)
-    
-        ids = list(SongMetadata.objects.filter(songinstance__playlist__radio=radio).values_list('yasound_song_id', flat=True))
-        songs = YasoundSong.objects.filter(id__in=ids).select_related()
-        genres_ratio = []
-        for song in songs:
-            genres = YasoundGenre.objects.filter(yasoundsonggenre__song=song)
-            for genre in genres:
-                genre_name = get_simplified_name(genre.name_canonical).replace('$', '').replace('.', '')
-                ratio = (genre_name, 1)
-                for existing_ratio in genres_ratio:
-                    if existing_ratio[0] == genre_name:
-                        genres_ratio.remove(existing_ratio)
-                        ratio = (ratio[0], ratio[1] + 1)
-                genres_ratio.append(ratio)
-        genres_ratio.sort() 
-        genres_ratio.reverse()
-        limit = genres_ratio[0:5]
-        genre_docs = []
-        for i,genre in enumerate(limit):
-            pos = i
-            genre_docs.append({'pos': pos, 'genre': genre[0]})
-        doc = {
-            'genres': [genre_docs]
         }
         self.collection.update({'db_id': radio.id}, {'$set': doc}, upsert=True, safe=True)
            

@@ -4,9 +4,39 @@ from django.test import TestCase
 from models import ClassifiedRadiosManager
 from yabase import tests_utils as yabase_test_utils
 from yabase.models import Radio, SongMetadata
-from yaref import test_utils as yaref_test_utils
-from yaref.models import YasoundGenre, YasoundSongGenre, YasoundSong
+from yarecommendation.models import MapArtistManager
 
+class TestMapArtist(TestCase):
+    def setUp(self):
+        ma = MapArtistManager()
+        ma.drop()
+        
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user        
+
+    def testManager(self):
+        ma = MapArtistManager()
+        artist = 'john'
+        code = ma.artist_code(artist)
+        self.assertEquals(code, 0)
+
+        code = ma.artist_code(artist)
+        self.assertEquals(code, 0)
+
+        artist = 'jean'
+        code = ma.artist_code(artist)
+        self.assertEquals(code, 1)
+
+        artist = 'john'
+        code = ma.artist_code(artist)
+        self.assertEquals(code, 0)
+
+        artist = 'jeannot'
+        code = ma.artist_code(artist)
+        self.assertEquals(code, 2)
 class TestClassification(TestCase):
     def setUp(self):
         cm = ClassifiedRadiosManager()
@@ -20,6 +50,8 @@ class TestClassification(TestCase):
 
 
     def testManager(self):
+        ma = MapArtistManager()
+
         radio = Radio.objects.radio_for_user(self.user)
         playlist = yabase_test_utils.generate_playlist(song_count=10)
         playlist.radio = radio
@@ -32,7 +64,7 @@ class TestClassification(TestCase):
         
         doc = cm.all()[0]
         classification = doc.get('classification')
-        self.assertEquals(classification.get('artist1'), 1)
+        self.assertEquals(classification.get(str(ma.artist_code('artist1'))), 1)
 
         
         SongMetadata.objects.filter(artist_name='artist2').update(artist_name='artist1')
@@ -40,4 +72,6 @@ class TestClassification(TestCase):
         
         doc = cm.all()[0]
         classification = doc.get('classification')
-        self.assertEquals(classification.get('artist1'), 2)
+        self.assertEquals(classification.get(str(ma.artist_code('artist1'))), 2)
+
+
