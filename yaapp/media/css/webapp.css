@@ -48,9 +48,73 @@ body {
 #footer {
 	background-image: url(/media/app/images/footer_bg.png);
 	background-repeat: repeat-x;
-	color: white;
 	height: 150px;
 }
+
+#contacts {
+	font-size: 14px;
+	display: inline-block;
+	float: left;
+	margin-right: 70px;
+}
+
+#contacts span {
+	color: white;
+}
+
+#contacts p span a {
+	padding-top:100px;
+}
+
+/*--- couleurs des font ---*/
+
+.blanc {
+	color:white;
+}
+
+.gris {
+	color:#757b7d;
+}
+
+#Users {
+	display:inline-block;
+	float:left;
+}
+
+#connected_users {
+	display: inline-block;
+	width: 70px;
+	height: 50px;
+	color: #757b7d;
+	margin-top:5px;
+}
+
+#minutes {
+	float: left;
+	display:inline-block;
+}
+
+.blocks {
+	display: inline-block;
+	margin-top: 50px;
+	height:100px;
+	font-family: Arial;
+	font-weight: bold;
+}
+
+.separation {
+
+}
+
+.decalage {
+	position:relative;
+	bottom:2px;
+}
+
+.socio {
+	margin:5px;
+}
+
 
 /**
  * Player
