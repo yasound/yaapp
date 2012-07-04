@@ -61,12 +61,7 @@ body {
 	float:left;
 	margin-top:38px;
 }
-#copyright {
-	width: 100px;
-	height: 20px;
-	float: right;
-	margin-bottom: 0px;
-}
+
 /*--- FOOTER LEFT BLOCK ---*/
 
 #contacts {
@@ -126,11 +121,10 @@ body {
 }
 
 #img-users {
-	width:332px;
+	width:340px;
 	display:inline-block;
-	float:left;
-	margin-left:20px;
-	margin-top:5px;
+	padding-left:20px;
+	padding-top:5px;
 }
 
 #img-users .individual-pictures {
@@ -151,7 +145,7 @@ body {
 	width:180px;
 	height:80px;
 	text-align:right;
-	margin-top:40px;
+	margin-top:42px;
 }
 
 #minutes span {
@@ -163,11 +157,11 @@ body {
 
 #minutes p {
 	float:right;
-	width:128px;
+	width:130px;
 	padding-top:15px;
 }	
 
-/*--- couleurs des font ---*/
+/*--- FONTS COLORS ---*/
 
 .footer-text-color1 {
 	color: white;
@@ -175,6 +169,14 @@ body {
 
 .footer-text-color2 {
 	color: #757b7d;
+}
+
+#copyright {
+	width: 120px;
+	height: 20px;
+	float: right;
+	text-align:right;
+	margin-bottom: 0px;
 }
 
 /**
