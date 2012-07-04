@@ -52,19 +52,28 @@ body {
 }
 
 .blocks {
-	float:left;
 	height: 100px;
 	font-family: arial, sans-serif;
 	font-weight: bold;
 }
 
-/* FOOTER LEFT BLOCK */
+.separation {
+	float:left;
+	margin-top:38px;
+}
+#copyright {
+	width: 100px;
+	height: 20px;
+	float: right;
+	margin-bottom: 0px;
+}
+/*--- FOOTER LEFT BLOCK ---*/
 
 #contacts {
 	font-size: 14px;
 	float: left;
-	margin-right: 0px;	
 	width: 211px;
+	margin-right: 0px;	
 	margin-top: 58px;
 }
 
@@ -98,37 +107,65 @@ body {
 	margin-left: 10px;
 }
 
-.separation {
-	display:inline-block;
-	float:left;
-	margin-top:38px;
-}
+/*--- FOOTER MIDDLE BLOCK ---*/
 
 #connected-users {
-	width:436px;
-	height:82px;
-	margin-top:40px;
-	margin-left:35px;
+	float:left;
+	width: 436px;
+	height: 82px;
+	margin: 40px 54px 0px 35px;
 }
 
 #text-users {
 	display:inline-block;
 	float:left;
 	color:#757b7d;
+	font-size:14px;
 	width:75px;
 	padding-top:25px;
 }
 
-#img-profiles {
+#img-users {
 	width:332px;
 	display:inline-block;
 	float:left;
 	margin-left:20px;
+	margin-top:5px;
 }
 
-#img-profiles .individual-pictures {
-	padding: 0px 4px 10px 0px;
+#img-users .individual-pictures {
+	padding: 0px 5px 10px 0px;
+	margin:0px;
 }
+
+#img-users button {
+	width:112px;
+	height:31px;			
+}
+
+/*--- FOOTER RIGHT BLOCK ---*/
+
+#minutes {
+	float:right;
+	display:inline-block;
+	width:180px;
+	height:80px;
+	text-align:right;
+	margin-top:40px;
+}
+
+#minutes span {
+	font-weight:normal;
+	font-size:42px;
+	margin-top:40px;
+	margin-bottom:15px;
+}
+
+#minutes p {
+	float:right;
+	width:128px;
+	padding-top:15px;
+}	
 
 /*--- couleurs des font ---*/
 
@@ -138,13 +175,6 @@ body {
 
 .footer-text-color2 {
 	color: #757b7d;
-}
-
-
-
-#minutes {
-	float: left;
-	display:inline-block;
 }
 
 /**
