@@ -51,70 +51,101 @@ body {
 	height: 150px;
 }
 
-#contacts {
-	font-size: 14px;
-	display: inline-block;
-	float: left;
-	margin-right: 70px;
+.blocks {
+	float:left;
+	height: 100px;
+	font-family: arial, sans-serif;
+	font-weight: bold;
 }
 
-#contacts span {
+/* FOOTER LEFT BLOCK */
+
+#contacts {
+	font-size: 14px;
+	float: left;
+	margin-right: 0px;	
+	width: 211px;
+	margin-top: 58px;
+}
+
+#contacts p {
+	color: white;
+	overflow: hidden;
+	border:0;
+}
+
+#contacts p a {
+	text-decoration: none;
+}
+
+#contacts p a:hover.footer-text-color1 {
+	text-decoration: none;
 	color: white;
 }
 
-#contacts p span a {
-	padding-top:100px;
+#contacts p a:hover.footer-text-color2 {
+	text-decoration: none;
+	color: #757b7d;
+}
+
+#contacts p a img {
+	position: relative;
+	bottom: 3px;
+	padding-right: 5px;
+}
+
+#contacts p a img.padding-social-logo {
+	margin-left: 10px;
+}
+
+.separation {
+	display:inline-block;
+	float:left;
+	margin-top:38px;
+}
+
+#connected-users {
+	width:436px;
+	height:82px;
+	margin-top:40px;
+	margin-left:35px;
+}
+
+#text-users {
+	display:inline-block;
+	float:left;
+	color:#757b7d;
+	width:75px;
+	padding-top:25px;
+}
+
+#img-profiles {
+	width:332px;
+	display:inline-block;
+	float:left;
+	margin-left:20px;
+}
+
+#img-profiles .individual-pictures {
+	padding: 0px 4px 10px 0px;
 }
 
 /*--- couleurs des font ---*/
 
-.blanc {
-	color:white;
+.footer-text-color1 {
+	color: white;
 }
 
-.gris {
-	color:#757b7d;
-}
-
-#Users {
-	display:inline-block;
-	float:left;
-}
-
-#connected_users {
-	display: inline-block;
-	width: 70px;
-	height: 50px;
+.footer-text-color2 {
 	color: #757b7d;
-	margin-top:5px;
 }
+
+
 
 #minutes {
 	float: left;
 	display:inline-block;
 }
-
-.blocks {
-	display: inline-block;
-	margin-top: 50px;
-	height:100px;
-	font-family: Arial;
-	font-weight: bold;
-}
-
-.separation {
-
-}
-
-.decalage {
-	position:relative;
-	bottom:2px;
-}
-
-.socio {
-	margin:5px;
-}
-
 
 /**
  * Player
