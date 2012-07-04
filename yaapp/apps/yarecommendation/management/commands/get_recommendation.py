@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from optparse import make_option
-from yarecommendation.models import ClassifiedRadiosManager
+from yarecommendation.models import ClassifiedRadiosManager, MapArtistManager
 import logging
 from time import time
 
@@ -31,7 +31,10 @@ class Command(BaseCommand):
         
         artists = doc.get('artists')
         
-        reco = cm.find_similar_radios(artists)
+        ma = MapArtistManager()
+        artists_names = [ma.artist_name(code) for code in artists]
+        
+        reco = cm.find_similar_radios(artists_names)
         result = []
         for rec in reco:
             if rec[1] == radio_id:

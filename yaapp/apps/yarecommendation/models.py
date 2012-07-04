@@ -41,6 +41,13 @@ class MapArtistManager():
             code = doc.get('code')
         return code
 
+    def artist_name(self, code):
+        doc = self.collection.find_one({'code': code})
+        if doc:
+            return doc.get('artist')
+        return None
+        
+
 class ClassifiedRadiosManager():
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -103,13 +110,14 @@ class ClassifiedRadiosManager():
         return float(len(self._intersect(a, b)))
     
     def find_similar_radios(self, artists):
+        ma = MapArtistManager()
         similarities = []
         if len(artists) == 0:
             return similarities
         artists_sanitized = []
         for artist in artists:
             artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
-            artists_sanitized.append(artist_name)
+            artists_sanitized.append(ma.artist_code(artist_name))
         
         docs = self.collection.find()
         for doc in docs:
