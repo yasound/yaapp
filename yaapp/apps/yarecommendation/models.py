@@ -4,7 +4,7 @@ from django.db.models import signals
 from pymongo import DESCENDING
 from yabase.models import SongMetadata, Radio
 from yarecommendation.task import async_add_radio
-from yarecommendation.utils import top_matches
+from yarecommendation.utils import top_matches, sim_pearson
 from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
@@ -52,7 +52,7 @@ class ClassifiedRadiosManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.radios
-        self.collection.ensure_index("db_id")
+        self.collection.ensure_index("db_id", unique=True)
     def drop(self):
         self.collection.drop()
     
@@ -144,6 +144,181 @@ class ClassifiedRadiosManager():
     
     def radio_doc(self, radio_id):
         return self.collection.find_one({'db_id': radio_id})
+    
+class RadiosClusterManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.recommendation.cluster
+        self.collection.ensure_index("db_id", unique=False)
+        self.collection.ensure_index("root", unique=False)
+    def drop(self):
+        self.collection.drop()
+        
+        
+    def _pprint(self, node, depth):
+        if node is None:
+            return
+        print "-" * depth, "", node.get('_id'), "virtual:", node.get('virtual')
+        self._pprint(self._get_left_child(node), depth+2)
+        self._pprint(self._get_right_child(node), depth+2)
+        
+    def pprint(self):
+        root = self._root_node()
+        depth=1
+        print "-" * depth, "", root.get('_id'), "(root)"
+        self._pprint(self._get_left_child(root), depth=depth+2)
+        self._pprint(self._get_right_child(root), depth=depth+2)
+        
+    def _root_node(self):
+        root = self.collection.find_one({'root': True})
+        if not root:
+            self._create_root()
+            root = self.collection.find_one({'root': True})
+        return root
+    
+    def _get_left_child(self, parent):
+        return self.collection.find_one({'_id': parent.get('left')})
+        
+    def _get_right_child(self, parent):
+        return self.collection.find_one({'_id': parent.get('right')})
+
+    def _find_in_nodes(self, parent, radio, current_score=0):
+        left_child = self._get_left_child(parent)
+        right_child = self._get_right_child(parent)
+        
+        left_score, right_score = 0, 0
+        if left_child:
+            left_score = sim_pearson(left_child, radio)
+        if right_child:
+            right_score = sim_pearson(right_child, radio)
+        
+        if current_score > left_score and current_score > right_score:
+            return parent
+        
+        if left_score >= right_score:
+            if left_child is None:
+                print "found %s" % (parent.get('_id'))
+                return parent
+            return self._find_in_nodes(left_child, radio, left_score)
+        else:
+            if right_child is None:
+                return parent
+            return self._find_in_nodes(right_child, radio, right_score)
+            
+    def _find_node(self, radio):
+        root = self._root_node()
+        return self._find_in_nodes(root, radio)
+        
+    def _create_root(self):
+        doc = {
+            'parent': None,
+            'root': True,
+            'virtual': True,
+            'left': None,
+            'right': None,
+            'db_id': None,
+            'classification': None
+        }
+        self.collection.insert(doc, safe=True)
+    
+    def _add_new_radio(self, parent, radio):
+        doc = {
+            'parent': None,
+            'root': False,
+            'virtual': False,
+            'left': None,
+            'right': None,
+            'db_id': radio.get('db_id'),
+            'classification': radio.get('classification')
+        }
+        self.collection.save(doc, safe=True)
+        if parent is None:
+            return doc
+    
+        doc['parent'] = parent.get('_id')
+        if parent.get('left') == None:
+            parent['left'] = doc.get('_id')
+        else:
+            parent['right'] = doc.get('_id')
+
+        self.collection.save(doc, safe=True)
+        self.collection.save(parent, safe=True)
+        return doc
+    
+    def _is_leaf(self, node):
+        left = node.get('left')
+        right = node.get('right')
+        if left is None and right is None:
+            return True
+        return False
+    
+    def _generate_virtual_node(self, node1, radio):
+        node2 = self._add_new_radio(None, radio)
+        
+        classification1 = node1.get('classification')
+        classification2 = node2.get('classification')
+        
+        keys1 = classification1.keys()
+        keys2 = classification2.keys()
+        
+        merged_classification = {}
+        
+        for artist in keys1:
+            if artist in keys2:
+                val1 = classification1[artist]
+                val2 = classification2[artist]
+                mean = float( (val1 + val2) / 2)
+                merged_classification[artist] = mean
+                del classification2[artist]
+                del classification1[artist]
+
+        keys1 = classification1.keys()
+        keys2 = classification2.keys()
+        for artist in keys2:
+            if artist in keys1:
+                val1 = classification1[artist]
+                val2 = classification2[artist]
+                mean = float( (val1 + val2) / 2)
+                merged_classification[artist] = mean
+        
+        doc = {
+            'parent': None,
+            'root': False,
+            'virtual': True,
+            'db_id': None,
+            'left': node1.get('_id'),
+            'right': node2.get('_id'),
+            'classification': merged_classification
+        }
+        self.collection.save(doc, safe=True)
+        return doc
+
+    def _parent_node(self, node):
+        if node.get('root') == True:
+            return node
+        return self.collection.find_one({'_id': node.get('parent')})
+    
+    def _replace_child(self, parent, node1, node2):
+        
+        if parent.get('left') == node1.get('_id'):
+            parent['left'] = node2.get('_id')
+        else:
+            parent['right'] = node2.get('_id')
+            
+        node2['parent'] = node1.get('parent')
+        node1['parent'] = node2.get('_id')
+        self.collection.save(node2, safe=True)
+        self.collection.save(node1, safe=True)
+        self.collection.save(parent, safe=True)
+    
+    def add_radio(self, radio):
+        nearest_node = self._find_node(radio)
+        if nearest_node.get('root') == True:
+            self._add_new_radio(self._root_node(), radio)
+        else:
+            virtual_node = self._generate_virtual_node(nearest_node, radio)
+            parent_node = self._parent_node(nearest_node)
+            self._replace_child(parent_node, nearest_node, virtual_node)
     
 def new_radio(sender, instance, created, **kwargs):
     if created:
