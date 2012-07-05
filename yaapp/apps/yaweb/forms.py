@@ -1,5 +1,8 @@
 from bootstrap.forms import Fieldset, BootstrapForm
 from django import forms
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 class BetatestForm(BootstrapForm):
@@ -96,4 +99,7 @@ class BetatestForm(BootstrapForm):
        
     
     def save(self):
-        pass
+        context = self.cleaned_data
+        message = render_to_string("yaweb/betatest_mail_template.txt", context)
+        subject = '[betatest] nouveau candidat'
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [a[1] for a in settings.MODERATORS])
