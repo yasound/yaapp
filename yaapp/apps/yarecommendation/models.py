@@ -182,7 +182,12 @@ class RadiosClusterManager():
     def _get_right_child(self, parent):
         return self.collection.find_one({'_id': parent.get('right')})
 
-    def _find_in_nodes(self, parent, radio, current_score=0):
+    def _find_in_nodes(self, parent, radio, current_score=0, stop_score=None):
+        print "current_score = %f, stop_score=%s" %(current_score, stop_score)
+        if stop_score is not None and stop_score <= current_score:
+            print "stop_score reached: (stop_score) %f < %f (current_score) " % (stop_score, current_score)
+            return parent
+        
         left_child = self._get_left_child(parent)
         right_child = self._get_right_child(parent)
         
@@ -192,22 +197,21 @@ class RadiosClusterManager():
         if right_child:
             right_score = abs(sim_pearson(right_child, radio))
         
-        print "current_score = %f, left_score=%f, right_score=%f" % (current_score, left_score, right_score)
         if current_score > left_score and current_score > right_score:
             return parent
         
         if left_score >= right_score:
             if left_child is None:
                 return parent
-            return self._find_in_nodes(left_child, radio, left_score)
+            return self._find_in_nodes(left_child, radio, left_score, stop_score=stop_score)
         else:
             if right_child is None:
                 return parent
-            return self._find_in_nodes(right_child, radio, right_score)
+            return self._find_in_nodes(right_child, radio, right_score, stop_score=stop_score)
             
-    def _find_node(self, radio):
+    def _find_node(self, radio, stop_score):
         root = self._root_node()
-        return self._find_in_nodes(root, radio)
+        return self._find_in_nodes(root, radio, current_score=0, stop_score=stop_score)
         
     def _create_root(self):
         doc = {
@@ -271,6 +275,8 @@ class RadiosClusterManager():
                 merged_classification[artist] = mean
                 del classification2[artist]
                 del classification1[artist]
+            else:
+                merged_classification[artist] = classification1[artist]
 
         keys1 = classification1.keys()
         keys2 = classification2.keys()
@@ -280,6 +286,8 @@ class RadiosClusterManager():
                 val2 = classification2[artist]
                 mean = float( (val1 + val2) / 2)
                 merged_classification[artist] = mean
+            else:
+                merged_classification[artist] = classification2[artist]
         
         doc = {
             'parent': None,
@@ -322,6 +330,34 @@ class RadiosClusterManager():
             virtual_node = self._generate_virtual_node(nearest_node, radio)
             parent_node = self._parent_node(nearest_node)
             self._replace_child(parent_node, nearest_node, virtual_node)
+    
+    def _radios_from_node(self, node, radio):
+        res = []
+        if node.get('db_id'):
+            score = abs(sim_pearson(node, radio))
+            if score >= 0.9:
+                res.append(node.get('db_id'))
+                
+        left = self._get_left_child(node)
+        if left:
+            res.extend(self._radios_from_node(left, radio))
+        right = self._get_right_child(node)
+        if right:
+            res.extend(self._radios_from_node(right, radio))
+        return res
+        
+    def find_radios(self, artists):
+        res = []
+        fake_radio = {
+            'classification': artists
+        }
+        node = self._find_node(fake_radio, stop_score=0.9)
+        print node
+        if node is None:
+            return res
+        else:
+            res = self._radios_from_node(node, fake_radio)
+        return res
     
 def new_radio(sender, instance, created, **kwargs):
     if created:
