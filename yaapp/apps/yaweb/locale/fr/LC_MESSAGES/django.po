@@ -131,8 +131,8 @@ msgid "What is your account ?"
 msgstr "Sous quel identifiant ?"
 
 #: forms.py:61
-msgid "Do you have?"
-msgstr "Avez-vous ?"
+msgid "What equipment do you have?"
+msgstr "De quel équipement disposez vous ?"
 
 #: forms.py:73
 msgid "Are you registered at another music platform?"
