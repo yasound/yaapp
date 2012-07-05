@@ -201,7 +201,16 @@
     <div class="navbar navbar-fixed-top" id='header'>
       <div class="navbar-inner">
         <div class="container">
-            <a href='{% url webapp %}' id='btn-webapp' class='brand'><img src='/media/app/images/yasound.png' alt='Yasound logo' width='138px' height='76px'/></a>
+            <a href='{% url webapp %}' id='btn-webapp' class='brand'>
+				<img src='/media/app/images/yasound.png' alt='Yasound logo' width='138px' height='76px'/>
+			</a>
+			<div class="header-separation">
+				<img src="../../media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
+			</div>
+			<div id="audio-quality">
+					<img id="audio-quality-btn" src="../../media/app/images/btn-sound-quality.png" width="25" height="25" alt="Btn Sound Quality">
+					<img src="../../media/app/images/slider-sound-quality.png" width="70" height="25" alt="Slider Sound Quality">
+			</div>
           
           <div class="nav-collapse">
             <div class='pull-right'>
@@ -291,7 +300,7 @@
 			</p>
 		</div>
 
-		<div class="separation">
+		<div class="footer-separation">
 			<img src="../../media/app/images/separation.png" width="4" height="81" alt="separation">
 		</div>
 		
@@ -319,7 +328,7 @@
 				</a>
 			</p>
 		</div>
-		<div class="separation">
+		<div class="footer-separation">
 			<img src="../../media/app/images/separation.png" width="4" height="81" alt="separation">
 		</div>
 		<div id="minutes" class="blocks">
