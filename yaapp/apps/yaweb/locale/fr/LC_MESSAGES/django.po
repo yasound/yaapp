@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-21 14:24+0200\n"
+"POT-Creation-Date: 2012-07-05 11:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,130 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: forms.py:6
+msgid "Last name"
+msgstr "Nom"
+
+#: forms.py:7
+msgid "First name"
+msgstr "Prénom"
+
+#: forms.py:8
+msgid "Occupation"
+msgstr "Profession"
+
+#: forms.py:9
+msgid "Age"
+msgstr "Age"
+
+#: forms.py:10
+msgid "Are you registered at Yasound?"
+msgstr "Êtes-vous inscrit sur Yasound ?"
+
+#: forms.py:11
+msgid "Facebook"
+msgstr "Facebook"
+
+#: forms.py:12
+msgid "Twitter"
+msgstr "Twitter"
+
+#: forms.py:13
+msgid "Email"
+msgstr "Email"
+
+#: forms.py:15
+msgid "A mac"
+msgstr "Un mac"
+
+#: forms.py:16
+#: forms.py:19
+#: forms.py:22
+#: forms.py:25
+#: forms.py:28
+msgid "Which one ?"
+msgstr "Lequel ?"
+
+#: forms.py:18
+msgid "A PC"
+msgstr "Un PC"
+
+#: forms.py:21
+msgid "An iPhone"
+msgstr "Un iPhone"
+
+#: forms.py:24
+msgid "An iPod"
+msgstr "Un iPod"
+
+#: forms.py:27
+msgid "A smartphone shipped with Android"
+msgstr "Un smartphone équipé d'Android"
+
+#: forms.py:30
+#: forms.py:39
+msgid "Deezer"
+msgstr "Deezer"
+
+#: forms.py:31
+#: forms.py:40
+msgid "Spotify"
+msgstr "Spotify"
+
+#: forms.py:32
+#: forms.py:41
+msgid "Soundcloud"
+msgstr "Soundcloud"
+
+#: forms.py:33
+#: forms.py:42
+msgid "Grooveshark"
+msgstr "Grooveshark"
+
+#: forms.py:34
+#: forms.py:43
+msgid "Lastfm"
+msgstr "Lastfm"
+
+#: forms.py:35
+#: forms.py:44
+msgid "Radionomy"
+msgstr "Radionomy"
+
+#: forms.py:36
+#: forms.py:45
+msgid "MusicMe"
+msgstr "MusicMe"
+
+#: forms.py:37
+#: forms.py:46
+msgid "Qobuz"
+msgstr "Qobuz"
+
+#: forms.py:50
+msgid "General informations"
+msgstr "Informations générales"
+
+#: forms.py:55
+msgid "You and Yasound"
+msgstr "Vous et Yasound"
+
+#: forms.py:57
+msgid "What is your account ?"
+msgstr "Sous quel identifiant ?"
+
+#: forms.py:61
+msgid "Do you have?"
+msgstr "Avez-vous ?"
+
+#: forms.py:73
+msgid "Are you registered at another music platform?"
+msgstr "Etes-vous abonné à d’autres plateformes d’écoute de musique en ligne ?"
+
+#: forms.py:83
+msgid "Have you subscribed to paid options?"
+msgstr "Avez-vous souscrit à des comptes payants ?"
 
 #: templates/yaweb/about.html:3
 msgid "About"
