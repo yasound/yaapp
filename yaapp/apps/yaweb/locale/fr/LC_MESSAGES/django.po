@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-05 14:02+0200\n"
+"POT-Creation-Date: 2012-07-05 14:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,8 +136,8 @@ msgid "What is your account ?"
 msgstr "Sous quel identifiant ?"
 
 #: forms.py:67
-msgid "What equipment do you have?"
-msgstr "De quel équipement disposez vous ?"
+msgid "What equipment(s) do you have?"
+msgstr "De quel(s) équipement(s) disposez vous ?"
 
 #: forms.py:80
 msgid "Are you registered at another music platform?"

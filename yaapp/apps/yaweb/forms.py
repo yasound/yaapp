@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 class BetatestForm(BootstrapForm):
+    main_email = forms.CharField(label=_("Email"), max_length=255, required=True)
     lastname = forms.CharField(label=_("Last name"), required=True)
     firstname = forms.CharField(label=_("First name"), required=True)
     occupation = forms.CharField(label=_("Occupation"), required=True)
@@ -13,7 +14,7 @@ class BetatestForm(BootstrapForm):
     registered = forms.BooleanField(label=_("Are you registered at Yasound?"), required=False)
     facebook = forms.CharField(label=_("Facebook"), required=False)
     twitter = forms.CharField(label=_("Twitter"), required=False)
-    email = forms.CharField(label=_("Email"), required=False)
+    email = forms.CharField(label=_("Email"), max_length=255, required=False)
 
     mac = forms.BooleanField(label=_("A mac"), required=False)
     mac_details = forms.CharField(label=_("Which one ?"), required=False)
@@ -54,6 +55,7 @@ class BetatestForm(BootstrapForm):
     class Meta:
         layout = (
             Fieldset(_('General informations'),
+                     'main_email',
                      'lastname',
                      'firstname',
                      'occupation',
@@ -64,7 +66,7 @@ class BetatestForm(BootstrapForm):
                      'facebook',
                      'twitter',
                      'email'),
-            Fieldset(_('What equipment do you have?'),
+            Fieldset(_('What equipment(s) do you have?'),
                      'mac',
                      'mac_details',
                      'pc',

@@ -2,6 +2,7 @@
 Informations générales
 ----------------------
 
+email : {{main_email}}
 nom : {{lastname}}
 prénom: {{firstname}}
 profession : {{occupation}}

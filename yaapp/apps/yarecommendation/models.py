@@ -209,7 +209,7 @@ class RadiosClusterManager():
                 return parent
             return self._find_in_nodes(right_child, radio, right_score, stop_score=stop_score)
             
-    def _find_node(self, radio, stop_score):
+    def _find_node(self, radio, stop_score=None):
         root = self._root_node()
         return self._find_in_nodes(root, radio, current_score=0, stop_score=stop_score)
         
