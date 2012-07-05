@@ -10,7 +10,7 @@ class BetatestForm(BootstrapForm):
     firstname = forms.CharField(label=_("First name"), required=True)
     occupation = forms.CharField(label=_("Occupation"), required=True)
     age = forms.CharField(label=_("Age"), required=True)
-    registered = forms.BooleanField(label=_("Are you registered at Yasound?"), required=True)
+    registered = forms.BooleanField(label=_("Are you registered at Yasound?"), required=False)
     facebook = forms.CharField(label=_("Facebook"), required=False)
     twitter = forms.CharField(label=_("Twitter"), required=False)
     email = forms.CharField(label=_("Email"), required=False)
@@ -26,6 +26,9 @@ class BetatestForm(BootstrapForm):
 
     ipod = forms.BooleanField(label=_("An iPod"), required=False)
     ipod_details = forms.CharField(label=_("Which one ?"), required=False)
+
+    ipad = forms.BooleanField(label=_("An iPad"), required=False)
+    ipad_details = forms.CharField(label=_("Which one ?"), required=False)
 
     android = forms.BooleanField(label=_("A smartphone shipped with Android"), required=False)
     android_details = forms.CharField(label=_("Which one ?"), required=False)
@@ -70,6 +73,8 @@ class BetatestForm(BootstrapForm):
                      'iphone_details',
                      'ipod',
                      'ipod_details',
+                     'ipad',
+                     'ipad_details',
                      'android',
                      'android_details',),
             Fieldset(_('Are you registered at another music platform?'),

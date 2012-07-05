@@ -4,6 +4,7 @@ jQuery(document).ready(function() {
     var pcInfo = $('#id_pc').parent().parent().next();
     var iPhoneInfo = $('#id_iphone').parent().parent().next();
     var iPodInfo = $('#id_ipod').parent().parent().next();
+    var iPadInfo = $('#id_ipad').parent().parent().next();
     var androidInfo = $('#id_android').parent().parent().next();
 
     if (!$('#id_registered').attr('checked')) {
@@ -21,6 +22,9 @@ jQuery(document).ready(function() {
     }
     if (!$('#id_ipod').attr('checked')) {
         iPodInfo.hide();
+    }
+    if (!$('#id_ipad').attr('checked')) {
+        iPadInfo.hide();
     }
     if (!$('#id_android').attr('checked')) {
         androidInfo.hide();
@@ -42,6 +46,9 @@ jQuery(document).ready(function() {
     });
     $('#id_ipod').click(function() {
         iPodInfo.slideToggle();    
+    });
+    $('#id_ipad').click(function() {
+        iPadInfo.slideToggle();    
     });
     $('#id_android').click(function() {
         androidInfo.slideToggle();    

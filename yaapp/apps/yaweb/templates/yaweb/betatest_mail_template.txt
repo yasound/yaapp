@@ -18,6 +18,7 @@ possède un mac : {% if mac %}oui ({{mac_details}}){% else %}non{% endif %}
 possède un pc : {% if pc %}oui ({{pc_details}}){% else %}non{% endif %}
 possède un iPhone : {% if iphone %}oui ({{iphone_details}}){% else %}non{% endif %}
 possède un iPod : {% if ipod %}oui ({{ipod_details}}){% else %}non{% endif %}
+possède un iPad : {% if ipad %}oui ({{ipad_details}}){% else %}non{% endif %}
 possède un smartphone Android : {% if android %}oui ({{android_details}}){% else %}non{% endif %}
 
 Plateformes utilisées
