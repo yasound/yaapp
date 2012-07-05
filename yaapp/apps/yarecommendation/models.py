@@ -188,16 +188,16 @@ class RadiosClusterManager():
         
         left_score, right_score = 0, 0
         if left_child:
-            left_score = sim_pearson(left_child, radio)
+            left_score = abs(sim_pearson(left_child, radio))
         if right_child:
-            right_score = sim_pearson(right_child, radio)
+            right_score = abs(sim_pearson(right_child, radio))
         
+        print "current_score = %f, left_score=%f, right_score=%f" % (current_score, left_score, right_score)
         if current_score > left_score and current_score > right_score:
             return parent
         
         if left_score >= right_score:
             if left_child is None:
-                print "found %s" % (parent.get('_id'))
                 return parent
             return self._find_in_nodes(left_child, radio, left_score)
         else:
@@ -263,6 +263,9 @@ class RadiosClusterManager():
         
         merged_classification = {}
         
+        import pdb
+        pdb.set_trace()
+
         for artist in keys1:
             if artist in keys2:
                 val1 = classification1[artist]
@@ -291,6 +294,10 @@ class RadiosClusterManager():
             'classification': merged_classification
         }
         self.collection.save(doc, safe=True)
+        
+        node2['parent'] = doc.get('_id')
+        self.collection.save(node2, safe=True)
+        
         return doc
 
     def _parent_node(self, node):
@@ -299,7 +306,6 @@ class RadiosClusterManager():
         return self.collection.find_one({'_id': node.get('parent')})
     
     def _replace_child(self, parent, node1, node2):
-        
         if parent.get('left') == node1.get('_id'):
             parent['left'] = node2.get('_id')
         else:
