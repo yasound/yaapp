@@ -64,7 +64,7 @@ class BetatestForm(BootstrapForm):
                      'facebook',
                      'twitter',
                      'email'),
-            Fieldset(_('What equipment do you have?'),
+            Fieldset(_('What equipment(s) do you have?'),
                      'mac',
                      'mac_details',
                      'pc',
