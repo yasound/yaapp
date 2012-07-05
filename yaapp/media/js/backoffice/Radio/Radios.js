@@ -167,7 +167,7 @@ Yasound.Radios.Handler.FindMetadata = function(selected) {
             var json = Ext.decode(data);
             var metadatas = json.data;
             Ext.Msg.show({
-                title: gettext('Confirmation'),
+                title: gettext('The following metadata have been found, use it ?'),
                 msg: gettext(metadatas),
                 buttons: Ext.Msg.YESNOCANCEL,
                 fn: function(b, text){

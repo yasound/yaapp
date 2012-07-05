@@ -42,6 +42,7 @@ from yasearch.models import MostPopularSongsManager
 from yametrics.matching_errors import MatchingErrorsManager
 from yabase.export_utils import export_pur
 from yahistory.models import UserHistory
+from yasearch.utils import get_simplified_name
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -417,7 +418,9 @@ def yasound_songs_find_metadata(request, song_id=None):
     res = ''
     for song in yasound_songs:
         synonyms = song.find_synonyms()
-        res = res + '%s : %s' % (song, synonyms)
+        for synonym in synonyms:
+            res = res + '%s : %s' % (song, synonym)
+            break # only first synonym is displayed
 
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
@@ -434,16 +437,35 @@ def yasound_songs_replace_metadata(request, song_id=None):
 
     ids = request.REQUEST.getlist('yasound_song_id')
     yasound_songs = YasoundSong.objects.filter(id__in=ids)
-    
-    res = ''
+
     for song in yasound_songs:
         synonyms = song.find_synonyms()
-        res = res + '%s : %s<br/>' % (song, synonyms)
+        for synonym in synonyms:
+            name = synonym.get('name', '')
+            artist = synonym.get('artist', '')
+            album = synonym.get('album', '')
+            to_save=False
+            if len(name) > 0:
+                song.name = name
+                song.name_simplified = get_simplified_name(name)
+                to_save = True
+            if len(artist) > 0:
+                song.artist_name = artist
+                song.artist_name_simplified = get_simplified_name(artist)
+                to_save = True
+            if len(album) > 0:
+                song.album_name = album
+                song.album_name_simplified = get_simplified_name(album)
+                to_save = True
+                
+            if to_save:
+                song.save()
+                song.build_fuzzy_index(upsert=True)
+            
+            break # only first synonym is handled
 
-    print res
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
-        'data': res,
     })
     resp = utils.JsonResponse(json_data)
     return resp
