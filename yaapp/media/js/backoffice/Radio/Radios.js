@@ -165,7 +165,7 @@ Yasound.Radios.Handler.FindMetadata = function(selected) {
         success: function(result, request){
             var data = result.responseText;
             var json = Ext.decode(data);
-            var metadatas = json.metadatas;
+            var metadatas = json.data;
             Ext.Msg.show({
                 title: gettext('Confirmation'),
                 msg: gettext(metadatas),

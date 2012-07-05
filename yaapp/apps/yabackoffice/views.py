@@ -407,6 +407,49 @@ def yasound_songs(request, song_id=None):
 
 @csrf_exempt
 @login_required
+def yasound_songs_find_metadata(request, song_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    ids = request.REQUEST.getlist('yasound_song_id')
+    yasound_songs = YasoundSong.objects.filter(id__in=ids)
+    
+    res = ''
+    for song in yasound_songs:
+        synonyms = song.find_synonyms()
+        res = res + '%s : %s' % (song, synonyms)
+
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': res,
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
+def yasound_songs_replace_metadata(request, song_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    ids = request.REQUEST.getlist('yasound_song_id')
+    yasound_songs = YasoundSong.objects.filter(id__in=ids)
+    
+    res = ''
+    for song in yasound_songs:
+        synonyms = song.find_synonyms()
+        res = res + '%s : %s<br/>' % (song, synonyms)
+
+    print res
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': res,
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
 def rejected_songs(request):
     if not request.user.is_superuser:
         raise Http404()
