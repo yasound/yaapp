@@ -132,9 +132,29 @@ body {
 	margin:0px;
 }
 
-#img-users button {
-	width:112px;
-	height:31px;			
+#footer-button {
+	display:inline-block;
+	height:32px;
+	width:113px;
+	background-image:url('../app/images/footer-btn-bg.png');
+	background-repeat:repeat-x;
+	border:1px solid black;
+	box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
+	border-radius:4px;
+	text-align:center;
+	color:#757b7d;
+	
+	-webkit-box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
+	-moz-box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
+	-o-box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	-o-border-radius:4px;
+}
+
+#footer-button-text {
+	display:inline-block;
+	padding-top:7px;
 }
 
 /*--- FOOTER RIGHT BLOCK ---*/
@@ -159,7 +179,7 @@ body {
 	float:right;
 	width:130px;
 	padding-top:15px;
-}	
+}
 
 /*--- FONTS COLORS ---*/
 
