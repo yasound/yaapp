@@ -54,7 +54,7 @@ body {
 .blocks {
 	height: 100px;
 	font-family: arial, sans-serif;
-	font-weight: bold;
+	font-weight:;
 }
 
 .separation {
@@ -128,31 +128,38 @@ body {
 }
 
 #img-users .individual-pictures {
-	padding: 0px 5px 10px 0px;
+	padding: 0px 5px 9px 0px;
 	margin:0px;
 }
 
 #footer-button {
 	display:inline-block;
-	height:32px;
+	height:30px;
 	width:113px;
 	background-image:url('../app/images/footer-btn-bg.png');
 	background-repeat:repeat-x;
-	border:1px solid black;
-	box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
+	border:1px solid #1a1c1d;
+	box-shadow:0px 1px 1px #1a1c1d, 0px 1px 1px #4f5252 inset;
 	border-radius:4px;
 	text-align:center;
-	color:#757b7d;
+	color:#8d9699;
+	position:relative;
+	bottom:1px;
 	
-	-webkit-box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
-	-moz-box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
-	-o-box-shadow:0px 1px 2px #000, 0px 1px 1px #4f5252 inset;
+	-webkit-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
+	-moz-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
+	-o-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
 	-webkit-border-radius:4px;
 	-moz-border-radius:4px;
 	-o-border-radius:4px;
 }
 
-#footer-button-text {
+#footer-button:hover {
+	box-shadow:0px 1px 5px #000, 0px 1px 1px #4f5252 inset;
+}
+
+
+#footer-button span {
 	display:inline-block;
 	padding-top:7px;
 }
@@ -179,6 +186,7 @@ body {
 	float:right;
 	width:130px;
 	padding-top:15px;
+	font-size:13px;
 }
 
 /*--- FONTS COLORS ---*/
