@@ -263,9 +263,6 @@ class RadiosClusterManager():
         
         merged_classification = {}
         
-        import pdb
-        pdb.set_trace()
-
         for artist in keys1:
             if artist in keys2:
                 val1 = classification1[artist]
