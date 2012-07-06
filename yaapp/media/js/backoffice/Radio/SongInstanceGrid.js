@@ -135,13 +135,13 @@ Yasound.Backoffice.UI.SongInstanceGrid = Ext.extend(Ext.grid.GridPanel, {
     	this.calculatePageSize();
     },
     calculatePageSize: function() {
-		var bodyHeight = this.getHeight();
-		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50;
-		var rowHeight = 21;
-		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+        var bodyHeight = this.getHeight();
+        var heightOther = 120+30;
+        var rowHeight = 20;
+        var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
-		this.getBottomToolbar().pageSize = gridRows;
-		this.getStore().reload({ params:{ start:0, limit:gridRows } });
-    }
+        this.getBottomToolbar().pageSize = gridRows;
+        this.getStore().reload({ params:{ start:0, limit:gridRows } });
+    },
 });
 Ext.reg('songinstancegrid', Yasound.Backoffice.UI.SongInstanceGrid);
