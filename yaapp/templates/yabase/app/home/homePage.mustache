@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class='row-fluid'>
+<div class='row'>
     <div class='span12'>
         <div class='page-header'>
         <h1>{% trans "Selection" %}</h1>
@@ -9,7 +9,7 @@
         </ul>
     </div>
 </div>    
-<div class='row-fluid'>
+<div class='row'>
     <div class='span12'>
         <div class='page-header'>
         <h1>{% trans "Most popular radios today" %}</h1>
@@ -20,7 +20,7 @@
     </div>
 </div>
 {% if request.user.is_authenticated %}
-<div class='row-fluid'>
+<div class='row'>
     <div class='span12'>
         <div class='page-header'>
         <h1><a href='{% url webapp_favorites %}' id='favorites-link'>{% trans "My favorites" %}</a></h1>

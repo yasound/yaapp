@@ -115,7 +115,7 @@ $(document).ready(function () {
                 this.currentView.close();
                 this.currentView = undefined;
             }
-            $('#webapp-container').append("<div class='container-fluid' id='webapp-content'/>")
+            $('#webapp-container').append("<div class='container' id='webapp-content'/>")
         },
 
         pushManager: new Yasound.App.PushManager({
