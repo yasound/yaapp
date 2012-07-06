@@ -1,0 +1,35 @@
+
+Informations générales
+----------------------
+
+email : {{main_email}}
+nom : {{lastname}}
+prénom: {{firstname}}
+profession : {{occupation}}
+age: {{age}}
+possède un compte yasound : {% if registered %}oui{% else %}non{% endif %}
+facebook: {{facebook}}
+twitter: {{twitter}}
+email: {{email}}
+
+Equipement
+----------
+
+possède un mac : {% if mac %}oui ({{mac_details}}){% else %}non{% endif %}
+possède un pc : {% if pc %}oui ({{pc_details}}){% else %}non{% endif %}
+possède un iPhone : {% if iphone %}oui ({{iphone_details}}){% else %}non{% endif %}
+possède un iPod : {% if ipod %}oui ({{ipod_details}}){% else %}non{% endif %}
+possède un iPad : {% if ipad %}oui ({{ipad_details}}){% else %}non{% endif %}
+possède un smartphone Android : {% if android %}oui ({{android_details}}){% else %}non{% endif %}
+
+Plateformes utilisées
+---------------------
+
+deezer : {% if deezer %}oui {% if deezer_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}
+spotify : {% if spotify %}oui {% if spotify_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}
+soundcloud : {% if soundcloud %}oui {% if soundcloud_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}
+grooveshark : {% if grooveshark %}oui {% if grooveshark_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}
+lastfm : {% if lastfm %}oui {% if lastfm_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}
+radionomy : {% if radionomy %}oui{% else %}non{% endif %}
+musicme : {% if musicme %}oui {% if musicme_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}
+qobuz : {% if qobuz %}oui {% if qobuz_paid %}(abonnement payant){% endif %}{% else %}non{% endif %}

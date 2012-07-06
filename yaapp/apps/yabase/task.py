@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from models import Playlist, SongInstance, update_leaderboard, RadioUser
 from shutil import rmtree
-from struct import unpack_from
 from yabase.import_utils import parse_itunes_line, import_from_string, \
     fast_import
 from yacore.database import flush_transaction
@@ -14,7 +13,9 @@ import os
 import signals as yabase_signals
 import time
 import zlib
+from yabase import settings as yabase_settings
 logger = logging.getLogger("yaapp.yabase")
+from yacore.binary import BinaryData
 
 @task(ignore_result=True)
 def leaderboard_update_task():
@@ -25,34 +26,7 @@ def leaderboard_update_task():
     logger.info('leaderboard_update_task finished')
     
 
-class BinaryData:
-    def __init__(self, data):
-        self.offset = 0
-        self.data = data
 
-    def get_int16(self):
-        res = unpack_from('<h', self.data, self.offset)[0]
-        self.offset = self.offset + 2
-        return res
-
-    def get_int32(self):
-        res = unpack_from('<i', self.data, self.offset)[0]
-        self.offset = self.offset + 4
-        return res
-
-    def get_tag(self):
-        res = unpack_from('<4s', self.data, self.offset)[0]
-        self.offset = self.offset + 4
-        return res
-
-    def get_string(self):
-        size = self.get_int16()
-        res = unpack_from('<' + str(size) + 's', self.data, self.offset)[0]
-        self.offset = self.offset + size
-        return res
-
-    def is_done(self):
-        return self.offset >= len(self.data)
 
 
 @transaction.commit_on_success
@@ -259,6 +233,11 @@ def async_radio_broadcast_message(radio, message):
 
 @task(ignore_result=True)
 def async_import_from_itunes(radio, data):
+    yabase_signals.new_animator_activity.send(sender=radio, 
+                                              user=radio.creator, 
+                                              radio=radio,
+                                              atype=yabase_settings.ANIMATOR_TYPE_IMPORT_ITUNES)
+    
     lines = data.split('\n')
     for line in lines:
         name, album, artist = parse_itunes_line(line)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-19 15:32+0200\n"
+"POT-Creation-Date: 2012-07-02 14:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,22 @@ msgstr "Notification marquée comme lue"
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
+#: js/app/settings/views.js:59
+msgid "Facebook settings saved"
+msgstr "Paramètres Facebook sauvegardés"
+
+#: js/app/settings/views.js:61
+msgid "Error while saving Facebook settings"
+msgstr "Erreur lors de la sauvegarde des paramètres Facebook"
+
+#: js/app/settings/views.js:69
+msgid "Twitter settings saved"
+msgstr "Paramètres Twitter sauvegardés"
+
+#: js/app/settings/views.js:71
+msgid "Error while saving Twitter settings"
+msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
+
 #: js/backoffice/backoffice.js:71
 #: js/backoffice/Moderation/Radios.js:14
 #: js/backoffice/Radio/Radios.js:327
@@ -74,9 +90,8 @@ msgstr "Envoyer les nouvelles chansons vers yasound"
 
 #: js/backoffice/backoffice.js:96
 #: js/backoffice/Radio/AllSongs.js:61
-#, fuzzy
 msgid "All songs"
-msgstr "Chansons disponibles"
+msgstr "Toutes les chansons"
 
 #: js/backoffice/backoffice.js:109
 msgid "Search engine"
@@ -103,32 +118,45 @@ msgstr "Modération"
 #: js/backoffice/Moderation/Users.js:19
 #: js/backoffice/Statistics/Statistics.js:136
 #: js/backoffice/Statistics/Statistics.js:163
+#: js/backoffice/Users/History.js:21
 #: js/backoffice/Users/Users.js:130
 #: js/backoffice/Users/Users.js.py:137
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: js/backoffice/backoffice.js:215
+#: js/backoffice/backoffice.js:217
 #: js/backoffice/Statistics/Statistics.js:269
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: js/backoffice/backoffice.js:217
+#: js/backoffice/backoffice.js:219
 msgid "Useful stats"
 msgstr "Statistiques utiles"
 
-#: js/backoffice/backoffice.js:241
+#: js/backoffice/backoffice.js:233
+#: js/backoffice/Song/MostPopularSongs.js:29
+#: js/backoffice/Song/MostPopularSongs.js:33
+msgid "Most popular songs"
+msgstr "Chansons les plus populaires"
+
+#: js/backoffice/backoffice.js:236
+#: js/backoffice/Song/RejectedSongs.js:18
+#: js/backoffice/Song/RejectedSongs.js:22
+msgid "Rejected songs"
+msgstr "Chansons rejetées"
+
+#: js/backoffice/backoffice.js:249
 #: js/backoffice/Menus/Menus.js:187
 msgid "Menus"
 msgstr "Menus"
 
-#: js/backoffice/backoffice.js:265
+#: js/backoffice/backoffice.js:273
 msgid "Activity score factors"
-msgstr ""
+msgstr "Pondération des scores d'activités"
 
-#: js/backoffice/backoffice.js:267
+#: js/backoffice/backoffice.js:275
 msgid "factors to compute radio activity score"
-msgstr ""
+msgstr "Pondération pour calculer le score d'une radio"
 
 #: js/backoffice/Invitations/InvitationForm.js:28
 msgid "Enter name of VIP"
@@ -151,6 +179,7 @@ msgid "Enter subject of invitation"
 msgstr "Saisir le sujet de l'invitation"
 
 #: js/backoffice/Invitations/InvitationForm.js:49
+#: js/backoffice/Users/UserHistoryGrid.js:42
 msgid "Message"
 msgstr "Message"
 
@@ -173,17 +202,18 @@ msgstr "Annuler"
 #: js/backoffice/Menus/MenuGrid.js:23
 #: js/backoffice/Radio/RadioGrid.js:47
 #: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:26
-#: js/backoffice/Users/UserGrid.js:30
+#: js/backoffice/Users/UserGrid.js:31
 msgid "Name"
 msgstr "Nom"
 
 #: js/backoffice/Invitations/InvitationGrid.js:40
-#: js/backoffice/Users/UserGrid.js:40
+#: js/backoffice/Users/UserGrid.js:41
 msgid "Email"
 msgstr "Email"
 
 #: js/backoffice/Invitations/InvitationGrid.js:50
 #: js/backoffice/Moderation/AbuseGrid.js:30
+#: js/backoffice/Users/UserHistoryGrid.js:37
 #: js/backoffice/WallEvent/WallEventGrid.js:34
 msgid "Radio"
 msgstr "Radio"
@@ -201,7 +231,10 @@ msgstr "Envoyée le"
 #: js/backoffice/Moderation/AbuseGrid.js:113
 #: js/backoffice/Radio/SongInstanceGrid.js:97
 #: js/backoffice/Radio/YasoundSongGrid.js:115
-#: js/backoffice/Users/UserGrid.js:146
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:61
+#: js/backoffice/Song/RejectedSongGrid.js:88
+#: js/backoffice/Users/UserGrid.js:147
+#: js/backoffice/Users/UserHistoryGrid.js:90
 #: js/backoffice/WallEvent/WallEventGrid.js:107
 msgid "Displaying {0} - {1} of {2}"
 msgstr "Affichage de {0} - {1} sur {2}"
@@ -211,7 +244,10 @@ msgstr "Affichage de {0} - {1} sur {2}"
 #: js/backoffice/Moderation/AbuseGrid.js:114
 #: js/backoffice/Radio/SongInstanceGrid.js:98
 #: js/backoffice/Radio/YasoundSongGrid.js:116
-#: js/backoffice/Users/UserGrid.js:147
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:62
+#: js/backoffice/Song/RejectedSongGrid.js:89
+#: js/backoffice/Users/UserGrid.js:148
+#: js/backoffice/Users/UserHistoryGrid.js:91
 #: js/backoffice/WallEvent/WallEventGrid.js:108
 msgid "Nothing to display"
 msgstr "Rien à afficher"
@@ -314,9 +350,8 @@ msgstr "Voulez-vous ignorer définitivement cette notification ?"
 
 #: js/backoffice/Moderation/Abuse.js:75
 #: js/backoffice/Moderation/Abuse.js:80
-#, fuzzy
 msgid "Abuse notifications"
-msgstr "Nouvelle notification reçue"
+msgstr "Notifications d'abus"
 
 #: js/backoffice/Moderation/Abuse.js:85
 msgid "Delete notification and message"
@@ -328,13 +363,14 @@ msgstr "Ignorer la notification"
 
 #: js/backoffice/Moderation/AbuseGrid.js:23
 #: js/backoffice/Radio/RadioGrid.js:40
+#: js/backoffice/Users/UserHistoryGrid.js:15
 #: js/backoffice/WallEvent/WallEventGrid.js:27
 msgid "Date"
 msgstr "Date"
 
 #: js/backoffice/Moderation/AbuseGrid.js:40
 msgid "Sender"
-msgstr ""
+msgstr "Emetteur"
 
 #: js/backoffice/Moderation/AbuseGrid.js:50
 #: js/backoffice/Radio/RadioForm.js:35
@@ -352,6 +388,9 @@ msgstr "Texte"
 #: js/backoffice/Radio/YasoundSongGrid.js:125
 #: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:75
 #: js/backoffice/Song/MissingSongMetadataGrid.js:61
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:70
+#: js/backoffice/Song/RejectedSongGrid.js:98
+#: js/backoffice/Users/UserHistoryGrid.js:99
 #: js/backoffice/WallEvent/WallEventGrid.js:116
 #, perl-brace-format
 msgid ""
@@ -377,7 +416,7 @@ msgstr "Chanson"
 
 #: js/backoffice/Radio/AllSongs.js:38
 msgid "Find musicbrainz id"
-msgstr ""
+msgstr "Rechercher l'id musicbrainz"
 
 #: js/backoffice/Radio/RadioForm.js:26
 msgid "Enter radio name"
@@ -406,6 +445,7 @@ msgstr "Valider"
 
 #: js/backoffice/Radio/RadioGrid.js:29
 #: js/backoffice/Radio/YasoundSongGrid.js:9
+#: js/backoffice/Song/RejectedSongGrid.js:9
 msgid "Id"
 msgstr "Id"
 
@@ -488,18 +528,24 @@ msgstr "Programmation"
 #: js/backoffice/Radio/SongInstanceGrid.js:9
 #: js/backoffice/Radio/YasoundSongGrid.js:19
 #: js/backoffice/Song/MissingSongMetadataGrid.js:8
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:8
+#: js/backoffice/Song/RejectedSongGrid.js:19
 msgid "Track"
 msgstr "Piste"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:19
 #: js/backoffice/Radio/YasoundSongGrid.js:28
 #: js/backoffice/Song/MissingSongMetadataGrid.js:13
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:13
+#: js/backoffice/Song/RejectedSongGrid.js:28
 msgid "Album"
 msgstr "Album"
 
 #: js/backoffice/Radio/SongInstanceGrid.js:29
 #: js/backoffice/Radio/YasoundSongGrid.js:37
 #: js/backoffice/Song/MissingSongMetadataGrid.js:18
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:18
+#: js/backoffice/Song/RejectedSongGrid.js:37
 msgid "Artist"
 msgstr "Artiste"
 
@@ -509,30 +555,30 @@ msgstr "Id de chanson"
 
 #: js/backoffice/Radio/YasoundSongGrid.js:46
 msgid "Lastfm id"
-msgstr ""
+msgstr "Rechercher l'id lastfm"
 
 #: js/backoffice/Radio/YasoundSongGrid.js:56
 msgid "mb id"
-msgstr ""
+msgstr "mb id"
 
 #: js/backoffice/RadioActivityScoreSettings/RadioActivityScoreSettings.js:16
 msgid "Radio activity score factors"
-msgstr ""
+msgstr "Pondération des scores d'activité"
 
 #: js/backoffice/RadioActivityScoreSettings/RadioActivityScoreSettings.js:34
-#, fuzzy
 msgid "Radio activity score"
-msgstr "Activité des animateurs de radio"
+msgstr "Score d'activité de radio"
 
 #: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:36
 msgid "Value"
-msgstr ""
+msgstr "Valeur"
 
 #: js/backoffice/SearchEngine/SearchEngine.js:16
 msgid "Fuzzy song search"
 msgstr "Recherche floue"
 
 #: js/backoffice/Song/MissingSongMetadataGrid.js:23
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:23
 msgid "Count"
 msgstr "Total"
 
@@ -541,12 +587,22 @@ msgid "Most missing songs"
 msgstr "Chansons manquantes les plus demandées"
 
 #: js/backoffice/Song/MissingSongs.js:59
+#: js/backoffice/Song/MostPopularSongs.js:36
+#: js/backoffice/Song/RejectedSongs.js:25
 msgid "Refresh"
 msgstr "Rafraichir"
 
 #: js/backoffice/Song/MissingSongs.js:68
 msgid "Upload file"
 msgstr "Importer un titre"
+
+#: js/backoffice/Song/MostPopularSongs.js:42
+msgid "Export"
+msgstr "Exporter"
+
+#: js/backoffice/Song/RejectedSongGrid.js:46
+msgid "Reject count"
+msgstr "Nombre de rejets"
 
 #: js/backoffice/Statistics/Statistics.js:13
 msgid "Metrics"
@@ -585,14 +641,12 @@ msgid "Message count per user"
 msgstr "Nombre de message par utilisateur"
 
 #: js/backoffice/Statistics/Statistics.js:162
-#, fuzzy
 msgid "Number of likes"
-msgstr "Nombre de messages"
+msgstr "Nombre de \"J'aime\""
 
 #: js/backoffice/Statistics/Statistics.js:166
-#, fuzzy
 msgid "Likes per user"
-msgstr "Nombre de message par utilisateur"
+msgstr "Nombre de \"J'aime\" par utilisateur"
 
 #: js/backoffice/Statistics/Statistics.js:211
 msgid "Share activity"
@@ -603,9 +657,8 @@ msgid "Key figures"
 msgstr "Chiffres clefs"
 
 #: js/backoffice/Statistics/Statistics.js:248
-#, fuzzy
 msgid "Radio tags"
-msgstr "Radios"
+msgstr "Tags de radio"
 
 #: js/backoffice/Upload/Upload.js:24
 msgid "Select a file"
@@ -623,39 +676,64 @@ msgstr "Résultats de l'import"
 msgid "Upload started\n"
 msgstr "Import démarré\n"
 
+#: js/backoffice/Users/History.js:14
+#: js/backoffice/Users/History.js.py:44
+msgid "History"
+msgstr "Historique"
+
 #: js/backoffice/Users/UserField.js:52
 msgid "Please select user"
 msgstr "Veuillez sélectionner un utilisateur"
 
-#: js/backoffice/Users/UserGrid.js:50
+#: js/backoffice/Users/UserGrid.js:51
 msgid "Facebook UID"
 msgstr "UID facebook"
 
-#: js/backoffice/Users/UserGrid.js:60
+#: js/backoffice/Users/UserGrid.js:61
 msgid "Join date"
 msgstr "Date d'inscription"
 
-#: js/backoffice/Users/UserGrid.js:67
+#: js/backoffice/Users/UserGrid.js:68
 msgid "Last authentication"
 msgstr "Dernière authentification"
 
-#: js/backoffice/Users/UserGrid.js:74
+#: js/backoffice/Users/UserGrid.js:75
 msgid "Superuser?"
 msgstr "Superutilisateur ?"
 
-#: js/backoffice/Users/UserGrid.js:80
-#: js/backoffice/Users/UserGrid.js.py:91
+#: js/backoffice/Users/UserGrid.js:81
+#: js/backoffice/Users/UserGrid.js.py:92
 msgid "Yes"
 msgstr "Oui"
 
-#: js/backoffice/Users/UserGrid.js:82
-#: js/backoffice/Users/UserGrid.js.py:93
+#: js/backoffice/Users/UserGrid.js:83
+#: js/backoffice/Users/UserGrid.js.py:94
 msgid "No"
 msgstr "Non"
 
-#: js/backoffice/Users/UserGrid.js:85
+#: js/backoffice/Users/UserGrid.js:86
 msgid "Actived?"
 msgstr "Activé ?"
+
+#: js/backoffice/Users/UserHistoryGrid.js:22
+msgid "Type"
+msgstr "Type"
+
+#: js/backoffice/Users/UserHistoryGrid.js:27
+msgid "Animator type"
+msgstr "Type d'animation"
+
+#: js/backoffice/Users/UserHistoryGrid.js:32
+msgid "Username"
+msgstr "Utilisateur"
+
+#: js/backoffice/Users/UserHistoryGrid.js:47
+msgid "Song"
+msgstr "Chanson"
+
+#: js/backoffice/Users/UserHistoryGrid.js:52
+msgid "Share type"
+msgstr "Type de partage"
 
 #: js/backoffice/Users/Users.js:11
 msgid "Do you want to disable the selected user(s)"
@@ -682,14 +760,12 @@ msgid "Report as fake user"
 msgstr "Déclarer comme utilisateur invalide"
 
 #: js/backoffice/Users/Users.js:171
-#, fuzzy
 msgid "Export selected users"
-msgstr "Veuillez sélectionner un utilisateur"
+msgstr "Exporter les utilisateurs sélectionnés"
 
 #: js/backoffice/Users/Users.js:182
-#, fuzzy
 msgid "Export all users"
-msgstr "Déclarer comme utilisateur invalide"
+msgstr "Exporter tous les utilisateurs"
 
 #: js/backoffice/ux/LoggerWindow.js:14
 msgid "Close"

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from optparse import make_option
-from yarecommendation.models import ClassifiedRadiosManager
+from yarecommendation.models import ClassifiedRadiosManager, MapArtistManager,\
+    RadiosClusterManager
 import logging
 from time import time
 
@@ -15,12 +16,16 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('-r', '--radio', dest='radio_id',
             default=0, help="radio id"),
+        make_option('-c', '--cluster', dest='use_cluster', action='store_true',
+            default=False, help="use cluster"),
     )
     help = "Build radio recommendation data"
     args = ''
 
     def handle(self, *app_labels, **options):
+        start = time()
         radio_id = int(options.get('radio_id', 0))
+        use_cluster = options.get('use_cluster', False)
         logger.info("getting recommendation")
         cm = ClassifiedRadiosManager()
         
@@ -31,11 +36,19 @@ class Command(BaseCommand):
         
         artists = doc.get('artists')
         
-        reco = cm.find_similar_radios(artists)
         result = []
-        for rec in reco:
-            if rec[1] == radio_id:
-                continue
-            result.append(rec)
+        if not use_cluster:
+            ma = MapArtistManager()
+            artists_names = [ma.artist_name(code) for code in artists]
+            reco = cm.find_similar_radios(artists_names)
+            for rec in reco:
+                if rec[1] == radio_id:
+                    continue
+                result.append(rec)
+        else:
+            rc = RadiosClusterManager()
+            doc = cm.collection.find_one({'db_id': radio_id})
+            result = rc.find_radios(doc.get('classification'))
         logger.info(result)
-        logger.info("done")
+        elapsed = time() - start
+        logger.info('done in %s secondes', str(elapsed))             

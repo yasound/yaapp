@@ -3,6 +3,8 @@ from django.test import TestCase
 from models import UserHistory
 from yabase.models import Radio
 import datetime
+from yabase import settings as yabase_settings
+
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
         uh = UserHistory()
@@ -56,7 +58,7 @@ class TestGlobalMetricsManager(TestCase):
     def test_add_like_song_event(self):
         uh = UserHistory()
         r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
-        uh.add_like_song_event(user_id=self.user.id, song_id=42)
+        uh.add_like_song_event(user_id=self.user.id, radio_uuid=r.uuid, song_id=42)
 
         now = datetime.datetime.now()
         yesterday = now + datetime.timedelta(days=-1)
@@ -140,7 +142,7 @@ class TestGlobalMetricsManager(TestCase):
     def test_add_animator_event(self):
         uh = UserHistory()
         r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
-        uh.add_animator_event(user_id=self.user.id, radio_uuid=r.uuid)
+        uh.add_animator_event(user_id=self.user.id, radio_uuid=r.uuid, atype=yabase_settings.ANIMATOR_TYPE_IMPORT_ITUNES)
 
         now = datetime.datetime.now()
         yesterday = now + datetime.timedelta(days=-1)

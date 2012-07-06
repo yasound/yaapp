@@ -19,29 +19,16 @@ class Command(BaseCommand):
     args = ''
 
     def handle(self, *app_labels, **options):
-        logger.info("processing radios")
         cm = ClassifiedRadiosManager()
-        cm.drop()
-        start = time()
-        cm.populate()
-        elapsed = time() - start
-        logger.info('done in %s secondes', str(elapsed))
-        logger.info("calculating similarities")
-        start = time()
-        cm.calculate_similar_radios()
-        elapsed = time() - start
-        logger.info('done in %s secondes', str(elapsed))
-        logger.info("processing done")
-        logger.info("done")
-        
+        rc = RadiosClusterManager()
+        rc.drop()
         logger.info("creating cluster")
         start = time()
         radios = cm.collection.find()
-        rc = RadiosClusterManager()
-        rc.drop()
         for radio in radios:
+            rc = RadiosClusterManager()
             rc.add_radio(radio)
         elapsed = time() - start
         logger.info('done in %s secondes', str(elapsed))
-
+        
         

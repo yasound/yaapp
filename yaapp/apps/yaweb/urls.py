@@ -11,6 +11,10 @@ urlpatterns = patterns('yaweb.views',
     url(r'^station/$', 'contest_station', {'template_name': 'yaweb/contest_station.html'}, name='contest_station'),
     url(r'^station/iphone/$', 'contest_station_iphone', {'template_name': 'yaweb/contest_station_iphone.html'}, name='contest_station_iphone'),
     url(r'^station/terms/$', 'contest_station_terms', {'template_name': 'yaweb/contest_station_terms.html'}, name='contest_station_terms'),
+
+    url(r'^betatest/$', 'betatest', name='betatest_survey'),
+    url(r'^betatest/thank-you$', 'betatest_thankyou', name='betatest_thankyou'),
+
     
     url(r'^download/(?P<filename>.*)$', 'download', name='download'),
 

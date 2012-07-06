@@ -1,14 +1,16 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-import settings as yaweb_settings
-import mimetypes, os
 from django_mobile import get_flavour
-
+from yaweb.forms import BetatestForm
 import logging
+import mimetypes
+import os
+import settings as yaweb_settings
+
 logger = logging.getLogger("yaapp.yaweb")
 
 
@@ -107,3 +109,26 @@ def download(request, filename):
     response["Content-Disposition"]= "attachment; filename=%s" % os.path.split(filename)[1]
     return response
 
+def betatest(request, template_name='yaweb/betatest.html'):
+    if request.method == 'GET':
+        form = BetatestForm()
+        return render_to_response(template_name, {
+            'current_page': 'betatest',
+            'form': form,
+        }, context_instance=RequestContext(request))  
+    elif request.method == 'POST':
+        form = BetatestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('betatest_thankyou'))
+        return render_to_response(template_name, {
+            'current_page': 'betatest',
+            'form': form,
+        }, context_instance=RequestContext(request))  
+        
+    raise Http404
+
+def betatest_thankyou(request, template_name='yaweb/betatest_thankyou.html'):
+    return render_to_response(template_name, {
+        'current_page': 'betatest_thankyou',
+    }, context_instance=RequestContext(request))  

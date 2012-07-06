@@ -143,6 +143,48 @@ Yasound.Radios.Handler.AddToRadio = function(radioId, selected) {
    });
 };
 
+Yasound.Radios.Handler.FindMetadata = function(selected) {
+    ids = [];
+    Ext.each(selected, function(record) {
+        ids.push(record.data.id);
+    });
+
+    var acceptMetadatas = function(ids) {
+        Ext.Ajax.request({
+            url: String.format('/yabackoffice/yasound_songs/replace_metadata/'),
+            method: 'POST',
+            timeout: 1000 * 60 * 5,
+            params: {
+                yasound_song_id: ids
+            }
+        });
+    };
+    
+    Ext.Ajax.request({
+        url: String.format('/yabackoffice/yasound_songs/find_metadata/'),
+        success: function(result, request){
+            var data = result.responseText;
+            var json = Ext.decode(data);
+            var metadatas = json.data;
+            Ext.Msg.show({
+                title: gettext('The following metadata have been found, use it ?'),
+                msg: gettext(metadatas),
+                buttons: Ext.Msg.YESNOCANCEL,
+                fn: function(b, text){
+                    acceptMetadatas(ids);    
+                }
+            });
+        },
+        failure: function(result, request){
+        },
+        method: 'POST',
+        timeout: 1000 * 60 * 5,
+        params: {
+            yasound_song_id: ids
+        }
+    });
+}
+
 Yasound.Radios.UI.RadiosPanel = function() {
 	var songGrid = Ext.ComponentMgr.create({
 		xtype: 'songinstancegrid',
@@ -305,13 +347,24 @@ Yasound.Radios.UI.RadiosPanel = function() {
 				var selected = grid.getSelectionModel().getSelections();
 				Yasound.Radios.Handler.AddToRadio(radioId, selected);
 			}
-		}],
+		}, {
+            text:gettext('Find metadata'),
+            disabled: true,
+            ref: '../findMetadataButton',
+            handler: function(b, e) {
+                var grid = b.ownerCt.ownerCt;
+                var selected = grid.getSelectionModel().getSelections();
+                Yasound.Radios.Handler.FindMetadata(selected);
+            }
+        }],
 		listeners: {
     		'selected': function(grid, id, record) {
     			grid.addToRadioButton.setDisabled(false);
+    			grid.findMetadataButton.setDisabled(false);
     		},
     		'unselected': function(grid) {
     			grid.addToRadioButton.setDisabled(true);
+                grid.findMetadataButton.setDisabled(true);
     		}
 		}
 	});

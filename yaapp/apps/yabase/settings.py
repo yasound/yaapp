@@ -81,3 +81,12 @@ FEATURED_CHOICES = (
     (FEATURED_SELECTION, _('Selection')),
     (FEATURED_HOMEPAGE, _('Homepage')),
 )
+
+
+ANIMATOR_TYPE_CREATE_RADIO      = 'create_radio'
+ANIMATOR_TYPE_UPLOAD_PLAYLIST   = 'upload_playlist'
+ANIMATOR_TYPE_UPLOAD_SONG       = 'upload_song'
+ANIMATOR_TYPE_ADD_SONG          = 'add_song'
+ANIMATOR_TYPE_REJECT_SONG       = 'reject_song'
+ANIMATOR_TYPE_DELETE_SONG       = 'delete_song'
+ANIMATOR_TYPE_IMPORT_ITUNES     = 'import_itunes'

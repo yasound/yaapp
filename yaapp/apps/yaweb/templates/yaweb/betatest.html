@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+<link href="/media/yaweb/css/elecsounds.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="/media/bootstrap/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/media/css/style.css" />
+<script type="text/javascript" src="/media/yaweb/js/betatest.js"></script>
+<title>Betatest - Yasound</title>
+</head>
+<body>
+	<div class='container-fluid'>
+
+		<div class='row-fluid'>
+			<div class='span12'>
+				<a href='#' id='logo'><img src='/media/images/logo.png'
+					alt='Yasound logo' /></a>
+			</div>
+		</div>
+		<div class="page-header">
+			<h1>Appel aux beta-testeurs !</h1>
+		</div>
+
+		<div class='row-fluid'>
+			<h2>Impatients de découvrir les nouveautés de Yasound pour la
+				rentrée ?</h2>
+
+			<p class='lead'>Alors venez aider la team Yasound cet été et
+				découvrez en avant première notre nouvelle version !</p>
+
+			<p class='lead'>Nous recherchons une dizaine de beta testeurs qui
+				nous aiderons à affiner l’ergonomie de notre portail web et notre
+				application. Pour cela, vous devrez utiliser Yasound sur smartphone
+				et sur ordinateur entre la fin du mois de juillet et la fin du mois
+				d’août.</p>
+
+			<p class='lead'>Votre mission sera de nous rapporter les bugs
+				rencontrés mais également les améliorations que vous souhaiteriez
+				voir apparaître.</p>
+		</div>
+
+		<div class='row-fluid'>
+			<h2>Vous êtes intéressé(e) ?</h2>
+			<p class='lead'>Remplissez ce formulaire avant le 13 juillet
+				prochain :</p>
+			<form method='post' class="form-horizontal well" id='betatest-form'>
+				{% csrf_token %}
+				<fieldset>
+					{{ form }} <br />
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Soumettre votre candidature</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+</body>
+</html>

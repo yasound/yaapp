@@ -38,6 +38,9 @@ import settings as yabase_settings
 from tastypie.models import ApiKey
 import uuid
 import requests
+import zlib
+from yacore.binary import BinaryData
+from yarecommendation.models import ClassifiedRadiosManager
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -75,13 +78,52 @@ def upload_playlists(request, radio_id):
     radio = get_object_or_404(Radio, pk=radio_id)
 
     if radio.ready:
-        yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
+        yabase_signals.new_animator_activity.send(sender=request.user, 
+                                                  user=request.user, 
+                                                  radio=radio,
+                                                  atype=yabase_settings.ANIMATOR_TYPE_UPLOAD_PLAYLIST)
     
     data = request.FILES['playlists_data']
     content_compressed = data.read()
     asyncRes = process_playlists.delay(radio, content_compressed)
 
     return HttpResponse(asyncRes.task_id)
+
+@csrf_exempt
+def similar_radios_from_artist_list(request):
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+    check_api_key_Authentication(request)
+    
+    data = request.FILES['artists_data']
+    content_compressed = data.read()
+    
+    try:
+        content_uncompressed = zlib.decompress(content_compressed)
+    except Exception, e:
+        logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
+        return
+    
+    binary = BinaryData(content_uncompressed)
+    artists = []
+    while not binary.is_done():
+        tag = binary.get_tag()
+        a = binary.get_string()
+        song_count = binary.get_int16()
+        if tag == 'ARTS':
+            artists.append(a)
+            
+    m = ClassifiedRadiosManager()
+    res = m.find_similar_radios(artists)
+    radio_ids = [x[1] for x in res]
+    data = []
+    for r in radio_ids:
+        try:
+            radio = Radio.objects.get(id=r)
+            data.append(radio.as_dict())
+        except:
+            pass    
+    return api_response(data)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
@@ -516,8 +558,12 @@ def get_current_song(request, radio_id):
 def buy_link(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)
     song_instance = radio.current_song
+    
+    
     if not song_instance:
         return HttpResponseRedirect(reverse('buy_link_not_found'))
+
+    yabase_signals.buy_link.send(sender=request.user, radio=radio, user=request.user, song_instance=song_instance)
 
     song_metadata = song_instance.metadata
     yasound_song_id = song_metadata.yasound_song_id
@@ -570,7 +616,10 @@ def upload_song(request, song_id=None):
     radio = None
     try:
         radio = Radio.objects.radio_for_user(request.user)
-        yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
+        yabase_signals.new_animator_activity.send(sender=request.user, 
+                                                  user=request.user, 
+                                                  radio=radio,
+                                                  atype=yabase_settings.ANIMATOR_TYPE_UPLOAD_SONG)
     except:
         logger.info('no radio for user %s' % (request.user))
 
@@ -626,7 +675,7 @@ def upload_song_ajax(request):
         if creator_profile_id:
             user = User.objects.get(userprofile__id=creator_profile_id)
             radio.creator = user
-            global_message = global_message + 'radio "%s" assigned to "%s"\n' % (radio, user)  
+            global_message = global_message + u'radio "%s" assigned to "%s"\n' % (unicode(radio), unicode(user))  
         radio.save()
              
     
@@ -689,7 +738,11 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     yasound_song_id = int(yasound_song_id)
     radio = get_object_or_404(Radio, id=radio_id)
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
+    yabase_signals.new_animator_activity.send(sender=request.user, 
+                                              user=request.user, 
+                                              radio=radio,
+                                              atype=yabase_settings.ANIMATOR_TYPE_ADD_SONG,
+                                              details = {'yasound_song_id':yasound_song_id})
     
     playlists = Playlist.objects.filter(radio=radio)
     if playlist_index > playlists.count():
@@ -743,7 +796,11 @@ def reject_song(request, song_id):
     radio = song_instance.playlist.radio
     radio.reject_song(song_instance)
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
+    yabase_signals.new_animator_activity.send(sender=request.user, 
+                                              user=request.user, 
+                                              radio=radio,
+                                              atype=yabase_settings.ANIMATOR_TYPE_REJECT_SONG,
+                                              details={'song_instance':song_instance})
     
     res = {'success': True}
     response = json.dumps(res)
@@ -853,7 +910,6 @@ class WebAppView(View):
         
         return True, None if ok or False, redirect page else
         """
-        return True, None
         if not request.user.is_superuser:
             if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
                 if radio_uuid:
@@ -1121,7 +1177,11 @@ def delete_song_instance(request, song_instance_id):
     # if radio has no more songs, set ready to False
     radio = song.playlist.radio
 
-    yabase_signals.new_animator_activity.send(sender=request.user, user=request.user, radio=radio)
+    yabase_signals.new_animator_activity.send(sender=request.user, 
+                                              user=request.user, 
+                                              radio=radio,
+                                              atype=yabase_settings.ANIMATOR_TYPE_DELETE_SONG,
+                                              details={'song_instance':song})
     
     song_count = SongInstance.objects.filter(playlist__radio=radio, metadata__yasound_song_id__gt=0).count()
     if song_count == 0:
@@ -1212,8 +1272,12 @@ def notify_streamer(request):
         'api_key': api_key
     }
     logger.debug('notify_streamer: url = %s' % (stream_url))
-    r = requests.get(stream_url, headers=custom_headers)
-    logger.debug('result: %d' % (r.status_code))
+    try:
+        r = requests.get(stream_url, headers=custom_headers)
+        logger.debug('result: %d' % (r.status_code))
+    except Exception, e:
+        logger.debug('error:')
+        logger.debug(e)
     return HttpResponse('OK')
 
 @csrf_exempt
@@ -1242,4 +1306,50 @@ def similar_radios(request, radio_uuid):
         data.append(radio.as_dict())
     return api_response(data)
 
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST',], login_required=True)
+def my_programming(request):
+    radio = Radio.objects.radio_for_user(request.user)
+    if not radio:
+        raise Http404
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    
+    artists = request.REQUEST.getlist('artist')
+    albums = request.REQUEST.getlist('album')
+    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio)
+    if artists:
+        qs = qs.filter(artist_name__in=artists)
+    if albums:
+        qs = qs.filter(album_name__in=albums)
+    tracks = qs.values('id', 'name', 'album_name', 'artist_name').distinct()
+    total_count = tracks.count() 
+    response = api_response(list(tracks[offset:offset+limit]), total_count, limit=limit, offset=offset)
+    return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def my_programming_artists(request):
+    radio = Radio.objects.radio_for_user(request.user)
+    if not radio:
+        raise Http404
+    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio).distinct()
+    artists = qs.values('artist_name').distinct()
+    total_count = artists.count()
+    response = api_response(list(artists), total_count)
+    return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def my_programming_albums(request):
+    radio = Radio.objects.radio_for_user(request.user)
+    if not radio:
+        raise Http404
+    
+    artists = request.REQUEST.getlist('artist')
+    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio)
+    if artists:
+        qs = qs.filter(artist_name__in=artists)
+    albums = qs.values('album_name').distinct()
+    total_count = albums.count()
+    response = api_response(list(albums), total_count)
+    return response
     

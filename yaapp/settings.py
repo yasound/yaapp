@@ -66,6 +66,7 @@ CELERY_IMPORTS = (
     "yasearch.task",
     "yaref.task",
 )
+CELERY_SEND_TASK_ERROR_EMAILS = True
 
 if LOCAL_MODE:
     # Celery config:
@@ -522,6 +523,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yahistory': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
                 
     }
 }
@@ -849,6 +855,7 @@ IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
     'django_extensions',
     'emencia.django.newsletter',
+    'bootstrap',
 )
 JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 

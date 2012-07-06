@@ -18,6 +18,8 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^songmetadata/export_most_popular/$', 'songmetadata_export_most_popular'),
 
     url(r'^yasound_songs$', 'yasound_songs'),
+    url(r'^yasound_songs/find_metadata/$', 'yasound_songs_find_metadata'),
+    url(r'^yasound_songs/replace_metadata/$', 'yasound_songs_replace_metadata'),
     url(r'^rejected_songs$', 'rejected_songs'),
     
     url(r'^invitations/$', 'invitations', {'type': 'all'}),
@@ -31,6 +33,7 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^invitations/(?P<invitation_id>\d+)/send/$', 'invitation_send'),
     url(r'^users$', 'users'),
     url(r'^users/$', 'users'),
+    url(r'^users/history/$', 'users_history'),
 
     url(r'^wall_events$', 'wall_events'),
     url(r'^wall_events/(?P<wall_event_id>\d+)$', 'wall_events'),

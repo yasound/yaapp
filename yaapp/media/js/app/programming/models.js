@@ -14,6 +14,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
     skipAttribute: 'offset',
     perPage: 25,
     page:0,
+    params:{},
     
     parse: function(response) {
         var results = response.objects;
@@ -21,18 +22,49 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
-    
-    fetchFirst: function() {
-        var savedPage = this.page;
-        this.page = 0;
-        var that = this;
-        this.fetch({
-            success: function() {
-                that.page = savedPage;
-            },
-            error: function() {
-                that.page = savedPage;
-            }
-        });
-    }    
+    filterArtists: function(artists) {
+        if (artists) {
+            _.extend(this.params, {artist:artists});
+        } else {
+            _.extend(this.params, {artist:undefined});
+        }
+        this.goTo(0);
+    },
+    filterAlbums: function(albums) {
+        if (albums) {
+            _.extend(this.params, {album:albums});
+        } else {
+            _.extend(this.params, {album:undefined});
+        }
+        this.goTo(0);
+    }
+});
+
+
+Yasound.Data.Models.ProgrammingArtist = Backbone.Model.extend({});
+
+Yasound.Data.Models.ProgrammingArtists = Backbone.Collection.extend({
+    model: Yasound.Data.Models.ProgrammingArtist,
+    url: '/api/v1/my_programming/artists/'    
+});
+
+Yasound.Data.Models.ProgrammingAlbum = Backbone.Model.extend({});
+
+Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
+    model: Yasound.Data.Models.ProgrammingAlbum,
+    url: '/api/v1/my_programming/albums/',
+    filterArtists: function(artists) {
+        var params = {}
+        if (artists) {
+            params = {
+                data: {
+                    artist: artists
+                },
+                traditional: true,
+                processData: true
+            };
+        }
+        console.log(params)
+        this.fetch(params);
+    }
 });

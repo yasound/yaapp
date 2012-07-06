@@ -6,6 +6,7 @@ Yasound.Users.Data.UserStore = function() {
 	var fields = ['id', 
 	              'name', 
 	              'account_type',
+	              'user_id',
 	              'email',
 	              'is_active',
 	              'date_joined',

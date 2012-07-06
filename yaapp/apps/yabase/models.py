@@ -276,7 +276,6 @@ def song_instance_deleted(sender, instance, created=None, **kwargs):
     except:
         logger.error('no radio or playlist for song instance %s' % (song_instance.id))
 
-signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
          
 class SongUserManager(models.Manager):
     def likers(self, song):
@@ -988,6 +987,11 @@ class Radio(models.Model):
         
     def now_ready(self):
         self.creator.userprofile.radio_is_ready(self)
+        yabase_signals.new_animator_activity.send(sender=self, 
+                                                  user=self.creator, 
+                                                  radio=self,
+                                                  atype=yabase_settings.ANIMATOR_TYPE_CREATE_RADIO)
+        
         
     def shared(self, user, share_type=None):
         yabase_signals.radio_shared.send(sender=self, radio=self, user=user, share_type=share_type)
@@ -1135,7 +1139,6 @@ def radio_deleted(sender, instance, created=None, **kwargs):
     else:
         return
     radio.remove_from_fuzzy_index()
-signals.pre_delete.connect(radio_deleted, sender=Radio)
 
 
 
@@ -1477,7 +1480,6 @@ def next_song_deleted(sender, instance, created=None, **kwargs):
         n.order -= 1
         super(NextSong, n).save()
     
-signals.post_delete.connect(next_song_deleted, sender=NextSong)
 
 class FeaturedContent(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -1541,6 +1543,12 @@ class ApnsCertificate(models.Model):
 def new_current_song_handler(sender, radio, song_json, song, **kwargs):
     from yabase.task import async_dispatch_user_started_listening_song
     async_dispatch_user_started_listening_song.delay(radio, song)
-yabase_signals.new_current_song.connect(new_current_song_handler)
         
+        
+def install_handlers():
+    signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
+    signals.pre_delete.connect(radio_deleted, sender=Radio)
+    signals.post_delete.connect(next_song_deleted, sender=NextSong)
+    yabase_signals.new_current_song.connect(new_current_song_handler)
+install_handlers()
     

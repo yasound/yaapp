@@ -41,6 +41,8 @@ import utils as yabackoffice_utils
 from yasearch.models import MostPopularSongsManager
 from yametrics.matching_errors import MatchingErrorsManager
 from yabase.export_utils import export_pur
+from yahistory.models import UserHistory
+from yasearch.utils import get_simplified_name
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -406,6 +408,70 @@ def yasound_songs(request, song_id=None):
 
 @csrf_exempt
 @login_required
+def yasound_songs_find_metadata(request, song_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    ids = request.REQUEST.getlist('yasound_song_id')
+    yasound_songs = YasoundSong.objects.filter(id__in=ids)
+    
+    res = ''
+    for song in yasound_songs:
+        synonyms = song.find_synonyms()
+        for synonym in synonyms:
+            res = res + '%s : %s' % (song, synonym)
+            break # only first synonym is displayed
+
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+        'data': res,
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
+def yasound_songs_replace_metadata(request, song_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    ids = request.REQUEST.getlist('yasound_song_id')
+    yasound_songs = YasoundSong.objects.filter(id__in=ids)
+
+    for song in yasound_songs:
+        synonyms = song.find_synonyms()
+        for synonym in synonyms:
+            name = synonym.get('name', '')
+            artist = synonym.get('artist', '')
+            album = synonym.get('album', '')
+            to_save=False
+            if len(name) > 0:
+                song.name = name
+                song.name_simplified = get_simplified_name(name)
+                to_save = True
+            if len(artist) > 0:
+                song.artist_name = artist
+                song.artist_name_simplified = get_simplified_name(artist)
+                to_save = True
+            if len(album) > 0:
+                song.album_name = album
+                song.album_name_simplified = get_simplified_name(album)
+                to_save = True
+                
+            if to_save:
+                song.save()
+                song.build_fuzzy_index(upsert=True)
+            
+            break # only first synonym is handled
+
+    json_data = json.JSONEncoder(ensure_ascii=False).encode({
+        'success': True,
+    })
+    resp = utils.JsonResponse(json_data)
+    return resp
+
+@csrf_exempt
+@login_required
 def rejected_songs(request):
     if not request.user.is_superuser:
         raise Http404()
@@ -494,6 +560,55 @@ def users(request, user_id=None):
             'message': ''
         })
         return HttpResponse(json_data, mimetype='application/json')
+    raise Http404 
+
+@login_required
+def users_history(request):
+    if not request.user.is_superuser:
+        raise Http404()
+    if request.method == 'GET':
+        start = int(request.REQUEST.get('start', 0))
+        limit = int(request.REQUEST.get('limit', 25))
+        
+        user_id = int(request.REQUEST.get('user_id', 0))
+        uh = UserHistory()
+        qs = []
+        count = 0
+        if user_id > 0:
+            count = uh.all(user_id=user_id).count()
+            qs = uh.all(user_id=user_id, start=start, limit=limit)
+        data = []
+        for doc in qs:
+            user_name = doc.get('user_name')
+            history_type = doc.get('type')
+            details = doc.get('data')
+            if not details:
+                continue
+            
+            radio = details.get('radio_name', '')
+            message = details.get('message', '')
+            song = details.get('song_name', '')
+            share_type = details.get('share_type', '')
+            atype = details.get('atype', '')
+                
+            data.append({
+                'username': user_name,
+                'date': doc.get('date'),
+                'type': history_type,
+                'atype': atype,
+                'message': message,
+                'radio': unicode(radio),
+                'song': unicode(song),
+                'share_type': unicode(share_type)
+            })
+        json_data = MongoAwareEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'data': data,
+            'results': count
+        })
+        resp = utils.JsonResponse(json_data)
+        return resp  
+
     raise Http404 
 
 @csrf_exempt

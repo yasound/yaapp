@@ -313,6 +313,21 @@ class TestTimedMetrics(TestCase):
         mean = um.calculate_likes_per_user_mean()
         self.assertEquals(mean, 1.5)        
         
+    def test_buy_activity(self):
+        async_activity(self.user.id, yametrics_settings.ACTIVITY_BUY_LINK, throttle=False)
+        
+        tm = TimedMetricsManager()
+        docs = tm.collection.find()
+        self.assertEquals(docs.count(), 1)
+        self.assertEquals(docs[0][yametrics_settings.ACTIVITY_BUY_LINK], 1)
+
+        async_activity(self.user.id, yametrics_settings.ACTIVITY_BUY_LINK, throttle=False)
+
+        um = UserMetricsManager()
+        user_doc = um.get_doc(self.user.id)
+        self.assertEquals(user_doc[yametrics_settings.ACTIVITY_BUY_LINK], 2)
+        self.assertEquals(user_doc['last_buy_link_activity_slot'], tm.SLOT_24H)
+
         
 class TestRadioPopularityManager(TestCase):
     def setUp(self):

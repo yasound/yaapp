@@ -42,7 +42,7 @@ def update_notification(request, notif_id):
         for k in request.POST:
             data[k] = request.POST.get(k)
     else:
-        data = json.loads(request.POST.keys()[0]) # strange stuff !!! but it works with requests from ios
+        data = json.loads(request.raw_post_data)
     m = NotificationsManager()
     if not data.has_key('dest_user_id') or int(data['dest_user_id']) != request.user.id:
         return HttpResponseNotFound()

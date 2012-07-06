@@ -986,7 +986,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(friend_profile),
             'user_id': friend_profile.user.id,
-            'radio.id': radio.id
+            'radio_id': radio.id
         }
         m = NotificationsManager()
         m.add_notification(self.user.id, 
@@ -1125,18 +1125,15 @@ class UserProfile(models.Model):
         async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
         
     def position_changed(self):
+        return # temp hack
+        
         if self.latitude is None or self.longitude is None:
             return
-        from task import async_update_position_coords
-        async_update_position_coords.delay(userprofile=self)
+        self.update_position_coords()
     
-    def update_position_coords(self):
+    def update_position_coords(self, save=True):
         coords = latitude_longitude_to_coords(self.latitude, self.longitude, 'degrees')
-        
-        self.x_coord = coords[0]
-        self.y_coord = coords[1]
-        self.z_coord = coords[2]
-        self.save()
+        UserProfile.objects.filter(id=self.id).update(x_coord=coords[0], y_coord=coords[1], z_coord=coords[2])
         
         
 
@@ -1272,6 +1269,9 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
         async_tw_like_song.delay(user.id, wall_event.radio.uuid, song_title, artist)
         
 def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
+    """
+    Publish listening event on twitter
+    """
     if user is None:
         return
     if user.is_anonymous():
@@ -1287,6 +1287,9 @@ def user_started_listening_song_handler(sender, radio, user, song, **kwargs):
     async_tw_listen.delay(user.id, radio.uuid, song_title, artist)
 
 def new_animator_activity(sender, user, radio, **kwargs):
+    """
+    Publish animator activity on twitter
+    """
     if user is None or radio is None:
         return
     if user.is_anonymous():
