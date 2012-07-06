@@ -910,7 +910,6 @@ class WebAppView(View):
         
         return True, None if ok or False, redirect page else
         """
-        return True, None
         if not request.user.is_superuser:
             if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
                 if radio_uuid:
