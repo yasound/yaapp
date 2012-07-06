@@ -29,6 +29,14 @@ body {
 	height: 76px;
 }
 
+#brand-logo {
+	display:inline-block;
+	float:left;
+	margin-top:27px;
+	width:138px;
+	height:23;
+}
+
 .header-separation {
 	display:inline-block;
 	float:left;
@@ -76,11 +84,15 @@ body {
 }
 
 #play-btn {
-	height:37px;
-	width:37px;
+	height:33px;
+	width:33px;
 	display:inline-block;
 	float:left;
 	margin: 21px 0px 0px 19px;
+	
+	border-radius:28px;
+	background-image:url('../app/images/play-btn-bg.png');
+	box-shadow: 0px 1px 4px black;
 }
 
 #header .brand {
