@@ -75,6 +75,14 @@ body {
 	margin: 21px 0px 0px 19px;
 }
 
+#play-btn {
+	height:37px;
+	width:37px;
+	display:inline-block;
+	float:left;
+	margin: 21px 0px 0px 19px;
+}
+
 #header .brand {
 	margin: 0;
 	padding: 0;
