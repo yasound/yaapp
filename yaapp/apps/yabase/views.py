@@ -1273,8 +1273,12 @@ def notify_streamer(request):
         'api_key': api_key
     }
     logger.debug('notify_streamer: url = %s' % (stream_url))
-    r = requests.get(stream_url, headers=custom_headers)
-    logger.debug('result: %d' % (r.status_code))
+    try:
+        r = requests.get(stream_url, headers=custom_headers)
+        logger.debug('result: %d' % (r.status_code))
+    except Exception, e:
+        logger.debug('error:')
+        logger.debug(e)
     return HttpResponse('OK')
 
 @csrf_exempt
