@@ -76,11 +76,11 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
 
     radio_url = absolute_url(reverse('webapp_radio', args=[radio_uuid])) 
     song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
-    path = 'me/likes'
+    path = 'me/og.likes'
 
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path, url=song_url)
+        res = graph.post(path=path, object=song_url)
         logger.debug(res)
     except GraphAPI.FacebookError as e:
         logger.info(e)
