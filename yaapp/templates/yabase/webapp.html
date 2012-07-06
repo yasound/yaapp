@@ -1,8 +1,24 @@
-{% extends "base.html" %}
+{% load i18n %}
 {% load i18n %}
 {% load thumbnail %}
 {% load compressed %}
 {% load straight_include %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasoundev: http://ogp.me/ns/fb/yasoundev#">
+    <title>{% block head_title %}Yasound{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/media/yaweb/images/favicon.png" />
+    <meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel." />
+    <meta name="Author" content="Yasound SAS" />
+    <meta name="copyright" content="Yasound SAS" />
+    <meta http-equiv="Cache-control" content="public" />
+    <meta name="language" content="french" />
+    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
+
+    <!--[if lte IE 7] -->
+        <link rel="stylesheet" href="/media/css/ie.css"/>
+    <!--<![endif]-->
 
 {% block extra_head %}
     {% block fb_open_graph %}{% endblock %}
@@ -14,7 +30,6 @@
     <link rel="stylesheet" href="/media/css/webapp.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
     <link rel="stylesheet" href="/media/js/colibri/colibri.css"/>
-    <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
     
     <script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
@@ -34,7 +49,6 @@
     <script type="text/javascript" src='/media/js/pubsub.js'></script>
     <script type="text/javascript" src='/media/js/Namespace.js'></script>
     <script type="text/javascript" src='/media/js/colibri/colibri.js'></script>
-    <script type="text/javascript" src='/media/js/chosen/chosen.jquery.min.js'></script>
 
     
     {% compressed_js 'webapp-all' %}
@@ -147,16 +161,15 @@
    <script type="text/html" id="programmingToolbarTemplate">
       {% include "yabase/app/programming/programmingToolbar.mustache" %}
    </script>
-   <script type="text/html" id="programmingFiltersTemplate">
-      {% include "yabase/app/programming/programmingFilters.mustache" %}
-   </script>
    <script type="text/html" id="importFromItunesTemplate">
       {% include "yabase/app/programming/importFromItunes.mustache" %}
    </script>
 {% endif %}
 
 {% endblock %}
-{% block head_title %}{% trans "Yasound" %}{% endblock %}
+
+</head>
+<body>
 {% block body %}
 
 <div id="fb-root"></div>
@@ -185,10 +198,19 @@
 
 
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top" id='header'>
       <div class="navbar-inner">
-        <div class="container-fluid">
-            <a href='{% url webapp %}' id='btn-webapp' class='brand'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+        <div class="container">
+            <a href='{% url webapp %}' id='btn-webapp' class='brand'>
+				<img src='/media/app/images/yasound.png' alt='Yasound logo' width='138px' height='76px'/>
+			</a>
+			<div class="header-separation">
+				<img src="../../media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
+			</div>
+			<div id="audio-quality">
+					<img id="audio-quality-btn" src="../../media/app/images/btn-sound-quality.png" width="25" height="25" alt="Btn Sound Quality">
+					<img src="../../media/app/images/slider-sound-quality.png" width="70" height="25" alt="Slider Sound Quality">
+			</div>
           
           <div class="nav-collapse">
             <div class='pull-right'>
@@ -238,7 +260,7 @@
 
 
           </div><!--/.nav-collapse -->
-            <div id='webapp-player'>
+            <div id='player'>
             </div>
             <div class='nav-collapse'>
 				<!-- AddThis Button BEGIN -->
@@ -256,15 +278,81 @@
       </div>
     </div>
     
-<div id='webapp-container'>
-<div class='container-fluid' id='webapp-content'>{% block content%}{%endblock%}</div>
-</div>
-<div class='container-fluid'>
-    <hr>
-    <footer>
-    <p>&copy; Yasound 2012</p>
-    </footer>
-</div>
+<div class='container' id='webapp-content'>{% block content%}{%endblock%}</div>
 
+<div id='footer'>
+<div class='container'>
+    <footer>
+		<div id="contacts" class="blocks">
+			<p>
+				<a href="#" class="footer-text-color1" title="contacts">Contacts</a> -
+				<a href="#" class="footer-text-color1" title="metions-legales">Mentions légales</a>
+			</p>
+			<p>
+				<a href="#" class="footer-text-color2" title="facebook">
+					<img src="/media/app/images/facebook_logo.png" alt="facebook"/>
+					<span>Facebook</span>
+				</a>
+				<a href="#" class="footer-text-color2" title="facebook"> 
+					<img src="/media/app/images/twitter_logo.png" alt="twitter" class="padding-social-logo"/>
+					<span>Twitter</span>
+				</a>
+			</p>
+		</div>
+
+		<div class="footer-separation">
+			<img src="../../media/app/images/separation.png" width="4" height="81" alt="separation">
+		</div>
+		
+		<div id="connected-users" class="blocks">
+			<p id="text-users">
+				Utilisateurs connetés
+			</p>
+			<p id="img-users">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
+				
+				<a href="#" id="footer-button">
+				    <span id="footer-button-text">Tous les voir</span>
+				</a>
+			</p>
+		</div>
+		<div class="footer-separation">
+			<img src="../../media/app/images/separation.png" width="4" height="81" alt="separation">
+		</div>
+		<div id="minutes" class="blocks">
+			<span class="footer-text-color1" >232 523</span>
+			<p class="footer-text-color2" >minutes de musique ont été écoutées</p>
+		</div>
+	<p id="copyright">&copy; Yasound 2012</p>
+	</footer>
+</div>
+</div>
+</body>
 {% endblock %}
+
+<script type="text/javascript">
+// GOOGLE ANALYTICS
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4211339-12']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</html>
 
