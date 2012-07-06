@@ -40,13 +40,39 @@ body {
 	display:inline-block;
 	float:left;
 	margin-top:26px;
+	padding-top:1px;
+	width:77px;
+	height:27px;
+	background-image:url('../app/images/slider-sound-quality.png');
+	background-repeat: no-repeat;
+	background-position:center center;
 	margin-left:22px;
 }
 
-#audio-quality-btn {
-	position:relative;
-	left:28px;
-	top:1px;
+#audio-quality-padding {
+	padding-left:0px;
+	padding-top:1px;
+}
+
+#SD {
+	padding-bottom:4px;
+	padding-left:5px;
+}
+
+#radio-picto {
+	height:32px;
+	width:32px;
+	display:inline-block;
+	float:left;
+	margin: 21px 0px 0px 21px;
+}
+
+#favoris-radio {
+	height:36px;
+	width:37px;
+	display:inline-block;
+	float:left;
+	margin: 21px 0px 0px 19px;
 }
 
 #header .brand {
