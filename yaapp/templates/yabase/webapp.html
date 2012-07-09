@@ -117,7 +117,14 @@
    <script type='text/html' id='homePageTemplate'>
      {% include "yabase/app/home/homePage.mustache" %}
    </script>
-
+   
+   <script type="text/html" id="staticLegalPageTemplate">
+      {% include "yabase/app/static/legal.mustache" %}
+   </script>
+   <script type="text/html" id="staticContactPageTemplate">
+      {% include "yabase/app/static/contact.mustache" %}
+   </script>
+   
 {% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
      {% include "yabase/app/favoritesPage.mustache" %}
@@ -206,7 +213,7 @@
       <div class="navbar-inner">
         <div class="container">
 			<div id="brand-logo">
-				<a href="#" {% url webapp %}>
+				<a href="{% url webapp %}" id='btn-webapp'>
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
@@ -286,8 +293,8 @@
     <footer>
 		<div id="contacts" class="blocks">
 			<p>
-				<a href="#" class="footer-text-color1" title="contacts">Contacts</a> -
-				<a href="#" class="footer-text-color1" title="metions-legales">Mentions légales</a>
+				<a id='btn-contact' href="{% url webapp_contact %}" class="footer-text-color1" title="{% trans 'Contact' %}">{% trans "Contact" %}</a> -
+				<a id='btn-legal' href="{% url webapp_legal %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
 			</p>
 			<p>
 				<a href="#" class="footer-text-color2" title="facebook">

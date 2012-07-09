@@ -4,7 +4,7 @@
  * evil: true, undef: true, white: true, newcap: true
  */
 /* extern Ext, $ */
-Namespace('Yasound.Data.Views');
+Namespace('Yasound.Views');
 
 /**
  * Home page

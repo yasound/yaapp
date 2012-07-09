@@ -98,6 +98,8 @@ PIPELINE_JS = {
             'js/app/programming/models.js',
             'js/app/home/views.js',
             'js/app/home/models.js',
+            'js/app/static/views.js',
+            'js/app/static/models.js',
             'js/app/push.js',
             'js/app/app.js',
         ]
