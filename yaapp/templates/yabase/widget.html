@@ -11,7 +11,7 @@
     <meta http-equiv="Cache-control" content="public" />
     <meta name="language" content="french" />
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/media/css/style.css"/>
+    <link rel="stylesheet" href="/media/css/style_widget.css"/>
 
     <!--[if lte IE 7] -->
         <link rel="stylesheet" href="/media/css/ie.css"/>
@@ -39,7 +39,7 @@
 <div class='container-fluid'>
     <div class='row-fluid'>
         <div class='span12'>
-            <a href='{% url yabase.views.web_listen radio.uuid %}' target='_blank'><img src='/media/images/logo.png' alt='Yasound logo'/></a>
+            <a href='{% url yabase.views.web_listen radio.uuid %}' target='_blank'><img src='/media/images/logo.png' alt='Yasound logo' width='130px	'/></a>
            <div id='widget-player'>
                <div id='track-picture' class='thumbnail'>
                    <img id='track-image' src="/media/images/default_image.png" width="120px" height="120px" alt='{% trans "Track logo" %}'/>
