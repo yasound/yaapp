@@ -115,7 +115,7 @@ $(document).ready(function () {
                 this.currentView.close();
                 this.currentView = undefined;
             }
-            $('#webapp-container').append("<div class='container-fluid' id='webapp-content'/>")
+            $('#webapp-container').append("<div class='container' id='webapp-content'/>")
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -231,7 +231,7 @@ $(document).ready(function () {
                 this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio,
-                    el: $('#webapp-player')
+                    el: $('#player')
                 })
                 this.radioContext.currentSongView.radio = this.currentRadio;
 

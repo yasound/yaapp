@@ -305,10 +305,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         $('body').css('cursor', 'pointer');
         var $volumeControl = $('#volume-control');
         var position = event.pageX;
-        var left = $volumeControl.position().left;
+        var left = $volumeControl.offset().left;
         var width = $volumeControl.width();
 
         var relativePosition = position - left;
+        
         var soundVolume = Math.floor(relativePosition * 100 / width);
         var percentage = soundVolume + "%";
         $('#volume-position').css("width", percentage);
