@@ -4,7 +4,7 @@ from django.db.models import signals
 from pymongo import DESCENDING
 from yabase.models import SongMetadata, Radio
 from yarecommendation.task import async_add_radio
-from yarecommendation.utils import top_matches, sim_pearson
+from yarecommendation.utils import top_matches, sim_pearson, tail_call_optimized
 from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
@@ -182,6 +182,7 @@ class RadiosClusterManager():
     def _get_right_child(self, parent):
         return self.collection.find_one({'_id': parent.get('right')})
 
+    @tail_call_optimized
     def _find_in_nodes(self, parent, radio, current_score=0, stop_score=None):
         print "current_score = %f, stop_score=%s" %(current_score, stop_score)
         if stop_score is not None and stop_score <= current_score:
