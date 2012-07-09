@@ -95,6 +95,13 @@ def similar_radios_from_artist_list(request):
         return HttpResponse(status=405)
     check_api_key_Authentication(request)
     
+    user_radio_ids = []
+    if request.user and request.user.is_authenticated():
+        radios = Radio.objects.filter(creator=request.user)
+        for r in radios:
+            user_radio_ids.append(r.id)
+        
+    
     data = request.FILES['artists_data']
     content_compressed = data.read()
     
@@ -118,6 +125,8 @@ def similar_radios_from_artist_list(request):
     radio_ids = [x[1] for x in res]
     data = []
     for r in radio_ids:
+        if r in user_radio_ids:
+            continue # dont't add user's radios
         try:
             radio = Radio.objects.get(id=r)
             data.append(radio.as_dict())
