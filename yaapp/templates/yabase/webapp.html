@@ -205,29 +205,18 @@
     <div class="navbar navbar-fixed-top" id='header'>
       <div class="navbar-inner">
         <div class="container">
-            <a href='{% url webapp %}' id='btn-webapp' class='brand'>
-				<img src='/media/app/images/yasound.png' alt='Yasound logo' width='138px' height='76px'/>
-			</a>
-			<div class="header-separation">
-				<img src="../../media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
-			</div>
-			<div id="audio-quality">
-				<img id="audio-quality-padding" src="../../media/app/images/btn-sound-quality.png" width="28" height="28" alt="Btn Sound Quality">
-				<img id="SD" class="audio-quality-padding" src="../../media/app/images/SD.png" width="21" height="12" alt="SD">
-			</div>
-			<div id="radio-picto">
-				<a href="#">
-					<img src="../../media/app/images/radio-picto.png" width="32" height="32" alt="Radio Picto">
+			<div id="brand-logo">
+				<a href="#" {% url webapp %}>
+					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
-			<div id="favoris-radio">
-				<img src="../../media/app/images/favorite-radio.png" width="37" height="36" alt="Favorite Radio">
+			<div class="header-separation">
+				<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
 			</div>
-          
-          <div class="nav-collapse">
-            <div class='pull-right'>
-                <div id='user-menu' class='btn-toolbar'>            
-                {% if request.user.is_authenticated %}
+          	<div class="nav-collapse">
+            	<div class='pull-right'>
+                	<div id='user-menu' class='btn-toolbar'>            
+                		{% if request.user.is_authenticated %}
                         <div class='btn-group'>
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-eye-open"></i>
@@ -368,3 +357,4 @@
 </script>
 </html>
 
+                
