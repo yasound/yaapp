@@ -124,6 +124,10 @@
    <script type="text/html" id="staticContactPageTemplate">
       {% include "yabase/app/static/contact.mustache" %}
    </script>
+
+   <script type="text/html" id="connectedUserTemplate">
+      {% include "yabase/app/common/connectedUser.mustache" %}
+   </script>
    
 {% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
@@ -317,19 +321,6 @@
 				{% trans "Connected users" %}
 			</p>
 			<p id="img-users">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
-				<img class="individual-pictures" src="../../media/app/images/portrait1.png" width="34" height="34" alt="portrait">
 				
 				<a href="#" id="footer-button">
 				    <span id="footer-button-text">Tous les voir</span>

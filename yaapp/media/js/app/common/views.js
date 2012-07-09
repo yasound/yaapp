@@ -494,3 +494,67 @@ Yasound.Views.Pagination = Backbone.View.extend({
         }
     }
 });
+
+
+/**
+ * Connected users
+ */
+Yasound.Views.ConnectedUsers = Backbone.View.extend({
+    el: '#connected-users',
+    collection: new Yasound.Data.Models.ConnectedUsers(),
+    
+    initialize: function() {
+        _.bindAll(this, 'addOne', 'addAll', 'render');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+    },
+    onClose: function() {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    addAll: function() {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function(user) {
+        var view = new Yasound.Views.ConnectedUserCell({
+            model: user
+        });
+
+        $('#img-users', this.el).prepend(view.render().el);
+        this.views.push(view);
+    },
+    render: function() {
+        this.collection.fetch();
+    }
+});
+
+Yasound.Views.ConnectedUserCell = Backbone.View.extend({
+    tagName: 'span',
+
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).hide().html(ich.connectedUserTemplate(data)).fadeIn(200);
+        return this;
+    }
+});

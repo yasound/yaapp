@@ -150,6 +150,7 @@ $(document).ready(function () {
 
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
+                this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
         },

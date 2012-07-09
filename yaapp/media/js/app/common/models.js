@@ -73,3 +73,22 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
         return str;
     }
 });
+
+
+/**
+ * Connected user
+ */
+Yasound.Data.Models.ConnectedUser = Backbone.Model.extend({
+    idAttribute: 'id'
+});
+
+/**
+ * Connected user list
+ */
+Yasound.Data.Models.ConnectedUsers = Backbone.Collection.extend({
+    model: Yasound.Data.Models.ConnectedUser,
+    url: function() {
+        return '/api/v1/connected_users/';
+    },
+});
+
