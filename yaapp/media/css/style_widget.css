@@ -1,5 +1,9 @@
 body {
-	padding-top: 30px;
+	padding-top: 5px;
+}
+
+.container-fluid {
+	padding:5px;
 }
 
 .hero-unit h1 {
@@ -95,9 +99,9 @@ footer #menu a:hover {
 	float: left;
 }
 
+
 #track-picture .btn-group {
 	padding-top: 12px;
-	width: 106px;
 	margin: 0px auto;
 	width: 106px;
 }
@@ -130,8 +134,7 @@ footer #menu a:hover {
 #widget-player #volume-control {
     width: 104px;
     cursor: pointer;
-    margin-left:8px;
-    margin-top:4px;
+    margin: 4px auto;
 }
 
 
