@@ -11,7 +11,7 @@ $(document).ready(function() {
         url : g_radio_url,
         autoPlay: g_auto_play,
         autoLoad: g_auto_play,
-        stream : true,
+        stream : true
     }
     
     soundManager.onready(function() {
