@@ -481,8 +481,9 @@ def update_localization(request):
     
 @check_api_key(methods=['GET'], login_required=False)
 def connected_users_by_distance(request):
-    skip = request.GET.get('skip', 0)
-    limit = request.GET.get('limit', 20)
+    skip = int(request.GET.get('skip', 0))
+    limit = int(request.GET.get('limit', 20))
+    
     
     if request.user and request.user.is_authenticated():
         userprofile = request.user.userprofile
