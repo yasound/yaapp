@@ -1125,8 +1125,6 @@ class UserProfile(models.Model):
         async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
         
     def position_changed(self):
-        return # temp hack
-        
         if self.latitude is None or self.longitude is None:
             return
         self.update_position_coords()
