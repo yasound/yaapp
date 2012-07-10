@@ -544,6 +544,7 @@ Yasound.Views.ConnectedUserCell = Backbone.View.extend({
     tagName: 'span',
 
     events: {
+        "click a": "onUser"
     },
 
     initialize: function () {
@@ -556,5 +557,12 @@ Yasound.Views.ConnectedUserCell = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.connectedUserTemplate(data)).fadeIn(200);
         return this;
+    },
+    onUser: function (e) {
+        e.preventDefault();
+        var username = this.model.get('username');
+        Yasound.App.Router.navigate("profile/" + username + '/', {
+            trigger: true
+        });
     }
 });
