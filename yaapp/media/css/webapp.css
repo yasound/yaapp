@@ -258,8 +258,8 @@ body {
 }
 
 #minutes span {
-	font-weight:normal;
-	font-size:42px;
+	font-weight:bold;
+	font-size:36px;
 	margin-top:40px;
 	margin-bottom:15px;
 }
