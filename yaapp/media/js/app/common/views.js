@@ -508,7 +508,8 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
     collection: new Yasound.Data.Models.ConnectedUsers(),
     
     initialize: function() {
-        _.bindAll(this, 'addOne', 'addAll', 'render');
+        _.bindAll(this, 'addOne', 'addAll', 'render', 'updateData');
+        setInterval(this.updateData, 10 * 1000 * 60);
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -540,11 +541,15 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
         this.views.push(view);
     },
     render: function() {
-        this.collection.fetch();
+        this.updateData();
     },
     onShowAll: function(e) {
         e.preventDefault();
-    }
+    },
+    updateData: function() {
+        this.clear();
+        this.collection.fetch();
+    } 
 });
 
 Yasound.Views.ConnectedUserCell = Backbone.View.extend({
