@@ -1369,7 +1369,7 @@ def public_stats(request):
     metrics = mm.get_global_metrics()
     listening_time = 0
     for metric in metrics:
-        if 'listening_time' in metrics:
+        if 'listening_time' in metric:
             listening_time += float(metric['listening_time'])
     data = {
         'minutes': intcomma(int(listening_time))
