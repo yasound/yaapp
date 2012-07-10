@@ -1294,17 +1294,15 @@ def notify_streamer(request):
 @csrf_exempt
 @check_api_key(methods=['POST',], login_required=True)
 def ping(request):
-    radio_uuid = request.REQUEST.get('radio_uuid')
-    if not radio_uuid:
-        raise Http404
-    
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
     profile = request.user.get_profile()
     profile.authenticated()
     
-    radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
-    radio_user.connected = True
-    radio_user.save()
+    radio_uuid = request.REQUEST.get('radio_uuid')
+    if radio_uuid:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
+        radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
+        radio_user.connected = True
+        radio_user.save()
     return HttpResponse('OK')
 
 @check_api_key(methods=['GET',], login_required=False)
