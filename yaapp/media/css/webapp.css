@@ -115,6 +115,14 @@ body {
 	background-image: url(/media/app/images/footer_bg.png);
 	background-repeat: repeat-x;
 	height: 150px;
+	position:fixed;
+	bottom:0;
+	z-index:100;
+	width:100%;
+}
+
+#pre-footer {
+	margin-bottom:150px;
 }
 
 .blocks {
