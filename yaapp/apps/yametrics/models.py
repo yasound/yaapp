@@ -125,7 +125,7 @@ class GlobalMetricsManager():
         timestamps = range(2012, 2020)
         metrics = []
         for timestamp in timestamps:
-            metric = collection.find_one({'timestamp': timestamp})
+            metric = collection.find_one({'timestamp': '%d' % timestamp})
             if metric:
                 metrics.append(metric)
         return metrics
