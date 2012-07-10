@@ -221,6 +221,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/set_localization/$','account.views.update_localization'),
     
     url(r'^api/v1/connected_users/$','account.views.connected_users_by_distance'),
+    url(r'^api/v1/fast_connected_users/$','account.views.fast_connected_users_by_distance'),
 
     # programming
     url(r'^api/v1/my_programming/$', 'yabase.views.my_programming'),
