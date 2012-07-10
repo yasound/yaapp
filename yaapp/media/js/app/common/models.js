@@ -88,7 +88,7 @@ Yasound.Data.Models.ConnectedUser = Backbone.Model.extend({
 Yasound.Data.Models.ConnectedUsers = Backbone.Collection.extend({
     model: Yasound.Data.Models.ConnectedUser,
     url: function() {
-        return '/api/v1/connected_users/?limit=13';
+        return '/api/v1/fast_connected_users/?limit=13';
     }
 });
 

@@ -30,6 +30,7 @@ import yabase.settings as yabase_settings
 from yacore.decorators import check_api_key
 from yacore.api import api_response
 from yacore.decorators import check_api_key
+from django.core.cache import cache
 
 logger = logging.getLogger("yaapp.account")
 
@@ -502,5 +503,42 @@ def connected_users_by_distance(request):
             data.append(p.user_as_dict(full=True))
     return api_response(data, limit=limit, offset=skip)
     
+
+@check_api_key(methods=['GET'], login_required=False)
+def fast_connected_users_by_distance(request):
+    skip = 0
+    limit = 13
+    data = []
+    profiles = None
+    
+    key = None
+    if request.user and request.user.is_authenticated():
+        userprofile = request.user.userprofile
+        
+        key = '%d.fast_connected_users' % (userprofile.id)
+        data = cache.get(key, [])
+        if not data:
+            profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
+    else:
+        from yacore.geoip import ip_coords
+        ip = request.META[settings.GEOIP_LOOKUP]
+        coords = ip_coords(ip)
+        if coords is None:
+            profiles = None
+        else:
+            key = '%s.fast_connected_users' % (coords)
+            data = cache.get(key, [])
+            if not data:
+                profiles = UserProfile.objects.connected_userprofiles(coords[0], coords[1], skip=skip, limit=limit)
+
+    if profiles and not data:
+        for p in profiles:
+            data.append(p.user_as_dict(full=True))
+        
+    if key is not None and profiles is not None:
+        # first time we get data
+        cache.set(key, data, 60*5)
+        
+    return api_response(data, limit=limit, offset=skip)
         
     
