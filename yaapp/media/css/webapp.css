@@ -95,6 +95,27 @@ body {
 	box-shadow: 0px 1px 4px black;
 }
 
+#sound-level {
+	width:190px;
+	height:100px;
+	display:inline-block;
+}
+
+#min-level {
+	display:inline-block;
+	float:left;
+}
+
+#level-bar {
+	background-image:url('../app/images/level-bar.png');
+	background-position:center;
+}
+
+#max-level {
+	display:inline-block;
+	float:right;
+}
+
 #header .brand {
 	margin: 0;
 	padding: 0;
@@ -106,6 +127,133 @@ body {
 
 #tbar-search {
 	margin-top: -14px;
+}
+
+/*-- SUB-HEADER --*/
+
+#sub-header {
+	height:55px;
+	width:100%;
+	background-image:url('../app/images/sub-header-bg.png');
+	background-repeat: repeat-x;
+	box-shadow: 3px 0px 4px #cfcfcf;
+	clear:both;
+	position:fixed;
+	top:76px;
+}
+
+#sub-header-container {
+	height:55px;
+}
+
+ul {
+	display:inline-block;
+	float:left;
+	width:310px;
+	margin-left:0px;
+}
+
+#sub-header-nav li {
+	display:inline-block;
+	float:left;
+	list-style:none;
+	padding: 19px 13px;
+}
+
+#sub-header-nav li a {
+	color:#7b8082;
+	text-shadow:1px 1px 1px white;
+	font-size:15px;
+}
+
+#sub-header-nav li a:hover {
+	color:#474b4d;
+	text-shadow:1px 1px 1px white;
+	text-decoration:none;
+}
+
+#sub-header-nav .first {
+	padding-left:0px;
+}
+
+#form select {
+	display:inline-block;
+	float:left;
+	height:32px;
+	width:108px;
+	color:#7b8082;
+	border:1px solid #babfc2;
+	margin: 3px 13px;
+	font-size:15px;
+}
+
+form {
+	margin:0px;
+}
+
+#sub-header-separation {
+	display:inline-block;
+	float:left;
+	background-image: url('../app/images/sub-header-separation.png');
+	height:36px;
+	width:3px;
+	margin: 5px 13px;
+}
+
+#create-radio {
+	display:inline-block;
+	float:left;
+	background-image:url('../app/images/create-radio-btn-bg.png');
+	height:30px;
+	width:147px;
+	margin: 3px 13px;
+	border: 1px solid #b8bec1;
+	border-radius:20px;
+	text-align:center;
+	box-shadow: 0px 1px 1px #caced1;
+	color: #7b8082;
+	font-size:15px;
+	text-shadow:1px 1px 1px white;
+}
+
+#create-radio span {
+	position:relative;
+	top:6px;
+}
+
+#create-radio:hover {
+	display:inline-block;
+	float:left;
+	background-image:url('../app/images/create-radio-btn-bg.png');
+	height:30px;
+	width:147px;
+	margin: 3px 13px;
+	border: 1px solid #b8bec1;
+	border-radius:20px;
+	text-align:center;
+	box-shadow: 1px 1px 5px #caced1;
+	color: #7b8082;
+	font-size:15px;
+	text-decoration:none;
+}
+
+#search-bar {
+	background:#FFF;
+}
+
+#search-bar input {
+	display:inline-block;
+	float:left;
+	height:24px;
+	width:152px;
+	margin: 2px 0px 0px 114px;
+	font-size:15px;
+	border-radius:20px;
+	padding-left:20px;
+	color:#b0b6b8;
+	background-image:url('../app/images/search-bar-symbol.png');
+	background-repeat:no-repeat;
+	background-position:;
 }
 
 /**
@@ -202,7 +350,7 @@ body {
 	display:inline-block;
 	height:30px;
 	width:113px;
-	background-image:url('../app/images/footer-btn-bg.png');
+	background-image:url('/app/images/footer-btn-bg.png');
 	background-repeat:repeat-x;
 	border:1px solid #1a1c1d;
 	box-shadow:0px 1px 1px #1a1c1d, 0px 1px 1px #4f5252 inset;
