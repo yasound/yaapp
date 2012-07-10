@@ -501,6 +501,10 @@ Yasound.Views.Pagination = Backbone.View.extend({
  */
 Yasound.Views.ConnectedUsers = Backbone.View.extend({
     el: '#connected-users',
+    events: {
+        "click #footer-button": "onShowAll"
+    },
+    
     collection: new Yasound.Data.Models.ConnectedUsers(),
     
     initialize: function() {
@@ -537,6 +541,9 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
     },
     render: function() {
         this.collection.fetch();
+    },
+    onShowAll: function(e) {
+        e.preventDefault();
     }
 });
 
@@ -556,6 +563,7 @@ Yasound.Views.ConnectedUserCell = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.connectedUserTemplate(data)).fadeIn(200);
+        $('a', this.el).tooltip({title: data.name})
         return this;
     },
     onUser: function (e) {
