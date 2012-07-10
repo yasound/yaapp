@@ -120,6 +120,17 @@ class GlobalMetricsManager():
                 metrics.append(metric)
         return metrics
     
+    def get_global_metrics(self):
+        collection = self.metrics_glob
+        timestamps = range(2012, 2020)
+        metrics = []
+        for timestamp in timestamps:
+            metric = collection.find_one({'timestamp': timestamp})
+            if metric:
+                metrics.append(metric)
+        return metrics
+        
+    
     def get_past_month_metrics(self):
         collection = self.metrics_glob
         timestamps = self._generate_past_month_timestamps()

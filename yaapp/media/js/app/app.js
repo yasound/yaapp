@@ -27,6 +27,18 @@ $(document).ready(function () {
             trigger: true
         });
     })
+    $('#btn-legal').click(function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('legal/', {
+            trigger: true
+        });
+    })
+    $('#btn-contact').click(function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('contact/', {
+            trigger: true
+        });
+    })
     
     Backbone.View.prototype.close = function () {
         this.remove();
@@ -77,6 +89,8 @@ $(document).ready(function () {
             "friends/": "friends",
             "notifications/": "notifications",
             "programming/": "programming",
+            "legal/": "legal",
+            "contact/": "contact",
             "*args": "index"
         },
 
@@ -136,6 +150,8 @@ $(document).ready(function () {
 
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
+                this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
+                this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
         },
@@ -251,6 +267,20 @@ $(document).ready(function () {
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
+        },
+        
+        legal: function() {
+            this.clearView();
+            this.currentView = new Yasound.Views.Static.LegalPage({
+                el: '#webapp-content'
+            }).render();
+        },
+        
+        contact: function() {
+            this.clearView();
+            this.currentView = new Yasound.Views.Static.ContactPage({
+                el: '#webapp-content'
+            }).render();
         }
     });
 

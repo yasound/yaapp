@@ -193,9 +193,16 @@ body {
 	padding-top:5px;
 }
 
+#img-users span {
+    padding: 0px 5px 9px 0px;
+}
+
 #img-users .individual-pictures {
-	padding: 0px 5px 9px 0px;
 	margin:0px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 2px solid white;
 }
 
 #footer-button {

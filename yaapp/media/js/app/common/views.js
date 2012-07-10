@@ -494,3 +494,108 @@ Yasound.Views.Pagination = Backbone.View.extend({
         }
     }
 });
+
+
+/**
+ * Connected users
+ */
+Yasound.Views.ConnectedUsers = Backbone.View.extend({
+    el: '#connected-users',
+    events: {
+        "click #footer-button": "onShowAll"
+    },
+    
+    collection: new Yasound.Data.Models.ConnectedUsers(),
+    
+    initialize: function() {
+        _.bindAll(this, 'addOne', 'addAll', 'render');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+    },
+    onClose: function() {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    addAll: function() {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function(user) {
+        var view = new Yasound.Views.ConnectedUserCell({
+            model: user
+        });
+
+        $('#img-users', this.el).prepend(view.render().el);
+        this.views.push(view);
+    },
+    render: function() {
+        this.collection.fetch();
+    },
+    onShowAll: function(e) {
+        e.preventDefault();
+    }
+});
+
+Yasound.Views.ConnectedUserCell = Backbone.View.extend({
+    tagName: 'span',
+
+    events: {
+        "click a": "onUser"
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).hide().html(ich.connectedUserTemplate(data)).fadeIn(200);
+        $('a', this.el).tooltip({title: data.name})
+        return this;
+    },
+    onUser: function (e) {
+        e.preventDefault();
+        var username = this.model.get('username');
+        Yasound.App.Router.navigate("profile/" + username + '/', {
+            trigger: true
+        });
+    }
+});
+
+
+Yasound.Views.PublicStats = Backbone.View.extend({
+    el: '#minutes',
+    model: new Yasound.Data.Models.PublicStats(),
+    events: {
+    },
+
+    initialize: function () {
+        _.bindAll(this, 'updateData');
+        this.model.bind('change', this.render, this);
+        this.updateData();
+        setInterval(this.updateData, 10 * 1000 * 60);
+    },
+    onClose: function() {
+    },
+    render: function() {
+        var data = this.model.toJSON();
+        $('span', this.el).html(data.minutes);
+    },
+    updateData: function() {
+        this.model.fetch();
+    }
+    
+});
