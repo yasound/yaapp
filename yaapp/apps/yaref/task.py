@@ -16,7 +16,7 @@ def find_musicbrainz_id(yasound_song_id):
     else:
         logger.debug('not found')
     
-@task(rate_limit='1/s')
+@task(rate_limit='1/s', ignore_result=True)
 def async_find_synonyms(yasound_song_id):
     logger = async_find_synonyms.get_logger()
     logger.info('finding synonyms for %s' % (yasound_song_id))
