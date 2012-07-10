@@ -92,3 +92,7 @@ Yasound.Data.Models.ConnectedUsers = Backbone.Collection.extend({
     },
 });
 
+
+Yasound.Data.Models.PublicStats =  Backbone.Model.extend({
+    urlRoot: '/api/v1/public_stats/',
+});

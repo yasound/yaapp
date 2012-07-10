@@ -152,6 +152,8 @@ urlpatterns = patterns('',
     
     url(r'^api/v1/notify_streamer/$', 'yabase.views.notify_streamer'),
     url(r'^api/v1/ping/$', 'yabase.views.ping'),
+
+    url(r'^api/v1/public_stats/$', 'yabase.views.public_stats'),
     
     
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),

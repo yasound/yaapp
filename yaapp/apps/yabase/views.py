@@ -22,26 +22,28 @@ from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist
 from shutil import rmtree
 from task import process_playlists, process_upload_song
 from tastypie.http import HttpNotFound
+from tastypie.models import ApiKey
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm
 from yacore.api import api_response
+from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
+from yametrics.models import GlobalMetricsManager
+from yarecommendation.models import ClassifiedRadiosManager
 from yaref.models import YasoundSong
 import import_utils
 import json
 import logging
 import os
-import settings as yabase_settings
-from tastypie.models import ApiKey
-import uuid
 import requests
+import settings as yabase_settings
+import uuid
 import zlib
-from yacore.binary import BinaryData
-from yarecommendation.models import ClassifiedRadiosManager
 
+from django.contrib.humanize.templatetags.humanize import intcomma
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
@@ -1361,4 +1363,17 @@ def my_programming_albums(request):
     total_count = albums.count()
     response = api_response(list(albums), total_count)
     return response
+
+def public_stats(request):
+    mm = GlobalMetricsManager()
+    metrics = mm.get_global_metrics()
+    listening_time = 0
+    for metric in metrics:
+        if 'listening_time' in metrics:
+            listening_time += float(metric['listening_time'])
+    data = {
+        'minutes': intcomma(int(listening_time))
+    }
+    response = json.dumps(data)
+    return HttpResponse(response, mimetype='application/json')
     

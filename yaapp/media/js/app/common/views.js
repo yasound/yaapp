@@ -574,3 +574,28 @@ Yasound.Views.ConnectedUserCell = Backbone.View.extend({
         });
     }
 });
+
+
+Yasound.Views.PublicStats = Backbone.View.extend({
+    el: '#minutes',
+    model: new Yasound.Data.Models.PublicStats(),
+    events: {
+    },
+
+    initialize: function () {
+        _.bindAll(this, 'updateData');
+        this.model.bind('change', this.render, this);
+        this.updateData();
+        setInterval(this.updateData, 10 * 1000 * 60);
+    },
+    onClose: function() {
+    },
+    render: function() {
+        var data = this.model.toJSON();
+        $('span', this.el).html(data.minutes);
+    },
+    updateData: function() {
+        this.model.fetch();
+    }
+    
+});
