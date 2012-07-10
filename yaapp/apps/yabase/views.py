@@ -1372,7 +1372,7 @@ def public_stats(request):
         if 'listening_time' in metric:
             listening_time += float(metric['listening_time'])
     data = {
-        'minutes': intcomma(int(listening_time))
+        'minutes': intcomma(int(listening_time)).replace(',', ' ')
     }
     response = json.dumps(data)
     return HttpResponse(response, mimetype='application/json')
