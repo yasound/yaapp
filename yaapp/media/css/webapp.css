@@ -120,14 +120,13 @@ body {
     border:none;
 }
 
-.volume {
-	width: 149px;
-    height: 9px;
-	background-image: url('../app/images/slider-blue-bg.png');  
-	position: absolute;  
-	border: 0;  
-	top: 0; 
-    border-radius: 25px;
+.ui-slider .ui-slider-range {
+    background-image: url('../app/images/slider-blue-bg.png');
+    position: absolute;
+    border: 0;  
+    top: 0;  
+    height: 100%;  
+    border-radius: 25px; 
 }
 
 #volume-slider{  

@@ -233,6 +233,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         
         var volumeSlider = $('#volume-slider'); 
         volumeSlider.slider({
+            range: "min",  
             min: 0,
             max: 100
         });
