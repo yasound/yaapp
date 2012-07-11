@@ -69,6 +69,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
         this.views.push(view);
     }
 });
+
 /**
  * Programming page
  */
@@ -155,7 +156,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
     albumsSelected: function(albums) {
         this.currentView.clear();
         this.songInstances.filterAlbums(albums);
-    },
+    }
 });
 
 /**

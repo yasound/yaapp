@@ -78,6 +78,6 @@ Yasound.App.PushManager = Class({
         var raw_data = message.data;
         var data = JSON.parse(raw_data);
         this.trigger(data.event_type, JSON.parse(data.data));
-    },
+    }
 
 });
