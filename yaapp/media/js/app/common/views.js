@@ -612,10 +612,11 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 Yasound.Views.SubMenu = Backbone.View.extend({
     events: {
-        "click #selection" : "selection",
-        "click #top"       : "top",
-        "click #friends"   : "friends",
-        "click #favorites" : "favorites"
+        "click #selection"          : "selection",
+        "click #top"                : "top",
+        "click #friends"            : "friends",
+        "click #favorites"          : "favorites",
+        "keypress #search-input"    : 'search'
     },
     initialize: function() {
         _.bindAll(this, 'render');
@@ -652,6 +653,23 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     favorites: function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate('/favorites/', {
+            trigger: true
+        });
+    },
+    search: function(e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+
+        var value = $('#search-input', this.el).val();
+        if (!value) {
+            return;
+        }
+
+        $('#search-input', this.el).val('');
+        e.preventDefault();
+
+        Yasound.App.Router.navigate("search/" + value + '/', {
             trigger: true
         });
     }
