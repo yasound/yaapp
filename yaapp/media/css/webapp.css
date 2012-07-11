@@ -89,7 +89,6 @@ body {
 	display:inline-block;
 	float:left;
 	margin: 21px 0px 0px 19px;
-	
 	border-radius:28px;
 	background-image:url('../app/images/play-btn-bg.png');
 	box-shadow: 0px 1px 4px black;
@@ -101,6 +100,11 @@ body {
 	display:inline-block;
 }
 
+#title-volume {
+	height:76px	;
+	width:200px;
+}
+
 .ui-slider .ui-slider-handle {  
     position: absolute;
     z-index: 2;  
@@ -109,11 +113,20 @@ body {
     cursor: pointer;  
     background: url('../app/images/timeline-btn.png') no-repeat 50% 50%;  
     font-weight: bold;  
-    color: #1C94C4;  
-    outline: none;  
-    top: -7px;  
-    margin-left: -12px;
-    border:none;  
+    color:#1C94C4;  
+    outline:none;  
+    top:-7px;  
+    margin-left:-12px;
+    border:none;
+}
+
+#volume-slider{  
+    margin-right: 10px;
+	height:9px;
+	width:149px;
+	background: url('../app/images/level-bar.png');
+ 	background-repeat:no-repeat;
+	border:none;
 }
 
 #min-level {
