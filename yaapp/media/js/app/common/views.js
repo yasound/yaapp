@@ -181,14 +181,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #dec": "dec",
         "click #like": "like",
         "click #track-image-link": "displayRadio",
-        "mousedown #volume-control": "volumeControl",
-        "mouseup": 'mouseUp',
-        "mousemove": "mouseMove",
         "click #fb_share": "facebookShare"
     },
 
     initialize: function () {
         this.model.bind('change', this.render, this);
+        _.bindAll(this, 'render', 'onVolumeSlide');
+        
     },
 
     onClose: function () {
@@ -232,6 +231,14 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         $('title').text(this.model.title());
+        
+        var volumeSlider = $('#volume-slider'); 
+        volumeSlider.slider({
+            min: 0,
+            max: 100
+        });
+        volumeSlider.bind("slide", this.onVolumeSlide);
+        
         this.generateSocialShare();
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
@@ -239,7 +246,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                 
                 this.notifyStreamer();
             }
-            $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
+            volumeSlider.slider('value', Yasound.App.MySound.volume);
         }
 
         // hide social buttons if current song is empty
@@ -260,7 +267,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
             $('#play i').removeClass('icon-play').addClass('icon-stop');
-            $('#volume-position').css("width", Yasound.App.MySound.volume + "%");
+            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
 
             this.notifyStreamer();
         } else {
@@ -275,11 +282,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             return;
         }
         if (Yasound.App.MySound.volume <= 90) {
-            $('#volume-position').css("width", Yasound.App.MySound.volume + 10 + "%");
-            Yasound.App.MySound.setVolume(Yasound.App.MySound.volume + 10);
+            $('#volume-slider').slider('value', Yasound.App.MySound.volume + 10);
         } else {
-            $('#volume-position').css("width", "100%");
-            Yasound.App.MySound.setVolume(100);
+            $('#volume-slider').slider('value', 100);
         }
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
@@ -289,54 +294,19 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             return;
         }
         if (Yasound.App.MySound.volume >= 10) {
-            $('#volume-position').css("width", Yasound.App.MySound.volume - 10 + "%");
-            Yasound.App.MySound.setVolume(Yasound.App.MySound.volume - 10);
+            $('#volume-slider').slider('value', Yasound.App.MySound.volume - 10);
         } else {
-            $('#volume-position').css("width", "0%");
-            Yasound.App.MySound.setVolume(0);
+            $('#volume-slider').slider('value', 0);
         }
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
-    resizeVolumeBar: function (event) {
-        if (typeof Yasound.App.MySound === "undefined") {
-            return;
-        }
-        $('body').css('cursor', 'pointer');
-        var $volumeControl = $('#volume-control');
-        var position = event.pageX;
-        var left = $volumeControl.offset().left;
-        var width = $volumeControl.width();
-
-        var relativePosition = position - left;
-        
-        var soundVolume = Math.floor(relativePosition * 100 / width);
-        var percentage = soundVolume + "%";
-        $('#volume-position').css("width", percentage);
-
+    onVolumeSlide: function(e, ui) {
+        var soundVolume = ui.value;
         Yasound.App.MySound.setVolume(soundVolume);
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
-
-    mouseUp: function (event) {
-        if (this.volumeMouseDown) {
-            $('body').css('cursor', 'auto');
-            this.volumeMouseDown = false;
-        }
-    },
-
-    mouseMove: function (event) {
-        if (!this.volumeMouseDown) {
-            return;
-        }
-        this.resizeVolumeBar(event);
-    },
-
-    volumeControl: function (event) {
-        this.volumeMouseDown = true;
-        this.resizeVolumeBar(event);
-    },
-
+    
     like: function (event) {
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';

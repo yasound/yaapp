@@ -101,6 +101,16 @@ body {
 	display:inline-block;
 }
 
+.volume-handler {
+    background-image:url('../app/images/timeline-btn.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    width:25px;
+    height:25px;
+    left:50%;
+    position:absolute;
+}
+
 #min-level {
 	display:inline-block;
 	float:left;
