@@ -267,32 +267,40 @@ form {
 
 #search-bar { 
 	display:inline-block;
-	float:left;
+	float:right;
 	width:174px; 
 	height:32px;
 	border:1px solid #b8bec1;
 	padding:0px;
-	margin:2px 0px 0px 109px;
-	background-color:white;
+	margin-top:2px;
+	background-color:#eaeef0;
 	border-radius:20px;
-	padding-left:11px;
+	padding-left:13px;
 	padding-top:2px;
+	padding-right:13px;
+	box-shadow:0px 1px 1px white;
 }
 
 #search-input {
 	width:135px;
 	height:23px;
 	border:none;
-	background-color:white;
+	background-color:#eaeef0;
 	box-shadow:none;
+	margin:0px;
+	font-size:15px;
+	color:#b0b6b8;
 }
 
 #search-symbol {
+	display:inline-block;
+	float:right;
+	padding-top:8px;
 	width:16px;
-	height:20px;
-	background-color:white;
+	height:23px;
+	background-color:#eaeef0;
 	background-image:url('../app/images/search-bar-symbol.png');
-	background-position:top;
+	background-position:center;
 	background-repeat:no-repeat;
 }
 
