@@ -102,9 +102,9 @@ body {
 }
 
 .ui-slider .ui-slider-handle {  
-    position: absolute;  
+    position: absolute;
     z-index: 2;  
-    width: 25px;  
+    width: 25px;
     height: 25px;  
     cursor: pointer;  
     background: url('../app/images/timeline-btn.png') no-repeat 50% 50%;  
