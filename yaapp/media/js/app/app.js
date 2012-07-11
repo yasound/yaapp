@@ -1,9 +1,5 @@
-"use strict";
-/*
- * jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true,
- * evil: true, undef: true, white: true, newcap: true
- */
-/* extern Ext, $ */
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 $(document).ready(function () {
     Namespace('Yasound.App');
 
@@ -26,19 +22,19 @@ $(document).ready(function () {
         Yasound.App.Router.navigate('', {
             trigger: true
         });
-    })
+    });
     $('#btn-legal').click(function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate('legal/', {
             trigger: true
         });
-    })
+    });
     $('#btn-contact').click(function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate('contact/', {
             trigger: true
         });
-    })
+    });
     
     Backbone.View.prototype.close = function () {
         this.remove();
@@ -46,7 +42,7 @@ $(document).ready(function () {
         if (this.onClose) {
             this.onClose();
         }
-    }
+    };
 
 
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
@@ -129,7 +125,7 @@ $(document).ready(function () {
                 this.currentView.close();
                 this.currentView = undefined;
             }
-            $('#webapp-container').append("<div class='container' id='webapp-content'/>")
+            $('#webapp-container').append("<div class='container' id='webapp-content'/>");
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -162,7 +158,7 @@ $(document).ready(function () {
             }
             
             if (showSubMenu && !this.commonContext.subMenuView) {
-                $('#submenu-container').append("<div id='submenu-content'/>")
+                $('#submenu-container').append("<div id='submenu-content'/>");
                 this.commonContext.subMenuView = new Yasound.Views.SubMenu({
                     el: '#submenu-content'
                 }).render();
@@ -261,7 +257,7 @@ $(document).ready(function () {
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio,
                     el: $('#player')
-                })
+                });
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
                 this.currentRadio.on('change:id', function (model, id) {

@@ -1,4 +1,3 @@
-"use strict";
 /*
  * jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true,
  * evil: true, undef: true, white: true, newcap: true
@@ -54,7 +53,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     submitFacebook: function(e) {
         e.preventDefault();
         var form = $('#settings-facebook-form', this.el);
-        var url = window.location.href
+        var url = window.location.href;
         $.post(url, form.serializeArray(), function() {
             colibri(gettext('Facebook settings saved'));
         }).error(function() {
@@ -64,7 +63,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     submitTwitter: function(e) {
         e.preventDefault();
         var form = $('#settings-twitter-form', this.el);
-        var url = window.location.href
+        var url = window.location.href;
         $.post(url, form.serializeArray(), function() {
             colibri(gettext('Twitter settings saved'));
         }).error(function() {
