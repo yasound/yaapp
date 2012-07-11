@@ -1,4 +1,3 @@
-"use strict";
 /*
  * jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true,
  * evil: true, undef: true, white: true, newcap: true
@@ -153,8 +152,8 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         
         var insertOnTop = false;
         if (this.views.length > 0) {
-            var lastId = parseInt(this.views[0].model.get('id'));
-            var currentId = parseInt(wallEvent.id);
+            var lastId = parseInt(this.views[0].model.get('id'), 10);
+            currentId = parseInt(wallEvent.id, 10);
             if (currentId > lastId) {
                 insertOnTop = true;
             }
@@ -485,7 +484,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.paginationView.close();
         }
         if (this.similarRadiosView) {
-            this.similarRadiosView.close()
+            this.similarRadiosView.close();
         }
 
         this.wallEvents.reset();

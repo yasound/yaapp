@@ -1,9 +1,5 @@
-"use strict";
-/*
- * jslint forin: true, nomen: true, vars: true, bitwise: true, browser: true,
- * eqeq: true, evil: true, undef: true, white: true, newcap: true
- */
-/* extern Ext, $ */
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 Namespace('Yasound.App');
 
 var Class = function (methods) {

@@ -1,4 +1,3 @@
-"use strict";
 /*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
 /*extern Ext, $ */
 Namespace('Yasound.Views');
@@ -83,7 +82,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             this.currentView.close();
         }
         this.toolbar.close();
-        this.filters.off('artistsSelected', this.artistsSelected)
+        this.filters.off('artistsSelected', this.artistsSelected);
         this.filters.close();
     },
 
@@ -166,7 +165,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     el: '#programming-toolbar',
     events: {
         'click #all': 'all',
-        'click #import-itunes': 'importItunes',
+        'click #import-itunes': 'importItunes'
     },
     render: function() {
         $(this.el).html(ich.programmingToolbarTemplate());
@@ -191,7 +190,7 @@ Yasound.Views.ProgrammingFilters = Backbone.View.extend({
     },
     onClose: function () {
         this.artistsView.close();
-        this.albumsView.close()
+        this.albumsView.close();
         this.off('artistsSelected', this.artistsSelected);
         this.off('albumsSelected', this.albumsSelected);
     },    

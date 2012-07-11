@@ -1,4 +1,3 @@
-"use strict";
 /*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
 /*extern Ext, $ */
 Namespace('Yasound.Views');
@@ -27,7 +26,7 @@ Yasound.Views.Notification = Backbone.View.extend({
     },
     
     onRemove: function() {
-        if (this.model.get('read') == false ) {
+        if (this.model.get('read') === false ) {
             this.model.markAsRead();
             colibri(gettext('Notification marked as read'));
         } else {
@@ -159,7 +158,7 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
 
         this.notificationsToolbar = new Yasound.Views.NotificationsToolbar({
             el: $('#notifications-toolbar', this.el),
-            collection: this.notifications,
+            collection: this.notifications
         }).render();
         this.notificationsToolbar.notificationsView = this.notificationsView; 
 
