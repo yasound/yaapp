@@ -161,11 +161,11 @@ body {
 	height:55px;
 }
 
-ul {
-	display:inline-block;
-	float:left;
-	width:310px;
-	margin-left:0px;
+#sub-header-nav {
+    display:inline-block;
+    float:left;
+    width:310px;
+    margin-left:0px;
 }
 
 #sub-header-nav li {
