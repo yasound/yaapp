@@ -120,6 +120,16 @@ body {
     border:none;
 }
 
+.volume {
+	width: 149px;
+    height: 9px;
+	background-image: url('../app/images/slider-blue-bg.png');  
+	position: absolute;  
+	border: 0;  
+	top: 0; 
+    border-radius: 25px;
+}
+
 #volume-slider{  
     margin-right: 10px;
 	height:9px;
@@ -279,6 +289,10 @@ form {
 	padding-top:2px;
 	padding-right:13px;
 	box-shadow:0px 1px 1px white;
+}
+
+input::-webkit-input-placeholder {
+    color:#b0b6b8;
 }
 
 #search-input {
