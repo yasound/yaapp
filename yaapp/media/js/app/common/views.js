@@ -605,3 +605,55 @@ Yasound.Views.PublicStats = Backbone.View.extend({
     }
     
 });
+
+
+/**
+ * Sub menu handler
+ */
+Yasound.Views.SubMenu = Backbone.View.extend({
+    events: {
+        "click #selection" : "selection",
+        "click #top"       : "top",
+        "click #friends"   : "friends",
+        "click #favorites" : "favorites"
+    },
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+    reset: function() {
+        
+    },
+    onClose: function() {
+        
+    },
+    render: function() {
+        this.reset();
+        $(this.el).html(ich.subMenuTemplate());
+        return this;
+    },
+    selection: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/', {
+            trigger: true
+        });
+    },
+    top: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/', {
+            trigger: true
+        });
+    },
+    friends: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/friends/', {
+            trigger: true
+        });
+    },
+    favorites: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/favorites/', {
+            trigger: true
+        });
+    }
+});
+

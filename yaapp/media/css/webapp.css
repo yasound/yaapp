@@ -253,7 +253,7 @@ form {
 	color:#b0b6b8;
 	background-image:url('../app/images/search-bar-symbol.png');
 	background-repeat:no-repeat;
-	background-position:;
+	background-position:90% 50%;
 }
 
 /**
@@ -272,6 +272,10 @@ form {
 
 #pre-footer {
 	margin-bottom:150px;
+}
+
+#post-submenu {
+    margin-top: 55px;
 }
 
 .blocks {
