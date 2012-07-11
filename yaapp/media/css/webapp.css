@@ -101,14 +101,19 @@ body {
 	display:inline-block;
 }
 
-.volume-handler {
-    background-image:url('../app/images/timeline-btn.png');
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    width:25px;
-    height:25px;
-    left:50%;
-    position:absolute;
+.ui-slider .ui-slider-handle {  
+    position: absolute;  
+    z-index: 2;  
+    width: 25px;  
+    height: 25px;  
+    cursor: pointer;  
+    background: url('../app/images/timeline-btn.png') no-repeat 50% 50%;  
+    font-weight: bold;  
+    color: #1C94C4;  
+    outline: none;  
+    top: -7px;  
+    margin-left: -12px;
+    border:none;  
 }
 
 #min-level {
