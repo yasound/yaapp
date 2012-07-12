@@ -152,12 +152,14 @@ class RadiosKMeansManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.kmean
-        self.collection.ensure_index("db_id", unique=False)
+        self.collection.ensure_index("id", unique=True)
         self.radios = []
         self.data = []
-        self.cluster = []
     
     def create_matrix(self):
+        self.radios = []
+        self.data = []
+        
         ma = MapArtistManager()
         artist_count = ma.collection.find().count()
 
@@ -191,6 +193,7 @@ class RadiosKMeansManager():
     
     def build_cluster(self, k=4):
         self.create_matrix()
+        self.collection.drop()
 
         # Determine the minimum and maximum values for each point
         ranges=[(min([row[i] for row in self.data]),max([row[i] for row in self.data])) 
@@ -229,8 +232,23 @@ class RadiosKMeansManager():
                         avgs[j]/=len(bestmatches[i])
                     clusters[i]=avgs
             
-        self.clusters=clusters
-        self.clusterized_data = bestmatches
+        # saving all data        
+        for cluster_id, cluster in enumerate(clusters):
+            classification = {}
+            for artist_id, artist_count in enumerate(cluster):
+                classification[str(artist_id)] = artist_count 
+            doc = {
+                'id': cluster_id,
+                'classification': classification
+            }
+            self.collection.insert(doc, safe=True)
+
+        cm = ClassifiedRadiosManager()
+        for i, radios in enumerate(bestmatches):
+            for radio in radios:
+                cm.collection.update({'db_id': self.radios[radio]}, 
+                                     {'$set': {'cluster_id': i}}, 
+                                     safe=True)
                         
 class RadiosClusterManager():
     def __init__(self):
