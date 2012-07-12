@@ -33,7 +33,8 @@ def async_find_synonyms(yasound_song_id):
                                                   album_name=album_name)
         if existing_sm.count() == 0:
             logger.info('creating synonym: %s - %s - %s' % (name, album_name, artist_name))
-            SongMetadata.objects.create(name=name,
-                                        artist_name=artist_name,
-                                        album_name=album_name,
-                                        yasound_song_id=yasound_song_id)
+            sm = SongMetadata(name=name,
+                             artist_name=artist_name,
+                             album_name=album_name,
+                             yasound_song_id=yasound_song_id)
+            sm.calculate_hash_name(commit=True)
