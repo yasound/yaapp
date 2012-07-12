@@ -20,6 +20,12 @@ admin.site.register(Radio, RadioAdmin)
 class SongMetadataAdmin(admin.ModelAdmin):
     list_display = ('name', 'artist_name', 'album_name', 'yasound_song_id', 'hash_name')
     search_fields = ( 'name', 'artist_name', 'album_name', )
+    actions = ['generate_hash_name',]
+    def generate_hash_name(self, request, qs):
+        for metadata in qs.all():
+            metadata.calculate_hash_name(commit=True)
+    generate_hash_name.short_description = "Generate hash name"
+    
 admin.site.register(SongMetadata, SongMetadataAdmin)
 
 class SongInstanceAdmin(admin.ModelAdmin):
