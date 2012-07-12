@@ -1,5 +1,42 @@
 {% load i18n %}
-        <div id="sub-header">
+        
+<div class="navbar navbar-fixed-top" id='header'>
+	<div class="navbar-inner">
+		<div class="container">
+				<div id="brand-logo">
+					<a href="brand-logo" {% url webapp %}>
+						<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
+					</a>
+				</div>
+				<div class="header-separation">
+					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
+				</div>
+				<div >
+						<input class="input-switch" id="switch1" type="checkbox" />
+						<label for="switch1"></label>
+				</div>
+				<div id="radio-picto">
+					<a href="#">
+						<img src="/media/app/images/radio-picto.png" width="32" height="32" alt="Radio Picto">
+					</a>
+				</div>
+				<div id="favoris-radio">
+					<img src="/media/app/images/favorite-radio.png" width="37" height="36" alt="Favorite Radio">
+				</div>
+				<div id="play-btn"> 
+				</div>
+				<div id="sound-level">
+					<div id="min-level">
+						<img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
+					</div>
+					<div id="level-bar">
+					</div>
+					<div id="max-level">
+						<img src="/media/app/images/higher-volume.png" width="11" height="11" alt="Higher Volume">
+					</div>
+				</div>
+			</div>
+		<div id="sub-header">
             <div class="container" id="sub-header-container">
                 <ul id="sub-header-nav">
                     <li class="first"><a href='#' id="selection">{% trans "Selection" %}</a></li>
@@ -33,3 +70,5 @@
                 	</div>
             </div>
         </div>
+	</div>
+</div>

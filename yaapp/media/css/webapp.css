@@ -44,18 +44,91 @@ body {
 	margin-left:20px;
 }
 
-#audio-quality {
-	display:inline-block;
-	float:left;
-	margin-top:26px;
-	padding-top:1px;
-	width:77px;
-	height:27px;
-	background-image:url('../app/images/slider-sound-quality.png');
-	background-repeat: no-repeat;
-	background-position:center center;
-	margin-left:22px;
+/*bg slider*/
+.input-switch:not(:checked),.input-switch:checked { 
+    display: none;
 }
+
+
+.input-switch + label{
+    position: relative;
+    display: inline-block;
+	float:left;
+    height: 25px;
+    min-width: 75px;
+    overflow: hidden;
+    background-image: url('../app/images/sound-quality-bg.png');
+	border-radius:20px;
+}
+
+/*slider button*/
+.input-switch + label::before {
+    position: absolute;
+    display: inline-block;
+    top: 0px; left: -4px;
+    height: 31px; width: 31px;
+    cursor: pointer;
+    background-image:url('../app/images/btn-sound-quality.png');
+    content: '';
+}
+
+
+/*blue filling +label*/
+.input-switch:checked + label {
+    color: #FFF;
+	background-image:url('../app/images/sound-quality-blue-bg.png');
+}
+
+
+/*movement of the slider*/
+.input-switch:checked + label::before {
+    left: auto;
+    right: -4px;
+}
+
+
+
+
+/*
+.input-switch:not(:checked),.input-switch:checked { 
+    display: none; 
+}
+
+.input-switch + label {
+    position:relative;
+	display: inline-block;
+	float:left;
+    height: 25px;
+    width: 73px;
+    overflow: hidden;
+    background-image: url('../app/images/sound-quality-bg.png');
+	background-repeat:repeat-x;
+	border-radius:20px;
+}
+
+.input-switch + label::before {
+    position: absolute;
+    display: inline-block;
+    top: 0px; left	: 0px;
+    height: 31px; width: 31px;
+    cursor: pointer;
+    background-image:url('../app/images/btn-sound-quality.png');
+    content: '';
+}
+
+.input-switch:checked + label {
+    background-color: #05C;
+}
+
+.input-switch:checked + label::before {
+    position:relative;
+	left: auto;
+    right: 0px;
+}
+*/
+
+
+
 
 #audio-quality-padding {
 	padding-left:0px;
@@ -65,6 +138,16 @@ body {
 #SD {
 	padding-bottom:4px;
 	padding-left:5px;
+}
+
+#audio-quality:after{
+	background-image:url('../app/images/HD.png');
+	position:relative;
+	top:10px	;
+}
+
+#SD:active {
+	padding-bottom:7px;
 }
 
 #radio-picto {
