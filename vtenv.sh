@@ -3,6 +3,15 @@
 # environement for demos
 
 # Starts
+platform='unknown'
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+   platform='linux'
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   platform='osx'
+fi
+
+
 if [ ! -f ./vtenv/bin/python ]
 then
     if [ ! -f ./virtualenv.py ]
@@ -31,6 +40,12 @@ if [ ! -f ./fab ];then
     echo " * Now you can type ./local_install.sh to init your *local* installation"
     ln -s vtenv/bin/fab fab
 fi
+
+if [[ $platform == 'osx' ]]; then
+    echo "Installing numpy & scipy on osx"
+    vtenv/bin/pip install numpy
+    vtenv/bin/pip install scipy
+fi
+
 echo " * Done"
 exit
-

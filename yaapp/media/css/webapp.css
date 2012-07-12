@@ -189,15 +189,17 @@ body {
 #sub-header-nav {
     display:inline-block;
     float:left;
-    width:310px;
+    width:320px;
+	height:56px;
     margin-left:0px;
+	overflow:hidden;
 }
 
 #sub-header-nav li {
 	display:inline-block;
 	float:left;
 	list-style:none;
-	padding: 19px 13px;
+	padding: 19px 12px;
 }
 
 #sub-header-nav li a {
@@ -223,7 +225,7 @@ body {
 	width:108px;
 	color:#7b8082;
 	border:1px solid #babfc2;
-	margin: 3px 13px;
+	margin: 3px 13px 0px 0px;
 	font-size:15px;
 }
 

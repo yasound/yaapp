@@ -22,7 +22,7 @@ class Command(BaseCommand):
         logger.info("creating cluster")
         start = time()
         rk = RadiosKMeansManager()
-        rk.build_cluster(k=30)
+        rk.build_cluster2()
         elapsed = time() - start
         logger.info('done in %s secondes', str(elapsed))
         
