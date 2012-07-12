@@ -73,8 +73,8 @@ class SongMetadata(models.Model):
         hash_name.update(get_simplified_name(self.album_name))
         hash_name.update(get_simplified_name(self.artist_name))
         hash_name = hash_name.hexdigest()
+        self.hash_name = hash_name
         if commit:
-            self.hash_name = hash_name
             self.save()
         return hash_name
         
