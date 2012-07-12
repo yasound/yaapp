@@ -249,6 +249,34 @@ class RadiosKMeansManager():
                 cm.collection.update({'db_id': self.radios[radio]}, 
                                      {'$set': {'cluster_id': i}}, 
                                      safe=True)
+
+    def build_cluster2(self, k=4):
+        self.create_matrix()
+        self.collection.drop()
+        
+        from numpy import array
+        from scipy.cluster.vq import vq, kmeans, whiten
+        whitened = whiten(self.data)
+        centroids, _ = kmeans(whitened, k)
+        data = vq(whitened, centroids)
+        
+        # saving all data        
+        for cluster_id, cluster in enumerate(centroids):
+            classification = {}
+            for artist_id, artist_count in enumerate(cluster):
+                classification[str(artist_id)] = artist_count 
+            doc = {
+                'id': cluster_id,
+                'classification': classification
+            }
+            self.collection.insert(doc, safe=True)
+
+        cm = ClassifiedRadiosManager()
+        for radio_index, cluster_id in enumerate(data[0]):
+            cm.collection.update({'db_id': self.radios[radio_index]}, 
+                                 {'$set': {'cluster_id': str(cluster_id)}}, 
+                                 safe=True)
+
                         
 class RadiosClusterManager():
     def __init__(self):
