@@ -15,30 +15,15 @@ class Command(BaseCommand):
     """
     option_list = BaseCommand.option_list + (
     )
-    help = "Build radio recommendation data"
+    help = "Build radio recommendation data (kmean)"
     args = ''
 
     def handle(self, *app_labels, **options):
-        logger.info("processing radios")
-        cm = ClassifiedRadiosManager()
-        cm.drop()
-        start = time()
-        cm.populate()
-        elapsed = time() - start
-        logger.info('done in %s secondes', str(elapsed))
-        logger.info("calculating similarities")
-        start = time()
-        cm.calculate_similar_radios()
-        elapsed = time() - start
-        logger.info('done in %s secondes', str(elapsed))
-        logger.info("processing done")
-        logger.info("done")
-        
         logger.info("creating cluster")
         start = time()
         rk = RadiosKMeansManager()
         rk.build_cluster(k=30)
         elapsed = time() - start
         logger.info('done in %s secondes', str(elapsed))
-
+        
         

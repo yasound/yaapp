@@ -108,25 +108,28 @@ body {
 .ui-slider .ui-slider-handle {  
     position: absolute;
     z-index: 2;  
-    width: 25px;
-    height: 25px;  
+    width: 20px;
+    height: 20px;  
     cursor: pointer;  
-    background: url('../app/images/timeline-btn.png') no-repeat 50% 50%;  
+    background: url('../app/images/volume-btn.png') no-repeat 50% 50%;  
     font-weight: bold;  
     color:#1C94C4;  
     outline:none;  
-    top:-9px;  
+    top:-7px;  
     margin-left:-12px;
     border:none;
 }
 
 .ui-slider .ui-slider-range {
-    background-image: url('../app/images/slider-blue-bg.png');
+    background-image: url('../app/images/slider-range-bg.png');
     position: absolute;
     border: 0;  
     top: 0;  
-    height: 100%;  
-    border-radius: 25px; 
+    height: 69%;  
+    border-radius: 25px;
+	border:1px solid black;
+	shadow-box: 0px 1px 1px #313334 ;
+	background-color:black;
 }
 
 #volume-slider{  

@@ -1,13 +1,16 @@
 from bson.code import Code
 from django.conf import settings
 from django.db.models import signals
-from pymongo import DESCENDING
+from math import sqrt
+from pymongo import DESCENDING, ASCENDING
 from yabase.models import SongMetadata, Radio
 from yarecommendation.task import async_add_radio
 from yarecommendation.utils import top_matches, sim_pearson, tail_call_optimized
 from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
+import random
+
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -145,6 +148,108 @@ class ClassifiedRadiosManager():
     def radio_doc(self, radio_id):
         return self.collection.find_one({'db_id': radio_id})
     
+class RadiosKMeansManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.recommendation.kmean
+        self.collection.ensure_index("id", unique=True)
+        self.radios = []
+        self.data = []
+    
+    def create_matrix(self):
+        self.radios = []
+        self.data = []
+        
+        ma = MapArtistManager()
+        artist_count = ma.collection.find().count()
+
+        cm = ClassifiedRadiosManager()
+        for radio in cm.collection.find():
+            self.radios.append(radio.get('db_id'))
+            line = [0]*artist_count
+            classification = radio.get('classification')
+            for artist, count in classification.iteritems():
+                line[int(artist)] = count
+            self.data.append(line)
+    
+    def pearson(self, v1,v2):
+        # Simple sums
+        sum1=sum(v1)
+        sum2=sum(v2)
+        
+        # Sums of the squares
+        sum1Sq=sum([pow(v,2) for v in v1])
+        sum2Sq=sum([pow(v,2) for v in v2])    
+        
+        # Sum of the products
+        pSum=sum([v1[i]*v2[i] for i in range(len(v1))])
+        
+        # Calculate r (Pearson score)
+        num=pSum-(sum1*sum2/len(v1))
+        den=sqrt((sum1Sq-pow(sum1,2)/len(v1))*(sum2Sq-pow(sum2,2)/len(v1)))
+        if den==0: return 0
+        
+        return 1.0-num/den    
+    
+    def build_cluster(self, k=4):
+        self.create_matrix()
+        self.collection.drop()
+
+        # Determine the minimum and maximum values for each point
+        ranges=[(min([row[i] for row in self.data]),max([row[i] for row in self.data])) 
+        for i in range(len(self.data[0]))]
+        
+        # Create k randomly placed centroids
+        clusters=[[random.random()*(ranges[i][1]-ranges[i][0])+ranges[i][0] 
+        for i in range(len(self.data[0]))] for j in range(k)]
+        
+        lastmatches=None
+        for t in range(100):
+            print 'Iteration %d' % t
+            bestmatches=[[] for i in range(k)]
+          
+            # Find which centroid is the closest for each row
+            for j in range(len(self.data)):
+                row=self.data[j]
+                bestmatch=0
+                for i in range(k):
+                    d=self.pearson(clusters[i],row)
+                    if d<self.pearson(clusters[bestmatch],row): bestmatch=i
+                bestmatches[bestmatch].append(j)
+            
+            # If the results are the same as last time, this is complete
+            if bestmatches==lastmatches: break
+            lastmatches=bestmatches
+            
+            # Move the centroids to the average of their members
+            for i in range(k):
+                avgs=[0.0]*len(self.data[0])
+                if len(bestmatches[i])>0:
+                    for rowid in bestmatches[i]:
+                        for m in range(len(self.data[rowid])):
+                            avgs[m]+=self.data[rowid][m]
+                    for j in range(len(avgs)):
+                        avgs[j]/=len(bestmatches[i])
+                    clusters[i]=avgs
+            
+        # saving all data        
+        for cluster_id, cluster in enumerate(clusters):
+            classification = {}
+            for artist_id, artist_count in enumerate(cluster):
+                classification[str(artist_id)] = artist_count 
+            doc = {
+                'id': cluster_id,
+                'classification': classification
+            }
+            self.collection.insert(doc, safe=True)
+
+        cm = ClassifiedRadiosManager()
+        for i, radios in enumerate(bestmatches):
+            for radio in radios:
+                cm.collection.update({'db_id': self.radios[radio]}, 
+                                     {'$set': {'cluster_id': i}}, 
+                                     safe=True)
+                        
 class RadiosClusterManager():
     def __init__(self):
         self.db = settings.MONGO_DB
