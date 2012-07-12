@@ -1,4 +1,3 @@
-"use strict";
 /*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
 /*extern Ext, $ */
 
@@ -67,7 +66,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
                     return gettext('Unknown artist');
                 }
                 return s;
-            },
+            }
         };
         var str = context.name() + ' ' + gettext('by') + ' ' + context.artist();
         return str;
@@ -94,5 +93,5 @@ Yasound.Data.Models.ConnectedUsers = Backbone.Collection.extend({
 
 
 Yasound.Data.Models.PublicStats =  Backbone.Model.extend({
-    urlRoot: '/api/v1/public_stats/',
+    urlRoot: '/api/v1/public_stats/'
 });

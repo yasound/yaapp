@@ -11,9 +11,11 @@
       <a class="btn" id='dec'><i class="icon-volume-down"></i></a>
       <div id='title-volume'>
         <div id='player-title'><% name %> {% trans "By" %} <strong><span id='track-artist'><% artist %></span></strong></div>
-        <div class="progress no-ease" id='volume-control' onmousedown="return false">
-          <div class="bar" id='volume-position' style="width: 0%;" onmousedown="return false"></div>
-        </div>
+        
+        <span class="tooltip"></span>  
+        <div id="volume-slider"></div>  
+        <span class="volume"></span>        
+        
       </div>
       <a class="btn" id='inc' ><i class="icon-volume-up"></i></a>
       <a class="btn" id='like' ><i class="icon-heart"></i></a>

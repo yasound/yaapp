@@ -1,4 +1,3 @@
-"use strict";
 /*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
 /*extern Ext, $ */
 Namespace('Yasound.Models');
@@ -21,7 +20,7 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
     },
     
     getFormattedDate: function() {
-        return this.getDate().format('LLLL')
+        return this.getDate().format('LLLL');
     },
     
     markAsRead: function() {

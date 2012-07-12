@@ -1,9 +1,5 @@
-"use strict";
-/*
- * jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true,
- * evil: true, undef: true, white: true, newcap: true
- */
-/* extern Ext, $ */
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
 $(document).ready(function () {
     Namespace('Yasound.App');
 
@@ -26,19 +22,19 @@ $(document).ready(function () {
         Yasound.App.Router.navigate('', {
             trigger: true
         });
-    })
+    });
     $('#btn-legal').click(function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate('legal/', {
             trigger: true
         });
-    })
+    });
     $('#btn-contact').click(function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate('contact/', {
             trigger: true
         });
-    })
+    });
     
     Backbone.View.prototype.close = function () {
         this.remove();
@@ -46,7 +42,7 @@ $(document).ready(function () {
         if (this.onClose) {
             this.onClose();
         }
-    }
+    };
 
 
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
@@ -122,14 +118,14 @@ $(document).ready(function () {
         },
 
         // this function must be called between every routes
-        clearView: function () {
-            this.buildCommonContext();
+        clearView: function (showSubMenu) {
+            this.buildCommonContext(showSubMenu);
             if (this.currentView) {
                 this.currentView.reset();
                 this.currentView.close();
                 this.currentView = undefined;
             }
-            $('#webapp-container').append("<div class='container' id='webapp-content'/>")
+            $('#webapp-container').append("<div class='container' id='webapp-content'/>");
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -137,7 +133,7 @@ $(document).ready(function () {
         }),
 
         // build common stuff for every views (radio)
-        buildCommonContext: function () {
+        buildCommonContext: function (showSubMenu) {
             if (!this.commonContext) {
                 this.commonContext = {};
                 this.commonContext.streamFunction = function (model, stream_url) {
@@ -154,10 +150,23 @@ $(document).ready(function () {
                 this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
             }
+            
+            if (!showSubMenu && this.commonContext.subMenuView) {
+                this.commonContext.subMenuView.reset();
+                this.commonContext.subMenuView.close();
+                this.commonContext.subMenuView = undefined;
+            }
+            
+            if (showSubMenu && !this.commonContext.subMenuView) {
+                $('#submenu-container').append("<div id='submenu-content'/>");
+                this.commonContext.subMenuView = new Yasound.Views.SubMenu({
+                    el: '#submenu-content'
+                }).render();
+            }
         },
         
         index: function () {
-            this.clearView();
+            this.clearView(true);
 
             this.currentView = new Yasound.Views.HomePage({
                 el: '#webapp-content'
@@ -190,7 +199,7 @@ $(document).ready(function () {
 
         // search page
         search: function (query) {
-            this.clearView();
+            this.clearView(true);
 
             var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
             radioSearchResults.setQuery(query);
@@ -203,7 +212,7 @@ $(document).ready(function () {
 
         // owner favorites page
         favorites: function () {
-            this.clearView();
+            this.clearView(true);
 
             var radios = new Yasound.Data.Models.Favorites({});
 
@@ -215,7 +224,7 @@ $(document).ready(function () {
         
         // owner friends page
         friends: function () {
-            this.clearView();
+            this.clearView(true);
 
             var friends = new Yasound.Data.Models.Friends({});
 
@@ -248,7 +257,7 @@ $(document).ready(function () {
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio,
                     el: $('#player')
-                })
+                });
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
                 this.currentRadio.on('change:id', function (model, id) {

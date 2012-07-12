@@ -27,10 +27,14 @@
         
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
-    <link rel="stylesheet" href="/media/css/webapp.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
+    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
+    
+    
     <link rel="stylesheet" href="/media/js/colibri/colibri.css"/>
     <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
+
+    <link rel="stylesheet" href="/media/css/webapp.css"/>
     
     <script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
@@ -52,6 +56,7 @@
     <script type="text/javascript" src='/media/js/colibri/colibri.js'></script>
     <script type="text/javascript" src='/media/js/chosen/chosen.jquery.min.js'></script>
     <script type="text/javascript" src="/media/js/jquery.imgr.min.js"></script>
+    <script type="text/javascript" src="/media/jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js"></script>
     
     {% compressed_js 'webapp-all' %}
     <script type="text/javascript">
@@ -129,6 +134,11 @@
    <script type="text/html" id="connectedUserTemplate">
       {% include "yabase/app/common/connectedUser.mustache" %}
    </script>
+   
+   <script type="text/html" id="subMenuTemplate">
+      {% include "yabase/app/common/subMenu.mustache" %}
+   </script>
+   
    
 {% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
@@ -222,13 +232,13 @@
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
-			<div class="header-separation">
-				<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
-			</div>
-          	<div class="nav-collapse">
-            	<div class='pull-right'>
-                	<div id='user-menu' class='btn-toolbar'>            
-                		{% if request.user.is_authenticated %}
+            <div class="header-separation">
+                <img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
+            </div>
+            <div class="nav-collapse">
+                <div class='pull-right'>
+                    <div id='user-menu' class='btn-toolbar'>            
+                        {% if request.user.is_authenticated %}
                         <div class='btn-group'>
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-eye-open"></i>
@@ -245,51 +255,35 @@
                         <i class="icon-user"></i>
                             {{ request.user.userprofile }} 
                         <span class="caret"></span> </a>
-						<ul class="dropdown-menu">
-							<li><a href="{% url webapp_radio user_uuid %}" id='btn-my-radio' yasound:uuid='{{ user_uuid }}'>{% trans "My radio" %}</a></li>
-							<li><a href="{% url webapp_favorites %}" id='btn-favorites'>{% trans "My favorites" %}</a></li>
-							<li><a href="{% url webapp_friends %}" id='btn-friends'>{% trans "My friends" %}</a></li>
-	                        <li class="divider"></li>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url webapp_radio user_uuid %}" id='btn-my-radio' yasound:uuid='{{ user_uuid }}'>{% trans "My radio" %}</a></li>
+                            <li><a href="{% url webapp_favorites %}" id='btn-favorites'>{% trans "My favorites" %}</a></li>
+                            <li><a href="{% url webapp_friends %}" id='btn-friends'>{% trans "My friends" %}</a></li>
+                            <li class="divider"></li>
                             <li><a href="{% url webapp_programming %}" id='btn-programming'>{% trans "Radio programming" %}</a></li>
                             <li><a href="{% url webapp_profile request.user.username %}" id='btn-my-profile'>{% trans "My profile" %}</a></li>
                             <li><a href="{% url webapp_settings %}" id='btn-settings'>{% trans "Settings" %}</a></li>
                             <li class="divider"></li>
-    						<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
-						</ul>
-						</div>
+                            <li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
+                        </ul>
+                        </div>
                 {% else %}
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-user"></i>
                             {% trans "Not logged" %}
                         <span class="caret"></span> </a>
                 {% endif %}
-                </div>       
-                <div>         
-                    <form class="navbar-search pull-right" action="" id='tbar-search'>
-                    <input class="search-query span2" type="text" id='search-input' placeholder="{% trans 'Search' %}">
-                    </form>
-                </div>    
+                </div>
             </div>
-
-
-          </div><!--/.nav-collapse -->
+            </div>
             <div id='player'>
             </div>
-            <div class='nav-collapse'>
-				<!-- AddThis Button BEGIN -->
-				<div class="addthis_toolbox addthis_default_style ">
-				<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-				<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
-				<a class="addthis_counter addthis_pill_style"></a>
-				</div>
-<!-- 				<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-				<script type="text/javascript" src="https://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f910520446e8625"></script>
- -->				<!-- AddThis Button END -->
             
-            </div>
-        </div>
-      </div>
-    </div>
+               
+		</div>
+	</div>
+	</div>
+	<div id='submenu-container'></div>
     
 <div id='webapp-container'>{% block content%}{%endblock%}</div>
 
@@ -323,7 +317,6 @@
 				{% trans "Connected users" %}
 			</p>
 			<p id="img-users">
-				
 				<a href="#" id="footer-button">
 				    <span id="footer-button-text">{% trans "See all" %}</span>
 				</a>

@@ -451,6 +451,30 @@ class SongImporter:
             if not song.file_exists():
                 return song
         return None
+    
+    def _find_sm(self, name, album_name, artist_name, radio_id):
+        self._log('searching SongMetadata (name=%s, album=%s, artist=%s, radio=%s)' % (name, album_name, artist_name, radio_id))
+        sm = SongMetadata(name=name, 
+                          artist_name=artist_name, 
+                          album_name=album_name)
+        sm.calculate_hash_name(commit=False)
+        
+        if not radio_id:
+            self._log('no radio id provided, creating new SongMetadata')
+            sm.save()
+            return sm
+        
+        qs = SongMetadata.objects.filter(yasound_song_id__isnull=True, 
+                                         hash_name=sm.hash_name, 
+                                         songinstance__playlist__radio__id=radio_id)
+        if qs.count() > 0:
+            self._log('found existing SongMetadata with no associated YasoundSong for the given radio, using it')
+            return qs[0]
+        else:
+            self._log('no SongMetadata without YasoundSong for the given radio, creating new SongMetadata')
+            sm.save()
+            return sm
+        
 
     def process_song(self, metadata, filepath=None, allow_unknown_song=False, song_metadata_id=None):
         """
@@ -555,12 +579,16 @@ class SongImporter:
                 if candidates.count() > 0:
                     sm = candidates[0]
                 else:
-                    sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
+                    sm = SongMetadata(name=name, artist_name=artist_name, album_name=album_name, yasound_song_id=song.id)
+                    sm.calculate_hash_name(commit=True)
                 self._log('creating songmetadata: done')
         else:
             if not sm:      
                 # create new song metadata
-                sm = SongMetadata.objects.create(name=name, artist_name=artist_name, album_name=album_name)
+                sm = self._find_sm(name=name,
+                                   album_name=album_name, 
+                                   artist_name=artist_name,
+                                   radio_id = metadata.get('radio_id'))
 
             
             # generate filename and save mp3 to disk

@@ -1,0 +1,35 @@
+{% load i18n %}
+        <div id="sub-header">
+            <div class="container" id="sub-header-container">
+                <ul id="sub-header-nav">
+                    <li class="first"><a href='#' id="selection">{% trans "Selection" %}</a></li>
+                    <li><a href='#' id='top'>{% trans "Top" %}</a></li>
+                    <li><a href='#' id='friends'>{% trans "My friends" %}</a></li>
+                    <li><a href='#' id='favorites'>{% trans "Favorites" %}</a></li>
+                </ul>
+                <div>
+                    <form>
+                        <p id="form">
+                            <select name="music-style" id="">
+                                <option value="#">Genre</option>
+                                <option value="#">Jazz</option>
+                                <option value="#">Rock</option>
+                                <option value="#">Blues</option>
+                                <option value="#">Pop</option>
+                                <option value="#">Country</option>
+                                <option value="#">Rap</option>
+                            </select>
+                        </p>
+                    </form>
+                </div>
+                <div id="sub-header-separation">
+                </div>
+                    <a id="create-radio" href="#">
+                        <span> Créer une radio </span>
+                    </a>
+                	<div id="search-bar">
+						<input type="text" id="search-input" class="unstyle" placeholder="Rechercher"/>
+						<input type="submit" value="" id="search-symbol" class="unstyle"/>
+                	</div>
+            </div>
+        </div>

@@ -109,5 +109,5 @@ class TestFind(TestCase):
         metadata = synonyms[0]
         self.assertEquals(metadata.get('name'), 'Believe')
         self.assertEquals(metadata.get('artist'), 'Cher')
-        self.assertEquals(metadata.get('album'), 'The Very Best of Cher')
+        self.assertEquals(metadata.get('album'), 'Believe')
         

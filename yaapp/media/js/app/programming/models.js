@@ -1,4 +1,3 @@
-"use strict";
 /*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
 /*extern Ext, $ */
 Namespace('Yasound.Data.Models');
@@ -54,7 +53,7 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingAlbum,
     url: '/api/v1/my_programming/albums/',
     filterArtists: function(artists) {
-        var params = {}
+        var params = {};
         if (artists) {
             params = {
                 data: {
@@ -64,7 +63,6 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
                 processData: true
             };
         }
-        console.log(params)
         this.fetch(params);
     }
 });
