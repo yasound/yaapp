@@ -10,7 +10,8 @@ from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
 import random
-
+from sklearn.cluster import MiniBatchKMeans
+from scipy.sparse import csc_matrix 
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -157,83 +158,36 @@ class RadiosKMeansManager():
         self.data = []
     
     def create_matrix(self):
+        from scipy import sparse
         self.radios = []
-        self.data = []
         
         ma = MapArtistManager()
         artist_count = ma.collection.find().count()
+        
 
         cm = ClassifiedRadiosManager()
+        radio_count = cm.collection.find().count()
+        data = []
+
         for radio in cm.collection.find():
             self.radios.append(radio.get('db_id'))
-            line = [0]*artist_count
             classification = radio.get('classification')
+            line = [0]*artist_count
             for artist, count in classification.iteritems():
                 line[int(artist)] = count
-            self.data.append(line)
+            data.append(line)
+            
+        self.data = csc_matrix(data)
     
-    def pearson(self, v1,v2):
-        # Simple sums
-        sum1=sum(v1)
-        sum2=sum(v2)
-        
-        # Sums of the squares
-        sum1Sq=sum([pow(v,2) for v in v1])
-        sum2Sq=sum([pow(v,2) for v in v2])    
-        
-        # Sum of the products
-        pSum=sum([v1[i]*v2[i] for i in range(len(v1))])
-        
-        # Calculate r (Pearson score)
-        num=pSum-(sum1*sum2/len(v1))
-        den=sqrt((sum1Sq-pow(sum1,2)/len(v1))*(sum2Sq-pow(sum2,2)/len(v1)))
-        if den==0: return 0
-        
-        return 1.0-num/den    
-    
-    def build_cluster(self, k=4):
+    def build_cluster(self, k=30):
         self.create_matrix()
         self.collection.drop()
-
-        # Determine the minimum and maximum values for each point
-        ranges=[(min([row[i] for row in self.data]),max([row[i] for row in self.data])) 
-        for i in range(len(self.data[0]))]
         
-        # Create k randomly placed centroids
-        clusters=[[random.random()*(ranges[i][1]-ranges[i][0])+ranges[i][0] 
-        for i in range(len(self.data[0]))] for j in range(k)]
+        mbkm = MiniBatchKMeans(init="random", k=k, max_iter=10, random_state=13, chunk_size=1000)
+        mbkm.fit(self.data)
         
-        lastmatches=None
-        for t in range(100):
-            print 'Iteration %d' % t
-            bestmatches=[[] for i in range(k)]
-          
-            # Find which centroid is the closest for each row
-            for j in range(len(self.data)):
-                row=self.data[j]
-                bestmatch=0
-                for i in range(k):
-                    d=self.pearson(clusters[i],row)
-                    if d<self.pearson(clusters[bestmatch],row): bestmatch=i
-                bestmatches[bestmatch].append(j)
-            
-            # If the results are the same as last time, this is complete
-            if bestmatches==lastmatches: break
-            lastmatches=bestmatches
-            
-            # Move the centroids to the average of their members
-            for i in range(k):
-                avgs=[0.0]*len(self.data[0])
-                if len(bestmatches[i])>0:
-                    for rowid in bestmatches[i]:
-                        for m in range(len(self.data[rowid])):
-                            avgs[m]+=self.data[rowid][m]
-                    for j in range(len(avgs)):
-                        avgs[j]/=len(bestmatches[i])
-                    clusters[i]=avgs
-            
         # saving all data        
-        for cluster_id, cluster in enumerate(clusters):
+        for cluster_id, cluster in enumerate(mbkm.cluster_centers_):
             classification = {}
             for artist_id, artist_count in enumerate(cluster):
                 classification[str(artist_id)] = artist_count 
@@ -243,36 +197,9 @@ class RadiosKMeansManager():
             }
             self.collection.insert(doc, safe=True)
 
-        cm = ClassifiedRadiosManager()
-        for i, radios in enumerate(bestmatches):
-            for radio in radios:
-                cm.collection.update({'db_id': self.radios[radio]}, 
-                                     {'$set': {'cluster_id': i}}, 
-                                     safe=True)
-
-    def build_cluster2(self, k=4):
-        self.create_matrix()
-        self.collection.drop()
-        
-        from numpy import array
-        from scipy.cluster.vq import vq, kmeans, whiten
-        whitened = whiten(self.data)
-        centroids, _ = kmeans(whitened, k)
-        data = vq(whitened, centroids)
-        
-        # saving all data        
-        for cluster_id, cluster in enumerate(centroids):
-            classification = {}
-            for artist_id, artist_count in enumerate(cluster):
-                classification[str(artist_id)] = artist_count 
-            doc = {
-                'id': cluster_id,
-                'classification': classification
-            }
-            self.collection.insert(doc, safe=True)
 
         cm = ClassifiedRadiosManager()
-        for radio_index, cluster_id in enumerate(data[0]):
+        for radio_index, cluster_id in enumerate(mbkm.labels_):
             cm.collection.update({'db_id': self.radios[radio_index]}, 
                                  {'$set': {'cluster_id': str(cluster_id)}}, 
                                  safe=True)
