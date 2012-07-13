@@ -10,7 +10,9 @@ from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
 import random
-
+from time import time
+from sklearn.cluster import MiniBatchKMeans
+from scipy.sparse import csc_matrix 
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -157,83 +159,51 @@ class RadiosKMeansManager():
         self.data = []
     
     def create_matrix(self):
+        logger.info('creating matrix data from radio information')
+        start = time()
         self.radios = []
-        self.data = []
         
         ma = MapArtistManager()
         artist_count = ma.collection.find().count()
+        
 
         cm = ClassifiedRadiosManager()
+        radio_count = cm.collection.find().count()
+        data = []
+
         for radio in cm.collection.find():
             self.radios.append(radio.get('db_id'))
-            line = [0]*artist_count
             classification = radio.get('classification')
+            line = [0]*artist_count
             for artist, count in classification.iteritems():
                 line[int(artist)] = count
-            self.data.append(line)
+            data.append(line)
+
+        elapsed = time() - start
+        logger.info('done in %s seconds, length is %dx%d' % (elapsed, radio_count, artist_count))
+            
+        logger.info('transformation to sparse csc_matrix')
+        start = time()
+        self.data = csc_matrix(data)
+        elapsed = time() - start
+        logger.info('done in %s seconds' % elapsed)
     
-    def pearson(self, v1,v2):
-        # Simple sums
-        sum1=sum(v1)
-        sum2=sum(v2)
-        
-        # Sums of the squares
-        sum1Sq=sum([pow(v,2) for v in v1])
-        sum2Sq=sum([pow(v,2) for v in v2])    
-        
-        # Sum of the products
-        pSum=sum([v1[i]*v2[i] for i in range(len(v1))])
-        
-        # Calculate r (Pearson score)
-        num=pSum-(sum1*sum2/len(v1))
-        den=sqrt((sum1Sq-pow(sum1,2)/len(v1))*(sum2Sq-pow(sum2,2)/len(v1)))
-        if den==0: return 0
-        
-        return 1.0-num/den    
-    
-    def build_cluster(self, k=4):
+    def build_cluster(self, k=30):
+        logger.info('building cluster, k=%d' % (k))
         self.create_matrix()
         self.collection.drop()
-
-        # Determine the minimum and maximum values for each point
-        ranges=[(min([row[i] for row in self.data]),max([row[i] for row in self.data])) 
-        for i in range(len(self.data[0]))]
         
-        # Create k randomly placed centroids
-        clusters=[[random.random()*(ranges[i][1]-ranges[i][0])+ranges[i][0] 
-        for i in range(len(self.data[0]))] for j in range(k)]
+        logger.info('MiniBatchKMeans started')
+        start = time()
+        mbkm = MiniBatchKMeans(init="random", k=k, max_iter=10, random_state=13, chunk_size=1000)
+        mbkm.fit(self.data)
+        elapsed = time() - start
+        logger.info('done in %s seconds' % elapsed)
         
-        lastmatches=None
-        for t in range(100):
-            print 'Iteration %d' % t
-            bestmatches=[[] for i in range(k)]
-          
-            # Find which centroid is the closest for each row
-            for j in range(len(self.data)):
-                row=self.data[j]
-                bestmatch=0
-                for i in range(k):
-                    d=self.pearson(clusters[i],row)
-                    if d<self.pearson(clusters[bestmatch],row): bestmatch=i
-                bestmatches[bestmatch].append(j)
-            
-            # If the results are the same as last time, this is complete
-            if bestmatches==lastmatches: break
-            lastmatches=bestmatches
-            
-            # Move the centroids to the average of their members
-            for i in range(k):
-                avgs=[0.0]*len(self.data[0])
-                if len(bestmatches[i])>0:
-                    for rowid in bestmatches[i]:
-                        for m in range(len(self.data[rowid])):
-                            avgs[m]+=self.data[rowid][m]
-                    for j in range(len(avgs)):
-                        avgs[j]/=len(bestmatches[i])
-                    clusters[i]=avgs
-            
+        logger.info('saving data to mongodb')
+        start = time()
         # saving all data        
-        for cluster_id, cluster in enumerate(clusters):
+        for cluster_id, cluster in enumerate(mbkm.cluster_centers_):
             classification = {}
             for artist_id, artist_count in enumerate(cluster):
                 classification[str(artist_id)] = artist_count 
@@ -243,255 +213,15 @@ class RadiosKMeansManager():
             }
             self.collection.insert(doc, safe=True)
 
-        cm = ClassifiedRadiosManager()
-        for i, radios in enumerate(bestmatches):
-            for radio in radios:
-                cm.collection.update({'db_id': self.radios[radio]}, 
-                                     {'$set': {'cluster_id': i}}, 
-                                     safe=True)
-
-    def build_cluster2(self, k=4):
-        self.create_matrix()
-        self.collection.drop()
-        
-        from numpy import array
-        from scipy.cluster.vq import vq, kmeans, whiten
-        whitened = whiten(self.data)
-        centroids, _ = kmeans(whitened, k)
-        data = vq(whitened, centroids)
-        
-        # saving all data        
-        for cluster_id, cluster in enumerate(centroids):
-            classification = {}
-            for artist_id, artist_count in enumerate(cluster):
-                classification[str(artist_id)] = artist_count 
-            doc = {
-                'id': cluster_id,
-                'classification': classification
-            }
-            self.collection.insert(doc, safe=True)
 
         cm = ClassifiedRadiosManager()
-        for radio_index, cluster_id in enumerate(data[0]):
+        for radio_index, cluster_id in enumerate(mbkm.labels_):
             cm.collection.update({'db_id': self.radios[radio_index]}, 
                                  {'$set': {'cluster_id': str(cluster_id)}}, 
                                  safe=True)
+        elapsed = time() - start
+        logger.info('done in %s seconds' % elapsed)
 
-                        
-class RadiosClusterManager():
-    def __init__(self):
-        self.db = settings.MONGO_DB
-        self.collection = self.db.recommendation.cluster
-        self.collection.ensure_index("db_id", unique=False)
-        self.collection.ensure_index("root", unique=False)
-    def drop(self):
-        self.collection.drop()
-        
-        
-    def _pprint(self, node, depth):
-        if node is None:
-            return
-        print "-" * depth, "", node.get('_id'), "virtual:", node.get('virtual')
-        self._pprint(self._get_left_child(node), depth+2)
-        self._pprint(self._get_right_child(node), depth+2)
-        
-    def pprint(self):
-        root = self._root_node()
-        depth=1
-        print "-" * depth, "", root.get('_id'), "(root)"
-        self._pprint(self._get_left_child(root), depth=depth+2)
-        self._pprint(self._get_right_child(root), depth=depth+2)
-        
-    def _root_node(self):
-        root = self.collection.find_one({'root': True})
-        if not root:
-            self._create_root()
-            root = self.collection.find_one({'root': True})
-        return root
-    
-    def _get_left_child(self, parent):
-        return self.collection.find_one({'_id': parent.get('left')})
-        
-    def _get_right_child(self, parent):
-        return self.collection.find_one({'_id': parent.get('right')})
-
-    @tail_call_optimized
-    def _find_in_nodes(self, parent, radio, current_score=0, stop_score=None):
-        print "current_score = %f, stop_score=%s" %(current_score, stop_score)
-        if stop_score is not None and stop_score <= current_score:
-            print "stop_score reached: (stop_score) %f < %f (current_score) " % (stop_score, current_score)
-            return parent
-        
-        left_child = self._get_left_child(parent)
-        right_child = self._get_right_child(parent)
-        
-        left_score, right_score = 0, 0
-        if left_child:
-            left_score = abs(sim_pearson(left_child, radio))
-        if right_child:
-            right_score = abs(sim_pearson(right_child, radio))
-        
-        if current_score > left_score and current_score > right_score:
-            return parent
-        
-        if left_score >= right_score:
-            if left_child is None:
-                return parent
-            return self._find_in_nodes(left_child, radio, left_score, stop_score=stop_score)
-        else:
-            if right_child is None:
-                return parent
-            return self._find_in_nodes(right_child, radio, right_score, stop_score=stop_score)
-            
-    def _find_node(self, radio, stop_score=None):
-        root = self._root_node()
-        return self._find_in_nodes(root, radio, current_score=0, stop_score=stop_score)
-        
-    def _create_root(self):
-        doc = {
-            'parent': None,
-            'root': True,
-            'virtual': True,
-            'left': None,
-            'right': None,
-            'db_id': None,
-            'classification': None
-        }
-        self.collection.insert(doc, safe=True)
-    
-    def _add_new_radio(self, parent, radio):
-        doc = {
-            'parent': None,
-            'root': False,
-            'virtual': False,
-            'left': None,
-            'right': None,
-            'db_id': radio.get('db_id'),
-            'classification': radio.get('classification')
-        }
-        self.collection.save(doc, safe=True)
-        if parent is None:
-            return doc
-    
-        doc['parent'] = parent.get('_id')
-        if parent.get('left') == None:
-            parent['left'] = doc.get('_id')
-        else:
-            parent['right'] = doc.get('_id')
-
-        self.collection.save(doc, safe=True)
-        self.collection.save(parent, safe=True)
-        return doc
-    
-    def _is_leaf(self, node):
-        left = node.get('left')
-        right = node.get('right')
-        if left is None and right is None:
-            return True
-        return False
-    
-    def _generate_virtual_node(self, node1, radio):
-        node2 = self._add_new_radio(None, radio)
-        
-        classification1 = node1.get('classification')
-        classification2 = node2.get('classification')
-        
-        keys1 = classification1.keys()
-        keys2 = classification2.keys()
-        
-        merged_classification = {}
-        
-        for artist in keys1:
-            if artist in keys2:
-                val1 = classification1[artist]
-                val2 = classification2[artist]
-                mean = float( (val1 + val2) / 2)
-                merged_classification[artist] = mean
-                del classification2[artist]
-                del classification1[artist]
-            else:
-                merged_classification[artist] = classification1[artist]
-
-        keys1 = classification1.keys()
-        keys2 = classification2.keys()
-        for artist in keys2:
-            if artist in keys1:
-                val1 = classification1[artist]
-                val2 = classification2[artist]
-                mean = float( (val1 + val2) / 2)
-                merged_classification[artist] = mean
-            else:
-                merged_classification[artist] = classification2[artist]
-        
-        doc = {
-            'parent': None,
-            'root': False,
-            'virtual': True,
-            'db_id': None,
-            'left': node1.get('_id'),
-            'right': node2.get('_id'),
-            'classification': merged_classification
-        }
-        self.collection.save(doc, safe=True)
-        
-        node2['parent'] = doc.get('_id')
-        self.collection.save(node2, safe=True)
-        
-        return doc
-
-    def _parent_node(self, node):
-        if node.get('root') == True:
-            return node
-        return self.collection.find_one({'_id': node.get('parent')})
-    
-    def _replace_child(self, parent, node1, node2):
-        if parent.get('left') == node1.get('_id'):
-            parent['left'] = node2.get('_id')
-        else:
-            parent['right'] = node2.get('_id')
-            
-        node2['parent'] = node1.get('parent')
-        node1['parent'] = node2.get('_id')
-        self.collection.save(node2, safe=True)
-        self.collection.save(node1, safe=True)
-        self.collection.save(parent, safe=True)
-    
-    def add_radio(self, radio):
-        nearest_node = self._find_node(radio)
-        if nearest_node.get('root') == True:
-            self._add_new_radio(self._root_node(), radio)
-        else:
-            virtual_node = self._generate_virtual_node(nearest_node, radio)
-            parent_node = self._parent_node(nearest_node)
-            self._replace_child(parent_node, nearest_node, virtual_node)
-    
-    def _radios_from_node(self, node, radio):
-        res = []
-        if node.get('db_id'):
-            score = abs(sim_pearson(node, radio))
-            if score >= 0.9:
-                res.append(node.get('db_id'))
-                
-        left = self._get_left_child(node)
-        if left:
-            res.extend(self._radios_from_node(left, radio))
-        right = self._get_right_child(node)
-        if right:
-            res.extend(self._radios_from_node(right, radio))
-        return res
-        
-    def find_radios(self, artists):
-        res = []
-        fake_radio = {
-            'classification': artists
-        }
-        node = self._find_node(fake_radio, stop_score=0.9)
-        print node
-        if node is None:
-            return res
-        else:
-            res = self._radios_from_node(node, fake_radio)
-        return res
     
 def new_radio(sender, instance, created, **kwargs):
     if created:

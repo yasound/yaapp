@@ -2,8 +2,7 @@
 from django.core.management.base import BaseCommand
 from optparse import make_option
 from time import time
-from yarecommendation.models import ClassifiedRadiosManager, \
-    RadiosClusterManager, RadiosKMeansManager
+from yarecommendation.models import ClassifiedRadiosManager, RadiosKMeansManager
 import logging
 
 logger = logging.getLogger("yaapp.yarecommendation")

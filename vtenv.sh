@@ -45,6 +45,7 @@ if [[ $platform == 'osx' ]]; then
     echo "Installing numpy & scipy on osx"
     vtenv/bin/pip install numpy
     vtenv/bin/pip install scipy
+    vtenv/bin/pip install scikit-learn
 fi
 
 echo " * Done"
