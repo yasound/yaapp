@@ -181,6 +181,9 @@ Yasound.Views.NotificationsToolbar = Backbone.View.extend({
         'click #unread': 'unread',
         'click #all': 'all'
     },
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
     render: function() {
         $(this.el).html(ich.notificationsToolbarTemplate());
         return this;

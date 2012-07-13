@@ -582,6 +582,7 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 Yasound.Views.SubMenu = Backbone.View.extend({
     events: {
+        "click #brand-logo"         : "home",
         "click #selection"          : "selection",
         "click #top"                : "top",
         "click #friends"            : "friends",
@@ -591,19 +592,30 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #messages-btn"       : 'notifications'
     },
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onNotification');
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.on('notification', this.onNotification);
+        }
+        
     },
     reset: function() {
-        
     },
     onClose: function() {
-        
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.off('notification', this.onNotification);
+        }
     },
     render: function() {
         this.reset();
         $(this.el).html(ich.subMenuTemplate());
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
+    },
+    home: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/', {
+            trigger: true
+        });
     },
     selection: function(e) {
         e.preventDefault();
@@ -657,6 +669,16 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         Yasound.App.Router.navigate('notifications/', {
             trigger: true
         });
-    }
+    },
+    onNotification: function(notification) {
+        var unreadCount = notification.unread_count;
+        var el = $('#messages-btn span', this.el); 
+        el.html(unreadCount);
+        if (unreadCount > 0) {
+            el.removeClass('hidden');            
+        } else {
+            el.addClass('hidden');
+        }
+    }    
 });
 

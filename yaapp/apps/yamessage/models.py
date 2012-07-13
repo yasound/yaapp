@@ -66,7 +66,9 @@ class NotificationsManager():
             text = raw_text
         return text
         
-        
+    def unread_count(self, user_id):
+        return self.notifications.find({'dest_user_id': user_id, 'read': False}).count()
+    
     def notifications_for_recipient(self, user_id, count=None, skip=0, date_greater_than=None, date_lower_than=None, read_status='all'):
         date_request = {}
         if date_greater_than is not None:
