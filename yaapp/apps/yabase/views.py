@@ -939,8 +939,10 @@ class WebAppView(View):
         
         if request.user.is_authenticated():
             user_uuid = request.user.get_profile().own_radio.uuid
+            user_profile = request.user.get_profile()
         else:
             user_uuid = 0
+            user_profile = None
         
         push_url = settings.YASOUND_PUSH_URL
         enable_push = settings.ENABLE_PUSH
@@ -978,6 +980,7 @@ class WebAppView(View):
             'facebook_share_link': facebook_share_link,
             'facebook_channel_url': facebook_channel_url,
             'settings_radio_form': settings_radio_form,
+            'user_profile': user_profile,
             'settings_user_form': settings_user_form,
             'settings_facebook_form': settings_facebook_form,
             'settings_twitter_form': settings_twitter_form,
