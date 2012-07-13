@@ -4,7 +4,7 @@ from django.test import TestCase
 from models import ClassifiedRadiosManager
 from yabase import tests_utils as yabase_test_utils
 from yabase.models import Radio, SongMetadata
-from yarecommendation.models import MapArtistManager, RadiosClusterManager
+from yarecommendation.models import MapArtistManager
 
 class TestMapArtist(TestCase):
     def setUp(self):
@@ -109,103 +109,4 @@ class TestCluster(TestCase):
             radios.append(radio)
         return radios
 
-    def testManagerRoot(self):
-        rc = RadiosClusterManager()
 
-        radio = Radio.objects.radio_for_user(self.user)
-        playlist = yabase_test_utils.generate_playlist(song_count=10)
-        playlist.radio = radio
-        playlist.save()
-        radio.ready=True
-        radio.save()
-        
-        cm = ClassifiedRadiosManager()
-        cm.add_radio(radio)
-
-        doc = cm.collection.find_one({'db_id': radio.id})
-        rc.add_radio(doc)
-        rc.pprint()
-        
-            
-    def testManager1Child(self):
-        rc = RadiosClusterManager()
-
-        radio = Radio.objects.radio_for_user(self.user)
-        playlist = yabase_test_utils.generate_playlist(song_count=10)
-        playlist.radio = radio
-        playlist.save()
-        radio.ready=True
-        radio.save()
-        
-        cm = ClassifiedRadiosManager()
-        cm.add_radio(radio)
-
-        doc = cm.collection.find_one({'db_id': radio.id})
-        rc.add_radio(doc)
-        rc.pprint()
-        print "############"
-        
-        radios = self._generate_radios(1)
-        
-        for radio in radios:
-            cm.add_radio(radio)
-            
-        for radio in radios:
-            doc = cm.collection.find_one({'db_id': radio.id})
-            rc.add_radio(doc)
-            
-        rc.pprint()
-
-    def testManager2Child(self):
-        rc = RadiosClusterManager()
-
-        radio = Radio.objects.radio_for_user(self.user)
-        playlist = yabase_test_utils.generate_playlist(song_count=10)
-        playlist.radio = radio
-        playlist.save()
-        radio.ready=True
-        radio.save()
-        
-        cm = ClassifiedRadiosManager()
-        cm.add_radio(radio)
-
-        doc = cm.collection.find_one({'db_id': radio.id})
-        rc.add_radio(doc)
-        rc.pprint()
-        print "############"
-        radios = self._generate_radios(2)
-        
-        for radio in radios:
-            cm.add_radio(radio)
-            
-        for radio in radios:
-            doc = cm.collection.find_one({'db_id': radio.id})
-            rc.add_radio(doc)
-            
-        rc.pprint()
-
-    def testManager10Child(self):
-        rc = RadiosClusterManager()
-
-        radio = Radio.objects.radio_for_user(self.user)
-        playlist = yabase_test_utils.generate_playlist(song_count=10)
-        playlist.radio = radio
-        playlist.save()
-        radio.ready=True
-        radio.save()
-        
-        cm = ClassifiedRadiosManager()
-        cm.add_radio(radio)
-
-        doc = cm.collection.find_one({'db_id': radio.id})
-        rc.add_radio(doc)
-        radios = self._generate_radios(10)
-        
-        for radio in radios:
-            cm.add_radio(radio)
-            
-        for radio in radios:
-            doc = cm.collection.find_one({'db_id': radio.id})
-            rc.add_radio(doc)
-            
-        rc.pprint()
