@@ -14,6 +14,7 @@
 				<div id="sound-quality">
 					<input class="input-switch" id="switch1" type="checkbox" />
 					<label for="switch1"></label>
+					<img id="SD" src="/media/app/images/SD.png" width="21" height="12" alt="SD">
 				</div>
 				<div id="radio-picto">
 					<a href="#">
@@ -23,8 +24,11 @@
 				<div>
 					<a id="favorite-radio" href="#"></a>
 				</div>
-				<div id="play-btn"> 
-				</div>
+				<a href="#" >
+					<div id="play-btn">
+						<img id="pause-symbol" src="/media/app/images/pause-symbol.png" width="10" height="10" alt="Pause Btn">
+					</div>
+				</a>
 				<div id="sound-level">
 					<div id="min-level">
 						<img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
@@ -36,13 +40,13 @@
 					</div>
 				</div>
 				<div class="header-social-btn" id="first-social-btn">
-					<img src="/media/app/images/header-share-btn.png" width="27" height="21" alt="Header Share Btn">
+					<a href="#" id="share-btn"></a>
 				</div>
 				<div class="header-social-btn">
-					<img src="/media/app/images/header-love-btn.png" width="23" height="20" alt="Header Love Btn">
+					<a href="#" id="love-btn"></a>
 				</div>
 				<div class="header-social-btn">
-					<img src="/media/app/images/header-shop-btn.png" width="27" height="22" alt="Header Shop Btn">
+					<a href="#" id="shop-btn"></a>
 				</div>
 				<div class="header-separation">
 					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
@@ -50,16 +54,18 @@
 				<div id="profile-picture">
 					<img src="/media/app/images/profile-picture.png" width="38" height="38" alt="Profile Picture">
 				</div>
-				<div class="notification">
-					<span class="badge badge-info" id="message-position-absolute">4</span>
-					<img src="/media/app/images/notification-picto.png" width="36" height="33" alt="Notification Picto">
+				<div>
+					<a id="messages-btn" class="notification">
+						<span class="badge badge-info" id="message-position-absolute">4</span>
+					</a>
 				</div>
 				<div class="notification" id="last-social-btn">
-					<img src="/media/app/images/gift-picto.png" width="34" height="32" alt="Gift Picto">
+					<a href="#" id="gift-btn"></a>
 				</div>
 			</div>
 		<div id="sub-header">
             <div class="container" id="sub-header-container">
+				<div id="sub-header-pointer"></div>
                 <ul id="sub-header-nav">
                     <li class="first"><a href='#' id="selection">{% trans "Selection" %}</a></li>
                     <li><a href='#' id='top'>{% trans "Top" %}</a></li>

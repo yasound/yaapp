@@ -44,11 +44,12 @@ body {
 	margin-left:20px;
 }
 
-#sound-quality{
+#sound-quality {
 	display:inline-block;
 	float:left;
 	padding-top:25px;
 	padding-left:20px;
+	position:relative;
 }
 
 /*bg slider*/
@@ -93,6 +94,12 @@ body {
     right: -4px;
 }
 
+#SD {
+	position:absolute;
+	left:55px;
+	top:31px;
+}
+
 #radio-picto {
 	height:32px;
 	width:32px;
@@ -128,6 +135,13 @@ body {
 	border-radius:28px;
 	background-image:url('../app/images/play-btn-bg.png');
 	box-shadow: 0px 1px 4px black;
+	position:relative;
+}
+
+#pause-symbol {
+	position:absolute;
+	top:12px;
+	left:12px;
 }
 
 #sound-level {
@@ -210,7 +224,59 @@ body {
 	padding-left:17px;
 }
 
-#profile-picture{
+#share-btn {
+	display:inline-block;
+	float:left;
+	height:18px;
+	width:24px;
+	background-image:url('../app/images/share-btn.png');
+}
+
+#share-btn:hover {
+	display:inline-block;
+	float:left;
+	height:18px;
+	width:24px;
+	background-image:url('../app/images/hover-share-btn.png');
+}
+
+#love-btn {
+	display:inline-block;
+	float:left;
+	height:18px;
+	width:20px;
+	background-image:url('../app/images/love-btn.png');
+	background-repeat:no-repeat;
+}
+
+#love-btn:hover {
+	display:inline-block;
+	float:left;
+	height:18px;
+	width:20px;
+	background-image:url('../app/images/hover-love-btn.png');
+	background-repeat:no-repeat;
+}
+
+#shop-btn {
+	display:inline-block;
+	float:left;
+	height:19px;
+	width:25px;
+	background-image:url('../app/images/shop-btn.png');
+	background-repeat:no-repeat;
+}
+
+#shop-btn:hover {
+	display:inline-block;
+	float:left;
+	height:19px;
+	width:25px;
+	background-image:url('../app/images/hover-shop-btn.png');
+	background-repeat:no-repeat;
+}
+
+#profile-picture {
 	float:left;
 	display:inline-block;
 	padding: 19px 0px 0px 16px;
@@ -223,15 +289,15 @@ body {
 	padding: 19px 0px 0px 25px;
 }
 
-#message-position-absolute{
+#message-position-absolute {
 	display:inline-block;
 	height:20px;
 	width:20px;
 	position:absolute;
 	background-image:url('../app/images/messages-bg-color.png');
 	background-repeat:repeat-x;
-	top:29px;
-	left:32px;
+	top:10px;
+	left:8px;
 	border-radius:20px;
 	border:1px solid #0f2937;
 	font-family:Arial;
@@ -245,6 +311,43 @@ body {
 #last-social-btn {
 	float:right;
 	margin-top:2px;
+}
+
+#messages-btn {
+	height:33px;
+	width:36px;
+	background-image:url('../app/images/messages-btn.png');
+	background-repeat:no-repeat;
+	position:relative;
+	top:19px;
+	left:26px;
+	padding:0px;	
+}
+
+#messages-btn:hover {
+	height:33px;
+	width:36px;
+	background-image:url('../app/images/hover-messages-btn.png');
+	background-repeat:no-repeat;
+	position:relative;
+	top:19px;
+	left:26px;
+}
+
+#gift-btn {
+	display:inline-block;
+	height:32px;
+	width:34px;
+	background-image:url('../app/images/gift-btn.png');
+	background-repeat:no-repeat;
+}
+
+#gift-btn:hover {
+	display:inline-block;
+	height:32px;
+	width:34px;
+	background-image:url('../app/images/hover-gift-btn.png');
+	background-repeat:no-repeat;
 }
 
 #header .brand {
@@ -275,6 +378,17 @@ body {
 
 #sub-header-container {
 	height:55px;
+	position:relative;
+}
+
+#sub-header-pointer {
+	position:absolute;
+	bottom:-7px;
+	left:23px;
+	background-image:url('../app/images/sub-header-pointer.png');
+	width:14px;
+	height:9px;
+	background-repeat:no-repeat;
 }
 
 #sub-header-nav {
