@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from optparse import make_option
 from yarecommendation.models import ClassifiedRadiosManager, MapArtistManager,\
-    RadiosClusterManager
+    RadiosKMeansManager
 import logging
 from time import time
 
@@ -46,9 +46,9 @@ class Command(BaseCommand):
                     continue
                 result.append(rec)
         else:
-            rc = RadiosClusterManager()
+            rk = RadiosKMeansManager()
             doc = cm.collection.find_one({'db_id': radio_id})
-            result = rc.find_radios(doc.get('classification'))
+            result = rk.find_cluster(doc.get('classification'))
         logger.info(result)
         elapsed = time() - start
         logger.info('done in %s secondes', str(elapsed))             

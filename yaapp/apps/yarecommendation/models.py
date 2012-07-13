@@ -3,6 +3,11 @@ from django.conf import settings
 from django.db.models import signals
 from math import sqrt
 from pymongo import DESCENDING, ASCENDING
+from scipy.sparse import csc_matrix
+from sklearn.neighbors import BallTree
+from sklearn.neighbors import NearestNeighbors
+from sklearn.cluster import MiniBatchKMeans
+from time import time
 from yabase.models import SongMetadata, Radio
 from yarecommendation.task import async_add_radio
 from yarecommendation.utils import top_matches, sim_pearson, tail_call_optimized
@@ -10,9 +15,6 @@ from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
 import random
-from time import time
-from sklearn.cluster import MiniBatchKMeans
-from scipy.sparse import csc_matrix 
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -142,6 +144,10 @@ class ClassifiedRadiosManager():
         similarities = similarities[0:20]
         return similarities 
 
+    def find2(self, classification):
+        rk = RadiosKMeansManager()
+        cluster = rk.find_cluster(classification)
+        
         
         
     def all(self):
@@ -155,48 +161,56 @@ class RadiosKMeansManager():
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.kmean
         self.collection.ensure_index("id", unique=True)
-        self.radios = []
-        self.data = []
     
-    def create_matrix(self):
-        logger.info('creating matrix data from radio information')
-        start = time()
-        self.radios = []
-        
+    def get_artist_count(self):
         ma = MapArtistManager()
         artist_count = ma.collection.find().count()
-        
+        return artist_count
+    
+    def create_matrix_line(self, artist_count, classification):
+        line = [0]*artist_count
+        for artist, count in classification.iteritems():
+            line[int(artist)] = count
+        return line
+    
+    def create_matrix(self, qs, id_key):
+        """
+        Create matrix from query set
+        """
+        logger.info('creating matrix data from radio information')
+        start = time()
+        items = []
 
-        cm = ClassifiedRadiosManager()
-        radio_count = cm.collection.find().count()
+        item_count = qs.count()
         data = []
-
-        for radio in cm.collection.find():
-            self.radios.append(radio.get('db_id'))
-            classification = radio.get('classification')
-            line = [0]*artist_count
-            for artist, count in classification.iteritems():
-                line[int(artist)] = count
+        artist_count = self.get_artist_count()
+        
+        for item in qs:
+            items.append(item.get(id_key))
+            classification = item.get('classification')
+            line = self.create_matrix_line(artist_count, classification);
             data.append(line)
 
         elapsed = time() - start
-        logger.info('done in %s seconds, length is %dx%d' % (elapsed, radio_count, artist_count))
+        logger.info('done in %s seconds, length is %dx%d' % (elapsed, item_count, artist_count))
             
         logger.info('transformation to sparse csc_matrix')
         start = time()
-        self.data = csc_matrix(data)
+        matrix = csc_matrix(data)
         elapsed = time() - start
         logger.info('done in %s seconds' % elapsed)
+        return items, matrix
     
     def build_cluster(self, k=30):
         logger.info('building cluster, k=%d' % (k))
-        self.create_matrix()
+        cm = ClassifiedRadiosManager()
+        radios, matrix = self.create_matrix(cm.collection.find(), 'db_id')
         self.collection.drop()
         
         logger.info('MiniBatchKMeans started')
         start = time()
         mbkm = MiniBatchKMeans(init="random", k=k, max_iter=10, random_state=13, chunk_size=1000)
-        mbkm.fit(self.data)
+        mbkm.fit(matrix)
         elapsed = time() - start
         logger.info('done in %s seconds' % elapsed)
         
@@ -216,12 +230,26 @@ class RadiosKMeansManager():
 
         cm = ClassifiedRadiosManager()
         for radio_index, cluster_id in enumerate(mbkm.labels_):
-            cm.collection.update({'db_id': self.radios[radio_index]}, 
+            cm.collection.update({'db_id': radios[radio_index]}, 
                                  {'$set': {'cluster_id': str(cluster_id)}}, 
                                  safe=True)
         elapsed = time() - start
         logger.info('done in %s seconds' % elapsed)
 
+    def find_cluster(self, classification):
+        # transform classification to sparse matrix
+        cluster_id = None
+        artist_count = self.get_artist_count()
+        line = self.create_matrix_line(artist_count, classification)
+        clusters, matrix = self.create_matrix(self.collection.find(), 'id')
+        neigh = NearestNeighbors(1, 0.4)
+        neigh.fit(matrix)
+        dist, ind = neigh.kneighbors(line)
+        
+        if len(ind) > 0:
+            cluster_index = ind[0]
+            cluster_id = clusters[cluster_index]
+        return cluster_id
     
 def new_radio(sender, instance, created, **kwargs):
     if created:
