@@ -587,7 +587,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #friends"            : "friends",
         "click #favorites"          : "favorites",
         "keypress #search-input"    : 'search',
-        "click #profile-picture a"  : 'profile'
+        "click #profile-picture a"  : 'profile',
+        "click #messages-btn"       : 'notifications'
     },
     initialize: function() {
         _.bindAll(this, 'render');
@@ -651,6 +652,11 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             trigger: true
         });
     },
-    
+    notifications: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('notifications/', {
+            trigger: true
+        });
+    }
 });
 
