@@ -246,7 +246,7 @@ class RadiosKMeansManager():
         artist_count = self.get_artist_count()
         line = self.create_matrix_line(artist_count, classification)
         clusters, matrix = self.create_matrix(self.collection.find(), 'id')
-        neigh = NearestNeighbors(1)
+        neigh = NearestNeighbors(5)
         neigh.fit(matrix)
         _dist, ind = neigh.kneighbors(line)
         
@@ -265,10 +265,14 @@ class RadiosKMeansManager():
         if qs.count() == 0:
             return None
         radios, matrix = self.create_matrix(qs, 'db_id')
-        
+
+        logger.info('calculating NearestNeighbors')        
+        start = time()
         neigh = NearestNeighbors(10)
         neigh.fit(matrix)
-        dist, ind = neigh.kneighbors(line)
+        _dist, ind = neigh.kneighbors(line)
+        elapsed = time() - start
+        logger.info('done in %s seconds' % elapsed)
 
         if len(ind) > 0:
             return [radios[radio_index] for radio_index in ind[0]]
