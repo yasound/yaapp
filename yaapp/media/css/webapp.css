@@ -56,7 +56,29 @@ body {
 	position:relative;
 }
 
-/*bg slider*/
+.switch-container {
+	margin-top:30px	;
+	float:left;
+	display:inline-block;
+	height:25px;
+	width:70px;
+	position:relative;
+	overflow:hidden;
+	border-radius:20px;
+	border:1px solid black;
+}
+
+.switch {
+	display:inline-block;
+	height:25px;
+	width:70px;
+	position:absolute;
+	background-image:url('../app/images/SD-HD.png');
+	background-position:-45px 50%;
+	background-repeat:no-repeat;
+}
+
+/*
 .input-switch:not(:checked),.input-switch:checked { 
     display: none;
 }
@@ -73,7 +95,7 @@ body {
 	border-radius:20px;
 }
 
-/*slider button*/
+
 .input-switch + label::before {
     position: absolute;
     display: inline-block;
@@ -85,18 +107,20 @@ body {
 }
 
 
-/*blue filling +label*/
+
 .input-switch:checked + label {
     color: #FFF;
 	background-image:url('../app/images/sound-quality-blue-bg.png');
 }
 
 
-/*movement of the slider*/
+
 .input-switch:checked + label::before {
     left: auto;
     right: -4px;
 }
+*/
+
 
 #SD {
 	position:absolute;
@@ -144,8 +168,8 @@ body {
 
 #pause-symbol {
 	position:absolute;
-	top:12px;
-	left:12px;
+	top:10px;
+	left:11px;
 }
 
 #sound-level {
@@ -283,7 +307,7 @@ body {
 #profile-picture {
 	float:left;
 	display:inline-block;
-	padding: 21px 0px 0px 16px;
+	padding: 19px 0px 0px 16px;
 }
 
 .notification {
