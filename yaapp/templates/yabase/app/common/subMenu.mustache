@@ -11,10 +11,8 @@
 				<div class="header-separation">
 					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
 				</div>
-				<div id="sound-quality">
-					<input class="input-switch" id="switch1" type="checkbox" />
-					<label for="switch1"></label>
-					<img id="SD" src="/media/app/images/SD.png" width="21" height="12" alt="SD">
+				<div class="switch-container">
+					<span class="switch"></span>
 				</div>
 				<div id="radio-picto">
 					<a href="#">
@@ -26,7 +24,7 @@
 				</div>
 				<a href="#" >
 					<div id="play-btn">
-						<img id="pause-symbol" src="/media/app/images/pause-symbol.png" width="10" height="10" alt="Pause Btn">
+						<img id="pause-symbol" src="/media/app/images/pause-symbol.png" width="12" height="12" alt="Pause Btn">
 					</div>
 				</a>
 				<div id="sound-level">
@@ -57,7 +55,7 @@
                         <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="34" height="34" alt="Profile Picture"></a>
                        {% endthumbnail %}
                    {% else %}
-                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="34" height="34" alt="Profile Picture"></a>
+                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="32" height="32" alt="Profile Picture"></a>
                    {% endif %}
 				</div>
 				<div>
