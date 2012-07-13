@@ -283,6 +283,8 @@ body {
 }
 
 .notification {
+	width:38px;
+	height:38px;
 	position:relative;
 	float:left;
 	display:inline-block;
