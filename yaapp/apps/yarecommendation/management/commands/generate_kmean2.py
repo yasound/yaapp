@@ -18,11 +18,12 @@ class Command(BaseCommand):
     args = ''
 
     def handle(self, *app_labels, **options):
-        logger.info("creating cluster")
+        logger.info("creating cache")
         start = time()
         rk = RadiosKMeansManager()
-        rk.build_cluster()
+        rk.save_cache()
         elapsed = time() - start
-        logger.info('clustering done in %s seconds', str(elapsed))
+        logger.info('cache saved in %s seconds', str(elapsed))
         
         
+

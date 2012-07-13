@@ -15,6 +15,9 @@ from yaref.models import YasoundSong, YasoundGenre
 from yasearch.utils import get_simplified_name
 import logging
 import random
+from scipy.io import mmread, mmwrite
+import os
+import numpy
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -202,6 +205,27 @@ class RadiosKMeansManager():
         logger.info('done in %s seconds' % elapsed)
         return items, matrix
     
+    def get_radio_matrix_path(self):
+        path = os.path.join(settings.RECOMMENDATION_CACHE, 'radio_matrix.mtx')
+        return path
+
+    def get_radio_index_path(self):
+        path = os.path.join(settings.RECOMMENDATION_CACHE, 'radio_index.npy')
+        return path
+    
+    def save_cache(self):
+        logger.info('building cache')
+        cm = ClassifiedRadiosManager()
+        radios, matrix = self.create_matrix(cm.collection.find(), 'db_id')
+        mmwrite(self.get_radio_matrix_path(), matrix)
+        numpy.save(self.get_radio_index_path(), radios)
+
+    def load_cache(self):
+        matrix = mmread(self.get_radio_matrix_path())
+        radios = numpy.load(self.get_radio_index_path())
+        return radios, csc_matrix(matrix)
+        
+    
     def build_cluster(self, k=30):
         logger.info('building cluster, k=%d' % (k))
         cm = ClassifiedRadiosManager()
@@ -238,7 +262,7 @@ class RadiosKMeansManager():
         
         clusters = self.collection.find()
         for cluster in clusters:
-            count = cm.collection.find({'cluster_id': cluster.get('id')}).count()
+            count = cm.collection.find({'cluster_id': cluster.get('id')})
             logger.info('cluster %s : %d radios'  % (cluster.get('id'), count))
 
     def find_cluster(self, classification):
@@ -246,6 +270,7 @@ class RadiosKMeansManager():
         artist_count = self.get_artist_count()
         line = self.create_matrix_line(artist_count, classification)
         clusters, matrix = self.create_matrix(self.collection.find(), 'id')
+        
         neigh = NearestNeighbors(5)
         neigh.fit(matrix)
         _dist, ind = neigh.kneighbors(line)
@@ -278,6 +303,23 @@ class RadiosKMeansManager():
             return [radios[radio_index] for radio_index in ind[0]]
         return []
     
+    def find_radios2(self, classification):
+        artist_count = self.get_artist_count()
+        line = self.create_matrix_line(artist_count, classification)
+        radios, matrix = self.load_cache()
+        
+        logger.info('calculating NearestNeighbors')        
+        start = time()
+        neigh = NearestNeighbors(10)
+        neigh.fit(matrix)
+        _dist, ind = neigh.kneighbors(line)
+        elapsed = time() - start
+        logger.info('done in %s seconds' % elapsed)
+
+        if len(ind) > 0:
+            return [radios[radio_index] for radio_index in ind[0]]
+        return []
+        
     
 def new_radio(sender, instance, created, **kwargs):
     if created:
