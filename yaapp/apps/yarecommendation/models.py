@@ -60,6 +60,7 @@ class ClassifiedRadiosManager():
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.radios
         self.collection.ensure_index("db_id", unique=True)
+        self.collection.ensure_index("cluster_id", unique=False)
     def drop(self):
         self.collection.drop()
     
@@ -238,18 +239,37 @@ class RadiosKMeansManager():
 
     def find_cluster(self, classification):
         # transform classification to sparse matrix
-        cluster_id = None
         artist_count = self.get_artist_count()
         line = self.create_matrix_line(artist_count, classification)
         clusters, matrix = self.create_matrix(self.collection.find(), 'id')
-        neigh = NearestNeighbors(1, 0.4)
+        neigh = NearestNeighbors(5)
         neigh.fit(matrix)
-        dist, ind = neigh.kneighbors(line)
+        _dist, ind = neigh.kneighbors(line)
         
         if len(ind) > 0:
-            cluster_index = ind[0]
-            cluster_id = clusters[cluster_index]
-        return cluster_id
+            return [str(clusters[cluster_index]) for cluster_index in ind[0]]
+        return []
+    
+    def find_radios(self, classification):
+        clusters = self.find_cluster(classification)
+
+        artist_count = self.get_artist_count()
+        line = self.create_matrix_line(artist_count, classification)
+
+        cm = ClassifiedRadiosManager()
+        qs = cm.collection.find({'cluster_id': {'$in': clusters}})
+        if qs.count() == 0:
+            return None
+        radios, matrix = self.create_matrix(qs, 'db_id')
+        
+        neigh = NearestNeighbors(10)
+        neigh.fit(matrix)
+        dist, ind = neigh.kneighbors(line)
+
+        if len(ind) > 0:
+            return [radios[radio_index] for radio_index in ind[0]]
+        return []
+    
     
 def new_radio(sender, instance, created, **kwargs):
     if created:

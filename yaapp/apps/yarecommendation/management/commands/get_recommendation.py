@@ -48,7 +48,7 @@ class Command(BaseCommand):
         else:
             rk = RadiosKMeansManager()
             doc = cm.collection.find_one({'db_id': radio_id})
-            result = rk.find_cluster(doc.get('classification'))
+            result = rk.find_radios(doc.get('classification'))
         logger.info(result)
         elapsed = time() - start
         logger.info('done in %s secondes', str(elapsed))             
