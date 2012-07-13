@@ -586,7 +586,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #top"                : "top",
         "click #friends"            : "friends",
         "click #favorites"          : "favorites",
-        "keypress #search-input"    : 'search'
+        "keypress #search-input"    : 'search',
+        "click #profile-picture a"  : 'profile'
     },
     initialize: function() {
         _.bindAll(this, 'render');
@@ -643,6 +644,13 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         Yasound.App.Router.navigate("search/" + value + '/', {
             trigger: true
         });
-    }
+    },
+    profile: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('profile/' + Yasound.App.username + '/', {
+            trigger: true
+        });
+    },
+    
 });
 

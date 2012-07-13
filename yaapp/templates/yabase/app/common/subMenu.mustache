@@ -53,7 +53,7 @@
 				</div>
 				<div id="profile-picture">
                    {% thumbnail user_profile.picture "38x38" format='PNG' as im %}
-                    <img src="{{ im.url  }}" width="38" height="38" alt="Profile Picture">
+                    <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="38" height="38" alt="Profile Picture"></a>
                    {% endthumbnail %}
 				</div>
 				<div>
