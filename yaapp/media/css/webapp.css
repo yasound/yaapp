@@ -425,6 +425,12 @@ body {
 	text-decoration:none;
 }
 
+#sub-header-nav li.selected a {
+    color:#474b4d;
+    text-shadow:1px 1px 1px white;
+    text-decoration:none;
+}
+
 #sub-header-nav .first {
 	padding-left:0px;
 }
