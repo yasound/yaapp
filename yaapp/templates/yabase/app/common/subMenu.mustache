@@ -1,5 +1,5 @@
 {% load i18n %}
-        
+{% load thumbnail %}        
 <div class="navbar navbar-fixed-top" id='header'>
 	<div class="navbar-inner">
 		<div class="container">
@@ -52,7 +52,9 @@
 					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
 				</div>
 				<div id="profile-picture">
-					<img src="/media/app/images/profile-picture.png" width="38" height="38" alt="Profile Picture">
+                   {% thumbnail user_profile.picture "38x38" format='PNG' as im %}
+                    <img src="{{ im.url  }}" width="38" height="38" alt="Profile Picture">
+                   {% endthumbnail %}
 				</div>
 				<div>
 					<a id="messages-btn" class="notification">

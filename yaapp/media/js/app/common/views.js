@@ -600,6 +600,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     render: function() {
         this.reset();
         $(this.el).html(ich.subMenuTemplate());
+        $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
     },
     selection: function(e) {
