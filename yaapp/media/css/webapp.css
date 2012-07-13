@@ -5,6 +5,10 @@ body {
 	margin-top: 80px;
 }
 
+.hidden {
+	visibility: hidden;
+}
+
 .share {
 	float: left;
 	margin-right: 12px;

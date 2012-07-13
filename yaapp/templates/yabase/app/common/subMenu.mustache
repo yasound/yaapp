@@ -62,7 +62,7 @@
 				</div>
 				<div>
 					<a id="messages-btn" class="notification" href="{% url webapp_notifications %}">
-						<span class="badge badge-info" id="message-position-absolute">{{ notification_count }}</span>
+						<span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
 					</a>
 				</div>
 				<div class="notification" id="last-social-btn">
