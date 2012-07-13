@@ -4,6 +4,7 @@ from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -31,6 +32,7 @@ from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
+from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager
 from yaref.models import YasoundSong
@@ -43,7 +45,6 @@ import settings as yabase_settings
 import uuid
 import zlib
 
-from django.contrib.humanize.templatetags.humanize import intcomma
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
@@ -937,9 +938,15 @@ class WebAppView(View):
         if not authorized:
             return redirection
         
+        notification_count = 0
+        
         if request.user.is_authenticated():
-            user_uuid = request.user.get_profile().own_radio.uuid
             user_profile = request.user.get_profile()
+            user_uuid = user_profile.own_radio.uuid
+            
+            nm = NotificationsManager()
+            notification_count = nm.unread_count(request.user.id)
+            
         else:
             user_uuid = 0
             user_profile = None
@@ -986,7 +993,8 @@ class WebAppView(View):
             'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
             'display_associate_twitter' : display_associate_twitter,
-            'import_itunes_form': ImportItunesForm(user=request.user)
+            'import_itunes_form': ImportItunesForm(user=request.user),
+            'notification_count': notification_count
         }
         
         if hasattr(self, page):
@@ -1038,6 +1046,8 @@ class WebAppView(View):
         
         user_uuid = request.user.get_profile().own_radio.uuid
         user_profile  = request.user.get_profile()
+        nm = NotificationsManager()
+        notification_count = nm.unread_count(request.user.id)
         
         push_url = settings.YASOUND_PUSH_URL
         enable_push = settings.ENABLE_PUSH
@@ -1104,7 +1114,8 @@ class WebAppView(View):
             'display_associate_facebook' : display_associate_facebook,
             'display_associate_twitter' : display_associate_twitter,
             'user_profile': user_profile,
-            'import_itunes_form': import_itunes_form
+            'import_itunes_form': import_itunes_form,
+            'notification_count': notification_count
         }
         
         if hasattr(self, page):

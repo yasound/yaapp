@@ -582,6 +582,7 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 Yasound.Views.SubMenu = Backbone.View.extend({
     events: {
+        "click #brand-logo"         : "home",
         "click #selection"          : "selection",
         "click #top"                : "top",
         "click #friends"            : "friends",
@@ -604,6 +605,12 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         $(this.el).html(ich.subMenuTemplate());
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
+    },
+    home: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/', {
+            trigger: true
+        });
     },
     selection: function(e) {
         e.preventDefault();

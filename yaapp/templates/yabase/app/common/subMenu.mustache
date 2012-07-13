@@ -53,16 +53,16 @@
 				</div>
 				<div id="profile-picture">
 				   {% if user_profile.picture %}
-                       {% thumbnail user_profile.picture "34x34" format='PNG' as im %}
-                        <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="34" height="34" alt="Profile Picture"></a>
+                       {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
+                        <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"></a>
                        {% endthumbnail %}
                    {% else %}
-                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="34" height="34" alt="Profile Picture"></a>
+                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"></a>
                    {% endif %}
 				</div>
 				<div>
 					<a id="messages-btn" class="notification" href="{% url webapp_notifications %}">
-						<span class="badge badge-info" id="message-position-absolute">4</span>
+						<span class="badge badge-info" id="message-position-absolute">{{ notification_count }}</span>
 					</a>
 				</div>
 				<div class="notification" id="last-social-btn">
