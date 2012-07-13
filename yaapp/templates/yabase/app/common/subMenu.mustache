@@ -4,7 +4,7 @@
 	<div class="navbar-inner">
 		<div class="container">
 				<div id="brand-logo">
-					<a href="brand-logo" {% url webapp %}>
+					<a href='{% url webapp %}' alt="{% trans 'Logo Yasound' %}">
 						<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 					</a>
 				</div>
@@ -57,7 +57,7 @@
                    {% endthumbnail %}
 				</div>
 				<div>
-					<a id="messages-btn" class="notification">
+					<a id="messages-btn" class="notification" href="{% url webapp_notifications %}">
 						<span class="badge badge-info" id="message-position-absolute">4</span>
 					</a>
 				</div>
