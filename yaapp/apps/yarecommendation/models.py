@@ -178,7 +178,7 @@ class RadiosKMeansManager():
         """
         Create matrix from query set
         """
-        logger.info('creating matrix data from radio information')
+        logger.info('creating matrix data')
         start = time()
         items = []
 
@@ -210,7 +210,7 @@ class RadiosKMeansManager():
         
         logger.info('MiniBatchKMeans started')
         start = time()
-        mbkm = MiniBatchKMeans(init="random", k=k, max_iter=10, random_state=13, chunk_size=1000)
+        mbkm = MiniBatchKMeans(init="k-means++", k=k, max_iter=100, chunk_size=1000)
         mbkm.fit(matrix)
         elapsed = time() - start
         logger.info('done in %s seconds' % elapsed)
@@ -228,26 +228,30 @@ class RadiosKMeansManager():
             }
             self.collection.insert(doc, safe=True)
 
-
         cm = ClassifiedRadiosManager()
         for radio_index, cluster_id in enumerate(mbkm.labels_):
             cm.collection.update({'db_id': radios[radio_index]}, 
-                                 {'$set': {'cluster_id': str(cluster_id)}}, 
+                                 {'$set': {'cluster_id': int(cluster_id)}}, 
                                  safe=True)
         elapsed = time() - start
         logger.info('done in %s seconds' % elapsed)
+        
+        clusters = self.collection.find()
+        for cluster in clusters:
+            count = cm.collection.find({'cluster_id': cluster.get('id')}).count()
+            logger.info('cluster %s : %d radios'  % (cluster.get('id'), count))
 
     def find_cluster(self, classification):
         # transform classification to sparse matrix
         artist_count = self.get_artist_count()
         line = self.create_matrix_line(artist_count, classification)
         clusters, matrix = self.create_matrix(self.collection.find(), 'id')
-        neigh = NearestNeighbors(5)
+        neigh = NearestNeighbors(1)
         neigh.fit(matrix)
         _dist, ind = neigh.kneighbors(line)
         
         if len(ind) > 0:
-            return [str(clusters[cluster_index]) for cluster_index in ind[0]]
+            return [int(clusters[cluster_index]) for cluster_index in ind[0]]
         return []
     
     def find_radios(self, classification):
