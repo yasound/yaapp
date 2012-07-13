@@ -1037,6 +1037,7 @@ class WebAppView(View):
             return HttpResponseRedirect(reverse('webapp'))
         
         user_uuid = request.user.get_profile().own_radio.uuid
+        user_profile  = request.user.get_profile()
         
         push_url = settings.YASOUND_PUSH_URL
         enable_push = settings.ENABLE_PUSH
@@ -1102,6 +1103,7 @@ class WebAppView(View):
             'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
             'display_associate_twitter' : display_associate_twitter,
+            'user_profile': user_profile,
             'import_itunes_form': import_itunes_form
         }
         
