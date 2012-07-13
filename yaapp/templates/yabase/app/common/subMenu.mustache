@@ -52,9 +52,13 @@
 					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
 				</div>
 				<div id="profile-picture">
-                   {% thumbnail user_profile.picture "38x38" format='PNG' as im %}
-                    <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="38" height="38" alt="Profile Picture"></a>
-                   {% endthumbnail %}
+				   {% if user_profile.picture %}
+                       {% thumbnail user_profile.picture "34x34" format='PNG' as im %}
+                        <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="34" height="34" alt="Profile Picture"></a>
+                       {% endthumbnail %}
+                   {% else %}
+                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="34" height="34" alt="Profile Picture"></a>
+                   {% endif %}
 				</div>
 				<div>
 					<a id="messages-btn" class="notification" href="{% url webapp_notifications %}">
