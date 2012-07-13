@@ -18,12 +18,17 @@ def new_notification_handler(sender, notification, **kwargs):
     
     user = User.objects.get(id=recipient)
     
+    from yamessage.models import NotificationsManager
+    nm = NotificationsManager()
+    
+    unread_count = nm.unread_count(user.id)
+    notification['unread_count'] = unread_count
     channel = 'user.%s' % (user.id)
     logger.info("publishing message to %s" % (channel)) 
     
     data = {
         'event_type': 'notification',
-        'data': json.dumps(notification, cls=MongoAwareEncoder)
+        'data': json.dumps(notification, cls=MongoAwareEncoder),
     }
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
     red.publish(channel, json_data)
