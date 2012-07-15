@@ -56,16 +56,45 @@ body {
 	position:relative;
 }
 
+
 .switch-container {
 	margin-top:30px	;
 	float:left;
 	display:inline-block;
 	height:25px;
-	width:70px;
+	width:80px;
 	position:relative;
 	overflow:hidden;
-	border-radius:20px;
-	border:1px solid black;
+}
+
+.switch-container input[type="checkbox"] {
+    -webkit-appearance:none;    
+	display:inline-block;
+    height:25px;
+    width:80px;
+    position:absolute;
+    border:none;
+    z-index: 2;
+}
+
+.switch-container input[type="checkbox"]~.hd-bg {
+    display:inline-block;
+    height:25px;
+    width:80px;
+    position:absolute;
+    background-image:url('../app/images/SD-HD.png');
+    background-position:-46px 50%;
+    background-repeat:no-repeat;
+    border-radius:20px;
+    border:none;
+    -webkit-transition:background-position 0.2s ease;
+    -moz-transition:background-position 0.2s ease;
+    transition:background-position 0.2s ease;
+    z-index: 0;
+}
+
+.switch-container input[type="checkbox"]:checked~.hd-bg {
+    background-position:10px 50%;
 }
 
 .switch {
