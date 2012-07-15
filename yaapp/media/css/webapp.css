@@ -68,8 +68,8 @@ body {
 }
 
 .switch-container input[type="checkbox"] {
-    -webkit-appearance:none;    
-	display:inline-block;
+    -webkit-appearance:none;
+    opacity:0;    
     height:25px;
     width:80px;
     position:absolute;
