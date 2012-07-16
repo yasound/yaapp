@@ -175,9 +175,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     volumeMouseDown: false,
 
     events: {
-        "click #play": "play",
-        "click #inc": "inc",
-        "click #dec": "dec",
+        "click #play-btn": "togglePlay",
         "click #like": "like",
         "click #track-image-link": "displayRadio",
         "click #fb_share": "facebookShare"
@@ -242,7 +240,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         this.generateSocialShare();
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
-                $('#play i').removeClass('icon-play').addClass('icon-stop');
+                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
                 
                 this.notifyStreamer();
             }
@@ -262,43 +260,20 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         return this;
     },
 
-    play: function () {
+    togglePlay: function (e) {
+        e.preventDefault();
         if (typeof Yasound.App.MySound === "undefined") {
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
-            $('#play i').removeClass('icon-play').addClass('icon-stop');
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
             $('#volume-slider').slider('value', Yasound.App.MySound.volume);
 
             this.notifyStreamer();
         } else {
-            $('#play i').removeClass('icon-stop').addClass('icon-play');
+            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
             Yasound.App.MySound.destruct();
             Yasound.App.MySound = undefined;
         }
-    },
-
-    inc: function () {
-        if (typeof Yasound.App.MySound === "undefined") {
-            return;
-        }
-        if (Yasound.App.MySound.volume <= 90) {
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume + 10);
-        } else {
-            $('#volume-slider').slider('value', 100);
-        }
-        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
-    },
-
-    dec: function () {
-        if (typeof Yasound.App.MySound === "undefined") {
-            return;
-        }
-        if (Yasound.App.MySound.volume >= 10) {
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume - 10);
-        } else {
-            $('#volume-slider').slider('value', 0);
-        }
-        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
     onVolumeSlide: function(e, ui) {
