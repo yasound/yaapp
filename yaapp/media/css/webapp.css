@@ -167,12 +167,19 @@ body {
 }
 
 #favorite-radio {
-	background-image:url("/media/app/images/favorite-radio.png") ;
 	height:36px;
 	width:37px;
 	display:inline-block;
 	float:left;
 	margin: 21px 0px 0px 19px;
+}
+
+.is-not-favorite {
+    background-image:url("/media/app/images/favorite-radio.png") ;
+}
+
+.is-favorite {
+    background-image:url('../app/images/over-star.png');
 }
 
 #favorite-radio:hover{

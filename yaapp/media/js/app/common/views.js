@@ -182,13 +182,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #play-btn": "togglePlay",
         "click #like": "like",
         "click #radio-picto a": "displayRadio",
-        "click #fb_share": "facebookShare"
+        "click #fb_share": "facebookShare",
+        "click #favorite-radio": "favorite"
     },
 
     initialize: function () {
         this.model.bind('change', this.render, this);
-        _.bindAll(this, 'render', 'onVolumeSlide');
-        
+        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite');
     },
 
     onClose: function () {
@@ -259,8 +259,15 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#tweet', this.el).hide();
             $('#fb_share', this.el).hide();
         }
-        this.ping();
 
+        var radio = Yasound.App.Router.currentRadio;
+        if (radio && radio.get('favorite')) {
+            $('#favorite-radio', this.el).removeClass('is-not-favorite').addClass('is-favorite');
+        } else {
+            $('#btn-unfavorite', this.el).removeClass('is-favorite').addClass('is-not-favorite');
+        }
+        
+        this.ping();
         return this;
     },
 
@@ -321,6 +328,20 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
         FB.ui(obj, callback);
     },
+    
+    favorite: function(e) {
+        e.preventDefault();
+        var radio = Yasound.App.Router.currentRadio;
+        if (radio && radio.get('favorite')) {
+            radio.removeFromFavorite();
+            $('#favorite-radio', this.el).removeClass('is-favorite').addClass('is-not-favorite');
+            
+        } else {
+            radio.addToFavorite();
+            $('#favorite-radio', this.el).removeClass('is-not-favorite').addClass('is-favorite');
+        }
+    },
+    
     
     ping: function() {
         if (this.pingIntervalId) {
