@@ -141,6 +141,10 @@
    </script>
    
    
+   <script type='text/html' id='topRadiosPageTemplate'>
+     {% include "yabase/app/top/topRadiosPage.mustache" %}
+   </script>
+
 {% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
      {% include "yabase/app/favoritesPage.mustache" %}

@@ -80,6 +80,7 @@ $(document).ready(function () {
             "radio/:uuid": "radio",
             "search/:query/": "search",
             "favorites/": "favorites",
+            "top/": "top",
             "profile/:username/": "profile",
             "settings/": "settings",
             "friends/": "friends",
@@ -171,6 +172,8 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.HomePage({
                 el: '#webapp-content'
             }).render();
+            
+            this.commonContext.subMenuView.selectMenu('selection');
         },
 
         settings: function () {
@@ -220,8 +223,22 @@ $(document).ready(function () {
                 el: '#webapp-content',
                 collection: radios
             }).render();
+            this.commonContext.subMenuView.selectMenu('favorites');
         },
         
+        // top radios
+        top: function () {
+            this.clearView(/* showSubMenu = */ true);
+
+            var radios = new Yasound.Data.Models.MostActiveRadios({});
+
+            this.currentView = new Yasound.Views.TopRadiosPage({
+                el: '#webapp-content',
+                collection: radios
+            }).render();
+            this.commonContext.subMenuView.selectMenu('top');
+        },
+
         // owner friends page
         friends: function () {
             this.clearView(true);
@@ -232,6 +249,7 @@ $(document).ready(function () {
                 collection: friends,
                 el: '#webapp-content'
             }).render();
+            this.commonContext.subMenuView.selectMenu('friends');
         },
 
         // profile page
