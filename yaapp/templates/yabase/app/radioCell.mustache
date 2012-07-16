@@ -1,24 +1,23 @@
 {% load i18n %}
-	<div class="radio-cell-container">
-		<div class="radio-cell-selected">
-		</div>
-		<div class="radio-cell">
-			<img src="/media/app/images/radio/radio-album-cover.png" width="209" height="209" alt="Radio Album Cover">
-			<div id="radio-profile">
-				<img src='<% picture %>' width='32px' height='32px'/>
-				<span id="radio-profile-picture-mask">
-					<img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask">
-				</span>
-			</div>
-		</div>
-		<div id='caption'>
-	        <div id="caption-content">
-				<h5><% name %></h5>
-				<ul id="radio-favorites">
-					<li>123</li>
-					<li>1859</li>
-				</ul>
-			</div>
-	   	</div>
-	</div>
-
+<div class='radio-cell'>
+    <div class='picture'>
+    <img src='/media/app/images/radio/radio-album-cover.png'/>
+    </div>
+    
+    <div class='mask hidden'>
+    </div>
+    
+    <div class="profile">
+        <img src='<% picture %>' width='32px' height='32px'/>
+        <span class="radio-profile-picture-mask"><img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask"></span>
+    </div>
+    <div class='caption'>
+        <div class="caption-content">
+            <h5><% name %></h5>
+            <ul class="radio-favorites">
+                <li>123</li>
+                <li>1859</li>
+            </ul>
+        </div>
+    </div>
+</div>

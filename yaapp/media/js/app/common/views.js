@@ -11,10 +11,9 @@ Namespace('Yasound.Views');
  */
 Yasound.Views.RadioCell = Backbone.View.extend({
     tagName: 'li',
-    className: 'radio-cell',
 
     events: {
-        'click .thumbnail': 'onRadio'
+        'click .radio-cell': 'onRadio'
     },
 
     initialize: function () {
@@ -33,10 +32,19 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
     onRadio: function (e) {
         e.preventDefault();
-        var uuid = this.model.get('uuid');
-        Yasound.App.Router.navigate("radio/" + uuid + '/', {
-            trigger: true
-        });
+        
+        var mask = $('.mask', this.el);
+        if (mask.hasClass('hidden')) {
+            $("li .mask", $(this.el).parent()).addClass('hidden');
+            mask.removeClass('hidden');
+        } else {
+            mask.addClass('hidden');
+            var uuid = this.model.get('uuid');
+            Yasound.App.Router.navigate("radio/" + uuid + '/', {
+                trigger: true
+            });
+        }
+        
     }
 });
 
