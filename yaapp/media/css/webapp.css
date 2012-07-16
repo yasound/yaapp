@@ -58,7 +58,8 @@ body {
 
 
 .switch-container {
-	margin-top:30px	;
+	margin-top:25px;
+	margin-left:20px;
 	float:left;
 	display:inline-block;
 	height:25px;
@@ -195,6 +196,7 @@ body {
 	background-image:url('../app/images/play-btn-bg.png');
 	box-shadow: 0px 1px 4px black;
 	position:relative;
+	cursor:pointer;
 }
 
 #play-btn i {
@@ -203,13 +205,6 @@ body {
 	left:10px;
 }
 
-#sound-level {
-	width:190px;
-	height:100px;
-	display:inline-block;
-	padding-top:25px;
-	padding-left:20px;
-}
 
 #title-volume {
 	height:76px	;
@@ -246,6 +241,15 @@ body {
 #sound-level {
 	display:inline-block;
 	float:left;
+    width:190px;
+    height:100px;
+    padding-top:12px;
+    padding-left:20px;
+}
+
+#slider-container {
+	float:left;
+	width:150px;
 }
 
 #volume-slider{  
@@ -260,6 +264,8 @@ body {
 #min-level {
 	display:inline-block;
 	float:left;
+	margin-top:23px;
+	margin-right:6px;
 }
 
 #level-bar {
@@ -270,6 +276,7 @@ body {
 #max-level {
 	display:inline-block;
 	float:right;
+    margin-top:23px;
 }
 
 
@@ -1007,7 +1014,7 @@ ul .user-cell:hover .caption {
 	margin-top: 0px;
 	margin-left:0;
 	padding-left:0;
-	width:210px;
+	width:200px;
 }
 
 /**
