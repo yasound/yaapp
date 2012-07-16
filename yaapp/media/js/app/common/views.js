@@ -601,43 +601,43 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
     },
-    selectMenu: function(e) {
+    selectMenu: function(menu) {
         $("#sub-header-nav li", this.el).removeClass('selected');
-        $(e.target, this.el).parent().addClass('selected');
+        $("#" + menu, this.el).parent().addClass('selected');
         
+        var menuNumber = 1;
+        if (menu == 'selection') {
+            menuNumber = 1;
+        } else if (menu == 'top') {
+            menuNumber = 2;
+        } else if (menu == 'friends') {
+            menuNumber = 3;
+        } else if (menu == 'favorites') {
+            menuNumber = 4;
+        }
+        $('#sub-header-pointer', this.el).removeClass().addClass('menu' + menuNumber);
     },
     selection: function(e) {
         e.preventDefault();
-        this.selectMenu(e);
 
-        $('#sub-header-pointer', this.el).removeClass().addClass('menu1');
         Yasound.App.Router.navigate('/', {
             trigger: true
         });
     },
     top: function(e) {
         e.preventDefault();
-        this.selectMenu(e);
-
-        $('#sub-header-pointer', this.el).removeClass().addClass('menu2');
-        Yasound.App.Router.navigate('/', {
+        Yasound.App.Router.navigate('/top/', {
             trigger: true
         });
     },
     friends: function(e) {
         e.preventDefault();
-        this.selectMenu(e);
-
-        $('#sub-header-pointer', this.el).removeClass().addClass('menu3');
         Yasound.App.Router.navigate('/friends/', {
             trigger: true
         });
     },
     favorites: function(e) {
         e.preventDefault();
-        this.selectMenu(e);
-
-        $('#sub-header-pointer', this.el).removeClass().addClass('menu4');
         Yasound.App.Router.navigate('/favorites/', {
             trigger: true
         });

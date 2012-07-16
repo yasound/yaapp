@@ -1021,6 +1021,10 @@ class WebAppView(View):
         result = search_radio(query)
         return context, 'yabase/app/searchPage.html'  
 
+    def top(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 2
+        return context, 'yabase/webapp.html'  
+
     def favorites(self, request, context, *args, **kwargs):
         context['submenu_number'] = 4
         return context, 'yabase/webapp.html'  
