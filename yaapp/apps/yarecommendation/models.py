@@ -18,7 +18,6 @@ import random
 from scipy.io import mmread, mmwrite
 import os
 import numpy
-from scipy.cluster.vq import whiten
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -195,9 +194,7 @@ class RadiosKMeansManager():
             classification = item.get('classification')
             line = self.create_matrix_line(artist_count, classification);
             data.append(line)
-
-        data = whiten(data)
-
+        
         elapsed = time() - start
         logger.info('done in %s seconds, length is %dx%d' % (elapsed, item_count, artist_count))
             
