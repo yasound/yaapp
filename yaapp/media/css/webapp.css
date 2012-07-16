@@ -463,6 +463,28 @@ body {
 	width:14px;
 	height:9px;
 	background-repeat:no-repeat;
+	-webkit-transition: left 0.5s ease;
+    -moz-transition: left 0.5s ease;
+    -ms-transition: left 0.5s ease;
+    -o-transition: left 0.5s ease;
+    transition: left 0.5s ease;
+	
+}
+
+#sub-header-pointer.menu1 {
+	left:23px;
+}
+
+#sub-header-pointer.menu2 {
+    left:93px;
+}
+
+#sub-header-pointer.menu3 {
+    left:163px;
+}
+
+#sub-header-pointer.menu4 {
+    left:243px;
 }
 
 #sub-header-nav {
@@ -485,6 +507,11 @@ body {
 	color:#7b8082;
 	text-shadow:1px 1px 1px white;
 	font-size:15px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 #sub-header-nav li a:hover {

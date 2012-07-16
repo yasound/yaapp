@@ -2,12 +2,12 @@
 {% load thumbnail %}        
 <div id="sub-header">
     <div class="container" id="sub-header-container">
-		<div id="sub-header-pointer"></div>
+		<div id="sub-header-pointer" class='menu{{submenu_number}}'></div>
         <ul id="sub-header-nav">
-            <li class="first selected"><a href='#' id="selection">{% trans "Selection" %}</a></li>
-            <li><a href='#' id='top'>{% trans "Top" %}</a></li>
-            <li><a href='#' id='friends'>{% trans "My friends" %}</a></li>
-            <li><a href='#' id='favorites'>{% trans "Favorites" %}</a></li>
+            <li class="first {% ifequal submenu_number 1 %}selected{% endifequal %}"><a href='#' id="selection">{% trans "Selection" %}</a></li>
+            <li class="{% ifequal submenu_number 2 %}selected{% endifequal %}"><a href='#' id='top'>{% trans "Top" %}</a></li>
+            <li class="{% ifequal submenu_number 3 %}selected{% endifequal %}"><a href='#' id='friends'>{% trans "My friends" %}</a></li>
+            <li class="{% ifequal submenu_number 4 %}selected{% endifequal %}"><a href='#' id='favorites'>{% trans "Favorites" %}</a></li>
         </ul>
         <div>
             <form>

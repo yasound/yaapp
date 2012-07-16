@@ -994,7 +994,8 @@ class WebAppView(View):
             'display_associate_facebook' : display_associate_facebook,
             'display_associate_twitter' : display_associate_twitter,
             'import_itunes_form': ImportItunesForm(user=request.user),
-            'notification_count': notification_count
+            'notification_count': notification_count,
+            'submenu_number': 1 
         }
         
         if hasattr(self, page):
@@ -1004,6 +1005,7 @@ class WebAppView(View):
         return render_to_response(template_name, context, context_instance=RequestContext(request))           
 
     def home(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 1
         return context, 'yabase/webapp.html'  
 
     def radio(self, request, context, *args, **kwargs):
@@ -1020,9 +1022,11 @@ class WebAppView(View):
         return context, 'yabase/app/searchPage.html'  
 
     def favorites(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 4
         return context, 'yabase/webapp.html'  
 
     def friends(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 3
         return context, 'yabase/webapp.html'  
 
     def profile(self, request, context, *args, **kwargs):
