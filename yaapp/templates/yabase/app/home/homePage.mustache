@@ -5,7 +5,7 @@
         <div class='page-header'>
         <h1>{% trans "Selection" %}</h1>
         </div>
-        <ul id='selected-radios' class='thumbnails'>
+        <ul id='selected-radios' class='radio-cells'>
             <img class='loading-mask' src='/media/images/loading.gif'/>
         </ul>
     </div>
@@ -15,7 +15,7 @@
         <div class='page-header'>
         <h1>{% trans "Most popular radios today" %}</h1>
         </div>
-        <ul id='most-active-radios' class='thumbnails'>
+        <ul id='most-active-radios' class='radio-cells'>
             <img class='loading-mask' src='/media/images/loading.gif'/>
         </ul>
     </div>
@@ -26,7 +26,7 @@
         <div class='page-header'>
         <h1><a href='{% url webapp_favorites %}' id='favorites-link'>{% trans "My favorites" %}</a></h1>
         </div>
-        <ul id='favorites' class='thumbnails'>
+        <ul id='favorites' class='radio-cells'>
             <img class='loading-mask' src='/media/images/loading.gif'/>
         </ul>
         <div class='cell-pagination' id='pagination'></div>

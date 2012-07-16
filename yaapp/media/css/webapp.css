@@ -658,38 +658,58 @@ input::-webkit-input-placeholder {
 
 /*--- RADIO CELL ---*/
 
-.thumbnails li {
+.radio-cells-container {
+	display:block;
+	float:left;
+	margin:12px;
+	height:209px;
+	width:209px;
+}
+
+.thumbnails {
+	position:relative;
+}
+
+.radio-cell-selected {
+	position:absolute;
+	background-color:rgba(0,0,0,0.80);
+	height:209px;
+	width:209px;
+	border-radius:5px;
+	padding:0px;
+	z-index:2;
+}
+
+.radio-cells li {
 	margin:0px;
 	padding:0px;
 }
 
-.thumbnail {
-	display:inline-block;
+.radio-cell {
+	display:block;
 	float:left;
 	height:209px;
 	width:209px;
 	border-radius:5px;
 	padding:0px;
-	margin:12px;
-	background-image:url('../app/images/radio/radio-album-cover.png');
-	background-repeat:no-repeat;
 	position:relative;
 	border:1px solid #d3d3d3;
 	box-shadow:0px 0px 2px #d3d3d3;
 	overflow:hidden;
+	z-index:1;
 }
-
 
 #caption {
 	position:absolute;
-	bottom:0px;
-	padding:0px;
+	top:171px;
+	margin-left:12px;
 	background-image:url('../app/images/radio/radio-caption-bg.png');
 	background-repeat:repeat-x;
 	height:49px;
 	width:208px;
 	border-radius: 0px 0px 5px 5px;
 	border:1px solid black;
+	z-index:3;
 }
 
 #caption h5 {
@@ -700,10 +720,6 @@ input::-webkit-input-placeholder {
 	font-family:arial;
 	font-weight:normal;
 	overflow:hidden;
-}
-
-#caption-content {
-	
 }
 
 #radio-favorites {
@@ -744,7 +760,7 @@ input::-webkit-input-placeholder {
 	left:10px;
 }
 
-#radio-profile img {
+#radio-profile > img {
 	position:absolute;
 	border-radius:50px;
 }
@@ -752,6 +768,8 @@ input::-webkit-input-placeholder {
 #radio-profile span {
 	position:absolute;
 }
+
+
 
 
 /**
