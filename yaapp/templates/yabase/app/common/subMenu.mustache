@@ -1,106 +1,37 @@
 {% load i18n %}
 {% load thumbnail %}        
-<div class="navbar navbar-fixed-top" id='header'>
-	<div class="navbar-inner">
-		<div class="container">
-				<div id="brand-logo">
-					<a href='{% url webapp %}' alt="{% trans 'Logo Yasound' %}">
-						<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
-					</a>
-				</div>
-				<div class="header-separation">
-					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
-				</div>
-				<div class="switch-container">
-					<span class="switch"></span>
-				</div>
-				<div id="radio-picto">
-					<a href="#">
-						<img src="/media/app/images/radio-picto.png" width="32" height="32" alt="Radio Picto">
-					</a>
-				</div>
-				<div>
-					<a id="favorite-radio" href="#"></a>
-				</div>
-				<a href="#" >
-					<div id="play-btn">
-						<img id="pause-symbol" src="/media/app/images/pause-symbol.png" width="10" height="10" alt="Pause Btn">
-					</div>
-				</a>
-				<div id="sound-level">
-					<div id="min-level">
-						<img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
-					</div>
-					<div id="level-bar">
-					</div>
-					<div id="max-level">
-						<img src="/media/app/images/higher-volume.png" width="11" height="11" alt="Higher Volume">
-					</div>
-				</div>
-				<div class="header-social-btn" id="first-social-btn">
-					<a href="#" id="share-btn"></a>
-				</div>
-				<div class="header-social-btn">
-					<a href="#" id="love-btn"></a>
-				</div>
-				<div class="header-social-btn">	
-					<a href="#" id="shop-btn"></a>
-				</div>
-				<div class="header-separation">
-					<img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
-				</div>
-				<div id="profile-picture">
-				   {% if user_profile.picture %}
-                       {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
-                        <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"></a>
-                       {% endthumbnail %}
-                   {% else %}
-                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"></a>
-                   {% endif %}
-				</div>
-				<div>
-					<a id="messages-btn" class="notification" href="{% url webapp_notifications %}">
-						<span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
-					</a>
-				</div>
-				<div class="notification" id="last-social-btn">
-					<a href="#" id="gift-btn"></a>
-				</div>
-			</div>
-		<div id="sub-header">
-            <div class="container" id="sub-header-container">
-				<div id="sub-header-pointer"></div>
-                <ul id="sub-header-nav">
-                    <li class="first selected"><a href='#' id="selection">{% trans "Selection" %}</a></li>
-                    <li><a href='#' id='top'>{% trans "Top" %}</a></li>
-                    <li><a href='#' id='friends'>{% trans "My friends" %}</a></li>
-                    <li><a href='#' id='favorites'>{% trans "Favorites" %}</a></li>
-                </ul>
-                <div>
-                    <form>
-                        <p id="form">
-                            <select name="music-style" id="">
-                                <option value="#">Genre</option>
-                                <option value="#">Jazz</option>
-                                <option value="#">Rock</option>
-                                <option value="#">Blues</option>
-                                <option value="#">Pop</option>
-                                <option value="#">Country</option>
-                                <option value="#">Rap</option>
-                            </select>
-                        </p>
-                    </form>
-                </div>
-                <div id="sub-header-separation">
-                </div>
-                    <a id="create-radio" href="#">
-                        <span> Créer une radio </span>
-                    </a>
-                	<div id="search-bar">
-						<input type="text" id="search-input" class="unstyle" placeholder="Rechercher"/>
-						<input type="submit" value="" id="search-symbol" class="unstyle"/>
-                	</div>
-            </div>
+<div id="sub-header">
+    <div class="container" id="sub-header-container">
+		<div id="sub-header-pointer" class='menu{{submenu_number}}'></div>
+        <ul id="sub-header-nav">
+            <li class="first {% ifequal submenu_number 1 %}selected{% endifequal %}"><a href='#' id="selection">{% trans "Selection" %}</a></li>
+            <li class="{% ifequal submenu_number 2 %}selected{% endifequal %}"><a href='#' id='top'>{% trans "Top" %}</a></li>
+            <li class="{% ifequal submenu_number 3 %}selected{% endifequal %}"><a href='#' id='friends'>{% trans "My friends" %}</a></li>
+            <li class="{% ifequal submenu_number 4 %}selected{% endifequal %}"><a href='#' id='favorites'>{% trans "Favorites" %}</a></li>
+        </ul>
+        <div>
+            <form>
+                <p id="form">
+                    <select name="music-style" id="">
+                        <option value="#">Genre</option>
+                        <option value="#">Jazz</option>
+                        <option value="#">Rock</option>
+                        <option value="#">Blues</option>
+                        <option value="#">Pop</option>
+                        <option value="#">Country</option>
+                        <option value="#">Rap</option>
+                    </select>
+                </p>
+            </form>
         </div>
-	</div>
+        <div id="sub-header-separation">
+        </div>
+            <a id="create-radio" href="#">
+                <span> Créer une radio </span>
+            </a>
+        	<div id="search-bar">
+				<input type="text" id="search-input" class="unstyle" placeholder="Rechercher"/>
+				<input type="submit" value="" id="search-symbol" class="unstyle"/>
+        	</div>
+    </div>
 </div>

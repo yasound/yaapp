@@ -194,7 +194,7 @@ class RadiosKMeansManager():
             classification = item.get('classification')
             line = self.create_matrix_line(artist_count, classification);
             data.append(line)
-
+        
         elapsed = time() - start
         logger.info('done in %s seconds, length is %dx%d' % (elapsed, item_count, artist_count))
             
@@ -262,7 +262,7 @@ class RadiosKMeansManager():
         
         clusters = self.collection.find()
         for cluster in clusters:
-            count = cm.collection.find({'cluster_id': cluster.get('id')})
+            count = cm.collection.find({'cluster_id': cluster.get('id')}).count()
             logger.info('cluster %s : %d radios'  % (cluster.get('id'), count))
 
     def find_cluster(self, classification):

@@ -16,10 +16,6 @@
     <meta name="language" content="french" />
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
 
-    <!--[if lte IE 7] -->
-        <link rel="stylesheet" href="/media/css/ie.css"/>
-    <!--<![endif]-->
-
 {% block extra_head %}
     {% block fb_open_graph %}{% endblock %}
     
@@ -58,6 +54,11 @@
     <script type="text/javascript" src="/media/js/jquery.imgr.min.js"></script>
     <script type="text/javascript" src="/media/jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js"></script>
     
+	<!--[if (gte IE 6)&(lte IE 8)]>
+	  <script type="text/javascript" src="/media/js/selectivizr-min.js"></script>
+	  <noscript><link rel="stylesheet" href="/media/css/ie.css" /></noscript>
+	<![endif]-->
+
     {% compressed_js 'webapp-all' %}
     <script type="text/javascript">
        moment.lang('{{request.LANGUAGE_CODE}}');
@@ -237,44 +238,29 @@
             </div>
             <div class="nav-collapse">
                 <div class='pull-right'>
-                    <div id='user-menu' class='btn-toolbar'>            
-                        {% if request.user.is_authenticated %}
-                        <div class='btn-group'>
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="icon-eye-open"></i>
-                           {% trans "Notifications" %}
-                        <span class="caret"></span> </a>
-                        <ul class="dropdown-menu" id='notifications-menu'>
-                            <li class="divider"></li>
-                            <li><a href="{% url webapp_notifications %}" id='btn-notifications'>{% trans "All notifications" %}</a></li>
-                        </ul>
-                        </div>
-                                                
-                        <div class='btn-group'>
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="icon-user"></i>
-                            {{ request.user.userprofile }} 
-                        <span class="caret"></span> </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url webapp_radio user_uuid %}" id='btn-my-radio' yasound:uuid='{{ user_uuid }}'>{% trans "My radio" %}</a></li>
-                            <li><a href="{% url webapp_favorites %}" id='btn-favorites'>{% trans "My favorites" %}</a></li>
-                            <li><a href="{% url webapp_friends %}" id='btn-friends'>{% trans "My friends" %}</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url webapp_programming %}" id='btn-programming'>{% trans "Radio programming" %}</a></li>
-                            <li><a href="{% url webapp_profile request.user.username %}" id='btn-my-profile'>{% trans "My profile" %}</a></li>
-                            <li><a href="{% url webapp_settings %}" id='btn-settings'>{% trans "Settings" %}</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
-                        </ul>
-                        </div>
-                {% else %}
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="icon-user"></i>
-                            {% trans "Not logged" %}
-                        <span class="caret"></span> </a>
-                {% endif %}
+                    <div id='user-menu'>
+		                <div class="header-separation">
+		                    <img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
+		                </div>
+		                <div id="profile-picture">
+		                   {% if user_profile.picture %}
+		                       {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
+		                        <a href='{% url webapp_profile request.user.username %}'><img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"></a>
+		                       {% endthumbnail %}
+		                   {% else %}
+		                        <a href='{% url webapp_profile request.user.username %}'><img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"></a>
+		                   {% endif %}
+		                </div>
+		                <div>
+		                    <a id="messages-btn" class="notification" href="{% url webapp_notifications %}">
+		                        <span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
+		                    </a>
+		                </div>
+		                <div class="notification" id="last-social-btn">
+		                    <a href="#" id="gift-btn"></a>
+		                </div>
+	                </div>
                 </div>
-            </div>
             </div>
             <div id='player'>
             </div>

@@ -82,23 +82,27 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         'click #btn-my-radio': 'myRadio',
         'click #btn-favorites': 'favorites',
         'click #btn-friends': 'friends',
-        'click #btn-my-profile': 'myProfile',
+        'click #profile-picture a': 'myProfile',
         'click #btn-settings': 'settings',
         'click #btn-programming': 'programming',
-        'click #btn-notifications': 'notifications'
+        'click #messages-btn': 'notifications'
     },
     initialize: function() {
-        _.bindAll(this, 'addNotificationItem');
-        
-        this.notificationMenuItems = [];
-        var that = this;
+        _.bindAll(this, 'render', 'onNotification');
         if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.on('notification', function (notification) {
-                colibri(gettext('New notification received'));
-                that.addNotificationItem(notification);
-            });
+            Yasound.App.Router.pushManager.on('notification', this.onNotification);
         }
     },
+    onClose: function() {
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.off('notification', this.onNotification);
+        }
+    },
+    render: function() {
+        $('#profile-picture a img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
+        return this;
+    },
+    
     myRadio: function (e) {
         e.preventDefault();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
@@ -142,17 +146,17 @@ Yasound.Views.UserMenu = Backbone.View.extend({
             trigger: true
         });
     },
-    addNotificationItem: function(notification) {
-        var view = new Yasound.Views.NotificationMenuItem({
-            model: new Yasound.Data.Models.Notification(notification)
-        });
-        this.notificationMenuItems.slice(0, 0, view);
-        $('#notifications-menu').prepend(view.render().el);
-        if (this.notificationMenuItems.length >= 6) {
-            var lastView = this.notificationMenuItems.pop();
-            lastView.close();
+    onNotification: function(notification) {
+        colibri(gettext('New notification received'));
+        var unreadCount = notification.unread_count;
+        var el = $('#messages-btn span', this.el); 
+        el.html(unreadCount);
+        if (unreadCount > 0) {
+            el.removeClass('hidden');            
+        } else {
+            el.addClass('hidden');
         }
-    }
+    }    
 });
 
 Yasound.Views.NotificationMenuItem = Backbone.View.extend({
@@ -175,18 +179,16 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     volumeMouseDown: false,
 
     events: {
-        "click #play": "play",
-        "click #inc": "inc",
-        "click #dec": "dec",
+        "click #play-btn": "togglePlay",
         "click #like": "like",
-        "click #track-image-link": "displayRadio",
-        "click #fb_share": "facebookShare"
+        "click #radio-picto a": "displayRadio",
+        "click #fb_share": "facebookShare",
+        "click #favorite-radio": "favorite"
     },
 
     initialize: function () {
         this.model.bind('change', this.render, this);
-        _.bindAll(this, 'render', 'onVolumeSlide');
-        
+        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite');
     },
 
     onClose: function () {
@@ -242,13 +244,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         this.generateSocialShare();
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
-                $('#play i').removeClass('icon-play').addClass('icon-stop');
+                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
                 
                 this.notifyStreamer();
             }
             volumeSlider.slider('value', Yasound.App.MySound.volume);
         }
-
+        
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
             $('#tweet', this.el).show();
@@ -257,48 +259,32 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#tweet', this.el).hide();
             $('#fb_share', this.el).hide();
         }
-        this.ping();
 
+        var radio = Yasound.App.Router.currentRadio;
+        if (radio && radio.get('favorite')) {
+            $('#favorite-radio', this.el).removeClass('is-not-favorite').addClass('is-favorite');
+        } else {
+            $('#btn-unfavorite', this.el).removeClass('is-favorite').addClass('is-not-favorite');
+        }
+        
+        this.ping();
         return this;
     },
 
-    play: function () {
+    togglePlay: function (e) {
+        e.preventDefault();
         if (typeof Yasound.App.MySound === "undefined") {
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
-            $('#play i').removeClass('icon-play').addClass('icon-stop');
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
             $('#volume-slider').slider('value', Yasound.App.MySound.volume);
 
             this.notifyStreamer();
         } else {
-            $('#play i').removeClass('icon-stop').addClass('icon-play');
+            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
             Yasound.App.MySound.destruct();
             Yasound.App.MySound = undefined;
         }
-    },
-
-    inc: function () {
-        if (typeof Yasound.App.MySound === "undefined") {
-            return;
-        }
-        if (Yasound.App.MySound.volume <= 90) {
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume + 10);
-        } else {
-            $('#volume-slider').slider('value', 100);
-        }
-        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
-    },
-
-    dec: function () {
-        if (typeof Yasound.App.MySound === "undefined") {
-            return;
-        }
-        if (Yasound.App.MySound.volume >= 10) {
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume - 10);
-        } else {
-            $('#volume-slider').slider('value', 0);
-        }
-        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
 
     onVolumeSlide: function(e, ui) {
@@ -342,6 +328,20 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
         FB.ui(obj, callback);
     },
+    
+    favorite: function(e) {
+        e.preventDefault();
+        var radio = Yasound.App.Router.currentRadio;
+        if (radio && radio.get('favorite')) {
+            radio.removeFromFavorite();
+            $('#favorite-radio', this.el).removeClass('is-favorite').addClass('is-not-favorite');
+            
+        } else {
+            radio.addToFavorite();
+            $('#favorite-radio', this.el).removeClass('is-not-favorite').addClass('is-favorite');
+        }
+    },
+    
     
     ping: function() {
         if (this.pingIntervalId) {
@@ -582,28 +582,18 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 Yasound.Views.SubMenu = Backbone.View.extend({
     events: {
-        "click #brand-logo"         : "home",
         "click #selection"          : "selection",
         "click #top"                : "top",
         "click #friends"            : "friends",
         "click #favorites"          : "favorites",
-        "keypress #search-input"    : 'search',
-        "click #profile-picture a"  : 'profile',
-        "click #messages-btn"       : 'notifications'
+        "keypress #search-input"    : 'search'
     },
     initialize: function() {
-        _.bindAll(this, 'render', 'onNotification');
-        if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.on('notification', this.onNotification);
-        }
-        
+        _.bindAll(this, 'render', 'selectMenu');
     },
     reset: function() {
     },
     onClose: function() {
-        if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.off('notification', this.onNotification);
-        }
     },
     render: function() {
         this.reset();
@@ -611,32 +601,43 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
     },
-    home: function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('/', {
-            trigger: true
-        });
+    selectMenu: function(e) {
+        $("#sub-header-nav li", this.el).removeClass('selected');
+        $(e.target, this.el).parent().addClass('selected');
+        
     },
     selection: function(e) {
         e.preventDefault();
+        this.selectMenu(e);
+
+        $('#sub-header-pointer', this.el).removeClass().addClass('menu1');
         Yasound.App.Router.navigate('/', {
             trigger: true
         });
     },
     top: function(e) {
         e.preventDefault();
+        this.selectMenu(e);
+
+        $('#sub-header-pointer', this.el).removeClass().addClass('menu2');
         Yasound.App.Router.navigate('/', {
             trigger: true
         });
     },
     friends: function(e) {
         e.preventDefault();
+        this.selectMenu(e);
+
+        $('#sub-header-pointer', this.el).removeClass().addClass('menu3');
         Yasound.App.Router.navigate('/friends/', {
             trigger: true
         });
     },
     favorites: function(e) {
         e.preventDefault();
+        this.selectMenu(e);
+
+        $('#sub-header-pointer', this.el).removeClass().addClass('menu4');
         Yasound.App.Router.navigate('/favorites/', {
             trigger: true
         });
@@ -657,28 +658,6 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         Yasound.App.Router.navigate("search/" + value + '/', {
             trigger: true
         });
-    },
-    profile: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('profile/' + Yasound.App.username + '/', {
-            trigger: true
-        });
-    },
-    notifications: function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('notifications/', {
-            trigger: true
-        });
-    },
-    onNotification: function(notification) {
-        var unreadCount = notification.unread_count;
-        var el = $('#messages-btn span', this.el); 
-        el.html(unreadCount);
-        if (unreadCount > 0) {
-            el.removeClass('hidden');            
-        } else {
-            el.addClass('hidden');
-        }
-    }    
+    }
 });
 

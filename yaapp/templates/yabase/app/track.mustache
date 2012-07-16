@@ -1,25 +1,43 @@
 {% load i18n %}  
 
-<div class='picture'>
-  <a id='track-image-link' href='{% url webapp_radio current_uuid %}'> <img id='track-image' src='<% cover %>' width="84px" height="84px"/></a>
+<div class="switch-container">
+    <input type="checkbox"/>
+    <span class='hd-bg' />
+</div>                              
+<div id="radio-picto">
+    <a href="{% url webapp_radio current_uuid %}">
+        <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
+    </a>
 </div>
+    <a id="favorite-radio" class='is-not-favorite' href="#"></a>
+    <a id="play-btn">
+        <i class="icon-play"></i>
+    </a>
 
-<div id='details'>
-  <div class="btn-toolbar">
-    <div class="btn-group">
-      <a class="btn" id='play'><i class="icon-play"></i></a>
-      <a class="btn" id='dec'><i class="icon-volume-down"></i></a>
-      <div id='title-volume'>
-        <div id='player-title'><% name %> {% trans "By" %} <strong><span id='track-artist'><% artist %></span></strong></div>
-        
+<div id="sound-level">
+    <div id="min-level">
+        <img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
+    </div>
+
+    <div id='slider-container'>
+        <div id='player-title'><% name %></div>
         <span class="tooltip"></span>  
         <div id="volume-slider"></div>  
-        <span class="volume"></span>        
-        
-      </div>
-      <a class="btn" id='inc' ><i class="icon-volume-up"></i></a>
-      <a class="btn" id='like' ><i class="icon-heart"></i></a>
-      <a class="btn" id='btn-buy' href="<% buy_link %>" target='_blank'><i class="icon-shopping-cart"></i></a>
+        <span class="volume"></span> 
     </div>
-  </div>
-</div> 
+    
+    <div id="max-level">
+        <img src="/media/app/images/higher-volume.png" width="11" height="11" alt="Higher Volume">
+    </div>
+</div>
+
+
+<div class="header-social-btn" id="first-social-btn">
+    <a href="#" id="share-btn"></a>
+</div>
+<div class="header-social-btn">
+    <a href="#" id="love-btn"></a>
+</div>
+<div class="header-social-btn"> 
+    <a href="<% buy_link %>" id="shop-btn" target="_blank"></a>
+</div>
