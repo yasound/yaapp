@@ -1,7 +1,17 @@
 {% load i18n %}
-<div class='thumbnail'>
-    <img src='<% picture %>' width='100px' height='100px'/>
-    <div class='caption'>
-        <h5><% name %></h5>
-    </div>
+<div class="thumbnail">
+	<div id="radio-profile">
+		<img src='<% picture %>' width='32px' height='32px'/>
+		<span id="radio-profile-picture-mask"><img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask"></span>
+	</div>
+    <div id='caption'>
+        <div id="caption-content">
+			<h5><% name %></h5>
+			<ul id="radio-favorites">
+				<li>123</li>
+				<li>1859</li>
+			</ul>
+		</div>
+   	</div>
 </div>
+
