@@ -181,7 +181,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     events: {
         "click #play-btn": "togglePlay",
         "click #like": "like",
-        "click #track-image-link": "displayRadio",
+        "click #radio-picto a": "displayRadio",
         "click #fb_share": "facebookShare"
     },
 
@@ -250,7 +250,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             }
             volumeSlider.slider('value', Yasound.App.MySound.volume);
         }
-
+        
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
             $('#tweet', this.el).show();
