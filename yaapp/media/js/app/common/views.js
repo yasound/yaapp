@@ -561,7 +561,6 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 Yasound.Views.SubMenu = Backbone.View.extend({
     events: {
-        "click #brand-logo"         : "home",
         "click #selection"          : "selection",
         "click #top"                : "top",
         "click #friends"            : "friends",
