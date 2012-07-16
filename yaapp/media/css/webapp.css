@@ -448,6 +448,7 @@ body {
 	clear:both;
 	position:fixed;
 	top:76px;
+	z-index:25;
 }
 
 #sub-header-container {
