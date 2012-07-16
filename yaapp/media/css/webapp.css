@@ -828,7 +828,8 @@ input::-webkit-input-placeholder {
 }
 
 #player #player-title {
-	color: white;
+    color:#999e9f;
+    font-size:13px;
 }
 
 #player #details {
