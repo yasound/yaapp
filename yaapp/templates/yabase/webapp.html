@@ -274,7 +274,27 @@
 	</div>
 	<div id='submenu-container'></div>
     
+<div class="modal hide" id="modal-share">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Share" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Share options here:" %}
+        </p>
+        <ul>
+        <li><a href='#' id='fb_share'>{% trans "Facebook" %}</a></li>
+        <li><a href='#' id='tw_share'>{% trans "Twitter" %}</a></li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>        
+    
 <div id='webapp-container'>{% block content%}{%endblock%}</div>
+
+
 
 <div id='pre-footer'>&nbsp;</div>
 <div id='footer'>

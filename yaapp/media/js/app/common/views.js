@@ -168,13 +168,14 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #play-btn": "togglePlay",
         "click #love-btn": "like",
         "click #radio-picto a": "displayRadio",
-        "click #fb_share": "facebookShare",
         "click #favorite-radio": "favorite"
     },
 
     initialize: function () {
         this.model.bind('change', this.render, this);
-        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite');
+        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare');
+        
+        $('#fb_share').click(this.facebookShare);
     },
 
     onClose: function () {
@@ -202,15 +203,15 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     generateSocialShare: function () {
         if (!this.radio) {
-            $('#tweet').hide();
+            $('#tw_share').hide();
         } else {
             var twitterParams = {
                 url: '' + window.location,
                 text: this.generateTwitterText(),
                 hashtags: 'yasound'
             };
-            $('#tweet', this.el).show();
-            $('#tweet', this.el).attr('href', "http://twitter.com/share?" + $.param(twitterParams));
+            $('#tw_share').show();
+            $('#tw_share').attr('href', "http://twitter.com/share?" + $.param(twitterParams));
             $('meta[name=description]').attr('description', this.generateFacebookText());
         }
     },
@@ -239,11 +240,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
-            $('#tweet', this.el).show();
-            $('#fb_share', this.el).show();
+            $('#share-btn', this.el).show();
+            $('#tw_share').show();
+            $('#fb_share').show();
         } else {
-            $('#tweet', this.el).hide();
-            $('#fb_share', this.el).hide();
+            $('#share-btn', this.el).hide();
+            $('#tw_share').hide();
+            $('#fb_share').hide();
         }
 
         var radio = Yasound.App.Router.currentRadio;
@@ -301,7 +304,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     facebookShare: function (event) {
         event.preventDefault();
-
+        alert('hi')
         var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
         var obj = {
             method: 'feed',
