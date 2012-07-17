@@ -649,21 +649,40 @@ input::-webkit-input-placeholder {
 .radio-cell {
     display:block;
     float:left;
-    height:209px;
-    width:209px;
-    border-radius:5px;
-    padding:0px;
+    height:217px;
+    width:217px;
+    border-radius:10px;
     margin:12px;
     position:relative;
-    border:1px solid #d3d3d3;
-    box-shadow:0px 0px 2px #d3d3d3;
     overflow:hidden;
     cursor:pointer;
 }
 
+.radio-container {
+	float:left;
+	border:1px solid black;
+	display:inline-block;
+	height:209px;
+	width:209px;
+	border-radius:20px;
+	position:relative;
+	overflow:hidden;
+	top:4px;
+	left:3px;
+	box-shadow:0px 1px 3px #c7c7c7;
+}
+
+.radio-border {
+	position:absolute;
+	left:0px;
+	top:0px;
+	z-index:4;
+}
+
 .radio-cell .caption {
     position:absolute;
-    bottom:0px;
+    bottom:-1px;
+	left:1px;
     padding:0px;
     background-image:url('../app/images/radio/radio-caption-bg.png');
     background-repeat:repeat-x;
@@ -682,10 +701,6 @@ input::-webkit-input-placeholder {
     font-family:arial;
     font-weight:normal;
     overflow:hidden;
-}
-
-.radio-cell .caption-content {
-    
 }
 
 .radio-cell .radio-favorites {
@@ -761,11 +776,11 @@ input::-webkit-input-placeholder {
 }
 
 .radio-cell .picture {
-    position:absolute;
+	position:absolute;
     height:209px;
     width:209px;
-    left:0;
-    top:0;
+    left:0px;
+    top:0px;
     z-index:2;
 }
 
@@ -774,19 +789,12 @@ input::-webkit-input-placeholder {
 	height:209px;
     width:209px;
 	position:absolute;
-	border-radius:10px;
-	left:0;
-	top:0;
+	border-radius:5px;
+	left:1px;
+	top:1px;
 	z-index:4;	
 }
 
-.border {
-	position:absolute;
-	height:100%;
-	width:100%;
-	top:0;
-	left:0;
-}
 
 .radio-cell .radio-icon {
 	position:absolute;
