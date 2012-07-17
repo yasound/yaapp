@@ -502,6 +502,9 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
     },
     onShowAll: function(e) {
         e.preventDefault();
+        Yasound.App.Router.navigate("users/", {
+            trigger: true
+        });
     },
     updateData: function() {
         this.clear();

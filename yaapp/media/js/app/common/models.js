@@ -98,6 +98,10 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 });
 
 
+Yasound.Data.Models.User = Backbone.Model.extend({
+    idAttribute: 'id'
+});
+
 /**
  * Connected user
  */

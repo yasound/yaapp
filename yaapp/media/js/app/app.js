@@ -85,6 +85,7 @@ $(document).ready(function () {
             "search/:query/": "search",
             "favorites/": "favorites",
             "top/": "top",
+            "users/": "users",
             "profile/:username/": "profile",
             "settings/": "settings",
             "friends/": "friends",
@@ -254,6 +255,18 @@ $(document).ready(function () {
                 el: '#webapp-content'
             }).render();
             this.commonContext.subMenuView.selectMenu('friends');
+        },
+
+        // all users page
+        users: function () {
+            this.clearView(/* showSubMenu = */ false);
+
+            var users = new Yasound.Data.Models.Users({});
+
+            this.currentView = new Yasound.Views.UsersPage({
+                collection: users,
+                el: '#webapp-content'
+            }).render();
         },
 
         // profile page
