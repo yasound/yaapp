@@ -654,7 +654,6 @@ input::-webkit-input-placeholder {
     border-radius:5px;
     padding:0px;
     margin:12px;
-    background-repeat:no-repeat;
     position:relative;
     border:1px solid #d3d3d3;
     box-shadow:0px 0px 2px #d3d3d3;
@@ -705,12 +704,36 @@ input::-webkit-input-placeholder {
     font-size:11px;
 }
 
+.radio-cell .radio-favorites li:first-child:hover {
+    list-style:none;
+    color:white;
+    display:inline-block;
+    padding-left:30px;
+    background-image:url('../app/images/radio/radio-favorite-btn-hover.png');
+    background-repeat:no-repeat;
+    background-position:9px 1px;
+    color:#a7a7a7;
+    font-size:11px;
+}
+
 .radio-cell .radio-favorites li:last-child {
     list-style:none;
     color:white;
     display:inline-block;
     padding-left:30px;
     background-image:url('../app/images/radio/radio-playing-btn.png');
+    background-repeat:no-repeat;
+    background-position:9px 1px;
+    color:#a7a7a7;
+    font-size:11px;
+}
+
+.radio-cell .radio-favorites li:last-child:hover {
+    list-style:none;
+    color:white;
+    display:inline-block;
+    padding-left:30px;
+    background-image:url('../app/images/radio/radio-playing-btn-hover.png');
     background-repeat:no-repeat;
     background-position:9px 1px;
     color:#a7a7a7;
@@ -748,13 +771,14 @@ input::-webkit-input-placeholder {
 
 .radio-cell .mask {
 	background-color:rgba(0,0,0,0.80);
-	height:209px;
-    width:209px;
+	height:207px;
+    width:207px;
 	position:absolute;
 	border-radius:5px;
 	left:0;
 	top:0;
 	z-index:4;
+	border:2px solid blue;
 }
 
 .radio-cell .radio-icon {
@@ -774,6 +798,10 @@ input::-webkit-input-placeholder {
 	font-size:14px;
 }
 
+.radio-cell .mask p:last-child span {
+	font-size:12px;
+	display:block;
+}
 .radio-cell .mask p:first-child {
 	margin-bottom:30px;
 	margin-top:20px;
@@ -791,11 +819,12 @@ input::-webkit-input-placeholder {
 	margin-right:10px;
 	padding-left:6px;
 	font-size:11px;
+	color:#a0a8ac;
 	min-height:19px;
 	min-width:20px;
 	background-image:url('../app/images/radio/radio-tag-bg.png');
 	background-repeat:repeat-x;
-	border-radius:3px;
+	border-radius:4px;
 	position:relative;
 	padding-right:17px;
 	border:1px solid black;
