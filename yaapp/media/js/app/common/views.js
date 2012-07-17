@@ -37,9 +37,9 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             return;
         } 
         var mask = $('.mask', this.el);
-        if (mask.hasClass('hidden')) {
-            $("li .mask", $(this.el).parent()).addClass('hidden');
-            mask.removeClass('hidden');
+        if (!mask.is(":visible")) {
+            $("li .mask", $(this.el).parent()).fadeOut(300);
+            mask.removeClass('hidden').fadeIn(300);
         }
     },
     onLeave: function (e) {
@@ -47,16 +47,16 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             return;
         } 
         var mask = $('.mask', this.el);
-        mask.addClass('hidden');
+        mask.fadeOut(300);
     },
     onRadio: function (e) {
         e.preventDefault();
         var mask = $('.mask', this.el);
-        if (mask.hasClass('hidden')) {
-            $("li .mask", $(this.el).parent()).addClass('hidden');
-            mask.removeClass('hidden');
+        if (!mask.is(":visible")) {
+            $("li .mask", $(this.el).parent()).fadeOut(300);
+            mask.removeClass('hidden').fadeIn(300);
         } else {
-            mask.addClass('hidden');
+            mask.fadeOut(300);
             var uuid = this.model.get('uuid');
             Yasound.App.Router.navigate("radio/" + uuid + '/', {
                 trigger: true
