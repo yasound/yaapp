@@ -105,12 +105,7 @@ Yasound.Views.UserCell = Backbone.View.extend({
 Yasound.Views.UserMenu = Backbone.View.extend({
     el: '#user-menu',
     events: {
-        'click #btn-my-radio': 'myRadio',
-        'click #btn-favorites': 'favorites',
-        'click #btn-friends': 'friends',
         'click #profile-picture a': 'myProfile',
-        'click #btn-settings': 'settings',
-        'click #btn-programming': 'programming',
         'click #messages-btn': 'notifications'
     },
     initialize: function() {
@@ -136,33 +131,9 @@ Yasound.Views.UserMenu = Backbone.View.extend({
             trigger: true
         });
     },
-    favorites: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('favorites/', {
-            trigger: true
-        });
-    },
-    friends: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('friends/', {
-            trigger: true
-        });
-    },
     myProfile: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('profile/' + Yasound.App.username + '/', {
-            trigger: true
-        });
-    },
-    settings: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('settings/', {
-            trigger: true
-        });
-    },
-    programming: function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('programming/', {
             trigger: true
         });
     },
@@ -183,17 +154,6 @@ Yasound.Views.UserMenu = Backbone.View.extend({
             el.addClass('hidden');
         }
     }    
-});
-
-Yasound.Views.NotificationMenuItem = Backbone.View.extend({
-    tagName: 'li',
-    initialize: function () {
-        this.model.bind('change', this.render, this);
-    },
-    render: function() {
-        $(this.el).html(ich.notificationMenuItemTemplate(this.model.toJSON()));
-        return this;
-    }
 });
 
 /**
