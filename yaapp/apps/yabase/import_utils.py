@@ -326,8 +326,8 @@ class SongImporter:
         args.append(destination)
         p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
         output, errors = p.communicate()
-        print output
-        print errors
+        self._log(errors)
+        self._log(output)
         if len(errors) == 0:
             self._log(errors)
             return False
