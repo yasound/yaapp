@@ -166,7 +166,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     events: {
         "click #play-btn": "togglePlay",
-        "click #like": "like",
+        "click #love-btn": "like",
         "click #radio-picto a": "displayRadio",
         "click #fb_share": "facebookShare",
         "click #favorite-radio": "favorite"
@@ -279,7 +279,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
     },
     
-    like: function (event) {
+    like: function (e) {
+        e.preventDefault();
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
