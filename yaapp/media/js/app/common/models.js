@@ -52,7 +52,6 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
     },
     genre: function() {
         var genre_id = this.get('genre');
-        console.log(genre_id)
         var genre_data = {
             'style_all': gettext('All'),
             'style_classical': gettext('Classical'),
