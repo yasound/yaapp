@@ -50,7 +50,28 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             }
         });
     },
-    
+    genre: function() {
+        var genre_id = this.get('genre');
+        console.log(genre_id)
+        var genre_data = {
+            'style_all': gettext('All'),
+            'style_classical': gettext('Classical'),
+            'style_blues': gettext('Blues'),
+            'style_alternative': gettext('Alternative'),
+            'style_electro': gettext('Electro'),
+            'style_chanson_francaise': gettext('French Music'),
+            'style_jazz': gettext('Jazz'),
+            'style_pop': gettext('Pop'),
+            'style_reggae': gettext('Reggae'),
+            'style_rock': gettext('Rock'),
+            'style_metal': gettext('Metal'),
+            'style_hiphop': gettext('Hip Hop'),
+            'style_rnbsoul': gettext('RnB / Soul'),
+            'style_world': gettext('World'),
+            'style_misc': gettext('Miscellaneous'),
+        }
+        return genre_data[genre_id];
+    }
 });
 
 /**

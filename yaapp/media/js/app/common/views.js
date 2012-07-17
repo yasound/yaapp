@@ -87,6 +87,9 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         
         var img = $('.radio-icon img', this.el);
         img.attr('src', cover);
+        
+        var genre = this.model.genre();
+        $('.tag', this.el).html(genre + '<div class="tag-right-side"></div>');
     }
 });
 
