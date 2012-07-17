@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class='radio-cell'>
     <div class='picture'>
-    <img src='/media/app/images/radio/radio-album-cover.png'/>
+    <img src='<% picture %>' width='210' height='210'/>
     </div>
     
     <div class='mask' style='display:none;'>
@@ -19,7 +19,9 @@
     </div>
     
     <div class="profile">
+        <%#creator%>
         <img src='<% picture %>' width='32px' height='32px'/>
+        <%/creator%>
         <span class="radio-profile-picture-mask">
 			<img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask">
 		</span>
@@ -28,8 +30,8 @@
         <div class="caption-content">
             <h5><% name %></h5>
             <ul class="radio-favorites">
-                <li>123</li>
-                <li>1859</li>
+                <li><% favorites %></li>
+                <li><% nb_current_users %></li>
             </ul>
         </div>
     </div>
