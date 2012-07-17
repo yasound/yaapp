@@ -11,6 +11,10 @@ $(document).ready(function () {
     
     Yasound.App.userAuthenticated = g_authenticated;
     Yasound.App.username = g_username;
+    Yasound.App.isMobile = false;
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+        Yasound.App.isMobile = true;
+    }    
     
     /**
      * component initalization

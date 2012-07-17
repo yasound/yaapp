@@ -13,7 +13,9 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     tagName: 'li',
 
     events: {
-        'click .radio-cell': 'onRadio'
+        'click .radio-cell': 'onRadio',
+        'mouseover .radio-cell': 'onHover',
+        'mouseleave .radio-cell': 'onLeave'
     },
 
     initialize: function () {
@@ -30,9 +32,25 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
         return this;
     },
+    onHover: function (e) {
+        if (Yasound.App.isMobile) {
+            return;
+        } 
+        var mask = $('.mask', this.el);
+        if (mask.hasClass('hidden')) {
+            $("li .mask", $(this.el).parent()).addClass('hidden');
+            mask.removeClass('hidden');
+        }
+    },
+    onLeave: function (e) {
+        if (Yasound.App.isMobile) {
+            return;
+        } 
+        var mask = $('.mask', this.el);
+        mask.addClass('hidden');
+    },
     onRadio: function (e) {
         e.preventDefault();
-        
         var mask = $('.mask', this.el);
         if (mask.hasClass('hidden')) {
             $("li .mask", $(this.el).parent()).addClass('hidden');
