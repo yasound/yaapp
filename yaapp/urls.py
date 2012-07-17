@@ -20,7 +20,6 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
     MatchedSongResource, SearchSongResource, EditSongResource, \
     UserFavoriteRadioResource
 from yabase.models import Radio
-from yabase.views import WebAppView
 from yaweb import urls as yaweb_urls
 from yaweb.sitemap import StaticSitemap
 # Uncomment the next two lines to enable the admin:
@@ -187,21 +186,7 @@ urlpatterns = patterns('',
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<song_instance_id>\d+)$', 'yabase.views.web_song'),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_listen'),
     (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_widget'),
-    url(r'^app/$', WebAppView.as_view(), {'page': 'home'}, name='webapp'),
-    url(r'^app/radio/(?P<radio_uuid>\S+)/$', WebAppView.as_view(),  {'page': 'radio'}, name='webapp_radio'),
-    url(r'^app/search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_search'),
-    url(r'^app/favorites/$', WebAppView.as_view(), {'page': 'favorites'}, name='webapp_favorites'),
-    url(r'^app/top/$', WebAppView.as_view(), {'page': 'top'}, name='webapp_top'),
-    url(r'^app/friends/$', WebAppView.as_view(), {'page': 'friends'}, name='webapp_friends'),
-    url(r'^app/settings/$', WebAppView.as_view(), {'page': 'settings'}, name='webapp_settings'),
-    url(r'^app/notifications/$', WebAppView.as_view(), {'page': 'notifications'}, name='webapp_notifications'),
-    url(r'^app/programming/$', WebAppView.as_view(), {'page': 'programming'}, name='webapp_programming'),
-    url(r'^app/legal/$', WebAppView.as_view(), {'page': 'legal'}, name='webapp_legal'),
-    url(r'^app/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_contact'),
-    url(r'^app/users/$', WebAppView.as_view(), {'page': 'users'}, name='webapp_users'),
-    url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
-    
-    
+
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
     
@@ -245,6 +230,9 @@ urlpatterns = patterns('',
     
     # internal stuff
     url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
+
+
+    (r'^', include('yabase.urls')),
 
 )
 
