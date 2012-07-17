@@ -660,7 +660,6 @@ input::-webkit-input-placeholder {
 
 .radio-container {
 	float:left;
-	border:1px solid black;
 	display:inline-block;
 	height:209px;
 	width:209px;
@@ -687,7 +686,7 @@ input::-webkit-input-placeholder {
     background-image:url('../app/images/radio/radio-caption-bg.png');
     background-repeat:repeat-x;
     height:49px;
-    width:208px;
+    width:206px;
     border-radius: 0px 0px 5px 5px;
     border:1px solid black;
     z-index:5;
@@ -792,7 +791,7 @@ input::-webkit-input-placeholder {
 	border-radius:5px;
 	left:1px;
 	top:1px;
-	z-index:4;	
+	z-index:4;
 }
 
 
