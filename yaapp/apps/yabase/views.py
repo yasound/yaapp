@@ -1123,7 +1123,8 @@ class WebAppView(View):
             'display_associate_twitter' : display_associate_twitter,
             'user_profile': user_profile,
             'import_itunes_form': import_itunes_form,
-            'notification_count': notification_count
+            'notification_count': notification_count,
+            'submenu_number': 1 ,
         }
         
         if hasattr(self, page):

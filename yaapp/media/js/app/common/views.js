@@ -20,6 +20,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 
     initialize: function () {
         this.model.bind('change', this.render, this);
+        this.currentSongModel = new Yasound.Data.Models.CurrentSong();
+        this.currentSongModel.bind('change', this.refreshCurrentSong, this);
     },
     onClose: function () {
         this.model.unbind('change', this.render);
@@ -30,6 +32,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             data.name = _.str.prune(data.name, 18);
         }
         $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
+
+        this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
     },
     onHover: function (e) {
@@ -39,6 +43,9 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
             $("li .mask", $(this.el).parent()).fadeOut(300);
+            
+            this.currentSongModel.fetch()
+            
             mask.removeClass('hidden').fadeIn(300);
         }
     },
@@ -54,6 +61,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
             $("li .mask", $(this.el).parent()).fadeOut(300);
+            this.currentSongModel.fetch()
             mask.removeClass('hidden').fadeIn(300);
         } else {
             mask.fadeOut(300);
@@ -63,6 +71,25 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             });
         }
         
+    },
+    refreshCurrentSong: function(e) {
+        var el = $('.current-song', this.el);
+        var name = this.currentSongModel.get('name');
+        var artist =  this.currentSongModel.get('artist');
+        var cover = this.currentSongModel.get('cover');
+        if (!name) {
+            name = '';
+        }
+        if (!artist) {
+            artist = '';
+        }
+        el.html(name + '<span> ' + artist + '</span>');
+        
+        var img = $('.radio-icon img', this.el);
+        img.attr('src', cover);
+        
+        var genre = this.model.genre();
+        $('.tag', this.el).html(genre + '<div class="tag-right-side"></div>');
     }
 });
 
