@@ -942,7 +942,7 @@ class Radio(models.Model):
     def picture_url(self):
         if self.picture:
             try:
-                return get_thumbnail(self.picture, '100x100', format='PNG', crop='center').url
+                return get_thumbnail(self.picture, '210x210', format='PNG', crop='center').url
             except:
                 return yaapp_settings.DEFAULT_IMAGE
         else:
