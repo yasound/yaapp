@@ -97,6 +97,7 @@ footer #menu a:hover {
 
 #track-picture {
 	float: left;
+	margin-left:10px;
 }
 
 
@@ -107,8 +108,8 @@ footer #menu a:hover {
 }
 
 #track-details {
-	clear:both;
 	padding-top:10px;
+	max-width:250px;
 }
 
 #track-details p {

@@ -113,7 +113,9 @@ footer #menu a:hover {
 
 #track-details p {
 	height: 26px;
+	max-width:130px;
 	font-size: 12px;
+	max-width:130px;
 }
 
 #banner {
