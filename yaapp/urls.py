@@ -185,7 +185,8 @@ urlpatterns = patterns('',
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<song_instance_id>\d+)$', 'yabase.views.web_song'),
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_listen'),
-    (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_widget'),
+    (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)/$', 'yabase.views.web_widget'),
+    (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<wtype>\S+)', 'yabase.views.web_widget'),
 
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),

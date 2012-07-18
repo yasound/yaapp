@@ -862,7 +862,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
         'flash_player_absolute_url': flash_player_absolute_url,
     }, context_instance=RequestContext(request))    
 
-def web_widget(request, radio_uuid, template_name='yabase/widget.html'):
+def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.html'):
     radio = None
     try:
         radio = Radio.objects.get(uuid=radio_uuid)
@@ -871,11 +871,14 @@ def web_widget(request, radio_uuid, template_name='yabase/widget.html'):
             radios = Radio.objects.filter(uuid__startswith=radio_uuid)[:1]
             if radios.count() > 0:
                 radio = radios[0]
-                url = reverse('yabase.views.web_listen', args=[radio.uuid])
+                url = reverse('yabase.views.web_widget', args=[radio.uuid, wtype])
                 return HttpResponseRedirect(url)
 
     if radio is None:
         raise Http404
+
+    if wtype == 'large':
+        template_name = 'yabase/widget_large.html'
 
     radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
