@@ -1063,6 +1063,7 @@ input::-webkit-input-placeholder {
     height:80px;
     text-align:right;
     margin-top:42px;
+	position:relative;
 }
 
 #minutes span {
@@ -1073,7 +1074,8 @@ input::-webkit-input-placeholder {
 }
 
 #minutes p {
-    float:right;
+    position:absolute;
+	left:49px;
     width:130px;
     padding-top:15px;
     font-size:13px;
