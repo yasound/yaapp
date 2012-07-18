@@ -16,7 +16,7 @@ Yasound.Data.Models.Favorites = Backbone.Paginator.requestPager.extend({
     parse: function(response) {
         var results = response.objects;
         this.totalCount = response.meta.total_count;
-        this.totalPages = this.totalCount / this.perPage;
+        this.totalPages = Math.ceil(this.totalCount / this.perPage);
         return results;
     },
     setQuery: function(query) {
