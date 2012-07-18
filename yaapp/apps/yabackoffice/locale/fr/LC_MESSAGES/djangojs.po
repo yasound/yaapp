@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-02 14:47+0200\n"
+"POT-Creation-Date: 2012-07-18 14:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,54 +18,114 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/common/models.js:69
-#: js/app/common/views.js:208
+#: js/app/common/models.js:54
+msgid "All genres"
+msgstr "Tous Styles"
+
+#: js/app/common/models.js:55
+msgid "Classical"
+msgstr "Classique"
+
+#: js/app/common/models.js:56
+msgid "Blues"
+msgstr "Blues"
+
+#: js/app/common/models.js:57
+msgid "Alternative"
+msgstr "Alternative"
+
+#: js/app/common/models.js:58
+msgid "Electro"
+msgstr "Electro"
+
+#: js/app/common/models.js:59
+msgid "French Music"
+msgstr "Chanson Française"
+
+#: js/app/common/models.js:60
+msgid "Jazz"
+msgstr "Jazz"
+
+#: js/app/common/models.js:61
+msgid "Pop"
+msgstr "Pop"
+
+#: js/app/common/models.js:62
+msgid "Reggae"
+msgstr "Reggae"
+
+#: js/app/common/models.js:63
+msgid "Rock"
+msgstr "Rock"
+
+#: js/app/common/models.js:64
+msgid "Metal"
+msgstr "Metal"
+
+#: js/app/common/models.js:65
+msgid "Hip Hop"
+msgstr "Hip Hop"
+
+#: js/app/common/models.js:66
+msgid "RnB / Soul"
+msgstr "RnB / Soul"
+
+#: js/app/common/models.js:67
+msgid "World"
+msgstr "World"
+
+#: js/app/common/models.js:68
+msgid "Miscellaneous"
+msgstr "Divers"
+
+#: js/app/common/models.js:112
+#: js/app/common/views.js:226
 msgid "by"
 msgstr "par"
 
-#: js/app/common/views.js:98
+#: js/app/common/views.js:178
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:206
+#: js/app/common/views.js:224
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/common/views.js:209
+#: js/app/common/views.js:227
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/views.js:365
+#: js/app/common/views.js:342
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/notifications/views.js:32
+#: js/app/notifications/views.js:31
 msgid "Notification marked as read"
 msgstr "Notification marquée comme lue"
 
-#: js/app/notifications/views.js:34
+#: js/app/notifications/views.js:33
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/settings/views.js:59
+#: js/app/settings/views.js:58
 msgid "Facebook settings saved"
 msgstr "Paramètres Facebook sauvegardés"
 
-#: js/app/settings/views.js:61
+#: js/app/settings/views.js:60
 msgid "Error while saving Facebook settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Facebook"
 
-#: js/app/settings/views.js:69
+#: js/app/settings/views.js:68
 msgid "Twitter settings saved"
 msgstr "Paramètres Twitter sauvegardés"
 
-#: js/app/settings/views.js:71
+#: js/app/settings/views.js:70
 msgid "Error while saving Twitter settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 
 #: js/backoffice/backoffice.js:71
 #: js/backoffice/Moderation/Radios.js:14
-#: js/backoffice/Radio/Radios.js:327
+#: js/backoffice/Radio/Radios.js:380
 #: js/backoffice/Radio/UnmatchedSongs.js:21
 msgid "Radios"
 msgstr "Radios"
@@ -265,8 +325,8 @@ msgstr "Rien à afficher"
 #: js/backoffice/Radio/Radios.js:67
 #: js/backoffice/Radio/Radios.js.py:91
 #: js/backoffice/Radio/Radios.js:115
-#: js/backoffice/Radio/Radios.js.py:223
-#: js/backoffice/Radio/Radios.js:255
+#: js/backoffice/Radio/Radios.js.py:265
+#: js/backoffice/Radio/Radios.js:297
 #: js/backoffice/Users/Users.js:10
 #: js/backoffice/Users/Users.js.py:42
 #: js/backoffice/Users/Users.js:95
@@ -304,7 +364,7 @@ msgstr "Nouveau VIP"
 #: js/backoffice/Invitations/Invitations.js:118
 #: js/backoffice/Moderation/Radios.js:38
 #: js/backoffice/Moderation/Users.js:38
-#: js/backoffice/Radio/Radios.js:249
+#: js/backoffice/Radio/Radios.js:291
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -477,51 +537,59 @@ msgstr "Voulez-vous supprimer les doublons de la radio ?"
 msgid "Do you want to add songs to radio"
 msgstr "Voulez-vous ajouter les chansons à la radio ?"
 
-#: js/backoffice/Radio/Radios.js:151
+#: js/backoffice/Radio/Radios.js:168
+msgid "The following metadata have been found, use it ?"
+msgstr ""
+
+#: js/backoffice/Radio/Radios.js:193
 msgid "Songs assigned to radio"
 msgstr "Chansons assignées à la radio"
 
-#: js/backoffice/Radio/Radios.js:153
+#: js/backoffice/Radio/Radios.js:195
 msgid "Remove from radio"
 msgstr "Supprimer de la radio"
 
-#: js/backoffice/Radio/Radios.js:163
+#: js/backoffice/Radio/Radios.js:205
 msgid "Remove all songs from radio"
 msgstr "Supprimer toutes les chansons de la radio"
 
-#: js/backoffice/Radio/Radios.js:172
+#: js/backoffice/Radio/Radios.js:214
 msgid "Remove duplicate songs from radio"
 msgstr "Supprimer les doublons de la radio"
 
-#: js/backoffice/Radio/Radios.js:219
+#: js/backoffice/Radio/Radios.js:261
 msgid "Create new radio"
 msgstr "Créer une nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:224
+#: js/backoffice/Radio/Radios.js:266
 msgid "Do you want to create new radio ?"
 msgstr "Voulez-vous créer une radio ?"
 
-#: js/backoffice/Radio/Radios.js:231
+#: js/backoffice/Radio/Radios.js:273
 msgid "New radio"
 msgstr "Nouvelle radio"
 
-#: js/backoffice/Radio/Radios.js:239
+#: js/backoffice/Radio/Radios.js:281
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-#: js/backoffice/Radio/Radios.js:256
+#: js/backoffice/Radio/Radios.js:298
 msgid "Do you want to delete radio ?"
 msgstr "Voulez-vous supprimer la radio ?"
 
-#: js/backoffice/Radio/Radios.js:293
+#: js/backoffice/Radio/Radios.js:335
 msgid "Available songs"
 msgstr "Chansons disponibles"
 
-#: js/backoffice/Radio/Radios.js:297
+#: js/backoffice/Radio/Radios.js:339
 msgid "Add to radio"
 msgstr "Ajouter à la radio"
 
-#: js/backoffice/Radio/Radios.js:320
+#: js/backoffice/Radio/Radios.js:349
+msgid "Find metadata"
+msgstr ""
+
+#: js/backoffice/Radio/Radios.js:373
 msgid "Programming"
 msgstr "Programmation"
 

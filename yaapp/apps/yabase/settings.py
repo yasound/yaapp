@@ -17,8 +17,10 @@ RADIO_STYLE_RNBSOUL     = 'style_rnbsoul'
 RADIO_STYLE_WORLD       = 'style_world'
 RADIO_STYLE_MISC        = 'style_misc'
 
+RADIO_STYLE_NONE        = ''
+
 RADIO_STYLE_CHOICES = (
-    (RADIO_STYLE_ALL, _('All')),
+    (RADIO_STYLE_ALL, _('All genres')),
     (RADIO_STYLE_CLASSICAL, _('Classical')),
     (RADIO_STYLE_BLUES, _('Blues')),
     (RADIO_STYLE_ALTERNATIVE, _('Alternative')),
@@ -34,6 +36,10 @@ RADIO_STYLE_CHOICES = (
     (RADIO_STYLE_WORLD, _('World')),
     (RADIO_STYLE_MISC, _('Miscellaneous')),
 )
+
+RADIO_STYLE_CHOICES_FORM = (
+    (RADIO_STYLE_NONE, _('Genre')),
+) + RADIO_STYLE_CHOICES
 
 # Mood
 MOOD_NEUTRAL = 'N'

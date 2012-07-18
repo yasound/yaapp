@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-05 09:32+0200\n"
+"POT-Creation-Date: 2012-07-18 14:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,277 +18,301 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: forms.py:13
+#: export_utils.py:8
+msgid "Songs"
+msgstr ""
+
+#: export_utils.py:20
+msgid "Name"
+msgstr ""
+
+#: export_utils.py:21
+msgid "Artist"
+msgstr ""
+
+#: forms.py:17
 msgid "My radio"
 msgstr "Ma radio"
 
-#: forms.py:17
+#: forms.py:27
 msgid "Password"
 msgstr "Mot de passe"
 
-#: forms.py:18
+#: forms.py:28
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: forms.py:24
+#: forms.py:34
 msgid "Profile"
 msgstr "Profil"
 
-#: forms.py:36
+#: forms.py:46
+#: forms.py:93
 msgid "Listen"
 msgstr "J'écoute un morceau"
 
-#: forms.py:37
+#: forms.py:47
+#: forms.py:94
 msgid "Like song"
 msgstr "J'aime le morceau"
 
-#: forms.py:38
+#: forms.py:48
+#: forms.py:95
 msgid "Post message"
 msgstr "Je poste un message"
 
-#: forms.py:39
+#: forms.py:49
+#: forms.py:96
 msgid "Update programming"
 msgstr "Je mets à jour ma programmation"
 
-#: forms.py:42
+#: forms.py:52
 msgid "Facebook share options"
 msgstr "Options de partage de Facebook"
 
-#: forms.py:85
+#: forms.py:99
 msgid "Twitter share options"
 msgstr "Options de partage de twitter"
 
-#: import_utils.py:232
+#: forms.py:139
+msgid "Please paste from iTunes"
+msgstr ""
+
+#: import_utils.py:244
 msgid "no echonest info about artist"
 msgstr ""
 
-#: import_utils.py:238
+#: import_utils.py:250
 msgid "artist info not sufficient"
 msgstr ""
 
-#: import_utils.py:242
+#: import_utils.py:254
 msgid "no name for artist"
 msgstr ""
 
-#: import_utils.py:261
+#: import_utils.py:273
 msgid "no lastfm info about album"
 msgstr ""
 
-#: import_utils.py:266
+#: import_utils.py:278
 #, python-format
 msgid "album already in database (%d)"
 msgstr ""
 
-#: import_utils.py:286
+#: import_utils.py:298
 msgid "downloading album cover"
 msgstr ""
 
-#: import_utils.py:491
+#: import_utils.py:555
 #, python-format
 msgid "song metadata given and found : %s"
 msgstr ""
 
-#: import_utils.py:493
+#: import_utils.py:557
 #, python-format
 msgid "song metadata does not exists : %s"
 msgstr ""
 
-#: import_utils.py:500
+#: import_utils.py:561
 msgid "looking for artist"
 msgstr ""
 
-#: import_utils.py:503
+#: import_utils.py:564
 msgid "looking for album"
 msgstr ""
 
-#: import_utils.py:507
+#: import_utils.py:568
 msgid "looking for song"
 msgstr ""
 
-#: import_utils.py:516
+#: import_utils.py:595
 msgid "generating filename"
 msgstr ""
 
-#: import_utils.py:528
+#: import_utils.py:609
 msgid "creating YasoundSong"
 msgstr ""
 
-#: import_utils.py:558
+#: import_utils.py:640
 #, python-format
 msgid "YasoundSong generated, id = %s"
 msgstr ""
 
-#: import_utils.py:560
+#: import_utils.py:642
 msgid "generating file data"
 msgstr ""
 
-#: import_utils.py:566
+#: import_utils.py:648
 msgid "generating preview"
 msgstr ""
 
-#: import_utils.py:590
+#: import_utils.py:674
 msgid "Association between YasoundSong and SongMetadata done"
 msgstr ""
 
-#: import_utils.py:598
+#: import_utils.py:682
 msgid "Building mongodb index"
 msgstr ""
 
-#: models.py:64
+#: models.py:66
 msgid "yasound song id"
 msgstr ""
 
-#: models.py:277
+#: models.py:289
 msgid "song"
 msgstr "chanson"
 
-#: models.py:278
-#: models.py:1109
+#: models.py:290
+#: models.py:1173
 msgid "user"
 msgstr "utilisateur"
 
-#: models.py:286
+#: models.py:298
 msgid "Song user"
 msgstr ""
 
-#: models.py:473
+#: models.py:509
 msgid "creator"
 msgstr "créateur"
 
-#: models.py:474
-#: models.py:1422
+#: models.py:510
+#: models.py:1485
 msgid "created"
 msgstr ""
 
-#: models.py:475
-#: models.py:1423
+#: models.py:511
+#: models.py:1486
 msgid "updated"
 msgstr ""
 
-#: models.py:506
+#: models.py:542
 msgid "current song"
 msgstr ""
 
-#: models.py:1108
-#: models.py:1444
+#: models.py:1172
+#: models.py:1507
 msgid "radio"
 msgstr ""
 
-#: models.py:1124
+#: models.py:1188
 msgid "Radio user"
 msgstr ""
 
-#: models.py:1424
+#: models.py:1487
 msgid "name"
 msgstr "nom"
 
-#: models.py:1425
+#: models.py:1488
 msgid "description"
 msgstr "description"
 
-#: models.py:1426
+#: models.py:1489
 msgid "activated"
 msgstr "activé"
 
-#: models.py:1440
-#: models.py:1443
+#: models.py:1503
+#: models.py:1506
 msgid "featured content"
 msgstr ""
 
-#: models.py:1445
+#: models.py:1508
 msgid "order"
 msgstr ""
 
-#: models.py:1452
+#: models.py:1515
 msgid "featured radio"
 msgstr ""
 
-#: settings.py:21
-msgid "All"
-msgstr ""
-
-#: settings.py:22
-msgid "Classical"
-msgstr ""
-
 #: settings.py:23
-msgid "Blues"
-msgstr ""
+msgid "All genres"
+msgstr "Tous Styles"
 
 #: settings.py:24
-msgid "Alternative"
-msgstr ""
+msgid "Classical"
+msgstr "Classique"
 
 #: settings.py:25
-msgid "Electro"
-msgstr ""
+msgid "Blues"
+msgstr "Blues"
 
 #: settings.py:26
-msgid "French Music"
-msgstr ""
+msgid "Alternative"
+msgstr "Alternative"
 
 #: settings.py:27
-msgid "Jazz"
-msgstr ""
+msgid "Electro"
+msgstr "Electro"
 
 #: settings.py:28
-msgid "Pop"
-msgstr ""
+msgid "French Music"
+msgstr "Chanson française"
 
 #: settings.py:29
-msgid "Reggae"
-msgstr ""
+msgid "Jazz"
+msgstr "Jazz"
 
 #: settings.py:30
-msgid "Rock"
-msgstr ""
+msgid "Pop"
+msgstr "Pop"
 
 #: settings.py:31
-msgid "Metal"
-msgstr ""
+msgid "Reggae"
+msgstr "Reggae"
 
 #: settings.py:32
-msgid "Hip hop"
-msgstr ""
+msgid "Rock"
+msgstr "Rock"
 
 #: settings.py:33
-msgid "RnB / Soul"
-msgstr ""
+msgid "Metal"
+msgstr "Metal"
 
 #: settings.py:34
-msgid "World"
-msgstr ""
+msgid "Hip hop"
+msgstr "Hip hop"
 
 #: settings.py:35
-msgid "Miscellaneous"
-msgstr ""
+msgid "RnB / Soul"
+msgstr "Rnb / Soul"
 
-#: settings.py:44
-#: settings.py:56
+#: settings.py:36
+msgid "World"
+msgstr "World"
+
+#: settings.py:37
+msgid "Miscellaneous"
+msgstr "Divers"
+
+#: settings.py:41
+msgid "Genre"
+msgstr "Genre"
+
+#: settings.py:50
+#: settings.py:62
 msgid "Like"
 msgstr ""
 
-#: settings.py:45
+#: settings.py:51
 msgid "Dislike"
 msgstr ""
 
-#: settings.py:46
+#: settings.py:52
 msgid "Neutral"
 msgstr ""
 
-#: settings.py:54
+#: settings.py:60
 msgid "Message"
 msgstr ""
 
-#: settings.py:55
+#: settings.py:61
 msgid "Song"
 msgstr ""
 
-#: settings.py:81
+#: settings.py:87
 msgid "Selection"
 msgstr ""
 
-#: settings.py:82
+#: settings.py:88
 msgid "Homepage"
 msgstr ""
 

@@ -610,7 +610,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #friends"            : "friends",
         "click #favorites"          : "favorites",
         "keypress #search-input"    : 'search',
-        "change #id_style"          : 'style'
+        "change #id_genre"          : 'genre'
     },
     initialize: function() {
         _.bindAll(this, 'render', 'selectMenu');
@@ -623,6 +623,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.subMenuTemplate());
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
+        
         return this;
     },
     selectMenu: function(menu) {
@@ -683,11 +684,11 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             trigger: true
         });
     },
-    style: function(e) {
-        $.publish('/submenu/style', $(e.target).val());
+    genre: function(e) {
+        $.publish('/submenu/genre', $(e.target).val());
     },
-    currentStyle: function() {
-        return $('#id_style').val();
+    currentGenre: function() {
+        return $('#id_genre').val();
     }
 });
 

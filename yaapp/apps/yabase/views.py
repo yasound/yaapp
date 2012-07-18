@@ -27,7 +27,7 @@ from tastypie.models import ApiKey
 from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
-    SettingsTwitterForm, ImportItunesForm, RadioStyleForm
+    SettingsTwitterForm, ImportItunesForm, RadioGenreForm
 from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
@@ -976,7 +976,7 @@ class WebAppView(View):
         
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
         
-        style_form = RadioStyleForm()
+        genre_form = RadioGenreForm()
         
         context = {
             'user_uuid': user_uuid,
@@ -997,7 +997,7 @@ class WebAppView(View):
             'display_associate_twitter' : display_associate_twitter,
             'import_itunes_form': ImportItunesForm(user=request.user),
             'notification_count': notification_count,
-            'style_form': style_form,
+            'genre_form': genre_form,
             'submenu_number': 1 
         }
         
@@ -1108,7 +1108,7 @@ class WebAppView(View):
                 import_itunes_form.save()
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
-        style_form = RadioStyleForm()
+        genre_form = RadioGenreForm()
 
         context = {
             'user_uuid': user_uuid,
@@ -1130,7 +1130,7 @@ class WebAppView(View):
             'import_itunes_form': import_itunes_form,
             'notification_count': notification_count,
             'submenu_number': 1,
-            'style_form': style_form
+            'genre_form': genre_form
         }
         
         if hasattr(self, page):

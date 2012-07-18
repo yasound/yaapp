@@ -66,18 +66,18 @@ Yasound.Views.HomePage = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onStyleChanged');
-        $.subscribe('/submenu/style', this.onStyleChanged)
+        _.bindAll(this, 'render', 'onGenreChanged');
+        $.subscribe('/submenu/genre', this.onGenreChanged)
     },
 
     onClose: function() {
-        $.unsubscribe('/submenu/style', this.onStyleChanged)
+        $.unsubscribe('/submenu/genre', this.onGenreChanged)
     },
 
     reset: function() {
     },
 
-    render: function(style) {
+    render: function(genre) {
         this.reset();
         $(this.el).html(ich.homePageTemplate());
         
@@ -87,10 +87,10 @@ Yasound.Views.HomePage = Backbone.View.extend({
             el: $('#selected-radios', this.el)
         });
 
-        this.selectedRadios.setStyle(style);
+        this.selectedRadios.setGenre(genre);
         return this;
     },
-    onStyleChanged: function(e, style) {
-        this.selectedRadios.setStyle(style);
+    onGenreChanged: function(e, genre) {
+        this.selectedRadios.setGenre(genre);
     }
 });

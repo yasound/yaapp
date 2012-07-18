@@ -5,8 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from models import Radio
 from yabase.task import async_import_from_itunes
 from yacore.tags import clean_tags
-import settings as yabase_settings
 import logging
+import settings as yabase_settings
 logger = logging.getLogger("yaapp.yabase")
 
 class SettingsRadioForm(BootstrapModelForm):
@@ -147,5 +147,5 @@ class ImportItunesForm(BootstrapForm):
         tracks = self.cleaned_data['tracks']
         async_import_from_itunes.delay(radio=Radio.objects.radio_for_user(self.user), data=tracks)
         
-class RadioStyleForm(forms.Form):
-    style = forms.ChoiceField(choices = yabase_settings.RADIO_STYLE_CHOICES)
+class RadioGenreForm(forms.Form):
+    genre = forms.ChoiceField(choices = yabase_settings.RADIO_STYLE_CHOICES_FORM, required=False)
