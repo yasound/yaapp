@@ -651,7 +651,6 @@ input::-webkit-input-placeholder {
     float:left;
     height:217px;
     width:217px;
-    border-radius:10px;
     margin:12px;
     position:relative;
     overflow:hidden;
@@ -660,12 +659,9 @@ input::-webkit-input-placeholder {
 
 .radio-container {
 	float:left;
-	display:inline-block;
 	height:209px;
 	width:209px;
-	border-radius:20px;
 	position:relative;
-	overflow:hidden;
 	top:4px;
 	left:3px;
 	box-shadow:0px 1px 3px #c7c7c7;
@@ -675,18 +671,18 @@ input::-webkit-input-placeholder {
 	position:absolute;
 	left:0px;
 	top:0px;
-	z-index:4;
+	z-index:5;
 }
 
 .radio-cell .caption {
     position:absolute;
-    bottom:-1px;
-	left:1px;
+    bottom:-2px;
+	left:0px;
     padding:0px;
     background-image:url('../app/images/radio/radio-caption-bg.png');
     background-repeat:repeat-x;
     height:49px;
-    width:206px;
+    width:209px;
     border-radius: 0px 0px 5px 5px;
     border:1px solid black;
     z-index:5;
@@ -776,8 +772,8 @@ input::-webkit-input-placeholder {
 
 .radio-cell .picture {
 	position:absolute;
-    height:209px;
-    width:209px;
+    height:210px;
+    width:210px;
     left:0px;
     top:0px;
     z-index:2;
@@ -785,12 +781,12 @@ input::-webkit-input-placeholder {
 
 .radio-cell .mask {
 	background-color:rgba(0,0,0,0.80);
-	height:209px;
-    width:209px;
+	height:210px;
+    width:210px;
 	position:absolute;
 	border-radius:5px;
-	left:1px;
-	top:1px;
+	left:0px;
+	top:0px;
 	z-index:4;
 }
 
