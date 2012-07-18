@@ -1281,6 +1281,8 @@ def most_active_radios(request):
     from yametrics.models import RadioPopularityManager
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
+    genre = request.GET.get('genre', '')
+    
     manager = RadioPopularityManager()
     radio_info = manager.most_popular(limit=limit, skip=skip)
     radio_data = []

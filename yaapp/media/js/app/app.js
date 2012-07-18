@@ -222,14 +222,13 @@ $(document).ready(function () {
 
         // owner favorites page
         favorites: function () {
-            this.clearView(true);
+            this.clearView(/* showSubMenu = */ true);
 
-            var radios = new Yasound.Data.Models.Favorites({});
+            var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.FavoritesPage({
-                el: '#webapp-content',
-                collection: radios
-            }).render();
+                el: '#webapp-content'
+            }).render(genre);
             this.commonContext.subMenuView.selectMenu('favorites');
         },
         

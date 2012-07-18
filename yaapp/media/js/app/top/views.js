@@ -3,6 +3,8 @@
 Namespace('Yasound.Views');
 
 Yasound.Views.TopRadiosPage = Backbone.View.extend({
+    collection: new Yasound.Data.Models.MostActiveRadios({}),
+    
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged');
         $.subscribe('/submenu/genre', this.onGenreChanged)
@@ -21,7 +23,6 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
 
     render: function(genre) {
         this.reset();
-        this.collection = new Yasound.Data.Models.MostActiveRadios({});
 
         $(this.el).html(ich.topRadiosPageTemplate());
         

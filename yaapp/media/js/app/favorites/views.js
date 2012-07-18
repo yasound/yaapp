@@ -3,13 +3,15 @@
 Namespace('Yasound.Views');
 
 Yasound.Views.FavoritesPage = Backbone.View.extend({
-    name: 'favoritepage',
+    collection: new Yasound.Data.Models.Favorites({}),
     
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onGenreChanged');
+        $.subscribe('/submenu/genre', this.onGenreChanged)
     },
 
     onClose: function() {
+        $.unsubscribe('/submenu/genre', this.onGenreChanged)
     },
 
     reset: function() {
@@ -19,7 +21,7 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
         }
     },
 
-    render: function() {
+    render: function(genre) {
         this.reset();
         $(this.el).html(ich.favoritesPageTemplate());
         
@@ -33,8 +35,17 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
         
-        this.collection.fetch();
-        
+        this.onGenreChanged('', genre)
         return this;
-    }
+    },
+    
+    onGenreChanged: function(e, genre) {
+        if (genre == '') {
+            this.collection.params.genre = undefined;
+        } else {
+            this.collection.params.genre = genre;
+        }
+        this.resultsView.clear();
+        this.collection.goTo(0);
+    }    
 });
