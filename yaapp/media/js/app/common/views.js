@@ -249,7 +249,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
-        $('title').text(this.model.title());
+        document.title = this.model.title();
         
         var volumeSlider = $('#volume-slider'); 
         volumeSlider.slider({
