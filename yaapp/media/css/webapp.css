@@ -683,7 +683,7 @@ input::-webkit-input-placeholder {
     background-image:url('../app/images/radio/radio-caption-bg.png');
     background-repeat:repeat-x;
     height:49px;
-    width:208px;
+    width:209px;
     border-radius: 0px 0px 5px 5px;
     border:1px solid black;
     z-index:5;
@@ -778,6 +778,12 @@ input::-webkit-input-placeholder {
     left:0px;
     top:0px;
     z-index:2;
+    border-radius:5px;
+    border:1px solid #e7e7e7;
+}
+
+.radio-cell .picture img {
+    border-radius:5px;
 }
 
 .radio-cell .mask {
