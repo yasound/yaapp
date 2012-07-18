@@ -237,12 +237,11 @@ $(document).ready(function () {
         top: function () {
             this.clearView(/* showSubMenu = */ true);
 
-            var radios = new Yasound.Data.Models.MostActiveRadios({});
+            var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.TopRadiosPage({
                 el: '#webapp-content',
-                collection: radios
-            }).render();
+            }).render(genre);
             this.commonContext.subMenuView.selectMenu('top');
         },
 

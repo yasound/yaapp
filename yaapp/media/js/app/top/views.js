@@ -4,10 +4,12 @@ Namespace('Yasound.Views');
 
 Yasound.Views.TopRadiosPage = Backbone.View.extend({
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onGenreChanged');
+        $.subscribe('/submenu/genre', this.onGenreChanged)
     },
 
     onClose: function() {
+        $.unsubscribe('/submenu/genre', this.onGenreChanged)
     },
 
     reset: function() {
@@ -17,8 +19,10 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
         }
     },
 
-    render: function() {
+    render: function(genre) {
         this.reset();
+        this.collection = new Yasound.Data.Models.MostActiveRadios({});
+
         $(this.el).html(ich.topRadiosPageTemplate());
         
         this.resultsView = new Yasound.Views.SearchResults({
@@ -31,8 +35,13 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
         
+        this.collection.params.genre = genre;
         this.collection.fetch();
         
         return this;
+    },
+    onGenreChanged: function(e, genre) {
+        this.collection.params.genre = genre;
+        this.collection.fetch();
     }
 });

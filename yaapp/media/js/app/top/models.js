@@ -11,6 +11,7 @@ Yasound.Data.Models.MostActiveRadios = Backbone.Paginator.requestPager.extend({
     page:0,
     lastId: 0,
     queryAttribute: 'search',
+    params: {},
     
     parse: function(response) {
         var results = response.objects;
