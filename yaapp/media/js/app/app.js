@@ -175,9 +175,10 @@ $(document).ready(function () {
         index: function () {
             this.clearView(true);
 
+            var style =  this.commonContext.subMenuView.currentStyle();
             this.currentView = new Yasound.Views.HomePage({
                 el: '#webapp-content'
-            }).render();
+            }).render(style);
             
             this.commonContext.subMenuView.selectMenu('selection');
         },

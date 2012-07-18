@@ -11,6 +11,9 @@ Yasound.Data.Models.SelectedRadios = Backbone.Collection.extend({
         return '/api/v1/selected_web_radio/';
     },
 
+    setStyle: function(style) {
+        this.fetch({ data: $.param({ style: style}) });
+    },
     comparator: function(radioUser) {
         return radioUser.get("id");
     }

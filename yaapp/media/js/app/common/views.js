@@ -609,7 +609,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #top"                : "top",
         "click #friends"            : "friends",
         "click #favorites"          : "favorites",
-        "keypress #search-input"    : 'search'
+        "keypress #search-input"    : 'search',
+        "change #id_style"          : 'style'
     },
     initialize: function() {
         _.bindAll(this, 'render', 'selectMenu');
@@ -681,6 +682,12 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         Yasound.App.Router.navigate("search/" + value + '/', {
             trigger: true
         });
+    },
+    style: function(e) {
+        $.publish('/submenu/style', $(e.target).val());
+    },
+    currentStyle: function() {
+        return $('#id_style').val();
     }
 });
 
