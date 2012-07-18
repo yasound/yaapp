@@ -63,7 +63,6 @@ Yasound.Views.SelectedRadios = Backbone.View.extend({
  */
 Yasound.Views.HomePage = Backbone.View.extend({
     events: {
-        'click #favorites-link': 'favorites'
     },
 
     initialize: function() {
@@ -86,34 +85,7 @@ Yasound.Views.HomePage = Backbone.View.extend({
             el: $('#selected-radios', this.el)
         });
 
-        this.mostActiveRadios = new Yasound.Data.Models.MostActiveRadios({});
-        this.mosteActiveRadiosView = new Yasound.Views.SelectedRadios({
-            collection: this.mostActiveRadios,
-            el: $('#most-active-radios', this.el)
-        });
-        
-        if (Yasound.App.userAuthenticated) {
-            this.favorites = new Yasound.Data.Models.Favorites({});
-            this.favoritesViews = new Yasound.Views.SearchResults({
-                collection: this.favorites,
-                el: $('#favorites', this.el)
-            });
-            this.paginationView = new Yasound.Views.Pagination({
-                collection: this.favorites,
-                el: $('#pagination', this.el)
-            });
-            this.favorites.fetch();
-        }
-     
         this.selectedRadios.fetch();
-        this.mostActiveRadios.fetch();
         return this;
-    },
-    
-    favorites: function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('favorites/', {
-            trigger: true
-        });
     }
 });
