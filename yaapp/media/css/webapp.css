@@ -419,18 +419,17 @@ body {
 
 #sub-header-pointer {
     position:absolute;
-    bottom:-7px;
+    bottom:-8px;
     left:23px;
     background-image:url('../app/images/sub-header-pointer.png');
     width:14px;
-    height:9px;
+    height:8px;
     background-repeat:no-repeat;
     -webkit-transition: left 0.5s ease;
     -moz-transition: left 0.5s ease;
     -ms-transition: left 0.5s ease;
     -o-transition: left 0.5s ease;
     transition: left 0.5s ease;
-    
 }
 
 #sub-header-pointer.menu1 {
@@ -638,7 +637,7 @@ input::-webkit-input-placeholder {
 
 /*--- RADIO CELL ---*/
 .radio-cells {
-  margin-left: -20px;
+  margin-left: -48px;
   list-style: none;
   *zoom: 1;
 }
@@ -671,9 +670,11 @@ input::-webkit-input-placeholder {
 .radio-cell {
     display:block;
     float:left;
-    height:317px;
+    height:217px;
     width:217px;
     margin:12px;
+    margin-left:24px;
+    margin-right:0;
     position:relative;
     overflow:hidden;
     cursor:pointer;
