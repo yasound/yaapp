@@ -1416,7 +1416,7 @@ ul#notifications .read {
 .yabutton {
     display:block;
     height:31px;
-    width:122px;
+    width:135px;
     background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
