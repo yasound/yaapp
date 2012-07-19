@@ -956,22 +956,24 @@ input::-webkit-input-placeholder {
 	font-size:15px;
 }
 
+
+#webapp-container {
+	min-height:942px;
+}
 /**
  * Footer
  */
+#pre-footer {
+	margin-bottom:24px;
+}
+ 
 #footer {
     background-image: url(/media/app/images/footer_bg.png);
     background-repeat: repeat-x;
     height: 150px;
-    position:fixed;
-    bottom:0;
     z-index:100;
     width:100%;
     background-color: black;
-}
-
-#pre-footer {
-    margin-bottom:150px;
 }
 
 #post-submenu {
