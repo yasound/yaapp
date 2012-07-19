@@ -496,6 +496,7 @@ body {
 	margin:0;
 	position:relative;
 	margin-top:10px;
+	text-overflow: ellipsis
 }
 
 select {
@@ -521,7 +522,7 @@ select {
     margin: 3px 13px 0px 0px;
     font-size:15px;
 	background-image:url('../app/images/radio-style-bg.png');
-	padding: 0px 0px 0px 9px;
+	padding: 0px 25px 0px 9px;
 }
 
 #sub-header-separation {
@@ -836,20 +837,21 @@ input::-webkit-input-placeholder {
 .radio-cell .mask p {
 	color:white;
 	font-size:14px;
+	padding-right:10px;
+	overflow:hidden;
+	margin:0px;
+	max-height:20px;
 }
 
-.radio-cell .mask p:last-child span {
+.radio-cell .mask p:last-child {
 	font-size:12px;
 	display:block;
+	color:#b1b1b1;
 }
+
 .radio-cell .mask p:first-child {
 	margin-bottom:30px;
 	margin-top:20px;
-}
-
-.radio-cell .mask span {
-	color:#b1b1b1;
-	font-size:14px;
 }
 
 .radio-cell .tag {
