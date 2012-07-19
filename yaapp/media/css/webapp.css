@@ -672,7 +672,6 @@ input::-webkit-input-placeholder {
 	display:block;
 	margin-left:auto;
 	margin-right:auto;
-	margin-top:50%
 }
 
 /*--- RADIO CELL ---*/
@@ -1408,7 +1407,57 @@ ul#notifications .read {
     font-size:15px;
 }
 
-.yabutton-large:hover {
+.yabutton-large	:hover {
+    border:1px solid #cbcdc9;
+    border-radius:7px;
+    box-shadow:1px 3px 4px #e3e3e3;
+}
+
+.yabutton {
+    display:block;
+    height:31px;
+    width:122px;
+    background-image:url('../app/images/btn-more.png');
+    background-repeat:repeat-x;
+    border:1px solid #cbcdc9;
+    border-radius:6px;
+    text-align:center;
+    box-shadow:1px 1px 1px #e3e3e3;
+    cursor: pointer;
+    margin-top:13px;
+    text-decoration:none;
+    color:#58595c;
+    position:relative;
+    text-shadow:1px 1px 1px white;
+    font-size:13px;
+}
+
+.yabutton:hover {
+    border:1px solid #cbcdc9;
+    border-radius:7px;
+    box-shadow:1px 3px 4px #e3e3e3;
+}
+
+.yabutton-small {
+    display:block;
+    height:27px;
+    width:90px;
+    background-image:url('../app/images/btn-more.png');
+    background-repeat:repeat-x;
+    border:1px solid #cbcdc9;
+    border-radius:6px;
+    text-align:center;
+    box-shadow:1px 1px 1px #e3e3e3;
+    cursor: pointer;
+    margin-top:12px;
+    text-decoration:none;
+    color:#58595c;
+    position:relative;
+    text-shadow:1px 1px 1px white;
+    font-size:12px;
+}
+
+.yabutton-small:hover {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
