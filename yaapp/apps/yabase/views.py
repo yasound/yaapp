@@ -1415,3 +1415,22 @@ def load_template(request, template_name):
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, {
     }, context_instance=RequestContext(request))    
+    
+    
+@check_api_key(methods=['GET',], login_required=False)
+def user_favorites(request, username):
+    """
+    Simple view which returns the favorites radio for given user.
+    The tastypie version only support id as user input
+    """
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    qs = Radio.objects.filter(radiouser__user__username=username, radiouser__favorite=True)
+    total_count = qs.count()
+    qs = qs[offset:offset+limit] 
+    data = []
+    for radio in qs:
+        data.append(radio.as_dict(full=True))
+    response = api_response(data, total_count, limit=limit, offset=offset)
+    return response
+    

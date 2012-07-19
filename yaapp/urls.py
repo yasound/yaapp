@@ -68,7 +68,6 @@ playlist_matched_songs = MatchedSongResource()
 
 
 user_favorite_radios = UserFavoriteRadioResource()
-#Radio.objects.unlock_all()
 
 js_info_dict = {
     'packages': ('yabackoffice', 'yabase',),
@@ -94,6 +93,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/task/(?P<task_id>\S+)/$', 'yabase.views.task_status'),
     url(r'^api/v1/user/(?P<user_id>\d+)/picture/$', 'account.views.set_user_picture'),
     url(r'^api/v1/user/(?P<user_id>\d+)/', include(user_favorite_radios.urls)),
+    url(r'^api/v1/user/(?P<username>\S+)/favorites/$', 'yabase.views.user_favorites'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/picture/$', 'yabase.views.set_radio_picture'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/liker/$', 'yabase.views.like_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/neutral/$', 'yabase.views.neutral_radio'),
