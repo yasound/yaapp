@@ -741,7 +741,7 @@ input::-webkit-input-placeholder {
 .radio-cell .caption {
     position:absolute;
     bottom:-2px;
-	left:0px;
+	left:1px;
     padding:0px;
     background-image:url('../app/images/radio/radio-caption-bg.png');
     background-repeat:repeat-x;
