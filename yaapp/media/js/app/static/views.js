@@ -10,15 +10,18 @@ Namespace('Yasound.Views.Static');
  */
 Yasound.Views.Static.LegalPage = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'templateLoaded');
     },
     reset: function() {
         
     },
     render: function () {
         this.reset();
-        $(this.el).html(ich.staticLegalPageTemplate());
+        ich.loadRemoteTemplate('static/legal.mustache', 'staticLegalPageTemplate', this.templateLoaded);
         return this;
+    },
+    templateLoaded: function() {
+        $(this.el).html(ich.staticLegalPageTemplate());
     }
 });
 
