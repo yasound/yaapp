@@ -67,7 +67,7 @@ Yasound.Views.SearchResults = Backbone.View.extend({
         var view = new Yasound.Views.RadioCell({
             model: radio
         });
-        $(this.el).append(view.render().el);
+        $(this.el).append($(view.render().el).hide().fadeIn(200));
         this.views.push(view);
     }
 });
