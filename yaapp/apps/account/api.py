@@ -163,10 +163,10 @@ class PublicUserResource(UserResource):
         
         own_radio = userprofile.own_radio
         if own_radio and own_radio.ready:
-            bundle.data['own_radio'] = own_radio.as_dict()
+            bundle.data['own_radio'] = own_radio.as_dict(full=True)
         current_radio = userprofile.current_radio
         if current_radio and current_radio.ready:
-            bundle.data['current_radio'] = current_radio.as_dict()
+            bundle.data['current_radio'] = current_radio.as_dict(full=True)
         
         userprofile.fill_user_bundle_with_history(bundle)
         

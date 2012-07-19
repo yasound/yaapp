@@ -802,6 +802,7 @@ class Radio(models.Model):
             'ready': self.ready,
             'stream_url' : self.stream_url,
             'web_url': self.web_url,
+            'genre': self.genre
         }
         if full:
             data['creator'] = self.creator.userprofile.user_as_dict(full=True)
