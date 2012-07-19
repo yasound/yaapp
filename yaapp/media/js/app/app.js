@@ -19,8 +19,7 @@ $(document).ready(function () {
     Yasound.App.cellsPerPage = function() {
         var viewportHeight = $(window).height();
         var headerHeight = $('#header').height();
-        var footerHeight = $('#footer').height();
-        var containerHeight = viewportHeight - headerHeight - footerHeight;
+        var containerHeight = viewportHeight - headerHeight;
         
         var cellHeight = 217;
         
