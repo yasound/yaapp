@@ -16,6 +16,18 @@ $(document).ready(function () {
         Yasound.App.isMobile = true;
     }    
     
+    Yasound.App.cellsPerPage = function() {
+        var viewportHeight = $(window).height();
+        var headerHeight = $('#header').height();
+        var footerHeight = $('#footer').height();
+        var containerHeight = viewportHeight - headerHeight - footerHeight;
+        
+        var cellHeight = 217;
+        
+        var rows =  Math.ceil(containerHeight / cellHeight);
+        return rows*4;
+    };
+    
     /**
      * component initalization
      */

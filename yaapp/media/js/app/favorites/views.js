@@ -6,7 +6,7 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Favorites({}),
     
     initialize: function() {
-        _.bindAll(this, 'render', 'onGenreChanged', 'cellsPerPage');
+        _.bindAll(this, 'render', 'onGenreChanged');
         $.subscribe('/submenu/genre', this.onGenreChanged)
     },
 
@@ -21,22 +21,10 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
         }
     },
 
-    cellsPerPage: function() {
-        var viewportHeight = $(window).height();
-        var headerHeight = $('#header').height();
-        var footerHeight = $('#footer').height();
-        var containerHeight = viewportHeight - headerHeight - footerHeight;
-        
-        var cellHeight = 217;
-        
-        var rows =  Math.ceil(containerHeight / cellHeight);
-        return rows*4;
-    },
-    
     render: function(genre) {
         this.reset();
         $(this.el).html(ich.favoritesPageTemplate());
-        this.collection.perPage = this.cellsPerPage()
+        this.collection.perPage = Yasound.App.cellsPerPage();
         
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,
