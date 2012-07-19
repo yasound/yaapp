@@ -35,7 +35,7 @@ body {
 }
 
 #brand-logo {
-    display:inline-block;
+    display:block;
     float:left;
     margin-top:27px;
     width:138px;
@@ -43,14 +43,14 @@ body {
 }
 
 .header-separation {
-    display:inline-block;
+    display:block;
     float:left;
     margin-top:14px;
     margin-left:20px;
 }
 
 #sound-quality {
-    display:inline-block;
+    display:block;
     float:left;
     padding-top:25px;
     padding-left:20px;
@@ -62,7 +62,7 @@ body {
     margin-top:25px;
     margin-left:20px;
     float:left;
-    display:inline-block;
+    display:block;
     height:25px;
     width:80px;
     position:relative;
@@ -1022,7 +1022,7 @@ input::-webkit-input-placeholder {
 }
 
 #footer-button {
-    display:inline-block;
+    display:block;
     height:30px;
     width:113px;
     background-image:url('/app/images/footer-btn-bg.png');
@@ -1058,7 +1058,7 @@ input::-webkit-input-placeholder {
 
 #minutes {
     float:right;
-    display:inline-block;
+    display:block;
     width:180px;
     height:80px;
     text-align:right;
@@ -1120,6 +1120,8 @@ input::-webkit-input-placeholder {
 #player #player-title {
     color:#999e9f;
     font-size:13px;
+	padding-left:6px;
+	overflow:hidden;
 }
 
 #player #details {
