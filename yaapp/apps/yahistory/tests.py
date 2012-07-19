@@ -37,7 +37,7 @@ class TestGlobalMetricsManager(TestCase):
     def test_add_post_message_event(self):
         uh = UserHistory()
         r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
-        uh.add_post_message_event(user_id=self.user.id, radio_uuid=r.uuid, message=u'hello, word')
+        uh.add_post_message_event(user_id=self.user.id, radio_uuid=r.uuid, message=u'hello, world')
 
         now = datetime.datetime.now()
         yesterday = now + datetime.timedelta(days=-1)
@@ -54,6 +54,14 @@ class TestGlobalMetricsManager(TestCase):
 
         docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LIKE_SONG)
         self.assertEquals(docs.count(), 0)
+
+        doc = uh.last_message(self.user.id)
+        self.assertEquals(doc.get('data').get('message'), u'hello, world')
+
+        uh.add_post_message_event(user_id=self.user.id, radio_uuid=r.uuid, message=u'second message')
+
+        doc = uh.last_message(self.user.id)
+        self.assertEquals(doc.get('data').get('message'), u'second message')
 
     def test_add_like_song_event(self):
         uh = UserHistory()

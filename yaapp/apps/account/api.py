@@ -140,6 +140,8 @@ class PublicUserResource(UserResource):
     
     * anonymous access allowed
     * access by username instead of id in order to avoid easy guess of our data
+    * no private info (facebook_token, ..) even if caller is user
+    * last history
     """
     class Meta:
         queryset = User.objects.all()
@@ -165,6 +167,8 @@ class PublicUserResource(UserResource):
         current_radio = userprofile.current_radio
         if current_radio and current_radio.ready:
             bundle.data['current_radio'] = current_radio.as_dict()
+        
+        userprofile.fill_user_bundle_with_history(bundle)
         
         return bundle
         

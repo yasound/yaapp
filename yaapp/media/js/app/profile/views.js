@@ -19,7 +19,9 @@ Yasound.Views.User = Backbone.View.extend({
     },
 
     render: function () {
-        $(this.el).html(ich.userTemplate(this.model.toJSON()));
+        var data = this.model.toJSON();
+        data.human_date = this.model.humanDate();
+        $(this.el).html(ich.userTemplate(data));
         return this;
     }
 });
@@ -46,7 +48,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         
         this.userView = new Yasound.Views.User({
             model: this.model,
-            el: $('#webapp-radio', this.el)
+            el: $('#user-profile', this.el)
         });
         
         this.currentRadioView = new Yasound.Views.RadioCell({

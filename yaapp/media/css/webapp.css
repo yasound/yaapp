@@ -1324,3 +1324,45 @@ ul#notifications li div {
 ul#notifications .read {
     font-weight: normal;
 }
+
+/**
+ * User profile
+ */
+#user-profile #picture {
+	float:left;
+	margin-right:12px;
+}
+
+#user-profile #recent-activity {
+	float:right;
+	width:240px;
+}
+
+
+/**
+ * common items
+ */
+.yabutton-large {
+    display:block;
+    height:41px;
+    width:132px;
+    background-image:url('../app/images/btn-more.png');
+    background-repeat:repeat-x;
+    border:1px solid #cbcdc9;
+    border-radius:7px;
+    text-align:center;
+    box-shadow:1px 1px 1px #e3e3e3;
+    cursor: pointer;
+    margin-top:12px;
+    text-decoration:none;
+    color:#58595c;
+    position:relative;
+    text-shadow:1px 1px 1px white;
+    font-size:15px;
+}
+
+.yabutton-large:hover {
+    border:1px solid #cbcdc9;
+    border-radius:7px;
+    box-shadow:1px 3px 4px #e3e3e3;
+}

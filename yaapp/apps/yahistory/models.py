@@ -195,6 +195,9 @@ class UserHistory():
         return docs
         
 
+    def last_message(self, user_id):
+        return self.collection.find_one({'db_id': user_id, 'type': UserHistory.ETYPE_MESSAGE}, sort=[('date', DESCENDING)])
+
     def history_for_user(self, user_id, start_date=None, end_date=None, infinite=False, etype=None):
         query = {'db_id': user_id}
         if not infinite:

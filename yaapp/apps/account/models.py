@@ -11,11 +11,13 @@ from django.utils.translation import ugettext_lazy as _
 from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
+from social_auth.signals import socialauth_registered
 from sorl.thumbnail import ImageField, get_thumbnail, delete
 from tastypie.models import create_api_key
 from yabase import signals as yabase_signals
 from yabase.apns import get_deprecated_devices, send_message
 from yabase.models import Radio, RadioUser
+from yahistory.models import UserHistory
 from yamessage.models import NotificationsManager
 import datetime
 import json
@@ -31,7 +33,6 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
-from social_auth.signals import socialauth_registered
 
 logger = logging.getLogger("yaapp.account")
 
@@ -592,6 +593,18 @@ class UserProfile(models.Model):
             app_id = bundle.request.app_id
             if app_id == yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER:
                 self.add_to_group(yabase_settings.TECH_TOUR_GROUP_NAME)
+           
+    def fill_user_bundle_with_history(self, bundle):
+        if not self.user:
+            return
+        uh = UserHistory()
+        doc = uh.last_message(self.user.id)
+        bundle.data['history'] = {
+            'date': doc.get('date'),
+            'message': doc.get('data').get('message'),
+            'radio_uuid': doc.get('data').get('radio_uuid'),
+            'radio_name': doc.get('data').get('radio_name')
+        }
            
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):

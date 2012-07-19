@@ -1,9 +1,10 @@
 {% load i18n %}
-<div class='row-fluid'>
-<div class='span4'>
-    <div id='webapp-radio'></div>
+<div class='row' id='user-profile'>
 </div>
+
+<div class='row'>
 <div class='span8'>
+    <div id='webapp-radio'></div>
     <ul class='thumbnails' id='profile-radios'>
         <li>
             <h4>{% trans "Radio" %}</h4>
@@ -26,5 +27,6 @@
     <h2>{% trans "Favorites" %}</h2>
     <ul id='favorites' class='thumbnails'></ul>
     <div class='cell-pagination' id='pagination'></div>
+</div>
 </div>
 </div>
