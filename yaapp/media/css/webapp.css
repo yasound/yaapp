@@ -1338,6 +1338,9 @@ ul#notifications .read {
 	width:240px;
 }
 
+.right {
+	float:right;
+}
 
 /**
  * common items

@@ -21,10 +21,13 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
         }
     },
 
-    render: function(genre) {
+    render: function(genre, username) {
         this.reset();
         $(this.el).html(ich.favoritesPageTemplate());
         this.collection.perPage = Yasound.App.cellsPerPage();
+        if (username) {
+            this.collection.setUsername(username);
+        }
         
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,

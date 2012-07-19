@@ -95,10 +95,11 @@ $(document).ready(function () {
             "radio/:uuid/*args": "radio",
             "radio/:uuid": "radio",
             "search/:query/": "search",
-            "favorites/": "favorites",
+            "favorites/": "myFavorites",
             "top/": "top",
             "users/": "users",
             "profile/:username/": "profile",
+            "profile/:username/favorites/": "userFavorites",
             "settings/": "settings",
             "friends/": "friends",
             "notifications/": "notifications",
@@ -229,7 +230,7 @@ $(document).ready(function () {
         },
 
         // owner favorites page
-        favorites: function () {
+        myFavorites: function () {
             this.clearView(/* showSubMenu = */ true);
 
             var genre =  this.commonContext.subMenuView.currentGenre();
@@ -240,6 +241,13 @@ $(document).ready(function () {
             this.commonContext.subMenuView.selectMenu('favorites');
         },
         
+        userFavorites: function (username) {
+            this.clearView(/* showSubMenu = */ false);
+            this.currentView = new Yasound.Views.FavoritesPage({
+                el: '#webapp-content'
+            }).render('', username);
+        },
+
         // top radios
         top: function () {
             this.clearView(/* showSubMenu = */ true);

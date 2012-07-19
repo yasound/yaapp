@@ -38,10 +38,11 @@ Yasound.Views.User = Backbone.View.extend({
  * Profile page
  */
 Yasound.Views.ProfilePage = Backbone.View.extend({
-    name: 'profilepage',
-
+    events: {
+        'click #favorites-btn': 'displayFavorites'
+    },
     initialize: function () {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'modelLoaded');
     },
 
     onClose: function () {
@@ -69,23 +70,38 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             el: $('#own-radio', this.el)
         });
 
-        var favorites = new Yasound.Data.Models.Favorites({});
+        this.favorites = new Yasound.Data.Models.Favorites({});
+        this.favorites.perPage = 4;
 
         this.favoritesView = new Yasound.Views.SearchResults({
-            collection: favorites,
+            collection: this.favorites,
             el: $('#favorites', this.el)
         });
-        this.paginationView = new Yasound.Views.Pagination({
-            collection: favorites,
-            el: $('#pagination', this.el)
+
+        this.friends = new Yasound.Data.Models.Friends({})
+        this.friends.perPage = 4;
+        this.friendsView = new Yasound.Views.Friends({
+            collection: this.friends,
+            el: $('#friends', this.el)
         });
 
         this.model.fetch({
-            success: function (model, response) {
-                favorites.url = '/api/v1/user/' + model.get('id') + '/favorite_radio/';
-                favorites.fetch();
-            }
+            success: this.modelLoaded
         });
         return this;
+    },
+    
+    modelLoaded: function(model, response) {
+        this.favorites.url = '/api/v1/user/' + model.get('username') + '/favorites/';
+        this.favorites.fetch();
+        this.friends.fetch();
+    },
+
+    displayFavorites: function (e) {
+        e.preventDefault();
+        var username = this.model.get('username')
+        Yasound.App.Router.navigate("profile/" + username + '/favorites/', {
+            trigger: true
+        });
     }
 });
