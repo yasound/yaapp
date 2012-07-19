@@ -478,7 +478,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
         var height = $(document).height();
         var scrollHeight = $(window).scrollTop() + $(window).height();
 
-        if (scrollHeight >= height) {
+        if (scrollHeight >= 100) {
             this.locked = true;
             this.collection.requestNextPage();
         }
