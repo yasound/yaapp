@@ -599,12 +599,13 @@ class UserProfile(models.Model):
             return
         uh = UserHistory()
         doc = uh.last_message(self.user.id)
-        bundle.data['history'] = {
-            'date': doc.get('date'),
-            'message': doc.get('data').get('message'),
-            'radio_uuid': doc.get('data').get('radio_uuid'),
-            'radio_name': doc.get('data').get('radio_name')
-        }
+        if doc is not None:
+            bundle.data['history'] = {
+                'date': doc.get('date'),
+                'message': doc.get('data').get('message'),
+                'radio_uuid': doc.get('data').get('radio_uuid'),
+                'radio_name': doc.get('data').get('radio_name')
+            }
            
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
