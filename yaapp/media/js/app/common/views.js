@@ -78,6 +78,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
     refreshCurrentSong: function(e) {
         var el = $('.current-song', this.el);
+		var el2 = $('.current-artist', this.el2);
         var name = this.currentSongModel.get('name');
         var artist =  this.currentSongModel.get('artist');
         var cover = this.currentSongModel.get('cover');
@@ -87,7 +88,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         if (!artist) {
             artist = '';
         }
-        el.html(name + '<span> ' + artist + '</span>');
+        el.html(name);
+		el2.html(artist);
         
         var img = $('.radio-icon img', this.el);
         img.attr('src', cover);
