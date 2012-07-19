@@ -934,6 +934,7 @@ input::-webkit-input-placeholder {
 	text-align:center;
 	box-shadow:1px 1px 1px #e3e3e3;
 	cursor: pointer;
+	margin-left:375px;
 }
 
 .btn-breadcrumb:hover {
