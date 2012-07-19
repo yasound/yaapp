@@ -73,8 +73,7 @@ Yasound.Views.SearchResults = Backbone.View.extend({
 });
 
 Yasound.Views.SearchPage = Backbone.View.extend({
-    name: 'searchpage',
-    
+    collection: new Yasound.Data.Models.RadioSearchResults({}),
     initialize: function() {
         _.bindAll(this, 'render');
     },
@@ -89,10 +88,12 @@ Yasound.Views.SearchPage = Backbone.View.extend({
         }
     },
 
-    render: function() {
+    render: function(query) {
         this.reset();
         $(this.el).html(ich.searchPageTemplate());
-        
+        this.collection.setQuery(query);
+        this.collection.perPage = Yasound.App.cellsPerPage();
+
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,
             el: $('#results', this.el)

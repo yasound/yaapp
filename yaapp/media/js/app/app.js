@@ -223,13 +223,9 @@ $(document).ready(function () {
         search: function (query) {
             this.clearView(true);
 
-            var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
-            radioSearchResults.setQuery(query);
-
             this.currentView = new Yasound.Views.SearchPage({
-                el: '#webapp-content',
-                collection: radioSearchResults
-            }).render();
+                el: '#webapp-content'
+            }).render(query);
         },
 
         // owner favorites page
