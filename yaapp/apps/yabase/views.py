@@ -1410,4 +1410,8 @@ def public_stats(request):
     }
     response = json.dumps(data)
     return HttpResponse(response, mimetype='application/json')
-    
+
+def load_template(request, template_name):
+    template_full_name = 'yabase/app/%s' % (template_name)
+    return render_to_response(template_full_name, {
+    }, context_instance=RequestContext(request))    

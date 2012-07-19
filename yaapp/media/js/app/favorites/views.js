@@ -24,6 +24,7 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
     render: function(genre) {
         this.reset();
         $(this.el).html(ich.favoritesPageTemplate());
+        this.collection.perPage = Yasound.App.cellsPerPage();
         
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,

@@ -25,6 +25,7 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
         this.reset();
 
         $(this.el).html(ich.topRadiosPageTemplate());
+        this.collection.perPage = Yasound.App.cellsPerPage();
         
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,

@@ -10,15 +10,18 @@ Namespace('Yasound.Views.Static');
  */
 Yasound.Views.Static.LegalPage = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'templateLoaded');
     },
     reset: function() {
         
     },
     render: function () {
         this.reset();
-        $(this.el).html(ich.staticLegalPageTemplate());
+        ich.loadRemoteTemplate('static/legal.mustache', 'staticLegalPageTemplate', this.templateLoaded);
         return this;
+    },
+    templateLoaded: function() {
+        $(this.el).html(ich.staticLegalPageTemplate());
     }
 });
 
@@ -27,14 +30,18 @@ Yasound.Views.Static.LegalPage = Backbone.View.extend({
  */
 Yasound.Views.Static.ContactPage = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'templateLoaded');
     },
     reset: function() {
         
     },
     render: function () {
         this.reset();
-        $(this.el).html(ich.staticContactPageTemplate());
+        ich.loadRemoteTemplate('static/contact.mustache', 'staticContactPageTemplate', this.templateLoaded);
         return this;
+    },
+    templateLoaded: function() {
+        $(this.el).html(ich.staticContactPageTemplate());
     }
+    
 });

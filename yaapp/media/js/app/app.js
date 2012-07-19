@@ -16,6 +16,18 @@ $(document).ready(function () {
         Yasound.App.isMobile = true;
     }    
     
+    Yasound.App.cellsPerPage = function() {
+        var viewportHeight = $(window).height();
+        var headerHeight = $('#header').height();
+        var footerHeight = $('#footer').height();
+        var containerHeight = viewportHeight - headerHeight - footerHeight;
+        
+        var cellHeight = 217;
+        
+        var rows =  Math.ceil(containerHeight / cellHeight);
+        return rows*4;
+    };
+    
     /**
      * component initalization
      */
@@ -211,13 +223,9 @@ $(document).ready(function () {
         search: function (query) {
             this.clearView(true);
 
-            var radioSearchResults = new Yasound.Data.Models.RadioSearchResults({});
-            radioSearchResults.setQuery(query);
-
             this.currentView = new Yasound.Views.SearchPage({
-                el: '#webapp-content',
-                collection: radioSearchResults
-            }).render();
+                el: '#webapp-content'
+            }).render(query);
         },
 
         // owner favorites page
