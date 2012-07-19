@@ -26,6 +26,13 @@ Yasound.Data.Models.User = Backbone.Model.extend({
         this.ownRadio.set(this.get('own_radio'));
     },
     humanDate: function() {
-        return _.str.capitalize(Yasound.Utils.humanizeDate(this.get('history')['date']));
+        var history = this.get('history');
+        if (history) {
+            var date = history['date'];
+            if (date) {
+                return _.str.capitalize(Yasound.Utils.humanizeDate(this.get('history')['date']));
+            }
+         }
+        return '';
     }
 });
