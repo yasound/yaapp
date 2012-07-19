@@ -9,6 +9,7 @@ Yasound.Views.User = Backbone.View.extend({
     tagName: 'div',
     className: 'radio',
     events: {
+        'click #radio-activity': 'radio'
     },
 
     initialize: function () {
@@ -23,6 +24,13 @@ Yasound.Views.User = Backbone.View.extend({
         data.human_date = this.model.humanDate();
         $(this.el).html(ich.userTemplate(data));
         return this;
+    },
+    radio: function (e) {
+        e.preventDefault();
+        var uuid = this.model.get('history')['radio_uuid'];
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
     }
 });
 
@@ -31,26 +39,26 @@ Yasound.Views.User = Backbone.View.extend({
  */
 Yasound.Views.ProfilePage = Backbone.View.extend({
     name: 'profilepage',
-    
-    initialize: function() {
+
+    initialize: function () {
         _.bindAll(this, 'render');
     },
 
-    onClose: function() {
+    onClose: function () {
     },
 
-    reset: function() {
+    reset: function () {
     },
 
-    render: function() {
+    render: function () {
         this.reset();
         $(this.el).html(ich.profilePageTemplate());
-        
+
         this.userView = new Yasound.Views.User({
             model: this.model,
             el: $('#user-profile', this.el)
         });
-        
+
         this.currentRadioView = new Yasound.Views.RadioCell({
             model: this.model.currentRadio,
             el: $('#current-radio', this.el)
@@ -60,9 +68,9 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             model: this.model.ownRadio,
             el: $('#own-radio', this.el)
         });
-        
+
         var favorites = new Yasound.Data.Models.Favorites({});
-        
+
         this.favoritesView = new Yasound.Views.SearchResults({
             collection: favorites,
             el: $('#favorites', this.el)
@@ -71,10 +79,9 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             collection: favorites,
             el: $('#pagination', this.el)
         });
-        
-        
+
         this.model.fetch({
-            success: function(model, response) {
+            success: function (model, response) {
                 favorites.url = '/api/v1/user/' + model.get('id') + '/favorite_radio/';
                 favorites.fetch();
             }
