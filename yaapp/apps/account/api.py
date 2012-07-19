@@ -152,6 +152,22 @@ class PublicUserResource(UserResource):
         return [
             url(r"^(?P<resource_name>%s)/(?P<username>\S+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
         ]
+        
+    def dehydrate(self, bundle):
+        userID = bundle.data['id'];
+        user = User.objects.get(pk=userID)
+        userprofile = user.userprofile        
+        userprofile.fill_user_bundle(bundle)
+        
+        own_radio = userprofile.own_radio
+        if own_radio and own_radio.ready:
+            bundle.data['own_radio'] = own_radio.as_dict()
+        current_radio = userprofile.current_radio
+        if current_radio and current_radio.ready:
+            bundle.data['current_radio'] = current_radio.as_dict()
+        
+        return bundle
+        
 
 class PopularUserResource(UserResource):
     """
