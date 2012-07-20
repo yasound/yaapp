@@ -1684,8 +1684,6 @@ var io = ('undefined' === typeof module ? {} : module.exports);
     self.connecting = true;
     
     this.handshake(function (sid, heartbeat, close, transports) {
-      if (self.connecting || self.connected) return;
-        
       self.sessionid = sid;
       self.closeTimeout = close * 1000;
       self.heartbeatTimeout = heartbeat * 1000;
