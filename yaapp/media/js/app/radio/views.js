@@ -110,19 +110,32 @@ Yasound.Views.Radio = Backbone.View.extend({
 
 Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'addOne', 'addAll');
+        _.bindAll(this, 'addOne', 'addAll', 'beforeFetch');
 
+        this.collection.bind('beforeFetch', this.beforeFetch, this);
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
         this.views = [];
     },
 
     onClose: function () {
+        this.collection.unbind('beforeFetch', this.beforeFetch);
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
     },
-
-    addAll: function () {
+    
+    beforeFetch: function() {
+        if (this.loadingMask) {
+            $(this.el).append(this.loadingMask);
+        }
+    },
+    
+    addAll: function() {
+        var mask = $('.loading-mask', this.el);
+        if (!this.loadingMask) {
+            this.loadingMask = mask;
+        }
+        mask.remove();
         this.collection.each(this.addOne);
     },
 
