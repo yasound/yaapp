@@ -1390,7 +1390,34 @@ ul#notifications .read {
 	margin-left:10px;
 }
 
+/**
+ * My radios
+ */
+.radio-with-stats-cells{
+    list-style: none;
+}
+ul .radio-with-stats-cells li {
+	display:block;
+	float:none;
 
+}
+
+.radio-with-stats-cells .radio-with-stats {
+	height:250px;
+	width:900px;
+}
+
+.radio-with-stats .radio-cell-parent {
+	float:left;
+	width:220px;
+	margin-right:24px;
+}
+
+.radio-with-stats .radio-cell-parent .radio-cell {
+	margin:0;
+	padding:0;
+	float:none;
+}
 /**
  * common items
  */
