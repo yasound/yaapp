@@ -242,7 +242,7 @@ $(document).ready(function () {
         
         userFavorites: function (username) {
             this.clearView(/* showSubMenu = */ false);
-            this.currentView = new Yasound.Views.FavoritesPage({
+            this.currentView = new Yasound.Views.UserFavoritesPage({
                 el: '#webapp-content'
             }).render('', username);
         },
