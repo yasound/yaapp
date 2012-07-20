@@ -396,7 +396,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
 Yasound.Views.Pagination = Backbone.View.extend({
     events: {
-        'click a.servernext': 'nextResultPage',
+        'click button.servernext': 'nextResultPage',
         'click a.serverprevious': 'previousResultPage',
         'click a.orderUpdate': 'updateSortBy',
         'click a.serverlast': 'gotoLast',

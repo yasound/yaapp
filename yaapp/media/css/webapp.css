@@ -923,6 +923,11 @@ input::-webkit-input-placeholder {
 
 /*--- BUTTON NEXT ---*/
 
+.pagination {
+    margin-left:375px;
+}
+
+
 .btn-breadcrumb {
 	height:41px;
 	width:132px;

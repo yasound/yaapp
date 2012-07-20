@@ -316,6 +316,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 
 		// fetches the latest results from the server
 		pager: function () {
+		    this.trigger('beforeFetch');
 			this.fetch({});
 		}
 

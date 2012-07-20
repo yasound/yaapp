@@ -32,15 +32,26 @@ Yasound.Views.SearchResults = Backbone.View.extend({
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('beforeFetch', this.beforeFetch, this);
         this.views = [];
     },
     onClose: function() {
+        this.collection.unbind('beforeFetch', this.beforeFetch);
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
     },
 
+    beforeFetch: function() {
+        if (this.loadingMask) {
+            $(this.el).append(this.loadingMask);
+        }
+    },
     addAll: function() {
-        $('.loading-mask', this.el).remove();
+        var mask = $('.loading-mask', this.el);
+        if (!this.loadingMask) {
+            this.loadingMask = mask;
+        }
+        mask.remove();
         this.collection.each(this.addOne);
     },
 
