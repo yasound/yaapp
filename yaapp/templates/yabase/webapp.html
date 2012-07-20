@@ -265,13 +265,13 @@
 		                   {% endif %}
 		                </div>
 		                <div>
-		                    <a id="messages-btn" class="notification yatooltip" href="{% url webapp_notifications %}">		
+		                    <a id="messages-btn" class="header-notification yatooltip" href="{% url webapp_notifications %}">
 								<span class="yatoolelt">Hello world</span>
 		                        <span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
 		                    </a>
 		                </div>
-		                <div class="notification" id="last-social-btn">
-		                    <a href="#" class="yatooltip" id="gift-btn"><span class="yatoolelt">{% trans 'No gifts' %}</span></a>
+		                <div class="header-notification" id="last-social-btn">
+		                    <a href="#" class="yatooltip" id="gift-btn"><span>{% trans 'No gifts' %}</span></a>
 		                </div>
 	                </div>
                 </div>
