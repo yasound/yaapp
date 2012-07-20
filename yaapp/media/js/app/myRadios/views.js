@@ -92,6 +92,29 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
             el: $('.radio-cell-parent', this.el),
             model: this.model
         }).render();
+        
+        var stats = data['stats'];
+        var chart_data = []
+        if (stats) {
+            _.each(stats, function(stat) { 
+                if (stat['connections']) {
+                    var date = Yasound.Utils.momentDate(stat['date']).unix();
+                    chart_data.push([date, stat['connections']])
+                }
+            });
+        }
+        console.log(chart_data);
+        
+        
+        var options = {
+            xaxis: {
+                mode: "time",
+                minTickSize: [1, "day"],
+            }
+        };
+        
+        var plot = $.plot($('.chartdiv', this.el), [chart_data], options);
+        
         return this;
     }
 });
