@@ -612,7 +612,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #friends"            : "friends",
         "click #favorites"          : "favorites",
         "keypress #search-input"    : 'search',
-        "change #id_genre"          : 'genre'
+        "change #id_genre"          : 'genre',
+        "click #create-radio"       : 'myRadios'
     },
     initialize: function() {
         _.bindAll(this, 'render', 'selectMenu');
@@ -625,6 +626,12 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.subMenuTemplate());
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
+        
+        if (Yasound.App.hasRadios) {
+            $('#create-radio span').html(gettext('My radios'));
+        } else {
+            $('#create-radio span').html(gettext('Create radio'));
+        }
         
         return this;
     },
@@ -641,7 +648,10 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             menuNumber = 3;
         } else if (menu == 'favorites') {
             menuNumber = 4;
+        } else if (menu == 'my-radios') {
+            menuNumber = 5;
         }
+
         $('#sub-header-pointer', this.el).removeClass().addClass('menu' + menuNumber);
     },
     selection: function(e) {
@@ -691,6 +701,14 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     },
     currentGenre: function() {
         return $('#id_genre').val();
+    },
+    myRadios: function(e) {
+        e.preventDefault();
+        if (Yasound.App.hasRadios) {
+            Yasound.App.Router.navigate('/radios/', {
+                trigger: true
+            });
+        }
     }
 });
 

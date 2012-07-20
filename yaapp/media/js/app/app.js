@@ -12,6 +12,8 @@ $(document).ready(function () {
     Yasound.App.userAuthenticated = g_authenticated;
     Yasound.App.username = g_username;
     Yasound.App.isMobile = false;
+    Yasound.App.hasRadios = g_has_radios;
+    
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
     }    
@@ -95,6 +97,7 @@ $(document).ready(function () {
             "radio/:uuid": "radio",
             "search/:query/": "search",
             "favorites/": "myFavorites",
+            "radios/": "myRadios",
             "top/": "top",
             "users/": "users",
             "profile/:username/": "profile",
@@ -339,6 +342,18 @@ $(document).ready(function () {
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
+        },
+        
+        // owner favorites page
+        myRadios: function () {
+            this.clearView(/* showSubMenu = */ true);
+
+            var genre =  this.commonContext.subMenuView.currentGenre();
+
+            this.currentView = new Yasound.Views.MyRadiosPage({
+                el: '#webapp-content'
+            }).render(genre);
+            this.commonContext.subMenuView.selectMenu('my-radios');
         },
         
         legal: function() {
