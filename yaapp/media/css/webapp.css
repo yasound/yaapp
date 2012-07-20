@@ -1418,6 +1418,10 @@ ul .radio-with-stats-cells li {
 	padding:0;
 	float:none;
 }
+
+.radio-with-stats .chartdiv {
+	float:right;
+}
 /**
  * common items
  */
