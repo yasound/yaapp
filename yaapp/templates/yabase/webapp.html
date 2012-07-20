@@ -145,6 +145,10 @@
    <script type='text/html' id='userFavoritesPageTemplate'>
      {% include "yabase/app/favorites/userFavoritesPage.mustache" %}
    </script>
+   <script type='text/html' id='userFriendsPageTemplate'>
+     {% include "yabase/app/friends/userFriendsPage.mustache" %}
+   </script>
+
 {% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
      {% include "yabase/app/favorites/favoritesPage.mustache" %}

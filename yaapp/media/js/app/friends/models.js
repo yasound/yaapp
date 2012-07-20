@@ -4,5 +4,9 @@ Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.Friends = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.Radio,
-    url: '/api/v1/friend/'
+    url: '/api/v1/friend/',
+    setUsername: function (username) {
+        this.url = '/api/v1/user/' + username + '/friends/';
+        return this;
+    }
 });

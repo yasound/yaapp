@@ -7,5 +7,6 @@ Yasound.Data.Models.Favorites = Yasound.Data.Paginator.extend({
     url: '/api/v1/favorite_radio/',
     setUsername: function(username) {
         this.url = '/api/v1/user/' + username + '/favorites/';
+        return this;
     }
 });

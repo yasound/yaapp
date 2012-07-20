@@ -540,5 +540,23 @@ def fast_connected_users_by_distance(request):
         cache.set(key, data, 60*5)
         
     return api_response(data, limit=limit, offset=skip)
+
+@check_api_key(methods=['GET',], login_required=False)
+def user_friends(request, username):
+    """
+    Simple view which returns the friends for given user.
+    The tastypie version only support id as user input
+    """
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    user = get_object_or_404(User, username=username)
+    qs = UserProfile.objects.filter(user__in=user.get_profile().friends.all())
+    total_count = qs.count()
+    qs = qs[offset:offset+limit] 
+    data = []
+    for user_profile in qs:
+        data.append(user_profile.user_as_dict(full=True))
+    response = api_response(data, total_count, limit=limit, offset=offset)
+    return response
         
     

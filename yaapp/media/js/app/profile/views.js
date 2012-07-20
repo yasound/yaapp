@@ -39,7 +39,8 @@ Yasound.Views.User = Backbone.View.extend({
  */
 Yasound.Views.ProfilePage = Backbone.View.extend({
     events: {
-        'click #favorites-btn': 'displayFavorites'
+        'click #favorites-btn': 'displayFavorites',
+        'click #friends-btn': 'displayFriends'
     },
     initialize: function () {
         _.bindAll(this, 'render', 'modelLoaded');
@@ -92,15 +93,22 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     },
     
     modelLoaded: function(model, response) {
-        this.favorites.url = '/api/v1/user/' + model.get('username') + '/favorites/';
-        this.favorites.fetch();
-        this.friends.fetch();
+        this.favorites.setUsername(model.get('username')).fetch();
+        this.friends.setUsername(model.get('username')).fetch();
     },
 
     displayFavorites: function (e) {
         e.preventDefault();
         var username = this.model.get('username')
         Yasound.App.Router.navigate("profile/" + username + '/favorites/', {
+            trigger: true
+        });
+    },
+    
+    displayFriends: function (e) {
+        e.preventDefault();
+        var username = this.model.get('username')
+        Yasound.App.Router.navigate("profile/" + username + '/friends/', {
             trigger: true
         });
     }

@@ -58,8 +58,6 @@ Yasound.Views.Friends = Backbone.View.extend({
 });
 
 Yasound.Views.FriendsPage = Backbone.View.extend({
-    name: 'friendspage',
-    
     initialize: function() {
         _.bindAll(this, 'render');
     },
@@ -77,6 +75,41 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     render: function() {
         this.reset();
         $(this.el).html(ich.friendsPageTemplate());
+        
+        this.resultsView = new Yasound.Views.Friends({
+            collection: this.collection,
+            el: $('#results', this.el)
+        });
+        
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.collection,
+            el: $('#pagination', this.el)
+        });
+        
+        this.collection.fetch();
+        
+        return this;
+    }
+});
+
+Yasound.Views.UserFriendsPage = Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+        if (this.resultsView) {
+            this.resultsView.close();
+            this.resultsViews = undefined;
+        }
+    },
+
+    render: function() {
+        this.reset();
+        $(this.el).html(ich.userFriendsPageTemplate());
         
         this.resultsView = new Yasound.Views.Friends({
             collection: this.collection,

@@ -99,8 +99,9 @@ $(document).ready(function () {
             "users/": "users",
             "profile/:username/": "profile",
             "profile/:username/favorites/": "userFavorites",
+            "profile/:username/friends/": "userFriends",
             "settings/": "settings",
-            "friends/": "friends",
+            "friends/": "myFriends",
             "notifications/": "notifications",
             "programming/": "programming",
             "legal/": "legal",
@@ -260,8 +261,8 @@ $(document).ready(function () {
         },
 
         // owner friends page
-        friends: function () {
-            this.clearView(true);
+        myFriends: function () {
+            this.clearView(/* showSubMenu = */ true);
 
             var friends = new Yasound.Data.Models.Friends({});
 
@@ -270,6 +271,18 @@ $(document).ready(function () {
                 el: '#webapp-content'
             }).render();
             this.commonContext.subMenuView.selectMenu('friends');
+        },
+
+        // user's friennds
+        userFriends: function (username) {
+            this.clearView(/* showSubMenu = */ false);
+
+            var friends = new Yasound.Data.Models.Friends({}).setUsername(username);
+            
+            this.currentView = new Yasound.Views.UserFriendsPage({
+                collection: friends,
+                el: '#webapp-content'
+            }).render();
         },
 
         // all users page
