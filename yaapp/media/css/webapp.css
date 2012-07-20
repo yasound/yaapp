@@ -387,11 +387,15 @@ body {
 	text-decoration:none;
 }
 
-#gift-btn span {
-	display:none;
+.tooltip {
+	opacity:100;
 }
 
-#gift-btn:hover span {
+.tooltip span {
+	opacity:0;
+}
+
+.tooltip:hover span {
 	position:absolute;
 	display:block;
 	height:29px;
@@ -406,13 +410,14 @@ body {
 	text-shadow:1px 1px 1px black;
 	text-align:center;
 	line-height:30px;
+	opacity:100;
 }
 
-#gift-btn:hover span:after {
+.tooltip:hover span:after {
 	content:url('../app/images/tooltip-pointer.png');
 	position:absolute;
 	top:-18px;
-	left:58px
+	left:58px;
 }
 
 #header .brand {
