@@ -103,8 +103,6 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
                 }
             });
         }
-        console.log(chart_data);
-        
         
         var options = {
             xaxis: {
