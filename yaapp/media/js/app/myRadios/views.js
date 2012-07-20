@@ -97,9 +97,9 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         var chart_data = []
         if (stats) {
             _.each(stats, function(stat) { 
-                if (stat['connections']) {
+                if (stat['overall_listening_time']) {
                     var date = Yasound.Utils.momentDate(stat['date']).unix();
-                    chart_data.push([date, stat['connections']])
+                    chart_data.push([date, stat['overall_listening_time']])
                 }
             });
         }
