@@ -335,7 +335,7 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.RadioPage({
                 model: this.currentRadio,
                 el: '#webapp-content'
-            }).render();
+            });
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);

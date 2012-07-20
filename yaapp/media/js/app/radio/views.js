@@ -364,7 +364,6 @@ Yasound.Views.RadioUser = Backbone.View.extend({
 });
 
 Yasound.Views.RadioPage = Backbone.View.extend({
-    name: 'radiopage',
     radioUsers: new Yasound.Data.Models.RadioUsers({}),
     wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
     similarRadios: new Yasound.Data.Models.SimilarRadios({}),
@@ -414,6 +413,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
     render: function () {
         this.reset();
+        $(this.el).html(ich.radioPageTemplate());
 
         var that = this;
         var wallPosted = function () {
@@ -426,7 +426,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.wallPosted = wallPosted;
         $.subscribe("/wall/posted", wallPosted);
 
-        $(this.el).html(ich.radioPageTemplate());
 
         if (Yasound.App.userAuthenticated) {
             this.wallInputView = new Yasound.Views.WallInput({
@@ -466,6 +465,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         });
 
         if (this.model.get('id')) {
+            this.similarRadiosView.clear();
             this.wallEvents.goTo(0);
             this.radioUsers.fetch();
         }
