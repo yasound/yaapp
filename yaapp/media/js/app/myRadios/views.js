@@ -107,7 +107,7 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         var options = {
             xaxis: {
                 mode: "time",
-                minTickSize: [1, "day"],
+                minTickSize: [1, "day"]
             }
         };
         
