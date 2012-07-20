@@ -387,38 +387,6 @@ body {
 	text-decoration:none;
 }
 
-.tooltip {
-	opacity:100;
-}
-
-.tooltip span {
-	opacity:0;
-}
-
-.tooltip:hover span {
-	position:absolute;
-	display:block;
-	height:29px;
-	min-width:130px;
-	background-image:url('../app/images/tooltip-bg.png');
-	top:40px;
-	left:-50px;
-	border:1px solid black;
-	box-shadow:0px 1px 0px #999b9c inset;
-	border-radius:6px;
-	color:white;
-	text-shadow:1px 1px 1px black;
-	text-align:center;
-	line-height:30px;
-	opacity:100;
-}
-
-.tooltip:hover span:after {
-	content:url('../app/images/tooltip-pointer.png');
-	position:absolute;
-	top:-18px;
-	left:58px;
-}
 
 #header .brand {
     margin: 0;
@@ -1217,12 +1185,6 @@ input::-webkit-input-placeholder {
 /**
  * Radio page
  */
-
-
-
-/**
- * Radio page
- */
 #webapp-radio {
     margin-top: 24px;
     background-color: #F5F5F5;
@@ -1396,6 +1358,14 @@ ul#notifications .read {
 }
 
 /**
+ * profile
+ */
+
+.profile-bio {
+	width:;
+}
+
+/**
  * common items
  */
 .yabutton-large {
@@ -1471,4 +1441,37 @@ ul#notifications .read {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
+}
+
+.yatooltip {
+	opacity:100;
+}
+
+.yatooltip span {
+	opacity:0;
+}
+
+.yatooltip:hover span {
+	position:absolute;
+	display:block;
+	height:29px;
+	min-width:130px;
+	background-image:url('../app/images/tooltip-bg.png');
+	top:40px;
+	left:-50px;
+	border:1px solid black;
+	box-shadow:0px 1px 0px #999b9c inset;
+	border-radius:6px;
+	color:white;
+	text-shadow:1px 1px 1px black;
+	text-align:center;
+	line-height:30px;
+	opacity:100;
+}
+
+.yatooltip:hover span:after {
+	content:url('../app/images/tooltip-pointer.png');
+	position:absolute;
+	top:-18px;
+	left:58px;
 }
