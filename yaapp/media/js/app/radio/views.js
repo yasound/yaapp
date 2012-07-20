@@ -490,3 +490,21 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         return this;
     }
 });
+
+Yasound.Views.MyRadiosPage = Backbone.View.extend({
+    initialize: function () {
+    },
+
+    onClose: function () {
+    },
+
+    reset: function () {
+    },
+
+    render: function () {
+        this.reset();
+        $(this.el).html(ich.myRadiosPageTemplate());
+        console.log(ich.myRadiosPageTemplate())
+        return this;
+    }
+});

@@ -981,6 +981,11 @@ class WebAppView(View):
         
         genre_form = RadioGenreForm()
         
+        has_radios = False
+        radio_count = Radio.objects.filter(creator=request.user).count()
+        if radio_count > 0:
+            has_radios = True 
+        
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1001,6 +1006,7 @@ class WebAppView(View):
             'import_itunes_form': ImportItunesForm(user=request.user),
             'notification_count': notification_count,
             'genre_form': genre_form,
+            'has_radios': has_radios,
             'submenu_number': 1 
         }
         
@@ -1113,6 +1119,11 @@ class WebAppView(View):
 
         genre_form = RadioGenreForm()
 
+        has_radios = False
+        radio_count = Radio.objects.filter(creator=request.user).count()
+        if radio_count > 0:
+            has_radios = True 
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1133,6 +1144,7 @@ class WebAppView(View):
             'import_itunes_form': import_itunes_form,
             'notification_count': notification_count,
             'submenu_number': 1,
+            'has_radios': has_radios,
             'genre_form': genre_form
         }
         

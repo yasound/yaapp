@@ -69,6 +69,7 @@
        var g_enable_push = {% if enable_push %}true{% else %}false{% endif %};
        var g_facebook_share_picture = '{{ facebook_share_picture}}';
        var g_facebook_share_link = '{{ facebook_share_link}}';
+       var g_has_radios = {% if has_radios %}true{% else %}false{% endif %};
     </script>
 
 
@@ -197,6 +198,11 @@
    <script type="text/html" id="importFromItunesTemplate">
       {% include "yabase/app/programming/importFromItunes.mustache" %}
    </script>
+   
+   <script type='text/html' id='myRadiosPageTemplate'>
+     {% include "yabase/app/radio/myRadiosPage.mustache" %}
+   </script>
+   
 {% endif %}
 
 {% endblock %}
