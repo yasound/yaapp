@@ -1,0 +1,47 @@
+{% load i18n %}
+<div class='radio-with-stats'>
+    <div class='radio-cell'>
+    	<div class="radio-border" style='display:none;'>
+    		<img src="/media/app/images/radio/radio-hover-border.png" alt="Radio Hover Border">
+        </div>
+    	<div class="radio-container">	
+    		<div class='picture'>
+    	    <img src='<% picture %>' width='210' height='210'/>
+    	    </div>
+    	
+    		<div class='mask' style='display:none;'>
+    			<div class="radio-icon">
+    				<img src="/media/images/default_album.jpg" width="36" height="36" alt="Radio Radio Picture">
+    			</div>
+    			<div class="radio-id">
+    	            <%#creator%>
+    				<p><span>{% trans "By" %}</span> <% name %></p>
+    	            <%/creator%>
+    				<p class='current-song'></p>
+    				<p class='current-artist'></p>
+    			</div>
+    			<div class="tag">
+    				<div class="tag-right-side"></div>
+    			</div>
+    	    </div>
+        
+    	    <div class="profile">
+    	        <%#creator%>
+    	        <img src='<% picture %>' width='32px' height='32px'/>
+    	        <%/creator%>
+    	        <span class="radio-profile-picture-mask">
+    				<img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask">
+    			</span>
+    	    </div>
+    	    <div class='caption'>
+    	        <div class="caption-content">
+    	            <h5><% name %></h5>
+    	            <ul class="radio-favorites">
+    	                <li><% favorites %></li>
+    	                <li><% nb_current_users %></li>
+    	            </ul>
+    	        </div>
+    	    </div>
+    	<div>
+    </div>
+</div>

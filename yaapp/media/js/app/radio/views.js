@@ -491,39 +491,4 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     }
 });
 
-Yasound.Views.MyRadiosPage = Backbone.View.extend({
-    collection: new Yasound.Data.Models.MyRadios({}),
-    
-    initialize: function () {
-    },
 
-    onClose: function () {
-    },
-
-    reset: function () {
-    },
-
-    render: function (genre) {
-        this.reset();
-        $(this.el).html(ich.myRadiosPageTemplate());
-        this.collection.perPage = 24;
-
-        this.resultsView = new Yasound.Views.SearchResults({
-            collection: this.collection,
-            el: $('#results', this.el)
-        });
-        
-        this.onGenreChanged('', genre)
-        return this;
-    },
-    
-    onGenreChanged: function(e, genre) {
-        if (genre == '') {
-            this.collection.params.genre = undefined;
-        } else {
-            this.collection.params.genre = genre;
-        }
-        this.resultsView.clear();
-        this.collection.goTo(0);
-    }    
-});
