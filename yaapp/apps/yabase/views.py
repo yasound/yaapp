@@ -1445,4 +1445,16 @@ def user_favorites(request, username):
         data.append(radio.as_dict(full=True))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
-    
+
+@check_api_key(methods=['GET',], login_required=True)
+def my_radios(request):
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    qs = Radio.objects.filter(creator=request.user)
+    total_count = qs.count()
+    qs = qs[offset:offset+limit] 
+    data = []
+    for radio in qs:
+        data.append(radio.as_dict(full=True))
+    response = api_response(data, total_count, limit=limit, offset=offset)
+    return response
