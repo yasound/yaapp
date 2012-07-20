@@ -313,6 +313,7 @@ body {
     float:left;
     display:inline-block;
     padding: 19px 0px 0px 16px;
+	text-decoration:none;
 }
 
 .notification {
@@ -1343,9 +1344,11 @@ ul#notifications .read {
 /**
  * User profile
  */
+
 #user-profile #picture {
 	float:left;
 	margin-right:12px;
+	margin-top:15px;
 }
 
 #user-profile #recent-activity {
@@ -1353,17 +1356,36 @@ ul#notifications .read {
 	width:240px;
 }
 
+#infos {
+	float:left;
+	position:relative;
+	height:200px;
+	width:450px;
+	margin-top:25px;
+	margin-left:25px;
+}
+
+#user-name {
+	display:inline;
+}
+
 .right {
 	float:right;
 }
 
-/**
- * profile
- */
-
 .profile-bio {
-	width:;
+	float:left;
+	width:450px;
+	height:95px;
+	overflow:scroll;
+	margin-bottom:27px;
 }
+
+.user-btn {
+	margin-bottom:20px;
+	margin-left:10px;
+}
+
 
 /**
  * common items
@@ -1371,7 +1393,7 @@ ul#notifications .read {
 .yabutton-large {
     display:block;
     height:41px;
-    width:132px;
+	padding:10px 20px;
     background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
@@ -1379,7 +1401,6 @@ ul#notifications .read {
     text-align:center;
     box-shadow:1px 1px 1px #e3e3e3;
     cursor: pointer;
-    margin-top:12px;
     text-decoration:none;
     color:#58595c;
     position:relative;
@@ -1387,7 +1408,7 @@ ul#notifications .read {
     font-size:15px;
 }
 
-.yabutton-large	:hover {
+.yabutton-large:hover {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
@@ -1396,15 +1417,14 @@ ul#notifications .read {
 .yabutton {
     display:block;
     height:31px;
-    width:135px;
-    background-image:url('../app/images/btn-more.png');
+	padding:7px 15px;    
+	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
     border-radius:6px;
     text-align:center;
     box-shadow:1px 1px 1px #e3e3e3;
     cursor: pointer;
-    margin-top:13px;
     text-decoration:none;
     color:#58595c;
     position:relative;
@@ -1421,15 +1441,14 @@ ul#notifications .read {
 .yabutton-small {
     display:block;
     height:27px;
-    width:90px;
-    background-image:url('../app/images/btn-more.png');
+	padding:3px 10px;    
+	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
     border-radius:6px;
     text-align:center;
     box-shadow:1px 1px 1px #e3e3e3;
     cursor: pointer;
-    margin-top:12px;
     text-decoration:none;
     color:#58595c;
     position:relative;
@@ -1445,13 +1464,17 @@ ul#notifications .read {
 
 .yatooltip {
 	opacity:100;
+	text-decoration:none;
+	position:relative;
 }
 
-.yatooltip span {
+.yatooltip .yatoolelt {
 	opacity:0;
-}
+	display:none;
+	position:absolute;
+}	
 
-.yatooltip:hover span {
+.yatooltip:hover .yatoolelt {
 	position:absolute;
 	display:block;
 	height:29px;
@@ -1469,9 +1492,9 @@ ul#notifications .read {
 	opacity:100;
 }
 
-.yatooltip:hover span:after {
+.yatooltip:hover .yatoolelt:after {
 	content:url('../app/images/tooltip-pointer.png');
 	position:absolute;
 	top:-18px;
-	left:58px;
+	left:59px;
 }
