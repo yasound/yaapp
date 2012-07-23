@@ -1375,7 +1375,6 @@ ul#notifications .read {
 	background-image:url('../app/images/profile/user-bg.png');
 	background-repeat:repeat-x;
 	margin:0px;
-	margin-bottom:30px;
 	height:200px;
 	width:100%;
 	border-radius:20px 20px 0px 0px;
@@ -1423,8 +1422,11 @@ ul#notifications .read {
 	margin:6px 0px 0px 13px;
 }
 
-.zone-title-margin {
+.zone-title {
+	line-height:18px;
 	margin-left:22px;
+	margin-top:30px;
+	margin-bottom:30px;
 }
 
 .validated {	
@@ -1439,6 +1441,13 @@ ul#notifications .read {
 	display:block;
 	float:left;
 	margin: 5px 20px 0px 25px;
+}
+
+.separation-line {
+	height:1px;
+	width:100%;
+	background-image:url('../app/images/profile/separation-line.png');
+	background-repeat:repeat-x;
 }
 
 #comments {
@@ -1549,8 +1558,7 @@ ul#notifications .read {
 .yabutton {
     display:block;
     height:31px;
-	padding:7px 15px;
-	margin-right:21px;    
+	padding:7px 15px;    
 	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
@@ -1564,6 +1572,7 @@ ul#notifications .read {
     position:relative;
     font-size:12px;
 	font-weight:bold;
+	margin:25px 21px 25px 0px;
 }
 
 .yabutton:hover {
