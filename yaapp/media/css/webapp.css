@@ -1356,10 +1356,41 @@ ul#notifications .read {
  * User profile
  */
 
+.profile-background {
+	background-color:white;
+	margin:25px 0px 25px 0px;
+	box-shadow:0px 0px 10px #e2e2e2;
+	border-radius:20px;
+	padding-bottom:27px;
+}
+
+.no-margin {
+	margin:0px;
+}
+
+#user-profile {
+	display:block;
+	position:relative;
+	clear:both;
+	background-image:url('../app/images/profile/user-bg.png');
+	background-repeat:repeat-x;
+	margin:0px;
+	margin-bottom:30px;
+	height:200px;
+	width:100%;
+	border-radius:20px 20px 0px 0px;
+}
+
+#user-profile:after {
+	content:url('../app/images/profile/user-profile-pointer.png');
+	position:absolute;
+	bottom:-16px;
+	left:86px;
+}
+
 #user-profile #picture {
+	margin:15px 25px 0px 19px;
 	float:left;
-	margin-right:12px;
-	margin-top:15px;
 }
 
 #user-profile #recent-activity {
@@ -1372,12 +1403,99 @@ ul#notifications .read {
 	position:relative;
 	height:200px;
 	width:450px;
-	margin-top:25px;
-	margin-left:25px;
+	margin:24px 0px 0px 0px;
 }
 
 #user-name {
 	display:inline;
+	float:left
+}
+
+.sd-hd-small {
+	display:block;
+	float:left;
+	height:21px;
+	width:33px;
+	background-image:url('../app/images/profile/SD-HD-bg-small.png');
+	border-radius:4px;
+	text-align:center;
+	padding-top:2px;
+	margin:6px 0px 0px 13px;
+}
+
+.zone-title-margin {
+	margin-left:22px;
+}
+
+.validated {	
+	display:block;
+	float:left;
+	margin-top:4px;
+	margin-left:6px;
+}
+
+
+.separation-high {
+	display:block;
+	float:left;
+	margin: 5px 20px 0px 25px;
+}
+
+#comments {
+	display:block;
+	float:left;
+	margin:25px 0px 0px 0px;
+	width:200px;
+	height:160px;
+}
+
+#comments h2 {
+	line-height:12px;
+	margin-bottom:13px;
+	text-align:center;
+	color:#76777b;
+	font-family:Georgia;
+	font-style:italic;
+	font-weight:bold;
+	font-size:12px;
+}
+
+#comments blockquote {
+	margin:0px 0px 15px 0px;
+	padding:0px;
+	border:none;
+	text-align:center;
+	color:#76777b;
+	font-family:Georgia;
+	font-style:italic;
+	font-size:14px;
+}
+
+#comments .artist-comment {
+	position:relative;
+	width:200px;
+	height:34px;
+	text-align:left;
+	color:#99a1a5;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.artist-comment a {
+	display:block;
+	text-align:left;
+	text-decoration:none;
+	color:#1786c5;
+	font-family:arial;
+	font-weight:bold;
+	font-size:12px;
+}
+
+.artist-comment .radio-picto {
+	position:absolute;
+	right:0px;
+	top:1px;
 }
 
 .right {
@@ -1388,7 +1506,10 @@ ul#notifications .read {
 	float:left;
 	width:450px;
 	height:95px;
-	overflow:scroll;
+	line-height:21px;
+	color:#727478;
+	font-weight:normal;
+	overflow:hidden;
 	margin-bottom:27px;
 }
 
@@ -1428,7 +1549,8 @@ ul#notifications .read {
 .yabutton {
     display:block;
     height:31px;
-	padding:7px 15px;    
+	padding:7px 15px;
+	margin-right:21px;    
 	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
@@ -1438,9 +1560,10 @@ ul#notifications .read {
     cursor: pointer;
     text-decoration:none;
     color:#58595c;
+	text-shadow:1px 1px white;
     position:relative;
-    text-shadow:1px 1px 1px white;
-    font-size:13px;
+    font-size:12px;
+	font-weight:bold;
 }
 
 .yabutton:hover {
