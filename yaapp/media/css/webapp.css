@@ -1,9 +1,17 @@
 /**
  * Common
  */
+
+html {
+	min-height:100%;
+	position:relative;
+}
+
 body {
     margin-top: 80px;
     background-color: #f0f0f0;
+	height:auto;
+	height:100%;
 }
 
 .hidden {
@@ -359,7 +367,8 @@ body {
     position:relative;
     top:19px;
     left:26px;
-    padding:0px;    
+    padding:0px;
+    text-decoration:none;
 }
 
 #messages-btn:hover {
@@ -948,11 +957,14 @@ input::-webkit-input-placeholder {
 
 
 #webapp-container {
-	min-height:942px;
+	min-height:822px;
+	margin-bottom:120px;
 }
+
 /**
  * Footer
  */
+
 #pre-footer {
 	margin-bottom:24px;
 }
@@ -966,6 +978,8 @@ input::-webkit-input-placeholder {
 	height:149px;
 	margin-bottom:0px;
     background-color: black;
+	position:absolute;
+	bottom:0px;
 }
 
 #post-submenu {
@@ -1431,7 +1445,7 @@ ul#notifications .read {
 	margin-bottom:30px;
 }
 
-.validated {	
+.validated {
 	display:block;
 	float:left;
 	margin-top:4px;
@@ -1611,6 +1625,10 @@ ul#notifications .read {
 	opacity:100;
 	text-decoration:none;
 	position:relative;
+}
+
+.yatooltip:hover {
+	text-decoration:none;
 }
 
 .yatooltip .yatoolelt {
