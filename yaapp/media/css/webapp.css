@@ -452,19 +452,19 @@ body {
 }
 
 #sub-header-pointer.menu2 {
-    left:93px;
+    left:91px;
 }
 
 #sub-header-pointer.menu3 {
-    left:163px;
+    left:160px;
 }
 
 #sub-header-pointer.menu4 {
-    left:243px;
+    left:250px;
 }
 
 #sub-header-pointer.menu5 {
-    left:548px
+    left:536px
 }
 
 #sub-header-nav {
@@ -670,7 +670,7 @@ input::-webkit-input-placeholder {
 
 /*--- RADIO CELL ---*/
 .radio-cells {
-  margin-left: -48px;
+  margin-left: 0px;
   list-style: none;
   *zoom: 1;
 }
@@ -706,7 +706,7 @@ input::-webkit-input-placeholder {
     height:217px;
     width:217px;
     margin:12px;
-    margin-left:24px;
+    margin-left:14px;
     margin-right:0;
     position:relative;
     overflow:hidden;
@@ -958,16 +958,12 @@ input::-webkit-input-placeholder {
 
 #webapp-container {
 	min-height:822px;
-	margin-bottom:120px;
+	margin-bottom:158px;
 }
 
 /**
  * Footer
  */
-
-#pre-footer {
-	margin-bottom:24px;
-}
  
 #footer {
     background-image: url(/media/app/images/footer_bg.png);
@@ -1380,10 +1376,6 @@ ul#notifications .read {
 	padding-bottom:27px;
 }
 
-.no-margin {
-	margin:0px;
-}
-
 #user-profile {
 	display:block;
 	position:relative;
@@ -1588,7 +1580,7 @@ ul#notifications .read {
     position:relative;
     font-size:12px;
 	font-weight:bold;
-	margin:25px 21px 25px 0px;
+	margin:25px 21px 0px 0px;
 }
 
 .yabutton:hover {
@@ -1660,4 +1652,8 @@ ul#notifications .read {
 	position:absolute;
 	top:-18px;
 	left:59px;
+}
+
+.no-margin {
+	margin:0px;
 }
