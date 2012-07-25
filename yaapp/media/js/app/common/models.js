@@ -122,7 +122,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             'style_hiphop': gettext('Hip Hop'),
             'style_rnbsoul': gettext('RnB / Soul'),
             'style_world': gettext('World'),
-            'style_misc': gettext('Miscellaneous'),
+            'style_misc': gettext('Miscellaneous')
         }
         return genre_data[genre_id];
     }

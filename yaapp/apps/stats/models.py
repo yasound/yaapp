@@ -44,3 +44,16 @@ class RadioListeningStat(models.Model):
     def __unicode__(self):
         return 'stat for %s' % self.radio
     
+    def as_dict(self):
+        data = {
+            'id': self.id,
+            'date': self.date,
+            'overall_listening_time': self.overall_listening_time,
+            'audience_peak': self.audience_peak,
+            'connections': self.connections,
+            'favorites': self.favorites,
+            'likes': self.likes,
+            'dislikes': self.dislikes,
+        }
+        return data
+        

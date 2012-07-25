@@ -21,6 +21,7 @@ from forms import SettingsRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata
 from shutil import rmtree
+from stats.models import RadioListeningStat
 from task import process_playlists, process_upload_song
 from tastypie.http import HttpNotFound
 from tastypie.models import ApiKey
@@ -1411,6 +1412,9 @@ def my_programming_albums(request):
     return response
 
 def public_stats(request):
+    """
+    public global stats (minutes listened on yasound)
+    """
     mm = GlobalMetricsManager()
     metrics = mm.get_global_metrics()
     listening_time = 0
@@ -1455,6 +1459,12 @@ def my_radios(request):
     qs = qs[offset:offset+limit] 
     data = []
     for radio in qs:
-        data.append(radio.as_dict(full=True))
+        radio_data = radio.as_dict(full=True)
+        stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
+        stats_data = []
+        for stat in stats:
+            stats_data.append(stat.as_dict())
+        radio_data['stats'] = stats_data
+        data.append(radio_data)
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
