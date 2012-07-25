@@ -1538,24 +1538,33 @@ ul#notifications .read {
 /**
  * My radios
  */
+
 .radio-with-stats-cells{
     list-style: none;
+	margin:0px;
 }
+
 ul .radio-with-stats-cells li {
 	display:block;
 	float:none;
-
 }
 
 .radio-with-stats-cells .radio-with-stats {
-	height:250px;
-	width:900px;
+	float:left;
+	display:block;
+	height:260px;
+	width:940px;
+	margin-top:23px;
+	background-image:url('../app/images/myRadio/my-radio-bg.png');
+	border-radius:10px;
+	box-shadow:1px 2px 2px #dcdcdc;
 }
 
 .radio-with-stats .radio-cell-parent {
 	float:left;
 	width:220px;
 	margin-right:24px;
+	margin:21px;
 }
 
 .radio-with-stats .radio-cell-parent .radio-cell {
@@ -1566,10 +1575,62 @@ ul .radio-with-stats-cells li {
 
 .radio-with-stats .chartdiv {
 	float:right;
+	margin:30px;
 }
+
+.stats {
+	float:left;
+	margin-top:40px;
+	height:190px;
+	width:135px;
+}
+
+.stats-container {
+	display:block;
+	float:right;
+}
+
+.stats .new-messages, 
+.stats .minutes-spent {
+	text-align:right;
+}
+
+.stats em {
+	display:block;
+	color:#434343;
+	font-size:42px;
+	font-style:normal;
+	font-weight:bold;
+	margin-bottom:18px;
+}
+
+.stats .new-messages em {
+	color:#169dea;
+	margin-top:29px;
+	margin-bottom:29px;
+}
+
+.stats .minutes-spent em {
+	margin-bottom:29px;
+}
+
+.stats span {
+	display:block;
+	color:#999999;
+	font-size:13px;
+	line-height:18px;
+	text-shadow:1px 1px white;
+}
+
+.stats .new-messages span {
+	width:70px;
+	float:right;
+}
+
 /**
  * common items
  */
+
 .yabutton-large {
     display:block;
     height:41px;
