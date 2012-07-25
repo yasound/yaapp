@@ -101,7 +101,7 @@ def similar_radios_from_artist_list(request):
     
     user_radio_ids = []
     if request.user and request.user.is_authenticated():
-        radios = Radio.objects.filter(creator=request.user)
+        radios = request.user.userprofile.own_radios(only_ready_radios=False)
         for r in radios:
             user_radio_ids.append(r.id)
         
@@ -983,7 +983,7 @@ class WebAppView(View):
         genre_form = RadioGenreForm()
         
         has_radios = False
-        radio_count = Radio.objects.filter(creator=request.user).count()
+        radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
         if radio_count > 0:
             has_radios = True 
         
@@ -1121,7 +1121,7 @@ class WebAppView(View):
         genre_form = RadioGenreForm()
 
         has_radios = False
-        radio_count = Radio.objects.filter(creator=request.user).count()
+        radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
         if radio_count > 0:
             has_radios = True 
 
@@ -1163,7 +1163,7 @@ def radios(request, template_name='web/radios.html'):
 def web_myradio(request, radio_uuid=None, template_name='web/my_radio.html'):
     radio = None
     if not uuid:
-        radios = Radio.objects.filter(creator=request.user, ready=True)[0:1]
+        radios = request.user.userprofile.own_radios(only_ready_radios=True)[0:1]
         if radios.count() == 0:
             raise Http404
         else:
@@ -1454,7 +1454,7 @@ def user_favorites(request, username):
 def my_radios(request):
     limit = int(request.REQUEST.get('limit', 25))
     offset = int(request.REQUEST.get('offset', 0))
-    qs = Radio.objects.filter(creator=request.user)
+    qs = request.user.userprofile.own_radios(only_ready_radios=False)
     total_count = qs.count()
     qs = qs[offset:offset+limit] 
     data = []
@@ -1468,3 +1468,11 @@ def my_radios(request):
         data.append(radio_data)
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
+
+@check_api_key(methods=['GET',], login_required=False)
+def radio_leaderboard(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    data = radio.relative_leaderboard_as_dicts()
+    response = api_response(data)
+    return response
+    

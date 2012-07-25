@@ -30,7 +30,7 @@ class FriendResource(ModelResource):
         user = userprofile.user
         bundle.data['id'] = user.id
         bundle.data['username'] = user.username      
-        userprofile.fill_user_bundle(bundle)       
+        userprofile.fill_user_bundle(bundle, full=True)       
         
         return bundle
     

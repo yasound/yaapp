@@ -219,6 +219,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/my_programming/albums/$', 'yabase.views.my_programming_albums'),
     
 
+    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/leaderboard/$', 'yabase.views.radio_leaderboard', name='radio_leaderboard'),
+
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
     

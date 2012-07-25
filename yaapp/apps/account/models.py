@@ -480,10 +480,18 @@ class UserProfile(models.Model):
     
     @property
     def own_radio(self):
-        try:
-            return Radio.objects.filter(creator=self.user)[:1][0]
-        except:
+        radios = self.own_radios(only_ready_radios=False)
+        if radios.count() == 0:
             return None
+        else:
+            return radios[0]
+        
+    def own_radios(self, only_ready_radios=True):
+        if only_ready_radios:
+            radios = Radio.objects.filter(creator=self.user, ready=True)
+        else:
+            radios = Radio.objects.filter(creator=self.user)
+        return radios
     
     @property
     def current_radio(self):
@@ -529,28 +537,32 @@ class UserProfile(models.Model):
                 'picture': self.picture_url,
                 'name': self.name,
                 'username': self.user.username,
+                'bio_text': self.bio_text,
                 'city': self.city,
                 'latitude': self.latitude,
                 'longitude': self.longitude
                 }
         
         if full:
+            # own radio (the first one)
             own_radio = self.own_radio
             if own_radio and own_radio.ready:
                 data['own_radio'] = own_radio.as_dict()
+            
+            # own radios (all)
+            own_radios = self.own_radios(only_ready_radios=True)
+            own_radios_list = [x.as_dict() for x in own_radios]
+            data['own_radios'] = own_radios_list
+            
+            # current radio
             current_radio = self.current_radio
             if current_radio and current_radio.ready:
                 data['current_radio'] = current_radio.as_dict()
         return data
     
-    def fill_user_bundle(self, bundle):
-        bundle.data['picture'] = self.picture_url
-        bundle.data['bio_text'] = self.bio_text
-        bundle.data['name'] = self.name
-        bundle.data['username'] = self.user.username
-        bundle.data['city'] = self.city
-        bundle.data['latitude'] = self.latitude
-        bundle.data['longitude'] = self.longitude
+    def fill_user_bundle(self, bundle, full=False):
+        user_dict = self.user_as_dict(full=full)
+        bundle.data.update(user_dict)
         
     def fill_user_bundle_with_login_infos(self, bundle):
         if self.user:
@@ -693,7 +705,8 @@ class UserProfile(models.Model):
         img = graph.get('me/picture?type=large')
         f = ContentFile(img)
         self.set_picture(f)
-        radios = Radio.objects.filter(creator=self.user)
+        # update radios picture
+        radios = self.own_radios(only_ready_radios=False)
         for r in radios:
             r.set_picture(f)
         

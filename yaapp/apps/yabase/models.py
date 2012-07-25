@@ -400,7 +400,7 @@ class RadioManager(models.Manager):
         return self.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
     
     def radio_for_user(self, user):
-        return self.filter(creator=user)[:1][0]
+        return user.userprofile.own_radio()
     
     def unlock_all(self):
         self.all().update(computing_next_songs=False)
@@ -918,6 +918,19 @@ class Radio(models.Model):
         for i in range(nb_lower_radios):
             results.append(lower_radios[i])
         return results
+    
+    def relative_leaderboard_as_dicts(self):
+        leaderboard = self.relative_leaderboard()
+        data = []
+        for i in leaderboard:
+            dict = {'id': i.id,
+                    'name': i.name,
+                    'leaderboard_favorites': i.leaderboard_favorites,
+                    'leaderboard_rank': i.leaderboard_rank,
+                    'mine': True if i.id == self.id else False
+                    }
+            data.append(dict)
+        return data
     
     def current_users(self):
         users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()
