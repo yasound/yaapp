@@ -400,7 +400,7 @@ class RadioManager(models.Manager):
         return self.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
     
     def radio_for_user(self, user):
-        return user.userprofile.own_radio()
+        return user.userprofile.own_radio
     
     def unlock_all(self):
         self.all().update(computing_next_songs=False)

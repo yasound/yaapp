@@ -79,6 +79,7 @@ class ProgrammingResource(ModelResource):
         include_resource_uri = False
         filtering = {
             'playlist': ALL,
+            'radio': 'exact'
         }
         authorization= ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
@@ -89,6 +90,7 @@ class ProgrammingResource(ModelResource):
         if radio is None:
             raise NotFound()
         return SongInstance.objects.select_related().filter(playlist__radio=radio)
+    
         
 
 class PlaylistResource(ModelResource):
