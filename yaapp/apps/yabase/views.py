@@ -626,15 +626,16 @@ def upload_song(request, song_id=None):
         logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
-    radio = None
-    try:
-        radio = Radio.objects.radio_for_user(request.user)
-        yabase_signals.new_animator_activity.send(sender=request.user, 
+    if song_id:
+        try:
+            song_instance = SongInstance.objects.get(id=song_id)
+            radio = Radio.objects.get(id=song_instance.playlist.radio.id)
+            yabase_signals.new_animator_activity.send(sender=request.user, 
                                                   user=request.user, 
                                                   radio=radio,
                                                   atype=yabase_settings.ANIMATOR_TYPE_UPLOAD_SONG)
-    except:
-        logger.info('no radio for user %s' % (request.user))
+        except:
+            logger.info('no radio')
 
         
     json_data = {}
