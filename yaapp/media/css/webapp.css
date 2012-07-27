@@ -1342,6 +1342,77 @@ ul .user-cell:hover .caption {
 /**
  * Notifications
  */
+
+#webapp-wall-input {
+	margin:0px;
+}
+
+.wall-container {
+	background-color:white;
+	width:620px;
+	margin-top:24px;
+	padding-bottom:10px;
+	border-radius:20px;
+}
+
+.wall-event-message, .form-search {
+	width:620px;
+	min-height:104px;
+	margin:0px;
+	padding:0px;
+	overflow:hidden;
+	
+	background-image: linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
+	background-image: -o-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
+	background-image: -moz-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
+	background-image: -webkit-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
+	background-image: -ms-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.14, rgb(247,247,247)),
+		color-stop(0.79, rgb(255,255,255))
+	);
+}
+
+.search-query {
+	margin:10px;
+	margin-left:30px;
+}
+
+.form-search {
+	border-radius:20px 20px 0px 0px;
+}
+
+.wall-event-message img.user {
+	display:block;
+	float:left;
+	margin:26px;
+}
+
+.wall-event-message h2 {
+	font-size:13px;
+	font-weight:bold;
+}
+
+.wall-event-message p {
+	max-height:35px;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+
+.submit-btn {
+	margin:10px;
+	float:right;
+	margin-right:30px;
+}
+
+.like-comment {
+	margin:30px;
+	margin-bottom:0px;
+}
+
 ul#notifications {
     list-style: none;
     margin-left: 0;

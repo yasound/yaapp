@@ -1,6 +1,6 @@
 {% load i18n %}
-<form class="well form-search">
-    <input type="text" class="input-large search-query">
-    <button type="submit" class="btn" id='submit'>{% trans "Post message" %}</button>
-    <button class="btn" id='refresh'>{% trans "Refresh" %}</button>
+<form class="form-search">
+    <textarea type="textarea" class="input-xxlarge search-query" row='5'></textarea>
+    <button type="submit" class="btn submit-btn yabutton-large" id='submit'>{% trans "Post message" %}</button>
+    <!-- <button class="btn" id='refresh'>{% trans "Refresh" %}</button> -->
 </form>
