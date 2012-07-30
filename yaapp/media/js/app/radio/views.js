@@ -16,7 +16,7 @@ Yasound.Views.WallInput = Backbone.View.extend({
         var $button = $('.btn', this.el);
         $button.attr('disabled', 'disable');
         if (this.radioUUID) {
-            var $input = $('input[type=text]', this.el);
+            var $input = $('input[type=textarea]', this.el);
             var message = $input.val();
             var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
             $.post(url, {
