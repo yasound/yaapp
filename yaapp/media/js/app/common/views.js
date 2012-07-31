@@ -621,7 +621,6 @@ Yasound.Views.PublicStats = Backbone.View.extend({
     updateData: function() {
         this.model.fetch();
     }
-    
 });
 
 
@@ -649,13 +648,13 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.subMenuTemplate());
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
-        
+
         if (Yasound.App.hasRadios) {
             $('#create-radio span').html(gettext('My radios'));
         } else {
             $('#create-radio span').html(gettext('Create radio'));
         }
-        
+	
         return this;
     },
     selectMenu: function(menu) {

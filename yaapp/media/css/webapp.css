@@ -1715,7 +1715,6 @@ ul .radio-with-stats-cells li {
 	margin-top:40px;
 	height:190px;
 	width:135px;
-	color:grey;
 }
 
 .stats-container {
@@ -1893,4 +1892,10 @@ ul .radio-with-stats-cells li {
 
 .no-margin {
 	margin:0px;
+}
+
+@media screen and (max-width:500px) {
+	/*--- HEADER ---*/
+	.fix-ff {display:none;}
+	
 }
