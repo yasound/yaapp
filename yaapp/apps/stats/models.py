@@ -33,7 +33,7 @@ class RadioListeningStatManager(models.Manager):
 class RadioListeningStat(models.Model):
     objects = RadioListeningStatManager()
     radio = models.ForeignKey('yabase.Radio')
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     overall_listening_time = models.FloatField()
     audience_peak = models.IntegerField()
     connections = models.IntegerField()
