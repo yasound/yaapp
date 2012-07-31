@@ -221,6 +221,11 @@ urlpatterns = patterns('',
 
     url(r'^api/v2/radio/(?P<radio_uuid>\S+)/leaderboard/$', 'yabase.views.radio_leaderboard', name='radio_leaderboard'),
 
+    # programming
+    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.radio_programming'),
+    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/artists/$', 'yabase.views.radio_programming_artists'),
+    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/albums/$', 'yabase.views.radio_programming_albums'),
+
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
     
