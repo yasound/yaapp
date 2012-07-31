@@ -58,7 +58,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         $('.radio-border', this.el).fadeOut(300);
 
     },
-    onRadio: function (e) {
+	onRadio: function (e) {
         e.preventDefault();
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
@@ -108,8 +108,7 @@ Yasound.Views.UserCell = Backbone.View.extend({
     events: {
         'click .user-cell-inner': 'onUser',
 		'mouseover .user-cell-inner': 'onHover',
-		'mouseleave .user-cell-inner': 'onLeave',
-		'click .radio-cell': 'onRadio'
+		'mouseleave .user-cell-inner': 'onLeave'
     },
 
     initialize: function () {
@@ -130,12 +129,11 @@ Yasound.Views.UserCell = Backbone.View.extend({
         if (Yasound.App.isMobile) {
             return;
         } 
-        var mask = $('.mask-user', this.el);
-        if (!mask.is(":visible")) {
+        var maskUser = $('.mask-user', this.el);
+        if (!maskUser.is(":visible")) {
             $("li .mask-user", $(this.el).parent()).fadeOut(300);
             
-            mask.removeClass('hidden').fadeIn(300);
-            $('.radio-border', this.el).fadeIn(300);
+            maskUser.removeClass('hidden').fadeIn(300);
         }
     },
 
@@ -146,16 +144,6 @@ Yasound.Views.UserCell = Backbone.View.extend({
         var mask = $('.mask-user', this.el);
         mask.fadeOut(300);
         $('.radio-border', this.el).fadeOut(300);
-    },
-
-	onRadio: function (e) {
-        e.preventDefault();
-        var mask = $('.mask-user', this.el);
-        if (!mask.is(":visible")) {
-            $("li .mask-user", $(this.el).parent()).fadeOut(300);
-        
-            mask.removeClass('hidden').fadeIn(300);
-        }
     },
 
     onUser: function (e) {
