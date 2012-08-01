@@ -26,7 +26,7 @@ body {
 
 .cell-pagination {
     float: left;
-    with: 148px;
+    width: 148px;
 }
 
 #profile-radios {
@@ -1894,8 +1894,94 @@ ul .radio-with-stats-cells li {
 	margin:0px;
 }
 
-@media screen and (max-width:500px) {
-	/*--- HEADER ---*/
-	.fix-ff {display:none;}
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+	
+/*-- CONTAINER --*/
+	.container {
+		width:480px;
+	} 	
+	#results {
+		width:480px;
+	}
+	#pagination {
+		margin-left:18.5%;
+	}
+
+/*-- MENU --*/
+	#sound-level {
+		display:none;
+	}
+	.header-separation {
+		display:none;
+	}
+	
+	
+/*-- SUBMENU --*/
+	.fix-ff {
+		display:none;
+	}
+	#radio-style-symbol {
+		display:none;
+	}
+	#create-radio {
+		width:90px;
+	}
+	#create-radio:hover {
+		width:90px;
+	}
+	#sub-header-separation {
+		display:none;
+	}
+	
+/*-- RADIO-CELL --*/
+	.profile-background, .radio-cells {
+		width:480px;	
+	}
+
+/*-- PROFILE --*/
+	.profile-bio {
+		width:225px;
+		height:60px;
+		float:left;
+		clear:both;
+	}
+	.user-btn {
+		float:left;
+		margin:0px;
+		margin-right:10px;
+		margin-bottom:10px;
+	}
+	#infos h2 {
+		display:block;
+		float:none;
+	}
+	#comments, 
+	#all-my-radios,
+	#favorites-btn,
+	#friends-btn,
+	.sd-hd-small,
+	.validated {
+		display:none;
+	}
+
+/*-- FOOTER --*/
+	#connected-users {
+		display:none;
+	}
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+	
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
 	
 }
