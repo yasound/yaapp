@@ -42,3 +42,4 @@ xlwt
 django-tinymce
 pygeoip
 -e git+https://github.com/alastair/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
+unicodecsv

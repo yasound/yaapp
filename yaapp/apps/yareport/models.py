@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from yaref.models import YasoundSong
 import datetime
-import csv
+import unicodecsv
 import os
 import settings as yareport_settings
 import string
@@ -54,7 +54,7 @@ def scpp_report(destination_folder='', start_date=None, end_date=None):
         else:
             path = filename
         f = open(path, 'w')
-        csv_writer = csv.writer(f)
+        csv_writer = unicodecsv.writer(f)
         
         if start_date and end_date:
                 query_dict["report_date"] = {"$gte": start_date, "$lt": end_date}
@@ -145,7 +145,7 @@ def scpp_report_global(destination_folder='', start_date=None, end_date=None):
     else:
         path = filename
     f = open(path, 'w')
-    csv_writer = csv.writer(f)
+    csv_writer = unicodecsv.writer(f)
     for row in report_rows:
         csv_writer.writerow(row)
     f.close()
