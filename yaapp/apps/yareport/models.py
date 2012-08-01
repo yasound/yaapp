@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from yaref.models import YasoundSong
 import datetime
-import csv
+import unicodecsv
 import os
 import settings as yareport_settings
 import string
@@ -54,7 +54,7 @@ def scpp_report(destination_folder='', start_date=None, end_date=None):
         else:
             path = filename
         f = open(path, 'w')
-        csv_writer = csv.writer(f)
+        csv_writer = unicodecsv.writer(f)
         
         if start_date and end_date:
                 query_dict["report_date"] = {"$gte": start_date, "$lt": end_date}
@@ -90,6 +90,65 @@ def scpp_report(destination_folder='', start_date=None, end_date=None):
             
             csv_writer.writerow(data)
         f.close()
+        
+
+def scpp_report_global(destination_folder='', start_date=None, end_date=None):
+    db = settings.MONGO_DB
+
+    report_rows = []    
+    query_dict = {}
+    if start_date:
+        if not query_dict.has_key('report_date'):
+            query_dict['report_date'] = {}
+        query_dict["report_date"]["$gte"] = start_date
+    if end_date:
+        if not query_dict.has_key('report_date'):
+            query_dict['report_date'] = {}
+        query_dict["report_date"]["lt"] = end_date
+        
+    song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
+    for song_id in song_ids:
+        q = query_dict
+        q["yasound_song_id"] = song_id
+        song_docs = db.reports.find(q)
+        count = song_docs.count()
+        doc = song_docs[0]
+        
+        duration_seconds = doc["duration"]
+        hours = int(duration_seconds / 3600)
+        duration_seconds -= hours * 3600
+        minutes = int(duration_seconds / 60)
+        duration_seconds -= minutes * 60
+        seconds = duration_seconds
+        if hours > 0:
+            duration_str = '%d:%02d:%02d' % (hours, minutes, seconds)
+        else:
+            duration_str = '%d:%02d' % (minutes, seconds)
+        
+        
+        data = []
+        data.append(doc["song_name"])           # Titre du Phonogramme
+        data.append(duration_str)               # Duree repoduite
+        data.append('')                         # Interpete Prenom
+        data.append(doc["song_artist_name"])    # Interpete Nom
+        data.append('')                         # Compositeur (Pour le classique)
+        data.append('')                         # Marque ou producteur
+        data.append('')                         # Code barre du support commercia
+        data.append(count)                      # Nombre de reproductions ou de passage
+        
+        report_rows.append(data)
+        
+        
+    filename = 'scpp_report_%s.csv' % datetime.datetime.now()
+    if destination_folder and destination_folder != '':
+        path = os.path.join(destination_folder, filename)
+    else:
+        path = filename
+    f = open(path, 'w')
+    csv_writer = unicodecsv.writer(f)
+    for row in report_rows:
+        csv_writer.writerow(row)
+    f.close()
         
 def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, replace_with_space=True, char_count=None, left_justify=True):
     if to_upper:
