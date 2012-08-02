@@ -107,7 +107,12 @@ def scpp_report_global(destination_folder='', start_date=None, end_date=None):
         query_dict["report_date"]["lt"] = end_date
         
     song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
+    song_ids_count = len(song_ids)
+    i = 0
     for song_id in song_ids:
+        print '%d/%d (%f%%)' % (i, song_ids_count, float(i) / float(song_ids_count) * 100.0)
+        i += 1
+        
         q = query_dict
         q["yasound_song_id"] = song_id
         song_docs = db.reports.find(q)
