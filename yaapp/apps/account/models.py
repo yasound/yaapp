@@ -531,7 +531,7 @@ class UserProfile(models.Model):
             url = yaapp_settings.DEFAULT_IMAGE
         return url
     
-    def user_as_dict(self, full=False):
+    def user_as_dict(self, full=False, request_user=None):
         data = {
                 'id': self.user.id,
                 'picture': self.picture_url,
@@ -547,21 +547,21 @@ class UserProfile(models.Model):
             # own radio (the first one)
             own_radio = self.own_radio
             if own_radio and own_radio.ready:
-                data['own_radio'] = own_radio.as_dict()
+                data['own_radio'] = own_radio.as_dict(request_user=request_user)
             
             # own radios (all)
             own_radios = self.own_radios(only_ready_radios=True)
-            own_radios_list = [x.as_dict() for x in own_radios]
+            own_radios_list = [x.as_dict(request_user=request_user) for x in own_radios]
             data['own_radios'] = own_radios_list
             
             # current radio
             current_radio = self.current_radio
             if current_radio and current_radio.ready:
-                data['current_radio'] = current_radio.as_dict()
+                data['current_radio'] = current_radio.as_dict(request_user=request_user)
         return data
     
     def fill_user_bundle(self, bundle, full=False):
-        user_dict = self.user_as_dict(full=full)
+        user_dict = self.user_as_dict(full=full, request_user=bundle.request.user)
         bundle.data.update(user_dict)
         
     def fill_user_bundle_with_login_infos(self, bundle):
