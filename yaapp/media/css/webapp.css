@@ -1311,6 +1311,51 @@ input::-webkit-input-placeholder {
 	text-shadow:1px 1px white;
 }
 
+.like-comment {
+    margin-left:34px;
+    margin-top:10px;
+}
+
+.like-comment img {
+    display:block;
+    float:left;
+}
+
+.like-comment h2 {
+    display:block;
+    float:left;
+    margin-left:35px;
+}
+
+.like-comment p {
+    float:left;
+    clear:both;
+    margin-left:67px;
+}
+
+.song-comment {
+    margin-left:34px;
+    margin-top:10px;
+}
+
+.song-comment img {
+    display:block;
+    float:left;
+}
+
+.song-comment h2 {
+    display:block;
+    float:left;
+    margin-left:35px;
+}
+
+.song-comment p,
+.wall-event-message .song-comment .date-comment,
+.wall-event-message .like-comment .date-comment {
+    float:left;
+    clear:both;
+    margin-left:67px;
+}
 
 /**
  * User cell
@@ -1479,8 +1524,7 @@ ul#notifications {
 }
 
 .alert .date {
-    float: right;
-
+    float:right;
 }
 
 #notifications-toolbar,#programming-toolbar {
@@ -1547,8 +1591,11 @@ ul#notifications .read {
 }
 
 #user-name {
-	display:inline;
-	float:left
+	display:block;
+    max-width:165px;
+    max-height:72px;
+    overflow:hidden;
+	float:left;
 }
 
 .sd-hd-small {
