@@ -79,6 +79,7 @@ class ProgrammingResource(ModelResource):
         include_resource_uri = False
         filtering = {
             'playlist': ALL,
+            'radio': 'exact'
         }
         authorization= ReadOnlyAuthorization()
         authentication = YasoundApiKeyAuthentication()
@@ -89,6 +90,7 @@ class ProgrammingResource(ModelResource):
         if radio is None:
             raise NotFound()
         return SongInstance.objects.select_related().filter(playlist__radio=radio)
+    
         
 
 class PlaylistResource(ModelResource):
@@ -656,15 +658,7 @@ class RadioFavoriteResource(ModelResource):
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
         userprofile = bundle.obj.userprofile      
-        userprofile.fill_user_bundle(bundle)
-        
-        own_radio = userprofile.own_radio
-        if own_radio and own_radio.ready:
-            bundle.data['own_radio'] = own_radio.as_dict()
-        current_radio = userprofile.current_radio
-        if current_radio and current_radio.ready:
-            bundle.data['current_radio'] = current_radio.as_dict()
-        
+        userprofile.fill_user_bundle(bundle, full=True)
         return bundle
 
 
@@ -690,7 +684,7 @@ class RadioCurrentUserResource(ModelResource):
     
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
-        bundle.obj.userprofile.fill_user_bundle(bundle)
+        bundle.obj.userprofile.fill_user_bundle(bundle, full=True)
         return bundle
     
 
@@ -958,7 +952,7 @@ class LeaderBoardResource(ModelResource):
     def get_object_list(self, request):
         self.request_user = request.user
         try:
-            user_radio = Radio.objects.filter(creator=request.user)[0]
+            user_radio = Radio.objects.radio_for_user(request.user)
         except Radio.DoesNotExist:
             return None
         return user_radio.relative_leaderboard()

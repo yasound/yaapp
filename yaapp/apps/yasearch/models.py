@@ -184,9 +184,9 @@ def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True,
             break
     radios = []
     for u in users:
-        if u.userprofile.own_radio:
-            r = u.userprofile.own_radio
-            if (r.ready or not ready_radios_only) and (r.creator or not radios_with_creator_only):
+        user_radios = u.userprofile.own_radios(only_ready_radios=ready_radios_only)
+        for r in user_radios:
+            if r.creator or not radios_with_creator_only:
                 radios.append(r)
     return radios
     

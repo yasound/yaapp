@@ -1,11 +1,11 @@
 from yabase.models import Radio
 from django.conf import settings
-
+from account.models import UserProfile
 def my_radios(request):
     if not request.user.is_authenticated():
         return []
     
-    radios = Radio.objects.filter(creator=request.user, ready=True)
+    radios = request.user.userprofile.own_radios(only_ready_radios=True)
     return {
         'my_radios': radios
     }

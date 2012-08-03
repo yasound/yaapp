@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class='span12'>
+<div class='span12 no-margin'>
    <div id='picture'>
        <img src="<% picture %>" width="163px" height="163px"/>
    </div>
@@ -12,9 +12,26 @@
    </div>
    <div id='infos'>
      <h2 id="user-name"><% name %></h2>
-		<button type="button" class="user-btn yabutton-large right">Message</button>
-		<button type="button" class="user-btn yabutton-large right">Suivre</button>
+	<a href='#' class='sd-hd-small'><img src="/media/app/images/profile/HD.png" width="24" height="13" alt="HD"></a>
+	<span class='validated'>
+		<img src="/media/app/images/profile/validated-profile.png" width="25" height="25" alt="Validated Profile">
+	</span>
+	<button type="button" class="user-btn yabutton-large right">Message</button>
+	<button type="button" class="user-btn yabutton-large right">Suivre</button>
      <p class="profile-bio"><% bio_text %></p>
    </div>
-   
+	<div class='separation-high'>
+		<img src="/media/app/images/profile/separation-profile.png" width="3" height="199" alt="Separation Profile">
+	</div>
+   <div id='comments'>
+   		<h2><% human_date %></h2>
+		<blockquote>&laquo; <% message %> &raquo;</blockquote>
+		<div class='artist-comment'>
+			Ecouter Jay-Z sur
+			 <a id='radio-activity' href='/app/radio/<% radio_uuid %>/'>Woodstock Radio Vol.2</a>
+			<div class='radio-picto'>
+				<img src="/media/app/images/radio-picto.png" width="32" height="32" alt="Radio Picto">
+			</div>
+		</div>
+   </div>
 </div>

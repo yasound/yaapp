@@ -58,7 +58,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         $('.radio-border', this.el).fadeOut(300);
 
     },
-    onRadio: function (e) {
+	onRadio: function (e) {
         e.preventDefault();
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
@@ -106,7 +106,9 @@ Yasound.Views.UserCell = Backbone.View.extend({
     tagName: 'li',
     className: 'user-cell',
     events: {
-        'click .user-cell-inner': 'onUser'
+        'click .user-cell-inner': 'onUser',
+		'mouseover .user-cell-inner': 'onHover',
+		'mouseleave .user-cell-inner': 'onLeave'
     },
 
     initialize: function () {
@@ -121,6 +123,27 @@ Yasound.Views.UserCell = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).html(ich.userCellTemplate(data));
         return this;
+    },
+	
+	onHover: function (e) {
+        if (Yasound.App.isMobile) {
+            return;
+        } 
+        var maskUser = $('.mask-user', this.el);
+        if (!maskUser.is(":visible")) {
+            $("li .mask-user", $(this.el).parent()).fadeOut(300);
+            
+            maskUser.removeClass('hidden').fadeIn(300);
+        }
+    },
+
+	onLeave: function (e) {
+        if (Yasound.App.isMobile) {
+            return;
+        } 
+        var mask = $('.mask-user', this.el);
+        mask.fadeOut(300);
+        $('.radio-border', this.el).fadeOut(300);
     },
 
     onUser: function (e) {
@@ -482,7 +505,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
 
         if (scrollHeight >= height) {
             this.locked = true;
-            this.collection.requestNextPage();
+            /*this.collection.requestNextPage();*/
         }
     }
 });
@@ -598,7 +621,6 @@ Yasound.Views.PublicStats = Backbone.View.extend({
     updateData: function() {
         this.model.fetch();
     }
-    
 });
 
 
@@ -626,13 +648,15 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.subMenuTemplate());
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
-        
+        $("select", this.el).uniform();
+
+
         if (Yasound.App.hasRadios) {
             $('#create-radio span').html(gettext('My radios'));
         } else {
             $('#create-radio span').html(gettext('Create radio'));
         }
-        
+	
         return this;
     },
     selectMenu: function(menu) {

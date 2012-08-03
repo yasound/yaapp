@@ -101,7 +101,7 @@ def similar_radios_from_artist_list(request):
     
     user_radio_ids = []
     if request.user and request.user.is_authenticated():
-        radios = Radio.objects.filter(creator=request.user)
+        radios = request.user.userprofile.own_radios(only_ready_radios=False)
         for r in radios:
             user_radio_ids.append(r.id)
         
@@ -133,7 +133,7 @@ def similar_radios_from_artist_list(request):
             continue # dont't add user's radios
         try:
             radio = Radio.objects.get(id=r)
-            data.append(radio.as_dict())
+            data.append(radio.as_dict(request_user=request.user))
         except:
             pass    
     return api_response(data)
@@ -626,15 +626,16 @@ def upload_song(request, song_id=None):
         logger.info(request.FILES)
         return HttpResponse('request does not contain a song file')
 
-    radio = None
-    try:
-        radio = Radio.objects.radio_for_user(request.user)
-        yabase_signals.new_animator_activity.send(sender=request.user, 
+    if song_id:
+        try:
+            song_instance = SongInstance.objects.get(id=song_id)
+            radio = Radio.objects.get(id=song_instance.playlist.radio.id)
+            yabase_signals.new_animator_activity.send(sender=request.user, 
                                                   user=request.user, 
                                                   radio=radio,
                                                   atype=yabase_settings.ANIMATOR_TYPE_UPLOAD_SONG)
-    except:
-        logger.info('no radio for user %s' % (request.user))
+        except:
+            logger.info('no radio')
 
         
     json_data = {}
@@ -983,7 +984,7 @@ class WebAppView(View):
         genre_form = RadioGenreForm()
         
         has_radios = False
-        radio_count = Radio.objects.filter(creator=request.user).count()
+        radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
         if radio_count > 0:
             has_radios = True 
         
@@ -1121,7 +1122,7 @@ class WebAppView(View):
         genre_form = RadioGenreForm()
 
         has_radios = False
-        radio_count = Radio.objects.filter(creator=request.user).count()
+        radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
         if radio_count > 0:
             has_radios = True 
 
@@ -1163,7 +1164,7 @@ def radios(request, template_name='web/radios.html'):
 def web_myradio(request, radio_uuid=None, template_name='web/my_radio.html'):
     radio = None
     if not uuid:
-        radios = Radio.objects.filter(creator=request.user, ready=True)[0:1]
+        radios = request.user.userprofile.own_radios(only_ready_radios=True)[0:1]
         if radios.count() == 0:
             raise Http404
         else:
@@ -1301,7 +1302,7 @@ def most_active_radios(request):
     radio_data = []
     for i in radio_info:
         r = Radio.objects.get(id=i['db_id'])
-        radio_data.append(r.as_dict(full=True))
+        radio_data.append(r.as_dict(full=True, request_user=request.user))
     response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
     return response
 
@@ -1361,28 +1362,43 @@ def similar_radios(request, radio_uuid):
     
     data = []
     for radio in similar_radios:
-        data.append(radio.as_dict())
+        data.append(radio.as_dict(request_user=request.user))
     return api_response(data)
 
+# 
+#    programming
+#
+def programming_response(request, radio):
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    artists = request.REQUEST.getlist('artist')
+    albums = request.REQUEST.getlist('album')
+    tracks = radio.programming(artists, albums)
+    total_count = tracks.count() 
+    response = api_response(list(tracks[offset:offset+limit]), total_count, limit=limit, offset=offset)
+    return response
+
+def programming_artists_response(request, radio):
+    artists = radio.programming_artists()
+    total_count = artists.count()
+    response = api_response(list(artists), total_count)
+    return response
+
+def programming_albums_response(request, radio):
+    artists = request.REQUEST.getlist('artist')
+    albums = radio.programming_albums(artists)
+    total_count = albums.count()
+    response = api_response(list(albums), total_count)
+    return response
+
+# v1
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST',], login_required=True)
 def my_programming(request):
     radio = Radio.objects.radio_for_user(request.user)
     if not radio:
         raise Http404
-    limit = int(request.REQUEST.get('limit', 25))
-    offset = int(request.REQUEST.get('offset', 0))
-    
-    artists = request.REQUEST.getlist('artist')
-    albums = request.REQUEST.getlist('album')
-    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio)
-    if artists:
-        qs = qs.filter(artist_name__in=artists)
-    if albums:
-        qs = qs.filter(album_name__in=albums)
-    tracks = qs.values('id', 'name', 'album_name', 'artist_name').distinct()
-    total_count = tracks.count() 
-    response = api_response(list(tracks[offset:offset+limit]), total_count, limit=limit, offset=offset)
+    response = programming_response(request, radio)
     return response
 
 @check_api_key(methods=['GET',], login_required=True)
@@ -1390,10 +1406,7 @@ def my_programming_artists(request):
     radio = Radio.objects.radio_for_user(request.user)
     if not radio:
         raise Http404
-    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio).distinct()
-    artists = qs.values('artist_name').distinct()
-    total_count = artists.count()
-    response = api_response(list(artists), total_count)
+    response = programming_artists_response(request, radio)
     return response
 
 @check_api_key(methods=['GET',], login_required=True)
@@ -1401,14 +1414,27 @@ def my_programming_albums(request):
     radio = Radio.objects.radio_for_user(request.user)
     if not radio:
         raise Http404
-    
-    artists = request.REQUEST.getlist('artist')
-    qs = SongMetadata.objects.filter(songinstance__playlist__radio=radio)
-    if artists:
-        qs = qs.filter(artist_name__in=artists)
-    albums = qs.values('album_name').distinct()
-    total_count = albums.count()
-    response = api_response(list(albums), total_count)
+    response = programming_albums_response(request, radio)
+    return response
+
+# v2
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST',], login_required=True)
+def radio_programming(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    response = programming_response(request, radio)
+    return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def radio_programming_artists(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    response = programming_artists_response(request, radio)
+    return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def radio_programming_albums(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    response = programming_albums_response(request, radio)
     return response
 
 def public_stats(request):
@@ -1446,7 +1472,7 @@ def user_favorites(request, username):
     qs = qs[offset:offset+limit] 
     data = []
     for radio in qs:
-        data.append(radio.as_dict(full=True))
+        data.append(radio.as_dict(full=True, request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
 
@@ -1454,12 +1480,12 @@ def user_favorites(request, username):
 def my_radios(request):
     limit = int(request.REQUEST.get('limit', 25))
     offset = int(request.REQUEST.get('offset', 0))
-    qs = Radio.objects.filter(creator=request.user)
+    qs = request.user.userprofile.own_radios(only_ready_radios=False)
     total_count = qs.count()
     qs = qs[offset:offset+limit] 
     data = []
     for radio in qs:
-        radio_data = radio.as_dict(full=True)
+        radio_data = radio.as_dict(full=True, request_user=request.user)
         stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
         stats_data = []
         for stat in stats:
@@ -1468,3 +1494,11 @@ def my_radios(request):
         data.append(radio_data)
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
+
+@check_api_key(methods=['GET',], login_required=False)
+def radio_leaderboard(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    data = radio.relative_leaderboard_as_dicts()
+    response = api_response(data)
+    return response
+    

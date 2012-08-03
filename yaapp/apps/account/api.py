@@ -110,14 +110,7 @@ class UserResource(ModelResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle)
-        
-        own_radio = userprofile.own_radio
-        if own_radio and own_radio.ready:
-            bundle.data['own_radio'] = own_radio.as_dict()
-        current_radio = userprofile.current_radio
-        if current_radio and current_radio.ready:
-            bundle.data['current_radio'] = current_radio.as_dict()
+        userprofile.fill_user_bundle(bundle, full=True)
         
         if bundle.request.user == user:
             userprofile.fill_user_bundle_with_login_infos(bundle)
@@ -159,14 +152,7 @@ class PublicUserResource(UserResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle)
-        
-        own_radio = userprofile.own_radio
-        if own_radio and own_radio.ready:
-            bundle.data['own_radio'] = own_radio.as_dict(full=True)
-        current_radio = userprofile.current_radio
-        if current_radio and current_radio.ready:
-            bundle.data['current_radio'] = current_radio.as_dict(full=True)
+        userprofile.fill_user_bundle(bundle, full=True)
         
         userprofile.fill_user_bundle_with_history(bundle)
         
@@ -257,7 +243,7 @@ class SignupResource(ModelResource):
         user_profile.yasound_email = bundle.data['email']
         user_profile.update_with_bundle(bundle, True)
         
-        radio = Radio.objects.filter(creator=user.id)[0]
+        radio = Radio.objects.radio_for_user(user)
         radio.create_name(user)
         
         return user_resource
@@ -275,7 +261,7 @@ class LoginResource(ModelResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle)
+        userprofile.fill_user_bundle(bundle, full=True)
 
         # add social stuff        
         userprofile.fill_user_bundle_with_login_infos(bundle)     
@@ -411,7 +397,7 @@ class SocialAuthentication(Authentication):
                 
                 request.user = user
                 
-                radio = Radio.objects.filter(creator=user.id)[0]
+                radio = Radio.objects.radio_for_user(user)
                 radio.create_name(user)
                 logger.info('facebook user created')
                 authenticated = True
@@ -462,7 +448,7 @@ class SocialAuthentication(Authentication):
                 
                 request.user = user
                 
-                radio = Radio.objects.filter(creator=user.id)[0]
+                radio = Radio.objects.radio_for_user(user)
                 radio.create_name(user)
                 authenticated = True
         else:
@@ -487,7 +473,7 @@ class LoginSocialResource(ModelResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle)
+        userprofile.fill_user_bundle(bundle, full=True)
         
         # add specific login informations
         # add social stuff   

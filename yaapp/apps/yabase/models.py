@@ -400,7 +400,7 @@ class RadioManager(models.Manager):
         return self.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
     
     def radio_for_user(self, user):
-        return self.filter(creator=user)[:1][0]
+        return user.userprofile.own_radio
     
     def unlock_all(self):
         self.all().update(computing_next_songs=False)
@@ -544,6 +544,8 @@ class Radio(models.Model):
                                      on_delete=models.SET_NULL)
     
     current_song_play_date = models.DateTimeField(null=True, blank=True)
+    
+    new_wall_messages_count = models.IntegerField(default=0) # number of new messages since last creator visit
     
     def __unicode__(self):
         if self.name:
@@ -788,7 +790,7 @@ class Radio(models.Model):
         bundle.data['stream_url'] = self.stream_url
         bundle.data['web_url'] = self.web_url
     
-    def as_dict(self, full=False):
+    def as_dict(self, full=False, request_user=None):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         data = {
             'id': self.id,
@@ -802,16 +804,19 @@ class Radio(models.Model):
             'ready': self.ready,
             'stream_url' : self.stream_url,
             'web_url': self.web_url,
-            'genre': self.genre
+            'genre': self.genre,
+            'overall_listening_time': self.overall_listening_time
         }
         if full:
-            data['creator'] = self.creator.userprofile.user_as_dict(full=True)
+            data['creator'] = self.creator.userprofile.user_as_dict(full=True, request_user=request_user)
             data['description'] = self.description
             data['genre'] = self.genre
             data['theme'] = self.theme
             data['audience_peak'] = self.audience_peak
-            data['overall_listening_time'] = self.overall_listening_time
             data['created'] = self.created
+            
+        if request_user == self.creator:
+            data['new_wall_messages_count'] = self.new_wall_messages_count
         return data
     
     def update_with_data(self, data):
@@ -889,6 +894,9 @@ class Radio(models.Model):
         creator_profile = creator.userprofile
         creator_profile.user_in_my_radio(creator_profile, self)
         
+        # reset unread wall messages count
+        Radio.objects.filter(id=self.id).update(new_wall_messages_count=0)
+        
 
     def create_listening_stat(self):
         favorites = RadioUser.objects.get_favorite().filter(radio=self).count()
@@ -918,6 +926,19 @@ class Radio(models.Model):
         for i in range(nb_lower_radios):
             results.append(lower_radios[i])
         return results
+    
+    def relative_leaderboard_as_dicts(self):
+        leaderboard = self.relative_leaderboard()
+        data = []
+        for i in leaderboard:
+            dict = {'id': i.id,
+                    'name': i.name,
+                    'leaderboard_favorites': i.leaderboard_favorites,
+                    'leaderboard_rank': i.leaderboard_rank,
+                    'mine': True if i.id == self.id else False
+                    }
+            data.append(dict)
+        return data
     
     def current_users(self):
         users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()
@@ -1091,6 +1112,37 @@ class Radio(models.Model):
             if similar_radios:
                 return Radio.objects.filter(id__in=similar_radios)
         return Radio.objects.none()
+    
+    def programming(self, artists=None, albums=None):
+        qs = SongMetadata.objects.filter(songinstance__playlist__radio=self)
+        if artists:
+            qs = qs.filter(artist_name__in=artists)
+        if albums:
+            qs = qs.filter(album_name__in=albums)
+        tracks = qs.values ('id', 'name', 'album_name', 'artist_name').distinct()
+        return tracks
+    
+    def programming_artists(self):
+        qs = SongMetadata.objects.filter(songinstance__playlist__radio=self).distinct()
+        artists = qs.values('artist_name').distinct()
+        return artists
+    
+    def programming_albums(self, artists=None):
+        qs = SongMetadata.objects.filter(songinstance__playlist__radio=self)
+        if artists:
+            qs = qs.filter(artist_name__in=artists)
+        albums = qs.values('album_name').distinct()
+        return albums
+    
+    def message_posted_in_wall(self, wall_event):
+        if self.creator:
+            creator_profile = self.creator.userprofile
+            creator_profile.message_posted_in_my_radio(wall_event)
+            
+            # increment new message count if the creator is not in the radio
+            creator_profile = self.creator.userprofile
+            if creator_profile.connected_radio is not self:
+                Radio.objects.filter(id=self.id).update(new_wall_messages_count=self.new_wall_messages_count+1)
     
     class Meta:
         db_name = u'default'
@@ -1383,10 +1435,7 @@ class WallEvent(models.Model):
                     pass
             self.save()
             if self.type == yabase_settings.EVENT_MESSAGE:
-                radio_creator = self.radio.creator
-                if radio_creator:
-                    radio_creator_profile = radio_creator.userprofile
-                    radio_creator_profile.message_posted_in_my_radio(self)
+                self.radio.message_posted_in_wall(self)
             
             yabase_signals.new_wall_event.send(sender=self, wall_event=self)
     

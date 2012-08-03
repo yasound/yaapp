@@ -20,10 +20,10 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
             this.resultsViews = undefined;
         }
     },
-
+                                                   
     render: function(genre) {
         this.reset();
-
+        
         $(this.el).html(ich.topRadiosPageTemplate());
         this.collection.perPage = Yasound.App.cellsPerPage();
         

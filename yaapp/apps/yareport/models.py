@@ -2,10 +2,11 @@ from django.db import models
 from django.conf import settings
 from yaref.models import YasoundSong
 import datetime
-import csv
+import unicodecsv
 import os
 import settings as yareport_settings
 import string
+import logging
 
 def report_song(radio, song_instance):
     db = settings.MONGO_DB
@@ -39,57 +40,85 @@ def print_reports():
     
     
 
-def scpp_report(destination_folder='', start_date=None, end_date=None):
-    db = settings.MONGO_DB
 
-    radio_ids = db.reports.distinct("radio_id")
-    for radio_id in radio_ids:
-        query_dict = {}
-        query_dict["radio_id"] = radio_id
-        documents = db.reports.find(query_dict)        
-        radio_name = documents[0]["radio_name"]
-        filename = '%s_scpp_report.csv' % radio_name
-        if destination_folder and destination_folder != '':
-            path = os.path.join(destination_folder, filename)
-        else:
-            path = filename
-        f = open(path, 'w')
-        csv_writer = csv.writer(f)
         
-        if start_date and end_date:
-                query_dict["report_date"] = {"$gte": start_date, "$lt": end_date}
-        song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
-        for song_id in song_ids:
+def song_report(start_date=None, end_date=None, radio_id=None):
+    db = settings.MONGO_DB
+    
+    query_dict = {}
+    if start_date:
+        if not query_dict.has_key('report_date'):
+            query_dict['report_date'] = {}
+        query_dict["report_date"]["$gte"] = start_date
+    if end_date:
+        if not query_dict.has_key('report_date'):
+            query_dict['report_date'] = {}
+        query_dict["report_date"]["lt"] = end_date
+    
+    if radio_id is not None:
+        query_dict['radio_id'] = radio_id
+        
+    song_infos = []
+    song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
+    for song_id in song_ids:
             q = query_dict
             q["yasound_song_id"] = song_id
             song_docs = db.reports.find(q)
             count = song_docs.count()
             doc = song_docs[0]
-            
-            duration_seconds = doc["duration"]
-            hours = int(duration_seconds / 3600)
-            duration_seconds -= hours * 3600
-            minutes = int(duration_seconds / 60)
-            duration_seconds -= minutes * 60
-            seconds = duration_seconds
-            if hours > 0:
-                duration_str = '%d:%02d:%02d' % (hours, minutes, seconds)
-            else:
-                duration_str = '%d:%02d' % (minutes, seconds)
-            
-            
-            data = []
-            data.append(doc["song_name"])           # Titre du Phonogramme
-            data.append(duration_str)               # Duree repoduite
-            data.append('')                         # Interpete Prenom
-            data.append(doc["song_artist_name"])    # Interpete Nom
-            data.append('')                         # Compositeur (Pour le classique)
-            data.append('')                         # Marque ou producteur
-            data.append('')                         # Code barre du support commercia
-            data.append(count)                      # Nombre de reproductions ou de passage
-            
-            csv_writer.writerow(data)
-        f.close()
+            doc.pop('report_date')
+            doc['count'] = count
+            song_infos.append(doc)
+    return song_infos
+
+
+def build_scpp_report_file(song_report_docs, destination_folder=''):
+    logger = logging.getLogger("yaapp.yareport")
+    report_rows = [] 
+    
+    nb_docs = len(song_report_docs)
+    i = 0
+    for doc in song_report_docs:
+        logger.info('scpp_report_global: %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
+        duration_seconds = doc["duration"]
+        hours = int(duration_seconds / 3600)
+        duration_seconds -= hours * 3600
+        minutes = int(duration_seconds / 60)
+        duration_seconds -= minutes * 60
+        seconds = duration_seconds
+        if hours > 0:
+            duration_str = '%d:%02d:%02d' % (hours, minutes, seconds)
+        else:
+            duration_str = '%d:%02d' % (minutes, seconds)
+
+        data = []
+        data.append(doc["song_name"])           # Titre du Phonogramme
+        data.append(duration_str)               # Duree repoduite
+        data.append('')                         # Interpete Prenom
+        data.append(doc["song_artist_name"])    # Interpete Nom
+        data.append('')                         # Compositeur (Pour le classique)
+        data.append('')                         # Marque ou producteur
+        data.append('')                         # Code barre du support commercia
+        data.append(doc["count"])                      # Nombre de reproductions ou de passage
+        
+        report_rows.append(data)
+        
+    filename = 'scpp_report_%s.csv' % datetime.datetime.now()
+    if destination_folder and destination_folder != '':
+        path = os.path.join(destination_folder, filename)
+    else:
+        path = filename
+    f = open(path, 'w')
+    csv_writer = unicodecsv.writer(f)
+    for row in report_rows:
+        csv_writer.writerow(row)
+    f.close()
+
+def scpp_report(destination_folder='', start_date=None, end_date=None, restrict_to_radio=None): 
+    radio_id = None if restrict_to_radio is None else restrict_to_radio.id
+    song_report_docs = song_report(start_date=start_date, end_date=end_date, radio_id=radio_id)
+    build_scpp_report_file(song_report_docs, destination_folder)
+
         
 def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, replace_with_space=True, char_count=None, left_justify=True):
     if to_upper:
@@ -111,6 +140,8 @@ def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, repla
     return x
             
         
+
+   
 def sacem_report(destination_folder='', start_date=None, end_date=None):
     allowed_characters = string.uppercase + '().-/'
     db = settings.MONGO_DB
@@ -166,43 +197,43 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
     report_header = '%s %s %s %s %s %s %s %s\r\n' % (declarant_code, report_start_date, report_end_date, report_start_hour, report_end_hour, declarant_identifier, declarant_address_1, declarant_address_2)
     f.write(report_header)
     
-    
-    song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
-    for song_id in song_ids:
-            q = query_dict
-            q["yasound_song_id"] = song_id
-            song_docs = db.reports.find(q)
-            count = song_docs.count()
-            doc = song_docs[0]
+    report_rows = []
+    docs = song_report(start_date=start_date, end_date=end_date)
+    for doc in docs:
+        song_name = clean_string(doc['song_name'], allowed_characters, char_count=24)
             
-            song_name = clean_string(doc['song_name'], allowed_characters, char_count=24)
-            
-            count = min(count, 9999) # limited to 4 digits
-            count_str = '%04d' % count
-            
-            song_number = '1' # song number in advertisement campaign
-            
-            duration_seconds = doc["duration"] * count
-            minutes = int(duration_seconds) / 60
-            seconds = duration_seconds - (minutes * 60)
-            if minutes > 9999:
-                minutes = 9999
-                seconds = 59
-            duration_str = '%04d:%02d' % (minutes, seconds)
-            
-            artist = clean_string(doc['song_artist_name'], allowed_characters, char_count=24)
-            composer = clean_string('', allowed_characters, char_count=24)
-            arranger = clean_string('', allowed_characters, char_count=24)
-            editor = clean_string('', allowed_characters, char_count=24)
-            genre = clean_string('', allowed_characters, char_count=3)
-            producer = clean_string('', allowed_characters, char_count=24)
-            catalog_number = clean_string('', allowed_characters, char_count=20)
-            bar_code = clean_string('', allowed_characters, char_count=13)
-            
-            report_row = '%s %s %s %s %s %s %s %s %s %s %s %s\r\n' % (song_name, count_str, song_number, duration_str, artist, composer, arranger, editor, genre, producer, catalog_number, bar_code)
-            f.write(report_row)
+        count = min(doc['count'], 9999) # limited to 4 digits
+        count_str = '%04d' % count
+        
+        song_number = '1' # song number in advertisement campaign
+        
+        duration_seconds = doc["duration"] * count
+        minutes = int(duration_seconds) / 60
+        seconds = duration_seconds - (minutes * 60)
+        if minutes > 9999:
+            minutes = 9999
+            seconds = 59
+        duration_str = '%04d:%02d' % (minutes, seconds)
+        
+        artist = clean_string(doc['song_artist_name'], allowed_characters, char_count=24)
+        composer = clean_string('', allowed_characters, char_count=24)
+        arranger = clean_string('', allowed_characters, char_count=24)
+        editor = clean_string('', allowed_characters, char_count=24)
+        genre = clean_string('', allowed_characters, char_count=3)
+        producer = clean_string('', allowed_characters, char_count=24)
+        catalog_number = clean_string('', allowed_characters, char_count=20)
+        bar_code = clean_string('', allowed_characters, char_count=13)
+        
+        report_row = '%s %s %s %s %s %s %s %s %s %s %s %s\r\n' % (song_name, count_str, song_number, duration_str, artist, composer, arranger, editor, genre, producer, catalog_number, bar_code)
+        report_rows.append(report_row)
+
+    for row in report_rows:
+        f.write(row)
     f.close()
-    
+   
+
+
+ 
         
     
     
