@@ -1105,6 +1105,27 @@ class Radio(models.Model):
                 return Radio.objects.filter(id__in=similar_radios)
         return Radio.objects.none()
     
+    def programming(self, artists=None, albums=None):
+        qs = SongMetadata.objects.filter(songinstance__playlist__radio=self)
+        if artists:
+            qs = qs.filter(artist_name__in=artists)
+        if albums:
+            qs = qs.filter(album_name__in=albums)
+        tracks = qs.values ('id', 'name', 'album_name', 'artist_name').distinct()
+        return tracks
+    
+    def programming_artists(self):
+        qs = SongMetadata.objects.filter(songinstance__playlist__radio=self).distinct()
+        artists = qs.values('artist_name').distinct()
+        return artists
+    
+    def programming_albums(self, artists=None):
+        qs = SongMetadata.objects.filter(songinstance__playlist__radio=self)
+        if artists:
+            qs = qs.filter(artist_name__in=artists)
+        albums = qs.values('album_name').distinct()
+        return albums
+    
     class Meta:
         db_name = u'default'
         
