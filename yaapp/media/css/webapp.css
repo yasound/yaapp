@@ -1710,6 +1710,8 @@ ul .radio-with-stats-cells li {
 .radio-with-stats .chartdiv {
 	float:right;
 	margin:30px;
+    height:90% !important;
+    width:50% !important;
 }
 
 .stats {
@@ -1896,6 +1898,7 @@ ul .radio-with-stats-cells li {
 	margin:0px;
 }
 
+
 /* Landscape phones and down */
 @media (max-width: 480px) { 
 	
@@ -1917,6 +1920,9 @@ ul .radio-with-stats-cells li {
 	.header-separation {
 		display:none;
 	}
+    #search-bar{
+        
+    }
 	
 	
 /*-- SUBMENU --*/
@@ -1935,6 +1941,12 @@ ul .radio-with-stats-cells li {
 	#sub-header-separation {
 		display:none;
 	}
+    #sub-header-pointer {
+        display:none;
+    }
+    .selected {
+
+    }
 	
 /*-- RADIO-CELL --*/
 	.profile-background, .radio-cells {
@@ -1967,6 +1979,25 @@ ul .radio-with-stats-cells li {
 		display:none;
 	}
 
+/*-- MY RADIO --*/
+    .radio-with-stats-cells .radio-with-stats {
+        background-image:url('../app/images/myRadio/my-radio-bg-mobile');
+    }
+    .radio-with-stats-cells .radio-with-stats {
+        width:465px;
+        height:520px;
+    }
+    .radio-with-stats .stats {
+        float:left;
+        display:block;
+    }
+    .radio-with-stats .chartdiv {
+        height:20%;
+        width:20%;
+        height:45% !important;
+        width:90% !important;
+    }
+    
 /*-- FOOTER --*/
 	#connected-users {
 		display:none;
