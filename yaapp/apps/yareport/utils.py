@@ -7,8 +7,8 @@ from models import build_scpp_report_file
    
 def build_yasound_2011_report_docs(radio=None):
     logger = logging.getLogger("yaapp.yareport")
-    nb_days = 120
-    nb_songs_played_per_day = 20
+    nb_days = 117
+    nb_songs_played_per_day = 23
     nb_songs_played = nb_days * nb_songs_played_per_day
     
     if radio is None:
