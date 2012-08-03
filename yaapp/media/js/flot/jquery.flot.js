@@ -41,7 +41,7 @@
         var series = [],
             options = {
                 // the color theme used for graphs
-                colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"],
+                colors: ["#bebebe", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"],
                 legend: {
                     show: true,
                     noColumns: 1, // number of colums in legend table
@@ -88,17 +88,18 @@
                 yaxes: [],
                 series: {
                     points: {
-                        show: false,
-                        radius: 3,
-                        lineWidth: 2, // in pixels
+                        show: true,
+                        radius: 4,
+                        lineWidth: null, // in pixels
                         fill: true,
-                        fillColor: "#ffffff",
+                        fillColor: "#169dea",
                         symbol: "circle" // or callback
                     },
                     lines: {
                         // we don't put in show: false so we can see
                         // whether lines were actively disabled 
-                        lineWidth: 2, // in pixels
+                        show:true,
+                        lineWidth: 3, // in pixels
                         fill: false,
                         fillColor: null,
                         steps: false
@@ -107,25 +108,25 @@
                         show: false,
                         lineWidth: 2, // in pixels
                         barWidth: 1, // in units of the x axis
-                        fill: true,
+                        fill: false,
                         fillColor: null,
                         align: "left", // or "center" 
                         horizontal: false
                     },
-                    shadowSize: 3
+                    shadowSize: 0
                 },
                 grid: {
                     show: true,
                     aboveData: false,
-                    color: "#545454", // primary color used for outline and labels
-                    backgroundColor: null, // null for transparent, else color
-                    borderColor: null, // set if different from the grid color
+                    color: "#ececec", // primary color used for outline and labels
+                    backgroundColor: { colors: ["#ffffff", "#f9f9f9"] }, // null for transparent, else color
+                    borderColor: "#e7e7e7", // set if different from the grid color
                     tickColor: null, // color for the ticks, e.g. "rgba(0,0,0,0.15)"
                     labelMargin: 5, // in pixels
                     axisMargin: 8, // in pixels
-                    borderWidth: 2, // in pixels
+                    borderWidth: 1, // in pixels
                     minBorderMargin: null, // in pixels, null means taken from points radius
-                    markings: null, // array of ranges or fn: axes -> array of ranges
+                    markings: 10, // array of ranges or fn: axes -> array of ranges
                     markingsColor: "#f4f4f4",
                     markingsLineWidth: 2,
                     // interactive stuff

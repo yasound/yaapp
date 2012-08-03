@@ -518,39 +518,38 @@ body {
 	float:left;
 	margin:0;
 	position:relative;
-	margin-top:5px;
+	margin-top:3px;
 	text-overflow: ellipsis
 }
 
-.fix-ff {
-	width:108px;
-	height:35px;
+#fix-genre {
+    background-image:url('../app/images/genre-bg.png');
+    border-radius:5px;
+    width:108px;
+	height:32px;
 	overflow:hidden;
+    border:1px solid #b8bec1;
+    border-radius:5px;
 }
 
-select {
-	-webkit-appearance:none;
-	-moz-appearance:none;
-	-o-appearance:none;
-	appearance:none;
-}
 
-#radio-style-symbol {
-	position:absolute;
-	left:90px;
-	top:13px;
-}
-
-.fix-ff select {
-	display:block;
-    float:left;
-    height:32px;
-    width:208px;
-    color:#7b8082;
-    margin: 0px 13px 0px 0px;
+div .selector span {
+    display:block;
+    width:79px;
     font-size:15px;
-	background-image:url('../app/images/radio-style-bg.png');
-	padding: 0px 25px 0px 9px;
+    color:#7b8082;
+    line-height:30px;
+}
+
+.genre-selector {
+    position:absolute;
+    top:16px;
+    right:14px
+}
+
+.selector {
+    font-size:15px;
+    line-height:20px;   
 }
 
 #sub-header-separation {
@@ -1981,7 +1980,7 @@ ul .radio-with-stats-cells li {
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        background-image:url('../app/images/myRadio/my-radio-bg-mobile');
+        background-image:url('../app/images/myRadio/my-radio-bg-mobile.png');
     }
     .radio-with-stats-cells .radio-with-stats {
         width:465px;
