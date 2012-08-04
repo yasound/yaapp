@@ -459,7 +459,7 @@ def user_authenticated(request):
     if key != account_settings.AUTH_SERVER_KEY:
         return HttpResponseForbidden()
  
-    s = Session.objects.get(pk=sessionid)
+    s = get_object_or_404(Session, pk=sessionid)
     if not '_auth_user_id'in s.get_decoded():
         raise Http404
     
