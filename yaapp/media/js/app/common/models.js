@@ -174,7 +174,76 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
 
 Yasound.Data.Models.User = Backbone.Model.extend({
-    idAttribute: 'id'
+    idAttribute: 'username',
+    
+    url: function () {
+        return '/api/v1/public_user/' + this.id + '/';
+    },
+    
+    initialize: function () {
+        _.bindAll(this, 'fetchSuccess');
+
+        this.currentRadio = new Yasound.Data.Models.Radio(this.get('current_radio'));
+        this.ownRadio = new Yasound.Data.Models.Radio(this.get('own_radio'));
+        
+        this.bind('change', this.fetchSuccess);
+    },
+    
+    fetchSuccess: function () {
+        this.currentRadio.clear({silent: true});
+        this.currentRadio.set(this.get('current_radio'));
+
+        this.ownRadio.clear({silent: true});
+        this.ownRadio.set(this.get('own_radio'));
+    },
+    
+    humanDate: function() {
+        var history = this.get('history');
+        if (history) {
+            var date = history['date'];
+            if (date) {
+                return _.str.capitalize(Yasound.Utils.humanizeDate(this.get('history')['date']));
+            }
+         }
+        return '';
+    },
+    
+    toJSON: function() {
+        var data = Yasound.Data.Models.User.__super__.toJSON.apply(this);
+        
+        data['agc'] = '';
+        data['human_date'] = this.humanDate();
+        
+        if (this.get('age')) {
+            data['agc'] = this.get('age') +  ' ' + gettext('years old');
+        }
+        if (this.get('gender')) {
+            data['agc'] = data['agc'] + ', ' + this.get('gender');
+        }
+        if (this.get('city')) {
+            data['agc'] = data['agc'] + ', ' + this.get('city');
+        }
+        return data;
+    },
+    
+    follow: function(requestUser) {
+        this.set({'is_friend': true});
+        var url = '/api/v1/user/' + requestUser + '/friends/' + this.get('username');
+        $.ajax({
+           url: url,
+           type: 'POST'
+        });
+    },
+        
+    unfollow: function(requestUser) {
+        this.set({'is_friend': false});
+        var url = '/api/v1/user/' + requestUser + '/friends/' + this.get('username');
+        $.ajax({
+           url: url,
+           type: 'DELETE'
+        });
+    }
+    
 });
 
 /**

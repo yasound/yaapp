@@ -11,6 +11,7 @@ from yasearch.indexer import erase_index
 import settings as account_settings
 import task
 import yabase.settings as yabase_settings
+import datetime
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -21,7 +22,47 @@ class TestProfile(TestCase):
         user.set_password('test')
         user.save()
         self.assertEqual(user.get_profile(), UserProfile.objects.get(id=1))
+        
+    def test_age_gender_privacy(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
 
+        profile = user.get_profile()
+        self.assertIsNone(profile.age)
+        self.assertIsNone(profile.birthday)
+        self.assertEquals(profile.gender, '')
+        self.assertEquals(profile.privacy, account_settings.PRIVACY_PUBLIC)
+        
+        profile.birthday = datetime.date(2007, 01, 01)
+        self.assertTrue(profile.age >= 5)
+        
+    def test_privacy(self):
+        user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
+        user2 = User.objects.create(email="user2@yasound.com", username="user2", is_superuser=False, is_staff=False)
+
+        profile1 = user1.get_profile()
+        profile2 = user2.get_profile()
+        
+        self.assertTrue(profile1.can_give_personal_infos())
+        self.assertTrue(profile1.can_give_personal_infos(user2))
+        self.assertTrue(profile2.can_give_personal_infos())
+
+        profile1.privacy = account_settings.PRIVACY_PRIVATE
+        profile1.save()
+
+        self.assertFalse(profile1.can_give_personal_infos(user2))
+        self.assertTrue(profile1.can_give_personal_infos(user1))
+        
+        profile1.friends.add(user2)
+        self.assertFalse(profile1.can_give_personal_infos(user2))
+
+        profile1.privacy = account_settings.PRIVACY_FRIENDS
+        profile1.save()
+
+        self.assertTrue(profile1.can_give_personal_infos(user2))
+                
+        
     def test_index_fuzzy(self):
         user = User(email="test@yasound.com", username="username", is_superuser=False, is_staff=False)
         user.save()

@@ -103,6 +103,7 @@ $(document).ready(function () {
             "profile/:username/": "profile",
             "profile/:username/favorites/": "userFavorites",
             "profile/:username/friends/": "userFriends",
+            "profile/:username/radios/": "userRadios",
             "settings/": "settings",
             "friends/": "myFriends",
             "notifications/": "notifications",
@@ -276,7 +277,7 @@ $(document).ready(function () {
             this.commonContext.subMenuView.selectMenu('friends');
         },
 
-        // user's friennds
+        // user's friends
         userFriends: function (username) {
             this.clearView(/* showSubMenu = */ false);
 
@@ -286,6 +287,14 @@ $(document).ready(function () {
                 collection: friends,
                 el: '#webapp-content'
             }).render();
+        },
+
+        // user's radios
+        userRadios: function (username) {
+            this.clearView(/* showSubMenu = */ false);
+            this.currentView = new Yasound.Views.UserRadiosPage({
+                el: '#webapp-content',
+            }).render('', username);
         },
 
         // all users page

@@ -1302,7 +1302,7 @@ def most_active_radios(request):
     radio_data = []
     for i in radio_info:
         r = Radio.objects.get(id=i['db_id'])
-        radio_data.append(r.as_dict(full=True, request_user=request.user))
+        radio_data.append(r.as_dict(request_user=request.user))
     response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
     return response
 
@@ -1472,9 +1472,27 @@ def user_favorites(request, username):
     qs = qs[offset:offset+limit] 
     data = []
     for radio in qs:
-        data.append(radio.as_dict(full=True, request_user=request.user))
+        data.append(radio.as_dict(request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
+
+@check_api_key(methods=['GET',], login_required=False)
+def user_radios(request, username):
+    """
+    Simple view which returns the radio owned by a given user.
+    The tastypie version only support id as user input
+    """
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    qs = Radio.objects.filter(creator__username=username)
+    total_count = qs.count()
+    qs = qs[offset:offset+limit] 
+    data = []
+    for radio in qs:
+        data.append(radio.as_dict(request_user=request.user))
+    response = api_response(data, total_count, limit=limit, offset=offset)
+    return response
+
 
 @check_api_key(methods=['GET',], login_required=True)
 def my_radios(request):
@@ -1485,7 +1503,7 @@ def my_radios(request):
     qs = qs[offset:offset+limit] 
     data = []
     for radio in qs:
-        radio_data = radio.as_dict(full=True, request_user=request.user)
+        radio_data = radio.as_dict(request_user=request.user)
         stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
         stats_data = []
         for stat in stats:

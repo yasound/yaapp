@@ -500,7 +500,7 @@ def connected_users_by_distance(request):
     data = []
     if profiles:
         for p in profiles:
-            data.append(p.user_as_dict(full=True, request_user=request.user))
+            data.append(p.as_dict(request_user=request.user))
     return api_response(data, limit=limit, offset=skip)
     
 
@@ -535,7 +535,7 @@ def fast_connected_users_by_distance(request):
 
     if profiles and not data:
         for p in profiles:
-            data.append(p.user_as_dict(full=True, request_user=request.user))
+            data.append(p.as_dict(request_user=request.user))
         
     if key is not None and profiles is not None:
         # first time we get data
@@ -543,7 +543,7 @@ def fast_connected_users_by_distance(request):
         
     return api_response(data, limit=limit, offset=skip)
 
-@check_api_key(methods=['GET',], login_required=False)
+@check_api_key(methods=['GET'], login_required=False)
 def user_friends(request, username):
     """
     Simple view which returns the friends for given user.
@@ -557,8 +557,32 @@ def user_friends(request, username):
     qs = qs[offset:offset+limit] 
     data = []
     for user_profile in qs:
-        data.append(user_profile.user_as_dict(full=True, request_user=request.user))
+        data.append(user_profile.as_dict(request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
         
+@csrf_exempt
+@check_api_key(methods=['DELETE', 'POST'], login_required=True)
+def user_friends_add_remove(request, username, friend):
+    if request.user.username != username:
+        return HttpResponse(status=401)
+    
+    user = get_object_or_404(User, username=username)
+    friend = get_object_or_404(User, username=friend)
+    
+    profile = user.get_profile()
+    if not profile:
+        raise Http404
+    if request.method == 'DELETE':
+        profile.friends.remove(friend)
+    elif request.method == 'POST':
+        profile.friends.add(friend)
+        
+    response = {'success':True}
+    res = json.dumps(response)
+    return HttpResponse(res)
+        
+        
+        
+    
     

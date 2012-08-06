@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 
+# Account types
 ACCOUNT_TYPE_YASOUND = 'yasound'
 ACCOUNT_TYPE_FACEBOOK = 'facebook'
 ACCOUNT_TYPE_TWITTER = 'twitter'
@@ -15,6 +16,26 @@ ACCOUNT_TYPES_FACEBOOK = (ACCOUNT_MULT_FACEBOOK, ACCOUNT_TYPE_FACEBOOK)
 ACCOUNT_TYPES_TWITTER = (ACCOUNT_MULT_TWITTER, ACCOUNT_TYPE_TWITTER)
 ACCOUNT_TYPES_YASOUND = (ACCOUNT_MULT_YASOUND, ACCOUNT_TYPE_YASOUND)
 
+# Privacy attributes
+PRIVACY_PUBLIC = 0
+PRIVACY_PRIVATE = 1
+PRIVACY_FRIENDS = 2
+
+PRIVACY_CHOICES = (
+    (PRIVACY_PUBLIC, _('Public')),
+    (PRIVACY_FRIENDS, _('Friends')),
+    (PRIVACY_PRIVATE, _('Private')),
+)
+
+# Gender
+GENDER_MALE = 'M'
+GENDER_FEMALE = 'F'
+GENDER_CHOICES = (
+    (GENDER_MALE, _('Male')),
+    (GENDER_FEMALE, _('Female')),
+)
+
+# Other
 SUBSCRIPTION_NONE = 'none'
 SUBSCRIPTION_PREMIUM = 'premium'
 
@@ -33,3 +54,6 @@ APP_KEY_COOKIE_NAME = 'app_key'
 APP_KEY_IPHONE = 'yasound_iphone_app'
 
 AUTH_SERVER_KEY = '0VortuhIf23U5ZtD2XLVVG1xbNLBO2HPuogUROFRMn99ZWhcieezPNxFgaCYnhzH'
+
+
+

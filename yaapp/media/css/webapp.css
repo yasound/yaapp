@@ -29,10 +29,6 @@ body {
     width: 148px;
 }
 
-#profile-radios {
-    margin-top: 24px;
-}
-
 /**
  * Header
  */
@@ -1215,6 +1211,7 @@ input::-webkit-input-placeholder {
 /**
  * Radio page
  */
+
 #webapp-radio {
     margin-top: 24px;
 /*    background-color: #F5F5F5;*/
@@ -1360,10 +1357,11 @@ input::-webkit-input-placeholder {
 /**
  * User cell
  */
+
 ul .user-cell {
     list-style: none;
-    height: 154px;
-    width: 154px;
+    height: 146px;
+    width: 146px;
     float: left;
     margin-right: 20px;
     cursor: pointer;
@@ -1373,7 +1371,7 @@ ul .user-cell {
     border-radius: 50%;
     border: 8px solid white;
 	box-shadow: 0px 2px 8px #e6e6e6;
-    overflow: hidden;	
+    overflow: hidden;
 }
 
 ul .user-cell:hover {
@@ -1387,8 +1385,8 @@ ul .user-cell:hover {
 
 ul .mask-user {
 	position:absolute;
-	height:154px;
-	width:154px;
+	height:146px;
+	width:146px;
 	border-radius:50%;
 	background-color: rgba(0,0,0,0.8);
 	text-align:center;
@@ -1407,8 +1405,14 @@ ul .mask-user .caption-user {
 }
 
 .user-cell-inner {
-	height: 160px;
-    width: 160px;	
+	height: 158px;
+    width: 158px;
+}
+
+.delete-friend {
+    position:absolute;
+    bottom:-51px;
+    right:37px;
 }
 
 ul .user-cell .caption {
@@ -2017,7 +2021,7 @@ ul .radio-with-stats-cells li {
 		float:none;
 	}
 	#comments, 
-	#all-my-radios,
+	#radios-btn,
 	#favorites-btn,
 	#friends-btn,
 	.sd-hd-small,
