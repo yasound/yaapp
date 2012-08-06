@@ -11,6 +11,7 @@ from yasearch.indexer import erase_index
 import settings as account_settings
 import task
 import yabase.settings as yabase_settings
+import datetime
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -29,8 +30,12 @@ class TestProfile(TestCase):
 
         profile = user.get_profile()
         self.assertIsNone(profile.age)
+        self.assertIsNone(profile.birthday)
         self.assertEquals(profile.gender, '')
         self.assertEquals(profile.privacy, account_settings.PRIVACY_PUBLIC)
+        
+        profile.birthday = datetime.date(2007, 01, 01)
+        self.assertTrue(profile.age >= 5)
         
     def test_privacy(self):
         user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
