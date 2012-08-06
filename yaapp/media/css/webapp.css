@@ -1412,14 +1412,8 @@ ul .mask-user .caption-user {
 
 .delete-friend {
     position:absolute;
-    top:-26px;
-    right:132px;
-}
-
-.delete-friend img {
-    position:absolute;
-    top:130px;
-    left:60px;
+    bottom:-59px;
+    right:32px;
 }
 
 ul .user-cell .caption {
