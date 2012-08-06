@@ -500,7 +500,7 @@ def connected_users_by_distance(request):
     data = []
     if profiles:
         for p in profiles:
-            data.append(p.user_as_dict(full=True, request_user=request.user))
+            data.append(p.as_dict(request_user=request.user))
     return api_response(data, limit=limit, offset=skip)
     
 
@@ -535,7 +535,7 @@ def fast_connected_users_by_distance(request):
 
     if profiles and not data:
         for p in profiles:
-            data.append(p.user_as_dict(full=True, request_user=request.user))
+            data.append(p.as_dict(request_user=request.user))
         
     if key is not None and profiles is not None:
         # first time we get data
@@ -557,7 +557,7 @@ def user_friends(request, username):
     qs = qs[offset:offset+limit] 
     data = []
     for user_profile in qs:
-        data.append(user_profile.user_as_dict(full=True, request_user=request.user))
+        data.append(user_profile.as_dict(request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
         

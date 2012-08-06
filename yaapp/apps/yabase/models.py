@@ -790,7 +790,7 @@ class Radio(models.Model):
         bundle.data['stream_url'] = self.stream_url
         bundle.data['web_url'] = self.web_url
     
-    def as_dict(self, full=False, request_user=None):
+    def as_dict(self, request_user=None):
         likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         data = {
             'id': self.id,
@@ -805,16 +805,14 @@ class Radio(models.Model):
             'stream_url' : self.stream_url,
             'web_url': self.web_url,
             'genre': self.genre,
-            'overall_listening_time': self.overall_listening_time
+            'overall_listening_time': self.overall_listening_time,
+            'description': self.description,
+            'genre':self.genre,
+            'theme':self.theme,
+            'audience_peak': self.audience_peak,
+            'created': self.created,
+            'creator': self.creator.userprofile.as_dict(request_user=request_user),
         }
-        if full:
-            data['creator'] = self.creator.userprofile.user_as_dict(full=True, request_user=request_user)
-            data['description'] = self.description
-            data['genre'] = self.genre
-            data['theme'] = self.theme
-            data['audience_peak'] = self.audience_peak
-            data['created'] = self.created
-            
         if request_user == self.creator:
             data['new_wall_messages_count'] = self.new_wall_messages_count
         return data

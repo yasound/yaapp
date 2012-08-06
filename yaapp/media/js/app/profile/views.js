@@ -39,6 +39,7 @@ Yasound.Views.User = Backbone.View.extend({
  */
 Yasound.Views.ProfilePage = Backbone.View.extend({
     events: {
+        'click #radios-btn': 'displayRadios',
         'click #favorites-btn': 'displayFavorites',
         'click #friends-btn': 'displayFriends'
     },
@@ -64,6 +65,14 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         this.currentRadioView = new Yasound.Views.RadioCell({
             model: this.model.currentRadio,
             el: $('#current-radio', this.el)
+        });
+
+        this.radios = new Yasound.Data.Models.UserRadios({});
+        this.radios.perPage = 4;
+
+        this.radiosView = new Yasound.Views.SearchResults({
+            collection: this.radios,
+            el: $('#radios', this.el)
         });
 
         this.ownRadioView = new Yasound.Views.RadioCell({
@@ -93,8 +102,17 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     },
     
     modelLoaded: function(model, response) {
+        this.radios.setUsername(model.get('username')).fetch();
         this.favorites.setUsername(model.get('username')).fetch();
         this.friends.setUsername(model.get('username')).fetch();
+    },
+    
+    displayRadios: function(e) {
+        e.preventDefault();
+        var username = this.model.get('username')
+        Yasound.App.Router.navigate("profile/" + username + '/radios/', {
+            trigger: true
+        });
     },
 
     displayFavorites: function (e) {
