@@ -258,7 +258,7 @@ class LoginResource(ModelResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle, full=True)
+        userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
 
         # add social stuff        
         userprofile.fill_user_bundle_with_login_infos(bundle)     
@@ -470,7 +470,7 @@ class LoginSocialResource(ModelResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle, full=True)
+        userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
         
         # add specific login informations
         # add social stuff   

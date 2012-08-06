@@ -30,7 +30,7 @@ class FriendResource(ModelResource):
         user = userprofile.user
         bundle.data['id'] = user.id
         bundle.data['username'] = user.username      
-        userprofile.fill_user_bundle(bundle, full=True)       
+        userprofile.fill_user_bundle(bundle, include_own_current_radios=True)       
         
         return bundle
     
