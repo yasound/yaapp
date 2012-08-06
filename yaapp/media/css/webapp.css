@@ -1354,15 +1354,14 @@ input::-webkit-input-placeholder {
     margin-left:67px;
 }
 
-
-
 /**
  * User cell
  */
+
 ul .user-cell {
     list-style: none;
-    height: 154px;
-    width: 154px;
+    height: 146px;
+    width: 146px;
     float: left;
     margin-right: 20px;
     cursor: pointer;
@@ -1372,7 +1371,7 @@ ul .user-cell {
     border-radius: 50%;
     border: 8px solid white;
 	box-shadow: 0px 2px 8px #e6e6e6;
-    overflow: hidden;	
+    overflow: hidden;
 }
 
 ul .user-cell:hover {
@@ -1386,8 +1385,8 @@ ul .user-cell:hover {
 
 ul .mask-user {
 	position:absolute;
-	height:154px;
-	width:154px;
+	height:146px;
+	width:146px;
 	border-radius:50%;
 	background-color: rgba(0,0,0,0.8);
 	text-align:center;
@@ -1406,14 +1405,14 @@ ul .mask-user .caption-user {
 }
 
 .user-cell-inner {
-	height: 168px;
-    width: 168px;
+	height: 158px;
+    width: 158px;
 }
 
 .delete-friend {
     position:absolute;
-    bottom:-59px;
-    right:32px;
+    bottom:-51px;
+    right:37px;
 }
 
 ul .user-cell .caption {

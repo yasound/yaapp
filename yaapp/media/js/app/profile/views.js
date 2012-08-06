@@ -89,7 +89,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         });
 
         this.friends = new Yasound.Data.Models.Friends({})
-        this.friends.perPage = 4;
+        this.friends.perPage = 5;
         this.friendsView = new Yasound.Views.Friends({
             collection: this.friends,
             el: $('#friends', this.el)
