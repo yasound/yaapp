@@ -2,9 +2,9 @@
 Django >=1.3, < 1.4
 South
 django-tastypie
-celery
-celery-with-redis
-django-celery
+celery==2.5.1
+celery-with-redis==2.5
+django-celery==2.5.1
 tweepy
 django-taggit
 django-taggit-templatetags
@@ -26,7 +26,7 @@ requests
 sorl-thumbnail
 unidecode
 fuzzy
-kombu
+kombu==2.2.0
 django-mobile
 django-bitfield
 django-simple-captcha
