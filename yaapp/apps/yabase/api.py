@@ -658,7 +658,7 @@ class RadioFavoriteResource(ModelResource):
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
         userprofile = bundle.obj.userprofile      
-        userprofile.fill_user_bundle(bundle, full=True)
+        userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
         return bundle
 
 
@@ -684,7 +684,7 @@ class RadioCurrentUserResource(ModelResource):
     
     def dehydrate(self, bundle):
         bundle.data['username'] = bundle.obj.username
-        bundle.obj.userprofile.fill_user_bundle(bundle, full=True)
+        bundle.obj.userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
         return bundle
     
 

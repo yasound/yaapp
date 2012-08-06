@@ -275,7 +275,7 @@
 		                       {% endthumbnail %}
 		                   {% else %}
 		                        <a href='{% url webapp_profile request.user.username %}' class="yatooltip">
-									<span class="yatoolelt">Hello world</span>
+									<span class="yatoolelt">{% trans "Not connected" %}</span>
 									<img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture">
 								</a>
 								
@@ -283,7 +283,6 @@
 		                </div>
 		                <div>
 		                    <a id="messages-btn" class="header-notification yatooltip" href="{% url webapp_notifications %}">
-								<span class="yatoolelt">{% trans "Click for details" %}</span>
 		                        <span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
 		                    </a>
 		                </div>
