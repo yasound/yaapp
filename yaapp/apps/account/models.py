@@ -199,6 +199,10 @@ class UserProfile(models.Model):
     facebook_expiration_date = models.CharField(_('facebook expiration date'),max_length=35, blank=True)
 
     yasound_email = models.EmailField(_('email'), blank=True)
+
+    privacy = models.PositiveSmallIntegerField(_('privacy settings'), choices=account_settings.PRIVACY_CHOICES, default=account_settings.PRIVACY_PUBLIC)
+    age = models.PositiveSmallIntegerField(_('age'), blank=True, null=True)
+    gender = models.CharField(_('gender'), max_length=1, choices=account_settings.GENDER_CHOICES, blank=True)
     
     city = models.CharField(max_length=128, blank=True)
     latitude = models.FloatField(null=True, blank=True) # degrees

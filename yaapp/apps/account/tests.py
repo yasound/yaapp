@@ -21,7 +21,17 @@ class TestProfile(TestCase):
         user.set_password('test')
         user.save()
         self.assertEqual(user.get_profile(), UserProfile.objects.get(id=1))
+        
+    def test_age_gender_privacy(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
 
+        profile = user.get_profile()
+        self.assertIsNone(profile.age)
+        self.assertEquals(profile.gender, '')
+        self.assertEquals(profile.privacy, account_settings.PRIVACY_PUBLIC)
+        
     def test_index_fuzzy(self):
         user = User(email="test@yasound.com", username="username", is_superuser=False, is_staff=False)
         user.save()
