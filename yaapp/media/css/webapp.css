@@ -1215,6 +1215,7 @@ input::-webkit-input-placeholder {
 /**
  * Radio page
  */
+
 #webapp-radio {
     margin-top: 24px;
 /*    background-color: #F5F5F5;*/
@@ -1357,6 +1358,8 @@ input::-webkit-input-placeholder {
     margin-left:67px;
 }
 
+
+
 /**
  * User cell
  */
@@ -1407,8 +1410,20 @@ ul .mask-user .caption-user {
 }
 
 .user-cell-inner {
-	height: 160px;
-    width: 160px;	
+	height: 168px;
+    width: 168px;
+}
+
+.delete-friend {
+    position:absolute;
+    top:-26px;
+    right:132px;
+}
+
+.delete-friend img {
+    position:absolute;
+    top:130px;
+    left:60px;
 }
 
 ul .user-cell .caption {
