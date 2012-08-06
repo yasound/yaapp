@@ -565,44 +565,47 @@ class UserProfile(models.Model):
                 return True
         return False
     
-    def user_as_dict(self, full=False, request_user=None):
+    def as_dict(self, request_user=None, include_own_current_radios=False, include_all_radios=False):
         data = {
                 'id': self.user.id,
                 'picture': self.picture_url,
                 'name': self.name,
                 'username': self.user.username,
                 'bio_text': self.bio_text,
-                'city': self.city,
-                'latitude': self.latitude,
-                'longitude': self.longitude
-                }
+        }
         
         if self.can_give_personal_infos(request_user):
             if self.age is not None:
                 data['age'] = self.age
             if self.gender != '':
                 data['gender'] = self.get_gender_display()
-        
-        
-        if full:
+            data['city'] = self.city
+            data['latitude'] = self.latitude
+            data['longitude'] = self.longitude
+
+        if include_own_current_radios:
             # own radio (the first one)
             own_radio = self.own_radio
             if own_radio and own_radio.ready:
                 data['own_radio'] = own_radio.as_dict(request_user=request_user)
-            
+
+            # current radio
+            current_radio = self.current_radio
+            if current_radio and current_radio.ready:
+                data['current_radio'] = current_radio.as_dict(request_user=request_user)
+        
+        if include_all_radios:
             # own radios (all)
             own_radios = self.own_radios(only_ready_radios=True)
             own_radios_list = [x.as_dict(request_user=request_user) for x in own_radios]
             data['own_radios'] = own_radios_list
             
-            # current radio
-            current_radio = self.current_radio
-            if current_radio and current_radio.ready:
-                data['current_radio'] = current_radio.as_dict(request_user=request_user)
         return data
     
-    def fill_user_bundle(self, bundle, full=False):
-        user_dict = self.user_as_dict(full=full, request_user=bundle.request.user)
+    def fill_user_bundle(self, bundle, include_own_current_radios=False, include_all_radios=False):
+        user_dict = self.as_dict(request_user=bundle.request.user,
+                                 include_own_current_radios=include_own_current_radios,
+                                 include_all_radios=include_all_radios)
         bundle.data.update(user_dict)
         
     def fill_user_bundle_with_login_infos(self, bundle):

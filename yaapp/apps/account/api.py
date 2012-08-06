@@ -110,7 +110,7 @@ class UserResource(ModelResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle, full=True)
+        userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
         
         if bundle.request.user == user:
             userprofile.fill_user_bundle_with_login_infos(bundle)
@@ -118,9 +118,6 @@ class UserResource(ModelResource):
         return bundle
     
     def obj_update(self, bundle, request=None, **kwargs):
-        print 'UserResource.obj_update'
-        print 'bundle:'
-        print bundle
         user_resource = super(UserResource, self).obj_update(bundle, request, **kwargs)
         user = user_resource.obj        
         user_profile = user.userprofile
@@ -152,7 +149,7 @@ class PublicUserResource(UserResource):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
         userprofile = user.userprofile        
-        userprofile.fill_user_bundle(bundle, full=True)
+        userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
         
         userprofile.fill_user_bundle_with_history(bundle)
         
