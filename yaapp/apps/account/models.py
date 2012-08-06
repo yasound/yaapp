@@ -584,7 +584,7 @@ class UserProfile(models.Model):
             data['city'] = self.city
             data['latitude'] = self.latitude
             data['longitude'] = self.longitude
-            if request_user:
+            if request_user and not request_user.is_anonymous():
                 p = request_user.get_profile()
                 if p:
                     data['is_friend'] = p.has_friend(self.user)
