@@ -9,7 +9,8 @@ Yasound.Views.User = Backbone.View.extend({
     tagName: 'div',
     className: 'radio',
     events: {
-        'click #radio-activity': 'radio'
+        'click #radio-activity': 'radio',
+        'click #follow': 'follow'
     },
 
     initialize: function () {
@@ -21,7 +22,6 @@ Yasound.Views.User = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        data.human_date = this.model.humanDate();
         $(this.el).html(ich.userTemplate(data));
         return this;
     },
@@ -31,6 +31,16 @@ Yasound.Views.User = Backbone.View.extend({
         Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
         });
+    },
+    follow: function(e) {
+        e.preventDefault();
+        if (this.model.get('is_friend')) {
+            $(e.target, this.el).html(gettext('Follow'));
+            this.model.unfollow(Yasound.App.username);
+        } else {
+            $(e.target, this.el).html(gettext('Unfollow'))
+            this.model.follow(Yasound.App.username);
+        }
     }
 });
 

@@ -543,7 +543,7 @@ def fast_connected_users_by_distance(request):
         
     return api_response(data, limit=limit, offset=skip)
 
-@check_api_key(methods=['GET',], login_required=False)
+@check_api_key(methods=['GET'], login_required=False)
 def user_friends(request, username):
     """
     Simple view which returns the friends for given user.
@@ -561,4 +561,28 @@ def user_friends(request, username):
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
         
+@csrf_exempt
+@check_api_key(methods=['DELETE', 'POST'], login_required=True)
+def user_friends_add_remove(request, username, friend):
+    if request.user.username != username:
+        return HttpResponse(status=401)
+    
+    user = get_object_or_404(User, username=username)
+    friend = get_object_or_404(User, username=friend)
+    
+    profile = user.get_profile()
+    if not profile:
+        raise Http404
+    if request.method == 'DELETE':
+        profile.friends.remove(friend)
+    elif request.method == 'POST':
+        profile.friends.add(friend)
+        
+    response = {'success':True}
+    res = json.dumps(response)
+    return HttpResponse(res)
+        
+        
+        
+    
     
