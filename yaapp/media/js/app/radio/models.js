@@ -79,3 +79,11 @@ Yasound.Data.Models.SimilarRadios = Backbone.Collection.extend({
         return this;
     }
 });
+
+Yasound.Data.Models.UserRadios = Yasound.Data.Paginator.extend({
+    model: Yasound.Data.Models.Radio,
+    setUsername: function(username) {
+        this.url = '/api/v1/user/' + username + '/radios/';
+        return this;
+    }
+});

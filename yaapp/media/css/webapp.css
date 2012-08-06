@@ -29,10 +29,6 @@ body {
     width: 148px;
 }
 
-#profile-radios {
-    margin-top: 24px;
-}
-
 /**
  * Header
  */
@@ -2017,7 +2013,7 @@ ul .radio-with-stats-cells li {
 		float:none;
 	}
 	#comments, 
-	#all-my-radios,
+	#radios-btn,
 	#favorites-btn,
 	#friends-btn,
 	.sd-hd-small,
