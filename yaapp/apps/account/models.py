@@ -543,7 +543,7 @@ class UserProfile(models.Model):
         d = datetime.date.today()
         return (d.year - bday.year) - int((d.month, d.day) < (bday.month, bday.day))        
     
-    def is_a_friend(self, request_user):
+    def has_friend(self, request_user):
         """
         returns True if request_user is a friend of current user
         """
@@ -561,7 +561,7 @@ class UserProfile(models.Model):
         if self.privacy == account_settings.PRIVACY_PRIVATE:
             return False
         if self.privacy == account_settings.PRIVACY_FRIENDS:
-            if self.is_a_friend(request_user):
+            if self.has_friend(request_user):
                 return True
         return False
     
@@ -573,6 +573,8 @@ class UserProfile(models.Model):
                 'username': self.user.username,
                 'bio_text': self.bio_text,
         }
+        if request_user and request_user.id == self.user.id:
+            data['owner'] = True
         
         if self.can_give_personal_infos(request_user):
             if self.age is not None:
@@ -582,6 +584,10 @@ class UserProfile(models.Model):
             data['city'] = self.city
             data['latitude'] = self.latitude
             data['longitude'] = self.longitude
+            if request_user:
+                p = request_user.get_profile()
+                if p:
+                    data['is_friend'] = p.has_friend(self.user)
 
         if include_own_current_radios:
             # own radio (the first one)
