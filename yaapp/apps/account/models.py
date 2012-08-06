@@ -535,6 +535,28 @@ class UserProfile(models.Model):
             url = yaapp_settings.DEFAULT_IMAGE
         return url
     
+    def is_a_friend(self, request_user):
+        """
+        returns True if request_user is a friend of current user
+        """
+        if not request_user:
+            return False
+        if self.friends.filter(id=request_user.id).count() > 0:
+            return True
+        return False
+    
+    def can_give_personal_infos(self, request_user=None):
+        if self.privacy == account_settings.PRIVACY_PUBLIC:
+            return True
+        if request_user and request_user == self.user:
+            return True
+        if self.privacy == account_settings.PRIVACY_PRIVATE:
+            return False
+        if self.privacy == account_settings.PRIVACY_FRIENDS:
+            if self.is_a_friend(request_user):
+                return True
+        return False
+    
     def user_as_dict(self, full=False, request_user=None):
         data = {
                 'id': self.user.id,
@@ -546,6 +568,13 @@ class UserProfile(models.Model):
                 'latitude': self.latitude,
                 'longitude': self.longitude
                 }
+        
+        if self.can_give_personal_infos(request_user):
+            if self.age is not None:
+                data['age'] = self.age
+            if self.gender != '':
+                data['gender'] = self.gender
+        
         
         if full:
             # own radio (the first one)
