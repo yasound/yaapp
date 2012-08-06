@@ -1672,8 +1672,9 @@ ul#notifications .read {
 	font-size:14px;
 }
 
-#comments .artist-comment {
-	position:relative;
+#comments .artist-comment { 
+	position:absolute;
+    bottom:20px;
 	width:200px;
 	height:34px;
 	text-align:left;
