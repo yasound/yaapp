@@ -174,7 +174,25 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
 
 Yasound.Data.Models.User = Backbone.Model.extend({
-    idAttribute: 'id'
+    idAttribute: 'id',
+    
+    toJSON: function() {
+        var data = Yasound.Data.Models.User.__super__.toJSON.apply(this);
+        
+        data['agc'] = '';
+        
+        if (this.get('age')) {
+            data['agc'] = this.get('age') +  ' ' + gettext('years old');
+        }
+        if (this.get('gender')) {
+            data['agc'] = data['agc'] + ', ' + this.get('gender');
+        }
+        if (this.get('city')) {
+            data['agc'] = data['agc'] + ', ' + this.get('city');
+        }
+        return data;
+    }
+    
 });
 
 /**

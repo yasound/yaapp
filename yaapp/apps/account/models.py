@@ -581,7 +581,7 @@ class UserProfile(models.Model):
             if self.age is not None:
                 data['age'] = self.age
             if self.gender != '':
-                data['gender'] = self.gender
+                data['gender'] = self.get_gender_display()
         
         
         if full:
