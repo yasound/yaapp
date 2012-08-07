@@ -53,6 +53,10 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
 
 Yasound.Views.UserFavoritesPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Favorites({}),
+
+    events: {
+        'click #back-btn': 'onBack'
+    },
     
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged');
@@ -76,6 +80,7 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
         this.collection.perPage = Yasound.App.cellsPerPage();
         if (username) {
             this.collection.setUsername(username);
+            this.username = username;
         }
         
         this.resultsView = new Yasound.Views.SearchResults({
@@ -100,5 +105,12 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
         }
         this.resultsView.clear();
         this.collection.goTo(0);
-    }    
+    },
+    
+    onBack: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.username + '/', {
+            trigger: true
+        });
+    }
 });

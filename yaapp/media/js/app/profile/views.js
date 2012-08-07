@@ -120,10 +120,20 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     
     displayRadios: function(e) {
         e.preventDefault();
-        var username = this.model.get('username')
-        Yasound.App.Router.navigate("profile/" + username + '/radios/', {
-            trigger: true
-        });
+        var username = this.model.get('username');
+        
+        if (username == Yasound.App.username) {
+            // display radios with stats for current user
+            Yasound.App.Router.navigate("radios/", {
+                trigger: true
+            });
+        } else {
+            Yasound.App.Router.navigate("profile/" + username + '/radios/', {
+                trigger: true
+            });
+        } 
+        
+        
     },
 
     displayFavorites: function (e) {

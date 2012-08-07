@@ -460,7 +460,7 @@ body {
 }
 
 #sub-header-pointer.menu4 {
-    left:250px;
+    left:240px;
 }
 
 #sub-header-pointer.menu5 {
@@ -1712,6 +1712,9 @@ ul#notifications .read {
 	right:0px;
 	top:1px;
 }
+.artist-comment .radio-picto img {
+   border-radius:4px;
+}
 
 .right {
 	float:right;
@@ -1938,7 +1941,7 @@ ul .radio-with-stats-cells li {
 	position:absolute;
 	display:block;
 	height:29px;
-	min-width:130px;
+    width:130px;
 	background-image:url('../app/images/tooltip-bg.png');
 	top:40px;
 	left:-50px;
