@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 19:16+0200\n"
+"POT-Creation-Date: 2012-08-07 22:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1052,13 +1052,13 @@ msgstr "Tous les amis"
 msgid "Follow"
 msgstr "Suivre"
 
-#: templates/yabase/app/profile/user.mustache:37
-msgid "Listen to"
-msgstr "Ecoutez"
-
-#: templates/yabase/app/profile/user.mustache:37
+#: templates/yabase/app/profile/user.mustache:33
 msgid "on"
 msgstr "sur"
+
+#: templates/yabase/app/profile/user.mustache:38
+msgid "Currently listening to:"
+msgstr "Ecoute actuellement :"
 
 #: templates/yabase/app/programming/importFromItunes.mustache:6
 msgid "Send"
