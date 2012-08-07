@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-18 14:13+0200\n"
+"POT-Creation-Date: 2012-08-07 09:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,86 +18,150 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/common/models.js:54
+#: js/app/common/models.js:109
 msgid "All genres"
 msgstr "Tous Styles"
 
-#: js/app/common/models.js:55
+#: js/app/common/models.js:110
 msgid "Classical"
 msgstr "Classique"
 
-#: js/app/common/models.js:56
+#: js/app/common/models.js:111
 msgid "Blues"
 msgstr "Blues"
 
-#: js/app/common/models.js:57
+#: js/app/common/models.js:112
 msgid "Alternative"
 msgstr "Alternative"
 
-#: js/app/common/models.js:58
+#: js/app/common/models.js:113
 msgid "Electro"
 msgstr "Electro"
 
-#: js/app/common/models.js:59
+#: js/app/common/models.js:114
 msgid "French Music"
 msgstr "Chanson Française"
 
-#: js/app/common/models.js:60
+#: js/app/common/models.js:115
 msgid "Jazz"
 msgstr "Jazz"
 
-#: js/app/common/models.js:61
+#: js/app/common/models.js:116
 msgid "Pop"
 msgstr "Pop"
 
-#: js/app/common/models.js:62
+#: js/app/common/models.js:117
 msgid "Reggae"
 msgstr "Reggae"
 
-#: js/app/common/models.js:63
+#: js/app/common/models.js:118
 msgid "Rock"
 msgstr "Rock"
 
-#: js/app/common/models.js:64
+#: js/app/common/models.js:119
 msgid "Metal"
 msgstr "Metal"
 
-#: js/app/common/models.js:65
+#: js/app/common/models.js:120
 msgid "Hip Hop"
 msgstr "Hip Hop"
 
-#: js/app/common/models.js:66
+#: js/app/common/models.js:121
 msgid "RnB / Soul"
 msgstr "RnB / Soul"
 
-#: js/app/common/models.js:67
+#: js/app/common/models.js:122
 msgid "World"
 msgstr "World"
 
-#: js/app/common/models.js:68
+#: js/app/common/models.js:123
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:112
-#: js/app/common/views.js:226
+#: js/app/common/models.js:167
+#: js/app/common/views.js:270
 msgid "by"
 msgstr "par"
 
-#: js/app/common/views.js:178
+#: js/app/common/models.js:215
+msgid "years old"
+msgstr "ans"
+
+#: js/app/common/views.js:222
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:224
+#: js/app/common/views.js:268
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/common/views.js:227
+#: js/app/common/views.js:271
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/views.js:342
+#: js/app/common/views.js:386
 msgid "Yasound share"
 msgstr "Partage Yasound"
+
+#: js/app/common/views.js:673
+msgid "My radios"
+msgstr "Mes radios"
+
+#: js/app/common/views.js:675
+msgid "Create radio"
+msgstr "Créer une nouvelle radio"
+
+#: js/app/myRadios/views.js:118
+msgid "%b %d"
+msgstr "%d %b"
+
+#: js/app/myRadios/views.js:119
+msgid "jan"
+msgstr "jan"
+
+#: js/app/myRadios/views.js:120
+msgid "feb"
+msgstr "fev"
+
+#: js/app/myRadios/views.js:121
+msgid "mar"
+msgstr "mar"
+
+#: js/app/myRadios/views.js:122
+msgid "apr"
+msgstr "avr"
+
+#: js/app/myRadios/views.js:123
+msgid "may"
+msgstr "mai"
+
+#: js/app/myRadios/views.js:124
+msgid "jun"
+msgstr "juin"
+
+#: js/app/myRadios/views.js:125
+msgid "jul"
+msgstr "juil"
+
+#: js/app/myRadios/views.js:126
+msgid "aug"
+msgstr "aout"
+
+#: js/app/myRadios/views.js:127
+msgid "sept"
+msgstr "sept"
+
+#: js/app/myRadios/views.js:128
+msgid "oct"
+msgstr "oct"
+
+#: js/app/myRadios/views.js:129
+msgid "nov"
+msgstr "nov"
+
+#: js/app/myRadios/views.js:130
+msgid "dec"
+msgstr "dec"
 
 #: js/app/notifications/views.js:31
 msgid "Notification marked as read"
@@ -106,6 +170,14 @@ msgstr "Notification marquée comme lue"
 #: js/app/notifications/views.js:33
 msgid "Notification deleted"
 msgstr "Notification effacée"
+
+#: js/app/profile/views.js:38
+msgid "Follow"
+msgstr "Suivre"
+
+#: js/app/profile/views.js:41
+msgid "Unfollow"
+msgstr "Ne plus suivre"
 
 #: js/app/settings/views.js:58
 msgid "Facebook settings saved"
