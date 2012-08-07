@@ -1375,6 +1375,38 @@ input::-webkit-input-placeholder {
     margin-left:67px;
 }
 
+#webapp-track-container {
+    height:210px;
+    width:210px;
+    position:relative;
+    margin:25px 22px 20px 45px;
+}
+
+#webapp-track-picture {
+    position:absolute;
+    height:210px;
+    width:210px;
+}
+
+#webapp-track-title {
+    width:208px;
+    position:absolute;
+    border:1px solid black;
+    background-color: rgba(39, 37, 36, 0.80);
+    bottom:0px;
+    left:0px;
+    border-radius:0px 0px 5px 5px;
+    box-shadow:0px 1px 1px grey inset;
+}
+
+#webapp-track-title h2 {
+    font-size:15px;
+    font-weight:normal;
+    color:white;
+    line-height:20px;
+    margin:5px;
+}
+
 /**
  * User cell
  */
@@ -1599,8 +1631,8 @@ ul#notifications .read {
 #user-profile #picture {
 	margin:15px 25px 0px 18px;
 	float:left;
-    height:164px;
-    width:162px;
+    height:160px;
+    width:160px;
     border-radius:50%;
     box-shadow:0px 4px 5px #d7d7d7;
 }
