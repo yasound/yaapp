@@ -165,10 +165,27 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
                     return gettext('Unknown artist');
                 }
                 return s;
+            },
+            album: function() {
+                var s = model.get('album');
+                if (!s) {
+                    return gettext('Unknown album');
+                }
+                return s;
             }
+            
         };
         var str = context.name() + ' ' + gettext('by') + ' ' + context.artist();
+        if (context.album() != gettext('Unknown album')) {
+            str = str + ' ' + gettext('on') + ' ' + context.album();
+        }
         return str;
+    },
+    
+    toJSON: function() {
+        var data = Yasound.Data.Models.CurrentSong.__super__.toJSON.apply(this);
+        data['title'] = this.title();
+        return data;
     }
 });
 
