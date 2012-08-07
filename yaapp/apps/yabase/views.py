@@ -927,6 +927,10 @@ class WebAppView(View):
         
         return True, None if ok or False, redirect page else
         """
+        print settings.ANONYMOUS_ACCESS_ALLOWED
+        if settings.ANONYMOUS_ACCESS_ALLOWED == True:
+            return True, None
+        
         if not request.user.is_superuser:
             if request.user.groups.filter(name=account_settings.GROUP_NAME_BETATEST).count() == 0:
                 if radio_uuid:
@@ -934,7 +938,6 @@ class WebAppView(View):
                 raise Http404
         return True, None
     
-    @method_decorator(login_required)
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -984,7 +987,9 @@ class WebAppView(View):
         genre_form = RadioGenreForm()
         
         has_radios = False
-        radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
+        radio_count = 0;
+        if request.user.is_authenticated():
+            radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
         if radio_count > 0:
             has_radios = True 
         

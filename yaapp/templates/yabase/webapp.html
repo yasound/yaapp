@@ -159,7 +159,6 @@
      {% include "yabase/app/radio/userRadiosPage.mustache" %}
    </script>
 
-{% if request.user.is_authenticated %}
    <script type='text/html' id='favoritesPageTemplate'>
      {% include "yabase/app/favorites/favoritesPage.mustache" %}
    </script>
@@ -167,6 +166,8 @@
    <script type='text/html' id='friendsPageTemplate'>
      {% include "yabase/app/friends/friendsPage.mustache" %}
    </script>
+
+{% if request.user.is_authenticated %}
 
    <script type="text/html" id="wallInputTemplate">
       {% include "yabase/app/radio/wallInput.mustache" %}
@@ -274,7 +275,7 @@
 								</a>
 		                       {% endthumbnail %}
 		                   {% else %}
-		                        <a href='{% url webapp_profile request.user.username %}' class="yatooltip">
+		                        <a href='#' class="yatooltip">
 									<span class="yatoolelt">{% trans "Not connected" %}</span>
 									<img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture">
 								</a>
