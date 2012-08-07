@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 14:40+0200\n"
+"POT-Creation-Date: 2012-08-07 15:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -868,6 +868,7 @@ msgstr "Sans nom"
 
 #: templates/yabase/listen.html:88
 #: templates/yabase/song.html:89
+#: templates/yabase/app/track.mustache:51
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
@@ -884,6 +885,7 @@ msgid "No gifts"
 msgstr "Aucun cadeau"
 
 #: templates/yabase/webapp.html:306
+#: templates/yabase/app/track.mustache:40
 msgid "Share"
 msgstr "Partager"
 
@@ -943,6 +945,18 @@ msgstr "minutes de musique ont été écoutées"
 #: templates/yabase/app/pagination.mustache:3
 msgid "Show more"
 msgstr "Charger plus"
+
+#: templates/yabase/app/track.mustache:10
+msgid "Go to radio"
+msgstr "Aller sur la radio"
+
+#: templates/yabase/app/track.mustache:14
+msgid "Favorite"
+msgstr "Favoris"
+
+#: templates/yabase/app/track.mustache:46
+msgid "Like current song"
+msgstr "J'aime le titre"
 
 #: templates/yabase/app/common/subMenu.mustache:13
 msgid "Top"
@@ -1111,8 +1125,8 @@ msgid "Associate my twitter account"
 msgstr "Associer mon compte twitter"
 
 #: templates/yabase/app/users/usersPage.mustache:3
-msgid "Users"
-msgstr "Utilisateurs"
+msgid "Connected users near your location"
+msgstr "Utilisateurs connectés près de chez vous"
 
 #: templates/yainvitation/mail/email_invitation_message.txt:1
 #, python-format
