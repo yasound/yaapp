@@ -1,0 +1,17 @@
+{% load i18n %}
+<h2>{% trans "You are not authenticated" %}</h2>
+<p class='lead'>{% trans "Where to go now ?" %}</p>   
+{% url login as login_url %}
+{% url signup as signup_url %}
+{% url lost_password as lost_password_url %}
+{% blocktrans %}
+<p class='lead'>    
+If you already have an account, enter your credentials on the <a href='{{login_url}}'>login page</a>.
+</p>
+<p class='lead'>    
+Already registered but you lost your credentials ? Go to the <a href='{{lost_password_url}}'>lost password page</a>.
+</p>
+<p class='lead'>    
+No account yet? Get on the <a href='{{signup_url}}'>registration page</a> and join yasound in a few minutes.
+</p>
+{% endblocktrans %}
