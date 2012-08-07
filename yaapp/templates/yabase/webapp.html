@@ -269,6 +269,7 @@
 		                <div class="header-separation">
 		                    <img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
 		                </div>
+                        {% if request.user.is_authenticated %}
 		                <div id="profile-picture">
 		                   {% if user_profile.picture %}
 		                       {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
@@ -279,7 +280,7 @@
 		                       {% endthumbnail %}
 		                   {% else %}
 		                        <a href='#' class="yatooltip">
-									<span class="yatoolelt">{% trans "Not connected" %}</span>
+                                    <span class="yatoolelt">{% trans "Your profile" %}</span>
 									<img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture">
 								</a>
 								
@@ -293,6 +294,12 @@
 		                <div class="header-notification" id="last-social-btn">
 		                    <a href="#" class="yatooltip" id="gift-btn"><span class="yatoolelt">{% trans 'No gifts' %}</span></a>
 		                </div>
+		                {% else %}
+		                <div id='login'>
+		                  <a href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a> | 
+                          <a href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
+		                </div>
+		                {% endif %}
 	                </div>
                 </div>
             </div>

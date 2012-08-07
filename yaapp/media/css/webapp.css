@@ -371,6 +371,27 @@ body {
     text-decoration:none;
 }
 
+#login {
+    display:block;
+    float:left;
+    height:33px;
+    width:160px;
+    background-repeat:no-repeat;
+    position:relative;
+    font-size:14px;
+    color: white;
+    top:26px;
+    padding:0px;
+    text-decoration:none;
+}
+
+#login a {
+	color: white;
+}
+#login a:hover {
+	color: #dedede;
+}
+
 #messages-btn:hover {
     height:33px;
     width:36px;
