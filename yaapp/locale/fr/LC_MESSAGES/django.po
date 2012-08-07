@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 18:23+0200\n"
+"POT-Creation-Date: 2012-08-07 19:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr "disponible sur l'appstore"
 #: templates/account/signup.html:27
 #: templates/account/signup.html.py:75
 #: templates/web/menu.html:16
-#: templates/yabase/app/profile/user.mustache:24
+#: templates/yabase/app/profile/user.mustache:23
 msgid "Logout"
 msgstr "Se déconnecter"
 
@@ -906,7 +906,7 @@ msgid "Close"
 msgstr "Fermer"
 
 #: templates/yabase/webapp.html:334
-#: templates/yabase/app/profile/user.mustache:19
+#: templates/yabase/app/profile/user.mustache:18
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
@@ -942,6 +942,44 @@ msgstr "Tous les voir"
 msgid "minutes of music have been played"
 msgstr "minutes de musique ont été écoutées"
 
+#: templates/yabase/app/landing.html:2
+msgid "You are not authenticated"
+msgstr "Vous n'êtes pas authentifié"
+
+#: templates/yabase/app/landing.html:3
+msgid "Where to go now ?"
+msgstr "Que faire maintenant ?"
+
+#: templates/yabase/app/landing.html:7
+#, python-format
+msgid ""
+"\n"
+"<p class='lead'>    \n"
+"If you already have an account, enter your credentials on the <a "
+"href='%(login_url)s'>login page</a>.\n"
+"</p>\n"
+"<p class='lead'>    \n"
+"Already registered but you lost your credentials ? Go to the <a "
+"href='%(lost_password_url)s'>lost password page</a>.\n"
+"</p>\n"
+"<p class='lead'>    \n"
+"No account yet? Get on the <a href='%(signup_url)s'>registration page</a> "
+"and join yasound in a few minutes.\n"
+"</p>\n"
+msgstr "\n"
+"<p class='lead'>    \n"
+"Si vous êtes déjà enregistré sur Yasound, entrez vos identifiants sur la <a "
+"href='%(login_url)s'>page de connexion</a>.\n"
+"</p>\n"
+"<p class='lead'>    \n"
+"Déja enregistré mais vous avez perdu votre mot de passe ? Allez sur la <a "
+"href='%(lost_password_url)s'>page de récupération de mot de passe</a>.\n"
+"</p>\n"
+"<p class='lead'>    \n"
+"Pas encore de compte ? Allez sur la <a href='%(signup_url)s'>page de création de compte</a> "
+"et rejoignez yasound en quelques minutes.\n"
+"</p>\n"
+
 #: templates/yabase/app/pagination.mustache:3
 msgid "Show more"
 msgstr "Charger plus"
@@ -971,31 +1009,6 @@ msgstr "Favoris"
 #: templates/yabase/app/common/subMenu.mustache:38
 msgid "Create radio"
 msgstr "Créer une radio"
-
-#: templates/yabase/app/favorites/favoritesPage.mustache:12
-#: templates/yabase/app/friends/friendsPage.mustache:12
-msgid "You are not authenticated"
-msgstr "Vous n'êtes pas authentifié"
-
-#: templates/yabase/app/favorites/favoritesPage.mustache:17
-#: templates/yabase/app/friends/friendsPage.mustache:17
-#, python-format
-msgid ""
-"\n"
-"    <p class='lead'>    \n"
-"    If you already have an account, enter them on the <a "
-"href='%(login_url)s'>login page</a>.\n"
-"    </p>\n"
-"    <p class='lead'>    \n"
-"    Already registered but you lost your credentials ? Go to the <a "
-"href='%(lost_password_url)s'>lost password page</a>.\n"
-"    </p>\n"
-"    <p class='lead'>    \n"
-"    No account yet? Get on the <a href='%(signup_url)s'>registration page</"
-"a> and join yasound in a few minutes.\n"
-"    </p>\n"
-"    "
-msgstr ""
 
 #: templates/yabase/app/favorites/userFavoritesPage.mustache:3
 #: templates/yabase/app/friends/userFriendsPage.mustache:3
@@ -1035,15 +1048,15 @@ msgstr "Tous les favoris"
 msgid "All friends"
 msgstr "Tous les amis"
 
-#: templates/yabase/app/profile/user.mustache:20
+#: templates/yabase/app/profile/user.mustache:19
 msgid "Follow"
 msgstr "Suivre"
 
-#: templates/yabase/app/profile/user.mustache:38
+#: templates/yabase/app/profile/user.mustache:37
 msgid "Listen to"
 msgstr "Ecoutez"
 
-#: templates/yabase/app/profile/user.mustache:38
+#: templates/yabase/app/profile/user.mustache:37
 msgid "on"
 msgstr "sur"
 
