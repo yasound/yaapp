@@ -20,6 +20,9 @@
         <%^is_friend%>{% trans "Follow" %}<%/is_friend%>
 	</button>
     <%/owner%>
+    <%#owner%>
+    <button type="button" class="user-btn yabutton-large right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
+    <%/owner%>
     <em><% agc %></em>
     <p class="profile-bio"><% bio_text %></p>
    </div>
