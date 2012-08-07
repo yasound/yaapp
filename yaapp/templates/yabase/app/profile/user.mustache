@@ -5,7 +5,7 @@
    </div>
    <div id='infos'>
     <h2 id="user-name"><% name %></h2>
-	<a href='#' class='sd-hd-small'><img src="/media/app/images/profile/HD.png" width="24" height="13" alt="HD"></a>
+	<!-- <a href='#' class='sd-hd-small'><img src="/media/app/images/profile/HD.png" width="24" height="13" alt="HD"></a> -->
 	<span class='validated'>
         <%^owner%>
         <%#is_friend%>
@@ -14,7 +14,6 @@
         <%/owner%>
 	</span>
     <%^owner%>
-	<button type="button" class="user-btn yabutton-large right">Message</button>
 	<button type="button" class="user-btn yabutton-large right" id='follow'>
     	<%#is_friend%>{% trans "Unfollow" %}<%/is_friend%>
         <%^is_friend%>{% trans "Follow" %}<%/is_friend%>
