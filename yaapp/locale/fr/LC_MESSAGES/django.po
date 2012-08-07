@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 10:42+0200\n"
+"POT-Creation-Date: 2012-08-07 14:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -889,6 +889,10 @@ msgstr "Tous les voir"
 #: templates/yabase/webapp.html:380
 msgid "minutes of music have been played"
 msgstr "minutes de musique ont été écoutées"
+
+#: templates/yabase/app/pagination.mustache:3
+msgid "Show more"
+msgstr "Charger plus"
 
 #: templates/yabase/app/common/subMenu.mustache:13
 msgid "Top"
