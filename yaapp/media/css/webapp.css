@@ -1927,7 +1927,7 @@ ul .radio-with-stats-cells li {
 	position:absolute;
 	display:block;
 	height:29px;
-	min-width:130px;
+    width:130px;
 	background-image:url('../app/images/tooltip-bg.png');
 	top:40px;
 	left:-50px;

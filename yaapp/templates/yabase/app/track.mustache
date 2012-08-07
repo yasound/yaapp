@@ -5,11 +5,14 @@
     <span class='hd-bg' />
 </div>                              
 <div id="radio-picto">
-    <a href="{% url webapp_radio current_uuid %}">
+    <a href="{% url webapp_radio current_uuid %}" class='yatooltip'>
         <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
+        <span class="yatoolelt">{% trans "Go to radio" %}</span>
     </a>
 </div>
-    <a id="favorite-radio" class='is-not-favorite' href="#"></a>
+    <a id="favorite-radio" class='is-not-favorite yatooltip' href="#">
+            <span class="yatoolelt">{% trans "Favorite" %}</span>
+    </a>
     <a id="play-btn">
         <i class="icon-play"></i>
     </a>
@@ -33,11 +36,18 @@
 
 
 <div class="header-social-btn" id="first-social-btn">
-    <a id="share-btn" data-toggle="modal" href="#modal-share"></a>    
+    <a id="share-btn" data-toggle="modal" href="#modal-share" class='yatooltip'>
+    <span class="yatoolelt">{% trans "Share" %}</span>
+    </a>    
+        
 </div>
 <div class="header-social-btn">
-    <a href="#" id="love-btn"></a>
+    <a href="#" id="love-btn" class='yatooltip'>
+        <span class="yatoolelt">{% trans "Like current song" %}</span>
+    </a>
 </div>
 <div class="header-social-btn"> 
-    <a href="<% buy_link %>" id="shop-btn" target="_blank"></a>
+    <a href="<% buy_link %>" id="shop-btn" class='yatooltip' target="_blank">
+        <span class="yatoolelt">{% trans "Buy on iTunes" %}</span>
+    </a>
 </div>
