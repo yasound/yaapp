@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 19:09+0200\n"
+"POT-Creation-Date: 2012-08-07 19:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -890,8 +890,8 @@ msgid "Share"
 msgstr "Partager"
 
 #: templates/yabase/webapp.html:319
-msgid "Share options here:"
-msgstr ""
+msgid "Share this song on:"
+msgstr "Partager ce titre sur :"
 
 #: templates/yabase/webapp.html:322
 msgid "Facebook"
@@ -976,8 +976,8 @@ msgstr "\n"
 "href='%(lost_password_url)s'>page de récupération de mot de passe</a>.\n"
 "</p>\n"
 "<p class='lead'>    \n"
-"Pas encore de compte ? Allez sur la <a href='%(signup_url)s'>page de création de compte</a> "
-"et rejoignez yasound en quelques minutes.\n"
+"Pas encore de compte ? Allez sur la <a href='%(signup_url)s'>page de "
+"création de compte</a> et rejoignez yasound en quelques minutes.\n"
 "</p>\n"
 
 #: templates/yabase/app/pagination.mustache:3
