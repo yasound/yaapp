@@ -1354,6 +1354,36 @@ input::-webkit-input-placeholder {
     margin-left:67px;
 }
 
+#webapp-track-container {
+    height:210px;
+    width:210px;
+    position:relative;
+    margin:25px 22px 20px 43px;
+}
+
+#webapp-track-picture {
+    position:absolute;
+    height:210px;
+    width:210px;
+}
+
+#webapp-track-title {
+    width:210px;
+    position:absolute;
+    background-color: rgba(39, 37, 36, 0.80);
+    bottom:0px;
+    left:0px;
+    border-radius:0px 0px 5px 5px;
+}
+
+#webapp-track-title h2 {
+    font-size:15px;
+    font-weight:normal;
+    color:white;
+    line-height:20px;
+    margin:5px;
+}
+
 /**
  * User cell
  */
