@@ -9,6 +9,21 @@
 </div>
 {% else %}
 <div class='span12 no-margin'>
-    <h2>Not authenticated</h2>
+    <h2>{% trans "You are not authenticated" %}</h2>
+    <p class='lead'>Where to go now ?</p>   
+    {% url login as login_url %}
+    {% url signup as signup_url %}
+    {% url lost_password as lost_password_url %}
+    {% blocktrans %}
+    <p class='lead'>    
+    If you already have an account, enter them on the <a href='{{login_url}}'>login page</a>.
+    </p>
+    <p class='lead'>    
+    Already registered but you lost your credentials ? Go to the <a href='{{lost_password_url}}'>lost password page</a>.
+    </p>
+    <p class='lead'>    
+    No account yet? follow the <a href='{{signup_url}}'>registration page</a> and join yasound in a few minutes.
+    </p>
+    {% endblocktrans %}
 </div>
 {% endif %}
