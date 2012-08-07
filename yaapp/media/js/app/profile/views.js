@@ -23,6 +23,7 @@ Yasound.Views.User = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.userTemplate(data));
+        $('#picture img', this.el).imgr({size:"6px",color:"white",radius:"100%"});
         return this;
     },
     radio: function (e) {
@@ -66,7 +67,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     render: function () {
         this.reset();
         $(this.el).html(ich.profilePageTemplate());
-
+                                                 
         this.userView = new Yasound.Views.User({
             model: this.model,
             el: $('#user-profile', this.el)

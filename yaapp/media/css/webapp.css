@@ -1576,9 +1576,12 @@ ul#notifications .read {
 }
 
 #user-profile #picture {
-	margin:15px 25px 0px 19px;
+	margin:15px 25px 0px 18px;
 	float:left;
-	border-radius:50%;
+    height:164px;
+    width:162px;
+    border-radius:50%;
+    box-shadow:0px 4px 5px #d7d7d7;
 }
 
 #user-profile #recent-activity {
@@ -1628,6 +1631,16 @@ ul#notifications .read {
 	margin-left:6px;
 }
 
+#infos em {
+    float:left;
+    clear:left;
+    color:#999999;
+    font-size:15px;
+    font-weight:bold;
+    font-style:normal;
+    text-shadow:1px 1px solid white;
+    margin-bottom:15px;
+}
 
 .separation-high {
 	display:block;
@@ -1708,6 +1721,7 @@ ul#notifications .read {
 	float:left;
 	width:450px;
 	height:95px;
+    font-size:15px;
 	line-height:21px;
 	color:#727478;
 	font-weight:normal;
