@@ -1187,6 +1187,10 @@ input::-webkit-input-placeholder {
 }
 
 #player #player-title {
+    position:fixed;
+    display:block;
+    height:20px;
+    width:275px;
     color:#999e9f;
     font-size:13px;
 	padding-left:6px;
