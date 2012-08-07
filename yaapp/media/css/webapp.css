@@ -1238,11 +1238,9 @@ input::-webkit-input-placeholder {
  */
 
 #webapp-radio {
-    margin-top: 24px;
 /*    background-color: #F5F5F5;*/
     border-radius: 6px 6px 6px 6px;
     padding: 40px;
-    padding-top: 60px;
     padding-bottom: 60px;
 /*    background-image: url(/media/images/icon-radio.png);*/
     background-repeat: no-repeat;
