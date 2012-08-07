@@ -673,7 +673,7 @@ class UserProfile(models.Model):
                 radio_picture = settings.DEFAULT_IMAGE
             bundle.data['history'] = {
                 'date': doc.get('date'),
-                'message': doc.get('data').get('message'),
+                'message': doc.get('data').get('message')[:120],
                 'radio_uuid': radio_uuid,
                 'radio_name': doc.get('data').get('radio_name')[:24],
                 'radio_picture': radio_picture
