@@ -149,7 +149,7 @@ $(document).ready(function () {
                 this.currentView = undefined;
             }
             $('#webapp-container').append("<div class='container' id='webapp-content'/>");
-            $('body').scrollTop(0);
+            $('html, body').scrollTop(0);
         },
 
         pushManager: new Yasound.App.PushManager({
