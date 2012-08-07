@@ -662,12 +662,24 @@ class UserProfile(models.Model):
         uh = UserHistory()
         doc = uh.last_message(self.user.id)
         if doc is not None:
+            radio_uuid = doc.get('data').get('radio_uuid')
+            radio_current_song = None
+            try:
+                radio = Radio.objects.get(uuid=radio_uuid)
+                radio_picture = radio.picture_url
+                if radio.current_song:
+                    radio_current_song = unicode(radio.current_song)[:12]
+            except Radio.DoesNotExist:
+                radio_picture = settings.DEFAULT_IMAGE
             bundle.data['history'] = {
                 'date': doc.get('date'),
                 'message': doc.get('data').get('message'),
-                'radio_uuid': doc.get('data').get('radio_uuid'),
-                'radio_name': doc.get('data').get('radio_name')
+                'radio_uuid': radio_uuid,
+                'radio_name': doc.get('data').get('radio_name')[:24],
+                'radio_picture': radio_picture
             }
+            if radio_current_song:
+                bundle.data['history']['radio_current_song'] = radio_current_song
            
     def update_with_bundle(self, bundle, created):
         if bundle.data.has_key('bio_text'):
