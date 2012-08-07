@@ -30,17 +30,19 @@
 	</div>
    <div id='comments'>
         <%#history%>
-   		<h2><% human_date %></h2>
+   		<h2><% human_date %> {% trans "on" %} <a id='radio-activity' href='/app/radio/<% radio_uuid %>/'><% radio_name %></a></h2>
 		<blockquote>&laquo; <% message %> &raquo;</blockquote>
-		<div class='artist-comment'>
-		    <%#radio_current_song%>
-			{% trans "Listen to" %} <% radio_current_song %> {% trans "on" %}
-            <%/radio_current_song%>
-			 <a id='radio-activity' href='/app/radio/<% radio_uuid %>/'><% radio_name %></a>
-			<div class='radio-picto'>
-				<img src="<% radio_picture %>" width="32" height="32" alt="Radio Picto">
-			</div>
-		</div>
         <%/history%>
+		<div class='artist-comment'>
+		    <%#current_radio%>
+			{% trans "Currently listening to:" %}
+			 <a id='radio-activity' href='/app/radio/<% uuid %>/'><% name %></a>
+			<div class='radio-picto'>
+				<a href='/app/radio/<% uuid %>/'>
+				  <img src="<% picture %>" width="32" height="32" alt="Radio Picto">
+				</a>
+			</div>
+            <%/current_radio%>
+		</div>
    </div>
 </div>
