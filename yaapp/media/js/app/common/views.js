@@ -108,7 +108,8 @@ Yasound.Views.UserCell = Backbone.View.extend({
     events: {
         'click .user-cell-inner': 'onUser',
 		'mouseover .user-cell-inner': 'onHover',
-		'mouseleave .user-cell-inner': 'onLeave'
+		'mouseleave .user-cell-inner': 'onLeave',
+		'click .delete-friend': 'unfollow'
     },
 
     initialize: function () {
@@ -148,10 +149,28 @@ Yasound.Views.UserCell = Backbone.View.extend({
 
     onUser: function (e) {
         e.preventDefault();
+        var tagNameTarget = $(e.target).prop('tagName');
+        if (tagNameTarget == 'IMG') {
+            // do nothing if image clicked (because it is the delete image)
+            return;
+        }
+        
         var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/', {
             trigger: true
         });
+    },
+    
+    unfollow: function (e) {
+        e.preventDefault();
+        $('#modal-unfollow').modal('show');
+        var that = this;
+        $('#modal-unfollow .btn-primary').on('click', function () {
+            $('#modal-unfollow').modal('hide');
+            that.model.unfollow(Yasound.App.username);
+            that.close();
+        });
+
     }
 });
 

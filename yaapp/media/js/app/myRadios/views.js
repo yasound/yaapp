@@ -67,8 +67,15 @@ Yasound.Views.RadioResults = Backbone.View.extend({
  */
 Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
     tagName: 'li',
+    events: {
+        'plothover .chartdiv': 'plotHover'
+    },
+
     initialize: function () {
+        _.bindAll(this, 'render', 'plotHover', 'showToolTip');
         this.model.bind('change', this.render, this);
+        
+        this.previousPoint = null;
     },
     
     onClose: function () {
@@ -98,7 +105,7 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         if (stats) {
             _.each(stats, function(stat) { 
                 if (stat['overall_listening_time']) {
-                    var date = Yasound.Utils.momentDate(stat['date']).unix();
+                    var date = Yasound.Utils.momentDate(stat['date']).unix()*1000;
                     chart_data.push([date, stat['overall_listening_time']])
                 }
             });
@@ -108,12 +115,47 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
             xaxis: {
                 mode: "time",
                 minTickSize: [1, "day"]
-            }
+            },
+            grid: { hoverable: true, clickable: true }            
         };
         
         var plot = $.plot($('.chartdiv', this.el), [chart_data], options);
         
         return this;
+    },
+    
+    plotHover: function(event, pos, item) {
+        if (item) {
+            if (this.previousPoint != item.dataIndex) {
+                this.previousPoint = item.dataIndex;
+                
+                $("#tooltip", this.el).remove();
+                var x = item.datapoint[0].toFixed(2),
+                    y = item.datapoint[1].toFixed(2);
+                
+                var formattedDate = moment.unix(x/1000).format('LL');
+                var formattedValue = Math.round(y) + ' ' + gettext('minutes');
+                this.showToolTip(item.pageX, item.pageY,
+                            formattedDate + " : " + formattedValue);
+            }
+        }
+        else {
+            $("#tooltip", this.el).remove();
+            this.previousPoint = null;            
+        }
+    },
+    
+    showToolTip: function(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo(this.el).fadeIn(200);
     }
 });
 
