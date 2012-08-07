@@ -149,7 +149,7 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
                 var formattedDate = moment.unix(x/1000).format('LL');
                 var formattedValue = Math.round(y) + ' ' + gettext('minutes');
                 this.showToolTip(item.pageX, item.pageY,
-                            formattedDate + " : " + formattedValue);
+                            formattedDate + " :<br/> " + formattedValue);
             }
         }
         else {
@@ -162,8 +162,8 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         $('<div id="tooltip">' + contents + '</div>').css( {
             position: 'absolute',
             display: 'none',
-            top: y + -35,
-            left: x + -60,
+            top: y + -58,
+            left: x + -35,
             padding: '2px',
             'background-color': '#4b4b4b',
             opacity: 0.90,
