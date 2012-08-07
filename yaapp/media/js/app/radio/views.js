@@ -494,8 +494,12 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 Yasound.Views.UserRadiosPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.UserRadios({}),
     
+    events: {
+        'click #back-btn': 'onBack'
+    },
+    
     initialize: function() {
-        _.bindAll(this, 'render', 'onGenreChanged');
+        _.bindAll(this, 'render', 'onGenreChanged', 'onBack');
         $.subscribe('/submenu/genre', this.onGenreChanged)
     },
 
@@ -515,6 +519,7 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
         $(this.el).html(ich.userRadiosPageTemplate());
         this.collection.perPage = Yasound.App.cellsPerPage();
         if (username) {
+            this.username = username;
             this.collection.setUsername(username);
         }
         
@@ -540,5 +545,12 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
         }
         this.resultsView.clear();
         this.collection.goTo(0);
-    }    
+    },
+    
+    onBack: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.username + '/', {
+            trigger: true
+        });        
+    }
 });
