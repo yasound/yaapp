@@ -103,7 +103,7 @@ Yasound.Views.SearchPage = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.searchPageTemplate());
         this.collection.setQuery(query);
-        this.collection.perPage = Yasound.App.cellsPerPage();
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
 
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,

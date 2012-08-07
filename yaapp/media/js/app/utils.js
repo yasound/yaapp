@@ -17,3 +17,25 @@ Yasound.Utils.formatDate = function(rawDate) {
 Yasound.Utils.humanizeDate = function(rawDate) {
     return Yasound.Utils.momentDate(rawDate).fromNow();   
 }
+
+Yasound.Utils.cellsPerPage = function() {
+    var viewportHeight = $(window).height();
+    var headerHeight = $('#header').height();
+    var containerHeight = viewportHeight - headerHeight;
+    
+    var cellHeight = 217;
+    
+    var rows =  Math.ceil(containerHeight / cellHeight);
+    return rows*4;
+};
+
+Yasound.Utils.userCellsPerPage = function() {
+    var viewportHeight = $(window).height();
+    var headerHeight = $('#header').height();
+    var containerHeight = viewportHeight - headerHeight;
+    
+    var cellHeight = 158;
+    
+    var rows =  Math.ceil(containerHeight / cellHeight);
+    return rows*5;
+}
