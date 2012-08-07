@@ -109,7 +109,7 @@ msgstr "Mes radios"
 
 #: js/app/common/views.js:675
 msgid "Create radio"
-msgstr "Créer une nouvelle radio"
+msgstr "Créer une radio"
 
 #: js/app/myRadios/views.js:118
 msgid "%b %d"
@@ -631,7 +631,7 @@ msgstr "Supprimer les doublons de la radio"
 
 #: js/backoffice/Radio/Radios.js:261
 msgid "Create new radio"
-msgstr "Créer une nouvelle radio"
+msgstr "Créer une radio"
 
 #: js/backoffice/Radio/Radios.js:266
 msgid "Do you want to create new radio ?"
