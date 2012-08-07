@@ -24,7 +24,7 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
     render: function(genre) {
         this.reset();
         $(this.el).html(ich.favoritesPageTemplate());
-        this.collection.perPage = Yasound.App.cellsPerPage();
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
 
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,
@@ -77,7 +77,7 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
     render: function(genre, username) {
         this.reset();
         $(this.el).html(ich.userFavoritesPageTemplate());
-        this.collection.perPage = Yasound.App.cellsPerPage();
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
         if (username) {
             this.collection.setUsername(username);
             this.username = username;
