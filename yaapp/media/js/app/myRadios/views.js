@@ -114,9 +114,22 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         var options = {
             xaxis: {
                 mode: "time",
-                minTickSize: [1, "day"]
+                minTickSize: [1, "day"],
+                timeformat: gettext("%b %d"),
+                monthNames: [gettext("jan"), 
+                             gettext("feb"), 
+                             gettext("mar"),
+                             gettext("apr"), 
+                             gettext("may"), 
+                             gettext("jun"), 
+                             gettext("jul"), 
+                             gettext("aug"), 
+                             gettext("sept"), 
+                             gettext("oct"), 
+                             gettext("nov"), 
+                             gettext("dec")]                
             },
-            grid: { hoverable: true, clickable: true }            
+            grid: { hoverable: true, clickable: true }
         };
         
         var plot = $.plot($('.chartdiv', this.el), [chart_data], options);
