@@ -571,7 +571,7 @@ class UserProfile(models.Model):
                 'picture': self.picture_url,
                 'name': self.name,
                 'username': self.user.username,
-                'bio_text': self.bio_text[:190],
+                'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
@@ -671,9 +671,13 @@ class UserProfile(models.Model):
                     radio_current_song = unicode(radio.current_song)[:12]
             except Radio.DoesNotExist:
                 radio_picture = settings.DEFAULT_IMAGE
+                
+            message = doc.get('data').get('message')
+            if message is not None:
+                message = message[:120]
             bundle.data['history'] = {
                 'date': doc.get('date'),
-                'message': doc.get('data').get('message')[:120],
+                'message': message,
                 'radio_uuid': radio_uuid,
                 'radio_name': doc.get('data').get('radio_name')[:24],
                 'radio_picture': radio_picture
