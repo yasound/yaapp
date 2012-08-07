@@ -571,7 +571,7 @@ class UserProfile(models.Model):
                 'picture': self.picture_url,
                 'name': self.name,
                 'username': self.user.username,
-                'bio_text': self.bio_text,
+                'bio_text': self.bio_text[:190],
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
