@@ -484,7 +484,7 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
     render: function(genre, username) {
         this.reset();
         $(this.el).html(ich.userRadiosPageTemplate());
-        this.collection.perPage = Yasound.App.cellsPerPage();
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
         if (username) {
             this.collection.setUsername(username);
             this.username = username;

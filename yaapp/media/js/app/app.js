@@ -18,17 +18,6 @@ $(document).ready(function () {
         Yasound.App.isMobile = true;
     }    
     
-    Yasound.App.cellsPerPage = function() {
-        var viewportHeight = $(window).height();
-        var headerHeight = $('#header').height();
-        var containerHeight = viewportHeight - headerHeight;
-        
-        var cellHeight = 217;
-        
-        var rows =  Math.ceil(containerHeight / cellHeight);
-        return rows*4;
-    };
-    
     /**
      * component initalization
      */
@@ -268,10 +257,7 @@ $(document).ready(function () {
         myFriends: function () {
             this.clearView(/* showSubMenu = */ true);
 
-            var friends = new Yasound.Data.Models.Friends({});
-
             this.currentView = new Yasound.Views.FriendsPage({
-                collection: friends,
                 el: '#webapp-content'
             }).render();
             this.commonContext.subMenuView.selectMenu('friends');
@@ -281,12 +267,9 @@ $(document).ready(function () {
         userFriends: function (username) {
             this.clearView(/* showSubMenu = */ false);
 
-            var friends = new Yasound.Data.Models.Friends({}).setUsername(username);
-            
             this.currentView = new Yasound.Views.UserFriendsPage({
-                collection: friends,
                 el: '#webapp-content'
-            }).render();
+            }).render(username);
         },
 
         // user's radios
