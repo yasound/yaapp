@@ -191,11 +191,16 @@ Yasound.Views.MyRadiosPage = Backbone.View.extend({
     render: function (genre) {
         this.reset();
         $(this.el).html(ich.myRadiosPageTemplate());
-        this.collection.perPage = 24;
+        this.collection.perPage = 8;
 
         this.resultsView = new Yasound.Views.RadioResults({
             collection: this.collection,
             el: $('#results', this.el)
+        });
+        
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.collection,
+            el: $('#pagination', this.el)
         });
         
         this.onGenreChanged('', genre)
