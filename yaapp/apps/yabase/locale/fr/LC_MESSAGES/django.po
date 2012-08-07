@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-18 14:11+0200\n"
+"POT-Creation-Date: 2012-08-07 10:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,23 +46,19 @@ msgstr "Mot de passe (à nouveau)"
 msgid "Profile"
 msgstr "Profil"
 
-#: forms.py:46
-#: forms.py:93
+#: forms.py:46 forms.py:93
 msgid "Listen"
 msgstr "J'écoute un morceau"
 
-#: forms.py:47
-#: forms.py:94
+#: forms.py:47 forms.py:94
 msgid "Like song"
 msgstr "J'aime le morceau"
 
-#: forms.py:48
-#: forms.py:95
+#: forms.py:48 forms.py:95
 msgid "Post message"
 msgstr "Je poste un message"
 
-#: forms.py:49
-#: forms.py:96
+#: forms.py:49 forms.py:96
 msgid "Update programming"
 msgstr "Je mets à jour ma programmation"
 
@@ -103,54 +99,54 @@ msgstr ""
 msgid "downloading album cover"
 msgstr ""
 
-#: import_utils.py:555
+#: import_utils.py:552
 #, python-format
 msgid "song metadata given and found : %s"
 msgstr ""
 
-#: import_utils.py:557
+#: import_utils.py:554
 #, python-format
 msgid "song metadata does not exists : %s"
 msgstr ""
 
-#: import_utils.py:561
+#: import_utils.py:558
 msgid "looking for artist"
 msgstr ""
 
-#: import_utils.py:564
+#: import_utils.py:561
 msgid "looking for album"
 msgstr ""
 
-#: import_utils.py:568
+#: import_utils.py:565
 msgid "looking for song"
 msgstr ""
 
-#: import_utils.py:595
+#: import_utils.py:592
 msgid "generating filename"
 msgstr ""
 
-#: import_utils.py:609
+#: import_utils.py:606
 msgid "creating YasoundSong"
 msgstr ""
 
-#: import_utils.py:640
+#: import_utils.py:637
 #, python-format
 msgid "YasoundSong generated, id = %s"
 msgstr ""
 
-#: import_utils.py:642
+#: import_utils.py:639
 msgid "generating file data"
 msgstr ""
 
-#: import_utils.py:648
+#: import_utils.py:645
 msgid "generating preview"
 msgstr ""
 
-#: import_utils.py:674
+#: import_utils.py:671
 msgid "Association between YasoundSong and SongMetadata done"
 msgstr ""
 
-#: import_utils.py:682
+#: import_utils.py:679
 msgid "Building mongodb index"
 msgstr ""
 
@@ -162,8 +158,7 @@ msgstr ""
 msgid "song"
 msgstr "chanson"
 
-#: models.py:290
-#: models.py:1173
+#: models.py:290 models.py:1224
 msgid "user"
 msgstr "utilisateur"
 
@@ -175,13 +170,11 @@ msgstr ""
 msgid "creator"
 msgstr "créateur"
 
-#: models.py:510
-#: models.py:1485
+#: models.py:510 models.py:1533
 msgid "created"
 msgstr ""
 
-#: models.py:511
-#: models.py:1486
+#: models.py:511 models.py:1534
 msgid "updated"
 msgstr ""
 
@@ -189,37 +182,35 @@ msgstr ""
 msgid "current song"
 msgstr ""
 
-#: models.py:1172
-#: models.py:1507
+#: models.py:1223 models.py:1555
 msgid "radio"
 msgstr ""
 
-#: models.py:1188
+#: models.py:1239
 msgid "Radio user"
 msgstr ""
 
-#: models.py:1487
+#: models.py:1535
 msgid "name"
 msgstr "nom"
 
-#: models.py:1488
+#: models.py:1536
 msgid "description"
 msgstr "description"
 
-#: models.py:1489
+#: models.py:1537
 msgid "activated"
 msgstr "activé"
 
-#: models.py:1503
-#: models.py:1506
+#: models.py:1551 models.py:1554
 msgid "featured content"
 msgstr ""
 
-#: models.py:1508
+#: models.py:1556
 msgid "order"
 msgstr ""
 
-#: models.py:1515
+#: models.py:1563
 msgid "featured radio"
 msgstr ""
 
@@ -287,8 +278,7 @@ msgstr "Divers"
 msgid "Genre"
 msgstr "Genre"
 
-#: settings.py:50
-#: settings.py:62
+#: settings.py:50 settings.py:62
 msgid "Like"
 msgstr ""
 
@@ -315,4 +305,3 @@ msgstr ""
 #: settings.py:88
 msgid "Homepage"
 msgstr ""
-
