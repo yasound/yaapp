@@ -32,7 +32,7 @@ from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
 from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method
+from yacore.http import check_api_key_Authentication, check_http_method, push_url as get_push_url
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager
@@ -959,7 +959,7 @@ class WebAppView(View):
             user_uuid = 0
             user_profile = None
         
-        push_url = settings.YASOUND_PUSH_URL
+        push_url = get_push_url(request)
         enable_push = settings.ENABLE_PUSH
         
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
@@ -1076,7 +1076,7 @@ class WebAppView(View):
         nm = NotificationsManager()
         notification_count = nm.unread_count(request.user.id)
         
-        push_url = settings.YASOUND_PUSH_URL
+        push_url = get_push_url(request)
         enable_push = settings.ENABLE_PUSH
         
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
