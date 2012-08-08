@@ -48,16 +48,17 @@ class TestMisc(TestCase):
         self.factory = RequestFactory()
     
     def test_push_url(self):
-        from yacore.http import get_push_url
+        from views import WebAppView
+        wa = WebAppView()
         request = self.factory.get('/status/')
         request.META['HTTP_HOST'] = 'localhost:8000'
-        url = get_push_url(request)
+        url = wa._get_push_url(request)
         
         good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
         self.assertEquals(url, good_url)
 
         request.META['HTTP_HOST'] = 'localhost'
-        url = get_push_url(request)
+        url = wa._get_push_url(request)
         
         good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
         self.assertEquals(url, good_url)
