@@ -90,10 +90,14 @@ class ShowManager():
             show_id = ObjectId(show_id)
         self.shows.remove({'_id': show_id})
     
-    def songs_for_show(self, show_id):
+    def songs_for_show(self, show_id, count=None, skip=0):
         s = self.get_show(show_id)
         playlist_id = s['playlist_id']
-        songs = SongInstance.objects.filter(playlist__id=playlist_id)
+        songs = SongInstance.objects.filter(playlist__id=playlist_id).order_by('id')
+        if count is not None:
+            songs = songs[skip:skip+count]
+        else:
+            songs = songs[skip:]
         return songs
     
     def add_song_in_show(self, show_id, yasound_song_id):
