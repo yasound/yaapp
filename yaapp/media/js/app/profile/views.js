@@ -23,7 +23,7 @@ Yasound.Views.User = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         if (data.current_radio && data.current_radio.name.length > 18) {
-            data.current_radio.name = _.str.prune(data.current_radio.name, 18);
+            data.current_radio.name = data.current_radio.name.substring(0,18) + "...";
         }
         
         $(this.el).html(ich.userTemplate(data));
