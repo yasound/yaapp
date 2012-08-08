@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.core.files import File
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Count
 from django.db.models.fields import FieldDoesNotExist
@@ -25,6 +26,7 @@ import import_utils
 import os
 import settings as yabase_settings
 import simplejson as json
+from django.test.client import RequestFactory
 import uploader
 
 class TestMiddleware(TestCase):
@@ -39,6 +41,27 @@ class TestMiddleware(TestCase):
         self.client.get('/status//')
         res = self.client.post('/status//', {'username': 'john', 'password': 'smith'})
         print res
+        
+        
+class TestMisc(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+    
+    def test_push_url(self):
+        from yacore.http import push_url
+        request = self.factory.get('/status/')
+        request.META['HTTP_HOST'] = 'localhost:8000'
+        url = push_url(request)
+        
+        good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
+        self.assertEquals(url, good_url)
+
+        request.META['HTTP_HOST'] = 'localhost'
+        url = push_url(request)
+        
+        good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
+        self.assertEquals(url, good_url)
+
         
 class TestDatabase(TestCase):
     multi_db = True
