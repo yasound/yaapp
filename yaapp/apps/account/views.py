@@ -2,10 +2,12 @@ from account.forms import LoginForm, SignupForm, PasswordResetForm, \
     SetPasswordForm
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import SESSION_KEY, BACKEND_SESSION_KEY, load_backend, \
+    login as auth_login
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.api import get_messages
-from django.contrib.sessions.models import Session
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.forms.util import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseForbidden, \
@@ -14,6 +16,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 from django.utils import simplejson
 from django.utils.http import base36_to_int
+from django.utils.importlib import import_module
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -21,19 +24,15 @@ from django_mobile import get_flavour
 from models import User, UserProfile, Device
 from social_auth import __version__ as version
 from tastypie.http import HttpBadRequest
+from yacore.api import api_response
+from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
-import datetime
 import json
 import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
-from yacore.decorators import check_api_key
-from yacore.api import api_response
-from yacore.decorators import check_api_key
-from django.core.cache import cache
 
 logger = logging.getLogger("yaapp.account")
-
 
 PICTURE_FILE_TAG = 'picture'
 
@@ -458,16 +457,25 @@ def user_authenticated(request):
     key = decoded['key']
     if key != account_settings.AUTH_SERVER_KEY:
         return HttpResponseForbidden()
- 
-    s = get_object_or_404(Session, pk=sessionid)
-    if not '_auth_user_id'in s.get_decoded():
-        raise Http404
+
+    engine = import_module(settings.SESSION_ENGINE)
+    session = engine.SessionStore(sessionid)
     
-    u = User.objects.get(id=s.get_decoded()['_auth_user_id'])
-    to_json = {
-        "user_id": u.id,
-    }
-    return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+    try:
+        user_id = session[SESSION_KEY]
+        backend_path = session[BACKEND_SESSION_KEY]
+        backend = load_backend(backend_path)
+        user = backend.get_user(user_id) or AnonymousUser()
+    except KeyError:
+        user = AnonymousUser()
+    
+    if user.is_authenticated():
+        to_json = {
+            "user_id": user.id,
+        }
+        return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+    else:
+        raise Http404
 
 @check_api_key(methods=['POST'], login_required=True)
 def update_localization(request):
