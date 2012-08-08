@@ -235,7 +235,14 @@ Yasound.Data.Models.User = Backbone.Model.extend({
             data['agc'] = this.get('age') +  ' ' + gettext('years old');
         }
         if (this.get('gender')) {
-            data['agc'] = data['agc'] + ', ' + this.get('gender');
+            var gender = this.get('gender');
+            var gender_display = '';
+            if (gender == 'M') {
+                gender_display = gettext('male');
+            } else if (gender == 'F') {
+                gender_display = gettext('female');
+            }
+            data['agc'] = data['agc'] + ', ' + gender_display;
         }
         if (this.get('city')) {
             data['agc'] = data['agc'] + ', ' + this.get('city');
