@@ -694,6 +694,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             menuNumber = 4;
         } else if (menu == 'my-radios') {
             menuNumber = 5;
+        } else if (menu == 'search') {
+            menuNumber = 6;
         } else {
             $pointer.fadeOut(200);
         }

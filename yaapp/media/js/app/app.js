@@ -207,7 +207,7 @@ $(document).ready(function () {
 
         // search page
         search: function (query) {
-            this.clearView();
+            this.clearView('search');
 
             this.currentView = new Yasound.Views.SearchPage({
                 el: '#webapp-content'
