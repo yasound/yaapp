@@ -49,11 +49,8 @@ class ShowManager():
                     'random_play': random_play,
                     'type': self.TYPE_PLAYLIST
                     }
-        self.shows.insert(show_doc)
-        shows = self.shows.find({'playlist_id': playlist.id})
-        if shows.count() == 0:
-            return None
-        return shows[0]
+        self.shows.insert(show_doc, safe=True)
+        return self.shows.find_one({'playlist_id': playlist.id})
     
     def shows_for_radio(self, radio_id, count=None, skip=0):
         playlist_ids = Playlist.objects.filter(radio__id=radio_id).values_list('id', flat=True)
@@ -79,18 +76,13 @@ class ShowManager():
     def get_show(self, show_id):
         if isinstance(show_id, str) or isinstance(show_id, unicode):
             show_id = ObjectId(show_id)
-        shows = self.shows.find({'_id': show_id})
-        if shows.count() == 0:
-            return None
-        if shows.count() > 1:
-            return None
-        return shows[0]
+        return self.shows.find_one({'_id': show_id})
     
     def update_show(self, show_data):
         show_id = show_data.get('_id', None)
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
             show_data['_id'] = ObjectId(show_id)
-        self.shows.update({'_id':show_data['_id']}, show_data)
+        self.shows.update({'_id':show_data['_id']}, show_data, safe=True)
         return self.get_show(show_id)
     
     def delete_show(self, show_id):
@@ -99,14 +91,7 @@ class ShowManager():
         self.shows.remove({'_id': show_id})
     
     def songs_for_show(self, show_id):
-        if isinstance(show_id, str) or isinstance(show_id, unicode):
-            show_id = ObjectId(show_id)
-        shows = self.shows.find({'_id': show_id})
-        if shows.count() == 0:
-            return None
-        if shows.count() > 1:
-            return None
-        s = shows[0]
+        s = self.get_show(show_id)
         playlist_id = s['playlist_id']
         songs = SongInstance.objects.filter(playlist__id=playlist_id)
         return songs
