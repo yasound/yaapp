@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 10:41+0200\n"
+"POT-Creation-Date: 2012-08-08 09:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,13 +78,31 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:167 js/app/common/views.js:270
+#: js/app/common/models.js:175
+#: js/app/common/views.js:270
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:215
+#: js/app/common/models.js:176
+msgid "Unknown album"
+msgstr "Album inconnu"
+
+#: js/app/common/models.js:177
+#: js/app/common/views.js:271
+msgid "on"
+msgstr "sur"
+
+#: js/app/common/models.js:232
 msgid "years old"
 msgstr "ans"
+
+#: js/app/common/models.js:238
+msgid "male"
+msgstr "homme"
+
+#: js/app/common/models.js:240
+msgid "female"
+msgstr "femme"
 
 #: js/app/common/views.js:222
 msgid "New notification received"
@@ -93,10 +111,6 @@ msgstr "Nouvelle notification reçue"
 #: js/app/common/views.js:268
 msgid "I am listening to"
 msgstr "J'écoute"
-
-#: js/app/common/views.js:271
-msgid "on"
-msgstr "sur"
 
 #: js/app/common/views.js:386
 msgid "Yasound share"
@@ -111,7 +125,6 @@ msgid "Create radio"
 msgstr "Créer une radio"
 
 #: js/app/myRadios/views.js:118
-#, fuzzy, perl-format
 msgid "%b %d"
 msgstr "%d %b"
 
@@ -171,11 +184,11 @@ msgstr "Notification marquée comme lue"
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/profile/views.js:38
+#: js/app/profile/views.js:43
 msgid "Follow"
 msgstr "Suivre"
 
-#: js/app/profile/views.js:41
+#: js/app/profile/views.js:46
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
@@ -195,8 +208,10 @@ msgstr "Paramètres Twitter sauvegardés"
 msgid "Error while saving Twitter settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 
-#: js/backoffice/backoffice.js:71 js/backoffice/Moderation/Radios.js:14
-#: js/backoffice/Radio/Radios.js:380 js/backoffice/Radio/UnmatchedSongs.js:21
+#: js/backoffice/backoffice.js:71
+#: js/backoffice/Moderation/Radios.js:14
+#: js/backoffice/Radio/Radios.js:380
+#: js/backoffice/Radio/UnmatchedSongs.js:21
 msgid "Radios"
 msgstr "Radios"
 
@@ -204,11 +219,13 @@ msgstr "Radios"
 msgid "Song management"
 msgstr "Gestion des chansons"
 
-#: js/backoffice/backoffice.js:87 js/backoffice/Radio/UnmatchedSongs.js:38
+#: js/backoffice/backoffice.js:87
+#: js/backoffice/Radio/UnmatchedSongs.js:38
 msgid "Unmatched songs"
 msgstr "Chansons non détectées"
 
-#: js/backoffice/backoffice.js:90 js/backoffice/Song/MissingSongs.js:44
+#: js/backoffice/backoffice.js:90
+#: js/backoffice/Song/MissingSongs.js:44
 msgid "Missing songs"
 msgstr "Chansons manquantes"
 
@@ -216,7 +233,8 @@ msgstr "Chansons manquantes"
 msgid "Upload new songs to yasound"
 msgstr "Envoyer les nouvelles chansons vers yasound"
 
-#: js/backoffice/backoffice.js:96 js/backoffice/Radio/AllSongs.js:61
+#: js/backoffice/backoffice.js:96
+#: js/backoffice/Radio/AllSongs.js:61
 msgid "All songs"
 msgstr "Toutes les chansons"
 
@@ -233,21 +251,26 @@ msgstr "Outils de recherche"
 msgid "Invitations"
 msgstr "Invitations"
 
-#: js/backoffice/backoffice.js:159 js/backoffice/backoffice.js.py:161
+#: js/backoffice/backoffice.js:159
+#: js/backoffice/backoffice.js.py:161
 msgid "Moderation"
 msgstr "Modération"
 
-#: js/backoffice/backoffice.js:189 js/backoffice/backoffice.js.py:191
-#: js/backoffice/Moderation/Radios.js:20 js/backoffice/Moderation/Users.js:14
+#: js/backoffice/backoffice.js:189
+#: js/backoffice/backoffice.js.py:191
+#: js/backoffice/Moderation/Radios.js:20
+#: js/backoffice/Moderation/Users.js:14
 #: js/backoffice/Moderation/Users.js:19
 #: js/backoffice/Statistics/Statistics.js:136
 #: js/backoffice/Statistics/Statistics.js:163
-#: js/backoffice/Users/History.js:21 js/backoffice/Users/Users.js:130
+#: js/backoffice/Users/History.js:21
+#: js/backoffice/Users/Users.js:130
 #: js/backoffice/Users/Users.js.py:137
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: js/backoffice/backoffice.js:217 js/backoffice/Statistics/Statistics.js:269
+#: js/backoffice/backoffice.js:217
+#: js/backoffice/Statistics/Statistics.js:269
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -255,17 +278,20 @@ msgstr "Statistiques"
 msgid "Useful stats"
 msgstr "Statistiques utiles"
 
-#: js/backoffice/backoffice.js:233 js/backoffice/Song/MostPopularSongs.js:29
+#: js/backoffice/backoffice.js:233
+#: js/backoffice/Song/MostPopularSongs.js:29
 #: js/backoffice/Song/MostPopularSongs.js:33
 msgid "Most popular songs"
 msgstr "Chansons les plus populaires"
 
-#: js/backoffice/backoffice.js:236 js/backoffice/Song/RejectedSongs.js:18
+#: js/backoffice/backoffice.js:236
+#: js/backoffice/Song/RejectedSongs.js:18
 #: js/backoffice/Song/RejectedSongs.js:22
 msgid "Rejected songs"
 msgstr "Chansons rejetées"
 
-#: js/backoffice/backoffice.js:249 js/backoffice/Menus/Menus.js:187
+#: js/backoffice/backoffice.js:249
+#: js/backoffice/Menus/Menus.js:187
 msgid "Menus"
 msgstr "Menus"
 
@@ -307,7 +333,8 @@ msgid "Save"
 msgstr "Sauver"
 
 #: js/backoffice/Invitations/InvitationForm.js:63
-#: js/backoffice/Radio/RadioForm.js:58 js/backoffice/Upload/Upload.js:48
+#: js/backoffice/Radio/RadioForm.js:58
+#: js/backoffice/Upload/Upload.js:48
 msgid "Sending informations..."
 msgstr "Transmission des informations..."
 
@@ -317,7 +344,8 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: js/backoffice/Invitations/InvitationGrid.js:30
-#: js/backoffice/Menus/MenuGrid.js:23 js/backoffice/Radio/RadioGrid.js:47
+#: js/backoffice/Menus/MenuGrid.js:23
+#: js/backoffice/Radio/RadioGrid.js:47
 #: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:26
 #: js/backoffice/Users/UserGrid.js:31
 msgid "Name"
@@ -373,13 +401,20 @@ msgstr "Rien à afficher"
 #: js/backoffice/Invitations/Invitations.js:35
 #: js/backoffice/Invitations/Invitations.js:102
 #: js/backoffice/Invitations/Invitations.js:124
-#: js/backoffice/Moderation/Abuse.js:10 js/backoffice/Moderation/Abuse.js:41
-#: js/backoffice/Moderation/Radios.js:44 js/backoffice/Moderation/Users.js:44
-#: js/backoffice/Radio/Radios.js:13 js/backoffice/Radio/Radios.js.py:44
-#: js/backoffice/Radio/Radios.js:67 js/backoffice/Radio/Radios.js.py:91
-#: js/backoffice/Radio/Radios.js:115 js/backoffice/Radio/Radios.js.py:265
-#: js/backoffice/Radio/Radios.js:297 js/backoffice/Users/Users.js:10
-#: js/backoffice/Users/Users.js.py:42 js/backoffice/Users/Users.js:95
+#: js/backoffice/Moderation/Abuse.js:10
+#: js/backoffice/Moderation/Abuse.js:41
+#: js/backoffice/Moderation/Radios.js:44
+#: js/backoffice/Moderation/Users.js:44
+#: js/backoffice/Radio/Radios.js:13
+#: js/backoffice/Radio/Radios.js.py:44
+#: js/backoffice/Radio/Radios.js:67
+#: js/backoffice/Radio/Radios.js.py:91
+#: js/backoffice/Radio/Radios.js:115
+#: js/backoffice/Radio/Radios.js.py:265
+#: js/backoffice/Radio/Radios.js:297
+#: js/backoffice/Users/Users.js:10
+#: js/backoffice/Users/Users.js.py:42
+#: js/backoffice/Users/Users.js:95
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -412,7 +447,8 @@ msgid "New VIP"
 msgstr "Nouveau VIP"
 
 #: js/backoffice/Invitations/Invitations.js:118
-#: js/backoffice/Moderation/Radios.js:38 js/backoffice/Moderation/Users.js:38
+#: js/backoffice/Moderation/Radios.js:38
+#: js/backoffice/Moderation/Users.js:38
 #: js/backoffice/Radio/Radios.js:291
 msgid "Delete"
 msgstr "Supprimer"
@@ -457,7 +493,8 @@ msgstr "Voulez-vous supprimer définitivement le message ?"
 msgid "Do you want to ignore permanently the notification ?"
 msgstr "Voulez-vous ignorer définitivement cette notification ?"
 
-#: js/backoffice/Moderation/Abuse.js:75 js/backoffice/Moderation/Abuse.js:80
+#: js/backoffice/Moderation/Abuse.js:75
+#: js/backoffice/Moderation/Abuse.js:80
 msgid "Abuse notifications"
 msgstr "Notifications d'abus"
 
@@ -504,19 +541,21 @@ msgstr "Texte"
 msgid ""
 "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"elements\" : "
 "\"element\"]})"
-msgstr ""
-"{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
+msgstr "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
 "\"élément\"]})"
 
-#: js/backoffice/Moderation/Radios.js:34 js/backoffice/Moderation/Users.js:33
+#: js/backoffice/Moderation/Radios.js:34
+#: js/backoffice/Moderation/Users.js:33
 msgid "Comments"
 msgstr "Commentaires"
 
-#: js/backoffice/Moderation/Radios.js:45 js/backoffice/Moderation/Users.js:45
+#: js/backoffice/Moderation/Radios.js:45
+#: js/backoffice/Moderation/Users.js:45
 msgid "Do you want to delete this comment ?"
 msgstr "Voulez-vous supprimer ce commentaire ?"
 
-#: js/backoffice/Radio/AllSongs.js:35 js/backoffice/Radio/UnmatchedSongs.js:15
+#: js/backoffice/Radio/AllSongs.js:35
+#: js/backoffice/Radio/UnmatchedSongs.js:15
 msgid "Songs"
 msgstr "Chanson"
 
@@ -540,7 +579,8 @@ msgstr "Sélectionner un utilisateur"
 msgid "Select files or folder"
 msgstr "Sélectionner des fichiers ou un répertoire"
 
-#: js/backoffice/Radio/RadioForm.js:43 js/backoffice/Upload/Upload.js:103
+#: js/backoffice/Radio/RadioForm.js:43
+#: js/backoffice/Upload/Upload.js:103
 msgid "Upload songs"
 msgstr "Importer des chansons"
 
@@ -789,7 +829,8 @@ msgstr "Résultats de l'import"
 msgid "Upload started\n"
 msgstr "Import démarré\n"
 
-#: js/backoffice/Users/History.js:14 js/backoffice/Users/History.js.py:44
+#: js/backoffice/Users/History.js:14
+#: js/backoffice/Users/History.js.py:44
 msgid "History"
 msgstr "Historique"
 
@@ -813,11 +854,13 @@ msgstr "Dernière authentification"
 msgid "Superuser?"
 msgstr "Superutilisateur ?"
 
-#: js/backoffice/Users/UserGrid.js:81 js/backoffice/Users/UserGrid.js.py:92
+#: js/backoffice/Users/UserGrid.js:81
+#: js/backoffice/Users/UserGrid.js.py:92
 msgid "Yes"
 msgstr "Oui"
 
-#: js/backoffice/Users/UserGrid.js:83 js/backoffice/Users/UserGrid.js.py:94
+#: js/backoffice/Users/UserGrid.js:83
+#: js/backoffice/Users/UserGrid.js.py:94
 msgid "No"
 msgstr "Non"
 
@@ -880,3 +923,4 @@ msgstr "Exporter tous les utilisateurs"
 #: js/backoffice/ux/LoggerWindow.js:14
 msgid "Close"
 msgstr "Fermer"
+

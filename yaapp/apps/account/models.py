@@ -579,8 +579,10 @@ class UserProfile(models.Model):
         if self.can_give_personal_infos(request_user):
             if self.age is not None:
                 data['age'] = self.age
+            if self.birthday is not None:
+                data['birthday'] = self.birthday
             if self.gender != '':
-                data['gender'] = self.get_gender_display()
+                data['gender'] = self.gender
             data['city'] = self.city
             data['latitude'] = self.latitude
             data['longitude'] = self.longitude
