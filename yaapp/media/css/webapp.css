@@ -695,8 +695,7 @@ input::-webkit-input-placeholder {
 /*--- RADIO CELL ---*/
 
 .radio-cells {
-  /*margin-left: -28px; à mettre en place pour avoir des marges larges entre cellules*/
-  margin-left: 0px;
+  margin-left: -28px;
   list-style: none;
   *zoom: 1;
 }
@@ -733,8 +732,7 @@ input::-webkit-input-placeholder {
     width:217px;
     margin-top:0;
     margin-bottom:12px;
-    /*margin-left:25px; à mettre en place pour avoir des marges larges entre cellules*/
-    margin-left:14px;
+    margin-left:25px;
     margin-right:0;
     position:relative;
     overflow:hidden;
