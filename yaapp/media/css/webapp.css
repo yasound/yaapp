@@ -1627,6 +1627,13 @@ ul#notifications .read {
 	padding-bottom:27px;
 }
 
+.profile-background .radio-cells {
+    margin-left:0;	
+}
+.profile-background .radio-cell {
+    margin-left:13px;
+}
+
 #user-profile {
 	display:block;
 	position:relative;
