@@ -706,6 +706,11 @@ class UserProfile(models.Model):
             self.latitude = bundle.data['latitude']
         if bundle.data.has_key('longitude'):
             self.longitude = bundle.data['longitude']
+        if bundle.data.has_key('gender'):
+            self.gender = bundle.data['gender']
+        if bundle.data.has_key('birthday'):
+            birthday = bundle.data['birthday'].split('T')[0]
+            self.birthday = birthday
             
         if created and bundle.data.has_key('account_type'):
             t = bundle.data['account_type']
