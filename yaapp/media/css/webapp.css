@@ -485,7 +485,11 @@ body {
 }
 
 #sub-header-pointer.menu5 {
-    left:536px
+    left:536px;
+}
+
+#sub-header-pointer.menu6 {
+    left:830px;
 }
 
 #sub-header-nav {
