@@ -248,7 +248,7 @@ $(document).ready(function () {
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.TopRadiosPage({
-                el: '#webapp-content',
+                el: '#webapp-content'
             }).render(genre);
             this.commonContext.subMenuView.selectMenu('top');
         },
@@ -276,7 +276,7 @@ $(document).ready(function () {
         userRadios: function (username) {
             this.clearView(/* showSubMenu = */ false);
             this.currentView = new Yasound.Views.UserRadiosPage({
-                el: '#webapp-content',
+                el: '#webapp-content'
             }).render('', username);
         },
 
