@@ -32,7 +32,7 @@ from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
 from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method, push_url as get_push_url
+from yacore.http import check_api_key_Authentication, check_http_method, get_push_url
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager

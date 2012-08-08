@@ -85,7 +85,7 @@ def absolute_url(url):
     absolute_url = u"%s://%s%s" % (protocol, unicode(current_site.domain), url)
     return absolute_url
 
-def push_url(request):
+def get_push_url(request):
     host = request.META['HTTP_HOST']
     protocol = settings.DEFAULT_HTTP_PROTOCOL
     if ':' in host:
