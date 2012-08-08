@@ -379,6 +379,7 @@ INSTALLED_APPS = (
     #'tinymce',
     'tagging',
     'emencia.django.newsletter',
+    'yashow'
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

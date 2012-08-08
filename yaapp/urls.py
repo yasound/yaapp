@@ -124,8 +124,13 @@ urlpatterns = patterns('',
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
     
     # live
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),  
     
+    # shows
+    url(r'^api/v1/show/(?P<show_id>\S+)/$', 'yashow.views.show'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/create_show/$', 'yashow.views.create_show'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/shows/$', 'yashow.views.get_shows_for_radio'),
+  
 
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
@@ -227,7 +232,7 @@ urlpatterns = patterns('',
     url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.radio_programming'),
     url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/artists/$', 'yabase.views.radio_programming_artists'),
     url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/albums/$', 'yabase.views.radio_programming_albums'),
-
+    
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
     

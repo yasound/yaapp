@@ -586,6 +586,7 @@ class UserProfile(models.Model):
             data['city'] = self.city
             data['latitude'] = self.latitude
             data['longitude'] = self.longitude
+            data['url'] = self.url
             if request_user and not request_user.is_anonymous():
                 p = request_user.get_profile()
                 if p:
@@ -706,6 +707,13 @@ class UserProfile(models.Model):
             self.latitude = bundle.data['latitude']
         if bundle.data.has_key('longitude'):
             self.longitude = bundle.data['longitude']
+        if bundle.data.has_key('gender'):
+            self.gender = bundle.data['gender']
+        if bundle.data.has_key('birthday'):
+            birthday = bundle.data['birthday'].split('T')[0]
+            self.birthday = birthday
+        if bundle.data.has_key('url'):
+            self.url = bundle.data['url']
             
         if created and bundle.data.has_key('account_type'):
             t = bundle.data['account_type']
