@@ -211,6 +211,7 @@ class SongInstance(models.Model):
         desc_dict['frequency'] = self.frequency
         desc_dict['last_play_time'] = self.last_play_time.isoformat() if self.last_play_time is not None else None
         desc_dict['need_sync'] = self.need_sync
+        desc_dict['order'] = self.order
         
         
         cover = None

@@ -37,6 +37,32 @@ class ShowTest(TestCase):
         shows = self.manager.shows_for_radio(radio.id)
         self.assertEquals(shows.count(), 1)
         
+    def test_get_shows(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+            
+        radio = Radio(creator=user)
+        radio.save()
+        
+        self.manager.create_show('my first show', radio, self.manager.MONDAY, datetime.now().time())
+        self.manager.create_show('my second show', radio, self.manager.WEDNESDAY, datetime.now().time())
+        self.manager.create_show('my third show', radio, self.manager.FRIDAY, datetime.now().time())
+        self.manager.create_show('my fourth show', radio, self.manager.SATURDAY, datetime.now().time())
+        
+        shows = self.manager.shows_for_radio(radio.id)
+        self.assertEqual(shows.count(), 4)
+        
+        shows = self.manager.shows_for_radio(radio.id, skip=1)
+        self.assertEqual(shows.count(True), 3)
+        
+        shows = self.manager.shows_for_radio(radio.id, count=2)
+        self.assertEqual(shows.count(True), 2)
+        
+        shows = self.manager.shows_for_radio(radio.id, skip=1, count=2)
+        self.assertEqual(shows.count(True), 2)
+    
+        
     def test_get_show(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
@@ -146,6 +172,18 @@ class ShowTest(TestCase):
         songs = self.manager.songs_for_show(show_id)
         self.assertIsNotNone(songs)
         self.assertEqual(songs.count(), len(yasound_songs))
+        
+        count=3
+        songs = self.manager.songs_for_show(show_id, count=count)
+        self.assertIsNotNone(songs)
+        self.assertEqual(songs.count(), count)
+        
+        count=3
+        skip=2
+        songs = self.manager.songs_for_show(show_id, count=count, skip=skip)
+        self.assertIsNotNone(songs)
+        self.assertEqual(songs.count(), count)
+        self.assertEqual(songs[0].metadata.name, yasound_songs[skip].name)
 
     def test_add_song(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
@@ -292,5 +330,62 @@ class ViewsTest(TestCase):
         self.assertEqual(s['day'], data['day'])
         self.assertEqual(s['name'], data['name'])
         self.assertEqual(s['random_play'], data['random_play'])
+        
+    def test_get_songs(self):
+        nb_songs = 10
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+        
+        yasound_songs = YasoundSong.objects.all()[:nb_songs]
+        
+        d = self.manager.MONDAY
+        t = datetime.now().time()
+        show = self.manager.create_show('my first show', self.radio, d, t, yasound_songs=yasound_songs)
+        
+        show_id = str(show['_id'])
+        c = Client()
+        response = c.get('/api/v1/show/%s/songs/' % show_id, {'username':self.user.username, 'api_key':self.api_key.key})
+        self.assertEqual(response.status_code, 200)
+        
+        json_data = json.loads(response.content)
+        songs = json_data['objects']
+        self.assertEqual(len(songs), len(yasound_songs))
+        
+    def test_add_song(self):  
+        y = YasoundSong(name='test name', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        
+        d = self.manager.MONDAY
+        t = datetime.now().time()
+        show = self.manager.create_show('my first show', self.radio, d, t)
+        show_id = str(show['_id'])
+        
+        c = Client()
+        response = c.get('/api/v1/show/%s/add_song/%s/' % (show_id, y.id), {'username':self.user.username, 'api_key':self.api_key.key})
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertEqual(len(self.manager.songs_for_show(show['_id'])), 1)
+        
+    def test_remove_song(self):  
+        y = YasoundSong(name='test name', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        
+        d = self.manager.MONDAY
+        t = datetime.now().time()
+        show = self.manager.create_show('my first show', self.radio, d, t, yasound_songs=[y])
+        show_id = str(show['_id'])
+        
+        songs = self.manager.songs_for_show(show_id)
+        song_instance = songs[0]
+        
+        c = Client()
+        response = c.get('/api/v1/show/%s/remove_song/%s/' % (show_id, song_instance.id), {'username':self.user.username, 'api_key':self.api_key.key})
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertEqual(len(self.manager.songs_for_show(show['_id'])), 0)
         
         
