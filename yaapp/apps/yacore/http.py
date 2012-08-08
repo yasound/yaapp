@@ -84,14 +84,3 @@ def absolute_url(url):
     protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
     absolute_url = u"%s://%s%s" % (protocol, unicode(current_site.domain), url)
     return absolute_url
-
-def get_push_url(request):
-    host = request.META['HTTP_HOST']
-    protocol = settings.DEFAULT_HTTP_PROTOCOL
-    if ':' in host:
-        host = host[:host.find(':')]
-    
-    url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
-    return url
-    
-    

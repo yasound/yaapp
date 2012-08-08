@@ -32,7 +32,7 @@ from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
 from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method, get_push_url
+from yacore.http import check_api_key_Authentication, check_http_method
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager
@@ -938,6 +938,15 @@ class WebAppView(View):
                 raise Http404
         return True, None
     
+    def _get_push_url(self, request):
+        host = request.META['HTTP_HOST']
+        protocol = settings.DEFAULT_HTTP_PROTOCOL
+        if ':' in host:
+            host = host[:host.find(':')]
+        
+        url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
+        return url
+    
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -959,7 +968,7 @@ class WebAppView(View):
             user_uuid = 0
             user_profile = None
         
-        push_url = get_push_url(request)
+        push_url = self._get_push_url(request)
         enable_push = settings.ENABLE_PUSH
         
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
@@ -1077,7 +1086,7 @@ class WebAppView(View):
         nm = NotificationsManager()
         notification_count = nm.unread_count(request.user.id)
         
-        push_url = get_push_url(request)
+        push_url = self._get_push_url(request)
         enable_push = settings.ENABLE_PUSH
         
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
