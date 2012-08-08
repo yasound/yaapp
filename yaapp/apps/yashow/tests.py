@@ -7,13 +7,14 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from models import ShowManager
-from datetime import datetime
+from datetime import datetime, time
 from django.contrib.auth.models import User
 from yabase.models import Radio
 from yaref.models import YasoundSong
 from django.test import Client
 from tastypie.models import ApiKey
 import json
+from yacore.api import MongoAwareEncoder
 
 class ShowTest(TestCase):
     def setUp(self):
@@ -271,4 +272,25 @@ class ViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         s = json.loads(response.content)
         self.assertEqual(s['day'], new_day)
+        
+        
+    def test_post_show(self):
+        c = Client()
+        data = {
+                'name': 'my new show',
+                'day': self.manager.EVERY_DAY,
+                'time': time(hour=19, minute=0),
+                'random_play': True
+                }
+        json_desc = json.dumps(data, cls=MongoAwareEncoder)
+        response = c.post('/api/v1/radio/%s/create_show/?username=%s&api_key=%s' % (self.radio.uuid, self.user.username, self.api_key.key), json_desc, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        
+        s = json.loads(response.content)
+        self.assertIsNotNone(s)
+        
+        self.assertEqual(s['day'], data['day'])
+        self.assertEqual(s['name'], data['name'])
+        self.assertEqual(s['random_play'], data['random_play'])
+        
         
