@@ -725,7 +725,8 @@ input::-webkit-input-placeholder {
     float:left;
     height:217px;
     width:217px;
-    margin:12px;
+    margin-top:0;
+    margin-bottom:12px;
     margin-left:14px;
     margin-right:0;
     position:relative;
@@ -980,6 +981,7 @@ input::-webkit-input-placeholder {
 
 
 #webapp-container {
+    margin-top: 156px;
 	min-height:822px;
 	margin-bottom:158px;
 }
@@ -999,10 +1001,6 @@ input::-webkit-input-placeholder {
     background-color: black;
 	position:absolute;
 	bottom:0px;
-}
-
-#post-submenu {
-    margin-top: 55px;
 }
 
 .blocks {
@@ -1605,7 +1603,7 @@ ul#notifications .read {
 
 .profile-background {
 	background-color:white;
-	margin:25px 0px 25px 0px;
+	margin:0px 0px 25px 0px;
 	box-shadow:0px 0px 10px #e2e2e2;
 	border-radius:20px;
 	padding-bottom:27px;

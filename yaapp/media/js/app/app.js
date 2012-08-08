@@ -179,7 +179,7 @@ $(document).ready(function () {
         },
         
         index: function () {
-            this.clearView(true);
+            this.clearView(/* showSubMenu = */ true);
 
             var genre =  this.commonContext.subMenuView.currentGenre();
             this.currentView = new Yasound.Views.HomePage({
@@ -190,7 +190,7 @@ $(document).ready(function () {
         },
 
         settings: function () {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
 
             this.currentView = new Yasound.Views.SettingsPage({
                 el: '#webapp-content'
@@ -198,7 +198,7 @@ $(document).ready(function () {
         },
         
         notifications: function () {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
 
             this.currentView = new Yasound.Views.NotificationsPage({
                 el: '#webapp-content'
@@ -206,7 +206,7 @@ $(document).ready(function () {
         },
 
         programming: function () {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
 
             this.currentView = new Yasound.Views.ProgrammingPage({
                 el: '#webapp-content'
@@ -215,7 +215,7 @@ $(document).ready(function () {
 
         // search page
         search: function (query) {
-            this.clearView(true);
+            this.clearView(/* showSubMenu = */ true);
 
             this.currentView = new Yasound.Views.SearchPage({
                 el: '#webapp-content'
@@ -235,7 +235,7 @@ $(document).ready(function () {
         },
         
         userFavorites: function (username) {
-            this.clearView(/* showSubMenu = */ false);
+            this.clearView(/* showSubMenu = */ true);
             this.currentView = new Yasound.Views.UserFavoritesPage({
                 el: '#webapp-content'
             }).render('', username);
@@ -265,7 +265,7 @@ $(document).ready(function () {
 
         // user's friends
         userFriends: function (username) {
-            this.clearView(/* showSubMenu = */ false);
+            this.clearView(/* showSubMenu = */ true);
 
             this.currentView = new Yasound.Views.UserFriendsPage({
                 el: '#webapp-content'
@@ -274,7 +274,7 @@ $(document).ready(function () {
 
         // user's radios
         userRadios: function (username) {
-            this.clearView(/* showSubMenu = */ false);
+            this.clearView(/* showSubMenu = */ true);
             this.currentView = new Yasound.Views.UserRadiosPage({
                 el: '#webapp-content'
             }).render('', username);
@@ -282,7 +282,7 @@ $(document).ready(function () {
 
         // all users page
         users: function () {
-            this.clearView(/* showSubMenu = */ false);
+            this.clearView(/* showSubMenu = */ true);
 
             var users = new Yasound.Data.Models.Users({});
 
@@ -294,7 +294,7 @@ $(document).ready(function () {
 
         // profile page
         profile: function (username) {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
             this.currentView = new Yasound.Views.ProfilePage({
                 model: new Yasound.Data.Models.User({username:username}),
                 el: '#webapp-content'
@@ -303,7 +303,7 @@ $(document).ready(function () {
 
         // radio details page
         radio: function (uuid) {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
 
             if (!this.radioContext) {
                 var that = this;
@@ -349,14 +349,14 @@ $(document).ready(function () {
         },
         
         legal: function() {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
             this.currentView = new Yasound.Views.Static.LegalPage({
                 el: '#webapp-content'
             }).render();
         },
         
         contact: function() {
-            this.clearView();
+            this.clearView(/* showSubMenu = */ true);
             this.currentView = new Yasound.Views.Static.ContactPage({
                 el: '#webapp-content'
             }).render();
