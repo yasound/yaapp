@@ -130,8 +130,8 @@ $(document).ready(function () {
         },
 
         // this function must be called between every routes
-        clearView: function (showSubMenu) {
-            this.buildCommonContext(showSubMenu);
+        clearView: function (selectedMenu) {
+            this.buildCommonContext(selectedMenu);
             if (this.currentView) {
                 this.currentView.reset();
                 this.currentView.close();
@@ -146,7 +146,7 @@ $(document).ready(function () {
         }),
 
         // build common stuff for every views (radio)
-        buildCommonContext: function (showSubMenu) {
+        buildCommonContext: function (selectedMenu) {
             if (!this.commonContext) {
                 this.commonContext = {};
                 this.commonContext.streamFunction = function (model, stream_url) {
@@ -162,35 +162,27 @@ $(document).ready(function () {
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
-            }
-            
-            if (!showSubMenu && this.commonContext.subMenuView) {
-                this.commonContext.subMenuView.reset();
-                this.commonContext.subMenuView.close();
-                this.commonContext.subMenuView = undefined;
-            }
-            
-            if (showSubMenu && !this.commonContext.subMenuView) {
+
                 $('#submenu-container').append("<div id='submenu-content'/>");
                 this.commonContext.subMenuView = new Yasound.Views.SubMenu({
                     el: '#submenu-content'
                 }).render();
             }
+            this.commonContext.subMenuView.selectMenu(selectedMenu);
         },
         
         index: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView('selection');
 
             var genre =  this.commonContext.subMenuView.currentGenre();
             this.currentView = new Yasound.Views.HomePage({
                 el: '#webapp-content'
             }).render(genre);
             
-            this.commonContext.subMenuView.selectMenu('selection');
         },
 
         settings: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             this.currentView = new Yasound.Views.SettingsPage({
                 el: '#webapp-content'
@@ -198,7 +190,7 @@ $(document).ready(function () {
         },
         
         notifications: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             this.currentView = new Yasound.Views.NotificationsPage({
                 el: '#webapp-content'
@@ -206,7 +198,7 @@ $(document).ready(function () {
         },
 
         programming: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             this.currentView = new Yasound.Views.ProgrammingPage({
                 el: '#webapp-content'
@@ -215,7 +207,7 @@ $(document).ready(function () {
 
         // search page
         search: function (query) {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             this.currentView = new Yasound.Views.SearchPage({
                 el: '#webapp-content'
@@ -224,18 +216,17 @@ $(document).ready(function () {
 
         // owner favorites page
         myFavorites: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView('favorites');
 
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.FavoritesPage({
                 el: '#webapp-content'
             }).render(genre);
-            this.commonContext.subMenuView.selectMenu('favorites');
         },
         
         userFavorites: function (username) {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
             this.currentView = new Yasound.Views.UserFavoritesPage({
                 el: '#webapp-content'
             }).render('', username);
@@ -243,29 +234,27 @@ $(document).ready(function () {
 
         // top radios
         top: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView('top');
 
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.TopRadiosPage({
                 el: '#webapp-content'
             }).render(genre);
-            this.commonContext.subMenuView.selectMenu('top');
         },
 
         // owner friends page
         myFriends: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView('friends');
 
             this.currentView = new Yasound.Views.FriendsPage({
                 el: '#webapp-content'
             }).render();
-            this.commonContext.subMenuView.selectMenu('friends');
         },
 
         // user's friends
         userFriends: function (username) {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             this.currentView = new Yasound.Views.UserFriendsPage({
                 el: '#webapp-content'
@@ -274,7 +263,8 @@ $(document).ready(function () {
 
         // user's radios
         userRadios: function (username) {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
+            
             this.currentView = new Yasound.Views.UserRadiosPage({
                 el: '#webapp-content'
             }).render('', username);
@@ -282,7 +272,7 @@ $(document).ready(function () {
 
         // all users page
         users: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             var users = new Yasound.Data.Models.Users({});
 
@@ -294,7 +284,8 @@ $(document).ready(function () {
 
         // profile page
         profile: function (username) {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
+            
             this.currentView = new Yasound.Views.ProfilePage({
                 model: new Yasound.Data.Models.User({username:username}),
                 el: '#webapp-content'
@@ -303,7 +294,7 @@ $(document).ready(function () {
 
         // radio details page
         radio: function (uuid) {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
 
             if (!this.radioContext) {
                 var that = this;
@@ -338,25 +329,26 @@ $(document).ready(function () {
         
         // owner favorites page
         myRadios: function () {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView('my-radios');
 
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.MyRadiosPage({
                 el: '#webapp-content'
             }).render(genre);
-            this.commonContext.subMenuView.selectMenu('my-radios');
         },
         
         legal: function() {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
+            
             this.currentView = new Yasound.Views.Static.LegalPage({
                 el: '#webapp-content'
             }).render();
         },
         
         contact: function() {
-            this.clearView(/* showSubMenu = */ true);
+            this.clearView();
+            
             this.currentView = new Yasound.Views.Static.ContactPage({
                 el: '#webapp-content'
             }).render();

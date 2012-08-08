@@ -681,8 +681,9 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     selectMenu: function(menu) {
         $("#sub-header-nav li", this.el).removeClass('selected');
         $("#" + menu, this.el).parent().addClass('selected');
+        var $pointer = $('#sub-header-pointer', this.el);
         
-        var menuNumber = 1;
+        var menuNumber = 0;
         if (menu == 'selection') {
             menuNumber = 1;
         } else if (menu == 'top') {
@@ -693,9 +694,15 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             menuNumber = 4;
         } else if (menu == 'my-radios') {
             menuNumber = 5;
+        } else {
+            $pointer.fadeOut(200);
+        }
+        
+        if (menuNumber != 0) {
+            $pointer.fadeIn(200);
+            $pointer.removeClass().addClass('menu' + menuNumber);
         }
 
-        $('#sub-header-pointer', this.el).removeClass().addClass('menu' + menuNumber);
     },
     selection: function(e) {
         e.preventDefault();
