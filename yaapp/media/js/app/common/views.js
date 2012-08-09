@@ -353,8 +353,12 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     onVolumeSlide: function(e, ui) {
         var soundVolume = ui.value;
-        Yasound.App.MySound.setVolume(soundVolume);
-        Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
+        if (Yasound.App.MySound) {
+            Yasound.App.MySound.setVolume(soundVolume);
+            Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
+        } else {
+            Yasound.App.SoundConfig.volume = soundVolume;
+        }
     },
     
     like: function (e) {
