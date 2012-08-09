@@ -18,6 +18,17 @@ $(document).ready(function () {
         Yasound.App.isMobile = true;
     }    
     
+    Yasound.App.enableFX = true;
+    Yasound.App.waitForSoundManager = true;
+    
+    if ($.browser.msie) {
+        if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+            Yasound.App.enableFX = false;
+            Yasound.App.waitForSoundManager = false;
+            g_enable_push = false;
+        }
+    }
+    
     /**
      * component initalization
      */
@@ -368,17 +379,13 @@ $(document).ready(function () {
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
     
-    if ($.browser.msie) {
-        if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
-            Yasound.App.enableFX = false;
-            Backbone.history.start({
-                pushState: true,
-                root: '/app/',
-                silent: false
-            });
-        }
+    if (!Yasound.App.waitForSoundManager) {
+        Backbone.history.start({
+            pushState: true,
+            root: '/app/',
+            silent: false
+        });
     } else {
-        Yasound.App.enableFX = true;
         soundManager.onready(function () {
             Backbone.history.start({
                 pushState: true,
@@ -387,5 +394,4 @@ $(document).ready(function () {
             });
         });
     }
-
 });
