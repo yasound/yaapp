@@ -1373,4 +1373,205 @@ class TestParseItunes(TestCase):
         self.assertEquals(artist, 'Dominique A')
         self.assertEquals(album, 'La Fossette')
         
+
+class TestSongInstanceOrder(TestCase):
+    def setUp(self):
+        self.user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        self.user.set_password('test')
+        self.user.save()
+            
+        self.radio = Radio(creator=self.user)
+        self.radio.save()
+        self.playlist = Playlist.objects.create(radio=self.radio, name='main', source='src') 
+        
+        nb_songs = 10
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+            song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
+            song_instance.order = i
+            song_instance.save() 
+        
+    def test_setup(self):
+        print '\n***** test_setup *****'
+        songs = SongInstance.objects.filter(playlist=self.playlist).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+            
+    def test_insert(self):
+        print '\n***** test_insert *****'
+        insert_order = 3
+        y = YasoundSong(name='test song', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
+        song_instance.order = insert_order
+        song_instance.save()
+        
+        songs = SongInstance.objects.filter(playlist=self.playlist).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+            
+    def test_reset_order(self):
+        print '\n***** test_reset_order *****'
+        order_to_reset = 2
+        print 'reset order for song with order=%d' % order_to_reset
+        s = SongInstance.objects.filter(playlist=self.playlist).order_by('order')[order_to_reset]
+        s.order = None
+        s.save()
+
+        songs = SongInstance.objects.filter(playlist=self.playlist, order__isnull=False).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+            
+    def test_delete(self):
+        print '\n***** test_delete *****'
+        order_to_delete = 2
+        print 'delete song with order=%d' % order_to_delete
+        s = SongInstance.objects.filter(playlist=self.playlist).order_by('order')[order_to_delete]
+        s.delete()
+        
+        songs = SongInstance.objects.filter(playlist=self.playlist, order__isnull=False).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+            
+    def test_move_up(self):
+        print '\n***** test_move_up *****'
+        old_order = 2
+        new_order = 6
+        print 'move song with order=%d to order=%d' % (old_order, new_order)
+        s = SongInstance.objects.get(playlist=self.playlist, order=old_order)
+        s.order = new_order
+        s.save()
+        
+        songs = SongInstance.objects.filter(playlist=self.playlist, order__isnull=False).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+            
+    def test_move_down(self):
+        print '\n***** test_move_down *****'
+        old_order = 6
+        new_order = 2
+        print 'move song with order=%d to order=%d' % (old_order, new_order)
+        s = SongInstance.objects.get(playlist=self.playlist, order=old_order)
+        s.order = new_order
+        s.save()
+        
+        songs = SongInstance.objects.filter(playlist=self.playlist, order__isnull=False).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+            
+    def test_multi(self):
+        print '\n***** test_multi *****'
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=2)
+        s.order = 5
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=8)
+        s.order = 1
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=0)
+        s.order = 2
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=3)
+        s.order = 4
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=9)
+        s.order = None
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=7)
+        s.order = 4
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=6)
+        s.order = 2
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=1)
+        s.order = 4
+        s.save()
+        
+        y = YasoundSong(name='test song', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
+        song_instance.order = 3
+        song_instance.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=6)
+        s.order = 0
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=2)
+        s.order = None
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=4)
+        s.delete()
+        
+        y = YasoundSong(name='test song 2', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
+        song_instance.order = 8
+        song_instance.save()
+        
+        y = YasoundSong(name='test song 3', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
+        song_instance.order = 5
+        song_instance.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=3)
+        s.order = 2
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=2)
+        s.order = 7
+        s.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=2)
+        s.order = 20 # too high, will be clipped
+        s.save()
+        
+        y = YasoundSong(name='test song 4', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
+        y.save()
+        song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
+        song_instance.order = 30 # too high
+        song_instance.save()
+        
+        s = SongInstance.objects.get(playlist=self.playlist, order=1)
+        s.order = 9
+        s.save()
+        
+        songs = SongInstance.objects.filter(playlist=self.playlist, order__isnull=False).order_by('order')
+        order = 0
+        for s in songs:
+            print s.order, s.metadata.name
+            self.assertEqual(s.order, order)
+            order += 1
+        
         
