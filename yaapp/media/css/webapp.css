@@ -1002,7 +1002,7 @@ input::-webkit-input-placeholder {
 #webapp-container {
     margin-top: 158px;
 	min-height:822px;
-	margin-bottom:158px;
+	margin-bottom:16px;
 }
 
 /**
