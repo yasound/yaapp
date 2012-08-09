@@ -81,6 +81,21 @@ def create_show(request, radio_uuid):
     return HttpResponse(res)
 
 @check_api_key(methods=['GET'], login_required=True)
+def duplicate_show(request, show_id):
+    m = ShowManager()
+    s = m.get_show(show_id)
+    
+    if s is None:
+        return HttpResponseNotFound()
+    creator = Playlist.objects.get(id=s['playlist_id']).radio.creator
+    if creator != request.user:
+        return HttpResponseNotFound()
+    
+    show_copy = m.duplicate_show(show_id)
+    res = json.dumps(show_copy, cls=MongoAwareEncoder)
+    return HttpResponse(res)
+
+@check_api_key(methods=['GET'], login_required=True)
 def get_songs_for_show(request, show_id):
     m = ShowManager()
     show = m.get_show(show_id)

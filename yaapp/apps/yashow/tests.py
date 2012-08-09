@@ -146,6 +146,36 @@ class ShowTest(TestCase):
         self.manager.delete_show(show1['_id'])
         self.assertEqual(self.manager.shows.find().count(), 1)
         
+    def test_duplicate_show(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+            
+        radio = Radio(creator=user)
+        radio.save()
+        
+        nb_songs = 10
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+        
+        yasound_songs = YasoundSong.objects.all()[:nb_songs]
+        
+        show_original = self.manager.create_show('my first show', radio, self.manager.MONDAY, datetime.now().time(), yasound_songs=yasound_songs)
+        self.assertIsNotNone(show_original)
+        
+        show_copy = self.manager.duplicate_show(show_original['_id'])
+        self.assertIsNotNone(show_copy)
+        self.assertEqual(self.manager.nb_shows_for_radio(radio.id), 2)
+        self.assertEqual(show_copy['name'], show_original['name'])
+        self.assertEqual(show_copy['day'], show_original['day'])
+        self.assertEqual(show_copy['time'], show_original['time'])
+        self.assertEqual(show_copy['random_play'], show_original['random_play'])
+        self.assertEqual(len(self.manager.songs_for_show(show_copy['_id'])), len(self.manager.songs_for_show(show_original['_id'])))
+        
     def test_get_songs(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
@@ -332,6 +362,26 @@ class ViewsTest(TestCase):
         self.assertEqual(s['day'], data['day'])
         self.assertEqual(s['name'], data['name'])
         self.assertEqual(s['random_play'], data['random_play'])
+        
+    def test_duplicate_show(self):
+        show = self.manager.create_show('my first show', self.radio, self.manager.MONDAY, datetime.now().time())
+        show_id = show['_id']
+        
+        c = Client()
+        response = c.get('/api/v1/show/%s/duplicate/' % show_id, {'username':self.user.username, 'api_key':self.api_key.key})
+        self.assertEqual(response.status_code, 200)
+        
+        s = json.loads(response.content)
+        
+        # be sure it's another show
+        self.assertNotEqual(show['_id'], s['_id'])
+        self.assertNotEqual(show['playlist_id'], s['playlist_id'])
+        
+        # but with same settings
+        self.assertEqual(show['name'], s['name'])
+        self.assertEqual(show['day'], s['day'])
+        self.assertEqual(show['time'], s['time'])
+        self.assertEqual(show['random_play'], s['random_play'])
         
     def test_get_songs(self):
         nb_songs = 10
