@@ -6,6 +6,12 @@ import datetime
 from bson.objectid import ObjectId
 from pymongo import ASCENDING
 
+def time_string_from_date_string(date_str):
+    tokens = date_str.split('T')
+    if len(tokens) == 1:
+        return date_str
+    return tokens[1]
+
 class ShowManager():
     MONDAY = 'MON'
     TUESDAY = 'TUE'
@@ -36,11 +42,15 @@ class ShowManager():
         
         playlist = Playlist.objects.create(radio=radio, name=name)
         
-        for y_song in yasound_songs:
-            _song_instance = SongInstance.objects.create_from_yasound_song(playlist=playlist, yasound_song=y_song)
+        for index, y_song in enumerate(yasound_songs):
+            song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist=playlist, yasound_song=y_song)
+            song_instance.order = index
+            song_instance.save()
         
         if type(time) == datetime.time:
             time = time.isoformat()
+        elif isinstance(time, str) or isinstance(time, unicode):
+            time = time_string_from_date_string(time)
         
         show_doc = {'name': name,
                     'playlist_id': playlist.id,
@@ -82,6 +92,9 @@ class ShowManager():
         show_id = show_data.get('_id', None)
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
             show_data['_id'] = ObjectId(show_id)
+        time = show_data['time']
+        if time and (isinstance(time, str) or isinstance(time, unicode)):
+            show_data['time'] = time_string_from_date_string(time)
         self.shows.update({'_id':show_data['_id']}, show_data, safe=True)
         return self.get_show(show_id)
     
@@ -113,7 +126,7 @@ class ShowManager():
     def songs_for_show(self, show_id, count=None, skip=0):
         s = self.get_show(show_id)
         playlist_id = s['playlist_id']
-        songs = SongInstance.objects.filter(playlist__id=playlist_id).order_by('id')
+        songs = SongInstance.objects.filter(playlist__id=playlist_id).order_by('order', 'id')
         if count is not None:
             songs = songs[skip:skip+count]
         else:
@@ -129,7 +142,10 @@ class ShowManager():
             y = YasoundSong.objects.get(id=yasound_song_id)
         except:
             return False
-        _song_instance = SongInstance.objects.create_from_yasound_song(playlist=p, yasound_song=y)
+        song_count = SongInstance.objects.filter(playlist=p).count()
+        song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist=p, yasound_song=y)
+        song_instance.order = song_count
+        song_instance.save()
         return True
     
     def remove_song(self, song_instance_id):
@@ -140,7 +156,3 @@ class ShowManager():
         return True
             
         
-                                                       
-                                                       
-                                                       
-                                                       

@@ -31,6 +31,7 @@ import uuid
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from django.db.models import F
 
 if yaapp_settings.ENABLE_PUSH:
     from push import install_handlers
@@ -100,7 +101,7 @@ class SongInstanceManager(models.Manager):
                                     album_name=yasound_song.album_name,
                                     yasound_song_id=yasound_song.id)
             metadata.save()
-        SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata)
+        return SongInstance.objects.get_or_create(playlist=playlist, metadata=metadata)
 
     def get_current_song_json(self, radio_id):
         song_json = cache.get('radio_%s.current_song.json' % (str(radio_id)), None)
@@ -168,7 +169,7 @@ class SongInstance(models.Model):
     yasound_score = models.FloatField(default=0)
     metadata = models.ForeignKey(SongMetadata)
     users = models.ManyToManyField(User, through='SongUser', blank=True, null=True)
-    order = models.IntegerField(null=True, blank=True) # song index in the playlist
+    order = models.IntegerField(null=True, blank=True) # when it's changed, order for other songs from the playlist is updated
     need_sync = models.BooleanField(default=False)
     frequency = models.FloatField(default=0.5)
     enabled = models.BooleanField(default=True)
@@ -258,6 +259,38 @@ class SongInstance(models.Model):
                                                  enabled=self.enabled)
         return new_song
 
+    def save(self, *args, **kwargs):
+        old_order = None
+        new_order = self.order
+        if self.pk:
+            old_order = SongInstance.objects.get(pk=self.pk).order
+            
+        # be sure to have order value in the good range 
+        if new_order is not None:
+            nb_songs_with_order = SongInstance.objects.filter(playlist=self.playlist, order__isnull=False).count()
+            if old_order is None:
+                max_new_order = nb_songs_with_order
+            else:
+                max_new_order = nb_songs_with_order - 1
+            new_order = min(max_new_order, new_order)
+            new_order = max(0, new_order)
+            self.order = new_order
+        super(SongInstance, self).save(*args, **kwargs)
+        
+        if new_order == old_order:
+            return;
+        p = self.playlist
+        if new_order is not None and old_order is None: # insertion
+            SongInstance.objects.filter(playlist=p, order__gte=new_order, order__isnull=False).exclude(id=self.id).update(order=F('order') + 1) # increment order
+        elif new_order is None and old_order is not None: # order set to None
+            SongInstance.objects.filter(playlist=p, order__gt=old_order, order__isnull=False).exclude(id=self.id).update(order=F('order') - 1) # decrement order
+        elif new_order is not None and old_order is not None: # new_order and old_order not None
+            if new_order > old_order:
+                SongInstance.objects.filter(playlist=p, order__gt=old_order, order__lte=new_order, order__isnull=False).exclude(id=self.id).update(order=F('order') - 1) # decrement
+            elif old_order > new_order:
+                SongInstance.objects.filter(playlist=p, order__gte=new_order, order__lt=old_order, order__isnull=False).exclude(id=self.id).update(order=F('order') + 1) # increment
+    
+
 def song_instance_deleted(sender, instance, created=None, **kwargs):
     """
     when a song instance is deleted, we must be sure that
@@ -276,6 +309,10 @@ def song_instance_deleted(sender, instance, created=None, **kwargs):
             radio.clear_current_song_json_cache()
     except:
         logger.error('no radio or playlist for song instance %s' % (song_instance.id))
+        
+    if song_instance.order is not None:
+        # decrement order for song instances with order greater than this song
+        SongInstance.objects.filter(playlist=song_instance.playlist, order__gt=song_instance.order).update(order=F('order') - 1)
 
          
 class SongUserManager(models.Manager):
