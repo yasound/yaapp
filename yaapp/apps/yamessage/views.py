@@ -37,12 +37,7 @@ def get_notification(request, notif_id):
 
 @check_api_key(methods=['PUT'])
 def update_notification(request, notif_id):
-    if len(request.POST.keys()) > 1: # for the tests in yamessage.test.py
-        data = {}
-        for k in request.POST:
-            data[k] = request.POST.get(k)
-    else:
-        data = json.loads(request.raw_post_data)
+    data = json.loads(request.raw_post_data)
     m = NotificationsManager()
     if not data.has_key('dest_user_id') or int(data['dest_user_id']) != request.user.id:
         return HttpResponseNotFound()
