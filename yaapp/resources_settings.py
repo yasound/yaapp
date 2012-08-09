@@ -102,6 +102,8 @@ PIPELINE_JS = {
             'js/app/users/models.js',
             'js/app/programming/views.js',
             'js/app/programming/models.js',
+            'js/app/signup/models.js',
+            'js/app/signup/views.js',
             'js/app/home/views.js',
             'js/app/home/models.js',
             'js/app/static/views.js',

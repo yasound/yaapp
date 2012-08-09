@@ -99,6 +99,7 @@ $(document).ready(function () {
             "programming/": "programming",
             "legal/": "legal",
             "contact/": "contact",
+            "signup/": "signup",
             "*args": "index"
         },
 
@@ -351,6 +352,14 @@ $(document).ready(function () {
             this.clearView();
             
             this.currentView = new Yasound.Views.Static.ContactPage({
+                el: '#webapp-content'
+            }).render();
+        },
+
+        signup: function() {
+            this.clearView();
+            
+            this.currentView = new Yasound.Views.SignupPage({
                 el: '#webapp-content'
             }).render();
         }
