@@ -89,6 +89,26 @@ class ShowManager():
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
             show_id = ObjectId(show_id)
         self.shows.remove({'_id': show_id})
+        
+    def duplicate_show(self, show_id):
+        show_original = self.get_show(show_id)
+        if show_original is None:
+            return None
+        
+        radio = Playlist.objects.get(id=show_original['playlist_id']).radio
+        day = show_original['day']
+        time = show_original['time']
+        random = show_original['random_play']
+        name = show_original['name']
+        yasound_songs = []
+        songs_original = self.songs_for_show(show_id)
+        for s in songs_original:
+            yasound_song_id = s.metadata.yasound_song_id
+            y = YasoundSong.objects.get(id=yasound_song_id)
+            yasound_songs.append(y)
+        
+        show_copy = self.create_show(name, radio, day, time, random, yasound_songs)
+        return show_copy
     
     def songs_for_show(self, show_id, count=None, skip=0):
         s = self.get_show(show_id)

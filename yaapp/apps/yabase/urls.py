@@ -17,6 +17,7 @@ urlpatterns = patterns('yabase.views',
     url(r'^app/programming/$', WebAppView.as_view(), {'page': 'programming'}, name='webapp_programming'),
     url(r'^app/legal/$', WebAppView.as_view(), {'page': 'legal'}, name='webapp_legal'),
     url(r'^app/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_contact'),
+    url(r'^app/signup/$', WebAppView.as_view(), {'page': 'signup'}, name='webapp_signup'),
     url(r'^app/users/$', WebAppView.as_view(), {'page': 'users'}, name='webapp_users'),
     url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
 
