@@ -44,6 +44,7 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
     },
     onGenreChanged: function(e, genre) {
         this.collection.params.genre = genre;
-        this.collection.fetch();
+        this.resultsView.clear();
+        this.collection.goTo(0);
     }
 });

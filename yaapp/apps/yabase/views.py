@@ -1317,6 +1317,8 @@ def most_active_radios(request):
     radio_data = []
     for i in radio_info:
         r = Radio.objects.get(id=i['db_id'])
+        if genre and r.genre != genre:
+            continue
         radio_data.append(r.as_dict(request_user=request.user))
     response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
     return response
