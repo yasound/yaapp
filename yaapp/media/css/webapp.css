@@ -1004,8 +1004,6 @@ input::-webkit-input-placeholder {
 	height:149px;
 	margin-bottom:0px;
     background-color: black;
-	position:absolute;
-	bottom:0px;
 }
 
 .blocks {
