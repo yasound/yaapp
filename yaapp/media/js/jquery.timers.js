@@ -1,3 +1,5 @@
+(function($) {
+
 jQuery.fn.extend({
 	everyTime: function(interval, label, fn, times, belay) {
 		return this.each(function() {
@@ -139,4 +141,4 @@ if (jQuery.browser.msie)
 		}
 	});
 
-
+})(jQuery);
