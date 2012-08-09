@@ -350,7 +350,9 @@ class TestNotifications(TestCase):
             n = json.loads(response.content)
             n['read'] = True
             
-            response = c.put('/api/v1/update_notification/%s/?username=%s&api_key=%s' % (notif_id, user.username, api_key.key), n)
+            json_n = json.dumps(n)
+            
+            response = c.put('/api/v1/update_notification/%s/?username=%s&api_key=%s' % (notif_id, user.username, api_key.key), json_n, content_type="application/json")
             self.assertEqual(response.status_code, 200)
             
             data = json.loads(response.content)
