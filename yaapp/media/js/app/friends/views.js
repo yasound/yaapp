@@ -119,11 +119,9 @@ Yasound.Views.UserFriendsPage = Backbone.View.extend({
         this.reset();
         this.collection.perPage = Yasound.Utils.userCellsPerPage();
         this.collection.setUsername(username);
-        
 
         this.username = this.collection.username;
         $(this.el).html(ich.userFriendsPageTemplate());
-        
         this.resultsView = new Yasound.Views.Friends({
             collection: this.collection,
             el: $('#results', this.el)
