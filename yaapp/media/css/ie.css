@@ -2,3 +2,9 @@
     display: inline;
 }
 
+
+.radio-cell .mask {
+	filter:alpha(opacity=80); 
+	background-color:black;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}

@@ -99,6 +99,7 @@ $(document).ready(function () {
             "programming/": "programming",
             "legal/": "legal",
             "contact/": "contact",
+            "signup/": "signup",
             "*args": "index"
         },
 
@@ -353,18 +354,38 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.Static.ContactPage({
                 el: '#webapp-content'
             }).render();
+        },
+
+        signup: function() {
+            this.clearView();
+            
+            this.currentView = new Yasound.Views.SignupPage({
+                el: '#webapp-content'
+            }).render();
         }
     });
 
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
-
-    soundManager.onready(function () {
-        Backbone.history.start({
-            pushState: true,
-            root: '/app/',
-            silent: false
+    
+    if ($.browser.msie) {
+        if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+            Yasound.App.enableFX = false;
+            Backbone.history.start({
+                pushState: true,
+                root: '/app/',
+                silent: false
+            });
+        }
+    } else {
+        Yasound.App.enableFX = true;
+        soundManager.onready(function () {
+            Backbone.history.start({
+                pushState: true,
+                root: '/app/',
+                silent: false
+            });
         });
-    });
+    }
 
 });

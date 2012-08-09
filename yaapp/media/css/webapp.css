@@ -322,6 +322,19 @@ body {
 	text-decoration:none;
 }
 
+#profile-picture a {
+	display:block;
+	width:28px;
+	height:28px;
+    border:2px solid white;
+    border-radius:50%;
+}
+
+#profile-picture a img {
+	border:none;
+	border-radius:50%;
+}
+
 /*
 .notification {
     width:38px;
@@ -1004,8 +1017,6 @@ input::-webkit-input-placeholder {
 	height:149px;
 	margin-bottom:0px;
     background-color: black;
-	position:absolute;
-	bottom:0px;
 }
 
 .blocks {
