@@ -109,6 +109,7 @@ PIPELINE_JS = {
             'js/app/templateLoader.js',
             'js/app/push.js',
             'js/app/utils.js',
+            'js/app/error.js',
             'js/app/app.js',
         ]
     }

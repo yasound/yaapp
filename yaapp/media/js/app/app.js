@@ -149,6 +149,7 @@ $(document).ready(function () {
         buildCommonContext: function (selectedMenu) {
             if (!this.commonContext) {
                 this.commonContext = {};
+                this.commonContext.errorHandler = new Yasound.App.ErrorHandler().render();
                 this.commonContext.streamFunction = function (model, stream_url) {
                     if (!(typeof Yasound.App.MySound === "undefined")) {
                         Yasound.App.MySound.destruct();
