@@ -15,6 +15,7 @@ from django.test import Client
 from tastypie.models import ApiKey
 import json
 from yacore.api import MongoAwareEncoder
+from django.test.client import CONTENT_TYPE_RE
 
 class ShowTest(TestCase):
     def setUp(self):
@@ -306,7 +307,8 @@ class ViewsTest(TestCase):
         new_day = self.manager.SUNDAY
         s['day'] = new_day
         
-        response = c.put('/api/v1/show/%s/?username=%s&api_key=%s' % (s['_id'], self.user.username, self.api_key.key), s)
+        json_s = json.dumps(s)
+        response = c.put('/api/v1/show/%s/?username=%s&api_key=%s' % (s['_id'], self.user.username, self.api_key.key), json_s, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         s = json.loads(response.content)
         self.assertEqual(s['day'], new_day)

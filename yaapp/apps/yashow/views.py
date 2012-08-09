@@ -46,12 +46,7 @@ def show(request, show_id):
         return HttpResponse(res)
     
     elif request.method == 'PUT':
-        if len(request.POST.keys()) > 1: # for the tests in yashow.test.py
-            data = {}
-            for k in request.POST:
-                data[k] = request.POST.get(k)
-        else:
-            data = json.loads(request.raw_post_data)
+        data = json.loads(request.raw_post_data)
         if not data.has_key('playlist_id'):
             return HttpResponseNotFound()
         playlist_id = data['playlist_id']
