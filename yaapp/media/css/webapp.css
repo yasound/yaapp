@@ -1606,7 +1606,9 @@ ul#notifications .read {
  */
 
 .notification-container h1 {
-    height:104px;
+    padding-top:37px;
+    padding-left:31px;
+    height:67px;
     border-radius:6px 6px 0px 0px;
     box-shadow:0px -1px 5px #e2e2e2;
     background-color:white;
