@@ -31,7 +31,11 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         if (data.name.length > 18) {
             data.name = data.name.substring(0,18) + "...";
         }
-        $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
+        if (Yasound.App.enableFX) {
+            $(this.el).hide().html(ich.radioCellTemplate(data)).fadeIn(200);
+        } else {
+            $(this.el).html(ich.radioCellTemplate(data));
+        }
         
         this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
@@ -42,11 +46,20 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         } 
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
-            $("li .mask", $(this.el).parent()).fadeOut(300);
+            if (Yasound.App.enableFX) {
+                $("li .mask", $(this.el).parent()).fadeOut(300);
+            } else {
+                $("li .mask", $(this.el).parent()).hide();
+            }
             this.currentSongModel.fetch()
             
-            mask.removeClass('hidden').fadeIn(300);
-            $('.radio-border', this.el).fadeIn(300);
+            if (Yasound.App.enableFX) {
+                mask.removeClass('hidden').fadeIn(300);
+                $('.radio-border', this.el).fadeIn(300);
+            } else {
+                mask.removeClass('hidden').show();
+                $('.radio-border', this.el).show();
+            }
         }
     },
     onLeave: function (e) {
@@ -54,8 +67,13 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             return;
         } 
         var mask = $('.mask', this.el);
-        mask.fadeOut(300);
-        $('.radio-border', this.el).fadeOut(300);
+        if (Yasound.App.enableFX) {
+            mask.fadeOut(300);
+            $('.radio-border', this.el).fadeOut(300);
+        } else {
+            mask.hide();
+            $('.radio-border', this.el).hide();
+        }
 
     },
 	onRadio: function (e) {
@@ -195,7 +213,6 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         }
     },
     render: function() {
-        $('#profile-picture a img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
     },
     
