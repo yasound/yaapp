@@ -1622,6 +1622,11 @@ var io = ('undefined' === typeof module ? {} : module.exports);
       script.src = url + '&jsonp=' + io.j.length;
       insertAt.parentNode.insertBefore(script, insertAt);
 
+      // jbl added
+      script.onerror = function() {
+          self.onError();
+      };
+      
       io.j.push(function (data) {
         complete(data);
         script.parentNode.removeChild(script);
