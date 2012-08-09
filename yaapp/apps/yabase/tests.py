@@ -1488,14 +1488,6 @@ class TestSongInstanceOrder(TestCase):
         s.order = 5
         s.save()
         
-        s = SongInstance.objects.get(playlist=self.playlist, order=8)
-        s.order = 1
-        s.save()
-        
-        s = SongInstance.objects.get(playlist=self.playlist, order=0)
-        s.order = 2
-        s.save()
-        
         s = SongInstance.objects.get(playlist=self.playlist, order=3)
         s.order = 4
         s.save()
@@ -1539,16 +1531,6 @@ class TestSongInstanceOrder(TestCase):
         song_instance.order = 8
         song_instance.save()
         
-        y = YasoundSong(name='test song 3', artist_name='test artist', album_name='test album', filename='nofile', filesize=0, duration=60)
-        y.save()
-        song_instance, _created = SongInstance.objects.create_from_yasound_song(self.playlist, y)  
-        song_instance.order = 5
-        song_instance.save()
-        
-        s = SongInstance.objects.get(playlist=self.playlist, order=3)
-        s.order = 2
-        s.save()
-        
         s = SongInstance.objects.get(playlist=self.playlist, order=2)
         s.order = 7
         s.save()
@@ -1573,5 +1555,20 @@ class TestSongInstanceOrder(TestCase):
             print s.order, s.metadata.name
             self.assertEqual(s.order, order)
             order += 1
+        
+    def test_edit_order_view(self):
+        old_order = 3
+        new_order = 5
+        song = SongInstance.objects.get(playlist=self.playlist, order=old_order)
+        s = {
+             'id': song.id,
+             'order': new_order
+             }
+        json_s = json.dumps(s)
+        response = self.client.put('/api/v1/edit_song/%d/?username=%s&api_key=%s' % (song.id, self.user.username, self.user.api_key.key), json_s, content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+        
+        song = SongInstance.objects.get(id=song.id)
+        self.assertEqual(song.order, new_order)
         
         
