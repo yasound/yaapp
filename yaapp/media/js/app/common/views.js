@@ -627,7 +627,6 @@ Yasound.Views.ConnectedUserCell = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).hide().html(ich.connectedUserTemplate(data)).fadeIn(200);
         $('a', this.el).tooltip({title: data.name});
-        $('img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         return this;
     },
     onUser: function (e) {

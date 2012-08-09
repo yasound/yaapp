@@ -1080,6 +1080,7 @@ input::-webkit-input-placeholder {
 	position:relative;
 }
 
+
 #text-users {
     display:inline-block;
     float:left;
@@ -1102,6 +1103,18 @@ input::-webkit-input-placeholder {
 
 #img-users .individual-pictures {
     margin:0px;
+}
+
+#img-users a.user {
+	display:inline-block;
+	width:34px;
+	height:34px;
+	border-radius: 50%;
+	border:2px solid white;
+}
+
+#img-users img {
+	border-radius: 50%;
 }
 
 #footer-button {
