@@ -46,7 +46,8 @@ class SongInstanceResource(ModelResource):
                   'metadata',
                   'need_sync',
                   'likes',
-                  'dislikes']
+                  'dislikes',
+                  'order',]
         include_resource_uri = False
         filtering = {
             'playlist': ALL,
@@ -861,6 +862,7 @@ class EditSongResource(ModelResource):
         fields = ['id',
                   'frequency',
                   'enabled',
+                  'order'
                   ]
         include_resource_uri = False
         authorization= Authorization()
