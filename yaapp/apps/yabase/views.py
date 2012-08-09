@@ -245,8 +245,8 @@ def favorite_radio(request, radio_id):
     
     yabase_signals.favorite_radio.send(sender=radio, radio=radio, user=request.user)
     
-    res = '%s (user) has %s (radio) as favorite\n' % (request.user, radio)
-    return HttpResponse(res)
+    res = {'success': True}
+    return HttpResponse(json.dumps(res))
 
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
@@ -262,8 +262,8 @@ def not_favorite_radio(request, radio_id):
     
     yabase_signals.not_favorite_radio.send(sender=radio, radio=radio, user=request.user)
 
-    res = '%s (user) has not %s (radio) as favorite anymore\n' % (request.user, radio)
-    return HttpResponse(res)
+    res = {'success': True}
+    return HttpResponse(json.dumps(res))
 
 @csrf_exempt
 @check_api_key(methods=['POST',])
