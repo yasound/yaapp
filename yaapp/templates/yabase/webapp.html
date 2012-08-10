@@ -304,18 +304,19 @@
 		                  <a class='float-left' href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a>
                       <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>  
                       <a class='float-left' href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
+                      <div id='login-box-container'>
+                        <a id='login-btn-facebook' href="#"><img src="/media/app/images/Login/login-icon-facebook.png"><span>Connexion avec Facebook</span></a>
+                        <a id='login-btn-twitter' href="#"><img src="/media/app/images/Login/login-icon-twitter.png"><span>Connexion avec Twitter</span></a>
+                        <div class='login-separation-line'></div>
+                        <form>
+                          <span>Connnexion classique par email</span>
+                          <input type='text'/>
+                          <input type='password'/>
+                          <input id='login-btn-connection' type='submit' value='Connexion'/>
+                        </form>
+                        <a class="login-psw-lost" href="#">Forgot password</a>
+                      </div>
 		                </div>
-                    <div>
-                      <a href="#"></a>
-                      <a href="#"></a>
-                      <div class='login-separation-line'></div>
-                      <form>
-                        <input>
-                        <input>
-                        <input>
-                      </form>
-                      <a class="login-psw-lost" href="#"></a>
-                    </div>
 		                {% endif %}
 	                </div>
                 </div>
