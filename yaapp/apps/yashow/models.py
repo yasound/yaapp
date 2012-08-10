@@ -6,6 +6,12 @@ import datetime
 from bson.objectid import ObjectId
 from pymongo import ASCENDING
 
+def time_string_from_date_string(date_str):
+    tokens = date_str.split('T')
+    if len(tokens) == 1:
+        return date_str
+    return tokens[1]
+
 class ShowManager():
     MONDAY = 'MON'
     TUESDAY = 'TUE'
@@ -43,6 +49,8 @@ class ShowManager():
         
         if type(time) == datetime.time:
             time = time.isoformat()
+        elif isinstance(time, str) or isinstance(time, unicode):
+            time = time_string_from_date_string(time)
         
         show_doc = {'name': name,
                     'playlist_id': playlist.id,
@@ -84,6 +92,9 @@ class ShowManager():
         show_id = show_data.get('_id', None)
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
             show_data['_id'] = ObjectId(show_id)
+        time = show_data['time']
+        if time and (isinstance(time, str) or isinstance(time, unicode)):
+            show_data['time'] = time_string_from_date_string(time)
         self.shows.update({'_id':show_data['_id']}, show_data, safe=True)
         return self.get_show(show_id)
     
@@ -145,7 +156,3 @@ class ShowManager():
         return True
             
         
-                                                       
-                                                       
-                                                       
-                                                       

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-09 10:52+0200\n"
+"POT-Creation-Date: 2012-08-10 11:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,7 @@ msgstr "Se déconnecter"
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
 #: templates/yabase/webapp.html:305
+#: templates/yabase/app/signup/signup.mustache:41
 msgid "Login"
 msgstr "Se connecter"
 
@@ -1177,6 +1178,77 @@ msgstr "Associer mon compte facebook"
 #: templates/yabase/app/settings/settingsPage.mustache:77
 msgid "Associate my twitter account"
 msgstr "Associer mon compte twitter"
+
+#: templates/yabase/app/signup/signup.mustache:6
+#: templates/yabase/app/signup/signup.mustache:49
+msgid "Create your Yasound account"
+msgstr "Création de votre compte Yasound"
+
+#: templates/yabase/app/signup/signup.mustache:7
+msgid "Quick registration with Facebook or Twitter"
+msgstr "Enregistrement rapide avec Facebook ou Twitter"
+
+#: templates/yabase/app/signup/signup.mustache:10
+msgid "Quick registration with Facebook"
+msgstr "Inscription rapide avec Facebook"
+
+#: templates/yabase/app/signup/signup.mustache:13
+msgid "Quick registration with Twitter"
+msgstr "Inscription rapide avec Twitter"
+
+#: templates/yabase/app/signup/signup.mustache:17
+msgid "Email registration"
+msgstr "Inscription par email"
+
+#: templates/yabase/app/signup/signup.mustache:20
+msgid "Choose a user name"
+msgstr "Choisissez un nom d'utilisateur"
+
+#: templates/yabase/app/signup/signup.mustache:21
+msgid "Email"
+msgstr "Email"
+
+#: templates/yabase/app/signup/signup.mustache:22
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/yabase/app/signup/signup.mustache:23
+msgid "Confirm password"
+msgstr "Mot de passe (à nouveau)"
+
+#: templates/yabase/app/signup/signup.mustache:24
+msgid "Register my account"
+msgstr "Enregistrer mon compte"
+
+#: templates/yabase/app/signup/signup.mustache:33
+msgid "Thank you for registering at Yasound"
+msgstr "Merci pour votre inscription sur Yasound"
+
+#: templates/yabase/app/signup/signup.mustache:36
+msgid ""
+"An email has been sent to confirm your registration.\n"
+"        "
+msgstr "Un email a été envoyé afin de confirmer votre compte.\n"
+"        "
+
+#: templates/yabase/app/signup/signup.mustache:51
+msgid "You are currently logged as"
+msgstr "Vous êtes actuellement connecté sous"
+
+#: templates/yabase/app/signup/signup.mustache:53
+#, python-format
+msgid ""
+"\n"
+"        <p class='lead'>\n"
+"            <a href='%(logout_url)s/?next=/app/signup/'>Logout</a> to switch "
+"user.\n"
+"        </p>\n"
+"        "
+msgstr "\n"
+"        <p class='lead'>\n"
+"            <a href='%(logout_url)s/?next=/app/signup/'>Se déconnecter</a> pour changer d'utilisateur.\n"
+"        </p>\n"
+"        "
 
 #: templates/yabase/app/users/usersPage.mustache:3
 msgid "Connected users near your location"

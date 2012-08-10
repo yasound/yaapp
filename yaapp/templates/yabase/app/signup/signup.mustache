@@ -1,12 +1,61 @@
-{% load i18n %} 
-<div class='row>
-    <div class='span12'>
-        <h2>{% trans "Signup" %}</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In molestie lorem augue. Etiam lectus sapien, vehicula vitae eleifend in, adipiscing et odio. Integer ut eros id velit laoreet pulvinar. Duis libero dolor, volutpat a pulvinar nec, viverra in dui. Quisque ullamcorper scelerisque venenatis. Ut mollis libero eget neque consectetur vestibulum. Vestibulum non nunc libero, non facilisis ipsum.
-        Nunc orci orci, accumsan eget convallis fringilla, dignissim eget orci. Pellentesque nulla odio, vulputate in luctus eget, fermentum eget neque. Nulla tortor odio, lacinia semper mattis sed, aliquet et lorem. Cras iaculis metus id purus volutpat a sagittis mi mattis. Donec suscipit tempus ante, nec commodo arcu pellentesque at. Nunc in dolor enim, sit amet eleifend nulla. Donec rutrum, eros et facilisis condimentum, libero odio aliquam ipsum, vel venenatis purus quam non odio. Donec mollis consectetur nibh, vitae dignissim lectus iaculis eget. Integer iaculis tempor adipiscing. Vivamus tortor lectus, interdum eu lobortis id, vehicula nec nunc. Nam nisi libero, sagittis at cursus vitae, tempus sit amet neque.
-        Cras nibh tellus, pharetra elementum vehicula a, vestibulum quis est. In hac habitasse platea dictumst. Praesent sed dui at justo vestibulum rhoncus vitae tempus lorem. Curabitur et dolor felis. Vestibulum dignissim tellus in turpis faucibus nec mollis magna elementum. Sed commodo, arcu sed commodo vestibulum, mi arcu ultrices sem, id vestibulum dui enim a erat. Mauris non metus nibh, nec fermentum nibh. Sed ultrices tempor lobortis. Donec metus tortor, tincidunt eu tempus nec, lacinia id mauris. Aenean convallis ultricies lectus, ultricies commodo dolor posuere in. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl urna, malesuada in eleifend sed, placerat non metus.
-        Proin lorem mi, aliquam non mattis id, scelerisque sed libero. Cras porttitor varius mi, at ornare tortor faucibus vitae. Donec lacinia feugiat ipsum a fermentum. Mauris semper elementum fermentum. Aliquam ut urna ipsum, quis pharetra enim. Praesent tempor dictum magna in consectetur. In sollicitudin sagittis mauris at lobortis. Etiam aliquet odio egestas turpis aliquet ornare. Etiam nunc enim, iaculis quis iaculis a, pharetra fringilla dolor. Aenean sed nibh vitae justo porta condimentum. Sed vitae arcu enim, non tincidunt tellus. Proin tempor nisi id libero sollicitudin blandit. Duis quis scelerisque diam. Nunc posuere, augue ut molestie feugiat, velit urna suscipit dolor, ultricies faucibus nibh orci eget purus. Nam urna elit, imperdiet vel dapibus vel, fringilla et eros.
-        Aenean metus ipsum, vehicula vitae sodales eget, volutpat eu mauris. Nam lobortis porta leo tincidunt molestie. Mauris dignissim accumsan arcu eu cursus. In elit sapien, auctor et gravida sed, cursus eu dui. Integer vitae convallis leo. Donec vehicula lobortis mi nec tempus. Quisque volutpat faucibus dui, non imperdiet erat fringilla eget. Quisque ut turpis et tortor feugiat semper non eget justo. Quisque consectetur pellentesque enim, vel tincidunt ligula sollicitudin sed. Nam sit amet erat mi, sed aliquam leo. Nulla auctor lacinia lacus nec tincidunt. Nullam feugiat ornare risus non ultrices. Maecenas quis eleifend tortor. 
-    </p>
+{% load i18n %}
+
+{% if request.user.is_anonymous %}
+<div class='row'>
+    <div class='span12 signup-container'>
+        <h2>{% trans "Create your Yasound account" %}</h2>
+        <h3>{% trans 'Quick registration with Facebook or Twitter' %}</h3>
+        <div class='signup-btns'>
+            <div class="signup-btn-fbk">
+    		    	<a href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/SignUp/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+    	    </div>
+    	    <div class="signup-btn-twitter">
+    		    	<a href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/SignUp/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+    	    </div>
+	    </div>
+		<div id="signup-separation-line">&nbsp;</div>
+        <h3>{% trans 'Email registration' %}</h3>
+	    <form id='signup-form' method='post'>{% csrf_token %}
+	        <div id="signup-input">
+	        	<input placeholder="{% trans 'Choose a user name' %}" required="required" type="text" name="username">
+	        	<input placeholder="{% trans 'Email' %}" type="email" required="required" class="right-input" name="email">
+	        	<input placeholder="{% trans 'Password' %}"class="bottom-input" required="required" type="password" name="password1">
+	        	<input placeholder="{% trans 'Confirm password' %}" class="right-input bottom-input" required="required" type="password" name="password2">
+	        	<input id="signup-save-btn" type="submit" value="{% trans 'Register my account' %}" />
+	        </div>
+	    </form>
     </div>
-</div>    
+</div>
+
+<div class="modal hide fade" id="modal-after-signup">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Thank you for registering at Yasound" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% blocktrans %}An email has been sent to confirm your registration.
+        {% endblocktrans %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Login" %}</a>
+    </div>
+</div>
+
+
+{% else %}
+<div class='row'>
+    <div class='span12'>
+        <h2>{% trans "Create your Yasound account" %}</h2>
+
+        <p class='lead'>{% trans "You are currently logged as" %} <a href='{% url webapp_profile request.user.username %}'>{{ request.user.get_profile }}</a></p>
+        {% url logout as logout_url %}
+        {% blocktrans %}
+        <p class='lead'>
+            <a href='{{logout_url}}/?next=/app/signup/'>Logout</a> to switch user.
+        </p>
+        {% endblocktrans %}
+
+    </div>
+</div>
+{% endif %}

@@ -119,10 +119,13 @@ class ShowTest(TestCase):
         # change 'day'
         new_day = self.manager.WEDNESDAY
         show['day'] = new_day
+        date = datetime.now()
+        show['time'] = date.isoformat()
         s = self.manager.update_show(show)
         
         # check returned data
         self.assertEqual(s['day'], new_day)
+        self.assertEqual(s['time'], date.time().isoformat())
         
         # check stored data
         s2 = self.manager.get_show(s['_id'])
