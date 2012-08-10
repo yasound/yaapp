@@ -76,7 +76,7 @@ body {
 
 .switch-container input[type="checkbox"] {
     -webkit-appearance:none;
-    opacity:0;    
+    opacity:0;
     height:25px;
     width:80px;
     position:absolute;
@@ -182,17 +182,17 @@ body {
     width:200px;
 }
 
-.ui-slider .ui-slider-handle {  
+.ui-slider .ui-slider-handle {
     position: absolute;
-    z-index: 2;  
+    z-index: 2;
     width: 20px;
-    height: 20px;  
-    cursor: pointer;  
-    background: url('../app/images/volume-btn.png') no-repeat 50% 50%;  
-    font-weight: bold;  
-    color:#1C94C4;  
-    outline:none;  
-    top:-7px;  
+    height: 20px;
+    cursor: pointer;
+    background: url('../app/images/volume-btn.png') no-repeat 50% 50%;
+    font-weight: bold;
+    color:#1C94C4;
+    outline:none;
+    top:-7px;
     margin-left:-12px;
     border:none;
 }
@@ -200,9 +200,9 @@ body {
 .ui-slider .ui-slider-range {
     background-image: url('../app/images/slider-range-bg.png');
     position: absolute;
-    border: 0;  
-    top: 0;  
-    height: 69%;  
+    border: 0;
+    top: 0;
+    height: 69%;
     border-radius: 25px;
     border:1px solid black;
     shadow-box: 0px 1px 1px #313334 ;
@@ -223,7 +223,7 @@ body {
 	position:relative;
 }
 
-#volume-slider{  
+#volume-slider{
     margin-top:10px;
     height:9px;
     width:149px;
@@ -584,7 +584,7 @@ div .selector span {
 
 .selector {
     font-size:15px;
-    line-height:20px;   
+    line-height:20px;
 }
 
 #sub-header-separation {
@@ -633,10 +633,10 @@ div .selector span {
     text-decoration:none;
 }
 
-#search-bar { 
+#search-bar {
     display:inline-block;
     float:right;
-    width:174px; 
+    width:174px;
     height:32px;
     border:1px solid #b8bec1;
     padding:0px;
@@ -1008,7 +1008,7 @@ input::-webkit-input-placeholder {
 /**
  * Footer
  */
- 
+
 #footer {
     background-image: url(/media/app/images/footer_bg.png);
     background-repeat: repeat-x;
@@ -1037,7 +1037,7 @@ input::-webkit-input-placeholder {
     font-size: 14px;
     float: left;
     width: 211px;
-    margin-right: 0px;  
+    margin-right: 0px;
     margin-top: 58px;
 }
 
@@ -1132,7 +1132,7 @@ input::-webkit-input-placeholder {
     position:absolute;
     bottom:0px;
 	left:300px;
-    
+
     -webkit-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
     -moz-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
     -o-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
@@ -1200,7 +1200,7 @@ input::-webkit-input-placeholder {
  * Player
  */
 #player {
-} 
+}
 
 #player .picture {
     float: left;
@@ -1285,7 +1285,7 @@ input::-webkit-input-placeholder {
 
 #webapp-radio-title h1 a {
 	width:210px;
-	
+
 }
 
 #webapp-radio p {
@@ -1553,7 +1553,7 @@ ul .user-cell:hover .caption {
 	margin:0px;
 	padding:0px;
 	overflow:hidden;
-	
+
 	background-image: linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
 	background-image: -o-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
 	background-image: -moz-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
@@ -1656,7 +1656,7 @@ ul#notifications .read {
 }
 
 .profile-background .radio-cells {
-    margin-left:0;	
+    margin-left:0;
 }
 .profile-background .radio-cell {
     margin-left:13px;
@@ -1791,7 +1791,7 @@ ul#notifications .read {
 	font-size:14px;
 }
 
-#comments .artist-comment { 
+#comments .artist-comment {
 	position:absolute;
     bottom:20px;
 	width:200px;
@@ -1905,7 +1905,7 @@ ul .radio-with-stats-cells li {
 	float:right;
 }
 
-.stats .new-messages, 
+.stats .new-messages,
 .stats .minutes-spent {
 	text-align:right;
 }
@@ -2062,6 +2062,12 @@ ul .radio-with-stats-cells li {
     border-radius:5px;
 }
 
+.signup-container #signup-input input.error {
+    border:4px solid red;
+    border-radius:5px;
+}
+
+
 .signup-container #signup-input .right-input {
     margin-left:33px;
 }
@@ -2077,6 +2083,7 @@ ul .radio-with-stats-cells li {
     text-shadow:1px 1px white;
     box-shadow:0px 2px 2px #e4e4e4;
 }
+
 
 /**
  * common items
@@ -2109,7 +2116,7 @@ ul .radio-with-stats-cells li {
 .yabutton {
     display:block;
     height:31px;
-	padding:7px 15px;    
+	padding:7px 15px;
 	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
@@ -2135,7 +2142,7 @@ ul .radio-with-stats-cells li {
 .yabutton-small {
     display:block;
     height:27px;
-	padding:3px 10px;    
+	padding:3px 10px;
 	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
@@ -2170,7 +2177,7 @@ ul .radio-with-stats-cells li {
 	opacity:0;
 	display:none;
 	position:absolute;
-}	
+}
 
 .yatooltip:hover .yatoolelt {
 	position:absolute;
@@ -2213,7 +2220,7 @@ ul .radio-with-stats-cells li {
 	opacity:0;
 	display:none;
 	position:absolute;
-}	
+}
 
 .yatooltip-share:hover .yatoolelt-share {
 	position:absolute;
@@ -2247,12 +2254,12 @@ ul .radio-with-stats-cells li {
 
 
 /* Landscape phones and down */
-@media (max-width: 480px) { 
-	
+@media (max-width: 480px) {
+
 /*-- CONTAINER --*/
 	.container {
 		width:480px;
-	} 	
+	}
 	#results {
 		width:480px;
 	}
@@ -2268,10 +2275,10 @@ ul .radio-with-stats-cells li {
 		display:none;
 	}
     #search-bar{
-        
+
     }
-	
-	
+
+
 /*-- SUBMENU --*/
 	#fix-genre {
 		display:none;
@@ -2279,7 +2286,7 @@ ul .radio-with-stats-cells li {
     .genre-selector {
         display:none;
     }
-    
+
 	#radio-style-symbol {
 		display:none;
 	}
@@ -2301,19 +2308,19 @@ ul .radio-with-stats-cells li {
     #selection, #top, #friends, #favorites {
         display:none;
     }
-    
+
     #sub-header-nav {
         width:185px
     }
-    
-    #sub-header-nav li, 
+
+    #sub-header-nav li,
     #sub-header-nav li .first {
         width:30px;
         height:30px;
         padding-left:0px;
         padding-top:0px;
     }
-    
+
     #sub-header-nav li .mobile-selection {
         display:block;
         height:40px;
@@ -2327,7 +2334,7 @@ ul .radio-with-stats-cells li {
         display:block;
         height:30px;
         width:30px;
-        background-image:url('../app/images/top-sub-menu.png');   
+        background-image:url('../app/images/top-sub-menu.png');
         margin-top:12px;
         margin-left:20px;
     }
@@ -2335,7 +2342,7 @@ ul .radio-with-stats-cells li {
         display:block;
         height:30px;
         width:30px;
-        background-image:url('../app/images/friends-sub-menu.png');   
+        background-image:url('../app/images/friends-sub-menu.png');
         margin-top:12px;
         margin-left:20px;
     }
@@ -2343,7 +2350,7 @@ ul .radio-with-stats-cells li {
         display:block;
         height:30px;
         width:30px;
-        background-image:url('../app/images/favorites-sub-menu.png');   
+        background-image:url('../app/images/favorites-sub-menu.png');
         margin-top:14px;
         margin-left:24px;
     }
@@ -2354,10 +2361,10 @@ ul .radio-with-stats-cells li {
 	#search-bar #search-input {
         width:50px;
     }
-    
+
 /*-- RADIO-CELL --*/
 	.profile-background, .radio-cells {
-		width:480px;	
+		width:480px;
 	}
 
 /*-- PROFILE --*/
@@ -2377,7 +2384,7 @@ ul .radio-with-stats-cells li {
 		display:block;
 		float:none;
 	}
-	#comments, 
+	#comments,
 	#radios-btn,
 	#favorites-btn,
 	#friends-btn,
@@ -2403,7 +2410,7 @@ ul .radio-with-stats-cells li {
         height:45% !important;
         width:90% !important;
     }
-    
+
 /*-- FOOTER --*/
 	#connected-users {
 		display:none;
@@ -2412,15 +2419,15 @@ ul .radio-with-stats-cells li {
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-	
+
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
-	
+
 }
 
 /* Large desktop */
 @media (min-width: 1200px) {
-	
+
 }

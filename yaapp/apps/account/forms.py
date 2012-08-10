@@ -126,6 +126,49 @@ class SignupForm(forms.Form):
             return username, email
         return False
 
+class WebAppSignupForm(forms.Form):
+    username = forms.CharField(label=_("Username"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Username')}))
+    email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
+    password1 = forms.CharField(label=_("Password"), required=True, widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
+    password2 = forms.CharField(label=_("Password confirmation"), required=True, widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
+        
+    def clean_password2(self):
+        if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
+            if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
+                raise forms.ValidationError(_("You must type the same password each time."))
+        return self.cleaned_data["password2"]
+
+    def clean_username(self):
+        profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
+        if profiles.count() > 0:
+            raise forms.ValidationError(u"This username is already taken. Please choose another.")
+        return self.cleaned_data["username"]
+    
+    def clean_email(self):
+        user = User.objects.filter(email__exact=self.cleaned_data["email"])
+        if not user:
+            return self.cleaned_data["email"]
+        raise forms.ValidationError(u"This email is already taken. Please choose another.")
+
+    def save(self):
+        from api import build_random_username
+        
+        email = self.cleaned_data["email"]
+        password = self.cleaned_data["password1"]
+        username = build_random_username()
+        if email and username:
+            new_user = EmailUser.objects.create_user(username, email, password)
+            user = EmailUser.objects.get(email=email)
+            user.is_active = False
+            user.save()
+            user.get_profile().name = self.cleaned_data["username"]
+            user.get_profile().save()
+            
+            EmailAddress.objects.add_email(new_user, email)
+            
+            return username, email
+        return False
+
 class FastSignupForm(forms.Form):
     """
     Fast and anonymous signup form for creating unactive anonymous users
