@@ -1986,6 +1986,11 @@ ul .radio-with-stats-cells li {
     font-weight: normal;
 }
 
+.signup-container .signup-btns {
+	clear: both;
+    height:132px;
+}
+
 .signup-container .signup-btn-fbk {
     display:block;
     height:52px;

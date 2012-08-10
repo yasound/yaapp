@@ -2,21 +2,24 @@
 <div class='row'>
     <div class='span12 signup-container'>
         <h2>Création de votre compte Yasound</h2>
-        <h3>Inscription rapide avec Facebook ou Twitter</h3>    <div class="signup-btn-fbk">
-		    	<a href="#"><img src="/media/app/images/SignUp/signup-icon-facebook.png">Inscription rapide avec Facebook</a>
-		    </div>
-		    <div class="signup-btn-twitter">	
-		    	<a href="#"><img src="/media/app/images/SignUp/signup-icon-twitter.png">Inscription rapide avec Twitter</a>
-		    </div>
-		<div id="signup-separation-line"></div>
-        <h3>Inscription par email</h3>
+        <h3>{% trans 'Quick registration with Facebook or Twitter' %}</h3>   
+        <div class='signup-btns'> 
+            <div class="signup-btn-fbk">
+    		    	<a href="#"><img src="/media/app/images/SignUp/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+    	    </div>
+    	    <div class="signup-btn-twitter">	
+    		    	<a href="#"><img src="/media/app/images/SignUp/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+    	    </div>
+	    </div>
+		<div id="signup-separation-line">&nbsp;</div>
+        <h3>{% trans 'Email registration' %}</h3>
 	    <form>
 	        <div id="signup-input">
-	        	<input value="Choose a user name" type="text">
-	        	<input value="Email adress" class="right-input" type="text">
-	        	<input value="Password" class="bottom-input" type="text">
-	        	<input value="Confirm password" class="right-input bottom-input" type="text">
-	        	<input id="signup-save-btn"type="submit" value="Enregistrer mon compte" />
+	        	<input placeholder="{% trans 'Choose a user name' %}" type="text">
+	        	<input placeholder="{% trans 'Email' %}" type="email" class="right-input">
+	        	<input placeholder="{% trans 'Password' %}"class="bottom-input" type="password">
+	        	<input placeholder="{% trans 'Confirm password' %}" class="right-input bottom-input" type="password">
+	        	<input id="signup-save-btn"type="submit" value="{% trans 'Register my account' %}" />
 	        </div>
 	    </form>
     </div>
