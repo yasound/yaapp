@@ -202,9 +202,10 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         'click #messages-btn': 'notifications'
     },
     initialize: function() {
-        _.bindAll(this, 'render', 'onNotification');
+        _.bindAll(this, 'render', 'onNotification', 'onNotificationUnreadCount');
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification);
+            Yasound.App.Router.pushManager.on('notification_unread_count', this.onNotificationUnreadCount);
         }
     },
     onClose: function() {
@@ -237,7 +238,10 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     },
     onNotification: function(notification) {
         colibri(gettext('New notification received'));
-        var unreadCount = notification.unread_count;
+    },
+    
+    onNotificationUnreadCount: function(data) {
+        var unreadCount = data.count;
         var el = $('#messages-btn span', this.el); 
         el.html(unreadCount);
         if (unreadCount > 0) {

@@ -1,23 +1,61 @@
-{% load i18n %} 
+{% load i18n %}
+
+{% if request.user.is_anonymous %}
 <div class='row'>
     <div class='span12 signup-container'>
-        <h2>Création de votre compte Yasound</h2>
-        <h3>Inscription rapide avec Facebook ou Twitter</h3>    <div class="signup-btn-fbk">
-		    	<a href="#"><img src="/media/app/images/SignUp/signup-icon-facebook.png">Inscription rapide avec Facebook</a>
-		    </div>
-		    <div class="signup-btn-twitter">	
-		    	<a href="#"><img src="/media/app/images/SignUp/signup-icon-twitter.png">Inscription rapide avec Twitter</a>
-		    </div>
-		<div id="signup-separation-line"></div>
-        <h3>Inscription par email</h3>
-	    <form>
+        <h2>{% trans "Create your Yasound account" %}</h2>
+        <h3>{% trans 'Quick registration with Facebook or Twitter' %}</h3>
+        <div class='signup-btns'>
+            <div class="signup-btn-fbk">
+    		    	<a href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/SignUp/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+    	    </div>
+    	    <div class="signup-btn-twitter">
+    		    	<a href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/SignUp/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+    	    </div>
+	    </div>
+		<div id="signup-separation-line">&nbsp;</div>
+        <h3>{% trans 'Email registration' %}</h3>
+	    <form id='signup-form' method='post'>{% csrf_token %}
 	        <div id="signup-input">
-	        	<input value="Choose a user name" type="text">
-	        	<input value="Email adress" class="right-input" type="text">
-	        	<input value="Password" class="bottom-input" type="text">
-	        	<input value="Confirm password" class="right-input bottom-input" type="text">
-	        	<input id="signup-save-btn"type="submit" value="Enregistrer mon compte" />
+	        	<input placeholder="{% trans 'Choose a user name' %}" required="required" type="text" name="username">
+	        	<input placeholder="{% trans 'Email' %}" type="email" required="required" class="right-input" name="email">
+	        	<input placeholder="{% trans 'Password' %}"class="bottom-input" required="required" type="password" name="password1">
+	        	<input placeholder="{% trans 'Confirm password' %}" class="right-input bottom-input" required="required" type="password" name="password2">
+	        	<input id="signup-save-btn" type="submit" value="{% trans 'Register my account' %}" />
 	        </div>
 	    </form>
     </div>
-</div>    
+</div>
+
+<div class="modal hide fade" id="modal-after-signup">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Thank you for registering at Yasound" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% blocktrans %}An email has been sent to confirm your registration.
+        {% endblocktrans %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Login" %}</a>
+    </div>
+</div>
+
+
+{% else %}
+<div class='row'>
+    <div class='span12'>
+        <h2>{% trans "Create your Yasound account" %}</h2>
+
+        <p class='lead'>{% trans "You are currently logged as" %} <a href='{% url webapp_profile request.user.username %}'>{{ request.user.get_profile }}</a></p>
+        {% url logout as logout_url %}
+        {% blocktrans %}
+        <p class='lead'>
+            <a href='{{logout_url}}/?next=/app/signup/'>Logout</a> to switch user.
+        </p>
+        {% endblocktrans %}
+
+    </div>
+</div>
+{% endif %}
