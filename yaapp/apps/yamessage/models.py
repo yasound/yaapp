@@ -56,6 +56,9 @@ class NotificationsManager():
                  }
         self.notifications.insert(notif)
         yamessage_signals.new_notification.send(sender=self, notification=notif)
+
+        if recipient_user_id:
+            yamessage_signals.unread_changed.send(sender=self, dest_user_id=recipient_user_id, count=self.unread_count(recipient_user_id))
         
     def text_for_notification(self, notification_type, params):
         
@@ -86,7 +89,6 @@ class NotificationsManager():
         elif read_status == 'unread':
             request['read'] = False
         
-        print request
         if count is not None:
             notifications = self.notifications.find(request).sort([('date', DESCENDING)]).skip(skip).limit(count)
         else:
@@ -113,14 +115,28 @@ class NotificationsManager():
                 notif_data['date'] = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
         
         self.notifications.update({'_id':notif_data['_id']}, notif_data)
+
+        dest_user_id = notif_data.get('dest_user_id')
+        if dest_user_id:
+            yamessage_signals.unread_changed.send(sender=self, dest_user_id=dest_user_id, count=self.unread_count(dest_user_id))
+        
         return self.get_notification(id_str)
         
     def delete_notification(self, notif_id):
         if isinstance(notif_id, str) or isinstance(notif_id, unicode):
             notif_id = ObjectId(notif_id)
+            
+        notification = self.get_notification(notif_id)
+
         self.notifications.remove({'_id':notif_id})
+        
+        dest_user_id = notification.get('dest_user_id')
+        if dest_user_id:
+            yamessage_signals.unread_changed.send(sender=self, dest_user_id=dest_user_id, count=self.unread_count(dest_user_id))
+                    
     
     def delete_all_notifications(self, user_id):
         self.notifications.remove({'dest_user_id':user_id})
+        yamessage_signals.unread_changed.send(sender=self, dest_user_id=user_id, count=self.unread_count(user_id))
         
     
