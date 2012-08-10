@@ -301,8 +301,9 @@
 		                </div>
 		                {% else %}
 		                <div id='login'>
-		                  <a href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a> | 
-                          <a href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
+		                  <a class='float-left' href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a>
+                      <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>  
+                      <a class='float-left' href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
 		                </div>
 		                {% endif %}
 	                </div>

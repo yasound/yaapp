@@ -29,9 +29,14 @@ body {
     width: 148px;
 }
 
+.float-left {
+    float:left;
+}
 /**
  * Header
  */
+
+
 
 #header .navbar-inner {
     background-image: url(/media/app/images/header_bg.png);
@@ -388,22 +393,22 @@ body {
 #login {
     display:block;
     float:left;
-    height:33px;
-    width:160px;
-    background-repeat:no-repeat;
     position:relative;
-    font-size:14px;
+    font-size:15px;
     color: white;
-    top:26px;
     padding:0px;
     text-decoration:none;
 }
 
 #login a {
+    display:block;
+    margin-top:31px;
+    margin-left:18px;
 	color: white;
 }
 #login a:hover {
 	color: #dedede;
+    text-decoration: none;
 }
 
 #messages-btn:hover {
