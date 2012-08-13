@@ -671,18 +671,29 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 
 Yasound.Views.LogIn = Backbone.View.extend({
+    el: '#login',
+
     events: {
-        "mouseover .login-btn"  :"onHover"
+        "click .login-btn"  :"displayLogin"
     },
 
     render: function() {
-        
+        return this;
     },
-    
-    onHover: function (e) {
+
+    displayLogin: function (e) {
+        e.preventDefault();
         var loginBoxContainer = $('#login-box-container', this.el);
+        if (!loginBoxContainer.hasClass('hidden')) {
+            loginBoxContainer.addClass('hidden');
+            return;
+        }
         loginBoxContainer.removeClass('hidden');
     },
+
+    onLeave: function(e) {
+        console.log('onLeave');
+    }
 });
 
 /**
