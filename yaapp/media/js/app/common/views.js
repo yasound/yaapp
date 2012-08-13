@@ -672,12 +672,12 @@ Yasound.Views.PublicStats = Backbone.View.extend({
 
 Yasound.Views.LogIn = Backbone.View.extend({
     events: {
-        "click #": "clickShowPopup"
+        "click #": "clickShowPopup",
         "hover #": "hoverShowPopup"
     },
 
     render: function() {
-        $
+        
     }
 })
 
