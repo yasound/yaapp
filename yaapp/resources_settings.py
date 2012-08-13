@@ -1,5 +1,5 @@
 PIPELINE_CSS = { }
-PIPELINE_JS = { 
+PIPELINE_JS = {
     'backoffice-all': {
         'output_filename': 'backoffice-all.?.js',
         'source_filenames': [
@@ -104,6 +104,8 @@ PIPELINE_JS = {
             'js/app/programming/models.js',
             'js/app/signup/models.js',
             'js/app/signup/views.js',
+            'js/app/login/models.js',
+            'js/app/login/views.js',
             'js/app/home/views.js',
             'js/app/home/models.js',
             'js/app/static/views.js',

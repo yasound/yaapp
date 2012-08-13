@@ -29,7 +29,7 @@ from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm, RadioGenreForm
-from account.forms import WebAppSignupForm
+from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
@@ -1101,6 +1101,30 @@ class WebAppView(View):
                     context['signup_form'] = form
         return context, 'yabase/webapp.html'
 
+    def login(self, request, context, *args, **kwargs):
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid() and form.login(request):
+                if request.is_ajax():
+                    data = {
+                        'success': True
+                    }
+                    response = json.dumps(data)
+                    return HttpResponse(response, mimetype='application/json')
+                else:
+                    return HttpResponseRedirect(reverse('webapp'))
+            else:
+                if request.is_ajax():
+                    data = {
+                        'success': False,
+                        'errors': form.errors
+                    }
+                    response = json.dumps(data)
+                    return HttpResponse(response, mimetype='application/json')
+                else:
+                    context['signup_form'] = form
+        return context, 'yabase/webapp.html'
+
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.
@@ -1447,49 +1471,42 @@ def programming_albums_response(request, radio):
     response = api_response(list(albums), total_count)
     return response
 
-# v1
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST',], login_required=True)
-def my_programming(request):
-    radio = Radio.objects.radio_for_user(request.user)
-    if not radio:
-        raise Http404
+def my_programming(request, radio_uuid=None):
+    if radio_uuid is None:
+        radio = Radio.objects.radio_for_user(request.user)
+        if not radio:
+            raise Http404
+    else:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
+
     response = programming_response(request, radio)
     return response
 
 @check_api_key(methods=['GET',], login_required=True)
-def my_programming_artists(request):
-    radio = Radio.objects.radio_for_user(request.user)
+def my_programming_artists(request, radio_uuid=None):
+    if radio_uuid is None:
+        radio = Radio.objects.radio_for_user(request.user)
+        if not radio:
+            raise Http404
+    else:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
     if not radio:
         raise Http404
     response = programming_artists_response(request, radio)
     return response
 
 @check_api_key(methods=['GET',], login_required=True)
-def my_programming_albums(request):
-    radio = Radio.objects.radio_for_user(request.user)
+def my_programming_albums(request, radio_uuid=None):
+    if radio_uuid is None:
+        radio = Radio.objects.radio_for_user(request.user)
+        if not radio:
+            raise Http404
+    else:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
     if not radio:
         raise Http404
-    response = programming_albums_response(request, radio)
-    return response
-
-# v2
-@csrf_exempt
-@check_api_key(methods=['GET', 'POST',], login_required=True)
-def radio_programming(request, radio_uuid):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-    response = programming_response(request, radio)
-    return response
-
-@check_api_key(methods=['GET',], login_required=True)
-def radio_programming_artists(request, radio_uuid):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-    response = programming_artists_response(request, radio)
-    return response
-
-@check_api_key(methods=['GET',], login_required=True)
-def radio_programming_albums(request, radio_uuid):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
     response = programming_albums_response(request, radio)
     return response
 

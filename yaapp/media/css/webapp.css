@@ -52,7 +52,7 @@ body {
 #login a {
     display:block;
     margin-top:31px;
-    margin-left:18px;
+    /*margin-left:12px;*/
     color:white;
 }
 #login a:hover {
@@ -82,7 +82,7 @@ body {
 }
 
 #login-box-container a:hover {
-    color:#414244;
+    color:white;
     font-size:15px;
 }
 
@@ -99,14 +99,14 @@ body {
 }
 
 #login-box-container #login-btn-facebook {
-    background-image: url('../app/images/Login/login-btn-fbk.png');
+    background-image: url('../app/images/login/login-btn-fbk.png');
     background-repeat: repeat-x;
     border:1px solid #082029;
-    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0; 
+    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0;
 }
 
 #login-box-container #login-btn-twitter {
-    background-image: url('../app/images/Login/login-btn-twitter.png');
+    background-image: url('../app/images/login/login-btn-twitter.png');
     background-repeat: repeat-x;
     border:1px solid #0f1d3c;
     box-shadow: 0px 1px 1px #636566, inset 0px 1px 1px #baf2fe;
@@ -132,29 +132,48 @@ body {
 #login-box-container form input {
     display:block;
     height:38px;
-    width:255px;
+    width:242px;
+    color:#7f7f7f;
+    font-size:15px;
     border-radius:3px;
     margin:10px 15px;
-    padding:0px;
+    padding:0;
+    padding-left:12px;
+    box-shadow: 0px 1px 1px #202020;
 }
 
 #login-box-container form #login-btn-connection {
-    background-image:url('../app/images/Login/login-btn-connection.png');
+    width:257px;
+    background-image:url('../app/images/login/login-btn-connection.png');
     background-repeat:repeat-x;
     color:#414244;
     font-size:15px;
     padding:0px;
     border:none;
+    box-shadow: 0px 1px 1px #202020;
 }
 
 #login-box-container .login-psw-lost {
-    background-image:url('../app/images/Login/login-btn-connection.png');
-    background-repeat:repeat-x;
-    color:#414244;
-    font-size:15px;
-    line-height:35px;
-    text-align:center;
+    display:inline;
+    height:20px;
+    padding:0px;
+    font-size:12px;
 }
+
+#login-box-container .login-psw-lost:hover {
+    min-width:100px;
+    font-size:12px;
+    color:white;
+    text-decoration: underline;
+}
+
+#login-box-container:before {
+    content:url('../app/images/login/login-tooltip.png');
+    position:absolute;
+    top:-13px;
+    right:20px;
+}
+
 
 
 

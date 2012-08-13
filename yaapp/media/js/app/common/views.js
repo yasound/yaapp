@@ -36,14 +36,14 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         } else {
             $(this.el).html(ich.radioCellTemplate(data));
         }
-        
+
         this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
     },
     onHover: function (e) {
         if (Yasound.App.isMobile) {
             return;
-        } 
+        }
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
             if (Yasound.App.enableFX) {
@@ -52,7 +52,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
                 $("li .mask", $(this.el).parent()).hide();
             }
             this.currentSongModel.fetch()
-            
+
             if (Yasound.App.enableFX) {
                 mask.removeClass('hidden').fadeIn(300);
                 $('.radio-border', this.el).fadeIn(300);
@@ -65,7 +65,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     onLeave: function (e) {
         if (Yasound.App.isMobile) {
             return;
-        } 
+        }
         var mask = $('.mask', this.el);
         if (Yasound.App.enableFX) {
             mask.fadeOut(300);
@@ -92,7 +92,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
                 trigger: true
             });
         }
-        
+
     },
     refreshCurrentSong: function(e) {
         var el = $('.current-song', this.el);
@@ -108,10 +108,10 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         }
         el.html(name);
 		el2.html(artist);
-        
+
         var img = $('.radio-icon img', this.el);
         img.attr('src', cover);
-        
+
         var genre = this.model.genre();
         $('.tag', this.el).html(genre + '<div class="tag-right-side"></div>');
     }
@@ -143,15 +143,15 @@ Yasound.Views.UserCell = Backbone.View.extend({
         $(this.el).html(ich.userCellTemplate(data));
         return this;
     },
-	
+
 	onHover: function (e) {
         if (Yasound.App.isMobile) {
             return;
-        } 
+        }
         var maskUser = $('.mask-user', this.el);
         if (!maskUser.is(":visible")) {
             $("li .mask-user", $(this.el).parent()).fadeOut(300);
-            
+
             maskUser.removeClass('hidden').fadeIn(300);
         }
     },
@@ -159,7 +159,7 @@ Yasound.Views.UserCell = Backbone.View.extend({
 	onLeave: function (e) {
         if (Yasound.App.isMobile) {
             return;
-        } 
+        }
         var mask = $('.mask-user', this.el);
         mask.fadeOut(300);
         $('.radio-border', this.el).fadeOut(300);
@@ -172,13 +172,13 @@ Yasound.Views.UserCell = Backbone.View.extend({
             // do nothing if image clicked (because it is the delete image)
             return;
         }
-        
+
         var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/', {
             trigger: true
         });
     },
-    
+
     unfollow: function (e) {
         e.preventDefault();
         $('#modal-unfollow').modal('show');
@@ -216,7 +216,7 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     render: function() {
         return this;
     },
-    
+
     myRadio: function (e) {
         e.preventDefault();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
@@ -239,17 +239,17 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     onNotification: function(notification) {
         colibri(gettext('New notification received'));
     },
-    
+
     onNotificationUnreadCount: function(data) {
         var unreadCount = data.count;
-        var el = $('#messages-btn span', this.el); 
+        var el = $('#messages-btn span', this.el);
         el.html(unreadCount);
         if (unreadCount > 0) {
-            el.removeClass('hidden');            
+            el.removeClass('hidden');
         } else {
             el.addClass('hidden');
         }
-    }    
+    }
 });
 
 /**
@@ -270,7 +270,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     initialize: function () {
         this.model.bind('change', this.render, this);
         _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare');
-        
+
         $('#fb_share').click(this.facebookShare);
     },
 
@@ -315,25 +315,25 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
         document.title = this.model.title();
-        
-        var volumeSlider = $('#volume-slider'); 
+
+        var volumeSlider = $('#volume-slider');
         volumeSlider.slider({
-            range: "min",  
+            range: "min",
             min: 0,
             max: 100
         });
         volumeSlider.bind("slide", this.onVolumeSlide);
-        
+
         this.generateSocialShare();
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
                 $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-                
+
                 this.notifyStreamer();
             }
             volumeSlider.slider('value', Yasound.App.MySound.volume);
         }
-        
+
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
             $('#share-btn', this.el).show();
@@ -351,7 +351,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         } else {
             $('#btn-unfavorite', this.el).removeClass('is-favorite').addClass('is-not-favorite');
         }
-        
+
         this.ping();
         return this;
     },
@@ -381,7 +381,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.SoundConfig.volume = soundVolume;
         }
     },
-    
+
     like: function (e) {
         e.preventDefault();
         var songId = this.model.get('id');
@@ -417,26 +417,26 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
         FB.ui(obj, callback);
     },
-    
+
     favorite: function(e) {
         e.preventDefault();
         var radio = Yasound.App.Router.currentRadio;
         if (radio && radio.get('favorite')) {
             radio.removeFromFavorite();
             $('#favorite-radio', this.el).removeClass('is-favorite').addClass('is-not-favorite');
-            
+
         } else {
             radio.addToFavorite();
             $('#favorite-radio', this.el).removeClass('is-not-favorite').addClass('is-favorite');
         }
     },
-    
-    
+
+
     ping: function() {
         if (this.pingIntervalId) {
             clearInterval(this.pingIntervalId);
         }
-        
+
         var that = this;
         this.pingIntervalId = setInterval(function () {
             var query = $.ajax({
@@ -449,7 +449,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }, 60000);
 
     },
-    
+
     notifyStreamer: function() {
         var query = $.ajax({
             type: 'POST',
@@ -563,9 +563,9 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
     events: {
         "click #footer-button": "onShowAll"
     },
-    
+
     collection: new Yasound.Data.Models.ConnectedUsers(),
-    
+
     initialize: function() {
         _.bindAll(this, 'addOne', 'addAll', 'render', 'updateData');
         setInterval(this.updateData, 10 * 1000 * 60);
@@ -611,7 +611,7 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
     updateData: function() {
         this.clear();
         this.collection.fetch();
-    } 
+    }
 });
 
 Yasound.Views.ConnectedUserCell = Backbone.View.extend({
@@ -671,15 +671,82 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 
 Yasound.Views.LogIn = Backbone.View.extend({
+    el: '#login',
+
     events: {
-        "click #": "clickShowPopup"
-        "hover #": "hoverShowPopup"
+        "mouseenter .login-btn"  :"displayPopupLogin",
+        "click #login-btn": "displayRegularLogin",
+        "click #signup-btn": "displayRegularSignup",
+        "submit #popup-login-form": "submit"
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'displayPopupLogin', 'hidePopupLogin', 'displayRegularLogin', 'displayRegularSignup');
     },
 
     render: function() {
-        $
+        var that = this;
+        $(this.el).on('mouseleave', function() {
+            that.hidePopupLogin();
+        });
+
+        return this;
+    },
+
+    displayPopupLogin: function (e) {
+        e.preventDefault();
+        $('#login-box-container', this.el).removeClass('hidden');
+        loginBoxContainer.removeClass('hidden');
+    },
+
+    hidePopupLogin: function() {
+        $('#login-box-container', this.el).addClass('hidden');
+    },
+
+    displayRegularLogin: function (e) {
+        e.preventDefault();
+        this.hidePopupLogin();
+        Yasound.App.Router.navigate('/login/', {
+            trigger: true
+        });
+    },
+
+    displayRegularSignup: function (e) {
+        e.preventDefault();
+        this.hidePopupLogin();
+        Yasound.App.Router.navigate('/signup/', {
+            trigger: true
+        });
+    },
+
+    submit: function(e) {
+        e.preventDefault();
+        var form = $('#popup-login-form', this.el);
+        $('.error-msg', form).remove();
+        $('input').removeClass('error');
+
+        var url = form.attr('action');
+        $.post(url, form.serializeArray(), function(data) {
+            var success = data.success;
+            if (!data.success) {
+                colibri(gettext('Login error'));
+                var errors = data.errors;
+                if (errors) {
+                    _.each(errors, function(value, key) {
+                        var $input = $('input[name=' + key + ']', form);
+                        $input.addClass('error');
+                        $input.after('<div class="error-msg">' + value + '</div>');
+                    });
+                }
+            } else {
+                window.location = '/app/';
+            }
+        }).error(function() {
+            colibri(gettext('Error while login in', 'colibri-error'));
+        });
     }
-})
+
+});
 
 /**
  * Sub menu handler
@@ -713,14 +780,14 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         } else {
             $('#create-radio span').html(gettext('Create radio'));
         }
-	
+
         return this;
     },
     selectMenu: function(menu) {
         $("#sub-header-nav li", this.el).removeClass('selected');
         $("#" + menu, this.el).parent().addClass('selected');
         var $pointer = $('#sub-header-pointer', this.el);
-        
+
         var menuNumber = 0;
         if (menu == 'selection') {
             menuNumber = 1;
@@ -737,7 +804,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         } else {
             $pointer.fadeOut(200);
         }
-        
+
         if (menuNumber != 0) {
             $pointer.fadeIn(200);
             $pointer.removeClass().addClass('menu' + menuNumber);

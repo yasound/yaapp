@@ -22,21 +22,21 @@
 
 {% block extra_head %}
     {% block fb_open_graph %}{% endblock %}
-    
+
     <link rel="image_src" href="/media/yaweb/images/logo.png" />
-        
+
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
     <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
 	<link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
-    
-    
+
+
     <link rel="stylesheet" href="/media/js/colibri/colibri.css"/>
     <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
 
     <link rel="stylesheet" href="/media/css/webapp.css"/>
-    
+
 	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
@@ -63,7 +63,7 @@
     <script type="text/javascript" type="text/javascript" src="/media/js/flot/jquery.flot.selection.js"></script>
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
-        
+
 	<!--[if (gte IE 6)&(lte IE 8)]>
 	  <script type="text/javascript" src="/media/js/selectivizr-min.js"></script>
 	  <link rel="stylesheet" href="/media/css/ie.css" />
@@ -114,16 +114,16 @@
    <script type="text/html" id="wallEventTemplateSong">
       {% include "yabase/app/radio/wallEvent.song.mustache" %}
    </script>
-   
+
    <script type="text/html" id="radioUserTemplate">
       {% include "yabase/app/radio/radioUser.mustache" %}
    </script>
-   
+
    <script type='text/html' id='paginationTemplate'>
      {% include "yabase/app/pagination.mustache" %}
    </script>
 
-   
+
    <script type='text/html' id='radioCellTemplate'>
      {% include "yabase/app/radioCell.mustache" %}
    </script>
@@ -139,16 +139,16 @@
    <script type='text/html' id='homePageTemplate'>
      {% include "yabase/app/home/homePage.mustache" %}
    </script>
-   
+
    <script type="text/html" id="connectedUserTemplate">
       {% include "yabase/app/common/connectedUser.mustache" %}
    </script>
-   
+
    <script type="text/html" id="subMenuTemplate">
       {% include "yabase/app/common/subMenu.mustache" %}
    </script>
-   
-   
+
+
    <script type='text/html' id='topRadiosPageTemplate'>
      {% include "yabase/app/top/topRadiosPage.mustache" %}
    </script>
@@ -188,7 +188,7 @@
    <script type="text/html" id="notificationsPageTemplate">
       {% include "yabase/app/notifications/notificationsPage.mustache" %}
    </script>
-   
+
    <script type="text/html" id="notificationTemplate">
       {% include "yabase/app/notifications/notification.mustache" %}
    </script>
@@ -215,14 +215,14 @@
    <script type="text/html" id="importFromItunesTemplate">
       {% include "yabase/app/programming/importFromItunes.mustache" %}
    </script>
-   
+
    <script type='text/html' id='myRadiosPageTemplate'>
      {% include "yabase/app/myRadios/myRadiosPage.mustache" %}
    </script>
    <script type='text/html' id='radioWithStatsCellTemplate'>
      {% include "yabase/app/myRadios/radioWithStatsCell.mustache" %}
    </script>
-   
+
 {% endif %}
 
 {% endblock %}
@@ -288,7 +288,7 @@
                                     <span class="yatoolelt">{% trans "Your profile" %}</span>
 									<img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"/>
 								</a>
-								
+
 		                   {% endif %}
 		                </div>
 		                <div>
@@ -301,20 +301,21 @@
 		                </div>
 		                {% else %}
 		                <div id='login'>
-		                  <a class='float-left' href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a>
-                      <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>  
-                      <a class='float-left' href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
-                      <div id='login-box-container'>
-                        <a id='login-btn-facebook' href="#"><img src="/media/app/images/Login/login-icon-facebook.png"><span>Connexion avec Facebook</span></a>
-                        <a id='login-btn-twitter' href="#"><img src="/media/app/images/Login/login-icon-twitter.png"><span>Connexion avec Twitter</span></a>
+		                  <a class='float-left' id='signup-btn' href='{% url webapp_signup %}'>{% trans 'Signup' %}</a>
+                      <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
+                      <a class='float-left login-btn' id='login-btn' href='{% url webapp_login %}'>{% trans 'Login' %}</a>
+                      <div id='login-box-container' class='hidden'>
+                        <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
+                        <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
                         <div class='login-separation-line'></div>
-                        <form>
-                          <span>Connnexion classique par email</span>
-                          <input type='text'/>
-                          <input type='password'/>
+                        <form id='popup-login-form' method='post' action="{% url webapp_login %}">{% csrf_token %}
+                          <span>{% trans "Email login" %}</span>
+                          <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
+                          <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
+                          <input type='hidden' name='action' value='login'/>
                           <input id='login-btn-connection' type='submit' value='Connexion'/>
                         </form>
-                        <a class="login-psw-lost" href="#">Forgot password</a>
+                        <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
                       </div>
 		                </div>
 		                {% endif %}
@@ -327,7 +328,7 @@
 	</div>
 	</div>
 	<div id='submenu-container'></div>
-    
+
 <div class="modal hide fade" id="modal-share">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
@@ -344,7 +345,7 @@
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
     </div>
-</div>        
+</div>
 
 <div class="modal hide fade" id="modal-unfollow">
     <div class="modal-header">
@@ -359,7 +360,7 @@
         <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
         <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
     </div>
-</div>        
+</div>
 
 <div class="modal hide fade" id="modal-error">
     <div class="modal-header">
@@ -374,9 +375,9 @@
         <a href="#" class="btn" data-dismiss="modal">{% trans "Dismiss" %}</a>
         <a href="#" class="btn btn-primary">{% trans "Reload page" %}</a>
     </div>
-</div>        
+</div>
 
-    
+
 <div id='webapp-container'>{% block content%}{%endblock%}</div>
 
 
@@ -394,7 +395,7 @@
 					<img src="/media/app/images/facebook_logo.png" alt="facebook"/>
 					<span>Facebook</span>
 				</a>
-				<a href="https://twitter.com/YasoundSAS" class="footer-text-color2" title="twitter" target='_blank'> 
+				<a href="https://twitter.com/YasoundSAS" class="footer-text-color2" title="twitter" target='_blank'>
 					<img src="/media/app/images/twitter_logo.png" alt="twitter" class="padding-social-logo"/>
 					<span>Twitter</span>
 				</a>
@@ -404,7 +405,7 @@
 		<div class="footer-separation">
 			<img src="/media/app/images/separation.png" width="4" height="81" alt="separation"/>
 		</div>
-		
+
 		<div id="connected-users" class="blocks">
 			<p id="text-users">
 				{% trans "Connected users" %}
@@ -443,4 +444,3 @@
 </script>
 </html>
 
-                
