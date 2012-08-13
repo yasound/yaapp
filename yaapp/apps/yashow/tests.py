@@ -32,9 +32,11 @@ class ShowTest(TestCase):
         
         d = self.manager.MONDAY
         t = datetime.now().time()
-        show = self.manager.create_show('my first show', radio, d, t)
+        enabled = False
+        show = self.manager.create_show('my first show', radio, d, t, enabled=enabled)
         self.assertIsNotNone(show)
-        
+        self.assertEquals(show['enabled'], enabled)
+
         shows = self.manager.shows_for_radio(radio.id)
         self.assertEquals(shows.count(), 1)
     
@@ -198,11 +200,14 @@ class ShowTest(TestCase):
         show['days'] = new_days
         date = datetime.now()
         show['time'] = date.isoformat()
+        enabled = False
+        show['enabled'] = enabled
         s = self.manager.update_show(show)
         
         # check returned data
         self.assertEqual(s['days'], new_days)
         self.assertEqual(s['time'], date.time().isoformat())
+        self.assertEqual(s['enabled'], enabled)
         
         # check stored data
         s2 = self.manager.get_show(s['_id'])

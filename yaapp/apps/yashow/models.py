@@ -34,7 +34,7 @@ class ShowManager():
         self.shows = self.db.shows
         self.shows.ensure_index("playlist_id", unique=True)
         
-    def create_show(self, name, radio, days, time, random_play=True, yasound_songs=[]):        
+    def create_show(self, name, radio, days, time, random_play=True, enabled=True, yasound_songs=[]):        
         playlist = Playlist.objects.create(radio=radio, name=name)
         
         for index, y_song in enumerate(yasound_songs):
@@ -59,6 +59,7 @@ class ShowManager():
                     'days': days,
                     'time': time,
                     'random_play': random_play,
+                    'enabled': enabled,
                     'type': self.TYPE_PLAYLIST
                     }
         self.shows.insert(show_doc, safe=True)
@@ -120,6 +121,7 @@ class ShowManager():
         time = show_original['time']
         random = show_original['random_play']
         name = show_original['name']
+        enabled = show_original['enabled']
         yasound_songs = []
         songs_original = self.songs_for_show(show_id)
         for s in songs_original:
@@ -127,7 +129,7 @@ class ShowManager():
             y = YasoundSong.objects.get(id=yasound_song_id)
             yasound_songs.append(y)
         
-        show_copy = self.create_show(name, radio, days, time, random, yasound_songs)
+        show_copy = self.create_show(name, radio, days, time, random, enabled, yasound_songs)
         return show_copy
     
     def songs_for_show(self, show_id, count=None, skip=0):
