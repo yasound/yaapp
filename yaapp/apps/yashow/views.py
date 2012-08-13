@@ -77,12 +77,12 @@ def create_show(request, radio_uuid):
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     n = post_data_dict.get('name', '')
-    d = post_data_dict.get('day', m.EVERY_DAY)
+    d = post_data_dict.get('days', '')
     t = post_data_dict.get('time', datetime.time(hour=20, minute=0))
     random = post_data_dict.get('random_play', True)
     yasound_song_ids = post_data_dict.get('song_ids', [])
         
-    show = m.create_show(name=n, radio=radio, day=d, time=t, random_play=random, yasound_songs=yasound_song_ids)
+    show = m.create_show(name=n, radio=radio, days=d, time=t, random_play=random, yasound_songs=yasound_song_ids)
 
     res = json.dumps(show, cls=MongoAwareEncoder)
     return HttpResponse(res)
