@@ -672,11 +672,18 @@ Yasound.Views.PublicStats = Backbone.View.extend({
 
 Yasound.Views.LogIn = Backbone.View.extend({
     events: {
+        "mouseover .login-btn"  :"onHover"
     },
 
     render: function() {
-    }
-})
+        
+    },
+    
+    onHover: function (e) {
+        var loginBoxContainer = $('#login-box-container', this.el);
+        loginBoxContainer.removeClass('hidden');
+    },
+});
 
 /**
  * Sub menu handler

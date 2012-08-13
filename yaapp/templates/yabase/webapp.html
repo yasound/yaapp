@@ -303,8 +303,8 @@
 		                <div id='login'>
 		                  <a class='float-left' href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a>
                       <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>  
-                      <a class='float-left' href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
-                      <div id='login-box-container'>
+                      <a class='float-left login-btn' href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
+                      <div id='login-box-container' class='hidden'>
                         <a id='login-btn-facebook' href="#"><img src="/media/app/images/Login/login-icon-facebook.png"><span>Connexion avec Facebook</span></a>
                         <a id='login-btn-twitter' href="#"><img src="/media/app/images/Login/login-icon-twitter.png"><span>Connexion avec Twitter</span></a>
                         <div class='login-separation-line'></div>
