@@ -132,12 +132,13 @@ body {
 #login-box-container form input {
     display:block;
     height:38px;
-    width:255px;
+    width:242px;
     color:#7f7f7f;
     font-size:15px;
     border-radius:3px;
     margin:10px 15px;
-    padding:0px;
+    padding:0;
+    padding-left:12px;
     box-shadow: 0px 1px 1px #202020;
 }
 
