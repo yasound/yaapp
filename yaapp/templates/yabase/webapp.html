@@ -301,8 +301,22 @@
 		                </div>
 		                {% else %}
 		                <div id='login'>
-		                  <a href='{% url webapp_signup %}'>{% trans 'Signup' %}</a> |
-                          <a href='{% url webapp_login %}'>{% trans 'Login' %}</a>
+		                  <a class='float-left' id='signup-btn' href='{% url webapp_signup %}'>{% trans 'Signup' %}</a>
+                      <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
+                      <a class='float-left login-btn' id='login-btn' href='{% url webapp_login %}'>{% trans 'Login' %}</a>
+                      <div id='login-box-container' class='hidden'>
+                        <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/Login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
+                        <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/Login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
+                        <div class='login-separation-line'></div>
+                        <form id='popup-login-form' method='post' action="{% url webapp_login %}">{% csrf_token %}
+                          <span>{% trans "Email login" %}</span>
+                          <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
+                          <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
+                          <input type='hidden' name='action' value='login'/>
+                          <input id='login-btn-connection' type='submit' value='Connexion'/>
+                        </form>
+                        <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
+                      </div>
 		                </div>
 		                {% endif %}
 	                </div>

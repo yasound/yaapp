@@ -43,6 +43,13 @@ class ShowManager():
         playlist = Playlist.objects.create(radio=radio, name=name)
         
         for index, y_song in enumerate(yasound_songs):
+            if isinstance(y_song, int): # array of ids instead of objects
+                try:
+                    y_song = YasoundSong.objects.get(id=y_song)
+                except:
+                    pass
+            if not isinstance(y_song, YasoundSong):
+                continue
             song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist=playlist, yasound_song=y_song)
             song_instance.order = index
             song_instance.save()
@@ -101,6 +108,11 @@ class ShowManager():
     def delete_show(self, show_id):
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
             show_id = ObjectId(show_id)
+        show = self.get_show(show_id)
+        if show is None:
+            return
+        playlist = Playlist.objects.get(id=show['playlist_id'])
+        playlist.delete()
         self.shows.remove({'_id': show_id})
         
     def duplicate_show(self, show_id):

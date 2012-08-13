@@ -9,7 +9,7 @@ from django.test import TestCase
 from models import ShowManager
 from datetime import datetime, time
 from django.contrib.auth.models import User
-from yabase.models import Radio
+from yabase.models import Radio, Playlist, SongInstance
 from yaref.models import YasoundSong
 from django.test import Client
 from tastypie.models import ApiKey
@@ -37,6 +37,83 @@ class ShowTest(TestCase):
         
         shows = self.manager.shows_for_radio(radio.id)
         self.assertEquals(shows.count(), 1)
+    
+    def test_creation_with_songs(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+            
+        radio = Radio(creator=user)
+        radio.save()
+        
+        nb_songs = 10
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+        
+        yasound_songs = YasoundSong.objects.all()[:nb_songs]
+        
+        d = self.manager.MONDAY
+        t = datetime.now().time()
+        show = self.manager.create_show('my first show', radio, d, t, yasound_songs=yasound_songs)
+        self.assertIsNotNone(show)
+        
+        shows = self.manager.shows_for_radio(radio.id)
+        self.assertEquals(shows.count(), 1)
+        
+        self.assertEqual(self.manager.songs_for_show(show['_id']).count(), nb_songs)
+        
+    def test_creation_with_song_ids(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+            
+        radio = Radio(creator=user)
+        radio.save()
+        
+        nb_songs = 10
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+        
+        yasound_song_ids = YasoundSong.objects.values_list('id', flat=True)[:nb_songs]
+        
+        d = self.manager.MONDAY
+        t = datetime.now().time()
+        show = self.manager.create_show('my first show', radio, d, t, yasound_songs=yasound_song_ids)
+        self.assertIsNotNone(show)
+        
+        shows = self.manager.shows_for_radio(radio.id)
+        self.assertEquals(shows.count(), 1)
+        
+        self.assertEqual(self.manager.songs_for_show(show['_id']).count(), nb_songs)
+        
+    def test_creation_with_invalid_songs(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+            
+        radio = Radio(creator=user)
+        radio.save()
+        
+
+        yasound_song_ids = ['no_id', 'no_id2', 'no_id3']
+        
+        d = self.manager.MONDAY
+        t = datetime.now().time()
+        show = self.manager.create_show('my first show', radio, d, t, yasound_songs=yasound_song_ids)
+        self.assertIsNotNone(show)
+        
+        shows = self.manager.shows_for_radio(radio.id)
+        self.assertEquals(shows.count(), 1)
+        
+        self.assertEqual(self.manager.songs_for_show(show['_id']).count(), 0)
         
     def test_get_shows(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
@@ -139,15 +216,33 @@ class ShowTest(TestCase):
         radio = Radio(creator=user)
         radio.save()
         
-        show1 = self.manager.create_show('my first show', radio, self.manager.MONDAY, datetime.now().time())
+        nb_songs = 10
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+        
+        yasound_songs = YasoundSong.objects.all()[:nb_songs]
+        
+        show1 = self.manager.create_show('my first show', radio, self.manager.MONDAY, datetime.now().time(), yasound_songs=yasound_songs)
         self.assertIsNotNone(show1)
         
-        show2 = self.manager.create_show('my second show', radio, self.manager.TUESDAY, datetime.now().time())
+        show2 = self.manager.create_show('my second show', radio, self.manager.TUESDAY, datetime.now().time(), yasound_songs=yasound_songs)
         self.assertIsNotNone(show2)
         
         self.assertEqual(self.manager.shows.find().count(), 2)
         self.manager.delete_show(show1['_id'])
         self.assertEqual(self.manager.shows.find().count(), 1)
+        self.manager.delete_show(show2['_id'])
+        self.assertEqual(self.manager.shows.find().count(), 0)
+        
+        playlist_count = Playlist.objects.count()
+        self.assertEqual(playlist_count, 0)
+        
+        song_instance_count = SongInstance.objects.count()
+        self.assertEqual(song_instance_count, 0)
         
     def test_duplicate_show(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
