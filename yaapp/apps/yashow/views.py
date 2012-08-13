@@ -6,6 +6,10 @@ import json
 from yabase.models import Playlist, Radio, SongInstance
 from django.shortcuts import get_object_or_404
 import datetime
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
+logger = logging.getLogger("yaapp.yabase")
 
 @check_api_key(methods=['GET'], login_required=True)
 def get_shows_for_radio(request, radio_uuid):
@@ -60,10 +64,12 @@ def show(request, show_id):
     else:
         return HttpResponseNotFound()
     
+@csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
 def create_show(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     if radio.creator != request.user:
+        logger.info('request user is not the creator of the radio: do not have rights to create a show')
         return HttpResponseNotFound()
     
     m = ShowManager()
@@ -74,8 +80,9 @@ def create_show(request, radio_uuid):
     d = post_data_dict.get('day', m.EVERY_DAY)
     t = post_data_dict.get('time', datetime.time(hour=20, minute=0))
     random = post_data_dict.get('random_play', True)
-   
-    show = m.create_show(name=n, radio=radio, day=d, time=t, random_play=random)
+    yasound_song_ids = post_data_dict.get('song_ids', [])
+        
+    show = m.create_show(name=n, radio=radio, day=d, time=t, random_play=random, yasound_songs=yasound_song_ids)
 
     res = json.dumps(show, cls=MongoAwareEncoder)
     return HttpResponse(res)

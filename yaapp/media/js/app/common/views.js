@@ -666,6 +666,20 @@ Yasound.Views.PublicStats = Backbone.View.extend({
     }
 });
 
+/**
+ * LogIn PopUp
+ */
+
+Yasound.Views.LogIn = Backbone.View.extend({
+    events: {
+        "click #": "clickShowPopup"
+        "hover #": "hoverShowPopup"
+    },
+
+    render: function() {
+        $
+    }
+})
 
 /**
  * Sub menu handler

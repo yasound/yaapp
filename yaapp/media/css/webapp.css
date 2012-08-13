@@ -29,9 +29,135 @@ body {
     width: 148px;
 }
 
+.float-left {
+    float:left;
+}
 /**
  * Header
  */
+
+
+/*--- LOGIN ---*/
+
+#login {
+    display:block;
+    float:left;
+    position:relative;
+    font-size:15px;
+    color: white;
+    padding:0px;
+    text-decoration:none;
+}
+
+#login a {
+    display:block;
+    margin-top:31px;
+    margin-left:18px;
+    color:white;
+}
+#login a:hover {
+    color:#dedede;
+    text-decoration:none;
+}
+
+#login-box-container {
+    position:absolute;
+    top:68px;
+    right:0px;
+    display:block;
+    width:288px;
+    background-color:rgba(44, 46, 47, 0.99);
+    border:1px solid black;
+    border-radius:5px;
+    box-shadow:0px 0px 2px grey inset;
+}
+
+#login-box-container a {
+    position:relative;
+    display:block;
+    height:38px;
+    width:255px;
+    margin:15px;
+    border-radius:3px;
+}
+
+#login-box-container a:hover {
+    color:#414244;
+    font-size:15px;
+}
+
+#login-box-container a img {
+    position:absolute;
+    top:8px;
+    left:10px;
+}
+
+#login-box-container a span {
+    display:block;
+    margin-top:11px;
+    margin-left:47px;
+}
+
+#login-box-container #login-btn-facebook {
+    background-image: url('../app/images/Login/login-btn-fbk.png');
+    background-repeat: repeat-x;
+    border:1px solid #082029;
+    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0; 
+}
+
+#login-box-container #login-btn-twitter {
+    background-image: url('../app/images/Login/login-btn-twitter.png');
+    background-repeat: repeat-x;
+    border:1px solid #0f1d3c;
+    box-shadow: 0px 1px 1px #636566, inset 0px 1px 1px #baf2fe;
+}
+
+#login-box-container .login-separation-line {
+    height:1px;
+    width:255px;
+    background-color:black;
+    box-shadow: 0px 1px 0px #4d4f50;
+    margin-left:15px;
+}
+
+#login-box-container form span {
+    display:block;
+    width:100%;
+    color:#888888;
+    font-size: 15px;
+    margin:12px 0px;
+    text-align:center;
+}
+
+#login-box-container form input {
+    display:block;
+    height:38px;
+    width:255px;
+    border-radius:3px;
+    margin:10px 15px;
+    padding:0px;
+}
+
+#login-box-container form #login-btn-connection {
+    background-image:url('../app/images/Login/login-btn-connection.png');
+    background-repeat:repeat-x;
+    color:#414244;
+    font-size:15px;
+    padding:0px;
+    border:none;
+}
+
+#login-box-container .login-psw-lost {
+    background-image:url('../app/images/Login/login-btn-connection.png');
+    background-repeat:repeat-x;
+    color:#414244;
+    font-size:15px;
+    line-height:35px;
+    text-align:center;
+}
+
+
+
 
 #header .navbar-inner {
     background-image: url(/media/app/images/header_bg.png);
@@ -383,27 +509,6 @@ body {
     left:26px;
     padding:0px;
     text-decoration:none;
-}
-
-#login {
-    display:block;
-    float:left;
-    height:33px;
-    width:160px;
-    background-repeat:no-repeat;
-    position:relative;
-    font-size:14px;
-    color: white;
-    top:26px;
-    padding:0px;
-    text-decoration:none;
-}
-
-#login a {
-	color: white;
-}
-#login a:hover {
-	color: #dedede;
 }
 
 #messages-btn:hover {
