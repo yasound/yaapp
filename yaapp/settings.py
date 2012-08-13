@@ -32,7 +32,7 @@ DEFAULT_FROM_EMAIL = "Yasound Notification <noreply@yasound.com>"
 SERVER_EMAIL = "dev@yasound.com"
 if DEVELOPMENT_MODE:
     SERVER_EMAIL = "dev-dev@yasound.com"
-    
+
 EMAIL_CONFIRMATION_DAYS = 4
 EMAIL_RESEND_CONFIRMATION_DAYS = 2
 
@@ -41,7 +41,7 @@ if PRODUCTION_MODE:
     EMAIL_PORT = 25
     EMAIL_HOST_USER = 'dev@yasound.com'
     EMAIL_HOST_PASSWORD = 'w9t4vOT9OywDRZ4Yl9uP'
-    
+
 ADMINS = (
     ('Sebastien Métrot', 'seb@yasound.com'),
     ('Jerome Blondon', 'jerome@yasound.com'),
@@ -56,10 +56,10 @@ MODERATORS = (
 )
 
 CELERY_IMPORTS = (
-    "yabase.task", 
-    "stats.task", 
-    "account.task", 
-    "emailconfirmation.task", 
+    "yabase.task",
+    "stats.task",
+    "account.task",
+    "emailconfirmation.task",
     "yametrics.task",
     "yahistory.task",
     "yagraph.task",
@@ -75,7 +75,7 @@ if LOCAL_MODE:
     CELERY_RESULT_BACKEND = "database"
     CELERY_RESULT_DBURI = "sqlite:///db.dat"
     CELERY_TASK_RESULT_EXPIRES = 10
-    
+
     YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = True
 
     # Databases config:
@@ -133,7 +133,7 @@ elif DEVELOPMENT_MODE:
     CELERY_REDIS_PORT = 6379
     CELERY_REDIS_DB = 0
     CELERY_TASK_RESULT_EXPIRES = 10
-    
+
     YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = True
 
     # Databases config:
@@ -141,12 +141,12 @@ elif DEVELOPMENT_MODE:
         'default': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
+            'OPTIONS': {'read_default_file': '~/.my.cnf',},
         },
         'yasound': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',}, 
+            'OPTIONS': {'read_default_file': '~/.my.cnf.yasound',},
         }
     }
     CACHES = {
@@ -155,7 +155,7 @@ elif DEVELOPMENT_MODE:
             'LOCATION': 'yaapp-memory-cache'
         }
     }
-    
+
 elif PRODUCTION_MODE:
     # Celery config:
     CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
@@ -165,7 +165,7 @@ elif PRODUCTION_MODE:
     CELERY_REDIS_PORT = 6379
     CELERY_REDIS_DB = 0
     CELERY_TASK_RESULT_EXPIRES = 10
-    
+
     YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = True
 
     # Databases config:
@@ -173,15 +173,15 @@ elif PRODUCTION_MODE:
         'default': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yaapp',                      # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
+            'OPTIONS': {'read_default_file': '~/.my.cnf',},
         },
         'yasound': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'yasound',                      # Or path to database file if using sqlite3.
-            'OPTIONS': {'read_default_file': '~/.my.cnf',}, 
+            'OPTIONS': {'read_default_file': '~/.my.cnf',},
         }
     }
-    
+
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -198,8 +198,8 @@ elif PRODUCTION_MODE:
                 'yas-web-10:11211',
             ]
         }
-    } 
-    SESSION_ENGINE = "django.contrib.sessions.backends.cache"   
+    }
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # As we use a multi database config, we need a working database router:
 if not TEST_MODE:
@@ -207,7 +207,7 @@ if not TEST_MODE:
 else:
     # the test router enable syncdb for yasound database
     DATABASE_ROUTERS = ['yabase.router.YaappRouterForTest']
-    
+
     # celery should be sync when running tests
     CELERY_ALWAYS_EAGER = True
 
@@ -307,7 +307,7 @@ MIDDLEWARE_CLASSES = (
 if LOCAL_MODE or DEVELOPMENT_MODE:
     # ios 4 send double slashes. Nginx on prod server handle it gracefully, not on dev & local
     MIDDLEWARE_CLASSES += ('yabase.middleware.DoubleSlashMiddleware',)
-    
+
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -433,35 +433,35 @@ LOGGING = {
         'file':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000, 
+            'maxBytes': 1024*10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.log'),
             'formatter': 'verbose'
-        },     
+        },
         'file_yaweb':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000, 
+            'maxBytes': 1024*10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/yaweb.log'),
             'formatter': 'verbose'
-        },     
+        },
         'file_missing_songs':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000, 
+            'maxBytes': 1024*10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/missing_songs.log'),
             'formatter': 'verbose'
-        },     
+        },
         'file_delete_song':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000, 
+            'maxBytes': 1024*10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.delete_song.log'),
             'formatter': 'verbose'
-        },     
+        },
     },
     'loggers': {
         'django': {
@@ -488,7 +488,7 @@ LOGGING = {
             'handlers': ['console', 'file_delete_song'],
             'level': 'DEBUG',
             'propagate': False,
-        },                
+        },
         'yaapp.account': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
@@ -534,7 +534,12 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-                
+        'yaapp.yametrics': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+
     }
 }
 
@@ -596,7 +601,7 @@ if PRODUCTION_MODE:
     DEFAULT_HTTP_PROTOCOL = 'https'
 else:
     DEFAULT_HTTP_PROTOCOL = 'http'
-    
+
 # thumbnail
 THUMBNAIL_KEY_DBCOLUMN = 'thumb_key' # key is a mysql reserved keyword and break replication
 PICTURE_FOLDER = 'pictures'
@@ -604,13 +609,13 @@ if PRODUCTION_MODE:
     # use shared folder on prod servers
     PICTURE_FOLDER = 'pictures'
     THUMBNAIL_PREFIX = 'cache/'
-    
+
 # twitter
 if PRODUCTION_MODE:
     YASOUND_TWITTER_APP_CONSUMER_KEY = 'bvpS9ZEO6REqL96Sjuklg'
     YASOUND_TWITTER_APP_CONSUMER_SECRET = 'TMdhQbWXarXoxkjwSdUbTif5CyapHLfcAdYfTnTOmc'
-    
-    
+
+
 elif DEVELOPMENT_MODE or LOCAL_MODE:
     YASOUND_TWITTER_APP_CONSUMER_KEY = 'iLkxaRcY8QKku0UhaMvPQ'
     YASOUND_TWITTER_APP_CONSUMER_SECRET = 'rZYlrG4KXIat3nNJ3U8qXniQBSkJu8PjI1v7sCTHg'
@@ -639,8 +644,8 @@ elif PRODUCTION_MODE:
 # constants needed by django-social-auth, see https://github.com/omab/django-social-auth#twitter
 TWITTER_CONSUMER_KEY         = YASOUND_TWITTER_APP_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET      = YASOUND_TWITTER_APP_CONSUMER_SECRET
- 
-SOUTH_TESTS_MIGRATE=False   
+
+SOUTH_TESTS_MIGRATE=False
 
 # mongodb
 from pymongo.connection import Connection
@@ -711,10 +716,10 @@ if not PRODUCTION_MODE:
             "task": "yametrics.task.popularity_update_task",
             "schedule": crontab(minute=0, hour='*'),
         }
-                           
+
     }
 else:
-    import socket   
+    import socket
     hostname = socket.gethostname()
     if hostname == 'yas-web-01':
         CELERYBEAT_SCHEDULE = {
@@ -780,11 +785,11 @@ else:
                 "schedule": crontab(minute=0, hour='*'),
             },
         }
-        
-        
-        
-    
-    
+
+
+
+
+
 UPLOAD_SONG_FOLDER = '/tmp/'
 if PRODUCTION_MODE:
     UPLOAD_SONG_FOLDER = '/space/new/medias/sources/with_id3/'
@@ -829,7 +834,7 @@ else:
     ALBUM_COVERS_ROOT = '/tmp/'
     SONG_COVERS_ROOT = '/tmp/'
     RECOMMENDATION_CACHE = '/tmp/'
-    
+
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 
 # temp files
@@ -845,17 +850,17 @@ TRADEDOUBLER_ID="partnerId=2003"
 
 GEOIP_DATABASE = os.path.join(PROJECT_PATH, 'GeoIP.dat')
 GEOIP_CITY_DATABASE = os.path.join(PROJECT_PATH, 'GeoLiteCity.dat')
-GEOIP_LOOKUP = 'REMOTE_ADDR' 
+GEOIP_LOOKUP = 'REMOTE_ADDR'
 if DJANGO_MODE == 'PRODUCTION':
-    GEOIP_LOOKUP = 'HTTP_X_REAL_IP' 
+    GEOIP_LOOKUP = 'HTTP_X_REAL_IP'
 GEOIP_AUTHORIZED_COUNTRIES = ('FR',)
 # newsletter
 NEWSLETTER_DEFAULT_HEADER_SENDER = 'Yasound Newsletter <noreply@yasound.com>'
-    
+
 # misc
 MOST_POPULAR_SONG_COLLECTION_SIZE = 100000
 if TEST_MODE:
-    MOST_POPULAR_SONG_COLLECTION_SIZE = 5    
+    MOST_POPULAR_SONG_COLLECTION_SIZE = 5
 
 ANONYMOUS_ACCESS_ALLOWED = True
 if DEVELOPMENT_MODE:
