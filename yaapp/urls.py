@@ -122,10 +122,10 @@ urlpatterns = patterns('',
     url(r'^api/v1/song/(?P<song_id>\d+)/disliker/$', 'yabase.views.dislike_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/status/$', 'yabase.views.get_song_status'),
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
-    
+
     # live
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),  
-    
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),
+
     # show songs
     url(r'^api/v1/show/(?P<show_id>\S+)/songs/$', 'yashow.views.get_songs_for_show'),
     url(r'^api/v1/show/(?P<show_id>\S+)/add_song/(?P<yasound_song_id>\d+)/$', 'yashow.views.add_song_in_show'),
@@ -135,7 +135,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/show/(?P<show_id>\S+)/$', 'yashow.views.show'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/create_show/$', 'yashow.views.create_show'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/shows/$', 'yashow.views.get_shows_for_radio'),
-    
+
 
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
@@ -148,53 +148,65 @@ urlpatterns = patterns('',
     url(r'^api/v1/song_instance/(?P<song_instance_id>\d+)/cover/$', 'yabase.views.song_instance_cover'),
     url(r'^api/v1/account/association/$', 'account.views.associate'),
     url(r'^api/v1/account/dissociation/$', 'account.views.dissociate'),
+
+    # programming
+    url(r'^api/v1/my_programming/$', 'yabase.views.my_programming'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.my_programming'),
+
+    url(r'^api/v1/my_programming/artists/$', 'yabase.views.my_programming_artists'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/artists/$', 'yabase.views.my_programming_artists'),
+
+    url(r'^api/v1/my_programming/albums/$', 'yabase.views.my_programming_albums'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/albums/$', 'yabase.views.my_programming_albums'),
+
+    # api (will override any other url)
     (r'^api/', include(api.urls)),
     url(r'^graph/radio/(?P<radio_id>\d+)/song/(?P<song_id>\d+)', 'yagraph.views.song_graph'),
     (r'^status/', 'yabase.views.status'),
-    
+
     url(r'^api/v1/delete_song/(?P<song_instance_id>\d+)/$', 'yabase.views.delete_song_instance'),
     url(r'^api/v1/delete_message/(?P<message_id>\d+)/$', 'yabase.views.delete_message'),
     url(r'^api/v1/report_message/(?P<message_id>\d+)/$', 'yabase.views.report_message_as_abuse'),
 
     url(r'^api/v1/notify_missing_song/$', 'yabase.views.notify_missing_song'),
-    
+
     url(r'^api/v1/reject_song/(?P<song_id>\d+)/$', 'yabase.views.reject_song'),
-    
+
     url(r'^api/v1/most_active_radio/$', 'yabase.views.most_active_radios'),
-    
+
     url(r'^api/v1/notify_streamer/$', 'yabase.views.notify_streamer'),
     url(r'^api/v1/ping/$', 'yabase.views.ping'),
 
     url(r'^api/v1/public_stats/$', 'yabase.views.public_stats'),
     url(r'^api/v1/my_radios/$', 'yabase.views.my_radios'),
-    
-    
+
+
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
     url(r'^api/v1/notifications_preferences/$', 'account.views.get_notifications_preferences'),
     url(r'^api/v1/set_notifications_preferences/$', 'account.views.set_notifications_preferences'),
-    
+
     url(r'^api/v1/facebook_share_preferences/$', 'account.views.get_facebook_share_preferences'),
     url(r'^api/v1/set_facebook_share_preferences/$', 'account.views.set_facebook_share_preferences'),
-    
+
     url(r'^api/v1/twitter_share_preferences/$', 'account.views.get_twitter_share_preferences'),
     url(r'^api/v1/set_twitter_share_preferences/$', 'account.views.set_twitter_share_preferences'),
-    
+
     url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
     url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
     url(r'^api/v1/update_notification/(?P<notif_id>\S+)/$', 'yamessage.views.update_notification'),
     url(r'^api/v1/delete_notification/(?P<notif_id>\S+)/$', 'yamessage.views.delete_notification'),
     url(r'^api/v1/delete_all_notifications/$', 'yamessage.views.delete_all_notifications'),
-    
-    url(r'^api/v1/similar_radios_from_artist_list/$', 'yabase.views.similar_radios_from_artist_list'), 
+
+    url(r'^api/v1/similar_radios_from_artist_list/$', 'yabase.views.similar_radios_from_artist_list'),
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
-    
+
     # special case for iOS client
     url(r'^legal/eula.html$', 'yaweb.views.eula', name='eula'),
     url(r'^legal/privacy.html$', 'yaweb.views.privacy', name='privacy'),
     url(r'^fr/images/logo.png$', 'yaweb.views.logo', name='logo'),
-    
+
     url(r'^', include('yaweb.urls')),
 
     (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<song_instance_id>\d+)$', 'yabase.views.web_song'),
@@ -204,52 +216,42 @@ urlpatterns = patterns('',
 
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
-    
+
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
     (r'^invitation/', include('yainvitation.urls')),
-    
+
     (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
-    
+
     url(r'', include('social_auth.urls')),
     url(r'^login/$', 'account.views.login', name="login"),
     url(r'^signup/$', 'account.views.signup', name="signup"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
     url(r'^passreset/$','account.views.password_reset', name='lost_password'),
     url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','account.views.password_reset_confirm', name='reset_password_confirm'),
-    
+
     url(r'^api/v1/set_localization/$','account.views.update_localization'),
-    
+
     url(r'^api/v1/connected_users/$','account.views.connected_users_by_distance'),
     url(r'^api/v1/fast_connected_users/$','account.views.fast_connected_users_by_distance'),
 
-    # programming
-    url(r'^api/v1/my_programming/$', 'yabase.views.my_programming'),
-    url(r'^api/v1/my_programming/artists/$', 'yabase.views.my_programming_artists'),
-    url(r'^api/v1/my_programming/albums/$', 'yabase.views.my_programming_albums'),
-    
 
     url(r'^api/v2/radio/(?P<radio_uuid>\S+)/leaderboard/$', 'yabase.views.radio_leaderboard', name='radio_leaderboard'),
 
-    # programming
-    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.radio_programming'),
-    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/artists/$', 'yabase.views.radio_programming_artists'),
-    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/programming/albums/$', 'yabase.views.radio_programming_albums'),
-    
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
-    
+
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
-    
+
     #yamenu
     (r'^api/v1/app_menu/$', 'yamenu.views.menu_description'),
 
     # newsletters
-    url(r'^newsletters/', include('emencia.django.newsletter.urls')),    
-    
+    url(r'^newsletters/', include('emencia.django.newsletter.urls')),
+
     # internal stuff
     url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
 
@@ -268,7 +270,7 @@ else:
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.forbidden.txt', 'mimetype': 'text/plain'}),
         url(r'^channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='facebook_channel_url'),
     )
-    
+
 # sitemap
 sitemaps = {
     'yaweb': StaticSitemap(yaweb_urls.urlpatterns),

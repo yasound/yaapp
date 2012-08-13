@@ -93,7 +93,6 @@ $(document).ready(function () {
     Yasound.App.Workspace = Backbone.Router.extend({
         routes: {
             "": "index",
-            "radio/:uuid/*args": "radio",
             "radio/:uuid": "radio",
             "search/:query/": "search",
             "favorites/": "myFavorites",
@@ -108,10 +107,12 @@ $(document).ready(function () {
             "friends/": "myFriends",
             "notifications/": "notifications",
             "programming/": "programming",
+            "radio/:uuid/programming/": "programming",
             "legal/": "legal",
             "contact/": "contact",
             "signup/": "signup",
             "login/": "login",
+            "radio/:uuid/*args": "radio",
             "*args": "index"
         },
 
@@ -213,12 +214,12 @@ $(document).ready(function () {
             }).render();
         },
 
-        programming: function () {
+        programming: function (uuid) {
             this.clearView();
 
             this.currentView = new Yasound.Views.ProgrammingPage({
                 el: '#webapp-content'
-            }).render();
+            }).render(uuid);
         },
 
         // search page
