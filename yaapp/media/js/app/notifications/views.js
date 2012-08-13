@@ -119,7 +119,6 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
 
     onClose: function() {
         Yasound.App.Router.pushManager.off('notification', this.onNotification, this);
-        this.notificationsToolbar.close();
         this.notificationsView.close();
         this.paginationView.close();
     },
