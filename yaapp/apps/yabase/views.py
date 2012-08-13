@@ -29,7 +29,7 @@ from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm, RadioGenreForm
-from account.forms import WebAppSignupForm
+from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
@@ -1081,6 +1081,30 @@ class WebAppView(View):
             form = WebAppSignupForm(request.POST)
             if form.is_valid():
                 form.save()
+                if request.is_ajax():
+                    data = {
+                        'success': True
+                    }
+                    response = json.dumps(data)
+                    return HttpResponse(response, mimetype='application/json')
+                else:
+                    return HttpResponseRedirect(reverse('webapp'))
+            else:
+                if request.is_ajax():
+                    data = {
+                        'success': False,
+                        'errors': form.errors
+                    }
+                    response = json.dumps(data)
+                    return HttpResponse(response, mimetype='application/json')
+                else:
+                    context['signup_form'] = form
+        return context, 'yabase/webapp.html'
+
+    def login(self, request, context, *args, **kwargs):
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid() and form.login(request):
                 if request.is_ajax():
                     data = {
                         'success': True

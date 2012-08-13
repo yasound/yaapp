@@ -8,19 +8,19 @@ $(document).ready(function () {
         picture: g_facebook_share_picture,
         link: g_facebook_share_link
     };
-    
+
     Yasound.App.userAuthenticated = g_authenticated;
     Yasound.App.username = g_username;
     Yasound.App.isMobile = false;
     Yasound.App.hasRadios = g_has_radios;
-    
+
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
-    }    
-    
+    }
+
     Yasound.App.enableFX = true;
     Yasound.App.waitForSoundManager = true;
-    
+
     if ($.browser.msie) {
         if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
             Yasound.App.enableFX = false;
@@ -28,7 +28,7 @@ $(document).ready(function () {
             g_enable_push = false;
         }
     }
-    
+
     /**
      * component initalization
      */
@@ -52,7 +52,7 @@ $(document).ready(function () {
             trigger: true
         });
     });
-    
+
     Backbone.View.prototype.close = function () {
         this.remove();
         this.unbind();
@@ -111,6 +111,7 @@ $(document).ready(function () {
             "legal/": "legal",
             "contact/": "contact",
             "signup/": "signup",
+            "login/": "login",
             "*args": "index"
         },
 
@@ -183,7 +184,7 @@ $(document).ready(function () {
             }
             this.commonContext.subMenuView.selectMenu(selectedMenu);
         },
-        
+
         index: function () {
             this.clearView('selection');
 
@@ -191,7 +192,7 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.HomePage({
                 el: '#webapp-content'
             }).render(genre);
-            
+
         },
 
         settings: function () {
@@ -201,7 +202,7 @@ $(document).ready(function () {
                 el: '#webapp-content'
             }).render();
         },
-        
+
         notifications: function () {
             this.clearView();
 
@@ -237,7 +238,7 @@ $(document).ready(function () {
                 el: '#webapp-content'
             }).render(genre);
         },
-        
+
         userFavorites: function (username) {
             this.clearView();
             this.currentView = new Yasound.Views.UserFavoritesPage({
@@ -277,7 +278,7 @@ $(document).ready(function () {
         // user's radios
         userRadios: function (username) {
             this.clearView();
-            
+
             this.currentView = new Yasound.Views.UserRadiosPage({
                 el: '#webapp-content'
             }).render('', username);
@@ -298,7 +299,7 @@ $(document).ready(function () {
         // profile page
         profile: function (username) {
             this.clearView();
-            
+
             this.currentView = new Yasound.Views.ProfilePage({
                 model: new Yasound.Data.Models.User({username:username}),
                 el: '#webapp-content'
@@ -339,7 +340,7 @@ $(document).ready(function () {
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
         },
-        
+
         // owner favorites page
         myRadios: function () {
             this.clearView('my-radios');
@@ -350,18 +351,18 @@ $(document).ready(function () {
                 el: '#webapp-content'
             }).render(genre);
         },
-        
+
         legal: function() {
             this.clearView();
-            
+
             this.currentView = new Yasound.Views.Static.LegalPage({
                 el: '#webapp-content'
             }).render();
         },
-        
+
         contact: function() {
             this.clearView();
-            
+
             this.currentView = new Yasound.Views.Static.ContactPage({
                 el: '#webapp-content'
             }).render();
@@ -369,16 +370,25 @@ $(document).ready(function () {
 
         signup: function() {
             this.clearView();
-            
+
             this.currentView = new Yasound.Views.SignupPage({
                 el: '#webapp-content'
             }).render();
+        },
+
+        login: function() {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.LoginPage({
+                el: '#webapp-content'
+            }).render();
         }
+
     });
 
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
-    
+
     if (!Yasound.App.waitForSoundManager) {
         Backbone.history.start({
             pushState: true,
