@@ -696,7 +696,6 @@ Yasound.Views.LogIn = Backbone.View.extend({
     displayPopupLogin: function (e) {
         e.preventDefault();
         $('#login-box-container', this.el).removeClass('hidden');
-        loginBoxContainer.removeClass('hidden');
     },
 
     hidePopupLogin: function() {
