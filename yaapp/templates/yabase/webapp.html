@@ -301,15 +301,9 @@
 		                </div>
 		                {% else %}
 		                <div id='login'>
-<<<<<<< HEAD
-		                  <a id='signup-btn'class='float-left' href='{% url signup %}?next=/app/'>{% trans 'Signup' %}</a>
-                      <div class="header-separation login-btn"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>  
-                      <a id='login-btn' class='float-left' href='{% url login %}?next=/app/'>{% trans 'Login' %}</a>
-=======
 		                  <a class='float-left' id='signup-btn' href='{% url webapp_signup %}'>{% trans 'Signup' %}</a>
                       <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
                       <a class='float-left login-btn' id='login-btn' href='{% url webapp_login %}'>{% trans 'Login' %}</a>
->>>>>>> 208c9d5817d9bb5b7471cb3d43942147d5702eab
                       <div id='login-box-container' class='hidden'>
                         <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
                         <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
