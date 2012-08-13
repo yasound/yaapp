@@ -28,3 +28,5 @@ yaapp/media/statics/*
 yaapp/media/uploads/*
 yaapp/.settings/*
 yaapp/media/*-all.*.js
+.rope*
+yaapp.sublime*
