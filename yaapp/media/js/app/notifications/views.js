@@ -110,7 +110,7 @@ Yasound.Views.Notifications = Backbone.View.extend({
 });
 
 /**
- * Profile page
+ * Notifications page
  */
 Yasound.Views.NotificationsPage = Backbone.View.extend({
     initialize: function() {
@@ -156,57 +156,11 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        this.notificationsToolbar = new Yasound.Views.NotificationsToolbar({
-            el: $('#notifications-toolbar', this.el),
-            collection: this.notifications
-        }).render();
-        this.notificationsToolbar.notificationsView = this.notificationsView;
-
         this.notifications.fetch();
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification, this);
         }
         return this;
-    }
-});
-
-/**
- * Notification buttons
- */
-Yasound.Views.NotificationsToolbar = Backbone.View.extend({
-    el: '#notifications-toolbar',
-    events: {
-        'click #read': 'read',
-        'click #unread': 'unread',
-        'click #all': 'all'
-    },
-    initialize: function() {
-        _.bindAll(this, 'render');
-    },
-    render: function() {
-        $(this.el).html(ich.notificationsToolbarTemplate());
-        return this;
-    },
-    read: function(e) {
-        e.preventDefault();
-        this.notificationsView.clear();
-        this.notificationsView.mode = 'read';
-        this.collection.customParam1 = 'read';
-        this.collection.goTo(0);
-    },
-    unread: function(e) {
-        e.preventDefault();
-        this.notificationsView.clear();
-        this.notificationsView.mode = 'unread';
-        this.collection.customParam1 = 'unread';
-        this.collection.goTo(0);
-    },
-    all: function(e) {
-        e.preventDefault();
-        this.notificationsView.clear();
-        this.notificationsView.mode = 'all';
-        this.collection.customParam1 = 'all';
-        this.collection.goTo(0);
     }
 });
