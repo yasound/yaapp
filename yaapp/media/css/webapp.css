@@ -1984,9 +1984,8 @@ ul#notifications .read {
 	margin-bottom:27px;
 }
 
-.user-btn {
-	margin-bottom:20px;
-	margin-left:10px;
+#infos .user-btn {
+	margin: 0px 5px 10px 5px;
 }
 
 #infos a {

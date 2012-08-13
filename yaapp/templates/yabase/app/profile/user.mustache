@@ -14,14 +14,14 @@
         <%/owner%>
 	</span>
     <%^owner%>
-	<button type="button" class="user-btn yabutton-large right" id='follow'>
+	<button type="button" class="user-btn yabutton right" id='follow'>
     	<%#is_friend%>{% trans "Unfollow" %}<%/is_friend%>
         <%^is_friend%>{% trans "Follow" %}<%/is_friend%>
 	</button>
     <%/owner%>
     <%#owner%>
-    <button type="button" class="user-btn yabutton-large right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
-    <button type="button" class="user-btn yabutton-large right"><a href='{% url webapp_settings %}'>{% trans "Settings" %}</a></button>
+    <button type="button" class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
+    <button type="button" class="user-btn yabutton right"><a href='{% url webapp_settings %}'>{% trans "Settings" %}</a></button>
     <%/owner%>
     <em><% agc %></em>
     <p class="profile-bio"><% bio_text %></p>
