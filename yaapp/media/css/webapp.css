@@ -39,6 +39,10 @@ body {
 
 /*--- LOGIN ---*/
 
+#login  .header-separation {
+    margin-left:0px;
+}
+
 #login {
     display:block;
     float:left;
@@ -50,14 +54,32 @@ body {
 }
 
 #login a {
-    display:block;
-    margin-top:31px;
-    /*margin-left:12px;*/
     color:white;
 }
+
+#login #signup-btn {
+    float:left;
+    display:block;
+    width:70px;
+    margin-top:31px;
+    color:white;
+    text-align: center;
+}
+
+#login #login-btn {
+    float:left;
+    display:block;
+    width:100px;
+    margin-top:31px;
+
+    /*margin-left:12px;*/
+    color:white;
+    text-align: center;
+}
+
 #login a:hover {
-    color:#dedede;
-    text-decoration:none;
+    color:white;
+    text-decoration: none;
 }
 
 #login-box-container {
@@ -1962,9 +1984,8 @@ ul#notifications .read {
 	margin-bottom:27px;
 }
 
-.user-btn {
-	margin-bottom:20px;
-	margin-left:10px;
+#infos .user-btn {
+	margin: 0px 5px 10px 5px;
 }
 
 #infos a {
@@ -1992,7 +2013,7 @@ ul .radio-with-stats-cells li {
 	height:260px;
 	width:940px;
 	margin-top:23px;
-	background-image:url('../app/images/myRadio/my-radio-bg.png');
+	background-image:url('../app/images/my-radio/my-radio-bg.png');
 	border-radius:10px;
 	box-shadow:1px 2px 2px #dcdcdc;
 }
@@ -2084,7 +2105,7 @@ ul .radio-with-stats-cells li {
 
 .signup-container {
     height:618px;
-    background-image:url('../app/images/SignUp/signup-bg-gradient.png');
+    background-image:url('../app/images/sign-up/signup-bg-gradient.png');
     background-repeat:repeat-x;
     border:1px solid #e2e2e2;
     border-radius:5px;
@@ -2122,7 +2143,7 @@ ul .radio-with-stats-cells li {
     float:left;
     margin:30px 0px 42px 101px;
     position:relative;
-    background-image:url('../app/images/SignUp/btn-bg-facebook.png');
+    background-image:url('../app/images/sign-up/btn-bg-facebook.png');
     background-repeat:repeat-x;
     border:1px solid #283f70;
     border-radius:5px;
@@ -2136,7 +2157,7 @@ ul .radio-with-stats-cells li {
     float:left;
     margin:30px 0px 42px 33px;
     position:relative;
-    background-image:url('../app/images/SignUp/btn-bg-twitter.png');
+    background-image:url('../app/images/sign-up/btn-bg-twitter.png');
     background-repeat:repeat-x;
     border:1px solid #2c7996;
     border-radius:5px;
@@ -2165,7 +2186,7 @@ ul .radio-with-stats-cells li {
     float:left;
     clear:both;
     margin-bottom:37px;
-    background-image:url('../app/images/SignUp/signup-separation-line.png');
+    background-image:url('../app/images/sign-up/signup-separation-line.png');
     background-repeat:repeat-x;
 }
 
@@ -2518,7 +2539,7 @@ ul .radio-with-stats-cells li {
 	}
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        background-image:url('../app/images/myRadio/my-radio-bg-mobile.png');
+        background-image:url('../app/images/my-radio/my-radio-bg-mobile.png');
     }
     .radio-with-stats-cells .radio-with-stats {
         width:465px;

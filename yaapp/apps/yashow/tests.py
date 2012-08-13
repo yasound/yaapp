@@ -32,9 +32,11 @@ class ShowTest(TestCase):
         
         d = self.manager.MONDAY
         t = datetime.now().time()
-        show = self.manager.create_show('my first show', radio, d, t)
+        enabled = False
+        show = self.manager.create_show('my first show', radio, d, t, enabled=enabled)
         self.assertIsNotNone(show)
-        
+        self.assertEquals(show['enabled'], enabled)
+
         shows = self.manager.shows_for_radio(radio.id)
         self.assertEquals(shows.count(), 1)
     
@@ -56,7 +58,7 @@ class ShowTest(TestCase):
         
         yasound_songs = YasoundSong.objects.all()[:nb_songs]
         
-        d = self.manager.MONDAY
+        d = '%s,%s' % (self.manager.MONDAY, self.manager.FRIDAY)
         t = datetime.now().time()
         show = self.manager.create_show('my first show', radio, d, t, yasound_songs=yasound_songs)
         self.assertIsNotNone(show)
@@ -158,21 +160,21 @@ class ShowTest(TestCase):
         show_id = show['_id']
         s = self.manager.get_show(show_id)
         self.assertEqual(s['playlist_id'], show['playlist_id'])
-        self.assertEqual(s['day'], show['day'])
+        self.assertEqual(s['days'], show['days'])
         self.assertEqual(s['time'], show['time'])
         
         # show_id as str
         show_id = str(show['_id'])
         s = self.manager.get_show(show_id)
         self.assertEqual(s['playlist_id'], show['playlist_id'])
-        self.assertEqual(s['day'], show['day'])
+        self.assertEqual(s['days'], show['days'])
         self.assertEqual(s['time'], show['time'])
         
         # show_id as unicode
         show_id = unicode(show['_id'])
         s = self.manager.get_show(show_id)
         self.assertEqual(s['playlist_id'], show['playlist_id'])
-        self.assertEqual(s['day'], show['day'])
+        self.assertEqual(s['days'], show['days'])
         self.assertEqual(s['time'], show['time'])
         
         # check it returns None when an invalid id is asked
@@ -193,20 +195,23 @@ class ShowTest(TestCase):
         show = self.manager.create_show('my first show', radio, d, t)
         self.assertIsNotNone(show)
         
-        # change 'day'
-        new_day = self.manager.WEDNESDAY
-        show['day'] = new_day
+        # change 'days'
+        new_days = '%s,%s' % (self.manager.WEDNESDAY, self.manager.SUNDAY)
+        show['days'] = new_days
         date = datetime.now()
         show['time'] = date.isoformat()
+        enabled = False
+        show['enabled'] = enabled
         s = self.manager.update_show(show)
         
         # check returned data
-        self.assertEqual(s['day'], new_day)
+        self.assertEqual(s['days'], new_days)
         self.assertEqual(s['time'], date.time().isoformat())
+        self.assertEqual(s['enabled'], enabled)
         
         # check stored data
         s2 = self.manager.get_show(s['_id'])
-        self.assertEqual(s2['day'], new_day)
+        self.assertEqual(s2['days'], new_days)
         
     def test_delete_show(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
@@ -269,7 +274,7 @@ class ShowTest(TestCase):
         self.assertIsNotNone(show_copy)
         self.assertEqual(self.manager.nb_shows_for_radio(radio.id), 2)
         self.assertEqual(show_copy['name'], show_original['name'])
-        self.assertEqual(show_copy['day'], show_original['day'])
+        self.assertEqual(show_copy['days'], show_original['days'])
         self.assertEqual(show_copy['time'], show_original['time'])
         self.assertEqual(show_copy['random_play'], show_original['random_play'])
         self.assertEqual(len(self.manager.songs_for_show(show_copy['_id'])), len(self.manager.songs_for_show(show_original['_id'])))
@@ -387,7 +392,7 @@ class ViewsTest(TestCase):
         
         s = json.loads(response.content)
         self.assertEqual(show['playlist_id'], s['playlist_id'])
-        self.assertEqual(show['day'], s['day'])
+        self.assertEqual(show['days'], s['days'])
         self.assertEqual(show['time'], s['time'])
         
     def test_get_shows(self):
@@ -432,21 +437,21 @@ class ViewsTest(TestCase):
         c = Client()
         response = c.get('/api/v1/show/%s/' % show_id, {'username':self.user.username, 'api_key':self.api_key.key})
         s = json.loads(response.content)
-        new_day = self.manager.SUNDAY
-        s['day'] = new_day
+        new_days = self.manager.SUNDAY
+        s['days'] = new_days
         
         json_s = json.dumps(s)
         response = c.put('/api/v1/show/%s/?username=%s&api_key=%s' % (s['_id'], self.user.username, self.api_key.key), json_s, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         s = json.loads(response.content)
-        self.assertEqual(s['day'], new_day)
+        self.assertEqual(s['days'], new_days)
         
         
     def test_post_show(self):
         c = Client()
         data = {
                 'name': 'my new show',
-                'day': self.manager.EVERY_DAY,
+                'days': self.manager.TUESDAY,
                 'time': time(hour=19, minute=0),
                 'random_play': True
                 }
@@ -457,7 +462,7 @@ class ViewsTest(TestCase):
         s = json.loads(response.content)
         self.assertIsNotNone(s)
         
-        self.assertEqual(s['day'], data['day'])
+        self.assertEqual(s['days'], data['days'])
         self.assertEqual(s['name'], data['name'])
         self.assertEqual(s['random_play'], data['random_play'])
         
@@ -477,7 +482,7 @@ class ViewsTest(TestCase):
         
         # but with same settings
         self.assertEqual(show['name'], s['name'])
-        self.assertEqual(show['day'], s['day'])
+        self.assertEqual(show['days'], s['days'])
         self.assertEqual(show['time'], s['time'])
         self.assertEqual(show['random_play'], s['random_play'])
         

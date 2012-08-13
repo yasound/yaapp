@@ -20,9 +20,7 @@ class ShowManager():
     FRIDAY = 'FRI'
     SATURDAY = 'SAT'
     SUNDAY = 'SUN'
-    EVERY_DAY = 'ALL'
     
-    DAYS = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY, EVERY_DAY]
     
     TYPE_PLAYLIST = 'playlist'
     TYPE_META = 'meta'
@@ -36,10 +34,7 @@ class ShowManager():
         self.shows = self.db.shows
         self.shows.ensure_index("playlist_id", unique=True)
         
-    def create_show(self, name, radio, day, time, random_play=True, yasound_songs=[]):
-        if not day in self.DAYS:
-            return None
-        
+    def create_show(self, name, radio, days, time, random_play=True, enabled=True, yasound_songs=[]):        
         playlist = Playlist.objects.create(radio=radio, name=name)
         
         for index, y_song in enumerate(yasound_songs):
@@ -61,9 +56,10 @@ class ShowManager():
         
         show_doc = {'name': name,
                     'playlist_id': playlist.id,
-                    'day': day,
+                    'days': days,
                     'time': time,
                     'random_play': random_play,
+                    'enabled': enabled,
                     'type': self.TYPE_PLAYLIST
                     }
         self.shows.insert(show_doc, safe=True)
@@ -121,10 +117,11 @@ class ShowManager():
             return None
         
         radio = Playlist.objects.get(id=show_original['playlist_id']).radio
-        day = show_original['day']
+        days = show_original['days']
         time = show_original['time']
         random = show_original['random_play']
         name = show_original['name']
+        enabled = show_original['enabled']
         yasound_songs = []
         songs_original = self.songs_for_show(show_id)
         for s in songs_original:
@@ -132,7 +129,7 @@ class ShowManager():
             y = YasoundSong.objects.get(id=yasound_song_id)
             yasound_songs.append(y)
         
-        show_copy = self.create_show(name, radio, day, time, random, yasound_songs)
+        show_copy = self.create_show(name, radio, days, time, random, enabled, yasound_songs)
         return show_copy
     
     def songs_for_show(self, show_id, count=None, skip=0):

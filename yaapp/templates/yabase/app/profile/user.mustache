@@ -20,7 +20,8 @@
 	</button>
     <%/owner%>
     <%#owner%>
-    <button type="button" class="user-btn yabutton-large right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
+    <button type="button" class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
+    <button type="button" id='settings-btn' class="user-btn yabutton right"><a href='{% url webapp_settings %}'>{% trans "Settings" %}</a></button>
     <%/owner%>
     <em><% agc %></em>
     <p class="profile-bio"><% bio_text %></p>

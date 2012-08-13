@@ -10,7 +10,8 @@ Yasound.Views.User = Backbone.View.extend({
     className: 'radio',
     events: {
         'click #radio-activity': 'radio',
-        'click #follow': 'follow'
+        'click #follow': 'follow',
+        'click #settings-btn': 'settings'
     },
 
     initialize: function () {
@@ -25,11 +26,12 @@ Yasound.Views.User = Backbone.View.extend({
         if (data.current_radio && data.current_radio.name.length > 18) {
             data.current_radio.name = data.current_radio.name.substring(0,18) + "...";
         }
-        
+
         $(this.el).html(ich.userTemplate(data));
         $('#picture img', this.el).imgr({size:"6px",color:"white",radius:"100%"});
         return this;
     },
+
     radio: function (e) {
         e.preventDefault();
         var uuid = this.model.get('history')['radio_uuid'];
@@ -37,6 +39,14 @@ Yasound.Views.User = Backbone.View.extend({
             trigger: true
         });
     },
+
+    settings: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("settings/", {
+            trigger: true
+        });
+    },
+
     follow: function(e) {
         e.preventDefault();
         if (this.model.get('is_friend')) {
@@ -71,7 +81,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     render: function () {
         this.reset();
         $(this.el).html(ich.profilePageTemplate());
-                                                 
+
         this.userView = new Yasound.Views.User({
             model: this.model,
             el: $('#user-profile', this.el)
@@ -115,17 +125,17 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         });
         return this;
     },
-    
+
     modelLoaded: function(model, response) {
         this.radios.setUsername(model.get('username')).fetch();
         this.favorites.setUsername(model.get('username')).fetch();
         this.friends.setUsername(model.get('username')).fetch();
     },
-    
+
     displayRadios: function(e) {
         e.preventDefault();
         var username = this.model.get('username');
-        
+
         if (username == Yasound.App.username) {
             // display radios with stats for current user
             Yasound.App.Router.navigate("radios/", {
@@ -135,9 +145,9 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             Yasound.App.Router.navigate("profile/" + username + '/radios/', {
                 trigger: true
             });
-        } 
-        
-        
+        }
+
+
     },
 
     displayFavorites: function (e) {
@@ -147,7 +157,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             trigger: true
         });
     },
-    
+
     displayFriends: function (e) {
         e.preventDefault();
         var username = this.model.get('username')
