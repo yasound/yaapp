@@ -312,7 +312,7 @@
 >>>>>>> 208c9d5817d9bb5b7471cb3d43942147d5702eab
                       <div id='login-box-container' class='hidden'>
                         <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
-                        <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/lwebogin/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
+                        <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
                         <div class='login-separation-line'></div>
                         <form id='popup-login-form' method='post' action="{% url webapp_login %}">{% csrf_token %}
                           <span>{% trans "Email login" %}</span>
