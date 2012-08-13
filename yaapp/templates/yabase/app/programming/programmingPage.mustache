@@ -1,11 +1,23 @@
 {% load i18n %}
 <div class='row'>
-<div class='span12'>
-    <h1>{% trans "Programming" %}</h1>
-    <div class="btn-group" data-toggle="buttons-radio" id='programming-toolbar'>
+    <div class='span12'>
+        <h1>{% trans "Programming" %}</h1>
     </div>
-    <div id='programming-filters'></div>
-    <div id='content'></div>
-    <div class='cell-pagination' id='pagination'></div>
-</div>
+
+    <div class='span3'>
+        <div class='well'>
+            <ul class="nav nav-list">
+              <li class="nav-header">{% trans "Default playlist" %}</li>
+              <li class="active"><a href="#">{% trans "Programming" %}</a></li>
+              <li class="divider"/>
+              <li class="nav-header">{% trans "Shows" %}</li>
+              <li><a href="#">{% trans "morning show" %}</a></li>
+              <li><a href="#">{% trans "tonight show" %}</a></li>
+              <li><a href="#">{% trans "lounge" %}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class='span9' id='playlist'>
+    </div>
 </div>

@@ -671,18 +671,81 @@ Yasound.Views.PublicStats = Backbone.View.extend({
  */
 
 Yasound.Views.LogIn = Backbone.View.extend({
+    el: '#login',
+
     events: {
-        "mouseover .login-btn"  :"onHover"
+        "mouseenter .login-btn"  :"displayPopupLogin",
+        "click #login-btn": "displayRegularLogin",
+        "click #signup-btn": "displayRegularSignup",
+        "submit #popup-login-form": "submit"
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'displayPopupLogin', 'hidePopupLogin', 'displayRegularLogin', 'displayRegularSignup');
     },
 
     render: function() {
-        
+        var that = this;
+        $(this.el).on('mouseleave', function() {
+            that.hidePopupLogin();
+        });
+
+        return this;
     },
-    
-    onHover: function (e) {
-        var loginBoxContainer = $('#login-box-container', this.el);
+
+    displayPopupLogin: function (e) {
+        e.preventDefault();
+        $('#login-box-container', this.el).removeClass('hidden');
         loginBoxContainer.removeClass('hidden');
     },
+
+    hidePopupLogin: function() {
+        $('#login-box-container', this.el).addClass('hidden');
+    },
+
+    displayRegularLogin: function (e) {
+        e.preventDefault();
+        this.hidePopupLogin();
+        Yasound.App.Router.navigate('/login/', {
+            trigger: true
+        });
+    },
+
+    displayRegularSignup: function (e) {
+        e.preventDefault();
+        this.hidePopupLogin();
+        Yasound.App.Router.navigate('/signup/', {
+            trigger: true
+        });
+    },
+
+    submit: function(e) {
+        e.preventDefault();
+        var form = $('#popup-login-form', this.el);
+        $('.error-msg', form).remove();
+        $('input').removeClass('error');
+
+        var url = form.attr('action');
+        $.post(url, form.serializeArray(), function(data) {
+            var success = data.success;
+            if (!data.success) {
+                colibri(gettext('Login error'));
+                var errors = data.errors;
+                if (errors) {
+                    _.each(errors, function(value, key) {
+                        var $input = $('input[name=' + key + ']', form);
+                        $input.addClass('error');
+                        $input.after('<div class="error-msg">' + value + '</div>');
+                    });
+                }
+            } else {
+                window.location = '/app/';
+            }
+        }).error(function() {
+            colibri(gettext('Error while login in', 'colibri-error'));
+        });
+    }
+
 });
 
 /**

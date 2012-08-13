@@ -69,10 +69,11 @@ Yasound.Views.SongInstances = Backbone.View.extend({
     }
 });
 
-/**
- * Programming page
- */
-Yasound.Views.ProgrammingPage = Backbone.View.extend({
+Yasound.Views.Playlist = Backbone.View.extend({
+    el: '#playlist',
+    events: {
+    },
+
     initialize: function() {
         _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'artistsSelected', 'albumsSelected');
     },
@@ -104,6 +105,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
         this.songInstances.fetch();
     },
+
     onImportItunes: function() {
         if (this.currentView) {
             this.currentView.close();
@@ -114,10 +116,19 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
     },
 
+    artistsSelected: function(artists) {
+        this.currentView.clear();
+        this.songInstances.filterArtists(artists);
+    },
+
+    albumsSelected: function(albums) {
+        this.currentView.clear();
+        this.songInstances.filterAlbums(albums);
+    },
+
     render: function(uuid) {
         this.reset();
-        $(this.el).html(ich.programmingPageTemplate());
-
+        $(this.el).html(ich.playlistTemplate());
         this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
 
         $('#content', this.el).hide().html(ich.songInstancesTemplate()).fadeIn(200);
@@ -139,22 +150,36 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
         this.filters = new Yasound.Views.ProgrammingFilters({
             el: $('#programming-filters', this.el)
-        }).render();
+        }).render(uuid);
 
         this.filters.on('artistsSelected', this.artistsSelected);
         this.filters.on('albumsSelected', this.albumsSelected);
 
         this.songInstances.fetch();
+    }
+});
+
+/**
+ * Programming page
+ */
+Yasound.Views.ProgrammingPage = Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    render: function(uuid) {
+        this.reset();
+        $(this.el).html(ich.programmingPageTemplate());
+
+        this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
 
         return this;
-    },
-    artistsSelected: function(artists) {
-        this.currentView.clear();
-        this.songInstances.filterArtists(artists);
-    },
-    albumsSelected: function(albums) {
-        this.currentView.clear();
-        this.songInstances.filterAlbums(albums);
     }
 });
 
@@ -194,16 +219,16 @@ Yasound.Views.ProgrammingFilters = Backbone.View.extend({
         this.off('artistsSelected', this.artistsSelected);
         this.off('albumsSelected', this.albumsSelected);
     },
-    render: function() {
+    render: function(uuid) {
         $(this.el).html(ich.programmingFiltersTemplate());
 
-        this.artists = new Yasound.Data.Models.ProgrammingArtists({});
+        this.artists = new Yasound.Data.Models.ProgrammingArtists({}).setUUID(uuid);
         this.artistsView = new Yasound.Views.ProgrammingFilterArtists({
             collection:this.artists,
             el: $('#artist-select', this.el)
         });
 
-        this.albums = new Yasound.Data.Models.ProgrammingAlbums({});
+        this.albums = new Yasound.Data.Models.ProgrammingAlbums({}).setUUID(uuid);
         this.albumsView = new Yasound.Views.ProgrammingFilterAlbums({
             collection:this.albums,
             el: $('#album-select', this.el)
@@ -352,4 +377,3 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
         return this;
     }
 });
-
