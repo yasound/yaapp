@@ -139,7 +139,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
         this.filters = new Yasound.Views.ProgrammingFilters({
             el: $('#programming-filters', this.el)
-        }).render();
+        }).render(uuid);
 
         this.filters.on('artistsSelected', this.artistsSelected);
         this.filters.on('albumsSelected', this.albumsSelected);
@@ -194,16 +194,16 @@ Yasound.Views.ProgrammingFilters = Backbone.View.extend({
         this.off('artistsSelected', this.artistsSelected);
         this.off('albumsSelected', this.albumsSelected);
     },
-    render: function() {
+    render: function(uuid) {
         $(this.el).html(ich.programmingFiltersTemplate());
 
-        this.artists = new Yasound.Data.Models.ProgrammingArtists({});
+        this.artists = new Yasound.Data.Models.ProgrammingArtists({}).setUUID(uuid);
         this.artistsView = new Yasound.Views.ProgrammingFilterArtists({
             collection:this.artists,
             el: $('#artist-select', this.el)
         });
 
-        this.albums = new Yasound.Data.Models.ProgrammingAlbums({});
+        this.albums = new Yasound.Data.Models.ProgrammingAlbums({}).setUUID(uuid);
         this.albumsView = new Yasound.Views.ProgrammingFilterAlbums({
             collection:this.albums,
             el: $('#album-select', this.el)
