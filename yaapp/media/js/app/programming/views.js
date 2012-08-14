@@ -5,6 +5,7 @@ Namespace('Yasound.Views');
 Yasound.Views.SongInstance = Backbone.View.extend({
     tagName: 'tr',
     events: {
+        "click .remove": 'onRemove'
     },
 
     initialize: function () {
@@ -17,17 +18,23 @@ Yasound.Views.SongInstance = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        $(this.el).hide().html(ich.songInstanceCellTemplate(data)).fadeIn(200);
+        $(this.el).html(ich.songInstanceCellTemplate(data));
         return this;
+    },
+
+    onRemove: function (e) {
+        e.preventDefault();
+        this.model.destroy();
     }
 });
 
 Yasound.Views.SongInstances = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'addOne', 'addAll');
+        _.bindAll(this, 'addOne', 'addAll', 'onDestroy');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('destroy', this.onDestroy, this)
         this.views = [];
     },
 
@@ -66,6 +73,11 @@ Yasound.Views.SongInstances = Backbone.View.extend({
         });
         $(this.el).append(view.render().el);
         this.views.push(view);
+    },
+
+    onDestroy: function(model) {
+        this.clear();
+        this.collection.fetch();
     }
 });
 
@@ -198,10 +210,18 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     },
     all: function(e) {
         e.preventDefault();
+
+        $('#all').addClass('active');
+        $('#import-itunes').removeClass('active');
+
         this.trigger('tracks');
     },
     importItunes: function(e) {
         e.preventDefault();
+
+        $('#all').removeClass('active');
+        $('#import-itunes').addClass('active');
+
         this.trigger('importItunes');
     }
 });
@@ -309,7 +329,7 @@ Yasound.Views.ProgrammingFilterArtist = Backbone.View.extend({
     },
 
     render: function () {
-        var name = this.model.get('artist_name');
+        var name = this.model.get('metadata__artist_name');
         $(this.el).html(name);
         return this;
     }
@@ -372,7 +392,7 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
     },
 
     render: function () {
-        var name = this.model.get('album_name');
+        var name = this.model.get('metadata__album_name');
         $(this.el).html(name);
         return this;
     }

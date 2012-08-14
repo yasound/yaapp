@@ -1472,14 +1472,12 @@ def programming_albums_response(request, radio):
     return response
 
 @csrf_exempt
-@check_api_key(methods=['GET', 'POST',], login_required=True)
-def my_programming(request, radio_uuid=None):
-    if radio_uuid is None:
-        radio = Radio.objects.radio_for_user(request.user)
-        if not radio:
-            raise Http404
-    else:
-        radio = get_object_or_404(Radio, uuid=radio_uuid)
+@check_api_key(methods=['GET', 'POST',  'DELETE', ], login_required=True)
+def my_programming(request, radio_uuid, song_instance_id=None):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+
+    if song_instance_id is not None and request.method == 'DELETE':
+        return delete_song_instance(request, song_instance_id)
 
     response = programming_response(request, radio)
     return response

@@ -15,11 +15,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
     params:{},
 
     url: function() {
-        if (!this.uuid) {
-            return '/api/v1/my_programming/';
-        } else {
-            return '/api/v1/radio/' + this.uuid + '/programming/';
-        }
+        return '/api/v1/radio/' + this.uuid + '/programming/';
     },
 
     setUUID: function(uuid) {
@@ -57,11 +53,7 @@ Yasound.Data.Models.ProgrammingArtist = Backbone.Model.extend({});
 Yasound.Data.Models.ProgrammingArtists = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingArtist,
     url: function() {
-        if (!this.uuid) {
-            return '/api/v1/my_programming/artists/';
-        } else {
-            return '/api/v1/radio/' + this.uuid + '/programming/artists';
-        }
+        return '/api/v1/radio/' + this.uuid + '/programming/artists';
     },
 
     setUUID: function(uuid) {
@@ -75,11 +67,7 @@ Yasound.Data.Models.ProgrammingAlbum = Backbone.Model.extend({});
 Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingAlbum,
     url: function() {
-        if (!this.uuid) {
-            return '/api/v1/my_programming/albums/';
-        } else {
-            return '/api/v1/radio/' + this.uuid + '/programming/albums/';
-        }
+        return '/api/v1/radio/' + this.uuid + '/programming/albums/';
     },
 
     setUUID: function(uuid) {

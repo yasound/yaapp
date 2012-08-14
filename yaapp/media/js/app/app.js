@@ -106,7 +106,6 @@ $(document).ready(function () {
             "settings/": "settings",
             "friends/": "myFriends",
             "notifications/": "notifications",
-            "programming/": "programming",
             "radio/:uuid/programming/": "programming",
             "legal/": "legal",
             "contact/": "contact",
@@ -216,7 +215,6 @@ $(document).ready(function () {
 
         programming: function (uuid) {
             this.clearView();
-
             this.currentView = new Yasound.Views.ProgrammingPage({
                 el: '#webapp-content'
             }).render(uuid);
