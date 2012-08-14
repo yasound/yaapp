@@ -1,101 +1,105 @@
 {% load i18n %}
+
 <div class='row-fluid'>
-    <div class='span12'>
+    <div class='span12 settings-container'>
         <h1>{% trans "Settings" %}</h1>
+        <div id='settings-nav'>
+            <li class=''><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>Mes informations</span></a></li>
+            <li class=''><a href="#"><img src="/media/app/images/settings/settings-icon-accounts.png" alt='accounts' /><span>Mes comptes</span></a></li>
+            <li class=''><a href="#"><img src="/media/app/images/settings/settings-icon-notifications.png" alt='notifications' /><span>Notifications</span></a></li>
+        </div>
+        <div class='row-fluid'>
+            <div class='span6'>
+                {% if settings_facebook_form %}
+                
+                <form id='settings-facebook-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
+                    {{ settings_facebook_form }}
+                    <div class="form-actions">
+                        <input type='hidden' name='action' value='settings_facebook'/>
+                        <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
+                        <button type="submit" name='remove' id='btn-remove-facebook' class="btn btn-danger">{% trans "Remove account" %}</button>
+                    </div>
+                </form>
+
+               <div class="modal hide" id="modal-remove-facebook">
+                  <div class="modal-header">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <h3>{% trans "Remove facebook account ?" %}</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>{% trans "Do you want to remove your facebook account ?" %}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+                    <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+                  </div>
+                </div>        
+                 
+                {% endif %}
+
+                {% if settings_twitter_form %}
+                <form id='settings-twitter-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
+                    {{ settings_twitter_form }}
+                    <div class="form-actions">
+                        <input type='hidden' name='action' value='settings_twitter'/>
+                        <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
+                        <button type="submit" name='remove' id='btn-remove-twitter' class="btn btn-danger">{% trans "Remove account" %}</button>
+                    </div>
+                </form>
+
+               <div class="modal hide" id="modal-remove-twitter">
+                  <div class="modal-header">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <h3>{% trans "Remove twitter account ?" %}</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>{% trans "Do you want to remove your twitter account ?" %}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+                    <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+                  </div>
+                </div>        
+                {% endif %}
+
+                <form id='settings-user-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
+                    {{ settings_user_form }}
+                {% if display_associate_facebook %}
+                <div class='control-group'>
+                <div class='controls'>
+                <a class="btn-auth btn-facebook large first" href="{% url socialauth_associate_begin 'facebook' %}?next={{ next }}" rel="nofollow">
+                    {% trans 'Associate my facebook account' %}
+                </a>
+                </div>
+                </div>
+                {% endif %}
+                {% if display_associate_twitter %}
+                <div class='control-group'>
+                <div class='controls'>
+                <a class="btn-auth btn-twitter large" href="{% url socialauth_associate_begin 'twitter' %}?next={{ next }}" rel="nofollow">
+                    {% trans 'Associate my twitter account' %}
+                </a>
+                </div>
+                </div>
+                {% endif %}
+                    <div class="form-actions">
+                        <input type='hidden' name='action' value='settings_user'/>
+                        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class='span6'>
+
+                <form id='settings-radio-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
+                    {{ settings_radio_form }}
+                    <div class="form-actions">
+                        <input type='hidden' name='action' value='settings_radio'/>
+                        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
- </div>
-
-<div class='row-fluid'>
-    <div class='span6'>
-        {% if settings_facebook_form %}
-        
-        <form id='settings-facebook-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
-            {{ settings_facebook_form }}
-            <div class="form-actions">
-                <input type='hidden' name='action' value='settings_facebook'/>
-                <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
-                <button type="submit" name='remove' id='btn-remove-facebook' class="btn btn-danger">{% trans "Remove account" %}</button>
-            </div>
-        </form>
-
-       <div class="modal hide" id="modal-remove-facebook">
-          <div class="modal-header">
-            <button class="close" data-dismiss="modal">×</button>
-            <h3>{% trans "Remove facebook account ?" %}</h3>
-          </div>
-          <div class="modal-body">
-            <p>{% trans "Do you want to remove your facebook account ?" %}</p>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
-            <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
-          </div>
-        </div>        
-         
-        {% endif %}
-
-        {% if settings_twitter_form %}
-        <form id='settings-twitter-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
-            {{ settings_twitter_form }}
-            <div class="form-actions">
-                <input type='hidden' name='action' value='settings_twitter'/>
-                <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
-                <button type="submit" name='remove' id='btn-remove-twitter' class="btn btn-danger">{% trans "Remove account" %}</button>
-            </div>
-        </form>
-
-       <div class="modal hide" id="modal-remove-twitter">
-          <div class="modal-header">
-            <button class="close" data-dismiss="modal">×</button>
-            <h3>{% trans "Remove twitter account ?" %}</h3>
-          </div>
-          <div class="modal-body">
-            <p>{% trans "Do you want to remove your twitter account ?" %}</p>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
-            <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
-          </div>
-        </div>        
-        {% endif %}
-
-        <form id='settings-user-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
-            {{ settings_user_form }}
-        {% if display_associate_facebook %}
-        <div class='control-group'>
-        <div class='controls'>
-        <a class="btn-auth btn-facebook large first" href="{% url socialauth_associate_begin 'facebook' %}?next={{ next }}" rel="nofollow">
-            {% trans 'Associate my facebook account' %}
-        </a>
-        </div>
-        </div>
-        {% endif %}
-        {% if display_associate_twitter %}
-        <div class='control-group'>
-        <div class='controls'>
-        <a class="btn-auth btn-twitter large" href="{% url socialauth_associate_begin 'twitter' %}?next={{ next }}" rel="nofollow">
-            {% trans 'Associate my twitter account' %}
-        </a>
-        </div>
-        </div>
-        {% endif %}
-            <div class="form-actions">
-                <input type='hidden' name='action' value='settings_user'/>
-                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-            </div>
-        </form>
-    </div>
-
-    <div class='span6'>
-
-        <form id='settings-radio-form' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
-            {{ settings_radio_form }}
-            <div class="form-actions">
-                <input type='hidden' name='action' value='settings_radio'/>
-                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-            </div>
-        </form>
-    </div>
-</div>    
-
+</div>
 
