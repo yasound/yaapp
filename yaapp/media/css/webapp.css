@@ -1810,7 +1810,7 @@ ul#notifications .read {
 /**
  * Notifications
  */
-
+/*
 .notification-container h1 {
     padding-top:37px;
     padding-left:31px;
@@ -1823,6 +1823,16 @@ ul#notifications .read {
     color:#434343;
 }
 
+.notification-container {
+    border-radius:7px;
+    box-shadow:0px 1px 4px #e2e2e2;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+}
+*/
 /**
  * User profile
  */
@@ -2263,6 +2273,85 @@ ul .radio-with-stats-cells li {
     box-shadow:0px 2px 2px #e4e4e4;
 }
 
+/**
+ * Settings
+ */
+
+ .settings-container {
+    border-radius:7px;
+    box-shadow:0px 1px 4px #e2e2e2;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+ }
+
+ .settings-container h1 {
+    font-size:42px;
+    padding:38px 0px 38px 31px;
+    border-bottom: 1px solid #e3e3e3;
+ }
+
+#settings-nav { 
+    margin:0px;   
+}
+
+#settings-nav li {
+    position:relative;
+    height:65px;
+    list-style: none;
+    border-bottom:1px solid #e3e3e3;
+}
+
+#settings-nav li span {
+    display:block;
+    color:#169dea;
+    font-size:17px;
+    padding-top:25px;
+    margin-left:95px;
+}
+
+#settings-nav li img {
+    position:absolute;
+    top:15px;
+    left:15px;
+}
+
+#settings-nav li:hover {
+    background-image:url('../app/images/settings/settings-nav-bg-hover.png');
+    cursor: pointer;
+}
+
+#settings-nav li a:hover {
+    text-decoration: none;
+}
+
+#settings-nav .checked {
+    background-image:url('../app/images/settings/settings-nav-bg-checked.png');
+    border:1px solid #0b7cbc;
+    text-shadow:1px 1px #126898;
+}
+
+#settings-nav .checked span {
+    color:white;
+}
+
+.settings-content-container {
+    width:540px;
+    float:left;
+    border-left: 1px solid #e3e3e3;
+    padding-left:37px;
+    padding-top:30px;
+}
+
+.settings-content-container form fieldset legend {
+    display:block;
+    border-bottom: none;
+    font-size: 23px;
+    line-height:30px;
+    font-weight: bold;    
+}
 
 /**
  * common items
@@ -2426,6 +2515,14 @@ ul .radio-with-stats-cells li {
 	left:59px;
 }
 
+.yacheckbox {
+    display:block;
+    height:17px;
+    width:17px;
+    border:1px solid #bebebe;
+    border-radius:5px;
+    box-shadow:0px 2px 2px #bebebe;
+}
 
 .no-margin {
 	margin:0px;
