@@ -91,7 +91,27 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
 });
 
 Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
-    idAttribute: "id"
+    idAttribute: "db_id",
+
+    setUUID: function(uuid) {
+        this.uuid = uuid;
+        return this;
+    },
+
+    addToPlaylist: function() {
+        var url = '/api/v1/radio/' + this.uuid + '/programming/yasound_songs/';
+        var that;
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'yasound_song_id': this.id,
+            },
+            success: function() {
+                colibri(gettext('Song added'));
+            }
+        });
+    }
 });
 
 Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
@@ -117,6 +137,7 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
+
     filter: function(name, album, artist) {
         if (name) {
             _.extend(this.params, {name:name});
@@ -134,6 +155,5 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
             _.extend(this.params, {album:undefined});
         }
         this.goTo(0);
-
     }
 });

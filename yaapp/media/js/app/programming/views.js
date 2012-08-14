@@ -85,6 +85,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
 Yasound.Views.YasoundSong = Backbone.View.extend({
     tagName: 'tr',
     events: {
+        "click .add": "addSong"
     },
 
     initialize: function () {
@@ -99,6 +100,11 @@ Yasound.Views.YasoundSong = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).html(ich.yasoundSongCellTemplate(data));
         return this;
+    },
+
+    addSong: function(e) {
+        this.model.addToPlaylist();
+        this.close();
     }
 });
 
@@ -129,6 +135,7 @@ Yasound.Views.YasoundSongs = Backbone.View.extend({
     },
 
     addOne: function (song) {
+        song.setUUID(this.collection.uuid);
         var view = new Yasound.Views.YasoundSong({
             model: song
         });
@@ -190,7 +197,7 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         if (e.keyCode != 13) {
             return;
         }
-        this.onFind()
+        this.onFind();
     },
 
     onFind: function(e) {

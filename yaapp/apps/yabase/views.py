@@ -743,13 +743,8 @@ def upload_song_ajax(request):
 
 
 @csrf_exempt
+@check_api_key(methods=['POST'])
 def add_song(request, radio_id, playlist_index, yasound_song_id):
-    if not check_api_key_Authentication(request):
-        return HttpResponse(status=401)
-    if not check_http_method(request, ['post']):
-        return HttpResponse(status=405)
-
-
     radio_id = int(radio_id)
     playlist_index = int(playlist_index)
     yasound_song_id = int(yasound_song_id)
@@ -1510,27 +1505,36 @@ def my_programming_albums(request, radio_uuid=None):
     response = programming_albums_response(request, radio)
     return response
 
-@check_api_key(methods=['GET',], login_required=True)
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST', ], login_required=True)
 def my_programming_yasound_songs(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
-    limit = int(request.REQUEST.get('limit', 25))
-    offset = int(request.REQUEST.get('offset', 0))
-    name = request.REQUEST.get('name', '').lower()
-    artist = request.REQUEST.get('artist', '').lower()
-    album = request.REQUEST.get('album', '').lower()
+    if request.method == 'GET':
+        limit = int(request.REQUEST.get('limit', 25))
+        offset = int(request.REQUEST.get('offset', 0))
+        name = request.REQUEST.get('name', '').lower()
+        artist = request.REQUEST.get('artist', '').lower()
+        album = request.REQUEST.get('album', '').lower()
 
+        data = []
+        total_count = 0
 
-    data = []
+        if name == '' and artist == '' and album == '':
+            pass
+        else:
+            data = yasearch_search.find_song(name, album, artist, remove_common_words=True)
+            if data is not None and data != []:
+                total_count = data.count()
+                data = list(data[offset:offset+limit])
 
-    if name == '' and artist == '' and album == '':
-        pass
-    else:
-        data = yasearch_search.find_song(name, album, artist, remove_common_words=True)
+        response = api_response(data, total_count, limit=limit, offset=offset)
+        return response
+    elif request.method == 'POST':
+        yasound_song_id = request.REQUEST.get('yasound_song_id', None)
+        playlist, _created = radio.get_or_create_default_playlist()
+        return add_song(request, radio_id=radio.id, playlist_index=0, yasound_song_id=yasound_song_id)
 
-    total_count = data.count()
-    response = api_response(list(data[offset:offset+limit]), total_count, limit=limit, offset=offset)
-    return response
-
+    raise Http404
 
 def public_stats(request):
     """
