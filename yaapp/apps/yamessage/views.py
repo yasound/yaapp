@@ -1,8 +1,10 @@
 from django.http import HttpResponseNotFound, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from models import NotificationsManager
 from yacore.decorators import check_api_key
 from yacore.api import MongoAwareEncoder, api_response
 import json
+
 
 @check_api_key(methods=['GET'])
 def get_notifications(request):
@@ -28,6 +30,7 @@ def get_notifications(request):
     notifs = list(notif_cursor)
     return api_response(notifs, total_count=total_count, limit=limit, offset=offset)
 
+
 @check_api_key(methods=['GET'])
 def get_notification(request, notif_id):
     m = NotificationsManager()
@@ -36,6 +39,7 @@ def get_notification(request, notif_id):
         return HttpResponseNotFound()
     res = json.dumps(n, cls=MongoAwareEncoder)
     return HttpResponse(res)
+
 
 @check_api_key(methods=['PUT'])
 def update_notification(request, notif_id):
@@ -60,10 +64,21 @@ def delete_notification(request, notif_id):
     res = json.dumps(response)
     return HttpResponse(res)
 
+
 @check_api_key(methods=['DELETE'])
 def delete_all_notifications(request):
     m = NotificationsManager()
     m.delete_all_notifications(request.user.id)
+    response = {'succeeded': True}
+    res = json.dumps(response)
+    return HttpResponse(res)
+
+
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def mark_all_as_read(request):
+    m = NotificationsManager()
+    m.mark_all_as_read(request.user.id)
     response = {'succeeded': True}
     res = json.dumps(response)
     return HttpResponse(res)

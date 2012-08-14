@@ -113,6 +113,10 @@ Yasound.Views.Notifications = Backbone.View.extend({
  * Notifications page
  */
 Yasound.Views.NotificationsPage = Backbone.View.extend({
+    events: {
+        "click #mark-all-read-btn": "markAllAsRead"
+    },
+
     initialize: function() {
         _.bindAll(this, 'render');
     },
@@ -161,5 +165,20 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
             Yasound.App.Router.pushManager.on('notification', this.onNotification, this);
         }
         return this;
+    },
+
+    markAllAsRead: function (e) {
+        e.preventDefault();
+        var that = this;
+        var url = '/api/v1/notifications/mark_all_as_read/';
+        $.ajax({
+           url: url,
+           type: 'POST',
+           dataType: 'json',
+           success: function() {
+               that.notificationsView.clear();
+               that.notifications.goTo(0);
+           }
+        });
     }
 });
