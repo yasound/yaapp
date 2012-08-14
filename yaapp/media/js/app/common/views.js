@@ -51,7 +51,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             } else {
                 $("li .mask", $(this.el).parent()).hide();
             }
-            this.currentSongModel.fetch()
+            this.currentSongModel.fetch();
 
             if (Yasound.App.enableFX) {
                 mask.removeClass('hidden').fadeIn(300);
@@ -81,7 +81,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
             $("li .mask", $(this.el).parent()).fadeOut(300);
-            this.currentSongModel.fetch()
+            this.currentSongModel.fetch();
             mask.removeClass('hidden').fadeIn(300);
             $('.radio-border', this.el).fadeIn(300);
         } else {
@@ -199,10 +199,13 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     el: '#user-menu',
     events: {
         'click #profile-picture a': 'myProfile',
+        'hover #profile-picture a': 'displayPopupProfile',
+        'click #profile-btn': 'myProfile',
+        'click #logout-btn': 'logout',
         'click #messages-btn': 'notifications'
     },
     initialize: function() {
-        _.bindAll(this, 'render', 'onNotification', 'onNotificationUnreadCount');
+        _.bindAll(this, 'render', 'onNotification', 'onNotificationUnreadCount', 'displayPopupProfile', 'hidePopupProfile');
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification);
             Yasound.App.Router.pushManager.on('notification_unread_count', this.onNotificationUnreadCount);
@@ -214,11 +217,16 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         }
     },
     render: function() {
+        var that = this;
+        $(this.el).on('mouseleave', function() {
+            that.hidePopupProfile();
+        });
         return this;
     },
 
     myRadio: function (e) {
         e.preventDefault();
+        this.hidePopupProfile();
         var uuid = $('#btn-my-radio', this.el).attr('yasound:uuid');
         Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
@@ -226,16 +234,24 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     },
     myProfile: function (e) {
         e.preventDefault();
+        this.hidePopupProfile();
         Yasound.App.Router.navigate('profile/' + Yasound.App.username + '/', {
             trigger: true
         });
     },
     notifications: function(e) {
         e.preventDefault();
+        this.hidePopupProfile();
         Yasound.App.Router.navigate('notifications/', {
             trigger: true
         });
     },
+
+    logout: function(e) {
+        e.preventDefault();
+        window.location = '/logout';
+    },
+
     onNotification: function(notification) {
         colibri(gettext('New notification received'));
     },
@@ -249,6 +265,14 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         } else {
             el.addClass('hidden');
         }
+    },
+
+    displayPopupProfile: function (e) {
+        $('#profile-box-container', this.el).removeClass('hidden');
+    },
+
+    hidePopupProfile: function() {
+        $('#profile-box-container', this.el).addClass('hidden');
     }
 });
 
@@ -804,7 +828,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             $pointer.fadeOut(200);
         }
 
-        if (menuNumber != 0) {
+        if (menuNumber !== 0) {
             $pointer.fadeIn(200);
             $pointer.removeClass().addClass('menu' + menuNumber);
         }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-14 07:28+0200\n"
+"POT-Creation-Date: 2012-08-14 10:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,8 @@ msgstr "disponible sur l'appstore"
 #: templates/account/signup.html:27
 #: templates/account/signup.html.py:75
 #: templates/web/menu.html:16
+#: templates/yabase/webapp.html:282
+#: templates/yabase/webapp.html.py:293
 #: templates/yabase/app/profile/user.mustache:23
 msgid "Logout"
 msgstr "Se déconnecter"
@@ -60,7 +62,7 @@ msgstr "Se déconnecter"
 #: templates/account/login.html.py:55
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
-#: templates/yabase/webapp.html:302
+#: templates/yabase/webapp.html:314
 #: templates/yabase/app/login/login.mustache:21
 #: templates/yabase/app/signup/signup.mustache:41
 msgid "Login"
@@ -79,20 +81,20 @@ msgstr "Vous êtes déjà authentifié"
 
 #: templates/account/login.html:32
 #: templates/account/login.html.py:40
-#: templates/yabase/webapp.html:304
+#: templates/yabase/webapp.html:316
 #: templates/yabase/app/login/login.mustache:9
 msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
 #: templates/account/login.html:36
 #: templates/account/login.html.py:44
-#: templates/yabase/webapp.html:305
+#: templates/yabase/webapp.html:317
 #: templates/yabase/app/login/login.mustache:12
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
 #: templates/account/login.html:59
-#: templates/yabase/webapp.html:314
+#: templates/yabase/webapp.html:326
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
 
@@ -151,7 +153,7 @@ msgstr "\n"
 
 #: templates/account/signup.html:8
 #: templates/account/signup.html.py:56
-#: templates/yabase/webapp.html:300
+#: templates/yabase/webapp.html:312
 msgid "Signup"
 msgstr "S'inscrire"
 
@@ -338,7 +340,7 @@ msgid "Date"
 msgstr "Date"
 
 #: templates/newsletter/newsletter_historic.html:24
-#: templates/yabase/webapp.html:386
+#: templates/yabase/webapp.html:398
 #: templates/yabase/app/static/contact.mustache:4
 msgid "Contact"
 msgstr ""
@@ -883,103 +885,103 @@ msgstr "Sans nom"
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
-#: templates/yabase/webapp.html:278
-#: templates/yabase/webapp.html.py:284
-msgid "Your profile"
-msgstr "Votre profil"
+#: templates/yabase/webapp.html:281
+#: templates/yabase/webapp.html.py:292
+msgid "My profile"
+msgstr "Mon profil"
 
-#: templates/yabase/webapp.html:296
+#: templates/yabase/webapp.html:308
 msgid "No gifts"
 msgstr "Aucun cadeau"
 
-#: templates/yabase/webapp.html:308
+#: templates/yabase/webapp.html:320
 #: templates/yabase/app/login/login.mustache:16
 msgid "Email login"
 msgstr "Connexion avec email"
 
-#: templates/yabase/webapp.html:309
+#: templates/yabase/webapp.html:321
 #: templates/yabase/app/login/login.mustache:19
 #: templates/yabase/app/signup/signup.mustache:21
 msgid "Email"
 msgstr "Email"
 
-#: templates/yabase/webapp.html:310
+#: templates/yabase/webapp.html:322
 #: templates/yabase/app/login/login.mustache:20
 #: templates/yabase/app/signup/signup.mustache:22
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/yabase/webapp.html:331
+#: templates/yabase/webapp.html:343
 #: templates/yabase/app/track.mustache:40
 msgid "Share"
 msgstr "Partager"
 
-#: templates/yabase/webapp.html:334
+#: templates/yabase/webapp.html:346
 msgid "Share this song on:"
 msgstr "Partager ce titre sur :"
 
-#: templates/yabase/webapp.html:337
+#: templates/yabase/webapp.html:349
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/yabase/webapp.html:338
+#: templates/yabase/webapp.html:350
 msgid "Twitter"
 msgstr "Twitter"
 
-#: templates/yabase/webapp.html:342
+#: templates/yabase/webapp.html:354
 msgid "Close"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:349
+#: templates/yabase/webapp.html:361
 #: templates/yabase/app/profile/user.mustache:18
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: templates/yabase/webapp.html:352
+#: templates/yabase/webapp.html:364
 msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
-#: templates/yabase/webapp.html:356
+#: templates/yabase/webapp.html:368
 #: templates/yabase/app/settings/settingsPage.mustache:30
 #: templates/yabase/app/settings/settingsPage.mustache:56
 msgid "No thank you"
 msgstr "Non merci"
 
-#: templates/yabase/webapp.html:357
+#: templates/yabase/webapp.html:369
 #: templates/yabase/app/settings/settingsPage.mustache:31
 #: templates/yabase/app/settings/settingsPage.mustache:57
 msgid "Yes i want"
 msgstr "Oui je le veux"
 
-#: templates/yabase/webapp.html:364
+#: templates/yabase/webapp.html:376
 msgid "Connection error"
 msgstr "Erreur de connexion"
 
-#: templates/yabase/webapp.html:367
+#: templates/yabase/webapp.html:379
 msgid "Unable to connect Yasound server right now."
 msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
 
-#: templates/yabase/webapp.html:371
+#: templates/yabase/webapp.html:383
 msgid "Dismiss"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:372
+#: templates/yabase/webapp.html:384
 msgid "Reload page"
 msgstr "Recharger la page"
 
-#: templates/yabase/webapp.html:387
+#: templates/yabase/webapp.html:399
 msgid "Legal informations"
 msgstr "Mentions légales"
 
-#: templates/yabase/webapp.html:407
+#: templates/yabase/webapp.html:419
 msgid "Connected users"
 msgstr "Utilisateurs connectés"
 
-#: templates/yabase/webapp.html:411
+#: templates/yabase/webapp.html:423
 msgid "See all"
 msgstr "Tous les voir"
 
-#: templates/yabase/webapp.html:420
+#: templates/yabase/webapp.html:432
 msgid "minutes of music have been played"
 msgstr "minutes de musique ont été écoutées"
 
