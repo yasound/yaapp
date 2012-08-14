@@ -1,4 +1,21 @@
 {% load i18n %}
-<div>
-Add from server!
-</div>
+{% load i18n %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>{% trans "Track" %}</th>
+            <th>{% trans "Album" %}</th>
+            <th>{% trans "Artist" %}</th>
+            <th>{% trans "Action" %}</th>
+        </tr>
+        <tr>
+            <th><input type='text' id='find-track-input'/></th>
+            <th><input type='text' id='find-album-input'/></th>
+            <th><input type='text' id='find-artist-input'/></th>
+            <th><button class='yabutton-small' id='find-btn'>{% trans 'find' %}</button></th>
+        </tr>
+    </thead>
+    <tbody id='songs'>
+    </tbody>
+</table>
+<div class='cell-pagination' id='pagination'></div>

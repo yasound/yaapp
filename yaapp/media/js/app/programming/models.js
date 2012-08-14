@@ -89,3 +89,58 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
         this.fetch(params);
     }
 });
+
+Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
+    idAttribute: "id"
+});
+
+Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
+    model: Yasound.Data.Models.YasoundSong,
+    perPageAttribute: 'limit',
+    skipAttribute: 'offset',
+    perPage: 25,
+    page:0,
+    params:{},
+
+    url: function() {
+        return '/api/v1/programming/' + this.uuid + '/yasound_songs/';
+    },
+
+    setUUID: function(uuid) {
+        this.uuid = uuid;
+        return this;
+    },
+
+    parse: function(response) {
+        var results = response.objects;
+        this.totalCount = response.meta.total_count;
+        this.totalPages = this.totalCount / this.perPage;
+        return results;
+    },
+    filterTrack: function(track) {
+        if (track) {
+            _.extend(this.params, {name:track});
+        } else {
+            _.extend(this.params, {name:undefined});
+        }
+        this.goTo(0);
+    },
+
+    filterArtist: function(artist) {
+        if (artist) {
+            _.extend(this.params, {artist:artist});
+        } else {
+            _.extend(this.params, {artist:undefined});
+        }
+        this.goTo(0);
+    },
+
+    filterAlbum: function(album) {
+        if (album) {
+            _.extend(this.params, {album:album});
+        } else {
+            _.extend(this.params, {album:undefined});
+        }
+        this.goTo(0);
+    }
+});

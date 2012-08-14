@@ -81,7 +81,69 @@ Yasound.Views.SongInstances = Backbone.View.extend({
     }
 });
 
+
+Yasound.Views.YasoundSong = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.yasoundSongCellTemplate(data));
+        return this;
+    }
+});
+
+Yasound.Views.YasoundSongs = Backbone.View.extend({
+    initialize: function () {
+        _.bindAll(this, 'addOne', 'addAll');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (song) {
+        var view = new Yasound.Views.YasoundSong({
+            model: song
+        });
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    }
+});
+
 Yasound.Views.AddFromServer =  Backbone.View.extend({
+    events: {
+        "keypress #find-track-input": "onFindTrack",
+        "keypress #find-album-input": "onFindAlbum",
+        "keypress #find-artist-input": "onFindArtist",
+        "click #find-btn": "onFind"
+    },
 
     initialize: function() {
         _.bindAll(this, 'render');
@@ -93,8 +155,59 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
     reset: function() {
     },
 
-    render: function() {
+    render: function(uuid) {
         $(this.el).html(ich.programmingAddFromServerTemplate());
+
+        this.songs = new Yasound.Data.Models.YasoundSongs({}).setUUID(uuid);
+        this.songsView = new Yasound.Views.YasoundSongs({
+            collection: this.songs,
+            el: $('#songs', this.el)
+        }).render();
+
+    },
+
+    onFindTrack: function(e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+        var value = $(e.target).val();
+        if (!value) {
+            return;
+        }
+
+        this.songsView.clear();
+        this.songs.filterTrack(value);
+
+    },
+
+    onFindAlbum: function(e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+        var value = $(e.target).val();
+        if (!value) {
+            return;
+        }
+
+        this.songsView.clear();
+        this.songs.filterAlbum(value);
+    },
+
+    onFindArtist: function(e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+        var value = $(e.target).val();
+        if (!value) {
+            return;
+        }
+
+        this.songsView.clear();
+        this.songs.filterArtist(value);
+    },
+
+    onFind: function(e) {
+        e.preventDefault();
     }
 });
 
@@ -178,7 +291,7 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.clearView();
         this.currentView = new Yasound.Views.PlaylistContent({
             el: $('#content', this.el)
-        }).render(self.uuid);
+        }).render(this.uuid);
     },
 
 
@@ -192,13 +305,13 @@ Yasound.Views.Playlist = Backbone.View.extend({
 
         this.currentView = new Yasound.Views.AddFromServer({
             el: $('#content', this.el)
-        }).render();
+        }).render(this.uuid);
     },
 
 
     render: function(uuid) {
         this.reset();
-        self.uuid = uuid;
+        this.uuid = uuid;
         $(this.el).html(ich.playlistTemplate());
         this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
 
@@ -213,29 +326,6 @@ Yasound.Views.Playlist = Backbone.View.extend({
     }
 });
 
-/**
- * Programming page
- */
-Yasound.Views.ProgrammingPage = Backbone.View.extend({
-    initialize: function() {
-        _.bindAll(this, 'render');
-    },
-
-    onClose: function() {
-    },
-
-    reset: function() {
-    },
-
-    render: function(uuid) {
-        this.reset();
-        $(this.el).html(ich.programmingPageTemplate());
-
-        this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
-
-        return this;
-    }
-});
 
 /**
  * Programming menu
@@ -256,7 +346,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
 
         $('#all').addClass('active');
         $('#import-itunes').removeClass('active');
-        $('#import-from-server').removeClass('active');
+        $('#add-from-server').removeClass('active');
 
         this.trigger('tracks');
     },
@@ -265,7 +355,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
 
         $('#all').removeClass('active');
         $('#import-itunes').addClass('active');
-        $('#import-from-server').removeClass('active');
+        $('#add-from-server').removeClass('active');
 
         this.trigger('importItunes');
     },
@@ -274,7 +364,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
 
         $('#all').removeClass('active');
         $('#import-itunes').removeClass('active');
-        $('#import-from-server').addClass('active');
+        $('#add-from-server').addClass('active');
 
         this.trigger('addFromServer');
 
@@ -449,6 +539,31 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
     render: function () {
         var name = this.model.get('metadata__album_name');
         $(this.el).html(name);
+        return this;
+    }
+});
+
+
+/**
+ * Programming page
+ */
+Yasound.Views.ProgrammingPage = Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    render: function(uuid) {
+        this.reset();
+        $(this.el).html(ich.programmingPageTemplate());
+
+        this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
+
         return this;
     }
 });
