@@ -41,6 +41,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
     onClose: function () {
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('destroy', this.onDestroy);
     },
 
     addAll: function () {
@@ -221,6 +222,10 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
     onClose: function() {
         this.filters.off('artistsSelected', this.artistsSelected);
         this.filters.off('albumsSelected', this.albumsSelected);
+
+        this.songInstancesView.close();
+        this.paginationView.close();
+        this.filters.close();
     },
 
     reset: function() {
@@ -228,7 +233,6 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 
     render: function(uuid) {
         $(this.el).html(ich.songInstancesTemplate());
-
         this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
         this.songInstancesView = new Yasound.Views.SongInstances({
             collection: this.songInstances,
@@ -313,7 +317,6 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.reset();
         this.uuid = uuid;
         $(this.el).html(ich.playlistTemplate());
-        this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
 
         this.toolbar = new Yasound.Views.ProgrammingToolbar({
             el: $('#programming-toolbar', this.el)

@@ -19,6 +19,8 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
     },
 
     setUUID: function(uuid) {
+        _.extend(this.params, {artist:undefined});
+        _.extend(this.params, {album:undefined});
         this.uuid = uuid;
         return this;
     },
@@ -29,6 +31,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
+
     filterArtists: function(artists) {
         if (artists) {
             _.extend(this.params, {artist:artists});
@@ -37,6 +40,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
         }
         this.goTo(0);
     },
+
     filterAlbums: function(albums) {
         if (albums) {
             _.extend(this.params, {album:albums});
