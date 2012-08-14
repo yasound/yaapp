@@ -34,7 +34,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
-        this.collection.bind('destroy', this.onDestroy, this)
+        this.collection.bind('destroy', this.onDestroy, this);
         this.views = [];
     },
 
@@ -81,84 +81,51 @@ Yasound.Views.SongInstances = Backbone.View.extend({
     }
 });
 
-Yasound.Views.Playlist = Backbone.View.extend({
-    el: '#playlist',
-    events: {
-    },
+Yasound.Views.AddFromServer =  Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'artistsSelected', 'albumsSelected');
+        _.bindAll(this, 'render');
     },
 
     onClose: function() {
-        if (this.currentView) {
-            this.currentView.close();
-        }
-        this.toolbar.close();
-        this.filters.off('artistsSelected', this.artistsSelected);
-        this.filters.close();
     },
 
     reset: function() {
     },
 
-    onAll: function() {
-        if (this.currentView) {
-            this.currentView.close();
-        }
-        $('#content', this.el).html(ich.songInstancesTemplate());
-        this.currentView = new Yasound.Views.SongInstances({
-            collection: this.songInstances,
-            el: $('#song-instances', this.el)
-        }).render();
-        $(this.filters.el).show();
-        this.filters.on('artistsSelected', this.artistsSelected);
-        this.filters.on('albumsSelected', this.albumsSelected);
+    render: function() {
+        $(this.el).html(ich.programmingAddFromServerTemplate());
+    }
+});
 
-        this.songInstances.fetch();
+
+Yasound.Views.PlaylistContent =  Backbone.View.extend({
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'artistsSelected', 'albumsSelected');
     },
 
-    onImportItunes: function() {
-        if (this.currentView) {
-            this.currentView.close();
-        }
-        $(this.filters.el).hide();
+    onClose: function() {
         this.filters.off('artistsSelected', this.artistsSelected);
         this.filters.off('albumsSelected', this.albumsSelected);
-        $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
     },
 
-    artistsSelected: function(artists) {
-        this.currentView.clear();
-        this.songInstances.filterArtists(artists);
-    },
-
-    albumsSelected: function(albums) {
-        this.currentView.clear();
-        this.songInstances.filterAlbums(albums);
+    reset: function() {
     },
 
     render: function(uuid) {
-        this.reset();
-        $(this.el).html(ich.playlistTemplate());
-        this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
+        $(this.el).html(ich.songInstancesTemplate());
 
-        $('#content', this.el).hide().html(ich.songInstancesTemplate()).fadeIn(200);
-        this.currentView = new Yasound.Views.SongInstances({
+        this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
+        this.songInstancesView = new Yasound.Views.SongInstances({
             collection: this.songInstances,
             el: $('#song-instances', this.el)
-        });
+        }).render();
 
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.songInstances,
             el: $('#pagination', this.el)
         });
-
-        this.toolbar = new Yasound.Views.ProgrammingToolbar({
-            el: $('#programming-toolbar', this.el)
-        }).render();
-        this.toolbar.on('tracks', this.onAll);
-        this.toolbar.on('importItunes', this.onImportItunes);
 
         this.filters = new Yasound.Views.ProgrammingFilters({
             el: $('#programming-filters', this.el)
@@ -168,6 +135,81 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.filters.on('albumsSelected', this.albumsSelected);
 
         this.songInstances.fetch();
+    },
+
+    artistsSelected: function(artists) {
+        this.songInstancesView.clear();
+        this.songInstances.filterArtists(artists);
+    },
+
+    albumsSelected: function(albums) {
+        this.songInstancesView.clear();
+        this.songInstances.filterAlbums(albums);
+    }
+});
+
+
+Yasound.Views.Playlist = Backbone.View.extend({
+    el: '#playlist',
+    events: {
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'onAddFromServer');
+    },
+
+    onClose: function() {
+        if (this.currentView) {
+            this.currentView.close();
+        }
+        this.toolbar.close();
+    },
+
+    reset: function() {
+    },
+
+    clearView: function() {
+        if (this.currentView) {
+            this.currentView.close();
+        }
+    },
+
+    onAll: function() {
+        this.clearView();
+        this.currentView = new Yasound.Views.PlaylistContent({
+            el: $('#content', this.el)
+        }).render(self.uuid);
+    },
+
+
+    onImportItunes: function() {
+        this.clearView();
+        $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
+    },
+
+    onAddFromServer: function() {
+        this.clearView();
+
+        this.currentView = new Yasound.Views.AddFromServer({
+            el: $('#content', this.el)
+        }).render();
+    },
+
+
+    render: function(uuid) {
+        this.reset();
+        self.uuid = uuid;
+        $(this.el).html(ich.playlistTemplate());
+        this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
+
+        this.toolbar = new Yasound.Views.ProgrammingToolbar({
+            el: $('#programming-toolbar', this.el)
+        }).render();
+        this.toolbar.on('tracks', this.onAll);
+        this.toolbar.on('importItunes', this.onImportItunes);
+        this.toolbar.on('addFromServer', this.onAddFromServer);
+
+        this.onAll();
     }
 });
 
@@ -202,7 +244,8 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     el: '#programming-toolbar',
     events: {
         'click #all': 'all',
-        'click #import-itunes': 'importItunes'
+        'click #import-itunes': 'importItunes',
+        'click #add-from-server': 'addFromServer'
     },
     render: function() {
         $(this.el).html(ich.programmingToolbarTemplate());
@@ -213,6 +256,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
 
         $('#all').addClass('active');
         $('#import-itunes').removeClass('active');
+        $('#import-from-server').removeClass('active');
 
         this.trigger('tracks');
     },
@@ -221,8 +265,19 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
 
         $('#all').removeClass('active');
         $('#import-itunes').addClass('active');
+        $('#import-from-server').removeClass('active');
 
         this.trigger('importItunes');
+    },
+    addFromServer: function(e) {
+        e.preventDefault();
+
+        $('#all').removeClass('active');
+        $('#import-itunes').removeClass('active');
+        $('#import-from-server').addClass('active');
+
+        this.trigger('addFromServer');
+
     }
 });
 
