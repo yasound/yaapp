@@ -2283,11 +2283,8 @@ ul .radio-with-stats-cells li {
     border-bottom: 1px solid #e3e3e3;
  }
 
-#settings-nav {
-    float:left;
-    border-right:1px solid #e3e3e3;
-    width:266px;
-    height:100%;   
+#settings-nav { 
+    margin:0px;   
 }
 
 #settings-nav li {
@@ -2328,6 +2325,33 @@ ul .radio-with-stats-cells li {
 
 #settings-nav .checked span {
     color:white;
+}
+
+.settings-content-container {
+    width:540px;
+    float:left;
+    border-left: 1px solid #e3e3e3;
+    padding-left:37px;
+    padding-top:30px;
+}
+
+.settings-content-container form fieldset legend {
+    display:block;
+    border-bottom: none;
+    font-size: 23px;
+    line-height:30px;
+    font-weight: bold;    
+}
+
+.settings-content-container form fieldset .control-label {
+    float:left;
+    font-size: 15px;
+    font-weight: bold;
+    clear:left;
+}
+
+.settings-content-container form fieldset .controls input {
+    float:right;
 }
 
 /**
@@ -2492,6 +2516,14 @@ ul .radio-with-stats-cells li {
 	left:59px;
 }
 
+.yacheckbox {
+    display:block;
+    height:17px;
+    width:17px;
+    border:1px solid #bebebe;
+    border-radius:5px;
+    box-shadow:0px 2px 2px #bebebe;
+}
 
 .no-margin {
 	margin:0px;
