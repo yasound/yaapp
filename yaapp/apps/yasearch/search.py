@@ -8,7 +8,7 @@ import settings as yasearch_settings
 #
 # FIND
 #
-def find_song(name, album, artist, remove_common_words=True):
+def find_song(name, album, artist, remove_common_words=True, accurate_album=False):
 # from yaref.mongo import *;find_song(u"Voy A Perder La Razón", u"Raíces Del Flamenco (Antología 5)",u"Various Artists, El Agujeta")
     db = settings.MONGO_DB
     dms_name = yasearch_utils.build_dms(name, remove_common_words)
@@ -19,8 +19,13 @@ def find_song(name, album, artist, remove_common_words=True):
     if artist and len(dms_artist) > 0:
         query_items.append({"artist_dms":{"$all": dms_artist}})
 
+    if accurate_album:
+        album_op = '$all'
+    else:
+        album_op ='$in'
+        
     if album and len(dms_album) > 0:
-        query_items.append({"album_dms":{"$in": dms_album}})
+        query_items.append({"album_dms":{album_op: dms_album}})
 
     if name and len(dms_name) > 0:
         query_items.append({"song_dms":{"$all": dms_name}})
