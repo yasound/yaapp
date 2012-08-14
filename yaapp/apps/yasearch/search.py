@@ -27,7 +27,6 @@ def find_song(name, album, artist, remove_common_words=True):
 
     if len(query_items) == 0:
         return []
-
     
     res = db.songs.find({"$and":query_items}, 
                          {

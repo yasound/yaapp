@@ -103,7 +103,7 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
     params:{},
 
     url: function() {
-        return '/api/v1/programming/' + this.uuid + '/yasound_songs/';
+        return '/api/v1/radio/' + this.uuid + '/programming/yasound_songs/';
     },
 
     setUUID: function(uuid) {
@@ -117,30 +117,23 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
-    filterTrack: function(track) {
-        if (track) {
-            _.extend(this.params, {name:track});
+    filter: function(name, album, artist) {
+        if (name) {
+            _.extend(this.params, {name:name});
         } else {
             _.extend(this.params, {name:undefined});
         }
-        this.goTo(0);
-    },
-
-    filterArtist: function(artist) {
         if (artist) {
             _.extend(this.params, {artist:artist});
         } else {
             _.extend(this.params, {artist:undefined});
         }
-        this.goTo(0);
-    },
-
-    filterAlbum: function(album) {
         if (album) {
             _.extend(this.params, {album:album});
         } else {
             _.extend(this.params, {album:undefined});
         }
         this.goTo(0);
+
     }
 });

@@ -38,6 +38,8 @@ from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager
 from yaref.models import YasoundSong
+import yasearch.search as yasearch_search
+
 import import_utils
 import json
 import logging
@@ -1507,6 +1509,28 @@ def my_programming_albums(request, radio_uuid=None):
         raise Http404
     response = programming_albums_response(request, radio)
     return response
+
+@check_api_key(methods=['GET',], login_required=True)
+def my_programming_yasound_songs(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    name = request.REQUEST.get('name', '').lower()
+    artist = request.REQUEST.get('artist', '').lower()
+    album = request.REQUEST.get('album', '').lower()
+
+
+    data = []
+
+    if name == '' and artist == '' and album == '':
+        pass
+    else:
+        data = yasearch_search.find_song(name, album, artist, remove_common_words=True)
+
+    total_count = data.count()
+    response = api_response(list(data[offset:offset+limit]), total_count, limit=limit, offset=offset)
+    return response
+
 
 def public_stats(request):
     """

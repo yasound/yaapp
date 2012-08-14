@@ -164,50 +164,42 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
             el: $('#songs', this.el)
         }).render();
 
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.songs,
+            el: $('#pagination', this.el)
+        });
+
+
     },
 
     onFindTrack: function(e) {
         if (e.keyCode != 13) {
             return;
         }
-        var value = $(e.target).val();
-        if (!value) {
-            return;
-        }
-
-        this.songsView.clear();
-        this.songs.filterTrack(value);
-
+        this.onFind();
     },
 
     onFindAlbum: function(e) {
         if (e.keyCode != 13) {
             return;
         }
-        var value = $(e.target).val();
-        if (!value) {
-            return;
-        }
-
-        this.songsView.clear();
-        this.songs.filterAlbum(value);
+        this.onFind();
     },
 
     onFindArtist: function(e) {
         if (e.keyCode != 13) {
             return;
         }
-        var value = $(e.target).val();
-        if (!value) {
-            return;
-        }
-
-        this.songsView.clear();
-        this.songs.filterArtist(value);
+        this.onFind()
     },
 
     onFind: function(e) {
-        e.preventDefault();
+        var name = $('#find-track-input', this.el).val();
+        var album = $('#find-album-input', this.el).val();
+        var artist = $('#find-artist-input', this.el).val();
+
+        this.songsView.clear();
+        this.songs.filter(name, album, artist);
     }
 });
 
