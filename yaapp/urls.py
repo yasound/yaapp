@@ -191,11 +191,13 @@ urlpatterns = patterns('',
     url(r'^api/v1/twitter_share_preferences/$', 'account.views.get_twitter_share_preferences'),
     url(r'^api/v1/set_twitter_share_preferences/$', 'account.views.set_twitter_share_preferences'),
 
+    # notifications
     url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
     url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
     url(r'^api/v1/update_notification/(?P<notif_id>\S+)/$', 'yamessage.views.update_notification'),
     url(r'^api/v1/delete_notification/(?P<notif_id>\S+)/$', 'yamessage.views.delete_notification'),
     url(r'^api/v1/delete_all_notifications/$', 'yamessage.views.delete_all_notifications'),
+    url(r'^api/v1/notifications/mark_all_as_read/$', 'yamessage.views.mark_all_as_read'),
 
     url(r'^api/v1/similar_radios_from_artist_list/$', 'yabase.views.similar_radios_from_artist_list'),
 
