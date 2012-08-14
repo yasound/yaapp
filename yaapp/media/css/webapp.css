@@ -1810,7 +1810,7 @@ ul#notifications .read {
 /**
  * Notifications
  */
-
+/*
 .notification-container h1 {
     padding-top:37px;
     padding-left:31px;
@@ -1823,6 +1823,16 @@ ul#notifications .read {
     color:#434343;
 }
 
+.notification-container {
+    border-radius:7px;
+    box-shadow:0px 1px 4px #e2e2e2;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+}
+*/
 /**
  * User profile
  */
@@ -2341,17 +2351,6 @@ ul .radio-with-stats-cells li {
     font-size: 23px;
     line-height:30px;
     font-weight: bold;    
-}
-
-.settings-content-container form fieldset .control-label {
-    float:left;
-    font-size: 15px;
-    font-weight: bold;
-    clear:left;
-}
-
-.settings-content-container form fieldset .controls input {
-    float:right;
 }
 
 /**

@@ -4,7 +4,7 @@
     <div class='span12 settings-container'>
         <h1>{% trans "Settings" %}</h1>
         <ul id='settings-nav' class='span4'>
-            <li class=''><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>Mes informations</span></a></li>
+            <li class='checked'><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>Mes informations</span></a></li>
             <li class=''><a href="#"><img src="/media/app/images/settings/settings-icon-accounts.png" alt='accounts' /><span>Mes comptes</span></a></li>
             <li class=''><a href="#"><img src="/media/app/images/settings/settings-icon-notifications.png" alt='notifications' /><span>Notifications</span></a></li>
         </ul>
@@ -39,7 +39,7 @@
                 {% if settings_twitter_form %}
                 <form id='settings-twitter-form' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
                     {{ settings_twitter_form }}
-                    <div class="form-actions">
+                    <div class="">
                         <input type='hidden' name='action' value='settings_twitter' />
                         <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
                         <button type="submit" name='remove' id='btn-remove-twitter' class="btn btn-danger">{% trans "Remove account" %}</button>
