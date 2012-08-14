@@ -183,24 +183,25 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         if (e.keyCode != 13) {
             return;
         }
-        this.onFind();
+        this.onFind(e);
     },
 
     onFindAlbum: function(e) {
         if (e.keyCode != 13) {
             return;
         }
-        this.onFind();
+        this.onFind(e);
     },
 
     onFindArtist: function(e) {
         if (e.keyCode != 13) {
             return;
         }
-        this.onFind();
+        this.onFind(e);
     },
 
     onFind: function(e) {
+        e.preventDefault();
         var name = $('#find-track-input', this.el).val();
         var album = $('#find-album-input', this.el).val();
         var artist = $('#find-artist-input', this.el).val();
