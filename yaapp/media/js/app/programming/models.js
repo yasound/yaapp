@@ -95,7 +95,7 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
 });
 
 Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
-    idAttribute: "db_id",
+    idAttribute: "id",
 
     setUUID: function(uuid) {
         this.uuid = uuid;

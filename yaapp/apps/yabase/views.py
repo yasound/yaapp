@@ -1522,10 +1522,16 @@ def my_programming_yasound_songs(request, radio_uuid):
         if name == '' and artist == '' and album == '':
             pass
         else:
-            data = yasearch_search.find_song(name, album, artist, remove_common_words=True, accurate_album=True)
-            if data is not None and data != []:
-                total_count = data.count()
-                data = list(data[offset:offset+limit])
+            qs = YasoundSong.objects.all()
+            if name != '':
+                qs = qs.filter(name_simplified=name)
+            if artist != '':
+                qs = qs.filter(artist_name_simplified=artist)
+            if album != '':
+                qs = qs.filter(album_name_simplified=album)
+
+            total_count = qs.count()
+            data = list(qs[offset:offset+limit].values('id', 'name', 'artist_name', 'album_name'))
 
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
