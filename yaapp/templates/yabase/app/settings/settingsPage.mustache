@@ -106,9 +106,9 @@
                     <form id='my-informations' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
                         {{ my_informations_form }}
 
-                        <div class="form-actions">
+                        <div>
                             <input type='hidden' name='action' value='my_informations'/>
-                            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                            <button type="submit" class ="save-btn right">{% trans "Save" %}</button>
                         </div>
                     </form>
                 </div>
@@ -116,9 +116,9 @@
                 <div id='my-notifications' style='display:none;'>
                     <form id='my-notifications-form' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
                         {{ my_notifications_form }}
-                        <div class="form-actions">
+                        <div>
                             <input type='hidden' name='action' value='my_notifications'/>
-                            <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
+                            <button type="submit" name='save-btn right' class="save-btn">{% trans "Save" %}</button>
                         </div>
                     </form>
                 </div>
