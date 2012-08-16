@@ -2377,6 +2377,10 @@ ul .radio-with-stats-cells li {
     font-weight: bold;
 }
 
+.settings-content-container form textarea {
+    width:100%;
+}
+
 .control-group label {
     color:#434343;
     font-size:17px;
@@ -2407,9 +2411,9 @@ ul .radio-with-stats-cells li {
 #id_yasound_email,
 #id_password1,
 #id_password2,
-#id_name, 
-#id_url, 
-#id_birthday, 
+#id_name,
+#id_url,
+#id_birthday,
 #id_city {
     width:250px;
     height:35px;
