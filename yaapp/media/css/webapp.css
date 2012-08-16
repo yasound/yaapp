@@ -2074,6 +2074,16 @@ ul .radio-with-stats-cells li {
 	margin:21px;
 }
 
+.radio-with-stats .radio-toolbar {
+    float:right;
+    margin-top: 6px;
+    margin-right:20px;
+}
+
+.radio-with-stats .radio-toolbar button {
+    margin-right: 12px;
+}
+
 .radio-with-stats .radio-cell-parent .radio-cell {
 	margin:0;
 	padding:0;
@@ -2083,6 +2093,7 @@ ul .radio-with-stats-cells li {
 .radio-with-stats .chartdiv {
 	float:right;
 	margin:30px;
+    margin-top: 4px;
     height:90% !important;
     width:50% !important;
 }

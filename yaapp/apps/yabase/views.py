@@ -960,12 +960,26 @@ class WebAppView(View):
 
         notification_count = 0
 
+        my_informations_form = None
+        my_accounts_form = None
+        my_notifications_form = None
+        display_associate_facebook = False
+        display_associate_twitter = False
+
+
         if request.user.is_authenticated():
             user_profile = request.user.get_profile()
             user_uuid = user_profile.own_radio.uuid
 
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
+
+            display_associate_facebook = not request.user.get_profile().facebook_enabled
+            display_associate_twitter = not request.user.get_profile().twitter_enabled
+            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
+            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
+
 
         else:
             user_uuid = 0
@@ -976,21 +990,6 @@ class WebAppView(View):
 
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = request.build_absolute_uri(reverse('webapp'))
-
-
-        my_informations_form = None
-        my_accounts_form = None
-        my_notifications_form = None
-
-        display_associate_facebook = False
-        display_associate_twitter = False
-        if request.user.is_authenticated():
-            display_associate_facebook = not request.user.get_profile().facebook_enabled
-            display_associate_twitter = not request.user.get_profile().twitter_enabled
-
-            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
-            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
-            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
 
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
@@ -1014,16 +1013,16 @@ class WebAppView(View):
             'facebook_share_link': facebook_share_link,
             'facebook_channel_url': facebook_channel_url,
             'user_profile': user_profile,
-            'my_informations_form': my_informations_form,
-            'my_accounts_form': my_accounts_form,
-            'my_notifications_form': my_notifications_form,
-            'display_associate_facebook' : display_associate_facebook,
-            'display_associate_twitter' : display_associate_twitter,
             'import_itunes_form': ImportItunesForm(user=request.user),
             'notification_count': notification_count,
             'genre_form': genre_form,
             'has_radios': has_radios,
-            'submenu_number': 1
+            'submenu_number': 1,
+            'display_associate_facebook': display_associate_facebook,
+            'display_associate_twitter': display_associate_twitter,
+            'my_informations_form': my_informations_form,
+            'my_accounts_form': my_accounts_form,
+            'my_notifications_form': my_notifications_form,
         }
 
         if hasattr(self, page):
@@ -1120,6 +1119,47 @@ class WebAppView(View):
                     context['signup_form'] = form
         return context, 'yabase/webapp.html'
 
+    def settings(self, request, context, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('webapp'))
+
+        if request.method == 'POST':
+            action = request.REQUEST.get('action')
+            if action == 'my_informations':
+                my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
+                if my_informations_form.is_valid():
+                    my_informations_form.save()
+                    return HttpResponseRedirect(reverse('webapp_settings'))
+            elif action == 'my_accounts':
+                my_accounts_form = MyAccountsForm(request.POST, instance=UserProfile.objects.get(user=request.user))
+                if my_accounts_form.is_valid():
+                    my_accounts_form.save()
+                    return HttpResponseRedirect(reverse('webapp_settings'))
+            elif action == 'my_notifications':
+                my_notifications_form = MyNotificationsForm(request.user.get_profile(), request.POST)
+                if my_notifications_form.is_valid():
+                    my_notifications_form.save()
+                    return HttpResponseRedirect(reverse('webapp_settings'))
+
+        return context, 'yabase/webapp.html'
+
+    def edit_radio(self, request, context, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('webapp'))
+
+        if request.method == 'POST':
+            action = request.REQUEST.get('action')
+            if action == 'radio_settings':
+                uuid = request.REQUEST.get('uuid', '')
+                radio = get_object_or_404(Radio, uuid=uuid)
+                if radio.creator != request.user:
+                    raise Http404
+                form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect(reverse('webapp_edit_radio', args=[uuid]))
+        return context, 'yabase/webapp.html'
+
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher. Save data from profile page right now.
@@ -1135,11 +1175,13 @@ class WebAppView(View):
         my_informations_form = None
         my_accounts_form = None
         my_notifications_form = None
-
-
-        has_radios = False
         display_associate_facebook = False
         display_associate_twitter = False
+        if request.user.is_authenticated:
+            display_associate_facebook = not request.user.get_profile().facebook_enabled
+            display_associate_twitter = not request.user.get_profile().twitter_enabled
+
+        has_radios = False
 
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = request.build_absolute_uri(reverse('webapp'))
@@ -1150,14 +1192,6 @@ class WebAppView(View):
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
 
-
-            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
-            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
-            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
-
-            display_associate_facebook = not request.user.get_profile().facebook_enabled
-            display_associate_twitter = not request.user.get_profile().twitter_enabled
-
             radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
             if radio_count > 0:
                 has_radios = True
@@ -1166,29 +1200,13 @@ class WebAppView(View):
 
 
         action = request.REQUEST.get('action')
-        if action == 'my_informations':
-            my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
-            if my_informations_form.is_valid():
-                my_informations_form.save()
-                return HttpResponseRedirect(reverse('webapp_settings'))
-        elif action == 'my_accounts':
-            my_accounts_form = MyAccountsForm(request.POST, instance=UserProfile.objects.get(user=request.user))
-            if my_accounts_form.is_valid():
-                my_accounts_form.save()
-                return HttpResponseRedirect(reverse('webapp_settings'))
-        elif action == 'my_notifications':
-            my_notifications_form = MyNotificationsForm(request.user.get_profile(), request.POST)
-            if my_notifications_form.is_valid():
-                my_notifications_form.save()
-                return HttpResponseRedirect(reverse('webapp_settings'))
-        elif action == 'import_itunes':
+        if action == 'import_itunes':
             import_itunes_form = ImportItunesForm(request.user, request.POST)
             if import_itunes_form.is_valid():
                 import_itunes_form.save()
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
         genre_form = RadioGenreForm()
-
 
         context = {
             'user_uuid': user_uuid,
@@ -1200,11 +1218,6 @@ class WebAppView(View):
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
             'facebook_channel_url': facebook_channel_url,
-            'display_associate_facebook' : display_associate_facebook,
-            'display_associate_twitter' : display_associate_twitter,
-            'my_informations_form': my_informations_form,
-            'my_accounts_form': my_accounts_form,
-            'my_notifications_form': my_notifications_form,
             'user_profile': user_profile,
             'import_itunes_form': import_itunes_form,
             'notification_count': notification_count,
@@ -1551,9 +1564,19 @@ def public_stats(request):
     return HttpResponse(response, mimetype='application/json')
 
 def load_template(request, template_name):
+    context = {}
+    if template_name == 'radio/editRadioPage.mustache':
+        uuid = request.REQUEST.get('uuid', '')
+        radio = get_object_or_404(Radio, uuid=uuid)
+        if radio.creator != request.user:
+            raise Http404
+
+        context['radio'] = radio
+        context['settings_radio_form'] = SettingsRadioForm(instance=radio)
+
+
     template_full_name = 'yabase/app/%s' % (template_name)
-    return render_to_response(template_full_name, {
-    }, context_instance=RequestContext(request))
+    return render_to_response(template_full_name, context, context_instance=RequestContext(request))
 
 
 @check_api_key(methods=['GET',], login_required=False)

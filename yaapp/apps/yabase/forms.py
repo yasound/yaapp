@@ -79,8 +79,9 @@ class MyNotificationsForm(BootstrapForm):
     user_in_radio = forms.BooleanField(label=_("A user enters"), required=False)
     friend_in_radio = forms.BooleanField(label=_("A friend enters"), required=False)
     friend_online = forms.BooleanField(label=_("A friend goes online"), required=False)
+    message_posted = forms.BooleanField(label=_("A message is posted"), required=False)
     song_liked = forms.BooleanField(label=_("Someone likes a song"), required=False)
-    radio_in_favorites = forms.BooleanField(label=_("UMy radio is added as favorite"), required=False)
+    radio_in_favorites = forms.BooleanField(label=_("My radio is added as favorite"), required=False)
     radio_shared = forms.BooleanField(label=_("Someone shared my radio"), required=False)
     friend_created_radio = forms.BooleanField(label=_("A friend creates his radio"), required=False)
 
@@ -88,10 +89,11 @@ class MyNotificationsForm(BootstrapForm):
     FIELDSET_TWITTER = 2
     class Meta:
         layout = (
-            Fieldset(_('General notifications'),
+            Fieldset(_('Notifications'),
                     'user_in_radio',
                     'friend_in_radio',
                     'friend_online',
+                    'message_posted',
                     'song_liked',
                     'radio_in_favorites',
                     'radio_shared',
@@ -126,6 +128,7 @@ class MyNotificationsForm(BootstrapForm):
             'user_in_radio': self.user_profile.notifications_preferences.user_in_radio,
             'friend_in_radio': self.user_profile.notifications_preferences.friend_in_radio,
             'friend_online': self.user_profile.notifications_preferences.friend_online,
+            'message_posted': self.user_profile.notifications_preferences.message_posted,
             'song_liked': self.user_profile.notifications_preferences.song_liked,
             'radio_in_favorites': self.user_profile.notifications_preferences.radio_in_favorites,
             'radio_shared': self.user_profile.notifications_preferences.radio_shared,
@@ -180,6 +183,7 @@ class MyNotificationsForm(BootstrapForm):
         user_in_radio = self.cleaned_data['user_in_radio']
         friend_in_radio = self.cleaned_data['friend_in_radio']
         friend_online = self.cleaned_data['friend_online']
+        message_posted = self.cleaned_data['message_posted']
         song_liked = self.cleaned_data['song_liked']
         radio_in_favorites = self.cleaned_data['radio_in_favorites']
         radio_shared = self.cleaned_data['radio_shared']
@@ -188,6 +192,7 @@ class MyNotificationsForm(BootstrapForm):
         self.user_profile.notifications_preferences.user_in_radio = user_in_radio
         self.user_profile.notifications_preferences.friend_in_radio = friend_in_radio
         self.user_profile.notifications_preferences.friend_online = friend_online
+        self.user_profile.notifications_preferences.message_posted = message_posted
         self.user_profile.notifications_preferences.song_liked = song_liked
         self.user_profile.notifications_preferences.radio_in_favorites = radio_in_favorites
         self.user_profile.notifications_preferences.radio_shared = radio_shared
