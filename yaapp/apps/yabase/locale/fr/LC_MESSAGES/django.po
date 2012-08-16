@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-16 13:14+0200\n"
+"POT-Creation-Date: 2012-08-16 17:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,91 +20,99 @@ msgstr ""
 
 #: export_utils.py:8
 msgid "Songs"
-msgstr ""
+msgstr "Chansons"
 
 #: export_utils.py:20
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: export_utils.py:21
 msgid "Artist"
-msgstr ""
+msgstr "Artiste"
 
-#: forms.py:17
-msgid "My radio"
-msgstr "Ma radio"
+#: forms.py:14
+msgid "Tags"
+msgstr "Tags"
 
-#: forms.py:36 forms.py:205
+#: forms.py:14
+msgid "A comma-separated list of tags"
+msgstr "Une liste de tags séparés par des virgules"
+
+#: forms.py:31
+msgid "Biography"
+msgstr "Biographie"
+
+#: forms.py:40 forms.py:209
 msgid "Password"
 msgstr "Mot de passe"
 
-#: forms.py:37 forms.py:206
+#: forms.py:41 forms.py:210
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: forms.py:69 forms.py:74 forms.py:224 forms.py:271
+#: forms.py:73 forms.py:78 forms.py:228 forms.py:275
 msgid "Listen"
 msgstr "J'écoute un morceau"
 
-#: forms.py:70 forms.py:75 forms.py:225 forms.py:272
+#: forms.py:74 forms.py:79 forms.py:229 forms.py:276
 msgid "Like song"
 msgstr "J'aime le morceau"
 
-#: forms.py:71 forms.py:76 forms.py:226 forms.py:273
+#: forms.py:75 forms.py:80 forms.py:230 forms.py:277
 msgid "Post message"
 msgstr "Je poste un message"
 
-#: forms.py:72 forms.py:77 forms.py:227 forms.py:274
+#: forms.py:76 forms.py:81 forms.py:231 forms.py:278
 msgid "Update programming"
 msgstr "Je mets à jour ma programmation"
 
-#: forms.py:79
+#: forms.py:83
 msgid "A user enters"
 msgstr "Un auditeur entre"
 
-#: forms.py:80
+#: forms.py:84
 msgid "A friend enters"
 msgstr "Un ami entre"
 
-#: forms.py:81
+#: forms.py:85
 msgid "A friend goes online"
 msgstr "Un ami passe en ligne"
 
-#: forms.py:82
+#: forms.py:86
 msgid "A message is posted"
 msgstr "Un auditeur a écrit un message"
 
-#: forms.py:83
+#: forms.py:87
 msgid "Someone likes a song"
 msgstr "Un auditeur aime une chanson"
 
-#: forms.py:84
+#: forms.py:88
 msgid "My radio is added as favorite"
 msgstr "Un auditeur ajoute ma radio à ses favoris"
 
-#: forms.py:85
+#: forms.py:89
 msgid "Someone shared my radio"
 msgstr "Un auditeur partage ma radio"
 
-#: forms.py:86
+#: forms.py:90
 msgid "A friend creates his radio"
 msgstr "Un ami crée une radio"
 
-#: forms.py:92
-msgid "General notifications"
-msgstr ""
+#: forms.py:96
+msgid "Notifications"
+msgstr "Notifications"
 
-#: forms.py:102 forms.py:230
+#: forms.py:106 forms.py:234
 msgid "Facebook share options"
 msgstr "Options de partage de Facebook"
 
-#: forms.py:108 forms.py:277
+#: forms.py:112 forms.py:281
 msgid "Twitter share options"
 msgstr "Options de partage de twitter"
 
-#: forms.py:317
+#: forms.py:321
 msgid "Please paste from iTunes"
-msgstr ""
+msgstr "Veuillez effectuer un copier/coller depuis iTunes"
 
 #: import_utils.py:244
 msgid "no echonest info about artist"
@@ -210,25 +218,49 @@ msgstr ""
 msgid "updated"
 msgstr ""
 
+#: models.py:553 models.py:1574
+msgid "name"
+msgstr "nom"
+
+#: models.py:554
+msgid "picture"
+msgstr ""
+
+#: models.py:555
+msgid "url"
+msgstr ""
+
+#: models.py:556
+msgid "uuid"
+msgstr ""
+
+#: models.py:557 models.py:1575
+msgid "description"
+msgstr "description"
+
+#: models.py:558
+msgid "genre"
+msgstr "genre"
+
+#: models.py:559
+msgid "thene"
+msgstr ""
+
+#: models.py:560
+msgid "tags"
+msgstr ""
+
 #: models.py:580
 msgid "current song"
 msgstr ""
 
 #: models.py:1262 models.py:1594
 msgid "radio"
-msgstr ""
+msgstr "radio"
 
 #: models.py:1278
 msgid "Radio user"
 msgstr ""
-
-#: models.py:1574
-msgid "name"
-msgstr "nom"
-
-#: models.py:1575
-msgid "description"
-msgstr "description"
 
 #: models.py:1576
 msgid "activated"
@@ -324,19 +356,16 @@ msgstr ""
 
 #: settings.py:60
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #: settings.py:61
 msgid "Song"
-msgstr ""
+msgstr "Chanson"
 
 #: settings.py:87
 msgid "Selection"
-msgstr ""
+msgstr "Sélection"
 
 #: settings.py:88
 msgid "Homepage"
-msgstr ""
-
-#~ msgid "Profile"
-#~ msgstr "Profil"
+msgstr "Page d'accueil"
