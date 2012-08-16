@@ -89,7 +89,7 @@ class MyNotificationsForm(BootstrapForm):
     FIELDSET_TWITTER = 2
     class Meta:
         layout = (
-            Fieldset(_('General notifications'),
+            Fieldset(_('Notifications'),
                     'user_in_radio',
                     'friend_in_radio',
                     'friend_online',
