@@ -7,14 +7,17 @@ from yabase.task import async_import_from_itunes
 from yacore.tags import clean_tags
 import logging
 import settings as yabase_settings
+from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
 class SettingsRadioForm(BootstrapModelForm):
+    tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
+
     class Meta:
         model = Radio
         fields = ('name', 'genre', 'picture', 'description', 'tags')
         layout = (
-            Fieldset(_('My radio'), 'name', 'genre', 'picture', 'description', 'tags'),
+            Fieldset('', 'name', 'genre', 'picture', 'description', 'tags'),
         )
 
     def clean_tags(self):

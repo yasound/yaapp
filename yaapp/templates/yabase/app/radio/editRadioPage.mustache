@@ -2,15 +2,15 @@
 
 <div class='row-fluid'>
     <div class='span12 settings-container'>
-        <h1>{% trans "Edit radio settings" %}</h1>
+        <h1>{% trans "Radio settings" %}</h1>
 
         <div class='settings-content-container'>
             <form id='my-accounts' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
                 {{ settings_radio_form }}
-                <div class="form-actions">
+                <div>
                     <input type='hidden' name='uuid' value='{{ radio.uuid }}'/>
                     <input type='hidden' name='action' value='radio_settings'/>
-                    <button type="submit" name='save' class="btn btn-primary">{% trans "Save" %}</button>
+                    <button type="submit" name='save' class="save-btn">{% trans "Save" %}</button>
                 </div>
             </form>
         </div>

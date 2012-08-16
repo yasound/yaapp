@@ -274,9 +274,13 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
     onRemoveAll: function(e) {
         e.preventDefault();
         var that = this;
-        this.songInstances.removeAll(function() {
-            that.songInstancesView.clear();
-            that.songInstances.goTo(0);
+        $('#modal-remove-all', this.el).modal('show');
+        $('#modal-remove-all .btn-primary', this.el).on('click', function () {
+            $('#modal-remove-all', this.el).modal('hide');
+            that.songInstances.removeAll(function() {
+                that.songInstancesView.clear();
+                that.songInstances.goTo(0);
+            });
         });
     }
 

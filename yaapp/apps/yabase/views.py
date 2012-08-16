@@ -1182,7 +1182,7 @@ class WebAppView(View):
         my_notifications_form = None
         display_associate_facebook = False
         display_associate_twitter = False
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             display_associate_facebook = not request.user.get_profile().facebook_enabled
             display_associate_twitter = not request.user.get_profile().twitter_enabled
 
