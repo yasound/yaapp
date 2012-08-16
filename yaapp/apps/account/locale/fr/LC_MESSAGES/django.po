@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-16 09:16+0200\n"
+"POT-Creation-Date: 2012-08-16 17:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,9 +38,7 @@ msgstr "Utilisateurs"
 msgid "Id"
 msgstr "Id"
 
-#: export.py:21
-#: forms.py:92
-#: forms.py:130
+#: export.py:21 forms.py:92 forms.py:130
 msgid "Username"
 msgstr "Identifiant"
 
@@ -48,12 +46,7 @@ msgstr "Identifiant"
 msgid "Name"
 msgstr "Nom"
 
-#: export.py:23
-#: forms.py:34
-#: forms.py:61
-#: forms.py:93
-#: forms.py:131
-#: forms.py:242
+#: export.py:23 forms.py:34 forms.py:61 forms.py:93 forms.py:131 forms.py:242
 msgid "Email"
 msgstr "Email"
 
@@ -73,23 +66,15 @@ msgstr "Yasound ?"
 msgid "Join date"
 msgstr "Date d'inscription"
 
-#: export.py:31
-#: export.py:32
-#: export.py:33
+#: export.py:31 export.py:32 export.py:33
 msgid "No"
 msgstr "Non"
 
-#: export.py:40
-#: export.py:42
-#: export.py:44
+#: export.py:40 export.py:42 export.py:44
 msgid "Yes"
 msgstr "Oui"
 
-#: forms.py:35
-#: forms.py:94
-#: forms.py:132
-#: forms.py:133
-#: forms.py:179
+#: forms.py:35 forms.py:94 forms.py:132 forms.py:133 forms.py:179
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -117,8 +102,7 @@ msgstr "Langue changée avec succès"
 msgid "Password confirmation"
 msgstr "Confirmation du mot de passe"
 
-#: forms.py:138
-#: forms.py:297
+#: forms.py:138 forms.py:297
 msgid "You must type the same password each time."
 msgstr "Vous devez saisir le même mot de passe à chaque fois."
 
@@ -138,7 +122,8 @@ msgstr "S'enregistrer à la newsletter ?"
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr "Cet email n'a pas de compte associé. Etes-vous sur de vous être enregistré ?"
+msgstr ""
+"Cet email n'a pas de compte associé. Etes-vous sur de vous être enregistré ?"
 
 #: forms.py:285
 msgid "Current Password"
@@ -172,8 +157,7 @@ msgstr "Confirmation du nouveau mot de passe"
 msgid "The two password fields didn't match."
 msgstr "Les deux mots de passe ne correspondent pas."
 
-#: models.py:184
-#: models.py:1310
+#: models.py:184 models.py:1310
 msgid "user"
 msgstr "utilisateur"
 
@@ -182,8 +166,8 @@ msgid "name"
 msgstr "nom"
 
 #: models.py:186
-msgid "url"
-msgstr "url"
+msgid "web site"
+msgstr "site web"
 
 #: models.py:188
 msgid "account type"
@@ -277,9 +261,7 @@ msgstr "dernière date d'authentification"
 msgid "Cannot communicate with facebook"
 msgstr "Impossible de communiquer avec Facebook"
 
-#: models.py:310
-#: models.py:314
-#: models.py:318
+#: models.py:310 models.py:314 models.py:318
 msgid "Cannot get informations from facebook"
 msgstr "Impossible de récupérer les informations auprès de Facebook"
 
@@ -291,20 +273,12 @@ msgstr "Erreur d'identification Facebook"
 msgid "The Facebook account is already attached to another account."
 msgstr "Le compte facebook est actuellement attaché à un autre compte."
 
-#: models.py:346
-#: models.py:365
-#: models.py:402
-#: models.py:421
-#: models.py:438
-#: models.py:456
-#: views.py:414
-#: views.py:448
+#: models.py:346 models.py:365 models.py:402 models.py:421 models.py:438
+#: models.py:456 views.py:414 views.py:448
 msgid "OK"
 msgstr "OK"
 
-#: models.py:350
-#: models.py:406
-#: models.py:442
+#: models.py:350 models.py:406 models.py:442
 msgid "This is the last account, removal is impossible"
 msgstr "C'est le dernier compte, retrait impossible"
 
@@ -401,8 +375,7 @@ msgstr "J'ai mis à jour ma programmation sur %(url)s #yasound"
 msgid "Successfully logged in as %(username)s."
 msgstr "Connecté avec succès en tant que %(username)s."
 
-#: views.py:103
-#: views.py:126
+#: views.py:103 views.py:126
 #, python-format
 msgid "Confirmation email sent to %s"
 msgstr "Mail de confirmation envoyé à %s"
@@ -415,13 +388,13 @@ msgstr "Un email vient d'être envoyé afin de réinitialiser votre mot de passe
 msgid "Your password has been successfully reset."
 msgstr "Votre mot de passe à été réinitialisé avec succès."
 
-#: views.py:394
-#: views.py:436
+#: views.py:394 views.py:436
 msgid "Account type is missing from request"
 msgstr "Type de compte inconnu"
 
-#: views.py:405
-#: views.py:439
+#: views.py:405 views.py:439
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
+#~ msgid "url"
+#~ msgstr "url"

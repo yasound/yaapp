@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-16 17:33+0200\n"
+"POT-Creation-Date: 2012-08-16 17:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,41 +42,27 @@ msgstr "Une liste de tags séparés par des virgules"
 msgid "Biography"
 msgstr "Biographie"
 
-#: forms.py:40
-#: forms.py:209
+#: forms.py:40 forms.py:209
 msgid "Password"
 msgstr "Mot de passe"
 
-#: forms.py:41
-#: forms.py:210
+#: forms.py:41 forms.py:210
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: forms.py:73
-#: forms.py:78
-#: forms.py:228
-#: forms.py:275
+#: forms.py:73 forms.py:78 forms.py:228 forms.py:275
 msgid "Listen"
 msgstr "J'écoute un morceau"
 
-#: forms.py:74
-#: forms.py:79
-#: forms.py:229
-#: forms.py:276
+#: forms.py:74 forms.py:79 forms.py:229 forms.py:276
 msgid "Like song"
 msgstr "J'aime le morceau"
 
-#: forms.py:75
-#: forms.py:80
-#: forms.py:230
-#: forms.py:277
+#: forms.py:75 forms.py:80 forms.py:230 forms.py:277
 msgid "Post message"
 msgstr "Je poste un message"
 
-#: forms.py:76
-#: forms.py:81
-#: forms.py:231
-#: forms.py:278
+#: forms.py:76 forms.py:81 forms.py:231 forms.py:278
 msgid "Update programming"
 msgstr "Je mets à jour ma programmation"
 
@@ -116,13 +102,11 @@ msgstr "Un ami crée une radio"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: forms.py:106
-#: forms.py:234
+#: forms.py:106 forms.py:234
 msgid "Facebook share options"
 msgstr "Options de partage de Facebook"
 
-#: forms.py:112
-#: forms.py:281
+#: forms.py:112 forms.py:281
 msgid "Twitter share options"
 msgstr "Options de partage de twitter"
 
@@ -214,8 +198,7 @@ msgstr ""
 msgid "song"
 msgstr "chanson"
 
-#: models.py:328
-#: models.py:1263
+#: models.py:328 models.py:1263
 msgid "user"
 msgstr "utilisateur"
 
@@ -227,18 +210,15 @@ msgstr ""
 msgid "creator"
 msgstr "créateur"
 
-#: models.py:548
-#: models.py:1572
+#: models.py:548 models.py:1572
 msgid "created"
 msgstr ""
 
-#: models.py:549
-#: models.py:1573
+#: models.py:549 models.py:1573
 msgid "updated"
 msgstr ""
 
-#: models.py:553
-#: models.py:1574
+#: models.py:553 models.py:1574
 msgid "name"
 msgstr "nom"
 
@@ -254,8 +234,7 @@ msgstr ""
 msgid "uuid"
 msgstr ""
 
-#: models.py:557
-#: models.py:1575
+#: models.py:557 models.py:1575
 msgid "description"
 msgstr "description"
 
@@ -275,8 +254,7 @@ msgstr ""
 msgid "current song"
 msgstr ""
 
-#: models.py:1262
-#: models.py:1594
+#: models.py:1262 models.py:1594
 msgid "radio"
 msgstr "radio"
 
@@ -288,8 +266,7 @@ msgstr ""
 msgid "activated"
 msgstr "activé"
 
-#: models.py:1590
-#: models.py:1593
+#: models.py:1590 models.py:1593
 msgid "featured content"
 msgstr ""
 
@@ -365,8 +342,7 @@ msgstr "Tous Styles"
 msgid "Genre"
 msgstr "Genre"
 
-#: settings.py:50
-#: settings.py:62
+#: settings.py:50 settings.py:62
 msgid "Like"
 msgstr ""
 
@@ -393,4 +369,3 @@ msgstr "Sélection"
 #: settings.py:88
 msgid "Homepage"
 msgstr "Page d'accueil"
-
