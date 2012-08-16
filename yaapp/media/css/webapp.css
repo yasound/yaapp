@@ -2404,6 +2404,9 @@ ul .radio-with-stats-cells li {
     margin-bottom: 25px;
 }
 
+#id_yasound_email,
+#id_password1,
+#id_password2,
 #id_name, 
 #id_url, 
 #id_birthday, 
@@ -2447,6 +2450,23 @@ ul .radio-with-stats-cells li {
     margin:0px;
 }
 
+#my-accounts fieldset legend {
+    margin:0px;
+}
+
+.notifications .control-group {
+    position:relative;
+}
+
+.notifications .controls {
+    height:22px;
+    width:19px;
+    border:1px solid black;
+    float:right;
+    position:absolute;
+    top:1px;
+    right:150px;
+}
 
 /**
  * common items
