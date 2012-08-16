@@ -1121,7 +1121,7 @@ class WebAppView(View):
 
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp_settings'))
+            return HttpResponseRedirect(reverse('webapp'))
 
         if request.method == 'POST':
             action = request.REQUEST.get('action')
@@ -1143,6 +1143,21 @@ class WebAppView(View):
 
         return context, 'yabase/webapp.html'
 
+    def edit_radio(self, request, context, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('webapp'))
+        if request.method == 'POST':
+            action = request.REQUEST.get('action')
+            if action == 'radio_settings':
+                uuid = request.REQUEST.get('uuid', '')
+                radio = get_object_or_404(Radio, uuid=uuid)
+                if radio.creator != request.user:
+                    raise Http404
+                form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect(reverse('webapp_edit_radio', args=[uuid]))
+        return context, 'yabase/webapp.html'
 
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
@@ -1548,9 +1563,19 @@ def public_stats(request):
     return HttpResponse(response, mimetype='application/json')
 
 def load_template(request, template_name):
+    context = {}
+    if template_name == 'radio/editRadioPage.mustache':
+        uuid = request.REQUEST.get('uuid', '')
+        radio = get_object_or_404(Radio, uuid=uuid)
+        if radio.creator != request.user:
+            raise Http404
+
+        context['radio'] = radio
+        context['settings_radio_form'] = SettingsRadioForm(instance=radio)
+
+
     template_full_name = 'yabase/app/%s' % (template_name)
-    return render_to_response(template_full_name, {
-    }, context_instance=RequestContext(request))
+    return render_to_response(template_full_name, context, context_instance=RequestContext(request))
 
 
 @check_api_key(methods=['GET',], login_required=False)

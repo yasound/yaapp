@@ -68,20 +68,22 @@ Yasound.Views.RadioResults = Backbone.View.extend({
 Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
     tagName: 'li',
     events: {
-        'plothover .chartdiv': 'plotHover'
+        'plothover .chartdiv': 'plotHover',
+        'click .edit-radio': 'onEditRadio',
+        'click .edit-playlist': 'onEditPlaylist'
     },
 
     initialize: function () {
         _.bindAll(this, 'render', 'plotHover', 'showToolTip');
         this.model.bind('change', this.render, this);
-        
+
         this.previousPoint = null;
     },
-    
+
     onClose: function () {
         this.model.unbind('change', this.render);
     },
-    
+
     reset: function() {
         if (this.radioCellView) {
             this.radioCellView.reset();
@@ -89,63 +91,63 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
             this.radioCellView = undefined;
         }
     },
-    
+
     render: function () {
         this.reset();
         var data = this.model.toJSON();
-        
+
         $(this.el).hide().html(ich.radioWithStatsCellTemplate(data)).fadeIn(200);
         this.radioCellView = new Yasound.Views.RadioCell({
             el: $('.radio-cell-parent', this.el),
             model: this.model
         }).render();
-        
+
         var stats = data['stats'];
-        var chart_data = []
+        var chart_data = [];
         if (stats) {
-            _.each(stats, function(stat) { 
+            _.each(stats, function(stat) {
                 if (stat['overall_listening_time']) {
                     var date = Yasound.Utils.momentDate(stat['date']).unix()*1000;
-                    chart_data.push([date, stat['overall_listening_time']])
+                    chart_data.push([date, stat['overall_listening_time']]);
                 }
             });
         }
-        
+
         var options = {
             xaxis: {
                 mode: "time",
                 minTickSize: [1, "day"],
                 timeformat: gettext("%b %d"),
-                monthNames: [gettext("jan"), 
-                             gettext("feb"), 
+                monthNames: [gettext("jan"),
+                             gettext("feb"),
                              gettext("mar"),
-                             gettext("apr"), 
-                             gettext("may"), 
-                             gettext("jun"), 
-                             gettext("jul"), 
-                             gettext("aug"), 
-                             gettext("sept"), 
-                             gettext("oct"), 
-                             gettext("nov"), 
-                             gettext("dec")]                
+                             gettext("apr"),
+                             gettext("may"),
+                             gettext("jun"),
+                             gettext("jul"),
+                             gettext("aug"),
+                             gettext("sept"),
+                             gettext("oct"),
+                             gettext("nov"),
+                             gettext("dec")]
             },
             grid: { hoverable: true, clickable: true }
         };
-        
+
         var plot = $.plot($('.chartdiv', this.el), [chart_data], options);
-        
+
         return this;
     },
-    
+
     plotHover: function(event, pos, item) {
         if (item) {
             if (this.previousPoint != item.dataIndex) {
                 this.previousPoint = item.dataIndex;
-                
+
                 $("#tooltip", this.el).remove();
                 var x = item.datapoint[0].toFixed(2),
                     y = item.datapoint[1].toFixed(2);
-                
+
                 var formattedDate = moment.unix(x/1000).format('LL');
                 var formattedValue = Math.round(y) + ' ' + gettext('minutes');
                 this.showToolTip(item.pageX, item.pageY,
@@ -154,17 +156,16 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         }
         else {
             $("#tooltip", this.el).remove();
-            this.previousPoint = null;            
+            this.previousPoint = null;
         }
     },
-    
+
     showToolTip: function(x, y, contents) {
         $('<div id="tooltip">' + contents + '</div>').css( {
             position: 'absolute',
             display: 'none',
             top: y + -58,
             left: x + -35,
-            padding: '2px',
             'background-color': '#4b4b4b',
             opacity: 0.90,
             'border-radius':'5px',
@@ -173,12 +174,29 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
             'font-weight':'bold',
             'padding':'3px'
         }).appendTo(this.el).fadeIn(200);
+    },
+
+    onEditRadio: function (e) {
+        e.preventDefault();
+
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/edit/', {
+            trigger: true
+        });
+    },
+
+    onEditPlaylist: function (e) {
+        e.preventDefault();
+
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/programming/', {
+            trigger: true
+        });
     }
+
 });
 
 Yasound.Views.MyRadiosPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.MyRadios({}),
-    
+
     initialize: function () {
     },
 
@@ -197,23 +215,23 @@ Yasound.Views.MyRadiosPage = Backbone.View.extend({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-        
-        this.onGenreChanged('', genre)
+
+        this.onGenreChanged('', genre);
         return this;
     },
-    
+
     onGenreChanged: function(e, genre) {
-        if (genre == '') {
+        if (genre === '') {
             this.collection.params.genre = undefined;
         } else {
             this.collection.params.genre = genre;
         }
         this.resultsView.clear();
         this.collection.goTo(0);
-    }    
+    }
 });
