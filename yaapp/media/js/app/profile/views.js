@@ -9,7 +9,8 @@ Yasound.Views.User = Backbone.View.extend({
     tagName: 'div',
     className: 'radio',
     events: {
-        'click #radio-activity': 'radio',
+        'click #radio-history': 'radioHistory',
+        'click #radio-activity': 'currentRadio',
         'click #follow': 'follow',
         'click #settings-btn': 'settings'
     },
@@ -32,9 +33,17 @@ Yasound.Views.User = Backbone.View.extend({
         return this;
     },
 
-    radio: function (e) {
+    radioHistory: function (e) {
         e.preventDefault();
         var uuid = this.model.get('history')['radio_uuid'];
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
+    },
+
+    currentRadio: function (e) {
+        e.preventDefault();
+        var uuid = this.model.get('current_radio')['uuid'];
         Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
         });

@@ -2386,7 +2386,7 @@ ul .radio-with-stats-cells li {
     color:#4f4f4f;
     border-left: 1px solid #e3e3e3;
     padding-left:37px;
-    padding:30px 135px 30px 37px;
+    padding:25px 135px 30px 37px;
 }
 
 .settings-content-container form fieldset legend {
@@ -2408,7 +2408,6 @@ ul .radio-with-stats-cells li {
 }
 
 .save-btn {
-    float:right;
     font-size: 17px;
     color:#58595c;
     padding:17px 63px;
@@ -2484,16 +2483,18 @@ ul .radio-with-stats-cells li {
 }
 
 .twitter_share_options .control-group,
+.facebook_share_options .control-group,
 .notifications .control-group {
     position:relative;
 }
 
 .twitter_share_options .controls,
+.facebook_share_options .controls,
 .notifications .controls {
     float:right;
     position:absolute;
     top:1px;
-    right:150px;
+    right:120px;
 }
 
 /**
