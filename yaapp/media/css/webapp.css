@@ -18,6 +18,11 @@ body {
     visibility: hidden;
 }
 
+.hidden-display {
+    display: none;
+}
+
+
 .share {
     float: left;
     margin-right: 12px;
@@ -2293,8 +2298,8 @@ ul .radio-with-stats-cells li {
     border-bottom: 1px solid #e3e3e3;
  }
 
-#settings-nav { 
-    margin:0px;   
+#settings-nav {
+    margin:0px;
 }
 
 #settings-nav li {
@@ -2350,7 +2355,7 @@ ul .radio-with-stats-cells li {
     border-bottom: none;
     font-size: 23px;
     line-height:30px;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
 /**

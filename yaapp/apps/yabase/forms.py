@@ -76,13 +76,33 @@ class MyNotificationsForm(BootstrapForm):
     tw_share_post_message = forms.BooleanField(label=_("Post message"), required=False)
     tw_share_animator_activity = forms.BooleanField(label=_("Update programming"), required=False)
 
+    user_in_radio = forms.BooleanField(label=_("A user enters"), required=False)
+    friend_in_radio = forms.BooleanField(label=_("A friend enters"), required=False)
+    friend_online = forms.BooleanField(label=_("A friend goes online"), required=False)
+    song_liked = forms.BooleanField(label=_("Someone likes a song"), required=False)
+    radio_in_favorites = forms.BooleanField(label=_("UMy radio is added as favorite"), required=False)
+    radio_shared = forms.BooleanField(label=_("Someone shared my radio"), required=False)
+    friend_created_radio = forms.BooleanField(label=_("A friend creates his radio"), required=False)
+
+    FIELDSET_FACEBOOK = 1
+    FIELDSET_TWITTER = 2
     class Meta:
         layout = (
+            Fieldset(_('General notifications'),
+                    'user_in_radio',
+                    'friend_in_radio',
+                    'friend_online',
+                    'song_liked',
+                    'radio_in_favorites',
+                    'radio_shared',
+                    'friend_created_radio'),
+
             Fieldset(_('Facebook share options'),
                      'fb_share_listen',
                      'fb_share_like_song',
                      'fb_share_post_message',
                      'fb_share_animator_activity'),
+
             Fieldset(_('Twitter share options'),
                      'tw_share_listen',
                      'tw_share_like_song',
@@ -103,6 +123,13 @@ class MyNotificationsForm(BootstrapForm):
             'tw_share_like_song': self.user_profile.notifications_preferences.tw_share_like_song,
             'tw_share_post_message': self.user_profile.notifications_preferences.tw_share_post_message,
             'tw_share_animator_activity': self.user_profile.notifications_preferences.tw_share_animator_activity,
+            'user_in_radio': self.user_profile.notifications_preferences.user_in_radio,
+            'friend_in_radio': self.user_profile.notifications_preferences.friend_in_radio,
+            'friend_online': self.user_profile.notifications_preferences.friend_online,
+            'song_liked': self.user_profile.notifications_preferences.song_liked,
+            'radio_in_favorites': self.user_profile.notifications_preferences.radio_in_favorites,
+            'radio_shared': self.user_profile.notifications_preferences.radio_shared,
+            'friend_created_radio': self.user_profile.notifications_preferences.friend_created_radio,
         }
 
         super(MyNotificationsForm, self).__init__(initial=initial, *args, **kwargs)
@@ -115,7 +142,7 @@ class MyNotificationsForm(BootstrapForm):
                      'fb_share_animator_activity']
             for name in names:
                 self.fields[name].widget = HiddenInput()
-            self.Meta.layout[0].css_class = 'hidden'
+            self.Meta.layout[MyNotificationsForm.FIELDSET_FACEBOOK].css_class = 'hidden-display'
 
         if not self.user_profile.twitter_enabled:
             # hide twitter related fields
@@ -125,7 +152,7 @@ class MyNotificationsForm(BootstrapForm):
                      'tw_share_animator_activity']
             for name in names:
                 self.fields[name].widget = HiddenInput()
-            self.Meta.layout[1].css_class = 'hidden'
+            self.Meta.layout[MyNotificationsForm.FIELDSET_TWITTER].css_class = 'hidden-display'
 
 
     def save(self):
@@ -150,6 +177,21 @@ class MyNotificationsForm(BootstrapForm):
         self.user_profile.notifications_preferences.tw_share_post_message = tw_share_post_message
         self.user_profile.notifications_preferences.tw_share_animator_activity = tw_share_animator_activity
 
+        user_in_radio = self.cleaned_data['user_in_radio']
+        friend_in_radio = self.cleaned_data['friend_in_radio']
+        friend_online = self.cleaned_data['friend_online']
+        song_liked = self.cleaned_data['song_liked']
+        radio_in_favorites = self.cleaned_data['radio_in_favorites']
+        radio_shared = self.cleaned_data['radio_shared']
+        friend_created_radio = self.cleaned_data['friend_created_radio']
+
+        self.user_profile.notifications_preferences.user_in_radio = user_in_radio
+        self.user_profile.notifications_preferences.friend_in_radio = friend_in_radio
+        self.user_profile.notifications_preferences.friend_online = friend_online
+        self.user_profile.notifications_preferences.song_liked = song_liked
+        self.user_profile.notifications_preferences.radio_in_favorites = radio_in_favorites
+        self.user_profile.notifications_preferences.radio_shared = radio_shared
+        self.user_profile.notifications_preferences.friend_created_radio = friend_created_radio
 
         self.user_profile.save()
 
