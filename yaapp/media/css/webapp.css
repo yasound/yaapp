@@ -2344,11 +2344,13 @@ ul .radio-with-stats-cells li {
 }
 
 .settings-content-container {
-    width:540px;
+    width:465px;
     float:left;
+    font-size: 15px;
+    color:#4f4f4f;
     border-left: 1px solid #e3e3e3;
     padding-left:37px;
-    padding-top:30px;
+    padding:30px 135px 30px 37px;
 }
 
 .settings-content-container form fieldset legend {
@@ -2357,6 +2359,56 @@ ul .radio-with-stats-cells li {
     font-size: 23px;
     line-height:30px;
     font-weight: bold;    
+}
+
+.control-group label {
+    color:#434343;
+    font-size:17px;
+    margin-bottom:9px;
+}
+
+.save-btn {
+    font-size: 17px;
+    color:#58595c;
+    padding:17px 63px;
+    border:1px solid #acacac;
+    border-radius:5px;
+    background-image:url('../app/images/settings/settings-btn-bg-save.png');
+    background-repeat: repeat-x;
+    box-shadow:0px 1px 2px #d4d4d4;
+    cursor: pointer;
+    text-shadow:1px 1px 1px white;
+}
+
+.save-btn:hover {
+    box-shadow:1px 3px 4px #e3e3e3;
+}
+
+.control-group {
+    margin-bottom: 25px;
+}
+
+#id_name, 
+#id_url, 
+#id_birthday, 
+#id_city {
+    width:250px;
+    height:35px;
+    border:1px solid #bebebe;
+    border-radius:5px;
+    font-size: 17px;
+    color:#74737b;
+    padding:0px;
+    margin:0px;
+    background-image:url('../app/images/settings/settings-input-bg.png');
+    background-repeat:repeat-x;
+    padding:0px 5px;
+}
+
+.controls select {
+    height:35px;
+    border:1px solid #bebebe;
+    background-image:url('../app/images/settings/settings-input-bg.png') 
 }
 
 /**
