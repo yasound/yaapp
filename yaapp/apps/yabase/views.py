@@ -1064,9 +1064,6 @@ class WebAppView(View):
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
 
-    def settings(self, request, context, *args, **kwargs):
-        return context, 'yabase/webapp.html'
-
     def notifications(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
 
@@ -1124,6 +1121,10 @@ class WebAppView(View):
             return HttpResponseRedirect(reverse('webapp'))
 
         if request.method == 'POST':
+            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
+            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
+
             action = request.REQUEST.get('action')
             if action == 'my_informations':
                 my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
@@ -1140,6 +1141,10 @@ class WebAppView(View):
                 if my_notifications_form.is_valid():
                     my_notifications_form.save()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+
+            context['my_informations_form'] = my_informations_form
+            context['my_accounts_form'] = my_accounts_form
+            context['my_notifications_form'] = my_notifications_form
 
         return context, 'yabase/webapp.html'
 
@@ -1223,7 +1228,12 @@ class WebAppView(View):
             'notification_count': notification_count,
             'submenu_number': 1,
             'has_radios': has_radios,
-            'genre_form': genre_form
+            'genre_form': genre_form,
+            'display_associate_facebook': display_associate_facebook,
+            'display_associate_twitter': display_associate_twitter,
+            'my_informations_form': my_informations_form,
+            'my_accounts_form': my_accounts_form,
+            'my_notifications_form': my_notifications_form,
         }
 
         if hasattr(self, page):
