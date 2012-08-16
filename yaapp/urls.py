@@ -150,14 +150,11 @@ urlpatterns = patterns('',
     url(r'^api/v1/account/dissociation/$', 'account.views.dissociate'),
 
     # programming
-    url(r'^api/v1/my_programming/$', 'yabase.views.my_programming'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.my_programming'),
-
-    url(r'^api/v1/my_programming/artists/$', 'yabase.views.my_programming_artists'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/(?P<song_instance_id>\d+)/$', 'yabase.views.my_programming'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/artists/$', 'yabase.views.my_programming_artists'),
-
-    url(r'^api/v1/my_programming/albums/$', 'yabase.views.my_programming_albums'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/albums/$', 'yabase.views.my_programming_albums'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/yasound_songs/$', 'yabase.views.my_programming_yasound_songs'),
 
     # api (will override any other url)
     (r'^api/', include(api.urls)),

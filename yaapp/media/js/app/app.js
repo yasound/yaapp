@@ -106,8 +106,8 @@ $(document).ready(function () {
             "settings/": "settings",
             "friends/": "myFriends",
             "notifications/": "notifications",
-            "programming/": "programming",
             "radio/:uuid/programming/": "programming",
+            "radio/:uuid/edit/": "editRadio",
             "legal/": "legal",
             "contact/": "contact",
             "signup/": "signup",
@@ -215,9 +215,15 @@ $(document).ready(function () {
         },
 
         programming: function (uuid) {
-            this.clearView();
-
+            this.clearView('my-radios');
             this.currentView = new Yasound.Views.ProgrammingPage({
+                el: '#webapp-content'
+            }).render(uuid);
+        },
+
+        editRadio: function (uuid) {
+            this.clearView('my-radios');
+            this.currentView = new Yasound.Views.EditRadioPage({
                 el: '#webapp-content'
             }).render(uuid);
         },

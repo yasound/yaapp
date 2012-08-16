@@ -15,14 +15,12 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
     params:{},
 
     url: function() {
-        if (!this.uuid) {
-            return '/api/v1/my_programming/';
-        } else {
-            return '/api/v1/radio/' + this.uuid + '/programming/';
-        }
+        return '/api/v1/radio/' + this.uuid + '/programming/';
     },
 
     setUUID: function(uuid) {
+        _.extend(this.params, {artist:undefined});
+        _.extend(this.params, {album:undefined});
         this.uuid = uuid;
         return this;
     },
@@ -33,7 +31,9 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
+
     filterArtists: function(artists) {
+        this.artists = artists;
         if (artists) {
             _.extend(this.params, {artist:artists});
         } else {
@@ -41,13 +41,40 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
         }
         this.goTo(0);
     },
+
     filterAlbums: function(albums) {
+        this.albums = albums;
         if (albums) {
             _.extend(this.params, {album:albums});
         } else {
             _.extend(this.params, {album:undefined});
         }
         this.goTo(0);
+    },
+
+    removeAll: function(callback) {
+        var url = '/api/v1/radio/' + this.uuid + '/programming/';
+        var params = {
+            action: 'delete'
+        };
+
+        if (this.artists) {
+            params['artist'] = this.artists;
+        }
+        if (this.albums) {
+            params['album'] = this.albums;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: params,
+            processData: true,
+            traditional: true,
+            success: function() {
+                callback();
+            }
+        });
     }
 });
 
@@ -57,17 +84,13 @@ Yasound.Data.Models.ProgrammingArtist = Backbone.Model.extend({});
 Yasound.Data.Models.ProgrammingArtists = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingArtist,
     url: function() {
-        if (!this.uuid) {
-            return '/api/v1/my_programming/artists/';
-        } else {
-            return '/api/v1/radio/' + this.uuid + '/programming/artists';
-        }
+        return '/api/v1/radio/' + this.uuid + '/programming/artists';
     },
 
     setUUID: function(uuid) {
         this.uuid = uuid;
         return this;
-    },
+    }
 });
 
 Yasound.Data.Models.ProgrammingAlbum = Backbone.Model.extend({});
@@ -75,11 +98,7 @@ Yasound.Data.Models.ProgrammingAlbum = Backbone.Model.extend({});
 Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingAlbum,
     url: function() {
-        if (!this.uuid) {
-            return '/api/v1/my_programming/albums/';
-        } else {
-            return '/api/v1/radio/' + this.uuid + '/programming/albums/';
-        }
+        return '/api/v1/radio/' + this.uuid + '/programming/albums/';
     },
 
     setUUID: function(uuid) {
@@ -99,5 +118,73 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
             };
         }
         this.fetch(params);
+    }
+});
+
+Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
+    idAttribute: "id",
+
+    setUUID: function(uuid) {
+        this.uuid = uuid;
+        return this;
+    },
+
+    addToPlaylist: function() {
+        var url = '/api/v1/radio/' + this.uuid + '/programming/yasound_songs/';
+        var that;
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'yasound_song_id': this.id
+            },
+            success: function() {
+                colibri(gettext('Song added'));
+            }
+        });
+    }
+});
+
+Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
+    model: Yasound.Data.Models.YasoundSong,
+    perPageAttribute: 'limit',
+    skipAttribute: 'offset',
+    perPage: 25,
+    page:0,
+    params:{},
+
+    url: function() {
+        return '/api/v1/radio/' + this.uuid + '/programming/yasound_songs/';
+    },
+
+    setUUID: function(uuid) {
+        this.uuid = uuid;
+        return this;
+    },
+
+    parse: function(response) {
+        var results = response.objects;
+        this.totalCount = response.meta.total_count;
+        this.totalPages = this.totalCount / this.perPage;
+        return results;
+    },
+
+    filter: function(name, album, artist) {
+        if (name) {
+            _.extend(this.params, {name:name});
+        } else {
+            _.extend(this.params, {name:undefined});
+        }
+        if (artist) {
+            _.extend(this.params, {artist:artist});
+        } else {
+            _.extend(this.params, {artist:undefined});
+        }
+        if (album) {
+            _.extend(this.params, {album:album});
+        } else {
+            _.extend(this.params, {album:undefined});
+        }
+        this.goTo(0);
     }
 });

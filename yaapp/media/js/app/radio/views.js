@@ -141,13 +141,13 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
     },
-    
+
     beforeFetch: function() {
         if (this.loadingMask) {
             $(this.el).append(this.loadingMask);
         }
     },
-    
+
     addAll: function() {
         var mask = $('.loading-mask', this.el);
         if (!this.loadingMask) {
@@ -180,7 +180,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         var view = new Yasound.Views.WallEvent({
             model: wallEvent
         });
-        
+
         var insertOnTop = false;
         if (this.views.length > 0) {
             var lastId = parseInt(this.views[0].model.get('id'), 10);
@@ -189,7 +189,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
                 insertOnTop = true;
             }
         }
-        
+
         if (insertOnTop) {
             $(this.el).prepend(view.render().el);
             // in case of prepend, it means that the wall has been refreshed
@@ -332,7 +332,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
         Yasound.App.Router.navigate("profile/" + this.model.get('username') + '/', {
             trigger: true
         });
-    }    
+    }
 });
 
 Yasound.Views.RadioPage = Backbone.View.extend({
@@ -340,7 +340,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
     intervalId: undefined,
     wallPosted: undefined,
-    
+
     initialize: function () {
         this.model.bind('change', this.render, this);
     },
@@ -407,13 +407,13 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             model: this.model,
             el: $('#webapp-radio', this.el)
         });
-        
+
         this.trackView = new Yasound.Views.TrackInRadio({
             model: this.model.currentSong,
             el: $('#webapp-track', this.el)
         });
 
-        
+
         this.radioUsers.radio = this.model;
         this.radioUsersView = new Yasound.Views.RadioUsers({
             collection: this.radioUsers,
@@ -489,21 +489,21 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
             this.collection.setUsername(username);
             this.username = username;
         }
-        
+
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-        
+
         this.onGenreChanged('', genre)
         return this;
     },
-    
+
     onGenreChanged: function(e, genre) {
         if (genre == '') {
             this.collection.params.genre = undefined;
@@ -513,11 +513,38 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
         this.resultsView.clear();
         this.collection.goTo(0);
     },
-    
+
     onBack: function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.username + '/', {
             trigger: true
         });
+    }
+});
+
+Yasound.Views.EditRadioPage = Backbone.View.extend({
+    events: {
+    },
+    initialize: function () {
+        _.bindAll(this, 'render', 'templateLoaded');
+    },
+
+    onClose: function () {
+    },
+
+    reset: function () {
+    },
+
+    render: function (uuid) {
+        this.reset();
+        var params = {
+            uuid: uuid
+        };
+        ich.loadRemoteTemplate('radio/editRadioPage.mustache', 'editRadioPageTemplate', this.templateLoaded, params);
+        return this;
+    },
+
+    templateLoaded: function() {
+        $(this.el).html(ich.editRadioPageTemplate());
     }
 });

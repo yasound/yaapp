@@ -1,21 +1,8 @@
 {% load i18n %}
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>{% trans "Artist" %}</th>
-            <th>{% trans "Album" %}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <select multiple="multiple" id="artist-select" data-placeholder="{% trans 'Select artists' %}">
-              </select>
-             </td> 
-            <td>
-              <select multiple="multiple" id="album-select" data-placeholder="{% trans 'Select albums' %}">
-              </select>
-             </td> 
-        </tr>
-    </tbody>
-</table>
+
+<form class="well form-inline">
+    <select multiple="multiple" id="artist-select" data-placeholder="{% trans 'Select artists' %}">
+    </select>
+    <select multiple="multiple" id="album-select" data-placeholder="{% trans 'Select albums' %}">
+    </select>
+</form>

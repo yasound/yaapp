@@ -18,6 +18,11 @@ body {
     visibility: hidden;
 }
 
+.hidden-display {
+    display: none;
+}
+
+
 .share {
     float: left;
     margin-right: 12px;
@@ -1810,7 +1815,7 @@ ul#notifications .read {
 /**
  * Notifications
  */
-
+/*
 .notification-container h1 {
     padding-top:37px;
     padding-left:31px;
@@ -1823,6 +1828,16 @@ ul#notifications .read {
     color:#434343;
 }
 
+.notification-container {
+    border-radius:7px;
+    box-shadow:0px 1px 4px #e2e2e2;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+}
+*/
 /**
  * User profile
  */
@@ -2059,6 +2074,16 @@ ul .radio-with-stats-cells li {
 	margin:21px;
 }
 
+.radio-with-stats .radio-toolbar {
+    float:right;
+    margin-top: 6px;
+    margin-right:20px;
+}
+
+.radio-with-stats .radio-toolbar button {
+    margin-right: 12px;
+}
+
 .radio-with-stats .radio-cell-parent .radio-cell {
 	margin:0;
 	padding:0;
@@ -2068,6 +2093,7 @@ ul .radio-with-stats-cells li {
 .radio-with-stats .chartdiv {
 	float:right;
 	margin:30px;
+    margin-top: 4px;
     height:90% !important;
     width:50% !important;
 }
@@ -2263,6 +2289,193 @@ ul .radio-with-stats-cells li {
     box-shadow:0px 2px 2px #e4e4e4;
 }
 
+/**
+ * Settings
+ */
+
+ .settings-container {
+    border-radius:7px;
+    box-shadow:0px 1px 4px #cccccc;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+ }
+
+ .settings-container h1 {
+    font-size:42px;
+    padding:38px 0px 38px 31px;
+    border-bottom: 1px solid #e3e3e3;
+ }
+
+#settings-nav {
+    margin:0px;
+}
+
+#settings-nav li {
+    position:relative;
+    height:65px;
+    list-style: none;
+    border-bottom:1px solid #e3e3e3;
+}
+
+#settings-nav li span {
+    display:block;
+    color:#169dea;
+    font-size:17px;
+    padding-top:25px;
+    margin-left:95px;
+}
+
+#settings-nav li img {
+    position:absolute;
+    top:15px;
+    left:15px;
+}
+
+#settings-nav li:hover {
+    background-image:url('../app/images/settings/settings-nav-bg-hover.png');
+    cursor: pointer;
+}
+
+#settings-nav li a:hover {
+    text-decoration: none;
+}
+
+#settings-nav .checked {
+    background-image:url('../app/images/settings/settings-nav-bg-checked.png');
+    border:1px solid #0b7cbc;
+    text-shadow:1px 1px #126898;
+}
+
+#settings-nav .checked:hover {
+    background-image:url('../app/images/settings/settings-nav-bg-checked.png');
+    border:1px solid #0b7cbc;
+    text-shadow:1px 1px #126898;
+}
+
+#settings-nav .checked span {
+    color:white;
+}
+
+.settings-content-container {
+    width:465px;
+    float:left;
+    font-size: 15px;
+    color:#4f4f4f;
+    border-left: 1px solid #e3e3e3;
+    padding-left:37px;
+    padding:25px 135px 30px 37px;
+}
+
+.settings-content-container form fieldset legend {
+    display:block;
+    border-bottom: none;
+    font-size: 23px;
+    line-height:30px;
+    font-weight: bold;
+}
+
+.settings-content-container form textarea {
+    width:100%;
+}
+
+.control-group label {
+    color:#434343;
+    font-size:17px;
+    margin-bottom:9px;
+}
+
+.save-btn {
+    font-size: 17px;
+    color:#58595c;
+    padding:17px 63px;
+    border:1px solid #acacac;
+    border-radius:5px;
+    background-image:url('../app/images/settings/settings-btn-bg-save.png');
+    background-repeat: repeat-x;
+    box-shadow:0px 1px 2px #d4d4d4;
+    cursor: pointer;
+    text-shadow:1px 1px 1px white;
+}
+
+.save-btn:hover {
+    box-shadow:1px 3px 4px #e3e3e3;
+}
+
+.control-group {
+    margin-bottom: 25px;
+}
+
+#id_yasound_email,
+#id_password1,
+#id_password2,
+#id_name,
+#id_url,
+#id_birthday,
+#id_city {
+    width:250px;
+    height:35px;
+    border:1px solid #bebebe;
+    border-radius:5px;
+    font-size: 17px;
+    color:#74737b;
+    padding:0px;
+    margin:0px;
+    background-image:url('../app/images/settings/settings-form-bg.png');
+    background-repeat:repeat-x;
+    padding:0px 5px;
+}
+
+#div_id_gender .controls {
+    width:144px;
+    height:30px;
+    position:relative;
+    border:1px solid #bebebe;
+    border-radius:7px;
+    box-shadow: 0px 2px 4px #d4d4d4;
+    background-image:url('../app/images/settings/settings-form-bg.png');
+    background-repeat:repeat-x;
+    padding:3px 5px;
+}
+
+#div_id_gender .controls:after {
+    content:url(../app/images/settings/settings-selector.png);
+    position:absolute;
+    top:11px;
+    right:11px;
+}
+
+#div_id_gender span {
+    color:#74737b;
+    font-size:17px;
+    padding:0px;
+    margin:0px;
+}
+
+#my-accounts fieldset legend {
+    margin:0px;
+}
+
+.twitter_share_options {
+    margin-top:50px;
+}
+
+.twitter_share_options .control-group,
+.facebook_share_options .control-group,
+.notifications .control-group {
+    position:relative;
+}
+
+.twitter_share_options .controls,
+.facebook_share_options .controls,
+.notifications .controls {
+    float:right;
+    position:absolute;
+    top:1px;
+    right:120px;
+}
 
 /**
  * common items
@@ -2426,6 +2639,14 @@ ul .radio-with-stats-cells li {
 	left:59px;
 }
 
+.yacheckbox {
+    display:block;
+    height:17px;
+    width:17px;
+    border:1px solid #bebebe;
+    border-radius:5px;
+    box-shadow:0px 2px 2px #bebebe;
+}
 
 .no-margin {
 	margin:0px;
