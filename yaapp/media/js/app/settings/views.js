@@ -32,9 +32,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     render: function () {
         this.reset();
         $(this.el).html(ich.settingsPageTemplate());
-        $("select, input:checkbox, :checkbox, :radio", this.el).uniform({
-            checkedClass: 'checked-uniform',
-        });
+        $("select", this.el).uniform({});
         return this;
     },
     removeFacebook: function (e) {
