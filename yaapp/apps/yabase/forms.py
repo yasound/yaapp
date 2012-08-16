@@ -91,6 +91,8 @@ class MyNotificationsForm(BootstrapForm):
         )
 
     def __init__(self, user_profile=None, *args, **kwargs):
+        from django.forms.widgets import HiddenInput
+
         self.user_profile = user_profile
         initial = {
             'fb_share_listen': self.user_profile.notifications_preferences.fb_share_listen,
@@ -102,7 +104,29 @@ class MyNotificationsForm(BootstrapForm):
             'tw_share_post_message': self.user_profile.notifications_preferences.tw_share_post_message,
             'tw_share_animator_activity': self.user_profile.notifications_preferences.tw_share_animator_activity,
         }
+
         super(MyNotificationsForm, self).__init__(initial=initial, *args, **kwargs)
+
+        if not self.user_profile.facebook_enabled:
+            # hide facebook related fields
+            names = ['fb_share_listen',
+                     'fb_share_like_song',
+                     'fb_share_post_message',
+                     'fb_share_animator_activity']
+            for name in names:
+                self.fields[name].widget = HiddenInput()
+            self.Meta.layout[0].css_class = 'hidden'
+
+        if not self.user_profile.twitter_enabled:
+            # hide twitter related fields
+            names = ['tw_share_listen',
+                     'tw_share_like_song',
+                     'tw_share_post_message',
+                     'tw_share_animator_activity']
+            for name in names:
+                self.fields[name].widget = HiddenInput()
+            self.Meta.layout[1].css_class = 'hidden'
+
 
     def save(self):
 
