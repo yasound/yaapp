@@ -204,7 +204,7 @@ class UserProfile(models.Model):
     birthday = models.DateField(_('born'), blank=True, null=True)
     gender = models.CharField(_('gender'), max_length=1, choices=account_settings.GENDER_CHOICES, blank=True)
     
-    city = models.CharField(max_length=128, blank=True)
+    city = models.CharField(_('city'), max_length=128, blank=True)
     latitude = models.FloatField(null=True, blank=True) # degrees
     longitude = models.FloatField(null=True, blank=True) # degrees
     
