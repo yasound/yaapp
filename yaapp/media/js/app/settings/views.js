@@ -13,8 +13,11 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         'click #btn-remove-facebook': 'removeFacebook',
         'click #btn-remove-twitter': 'removeTwitter',
         'submit #settings-facebook-form': 'submitFacebook',
-        'submit #settings-twitter-form': 'submitTwitter'
-        
+        'submit #settings-twitter-form': 'submitTwitter',
+        'click #my-informations-menu': 'onInformationsMenu',
+        'click #my-accounts-menu': 'onAccountsMenu',
+        'click #my-notifications-menu': 'onNotificationsMenu'
+
     },
     initialize: function () {
         _.bindAll(this, 'render');
@@ -40,7 +43,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         });
         return false;
     },
-    
+
     removeTwitter: function (e) {
         e.preventDefault();
         $('#modal-remove-twitter').modal('show');
@@ -69,5 +72,37 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         }).error(function() {
             colibri(gettext('Error while saving Twitter settings', 'colibri-error'));
         });
+    },
+
+    onInformationsMenu: function (e) {
+        e.preventDefault();
+
+        $('#settings-nav li', this.el).removeClass('checked');
+        $('#settings-nav #my-informations-menu', this.el).addClass('checked');
+
+        $('#my-notifications', this.el).hide();
+        $('#my-accounts', this.el).hide();
+        $('#my-informations', this.el).show();
+    },
+
+    onAccountsMenu: function (e) {
+        e.preventDefault();
+        $('#settings-nav li', this.el).removeClass('checked');
+        $('#settings-nav #my-accounts-menu', this.el).addClass('checked');
+
+        $('#my-notifications', this.el).hide();
+        $('#my-informations', this.el).hide();
+        $('#my-accounts', this.el).show();
+    },
+
+    onNotificationsMenu: function (e) {
+        e.preventDefault();
+        $('#settings-nav li', this.el).removeClass('checked');
+        $('#settings-nav #my-notifications-menu', this.el).addClass('checked');
+
+        $('#my-informations', this.el).hide();
+        $('#my-accounts', this.el).hide();
+        $('#my-notifications', this.el).show();
     }
+
 });

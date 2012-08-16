@@ -29,6 +29,7 @@ from tempfile import mkdtemp
 from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm, RadioGenreForm
+from forms import MyAccountsForm, MyInformationsForm, MyNotificationsForm
 from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response
 from yacore.binary import BinaryData
@@ -976,22 +977,20 @@ class WebAppView(View):
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = request.build_absolute_uri(reverse('webapp'))
 
-        settings_radio_form = None
-        settings_user_form = None
-        settings_facebook_form = None
-        settings_twitter_form = None
+
+        my_informations_form = None
+        my_accounts_form = None
+        my_notifications_form = None
+
         display_associate_facebook = False
         display_associate_twitter = False
         if request.user.is_authenticated():
             display_associate_facebook = not request.user.get_profile().facebook_enabled
             display_associate_twitter = not request.user.get_profile().twitter_enabled
 
-            settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
-            settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
-            if request.user.get_profile().facebook_enabled:
-                settings_facebook_form = SettingsFacebookForm(user_profile=request.user.get_profile())
-            if request.user.get_profile().twitter_enabled:
-                settings_twitter_form = SettingsTwitterForm(user_profile=request.user.get_profile())
+            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
+            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
 
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
@@ -1014,11 +1013,10 @@ class WebAppView(View):
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
             'facebook_channel_url': facebook_channel_url,
-            'settings_radio_form': settings_radio_form,
             'user_profile': user_profile,
-            'settings_user_form': settings_user_form,
-            'settings_facebook_form': settings_facebook_form,
-            'settings_twitter_form': settings_twitter_form,
+            'my_informations_form': my_informations_form,
+            'my_accounts_form': my_accounts_form,
+            'my_notifications_form': my_notifications_form,
             'display_associate_facebook' : display_associate_facebook,
             'display_associate_twitter' : display_associate_twitter,
             'import_itunes_form': ImportItunesForm(user=request.user),
@@ -1133,10 +1131,12 @@ class WebAppView(View):
         notification_count = 0
         push_url = self._get_push_url(request)
         enable_push = settings.ENABLE_PUSH
-        settings_facebook_form = None
-        settings_twitter_form = None
-        settings_radio_form = None
-        settings_user_form = None
+
+        my_informations_form = None
+        my_accounts_form = None
+        my_notifications_form = None
+
+
         has_radios = False
         display_associate_facebook = False
         display_associate_twitter = False
@@ -1150,12 +1150,10 @@ class WebAppView(View):
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
 
-            settings_radio_form = SettingsRadioForm(instance=Radio.objects.radio_for_user(request.user))
-            settings_user_form = SettingsUserForm(instance=UserProfile.objects.get(user=request.user))
-            if request.user.get_profile().facebook_enabled:
-                settings_facebook_form = SettingsFacebookForm(user_profile=request.user.get_profile())
-            if request.user.get_profile().twitter_enabled:
-                settings_twitter_form = SettingsTwitterForm(user_profile=request.user.get_profile())
+
+            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
+            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
 
             display_associate_facebook = not request.user.get_profile().facebook_enabled
             display_associate_twitter = not request.user.get_profile().twitter_enabled
@@ -1168,25 +1166,20 @@ class WebAppView(View):
 
 
         action = request.REQUEST.get('action')
-        if action == 'settings_radio':
-            settings_radio_form = SettingsRadioForm(request.POST, request.FILES, instance=Radio.objects.radio_for_user(request.user))
-            if settings_radio_form.is_valid():
-                settings_radio_form.save()
+        if action == 'my_informations':
+            my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
+            if my_informations_form.is_valid():
+                my_informations_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
-        elif action == 'settings_user':
-            settings_user_form = SettingsUserForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
-            if settings_user_form.is_valid():
-                settings_user_form.save()
+        elif action == 'my_accounts':
+            my_accounts_form = MyAccountsForm(request.POST, instance=UserProfile.objects.get(user=request.user))
+            if my_accounts_form.is_valid():
+                my_accounts_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
-        elif action == 'settings_facebook':
-            settings_facebook_form = SettingsFacebookForm(request.user.get_profile(), request.POST)
-            if settings_facebook_form.is_valid():
-                settings_facebook_form.save()
-                return HttpResponseRedirect(reverse('webapp_settings'))
-        elif action == 'settings_twitter':
-            settings_twitter_form = SettingsTwitterForm(request.user.get_profile(), request.POST)
-            if settings_twitter_form.is_valid():
-                settings_twitter_form.save()
+        elif action == 'my_notifications':
+            my_notifications_form = MyNotificationsForm(request.user.get_profile(), request.POST)
+            if my_notifications_form.is_valid():
+                my_notifications_form.save()
                 return HttpResponseRedirect(reverse('webapp_settings'))
         elif action == 'import_itunes':
             import_itunes_form = ImportItunesForm(request.user, request.POST)
@@ -1207,12 +1200,11 @@ class WebAppView(View):
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
             'facebook_channel_url': facebook_channel_url,
-            'settings_radio_form': settings_radio_form,
-            'settings_user_form': settings_user_form,
-            'settings_facebook_form': settings_facebook_form,
-            'settings_twitter_form': settings_twitter_form,
             'display_associate_facebook' : display_associate_facebook,
             'display_associate_twitter' : display_associate_twitter,
+            'my_informations_form': my_informations_form,
+            'my_accounts_form': my_accounts_form,
+            'my_notifications_form': my_notifications_form,
             'user_profile': user_profile,
             'import_itunes_form': import_itunes_form,
             'notification_count': notification_count,
