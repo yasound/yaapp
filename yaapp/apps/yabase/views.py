@@ -1146,6 +1146,7 @@ class WebAppView(View):
     def edit_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('webapp'))
+
         if request.method == 'POST':
             action = request.REQUEST.get('action')
             if action == 'radio_settings':
