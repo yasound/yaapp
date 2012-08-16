@@ -1302,7 +1302,7 @@ def status(request):
     return HttpResponse('OK')
 
 
-@check_api_key(methods=['PUT', 'DELETE'])
+@check_api_key(methods=['PUT', 'DELETE', 'POST'])
 def delete_song_instance(request, song_instance_id):
     song = get_object_or_404(SongInstance, pk=song_instance_id)
 
@@ -1480,6 +1480,15 @@ def my_programming(request, radio_uuid, song_instance_id=None):
 
     if song_instance_id is not None and request.method == 'DELETE':
         return delete_song_instance(request, song_instance_id)
+
+    if request.method == 'POST':
+        action = request.REQUEST.get('action', '')
+        if action == 'delete':
+            artists = request.REQUEST.getlist('artist')
+            albums = request.REQUEST.getlist('album')
+            tracks = radio.programming(artists, albums)
+            for track in tracks:
+                delete_song_instance(request, track.get('id'))
 
     response = programming_response(request, radio)
     return response
