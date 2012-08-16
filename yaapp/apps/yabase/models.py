@@ -550,14 +550,14 @@ class Radio(models.Model):
 
     ready = models.BooleanField(default=False)
 
-    name = models.CharField(max_length=255)
-    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
-    uuid = models.CharField(max_length=48, blank=True)
-    description = models.TextField(blank=True)
-    genre = models.CharField(max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
-    theme = models.CharField(max_length=255, blank=True)
-    tags = TaggableManager(blank=True)
+    name = models.CharField(_('name'), max_length=255)
+    picture = models.ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    url = models.URLField(_('url'), null=True, blank=True)
+    uuid = models.CharField(_('uuid'), max_length=48, blank=True)
+    description = models.TextField(_('description'), blank=True)
+    genre = models.CharField(_('genre'), max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
+    theme = models.CharField(_('thene'), max_length=255, blank=True)
+    tags = TaggableManager(_('tags'), blank=True)
 
     anonymous_audience = models.IntegerField(default=0)
     audience_peak = models.FloatField(default=0, null=True, blank=True)
