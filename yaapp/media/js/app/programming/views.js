@@ -30,12 +30,16 @@ Yasound.Views.SongInstance = Backbone.View.extend({
 
 Yasound.Views.SongInstances = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'addOne', 'addAll', 'onDestroy');
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
         this.collection.bind('destroy', this.onDestroy, this);
         this.views = [];
+    },
+
+    render: function() {
+        return this;
     },
 
     onClose: function () {
@@ -214,6 +218,9 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 
 
 Yasound.Views.PlaylistContent =  Backbone.View.extend({
+    events: {
+        "click #remove-all": "onRemoveAll"
+    },
 
     initialize: function() {
         _.bindAll(this, 'render', 'artistsSelected', 'albumsSelected');
@@ -262,7 +269,18 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
     albumsSelected: function(albums) {
         this.songInstancesView.clear();
         this.songInstances.filterAlbums(albums);
+    },
+
+    onRemoveAll: function(e) {
+        e.preventDefault();
+        var that = this;
+        _.chain(this.songInstances.models).clone().each(function(model){
+          model.destroy();
+        });
+        this.songInstancesView.clear();
+        this.songInstances.goTo(0);
     }
+
 });
 
 
