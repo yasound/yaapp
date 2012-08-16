@@ -141,6 +141,9 @@ class MyNotificationsForm(BootstrapForm):
 
         super(MyNotificationsForm, self).__init__(initial=initial, *args, **kwargs)
 
+        self.Meta.layout[MyNotificationsForm.FIELDSET_FACEBOOK].css_class='facebook_share_options'
+        self.Meta.layout[MyNotificationsForm.FIELDSET_TWITTER].css_class='twitter_share_options'
+
         if not self.user_profile.facebook_enabled:
             # hide facebook related fields
             names = ['fb_share_listen',
