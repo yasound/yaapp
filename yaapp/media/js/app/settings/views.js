@@ -82,7 +82,12 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
         $('#my-notifications', this.el).hide();
         $('#my-accounts', this.el).hide();
-        $('#my-informations', this.el).show();
+
+        if (Yasound.App.enableFX) {
+            $('#my-informations', this.el).fadeIn(200);
+        } else {
+            $('#my-informations', this.el).show();
+        }
     },
 
     onAccountsMenu: function (e) {
@@ -92,7 +97,11 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
         $('#my-notifications', this.el).hide();
         $('#my-informations', this.el).hide();
-        $('#my-accounts', this.el).show();
+        if (Yasound.App.enableFX) {
+            $('#my-accounts', this.el).fadeIn(200);
+        } else {
+            $('#my-accounts', this.el).show();
+        }
     },
 
     onNotificationsMenu: function (e) {
@@ -102,7 +111,11 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
         $('#my-informations', this.el).hide();
         $('#my-accounts', this.el).hide();
-        $('#my-notifications', this.el).show();
+        if (Yasound.App.enableFX) {
+            $('#my-notifications', this.el).fadeIn(200);
+        } else {
+            $('#my-notifications', this.el).show();
+        }
     }
 
 });
