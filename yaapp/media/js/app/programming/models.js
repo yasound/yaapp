@@ -84,7 +84,7 @@ Yasound.Data.Models.ProgrammingArtist = Backbone.Model.extend({});
 Yasound.Data.Models.ProgrammingArtists = Backbone.Collection.extend({
     model: Yasound.Data.Models.ProgrammingArtist,
     url: function() {
-        return '/api/v1/radio/' + this.uuid + '/programming/artists';
+        return '/api/v1/radio/' + this.uuid + '/programming/artists/';
     },
 
     setUUID: function(uuid) {
