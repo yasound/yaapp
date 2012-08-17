@@ -220,7 +220,7 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     },
     render: function() {
         var that = this;
-        $(this.el).on('mouseleave', function() {
+        $(this.el).parent().on('mouseleave', function() {
             that.hidePopupProfile();
         });
         return this;

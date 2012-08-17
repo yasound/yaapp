@@ -849,7 +849,9 @@ RADIO_PICTURE_MAX_FILE_SIZE = 20971520
 RADIO_PICTURE_MIN_FILE_SIZE = 1024
 RADIO_PICTURE_ACCEPTED_FORMATS = ['image/png', 'image/jpg', 'image/jpeg', 'image/tiff']
 
-
+USER_PICTURE_MAX_FILE_SIZE = 20971520
+USER_PICTURE_MIN_FILE_SIZE = 1024
+USER_PICTURE_ACCEPTED_FORMATS = ['image/png', 'image/jpg', 'image/jpeg', 'image/tiff']
 
 # iTunes buy link
 ITUNES_BASE_URL="http://itunes.apple.com/search"
