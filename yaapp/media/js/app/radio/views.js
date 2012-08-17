@@ -577,6 +577,5 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             fail: function (e, data) {
             }
         });
-
     }
 });

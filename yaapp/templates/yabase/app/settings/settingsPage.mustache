@@ -102,6 +102,11 @@
                 </div>
 
                 <div id='my-informations'>
+                    <input type="file" name="picture" data-url="/api/v1/user/{{ request.user.username }}/picture/" id='file-upload'/>
+                    <img src='{{ user_profile.picture_url }}' id='user-picture-image'/>
+                    <div id='progress' class="progress progress-striped active">
+                      <div class="bar"></div>
+                    </div>
 
                     <form id='my-informations' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
                         {{ my_informations_form }}

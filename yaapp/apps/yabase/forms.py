@@ -31,9 +31,9 @@ class MyInformationsForm(BootstrapModelForm):
     bio_text = forms.CharField(label=_('Biography'), widget=forms.widgets.Textarea(attrs={'rows':5, 'cols':60}))
     class Meta:
         model = UserProfile
-        fields = ('name', 'url', 'bio_text', 'picture', 'birthday', 'gender', 'city')
+        fields = ('name', 'url', 'bio_text', 'birthday', 'gender', 'city')
         layout = (
-            Fieldset('', 'name', 'url', 'bio_text', 'picture', 'birthday', 'gender', 'city'),
+            Fieldset('', 'name', 'url', 'bio_text', 'birthday', 'gender', 'city'),
         )
 
 class MyAccountsForm(BootstrapModelForm):
