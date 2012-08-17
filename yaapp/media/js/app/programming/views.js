@@ -471,7 +471,7 @@ Yasound.Views.ImportFromItunes =  Backbone.View.extend({
     },
 
     render: function(uuid) {
-        $(this.el).html(ich.importFromItunesTemplate());
+        $(this.el).html(ich.importFromItunesTemplate({uuid:uuid}));
         return this;
     }
 });
