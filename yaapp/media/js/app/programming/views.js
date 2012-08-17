@@ -287,13 +287,104 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 });
 
 
+Yasound.Views.UploadCell = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    render: function(data) {
+        $(this.el).html(ich.programmingUploadCellTemplate(data.files[0]));
+        this.data = data;
+        return this;
+    }
+});
+
+Yasound.Views.AddFromDesktop =  Backbone.View.extend({
+    events: {
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render');
+        this.views = [];
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    render: function(uuid) {
+        $(this.el).html(ich.programmingUploadTemplate());
+        var $table = $('#upload-table tbody', this.el);
+        var that = this;
+        $('#file-upload', this.el).fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var view = new Yasound.Views.UploadCell({});
+                $('#upload-table', that.el).append(view.render(data).el);
+                that.views.push(view);
+            },
+            progressall: function (e, data) {
+            },
+            done: function (e, data) {
+            },
+            fail: function (e, data) {
+            }
+        });
+
+
+    },
+
+    artistsSelected: function(artists) {
+        this.songInstancesView.clear();
+        this.songInstances.filterArtists(artists);
+    },
+
+    albumsSelected: function(albums) {
+        this.songInstancesView.clear();
+        this.songInstances.filterAlbums(albums);
+    },
+
+    onRemoveAll: function(e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-remove-all', this.el).modal('show');
+        $('#modal-remove-all .btn-primary', this.el).on('click', function () {
+            $('#modal-remove-all', this.el).modal('hide');
+            that.songInstances.removeAll(function() {
+                that.songInstancesView.clear();
+                that.songInstances.goTo(0);
+            });
+        });
+    }
+
+});
+
 Yasound.Views.Playlist = Backbone.View.extend({
     el: '#playlist',
     events: {
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'onAddFromServer');
+        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'onAddFromServer', 'onAddFromDesktop');
     },
 
     onClose: function() {
@@ -333,6 +424,12 @@ Yasound.Views.Playlist = Backbone.View.extend({
         }).render(this.uuid);
     },
 
+    onAddFromDesktop: function() {
+        this.clearView();
+        this.currentView = new Yasound.Views.AddFromDesktop({
+            el: $('#content', this.el)
+        }).render(this.uuid);
+    },
 
     render: function(uuid) {
         this.reset();
@@ -345,8 +442,9 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.toolbar.on('tracks', this.onAll);
         this.toolbar.on('importItunes', this.onImportItunes);
         this.toolbar.on('addFromServer', this.onAddFromServer);
+        this.toolbar.on('addFromDesktop', this.onAddFromDesktop);
 
-        this.onAll();
+        this.onAddFromDesktop();
     }
 });
 
@@ -359,39 +457,47 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     events: {
         'click #all': 'all',
         'click #import-itunes': 'importItunes',
-        'click #add-from-server': 'addFromServer'
+        'click #add-from-server': 'addFromServer',
+        'click #add-from-desktop': 'addFromDesktop'
     },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'selectMenu');
+    },
+
     render: function() {
         $(this.el).html(ich.programmingToolbarTemplate());
         return this;
     },
+
+    selectMenu: function(menu) {
+        $('#all', this.el).removeClass('active');
+        $('#import-itunes', this.el).removeClass('active');
+        $('#add-from-server', this.el).removeClass('active');
+        $('#add-from-desktop', this.el).removeClass('active');
+
+        $(menu).addClass('active');
+    },
+
     all: function(e) {
         e.preventDefault();
-
-        $('#all').addClass('active');
-        $('#import-itunes').removeClass('active');
-        $('#add-from-server').removeClass('active');
-
+        this.selectMenu('#all');
         this.trigger('tracks');
     },
     importItunes: function(e) {
         e.preventDefault();
-
-        $('#all').removeClass('active');
-        $('#import-itunes').addClass('active');
-        $('#add-from-server').removeClass('active');
-
+        this.selectMenu('#import-itunes');
         this.trigger('importItunes');
     },
     addFromServer: function(e) {
         e.preventDefault();
-
-        $('#all').removeClass('active');
-        $('#import-itunes').removeClass('active');
-        $('#add-from-server').addClass('active');
-
+        this.selectMenu('#add-from-server');
         this.trigger('addFromServer');
-
+    },
+    addFromDesktop: function(e) {
+        e.preventDefault();
+        this.selectMenu('#add-from-desktop');
+        this.trigger('addFromDesktop');
     }
 });
 

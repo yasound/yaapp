@@ -1,0 +1,17 @@
+{% load i18n %}
+<div>
+    <input id="file-upload" type="file" name="files[]" data-url="server/php/" multiple>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Filename" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Action" %}</th>
+            </tr>
+        </thead>
+        <tbody id='upload-table'>
+        </tbody>
+    </table>
+
+</div>
