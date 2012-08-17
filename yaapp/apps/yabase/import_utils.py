@@ -766,14 +766,15 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
     """
 
     # normalize metadata radio_id
-    radio_id = metadata.get('radio_id')
-    radio_uuid = metadata.get('radio_uuid')
-    if radio_uuid is not None and radio_id is None:
-        try:
-            radio = Radio.objects.get(uuid=radio_uuid)
-            metadata['radio_id'] = radio.id
-        except:
-            pass
+    if metadata:
+        radio_id = metadata.get('radio_id')
+        radio_uuid = metadata.get('radio_uuid')
+        if radio_uuid is not None and radio_id is None:
+            try:
+                radio = Radio.objects.get(uuid=radio_uuid)
+                metadata['radio_id'] = radio.id
+            except:
+                pass
 
     importer = SongImporter()
     sm, messages = importer.import_song(filepath, metadata, convert, allow_unknown_song, song_metadata_id=song_metadata_id)
