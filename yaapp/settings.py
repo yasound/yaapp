@@ -843,6 +843,14 @@ if PRODUCTION_MODE:
 else:
     TEMP_DIRECTORY = '/tmp/'
 
+
+# picture upload
+RADIO_PICTURE_MAX_FILE_SIZE = 20971520
+RADIO_PICTURE_MIN_FILE_SIZE = 1024
+RADIO_PICTURE_ACCEPTED_FORMATS = ['image/png', 'image/jpg', 'image/jpeg', 'image/tiff']
+
+
+
 # iTunes buy link
 ITUNES_BASE_URL="http://itunes.apple.com/search"
 TRADEDOUBLER_URL="http://clk.tradedoubler.com/click?p=23753&a=2007583&url="
