@@ -5,6 +5,11 @@
         <h1>{% trans "Radio settings" %}</h1>
 
         <div class='settings-content-container'>
+            <input type="file" name="picture" data-url="/api/v1/radio/{{ radio.uuid }}/picture/" id='file-upload'/>
+            <img src='{{ radio.picture_url }}' id='radio-picture-image'/>
+            <div id='progress' class="progress progress-striped active">
+              <div class="bar"></div>
+            </div>
             <form id='my-accounts' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
                 {{ settings_radio_form }}
                 <div>

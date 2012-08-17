@@ -15,9 +15,9 @@ class SettingsRadioForm(BootstrapModelForm):
 
     class Meta:
         model = Radio
-        fields = ('name', 'genre', 'picture', 'description', 'tags')
+        fields = ('name', 'genre', 'description', 'tags')
         layout = (
-            Fieldset('', 'name', 'genre', 'picture', 'description', 'tags'),
+            Fieldset('', 'name', 'genre', 'description', 'tags'),
         )
 
     def clean_tags(self):

@@ -1662,3 +1662,73 @@ def radio_leaderboard(request, radio_uuid):
     response = api_response(data)
     return response
 
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST', 'DELETE'])
+def radio_picture(request, radio_uuid):
+    """
+    RESTful view for handling radio picture
+    """
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.method == 'GET':
+        return HttpResponseRedirect(radio.picture_url)
+
+    if radio.creator != request.user:
+        return HttpResponse(status=401)
+
+    if request.method == 'POST':
+        if not request.FILES.has_key(PICTURE_FILE_TAG):
+            return HttpResponseBadRequest('Must upload a file')
+
+        f = request.FILES[PICTURE_FILE_TAG]
+        error = False
+
+        if f.size > settings.RADIO_PICTURE_MAX_FILE_SIZE:
+            error = "maxFileSize"
+        if f.size < settings.RADIO_PICTURE_MIN_FILE_SIZE:
+            error = "minFileSize"
+        if f.content_type not in settings.RADIO_PICTURE_ACCEPTED_FORMATS:
+            error = "acceptFileTypes"
+
+        response_data = {
+            "name": f.name,
+            "size": f.size,
+            "type": f.content_type
+        }
+        if error:
+            response_data["error"] = error
+            response_data = json.dumps([response_data])
+            return HttpResponse(response_data, mimetype='application/json')
+
+        radio.set_picture(f)
+
+        # url for deleting the file in case user decides to delete it
+        response_data["delete_url"] = reverse('yabase.views.radio_picture', kwargs={'radio_uuid':radio.uuid})
+        response_data["delete_type"] = "DELETE"
+        response_data["url"] = radio.picture_url
+
+        # generate the json data
+        response_data = json.dumps([response_data])
+        # response type
+        response_type = "application/json"
+
+        # QUIRK HERE
+        # in jQuey uploader, when it falls back to uploading using iFrames
+        # the response content type has to be text/html
+        # if json will be send, error will occur
+        # if iframe is sending the request, it's headers are a little different compared
+        # to the jQuery ajax request
+        # they have different set of HTTP_ACCEPT values
+        # so if the text/html is present, file was uploaded using jFrame because
+        # that value is not in the set when uploaded by XHR
+        if "text/html" in request.META["HTTP_ACCEPT"]:
+            response_type = "text/html"
+
+        # return the data to the uploading plugin
+        return HttpResponse(response_data, mimetype=response_type)
+    elif request.method == 'DELETE':
+        radio.picture.delete()
+        response_data = json.dumps(True)
+        return HttpResponse(response_data, mimetype="application/json")
+    raise Http404
+
