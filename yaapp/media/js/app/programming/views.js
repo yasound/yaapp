@@ -290,10 +290,14 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 Yasound.Views.UploadCell = Backbone.View.extend({
     tagName: 'tr',
     events: {
+        "click .start": "onStart",
+        "click .stop": "onStop",
+        "click .remove": "onRemove"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'start', 'onProgress', 'onFinished', 'onFailed');
+        this.jqXHR = undefined;
     },
 
     onClose: function() {
@@ -302,15 +306,66 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     reset: function() {
     },
 
-    render: function(data) {
+    render: function(data, uuid) {
         $(this.el).html(ich.programmingUploadCellTemplate(data.files[0]));
+        $('#stop', this.el).attr('disabled', true);
+
         this.data = data;
+        this.data.formData = {
+            'response_format': 'json',
+            data: JSON.stringify({
+                'radio_uuid': uuid
+            })
+        };
+
+        this.data.onProgress = this.onProgress;
+        this.data.onFinished = this.onFinished;
+        this.data.onFailed = this.onFailed;
         return this;
+    },
+
+    start: function() {
+        this.jqXHR = this.data.submit();
+    },
+
+    onStart: function(e) {
+        e.preventDefault();
+        this.start();
+
+        $('#stop', this.el).attr('disabled', false);
+    },
+
+    onStop: function (e) {
+        if (this.jqHXR) {
+            this.jqHXR.abort();
+            this.jqHXR = undefined;
+            $('#stop', this.el).attr('disabled', true);
+        }
+    },
+
+    onRemove: function (e) {
+        this.onStop();
+        this.remove();
+    },
+
+    onFinished: function(e, data) {
+        this.remove();
+    },
+
+    onFailed: function(e, data) {
+
+    },
+
+    onProgress: function(e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $progress = $('#progress .bar', this.el);
+        $progress.css('width', progress + '%');
     }
 });
 
 Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     events: {
+        "click #start-all-btn": "onStartAll"
     },
 
     initialize: function() {
@@ -339,43 +394,37 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
             dataType: 'json',
             add: function (e, data) {
                 var view = new Yasound.Views.UploadCell({});
-                $('#upload-table', that.el).append(view.render(data).el);
+                $('#upload-table', that.el).append(view.render(data, uuid).el);
                 that.views.push(view);
             },
             progressall: function (e, data) {
             },
+            progress: function (e, data) {
+                if (data.onProgress) {
+                    data.onProgress(e, data);
+                }
+            },
             done: function (e, data) {
+                if (data.onFinished) {
+                    data.onFinished(e, data);
+                }
             },
             fail: function (e, data) {
+                if (data.onFailed) {
+                    data.onFailed(e, data);
+                }
             }
         });
 
 
     },
 
-    artistsSelected: function(artists) {
-        this.songInstancesView.clear();
-        this.songInstances.filterArtists(artists);
-    },
-
-    albumsSelected: function(albums) {
-        this.songInstancesView.clear();
-        this.songInstances.filterAlbums(albums);
-    },
-
-    onRemoveAll: function(e) {
+    onStartAll: function (e) {
         e.preventDefault();
-        var that = this;
-        $('#modal-remove-all', this.el).modal('show');
-        $('#modal-remove-all .btn-primary', this.el).on('click', function () {
-            $('#modal-remove-all', this.el).modal('hide');
-            that.songInstances.removeAll(function() {
-                that.songInstancesView.clear();
-                that.songInstances.goTo(0);
-            });
+        _.each(this.views, function(view) {
+            view.start();
         });
     }
-
 });
 
 Yasound.Views.Playlist = Backbone.View.extend({

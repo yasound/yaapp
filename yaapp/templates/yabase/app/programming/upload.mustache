@@ -1,7 +1,8 @@
 {% load i18n %}
 <div>
-    <input id="file-upload" type="file" name="files[]" data-url="server/php/" multiple>
+    <input id="file-upload" type="file" name="song" data-url="/api/v1/upload_song/" multiple>
 
+    <button class='yabutton-small' id='start-all-btn'>{% trans "Start all" %}</button>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
