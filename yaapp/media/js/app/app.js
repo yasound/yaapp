@@ -55,10 +55,15 @@ $(document).ready(function () {
     });
 
     Backbone.View.prototype.close = function () {
-        this.remove();
-        this.unbind();
-        if (this.onClose) {
-            this.onClose();
+        if (this.sticky) {
+            this.el.parentNode.removeChild(this.el);
+            Yasound.Utils.saveStickyView(this.stickyKey(), this);
+        } else {
+            this.remove();
+            this.unbind();
+            if (this.onClose) {
+                this.onClose();
+            }
         }
     };
 

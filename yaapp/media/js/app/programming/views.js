@@ -181,7 +181,7 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-
+        return this;
     },
 
     onFindTrack: function(e) {
@@ -259,6 +259,8 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
         this.filters.on('albumsSelected', this.albumsSelected);
 
         this.songInstances.fetch();
+
+        return this;
     },
 
     artistsSelected: function(artists) {
@@ -364,6 +366,11 @@ Yasound.Views.UploadCell = Backbone.View.extend({
 });
 
 Yasound.Views.AddFromDesktop =  Backbone.View.extend({
+    sticky: true,
+    stickyKey: function() {
+        return 'add-from-desktop-' + this.uuid;
+    },
+
     events: {
         "click #start-all-btn": "onStartAll"
     },
@@ -386,8 +393,12 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         this.views = [];
     },
 
-    render: function(uuid) {
-        $(this.el).html(ich.programmingUploadTemplate());
+    render: function(uuid, disableTemplate) {
+        if (!disableTemplate) {
+            $(this.el).html(ich.programmingUploadTemplate());
+        }
+        this.uuid = uuid;
+
         var $table = $('#upload-table tbody', this.el);
         var that = this;
         $('#file-upload', this.el).fileupload({
@@ -416,7 +427,12 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
             }
         });
 
+        this.delegateEvents();
+        _.map(this.views, function (view) {
+            view.delegateEvents();
+        });
 
+        return this;
     },
 
     onStartAll: function (e) {
@@ -433,13 +449,11 @@ Yasound.Views.Playlist = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'onAddFromServer', 'onAddFromDesktop');
+        _.bindAll(this, 'render', 'onAll',  'onClose', 'clearView', 'onImportItunes', 'onAddFromServer', 'onAddFromDesktop');
     },
 
     onClose: function() {
-        if (this.currentView) {
-            this.currentView.close();
-        }
+        this.clearView();
         this.toolbar.close();
     },
 
@@ -449,6 +463,7 @@ Yasound.Views.Playlist = Backbone.View.extend({
     clearView: function() {
         if (this.currentView) {
             this.currentView.close();
+            $(this.el).append("<div id='content'></div>");
         }
     },
 
@@ -475,9 +490,16 @@ Yasound.Views.Playlist = Backbone.View.extend({
 
     onAddFromDesktop: function() {
         this.clearView();
-        this.currentView = new Yasound.Views.AddFromDesktop({
-            el: $('#content', this.el)
-        }).render(this.uuid);
+
+        var savedView = Yasound.Utils.getStickyView('add-from-desktop-' + this.uuid);
+        if (!savedView) {
+            this.currentView = new Yasound.Views.AddFromDesktop({
+                el: $('#content', this.el)
+            }).render(this.uuid);
+        } else {
+            this.currentView = savedView;
+            $(this.el).append(this.currentView.render(this.uuid, true).el);
+        }
     },
 
     render: function(uuid) {
@@ -493,7 +515,9 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.toolbar.on('addFromServer', this.onAddFromServer);
         this.toolbar.on('addFromDesktop', this.onAddFromDesktop);
 
-        this.onAddFromDesktop();
+        this.onAll();
+
+        return this;
     }
 });
 
@@ -728,10 +752,11 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onClose');
     },
 
     onClose: function() {
+        this.playlistView.close();
     },
 
     reset: function() {
@@ -742,7 +767,6 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         $(this.el).html(ich.programmingPageTemplate());
 
         this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
-
         return this;
     }
 });
