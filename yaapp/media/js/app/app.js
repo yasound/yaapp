@@ -13,6 +13,7 @@ $(document).ready(function () {
     Yasound.App.username = g_username;
     Yasound.App.isMobile = false;
     Yasound.App.hasRadios = g_has_radios;
+    Yasound.App.stickyViews = [];
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
