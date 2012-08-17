@@ -1635,6 +1635,9 @@ def user_radios(request, username):
 
 @check_api_key(methods=['GET',], login_required=True)
 def my_radios(request):
+    """
+    Return the owner radio with additional informations (stats)
+    """
     limit = int(request.REQUEST.get('limit', 25))
     offset = int(request.REQUEST.get('offset', 0))
     qs = request.user.userprofile.own_radios(only_ready_radios=False)
