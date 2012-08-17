@@ -292,13 +292,13 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 Yasound.Views.UploadCell = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        "click .start": "onStart",
-        "click .stop": "onStop",
-        "click .remove": "onRemove"
+        "click #start": "onStart",
+        "click #stop": "onStop",
+        "click #remove": "onRemove"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'start', 'onProgress', 'onFinished', 'onFailed');
+        _.bindAll(this, 'render', 'start', 'onStart', 'onStop', 'onRemove', 'onProgress', 'onFinished', 'onFailed');
         this.jqXHR = undefined;
     },
 
@@ -352,7 +352,7 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     onRemove: function (e) {
-        this.onStop();
+        this.stop();
         this.remove();
     },
 
