@@ -102,8 +102,15 @@
                 </div>
 
                 <div id='my-informations'>
-                    <input type="file" name="picture" data-url="/api/v1/user/{{ request.user.username }}/picture/" id='file-upload'/>
-                    <img src='{{ user_profile.picture_url }}' id='user-picture-image'/>
+                    <div class='upload-container'>
+                        <div class='upload-content yabutton-small'>   
+                            <span>Ajouter une photo</span> 
+                            <input type="file" name="picture" data-url="/api/v1/user/{{ request.user.username }}/picture/" id='file-upload'/>
+                        </div>
+                        <div class='settings-picture'>
+                            <img src='{{ user_profile.picture_url }}' id='user-picture-image'/>
+                        </div>
+                    </div>
                     <div id='progress' class="progress progress-striped active">
                       <div class="bar"></div>
                     </div>

@@ -32,7 +32,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     render: function () {
         this.reset();
         $(this.el).html(ich.settingsPageTemplate());
-        $("select, input:file", this.el).uniform({});
+        $("select", this.el).uniform({});
 
         var that = this;
         var $progress = $('#progress .bar', this.el);
