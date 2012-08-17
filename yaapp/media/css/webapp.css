@@ -1840,10 +1840,14 @@ ul#notifications {
 }
 
 .notification-container .text-notification {
+    position:absolute;
+    top:25px;
     font-size:17px;
     color:#434343;
     font-weight: normal;
-    padding-left:102px;
+    color:#434343;
+    font-size: 17px;
+    font-weight: normal;
 }
 
 .notifications-heart {
@@ -1854,6 +1858,25 @@ ul#notifications {
     left:20px;
     top:15px;
     background-image:url('../app/images/notifications/notifications-heart-icon.png');
+}
+
+.notification-container .close-icon {
+    display:block;
+    position:absolute;
+    top:25px;
+    right:20px;
+    height:20px;
+    width:20px;
+    background-image:url('../app/images/notifications/notifications-close.png');
+}
+
+.notification-container .date {
+    float:right;
+    color:#b3b3b3;
+    font-size: 17px;
+    font-weight: normal;
+    margin-right:55px;
+    margin-top:25px;
 }
 
 .notification-odd {
