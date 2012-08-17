@@ -672,6 +672,23 @@ def upload_song(request, song_id=None):
                               allow_unknown_song=True)
 
     res = 'upload OK for song: %s' % unicode(f.name)
+
+    response_format = request.REQUEST.get('response_format', '')
+    if response_format == 'json':
+        response_data = {
+            "name": f.name,
+            "size": f.size,
+            "type": f.content_type
+        }
+        # generate the json data
+        response_data = json.dumps([response_data])
+        # response type
+        response_type = "application/json"
+        if "text/html" in request.META["HTTP_ACCEPT"]:
+            response_type = "text/html"
+        return HttpResponse(response_data, mimetype=response_type)
+    else:
+        res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
 
 @login_required
