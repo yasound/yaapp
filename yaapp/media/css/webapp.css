@@ -34,7 +34,9 @@ body {
     width: 148px;
 }
 
-.float-left {
+.float-left,
+.left
+ {
     float:left;
 }
 /**

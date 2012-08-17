@@ -303,6 +303,7 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     onClose: function() {
+        this.stop();
     },
 
     reset: function() {
@@ -330,6 +331,13 @@ Yasound.Views.UploadCell = Backbone.View.extend({
         this.jqXHR = this.data.submit();
     },
 
+    stop: function () {
+        if (this.jqHXR) {
+            this.jqHXR.abort();
+            this.jqHXR = undefined;
+        }
+    },
+
     onStart: function(e) {
         e.preventDefault();
         this.start();
@@ -338,11 +346,9 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     onStop: function (e) {
-        if (this.jqHXR) {
-            this.jqHXR.abort();
-            this.jqHXR = undefined;
-            $('#stop', this.el).attr('disabled', true);
-        }
+        e.preventDefault();
+        this.stop();
+        $('#stop', this.el).attr('disabled', true);
     },
 
     onRemove: function (e) {
@@ -372,7 +378,8 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     },
 
     events: {
-        "click #start-all-btn": "onStartAll"
+        "click #start-all-btn": "onStartAll",
+        "click #remove-all-btn": "onRemoveAll"
     },
 
     initialize: function() {
@@ -440,6 +447,11 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         _.each(this.views, function(view) {
             view.start();
         });
+    },
+
+    onRemoveAll: function (e) {
+        e.preventDefault();
+        this.clear();
     }
 });
 
