@@ -542,6 +542,7 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             uuid: uuid
         };
         ich.loadRemoteTemplate('radio/editRadioPage.mustache', 'editRadioPageTemplate', this.templateLoaded, params);
+        $("input:file, input[type=file], input[type=submit]",this.el).uniform({});
         return this;
     },
 

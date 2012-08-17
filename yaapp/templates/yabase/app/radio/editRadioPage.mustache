@@ -5,8 +5,12 @@
         <h1>{% trans "Radio settings" %}</h1>
 
         <div class='settings-content-container'>
-            <input type="file" name="picture" data-url="/api/v1/radio/{{ radio.uuid }}/picture/" id='file-upload'/>
-            <img src='{{ radio.picture_url }}' id='radio-picture-image'/>
+            <div class='upload-container'>
+                <input type="file" name="picture" data-url="/api/v1/radio/{{ radio.uuid }}/picture/" id='file-upload'/>
+                <div class='settings-picture'>
+                    <img src='{{ radio.picture_url }}' id='radio-picture-image'/>
+                </div>
+            </div>
             <div id='progress' class="progress progress-striped active">
               <div class="bar"></div>
             </div>
