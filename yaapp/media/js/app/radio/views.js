@@ -555,7 +555,6 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             add: function (e, data) {
                 $progress.parent().show();
                 data.submit();
-                // data.context = $('<p/>').text('Uploading...').appendTo(document.body);
             },
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -563,17 +562,19 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             },
 
             done: function (e, data) {
-                // data.context.text('Upload finished.')
-                console.log('finished');
-                console.log(data)
                 var result = data.result[0];
-                var url = result.url;
-                $('#radio-picture-image', that.el).attr('src', url);
+                if (result.error) {
+                    var error = result.error;
+                    $('#modal-upload-error .modal-body p', that.el).html(error);
+                    $('#modal-upload-error', that.el).modal('show');
+                } else {
+                    var url = result.url;
+                    $('#radio-picture-image', that.el).attr('src', url);
+                }
                 $progress.css('width', '0%');
                 $progress.parent().hide();
             },
             fail: function (e, data) {
-                console.log(data)
             }
         });
 

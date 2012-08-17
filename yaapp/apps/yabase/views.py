@@ -1684,12 +1684,11 @@ def radio_picture(request, radio_uuid):
         error = False
 
         if f.size > settings.RADIO_PICTURE_MAX_FILE_SIZE:
-            error = "maxFileSize"
+            error = unicode(_('The provided file is too big'))
         if f.size < settings.RADIO_PICTURE_MIN_FILE_SIZE:
-            error = "minFileSize"
+            error = unicode(_('The provided file is too small'))
         if f.content_type not in settings.RADIO_PICTURE_ACCEPTED_FORMATS:
-            error = "acceptFileTypes"
-
+            error = unicode(_('The file format is not supported'))
         response_data = {
             "name": f.name,
             "size": f.size,
