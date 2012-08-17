@@ -7,6 +7,8 @@ from yabase.task import async_import_from_itunes
 from yacore.tags import clean_tags
 import logging
 import settings as yabase_settings
+from django.forms.widgets import HiddenInput
+
 from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
@@ -117,7 +119,6 @@ class MyNotificationsForm(BootstrapForm):
         )
 
     def __init__(self, user_profile=None, *args, **kwargs):
-        from django.forms.widgets import HiddenInput
 
         self.user_profile = user_profile
         initial = {
@@ -321,7 +322,7 @@ class SettingsTwitterForm(BootstrapForm):
         self.user_profile.save()
 
 class ImportItunesForm(BootstrapForm):
-    uuid = forms.CharField(required=True)
+    uuid = forms.CharField(required=True, widget=HiddenInput())
     tracks = forms.CharField(label=_('Please paste from iTunes'),
                              widget=forms.Textarea,
                                     required=True)
