@@ -443,6 +443,27 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     }
 });
 
+
+Yasound.Views.ImportFromItunes =  Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    clear: function () {
+    },
+
+    render: function(uuid) {
+        $(this.el).html(ich.importFromItunesTemplate());
+        return this;
+    }
+});
+
 Yasound.Views.Playlist = Backbone.View.extend({
     el: '#playlist',
     events: {
@@ -477,7 +498,9 @@ Yasound.Views.Playlist = Backbone.View.extend({
 
     onImportItunes: function() {
         this.clearView();
-        $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
+        this.currentView = new Yasound.Views.ImportFromItunes({
+            el: $('#content', this.el)
+        }).render(this.uuid);
     },
 
     onAddFromServer: function() {
