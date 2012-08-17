@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-17 23:01+0200\n"
+"POT-Creation-Date: 2012-08-17 23:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -886,7 +886,8 @@ msgid "Twitter"
 msgstr "Twitter"
 
 #: templates/yabase/webapp.html:381
-#: templates/yabase/app/radio/editRadioPage.mustache:24
+#: templates/yabase/app/radio/editRadioPage.mustache:31
+#: templates/yabase/app/settings/settingsPage.mustache:128
 msgid "Close"
 msgstr "Fermer"
 
@@ -1096,7 +1097,7 @@ msgstr "Artiste"
 msgid "find"
 msgstr "rechercher"
 
-#: templates/yabase/app/programming/importFromItunes.mustache:6
+#: templates/yabase/app/programming/importFromItunes.mustache:7
 msgid "Send"
 msgstr "Envoyer"
 
@@ -1179,14 +1180,20 @@ msgstr "ajouter"
 msgid "Radio settings"
 msgstr "Paramètres de la radio"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:17
+#: templates/yabase/app/radio/editRadioPage.mustache:10
+#: templates/yabase/app/settings/settingsPage.mustache:107
+msgid "Upload photo"
+msgstr "Importer une photo"
+
+#: templates/yabase/app/radio/editRadioPage.mustache:24
+#: templates/yabase/app/settings/settingsPage.mustache:121
 msgid "Upload error"
 msgstr "Erreur d'upload"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:33
+#: templates/yabase/app/radio/editRadioPage.mustache:40
 #: templates/yabase/app/settings/settingsPage.mustache:67
-#: templates/yabase/app/settings/settingsPage.mustache:116
-#: templates/yabase/app/settings/settingsPage.mustache:126
+#: templates/yabase/app/settings/settingsPage.mustache:138
+#: templates/yabase/app/settings/settingsPage.mustache:148
 msgid "Save"
 msgstr "Enregistrer"
 
