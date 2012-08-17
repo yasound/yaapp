@@ -6,7 +6,10 @@
 
         <div class='settings-content-container'>
             <div class='upload-container'>
-                <input type="file" name="picture" data-url="/api/v1/radio/{{ radio.uuid }}/picture/" id='file-upload'/>
+                <div class='upload-content yabutton-small'>
+                    <span>Ajouter une photo</span>
+                    <input type="file" name="picture" data-url="/api/v1/radio/{{ radio.uuid }}/picture/" id='file-upload'/>
+                </div>
                 <div class='settings-picture'>
                     <img src='{{ radio.picture_url }}' id='radio-picture-image'/>
                 </div>
