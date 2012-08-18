@@ -17,7 +17,7 @@ Yasound.Data.Paginator = Backbone.Paginator.requestPager.extend({
     lastId: 0,
     queryAttribute: 'search',
     params: {},
-    
+
     parse: function(response) {
         var results = response.objects;
         this.totalCount = response.meta.total_count;
@@ -42,7 +42,7 @@ Yasound.Data.Paginator = Backbone.Paginator.requestPager.extend({
     comparator: function(obj) {
         return -parseInt(obj.get("id"), 10);
     },
-    
+
     fetchFirst: function() {
         var savedPage = this.page;
         this.page = 0;
@@ -173,7 +173,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
                 }
                 return s;
             }
-            
+
         };
         var str = context.name() + ' ' + gettext('by') + ' ' + context.artist();
         if (context.album() != gettext('Unknown album')) {
@@ -181,7 +181,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
         }
         return str;
     },
-    
+
     toJSON: function() {
         var data = Yasound.Data.Models.CurrentSong.__super__.toJSON.apply(this);
         data['title'] = this.title();
@@ -192,20 +192,20 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
 Yasound.Data.Models.User = Backbone.Model.extend({
     idAttribute: 'username',
-    
+
     url: function () {
         return '/api/v1/public_user/' + this.id + '/';
     },
-    
+
     initialize: function () {
         _.bindAll(this, 'fetchSuccess');
 
         this.currentRadio = new Yasound.Data.Models.Radio(this.get('current_radio'));
         this.ownRadio = new Yasound.Data.Models.Radio(this.get('own_radio'));
-        
+
         this.bind('change', this.fetchSuccess);
     },
-    
+
     fetchSuccess: function () {
         this.currentRadio.clear({silent: true});
         this.currentRadio.set(this.get('current_radio'));
@@ -213,7 +213,7 @@ Yasound.Data.Models.User = Backbone.Model.extend({
         this.ownRadio.clear({silent: true});
         this.ownRadio.set(this.get('own_radio'));
     },
-    
+
     humanDate: function() {
         var history = this.get('history');
         if (history) {
@@ -224,13 +224,13 @@ Yasound.Data.Models.User = Backbone.Model.extend({
          }
         return '';
     },
-    
+
     toJSON: function() {
         var data = Yasound.Data.Models.User.__super__.toJSON.apply(this);
-        
+
         data['agc'] = '';
         data['human_date'] = this.humanDate();
-        
+
         if (this.get('age')) {
             data['agc'] = this.get('age') +  ' ' + gettext('years old');
         }
@@ -249,25 +249,25 @@ Yasound.Data.Models.User = Backbone.Model.extend({
         }
         return data;
     },
-    
+
     follow: function(requestUser) {
         this.set({'is_friend': true});
-        var url = '/api/v1/user/' + requestUser + '/friends/' + this.get('username');
+        var url = '/api/v1/user/' + requestUser + '/friends/' + this.get('username') + '/';
         $.ajax({
            url: url,
            type: 'POST'
         });
     },
-        
+
     unfollow: function(requestUser) {
         this.set({'is_friend': false});
-        var url = '/api/v1/user/' + requestUser + '/friends/' + this.get('username');
+        var url = '/api/v1/user/' + requestUser + '/friends/' + this.get('username') + '/';
         $.ajax({
            url: url,
            type: 'DELETE'
         });
     }
-    
+
 });
 
 /**
