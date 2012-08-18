@@ -106,9 +106,9 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         var chart_data = [];
         if (stats) {
             _.each(stats, function(stat) {
-                if (stat['overall_listening_time']) {
+                if (stat['connections']) {
                     var date = Yasound.Utils.momentDate(stat['date']).unix()*1000;
-                    chart_data.push([date, stat['overall_listening_time']]);
+                    chart_data.push([date, stat['connections']]);
                 }
             });
         }
@@ -149,7 +149,7 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
                     y = item.datapoint[1].toFixed(2);
 
                 var formattedDate = moment.unix(x/1000).format('LL');
-                var formattedValue = Math.round(y) + ' ' + gettext('minutes');
+                var formattedValue = Math.round(y) + ' ' + gettext('listeners');
                 this.showToolTip(item.pageX, item.pageY,
                             formattedDate + " :<br/> " + formattedValue);
             }
