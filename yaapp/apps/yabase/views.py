@@ -967,6 +967,21 @@ class WebAppView(View):
         url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
         return url
 
+    def _ajax_success(self):
+        data = {
+            'success': True
+        }
+        response = json.dumps(data)
+        return HttpResponse(response, mimetype='application/json')
+
+    def _ajax_error(self, errors):
+        data = {
+            'success': False,
+            'errors': errors
+        }
+        response = json.dumps(data)
+        return HttpResponse(response, mimetype='application/json')
+
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -1114,21 +1129,12 @@ class WebAppView(View):
             form = LoginForm(request.POST)
             if form.is_valid() and form.login(request):
                 if request.is_ajax():
-                    data = {
-                        'success': True
-                    }
-                    response = json.dumps(data)
-                    return HttpResponse(response, mimetype='application/json')
+                    return self._ajax_success()
                 else:
                     return HttpResponseRedirect(reverse('webapp'))
             else:
                 if request.is_ajax():
-                    data = {
-                        'success': False,
-                        'errors': form.errors
-                    }
-                    response = json.dumps(data)
-                    return HttpResponse(response, mimetype='application/json')
+                    return self._ajax_error(form.errors)
                 else:
                     context['signup_form'] = form
         return context, 'yabase/webapp.html'
@@ -1179,7 +1185,13 @@ class WebAppView(View):
                 form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
                 if form.is_valid():
                     form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_edit_radio', args=[uuid]))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(form.errors)
+
         return context, 'yabase/webapp.html'
 
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):

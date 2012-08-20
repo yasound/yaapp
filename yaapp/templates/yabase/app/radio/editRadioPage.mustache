@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <form id='my-accounts' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
+            <form id='edit-radio' enctype="multipart/form-data" class='' action="{% url webapp_edit_radio radio.uuid %}" method='post'>{% csrf_token %}
                 {{ settings_radio_form }}
                 <div>
                     <input type='hidden' name='uuid' value='{{ radio.uuid }}'/>

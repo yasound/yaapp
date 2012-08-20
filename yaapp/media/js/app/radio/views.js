@@ -524,7 +524,9 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
 
 Yasound.Views.EditRadioPage = Backbone.View.extend({
     events: {
+        "submit #edit-radio": "onSubmit"
     },
+
     initialize: function () {
         _.bindAll(this, 'render', 'templateLoaded');
     },
@@ -570,6 +572,8 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
                     $('#modal-upload-error', that.el).modal('show');
                 } else {
                     var url = result.url;
+                    var now = moment();
+                    url = url + '?' + now.unix();
                     $('#radio-picture-image', that.el).attr('src', url);
                 }
                 $progress.css('width', '0%');
@@ -577,6 +581,33 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             },
             fail: function (e, data) {
             }
+        });
+    },
+
+    onSubmit: function (e) {
+        e.preventDefault();
+        var form = $('#edit-radio');
+        $('.error-msg', form).remove();
+        $('input').removeClass('error');
+
+        var url = form.attr('action');
+        $.post(url, form.serializeArray(), function(data) {
+            var success = data.success;
+            if (!data.success) {
+                colibri(gettext('Error while saving settings'));
+                var errors = data.errors;
+                if (errors) {
+                    _.each(errors, function(value, key) {
+                        var $input = $('input[name=' + key + ']', form);
+                        $input.addClass('error');
+                        $input.after('<div class="error-msg">' + value + '</div>');
+                    });
+                }
+            } else {
+                colibri(gettext('Radio settings updated'));
+            }
+        }).error(function() {
+            colibri(gettext('Error while saving settings', 'colibri-error'));
         });
     }
 });

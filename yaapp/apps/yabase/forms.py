@@ -13,6 +13,7 @@ from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
 class SettingsRadioForm(BootstrapModelForm):
+    name = forms.CharField(label=_('Name'), required=True, max_length=255)
     tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
 
     class Meta:
