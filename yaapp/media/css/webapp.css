@@ -1862,6 +1862,26 @@ ul#notifications {
     background-image:url('../app/images/notifications/notifications-heart-icon.png');
 }
 
+.notifications-star {
+    height:47px;
+    width:47px;
+    background-repeat: no-repeat;
+    position:absolute;
+    left:20px;
+    top:15px;
+    background-image:url('../app/images/notifications/notifications-star-icon.png');
+}
+
+.notifications-balloon {
+    height:47px;
+    width:47px;
+    background-repeat: no-repeat;
+    position:absolute;
+    left:20px;
+    top:15px;
+    background-image:url('../app/images/notifications/notifications-balloon-icon.png');
+}
+
 .notification-container .close-icon {
     display:block;
     position:absolute;
