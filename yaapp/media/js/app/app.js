@@ -13,6 +13,7 @@ $(document).ready(function () {
     Yasound.App.username = g_username;
     Yasound.App.isMobile = false;
     Yasound.App.hasRadios = g_has_radios;
+    Yasound.App.stickyViews = [];
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
@@ -54,10 +55,15 @@ $(document).ready(function () {
     });
 
     Backbone.View.prototype.close = function () {
-        this.remove();
-        this.unbind();
-        if (this.onClose) {
-            this.onClose();
+        if (this.sticky) {
+            this.el.parentNode.removeChild(this.el);
+            Yasound.Utils.saveStickyView(this.stickyKey(), this);
+        } else {
+            this.remove();
+            this.unbind();
+            if (this.onClose) {
+                this.onClose();
+            }
         }
     };
 

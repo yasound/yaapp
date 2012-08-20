@@ -181,7 +181,7 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-
+        return this;
     },
 
     onFindTrack: function(e) {
@@ -259,6 +259,8 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
         this.filters.on('albumsSelected', this.albumsSelected);
 
         this.songInstances.fetch();
+
+        return this;
     },
 
     artistsSelected: function(artists) {
@@ -287,19 +289,221 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 });
 
 
+Yasound.Views.UploadCell = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+        "click #start": "onStart",
+        "click #stop": "onStop",
+        "click #remove": "onRemove"
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'start', 'onStart', 'onStop', 'onRemove', 'onProgress', 'onFinished', 'onFailed');
+        this.jqXHR = undefined;
+    },
+
+    onClose: function() {
+        this.stop();
+    },
+
+    reset: function() {
+    },
+
+    render: function(data, uuid) {
+        $(this.el).html(ich.programmingUploadCellTemplate(data.files[0]));
+        $('#stop', this.el).attr('disabled', true);
+
+        this.data = data;
+        this.data.formData = {
+            'response_format': 'json',
+            data: JSON.stringify({
+                'radio_uuid': uuid
+            })
+        };
+
+        this.data.onProgress = this.onProgress;
+        this.data.onFinished = this.onFinished;
+        this.data.onFailed = this.onFailed;
+        return this;
+    },
+
+    start: function() {
+        this.jqXHR = this.data.submit();
+    },
+
+    stop: function () {
+        if (this.jqHXR) {
+            this.jqHXR.abort();
+            this.jqHXR = undefined;
+        }
+    },
+
+    onStart: function(e) {
+        e.preventDefault();
+        this.start();
+
+        $('#stop', this.el).attr('disabled', false);
+    },
+
+    onStop: function (e) {
+        e.preventDefault();
+        this.stop();
+        $('#stop', this.el).attr('disabled', true);
+    },
+
+    onRemove: function (e) {
+        this.stop();
+        this.remove();
+    },
+
+    onFinished: function(e, data) {
+        this.remove();
+    },
+
+    onFailed: function(e, data) {
+
+    },
+
+    onProgress: function(e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $progress = $('#progress .bar', this.el);
+        $progress.css('width', progress + '%');
+    }
+});
+
+Yasound.Views.AddFromDesktop =  Backbone.View.extend({
+    sticky: true,
+    stickyKey: function() {
+        return 'add-from-desktop-' + this.uuid;
+    },
+
+    events: {
+        "click #start-all-btn": "onStartAll",
+        "click #remove-all-btn": "onRemoveAll"
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render');
+        this.views = [];
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    render: function(uuid, disableTemplate) {
+        if (!disableTemplate) {
+            $(this.el).html(ich.programmingUploadTemplate());
+        }
+        this.uuid = uuid;
+
+        var $table = $('#upload-table tbody', this.el);
+        var that = this;
+        $('#file-upload', this.el).fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var view = new Yasound.Views.UploadCell({});
+                $('#upload-table', that.el).append(view.render(data, uuid).el);
+                that.views.push(view);
+            },
+            progressall: function (e, data) {
+            },
+            progress: function (e, data) {
+                if (data.onProgress) {
+                    data.onProgress(e, data);
+                }
+            },
+            done: function (e, data) {
+                if (data.onFinished) {
+                    data.onFinished(e, data);
+                }
+            },
+            fail: function (e, data) {
+                if (data.onFailed) {
+                    data.onFailed(e, data);
+                }
+            }
+        });
+
+        this.delegateEvents();
+        _.map(this.views, function (view) {
+            view.delegateEvents();
+        });
+
+        return this;
+    },
+
+    onStartAll: function (e) {
+        e.preventDefault();
+        _.each(this.views, function(view) {
+            view.start();
+        });
+    },
+
+    onRemoveAll: function (e) {
+        e.preventDefault();
+        this.clear();
+    }
+});
+
+
+Yasound.Views.ImportFromItunes =  Backbone.View.extend({
+    events: {
+        "submit #programming-import-itunes": "onSubmit"
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    clear: function () {
+    },
+
+    render: function(uuid) {
+        $(this.el).html(ich.importFromItunesTemplate({uuid:uuid}));
+        return this;
+    },
+
+    onSubmit: function (e) {
+        e.preventDefault();
+        var form = $('#programming-import-itunes', this.el);
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('iTunes import analyzis started'),
+            errorMessage: gettext('Error while analyzing iTunes import data'),
+            success: function (e) {
+                $('textarea', form).val('');
+            }
+        });
+    }
+});
+
 Yasound.Views.Playlist = Backbone.View.extend({
     el: '#playlist',
     events: {
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onAll', 'onImportItunes', 'onAddFromServer');
+        _.bindAll(this, 'render', 'onAll',  'onClose', 'clearView', 'onImportItunes', 'onAddFromServer', 'onAddFromDesktop');
     },
 
     onClose: function() {
-        if (this.currentView) {
-            this.currentView.close();
-        }
+        this.clearView();
         this.toolbar.close();
     },
 
@@ -309,6 +513,7 @@ Yasound.Views.Playlist = Backbone.View.extend({
     clearView: function() {
         if (this.currentView) {
             this.currentView.close();
+            $(this.el).append("<div id='content'></div>");
         }
     },
 
@@ -322,7 +527,9 @@ Yasound.Views.Playlist = Backbone.View.extend({
 
     onImportItunes: function() {
         this.clearView();
-        $('#content', this.el).hide().html(ich.importFromItunesTemplate()).fadeIn(200);
+        this.currentView = new Yasound.Views.ImportFromItunes({
+            el: $('#content', this.el)
+        }).render(this.uuid);
     },
 
     onAddFromServer: function() {
@@ -333,6 +540,19 @@ Yasound.Views.Playlist = Backbone.View.extend({
         }).render(this.uuid);
     },
 
+    onAddFromDesktop: function() {
+        this.clearView();
+
+        var savedView = Yasound.Utils.getStickyView('add-from-desktop-' + this.uuid);
+        if (!savedView) {
+            this.currentView = new Yasound.Views.AddFromDesktop({
+                el: $('#content', this.el)
+            }).render(this.uuid);
+        } else {
+            this.currentView = savedView;
+            $(this.el).append(this.currentView.render(this.uuid, true).el);
+        }
+    },
 
     render: function(uuid) {
         this.reset();
@@ -345,8 +565,11 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.toolbar.on('tracks', this.onAll);
         this.toolbar.on('importItunes', this.onImportItunes);
         this.toolbar.on('addFromServer', this.onAddFromServer);
+        this.toolbar.on('addFromDesktop', this.onAddFromDesktop);
 
         this.onAll();
+
+        return this;
     }
 });
 
@@ -359,39 +582,47 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     events: {
         'click #all': 'all',
         'click #import-itunes': 'importItunes',
-        'click #add-from-server': 'addFromServer'
+        'click #add-from-server': 'addFromServer',
+        'click #add-from-desktop': 'addFromDesktop'
     },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'selectMenu');
+    },
+
     render: function() {
         $(this.el).html(ich.programmingToolbarTemplate());
         return this;
     },
+
+    selectMenu: function(menu) {
+        $('#all', this.el).removeClass('active');
+        $('#import-itunes', this.el).removeClass('active');
+        $('#add-from-server', this.el).removeClass('active');
+        $('#add-from-desktop', this.el).removeClass('active');
+
+        $(menu).addClass('active');
+    },
+
     all: function(e) {
         e.preventDefault();
-
-        $('#all').addClass('active');
-        $('#import-itunes').removeClass('active');
-        $('#add-from-server').removeClass('active');
-
+        this.selectMenu('#all');
         this.trigger('tracks');
     },
     importItunes: function(e) {
         e.preventDefault();
-
-        $('#all').removeClass('active');
-        $('#import-itunes').addClass('active');
-        $('#add-from-server').removeClass('active');
-
+        this.selectMenu('#import-itunes');
         this.trigger('importItunes');
     },
     addFromServer: function(e) {
         e.preventDefault();
-
-        $('#all').removeClass('active');
-        $('#import-itunes').removeClass('active');
-        $('#add-from-server').addClass('active');
-
+        this.selectMenu('#add-from-server');
         this.trigger('addFromServer');
-
+    },
+    addFromDesktop: function(e) {
+        e.preventDefault();
+        this.selectMenu('#add-from-desktop');
+        this.trigger('addFromDesktop');
     }
 });
 
@@ -573,10 +804,11 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onClose');
     },
 
     onClose: function() {
+        this.playlistView.close();
     },
 
     reset: function() {
@@ -587,7 +819,6 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         $(this.el).html(ich.programmingPageTemplate());
 
         this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
-
         return this;
     }
 });

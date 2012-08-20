@@ -16,7 +16,10 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         'submit #settings-twitter-form': 'submitTwitter',
         'click #my-informations-menu': 'onInformationsMenu',
         'click #my-accounts-menu': 'onAccountsMenu',
-        'click #my-notifications-menu': 'onNotificationsMenu'
+        'click #my-notifications-menu': 'onNotificationsMenu',
+
+        "submit #my-informations-form": "onSubmitMyInformations",
+        "submit #my-notifications-form": "onSubmitMyNotifications"
 
     },
     initialize: function () {
@@ -33,6 +36,40 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.settingsPageTemplate());
         $("select", this.el).uniform({});
+
+        var that = this;
+        var $progress = $('#progress .bar', this.el);
+        $progress.parent().hide();
+        $('#file-upload').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                $progress.parent().show();
+                data.submit();
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $progress.css('width', progress + '%');
+            },
+
+            done: function (e, data) {
+                var result = data.result[0];
+                if (result.error) {
+                    var error = result.error;
+                    $('#modal-upload-error .modal-body p', that.el).html(error);
+                    $('#modal-upload-error', that.el).modal('show');
+                } else {
+                    var url = result.url;
+                    $('#user-picture-image', that.el).attr('src', url);
+                }
+                $progress.css('width', '0%');
+                $progress.parent().hide();
+            },
+            fail: function (e, data) {
+            }
+        });
+
+
+
         return this;
     },
     removeFacebook: function (e) {
@@ -117,6 +154,27 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         } else {
             $('#my-notifications', this.el).show();
         }
+    },
+
+    onSubmitMyInformations: function (e) {
+        e.preventDefault();
+        var form = $('#my-informations-form', this.el);
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('Settings updated'),
+            errorMessage: gettext('Error while saving settings')
+        });
+    },
+
+    onSubmitMyNotifications: function (e) {
+        e.preventDefault();
+        var form = $('#my-notifications-form', this.el);
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('Settings updated'),
+            errorMessage: gettext('Error while saving settings')
+        });
     }
+
 
 });

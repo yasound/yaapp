@@ -1,7 +1,8 @@
 {% load i18n %}
-<form id='programming-import-itunes' enctype="multipart/form-data" class='form-horizontal well' method='post'>{% csrf_token %}
+<form id='programming-import-itunes' enctype="multipart/form-data" class='form-horizontal well' action="/app/radio/<%uuid%>/programming/" method='post'>{% csrf_token %}
     {{ import_itunes_form }}
     <div class="form-actions">
+        <input type='hidden' name='uuid' value='<% uuid %>'/>
         <input type='hidden' name='action' value='import_itunes'/>
         <button type="submit" name='save' class="btn btn-primary">{% trans "Send" %}</button>
     </div>

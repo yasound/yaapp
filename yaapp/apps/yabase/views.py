@@ -672,6 +672,23 @@ def upload_song(request, song_id=None):
                               allow_unknown_song=True)
 
     res = 'upload OK for song: %s' % unicode(f.name)
+
+    response_format = request.REQUEST.get('response_format', '')
+    if response_format == 'json':
+        response_data = {
+            "name": f.name,
+            "size": f.size,
+            "type": f.content_type
+        }
+        # generate the json data
+        response_data = json.dumps([response_data])
+        # response type
+        response_type = "application/json"
+        if "text/html" in request.META["HTTP_ACCEPT"]:
+            response_type = "text/html"
+        return HttpResponse(response_data, mimetype=response_type)
+    else:
+        res = 'upload OK for song: %s' % unicode(f.name)
     return HttpResponse(res)
 
 @login_required
@@ -950,6 +967,21 @@ class WebAppView(View):
         url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
         return url
 
+    def _ajax_success(self):
+        data = {
+            'success': True
+        }
+        response = json.dumps(data)
+        return HttpResponse(response, mimetype='application/json')
+
+    def _ajax_error(self, errors):
+        data = {
+            'success': False,
+            'errors': errors
+        }
+        response = json.dumps(data)
+        return HttpResponse(response, mimetype='application/json')
+
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -1097,21 +1129,12 @@ class WebAppView(View):
             form = LoginForm(request.POST)
             if form.is_valid() and form.login(request):
                 if request.is_ajax():
-                    data = {
-                        'success': True
-                    }
-                    response = json.dumps(data)
-                    return HttpResponse(response, mimetype='application/json')
+                    return self._ajax_success()
                 else:
                     return HttpResponseRedirect(reverse('webapp'))
             else:
                 if request.is_ajax():
-                    data = {
-                        'success': False,
-                        'errors': form.errors
-                    }
-                    response = json.dumps(data)
-                    return HttpResponse(response, mimetype='application/json')
+                    return self._ajax_error(form.errors)
                 else:
                     context['signup_form'] = form
         return context, 'yabase/webapp.html'
@@ -1130,17 +1153,32 @@ class WebAppView(View):
                 my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
                 if my_informations_form.is_valid():
                     my_informations_form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(my_informations_form.errors)
             elif action == 'my_accounts':
                 my_accounts_form = MyAccountsForm(request.POST, instance=UserProfile.objects.get(user=request.user))
                 if my_accounts_form.is_valid():
                     my_accounts_form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(my_accounts_form.errors)
             elif action == 'my_notifications':
                 my_notifications_form = MyNotificationsForm(request.user.get_profile(), request.POST)
                 if my_notifications_form.is_valid():
                     my_notifications_form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(my_notifications_form.errors)
 
             context['my_informations_form'] = my_informations_form
             context['my_accounts_form'] = my_accounts_form
@@ -1162,7 +1200,13 @@ class WebAppView(View):
                 form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
                 if form.is_valid():
                     form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_edit_radio', args=[uuid]))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(form.errors)
+
         return context, 'yabase/webapp.html'
 
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
@@ -1209,6 +1253,12 @@ class WebAppView(View):
             import_itunes_form = ImportItunesForm(request.user, request.POST)
             if import_itunes_form.is_valid():
                 import_itunes_form.save()
+                if request.is_ajax():
+                    return self._ajax_success();
+            else:
+                if request.is_ajax():
+                    return self._ajax_error(import_itunes_form.errors)
+
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
         genre_form = RadioGenreForm()
@@ -1635,6 +1685,9 @@ def user_radios(request, username):
 
 @check_api_key(methods=['GET',], login_required=True)
 def my_radios(request):
+    """
+    Return the owner radio with additional informations (stats)
+    """
     limit = int(request.REQUEST.get('limit', 25))
     offset = int(request.REQUEST.get('offset', 0))
     qs = request.user.userprofile.own_radios(only_ready_radios=False)
@@ -1658,4 +1711,73 @@ def radio_leaderboard(request, radio_uuid):
     data = radio.relative_leaderboard_as_dicts()
     response = api_response(data)
     return response
+
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST', 'DELETE'])
+def radio_picture(request, radio_uuid):
+    """
+    RESTful view for handling radio picture
+    """
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.method == 'GET':
+        return HttpResponseRedirect(radio.picture_url)
+
+    if radio.creator != request.user:
+        return HttpResponse(status=401)
+
+    if request.method == 'POST':
+        if not request.FILES.has_key(PICTURE_FILE_TAG):
+            return HttpResponseBadRequest('Must upload a file')
+
+        f = request.FILES[PICTURE_FILE_TAG]
+        error = False
+
+        if f.size > settings.RADIO_PICTURE_MAX_FILE_SIZE:
+            error = unicode(_('The provided file is too big'))
+        if f.size < settings.RADIO_PICTURE_MIN_FILE_SIZE:
+            error = unicode(_('The provided file is too small'))
+        if f.content_type not in settings.RADIO_PICTURE_ACCEPTED_FORMATS:
+            error = unicode(_('The file format is not supported'))
+        response_data = {
+            "name": f.name,
+            "size": f.size,
+            "type": f.content_type
+        }
+        if error:
+            response_data["error"] = error
+            response_data = json.dumps([response_data])
+            return HttpResponse(response_data, mimetype='application/json')
+
+        radio.set_picture(f)
+
+        # url for deleting the file in case user decides to delete it
+        response_data["delete_url"] = reverse('yabase.views.radio_picture', kwargs={'radio_uuid':radio.uuid})
+        response_data["delete_type"] = "DELETE"
+        response_data["url"] = radio.picture_url
+
+        # generate the json data
+        response_data = json.dumps([response_data])
+        # response type
+        response_type = "application/json"
+
+        # QUIRK HERE
+        # in jQuey uploader, when it falls back to uploading using iFrames
+        # the response content type has to be text/html
+        # if json will be send, error will occur
+        # if iframe is sending the request, it's headers are a little different compared
+        # to the jQuery ajax request
+        # they have different set of HTTP_ACCEPT values
+        # so if the text/html is present, file was uploaded using jFrame because
+        # that value is not in the set when uploaded by XHR
+        if "text/html" in request.META["HTTP_ACCEPT"]:
+            response_type = "text/html"
+
+        # return the data to the uploading plugin
+        return HttpResponse(response_data, mimetype=response_type)
+    elif request.method == 'DELETE':
+        radio.picture.delete()
+        response_data = json.dumps(True)
+        return HttpResponse(response_data, mimetype="application/json")
+    raise Http404
 

@@ -7,17 +7,21 @@ from yabase.task import async_import_from_itunes
 from yacore.tags import clean_tags
 import logging
 import settings as yabase_settings
+from django.forms.widgets import HiddenInput
+import datetime
+
 from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
 class SettingsRadioForm(BootstrapModelForm):
+    name = forms.CharField(label=_('Name'), required=True, max_length=255)
     tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
 
     class Meta:
         model = Radio
-        fields = ('name', 'genre', 'picture', 'description', 'tags')
+        fields = ('name', 'genre', 'description', 'tags')
         layout = (
-            Fieldset('', 'name', 'genre', 'picture', 'description', 'tags'),
+            Fieldset('', 'name', 'genre', 'description', 'tags'),
         )
 
     def clean_tags(self):
@@ -31,10 +35,21 @@ class MyInformationsForm(BootstrapModelForm):
     bio_text = forms.CharField(label=_('Biography'), widget=forms.widgets.Textarea(attrs={'rows':5, 'cols':60}))
     class Meta:
         model = UserProfile
-        fields = ('name', 'url', 'bio_text', 'picture', 'birthday', 'gender', 'city')
+        fields = ('name', 'url', 'bio_text', 'birthday', 'gender', 'city')
         layout = (
-            Fieldset('', 'name', 'url', 'bio_text', 'picture', 'birthday', 'gender', 'city'),
+            Fieldset('', 'name', 'url', 'bio_text', 'birthday', 'gender', 'city'),
         )
+
+    def clean_birthday(self):
+        birthday = self.cleaned_data['birthday']
+        max_birthday = datetime.date(2007, 01, 01)
+        min_birthday = datetime.date(1916, 01, 01)
+
+        if birthday > max_birthday:
+            raise forms.ValidationError(_('Invalid birthday'))
+        if birthday < min_birthday:
+            raise forms.ValidationError(_('Invalide birthday'))
+        return birthday
 
 class MyAccountsForm(BootstrapModelForm):
     password1 = forms.CharField(label=_("Password"), required=False, widget=forms.PasswordInput())
@@ -117,7 +132,6 @@ class MyNotificationsForm(BootstrapForm):
         )
 
     def __init__(self, user_profile=None, *args, **kwargs):
-        from django.forms.widgets import HiddenInput
 
         self.user_profile = user_profile
         initial = {
@@ -321,8 +335,9 @@ class SettingsTwitterForm(BootstrapForm):
         self.user_profile.save()
 
 class ImportItunesForm(BootstrapForm):
+    uuid = forms.CharField(required=True, widget=HiddenInput())
     tracks = forms.CharField(label=_('Please paste from iTunes'),
-                             widget=forms.Textarea,
+                             widget=forms.Textarea({'cols':80}),
                                     required=True)
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
@@ -330,7 +345,10 @@ class ImportItunesForm(BootstrapForm):
 
     def save(self):
         tracks = self.cleaned_data['tracks']
-        async_import_from_itunes.delay(radio=Radio.objects.radio_for_user(self.user), data=tracks)
+        uuid = self.cleaned_data['uuid']
+        radio = Radio.objects.get(uuid=uuid)
+        if radio.creator == self.user:
+            async_import_from_itunes.delay(radio=radio, data=tracks)
 
 class RadioGenreForm(forms.Form):
     genre = forms.ChoiceField(choices = yabase_settings.RADIO_STYLE_CHOICES_FORM, required=False)

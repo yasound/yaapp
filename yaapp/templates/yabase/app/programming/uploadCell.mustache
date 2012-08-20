@@ -1,0 +1,12 @@
+{% load i18n %}
+<td><% name %></td>
+<td>
+    <div id='progress' class="progress progress-striped active">
+      <div class="bar" style="width: 0%"></div>
+    </div>
+</td>
+<td>
+    <button class='yabutton-small left' id='start'>{% trans 'start' %}</button>
+    <button class='yabutton-small left' id='stop'>{% trans 'abort' %}</button>
+    <button class='yabutton-small left' id='remove'>{% trans 'remove' %}</button>
+</td>

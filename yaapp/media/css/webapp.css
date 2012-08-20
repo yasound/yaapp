@@ -34,7 +34,9 @@ body {
     width: 148px;
 }
 
-.float-left {
+.float-left,
+.left
+ {
     float:left;
 }
 /**
@@ -1804,19 +1806,16 @@ ul#notifications {
     margin-bottom: 12px;
 }
 
-ul#notifications li div {
-    font-weight: bold;
+#programming-import-itunes textarea {
+    width:100%;
 }
 
-ul#notifications .read {
-    font-weight: normal;
-}
 
 /**
  * Notifications
  */
-/*
-.notification-container h1 {
+
+.notifications-container h1 {
     padding-top:37px;
     padding-left:31px;
     height:67px;
@@ -1828,7 +1827,7 @@ ul#notifications .read {
     color:#434343;
 }
 
-.notification-container {
+.notifications-container {
     border-radius:7px;
     box-shadow:0px 1px 4px #e2e2e2;
     background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
@@ -1837,7 +1836,65 @@ ul#notifications .read {
     background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
     background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
 }
-*/
+
+.notification-container {
+    position:relative;
+    height:67px;
+    border-top:1px solid #e3e3e3;
+    box-shadow: 0px 1px 1px white inset;
+    padding-left: 102px;
+
+}
+
+.notification-container .text-notification {
+    position:absolute;
+    top:25px;
+    font-size:17px;
+    color:#434343;
+    font-weight: normal;
+    color:#434343;
+    font-size: 17px;
+    font-weight: normal;
+}
+
+.notifications-heart {
+    height:47px;
+    width:47px;
+    background-repeat: no-repeat;
+    position:absolute;
+    left:20px;
+    top:15px;
+    background-image:url('../app/images/notifications/notifications-heart-icon.png');
+}
+
+.notification-container .close-icon {
+    display:block;
+    position:absolute;
+    top:25px;
+    right:20px;
+    height:20px;
+    width:20px;
+    background-image:url('../app/images/notifications/notifications-close.png');
+}
+
+.notification-container .date {
+    float:right;
+    color:#b3b3b3;
+    font-size: 17px;
+    font-weight: normal;
+    margin-right:55px;
+    margin-top:25px;
+}
+
+.notification-odd {
+    background-color:#fdfdfd;
+}
+
+.notification-even {
+    background-color:#f4f4f4;
+}
+
+
 /**
  * User profile
  */
@@ -2381,6 +2438,7 @@ ul .radio-with-stats-cells li {
     width:100%;
 }
 
+
 .control-group label {
     color:#434343;
     font-size:17px;
@@ -2441,7 +2499,7 @@ ul .radio-with-stats-cells li {
 }
 
 #div_id_gender .controls:after {
-    content:url(../app/images/settings/settings-selector.png);
+    content:url('../app/images/settings/settings-selector.png');
     position:absolute;
     top:11px;
     right:11px;
@@ -2476,6 +2534,100 @@ ul .radio-with-stats-cells li {
     top:1px;
     right:120px;
 }
+
+.upload-container img {
+    border-radius: 50px;
+}
+
+.upload-container .settings-picture {
+    position:absolute;
+    left:30px;
+    top:24px;
+    width:100px;
+    height:100;
+    border:4px solid white;
+    border-radius:50%;
+    box-shadow: 0px 0px 5px #7b7b7b, inset 1px 1px -5px #7b7b7b;
+    margin-right:40px;
+}
+
+/**
+ * radio edit
+ */
+
+.upload-container {
+    position:relative;
+    height:155px;
+    border:1px solid black;
+    background-image:url('../app/images/common/upload-bg.png');
+    border:1px solid #dadada;
+    border-radius:7px;
+    margin-bottom:25px;
+}
+
+
+.upload-container .upload-content {
+    font-size: 17px;
+    color:#58595c;
+    margin:60px 100px 0px 168px;
+    position:relative;
+    overflow:hidden;
+}
+
+.upload-container .upload-content span {
+    vertical-align: -5px;
+}
+
+.upload-container .upload-content input {
+    position:absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    border: solid transparent;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-container #radio-picture-image {
+    border-radius:0;
+}
+
+.upload-container .settings-picture-square {
+    position:absolute;
+    left:30px;
+    top:27px;
+    width:100px;
+    height:100;
+    box-shadow: 0px 0px 5px #7b7b7b, inset 1px 1px -5px #7b7b7b;
+    margin-right:40px;
+}
+
+#div_id_genre .controls {
+    width:144px;
+    height:30px;
+    position:relative;
+    border:1px solid #bebebe;
+    border-radius:7px;
+    box-shadow: 0px 2px 4px #d4d4d4;
+    background-image:url('../app/images/settings/settings-form-bg.png');
+    background-repeat:repeat-x;
+    padding:3px 5px;
+}
+
+#div_id_genre .controls:after {
+    content:url('../app/images/settings/settings-selector.png');
+    position:absolute;
+    top:11px;
+    right:11px;
+}
+
+#div_id_gendre span {
+    color:#74737b;
+    font-size:17px;
+    padding:0px;
+    margin:0px;
+}
+
 
 /**
  * common items

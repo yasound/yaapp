@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.forms.util import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseForbidden, \
-    HttpResponseRedirect, HttpResponseNotFound
+    HttpResponseRedirect, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context import RequestContext
 from django.utils import simplejson
@@ -54,13 +54,13 @@ def set_user_picture(request, user_id):
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         return HttpResponse('user does not exist')
-    
+
     if not request.FILES.has_key(PICTURE_FILE_TAG):
         return HttpResponse('request does not contain a picture file')
-    
+
     f = request.FILES[PICTURE_FILE_TAG]
     user.userprofile.set_picture(f)
-    
+
     res = 'picture OK for user: %s' % unicode(user)
     return HttpResponse(res)
 
@@ -70,7 +70,7 @@ def get_subscription(request):
 
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
-    
+
     profile = get_object_or_404(UserProfile, user=request.user)
     subscription = profile.subscription
     return HttpResponse(subscription)
@@ -106,13 +106,13 @@ def login(request, template_name='account/login.html'):
                     "email": email,
                     'next': next,
                 }, context_instance=RequestContext(request))
-            
+
     return render_to_response(template_name, {
         "login_form": login_form,
         "signup_form": signup_form,
         'next': next,
-    }, context_instance=RequestContext(request))    
-    
+    }, context_instance=RequestContext(request))
+
 def signup(request, template_name='account/signup.html'):
     next = request.REQUEST.get('next')
 
@@ -129,18 +129,18 @@ def signup(request, template_name='account/signup.html'):
                     "email": email,
                     'next': next,
                 }, context_instance=RequestContext(request))
-            
+
     return render_to_response(template_name, {
         "signup_form": signup_form,
         'next': next,
     }, context_instance=RequestContext(request))
-    
+
 def error(request, template_name='account/login_error.html'):
     messages = get_messages(request)
     return render_to_response(template_name, {'version': version,
                                              'messages': messages},
                               RequestContext(request))
-    
+
 
 @csrf_exempt
 def send_ios_push_notif_token(request):
@@ -149,7 +149,7 @@ def send_ios_push_notif_token(request):
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
-    
+
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     device_token = post_data_dict.get('device_token', None)
@@ -157,13 +157,13 @@ def send_ios_push_notif_token(request):
     device_uuid = post_data_dict.get('uuid', None)
     if not device_token or not device_token_type:
         return HttpResponse('bad data')
-    
+
     if device_token_type != account_settings.IOS_TOKEN_TYPE_SANDBOX and device_token_type != account_settings.IOS_TOKEN_TYPE_PRODUCTION:
         return HttpResponse('bad data')
     app_id = yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER
     if hasattr(request, 'app_id'):
         app_id = request.app_id
-    
+
     Device.objects.store_ios_token(request.user, device_uuid, device_token_type, device_token, app_identifier=app_id)
     res = 'send_ios_push_notif_token OK'
     return HttpResponse(res)
@@ -175,7 +175,7 @@ def get_notifications_preferences(request):
 
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
-    
+
     user_profile = request.user.userprofile
     res = user_profile.notif_preferences()
     response = json.dumps(res)
@@ -188,18 +188,18 @@ def set_notifications_preferences(request):
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
-    
+
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     user_profile = request.user.userprofile
     user_profile.set_notif_preferences(post_data_dict)
-    
+
     res = 'update_notifications_preferences OK'
     return HttpResponse(res)
 
 
 @check_api_key(methods=['GET'], login_required=True)
-def get_facebook_share_preferences(request):    
+def get_facebook_share_preferences(request):
     user_profile = request.user.userprofile
     res = user_profile.facebook_share_preferences()
     response = json.dumps(res)
@@ -207,17 +207,17 @@ def get_facebook_share_preferences(request):
 
 @check_api_key(methods=['POST'], login_required=True)
 @csrf_exempt
-def set_facebook_share_preferences(request):    
+def set_facebook_share_preferences(request):
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     user_profile = request.user.userprofile
     user_profile.set_facebook_share_preferences(post_data_dict)
-    
+
     res = 'update_facebook_share_preferences OK'
     return HttpResponse(res)
 
 @check_api_key(methods=['GET'], login_required=True)
-def get_twitter_share_preferences(request):    
+def get_twitter_share_preferences(request):
     user_profile = request.user.userprofile
     res = user_profile.twitter_share_preferences()
     response = json.dumps(res)
@@ -225,12 +225,12 @@ def get_twitter_share_preferences(request):
 
 @check_api_key(methods=['POST'], login_required=True)
 @csrf_exempt
-def set_twitter_share_preferences(request):    
+def set_twitter_share_preferences(request):
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
     user_profile = request.user.userprofile
     user_profile.set_twitter_share_preferences(post_data_dict)
-    
+
     res = 'update_twitter_share_preferences OK'
     return HttpResponse(res)
 
@@ -238,14 +238,14 @@ def set_twitter_share_preferences(request):
 def _parse_facebook_item(item):
     if 'object' not in item:
         return
-    
+
     object_value = item['object']
     if object_value != 'user':
         return
-    
+
     if 'entry' not in item:
         return
-    
+
     entries = item['entry']
     if type(entries) != type([]):
         entries = [entries]
@@ -279,14 +279,14 @@ def facebook_update(request):
         logger.debug('received update from facebook')
         json_data =  json.loads(request.read())
         logger.debug(json_data)
-        
+
         if type(json_data) == type([]):
             for item in json_data:
                 _parse_facebook_item(item)
         else:
-            _parse_facebook_item(json_data) 
+            _parse_facebook_item(json_data)
         return HttpResponse("OK")
-    
+
 @csrf_protect
 def password_reset(request, is_admin_site=False,
                    template_name='account/password_reset_form.html',
@@ -300,7 +300,7 @@ def password_reset(request, is_admin_site=False,
                    extra_context=None):
     if get_flavour() == 'mobile':
         template_name = template_name_mobile
-    
+
     if post_reset_redirect is None:
         post_reset_redirect = reverse('lost_password')
     if request.method == "POST":
@@ -374,13 +374,13 @@ def password_reset_confirm(request, uidb36=None, token=None,
     context.update(extra_context or {})
     return render_to_response(template_name, context,
                               context_instance=RequestContext(request, current_app=current_app))
-        
-        
+
+
 @csrf_exempt
 def associate(request):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
-    
+
     cookies = request.COOKIES
     if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
         return HttpResponse(status=401)
@@ -388,11 +388,11 @@ def associate(request):
         return HttpResponse(status=401)
     user = request.user
     profile = user.get_profile()
-    
+
     account_type = request.REQUEST.get('account_type')
     if not account_type:
         return HttpBadRequest(_('Account type is missing from request'))
-    
+
     uid = request.REQUEST.get('uid')
     token = request.REQUEST.get('token')
     token_secret = request.REQUEST.get('token_secret')
@@ -434,7 +434,7 @@ def dissociate(request):
     account_type = request.REQUEST.get('account_type')
     if not account_type:
         return HttpBadRequest(_('Account type is missing from request'))
-    
+
     res = False
     message = _('Unknown error')
     if account_type in account_settings.ACCOUNT_TYPES_FACEBOOK:
@@ -443,7 +443,7 @@ def dissociate(request):
         res, message = profile.remove_twitter_account()
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
         res, message = profile.remove_yasound_account()
-        
+
     if res:
         message = _('OK')
         return HttpResponse(unicode(message))
@@ -460,7 +460,7 @@ def user_authenticated(request):
 
     engine = import_module(settings.SESSION_ENGINE)
     session = engine.SessionStore(sessionid)
-    
+
     try:
         user_id = session[SESSION_KEY]
         backend_path = session[BACKEND_SESSION_KEY]
@@ -468,7 +468,7 @@ def user_authenticated(request):
         user = backend.get_user(user_id) or AnonymousUser()
     except KeyError:
         user = AnonymousUser()
-    
+
     if user.is_authenticated():
         to_json = {
             "user_id": user.id,
@@ -487,13 +487,13 @@ def update_localization(request):
     lon = obj['longitude']
     unit = obj.get('unit', 'degrees')
     request.user.userprofile.set_position(lat, lon, unit)
-    
+
 @check_api_key(methods=['GET'], login_required=False)
 def connected_users_by_distance(request):
     skip = int(request.GET.get('skip', 0))
     limit = int(request.GET.get('limit', 20))
-    
-    
+
+
     if request.user and request.user.is_authenticated():
         userprofile = request.user.userprofile
         profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
@@ -510,7 +510,7 @@ def connected_users_by_distance(request):
         for p in profiles:
             data.append(p.as_dict(request_user=request.user))
     return api_response(data, limit=limit, offset=skip)
-    
+
 
 @check_api_key(methods=['GET'], login_required=False)
 def fast_connected_users_by_distance(request):
@@ -518,11 +518,11 @@ def fast_connected_users_by_distance(request):
     limit = 13
     data = []
     profiles = None
-    
+
     key = None
     if request.user and request.user.is_authenticated():
         userprofile = request.user.userprofile
-        
+
         key = '%d.fast_connected_users' % (userprofile.id)
         data = cache.get(key, [])
         if not data:
@@ -544,11 +544,11 @@ def fast_connected_users_by_distance(request):
     if profiles and not data:
         for p in profiles:
             data.append(p.as_dict(request_user=request.user))
-        
+
     if key is not None and profiles is not None:
         # first time we get data
         cache.set(key, data, 60*5)
-        
+
     return api_response(data, limit=limit, offset=skip)
 
 @check_api_key(methods=['GET'], login_required=False)
@@ -562,22 +562,22 @@ def user_friends(request, username):
     user = get_object_or_404(User, username=username)
     qs = UserProfile.objects.filter(user__in=user.get_profile().friends.all())
     total_count = qs.count()
-    qs = qs[offset:offset+limit] 
+    qs = qs[offset:offset+limit]
     data = []
     for user_profile in qs:
         data.append(user_profile.as_dict(request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
-        
+
 @csrf_exempt
 @check_api_key(methods=['DELETE', 'POST'], login_required=True)
 def user_friends_add_remove(request, username, friend):
     if request.user.username != username:
         return HttpResponse(status=401)
-    
+
     user = get_object_or_404(User, username=username)
     friend = get_object_or_404(User, username=friend)
-    
+
     profile = user.get_profile()
     if not profile:
         raise Http404
@@ -585,12 +585,80 @@ def user_friends_add_remove(request, username, friend):
         profile.friends.remove(friend)
     elif request.method == 'POST':
         profile.friends.add(friend)
-        
+
     response = {'success':True}
     res = json.dumps(response)
     return HttpResponse(res)
-        
-        
-        
-    
-    
+
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST', 'DELETE'])
+def user_picture(request, username):
+    """
+    RESTful view for handling user picture
+    """
+
+    user = get_object_or_404(User, username=username)
+    user_profile = user.get_profile()
+    if not user_profile:
+        raise Http404
+
+    if request.method == 'GET':
+        return HttpResponseRedirect(user_profile.picture_url)
+
+    if user != request.user:
+        return HttpResponse(status=401)
+
+    if request.method == 'POST':
+        if not request.FILES.has_key(PICTURE_FILE_TAG):
+            return HttpResponseBadRequest('Must upload a file')
+
+        f = request.FILES[PICTURE_FILE_TAG]
+        error = False
+
+        if f.size > settings.USER_PICTURE_MAX_FILE_SIZE:
+            error = unicode(_('The provided file is too big'))
+        if f.size < settings.USER_PICTURE_MIN_FILE_SIZE:
+            error = unicode(_('The provided file is too small'))
+        if f.content_type not in settings.USER_PICTURE_ACCEPTED_FORMATS:
+            error = unicode(_('The file format is not supported'))
+        response_data = {
+            "name": f.name,
+            "size": f.size,
+            "type": f.content_type
+        }
+        if error:
+            response_data["error"] = error
+            response_data = json.dumps([response_data])
+            return HttpResponse(response_data, mimetype='application/json')
+
+        user_profile.set_picture(f)
+
+        # url for deleting the file in case user decides to delete it
+        response_data["delete_url"] = reverse('account.views.user_picture', kwargs={'username':user.username})
+        response_data["delete_type"] = "DELETE"
+        response_data["url"] = user_profile.picture_url
+
+        # generate the json data
+        response_data = json.dumps([response_data])
+        # response type
+        response_type = "application/json"
+
+        # QUIRK HERE
+        # in jQuey uploader, when it falls back to uploading using iFrames
+        # the response content type has to be text/html
+        # if json will be send, error will occur
+        # if iframe is sending the request, it's headers are a little different compared
+        # to the jQuery ajax request
+        # they have different set of HTTP_ACCEPT values
+        # so if the text/html is present, file was uploaded using jFrame because
+        # that value is not in the set when uploaded by XHR
+        if "text/html" in request.META["HTTP_ACCEPT"]:
+            response_type = "text/html"
+
+        # return the data to the uploading plugin
+        return HttpResponse(response_data, mimetype=response_type)
+    elif request.method == 'DELETE':
+        user_profile.picture.delete()
+        response_data = json.dumps(True)
+        return HttpResponse(response_data, mimetype="application/json")
+    raise Http404
