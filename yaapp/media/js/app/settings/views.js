@@ -16,7 +16,10 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         'submit #settings-twitter-form': 'submitTwitter',
         'click #my-informations-menu': 'onInformationsMenu',
         'click #my-accounts-menu': 'onAccountsMenu',
-        'click #my-notifications-menu': 'onNotificationsMenu'
+        'click #my-notifications-menu': 'onNotificationsMenu',
+
+        "submit #my-informations-form": "onSubmitMyInformations",
+        "submit #my-notifications-form": "onSubmitMyNotifications"
 
     },
     initialize: function () {
@@ -151,6 +154,27 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         } else {
             $('#my-notifications', this.el).show();
         }
+    },
+
+    onSubmitMyInformations: function (e) {
+        e.preventDefault();
+        var form = $('#my-informations-form');
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('Settings updated'),
+            errorMessage: gettext('Error while saving settings')
+        });
+    },
+
+    onSubmitMyNotifications: function (e) {
+        e.preventDefault();
+        var form = $('#my-notifications-form');
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('Settings updated'),
+            errorMessage: gettext('Error while saving settings')
+        });
     }
+
 
 });

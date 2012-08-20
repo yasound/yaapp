@@ -587,27 +587,10 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
     onSubmit: function (e) {
         e.preventDefault();
         var form = $('#edit-radio');
-        $('.error-msg', form).remove();
-        $('input').removeClass('error');
-
-        var url = form.attr('action');
-        $.post(url, form.serializeArray(), function(data) {
-            var success = data.success;
-            if (!data.success) {
-                colibri(gettext('Error while saving settings'));
-                var errors = data.errors;
-                if (errors) {
-                    _.each(errors, function(value, key) {
-                        var $input = $('input[name=' + key + ']', form);
-                        $input.addClass('error');
-                        $input.after('<div class="error-msg">' + value + '</div>');
-                    });
-                }
-            } else {
-                colibri(gettext('Radio settings updated'));
-            }
-        }).error(function() {
-            colibri(gettext('Error while saving settings', 'colibri-error'));
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('Radio settings updated'),
+            errorMessage: gettext('Error while saving settings')
         });
     }
 });

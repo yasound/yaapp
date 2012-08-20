@@ -8,6 +8,7 @@ from yacore.tags import clean_tags
 import logging
 import settings as yabase_settings
 from django.forms.widgets import HiddenInput
+import datetime
 
 from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
@@ -38,6 +39,17 @@ class MyInformationsForm(BootstrapModelForm):
         layout = (
             Fieldset('', 'name', 'url', 'bio_text', 'birthday', 'gender', 'city'),
         )
+
+    def clean_birthday(self):
+        birthday = self.cleaned_data['birthday']
+        max_birthday = datetime.date(2007, 01, 01)
+        min_birthday = datetime.date(1916, 01, 01)
+
+        if birthday > max_birthday:
+            raise forms.ValidationError(_('Invalid birthday'))
+        if birthday < min_birthday:
+            raise forms.ValidationError(_('Invalide birthday'))
+        return birthday
 
 class MyAccountsForm(BootstrapModelForm):
     password1 = forms.CharField(label=_("Password"), required=False, widget=forms.PasswordInput())

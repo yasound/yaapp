@@ -130,7 +130,7 @@
                     </div>
 
 
-                    <form id='my-informations' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
+                    <form id='my-informations-form' enctype="multipart/form-data" class='' action="{% url webapp_settings %}" method='post'>{% csrf_token %}
                         {{ my_informations_form }}
 
                         <div>

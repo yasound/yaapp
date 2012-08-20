@@ -1153,17 +1153,32 @@ class WebAppView(View):
                 my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
                 if my_informations_form.is_valid():
                     my_informations_form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(my_informations_form.errors)
             elif action == 'my_accounts':
                 my_accounts_form = MyAccountsForm(request.POST, instance=UserProfile.objects.get(user=request.user))
                 if my_accounts_form.is_valid():
                     my_accounts_form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(my_accounts_form.errors)
             elif action == 'my_notifications':
                 my_notifications_form = MyNotificationsForm(request.user.get_profile(), request.POST)
                 if my_notifications_form.is_valid():
                     my_notifications_form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
                     return HttpResponseRedirect(reverse('webapp_settings'))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(my_notifications_form.errors)
 
             context['my_informations_form'] = my_informations_form
             context['my_accounts_form'] = my_accounts_form
