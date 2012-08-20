@@ -41,8 +41,9 @@ body {
 }
 
 .error-msg {
-    color:#f85e5e;
+    color:#F85E5E;
 }
+
 /**
  * Header
  */
@@ -1918,6 +1919,10 @@ ul#notifications {
     background-color:#f4f4f4;
 }
 
+.notifications-container #mark-all-read-btn {
+    margin-top:46px;
+    margin-right:20px;
+}
 
 /**
  * User profile
