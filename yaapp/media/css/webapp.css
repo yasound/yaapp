@@ -2415,7 +2415,12 @@ ul .radio-with-stats-cells li {
     font-size:42px;
     padding:38px 0px 38px 31px;
     border-bottom: 1px solid #e3e3e3;
- }
+}
+
+.settings-container #programming-btn {
+    margin-top:46px;
+    margin-right:20px;
+}
 
 #settings-nav {
     margin:0px;

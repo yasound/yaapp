@@ -467,11 +467,11 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged', 'onBack');
-        $.subscribe('/submenu/genre', this.onGenreChanged)
+        $.subscribe('/submenu/genre', this.onGenreChanged);
     },
 
     onClose: function() {
-        $.unsubscribe('/submenu/genre', this.onGenreChanged)
+        $.unsubscribe('/submenu/genre', this.onGenreChanged);
     },
 
     reset: function() {
@@ -500,12 +500,12 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        this.onGenreChanged('', genre)
+        this.onGenreChanged('', genre);
         return this;
     },
 
     onGenreChanged: function(e, genre) {
-        if (genre == '') {
+        if (genre === '') {
             this.collection.params.genre = undefined;
         } else {
             this.collection.params.genre = genre;
@@ -524,6 +524,7 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
 
 Yasound.Views.EditRadioPage = Backbone.View.extend({
     events: {
+        "click #programming-btn": "onProgramming",
         "submit #edit-radio": "onSubmit"
     },
 
@@ -591,6 +592,13 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             form: form,
             successMessage: gettext('Radio settings updated'),
             errorMessage: gettext('Error while saving settings')
+        });
+    },
+
+    onProgramming: function (e) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.uuid + '/programming/', {
+            trigger: true
         });
     }
 });
