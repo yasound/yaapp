@@ -541,7 +541,6 @@ def fast_connected_users_by_distance(request):
             if not data:
                 profiles = UserProfile.objects.connected_userprofiles(coords[0], coords[1], skip=skip, limit=limit)
 
-    profiles = UserProfile.objects.all()
     if profiles and not data:
         for p in profiles:
             data.append(p.as_dict(request_user=request.user))
