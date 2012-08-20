@@ -13,28 +13,36 @@ class MongoAwareEncoder(DjangoJSONEncoder):
             return o.isoformat()
         else:
             return super(MongoAwareEncoder, self).default(o)
-        
+
 def api_response(data, total_count=None, limit=None, offset=0, next_url=None, previous_url=None):
     """
     return standardized response with the following example scheme :
-    
+
     {"meta": {"previous": null, "total_count": 2, "offset": 2, "limit": 2, "next": null}, "objects": []}
-    
+
     """
-    if total_count is None:
-        total_count = len(data)
-    if limit is None:
-        limit = total_count
-        
-    response = {
-        'meta':{
-            'limit': limit,
-            'next': next_url,
-            'offset': offset,
-            'previous': previous_url,
-            'total_count': total_count
-        },
-        'objects': data
-    }
-    json_response = simplejson.dumps(response, cls=MongoAwareEncoder)
+    if type(data) == type([]):
+        if total_count is None:
+            total_count = len(data)
+        if limit is None:
+            limit = total_count
+
+        response = {
+            'meta':{
+                'limit': limit,
+                'next': next_url,
+                'offset': offset,
+                'previous': previous_url,
+                'total_count': total_count
+            },
+            'objects': data
+        }
+        json_response = simplejson.dumps(response, cls=MongoAwareEncoder)
+        return HttpResponse(json_response, mimetype='application/json')
+    else:
+        json_response = simplejson.dumps(data, cls=MongoAwareEncoder)
+        return HttpResponse(json_response, mimetype='application/json')
+
+def api_response_raw(data):
+    json_response = simplejson.dumps(data, cls=MongoAwareEncoder)
     return HttpResponse(json_response, mimetype='application/json')

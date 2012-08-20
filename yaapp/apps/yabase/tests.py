@@ -1651,5 +1651,42 @@ class TestProgramming(TestCase):
         self.assertEquals(data.get('meta').get('total_count'), 10)
 
 
+class TestMyRadios(TestCase):
+    def setUp(self):
+        self.user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        self.user.set_password('test')
+        self.user.save()
 
+        self.client.login(username="test", password="test")
 
+    def test_get_my_radios(self):
+        url = reverse('yabase.views.my_radios')
+        res = self.client.get(url)
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], 1)
+
+        objects = decoded_data['objects']
+        radio_data = objects[0]
+        user_radio = Radio.objects.radio_for_user(self.user)
+
+        self.assertEquals(radio_data["id"], user_radio.id)
+
+    def test_post_my_radios(self):
+        url = reverse('yabase.views.my_radios')
+        res = self.client.post(url)
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        new_radio = json.loads(data)
+
+        self.assertEquals(new_radio['id'], 2)
+        self.assertEquals(new_radio['creator']['username'], self.user.username)
+
+        res = self.client.get(url)
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], 2)
