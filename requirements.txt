@@ -11,12 +11,12 @@ django-taggit-templatetags
 python-memcached
 facepy ==0.6.8
 django-test-utils
--e git+https://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
+-e git+https://github.com/yasound/fuzzywuzzy.git#egg=fuzzywuzzy
 pyyaml
 pymongo
 django-extensions
 django-iphone-push
--e git+https://github.com/jbl2024/django-extjs#egg=django-extjs
+-e git+https://github.com/yasound/django-extjs#egg=django-extjs
 django-pipeline == 1.1.27
 jsmin
 simplejson
@@ -36,10 +36,10 @@ django-ignoretests
 redis
 mock
 python-dateutil<=1
--e git+https://github.com/earle/django-bootstrap.git#egg=bootstrap
+-e git+https://github.com/yasound/django-bootstrap.git#egg=bootstrap
 xlwt
--e git+https://github.com/lynadge/emencia-django-newsletter.git#egg=emencia-django-newsletter
+-e git+https://github.com/yasound/emencia-django-newsletter.git#egg=emencia-django-newsletter
 django-tinymce
 pygeoip
--e git+https://github.com/alastair/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
+-e git+https://github.com/yasound/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
 unicodecsv

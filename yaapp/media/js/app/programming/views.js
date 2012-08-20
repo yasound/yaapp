@@ -457,6 +457,10 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 
 
 Yasound.Views.ImportFromItunes =  Backbone.View.extend({
+    events: {
+        "submit #programming-import-itunes": "onSubmit"
+    },
+
     initialize: function() {
         _.bindAll(this, 'render');
     },
@@ -473,6 +477,19 @@ Yasound.Views.ImportFromItunes =  Backbone.View.extend({
     render: function(uuid) {
         $(this.el).html(ich.importFromItunesTemplate({uuid:uuid}));
         return this;
+    },
+
+    onSubmit: function (e) {
+        e.preventDefault();
+        var form = $('#programming-import-itunes', this.el);
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('iTunes import analyzis started'),
+            errorMessage: gettext('Error while analyzing iTunes import data'),
+            success: function (e) {
+                $('textarea', form).val('');
+            }
+        });
     }
 });
 
