@@ -2,7 +2,9 @@
 
 <div class='row-fluid'>
     <div class='span12 settings-container'>
+        {% if request.user.is_superuser %}
         <button type="button" class="yabutton-small right" id='programming-btn'>{% trans "Edit playlist" %}</button>
+        {% endif %}
         <h1>{% trans "Radio settings" %}</h1>
         <div class='settings-content-container'>
             <div class='upload-container'>
