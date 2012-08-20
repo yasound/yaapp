@@ -1683,27 +1683,35 @@ def user_radios(request, username):
     return response
 
 
-@check_api_key(methods=['GET',], login_required=True)
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST'])
 def my_radios(request):
     """
     Return the owner radio with additional informations (stats)
     """
-    limit = int(request.REQUEST.get('limit', 25))
-    offset = int(request.REQUEST.get('offset', 0))
-    qs = request.user.userprofile.own_radios(only_ready_radios=False)
-    total_count = qs.count()
-    qs = qs[offset:offset+limit]
-    data = []
-    for radio in qs:
-        radio_data = radio.as_dict(request_user=request.user)
-        stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
-        stats_data = []
-        for stat in stats:
-            stats_data.append(stat.as_dict())
-        radio_data['stats'] = stats_data
-        data.append(radio_data)
-    response = api_response(data, total_count, limit=limit, offset=offset)
-    return response
+    if request.method == 'GET':
+        limit = int(request.REQUEST.get('limit', 25))
+        offset = int(request.REQUEST.get('offset', 0))
+        qs = request.user.userprofile.own_radios(only_ready_radios=False)
+        total_count = qs.count()
+        qs = qs[offset:offset+limit]
+        data = []
+        for radio in qs:
+            radio_data = radio.as_dict(request_user=request.user)
+            stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
+            stats_data = []
+            for stat in stats:
+                stats_data.append(stat.as_dict())
+            radio_data['stats'] = stats_data
+            data.append(radio_data)
+        response = api_response(data, total_count, limit=limit, offset=offset)
+        return response
+    elif request.method == 'POST':
+        radio = Radio.objects.create(creator=request.user)
+        data = radio.as_dict(request_user=request.user)
+        return api_response(data)
+    raise Http404
+
 
 @check_api_key(methods=['GET',], login_required=False)
 def radio_leaderboard(request, radio_uuid):
