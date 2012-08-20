@@ -43,9 +43,8 @@ fi
 
 if [[ $platform == 'osx' ]]; then
     echo "Installing numpy & scipy on osx"
-    vtenv/bin/pip install numpy
-    vtenv/bin/pip install -e git+https://github.com/scipy/scipy.git#egg=scipy
-    vtenv/bin/pip install scikit-learn
+    brew install gfortran
+    vtenv/bin/pip install -r requirements_osx.txt --download-cache=eggs
 fi
 
 echo " * Done"
