@@ -1684,8 +1684,8 @@ def user_radios(request, username):
 
 
 @csrf_exempt
-@check_api_key(methods=['GET', 'POST'])
-def my_radios(request):
+@check_api_key(methods=['GET', 'POST', 'DELETE'])
+def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
@@ -1709,6 +1709,13 @@ def my_radios(request):
     elif request.method == 'POST':
         radio = Radio.objects.create(creator=request.user)
         data = radio.as_dict(request_user=request.user)
+        return api_response(data)
+    elif request.method == 'DELETE' and radio_uuid is not None:
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
+        Radio.objects.delete_radio(radio)
+        data = {
+            'success': True
+        }
         return api_response(data)
     raise Http404
 
