@@ -1707,7 +1707,8 @@ def my_radios(request, radio_uuid=None):
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     elif request.method == 'POST':
-        radio = Radio.objects.create(creator=request.user)
+        default_name = u'%s - %s' % ( _('new radio'), unicode(request.user.get_profile()))
+        radio = Radio.objects.create(creator=request.user, name=default_name)
         data = radio.as_dict(request_user=request.user)
         return api_response(data)
     elif request.method == 'DELETE' and radio_uuid is not None:
