@@ -20,9 +20,13 @@
 }
 
 .colibri-error {
-	color: #B94A48;
-	background-color: #F2DEDE;
-	border-color: #EED3D7;
+	color: #f85e5e;
+	background-image: linear-gradient(bottom, rgb(220,221,222) 0%, rgb(242,242,243) 60%, rgb(255,255,255) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(220,221,222) 0%, rgb(242,242,243) 60%, rgb(255,255,255) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(220,221,222) 0%, rgb(242,242,243) 60%, rgb(255,255,255) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(220,221,222) 0%, rgb(242,242,243) 60%, rgb(255,255,255) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(220,221,222) 0%, rgb(242,242,243) 60%, rgb(255,255,255) 100%);
+	border-color: #f85e5e;
 }
 
 .colibri-success {
