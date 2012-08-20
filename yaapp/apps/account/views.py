@@ -539,6 +539,7 @@ def fast_connected_users_by_distance(request):
             key = '%s.fast_connected_users' % (sanitized_coords)
             data = cache.get(key, [])
             if not data:
+                profiles = UserProfile.objects.all()
                 profiles = UserProfile.objects.connected_userprofiles(coords[0], coords[1], skip=skip, limit=limit)
 
     if profiles and not data:
