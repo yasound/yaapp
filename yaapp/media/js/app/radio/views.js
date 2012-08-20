@@ -586,7 +586,7 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
 
     onSubmit: function (e) {
         e.preventDefault();
-        var form = $('#edit-radio');
+        var form = $('#edit-radio', this.el);
         Yasound.Utils.submitForm({
             form: form,
             successMessage: gettext('Radio settings updated'),

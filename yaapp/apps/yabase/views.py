@@ -1253,6 +1253,12 @@ class WebAppView(View):
             import_itunes_form = ImportItunesForm(request.user, request.POST)
             if import_itunes_form.is_valid():
                 import_itunes_form.save()
+                if request.is_ajax():
+                    return self._ajax_success();
+            else:
+                if request.is_ajax():
+                    return self._ajax_error(import_itunes_form.errors)
+
         facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
 
         genre_form = RadioGenreForm()

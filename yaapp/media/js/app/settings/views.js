@@ -158,7 +158,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
     onSubmitMyInformations: function (e) {
         e.preventDefault();
-        var form = $('#my-informations-form');
+        var form = $('#my-informations-form', this.el);
         Yasound.Utils.submitForm({
             form: form,
             successMessage: gettext('Settings updated'),
@@ -168,7 +168,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
     onSubmitMyNotifications: function (e) {
         e.preventDefault();
-        var form = $('#my-notifications-form');
+        var form = $('#my-notifications-form', this.el);
         Yasound.Utils.submitForm({
             form: form,
             successMessage: gettext('Settings updated'),

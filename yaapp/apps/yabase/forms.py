@@ -337,7 +337,7 @@ class SettingsTwitterForm(BootstrapForm):
 class ImportItunesForm(BootstrapForm):
     uuid = forms.CharField(required=True, widget=HiddenInput())
     tracks = forms.CharField(label=_('Please paste from iTunes'),
-                             widget=forms.Textarea,
+                             widget=forms.Textarea({'cols':80}),
                                     required=True)
     def __init__(self, user=None, *args, **kwargs):
         self.user = user

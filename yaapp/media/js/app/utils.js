@@ -71,13 +71,20 @@ Yasound.Utils.submitForm = function (options) {
             var errors = data.errors;
             if (errors) {
                 _.each(errors, function(value, key) {
-                    var $input = $('input[name=' + key + ']', form);
+                    var $input = $('[name=' + key + ']', form);
                     $input.addClass('error');
                     $input.after('<div class="error-msg">' + value + '</div>');
                 });
+
+                if (options.error) {
+                    options.error();
+                }
             }
         } else {
             colibri(options.successMessage);
+            if (options.success) {
+                options.success();
+            }
         }
     }).error(function() {
         colibri(options.errorMessage, 'colibri-error');

@@ -1806,6 +1806,11 @@ ul#notifications {
     margin-bottom: 12px;
 }
 
+#programming-import-itunes textarea {
+    width:100%;
+}
+
+
 /**
  * Notifications
  */
@@ -2432,6 +2437,7 @@ ul .radio-with-stats-cells li {
 .settings-content-container form textarea {
     width:100%;
 }
+
 
 .control-group label {
     color:#434343;
