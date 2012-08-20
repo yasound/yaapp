@@ -1861,7 +1861,10 @@ ul#notifications {
     font-weight: normal;
 }
 
-.notifications-heart {
+.notifications-heart
+,.type_notif_song_liked
+,.type_notif_friend_created_radio
+{
     height:47px;
     width:47px;
     background-repeat: no-repeat;
@@ -1871,7 +1874,11 @@ ul#notifications {
     background-image:url('../app/images/notifications/notifications-heart-icon.png');
 }
 
-.notifications-star {
+.notifications-star
+,.type_notif_song_liked
+,.type_notif_radio_in_favorites
+,.type_notif_message_from_yasound
+ {
     height:47px;
     width:47px;
     background-repeat: no-repeat;
@@ -1881,7 +1888,12 @@ ul#notifications {
     background-image:url('../app/images/notifications/notifications-star-icon.png');
 }
 
-.notifications-balloon {
+.notifications-balloon
+,.type_notif_message_from_user
+,.type_notif_user_in_radio
+,.type_notif_friend_in_radio
+,.type_notif_friend_online
+ {
     height:47px;
     width:47px;
     background-repeat: no-repeat;
