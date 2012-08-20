@@ -234,6 +234,7 @@ body {
     padding:0px;
     margin-top:4px;
     border:none;
+    border-radius:3px;
     box-shadow: 0px 1px 1px #202020;
 }
 
