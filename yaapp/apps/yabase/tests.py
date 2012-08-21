@@ -1690,3 +1690,33 @@ class TestMyRadios(TestCase):
         decoded_data = json.loads(data)
         meta = decoded_data['meta']
         self.assertEquals(meta['total_count'], 2)
+
+    def test_delete_my_radios(self):
+        url = reverse('yabase.views.my_radios')
+        res = self.client.post(url)
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        new_radio = json.loads(data)
+
+        self.assertEquals(new_radio['id'], 2)
+        self.assertEquals(new_radio['creator']['username'], self.user.username)
+
+        res = self.client.get(url)
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], 2)
+
+
+        url = reverse('yabase.views.my_radios', args=[new_radio['uuid']])
+        res = self.client.delete(url)
+        self.assertEquals(res.status_code, 200)
+
+        url = reverse('yabase.views.my_radios')
+        res = self.client.get(url)
+        self.assertEquals(res.status_code, 200)
+        data = res.content
+        decoded_data = json.loads(data)
+        meta = decoded_data['meta']
+        self.assertEquals(meta['total_count'], 1)

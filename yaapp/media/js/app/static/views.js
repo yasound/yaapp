@@ -13,7 +13,7 @@ Yasound.Views.Static.LegalPage = Backbone.View.extend({
         _.bindAll(this, 'render', 'templateLoaded');
     },
     reset: function() {
-        
+
     },
     render: function () {
         this.reset();
@@ -33,7 +33,7 @@ Yasound.Views.Static.ContactPage = Backbone.View.extend({
         _.bindAll(this, 'render', 'templateLoaded');
     },
     reset: function() {
-        
+
     },
     render: function () {
         this.reset();
@@ -43,5 +43,4 @@ Yasound.Views.Static.ContactPage = Backbone.View.extend({
     templateLoaded: function() {
         $(this.el).html(ich.staticContactPageTemplate());
     }
-    
 });

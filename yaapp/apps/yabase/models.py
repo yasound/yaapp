@@ -540,6 +540,9 @@ class RadioManager(models.Manager):
             radio.tags.add(*to_add)
         logger.info('done')
 
+    def delete_radio(self, radio):
+        radio.empty_next_songs_queue()
+        radio.delete()
 
 
 class Radio(models.Model):

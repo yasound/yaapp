@@ -47,7 +47,7 @@ Yasound.Views.SelectedRadios = Backbone.View.extend({
             // do not insert duplicated content
             return;
         }
-        
+
         var view = new Yasound.Views.RadioCell({
             model: radio
         });
@@ -79,7 +79,7 @@ Yasound.Views.HomePage = Backbone.View.extend({
     render: function(genre) {
         this.reset();
         $(this.el).html(ich.homePageTemplate());
-        
+
         this.selectedRadios = new Yasound.Data.Models.SelectedRadios({});
         this.selectedRadiosView = new Yasound.Views.SelectedRadios({
             collection: this.selectedRadios,

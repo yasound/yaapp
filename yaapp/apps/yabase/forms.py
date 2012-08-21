@@ -42,9 +42,11 @@ class MyInformationsForm(BootstrapModelForm):
 
     def clean_birthday(self):
         birthday = self.cleaned_data['birthday']
+        if birthday is None:
+            return birthday
+
         max_birthday = datetime.date(2007, 01, 01)
         min_birthday = datetime.date(1916, 01, 01)
-
         if birthday > max_birthday:
             raise forms.ValidationError(_('Invalid birthday'))
         if birthday < min_birthday:

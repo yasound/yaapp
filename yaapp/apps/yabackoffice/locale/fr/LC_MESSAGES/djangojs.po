@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-08 09:41+0200\n"
+"POT-Creation-Date: 2012-08-21 10:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: js/app/utils.js:61
+msgid "Data saved with success"
+msgstr "Données sauvegardées avec succès"
+
+#: js/app/utils.js:62
+msgid "Error while saving data"
+msgstr "Erreur lors de la sauvegarde des données"
 
 #: js/app/common/models.js:109
 msgid "All genres"
@@ -79,7 +87,7 @@ msgid "Miscellaneous"
 msgstr "Divers"
 
 #: js/app/common/models.js:175
-#: js/app/common/views.js:270
+#: js/app/common/views.js:327
 msgid "by"
 msgstr "par"
 
@@ -88,7 +96,7 @@ msgid "Unknown album"
 msgstr "Album inconnu"
 
 #: js/app/common/models.js:177
-#: js/app/common/views.js:271
+#: js/app/common/views.js:328
 msgid "on"
 msgstr "sur"
 
@@ -104,75 +112,86 @@ msgstr "homme"
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:222
+#: js/app/common/views.js:268
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:268
+#: js/app/common/views.js:325
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/common/views.js:386
+#: js/app/common/views.js:447
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/common/views.js:673
+#: js/app/common/views.js:766
+#: js/app/login/views.js:38
+msgid "Login error"
+msgstr "Erreur de connexion"
+
+#: js/app/common/views.js:779
+#: js/app/login/views.js:51
+msgid "Error while login in"
+msgstr "Erreur lors de la connexion"
+
+#: js/app/common/views.js:813
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:675
+#: js/app/common/views.js:815
 msgid "Create radio"
 msgstr "Créer une radio"
 
-#: js/app/myRadios/views.js:118
+#: js/app/myRadios/views.js:120
+#, fuzzy
 msgid "%b %d"
 msgstr "%d %b"
 
-#: js/app/myRadios/views.js:119
+#: js/app/myRadios/views.js:121
 msgid "jan"
 msgstr "jan"
 
-#: js/app/myRadios/views.js:120
+#: js/app/myRadios/views.js:122
 msgid "feb"
 msgstr "fev"
 
-#: js/app/myRadios/views.js:121
+#: js/app/myRadios/views.js:123
 msgid "mar"
 msgstr "mar"
 
-#: js/app/myRadios/views.js:122
+#: js/app/myRadios/views.js:124
 msgid "apr"
 msgstr "avr"
 
-#: js/app/myRadios/views.js:123
+#: js/app/myRadios/views.js:125
 msgid "may"
 msgstr "mai"
 
-#: js/app/myRadios/views.js:124
+#: js/app/myRadios/views.js:126
 msgid "jun"
 msgstr "juin"
 
-#: js/app/myRadios/views.js:125
+#: js/app/myRadios/views.js:127
 msgid "jul"
 msgstr "juil"
 
-#: js/app/myRadios/views.js:126
+#: js/app/myRadios/views.js:128
 msgid "aug"
 msgstr "aout"
 
-#: js/app/myRadios/views.js:127
+#: js/app/myRadios/views.js:129
 msgid "sept"
 msgstr "sept"
 
-#: js/app/myRadios/views.js:128
+#: js/app/myRadios/views.js:130
 msgid "oct"
 msgstr "oct"
 
-#: js/app/myRadios/views.js:129
+#: js/app/myRadios/views.js:131
 msgid "nov"
 msgstr "nov"
 
-#: js/app/myRadios/views.js:130
+#: js/app/myRadios/views.js:132
 msgid "dec"
 msgstr "dec"
 
@@ -184,29 +203,60 @@ msgstr "Notification marquée comme lue"
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/profile/views.js:43
+#: js/app/profile/views.js:62
 msgid "Follow"
 msgstr "Suivre"
 
-#: js/app/profile/views.js:46
+#: js/app/profile/views.js:65
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: js/app/settings/views.js:58
+#: js/app/programming/views.js:494
+msgid "iTunes import analyzis started"
+msgstr "L'analyse de l'import iTunes a démarré"
+
+#: js/app/programming/views.js:495
+msgid "Error while analyzing iTunes import data"
+msgstr "Erreur lors de l'analyse de l'import iTunes"
+
+#: js/app/radio/views.js:591
+msgid "Radio settings updated"
+msgstr "Paramètres de la radio mis à jour"
+
+#: js/app/radio/views.js:592
+#: js/app/settings/views.js:167
+#: js/app/settings/views.js.py:177
+msgid "Error while saving settings"
+msgstr "Erreur lors de la sauvegarde des paramètres"
+
+#: js/app/settings/views.js:101
 msgid "Facebook settings saved"
 msgstr "Paramètres Facebook sauvegardés"
 
-#: js/app/settings/views.js:60
+#: js/app/settings/views.js:103
 msgid "Error while saving Facebook settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Facebook"
 
-#: js/app/settings/views.js:68
+#: js/app/settings/views.js:111
 msgid "Twitter settings saved"
 msgstr "Paramètres Twitter sauvegardés"
 
-#: js/app/settings/views.js:70
+#: js/app/settings/views.js:113
 msgid "Error while saving Twitter settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
+
+#: js/app/settings/views.js:166
+#: js/app/settings/views.js.py:176
+msgid "Settings updated"
+msgstr "Paramètres mis à jour"
+
+#: js/app/signup/views.js:38
+msgid "Registration error"
+msgstr "Erreur d'inscription"
+
+#: js/app/signup/views.js:54
+msgid "Error while creating account"
+msgstr "Erreur lors de création du compte"
 
 #: js/backoffice/backoffice.js:71
 #: js/backoffice/Moderation/Radios.js:14
@@ -624,7 +674,7 @@ msgstr "Voulez-vous ajouter les chansons à la radio ?"
 
 #: js/backoffice/Radio/Radios.js:168
 msgid "The following metadata have been found, use it ?"
-msgstr ""
+msgstr "Les métadatas suivantes ont été trouvées, les utiliser ?"
 
 #: js/backoffice/Radio/Radios.js:193
 msgid "Songs assigned to radio"
@@ -672,7 +722,7 @@ msgstr "Ajouter à la radio"
 
 #: js/backoffice/Radio/Radios.js:349
 msgid "Find metadata"
-msgstr ""
+msgstr "Rechercher les métadatas"
 
 #: js/backoffice/Radio/Radios.js:373
 msgid "Programming"

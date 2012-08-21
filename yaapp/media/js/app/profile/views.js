@@ -62,7 +62,7 @@ Yasound.Views.User = Backbone.View.extend({
             $(e.target, this.el).html(gettext('Follow'));
             this.model.unfollow(Yasound.App.username);
         } else {
-            $(e.target, this.el).html(gettext('Unfollow'))
+            $(e.target, this.el).html(gettext('Unfollow'));
             this.model.follow(Yasound.App.username);
         }
     }
@@ -122,7 +122,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             el: $('#favorites', this.el)
         });
 
-        this.friends = new Yasound.Data.Models.Friends({})
+        this.friends = new Yasound.Data.Models.Friends({});
         this.friends.perPage = 5;
         this.friendsView = new Yasound.Views.Friends({
             collection: this.friends,
@@ -161,7 +161,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
 
     displayFavorites: function (e) {
         e.preventDefault();
-        var username = this.model.get('username')
+        var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/favorites/', {
             trigger: true
         });
@@ -169,7 +169,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
 
     displayFriends: function (e) {
         e.preventDefault();
-        var username = this.model.get('username')
+        var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/friends/', {
             trigger: true
         });

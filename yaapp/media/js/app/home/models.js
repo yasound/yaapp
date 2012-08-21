@@ -22,5 +22,3 @@ Yasound.Data.Models.SelectedRadios = Backbone.Collection.extend({
         return radioUser.get("id");
     }
 });
-
-
