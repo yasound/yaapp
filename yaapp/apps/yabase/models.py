@@ -541,8 +541,7 @@ class RadioManager(models.Manager):
         logger.info('done')
 
     def delete_radio(self, radio):
-        radio.current_song = None
-        radio.save()
+        radio.empty_next_songs_queue()
         radio.delete()
 
 
