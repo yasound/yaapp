@@ -2,6 +2,7 @@
 /*extern Ext, $ */
 Namespace('Yasound.Views');
 
+
 Yasound.Views.SongInstance = Backbone.View.extend({
     tagName: 'tr',
     events: {
@@ -87,6 +88,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
 });
 
 
+
 Yasound.Views.YasoundSong = Backbone.View.extend({
     tagName: 'tr',
     events: {
@@ -112,6 +114,7 @@ Yasound.Views.YasoundSong = Backbone.View.extend({
         this.close();
     }
 });
+
 
 Yasound.Views.YasoundSongs = Backbone.View.extend({
     initialize: function () {
@@ -148,6 +151,7 @@ Yasound.Views.YasoundSongs = Backbone.View.extend({
         this.views.push(view);
     }
 });
+
 
 Yasound.Views.AddFromServer =  Backbone.View.extend({
     events: {
@@ -289,6 +293,7 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 });
 
 
+
 Yasound.Views.UploadCell = Backbone.View.extend({
     tagName: 'tr',
     events: {
@@ -365,11 +370,13 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     onProgress: function(e, data) {
-        var progress = parseInt(data.loaded / data.total * 100, 10);
+        var percentage = (data.loaded*100) / data.total;
+        var progress = parseInt(percentage, 10);
         $progress = $('#progress .bar', this.el);
         $progress.css('width', progress + '%');
     }
 });
+
 
 Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     sticky: true,
@@ -456,6 +463,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 });
 
 
+
 Yasound.Views.ImportFromItunes =  Backbone.View.extend({
     events: {
         "submit #programming-import-itunes": "onSubmit"
@@ -482,16 +490,21 @@ Yasound.Views.ImportFromItunes =  Backbone.View.extend({
     onSubmit: function (e) {
         e.preventDefault();
         var form = $('#programming-import-itunes', this.el);
+
+        var successMessage = gettext('iTunes import analyzis started');
+        var errorMessage = gettext('Error while analyzing iTunes import data');
+
         Yasound.Utils.submitForm({
             form: form,
-            successMessage: gettext('iTunes import analyzis started'),
-            errorMessage: gettext('Error while analyzing iTunes import data'),
+            successMessage: successMessage,
+            errorMessage: errorMessage,
             success: function (e) {
                 $('textarea', form).val('');
             }
         });
     }
 });
+
 
 Yasound.Views.Playlist = Backbone.View.extend({
     el: '#playlist',

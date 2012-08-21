@@ -77,30 +77,30 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         this.reset();
         this.collection.perPage = Yasound.Utils.userCellsPerPage();
         $(this.el).html(ich.friendsPageTemplate());
-        
+
         this.resultsView = new Yasound.Views.Friends({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-        
+
         this.collection.fetch();
-        
+
         return this;
     }
 });
 
 Yasound.Views.UserFriendsPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Friends({}),
-    
+
     events: {
         'click #back-btn': 'onBack'
     },
-    
+
     initialize: function() {
         _.bindAll(this, 'render', 'onBack');
     },
@@ -126,17 +126,17 @@ Yasound.Views.UserFriendsPage = Backbone.View.extend({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-        
+
         this.collection.fetch();
-        
+
         return this;
     },
-    
+
     onBack: function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.username + '/', {

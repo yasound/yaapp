@@ -561,7 +561,7 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
                 data.submit();
             },
             progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progress = parseInt( (data.loaded*100) / data.total, 10);
                 $progress.css('width', progress + '%');
             },
 
@@ -588,10 +588,13 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
     onSubmit: function (e) {
         e.preventDefault();
         var form = $('#edit-radio', this.el);
+        var successMessage = gettext('Radio settings updated');
+        var errorMessage = gettext('Error while saving settings');
+
         Yasound.Utils.submitForm({
             form: form,
-            successMessage: gettext('Radio settings updated'),
-            errorMessage: gettext('Error while saving settings')
+            successMessage: successMessage,
+            errorMessage: errorMessage
         });
     },
 

@@ -4,7 +4,7 @@ Namespace('Yasound.Views');
 
 Yasound.Views.FavoritesPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Favorites({}),
-    
+
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged');
         $.subscribe('/submenu/genre', this.onGenreChanged)
@@ -30,16 +30,16 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-        
+
         this.onGenreChanged('', genre)
         return this;
     },
-    
+
     onGenreChanged: function(e, genre) {
         if (genre == '') {
             this.collection.params.genre = undefined;
@@ -48,7 +48,7 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
         }
         this.resultsView.clear();
         this.collection.goTo(0);
-    }    
+    }
 });
 
 Yasound.Views.UserFavoritesPage = Backbone.View.extend({
@@ -57,7 +57,7 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
     events: {
         'click #back-btn': 'onBack'
     },
-    
+
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged');
         $.subscribe('/submenu/genre', this.onGenreChanged)
@@ -82,21 +82,21 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
             this.collection.setUsername(username);
             this.username = username;
         }
-        
+
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-        
+
         this.onGenreChanged('', genre)
         return this;
     },
-    
+
     onGenreChanged: function(e, genre) {
         if (genre == '') {
             this.collection.params.genre = undefined;
@@ -106,7 +106,7 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
         this.resultsView.clear();
         this.collection.goTo(0);
     },
-    
+
     onBack: function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.username + '/', {

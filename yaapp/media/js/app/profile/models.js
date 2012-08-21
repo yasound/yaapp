@@ -4,4 +4,3 @@
  */
 /* extern Ext, $ */
 Namespace('Yasound.Data.Models');
-
