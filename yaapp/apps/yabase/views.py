@@ -1713,6 +1713,9 @@ def my_radios(request, radio_uuid=None):
         return api_response(data)
     elif request.method == 'DELETE' and radio_uuid is not None:
         radio = get_object_or_404(Radio, uuid=radio_uuid)
+        if radio.creator != request.user:
+            return HttpResponse(status=401)
+
         Radio.objects.delete_radio(radio)
         data = {
             'success': True
