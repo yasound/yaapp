@@ -1441,7 +1441,10 @@ def most_active_radios(request):
     radio_info = manager.most_popular(limit=limit, skip=skip)
     radio_data = []
     for i in radio_info:
-        r = Radio.objects.get(id=i['db_id'])
+        try:
+            r = Radio.objects.get(id=i['db_id'])
+        except Radio.DoesNotExist:
+            continue
         if genre and r.genre != genre:
             continue
         radio_data.append(r.as_dict(request_user=request.user))
