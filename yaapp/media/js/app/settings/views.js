@@ -47,7 +47,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
                 data.submit();
             },
             progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progress = parseInt( (data.loaded*100) / data.total, 10);
                 $progress.css('width', progress + '%');
             },
 
@@ -100,7 +100,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         $.post(url, form.serializeArray(), function() {
             colibri(gettext('Facebook settings saved'));
         }).error(function() {
-            colibri(gettext('Error while saving Facebook settings', 'colibri-error'));
+            colibri(gettext('Error while saving Facebook settings'), 'colibri-error');
         });
     },
     submitTwitter: function(e) {
@@ -110,7 +110,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         $.post(url, form.serializeArray(), function() {
             colibri(gettext('Twitter settings saved'));
         }).error(function() {
-            colibri(gettext('Error while saving Twitter settings', 'colibri-error'));
+            colibri(gettext('Error while saving Twitter settings'), 'colibri-error');
         });
     },
 

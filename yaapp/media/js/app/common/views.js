@@ -903,4 +903,3 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         }
     }
 });
-
