@@ -1566,7 +1566,7 @@ input::-webkit-input-placeholder {
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
-    
+
 }
 
 .like-comment {
@@ -1650,6 +1650,11 @@ input::-webkit-input-placeholder {
     float:right;
     margin-right:5px;
     margin-bottom:5px;
+    display:none;
+}
+
+.wall-event:hover .wall-event-remove button  {
+    display:block;
 }
 
 .wall-delete {
@@ -2708,7 +2713,7 @@ ul .radio-with-stats-cells li {
  * Favorite Login
  */
 
- 
+
 .favorites-login-container {
     text-align:center;
 }
@@ -2733,7 +2738,7 @@ ul .radio-with-stats-cells li {
     color:#575757;
     text-shadow:0px 1px white;
     font-weight:bold;
-    margin:55px 0px;   
+    margin:55px 0px;
 }
 
 /**
