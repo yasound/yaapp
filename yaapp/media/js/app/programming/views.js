@@ -332,6 +332,7 @@ Yasound.Views.UploadCell = Backbone.View.extend({
 
     start: function() {
         this.job = this.data.submit();
+        $.publish('/programming/upload_started');
         $('#start', this.el).hide();
         $('#stop', this.el).show();
     },
@@ -340,6 +341,8 @@ Yasound.Views.UploadCell = Backbone.View.extend({
         if (this.job) {
             this.job.abort();
             this.job = undefined;
+
+            $.publish('/programming/upload_stopped');
 
             $('#start', this.el).show();
             $('#stop', this.el).hide();
@@ -362,11 +365,12 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     onFinished: function(e, data) {
+        $.publish('/programming/upload_finished');
         this.remove();
     },
 
     onFailed: function(e, data) {
-
+        $.publish('/programming/upload_failed');
     },
 
     onProgress: function(e, data) {
@@ -386,6 +390,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 
     events: {
         "click #start-all-btn": "onStartAll",
+        "click #stop-all-btn": "onStopAll",
         "click #remove-all-btn": "onRemoveAll"
     },
 
@@ -453,6 +458,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     onStartAll: function (e) {
         e.preventDefault();
         $('#start-all-btn', this.el).hide();
+        $('#stop-all-btn', this.el).show();
         $('#remove-all-btn', this.el).show();
 
         _.each(this.views, function(view) {
@@ -460,9 +466,21 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         });
     },
 
+    onStopAll: function (e) {
+        e.preventDefault();
+        $('#start-all-btn', this.el).show();
+        $('#stop-all-btn', this.el).hide();
+        $('#remove-all-btn', this.el).show();
+
+        _.each(this.views, function(view) {
+            view.stop();
+        });
+    },
+
     onRemoveAll: function (e) {
         e.preventDefault();
         $('#start-all-btn', this.el).hide();
+        $('#stop-all-btn', this.el).hide();
         $('#remove-all-btn', this.el).hide();
         this.clear();
     }

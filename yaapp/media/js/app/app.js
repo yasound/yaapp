@@ -14,6 +14,7 @@ $(document).ready(function () {
     Yasound.App.isMobile = false;
     Yasound.App.hasRadios = g_has_radios;
     Yasound.App.stickyViews = [];
+    Yasound.App.uploadCount = 0;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
@@ -29,6 +30,25 @@ $(document).ready(function () {
             g_enable_push = false;
         }
     }
+
+    $.subscribe('/programming/upload_started', function () {
+        Yasound.App.uploadCount = Yasound.App.uploadCount + 1;
+    });
+    $.subscribe('/programming/upload_stopped', function () {
+        Yasound.App.uploadCount = Yasound.App.uploadCount - 1;
+    });
+    $.subscribe('/programming/upload_finished', function () {
+        Yasound.App.uploadCount = Yasound.App.uploadCount - 1;
+    });
+    $.subscribe('/programming/upload_failed', function () {
+        Yasound.App.uploadCount = Yasound.App.uploadCount - 1;
+    });
+
+    $(window).bind('beforeunload', function() {
+        if (Yasound.App.uploadCount > 0) {
+            return gettext('Unfinished uploads are pending, do you really want to leave Yasound?');
+        }
+    });
 
     /**
      * component initalization
