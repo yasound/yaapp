@@ -1371,7 +1371,7 @@ input::-webkit-input-placeholder {
 
 #minutes span {
     font-weight:bold;
-    font-size:36px;
+    font-size:30px;
     margin-top:40px;
     margin-bottom:15px;
 }
@@ -1566,7 +1566,6 @@ input::-webkit-input-placeholder {
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
-    
 }
 
 .like-comment {
