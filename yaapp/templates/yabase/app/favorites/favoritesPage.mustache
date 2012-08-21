@@ -8,6 +8,11 @@
 </div>
 {% else %}
 <div class='span12 no-margin'>
-{% include "yabase/app/landing.html" %}
+	<div class='favorites-login-container'>
+		<img src="/media/app/images/icon-star-big-blue.png">
+		<p class='favorites-login-p'>Connectez-vous pour afficher vos favoris.</p>
+		<button>Se connecter</button>
+		{% include "yabase/app/landing.html" %}
+	</div>
 </div>
 {% endif %}
