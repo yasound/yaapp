@@ -2780,7 +2780,6 @@ ul .radio-with-stats-cells li {
 }
 
 .yabutton-small {
-    display:block;
     height:27px;
 	padding:3px 10px;
 	background-image:url('../app/images/btn-more.png');
