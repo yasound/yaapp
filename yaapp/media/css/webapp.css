@@ -1549,6 +1549,7 @@ input::-webkit-input-placeholder {
 }
 
 .wall-event-message {
+    position:relative;
     border-bottom: 1px solid #eeeeee;
     margin-bottom: 12px;
 }
@@ -1565,6 +1566,7 @@ input::-webkit-input-placeholder {
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
+    
 }
 
 .like-comment {
@@ -1643,6 +1645,15 @@ input::-webkit-input-placeholder {
     color:white;
     line-height:20px;
     margin:5px;
+}
+.wall-event-remove button {
+    float:right;
+    margin-right:5px;
+    margin-bottom:5px;
+}
+
+.wall-delete {
+    display:none;
 }
 
 /**
@@ -2794,6 +2805,7 @@ ul .radio-with-stats-cells li {
     position:relative;
     text-shadow:1px 1px 1px white;
     font-size:12px;
+    vertical-align:middle;
 }
 
 .yabutton-small:hover {
