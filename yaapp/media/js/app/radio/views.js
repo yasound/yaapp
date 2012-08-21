@@ -176,7 +176,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
             // do not insert duplicated content
             return;
         }
-
+        wallEvent.set('creator', this.collection.radio.get('creator').owner);
         var view = new Yasound.Views.WallEvent({
             model: wallEvent
         });
