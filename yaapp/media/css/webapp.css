@@ -1865,6 +1865,7 @@ ul#notifications {
 .notification-container .text-notification {
     position:absolute;
     top:25px;
+    width:300px;
     font-size:17px;
     color:#434343;
     font-weight: normal;
