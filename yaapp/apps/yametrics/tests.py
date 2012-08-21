@@ -20,13 +20,13 @@ class TestGlobalMetricsManager(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user        
-    
+        self.user = user
+
     def test_inc_global_value(self):
         mm = GlobalMetricsManager()
         mm.inc_global_value("val1", 10)
         mm.inc_global_value("val2", 12)
-        
+
         now = datetime.datetime.now()
         year = now.strftime('%Y')
         month = now.strftime('%Y-%m')
@@ -35,7 +35,7 @@ class TestGlobalMetricsManager(TestCase):
         self.assertEquals(mm.get_metrics_for_timestamp(year)['val2'], 12)
         self.assertEquals(mm.get_metrics_for_timestamp(month)['val1'], 10)
         self.assertEquals(mm.get_metrics_for_timestamp(month)['val2'], 12)
-        
+
         mm.inc_global_value("val1", 10)
         mm.inc_global_value("val2", 12)
 
@@ -49,7 +49,7 @@ class TestGlobalMetricsManager(TestCase):
 
         mm.set_daily_value("daily_val1", 200)
         self.assertEquals(mm.get_metrics_for_timestamp(day)['daily_val1'], 200)
-        
+
     def test_sample_metrics(self):
         mm = GlobalMetricsManager()
         now = datetime.datetime.now()
@@ -58,10 +58,10 @@ class TestGlobalMetricsManager(TestCase):
 
         Radio(name='pizza', ready=True, creator=self.user).save()
         Radio(name='ben', ready=True, creator=self.user).save()
-        
+
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_radios'], 3)
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_users'], 1)
-        
+
     def test_graph_metrics(self):
         mm = GlobalMetricsManager()
         now = datetime.datetime.now()
@@ -78,8 +78,8 @@ class TestGlobalMetricsManager(TestCase):
         data = mm.get_graph_metrics(['key'])
         self.assertEquals(len(data), 5)
 
-        
-        
+
+
 class TestRadioMetricsManager(TestCase):
     def setUp(self):
         rm = RadioMetricsManager()
@@ -89,8 +89,8 @@ class TestRadioMetricsManager(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user        
-    
+        self.user = user
+
     def test_inc_radio_value(self):
         rm = RadioMetricsManager()
 
@@ -118,30 +118,43 @@ class TestRadioMetricsManager(TestCase):
 
         data = rm.filter(key='val1', id_only=True)
         self.assertEquals(data[0]['db_id'], 1)
-        
+
+    def test_remove_radio(self):
+        rm = RadioMetricsManager()
+
+        rm.inc_value(1, "val1", 10)
+        rm.inc_value(1, "val2", 12)
+
+        self.assertEquals(rm.metrics(1)['val1'], 10)
+        self.assertEquals(rm.metrics(1)['val2'], 12)
+
+        rm.remove_radio(1);
+
+        self.assertEquals(rm.metrics(1), None)
+
     def test_daily_popularity(self):
         rm = RadioMetricsManager()
 
         rm.inc_value(1, "daily_popularity", 10)
         self.assertEquals(rm.metrics(1)['daily_popularity'], 10)
-        
+
         rm.reset_daily_popularity()
         self.assertEquals(rm.metrics(1)['daily_popularity'], 0)
-        
-        
-        
+
+
+
 class TestTopMissingSongsManager(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user        
+        self.user = user
 
     def test_values(self):
         yabase_tests_utils.generate_playlist()
         SongMetadata.objects.all().update(yasound_song_id=None)
-        
+
         mm = TopMissingSongsManager()
         mm.calculate(100)
         docs = mm.all()
@@ -163,26 +176,26 @@ class TestTimedMetrics(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user   
+        self.user = user
         tm = TimedMetricsManager()
         tm.erase_metrics()
         um = UserMetricsManager()
         um.erase_metrics()
-        
+
     def test_slots(self):
         tm = TimedMetricsManager()
         self.assertEquals(tm.slot(0), tm.SLOT_24H)
         self.assertEquals(tm.slot(1), tm.SLOT_3D)
         self.assertEquals(tm.slot(2), tm.SLOT_3D)
         self.assertEquals(tm.slot(3), tm.SLOT_3D)
-        
+
         self.assertEquals(tm.slot(4), tm.SLOT_7D)
         self.assertEquals(tm.slot(5), tm.SLOT_7D)
         self.assertEquals(tm.slot(7), tm.SLOT_7D)
 
         self.assertEquals(tm.slot(8), tm.SLOT_15D)
         self.assertEquals(tm.slot(15), tm.SLOT_15D)
- 
+
         self.assertEquals(tm.slot(16), tm.SLOT_30D)
         self.assertEquals(tm.slot(20), tm.SLOT_30D)
 
@@ -190,10 +203,10 @@ class TestTimedMetrics(TestCase):
         self.assertEquals(tm.slot(40), tm.SLOT_90D)
 
         self.assertEquals(tm.slot(160), tm.SLOT_90D_MORE)
-        
+
     def test_async_animator_activity(self):
         async_activity(self.user.id, yametrics_settings.ACTIVITY_ANIMATOR)
-        
+
         tm = TimedMetricsManager()
         docs = tm.collection.find()
         self.assertEquals(docs.count(), 1)
@@ -232,16 +245,16 @@ class TestTimedMetrics(TestCase):
             else:
                 self.assertEquals(ttype, tm.SLOT_3D)
                 self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 1)
-                
+
     def test_messages_stats(self):
         async_activity(self.user.id, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
 
         um = UserMetricsManager()
         stats = um.messages_stats()
         self.assertEquals(stats.count(), 0)
-        
+
         um.update_messages_stats()
-        
+
         stats = um.messages_stats()
         self.assertEquals(stats.count(), 1)
         doc = stats[0]
@@ -256,11 +269,11 @@ class TestTimedMetrics(TestCase):
         doc = stats[0]
         self.assertEquals(doc['_id'], 1)
         self.assertEquals(doc['value'], 2)
-        
+
         async_activity(42, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
         um.update_messages_stats()
         stats = um.messages_stats()
-        
+
         self.assertEquals(stats.count(), 2)
         doc = stats[0]
         self.assertEquals(doc['_id'], 1)
@@ -269,7 +282,7 @@ class TestTimedMetrics(TestCase):
         doc = stats[1]
         self.assertEquals(doc['_id'], 2)
         self.assertEquals(doc['value'], 1)
-                
+
         mean = um.calculate_messages_per_user_mean()
         self.assertEquals(mean, 1.5)
 
@@ -279,9 +292,9 @@ class TestTimedMetrics(TestCase):
         um = UserMetricsManager()
         stats = um.likes_stats()
         self.assertEquals(stats.count(), 0)
-        
+
         um.update_likes_stats()
-        
+
         stats = um.likes_stats()
         self.assertEquals(stats.count(), 1)
         doc = stats[0]
@@ -296,11 +309,11 @@ class TestTimedMetrics(TestCase):
         doc = stats[0]
         self.assertEquals(doc['_id'], 1)
         self.assertEquals(doc['value'], 2)
-        
+
         async_activity(42, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
         um.update_likes_stats()
         stats = um.likes_stats()
-        
+
         self.assertEquals(stats.count(), 2)
         doc = stats[0]
         self.assertEquals(doc['_id'], 1)
@@ -309,13 +322,13 @@ class TestTimedMetrics(TestCase):
         doc = stats[1]
         self.assertEquals(doc['_id'], 2)
         self.assertEquals(doc['value'], 1)
-                
+
         mean = um.calculate_likes_per_user_mean()
-        self.assertEquals(mean, 1.5)        
-        
+        self.assertEquals(mean, 1.5)
+
     def test_buy_activity(self):
         async_activity(self.user.id, yametrics_settings.ACTIVITY_BUY_LINK, throttle=False)
-        
+
         tm = TimedMetricsManager()
         docs = tm.collection.find()
         self.assertEquals(docs.count(), 1)
@@ -328,7 +341,7 @@ class TestTimedMetrics(TestCase):
         self.assertEquals(user_doc[yametrics_settings.ACTIVITY_BUY_LINK], 2)
         self.assertEquals(user_doc['last_buy_link_activity_slot'], tm.SLOT_24H)
 
-        
+
 class TestRadioPopularityManager(TestCase):
     def setUp(self):
         manager = RadioPopularityManager()
@@ -339,41 +352,41 @@ class TestRadioPopularityManager(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user    
-        
-        
+        self.user = user
+
+
     def test_actions(self):
         manager = RadioPopularityManager()
-        radio_id = 1 
-        
+        radio_id = 1
+
         self.assertEquals(manager.radios.count(), 0)
         manager.action(radio_id, yametrics_settings.ACTIVITY_LISTEN)
         self.assertEquals(manager.radios.count(), 1)
         manager.action(radio_id, yametrics_settings.ACTIVITY_LISTEN)
         self.assertEquals(manager.radios.count(), 1)
-        
+
         activity = manager.radios.find()[0]['activity']
         self.assertGreater(activity, 0)
-        
+
     def test_compute_progression_cleans_useless_documents(self):
         manager = RadioPopularityManager()
         radio_id_1 = 1
         radio_id_2 = 2
         radio_id_3 = 3
-        
+
         self.assertEquals(manager.radios.count(), 0)
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
         self.assertEquals(manager.radios.count(), 1)
-        
+
         # check compute_progression removes documents without 'activity' or with 'activity' = 0
         manager.radios.insert({'db_id': radio_id_2, 'bla':123})
         self.assertEquals(manager.radios.count(), 2)
         manager.radios.insert({'db_id': radio_id_3, 'activity':0})
         self.assertEquals(manager.radios.count(), 3)
-        
+
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 1)
-        
+
     def test_compute_progression1(self):
         # simple case:
         #    activity is non zero
@@ -382,16 +395,16 @@ class TestRadioPopularityManager(TestCase):
         radio_id_1 = 1
         activity = 55
         last_activity = 20
-        
+
         self.assertEquals(manager.radios.count(), 0)
         manager.radios.insert({'db_id': radio_id_1, 'activity':activity, 'last_activity':last_activity})
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 1)
-        
-        
+
+
         doc = manager.radios.find({'db_id': radio_id_1})[0]
         self.assertEquals(doc['progression'], activity - last_activity)
-        
+
     def test_compute_progression2(self):
         # second case:
         #    activity is non zero
@@ -399,45 +412,45 @@ class TestRadioPopularityManager(TestCase):
         manager = RadioPopularityManager()
         radio_id_1 = 1
         activity = 55
-        
+
         self.assertEquals(manager.radios.count(), 0)
         manager.radios.insert({'db_id': radio_id_1, 'activity':activity})
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 1)
-        
-        
+
+
         doc = manager.radios.find({'db_id': radio_id_1})[0]
         self.assertEquals(doc['progression'], activity)
-        
+
     def test_most_popular(self):
         manager = RadioPopularityManager()
         radio_id_1 = 1
         radio_id_2 = 2
         radio_id_3 = 3
         radio_id_4 = 4
-        
+
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 4)
-        
-        
+
+
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
-        
-        
+
+
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
@@ -446,20 +459,20 @@ class TestRadioPopularityManager(TestCase):
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
-        
+
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 4)
-        
+
         most_popular = manager.most_popular(db_only=False)
         self.assertEquals(most_popular.count(True), 4)
         doc0 = most_popular[0]
@@ -469,19 +482,19 @@ class TestRadioPopularityManager(TestCase):
         self.assertGreaterEqual(doc0['progression'], doc1['progression'])
         self.assertGreaterEqual(doc1['progression'], doc2['progression'])
         self.assertGreaterEqual(doc2['progression'], doc3['progression'])
-        
+
         most_popular = manager.most_popular(limit=2, db_only=False)
         self.assertEquals(most_popular.count(True), 2)
-        
+
         most_popular = manager.most_popular(skip=1, db_only=False)
         self.assertEquals(most_popular.count(True), 3)
         self.assertEquals(doc1, most_popular[0])
-        
+
         most_popular = manager.most_popular(skip=1, limit=2, db_only=False)
         self.assertEquals(most_popular.count(True), 2)
         self.assertEquals(doc1, most_popular[0])
         self.assertEquals(doc2, most_popular[1])
-        
+
     def test_settings(self):
         manager = RadioPopularityManager()
         factors = {
@@ -491,22 +504,51 @@ class TestRadioPopularityManager(TestCase):
                    yametrics_settings.ACTIVITY_SHARE: manager.settings.find({'name':yametrics_settings.ACTIVITY_SHARE})[0]['value'],
                    yametrics_settings.ACTIVITY_ADD_TO_FAVORITES: manager.settings.find({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES})[0]['value']
                    }
-        
+
         # test RadioPopularityManager.action_score_coeff()
         for k in factors:
             self.assertEqual(factors[k], manager.action_score_coeff(k))
-            
-            
+
+
         # test RadioPopularityManager.update_coeff_doc()
         doc = manager.settings.find()[0]
         coeff_id = str(doc['_id'])
         val = 123
         doc['value'] = val
         manager.update_coeff_doc(coeff_id, doc)
-        
+
         doc = manager.settings.find({'_id': ObjectId(coeff_id)})[0]
         self.assertEquals(doc['value'], val)
-        
+
+    def test_remove_radio(self):
+        manager = RadioPopularityManager()
+        radio_id_1 = 1
+        radio_id_2 = 2
+        radio_id_3 = 3
+        radio_id_4 = 4
+
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
+
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_2, yametrics_settings.ACTIVITY_LISTEN)
+
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+        manager.action(radio_id_3, yametrics_settings.ACTIVITY_LISTEN)
+
+        manager.action(radio_id_4, yametrics_settings.ACTIVITY_LISTEN)
+
+        manager.compute_progression()
+        self.assertEquals(manager.radios.count(), 4)
+
+        manager.remove_radio(radio_id_1)
+        self.assertEquals(manager.radios.count(), 3)
+
+
+
 class TestAbuseManager(TestCase):
     def setUp(self):
         manager = AbuseManager()
@@ -516,19 +558,19 @@ class TestAbuseManager(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user    
-        
-        
+        self.user = user
+
+
     def test_report_abuse(self):
         radio = Radio.objects.radio_for_user(self.user)
         wall_event = WallEvent(radio=radio, type=yabase_settings.EVENT_MESSAGE, text='hi, world', user=self.user)
-        
+
         manager = AbuseManager()
         manager.report_abuse(sender=self.user, wall_event=wall_event)
-        
+
         abuses = manager.all()
         self.assertEquals(abuses.count(), 1)
-        
+
         results = [a for a in abuses]
         abuse = results[0]
         self.assertEquals(abuse.get('db_id'), wall_event.id)
@@ -536,9 +578,8 @@ class TestAbuseManager(TestCase):
         self.assertEquals(abuse.get('sender'), self.user.id)
         self.assertEquals(abuse.get('user'), self.user.id)
         self.assertEquals(abuse.get('text'), wall_event.text)
-        
-        
+
+
         manager.delete(abuse.get('_id'))
         abuses = manager.all()
         self.assertEquals(abuses.count(), 0)
-        

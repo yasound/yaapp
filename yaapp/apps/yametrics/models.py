@@ -22,15 +22,15 @@ class GlobalMetricsManager():
         self.db = settings.MONGO_DB
         self.metrics_glob = self.db.metrics.glob
         self.metrics_glob.ensure_index("timestamp", unique=True)
-        
+
     def _get_hour_timestamp(self):
         now = datetime.datetime.now()
         return now.strftime('%Y-%m-%d-%H:00')
-    
+
     def _get_day_timestamp(self):
         now = datetime.datetime.now()
         return now.strftime('%Y-%m-%d')
-    
+
     def _get_month_timestamp(self):
         now = datetime.datetime.now()
         return now.strftime('%Y-%m')
@@ -38,13 +38,13 @@ class GlobalMetricsManager():
     def _get_year_timestamp(self):
         now = datetime.datetime.now()
         return now.strftime('%Y')
-    
+
     def _generate_timestamps(self):
         return [self._get_hour_timestamp(),
                 self._get_day_timestamp(),
                 self._get_month_timestamp(),
                 self._get_year_timestamp()]
-    
+
     def _generate_past_month_timestamps(self, start_date=None):
         if start_date is None:
             start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
@@ -58,13 +58,13 @@ class GlobalMetricsManager():
         if start_date is None:
             start_date = datetime.datetime.now()
         timestamps = []
-        
+
         day = start_date + datetime.timedelta(days=-(90-1))
         for dt in rrule.rrule(rrule.DAILY, dtstart=day, until=start_date):
             timestamps.append(dt.strftime('%Y-%m-%d'))
 
         return timestamps
-    
+
     def _generate_past_year_timestamps(self, start_date=None):
         if start_date is None:
             start_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
@@ -76,10 +76,10 @@ class GlobalMetricsManager():
 
     def erase_global_metrics(self):
         self.metrics_glob.drop()
-        
+
     def inc_global_value(self, key, value):
         collection = self.metrics_glob
-        
+
         timestamps = self._generate_timestamps()
         for timestamp in timestamps:
             collection.update({
@@ -109,7 +109,7 @@ class GlobalMetricsManager():
     def get_metrics_for_timestamp(self, timestamp):
         collection = self.metrics_glob
         return collection.find_one({'timestamp': timestamp})
-    
+
     def get_current_metrics(self):
         collection = self.metrics_glob
         timestamps = self._generate_timestamps()
@@ -119,7 +119,7 @@ class GlobalMetricsManager():
             if metric:
                 metrics.append(metric)
         return metrics
-    
+
     def get_global_metrics(self):
         collection = self.metrics_glob
         timestamps = range(2012, 2020)
@@ -129,8 +129,8 @@ class GlobalMetricsManager():
             if metric:
                 metrics.append(metric)
         return metrics
-        
-    
+
+
     def get_past_month_metrics(self):
         collection = self.metrics_glob
         timestamps = self._generate_past_month_timestamps()
@@ -140,7 +140,7 @@ class GlobalMetricsManager():
             if metric:
                 metrics.append(metric)
         return metrics
-      
+
     def get_past_year_metrics(self):
         collection = self.metrics_glob
         timestamps = self._generate_past_year_timestamps()
@@ -149,8 +149,8 @@ class GlobalMetricsManager():
             metric = collection.find_one({'timestamp': timestamp})
             if metric:
                 metrics.append(metric)
-        return metrics    
-    
+        return metrics
+
     def get_graph_metrics(self, keys):
         collection = self.metrics_glob
         timestamps = self._generate_graph_timestamps()
@@ -165,11 +165,11 @@ class GlobalMetricsManager():
         }, {
             'timestamp': '-1'
         }]
-        
+
         for item in data:
             for key in keys:
                 item[key] = 0
-        
+
         current_timestamp = 0
         for i, timestamp in enumerate(timestamps):
             if i ==  len(timestamps)-15:
@@ -187,14 +187,14 @@ class GlobalMetricsManager():
                     if key in metric:
                         value = metric[key]
                         data[current_timestamp][key] = data[current_timestamp][key] + value
-        return data    
-      
+        return data
+
 class TopMissingSongsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.topmissingsongs = self.db.metrics.topmissingsongs
         self.topmissingsongs.ensure_index("db_id", unique=True)
-        
+
     def calculate(self, limit=100):
         collection = self.topmissingsongs
         collection.drop()
@@ -219,17 +219,17 @@ class RadioMetricsManager():
         self.db = settings.MONGO_DB
         self.radios = self.db.metrics.radios
         self.radios.ensure_index("db_id", unique=True)
-    
+
     def erase_metrics(self):
         self.radios.drop()
-        
+
     def inc_value(self, radio_id, key, value):
         collection = self.radios
-        collection.update({"db_id": radio_id}, 
-                          {"$inc": {key: value}}, 
+        collection.update({"db_id": radio_id},
+                          {"$inc": {key: value}},
                           upsert=True,
                           safe=True)
-    
+
     def metrics(self, radio_id):
         """
         return metrics for given radio
@@ -237,7 +237,7 @@ class RadioMetricsManager():
         collection = self.radios
         metric = collection.find_one({'db_id': radio_id})
         return metric
-    
+
     def filter(self, key='db_id', id_only=True, limit=5):
         collection = self.radios
         if id_only:
@@ -248,10 +248,13 @@ class RadioMetricsManager():
     def reset_daily_popularity(self):
         collection = self.radios
         collection.update({}, {'$set': {'daily_popularity': 0}}, multi=True)
-        
-        
-        
-        
+
+    def remove_radio(self, radio_id):
+        collection = self.radios
+        collection.remove({'db_id': radio_id }, safe=True)
+
+
+
 
 class RadioPopularityManager():
     def __init__(self):
@@ -260,7 +263,7 @@ class RadioPopularityManager():
         self.radios.ensure_index("db_id", unique=True)
         self.settings = self.db.metrics.radio_popularity_settings
         self.settings.ensure_index("name", unique=True)
-        
+
         if self.settings.find({'name':yametrics_settings.ACTIVITY_LISTEN}).count() == 0:
             self.settings.insert({'name':yametrics_settings.ACTIVITY_LISTEN,'value':1})
         if self.settings.find({'name':yametrics_settings.ACTIVITY_SONG_LIKE}).count() == 0:
@@ -276,35 +279,35 @@ class RadioPopularityManager():
 
     def drop(self):
         self.radios.drop()
-        
+
     def drop_settings(self):
         self.settings.drop()
-        
+
     def most_popular(self, limit=10, skip=0, db_only=True):
         collection = self.radios
         if db_only:
             return collection.find({}, {'db_id': True}).sort([('progression', DESCENDING)]).skip(skip).limit(limit)
         else:
             return collection.find().sort([('progression', DESCENDING)]).skip(skip).limit(limit)
-            
+
     def action(self, radio_id, activity_type):
         inc = self.settings.find({'name':activity_type})[0]['value']
-            
+
         collection = self.radios
-        collection.update({"db_id": radio_id}, 
-                          {"$inc": {'activity': inc}}, 
+        collection.update({"db_id": radio_id},
+                          {"$inc": {'activity': inc}},
                           upsert=True,
                           safe=True)
-        
-        
+
+
     def action_score_coeff(self, activity_type):
         factor = self.settings.find({'name':activity_type})[0]['value']
         return factor
-    
+
     def coeff_documents(self):
         docs = self.settings.find()
         return docs
-    
+
     def update_coeff_doc(self, coeff_id, new_doc):
         if isinstance(coeff_id, str) or isinstance(coeff_id, unicode):
             coeff_id = ObjectId(coeff_id)
@@ -314,13 +317,13 @@ class RadioPopularityManager():
             return
         if val < 0:
             return
-        
+
         self.settings.update({'_id':coeff_id}, new_doc)
-        
+
     def compute_progression(self):
         collection = self.radios
         collection.remove({'$or': [{'activity': {'$exists': False, }}, {'activity': 0}] })
-        
+
         docs = collection.find()
         for d in docs:
             activity = d['activity']
@@ -329,33 +332,34 @@ class RadioPopularityManager():
             last_activity = activity
             activity = 0
             collection.update({'db_id': d['db_id']}, {'$set': {'progression': new_progression, 'activity': activity, 'last-activity': last_activity} })
-            
-            
 
-        
+    def remove_radio(self, radio_id):
+        collection = self.radios
+        collection.remove({'db_id': radio_id }, safe=True)
+
 class UserMetricsManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.metrics.users
         self.collection.ensure_index("db_id", unique=True)
-    
+
     def erase_metrics(self):
         self.collection.drop()
         self.db.metrics.messages_stats.drop()
         self.db.metrics.likes_stats.drop()
-        
+
     def inc_value(self, user_id, key, value):
-        self.collection.update({"db_id": user_id}, 
-                               {"$inc": {key: value}}, 
+        self.collection.update({"db_id": user_id},
+                               {"$inc": {key: value}},
                                upsert=True,
                                safe=True)
-        
+
     def set_value(self, user_id, key, value):
-        self.collection.update({"db_id": user_id}, 
-                               {"$set": {key: value}}, 
+        self.collection.update({"db_id": user_id},
+                               {"$set": {key: value}},
                                upsert=True,
                                safe=True)
-        
+
     def get_value(self, user_id, key):
         doc = self.get_doc(user_id)
         try:
@@ -364,13 +368,13 @@ class UserMetricsManager():
             return None
     def get_doc(self, user_id):
         return self.collection.find_one({'db_id': user_id})
-    
+
     def all(self):
         return self.collection.find()
-    
+
     def update_messages_stats(self):
         output = self.db.metrics.messages_stats.name
-        
+
         map_func = Code("""
         function() {
             if (this.wall_message_activity) {
@@ -378,7 +382,7 @@ class UserMetricsManager():
             }
         }
 """)
-        
+
         reduce_func = Code("""
         function(key, values) {
             var total = 0;
@@ -389,7 +393,7 @@ class UserMetricsManager():
         }
 """)
         self.collection.map_reduce(map_func, reduce_func, output)
-    
+
     def calculate_messages_per_user_mean(self):
         docs = self.db.metrics.messages_stats.find()
         users_messages = 0.0
@@ -403,22 +407,22 @@ class UserMetricsManager():
         if user_count > 0:
             mean = users_messages / user_count
         return mean
-    
+
     def messages_stats(self):
         """
         return docs like :
-        
-        {'_id':20, 'value': 12} 
-        
+
+        {'_id':20, 'value': 12}
+
         which means :
-        
+
         12 users have posted 20 messages
         """
         return self.db.metrics.messages_stats.find()
-    
+
     def update_likes_stats(self):
         output = self.db.metrics.likes_stats.name
-        
+
         map_func = Code("""
         function() {
             if (this.song_like_activity) {
@@ -426,7 +430,7 @@ class UserMetricsManager():
             }
         }
 """)
-        
+
         reduce_func = Code("""
         function(key, values) {
             var total = 0;
@@ -437,7 +441,7 @@ class UserMetricsManager():
         }
 """)
         self.collection.map_reduce(map_func, reduce_func, output)
-    
+
     def calculate_likes_per_user_mean(self):
         docs = self.db.metrics.likes_stats.find()
         users_likes = 0.0
@@ -451,19 +455,19 @@ class UserMetricsManager():
         if user_count > 0:
             mean = users_likes / user_count
         return mean
-    
+
     def likes_stats(self):
         """
         return docs like :
-        
-        {'_id':20, 'value': 12} 
-        
+
+        {'_id':20, 'value': 12}
+
         which means :
-        
+
         12 users have likes 20 songs
         """
-        return self.db.metrics.likes_stats.find()    
-class TimedMetricsManager():       
+        return self.db.metrics.likes_stats.find()
+class TimedMetricsManager():
     SLOT_24H        = '24h'
     SLOT_3D         = '3d'
     SLOT_7D         = '7d'
@@ -476,22 +480,22 @@ class TimedMetricsManager():
         self.db = settings.MONGO_DB
         self.collection = self.db.metrics.timed
         self.collection.ensure_index("type", unique=True)
-    
+
     def erase_metrics(self):
         self.collection.drop()
-        
+
     def inc_value(self, ttype, key, value):
-        self.collection.update({"type": ttype}, 
-                               {"$inc": {key: value}}, 
+        self.collection.update({"type": ttype},
+                               {"$inc": {key: value}},
                                upsert=True,
                                safe=True)
-        
+
     def set_value(self, ttype, key, value):
-        self.collection.update({"type": ttype}, 
-                               {"$set": {key: value}}, 
+        self.collection.update({"type": ttype},
+                               {"$set": {key: value}},
                                upsert=True,
                                safe=True)
-        
+
     def get_value(self, ttype, key):
         doc = self.collection.find_one({'type': ttype})
         try:
@@ -501,7 +505,7 @@ class TimedMetricsManager():
 
     def all(self):
         return self.collection.find()
-        
+
     def slot(self, days):
         if days < 1:
             return self.SLOT_24H
@@ -519,15 +523,15 @@ class TimedMetricsManager():
             return self.SLOT_90D_MORE
 
 
-class AbuseManager():       
+class AbuseManager():
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.abuse
         self.collection.ensure_index("db_id")
-    
+
     def drop(self):
         self.collection.drop()
-        
+
     def report_abuse(self, sender, wall_event):
         now = datetime.datetime.now()
         doc = {
@@ -538,22 +542,22 @@ class AbuseManager():
             'user': wall_event.user.id,
             'text': wall_event.text
         }
-        
-        self.collection.update({"db_id": wall_event.id}, 
-                               doc, 
+
+        self.collection.update({"db_id": wall_event.id},
+                               doc,
                                upsert=True,
-                               safe=True)   
-    
+                               safe=True)
+
     def delete(self, id):
         self.collection.remove(ObjectId(id), safe=True)
-        
+
     def get(self, id):
         return self.collection.find_one({'_id': ObjectId(id)})
-    
+
     def all(self):
         return self.collection.find()
-        
-        
+
+
 ## Event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
@@ -579,22 +583,22 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
     we_type = wall_event.type
     if we_type == yabase_settings.EVENT_MESSAGE:
         async_inc_global_value.delay('new_wall_messages', 1)
-        
+
         user = wall_event.user
         if not user.is_anonymous():
             async_activity.delay(user.id, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
-            
+
         async_radio_activity(wall_event.radio.id, yametrics_settings.ACTIVITY_WALL_MESSAGE)
-        
+
     elif we_type == yabase_settings.EVENT_LIKE:
         async_inc_global_value.delay('new_song_like', 1)
 
         user = wall_event.user
         if not user.is_anonymous():
             async_activity.delay(user.id, yametrics_settings.ACTIVITY_SONG_LIKE, throttle=False)
-            
+
         async_radio_activity(wall_event.radio.id, yametrics_settings.ACTIVITY_SONG_LIKE)
-    
+
     async_inc_radio_value.delay(wall_event.radio.id, 'daily_popularity', 1)
 
 def new_user_profile_handler(sender, instance, created, **kwargs):
@@ -604,6 +608,15 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
 def new_radio_handler(sender, instance, created, **kwargs):
     if created:
         async_inc_global_value.delay('new_radios', 1)
+
+def radio_deleted_handler(sender, instance, created=None, **kwargs):
+    radio = instance
+    rp = RadioPopularityManager()
+    rp.remove_radio(radio.id)
+
+    rm = RadioMetricsManager()
+    rm.remove_radio(radio.id)
+
 
 def dislike_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_dislike', 1)
@@ -618,7 +631,7 @@ def favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_favorite_radio', 1)
     async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_ADD_TO_FAVORITES)
-    
+
 def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_not_favorite_radio', 1)
 
@@ -640,18 +653,18 @@ def new_moderator_abuse_msg_activity(sender, user, wall_event, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_ABUSE_MSG, throttle=False)
     async_inc_global_value.delay('new_moderator_abuse_msg_activity', 1)
     async_report_abuse.delay(user, wall_event)
-    
-    
+
+
 def new_share(sender, radio, user, share_type, **kwargs):
-    
+
     activity_key = 'share_%s_activity' % (share_type)
     async_activity.delay(user.id, activity_key, throttle=False)
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_SHARE, throttle=False)
-    
+
     async_inc_global_value.delay('new_share', 1)
     key = 'new_share_%s' % (str(share_type))
     async_inc_global_value.delay(key, 1)
-    
+
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_SHARE)
 
 def install_handlers():
@@ -660,6 +673,8 @@ def install_handlers():
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
     signals.post_save.connect(new_radio_handler, sender=Radio)
+    signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
+
     yabase_signals.dislike_radio.connect(dislike_radio_handler)
     yabase_signals.dislike_radio.connect(like_radio_handler)
     yabase_signals.dislike_radio.connect(neutral_like_radio_handler)
@@ -671,5 +686,5 @@ def install_handlers():
     yabase_signals.radio_shared.connect(new_share)
     yabase_signals.buy_link.connect(buy_link_handler)
     account_signals.new_device_registered.connect(new_device_registered)
-    
+
 install_handlers()
