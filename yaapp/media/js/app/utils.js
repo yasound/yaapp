@@ -67,7 +67,7 @@ Yasound.Utils.submitForm = function (options) {
     $.post(url, form.serializeArray(), function(data) {
         var success = data.success;
         if (!data.success) {
-            colibri(options.errorMessage, 'colibri-eror');
+            colibri(options.errorMessage, 'colibri-error');
             var errors = data.errors;
             if (errors) {
                 _.each(errors, function(value, key) {

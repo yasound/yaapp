@@ -59,6 +59,8 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
                     $('#modal-upload-error', that.el).modal('show');
                 } else {
                     var url = result.url;
+                    var now = moment();
+                    url = url + '?' + now.unix();
                     $('#user-picture-image', that.el).attr('src', url);
                 }
                 $progress.css('width', '0%');

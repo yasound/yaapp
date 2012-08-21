@@ -39,6 +39,11 @@ body {
  {
     float:left;
 }
+
+.error-msg {
+    color:#F85E5E;
+}
+
 /**
  * Header
  */
@@ -229,6 +234,7 @@ body {
     padding:0px;
     margin-top:4px;
     border:none;
+    border-radius:3px;
     box-shadow: 0px 1px 1px #202020;
 }
 
@@ -1262,15 +1268,15 @@ input::-webkit-input-placeholder {
 
 #connected-users {
     float:left;
-    width: 436px;
+    width: 443px;
     height: 82px;
-    margin: 40px 54px 0px 35px;
+    margin: 30px 54px 0px 35px;
 	position:relative;
 }
 
 
 #text-users {
-    display:inline-block;
+    display:block;
     float:left;
     color:#757b7d;
     font-size:14px;
@@ -1279,14 +1285,17 @@ input::-webkit-input-placeholder {
 }
 
 #img-users {
-    width:340px;
-    display:inline-block;
-    padding-left:20px;
-    padding-top:5px;
+    display:block;
+    margin-left:20px;
+    margin-top:5px;
 }
 
 #img-users span {
-    padding: 0px 5px 9px 0px;
+    display:block;
+    float:left;
+    margin-bottom:10px;
+    margin-right:8px;
+    text-align:center;
 }
 
 #img-users .individual-pictures {
@@ -1316,9 +1325,10 @@ input::-webkit-input-placeholder {
     border-radius:4px;
     text-align:center;
     color:#8d9699;
+    text-align:center;
     position:absolute;
-    bottom:0px;
-	left:300px;
+    bottom:-7px;
+	right:15px ;
 
     -webkit-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
     -moz-box-shadow:0px 1px 2px #1a1c1d, 0px 1px 1px #4f5252 inset;
@@ -1332,6 +1342,12 @@ input::-webkit-input-placeholder {
     box-shadow:0px 1px 5px #000, 0px 1px 1px #4f5252 inset;
 }
 
+#footer-button-text {
+    display:block;
+    height:30px;
+    width:113px;
+    text-align:center;
+}
 
 #footer-button span {
     display:inline-block;
@@ -1857,7 +1873,10 @@ ul#notifications {
     font-weight: normal;
 }
 
-.notifications-heart {
+.notifications-heart
+,.type_notif_song_liked
+,.type_notif_friend_created_radio
+{
     height:47px;
     width:47px;
     background-repeat: no-repeat;
@@ -1865,6 +1884,35 @@ ul#notifications {
     left:20px;
     top:15px;
     background-image:url('../app/images/notifications/notifications-heart-icon.png');
+}
+
+.notifications-star
+,.type_notif_song_liked
+,.type_notif_radio_in_favorites
+,.type_notif_message_from_yasound
+ {
+    height:47px;
+    width:47px;
+    background-repeat: no-repeat;
+    position:absolute;
+    left:20px;
+    top:15px;
+    background-image:url('../app/images/notifications/notifications-star-icon.png');
+}
+
+.notifications-balloon
+,.type_notif_message_from_user
+,.type_notif_user_in_radio
+,.type_notif_friend_in_radio
+,.type_notif_friend_online
+ {
+    height:47px;
+    width:47px;
+    background-repeat: no-repeat;
+    position:absolute;
+    left:20px;
+    top:15px;
+    background-image:url('../app/images/notifications/notifications-balloon-icon.png');
 }
 
 .notification-container .close-icon {
@@ -1894,6 +1942,10 @@ ul#notifications {
     background-color:#f4f4f4;
 }
 
+.notifications-container #mark-all-read-btn {
+    margin-top:46px;
+    margin-right:20px;
+}
 
 /**
  * User profile
@@ -2364,7 +2416,12 @@ ul .radio-with-stats-cells li {
     font-size:42px;
     padding:38px 0px 38px 31px;
     border-bottom: 1px solid #e3e3e3;
- }
+}
+
+.settings-container #programming-btn {
+    margin-top:46px;
+    margin-right:20px;
+}
 
 #settings-nav {
     margin:0px;

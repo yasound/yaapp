@@ -540,6 +540,10 @@ class RadioManager(models.Manager):
             radio.tags.add(*to_add)
         logger.info('done')
 
+    def delete_radio(self, radio):
+        radio.current_song = None
+        radio.save()
+        radio.delete()
 
 
 class Radio(models.Model):

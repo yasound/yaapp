@@ -181,6 +181,7 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/public_stats/$', 'yabase.views.public_stats'),
     url(r'^api/v1/my_radios/$', 'yabase.views.my_radios'),
+    url(r'^api/v1/my_radios/(?P<radio_uuid>\S+)/$', 'yabase.views.my_radios'),
 
 
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
