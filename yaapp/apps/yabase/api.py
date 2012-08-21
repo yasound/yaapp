@@ -105,14 +105,13 @@ class PlaylistResource(ModelResource):
         allowed_methods = []
 
 class RadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False)
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = Authorization()
@@ -183,14 +182,13 @@ class PublicRadioResource(ModelResource):
     
 
 class SearchRadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'search_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -218,14 +216,13 @@ class SearchRadioResource(ModelResource):
         return self.get_object_list(request)
     
 class SearchRadioByUserResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'search_radio_by_user'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -250,14 +247,13 @@ class SearchRadioByUserResource(ModelResource):
         return self.get_object_list(request)
     
 class SearchRadioBySongResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
 
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'search_radio_by_song'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -285,14 +281,13 @@ class SelectedRadioResource(ModelResource):
     """
     Display radios in 'selection' menu
     """
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'selected_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -317,14 +312,13 @@ class SelectedWebRadioResource(ModelResource):
     """
     Display radios in 'selection' webapp homepage
     """
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'selected_web_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
@@ -345,14 +339,13 @@ class SelectedWebRadioResource(ModelResource):
         return obj_list
         
 class TopRadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'top_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -376,14 +369,13 @@ class TopRadioResource(ModelResource):
         return radios
 
 class FavoriteRadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -404,14 +396,13 @@ class FavoriteRadioResource(ModelResource):
         return object_list.filter(radiouser__user=user, radiouser__favorite=True)
 
 class UserFavoriteRadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -434,14 +425,13 @@ class UserFavoriteRadioResource(ModelResource):
 
 
 class FriendRadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
 
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'friend_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -462,16 +452,14 @@ class FriendRadioResource(ModelResource):
         return object_list.filter(creator__in=user.userprofile.friends.all())
     
 class TechTourRadioResource(ModelResource):
-    playlists = fields.ManyToManyField('yabase.api.PlaylistResource', 'playlists', full=False)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'techtour_radio'
-        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'playlists', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
-#        authentication = YasoundApiKeyAuthentication()
         authentication = Authentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
@@ -869,39 +857,6 @@ class EditSongResource(ModelResource):
         authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['put']
     
-    
-#YASOUND_SONG_ID_PARAM_NAME = 'yasound_song'
-#class AddSongResource(ModelResource):  
-#    class Meta:
-#        queryset = SongInstance.objects.all()
-#        resource_name = 'add_song'
-#        fields = ['frequency',
-#                  ]
-#        include_resource_uri = False
-#        authorization= Authorization()
-#        authentication = YasoundApiKeyAuthentication()
-#        allowed_methods = ['post']
-#        
-#    def obj_create(self, bundle, request=None, **kwargs):
-#        yasound_song_id = kwargs.pop(YASOUND_SONG_ID_PARAM_NAME)
-#        try:
-#            yasound_song = YasoundSong.objects.get(id=yasound_song_id)
-#        except YasoundSong.DoesNotExist:
-#            return None
-#        
-#        playlists = Playlist.filter(radio__creator=request.user)
-#        if playlists.count() == 0:
-#            return None
-#        playlist = playlists[0]
-#
-#        song_instance_resource = super(AddSongResource, self).obj_create(bundle, request, **kwargs)
-#        song_instance = song_instance_resource.obj
-#        song_instance.playlist = playlist
-#        
-#        song_instance.metadata.yasound_song = yasound_song
-#        song_instance.save()
-#        return song_instance_resource
-#        
 class SearchSongResource(ModelResource):  
     class Meta:
         playlist = None
