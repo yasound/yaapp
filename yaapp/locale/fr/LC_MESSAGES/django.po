@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-21 08:26+0200\n"
+"POT-Creation-Date: 2012-08-21 16:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -348,7 +348,7 @@ msgstr ""
 #: templates/newsletter/newsletter_historic.html:25
 #: templates/yabase/app/programming/addFromServer.mustache:17
 #: templates/yabase/app/programming/songInstances.mustache:13
-#: templates/yabase/app/programming/upload.mustache:14
+#: templates/yabase/app/programming/upload.mustache:15
 msgid "Action"
 msgstr "Action"
 
@@ -1199,7 +1199,7 @@ msgid "Remove all songs"
 msgstr "Supprimer tous les morceaux"
 
 #: templates/yabase/app/programming/songInstances.mustache:31
-#: templates/yabase/app/programming/upload.mustache:7
+#: templates/yabase/app/programming/upload.mustache:8
 msgid "Remove all"
 msgstr "Supprimer tous les morceaux"
 
@@ -1211,11 +1211,15 @@ msgstr "Voulez-vous vraiment supprimer tous les titres filtrés ?"
 msgid "Start all"
 msgstr "Tout démarrer"
 
-#: templates/yabase/app/programming/upload.mustache:12
+#: templates/yabase/app/programming/upload.mustache:7
+msgid "Stop all"
+msgstr "Tout arrêter"
+
+#: templates/yabase/app/programming/upload.mustache:13
 msgid "Filename"
 msgstr "Nom"
 
-#: templates/yabase/app/programming/upload.mustache:13
+#: templates/yabase/app/programming/upload.mustache:14
 msgid "Progress"
 msgstr "Progression"
 
