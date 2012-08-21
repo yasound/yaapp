@@ -303,8 +303,8 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'start', 'onStart', 'onStop', 'onRemove', 'onProgress', 'onFinished', 'onFailed');
-        this.jqXHR = undefined;
+        _.bindAll(this, 'render', 'start', 'stop', 'onStart', 'onStop', 'onRemove', 'onProgress', 'onFinished', 'onFailed');
+        this.job = undefined;
     },
 
     onClose: function() {
@@ -316,8 +316,6 @@ Yasound.Views.UploadCell = Backbone.View.extend({
 
     render: function(data, uuid) {
         $(this.el).html(ich.programmingUploadCellTemplate(data.files[0]));
-        $('#stop', this.el).attr('disabled', true);
-
         this.data = data;
         this.data.formData = {
             'response_format': 'json',
@@ -333,27 +331,29 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     start: function() {
-        this.jqXHR = this.data.submit();
+        this.job = this.data.submit();
+        $('#start', this.el).hide();
+        $('#stop', this.el).show();
     },
 
     stop: function () {
-        if (this.jqHXR) {
-            this.jqHXR.abort();
-            this.jqHXR = undefined;
+        if (this.job) {
+            this.job.abort();
+            this.job = undefined;
+
+            $('#start', this.el).show();
+            $('#stop', this.el).hide();
         }
     },
 
     onStart: function(e) {
         e.preventDefault();
         this.start();
-
-        $('#stop', this.el).attr('disabled', false);
     },
 
     onStop: function (e) {
         e.preventDefault();
         this.stop();
-        $('#stop', this.el).attr('disabled', true);
     },
 
     onRemove: function (e) {
@@ -418,6 +418,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         $('#file-upload', this.el).fileupload({
             dataType: 'json',
             add: function (e, data) {
+                $('#start-all-btn', that.el).show();
                 var view = new Yasound.Views.UploadCell({});
                 $('#upload-table', that.el).append(view.render(data, uuid).el);
                 that.views.push(view);
@@ -451,6 +452,9 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 
     onStartAll: function (e) {
         e.preventDefault();
+        $('#start-all-btn', this.el).hide();
+        $('#remove-all-btn', this.el).show();
+
         _.each(this.views, function(view) {
             view.start();
         });
@@ -458,6 +462,8 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 
     onRemoveAll: function (e) {
         e.preventDefault();
+        $('#start-all-btn', this.el).hide();
+        $('#remove-all-btn', this.el).hide();
         this.clear();
     }
 });
