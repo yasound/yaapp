@@ -83,8 +83,10 @@ class MyAccountsForm(BootstrapModelForm):
 
     def save(self):
         if "password1" in self.cleaned_data:
-            self.instance.user.set_password(self.cleaned_data['password1'])
-            self.instance.user.save()
+            password = self.cleaned_data['password1']
+            if len(password) > 0:
+                self.instance.user.set_password(self.cleaned_data['password1'])
+                self.instance.user.save()
 
 class MyNotificationsForm(BootstrapForm):
     fb_share_listen = forms.BooleanField(label=_("Listen"), required=False)
