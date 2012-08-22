@@ -209,8 +209,8 @@ body {
 
 #profile-box-container {
     position:absolute;
-    top:40px;
-    left:-140px;
+    top:45px;
+    left:-137px;
     display:block;
     width:282px;
     background-color:rgba(44, 46, 47, 0.99);
@@ -1371,7 +1371,7 @@ input::-webkit-input-placeholder {
 
 #minutes span {
     font-weight:bold;
-    font-size:36px;
+    font-size:30px;
     margin-top:40px;
     margin-bottom:15px;
 }
@@ -1566,7 +1566,10 @@ input::-webkit-input-placeholder {
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
+<<<<<<< HEAD
+=======
 
+>>>>>>> 2e3b19b2b80561c7613d163640b0621da26b26cd
 }
 
 .like-comment {
