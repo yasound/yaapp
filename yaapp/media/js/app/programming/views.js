@@ -6,7 +6,9 @@ Namespace('Yasound.Views');
 Yasound.Views.SongInstance = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        "click .remove": 'onRemove'
+        "click .remove": "onRemove",
+        "click .artist": "onArtist",
+        "click .album": "onAlbum"
     },
 
     initialize: function () {
@@ -26,6 +28,23 @@ Yasound.Views.SongInstance = Backbone.View.extend({
     onRemove: function (e) {
         e.preventDefault();
         this.model.destroy();
+    },
+
+    onArtist: function (e) {
+        e.preventDefault();
+        $('#artist-select').val(this.model.get('metadata__artist_name'));
+        $('#artist-select').trigger("liszt:updated");
+        $('#artist-select').trigger("change");
+        $('html, body').scrollTop(0);
+
+    },
+
+    onAlbum: function (e) {
+        e.preventDefault();
+        $('#album-select').val(this.model.get('metadata__album_name'));
+        $('#album-select').trigger("liszt:updated");
+        $('#album-select').trigger("change");
+        $('html, body').scrollTop(0);
     }
 });
 
