@@ -4,9 +4,9 @@
 <h2><a href='/app/profile/<% user_username %>/'><% user_name %></a></h2>
 {% if request.user.is_authenticated %}
 <div class='wall-event-remove'>
-    <button class='yabutton-small' id='report-abuse-btn' href="#">{% trans "report as abusive" %}</button>
+    <button class='yabutton-small' id='report-abuse-btn' href="#"><i class="icon-thumbs-down"></i> {% trans "report as abusive" %}</button>
     <%#creator%>
-    <button class='yabutton-small wall-delete' href="#" id='delete-btn'>{% trans "delete" %}</button>
+    <button class='yabutton-small wall-delete' href="#" id='delete-btn'><i class="icon-trash"></i> {% trans "delete" %}</button>
     <%/creator%>
 </div>
 {% endif %}
