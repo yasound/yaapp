@@ -1487,13 +1487,8 @@ input::-webkit-input-placeholder {
 }
 
 #webapp-radio-title {
-	width:210px;
 	overflow:hidden;
-}
-
-#webapp-radio-title h1 a {
-	width:210px;
-
+    margin-left:5px;
 }
 
 #webapp-radio p {
@@ -1531,7 +1526,6 @@ input::-webkit-input-placeholder {
 }
 
 #webapp-radio-title {
-    margin-left: 10px;
     text-align: center;
 }
 
@@ -1541,6 +1535,84 @@ input::-webkit-input-placeholder {
 
 #webapp-wall-input {
     margin-top: 24px;
+}
+
+#btn-favorite {
+    display:block;
+    position:relative;
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+    vertical-align:middle;
+    color:#58595C;
+    font-weight:bold;
+    text-shadow:1px 1px white;
+}
+
+#btn-favorite img {
+    position:absolute;
+    left:10px;
+    top:11px;
+}
+
+#btn-favorite span {
+    display:block;
+    margin-top:12px;
+    margin-left:25px;
+    font-size:15px;
+}
+
+#btn-favorite:hover {
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+}
+
+#btn-unfavorite {
+    display:block;
+    position:relative;
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+    vertical-align:middle;
+    color:#58595C;
+    font-weight:bold;
+    text-shadow:1px 1px white;
+}
+
+#btn-unfavorite img {
+    left:10px;
+    top:11px;
+    position:absolute;
+}
+
+#btn-unfavorite span {
+    display:block;
+    margin-top:12px;
+    margin-left:25px;
+    font-size:15px;
+}
+
+#btn-unfavorite:hover {
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
 }
 
 #wall {
