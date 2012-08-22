@@ -571,10 +571,14 @@ class UserProfile(models.Model):
                 'picture': self.picture_url,
                 'name': self.name,
                 'username': self.user.username,
-                'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
+                'bio_text': self.bio_text[:190] if self.bio_text is not None else None
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
+            data['permissions'] = [{
+                'create_radio': True
+            }]
+
 
         if self.can_give_personal_infos(request_user):
             if self.age is not None:
