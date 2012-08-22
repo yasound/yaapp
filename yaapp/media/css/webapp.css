@@ -1732,6 +1732,7 @@ input::-webkit-input-placeholder {
 .wall-event-remove button {
     float:right;
     margin-right:5px;
+    margin-top:12px;
     margin-bottom:5px;
     display:none;
 }
