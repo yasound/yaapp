@@ -33,9 +33,6 @@ import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 from django.db.models import F
 
-if yaapp_settings.ENABLE_PUSH:
-    from push import install_handlers
-    install_handlers()
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -1641,3 +1638,8 @@ def install_handlers():
     signals.post_delete.connect(next_song_deleted, sender=NextSong)
     yabase_signals.new_current_song.connect(new_current_song_handler)
 install_handlers()
+
+
+if yaapp_settings.ENABLE_PUSH:
+    from push import install_handlers
+    install_handlers()

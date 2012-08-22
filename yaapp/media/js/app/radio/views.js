@@ -176,7 +176,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
             // do not insert duplicated content
             return;
         }
-
+        wallEvent.set('creator', this.collection.radio.get('creator').owner);
         var view = new Yasound.Views.WallEvent({
             model: wallEvent
         });
@@ -205,6 +205,11 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
             $(this.el).append(view.render().el);
             this.views.push(view);
         }
+    },
+
+    removeView: function(view) {
+        view.close();
+        this.views = _.without(this.views, view);
     }
 });
 
@@ -213,7 +218,9 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     tagName: 'li',
     className: 'wall-event',
     events: {
-        'click h2 a': 'selectUser'
+        'click h2 a': 'selectUser',
+        'click #report-abuse-btn': 'reportAbuse',
+        'click #delete-btn': 'deleteMessage'
     },
 
     initialize: function () {
@@ -249,6 +256,26 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         event.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.model.get('user_username') + '/', {
             trigger: true
+        });
+    },
+
+    reportAbuse: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-report-abuse').modal('show');
+        $('#modal-report-abuse .btn-primary').one('click', function () {
+            $('#modal-report-abuse').modal('hide');
+            that.model.reportAbuse();
+        });
+    },
+
+    deleteMessage: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-delete-message').modal('show');
+        $('#modal-delete-message .btn-primary').one('click', function () {
+            $('#modal-delete-message').modal('hide');
+            that.model.deleteMessage();
         });
     }
 });
@@ -342,6 +369,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     wallPosted: undefined,
 
     initialize: function () {
+        _.bindAll(this, 'removeWallEvent');
         this.model.bind('change', this.render, this);
     },
 
@@ -445,6 +473,9 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             Yasound.App.Router.pushManager.on('wall_event', function (msg) {
                 that.wallEvents.reset(msg);
             });
+            Yasound.App.Router.pushManager.on('wall_event_deleted', function (msg) {
+                that.removeWallEvent(msg);
+            });
         }
 
         this.intervalId = setInterval(function () {
@@ -455,6 +486,20 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         }, 10000);
 
         return this;
+    },
+
+    removeWallEvent: function(message) {
+        var viewToRemove;
+        _.each(this.wallEventsView.views, function(view) {
+            if (view.model.get('id') === message.id) {
+                viewToRemove = view;
+            }
+        });
+
+        if (!viewToRemove) {
+            return;
+        }
+        this.wallEventsView.removeView(viewToRemove);
     }
 });
 

@@ -2,10 +2,12 @@
 <div class='wall-event-message'>
 <img class='user' src='<% user_picture %>' width='48px' height='48px'/>
 <h2><a href='/app/profile/<% user_username %>/'><% user_name %></a></h2>
+<div class='wall-event-remove'>
+    <button class='yabutton-small' id='report-abuse-btn' href="#">report as spam</button>
+    <%#creator%>
+    <button class='yabutton-small wall-delete' href="#" id='delete-btn'>delete</button>
+    <%/creator%>
+</div>
 <p><% text %></p>
 <div class='date'><% formatted_start_date %></div>
-<div class='wall-event-remove'>
-	<button class='yabutton-small' href="#">report as spam</button>
-	<button class='yabutton-small wall-delete' href="#">delete</button>
-</div>
 </div>

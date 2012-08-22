@@ -281,7 +281,7 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
         e.preventDefault();
         var that = this;
         $('#modal-remove-all', this.el).modal('show');
-        $('#modal-remove-all .btn-primary', this.el).on('click', function () {
+        $('#modal-remove-all .btn-primary', this.el).one('click', function () {
             $('#modal-remove-all', this.el).modal('hide');
             that.songInstances.removeAll(function() {
                 that.songInstancesView.clear();
