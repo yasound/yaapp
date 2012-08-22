@@ -1566,10 +1566,6 @@ input::-webkit-input-placeholder {
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
-<<<<<<< HEAD
-=======
-
->>>>>>> 2e3b19b2b80561c7613d163640b0621da26b26cd
 }
 
 .like-comment {
@@ -1612,10 +1608,14 @@ input::-webkit-input-placeholder {
 
 .song-comment p,
 .wall-event-message .song-comment .date-comment,
-.wall-event-message .like-comment .date-comment {
+.wall-event-message .date-like {
     float:left;
     clear:both;
     margin-left:67px;
+}
+
+.wall-event-message .date-like {
+    color:#97989B;
 }
 
 #webapp-track-container {
@@ -2743,6 +2743,7 @@ ul .radio-with-stats-cells li {
     font-weight:bold;
     margin:55px 0px;
 }
+
 
 .friends-login-container {
     text-align:center;
