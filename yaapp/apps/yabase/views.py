@@ -1571,7 +1571,7 @@ def my_programming_artists(request, radio_uuid):
         data = json.loads(request.raw_post_data)
         action = data.get('action')
         if action == 'delete':
-            artist_name = data.get('artist_name')
+            artist_name = data.get('name')
             tracks = radio.programming(artists=[artist_name])
             for track in tracks:
                 delete_song_instance(request, track.get('id'))
@@ -1591,7 +1591,7 @@ def my_programming_albums(request, radio_uuid=None):
         data = json.loads(request.raw_post_data)
         action = data.get('action')
         if action == 'delete':
-            album_name = data.get('album_name')
+            album_name = data.get('name')
             tracks = radio.programming(albums=[album_name])
             for track in tracks:
                 delete_song_instance(request, track.get('id'))

@@ -1677,7 +1677,7 @@ class TestProgramming(TestCase):
         url = reverse('yabase.views.my_programming_artists', args=[self.radio.uuid])
         data = {
             'action': 'delete',
-            'artist_name': 'artist-1'
+            'name': 'artist-1'
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
         self.assertEquals(response.status_code, 200)
@@ -1690,7 +1690,7 @@ class TestProgramming(TestCase):
         url = reverse('yabase.views.my_programming_artists', args=[self.radio.uuid])
         data = {
             'action': 'delete',
-            'artist_name': ''
+            'name': ''
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
         self.assertEquals(response.status_code, 200)
@@ -1724,7 +1724,7 @@ class TestProgramming(TestCase):
         url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
         data = {
             'action': 'delete',
-            'album_name': 'album-1'
+            'name': 'album-1'
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
         self.assertEquals(response.status_code, 200)
@@ -1735,7 +1735,7 @@ class TestProgramming(TestCase):
         url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
         data = {
             'action': 'delete',
-            'album_name': ''
+            'name': ''
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
         self.assertEquals(response.status_code, 200)
@@ -1758,7 +1758,7 @@ class TestProgramming(TestCase):
         url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
         data = {
             'action': 'delete',
-            'album_name': ''
+            'name': ''
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
         self.assertEquals(response.status_code, 200)

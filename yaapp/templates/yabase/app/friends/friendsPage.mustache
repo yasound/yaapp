@@ -10,9 +10,8 @@
 <div class='span12 no-margin'>
 	<div class='friends-login-container'>
 		<img src="/media/app/images/friends-icon-large.png">
-		<p class='friends-login-p'>Connectez-vous pour afficher vos amis.</p>
-		<button>Se connecter</button>
-		{% include "yabase/app/landing.html" %}
+		<p class='friends-login-p'>{% trans "Log in to view your friends." %}</p>
+		<button id='login-btn'>{% trans "Login" %}</button>
 	</div>
 </div>
 {% endif %}
