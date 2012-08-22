@@ -213,7 +213,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     tagName: 'li',
     className: 'wall-event',
     events: {
-        'click h2 a': 'selectUser'
+        'click h2 a': 'selectUser',
+        'click #report-abuse-btn': 'reportAbuse'
     },
 
     initialize: function () {
@@ -250,6 +251,17 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         Yasound.App.Router.navigate("profile/" + this.model.get('user_username') + '/', {
             trigger: true
         });
+    },
+
+    reportAbuse: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-report-abuse').modal('show');
+        $('#modal-report-abuse .btn-primary').on('click', function () {
+            $('#modal-report-abuse').modal('hide');
+            that.model.reportAbuse();
+        });
+
     }
 });
 
