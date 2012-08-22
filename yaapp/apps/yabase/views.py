@@ -943,7 +943,6 @@ class WebAppView(View):
 
         return True, None if ok or False, redirect page else
         """
-        print settings.ANONYMOUS_ACCESS_ALLOWED
         if settings.ANONYMOUS_ACCESS_ALLOWED == True:
             return True, None
 
@@ -1059,7 +1058,11 @@ class WebAppView(View):
 
         if hasattr(self, page):
             handler = getattr(self, page)
-            context, template_name = handler(request, context, *args, **kwargs)
+            result = handler(request, context, *args, **kwargs)
+            if type(result) == type(()):
+                context, template_name = result[0], result[1]
+            else:
+                return result
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
@@ -1141,7 +1144,7 @@ class WebAppView(View):
 
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp'))
+            return HttpResponseRedirect(reverse('webapp_login'))
 
         if request.method == 'POST':
             my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))

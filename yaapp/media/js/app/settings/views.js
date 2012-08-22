@@ -19,7 +19,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         'click #my-notifications-menu': 'onNotificationsMenu',
 
         "submit #my-informations-form": "onSubmitMyInformations",
-        "submit #my-notifications-form": "onSubmitMyNotifications"
+        // "submit #my-notifications-form": "onSubmitMyNotifications"
 
     },
     initialize: function () {
