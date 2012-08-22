@@ -1640,6 +1640,14 @@ input::-webkit-input-placeholder {
 	text-shadow:1px 1px white;
 }
 
+.wall-event-message .date,
+.wall-event-message h2 {
+    display:block;
+    line-height: 17px;
+    height: 17px;
+    margin-right:5px;
+}
+
 .like-comment {
     margin-left:34px;
     margin-top:10px;
@@ -1885,10 +1893,12 @@ ul .user-cell:hover .caption {
 .wall-event-message h2 {
 	font-size:13px;
 	font-weight:bold;
+    float:left;
 }
 
 .wall-event-message p {
-	max-height:35px;
+	margin-top:30px;
+    max-height:35px;
 	text-overflow:ellipsis;
 	overflow:hidden;
 }
