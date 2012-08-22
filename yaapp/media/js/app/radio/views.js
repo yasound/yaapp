@@ -133,6 +133,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         this.collection.bind('beforeFetch', this.beforeFetch, this);
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('remove', this.removeWallEvent, this);
         this.views = [];
     },
 
@@ -140,6 +141,7 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         this.collection.unbind('beforeFetch', this.beforeFetch);
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('remove', this.removeWallEvent, this);
     },
 
     beforeFetch: function() {
@@ -205,6 +207,19 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
             $(this.el).append(view.render().el);
             this.views.push(view);
         }
+    },
+
+    removeWallEvent: function(wallEvent) {
+        var viewToRemove;
+        _.map(this.views, function (view) {
+            if (view.model.id === wallEvent.id) {
+                viewToRemove = view;
+            }
+        });
+        if (viewToRemove) {
+            viewToRemove.close();
+            this.views = _.without(this.views, viewToRemove);
+        }
     }
 });
 
@@ -268,10 +283,9 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         e.preventDefault();
         var that = this;
         $('#modal-delete-message').modal('show');
-        $('#modal-delete-message .btn-primary').on('click', function () {
+        $('#modal-delete-message .btn-primary').one('click', function () {
             $('#modal-delete-message').modal('hide');
             that.model.deleteMessage();
-            that.remove();
         });
     }
 });
@@ -365,6 +379,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     wallPosted: undefined,
 
     initialize: function () {
+        _.bindAll(this, 'removeWallEvent');
         this.model.bind('change', this.render, this);
     },
 
@@ -468,6 +483,9 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             Yasound.App.Router.pushManager.on('wall_event', function (msg) {
                 that.wallEvents.reset(msg);
             });
+            Yasound.App.Router.pushManager.on('wall_event_deleted', function (msg) {
+                that.removeWallEvent(msg);
+            });
         }
 
         this.intervalId = setInterval(function () {
@@ -478,6 +496,14 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         }, 10000);
 
         return this;
+    },
+
+    removeWallEvent: function(message) {
+        var model = this.wallEvents.get(message.id);
+        if (!model) {
+            return;
+        }
+        this.wallEvents.remove(model);
     }
 });
 
