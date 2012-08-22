@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-22 10:58+0200\n"
+"POT-Creation-Date: 2012-08-22 11:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1296,6 +1296,14 @@ msgstr "Voulez-vous vraiment supprimer ce message ?"
 #: templates/yabase/app/radio/wallEvent.like.mustache:5
 msgid "likes"
 msgstr "j'aime"
+
+#: templates/yabase/app/radio/wallEvent.message.mustache:6
+msgid "report as abusive"
+msgstr "signaler comme abusif"
+
+#: templates/yabase/app/radio/wallEvent.message.mustache:8
+msgid "delete"
+msgstr "supprimer"
 
 #: templates/yabase/app/radio/wallInput.mustache:4
 msgid "Post message"
