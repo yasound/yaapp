@@ -273,7 +273,7 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         e.preventDefault();
         var that = this;
         $('#modal-report-abuse').modal('show');
-        $('#modal-report-abuse .btn-primary').on('click', function () {
+        $('#modal-report-abuse .btn-primary').one('click', function () {
             $('#modal-report-abuse').modal('hide');
             that.model.reportAbuse();
         });
