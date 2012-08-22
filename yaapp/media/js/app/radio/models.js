@@ -4,7 +4,23 @@ Namespace('Yasound.Data.Models');
 
 
 Yasound.Data.Models.WallEvent = Backbone.Model.extend({
-    idAttribute: 'id'
+    idAttribute: 'id',
+
+    reportAbuse: function () {
+        var url = '/api/v1/report_message/' + this.id + '/';
+        $.ajax({
+           url: url,
+           type: 'POST'
+        });
+    },
+
+    deleteMessage: function () {
+        var url = '/api/v1/delete_message/' + this.id + '/';
+        $.ajax({
+           url: url,
+           type: 'DELETE'
+        });
+    }
 });
 
 Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend({
@@ -14,7 +30,7 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     skipAttribute: 'offset',
     perPage: 25,
     page:0,
-    
+
     parse: function(response) {
         var results = response.objects;
         this.totalCount = response.meta.total_count;
@@ -24,14 +40,14 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     setRadio: function(radio) {
         this.radio = radio;
         this.url = '/api/v1/radio/' + this.radio.get('id') + '/wall/';
-        
+
         return this;
     },
 
     comparator: function(wallEvent) {
         return -parseInt(wallEvent.get("id"), 10);
     },
-    
+
     fetchFirst: function() {
         var savedPage = this.page;
         this.page = 0;

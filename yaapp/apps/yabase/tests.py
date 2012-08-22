@@ -1616,7 +1616,8 @@ class TestProgramming(TestCase):
 
 
     def test_my_programming(self):
-        response = self.client.get('/api/v1/my_programming/')
+        url = reverse('yabase.views.my_programming', args=[self.radio.uuid])
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
         data = json.loads(response.content)

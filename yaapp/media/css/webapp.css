@@ -48,7 +48,6 @@ body {
  * Header
  */
 
-
 /*--- LOGIN ---*/
 
 #login  .header-separation {
@@ -1213,6 +1212,10 @@ input::-webkit-input-placeholder {
     background-color: black;
 }
 
+#footer .container {
+    position:relative;
+}
+
 .blocks {
     height: 70px;
     font-family: arial, sans-serif;
@@ -1392,9 +1395,11 @@ input::-webkit-input-placeholder {
 }
 
 #copyright {
+    position:absolute;
+    right:5px;
+    bottom:-20px;
     width: 120px;
     height: 20px;
-    float: right;
     text-align:right;
     margin-bottom: 0px;
 }
@@ -1544,6 +1549,7 @@ input::-webkit-input-placeholder {
 }
 
 .wall-event-message {
+    position:relative;
     border-bottom: 1px solid #eeeeee;
     margin-bottom: 12px;
 }
@@ -1560,6 +1566,7 @@ input::-webkit-input-placeholder {
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
+
 }
 
 .like-comment {
@@ -1638,6 +1645,20 @@ input::-webkit-input-placeholder {
     color:white;
     line-height:20px;
     margin:5px;
+}
+.wall-event-remove button {
+    float:right;
+    margin-right:5px;
+    margin-bottom:5px;
+    display:none;
+}
+
+.wall-event:hover .wall-event-remove button  {
+    display:block;
+}
+
+.wall-delete {
+    display:none;
 }
 
 /**
@@ -2688,6 +2709,37 @@ ul .radio-with-stats-cells li {
     margin:0px;
 }
 
+/**
+ * Favorite Login
+ */
+
+
+.favorites-login-container {
+    text-align:center;
+}
+
+.favorites-login-container .favorites-login-p {
+    color:#575757;
+    font-size: 31px;
+    width:350px;
+    line-height:35px;
+    margin-left:300px;
+    margin-top:30px;
+    font-weight:bold;
+ }
+
+.favorites-login-container button {
+    width:569px;
+    height:77px;
+    background-image:url('../app/images/common/btn-bg-77.png');
+    border:1px solid #a5a5a5;
+    border-radius:7px;
+    font-size: 29px;
+    color:#575757;
+    text-shadow:0px 1px white;
+    font-weight:bold;
+    margin:55px 0px;
+}
 
 /**
  * common items
@@ -2758,6 +2810,7 @@ ul .radio-with-stats-cells li {
     position:relative;
     text-shadow:1px 1px 1px white;
     font-size:12px;
+    vertical-align:middle;
 }
 
 .yabutton-small:hover {
