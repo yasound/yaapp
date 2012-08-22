@@ -133,7 +133,6 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         this.collection.bind('beforeFetch', this.beforeFetch, this);
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
-        this.collection.bind('remove', this.removeWallEvent, this);
         this.views = [];
     },
 
@@ -141,7 +140,6 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         this.collection.unbind('beforeFetch', this.beforeFetch);
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
-        this.collection.unbind('remove', this.removeWallEvent, this);
     },
 
     beforeFetch: function() {
@@ -209,17 +207,9 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         }
     },
 
-    removeWallEvent: function(wallEvent) {
-        var viewToRemove;
-        _.map(this.views, function (view) {
-            if (view.model.id === wallEvent.id) {
-                viewToRemove = view;
-            }
-        });
-        if (viewToRemove) {
-            viewToRemove.close();
-            this.views = _.without(this.views, viewToRemove);
-        }
+    removeView: function(view) {
+        view.close();
+        this.views = _.without(this.views, view);
     }
 });
 
@@ -499,11 +489,17 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     removeWallEvent: function(message) {
-        var model = this.wallEvents.get(message.id);
-        if (!model) {
+        var viewToRemove;
+        _.each(this.wallEventsView.views, function(view) {
+            if (view.model.get('id') === message.id) {
+                viewToRemove = view;
+            }
+        });
+
+        if (!viewToRemove) {
             return;
         }
-        this.wallEvents.remove(model);
+        this.wallEventsView.removeView(viewToRemove);
     }
 });
 
