@@ -1691,14 +1691,6 @@ input::-webkit-input-placeholder {
     margin-left:35px;
 }
 
-.song-comment p,
-.wall-event-message .song-comment .date-comment,
-.wall-event-message .date-like {
-    float:left;
-    clear:both;
-    margin-left:67px;
-}
-
 .wall-event-message .date-like {
     color:#97989B;
     display:block;
@@ -1925,10 +1917,6 @@ ul .user-cell:hover .caption {
 ul#notifications {
     list-style: none;
     margin-left: 0;
-}
-
-.alert .date {
-    float:right;
 }
 
 #notifications-toolbar,#programming-toolbar {
