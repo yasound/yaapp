@@ -1300,7 +1300,7 @@ msgstr "Voulez-vous vraiment supprimer ce message ?"
 
 #: templates/yabase/app/radio/wallEvent.like.mustache:5
 msgid "likes"
-msgstr "j'aime"
+msgstr "aime"
 
 #: templates/yabase/app/radio/wallEvent.message.mustache:7
 msgid "report as abusive"
