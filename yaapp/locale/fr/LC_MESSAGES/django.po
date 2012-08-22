@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-22 11:17+0200\n"
+"POT-Creation-Date: 2012-08-22 18:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,6 +64,7 @@ msgstr "Se déconnecter"
 #: templates/web/menu.html:19
 #: templates/yabase/webapp.html:341
 #: templates/yabase/app/favorites/favoritesPage.mustache:14
+#: templates/yabase/app/friends/friendsPage.mustache:14
 #: templates/yabase/app/login/login.mustache:21
 #: templates/yabase/app/signup/signup.mustache:41
 msgid "Login"
@@ -1084,6 +1085,10 @@ msgstr "Connectez-vous pour afficher vos favoris."
 msgid "Back to profile"
 msgstr "Retour au profil"
 
+#: templates/yabase/app/friends/friendsPage.mustache:13
+msgid "Log in to view your friends."
+msgstr "Connectez-vous pour afficher vos amis."
+
 #: templates/yabase/app/home/homePage.html:17
 msgid "Most popular radios today"
 msgstr "Radio les plus populaires ce jour"
@@ -1297,11 +1302,11 @@ msgstr "Voulez-vous vraiment supprimer ce message ?"
 msgid "likes"
 msgstr "j'aime"
 
-#: templates/yabase/app/radio/wallEvent.message.mustache:6
+#: templates/yabase/app/radio/wallEvent.message.mustache:7
 msgid "report as abusive"
 msgstr "signaler comme abusif"
 
-#: templates/yabase/app/radio/wallEvent.message.mustache:8
+#: templates/yabase/app/radio/wallEvent.message.mustache:9
 msgid "delete"
 msgstr "supprimer"
 
