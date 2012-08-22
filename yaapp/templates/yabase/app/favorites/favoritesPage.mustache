@@ -10,9 +10,8 @@
 <div class='span12 no-margin'>
 	<div class='favorites-login-container'>
 		<img src="/media/app/images/icon-star-big-blue.png">
-		<p class='favorites-login-p'>Connectez-vous pour afficher vos amis.</p>
-		<button>Se connecter</button>
-		{% include "yabase/app/landing.html" %}
+		<p class='favorites-login-p'>{% trans "Log in to view your favorites." %}</p>
+		<button id='login-btn'>{% trans "Login" %}</button>
 	</div>
 </div>
 {% endif %}

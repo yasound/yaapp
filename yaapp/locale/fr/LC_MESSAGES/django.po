@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-21 16:56+0200\n"
+"POT-Creation-Date: 2012-08-22 11:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,7 @@ msgstr "Se déconnecter"
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
 #: templates/yabase/webapp.html:341
+#: templates/yabase/app/favorites/favoritesPage.mustache:14
 #: templates/yabase/app/login/login.mustache:21
 #: templates/yabase/app/signup/signup.mustache:41
 msgid "Login"
@@ -957,6 +958,8 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
 #: templates/yabase/webapp.html:395
 #: templates/yabase/app/programming/songInstances.mustache:38
+#: templates/yabase/app/radio/radioPage.mustache:30
+#: templates/yabase/app/radio/radioPage.mustache:45
 #: templates/yabase/app/settings/settingsPage.mustache:81
 #: templates/yabase/app/settings/settingsPage.mustache:97
 msgid "No thank you"
@@ -964,6 +967,8 @@ msgstr "Non merci"
 
 #: templates/yabase/webapp.html:396
 #: templates/yabase/app/programming/songInstances.mustache:39
+#: templates/yabase/app/radio/radioPage.mustache:31
+#: templates/yabase/app/radio/radioPage.mustache:46
 #: templates/yabase/app/settings/settingsPage.mustache:82
 #: templates/yabase/app/settings/settingsPage.mustache:98
 msgid "Yes i want"
@@ -1068,6 +1073,10 @@ msgstr "Favoris"
 #: templates/yabase/app/common/subMenu.mustache:38
 msgid "Create radio"
 msgstr "Créer une radio"
+
+#: templates/yabase/app/favorites/favoritesPage.mustache:13
+msgid "Log in to view your favorites."
+msgstr "Connectez-vous pour afficher vos favoris."
 
 #: templates/yabase/app/favorites/userFavoritesPage.mustache:3
 #: templates/yabase/app/friends/userFriendsPage.mustache:3
@@ -1268,9 +1277,33 @@ msgstr "Ajouter aux favoris"
 msgid "Remove from favorite"
 msgstr "Retirer des favoris"
 
+#: templates/yabase/app/radio/radioPage.mustache:23
+msgid "Confirm report as abuse"
+msgstr "Confirmer la notification d'abus"
+
+#: templates/yabase/app/radio/radioPage.mustache:26
+msgid "Do you really want to report this message as an abuse?"
+msgstr "Voulez-vous vraiment signaler ce contenu comme abusif ?"
+
+#: templates/yabase/app/radio/radioPage.mustache:38
+msgid "Confirm delete message"
+msgstr "Confirmer la suppression du message"
+
+#: templates/yabase/app/radio/radioPage.mustache:41
+msgid "Do you really want to delete this message?"
+msgstr "Voulez-vous vraiment supprimer ce message ?"
+
 #: templates/yabase/app/radio/wallEvent.like.mustache:5
 msgid "likes"
 msgstr "j'aime"
+
+#: templates/yabase/app/radio/wallEvent.message.mustache:6
+msgid "report as abusive"
+msgstr "signaler comme abusif"
+
+#: templates/yabase/app/radio/wallEvent.message.mustache:8
+msgid "delete"
+msgstr "supprimer"
 
 #: templates/yabase/app/radio/wallInput.mustache:4
 msgid "Post message"
