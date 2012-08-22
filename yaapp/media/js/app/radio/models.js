@@ -12,6 +12,14 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
            url: url,
            type: 'POST'
         });
+    },
+
+    deleteMessage: function () {
+        var url = '/api/v1/delete_message/' + this.id + '/';
+        $.ajax({
+           url: url,
+           type: 'DELETE'
+        });
     }
 });
 

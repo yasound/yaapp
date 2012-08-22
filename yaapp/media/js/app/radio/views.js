@@ -214,7 +214,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     className: 'wall-event',
     events: {
         'click h2 a': 'selectUser',
-        'click #report-abuse-btn': 'reportAbuse'
+        'click #report-abuse-btn': 'reportAbuse',
+        'click #delete-btn': 'deleteMessage'
     },
 
     initialize: function () {
@@ -261,7 +262,17 @@ Yasound.Views.WallEvent = Backbone.View.extend({
             $('#modal-report-abuse').modal('hide');
             that.model.reportAbuse();
         });
+    },
 
+    deleteMessage: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-delete-message').modal('show');
+        $('#modal-delete-message .btn-primary').on('click', function () {
+            $('#modal-delete-message').modal('hide');
+            that.model.deleteMessage();
+            that.remove();
+        });
     }
 });
 
