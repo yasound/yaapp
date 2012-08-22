@@ -1635,6 +1635,11 @@ input::-webkit-input-placeholder {
     border: 1px solid #c1c1c1;
 }
 
+.wall-event-message img {
+    margin: 36px;
+    float:left;
+}
+
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
@@ -1696,6 +1701,9 @@ input::-webkit-input-placeholder {
 
 .wall-event-message .date-like {
     color:#97989B;
+    display:block;
+    float:left;
+    margin:0px;
 }
 
 #webapp-track-container {
