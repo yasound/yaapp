@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from yaref.models import YasoundSong
+from yaref.mongo import SongAdditionalInfosManager
 from yasearch.utils import get_simplified_name
 import buylink
 
@@ -106,10 +107,37 @@ class TestFind(TestCase):
         s = YasoundSong(name='hi', artist_name='world', lastfm_id='1019817', musicbrainz_id='028523f5-23b3-4910-adc1-46d932e2fb55')
         synonyms = s.find_synonyms()
         self.assertEquals(len(synonyms), 2)
-
+        
 # disabled because response from echonest is not consistent
 #        metadata = synonyms[0]
 #        self.assertEquals(metadata.get('name'), 'Believe')
 #        self.assertEquals(metadata.get('artist'), 'Cher')
 #        self.assertEquals(metadata.get('album'), 'Believe')
         
+class TestAdditionalInfo(TestCase):
+    def setUp(self):
+        sa = SongAdditionalInfosManager()
+        sa.erase_informations()
+
+    def test_additional_info(self):
+        info = {
+            'conversion_status' : {
+                'preview_generated': False,
+                'hq_generated': False,
+                'lq_generated': False
+            },
+            'verified': True
+        }
+
+        sa = SongAdditionalInfosManager()
+        sa.add_information(1, info)
+
+        doc = sa.information(1)
+        self.assertEquals(doc.get('conversion_status').get('preview_generated'), False)
+        self.assertEquals(doc.get('verified'), True)
+        
+        sa.remove_information(1, 'conversion_status')
+        doc = sa.information(1)
+        self.assertIsNone(doc.get('conversion_status'))    
+        self.assertEquals(doc.get('verified'), True)
+    

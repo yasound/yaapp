@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-22 18:30+0200\n"
+"POT-Creation-Date: 2012-08-23 13:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -943,7 +943,7 @@ msgid "Twitter"
 msgstr "Twitter"
 
 #: templates/yabase/webapp.html:381
-#: templates/yabase/app/radio/editRadioPage.mustache:33
+#: templates/yabase/app/radio/editRadioPage.mustache:31
 #: templates/yabase/app/settings/settingsPage.mustache:128
 msgid "Close"
 msgstr "Fermer"
@@ -1058,8 +1058,8 @@ msgid "Favorite"
 msgstr "Favoris"
 
 #: templates/yabase/app/track.mustache:46
-msgid "Like current song"
-msgstr "J'aime le titre en cours"
+msgid "Like song"
+msgstr "J'aime le morceau"
 
 #: templates/yabase/app/common/subMenu.mustache:13
 msgid "Top"
@@ -1097,12 +1097,12 @@ msgstr "Radio les plus populaires ce jour"
 msgid "Login with Facebook or Twitter"
 msgstr "Connexion avec Facebook ou Twitter"
 
-#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:7
-#: templates/yabase/app/radio/editRadioPage.mustache:6
+#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:6
+#: templates/yabase/app/radio/editRadioPage.mustache:5
 msgid "Edit playlist"
 msgstr "Editer la playlist"
 
-#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:9
+#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:7
 msgid "Edit settings"
 msgstr "Modifier les paramètres"
 
@@ -1249,21 +1249,21 @@ msgstr "interrompre"
 msgid "add"
 msgstr "ajouter"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:8
+#: templates/yabase/app/radio/editRadioPage.mustache:6
 msgid "Radio settings"
 msgstr "Paramètres de la radio"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:12
+#: templates/yabase/app/radio/editRadioPage.mustache:10
 #: templates/yabase/app/settings/settingsPage.mustache:107
 msgid "Upload photo"
 msgstr "Importer une photo"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:26
+#: templates/yabase/app/radio/editRadioPage.mustache:24
 #: templates/yabase/app/settings/settingsPage.mustache:121
 msgid "Upload error"
 msgstr "Erreur d'upload"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:42
+#: templates/yabase/app/radio/editRadioPage.mustache:40
 #: templates/yabase/app/settings/settingsPage.mustache:67
 #: templates/yabase/app/settings/settingsPage.mustache:138
 #: templates/yabase/app/settings/settingsPage.mustache:148
@@ -1274,11 +1274,15 @@ msgstr "Enregistrer"
 msgid "by"
 msgstr "par"
 
-#: templates/yabase/app/radio/radio.mustache:10
+#: templates/yabase/app/radio/radio.mustache:12
+msgid "favorites"
+msgstr "favoris"
+
+#: templates/yabase/app/radio/radio.mustache:17
 msgid "Add to favorite"
 msgstr "Ajouter aux favoris"
 
-#: templates/yabase/app/radio/radio.mustache:14
+#: templates/yabase/app/radio/radio.mustache:21
 msgid "Remove from favorite"
 msgstr "Retirer des favoris"
 
@@ -1302,11 +1306,11 @@ msgstr "Voulez-vous vraiment supprimer ce message ?"
 msgid "likes"
 msgstr "aime"
 
-#: templates/yabase/app/radio/wallEvent.message.mustache:7
+#: templates/yabase/app/radio/wallEvent.message.mustache:6
 msgid "report as abusive"
 msgstr "signaler comme abusif"
 
-#: templates/yabase/app/radio/wallEvent.message.mustache:9
+#: templates/yabase/app/radio/wallEvent.message.mustache:8
 msgid "delete"
 msgstr "supprimer"
 
