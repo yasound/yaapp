@@ -4,14 +4,17 @@ Namespace('Yasound.Views');
 
 Yasound.Views.FavoritesPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Favorites({}),
+    events: {
+        'click #login-btn': 'onLogin'
+    },
 
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged');
-        $.subscribe('/submenu/genre', this.onGenreChanged)
+        $.subscribe('/submenu/genre', this.onGenreChanged);
     },
 
     onClose: function() {
-        $.unsubscribe('/submenu/genre', this.onGenreChanged)
+        $.unsubscribe('/submenu/genre', this.onGenreChanged);
     },
 
     reset: function() {
@@ -36,18 +39,25 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        this.onGenreChanged('', genre)
+        this.onGenreChanged('', genre);
         return this;
     },
 
     onGenreChanged: function(e, genre) {
-        if (genre == '') {
+        if (genre === '') {
             this.collection.params.genre = undefined;
         } else {
             this.collection.params.genre = genre;
         }
         this.resultsView.clear();
         this.collection.goTo(0);
+    },
+
+    onLogin: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("login/", {
+            trigger: true
+        });
     }
 });
 
@@ -60,11 +70,11 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged');
-        $.subscribe('/submenu/genre', this.onGenreChanged)
+        $.subscribe('/submenu/genre', this.onGenreChanged);
     },
 
     onClose: function() {
-        $.unsubscribe('/submenu/genre', this.onGenreChanged)
+        $.unsubscribe('/submenu/genre', this.onGenreChanged);
     },
 
     reset: function() {
@@ -93,12 +103,12 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        this.onGenreChanged('', genre)
+        this.onGenreChanged('', genre);
         return this;
     },
 
     onGenreChanged: function(e, genre) {
-        if (genre == '') {
+        if (genre === '') {
             this.collection.params.genre = undefined;
         } else {
             this.collection.params.genre = genre;

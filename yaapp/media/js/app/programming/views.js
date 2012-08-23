@@ -6,7 +6,9 @@ Namespace('Yasound.Views');
 Yasound.Views.SongInstance = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        "click .remove": 'onRemove'
+        "click .remove": "onRemove",
+        "click .artist": "onArtist",
+        "click .album": "onAlbum"
     },
 
     initialize: function () {
@@ -26,6 +28,23 @@ Yasound.Views.SongInstance = Backbone.View.extend({
     onRemove: function (e) {
         e.preventDefault();
         this.model.destroy();
+    },
+
+    onArtist: function (e) {
+        e.preventDefault();
+        $('#artist-select').val(this.model.get('metadata__artist_name'));
+        $('#artist-select').trigger("liszt:updated");
+        $('#artist-select').trigger("change");
+        $('html, body').scrollTop(0);
+
+    },
+
+    onAlbum: function (e) {
+        e.preventDefault();
+        $('#album-select').val(this.model.get('metadata__album_name'));
+        $('#album-select').trigger("liszt:updated");
+        $('#album-select').trigger("change");
+        $('html, body').scrollTop(0);
     }
 });
 
@@ -281,7 +300,7 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
         e.preventDefault();
         var that = this;
         $('#modal-remove-all', this.el).modal('show');
-        $('#modal-remove-all .btn-primary', this.el).on('click', function () {
+        $('#modal-remove-all .btn-primary', this.el).one('click', function () {
             $('#modal-remove-all', this.el).modal('hide');
             that.songInstances.removeAll(function() {
                 that.songInstancesView.clear();
@@ -303,8 +322,8 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'start', 'onStart', 'onStop', 'onRemove', 'onProgress', 'onFinished', 'onFailed');
-        this.jqXHR = undefined;
+        _.bindAll(this, 'render', 'start', 'stop', 'onStart', 'onStop', 'onRemove', 'onProgress', 'onFinished', 'onFailed');
+        this.job = undefined;
     },
 
     onClose: function() {
@@ -316,8 +335,6 @@ Yasound.Views.UploadCell = Backbone.View.extend({
 
     render: function(data, uuid) {
         $(this.el).html(ich.programmingUploadCellTemplate(data.files[0]));
-        $('#stop', this.el).attr('disabled', true);
-
         this.data = data;
         this.data.formData = {
             'response_format': 'json',
@@ -333,27 +350,32 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     start: function() {
-        this.jqXHR = this.data.submit();
+        this.job = this.data.submit();
+        $.publish('/programming/upload_started');
+        $('#start', this.el).hide();
+        $('#stop', this.el).show();
     },
 
     stop: function () {
-        if (this.jqHXR) {
-            this.jqHXR.abort();
-            this.jqHXR = undefined;
+        if (this.job) {
+            this.job.abort();
+            this.job = undefined;
+
+            $.publish('/programming/upload_stopped');
+
+            $('#start', this.el).show();
+            $('#stop', this.el).hide();
         }
     },
 
     onStart: function(e) {
         e.preventDefault();
         this.start();
-
-        $('#stop', this.el).attr('disabled', false);
     },
 
     onStop: function (e) {
         e.preventDefault();
         this.stop();
-        $('#stop', this.el).attr('disabled', true);
     },
 
     onRemove: function (e) {
@@ -362,11 +384,12 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     },
 
     onFinished: function(e, data) {
+        $.publish('/programming/upload_finished');
         this.remove();
     },
 
     onFailed: function(e, data) {
-
+        $.publish('/programming/upload_failed');
     },
 
     onProgress: function(e, data) {
@@ -386,6 +409,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 
     events: {
         "click #start-all-btn": "onStartAll",
+        "click #stop-all-btn": "onStopAll",
         "click #remove-all-btn": "onRemoveAll"
     },
 
@@ -418,6 +442,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         $('#file-upload', this.el).fileupload({
             dataType: 'json',
             add: function (e, data) {
+                $('#start-all-btn', that.el).show();
                 var view = new Yasound.Views.UploadCell({});
                 $('#upload-table', that.el).append(view.render(data, uuid).el);
                 that.views.push(view);
@@ -451,13 +476,31 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
 
     onStartAll: function (e) {
         e.preventDefault();
+        $('#start-all-btn', this.el).hide();
+        $('#stop-all-btn', this.el).show();
+        $('#remove-all-btn', this.el).show();
+
         _.each(this.views, function(view) {
             view.start();
         });
     },
 
+    onStopAll: function (e) {
+        e.preventDefault();
+        $('#start-all-btn', this.el).show();
+        $('#stop-all-btn', this.el).hide();
+        $('#remove-all-btn', this.el).show();
+
+        _.each(this.views, function(view) {
+            view.stop();
+        });
+    },
+
     onRemoveAll: function (e) {
         e.preventDefault();
+        $('#start-all-btn', this.el).hide();
+        $('#stop-all-btn', this.el).hide();
+        $('#remove-all-btn', this.el).hide();
         this.clear();
     }
 });

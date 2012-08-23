@@ -1,6 +1,7 @@
 from celery.task import task
 from yabase.models import SongMetadata
 from yaref.models import YasoundSong
+from yaref.mongo import SongAdditionalInfosManager
 import logging
 logger = logging.getLogger("yaapp.yaref")
 
@@ -38,3 +39,27 @@ def async_find_synonyms(yasound_song_id):
                              album_name=album_name,
                              yasound_song_id=yasound_song_id)
             sm.calculate_hash_name(commit=True)
+            
+
+@task(rate_limit='180/s', ignore_result=True)
+def async_convert_song(yasound_song_id):
+    song = YasoundSong.objects.get(id=yasound_song_id)
+    manager =SongAdditionalInfosManager()
+    doc = manager.information(song)
+    if doc is None:
+        doc = {
+            'db_id': song.id
+        }
+    conversion_status = doc.get('conversion_status')
+    if conversion_status is None:
+        conversion_status = {
+            'converted': False,
+            'high_quality_finished': False,
+            'low_quality_finished': False,
+            'preview_finished': False
+        }
+        information = {
+            'conversion_status': conversion_status
+        }
+        manager.add_information(song.id, information)
+        

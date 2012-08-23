@@ -241,6 +241,12 @@ class UserProfile(models.Model):
         default=(2+8+16+32+64+128+256+512+1024+2048)
     ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128) + YES (fb_share_listen=256) + YES (fb_share_like_song=512) + YES (fb_share_post_message=1024) + YES (fb_share_animator_activity=2048)
 
+    permissions = BitField(flags=(
+        'create_radio',
+        ),
+        default=(1)
+    ) #defaut = YES (create_radio)
+
     @property
     def facebook_enabled(self):
         return account_settings.ACCOUNT_TYPE_FACEBOOK in self.account_type or \
@@ -571,10 +577,14 @@ class UserProfile(models.Model):
                 'picture': self.picture_url,
                 'name': self.name,
                 'username': self.user.username,
-                'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
+                'bio_text': self.bio_text[:190] if self.bio_text is not None else None
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
+            data['permissions'] = {
+                'create_radio': True if self.permissions.create_radio else False
+            }
+
 
         if self.can_give_personal_infos(request_user):
             if self.age is not None:
@@ -1342,12 +1352,37 @@ class Device(models.Model):
     def __unicode__(self):
         return u'%s - %s - %s (%s)' % (self.user.userprofile.name, self.application_identifier, self.ios_token, self.ios_token_type);
 
+class UserAdditionalInfosManager():
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.account.users
+        self.collection.ensure_index('db_id', unique=True)
+
+    def erase_informations(self):
+        self.collection.drop()
+
+    def add_information(self, user_id, information):
+        self.collection.update({'db_id': user_id}, {'$set': information}, upsert=True, safe=True)
+
+    def remove_information(self, user_id, information_key):
+        self.collection.update({'db_id': user_id}, {'$unset': {information_key: 1}}, upsert=True, safe=True)
+
+    def information(self, user_id):
+        return self.collection.find_one({'db_id': user_id})
+
+    def remove_user(self, user_id):
+        self.collection.remove({'db_id': user_id})
+
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):
     if isinstance(instance, UserProfile):
         user_profile = instance
     else:
         return
+
+    ua = UserAdditionalInfosManager()
+    ua.remove_user(user_profile.user.id)
     user_profile.remove_from_fuzzy_index()
 
 def new_wall_event_handler(sender, wall_event, **kwargs):

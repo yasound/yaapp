@@ -12,7 +12,7 @@
             <div>
 
                 <div id='my-accounts' style='display:none;'>
-                    <form id='my-accounts' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
+                    <form id='my-accounts' enctype="multipart/form-data" class='' action="{% url webapp_settings %}" method='post'>{% csrf_token %}
                         {{ my_accounts_form }}
 
                         {% if display_associate_facebook %}
@@ -141,7 +141,7 @@
                 </div>
 
                 <div id='my-notifications' style='display:none;'>
-                    <form id='my-notifications-form' enctype="multipart/form-data" class='' method='post'>{% csrf_token %}
+                    <form id='my-notifications-form' enctype="multipart/form-data" class='' action="{% url webapp_settings %}" method='post'>{% csrf_token %}
                         {{ my_notifications_form }}
                         <div>
                             <input type='hidden' name='action' value='my_notifications'/>

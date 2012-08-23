@@ -19,7 +19,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         'click #my-notifications-menu': 'onNotificationsMenu',
 
         "submit #my-informations-form": "onSubmitMyInformations",
-        "submit #my-notifications-form": "onSubmitMyNotifications"
+        // "submit #my-notifications-form": "onSubmitMyNotifications"
 
     },
     initialize: function () {
@@ -77,7 +77,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     removeFacebook: function (e) {
         e.preventDefault();
         $('#modal-remove-facebook').modal('show');
-        $('#modal-remove-facebook .btn-primary').on('click', function () {
+        $('#modal-remove-facebook .btn-primary').one('click', function () {
             $('#modal-remove-facebook').modal('hide');
             $('#btn-remove-facebook').attr('id', 'foo').trigger('click');
         });
@@ -87,7 +87,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     removeTwitter: function (e) {
         e.preventDefault();
         $('#modal-remove-twitter').modal('show');
-        $('#modal-remove-twitter .btn-primary').on('click', function () {
+        $('#modal-remove-twitter .btn-primary').one('click', function () {
             $('#modal-remove-twitter').modal('hide');
             $('#btn-remove-twitter').attr('id', 'foo').trigger('click');
         });

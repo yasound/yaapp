@@ -48,7 +48,6 @@ body {
  * Header
  */
 
-
 /*--- LOGIN ---*/
 
 #login  .header-separation {
@@ -210,8 +209,8 @@ body {
 
 #profile-box-container {
     position:absolute;
-    top:40px;
-    left:-140px;
+    top:45px;
+    left:-137px;
     display:block;
     width:282px;
     background-color:rgba(44, 46, 47, 0.99);
@@ -1213,6 +1212,10 @@ input::-webkit-input-placeholder {
     background-color: black;
 }
 
+#footer .container {
+    position:relative;
+}
+
 .blocks {
     height: 70px;
     font-family: arial, sans-serif;
@@ -1368,7 +1371,7 @@ input::-webkit-input-placeholder {
 
 #minutes span {
     font-weight:bold;
-    font-size:36px;
+    font-size:30px;
     margin-top:40px;
     margin-bottom:15px;
 }
@@ -1392,9 +1395,11 @@ input::-webkit-input-placeholder {
 }
 
 #copyright {
+    position:absolute;
+    right:5px;
+    bottom:-20px;
     width: 120px;
     height: 20px;
-    float: right;
     text-align:right;
     margin-bottom: 0px;
 }
@@ -1482,13 +1487,8 @@ input::-webkit-input-placeholder {
 }
 
 #webapp-radio-title {
-	width:210px;
 	overflow:hidden;
-}
-
-#webapp-radio-title h1 a {
-	width:210px;
-
+    margin-left:5px;
 }
 
 #webapp-radio p {
@@ -1526,7 +1526,6 @@ input::-webkit-input-placeholder {
 }
 
 #webapp-radio-title {
-    margin-left: 10px;
     text-align: center;
 }
 
@@ -1538,12 +1537,117 @@ input::-webkit-input-placeholder {
     margin-top: 24px;
 }
 
+.favorites-nbr-container {
+    text-align:left;
+    margin-bottom: 10px
+}
+
+.favorites-nbr-container img {
+
+}
+
+.favorites-nbr {
+    margin-right:5px;
+    vertical-align: middle;    
+    font-size: 30px;
+    color:#434343;
+    font-weight: bold;
+}
+
+.favorites-nbr-container .favorites-txt {
+    float:right;
+    color:#999999;
+    margin-top:9px;
+    text-shadow:1px 1px white;
+    font-weight: bold;
+    font-size:13px;
+}
+
+#btn-favorite {
+    display:block;
+    position:relative;
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+    vertical-align:middle;
+    color:#58595C;
+    font-weight:bold;
+    text-shadow:1px 1px white;
+}
+
+#btn-favorite img {
+    position:absolute;
+    left:10px;
+    top:11px;
+}
+
+#btn-favorite span {
+    display:block;
+    margin-top:12px;
+    margin-left:25px;
+    font-size:15px;
+}
+
+#btn-favorite:hover {
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+}
+
+#btn-unfavorite {
+    display:block;
+    position:relative;
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+    vertical-align:middle;
+    color:#58595C;
+    font-weight:bold;
+    text-shadow:1px 1px white;
+}
+
+#btn-unfavorite img {
+    left:10px;
+    top:11px;
+    position:absolute;
+}
+
+#btn-unfavorite span {
+    display:block;
+    margin-top:12px;
+    margin-left:25px;
+    font-size:15px;
+}
+
+#btn-unfavorite:hover {
+    width:209px;
+    height:41px;
+    background-image:url('../app/images/common/btn-bg-42.png');
+    border:1px solid #cbcdc9;
+    box-shadow:0px 2px 2px #cbcdc9;
+    margin:0px;
+    padding:0px;
+}
+
 #wall {
     list-style: none;
     margin-left: 0;
 }
 
 .wall-event-message {
+    position:relative;
     border-bottom: 1px solid #eeeeee;
     margin-bottom: 12px;
 }
@@ -1557,9 +1661,22 @@ input::-webkit-input-placeholder {
     border: 1px solid #c1c1c1;
 }
 
+.wall-event-message img {
+    margin: 36px;
+    float:left;
+}
+
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
+}
+
+.wall-event-message .date,
+.wall-event-message h2 {
+    display:block;
+    line-height: 17px;
+    height: 17px;
+    margin-right:5px;
 }
 
 .like-comment {
@@ -1600,12 +1717,11 @@ input::-webkit-input-placeholder {
     margin-left:35px;
 }
 
-.song-comment p,
-.wall-event-message .song-comment .date-comment,
-.wall-event-message .like-comment .date-comment {
+.wall-event-message .date-like {
+    color:#97989B;
+    display:block;
     float:left;
-    clear:both;
-    margin-left:67px;
+    margin:0px;
 }
 
 #webapp-track-container {
@@ -1638,6 +1754,21 @@ input::-webkit-input-placeholder {
     color:white;
     line-height:20px;
     margin:5px;
+}
+.wall-event-remove button {
+    float:right;
+    margin-right:5px;
+    margin-top:12px;
+    margin-bottom:5px;
+    display:none;
+}
+
+.wall-event:hover .wall-event-remove button  {
+    display:block;
+}
+
+.wall-delete {
+    display:none;
 }
 
 /**
@@ -1789,10 +1920,12 @@ ul .user-cell:hover .caption {
 .wall-event-message h2 {
 	font-size:13px;
 	font-weight:bold;
+    float:left;
 }
 
 .wall-event-message p {
-	max-height:35px;
+	margin-top:30px;
+    max-height:35px;
 	text-overflow:ellipsis;
 	overflow:hidden;
 }
@@ -1811,10 +1944,6 @@ ul .user-cell:hover .caption {
 ul#notifications {
     list-style: none;
     margin-left: 0;
-}
-
-.alert .date {
-    float:right;
 }
 
 #notifications-toolbar,#programming-toolbar {
@@ -1865,6 +1994,9 @@ ul#notifications {
 .notification-container .text-notification {
     position:absolute;
     top:25px;
+    width:500px;
+    height:39px;
+    overflow:hidden;
     font-size:17px;
     color:#434343;
     font-weight: normal;
@@ -2009,7 +2141,7 @@ ul#notifications {
 
 #user-name {
 	display:block;
-    max-width:165px;
+    max-width:275px;
     max-height:72px;
     overflow:hidden;
 	float:left;
@@ -2685,6 +2817,65 @@ ul .radio-with-stats-cells li {
     margin:0px;
 }
 
+/**
+ * Favorite Login
+ */
+
+
+.favorites-login-container {
+    text-align:center;
+}
+
+.favorites-login-container .favorites-login-p {
+    color:#575757;
+    font-size: 31px;
+    width:350px;
+    line-height:35px;
+    margin-left:300px;
+    margin-top:30px;
+    font-weight:bold;
+ }
+
+.favorites-login-container button {
+    width:569px;
+    height:77px;
+    background-image:url('../app/images/common/btn-bg-77.png');
+    border:1px solid #a5a5a5;
+    border-radius:7px;
+    font-size: 29px;
+    color:#575757;
+    text-shadow:0px 1px white;
+    font-weight:bold;
+    margin:55px 0px;
+}
+
+
+.friends-login-container {
+    text-align:center;
+}
+
+.friends-login-container .friends-login-p {
+    color:#575757;
+    font-size: 31px;
+    width:350px;
+    line-height:35px;
+    margin-left:300px;
+    margin-top:30px;
+    font-weight:bold;
+ }
+
+.friends-login-container button {
+    width:569px;
+    height:77px;
+    background-image:url('../app/images/common/btn-bg-77.png');
+    border:1px solid #a5a5a5;
+    border-radius:7px;
+    font-size: 29px;
+    color:#575757;
+    text-shadow:0px 1px white;
+    font-weight:bold;
+    margin:55px 0px;
+}
 
 /**
  * common items
@@ -2741,7 +2932,6 @@ ul .radio-with-stats-cells li {
 }
 
 .yabutton-small {
-    display:block;
     height:27px;
 	padding:3px 10px;
 	background-image:url('../app/images/btn-more.png');
@@ -2756,6 +2946,7 @@ ul .radio-with-stats-cells li {
     position:relative;
     text-shadow:1px 1px 1px white;
     font-size:12px;
+    vertical-align:middle;
 }
 
 .yabutton-small:hover {

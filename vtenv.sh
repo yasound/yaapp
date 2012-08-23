@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script bootstraps a virtualenv 
+# This script bootstraps a virtualenv
 # environement for demos
 
 # Starts
@@ -42,9 +42,11 @@ if [ ! -f ./fab ];then
 fi
 
 if [[ $platform == 'osx' ]]; then
-    echo "Installing numpy & scipy on osx"
+    echo "Installing gfortran, numpy, scipy and scikit-learn on osx"
     brew install gfortran
-    vtenv/bin/pip install -r requirements_osx.txt --download-cache=eggs
+    vtenv/bin/pip install numpy
+    vtenv/bin/pip install -e git+https://github.com/scipy/scipy.git#egg=scipy
+    vtenv/bin/pip install scikit-learn
 fi
 
 echo " * Done"

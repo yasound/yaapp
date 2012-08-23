@@ -183,7 +183,7 @@ Yasound.Views.UserCell = Backbone.View.extend({
         e.preventDefault();
         $('#modal-unfollow').modal('show');
         var that = this;
-        $('#modal-unfollow .btn-primary').on('click', function () {
+        $('#modal-unfollow .btn-primary').one('click', function () {
             $('#modal-unfollow').modal('hide');
             that.model.unfollow(Yasound.App.username);
             that.close();

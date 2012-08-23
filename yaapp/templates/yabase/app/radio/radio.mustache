@@ -3,16 +3,22 @@
        <img src="<% picture %>" width="210px" height="210px"/>
    </div>
    <div id='webapp-radio-title'>
-        <h1><% name %> {% trans "by" %} <a href='/app/profile/<%#creator%><% username %>/'><% name %><%/creator%></a></h1>
-   {% if request.user.is_authenticated %}
-   <a class="btn" id='btn-favorite'>
-    <i class="icon-star-empty"></i>
-    {% trans 'Add to favorite' %}
-   </a>
-   <a class="btn" id='btn-unfavorite'>
-    <i class="icon-star"></i>
-    {% trans 'Remove from favorite' %}
-   </a>
-   {% endif %}
+        <h1><% name %> {% trans "by" %}
+          <a href='/app/profile/<%#creator%><% username %>/'><% name %><%/creator%></a>
+        </h1>
+        <div class='favorites-nbr-container'>
+          <span class='favorites-nbr'><% favorites %></span>
+          <img src="/media/app/images/star-small-gradient.png">
+          <div class='favorites-txt'>{% trans "favorites" %}</div>
+        </div>
+        {% if request.user.is_authenticated %}
+        <a class="btn" id='btn-favorite'>
+          <img src='/media/app/images/star-small-white.png' />
+          <span>{% trans 'Add to favorite' %}</span>
+        </a>
+        <a class="btn" id='btn-unfavorite'>
+          <img src='/media/app/images/star-small-grey.png' />
+          <span>{% trans 'Remove from favorite' %}</span>
+        </a>
+        {% endif %}
    </div>
-   

@@ -59,6 +59,11 @@ Yasound.Views.Friends = Backbone.View.extend({
 
 Yasound.Views.FriendsPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Friends({}),
+
+    events: {
+        'click #login-btn': 'onLogin'
+    },
+
     initialize: function() {
         _.bindAll(this, 'render');
     },
@@ -91,6 +96,13 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         this.collection.fetch();
 
         return this;
+    },
+
+    onLogin: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("login/", {
+            trigger: true
+        });
     }
 });
 

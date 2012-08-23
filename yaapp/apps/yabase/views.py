@@ -943,7 +943,6 @@ class WebAppView(View):
 
         return True, None if ok or False, redirect page else
         """
-        print settings.ANONYMOUS_ACCESS_ALLOWED
         if settings.ANONYMOUS_ACCESS_ALLOWED == True:
             return True, None
 
@@ -1059,7 +1058,11 @@ class WebAppView(View):
 
         if hasattr(self, page):
             handler = getattr(self, page)
-            context, template_name = handler(request, context, *args, **kwargs)
+            result = handler(request, context, *args, **kwargs)
+            if type(result) == type(()):
+                context, template_name = result[0], result[1]
+            else:
+                return result
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
@@ -1141,7 +1144,7 @@ class WebAppView(View):
 
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp'))
+            return HttpResponseRedirect(reverse('webapp_login'))
 
         if request.method == 'POST':
             my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
@@ -1441,7 +1444,10 @@ def most_active_radios(request):
     radio_info = manager.most_popular(limit=limit, skip=skip)
     radio_data = []
     for i in radio_info:
-        r = Radio.objects.get(id=i['db_id'])
+        try:
+            r = Radio.objects.get(id=i['db_id'])
+        except Radio.DoesNotExist:
+            continue
         if genre and r.genre != genre:
             continue
         radio_data.append(r.as_dict(request_user=request.user))
@@ -1553,31 +1559,45 @@ def my_programming(request, radio_uuid, song_instance_id=None):
     response = programming_response(request, radio)
     return response
 
-@check_api_key(methods=['GET',], login_required=True)
-def my_programming_artists(request, radio_uuid=None):
-    if radio_uuid is None:
-        radio = Radio.objects.radio_for_user(request.user)
-        if not radio:
-            raise Http404
-    else:
-        radio = get_object_or_404(Radio, uuid=radio_uuid)
-    if not radio:
-        raise Http404
-    response = programming_artists_response(request, radio)
-    return response
+@check_api_key(methods=['GET', 'POST'], login_required=True)
+def my_programming_artists(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.method == 'GET':
+        response = programming_artists_response(request, radio)
+        return response
+    elif request.method == 'POST':
+        if request.user != radio.creator:
+            return HttpResponse(status=401)
+        data = json.loads(request.raw_post_data)
+        action = data.get('action')
+        if action == 'delete':
+            artist_name = data.get('name')
+            tracks = radio.programming(artists=[artist_name])
+            for track in tracks:
+                delete_song_instance(request, track.get('id'))
+            res = {'success': True}
+            return HttpResponse(json.dumps(res))
+    raise Http404
 
-@check_api_key(methods=['GET',], login_required=True)
+@check_api_key(methods=['GET', 'POST'], login_required=True)
 def my_programming_albums(request, radio_uuid=None):
-    if radio_uuid is None:
-        radio = Radio.objects.radio_for_user(request.user)
-        if not radio:
-            raise Http404
-    else:
-        radio = get_object_or_404(Radio, uuid=radio_uuid)
-    if not radio:
-        raise Http404
-    response = programming_albums_response(request, radio)
-    return response
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.method == 'GET':
+        response = programming_albums_response(request, radio)
+        return response
+    elif request.method == 'POST':
+        if request.user != radio.creator:
+            return HttpResponse(status=401)
+        data = json.loads(request.raw_post_data)
+        action = data.get('action')
+        if action == 'delete':
+            album_name = data.get('name')
+            tracks = radio.programming(albums=[album_name])
+            for track in tracks:
+                delete_song_instance(request, track.get('id'))
+            res = {'success': True}
+            return HttpResponse(json.dumps(res))
+
 
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST', ], login_required=True)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-21 10:26+0200\n"
+"POT-Creation-Date: 2012-08-21 16:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: js/app/app.js:48
+msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
+msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
 #: js/app/utils.js:61
 msgid "Data saved with success"
@@ -211,11 +215,11 @@ msgstr "Suivre"
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: js/app/programming/views.js:494
+#: js/app/programming/views.js:518
 msgid "iTunes import analyzis started"
 msgstr "L'analyse de l'import iTunes a démarré"
 
-#: js/app/programming/views.js:495
+#: js/app/programming/views.js:519
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 

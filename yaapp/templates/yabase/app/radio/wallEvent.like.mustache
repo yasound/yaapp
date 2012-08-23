@@ -1,10 +1,7 @@
 {% load i18n %}
-<div class='wall-event-message alert alert-success'>
-	<div class ='like-comment'>	
-		<img src='/media/images/like.png' width='32px' height='32px'/>
-		<h2><a href='/app/profile/<% user_username %>/'><% user_name %></a> {% trans "likes" %} <% song_name %></h2>
-	</div>
+<div class='wall-event-message'>
+	<img src='/media/images/like.png' width='32px' height='32px'/>
 	<p><% text %></p>
-	<div class='date date-comment'><% formatted_start_date %></div>
-	<div class='clear'></div>
+	<h2><a href='/app/profile/<% user_username %>/'><% user_name %></a> {% trans "likes" %} <% song_name %></h2>
+	<div class='date-like'><% formatted_start_date %></div>
 </div>

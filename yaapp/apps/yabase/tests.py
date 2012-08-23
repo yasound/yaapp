@@ -27,6 +27,8 @@ import os
 import settings as yabase_settings
 import simplejson as json
 from django.test.client import RequestFactory
+from task import fast_import
+
 import uploader
 
 class TestMiddleware(TestCase):
@@ -495,6 +497,31 @@ class TestImportPlaylist(TestCase):
         found, _notfound = process_playlists_exec(radio, content_compressed=content_compressed)
         self.assertEquals(found, 1)
 
+    def test_fast_import_with_different_metadata(self):
+        mm = MostPopularSongsManager()
+        mm.drop()
+
+        self.user.is_superuser = True
+        self.user.save()
+        self.client.login(username="test", password="test")
+
+        song = yaref_test_utils.generate_yasound_song('one of a kind', 'meds classical version', 'placebo')
+        add_song(song)
+
+        radio = Radio.objects.radio_for_user(self.user)
+        playlist, _created = radio.get_or_create_default_playlist()
+
+        song_instance = import_utils.import_from_string('one of a kind', 'meds classical version', 'placebo', playlist)
+
+        mp = MostPopularSongsManager()
+        mp.add_song(song_instance)
+
+        si = fast_import('one of a kind', 'meds classical version', 'placebo', playlist)
+        self.assertEquals(si.metadata.id, song_instance.metadata.id)
+
+        si2 = fast_import('one of a kind', 'meds', 'placebo', playlist)
+        self.assertNotEquals(si2.metadata.id, song_instance.metadata.id)
+        self.assertEquals(si2.metadata.yasound_song_id, song_instance.metadata.yasound_song_id)
 
 class TestImportCover(TestCase):
     def setUp(self):
@@ -1616,7 +1643,8 @@ class TestProgramming(TestCase):
 
 
     def test_my_programming(self):
-        response = self.client.get('/api/v1/my_programming/')
+        url = reverse('yabase.views.my_programming', args=[self.radio.uuid])
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
         data = json.loads(response.content)
@@ -1650,6 +1678,120 @@ class TestProgramming(TestCase):
         data = json.loads(response.content)
         self.assertEquals(data.get('meta').get('total_count'), 10)
 
+
+    def test_my_programming_remove_artist(self):
+        radio = Radio(creator=self.user)
+        radio.save()
+        playlist = Playlist.objects.create(radio=radio, name='main', source='src')
+
+        nb_songs = 5
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+            song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist, y)
+            song_instance.order = i
+            song_instance.save()
+
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 10)
+
+        url = reverse('yabase.views.my_programming_artists', args=[self.radio.uuid])
+        data = {
+            'action': 'delete',
+            'name': 'artist-1'
+        }
+        response = self.client.post(url, json.dumps(data), content_type="application/json")
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 9)
+
+        # remove song with empty artist
+        SongMetadata.objects.filter(artist_name='artist-4').update(artist_name='')
+        url = reverse('yabase.views.my_programming_artists', args=[self.radio.uuid])
+        data = {
+            'action': 'delete',
+            'name': ''
+        }
+        response = self.client.post(url, json.dumps(data), content_type="application/json")
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 8)
+
+
+    def test_my_programming_remove_album(self):
+        radio = Radio(creator=self.user)
+        radio.save()
+        playlist = Playlist.objects.create(radio=radio, name='main', source='src')
+
+        nb_songs = 5
+        for i in range(nb_songs):
+            name = 'song-%d' % i
+            artist = 'artist-%d' % i
+            album = 'album-%d' % i
+            y = YasoundSong(name=name, artist_name=artist, album_name=album, filename='nofile', filesize=0, duration=60)
+            y.save()
+            song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist, y)
+            song_instance.order = i
+            song_instance.save()
+
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 10)
+
+        url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
+        data = {
+            'action': 'delete',
+            'name': 'album-1'
+        }
+        response = self.client.post(url, json.dumps(data), content_type="application/json")
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 9)
+
+        url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
+        data = {
+            'action': 'delete',
+            'name': ''
+        }
+        response = self.client.post(url, json.dumps(data), content_type="application/json")
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 9)
+
+        url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
+        data = {
+            'action': 'delete',
+        }
+        response = self.client.post(url, json.dumps(data), content_type="application/json")
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 9)
+
+        # remove song with empty album
+        SongMetadata.objects.filter(album_name='album-4').update(album_name='')
+        url = reverse('yabase.views.my_programming_albums', args=[self.radio.uuid])
+        data = {
+            'action': 'delete',
+            'name': ''
+        }
+        response = self.client.post(url, json.dumps(data), content_type="application/json")
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get(reverse('yabase.views.my_programming', args=[self.radio.uuid]))
+        data = json.loads(response.content)
+        self.assertEquals(data.get('meta').get('total_count'), 8)
 
 class TestMyRadios(TestCase):
     def setUp(self):
