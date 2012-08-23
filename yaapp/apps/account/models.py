@@ -244,8 +244,8 @@ class UserProfile(models.Model):
     permissions = BitField(flags=(
         'create_radio',
         ),
-        default=(0)
-    )
+        default=(1)
+    ) #defaut = YES (create_radio)
 
     @property
     def facebook_enabled(self):
@@ -581,9 +581,9 @@ class UserProfile(models.Model):
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
-            data['permissions'] = [{
-                'create_radio': True
-            }]
+            data['permissions'] = {
+                'create_radio': True if self.permissions.create_radio else False
+            }
 
 
         if self.can_give_personal_infos(request_user):
