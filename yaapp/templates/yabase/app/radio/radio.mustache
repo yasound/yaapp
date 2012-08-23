@@ -1,11 +1,13 @@
 {% load i18n %}
    <div id='webapp-radio-picture' class='thumbnail'>
        <img src="<% picture %>" width="210px" height="210px"/>
+       <div id='webapp-title-radio'>
+          <h2><% name %> {% trans "by" %} 
+          <a href='/app/profile/<%#creator%><% username %>/'><% name %><%/creator%></a>
+          </h2>
+       </div>
    </div>
    <div id='webapp-radio-title'>
-        <h1><% name %> {% trans "by" %} 
-          <a href='/app/profile/<%#creator%><% username %>/'><% name %><%/creator%></a>
-        </h1>
         <div class='favorites-nbr-container'>  
           <span class='favorites-nbr'>1453</span>
           <img src="/media/app/images/star-small-gradient.png">
