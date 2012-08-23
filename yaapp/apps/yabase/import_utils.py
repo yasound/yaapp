@@ -838,6 +838,15 @@ def fast_import(song_name, album_name, artist_name, playlist):
     logger.debug('fast_import succeeded')
 
     metadata = SongMetadata.objects.get(id=doc.get('db_id'))
+    if song_name != metadata.name or album_name != metadata.album_name or artist_name != metadata.artist_name:
+        yasound_song_id = metadata.yasound_song_id
+        metadata = SongMetadata(name=song_name,
+                                artist_name=artist_name,
+                                album_name=album_name,
+                                yasound_song_id=yasound_song_id)
+        metadata.calculate_hash_name(commit=True)
+
+
     raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
                                    [playlist.id,
                                     metadata.id])
