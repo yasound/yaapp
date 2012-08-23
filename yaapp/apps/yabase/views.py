@@ -1067,8 +1067,11 @@ class WebAppView(View):
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
     def home(self, request, context, *args, **kwargs):
+        radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_HOMEPAGE).order_by('featuredradio__order')
+
         context['submenu_number'] = 1
-        return context, 'yabase/webapp.html'
+        context['radios'] = radios
+        return context, 'yabase/app/home/homePage.html'
 
     def radio(self, request, context, *args, **kwargs):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
