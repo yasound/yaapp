@@ -1540,11 +1540,7 @@ input::-webkit-input-placeholder {
 
 .favorites-nbr-container {
     text-align:left;
-    margin-bottom: 10px
-}
-
-.favorites-nbr-container img {
-
+    margin: 10px 0px;
 }
 
 .favorites-nbr {
