@@ -1537,6 +1537,32 @@ input::-webkit-input-placeholder {
     margin-top: 24px;
 }
 
+.favorites-nbr-container {
+    text-align:left;
+    margin-bottom: 10px
+}
+
+.favorites-nbr-container img {
+
+}
+
+.favorites-nbr {
+    margin-right:5px;
+    vertical-align: middle;    
+    font-size: 30px;
+    color:#434343;
+    font-weight: bold;
+}
+
+.favorites-nbr-container .favorites-txt {
+    float:right;
+    color:#999999;
+    margin-top:9px;
+    text-shadow:1px 1px white;
+    font-weight: bold;
+    font-size:13px;
+}
+
 #btn-favorite {
     display:block;
     position:relative;
