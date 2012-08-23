@@ -3,11 +3,11 @@
        <img src="<% picture %>" width="210px" height="210px"/>
    </div>
    <div id='webapp-radio-title'>
-        <h1><% name %> {% trans "by" %} 
+        <h1><% name %> {% trans "by" %}
           <a href='/app/profile/<%#creator%><% username %>/'><% name %><%/creator%></a>
         </h1>
-        <div class='favorites-nbr-container'>  
-          <span class='favorites-nbr'>1453</span>
+        <div class='favorites-nbr-container'>
+          <span class='favorites-nbr'><% favorites %></span>
           <img src="/media/app/images/star-small-gradient.png">
           <div class='favorites-txt'>{% trans "favorites" %}</div>
         </div>
@@ -22,4 +22,3 @@
         </a>
         {% endif %}
    </div>
-   
