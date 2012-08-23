@@ -1,15 +1,15 @@
 from django.contrib import admin
-from models import UserProfile, Device 
+from models import UserProfile, Device
 from sorl.thumbnail.admin import AdminImageMixin
 
 class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = ('id', 'user', 'name', 'twitter_uid', 'facebook_uid')
     search_fields = ['user__username',]
-    exclude = ('notifications_preferences',)
+    exclude = ('notifications_preferences', 'permissions')
     def make_mailing_list(self, request, queryset):
         from emencia.django.newsletter.models import Contact
         from emencia.django.newsletter.models import MailingList
-        
+
         subscribers = []
         for profile in queryset:
             email = profile.user.email
@@ -29,11 +29,11 @@ class UserProfileAdmin(AdminImageMixin, admin.ModelAdmin):
     make_mailing_list.short_description = 'Add users to mailing list contact list'
 
     actions = ['make_mailing_list']
-        
+
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class DeviceAdmin(admin.ModelAdmin):
     list_display = ('user', 'ios_token')
     search_fields = ['user__username', 'ios_token']
 admin.site.register(Device, DeviceAdmin)
-    
+
