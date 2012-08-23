@@ -2141,7 +2141,7 @@ ul#notifications {
 
 #user-name {
 	display:block;
-    max-width:165px;
+    max-width:275px;
     max-height:72px;
     overflow:hidden;
 	float:left;
