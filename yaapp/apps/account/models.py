@@ -241,6 +241,12 @@ class UserProfile(models.Model):
         default=(2+8+16+32+64+128+256+512+1024+2048)
     ) #default = NO (user_in_radio=1) + YES (friend_in_radio=2) + NO (friend_online=4) + YES (message_posted=8) + YES (song_liked=16) + YES (radio_in_favorites=32) + YES (radio_shared=64) + YES (friend_created_radio=128) + YES (fb_share_listen=256) + YES (fb_share_like_song=512) + YES (fb_share_post_message=1024) + YES (fb_share_animator_activity=2048)
 
+    permissions = BitField(flags=(
+        'create_radio',
+        ),
+        default=(0)
+    )
+
     @property
     def facebook_enabled(self):
         return account_settings.ACCOUNT_TYPE_FACEBOOK in self.account_type or \
