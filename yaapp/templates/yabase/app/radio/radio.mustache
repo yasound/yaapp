@@ -9,7 +9,7 @@
         <div class='favorites-nbr-container'>  
           <span class='favorites-nbr'>1453</span>
           <img src="/media/app/images/star-small-gradient.png">
-          <div class='favorites-txt'>favorites</div>
+          <div class='favorites-txt'>{% trans "favorites" %}</div>
         </div>
         {% if request.user.is_authenticated %}
         <a class="btn" id='btn-favorite'>
