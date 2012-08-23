@@ -1352,12 +1352,37 @@ class Device(models.Model):
     def __unicode__(self):
         return u'%s - %s - %s (%s)' % (self.user.userprofile.name, self.application_identifier, self.ios_token, self.ios_token_type);
 
+class UserAdditionalInfosManager():
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.account.users
+        self.collection.ensure_index('db_id', unique=True)
+
+    def erase_informations(self):
+        self.collection.drop()
+
+    def add_information(self, user_id, information):
+        self.collection.update({'db_id': user_id}, {'$set': information}, upsert=True, safe=True)
+
+    def remove_information(self, user_id, information_key):
+        self.collection.update({'db_id': user_id}, {'$unset': {information_key: 1}}, upsert=True, safe=True)
+
+    def information(self, user_id):
+        return self.collection.find_one({'db_id': user_id})
+
+    def remove_user(self, user_id):
+        self.collection.remove({'db_id': user_id})
+
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):
     if isinstance(instance, UserProfile):
         user_profile = instance
     else:
         return
+
+    ua = UserAdditionalInfosManager()
+    ua.remove_user(user_profile.user.id)
     user_profile.remove_from_fuzzy_index()
 
 def new_wall_event_handler(sender, wall_event, **kwargs):

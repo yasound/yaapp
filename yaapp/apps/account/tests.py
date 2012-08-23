@@ -12,9 +12,13 @@ import settings as account_settings
 import task
 import yabase.settings as yabase_settings
 import datetime
+from models import UserAdditionalInfosManager
 
 class TestProfile(TestCase):
     def setUp(self):
+        ua = UserAdditionalInfosManager()
+        ua.erase_informations()
+
         erase_index()
 
     def test_profile_creation(self):
@@ -40,6 +44,39 @@ class TestProfile(TestCase):
 
         profile.birthday = datetime.date(2007, 01, 01)
         self.assertTrue(profile.age >= 5)
+
+    def test_additional_info(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.assertEqual(user.get_profile(), UserProfile.objects.get(id=1))
+
+        info = {
+            'connected_account' : ['deezer', 'soundclound']
+        }
+
+        ua = UserAdditionalInfosManager()
+        ua.add_information(user.id, info)
+
+        doc = ua.information(user.id)
+        self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
+
+        info = {
+            'deezer': {
+                'token': 'token1',
+                'expiration': 'no-expiration'
+            }
+        }
+        ua.add_information(user.id, info)
+
+        doc = ua.information(user.id)
+        self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
+        self.assertEquals(doc.get('deezer').get('token'),  'token1')
+
+        ua.remove_information(user.id, 'deezer')
+        doc = ua.information(user.id)
+        self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
+        self.assertIsNone(doc.get('deezer'))
 
     def test_privacy(self):
         user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
