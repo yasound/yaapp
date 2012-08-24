@@ -12,6 +12,11 @@ Yasound.Data.Models.SelectedRadios = Backbone.Collection.extend({
     },
 
     setGenre: function(genre) {
+        if (g_bootstrapped_data) {
+            this.reset(g_bootstrapped_data);
+            return;
+        }
+
         if (genre == '') {
             return this.fetch()
         } else {
