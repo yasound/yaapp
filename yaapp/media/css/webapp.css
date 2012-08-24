@@ -1971,6 +1971,61 @@ ul#notifications {
     width:100%;
 }
 
+#radio-actions-container {
+    width:213px;
+    border:1px solid #b6b6b7;
+    border-radius:10px;
+    box-shadow: 0px 0px 4px #b6b6b7;
+    background-color:#f7f7f7;
+    margin:0px;
+    margin-top:20px;
+}
+
+#radio-actions-container a {
+    display:block;
+    position:relative;
+    height:41px;
+    border-top:1px solid #b6b6b7;
+}
+
+#radio-actions-container li {
+    display:block;
+    padding-right:5px;
+    list-style:none;
+    color:#727478;
+    font-weight: bold;
+    text-shadow:1px 1px white;
+    vertical-align: middle;
+    max-height:41px;
+}
+
+#radio-actions-container .wall-first-child {
+    border-radius:10px 10px 0px 0px;
+}
+
+#radio-actions-container .wall-last-child {
+    border-radius:0px 0px 10px 10px;    
+}
+
+#radio-actions-container a:hover {
+    background-image: linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -o-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -moz-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -webkit-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -ms-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+
+    text-decoration:none;
+}
+
+#radio-actions-container .actions-btn {
+    float:left;
+    margin:6px;
+    margin-right:10px;
+}
+
+#radio-actions-container .wall-single-line {
+    line-height:41px;
+}
 
 /**
  * Notifications
