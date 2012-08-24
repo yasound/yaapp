@@ -1983,13 +1983,13 @@ ul#notifications {
 
 #radio-actions-container li {
     display:block;
-    position:relative;
-    height:41px;
+    min-height:41px;
+    vertical-align: middle;
     border-top:1px solid #b6b6b7;
 }
 
 #radio-actions-container a {
-    display:block;
+    display:inline;
     padding-right:5px;
     list-style:none;
     text-decoration: none;
@@ -2025,6 +2025,12 @@ ul#notifications {
 
 #radio-actions-container a {
     float:left;
+}
+
+#radio-actions-container span {
+    display:block;
+    float:left;
+    padding-top:10px;
 }
 
 /**
