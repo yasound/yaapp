@@ -5,6 +5,7 @@ $(document).ready(function() {
     soundManager.useHTML5Audio = true;
     soundManager.debugMode = true;
     soundManager.useFlashBlock = true;
+    soundManager.flashVersion = 9;
     var mySound = undefined;
     var soundConfig = {
         id : 'yasoundMainPlay',
@@ -13,7 +14,7 @@ $(document).ready(function() {
         autoLoad: g_auto_play,
         stream : true
     }
-    
+
     soundManager.onready(function() {
         if (g_auto_play) {
             mySound = soundManager.createSound(soundConfig);

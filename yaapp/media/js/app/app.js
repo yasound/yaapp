@@ -93,6 +93,8 @@ $(document).ready(function () {
     soundManager.useHTML5Audio = true;
     soundManager.debugMode = true;
     soundManager.useFlashBlock = true;
+    soundManager.flashVersion = 9;
+
     Yasound.App.MySound = undefined;
 
     Yasound.App.SoundConfig = {
