@@ -14,7 +14,7 @@ def subscriptions(request, subscription_id=None):
         qs = qs[offset:offset+limit]
         data = []
         for subscription in qs:
-            data.append(subscription.as_dict())
+            data.append(subscription.as_dict(request.user))
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     elif request.method == 'POST' and subscription_id is not None:

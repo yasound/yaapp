@@ -19,16 +19,25 @@ class Subscription(models.Model):
     description = models.TextField(_('description'), blank=True)
     duration = models.IntegerField(_('duration'), default=1)
     enabled = models.BooleanField(_('enabled'), default=False)
+    order = models.IntegerField(_('order'), default=0)
 
-    def as_dict(self):
+    def as_dict(self, request_user):
         data = {
             'id': self.id,
-            'name': self.name,
             'sku': self.sku,
-            'description': self.description,
             'duration': self.duration,
-            'enabled': self.enabled
+            'enabled': self.enabled,
+            'current': False
         }
+        if request_user:
+            uss = UserSubscription.objects.filter(user=request_user, active=True)[:1]
+            if uss.count() > 0:
+                us = uss[0]
+                if us.subscription.id == self.id:
+                    data['current'] = True
+                    data['expiration_date'] = us.expiration_date
+                elif us.subscription.order > self.order:
+                    data['enabled'] = False
         return data
 
     def __unicode__(self):
@@ -44,6 +53,8 @@ class UserSubscription(models.Model):
     user = models.ForeignKey(User, verbose_name=_('user'))
     subscription = models.ForeignKey(Subscription, verbose_name=_('subscription'))
     achievement = models.ForeignKey('Achievement', verbose_name=_('achievement'), null=True, blank=True)
+    active = models.BooleanField('Active', default=True)
+    expiration_date = models.DateTimeField(_('expiration date'))
 
     def __unicode__(self):
         return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
