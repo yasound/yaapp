@@ -1,0 +1,48 @@
+{% load i18n %}
+{% load thumbnail %}
+<div id='submenu-content'/>
+<div id="sub-header">
+    <div class="container" id="sub-header-container">
+        <div id="sub-header-pointer" class='menu{{submenu_number}}'></div>
+        <ul id="sub-header-nav">
+            <li class="first {% ifequal submenu_number 1 %}selected{% endifequal %}">
+                <a href='#' class='mobile-selection'></a>
+                <a href='{% url webapp %}' id="selection">{% trans "Selection" %}</a>
+            </li>
+            <li class="{% ifequal submenu_number 2 %}selected{% endifequal %}">
+                <a href='#' class='mobile-top'></a>
+                <a href='{% url webapp_top %}' id='top' >{% trans "Top" %}</a>
+            </li>
+            <li class="{% ifequal submenu_number 3 %}selected{% endifequal %}">
+                <a href='#' class='mobile-friends'></a>
+                <a href='{% url webapp_friends %}' id='friends'>{% trans "My friends" %}</a>
+            </li>
+            <li class="{% ifequal submenu_number 4 %}selected{% endifequal %}">
+                <a href='#' class='mobile-favorites'></a>
+                <a href='{% url webapp_favorites %}' id='favorites'>{% trans "Favorites" %}</a>
+            </li>
+        </ul>
+        <div>
+            <form>
+                <div class="genre-selector"><img src="/media/app/images/radio-style-symbol.png" alt="radio symbol"/></div>
+                <p id="form" class="jqtransform">
+                    <div id="fix-genre">
+                    {{ genre_form.genre }}
+                    </div>
+                </p>
+            </form>
+        </div>
+        <div id="sub-header-separation">
+        </div>
+            {% if request.user.is_authenticated %}
+            <a id="create-radio" href="#">
+                <span>{% trans "Create radio" %}</span>
+            </a>
+            {% endif %}
+            <div id="search-bar">
+                <input type="text" id="search-input" class="unstyle" placeholder="Rechercher"/>
+                <input type="submit" value="" id="search-symbol" class="unstyle"/>
+            </div>
+    </div>
+</div>
+</div>
