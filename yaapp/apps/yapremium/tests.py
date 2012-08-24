@@ -11,14 +11,14 @@ class TestModel(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user
-    
-    
+
+
     def test_available(self):
         self.assertEquals(len(Subscription.objects.available_subscriptions()), 0)
-        
+
         sub = Subscription.objects.create(name='sub', sku='sub')
         self.assertFalse(sub.enabled)
-        
+
         self.assertEquals(len(Subscription.objects.available_subscriptions()), 0)
         sub.enabled = True
         sub.save()
@@ -31,12 +31,12 @@ class TestView(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user
-    
-    
+
+
     def test_get_subscriptions(self):
         sub = Subscription.objects.create(name='sub', sku='sub', enabled=True)
 
         res = self.client.get(reverse('yapremium.views.subscriptions'))
         self.assertEquals(res.status_code, 200)
         data = json.loads(res.content)
-        self.assertEquals(data.get('metadata').get('count'), 1)
+        self.assertEquals(data.get('meta').get('total_count'), 1)
