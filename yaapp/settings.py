@@ -377,6 +377,7 @@ INSTALLED_APPS = (
     'yamessage',
     'yahistory',
     'yarecommendation',
+    'yapremium',
     # newsletter,
     #'tinymce',
     'tagging',
