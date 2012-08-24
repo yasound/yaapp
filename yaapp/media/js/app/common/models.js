@@ -125,6 +125,14 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             'style_misc': gettext('Miscellaneous')
         }
         return genre_data[genre_id];
+    },
+
+    toJSON: function() {
+        var data = Yasound.Data.Models.Radio.__super__.toJSON.apply(this);
+        if (data.name.length > 18) {
+            data.name = data.name.substring(0,18) + "...";
+        }
+        return data;
     }
 });
 
