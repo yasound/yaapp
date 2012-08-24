@@ -53,7 +53,7 @@ Yasound.Views.Radio = Backbone.View.extend({
     events: {
         "click #btn-favorite": "addToFavorite",
         "click #btn-unfavorite": "removeFromFavorite",
-        "click #webapp-radio-title h1": "selectUser"
+        "click #user": "selectUser"
     },
 
     initialize: function () {

@@ -2,7 +2,7 @@ from django.contrib import admin
 from models import Subscription, UserSubscription, GiftRule, Achievement
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sku', 'duration', )
+    list_display = ('name', 'sku', 'duration', 'enabled')
     search_fields = ( 'name', 'sku', )
 admin.site.register(Subscription, SubscriptionAdmin)
 

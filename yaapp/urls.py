@@ -222,6 +222,9 @@ urlpatterns = patterns('',
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
 
+    # yapremium
+    (r'^api/v1/premium/', include('yapremium.urls')),
+    
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),

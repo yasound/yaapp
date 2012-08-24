@@ -4,19 +4,39 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 import settings as yapremium_settings
 
+
+class SubscriptionManager(models.Manager):
+    def available_subscriptions(self):
+        return self.filter(enabled=True)
+
+
 class Subscription(models.Model):
+    objects = SubscriptionManager()
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     name = models.CharField(_('name'), max_length=255, blank=True)
     sku = models.CharField(_('sku'), max_length=255, blank=True)
     description = models.TextField(_('description'), blank=True)
     duration = models.IntegerField(_('duration'), default=1)
+    enabled = models.BooleanField(_('enabled'), default=False)
+
+    def as_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'sku': self.sku,
+            'description': self.description,
+            'duration': self.duration,
+            'enabled': self.enabled
+        }
+        return data
 
     def __unicode__(self):
         return u'%s' % (self.name)
 
     class Meta:
         verbose_name = _('subscription')
+
 
 class UserSubscription(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -31,7 +51,8 @@ class UserSubscription(models.Model):
     class Meta:
         verbose_name = _('user subscription')
         verbose_name_plural = _('user subscriptions')
-    
+
+
 class GiftRule(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -46,6 +67,7 @@ class GiftRule(models.Model):
     class Meta:
         verbose_name = _('gift rule')
         verbose_name_plural = _('gift rules')
+
 
 class Achievement(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
