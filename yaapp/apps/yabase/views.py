@@ -1131,7 +1131,7 @@ class WebAppView(View):
                     return HttpResponse(response, mimetype='application/json')
                 else:
                     context['signup_form'] = form
-        return context, 'yabase/webapp.html'
+        return context, 'yabase/app/signup/signup.html'
 
     def login(self, request, context, *args, **kwargs):
         if request.method == 'POST':
@@ -1146,7 +1146,7 @@ class WebAppView(View):
                     return self._ajax_error(form.errors)
                 else:
                     context['signup_form'] = form
-        return context, 'yabase/webapp.html'
+        return context, 'yabase/app/login/login.html'
 
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
