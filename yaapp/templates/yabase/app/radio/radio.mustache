@@ -26,10 +26,10 @@
    </div>
 	<ul id='radio-actions-container'>
 		<li class='wall-first-child'><a  href="#"><img class='actions-btn' src="/media/app/images/radio/radio-icon-embed.png"/>intégrer la radio sur mon site</a></li>
-		<li><a href="#"><img src="/media/app/images/radio/radio-icon-share.png"/><span>partager le titre</span></a></li>
+		<li><a data-toggle="modal" href="#modal-share"><img src="/media/app/images/radio/radio-icon-share.png"/><span>{% trans "Share song" %}</span></a></li>
 		<%#creator%>
     <%#owner%>
-		<li><a href="#"><img src="/media/app/images/radio/radio-icon-heart.png"/><span>j'aime le titre</span></a></li>
+		<li><a href="#" id="like-btn"><img src="/media/app/images/radio/radio-icon-heart.png"/><span>j'aime le titre</span></a></li>
 		<li><a href="#"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>modifier les paramètres</span></a></li>
 		<li><a href="#"><img src="/media/app/images/radio/radio-icon-music.png"/><span>mettre à jour la playlist</span></a></li>
 		<%/owner%>

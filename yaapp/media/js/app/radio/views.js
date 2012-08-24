@@ -53,7 +53,8 @@ Yasound.Views.Radio = Backbone.View.extend({
     events: {
         "click #btn-favorite": "addToFavorite",
         "click #btn-unfavorite": "removeFromFavorite",
-        "click #user": "selectUser"
+        "click #user": "selectUser",
+        "click #radio-actions-container #like-btn": "onLike"
     },
 
     initialize: function () {
@@ -105,6 +106,10 @@ Yasound.Views.Radio = Backbone.View.extend({
             $('#btn-favorite', this.el).show();
         }
         return this;
+    },
+
+    onLike: function (e) {
+        e.preventDefault();
     }
 });
 
