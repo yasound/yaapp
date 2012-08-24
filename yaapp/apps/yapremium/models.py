@@ -2,8 +2,38 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from datetime import *
+from dateutil.relativedelta import *
 import settings as yapremium_settings
+from yabase.models import Radio
 
+class Service(models.Model):
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
+    stype = models.IntegerField(_('service'), choices=yapremium_settings.SERVICE_CHOICES, unique=True)
+
+    class Meta:
+        verbose_name = _('service')
+
+    def __unicode__(self):
+        return u'%s' % (self.get_stype_display())
+
+    def activate(self, user):
+        profile = user.get_profile()
+        stype = self.stype
+        if stype == yapremium_settings.SERVICE_HD:
+            profile.permissions.hd = True
+        if stype == yapremium_settings.SERVICE_SELECTION:
+            profile.permissions.selection = True
+        profile.save()
+
+    def disable(self, user):
+        profile = user.get_profile()
+        if stype == yapremium_settings.SERVICE_HD:
+            profile.permissions.hd = False
+        if stype == yapremium_settings.SERVICE_SELECTION:
+            profile.permissions.selection = False
+        profile.save()
 
 class SubscriptionManager(models.Manager):
     def available_subscriptions(self):
@@ -20,6 +50,7 @@ class Subscription(models.Model):
     duration = models.IntegerField(_('duration'), default=1)
     enabled = models.BooleanField(_('enabled'), default=False)
     order = models.IntegerField(_('order'), default=0)
+    services = models.ManyToManyField(Service, verbose_name=_('services'))
 
     def as_dict(self, request_user):
         data = {
@@ -43,9 +74,23 @@ class Subscription(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name)
 
+    def calculate_expiration_date(self, today=None):
+        if not today:
+            today = date.today()
+        return today +relativedelta(months=+self.duration)
+
+    def activate_services(self, user):
+        services = self.services.all()
+        for service in services:
+            service.activate(user)
+
+    def disable_services(self, user):
+        services = self.services.all()
+        for service in services:
+            service.disable(user)
+
     class Meta:
         verbose_name = _('subscription')
-
 
 class UserSubscription(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -54,15 +99,29 @@ class UserSubscription(models.Model):
     subscription = models.ForeignKey(Subscription, verbose_name=_('subscription'))
     achievement = models.ForeignKey('Achievement', verbose_name=_('achievement'), null=True, blank=True)
     active = models.BooleanField('Active', default=True)
-    expiration_date = models.DateTimeField(_('expiration date'))
-
-    def __unicode__(self):
-        return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
+    expiration_date = models.DateTimeField(_('expiration date'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('user subscription')
         verbose_name_plural = _('user subscriptions')
 
+    def __unicode__(self):
+        return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
+
+    def save(self, *args, **kwargs):
+        if self.active:
+            UserSubscription.objects.filter(user=self.user, active=True).update(active=False)
+            self.subscription.activate_services(self.user)
+        else:
+            if self.pk:
+                previous = UserSubscription.objects.get(pk=pk)
+                if previous.active == True:
+                    self.subscription.disable_services(self.user)
+
+        if not self.expiration_date:
+            self.expiration_date = self.subscription.calculate_expiration_date()
+
+        super(UserSubscription, self).save(*args, **kwargs)
 
 class GiftRule(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
