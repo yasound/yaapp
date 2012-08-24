@@ -22,8 +22,5 @@ Yasound.Data.Models.SelectedRadios = Backbone.Collection.extend({
         } else {
             this.fetch({ data: $.param({ genre: genre}) });
         }
-    },
-    comparator: function(radioUser) {
-        return radioUser.get("id");
     }
 });
