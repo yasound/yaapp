@@ -1977,8 +1977,8 @@ ul#notifications {
     border-radius:10px;
     box-shadow: 0px 0px 4px #b6b6b7;
     background-color:#f7f7f7;
-    margin:0px;
-    margin-top:20px;
+    margin-left:3px;
+    margin-top:30px;
 }
 
 #radio-actions-container a {
