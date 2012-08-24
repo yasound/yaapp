@@ -850,6 +850,11 @@ else:
     TEMP_DIRECTORY = '/tmp/'
 
 
+# in-app purchase
+APPLE_VERIFY_RECEIPT_URL = 'https://sandbox.itunes.apple.com/verifyReceipt'
+if PRODUCTION_MODE:
+    APPLE_VERIFY_RECEIPT_URL = 'https://buy.itunes.apple.com/verifyReceipt'
+
 # picture upload
 RADIO_PICTURE_MAX_FILE_SIZE = 20971520
 RADIO_PICTURE_MIN_FILE_SIZE = 1024
