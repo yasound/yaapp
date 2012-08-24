@@ -22,6 +22,9 @@ Yasound.Views.Notification = Backbone.View.extend({
         data.formatted_date = this.model.getFormattedDate();
 
         $(this.el).hide().html(ich.notificationTemplate(data)).fadeIn(200);
+        
+        $(this.el).filter(':odd').addClass('notification-odd');
+        $(this.el).filter(':even').addClass('notification-even');
         return this;
     },
 
