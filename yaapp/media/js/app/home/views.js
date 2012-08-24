@@ -78,6 +78,7 @@ Yasound.Views.HomePage = Backbone.View.extend({
 
     render: function(genre) {
         this.reset();
+
         $(this.el).html(ich.homePageTemplate());
 
         this.selectedRadios = new Yasound.Data.Models.SelectedRadios({});

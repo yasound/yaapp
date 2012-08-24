@@ -1071,6 +1071,7 @@ class WebAppView(View):
 
         context['submenu_number'] = 1
         context['radios'] = radios
+        context['g_page'] = 'home'
         return context, 'yabase/app/home/homePage.html'
 
     def radio(self, request, context, *args, **kwargs):
