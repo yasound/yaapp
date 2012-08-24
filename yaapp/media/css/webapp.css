@@ -2001,6 +2001,7 @@ ul#notifications {
 
 #radio-actions-container .wall-first-child {
     border-radius:10px 10px 0px 0px;
+    border:none;
 }
 
 #radio-actions-container .wall-last-child {
