@@ -5,7 +5,7 @@
     </div>
     <div class="radio-container">
         <div class='picture'>
-        <img src='{{ radio.picture_url }}' width='210' height='210'/>
+        <a href='{% url webapp_radio radio.uuid %}'><img src='{{ radio.picture_url }}' width='210' height='210'/></a>
         </div>
 
         <div class='mask' style='display:none;'>
@@ -24,7 +24,7 @@
         </div>
 
         <div class="profile">
-            <img src='{{ radio.creator.user_profile.picture_url }}' width='32px' height='32px'/>
+            <img src='{{ radio.creator.userprofile.picture_url }}' width='32px' height='32px'/>
             <span class="radio-profile-picture-mask">
                 <img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask"/>
             </span>

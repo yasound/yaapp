@@ -60,6 +60,7 @@ class GiftRule(models.Model):
     gift = models.ForeignKey(Subscription, verbose_name=_('subscription'))
     unit = models.IntegerField(_('unit'), default=1)
     max_per_user = models.IntegerField(_('max per user'), default=1)
+    enabled = models.BooleanField(_('enabled'), default=False)
 
     def __unicode__(self):
         return u'%s' % (self.get_action_display)
