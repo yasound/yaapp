@@ -688,7 +688,6 @@ Yasound.Views.PublicStats = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'updateData');
         this.model.bind('change', this.render, this);
-        this.updateData();
         setInterval(this.updateData, 10 * 1000 * 60);
     },
     onClose: function() {
