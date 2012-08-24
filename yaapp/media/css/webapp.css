@@ -1498,6 +1498,7 @@ input::-webkit-input-placeholder {
 }
 
 #webapp-radio-picture {
+    position:relative;
     width: 212px;
     margin: 0px auto;
 }
@@ -1539,11 +1540,7 @@ input::-webkit-input-placeholder {
 
 .favorites-nbr-container {
     text-align:left;
-    margin-bottom: 10px
-}
-
-.favorites-nbr-container img {
-
+    margin: 10px 0px;
 }
 
 .favorites-nbr {
@@ -1739,13 +1736,32 @@ input::-webkit-input-placeholder {
 
 #webapp-track-title {
     width:208px;
-    position:absolute;
+    position:absolute;w
     border:1px solid black;
     background-color: rgba(39, 37, 36, 0.80);
     bottom:0px;
     left:0px;
     border-radius:0px 0px 5px 5px;
     box-shadow:0px 1px 1px grey inset;
+}
+
+#webapp-title-radio {
+    width:208px;
+    position:absolute;
+    border:1px solid black;
+    background-color: rgba(39, 37, 36, 0.80);
+    bottom:4px;
+    left:5px;
+    border-radius:0px 0px 5px 5px;
+    box-shadow:0px 1px 1px grey inset;
+}
+
+#webapp-title-radio h2 {
+    font-size: 15px;
+    font-weight: normal;
+    color: white;
+    line-height: 20px;
+    margin: 5px;
 }
 
 #webapp-track-title h2 {

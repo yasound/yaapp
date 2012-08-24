@@ -20,23 +20,23 @@ class ShowManager():
     FRIDAY = 'FRI'
     SATURDAY = 'SAT'
     SUNDAY = 'SUN'
-    
-    
+
+
     TYPE_PLAYLIST = 'playlist'
     TYPE_META = 'meta'
-    
+
     META_NEW_SONGS = 'new_songs'
     META_TOP_SONGS = 'top_songs'
     META_RARE_SONGS = 'rare_songs'
-    
+
     def __init__(self):
         self.db = settings.MONGO_DB
         self.shows = self.db.shows
         self.shows.ensure_index("playlist_id", unique=True)
-        
-    def create_show(self, name, radio, days, time, random_play=True, enabled=True, yasound_songs=[]):        
+
+    def create_show(self, name, radio, days, time, random_play=True, enabled=True, yasound_songs=[]):
         playlist = Playlist.objects.create(radio=radio, name=name)
-        
+
         for index, y_song in enumerate(yasound_songs):
             if isinstance(y_song, int): # array of ids instead of objects
                 try:
@@ -48,12 +48,12 @@ class ShowManager():
             song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist=playlist, yasound_song=y_song)
             song_instance.order = index
             song_instance.save()
-        
+
         if type(time) == datetime.time:
             time = time.isoformat()
         elif isinstance(time, str) or isinstance(time, unicode):
             time = time_string_from_date_string(time)
-        
+
         show_doc = {'name': name,
                     'playlist_id': playlist.id,
                     'days': days,
@@ -63,21 +63,25 @@ class ShowManager():
                     'type': self.TYPE_PLAYLIST
                     }
         self.shows.insert(show_doc, safe=True)
-        return self.shows.find_one({'playlist_id': playlist.id})
-    
+        show = self.shows.find_one({'playlist_id': playlist.id})
+
+        # update show duration
+        self.update_show_duration(show['_id'])
+        return show
+
     def shows_for_radio(self, radio_id, count=None, skip=0):
         playlist_ids = Playlist.objects.filter(radio__id=radio_id).values_list('id', flat=True)
-        
+
         query = {
                  'playlist_id': {'$in': list(playlist_ids)}
                  }
-        
+
         if count is not None:
             shows = self.shows.find(query).sort([('playlist_id', ASCENDING)]).skip(skip).limit(count)
         else:
             shows = self.shows.find(query).sort([('playlist_id', ASCENDING)]).skip(skip)
         return shows
-    
+
     def nb_shows_for_radio(self, radio_id):
         playlist_ids = Playlist.objects.filter(radio__id=radio_id).values_list('id', flat=True)
         query = {
@@ -85,12 +89,12 @@ class ShowManager():
                  }
         count = self.shows.find(query).count()
         return count
-    
+
     def get_show(self, show_id):
         if isinstance(show_id, str) or isinstance(show_id, unicode):
             show_id = ObjectId(show_id)
         return self.shows.find_one({'_id': show_id})
-    
+
     def update_show(self, show_data):
         show_id = show_data.get('_id', None)
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
@@ -100,7 +104,7 @@ class ShowManager():
             show_data['time'] = time_string_from_date_string(time)
         self.shows.update({'_id':show_data['_id']}, show_data, safe=True)
         return self.get_show(show_id)
-    
+
     def delete_show(self, show_id):
         if show_id and (isinstance(show_id, str) or isinstance(show_id, unicode)):
             show_id = ObjectId(show_id)
@@ -110,12 +114,12 @@ class ShowManager():
         playlist = Playlist.objects.get(id=show['playlist_id'])
         playlist.delete()
         self.shows.remove({'_id': show_id})
-        
+
     def duplicate_show(self, show_id):
         show_original = self.get_show(show_id)
         if show_original is None:
             return None
-        
+
         radio = Playlist.objects.get(id=show_original['playlist_id']).radio
         days = show_original['days']
         time = show_original['time']
@@ -128,10 +132,10 @@ class ShowManager():
             yasound_song_id = s.metadata.yasound_song_id
             y = YasoundSong.objects.get(id=yasound_song_id)
             yasound_songs.append(y)
-        
+
         show_copy = self.create_show(name, radio, days, time, random, enabled, yasound_songs)
         return show_copy
-    
+
     def songs_for_show(self, show_id, count=None, skip=0):
         s = self.get_show(show_id)
         playlist_id = s['playlist_id']
@@ -141,7 +145,7 @@ class ShowManager():
         else:
             songs = songs[skip:]
         return songs
-    
+
     def add_song_in_show(self, show_id, yasound_song_id):
         show = self.get_show(show_id)
         if show is None:
@@ -155,13 +159,33 @@ class ShowManager():
         song_instance, _created = SongInstance.objects.create_from_yasound_song(playlist=p, yasound_song=y)
         song_instance.order = song_count
         song_instance.save()
+
+        # update show duration
+        self.update_show_duration(show_id)
         return True
-    
+
     def remove_song(self, song_instance_id):
         try:
+            playlist = SongInstance.objects.get(id=song_instance_id).playlist
             SongInstance.objects.get(id=song_instance_id).delete()
         except:
             return False
+
+        # update show duration
+        show = self.shows.find_one({'playlist_id': playlist.id})
+        self.update_show_duration(show['_id'])
         return True
-            
-        
+
+    def update_show_duration(self, show_id):
+        show = self.get_show(show_id)
+        if show is None:
+            return
+
+        songs = self.songs_for_show(show_id)
+        yasound_song_ids = list(songs.values_list('metadata__yasound_song_id', flat=True))
+        yasound_songs = YasoundSong.objects.filter(id__in=yasound_song_ids)
+        durations = yasound_songs.values_list('duration', flat=True)
+        show_duration = sum(durations)
+        show['duration'] = show_duration
+        self.update_show(show)
+
