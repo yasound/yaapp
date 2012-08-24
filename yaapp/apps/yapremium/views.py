@@ -13,7 +13,7 @@ def subscriptions(request):
     qs = qs[offset:offset+limit]
     data = []
     for subscription in qs:
-        data.append(subscription.as_dict(request_user=request.user))
+        data.append(subscription.as_dict())
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
 
