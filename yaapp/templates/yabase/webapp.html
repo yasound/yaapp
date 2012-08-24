@@ -92,6 +92,7 @@
        var g_facebook_share_link = '{{ facebook_share_link}}';
        var g_has_radios = {% if has_radios %}true{% else %}false{% endif %};
        var g_page = '{{ g_page }}';
+       var g_bootstrapped_data = {% if bdata %}{{ bdata|safe }}{% else %}undefined{% endif %};
     </script>
 
 

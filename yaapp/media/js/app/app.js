@@ -19,13 +19,16 @@ $(document).ready(function () {
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
     }
+    if (g_bootstrapped_data) {
+        Yasound.Utils.disableFX();
+    } else {
+        Yasound.Utils.enableFX();
+    }
 
-    Yasound.App.enableFX = true;
     Yasound.App.waitForSoundManager = true;
 
     if ($.browser.msie) {
         if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
-            Yasound.App.enableFX = false;
             Yasound.App.waitForSoundManager = false;
             g_enable_push = false;
         }
@@ -173,6 +176,12 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
+            if (this.alreadyLoaded) {
+                g_bootstrapped_data = undefined;
+                Yasound.Utils.enableFX();
+            }
+            this.alreadyLoaded = true;
+
             this.buildCommonContext(selectedMenu);
             if (this.currentView) {
                 this.currentView.reset();
@@ -224,6 +233,7 @@ $(document).ready(function () {
                 el: '#webapp-content'
             }).render(genre);
 
+            Yasound.Utils.enableFX();
         },
 
         settings: function () {

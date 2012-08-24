@@ -90,3 +90,17 @@ Yasound.Utils.submitForm = function (options) {
         colibri(options.errorMessage, 'colibri-error');
     });
 };
+
+Yasound.Utils.disableFX = function() {
+    Yasound.App.enableFX = false;
+}
+
+Yasound.Utils.enableFX = function () {
+    if ($.browser.msie) {
+        if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+            Yasound.App.enableFX = false;
+            return;
+        }
+    }
+    Yasound.App.enableFX = true;
+}

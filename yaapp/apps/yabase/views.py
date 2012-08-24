@@ -31,7 +31,7 @@ from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm, RadioGenreForm
 from forms import MyAccountsForm, MyInformationsForm, MyNotificationsForm
 from account.forms import WebAppSignupForm, LoginForm
-from yacore.api import api_response
+from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
@@ -1071,6 +1071,7 @@ class WebAppView(View):
 
         context['submenu_number'] = 1
         context['radios'] = radios
+        context['bdata'] = json.dumps([radio.as_dict() for radio in radios], cls=MongoAwareEncoder)
         context['g_page'] = 'home'
         return context, 'yabase/app/home/homePage.html'
 
