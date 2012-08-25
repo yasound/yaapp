@@ -90,17 +90,29 @@ class UserSubscription(models.Model):
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
     subscription = models.ForeignKey(Subscription, verbose_name=_('subscription'))
+    active = models.BooleanField(_('active'), default=False)
+    expiration_date = models.DateTimeField(_('expiration date'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('user subscription')
         verbose_name_plural = _('user subscriptions')
 
     def save(self, *args, **kwargs):
+        uss = UserSubscription.objects.exclude(id=self.id).filter(active=True)
+        for us in uss:
+            us.active = False
+            us.save()
+
+        if self.active and not self.expiration_date:
+            self.expiration_date = self.subscription.calculate_expiration_date()
+
         super(UserSubscription, self).save(*args, **kwargs)
+
         for service in self.subscription.services.all():
             us, _created = UserService.objects.get_or_create(service=service, user=self.user)
-            us.active =True
-            us.expiration_date = self.subscription.calculate_expiration_date()
+            us.active = self.active
+            if us.active:
+                us.expiration_date = self.subscription.calculate_expiration_date(us.expiration_date)
             us.save()
 
 
@@ -127,11 +139,7 @@ class UserService(models.Model):
         if self.active:
             self.service.activate(self.user)
         else:
-            if self.pk:
-                previous = UserService.objects.get(pk=pk)
-                if previous.active == True:
-                    self.service.disable(self.user)
-
+            self.service.disable(self.user)
         super(UserService, self).save(*args, **kwargs)
 
 

@@ -30,7 +30,7 @@ def subscriptions(request, subscription_sku=None):
             response = api_response({'success': False})
             return response
         else:
-            UserSubscription.objects.create(subscription=subscription, user=request.user)
+            UserSubscription.objects.create(subscription=subscription, user=request.user, active=True)
             response = api_response({'success': True})
             return response
 
