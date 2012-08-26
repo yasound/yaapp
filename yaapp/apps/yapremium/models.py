@@ -52,6 +52,7 @@ class Subscription(models.Model):
     duration = models.IntegerField(_('duration'), default=1)
     enabled = models.BooleanField(_('enabled'), default=False)
     order = models.IntegerField(_('order'), default=0)
+    highlighted = models.BooleanField(_('enabled'), default=False)
     services = models.ManyToManyField(Service, verbose_name=_('services'))
 
     def as_dict(self, request_user):
@@ -60,7 +61,8 @@ class Subscription(models.Model):
             'sku': self.sku,
             'duration': self.duration,
             'enabled': self.enabled,
-            'current': False
+            'highlighted': self.highlighted,
+            'current': False,
         }
         if request_user:
             uss = UserSubscription.objects.filter(user=request_user, active=True)[:1]
