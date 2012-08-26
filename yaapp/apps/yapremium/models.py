@@ -52,7 +52,7 @@ class Subscription(models.Model):
     duration = models.IntegerField(_('duration'), default=1)
     enabled = models.BooleanField(_('enabled'), default=False)
     order = models.IntegerField(_('order'), default=0)
-    highlighted = models.BooleanField(_('enabled'), default=False)
+    highlighted = models.BooleanField(_('highlighted'), default=False)
     services = models.ManyToManyField(Service, verbose_name=_('services'))
 
     def as_dict(self, request_user):
