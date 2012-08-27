@@ -1,8 +1,10 @@
-from models import Subscription
+from models import Subscription, UserSubscription
 from django.shortcuts import get_object_or_404
 from yacore.api import api_response
 from yacore.decorators import check_api_key
 from django.contrib.auth.models import User
+from django.http import Http404, HttpResponse, HttpResponseNotFound, \
+    HttpResponseBadRequest, HttpResponseRedirect
 import utils as yapremium_utils
 import logging
 logger = logging.getLogger("yaapp.yapremium")

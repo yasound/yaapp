@@ -45,9 +45,12 @@ class TestView(TestCase):
 
 
     def test_get_subscriptions(self):
-        sub = Subscription.objects.create(name='sub', sku='sub', enabled=True)
+        sub = Subscription.objects.create(name='sub', sku='com.yasound.yasound.inappHD1y', enabled=True)
 
         res = self.client.get(reverse('yapremium.views.subscriptions'))
         self.assertEquals(res.status_code, 200)
         data = json.loads(res.content)
         self.assertEquals(data.get('meta').get('total_count'), 1)
+
+        res = self.client.post(reverse('yapremium.views.subscriptions', args=[sub.sku,]))
+        self.assertEquals(res.status_code, 403)
