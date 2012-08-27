@@ -60,6 +60,7 @@ def async_convert_song(yasound_song_id, dry=False):
     if conversion_status is None:
         conversion_status = {
             'converted': False,
+            'in_progress': False,
             'high_quality_finished': False,
             'low_quality_finished': False,
             'preview_finished': False
@@ -72,6 +73,14 @@ def async_convert_song(yasound_song_id, dry=False):
     if dry:
         return
 
+    if conversion_status.get('in_progress'):
+        logger.info('song conversion in progress, giving up')
+        return
+
+    conversion_status['in_progress'] = True
+    manager.add_information(song.id, information)
+
+
     # convert hq
     if not conversion_status.get('high_quality_finished'):
         logger.info('converting high quality file %s' % (yasound_song_id))
@@ -82,6 +91,8 @@ def async_convert_song(yasound_song_id, dry=False):
         res = yaref_utils.convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS, source, destination)
         if not res:
             logger.error('cannot convert %s to %s' % (source, destination))
+            conversion_status['in_progress'] = False
+            manager.add_information(song.id, information)
             return
 
         hq_destination = song.get_song_hq_path()
@@ -107,6 +118,8 @@ def async_convert_song(yasound_song_id, dry=False):
         res = yaref_utils.convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_LOW_QUALITY_OPTIONS, source, destination)
         if not res:
             logger.error('cannot convert %s to %s' % (source, destination))
+            conversion_status['in_progress'] = False
+            manager.add_information(song.id, information)
             return
 
         lq_destination = song.get_song_lq_path()
@@ -120,5 +133,8 @@ def async_convert_song(yasound_song_id, dry=False):
         manager.add_information(song.id, information)
     else:
         logger.info('lq conversion already done for %s' % (yasound_song_id))
+
+    conversion_status['in_progress'] = False
+    manager.add_information(song.id, information)
 
     logger.info('conversion done for %s (%s)' % (yasound_song_id, song.get_song_hq_path()))
