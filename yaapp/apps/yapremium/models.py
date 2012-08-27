@@ -30,6 +30,7 @@ class Service(models.Model):
 
     def disable(self, user):
         profile = user.get_profile()
+        stype = self.stype
         if stype == yapremium_settings.SERVICE_HD:
             profile.permissions.hd = False
         if stype == yapremium_settings.SERVICE_SELECTION:
