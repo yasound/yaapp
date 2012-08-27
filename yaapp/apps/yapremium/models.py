@@ -130,6 +130,7 @@ class UserService(models.Model):
 
     def as_dict(self):
         data = {
+            'id': self.id,
             'service': self.service.get_stype_display(),
             'active': self.active,
             'expiration_date': self.expiration_date,
