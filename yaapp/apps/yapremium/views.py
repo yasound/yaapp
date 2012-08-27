@@ -22,6 +22,7 @@ def subscriptions(request, subscription_sku=None):
         return response
     elif request.method == 'POST' and subscription_sku is not None:
         logger.debug('received receipt')
+        logger.debug(request)
         subscription = get_object_or_404(Subscription, sku=subscription_sku)
         receipt = request.REQUEST.get('receipt')
         username = request.REQUEST.get('username')
