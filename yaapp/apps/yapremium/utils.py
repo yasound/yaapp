@@ -2,7 +2,7 @@ from django.conf import settings
 import json
 import base64
 import urllib2
-
+import requests
 import logging
 logger = logging.getLogger("yaapp.yapremium")
 
