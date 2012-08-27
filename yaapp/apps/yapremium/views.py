@@ -1,4 +1,4 @@
-from models import Subscription, UserSubscription
+from models import Subscription, UserSubscription, UserService
 from django.shortcuts import get_object_or_404
 from yacore.api import api_response
 from yacore.decorators import check_api_key
@@ -37,8 +37,24 @@ def subscriptions(request, subscription_sku=None):
             return response
         else:
             logger.debug('receipt is valid, creating user subscription')
-            UserSubscription.objects.create(subscription=subscription, user=request.user, active=True)
+            UserSubscription.objects.create(subscription=subscription, user=request.user)
             response = api_response({'success': True})
             return response
 
+    raise Http404
+
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST'])
+def services(request, subscription_sku=None):
+    if request.method == 'GET':
+        limit = int(request.REQUEST.get('limit', 25))
+        offset = int(request.REQUEST.get('offset', 0))
+        qs = UserService.objects.filter(user=request.user)
+        total_count = qs.count()
+        qs = qs[offset:offset+limit]
+        data = []
+        for us in qs:
+            data.append(us.as_dict())
+        response = api_response(data, total_count, limit=limit, offset=offset)
+        return response
     raise Http404

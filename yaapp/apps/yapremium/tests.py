@@ -31,8 +31,7 @@ class TestModel(TestCase):
         today = date.today()
         subscription = Subscription.objects.create(name='sub', sku='sub', duration=2, enabled=True)
 
-        us = UserSubscription.objects.create(subscription=subscription, user=self.user, active=True)
-        self.assertTrue(us.active)
+        us = UserSubscription.objects.create(subscription=subscription, user=self.user)
         self.assertEquals(us.expiration_date, today + relativedelta(months=+subscription.duration))
 
 

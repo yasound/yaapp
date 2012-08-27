@@ -63,17 +63,7 @@ class Subscription(models.Model):
             'duration': self.duration,
             'enabled': self.enabled,
             'highlighted': self.highlighted,
-            'current': False,
         }
-        if request_user:
-            uss = UserSubscription.objects.filter(user=request_user, active=True)[:1]
-            if uss.count() > 0:
-                us = uss[0]
-                if us.subscription.id == self.id:
-                    data['current'] = True
-                    data['expiration_date'] = us.expiration_date
-                elif us.subscription.order > self.order:
-                    data['enabled'] = False
         return data
 
     def __unicode__(self):
@@ -93,7 +83,6 @@ class UserSubscription(models.Model):
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
     subscription = models.ForeignKey(Subscription, verbose_name=_('subscription'))
-    active = models.BooleanField(_('active'), default=False)
     expiration_date = models.DateTimeField(_('expiration date'), null=True, blank=True)
 
     class Meta:
@@ -101,23 +90,17 @@ class UserSubscription(models.Model):
         verbose_name_plural = _('user subscriptions')
 
     def save(self, *args, **kwargs):
-        uss = UserSubscription.objects.exclude(id=self.id).filter(active=True)
-        for us in uss:
-            us.active = False
-            us.save()
-
-        if self.active and not self.expiration_date:
-            self.expiration_date = self.subscription.calculate_expiration_date()
-
+        self.expiration_date = self.subscription.calculate_expiration_date()
         super(UserSubscription, self).save(*args, **kwargs)
 
         for service in self.subscription.services.all():
             us, _created = UserService.objects.get_or_create(service=service, user=self.user)
-            us.active = self.active
-            if us.active:
+            if not us.active:
+                us.expiration_date = self.subscription.calculate_expiration_date()
+            else:
                 us.expiration_date = self.subscription.calculate_expiration_date(us.expiration_date)
+            us.active = True
             us.save()
-
 
     def __unicode__(self):
         return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
@@ -145,6 +128,13 @@ class UserService(models.Model):
             self.service.disable(self.user)
         super(UserService, self).save(*args, **kwargs)
 
+    def as_dict(self):
+        data = {
+            'service': self.service.get_stype_display(),
+            'active': self.active,
+            'expiration_date': self.expiration_date,
+        }
+        return data
 
 class GiftRule(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
