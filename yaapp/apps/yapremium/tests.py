@@ -48,7 +48,7 @@ class TestVerifyReceipt(TestCase):
         f = open('./apps/yapremium/fixtures/yasound_inapp_apple_receipt.bin')
         data = f.read()
         f.close()
-        self.assertTrue(verify_receipt(data))
+        self.assertTrue(verify_receipt(data, encode=True))
 
 
 class TestView(TestCase):

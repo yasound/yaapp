@@ -30,7 +30,7 @@ def subscriptions(request, subscription_sku=None):
         username = request.REQUEST.get('username')
         if username != request.user.username:
             return HttpResponse(status=403)
-        validated = yapremium_utils.verify_receipt(receipt)
+        validated = yapremium_utils.verify_receipt(receipt, encode=False)
         if not validated:
             logger.debug('receipt is invalid')
             response = api_response({'success': False})

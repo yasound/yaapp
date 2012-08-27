@@ -6,11 +6,15 @@ import requests
 import logging
 logger = logging.getLogger("yaapp.yapremium")
 
-def verify_receipt(receipt):
+def verify_receipt(receipt, encode=False):
     """
     verify receipt on apple server
     """
-    receipt_data = base64.b64encode(receipt)
+    if encode:
+        receipt_data = base64.b64encode(receipt)
+    else:
+        receipt_data = receipt
+
     json_data = json.dumps({'receipt-data': receipt_data})
     r = requests.post(settings.APPLE_VERIFY_RECEIPT_URL, data=json_data, verify=False)
     logger.debug(r.raw)
