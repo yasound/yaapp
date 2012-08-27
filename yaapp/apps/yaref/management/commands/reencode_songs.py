@@ -6,6 +6,7 @@ from yabase.models import SongMetadata
 from yacore.database import queryset_iterator
 from yaref import mongo
 from yaref.models import YasoundSong
+from yabase.models import Radio
 import datetime
 import gc
 import logging
@@ -24,6 +25,8 @@ class Command(BaseCommand):
             default=False, help="dry: does nothing except logging into mongodb"),
         make_option('-r', '--radio', dest='radio_id',
             default=0, help="radio id"),
+        make_option('-n', '--count', dest='radio_count',
+            default=0, help="radio count"),
     )
     help = "Scan songs and check integry on filesystem"
     args = ''
@@ -31,16 +34,22 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         dry = options.get('dry', False)
         radio_id = int(options.get('radio_id', 0))
+        radio_count = int(options.get('radio_count', 0))
         songs = YasoundSong.objects.all()
         if radio_id > 0:
             yasound_song_ids = list(SongMetadata.objects.filter(songinstance__playlist__radio__id=radio_id).values_list('yasound_song_id', flat=True))
             songs = YasoundSong.objects.filter(id__in=yasound_song_ids)
-        count = songs.count() 
+        if radio_count > 0:
+            radios = Radio.objects.filter(ready=True).order_by('?')[:radio_count].values_list('id', flat=True)
+            yasound_song_ids = list(SongMetadata.objects.filter(songinstance__playlist__radio__id__in=list(radios)).values_list('yasound_song_id', flat=True))
+            songs = YasoundSong.objects.filter(id__in=yasound_song_ids)
+
+        count = songs.count()
         logger.info("processing %d song instances" % (count))
-        
+
         if count == 0:
             return
-        
+
         global_start = time()
         start = time()
         for i, song in enumerate(queryset_iterator(songs)):
@@ -52,4 +61,4 @@ class Command(BaseCommand):
         elapsed = time() - global_start
         logger.info("processed %d songs in %s seconds" % (count, str(elapsed)))
         logger.info("done")
-        
+
