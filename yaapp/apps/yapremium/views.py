@@ -25,15 +25,12 @@ def subscriptions(request, subscription_sku=None):
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     elif request.method == 'POST' and subscription_sku is not None:
-        logger.debug('received receipt')
-        logger.debug(request)
-
         subscription = get_object_or_404(Subscription, sku=subscription_sku)
         receipt = request.REQUEST.get('receipt')
         username = request.REQUEST.get('username')
         if username != request.user.username:
             return HttpResponse(status=403)
-        validated = yapremium_utils.verifiy_receipt(receipt)
+        validated = yapremium_utils.verify_receipt(receipt)
         if not validated:
             logger.debug('receipt is invalid')
             response = api_response({'success': False})

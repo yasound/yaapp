@@ -4,6 +4,7 @@ from django.test import TestCase
 from yapremium.models import Subscription, UserSubscription
 from datetime import *
 from dateutil.relativedelta import *
+from utils import verify_receipt
 import json
 
 class TestModel(TestCase):
@@ -33,6 +34,21 @@ class TestModel(TestCase):
         us = UserSubscription.objects.create(subscription=subscription, user=self.user, active=True)
         self.assertTrue(us.active)
         self.assertEquals(us.expiration_date, today + relativedelta(months=+subscription.duration))
+
+
+class TestVerifyReceipt(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+
+    def test_verify_receipt(self):
+        f = open('./apps/yapremium/fixtures/yasound_inapp_apple_receipt.bin')
+        data = f.read()
+        f.close()
+        self.assertTrue(verify_receipt(data))
 
 
 class TestView(TestCase):

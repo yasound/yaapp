@@ -6,7 +6,7 @@ import requests
 import logging
 logger = logging.getLogger("yaapp.yapremium")
 
-def verifiy_receipt(receipt):
+def verify_receipt(receipt):
     """
     verify receipt on apple server
     """
