@@ -542,7 +542,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-
+        'yaapp.yapremium': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     }
 }
 

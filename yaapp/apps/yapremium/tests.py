@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from yapremium.models import Subscription
+from yapremium.models import Subscription, UserSubscription
+from datetime import *
+from dateutil.relativedelta import *
 import json
 
 class TestModel(TestCase):
@@ -23,6 +25,15 @@ class TestModel(TestCase):
         sub.enabled = True
         sub.save()
         self.assertEquals(len(Subscription.objects.available_subscriptions()), 1)
+
+    def test_subscribe(self):
+        today = date.today()
+        subscription = Subscription.objects.create(name='sub', sku='sub', duration=2, enabled=True)
+
+        us = UserSubscription.objects.create(subscription=subscription, user=self.user, active=True)
+        self.assertTrue(us.active)
+        self.assertEquals(us.expiration_date, today + relativedelta(months=+subscription.duration))
+
 
 class TestView(TestCase):
     def setUp(self):
