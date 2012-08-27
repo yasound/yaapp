@@ -24,7 +24,7 @@ def leaderboard_update_task():
     update_leaderboard()
     flush_transaction()
     logger.info('leaderboard_update_task finished')
-    
+
 
 
 
@@ -32,7 +32,7 @@ def leaderboard_update_task():
 @transaction.commit_on_success
 def process_playlists_exec(radio, content_compressed, task=None):
     logger.info("decompress playlist for radio %d" % (radio.id))
-    
+
     try:
         content_uncompressed = zlib.decompress(content_compressed)
     except Exception, e:
@@ -42,8 +42,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
     logger.info('*** process_playlists ***')
 
     start = time.time()
-    
-    
+
+
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
@@ -51,7 +51,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
     REMOVE_PLAYLIST = 'REMV'
     REMOTE_PLAYLIST = 'RLST'
     UUID_TAG = 'UUID'
-        
+
     artist_name = None
     album_name = None
 
@@ -59,7 +59,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
     found = 0
     notfound = 0
 
-    # avoid stale data        
+    # avoid stale data
     flush_transaction()
 
     # create defaut playlist
@@ -77,10 +77,10 @@ def process_playlists_exec(radio, content_compressed, task=None):
         if task:
             progress = float(data.offset) / data_len
             task.update_state(state="PENDING", meta={"progress": "%.2f" % progress})
-            
+
         if tag == UUID_TAG:
             _uuid = data.get_string()
-        elif tag == PLAYLIST_TAG:            
+        elif tag == PLAYLIST_TAG:
             _device_playlist_name = data.get_string()
         elif tag == ALBUM_TAG:
             album_name = data.get_string()
@@ -92,11 +92,11 @@ def process_playlists_exec(radio, content_compressed, task=None):
 
             creator = radio.creator
             if creator is not None and creator.is_superuser:
-                song_instance = fast_import(song_name=song_name, 
+                song_instance = fast_import(song_name=song_name,
                                             album_name=album_name,
                                             artist_name=artist_name,
                                             playlist=playlist)
-                
+
                 if not song_instance:
                     remaining_songs.append({
                         'song_name': song_name,
@@ -104,7 +104,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
                         'artist_name': artist_name,
                     })
             else:
-                song_instance = import_from_string(song_name=song_name, 
+                song_instance = import_from_string(song_name=song_name,
                                                    album_name=album_name,
                                                    artist_name=artist_name,
                                                    playlist=playlist)
@@ -112,7 +112,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
                 found += 1
             else:
                 notfound +=1
-                
+
         elif tag == REMOVE_PLAYLIST:
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
@@ -120,7 +120,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
 
-            
+
     logger.info('playlist parsing finished, computing ready flag')
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
     if len(songs_ok) > 0:
@@ -148,21 +148,21 @@ def async_find_remaining_songs(songs, playlist_id):
         song_name = song.get('song_name')
         artist_name = song.get('artist_name')
         album_name = song.get('album_name')
-        
-        import_from_string(song_name=song_name, 
+
+        import_from_string(song_name=song_name,
                            album_name=album_name,
                            artist_name=artist_name,
-                           playlist=playlist)        
+                           playlist=playlist)
     radio = playlist.radio
     if radio.ready:
         return
-    
+
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
     if len(songs_ok) > 0:
         radio.ready = True
         radio.save()
         radio.fill_next_songs_queue()
-        
+
 @task
 def process_playlists(radio, content_compressed):
     return process_playlists_exec(radio, content_compressed, task=process_playlists)
@@ -180,13 +180,13 @@ def process_need_sync_songs_exec():
         name = metadata.name
         album = metadata.album_name
         artist = metadata.artist_name
-        mongo_doc = YasoundSong.objects.find_fuzzy(name, album, artist) 
+        mongo_doc = YasoundSong.objects.find_fuzzy(name, album, artist)
         if mongo_doc:
             metadata.yasound_song_id = mongo_doc['db_id']
             metadata.save()
             song.need_sync = False
             song.save()
-    
+
 @task
 def process_need_sync_songs():
     return process_need_sync_songs_exec()
@@ -200,17 +200,17 @@ def process_upload_song(filepath, metadata=None, convert=True, song_id=None, all
     path = os.path.dirname(filepath)
     logger.debug('deleting %s' % (path))
     rmtree(path)
-    
+
 @task
 def generate_preview(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
     yasound_song.generate_preview()
-    
+
 @task
 def extract_song_cover(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
     import_utils.extract_song_cover(yasound_song)
-    
+
 @task(ignore_result=True)
 def async_dispatch_user_started_listening_song(radio, song):
     """
@@ -219,31 +219,30 @@ def async_dispatch_user_started_listening_song(radio, song):
     """
     rus = RadioUser.objects.filter(radio=radio, listening=True).select_related()
     for ru in rus:
-        yabase_signals.user_started_listening_song.send(sender=ru.radio, 
+        yabase_signals.user_started_listening_song.send(sender=ru.radio,
                                                         radio=ru.radio,
-                                                        user=ru.user, 
+                                                        user=ru.user,
                                                         song=song)
 
 @task(ignore_result=True)
 def async_radio_broadcast_message(radio, message):
-    logger.debug('async_radio_broadcast_message: radio=%s, message=%s' % (radio, message))
     recipients = User.objects.filter(radiouser__radio=radio, radiouser__favorite=True)
+    logger.debug('async_radio_broadcast_message: radio=%s, message=%s' % (radio.id, unicode(message)))
     for recipient in recipients:
         recipient.get_profile().send_message(sender=radio.creator, radio=radio, message=message)
 
 @task(ignore_result=True)
 def async_import_from_itunes(radio, data):
-    yabase_signals.new_animator_activity.send(sender=radio, 
-                                              user=radio.creator, 
+    yabase_signals.new_animator_activity.send(sender=radio,
+                                              user=radio.creator,
                                               radio=radio,
                                               atype=yabase_settings.ANIMATOR_TYPE_IMPORT_ITUNES)
-    
+
     lines = data.split('\n')
     for line in lines:
         name, album, artist = parse_itunes_line(line)
-        logger.info('name=%s, album=%s, artist=%s' % (name, album, artist))
+        logger.info('name=%s, album=%s, artist=%s' % (unicode(name), unicode(album), unicode(artist)))
         if len(name) > 0:
             playlist, _created = radio.get_or_create_default_playlist()
             import_from_string(name, album, artist, playlist)
-    
-        
+
