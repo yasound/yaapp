@@ -11,15 +11,10 @@ def verifiy_receipt(receipt):
     json_data = json.dumps({'receipt-data': receipt_data})
 
     try:
-        s = urllib2.urlopen(settings.APPLE_VERIFY_RECEIPT_URL, json_data)
-        response_data = s.read()
-        s.close()
-
-        response_json = json.loads(response_data)
-        status = response_json.get('status', '')
+        r = requests.post(settings.APPLE_VERIFY_RECEIPT_URL, data=json_data)
+        response = r.json
+        if r.status_code == 200 and response.get('status') == 0:
+            return True
     except:
         return False
-
-    if response_data.status == 200 and status == 0:
-        return True
     return False
