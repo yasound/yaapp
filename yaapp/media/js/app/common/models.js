@@ -123,7 +123,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             'style_rnbsoul': gettext('RnB / Soul'),
             'style_world': gettext('World'),
             'style_misc': gettext('Miscellaneous')
-        }
+        };
         return genre_data[genre_id];
     },
 
@@ -188,6 +188,12 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
             str = str + ' ' + gettext('on') + ' ' + context.album();
         }
         return str;
+    },
+
+    like: function () {
+        var songId = this.get('id');
+        var url = '/api/v1/song/' + songId + '/liker/';
+        $.post(url);
     },
 
     toJSON: function() {
