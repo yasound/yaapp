@@ -46,7 +46,7 @@ def async_find_synonyms(yasound_song_id):
             sm.calculate_hash_name(commit=True)
 
 
-@task(rate_limit='180/s', ignore_result=True)
+@task(rate_limit='8/s', ignore_result=True)
 def async_convert_song(yasound_song_id, dry=False):
     logger.info('converting song %s' % (yasound_song_id))
     song = YasoundSong.objects.get(id=yasound_song_id)
