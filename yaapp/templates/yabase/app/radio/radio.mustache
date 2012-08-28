@@ -24,3 +24,15 @@
         </a>
         {% endif %}
    </div>
+	<ul id='radio-actions-container'>
+		<li class='wall-first-child'><a data-toggle="modal" href="#modal-share"><img src="/media/app/images/radio/radio-icon-share.png"/><span>{% trans "Share" %}</span></a></li>
+    {# <li><a href="#"><img src="/media/app/images/radio/radio-icon-message.png"/>envoyer un message aux auditeurs</a></li> #}
+		<%#creator%>
+    <%#owner%>
+		<li><a href="/app/<%uuid%>/settings/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Edit settings" %}</span></a></li>
+		<li><a href="/app/<%uuid%>/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Edit playlist" %}</span></a></li>
+		<%/owner%>
+    <%/creator%>
+    <li class='wall-last-child'><a href="#" id="like-btn"><img src="/media/app/images/radio/radio-icon-heart.png"/><span>{% trans "Like song" %}</span></a></li>
+    {# <li class='wall-last-child'><a  href="#"><img class='actions-btn' src="/media/app/images/radio/radio-icon-embed.png"/>intégrer la radio sur mon site</a></li> #}
+	</ul>

@@ -477,7 +477,7 @@ body {
     padding-left:17px;
 }
 
-#share-btn {
+#player #share-btn {
     display:inline-block;
     float:left;
     height:18px;
@@ -485,7 +485,7 @@ body {
     background-image:url('../app/images/share-btn.png');
 }
 
-#share-btn:hover {
+#player #share-btn:hover {
     display:inline-block;
     float:left;
     height:18px;
@@ -493,7 +493,7 @@ body {
     background-image:url('../app/images/hover-share-btn.png');
 }
 
-#love-btn {
+#player #love-btn {
     display:inline-block;
     float:left;
     height:18px;
@@ -502,7 +502,7 @@ body {
     background-repeat:no-repeat;
 }
 
-#love-btn:hover {
+#player #love-btn:hover {
     display:inline-block;
     float:left;
     height:18px;
@@ -511,7 +511,7 @@ body {
     background-repeat:no-repeat;
 }
 
-#shop-btn {
+#player #shop-btn {
     display:inline-block;
     float:left;
     height:19px;
@@ -520,7 +520,7 @@ body {
     background-repeat:no-repeat;
 }
 
-#shop-btn:hover {
+#player #shop-btn:hover {
     display:inline-block;
     float:left;
     height:19px;
@@ -1971,6 +1971,68 @@ ul#notifications {
     width:100%;
 }
 
+#radio-actions-container {
+    width:213px;
+    border:1px solid #b6b6b7;
+    border-radius:10px;
+    box-shadow: 0px 0px 4px #b6b6b7;
+    background-color:#f7f7f7;
+    margin-left:3px;
+    margin-top:30px;
+}
+
+#radio-actions-container li {
+    display:block;
+    min-height:41px;
+    vertical-align: middle;
+    border-top:1px solid #b6b6b7;
+}
+
+#radio-actions-container a {
+    display:inline;
+    padding-right:5px;
+    list-style:none;
+    text-decoration: none;
+    color:#727478;
+    font-weight: bold;
+    text-shadow:1px 1px white;
+    height:41px;
+}
+
+#radio-actions-container .wall-first-child {
+    border-radius:10px 10px 0px 0px;
+    border:none;
+}
+
+#radio-actions-container .wall-last-child {
+    border-radius:0px 0px 10px 10px;    
+}
+
+#radio-actions-container li:hover {
+    background-image: linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -o-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -moz-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -webkit-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+    background-image: -ms-linear-gradient(bottom, rgb(224,224,224) 10%, rgb(248,248,248) 55%);
+
+    text-decoration:none;
+}
+
+#radio-actions-container img {
+    float:left;
+    margin:6px;
+}
+
+#radio-actions-container a {
+    width:213px;
+    float:left;
+}
+
+#radio-actions-container span {
+    display:block;
+    float:left;
+    padding-top:10px;
+}
 
 /**
  * Notifications

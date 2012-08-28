@@ -53,7 +53,10 @@ Yasound.Views.Radio = Backbone.View.extend({
     events: {
         "click #btn-favorite": "addToFavorite",
         "click #btn-unfavorite": "removeFromFavorite",
-        "click #user": "selectUser"
+        "click #user": "selectUser",
+        "click #radio-actions-container #like-btn": "onLike",
+        "click #radio-actions-container #settings-btn": "onSettings",
+        "click #radio-actions-container #programming-btn": "onProgramming"
     },
 
     initialize: function () {
@@ -105,6 +108,27 @@ Yasound.Views.Radio = Backbone.View.extend({
             $('#btn-favorite', this.el).show();
         }
         return this;
+    },
+
+    onLike: function (e) {
+        e.preventDefault();
+        if (this.model.currentSong) {
+            this.model.currentSong.like();
+        }
+    },
+
+    onSettings: function (e) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/settings/', {
+            trigger: true
+        });
+    },
+
+    onProgramming: function (e) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/programming/', {
+            trigger: true
+        });
     }
 });
 

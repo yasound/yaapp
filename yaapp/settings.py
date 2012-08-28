@@ -67,6 +67,7 @@ CELERY_IMPORTS = (
     "yagraph.task",
     "yasearch.task",
     "yaref.task",
+    "yapremium.task",
 )
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
@@ -542,7 +543,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-
+        'yaapp.yapremium': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     }
 }
 
@@ -718,8 +723,11 @@ if not PRODUCTION_MODE:
         "raido_popularity": {
             "task": "yametrics.task.popularity_update_task",
             "schedule": crontab(minute=0, hour='*'),
+        },
+        "service_expiration": {
+            "task": "yapremium.task.check_expiration_date",
+            "schedule": crontab(minute=0, hour='12'),
         }
-
     }
 else:
     import socket
@@ -748,7 +756,11 @@ else:
 #                "task": "emailconfirmation.task.delete_expired_confirmations_task",
 #                "schedule": crontab(minute=0, hour='12'),
 #            },
-        }
+            "service_expiration": {
+                "task": "yapremium.task.check_expiration_date",
+                "schedule": crontab(minute=0, hour='12'),
+            }
+        },
     elif hostname == 'yas-web-04':
         CELERYBEAT_SCHEDULE = {
             "check_users_are_alive": {
@@ -849,6 +861,11 @@ if PRODUCTION_MODE:
 else:
     TEMP_DIRECTORY = '/tmp/'
 
+
+# in-app purchase
+APPLE_VERIFY_RECEIPT_URL = 'https://sandbox.itunes.apple.com/verifyReceipt'
+if PRODUCTION_MODE:
+    APPLE_VERIFY_RECEIPT_URL = 'https://buy.itunes.apple.com/verifyReceipt'
 
 # picture upload
 RADIO_PICTURE_MAX_FILE_SIZE = 20971520

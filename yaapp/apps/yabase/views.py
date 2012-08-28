@@ -1054,6 +1054,7 @@ class WebAppView(View):
             'my_informations_form': my_informations_form,
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
+            'minutes': _get_global_minutes()
         }
 
         if hasattr(self, page):
@@ -1130,7 +1131,7 @@ class WebAppView(View):
                     return HttpResponse(response, mimetype='application/json')
                 else:
                     context['signup_form'] = form
-        return context, 'yabase/webapp.html'
+        return context, 'yabase/app/signup/signup.html'
 
     def login(self, request, context, *args, **kwargs):
         if request.method == 'POST':
@@ -1145,7 +1146,7 @@ class WebAppView(View):
                     return self._ajax_error(form.errors)
                 else:
                     context['signup_form'] = form
-        return context, 'yabase/webapp.html'
+        return context, 'yabase/app/login/login.html'
 
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
@@ -1292,6 +1293,7 @@ class WebAppView(View):
             'my_informations_form': my_informations_form,
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
+            'minutes': _get_global_minutes()
         }
 
         if hasattr(self, page):
@@ -1614,7 +1616,7 @@ def my_programming_yasound_songs(request, radio_uuid):
         name = request.REQUEST.get('name', '').lower()
         artist = request.REQUEST.get('artist', '').lower()
         album = request.REQUEST.get('album', '').lower()
-
+        fuzzy = request.REQUEST.get('fuzzy', '').lower()
         data = []
         total_count = 0
 
@@ -1632,6 +1634,20 @@ def my_programming_yasound_songs(request, radio_uuid):
             total_count = qs.count()
             data = list(qs[offset:offset+limit].values('id', 'name', 'artist_name', 'album_name'))
 
+        if fuzzy != '':
+            data = yasearch_search.search_song(fuzzy)
+            if data is not None and data != []:
+                total_count = data.count()
+                data = list(data[offset:offset+limit])
+                for item in data:
+                    item['album_name'] = item['album']
+                    del item['album']
+                    item['artist_name'] = item['artist']
+                    del item['artist']
+                    item['id'] = item['db_id']
+                    del item['db_id']
+                    del item['_id']
+
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     elif request.method == 'POST':
@@ -1641,18 +1657,25 @@ def my_programming_yasound_songs(request, radio_uuid):
 
     raise Http404
 
+def _get_global_minutes():
+    minutes = cache.get('public.stat.minutes')
+    if not minutes:
+        mm = GlobalMetricsManager()
+        metrics = mm.get_global_metrics()
+        listening_time = 0
+        for metric in metrics:
+            if 'listening_time' in metric:
+                listening_time += float(metric['listening_time'])
+        minutes = intcomma(int(listening_time)).replace(',', ' ')
+        cache.set('public.stat.minutes', minutes, 60*5)
+    return minutes
+
 def public_stats(request):
     """
     public global stats (minutes listened on yasound)
     """
-    mm = GlobalMetricsManager()
-    metrics = mm.get_global_metrics()
-    listening_time = 0
-    for metric in metrics:
-        if 'listening_time' in metric:
-            listening_time += float(metric['listening_time'])
     data = {
-        'minutes': intcomma(int(listening_time)).replace(',', ' ')
+        'minutes': _get_global_minutes()
     }
     response = json.dumps(data)
     return HttpResponse(response, mimetype='application/json')

@@ -170,6 +170,7 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
     },
 
     filter: function(name, album, artist) {
+        _.extend(this.params, {fuzzy:undefined});
         if (name) {
             _.extend(this.params, {name:name});
         } else {
@@ -185,6 +186,11 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
         } else {
             _.extend(this.params, {album:undefined});
         }
+        this.goTo(0);
+    },
+
+    findFuzzy: function(criteria) {
+        _.extend(this.params, {name:undefined, artist:undefined, album:undefined, fuzzy:criteria});
         this.goTo(0);
     }
 });

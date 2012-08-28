@@ -177,7 +177,10 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         "keypress #find-track-input": "onFindTrack",
         "keypress #find-album-input": "onFindAlbum",
         "keypress #find-artist-input": "onFindArtist",
-        "click #find-btn": "onFind"
+        "click #find-btn": "onFind",
+        "keypress #find-fuzzy-input": "onFindFuzzyInput",
+        "click #find-fuzzy-btn": "onFindFuzzy"
+
     },
 
     initialize: function() {
@@ -228,6 +231,13 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         this.onFind(e);
     },
 
+    onFindFuzzyInput: function(e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+        this.onFindFuzzy(e);
+    },
+
     onFind: function(e) {
         e.preventDefault();
         var name = $('#find-track-input', this.el).val();
@@ -236,7 +246,16 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 
         this.songsView.clear();
         this.songs.filter(name, album, artist);
+    },
+
+    onFindFuzzy: function(e) {
+        e.preventDefault();
+        var criteria = $('#find-fuzzy-input', this.el).val();
+
+        this.songsView.clear();
+        this.songs.findFuzzy(criteria);
     }
+
 });
 
 
@@ -380,11 +399,13 @@ Yasound.Views.UploadCell = Backbone.View.extend({
 
     onRemove: function (e) {
         this.stop();
+        this.trigger('remove', this);
         this.remove();
     },
 
     onFinished: function(e, data) {
         $.publish('/programming/upload_finished');
+        this.trigger('remove', this);
         this.remove();
     },
 
@@ -414,7 +435,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onRemoveView');
         this.views = [];
     },
 
@@ -444,6 +465,7 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
             add: function (e, data) {
                 $('#start-all-btn', that.el).show();
                 var view = new Yasound.Views.UploadCell({});
+                view.on('remove', that.onRemoveView);
                 $('#upload-table', that.el).append(view.render(data, uuid).el);
                 that.views.push(view);
             },
@@ -502,6 +524,11 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         $('#stop-all-btn', this.el).hide();
         $('#remove-all-btn', this.el).hide();
         this.clear();
+    },
+
+    onRemoveView: function (view) {
+        this.views = _.without(this.views, view);
+        view.off('remove', this.onRemoveView);
     }
 });
 

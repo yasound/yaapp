@@ -243,6 +243,8 @@ class UserProfile(models.Model):
 
     permissions = BitField(flags=(
         'create_radio',
+        'hd',
+        'selection'
         ),
         default=(1)
     ) #defaut = YES (create_radio)
@@ -582,7 +584,9 @@ class UserProfile(models.Model):
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
             data['permissions'] = {
-                'create_radio': True if self.permissions.create_radio else False
+                'create_radio': True if self.permissions.create_radio else False,
+                'hd': True if self.permissions.hd else False,
+                'selection': True if self.permissions.selection else False,
             }
 
 
