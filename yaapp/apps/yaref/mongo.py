@@ -1,5 +1,28 @@
 from django.conf import settings
 
+
+class JobManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.yaref.job_manager
+        self.collection.ensure_index('id', unique=True)
+
+    def inc(self, key, value):
+        key = key.replace('.', '').replace('$', '')
+        self.collection.update({
+            "id": 'counters'
+        }, {
+            "$inc": {key: value}
+        }, upsert=True, safe=True)
+
+    def get(self, key, default=0):
+        key = key.replace('.', '').replace('$', '')
+        doc = self.collection.find_one({'id': 'counters'})
+        if doc:
+            return doc.get(key, default)
+        else:
+            return 0
+
 class SongAdditionalInfosManager():
     def __init__(self):
         self.db = settings.MONGO_DB
