@@ -177,7 +177,10 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         "keypress #find-track-input": "onFindTrack",
         "keypress #find-album-input": "onFindAlbum",
         "keypress #find-artist-input": "onFindArtist",
-        "click #find-btn": "onFind"
+        "click #find-btn": "onFind",
+        "keypress #find-fuzzy-input": "onFindFuzzyInput",
+        "click #find-fuzzy-btn": "onFindFuzzy"
+
     },
 
     initialize: function() {
@@ -228,6 +231,13 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         this.onFind(e);
     },
 
+    onFindFuzzyInput: function(e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+        this.onFindFuzzy(e);
+    },
+
     onFind: function(e) {
         e.preventDefault();
         var name = $('#find-track-input', this.el).val();
@@ -236,7 +246,16 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 
         this.songsView.clear();
         this.songs.filter(name, album, artist);
+    },
+
+    onFindFuzzy: function(e) {
+        e.preventDefault();
+        var criteria = $('#find-fuzzy-input', this.el).val();
+
+        this.songsView.clear();
+        this.songs.findFuzzy(criteria);
     }
+
 });
 
 

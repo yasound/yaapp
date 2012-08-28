@@ -1616,7 +1616,7 @@ def my_programming_yasound_songs(request, radio_uuid):
         name = request.REQUEST.get('name', '').lower()
         artist = request.REQUEST.get('artist', '').lower()
         album = request.REQUEST.get('album', '').lower()
-
+        fuzzy = request.REQUEST.get('fuzzy', '').lower()
         data = []
         total_count = 0
 
@@ -1633,6 +1633,20 @@ def my_programming_yasound_songs(request, radio_uuid):
 
             total_count = qs.count()
             data = list(qs[offset:offset+limit].values('id', 'name', 'artist_name', 'album_name'))
+
+        if fuzzy != '':
+            data = yasearch_search.search_song(fuzzy)
+            if data is not None and data != []:
+                total_count = data.count()
+                data = list(data[offset:offset+limit])
+                for item in data:
+                    item['album_name'] = item['album']
+                    del item['album']
+                    item['artist_name'] = item['artist']
+                    del item['artist']
+                    item['id'] = item['db_id']
+                    del item['db_id']
+                    del item['_id']
 
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
