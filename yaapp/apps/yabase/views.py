@@ -1068,7 +1068,7 @@ class WebAppView(View):
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
     def home(self, request, context, *args, **kwargs):
-        radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_HOMEPAGE).order_by('featuredradio__order')
+        radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
 
         context['submenu_number'] = 1
         context['radios'] = radios
