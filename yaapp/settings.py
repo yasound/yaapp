@@ -67,6 +67,7 @@ CELERY_IMPORTS = (
     "yagraph.task",
     "yasearch.task",
     "yaref.task",
+    "yapremium.task",
 )
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
@@ -722,8 +723,11 @@ if not PRODUCTION_MODE:
         "raido_popularity": {
             "task": "yametrics.task.popularity_update_task",
             "schedule": crontab(minute=0, hour='*'),
+        },
+        "service_expiration": {
+            "task": "yapremium.task.check_expiration_date",
+            "schedule": crontab(minute=0, hour='12'),
         }
-
     }
 else:
     import socket
@@ -752,7 +756,11 @@ else:
 #                "task": "emailconfirmation.task.delete_expired_confirmations_task",
 #                "schedule": crontab(minute=0, hour='12'),
 #            },
-        }
+            "service_expiration": {
+                "task": "yapremium.task.check_expiration_date",
+                "schedule": crontab(minute=0, hour='12'),
+            }
+        },
     elif hostname == 'yas-web-04':
         CELERYBEAT_SCHEDULE = {
             "check_users_are_alive": {
