@@ -1545,7 +1545,7 @@ input::-webkit-input-placeholder {
 
 .favorites-nbr {
     margin-right:5px;
-    vertical-align: middle;    
+    vertical-align: middle;
     font-size: 30px;
     color:#434343;
     font-weight: bold;
@@ -2005,7 +2005,7 @@ ul#notifications {
 }
 
 #radio-actions-container .wall-last-child {
-    border-radius:0px 0px 10px 10px;    
+    border-radius:0px 0px 10px 10px;
 }
 
 #radio-actions-container li:hover {
@@ -2115,6 +2115,7 @@ ul#notifications {
 ,.type_notif_user_in_radio
 ,.type_notif_friend_in_radio
 ,.type_notif_friend_online
+,.type_notif_message_in_wall
  {
     height:47px;
     width:47px;
