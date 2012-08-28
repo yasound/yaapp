@@ -1670,10 +1670,13 @@ input::-webkit-input-placeholder {
 
 .wall-event-message .date,
 .wall-event-message h2 {
-    display:block;
     line-height: 17px;
-    height: 17px;
     margin-right:5px;
+}
+
+.wall-event-message h2 a {
+    float:left;
+    margin-right:10px;
 }
 
 .like-comment {
@@ -1936,7 +1939,6 @@ ul .user-cell:hover .caption {
 .wall-event-message h2 {
 	font-size:13px;
 	font-weight:bold;
-    float:left;
 }
 
 .wall-event-message p {
