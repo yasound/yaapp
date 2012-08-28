@@ -52,6 +52,21 @@ $(document).ready(function () {
             return gettext('Unfinished uploads are pending, do you really want to leave Yasound?');
         }
     });
+    var $win = $(window);
+    $.fn.scrollBottom = function() { 
+        return $(document).height() - this.scrollTop() - this.height(); 
+    };
+    $win.scroll(function () {
+        if ($win.scrollTop() > 500 && $win.scrollBottom()!=0)
+            $('#scroll-top-container').removeClass('hidden-scroll margin-scroll')
+        else if ($win.scrollBottom() == 0){
+            $('#scroll-top-container').addClass('margin-scroll')
+        }
+        else if ($win.scrollTop() < 500 ){
+            $('#scroll-top-container').addClass('hidden-scroll')
+        }
+    });
+
 
     /**
      * component initalization
