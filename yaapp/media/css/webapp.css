@@ -1404,6 +1404,31 @@ input::-webkit-input-placeholder {
     margin-bottom: 0px;
 }
 
+/*--- SCROLL TO TOP ---*/
+
+#scroll-top-container {
+    position:fixed;
+    bottom:0;
+    right:20px;
+    width:66px;
+    height:68px;
+    border: 1px solid #d5d5d5;
+    background-color:#4e4f52;
+    border-radius: 10px 10px 0px 0px;
+}
+
+#scroll-top-container img {
+    margin:12px;
+}
+
+.hidden-scroll {
+    opacity:0;
+}
+
+.margin-scroll {
+    margin-bottom:150px;
+}
+
 /**
  * Player
  */
