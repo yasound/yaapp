@@ -6,8 +6,12 @@ import logging
 from tempfile import mkdtemp
 import utils as yaref_utils
 import shutil
+import time
+import random
 
+from django.core.cache import cache
 from django.conf import settings
+
 logger = logging.getLogger("yaapp.yaref")
 
 @task(ignore_result=True)
@@ -48,6 +52,18 @@ def async_find_synonyms(yasound_song_id):
 
 @task(rate_limit='8/s', ignore_result=True)
 def async_convert_song(yasound_song_id, dry=False):
+    convert_jobs_count = cache.get(settings.CONVERT_JOBS_COUNT_KEY, 0)
+    logger.info('convert_jobs_count = %d' % (convert_jobs_count))
+    if convert_jobs_count > 8:
+        countdown = random.randrange(20, 120)
+        logger.info('too much job, retrying in %d seconds' % (countdown))
+        raise async_convert_song.retry(countdown=countdown)
+
+    if convert_jobs_count == 0:
+        cache.set(settings.CONVERT_JOBS_COUNT_KEY, 0)
+
+    cache.incr(settings.CONVERT_JOBS_COUNT_KEY)
+
     logger.info('converting song %s' % (yasound_song_id))
     song = YasoundSong.objects.get(id=yasound_song_id)
     manager =SongAdditionalInfosManager()
@@ -71,10 +87,12 @@ def async_convert_song(yasound_song_id, dry=False):
     manager.add_information(song.id, information)
 
     if dry:
+        cache.decr(settings.CONVERT_JOBS_COUNT_KEY)
         return
 
     if conversion_status.get('in_progress'):
         logger.info('song conversion in progress, giving up')
+        cache.decr(settings.CONVERT_JOBS_COUNT_KEY)
         return
 
     conversion_status['in_progress'] = True
@@ -93,6 +111,7 @@ def async_convert_song(yasound_song_id, dry=False):
             logger.error('cannot convert %s to %s' % (source, destination))
             conversion_status['in_progress'] = False
             manager.add_information(song.id, information)
+            cache.decr(settings.CONVERT_JOBS_COUNT_KEY)
             return
 
         hq_destination = song.get_song_hq_path()
@@ -120,6 +139,7 @@ def async_convert_song(yasound_song_id, dry=False):
             logger.error('cannot convert %s to %s' % (source, destination))
             conversion_status['in_progress'] = False
             manager.add_information(song.id, information)
+            cache.decr(settings.CONVERT_JOBS_COUNT_KEY)
             return
 
         lq_destination = song.get_song_lq_path()
@@ -137,4 +157,5 @@ def async_convert_song(yasound_song_id, dry=False):
     conversion_status['in_progress'] = False
     manager.add_information(song.id, information)
 
+    cache.decr(settings.CONVERT_JOBS_COUNT_KEY)
     logger.info('conversion done for %s (%s)' % (yasound_song_id, song.get_song_hq_path()))

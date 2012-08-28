@@ -8,6 +8,8 @@ djcelery.setup_loader()
 
 PROJECT_PATH = os.path.abspath(os.path.split(__file__)[0])
 
+import socket
+hostname = socket.gethostname()
 
 # Theses settings are different with env variables
 #
@@ -730,8 +732,6 @@ if not PRODUCTION_MODE:
         }
     }
 else:
-    import socket
-    hostname = socket.gethostname()
     if hostname == 'yas-web-01':
         CELERYBEAT_SCHEDULE = {
             "radio-listening-stat-every-hour": {
@@ -798,8 +798,7 @@ else:
         }
 
 
-
-
+CONVERT_JOBS_COUNT_KEY = 'convert-' + hostname
 
 UPLOAD_SONG_FOLDER = '/tmp/'
 if PRODUCTION_MODE:
