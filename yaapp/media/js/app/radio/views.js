@@ -119,7 +119,7 @@ Yasound.Views.Radio = Backbone.View.extend({
 
     onSettings: function (e) {
         event.preventDefault();
-        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/settings/', {
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/edit/', {
             trigger: true
         });
     },
