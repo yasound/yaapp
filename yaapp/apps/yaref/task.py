@@ -54,7 +54,7 @@ def async_find_synonyms(yasound_song_id):
 def async_convert_song(yasound_song_id, dry=False):
     convert_jobs_count = cache.get(settings.CONVERT_JOBS_COUNT_KEY, 0)
     logger.info('convert_jobs_count = %d' % (convert_jobs_count))
-    if convert_jobs_count > 8:
+    if convert_jobs_count > 6:
         countdown = random.randrange(20, 120)
         logger.info('too much job, retrying in %d seconds' % (countdown))
         raise async_convert_song.retry(countdown=countdown)
