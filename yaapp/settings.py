@@ -752,15 +752,11 @@ else:
                 "task": "emailconfirmation.task.resend_confirmations_task",
                 "schedule": crontab(minute=0, hour='10'),
             },
-#            "delete_expired_confirmations": {
-#                "task": "emailconfirmation.task.delete_expired_confirmations_task",
-#                "schedule": crontab(minute=0, hour='12'),
-#            },
             "service_expiration": {
                 "task": "yapremium.task.check_expiration_date",
                 "schedule": crontab(minute=0, hour='12'),
             }
-        },
+        }
     elif hostname == 'yas-web-04':
         CELERYBEAT_SCHEDULE = {
             "check_users_are_alive": {
