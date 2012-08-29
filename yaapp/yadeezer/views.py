@@ -24,7 +24,7 @@ def deezer_communication(request, username):
 
     params = {
         'app_id': settings.DEEZER_APP_ID,
-        'secret': settings.DEEZER_APP_SECRET,
+        'secret': settings.DEEZER_SECRET_KEY,
         'code': code,
     }
     try:
