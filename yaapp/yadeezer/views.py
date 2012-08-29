@@ -16,7 +16,7 @@ def deezer_communication(request, username):
     code = request.REQUEST.get('code', '')
     reason = request.REQUEST.get('reason', '')
 
-    logger.debug('code = %s, reason=' % (code, reason))
+    logger.debug('code = %s, reason=%s' % (code, reason))
 
     if reason != '' and code == '':
         logger.debug('reason is not empty, exiting')
