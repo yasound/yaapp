@@ -31,7 +31,7 @@ def deezer_communication(request, username):
         r = request.get(settings.DEEZER_CONNECT_URL, params=params)
         data = r.text
     except:
-        logger.error('cannot communicate with twitter with params = %r' % (params))
+        logger.error('cannot communicate with deezer with params = %r' % (params))
         return HttpResponse('OK')
 
     token = None
