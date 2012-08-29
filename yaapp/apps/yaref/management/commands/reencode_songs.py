@@ -65,7 +65,7 @@ class Command(BaseCommand):
             if doc is not None:
                 conversion_status = doc.get('conversion_status')
                 if conversion_status:
-                    if conversion_status.get('high_quality_finished') or conversion_status.get('low_quality_finished') or conversion-status.get('in_progress'):
+                    if conversion_status.get('high_quality_finished') or conversion_status.get('low_quality_finished') or conversion_status.get('in_progress'):
                         skipped = skipped + 1
                         continue
 
