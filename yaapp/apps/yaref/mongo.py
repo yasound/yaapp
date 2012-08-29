@@ -28,6 +28,7 @@ class SongAdditionalInfosManager():
         self.db = settings.MONGO_DB
         self.collection = self.db.yaref.songs
         self.collection.ensure_index('db_id', unique=True)
+        self.collection.ensure_index('playlist', unique=True)
 
     def erase_informations(self):
         self.collection.drop()
