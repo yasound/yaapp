@@ -1412,13 +1412,17 @@ input::-webkit-input-placeholder {
     right:20px;
     width:66px;
     height:68px;
-    border: 1px solid #d5d5d5;
+    border: 2px solid white;
     background-color:#4e4f52;
     border-radius: 10px 10px 0px 0px;
+    opacity:0.9;
+    filter:alpha(opacity=90);
 }
 
 #scroll-top-container img {
     margin:12px;
+    opacity:0.9;
+    filter:alpha(opacity=9);
 }
 
 .hidden-scroll {
