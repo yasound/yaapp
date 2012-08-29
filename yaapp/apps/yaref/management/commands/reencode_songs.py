@@ -4,7 +4,7 @@ from optparse import make_option
 from time import time
 from yabase.models import SongMetadata
 from yacore.database import queryset_iterator
-from yaref import mongo
+from yaref.mongo import SongAdditionalInfosManager
 from yaref.models import YasoundSong
 from yabase.models import Radio
 import datetime
@@ -50,9 +50,18 @@ class Command(BaseCommand):
         if count == 0:
             return
 
+        sm = SongAdditionalInfosManager()
+
         global_start = time()
         start = time()
         for i, song in enumerate(queryset_iterator(songs)):
+            doc = sm.information(song.id)
+            if doc is not None:
+                conversion_status = doc.get('conversion_status')
+                if conversion_status:
+                    if conversion_status.get('high_quality_finished') or conversion_status.get('low_quality_finished') or conversion-status.get('in_progress'):
+                        continue
+
             async_convert_song.delay(song.id, dry=dry)
             if i % 1000 == 0:
                 elapsed = time() - start
