@@ -2,6 +2,7 @@ from celery.task import task
 from django.conf import settings
 from django.contrib.auth.models import User
 from models import PlaylistManager, TrackManager
+import requests
 import logging
 logger = logging.getLogger("yaapp.yadeezer")
 
@@ -15,6 +16,10 @@ def import_playlists_task(username, token):
     playlists = r.json
 
     pm = PlaylistManager()
+
+    logger.debug('received')
+    logger.debug(playlists)
+
     for playlist in playlists.get('data'):
         playlist['creator']['username'] = username
         pm.add(playlist)

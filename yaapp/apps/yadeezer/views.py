@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from task import import_playlists_task
-
+import requests
 import logging
 logger = logging.getLogger("yaapp.account")
 
@@ -28,7 +28,7 @@ def deezer_communication(request, username):
         'code': code,
     }
     try:
-        r = request.get(settings.DEEZER_CONNECT_URL, params=params)
+        r = requests.get(settings.DEEZER_CONNECT_URL, params=params)
         data = r.text
     except:
         logger.error('cannot communicate with deezer with params = %r' % (params))
