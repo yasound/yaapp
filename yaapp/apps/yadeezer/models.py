@@ -15,6 +15,7 @@ class TrackManager():
         self.db = settings.MONGO_DB
         self.collection = self.db.deezer.tracks
         self.collection.ensure_index('id', unique=True)
+        self.collection.ensure_index('playlist')
 
     def add(self, doc):
         self.collection.update({'id': doc.get('id')}, {'$set': doc}, upsert=True, safe=True)
