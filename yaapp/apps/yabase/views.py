@@ -1488,6 +1488,7 @@ def notify_streamer(request):
         'api_key': api_key
     }
     logger.debug('notify_streamer: url = %s' % (stream_url))
+    return HttpResponse('OK') # disabled right now
     try:
         r = requests.get(stream_url, headers=custom_headers)
         logger.debug('result: %d' % (r.status_code))
