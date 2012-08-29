@@ -1459,6 +1459,22 @@ def new_social_user(sender, user, response, details, **kwargs):
         profile.facebook_token = access_token
         profile.save()
 
+def new_radio_created(sender, instance, created=None, **kwargs):
+    if not created:
+        return
+    radio = instance
+    user = radio.creator
+
+    if user.is_superuser:
+        return
+    radio_count = Radio.objects.filter(creator=user).count()
+
+    if radio_count >= yaapp_settings.MAX_RADIO_PER_USER:
+        profile = user.get_profile()
+        profile.permissions.create_radio = False
+        profile.save()
+
+
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
     post_save.connect(create_user_profile, sender=EmailUser)
@@ -1467,6 +1483,7 @@ def install_handlers():
     post_save.connect(create_radio, sender=User)
     post_save.connect(create_radio, sender=EmailUser)
     post_save.connect(create_ml_contact, sender=UserProfile)
+    post_save.connect(new_radio_created, sender=Radio)
     pre_delete.connect(user_profile_deleted, sender=UserProfile)
 
     yabase_signals.new_wall_event.connect(new_wall_event_handler)

@@ -6,11 +6,12 @@ from django.test import TestCase
 from django.utils import simplejson as json
 from tastypie.models import ApiKey
 from yabase import tests_utils as yabase_tests_utils
-from yabase.models import RadioUser
+from yabase.models import Radio, RadioUser
 from yasearch.indexer import erase_index
 import settings as account_settings
 import task
 import yabase.settings as yabase_settings
+from django.conf import settings
 import datetime
 from models import UserAdditionalInfosManager
 
@@ -150,6 +151,22 @@ class TestProfile(TestCase):
 
         users = UserProfile.objects.search_user_fuzzy('babar')
         self.assertEquals(len(users), 1)
+
+
+    def test_permissions_create_radio(self):
+        user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
+        profile1 = user1.get_profile()
+        self.assertTrue(profile1.permissions.create_radio)
+
+        radios = Radio.objects.filter(creator=user1)
+        self.assertEquals(radios.count(), 1)
+
+        for i in range(0, settings.MAX_RADIO_PER_USER):
+            Radio.objects.create(creator=user1)
+
+        profile1 = UserProfile.objects.get(id=profile1.id)
+        self.assertFalse(profile1.permissions.create_radio)
+
 
 class TestMultiAccount(TestCase):
     def setUp(self):

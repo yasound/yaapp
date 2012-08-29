@@ -894,6 +894,9 @@ ANONYMOUS_ACCESS_ALLOWED = True
 if DEVELOPMENT_MODE:
     ANONYMOUS_ACCESS_ALLOWED = False
 
+
+MAX_RADIO_PER_USER = 25
+
 # test
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
