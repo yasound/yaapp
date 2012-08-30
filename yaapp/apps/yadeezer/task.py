@@ -28,11 +28,11 @@ def import_playlists_task(username, token):
     for playlist in playlists.get('data'):
         url = 'https://api.deezer.com/2.0/playlist/%s' % (playlist.get('id'))
         r = requests.get(url, params=params)
-        tracks = r.json
+        playlist_detail = r.json
         logger.debug('----------------')
         logger.debug('received')
-        logger.debug(tracks)
-        for track in tracks.get('data'):
+        logger.debug(playlist_detail)
+        for track in playlist_detail.get('tracks').get('data'):
             # add playlist info
             ps = track.get('playlist', [])
             ps.append(playlist.get('id'))
