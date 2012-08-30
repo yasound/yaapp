@@ -36,7 +36,7 @@ def deezer_communication(request, username):
 
     token = None
     try:
-        token = data.split('=')[1].split('?')[0]
+        token = data.split('=')[1].split('?')[0].split('&')[0]
     except:
         logger.info('cannot parse token')
         pass
