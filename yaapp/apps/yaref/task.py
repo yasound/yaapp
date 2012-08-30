@@ -51,7 +51,7 @@ def async_find_synonyms(yasound_song_id):
 
 
 @task(rate_limit='8/s', ignore_result=True, max_retries=2000)
-def async_convert_song(yasound_song_id, dry=False):
+def async_convert_song(yasound_song_id, dry=False, primary=False):
     jm = JobManager()
     convert_jobs_count = jm.get(settings.CONVERT_JOBS_COUNT_KEY, 0)
 
@@ -61,7 +61,7 @@ def async_convert_song(yasound_song_id, dry=False):
         logger.info('too much job, retrying in %d seconds' % (countdown))
         raise async_convert_song.retry(countdown=countdown)
 
-    logger.info('converting song %s' % (yasound_song_id))
+    logger.info('converting song %s, dry=%s, primary=%s' % (yasound_song_id, dry, primary))
     song = YasoundSong.objects.get(id=yasound_song_id)
 
     jm.inc(settings.CONVERT_JOBS_COUNT_KEY, 1)
@@ -126,32 +126,33 @@ def async_convert_song(yasound_song_id, dry=False):
     else:
         logger.info('hq conversion already done for %s' % (yasound_song_id))
 
-    if not conversion_status.get('low_quality_finished'):
-        # convert lq
-        logger.info('converting low quality file %s' % (yasound_song_id))
-        source = song.get_song_path()
-        directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
-        destination = u'%s/converted.mp3' % (directory)
+    if not primary:
+        if not conversion_status.get('low_quality_finished'):
+            # convert lq
+            logger.info('converting low quality file %s' % (yasound_song_id))
+            source = song.get_song_path()
+            directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
+            destination = u'%s/converted.mp3' % (directory)
 
-        res = yaref_utils.convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_LOW_QUALITY_OPTIONS, source, destination)
-        if not res:
-            logger.error('cannot convert %s to %s' % (source, destination))
-            conversion_status['in_progress'] = False
+            res = yaref_utils.convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_LOW_QUALITY_OPTIONS, source, destination)
+            if not res:
+                logger.error('cannot convert %s to %s' % (source, destination))
+                conversion_status['in_progress'] = False
+                manager.add_information(song.id, information)
+                jm.inc(settings.CONVERT_JOBS_COUNT_KEY, -1)
+                return
+
+            lq_destination = song.get_song_lq_path()
+            try:
+                shutil.copy(destination, lq_destination)
+            except:
+                logger.error('cannot copy %s to %s' % (destination, lq_destination))
+            shutil.rmtree(directory)
+
+            conversion_status['low_quality_finished'] = True
             manager.add_information(song.id, information)
-            jm.inc(settings.CONVERT_JOBS_COUNT_KEY, -1)
-            return
-
-        lq_destination = song.get_song_lq_path()
-        try:
-            shutil.copy(destination, lq_destination)
-        except:
-            logger.error('cannot copy %s to %s' % (destination, lq_destination))
-        shutil.rmtree(directory)
-
-        conversion_status['low_quality_finished'] = True
-        manager.add_information(song.id, information)
-    else:
-        logger.info('lq conversion already done for %s' % (yasound_song_id))
+        else:
+            logger.info('lq conversion already done for %s' % (yasound_song_id))
 
     conversion_status['in_progress'] = False
     manager.add_information(song.id, information)

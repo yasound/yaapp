@@ -17,26 +17,20 @@ def import_playlists_task(username, token):
 
     pm = PlaylistManager()
 
-    logger.debug('received')
-    logger.debug(playlists)
-
-    for playlist in playlists.get('data'):
+    for playlist in playlists.get('data', []):
+        # add link with our user database
         playlist['creator']['username'] = username
         pm.add(playlist)
 
     tm = TrackManager()
-    for playlist in playlists.get('data'):
+    for playlist in playlists.get('data', []):
         url = 'https://api.deezer.com/2.0/playlist/%s' % (playlist.get('id'))
         r = requests.get(url, params=params)
         playlist_detail = r.json
-        logger.debug('----------------')
-        logger.debug('received')
-        logger.debug(playlist_detail)
-        for track in playlist_detail.get('tracks').get('data'):
-            # add playlist info
+        for track in playlist_detail.get('tracks', []).get('data', []):
+            # add playlist info (which is an array of id)
             ps = track.get('playlist', [])
             ps.append(playlist.get('id'))
             ps = list(set(ps))
             track['playlists'] = ps
-
             tm.add(track)
