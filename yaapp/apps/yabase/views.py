@@ -34,7 +34,7 @@ from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method
+from yacore.http import check_api_key_Authentication, check_http_method, absolute_url
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager
@@ -866,8 +866,8 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     if radio is None:
         raise Http404
 
-    radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
-    flash_player_absolute_url = request.build_absolute_uri('/media/player.swf')
+    radio_picture_absolute_url = absolute_url(radio.picture_url)
+    flash_player_absolute_url = absolute_url('/media/player.swf')
 
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
@@ -898,7 +898,7 @@ def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.htm
     if wtype == 'large':
         template_name = 'yabase/widget_large.html'
 
-    radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
+    radio_picture_absolute_url = absolute_url(radio.picture_url)
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
         "radio": radio,
@@ -916,10 +916,10 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
     if song_instance.playlist.radio != radio:
         raise Http404
 
-    radio_picture_absolute_url = request.build_absolute_uri(radio.picture_url)
-    radio_absolute_url =  request.build_absolute_uri(reverse('yabase.views.web_listen', args=[radio_uuid]))
+    radio_picture_absolute_url = absolute_url(radio.picture_url)
+    radio_absolute_url =  absolute_url(reverse('yabase.views.web_listen', args=[radio_uuid]))
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid)
-    flash_player_absolute_url = request.build_absolute_uri('/media/player.swf')
+    flash_player_absolute_url = absolute_url('/media/player.swf')
 
     return render_to_response(template_name, {
         "radio": radio,
@@ -1018,10 +1018,10 @@ class WebAppView(View):
         push_url = self._get_push_url(request)
         enable_push = settings.ENABLE_PUSH
 
-        facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = request.build_absolute_uri(reverse('webapp'))
+        facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
+        facebook_share_link = absolute_url(reverse('webapp'))
 
-        facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
+        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
 
         genre_form = RadioGenreForm()
 
@@ -1055,7 +1055,7 @@ class WebAppView(View):
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
             'minutes': _get_global_minutes(),
-            'deezer_channel_url': request.build_absolute_uri(reverse('deezer_channel')),
+            'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
         }
 
@@ -1081,7 +1081,7 @@ class WebAppView(View):
     def radio(self, request, context, *args, **kwargs):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         context['radio'] = radio
-        context['radio_picture_absolute_url'] = request.build_absolute_uri(radio.picture_url)
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         return context, 'yabase/app/radio/radio.html'
 
     def search(self, request, context, *args, **kwargs):
@@ -1243,8 +1243,8 @@ class WebAppView(View):
 
         has_radios = False
 
-        facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = request.build_absolute_uri(reverse('webapp'))
+        facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
+        facebook_share_link = absolute_url(reverse('webapp'))
 
 
         if request.user.is_authenticated():
@@ -1272,7 +1272,7 @@ class WebAppView(View):
                 if request.is_ajax():
                     return self._ajax_error(import_itunes_form.errors)
 
-        facebook_channel_url = request.build_absolute_uri(reverse('facebook_channel_url'))
+        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
 
         genre_form = RadioGenreForm()
 
@@ -1298,7 +1298,7 @@ class WebAppView(View):
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
             'minutes': _get_global_minutes(),
-            'deezer_channel_url': request.build_absolute_uri(reverse('deezer_channel')),
+            'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
         }
 
