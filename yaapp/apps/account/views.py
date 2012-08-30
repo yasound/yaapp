@@ -662,3 +662,7 @@ def user_picture(request, username):
         response_data = json.dumps(True)
         return HttpResponse(response_data, mimetype="application/json")
     raise Http404
+
+
+
+

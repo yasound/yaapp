@@ -224,7 +224,7 @@ urlpatterns = patterns('',
 
     # yapremium
     (r'^api/v1/premium/', include('yapremium.urls')),
-    
+
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
@@ -250,6 +250,10 @@ urlpatterns = patterns('',
 
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
+
+    # deezer communication
+    url(r'^deezer/(?P<username>\S+)/$', 'yadeezer.views.deezer_communication', name='deezer_communication'),
+
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
