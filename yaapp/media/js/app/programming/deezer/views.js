@@ -95,9 +95,10 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
 
     onImport: function (e) {
         e.preventDefault();
+        var that = this;
         DZ.login(function(response) {
             if (response.authResponse) {
-                this.fetchPlaylists();
+                that.fetchPlaylists();
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
