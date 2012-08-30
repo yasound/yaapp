@@ -15,7 +15,7 @@ Yasound.Data.Models.Deezer.Playlists = Backbone.Paginator.requestPager.extend({
     params:{},
 
     url: function() {
-        return '/api/v1/' + this.username + '/deezer/playlists/';
+        return '/api/v1/deezer/playlists/';
     },
 
     setUsername: function(username) {

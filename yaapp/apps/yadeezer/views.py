@@ -2,17 +2,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template.context import RequestContext
 from task import import_playlists_task
+
 import requests
 import logging
-logger = logging.getLogger("yaapp.account")
+logger = logging.getLogger("yaapp.yadeezer")
 
 
 @csrf_exempt
 def deezer_communication(request, username):
     logger.debug('received deezer notification for user %s' % (username))
-    user = get_object_or_404(User, username=username)
+    _user = get_object_or_404(User, username=username)
     code = request.REQUEST.get('code', '')
     reason = request.REQUEST.get('reason', '')
 
@@ -44,3 +46,8 @@ def deezer_communication(request, username):
     logger.info('launching playlists import')
     import_playlists_task.delay(username, token)
     return HttpResponse('OK')
+
+def channel_url(request, template_name='deezer/channel_url.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))
+

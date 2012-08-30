@@ -62,10 +62,11 @@ Yasound.Views.Deezer.Playlist = Backbone.View.extend({
 
 Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
     events: {
+        "click #import-btn": "onImport"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'fetchPlaylists');
     },
 
     onClose: function() {
@@ -90,5 +91,23 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
 
         this.playlists.fetch();
         return this;
+    },
+
+    onImport: function (e) {
+        e.preventDefault();
+        DZ.login(function(response) {
+            if (response.authResponse) {
+                this.fetchPlaylists();
+            } else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+        }, {perms: 'basic_access,email'});
+    },
+
+    fetchPlaylists: function (e) {
+        DZ.api('/user/me/playlists', function(response) {
+            console.log(response);
+            DZ.logout();
+        });
     }
 });

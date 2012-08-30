@@ -996,7 +996,7 @@ class WebAppView(View):
         my_notifications_form = None
         display_associate_facebook = False
         display_associate_twitter = False
-        deezer_redirect_uri = None
+
 
         if request.user.is_authenticated():
             user_profile = request.user.get_profile()
@@ -1010,8 +1010,6 @@ class WebAppView(View):
             my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
             my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
             my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
-
-            deezer_redirect_uri = request.build_absolute_uri(reverse('deezer_communication', args=[request.user,]))
 
         else:
             user_uuid = 0
@@ -1057,7 +1055,8 @@ class WebAppView(View):
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
             'minutes': _get_global_minutes(),
-            'deezer_redirect_uri' : deezer_redirect_uri
+            'deezer_channel_url': request.build_absolute_uri(reverse('deezer_channel')),
+            'deezer_app_id': settings.DEEZER_APP_ID,
         }
 
         if hasattr(self, page):
@@ -1247,7 +1246,6 @@ class WebAppView(View):
         facebook_share_picture = request.build_absolute_uri(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = request.build_absolute_uri(reverse('webapp'))
 
-        deezer_redirect_uri = None
 
         if request.user.is_authenticated():
             user_uuid = request.user.get_profile().own_radio.uuid
@@ -1259,7 +1257,6 @@ class WebAppView(View):
             if radio_count > 0:
                 has_radios = True
 
-            deezer_redirect_uri = request.build_absolute_uri(reverse('deezer_communication', args=[request.user,]))
 
         import_itunes_form = ImportItunesForm()
 
@@ -1301,7 +1298,8 @@ class WebAppView(View):
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
             'minutes': _get_global_minutes(),
-            'deezer_redirect_uri': deezer_redirect_uri,
+            'deezer_channel_url': request.build_absolute_uri(reverse('deezer_channel')),
+            'deezer_app_id': settings.DEEZER_APP_ID,
         }
 
         if hasattr(self, page):
