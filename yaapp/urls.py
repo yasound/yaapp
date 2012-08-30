@@ -257,7 +257,7 @@ urlpatterns = patterns('',
 
     # deezer communication
     url(r'^deezer/(?P<username>\S+)/$', 'yadeezer.views.deezer_communication', name='deezer_communication'),
-    url(r'^api/v1/deezer/', include('yadeezer.urls')),
+
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
