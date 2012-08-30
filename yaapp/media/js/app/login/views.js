@@ -23,6 +23,7 @@ Yasound.Views.LoginPage = Backbone.View.extend({
 
     templateLoaded: function() {
         $(this.el).html(ich.loginPageTemplate());
+        $("select", this.el).uniform({});
     },
 
     submit: function(e) {
