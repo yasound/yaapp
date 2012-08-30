@@ -194,6 +194,10 @@ urlpatterns = patterns('',
     url(r'^api/v1/twitter_share_preferences/$', 'account.views.get_twitter_share_preferences'),
     url(r'^api/v1/set_twitter_share_preferences/$', 'account.views.set_twitter_share_preferences'),
 
+    # streamer auth token
+    url(r'^api/v1/streamer_auth_token/$', 'account.views.get_streamer_auth_token'),
+    url(r'^api/v1/check_streamer_auth_token/(?P<token>\S+)/$', 'account.views.check_streamer_auth_token'),
+
     # notifications
     url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
     url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
