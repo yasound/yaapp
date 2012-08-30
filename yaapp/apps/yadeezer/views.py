@@ -12,7 +12,7 @@ logger = logging.getLogger("yaapp.account")
 @csrf_exempt
 def deezer_communication(request, username):
     logger.debug('received deezer notification for user %s' % (username))
-    username = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username)
     code = request.REQUEST.get('code', '')
     reason = request.REQUEST.get('reason', '')
 
