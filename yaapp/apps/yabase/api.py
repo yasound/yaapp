@@ -107,6 +107,7 @@ class PlaylistResource(ModelResource):
 class RadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    large_picture = fields.CharField(attribute='large_picture_url', default=None, readonly=True)
 
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False)
@@ -149,6 +150,7 @@ class RadioResource(ModelResource):
 
 class PublicRadioResource(ModelResource):
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    large_picture = fields.CharField(attribute='large_picture_url', default=None, readonly=True)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
 
     class Meta:
