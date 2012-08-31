@@ -1,0 +1,34 @@
+{% load i18n %}
+<a id='import-btn' href='#'>{% trans "Import your playlists" %}</a>
+
+<div id='deezer-content'>
+    <div id='deezer-playlists-container'>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Playlist" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+            </thead>
+            <tbody id='playlists'>
+            </tbody>
+        </table>
+        <div class='cell-pagination' id='playlists-pagination'></div>
+    </div>
+
+    <div id='deezer-tracks-container'>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Track" %}</th>
+                    <th>{% trans "Album" %}</th>
+                    <th>{% trans "Artist" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+            </thead>
+            <tbody id='tracks'>
+            </tbody>
+        </table>
+        <div class='cell-pagination' id='tracks-pagination'></div>
+    </div>
+</div>

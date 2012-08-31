@@ -140,6 +140,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stopped/$', 'yabase.views.radio_has_stopped'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/song/(?P<songinstance_id>\d+)/played/$', 'yabase.views.song_played'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/connect/$', 'yabase.views.connect_to_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/disconnect/$', 'yabase.views.disconnect_from_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
@@ -193,6 +195,10 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/twitter_share_preferences/$', 'account.views.get_twitter_share_preferences'),
     url(r'^api/v1/set_twitter_share_preferences/$', 'account.views.set_twitter_share_preferences'),
+
+    # streamer auth token
+    url(r'^api/v1/streamer_auth_token/$', 'account.views.get_streamer_auth_token'),
+    url(r'^api/v1/check_streamer_auth_token/(?P<token>\S+)/$', 'account.views.check_streamer_auth_token'),
 
     # notifications
     url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
@@ -253,7 +259,7 @@ urlpatterns = patterns('',
 
     # deezer communication
     url(r'^deezer/(?P<username>\S+)/$', 'yadeezer.views.deezer_communication', name='deezer_communication'),
-
+    url(r'^api/v1/deezer/', include('yadeezer.urls')),
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),

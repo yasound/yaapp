@@ -2009,6 +2009,22 @@ ul#notifications {
     width:100%;
 }
 
+#deezer-content {
+    clear:both;
+
+}
+
+#deezer-playlists-container {
+    float:left;
+    width:240px;
+    margin-right:12px;
+}
+
+#deezer-tracks-container {
+    float:left;
+    width:400px;
+}
+
 #radio-actions-container {
     width:213px;
     border:1px solid #b6b6b7;

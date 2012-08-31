@@ -220,7 +220,7 @@ class SongInstance(models.Model):
                 cover = song.album.cover_url
 
         if cover is None:
-            cover = '/media/images/default_album.jpg'
+            cover = '/media/images/default_album.png'
         desc_dict['cover'] = cover
 
         return desc_dict
@@ -921,6 +921,32 @@ class Radio(models.Model):
 
         atomic_inc(self, 'overall_listening_time', listening_duration)
         yabase_signals.user_stopped_listening.send(sender=self, radio=self, user=self, duration=listening_duration)
+
+    # listening_duration is the total listening duration for all the clients who were connected to the radio before it stopped
+    def stopped_playing(self, listening_duration):
+        RadioUser.objects.filter(radio=self, listening=True).update(listening=False)
+        self.anonymous_audience = 0
+        self.save()
+        atomic_inc(self, 'overall_listening_time', listening_duration)
+
+    def song_starts_playing(self, song_instance):
+        if self.current_song:
+            task_report_song.delay(self, self.current_song)
+
+        # update current song
+        self.current_song = song_instance
+        self.current_song_play_date = datetime.datetime.now()
+
+        # TODO: use a signal instead
+        song_json = SongInstance.objects.set_current_song_json(self.id, song)
+
+        self.save()
+
+        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song)
+
+        song_instance.last_play_time = datetime.datetime.now()
+        song_instance.play_count += 1
+        song_instance.save()
 
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.userprofile.name, self.name)

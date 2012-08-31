@@ -581,29 +581,7 @@ Yasound.Views.ImportFromItunes =  Backbone.View.extend({
     }
 });
 
-Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
-    events: {
-    },
 
-    initialize: function() {
-        _.bindAll(this, 'render');
-    },
-
-    onClose: function() {
-    },
-
-    reset: function() {
-    },
-
-    clear: function () {
-    },
-
-    render: function(uuid) {
-        $(this.el).html(ich.importFromDeezerTemplate());
-        return this;
-    }
-
-});
 
 Yasound.Views.Playlist = Backbone.View.extend({
     el: '#playlist',
