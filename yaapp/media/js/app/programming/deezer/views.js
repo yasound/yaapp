@@ -125,8 +125,8 @@ Yasound.Views.Deezer.TrackCell = Backbone.View.extend({
     },
 
     onImportSucceded: function (message) {
+        colibri(gettext('Song imported'));
         this.remove();
-        collibri(gettext('song imported'));
     },
 
     onImportFailed: function (message) {
@@ -284,12 +284,12 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         // if (id ==1) {
         //     data = [{
         //         id: 1,
-        //         title: 'track1',
+        //         title: 'Round & Round & Round',
         //         artist: {
-        //             name: 'artist'
+        //             name: 'the cure'
         //         },
         //         album: {
-        //             title: 'album'
+        //             title: 'wild mood swings'
         //         }
         //     }, {
         //         id: 2,

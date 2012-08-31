@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from yabase.models import Radio
 from yaref.models import YasoundSong
 from yabase.views import add_song
+from yasearch import utils as yasearch_utils
 import json
 import requests
 import logging
@@ -77,11 +78,11 @@ def import_track(request, radio_uuid):
 
     qs = YasoundSong.objects.all()
     if name != '':
-        qs = qs.filter(name_simplified=name)
+        qs = qs.filter(name_simplified=yasearch_utils.get_simplified_name(name))
     if artist_name != '':
-        qs = qs.filter(artist_name_simplified=artist_name)
+        qs = qs.filter(artist_name_simplified=yasearch_utils.get_simplified_name(artist_name))
     if album_name != '':
-        qs = qs.filter(album_name_simplified=album_name)
+        qs = qs.filter(album_name_simplified=yasearch_utils.get_simplified_name(album_name))
 
     if qs.count() > 0:
         yasound_song = qs[0]
