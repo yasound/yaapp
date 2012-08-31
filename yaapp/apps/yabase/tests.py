@@ -1368,10 +1368,10 @@ class TestDuplicate(TestCase):
 
 class TestBroadcastMessage(TestCase):
     def setUp(self):
-        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user = User(email="test@yasound.com", username="broadcast", is_superuser=True, is_staff=True)
         user.set_password('test')
         user.save()
-        self.client.login(username="test", password="test")
+        self.client.login(username="broadcast", password="test")
         self.user = user
 
     def test_broadcast_not_owner(self):
