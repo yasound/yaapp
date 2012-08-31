@@ -3317,9 +3317,8 @@ ul .radio-with-stats-cells li {
 	margin:0px;
 }
 
-
 /* Landscape phones and down */
-@media (max-width: 480px) {
+@media screen and (max-device-width: 480px)  {
 
 /*-- CONTAINER --*/
 	.container {
