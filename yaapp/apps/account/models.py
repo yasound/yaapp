@@ -544,6 +544,17 @@ class UserProfile(models.Model):
         return url
 
     @property
+    def large_picture_url(self):
+        if self.picture:
+            try:
+                url = get_thumbnail(self.picture, '640x640', crop='center').url
+            except:
+                url = yaapp_settings.DEFAULT_IMAGE
+        else:
+            url = yaapp_settings.DEFAULT_IMAGE
+        return url
+
+    @property
     def age(self):
         bday = self.birthday
         if not bday:
@@ -577,6 +588,7 @@ class UserProfile(models.Model):
         data = {
                 'id': self.user.id,
                 'picture': self.picture_url,
+                'large_picture': self.large_picture_url,
                 'name': self.name,
                 'username': self.user.username,
                 'bio_text': self.bio_text[:190] if self.bio_text is not None else None
