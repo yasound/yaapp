@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-21 16:54+0200\n"
+"POT-Creation-Date: 2012-08-31 15:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:48
+#: js/app/app.js:51
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
@@ -90,29 +90,29 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:175
+#: js/app/common/models.js:183
 #: js/app/common/views.js:327
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:176
+#: js/app/common/models.js:184
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:177
+#: js/app/common/models.js:185
 #: js/app/common/views.js:328
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:232
+#: js/app/common/models.js:246
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:238
+#: js/app/common/models.js:252
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:240
+#: js/app/common/models.js:254
 msgid "female"
 msgstr "femme"
 
@@ -128,21 +128,21 @@ msgstr "J'écoute"
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/common/views.js:766
-#: js/app/login/views.js:38
+#: js/app/common/views.js:765
+#: js/app/login/views.js:39
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:779
-#: js/app/login/views.js:51
+#: js/app/common/views.js:778
+#: js/app/login/views.js:52
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:813
+#: js/app/common/views.js:812
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:815
+#: js/app/common/views.js:814
 msgid "Create radio"
 msgstr "Créer une radio"
 
@@ -199,11 +199,11 @@ msgstr "nov"
 msgid "dec"
 msgstr "dec"
 
-#: js/app/notifications/views.js:31
+#: js/app/notifications/views.js:32
 msgid "Notification marked as read"
 msgstr "Notification marquée comme lue"
 
-#: js/app/notifications/views.js:33
+#: js/app/notifications/views.js:34
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
@@ -215,19 +215,23 @@ msgstr "Suivre"
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: js/app/programming/views.js:518
+#: js/app/programming/views.js:568
 msgid "iTunes import analyzis started"
 msgstr "L'analyse de l'import iTunes a démarré"
 
-#: js/app/programming/views.js:519
+#: js/app/programming/views.js:569
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:591
+#: js/app/programming/deezer/views.js:128
+msgid "Song imported"
+msgstr "Chanson importée"
+
+#: js/app/radio/views.js:660
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:592
+#: js/app/radio/views.js:661
 #: js/app/settings/views.js:167
 #: js/app/settings/views.js.py:177
 msgid "Error while saving settings"
