@@ -922,6 +922,13 @@ class Radio(models.Model):
         atomic_inc(self, 'overall_listening_time', listening_duration)
         yabase_signals.user_stopped_listening.send(sender=self, radio=self, user=self, duration=listening_duration)
 
+    # listening_duration is the total listening duration for all the clients who were connected to the radio before it stopped
+    def stopped_playing(self, listening_duration):
+        RadioUser.objects.filter(radio=self, listening=True).update(listening=False)
+        self.anonymous_audience = 0
+        self.save()
+        atomic_inc(self, 'overall_listening_time', listening_duration)
+
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.userprofile.name, self.name)
         creator = self.creator
