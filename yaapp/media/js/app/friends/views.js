@@ -93,7 +93,9 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        this.collection.fetch();
+        if (Yasound.App.userAuthenticated) {
+            this.collection.fetch();
+        }
 
         return this;
     },
