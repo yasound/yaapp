@@ -96,9 +96,11 @@ Yasound.Views.Deezer.Playlist = Backbone.View.extend({
 Yasound.Views.Deezer.TrackCell = Backbone.View.extend({
     tagName: 'tr',
     events: {
+        "click .import": "onImport"
     },
 
     initialize: function () {
+        _.bindAll(this, 'onImportSucceded', 'onImportFailed');
         this.model.bind('change', this.render, this);
     },
 
@@ -110,6 +112,25 @@ Yasound.Views.Deezer.TrackCell = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).html(ich.deezerTrackCellTemplate(data));
         return this;
+    },
+
+    setUUID: function (uuid) {
+        this.uuid = uuid;
+        return this;
+    },
+
+    onImport: function (e) {
+        e.preventDefault();
+        this.model.addToRadio(this.uuid, this.onImportSucceded, this.onImportFailed);
+    },
+
+    onImportSucceded: function (message) {
+        this.remove();
+        collibri(gettext('song imported'));
+    },
+
+    onImportFailed: function (message) {
+        colibri(message, 'colibri-error');
     }
 });
 
@@ -125,6 +146,11 @@ Yasound.Views.Deezer.Tracks = Backbone.View.extend({
     },
 
     render: function() {
+        return this;
+    },
+
+    setUUID: function (uuid) {
+        this.uuid = uuid;
         return this;
     },
 
@@ -162,7 +188,7 @@ Yasound.Views.Deezer.Tracks = Backbone.View.extend({
         var view = new Yasound.Views.Deezer.TrackCell({
             model: track
         });
-        $(this.el).append(view.render().el);
+        $(this.el).append(view.render().setUUID(this.uuid).el);
         this.views.push(view);
     },
 
@@ -209,7 +235,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         this.tracksView = new Yasound.Views.Deezer.Tracks({
             el: $('#tracks', this.el),
             collection: this.tracks
-        });
+        }).setUUID(uuid);
 
         return this;
     },
@@ -263,7 +289,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         //             name: 'artist'
         //         },
         //         album: {
-        //             name: 'album'
+        //             title: 'album'
         //         }
         //     }, {
         //         id: 2,
@@ -272,7 +298,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         //             name: 'artist'
         //         },
         //         album: {
-        //             name: 'album'
+        //             title: 'album'
         //         }
         //     }
         //     ];
@@ -284,7 +310,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         //             name: 'artist'
         //         },
         //         album: {
-        //             name: 'album'
+        //             title: 'album'
         //         }
         //     }, {
         //         id: 4,
@@ -293,7 +319,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         //             name: 'artist'
         //         },
         //         album: {
-        //             name: 'album'
+        //             title: 'album'
         //         }
         //     }
         //     ];
