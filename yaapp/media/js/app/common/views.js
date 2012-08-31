@@ -350,6 +350,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
+        this.savedVolume = 0;
         document.title = this.model.title();
 
         var volumeSlider = $('#volume-slider');
@@ -397,12 +398,15 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (typeof Yasound.App.MySound === "undefined") {
             Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
             Yasound.App.MySound.play();
+            Yasound.App.MySound.setVolume(this.savedVolume);
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
             $('#volume-slider').slider('value', Yasound.App.MySound.volume);
 
             this.notifyStreamer();
         } else {
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
+            this.savedVolume = Yasound.App.MySound.volume;
+            Yasound.App.MySound.setVolume(0);
             Yasound.App.MySound.destruct();
             Yasound.App.MySound = undefined;
         }
