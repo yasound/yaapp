@@ -929,6 +929,25 @@ class Radio(models.Model):
         self.save()
         atomic_inc(self, 'overall_listening_time', listening_duration)
 
+    def song_starts_playing(self, song_instance):
+        if self.current_song:
+            task_report_song.delay(self, self.current_song)
+
+        # update current song
+        self.current_song = song_instance
+        self.current_song_play_date = datetime.datetime.now()
+
+        # TODO: use a signal instead
+        song_json = SongInstance.objects.set_current_song_json(self.id, song)
+
+        self.save()
+
+        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song)
+
+        song_instance.last_play_time = datetime.datetime.now()
+        song_instance.play_count += 1
+        song_instance.save()
+
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.userprofile.name, self.name)
         creator = self.creator
