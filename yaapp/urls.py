@@ -194,6 +194,10 @@ urlpatterns = patterns('',
     url(r'^api/v1/twitter_share_preferences/$', 'account.views.get_twitter_share_preferences'),
     url(r'^api/v1/set_twitter_share_preferences/$', 'account.views.set_twitter_share_preferences'),
 
+    # streamer auth token
+    url(r'^api/v1/streamer_auth_token/$', 'account.views.get_streamer_auth_token'),
+    url(r'^api/v1/check_streamer_auth_token/(?P<token>\S+)/$', 'account.views.check_streamer_auth_token'),
+
     # notifications
     url(r'^api/v1/notifications/$', 'yamessage.views.get_notifications'),
     url(r'^api/v1/notification/(?P<notif_id>\S+)/$', 'yamessage.views.get_notification'),
@@ -224,7 +228,7 @@ urlpatterns = patterns('',
 
     # yapremium
     (r'^api/v1/premium/', include('yapremium.urls')),
-    
+
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
@@ -250,6 +254,10 @@ urlpatterns = patterns('',
 
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
+
+    # deezer communication
+    url(r'^deezer/(?P<username>\S+)/$', 'yadeezer.views.deezer_communication', name='deezer_communication'),
+    url(r'^api/v1/deezer/', include('yadeezer.urls')),
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),

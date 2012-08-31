@@ -226,6 +226,15 @@
    <script type="text/html" id="importFromItunesTemplate">
       {% include "yabase/app/programming/importFromItunes.mustache" %}
    </script>
+   <script type="text/html" id="importFromDeezerTemplate">
+      {% include "yabase/app/programming/deezer/importFromDeezer.mustache" %}
+   </script>
+   <script type="text/html" id="deezerPlaylistCellTemplate">
+      {% include "yabase/app/programming/deezer/playlistCell.mustache" %}
+   </script>
+   <script type="text/html" id="deezerTrackCellTemplate">
+      {% include "yabase/app/programming/deezer/trackCell.mustache" %}
+   </script>
    <script type="text/html" id="programmingUploadTemplate">
       {% include "yabase/app/programming/upload.mustache" %}
    </script>
@@ -461,11 +470,23 @@
 			<p class="footer-text-color2" >{% trans "minutes of music have been played" %}</p>
 		</div>
 	<p id="copyright">&copy; Yasound 2012</p>
+  <a href='#' id='scroll-top-container' style='display:none;'>
+    <img src="/media/app/images/scroll-top.png">
+  </a>
 	</footer>
 </div>
 </div>
 </body>
 {% endblock %}
+
+<div id="dz-root"></div>
+<script src="http://cdn-files.deezer.com/js/min/dz.js"></script>
+<script>
+  DZ.init({
+    appId  : {{ deezer_app_id }},
+    channelUrl : '{{ deezer_channel_url }}'
+  });
+</script>
 
 <script type="text/javascript">
 // GOOGLE ANALYTICS

@@ -31,6 +31,8 @@ import json
 import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
+from django.core.cache import cache
+import uuid
 
 logger = logging.getLogger("yaapp.account")
 
@@ -662,3 +664,23 @@ def user_picture(request, username):
         response_data = json.dumps(True)
         return HttpResponse(response_data, mimetype="application/json")
     raise Http404
+
+@check_api_key(methods=['GET'])
+def get_streamer_auth_token(request):
+    token = uuid.uuid4().hex
+    key = 'token-%s' % (token)
+    cache.set(key, request.user.id, 60)
+    response = {'token': token}
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+@check_api_key(methods=['GET'], login_required=False)
+def check_streamer_auth_token(request, token):
+    key = 'token-%s' % (token)
+    user_id = cache.get(key)
+    cache.delete(key)  # the token can be used only once
+    response = {'user_id': user_id}
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+

@@ -2,6 +2,9 @@
 /*extern Ext, $ */
 Namespace('Yasound.Views');
 
+//----------------------------------------------------------
+// View items
+//----------------------------------------------------------
 
 Yasound.Views.SongInstance = Backbone.View.extend({
     tagName: 'tr',
@@ -421,6 +424,9 @@ Yasound.Views.UploadCell = Backbone.View.extend({
     }
 });
 
+//----------------------------------------------------------
+// Import views
+//----------------------------------------------------------
 
 Yasound.Views.AddFromDesktop =  Backbone.View.extend({
     sticky: true,
@@ -576,13 +582,22 @@ Yasound.Views.ImportFromItunes =  Backbone.View.extend({
 });
 
 
+
 Yasound.Views.Playlist = Backbone.View.extend({
     el: '#playlist',
     events: {
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onAll',  'onClose', 'clearView', 'onImportItunes', 'onAddFromServer', 'onAddFromDesktop');
+        _.bindAll(this,
+            'render',
+            'onAll',
+            'onClose',
+            'clearView',
+            'onImportItunes',
+            'onImportDeezer',
+            'onAddFromServer',
+            'onAddFromDesktop');
     },
 
     onClose: function() {
@@ -611,6 +626,13 @@ Yasound.Views.Playlist = Backbone.View.extend({
     onImportItunes: function() {
         this.clearView();
         this.currentView = new Yasound.Views.ImportFromItunes({
+            el: $('#content', this.el)
+        }).render(this.uuid);
+    },
+
+    onImportDeezer: function() {
+        this.clearView();
+        this.currentView = new Yasound.Views.ImportFromDeezer({
             el: $('#content', this.el)
         }).render(this.uuid);
     },
@@ -647,6 +669,7 @@ Yasound.Views.Playlist = Backbone.View.extend({
         }).render();
         this.toolbar.on('tracks', this.onAll);
         this.toolbar.on('importItunes', this.onImportItunes);
+        this.toolbar.on('importDeezer', this.onImportDeezer);
         this.toolbar.on('addFromServer', this.onAddFromServer);
         this.toolbar.on('addFromDesktop', this.onAddFromDesktop);
 
@@ -665,6 +688,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
     events: {
         'click #all': 'all',
         'click #import-itunes': 'importItunes',
+        'click #import-deezer': 'importDeezer',
         'click #add-from-server': 'addFromServer',
         'click #add-from-desktop': 'addFromDesktop'
     },
@@ -680,6 +704,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
 
     selectMenu: function(menu) {
         $('#all', this.el).removeClass('active');
+        $('#import-deezer', this.el).removeClass('active');
         $('#import-itunes', this.el).removeClass('active');
         $('#add-from-server', this.el).removeClass('active');
         $('#add-from-desktop', this.el).removeClass('active');
@@ -696,6 +721,11 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
         e.preventDefault();
         this.selectMenu('#import-itunes');
         this.trigger('importItunes');
+    },
+    importDeezer: function(e) {
+        e.preventDefault();
+        this.selectMenu('#import-deezer');
+        this.trigger('importDeezer');
     },
     addFromServer: function(e) {
         e.preventDefault();

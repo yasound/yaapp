@@ -70,6 +70,7 @@ CELERY_IMPORTS = (
     "yasearch.task",
     "yaref.task",
     "yapremium.task",
+    "yadeezer.task",
 )
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
@@ -381,6 +382,7 @@ INSTALLED_APPS = (
     'yahistory',
     'yarecommendation',
     'yapremium',
+    'yadeezer',
     # newsletter,
     #'tinymce',
     'tagging',
@@ -546,6 +548,11 @@ LOGGING = {
             'propagate': False,
         },
         'yaapp.yapremium': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.yadeezer': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,
@@ -893,6 +900,13 @@ if TEST_MODE:
 ANONYMOUS_ACCESS_ALLOWED = True
 if DEVELOPMENT_MODE:
     ANONYMOUS_ACCESS_ALLOWED = False
+
+MAX_RADIO_PER_USER = 25
+
+DEEZER_CONNECT_URL = 'https://connect.deezer.com/oauth/access_token.php'
+DEEZER_APP_ID = 105641
+DEEZER_APP_NAME = 'yasound'
+DEEZER_SECRET_KEY = 'f2d518a9b60828552c696f38d35eda37'
 
 # test
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"

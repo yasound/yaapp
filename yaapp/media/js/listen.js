@@ -3,7 +3,7 @@ $(document).ready(function() {
     // live
     soundManager.preferFlash = true;
     soundManager.useHTML5Audio = true;
-    soundManager.debugMode = true;
+    soundManager.debugMode = false;
     soundManager.useFlashBlock = true;
     soundManager.flashVersion = 9;
     var mySound = undefined;

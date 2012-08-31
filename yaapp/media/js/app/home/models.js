@@ -8,7 +8,7 @@ Namespace('Yasound.Data.Models');
 Yasound.Data.Models.SelectedRadios = Backbone.Collection.extend({
     model: Yasound.Data.Models.Radio,
     url: function() {
-        return '/api/v1/selected_web_radio/';
+        return '/api/v1/selected_radio/';
     },
 
     setGenre: function(genre) {

@@ -52,6 +52,23 @@ $(document).ready(function () {
             return gettext('Unfinished uploads are pending, do you really want to leave Yasound?');
         }
     });
+    var $win = $(window);
+    $.fn.scrollBottom = function() {
+        return $(document).height() - this.scrollTop() - this.height();
+    };
+    $win.scroll(function () {
+        if ($win.scrollTop() > 500 && $win.scrollBottom()!=0) {
+            $('#scroll-top-container').fadeIn(200);
+        } else if ($win.scrollTop() < 500 ) {
+            $('#scroll-top-container').fadeOut(200);
+        }
+    });
+    $('#scroll-top-container').click(function (e) {
+        e.preventDefault();
+        $('html, body').animate({scrollTop: 0}, 400);
+        return false;
+    })
+
 
     /**
      * component initalization
@@ -94,7 +111,7 @@ $(document).ready(function () {
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
     soundManager.preferFlash = true;
     soundManager.useHTML5Audio = true;
-    soundManager.debugMode = true;
+    soundManager.debugMode = false;
     soundManager.useFlashBlock = true;
     soundManager.flashVersion = 9;
 
