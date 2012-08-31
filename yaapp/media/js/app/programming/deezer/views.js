@@ -2,7 +2,119 @@
 /*extern Ext, $ */
 Namespace('Yasound.Views.Deezer');
 
+Yasound.Views.Deezer.PlaylistCell = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+        "click .details" : "onDetails"
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.deezerPlaylistCellTemplate(data));
+        return this;
+    },
+
+    onDetails: function (e) {
+        e.preventDefault();
+        this.trigger('loadPlaylist', this.model.get('id'));
+    }
+});
+
+
 Yasound.Views.Deezer.Playlist = Backbone.View.extend({
+    initialize: function () {
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy', 'onLoadPlaylist');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('destroy', this.onDestroy, this);
+        this.views = [];
+    },
+
+    render: function() {
+        return this;
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('destroy', this.onDestroy);
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.off('loadPlaylist', this.onLoadPlaylist);
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (playlist) {
+        var currentId = playlist.id;
+
+        var found = _.find(this.views, function (view) {
+            if (view.model.id == playlist.id) {
+                return true;
+            }
+        });
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+
+        var view = new Yasound.Views.Deezer.PlaylistCell({
+            model: playlist
+        });
+        view.on('loadPlaylist', this.onLoadPlaylist);
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    },
+
+    onDestroy: function(model) {
+        this.clear();
+        this.collection.fetch();
+    },
+
+    onLoadPlaylist: function (id) {
+        this.trigger('loadPlaylist', id);
+    }
+});
+
+Yasound.Views.Deezer.TrackCell = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.deezerTrackCellTemplate(data));
+        return this;
+    }
+});
+
+
+Yasound.Views.Deezer.Tracks = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy');
 
@@ -34,11 +146,11 @@ Yasound.Views.Deezer.Playlist = Backbone.View.extend({
         this.views = [];
     },
 
-    addOne: function (playlist) {
-        var currentId = playlist.id;
+    addOne: function (track) {
+        var currentId = track.id;
 
         var found = _.find(this.views, function (view) {
-            if (view.model.id == playlist.id) {
+            if (view.model.id == track.id) {
                 return true;
             }
         });
@@ -47,8 +159,8 @@ Yasound.Views.Deezer.Playlist = Backbone.View.extend({
             return;
         }
 
-        var view = new Yasound.Views.Deezer.PlaylistCell({
-            model: playlist
+        var view = new Yasound.Views.Deezer.TrackCell({
+            model: track
         });
         $(this.el).append(view.render().el);
         this.views.push(view);
@@ -66,10 +178,14 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'fetchPlaylists');
+        _.bindAll(this, 'render', 'fetchPlaylists', 'onLoadPlaylist');
     },
 
     onClose: function() {
+        if (this.playlistsView) {
+            this.playlistsView.off('loadPlaylist', this.onLoadPlaylist);
+            this.playlistsView.close();
+        }
     },
 
     reset: function() {
@@ -82,14 +198,19 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         $(this.el).html(ich.importFromDeezerTemplate());
 
         var username = Yasound.App.username;
-        this.playlists = new Yasound.Data.Models.Deezer.Playlists({}).setUsername(username);
+        this.playlists = new Yasound.Data.Models.Deezer.Playlists({});
         this.playlistsView = new Yasound.Views.Deezer.Playlist({
             el: $('#playlists', this.el),
             collection: this.playlists
         });
+        this.playlistsView.on('loadPlaylist', this.onLoadPlaylist);
 
+        this.tracks = new Yasound.Data.Models.Deezer.Tracks({});
+        this.tracksView = new Yasound.Views.Deezer.Tracks({
+            el: $('#tracks', this.el),
+            collection: this.tracks
+        });
 
-        this.playlists.fetch();
         return this;
     },
 
@@ -103,12 +224,82 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
                 console.log('User cancelled login or did not fully authorize.');
             }
         }, {perms: 'basic_access,email'});
+
+        // data = [{
+        //     id:1,
+        //     title: 'hello'
+        // }, {
+        //     id:2,
+        //     title: 'foo'
+        // }]
+        // that.playlistsView.clear();
+        // that.playlists.reset(data)
     },
 
     fetchPlaylists: function (e) {
+        var that = this;
         DZ.api('/user/me/playlists', function(response) {
-            console.log(response);
-            DZ.logout();
+            if (response.data) {
+                that.playlistsView.clear();
+                that.playlists.reset(response.data);
+            }
         });
+    },
+
+    onLoadPlaylist: function (id) {
+        var that = this;
+        DZ.api('/playlist/' + id, function(response) {
+            if (response.tracks && response.tracks.data) {
+                that.tracksView.clear();
+                that.tracks.reset(response.tracks.data);
+            }
+        });
+
+        // if (id ==1) {
+        //     data = [{
+        //         id: 1,
+        //         title: 'track1',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             name: 'album'
+        //         }
+        //     }, {
+        //         id: 2,
+        //         title: 'track2',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             name: 'album'
+        //         }
+        //     }
+        //     ];
+        // } else {
+        //     data = [{
+        //         id: 3,
+        //         title: 'track12',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             name: 'album'
+        //         }
+        //     }, {
+        //         id: 4,
+        //         title: 'track22',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             name: 'album'
+        //         }
+        //     }
+        //     ];
+
+        // }
+        // that.tracksView.clear();
+        // that.tracks.reset(data)
     }
 });
