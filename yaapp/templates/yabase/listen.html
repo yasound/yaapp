@@ -5,27 +5,28 @@
 {% block extra_head %}
 
 {% block fb_open_graph %}
-  <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" /> 
-  <meta property="og:type"   content="{{ FACEBOOK_APP_NAMESPACE}}:radio_station" /> 
-  <meta property="og:url"    content="{{ request.build_absolute_uri }}" /> 
-  <meta property="og:title"  content="{{ radio }}" /> 
-  <meta property="og:image"  content="{{ radio_picture_absolute_url }}" /> 
-  <meta property="og:audio"  content="{{ request.build_absolute_uri }}" /> 
+  <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" />
+  <meta property="og:type"   content="{{ FACEBOOK_APP_NAMESPACE}}:radio_station" />
+  <meta property="og:url"    content="{{ request.build_absolute_uri }}" />
+  <meta property="og:title"  content="{{ radio }}" />
+  <meta property="og:image"  content="{{ radio_picture_absolute_url }}" />
+  <meta property="og:audio"  content="{{ request.build_absolute_uri }}" />
   <meta property="og:audio:type" content="application/mp3" />
   <meta property="og:locale:alternate" content="fr_FR" />
-  
+
   <meta property="og:video:height" content="40" />
-  <meta property="og:video:width" content="80" /> 
+  <meta property="og:video:width" content="80" />
   <meta property="og:video:type" content="application/x-shockwave-flash" />
   <meta property="og:video" content="{{ flash_player_absolute_url }}?mp3={{radio_url}}&showslider=0&showvolume=1&buttonwidth=40&height=40&volumewidth=40&autoplay=1" />
-  
+  <meta property="og:video:secure_url" content="{{ flash_player_absolute_url }}?mp3={{radio_url}}&showslider=0&showvolume=1&buttonwidth=40&height=40&volumewidth=40&autoplay=1" />
+
 {% endblock %}
 
 
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
         var g_radio_id = '{{ radio.id }}';
-        
+
         var lbl_mute = "{% trans 'Mute' %}";
         var lbl_unmute = "{% trans 'Unmute' %}";
         var lbl_play = "{% trans 'Play' %}";
@@ -37,7 +38,7 @@
     <script type="text/javascript" src="/media/js/jquery.timers.js"></script>
     <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
     <script type="text/javascript" src="/media/js/listen.js"></script>
-    
+
 {% endblock %}
 {% block head_title %}{% trans "Listening to" %} {{ radio }}{% endblock %}
 {% block content %}
@@ -48,7 +49,7 @@
         <strong>Hello superuser</strong> <a href='{{ new_page }}'>Do you want to try out new web page ?</a>
         </div>
         </div>
-            
+
         {% endif %}
         <div class='span4'>
            <div id="radio">
@@ -65,7 +66,7 @@
                    <h1>{{ radio }}</h1>
                 </div>
            </div>
-        </div>   
+        </div>
 
         <div class='span8'>
            <div id='player'>
@@ -93,7 +94,7 @@
                       </div>
 
                    </div>
-               </div> 
+               </div>
             </div>
         </div>
     </div>
