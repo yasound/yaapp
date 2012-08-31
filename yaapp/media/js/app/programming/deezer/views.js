@@ -248,7 +248,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
 
     onLoadPlaylist: function (id) {
         var that = this;
-        DZ.api('/user/playlist/' + id, function(response) {
+        DZ.api('/playlist/' + id, function(response) {
             if (response.tracks && response.tracks.data) {
                 that.tracksView.clear();
                 that.tracks.reset(response.tracks.data);
