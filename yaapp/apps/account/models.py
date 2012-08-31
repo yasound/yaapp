@@ -1464,6 +1464,8 @@ def new_radio_created(sender, instance, created=None, **kwargs):
         return
     radio = instance
     user = radio.creator
+    if not user:
+        return
 
     if user.is_superuser:
         return
