@@ -32,18 +32,28 @@ Yasound.App.ErrorHandler = Backbone.View.extend({
             return;
         }
 
-        if (jqxhr.status !== 0) {
-            return;
+        if (jqxhr.status === 0) {
+            $('body').ajaxSuccess(this.onSuccess);
+
+            $('#modal-error').modal('show');
+            $('#modal-error .btn-primary').one('click', function () {
+                window.location = '/app/';
+            });
+
+            this.enableErrorHandling = false;
+        } else if (jqxhr.status === 401) {
+            $('body').ajaxSuccess(this.onSuccess);
+
+            $('#modal-error-disconnected').modal('show');
+            $('#modal-error-disconnected .btn-primary').one('click', function () {
+                Yasound.App.Router.navigate("login/", {
+                    trigger: true
+                });
+                $('#modal-error-disconnected').modal('hide');
+            });
+            this.enableErrorHandling = false;
         }
 
-        $('body').ajaxSuccess(this.onSuccess);
-
-        $('#modal-error').modal('show');
-        $('#modal-error .btn-primary').one('click', function () {
-            window.location = '/app/';
-        });
-
-        this.enableErrorHandling = false;
     },
 
     onSuccess: function() {

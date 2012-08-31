@@ -423,6 +423,20 @@
     </div>
 </div>
 
+<div class="modal hide fade" id="modal-error-disconnected">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "You are not logged in" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "You have to login to access the requested resource." %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Dismiss" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Go to login page" %}</a>
+    </div>
+</div>
 
 <div id='webapp-container'>{% block content%}{%endblock%}</div>
 

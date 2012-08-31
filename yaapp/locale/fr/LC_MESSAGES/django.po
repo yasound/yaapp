@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 15:21+0200\n"
+"POT-Creation-Date: 2012-08-31 19:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -342,7 +342,7 @@ msgid "Date"
 msgstr "Date"
 
 #: templates/newsletter/newsletter_historic.html:24
-#: templates/yabase/webapp.html:436
+#: templates/yabase/webapp.html:450
 #: templates/yabase/app/static/contact.mustache:4
 msgid "Contact"
 msgstr ""
@@ -494,8 +494,8 @@ msgstr ""
 #: templates/web/favorites.html:6
 #: templates/web/friends.html:6
 #: templates/web/selections.html:6
-#: templates/yabase/listen.html:29
-#: templates/yabase/song.html:30
+#: templates/yabase/listen.html:30
+#: templates/yabase/song.html:31
 #: templates/yabase/widget.html:24
 #: templates/yabase/widget_large.html:24
 msgid "Mute"
@@ -506,8 +506,8 @@ msgstr "Couper le son"
 #: templates/web/favorites.html:7
 #: templates/web/friends.html:7
 #: templates/web/selections.html:7
-#: templates/yabase/listen.html:30
-#: templates/yabase/song.html:31
+#: templates/yabase/listen.html:31
+#: templates/yabase/song.html:32
 #: templates/yabase/widget.html:25
 #: templates/yabase/widget_large.html:25
 msgid "Unmute"
@@ -518,8 +518,8 @@ msgstr "Rétablir le son"
 #: templates/web/favorites.html:8
 #: templates/web/friends.html:8
 #: templates/web/selections.html:8
-#: templates/yabase/listen.html:31
-#: templates/yabase/song.html:32
+#: templates/yabase/listen.html:32
+#: templates/yabase/song.html:33
 #: templates/yabase/widget.html:26
 #: templates/yabase/widget_large.html:26
 msgid "Play"
@@ -530,8 +530,8 @@ msgstr "Jouer"
 #: templates/web/favorites.html:9
 #: templates/web/friends.html:9
 #: templates/web/selections.html:9
-#: templates/yabase/listen.html:32
-#: templates/yabase/song.html:33
+#: templates/yabase/listen.html:33
+#: templates/yabase/song.html:34
 #: templates/yabase/widget.html:27
 #: templates/yabase/widget_large.html:27
 msgid "Stop"
@@ -542,8 +542,8 @@ msgstr "Arrêter"
 #: templates/web/friends.html:17
 #: templates/web/my_radio.html:3
 #: templates/web/selections.html:17
-#: templates/yabase/listen.html:42
-#: templates/yabase/song.html:43
+#: templates/yabase/listen.html:43
+#: templates/yabase/song.html:44
 #: templates/yabase/widget.html:6
 #: templates/yabase/widget_large.html:6
 msgid "Listening to"
@@ -576,10 +576,10 @@ msgstr "Rien pour le moment"
 
 #: templates/web/index.html:12
 #: templates/yabase/buy_link_not_found.html:12
-#: templates/yabase/listen.html:58
-#: templates/yabase/listen.html.py:61
-#: templates/yabase/song.html:59
-#: templates/yabase/song.html.py:62
+#: templates/yabase/listen.html:59
+#: templates/yabase/listen.html.py:62
+#: templates/yabase/song.html:60
+#: templates/yabase/song.html.py:63
 msgid "Radio logo"
 msgstr "Logo de la radio"
 
@@ -640,8 +640,8 @@ msgid "Welcome"
 msgstr "Bienvenue"
 
 #: templates/web/radio.html:5
-#: templates/yabase/listen.html:77
-#: templates/yabase/song.html:78
+#: templates/yabase/listen.html:78
+#: templates/yabase/song.html:79
 #: templates/yabase/widget.html:57
 #: templates/yabase/widget_large.html:57
 #: templates/yabase/app/radioCell.html:16
@@ -873,22 +873,22 @@ msgstr "Morceau indisponible pour achat"
 msgid "This item cannot be purchased right now, try later."
 msgstr "Ce morceau ne peut être acheté actuellement, veuillez réessayer plus tard."
 
-#: templates/yabase/listen.html:73
-#: templates/yabase/song.html:74
+#: templates/yabase/listen.html:74
+#: templates/yabase/song.html:75
 #: templates/yabase/widget.html:45
 #: templates/yabase/widget_large.html:45
 msgid "Track logo"
 msgstr "Logo du morceau"
 
-#: templates/yabase/listen.html:76
-#: templates/yabase/song.html:77
+#: templates/yabase/listen.html:77
+#: templates/yabase/song.html:78
 #: templates/yabase/widget.html:56
 #: templates/yabase/widget_large.html:56
 msgid "No name"
 msgstr "Sans nom"
 
-#: templates/yabase/listen.html:88
-#: templates/yabase/song.html:89
+#: templates/yabase/listen.html:89
+#: templates/yabase/song.html:90
 #: templates/yabase/app/track.mustache:51
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
@@ -988,6 +988,7 @@ msgid "Unable to connect Yasound server right now."
 msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
 
 #: templates/yabase/webapp.html:421
+#: templates/yabase/webapp.html.py:436
 msgid "Dismiss"
 msgstr "Fermer"
 
@@ -995,19 +996,31 @@ msgstr "Fermer"
 msgid "Reload page"
 msgstr "Recharger la page"
 
+#: templates/yabase/webapp.html:429
+msgid "You are not logged in"
+msgstr "Vous n'êtes pas authentifié"
+
+#: templates/yabase/webapp.html:432
+msgid "You have to login to access the requested resource."
+msgstr "Vous devez être authentifié pour accéder à cette ressource."
+
 #: templates/yabase/webapp.html:437
+msgid "Go to login page"
+msgstr "Aller à la page de login"
+
+#: templates/yabase/webapp.html:451
 msgid "Legal informations"
 msgstr "Mentions légales"
 
-#: templates/yabase/webapp.html:457
+#: templates/yabase/webapp.html:471
 msgid "Connected users"
 msgstr "Utilisateurs connectés"
 
-#: templates/yabase/webapp.html:461
+#: templates/yabase/webapp.html:475
 msgid "See all"
 msgstr "Tous les voir"
 
-#: templates/yabase/webapp.html:470
+#: templates/yabase/webapp.html:484
 msgid "minutes of music have been played"
 msgstr "minutes de musique ont été écoutées"
 
