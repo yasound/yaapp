@@ -22,17 +22,17 @@ logger = logging.getLogger("yaapp.yaref")
 
 
 if not 'db_name' in options.DEFAULT_NAMES:
-    options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)    
+    options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
 class YasoundArtist(models.Model):
     echonest_id = models.CharField(unique=True, max_length=20)
     lastfm_id = models.CharField(max_length=20, blank=True, null=True)
     musicbrainz_id = models.CharField(max_length=36, blank=True, null=True)
     name = models.CharField(max_length=255)
-    
+
     name_simplified = models.CharField(max_length=255)
     comment = models.TextField(null=True, blank=True)
-        
+
     class Meta:
         db_table = u'yasound_artist'
         db_name = u'yasound'
@@ -45,7 +45,7 @@ class YasoundAlbum(models.Model):
     name = models.CharField(max_length=255)
     name_simplified = models.CharField(max_length=255)
     cover_filename = models.CharField(max_length=45, null=True, blank=True)
-    
+
     @property
     def cover_url(self):
         if not self.cover_filename:
@@ -56,7 +56,7 @@ class YasoundAlbum(models.Model):
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
             return None
-    
+
     class Meta:
         db_table = u'yasound_album'
         db_name = u'yasound'
@@ -73,10 +73,10 @@ class YasoundGenre(models.Model):
         return self.name
 
 class YasoundSongManager(models.Manager):
-    
+
     _max_query = 0
     _max_song = None
-    
+
     def test_fuzzy(self, limit=5):
 #        from yaref.models import *;YasoundSong.objects.test_fuzzy()
         import random
@@ -84,12 +84,12 @@ class YasoundSongManager(models.Manager):
         count = 100
         random_ids = random.sample(xrange(1600000), count)
         artist_records = list(YasoundSong.objects.filter(id__in=random_ids).all())
-        
+
         found = 0
         errors = 0
         start = time()
         for i, artist in enumerate(artist_records):
-            res = self.find_fuzzy(artist.name,  artist.album_name, artist.artist_name, limit=limit) 
+            res = self.find_fuzzy(artist.name,  artist.album_name, artist.artist_name, limit=limit)
             if res:
                 found +=1
                 if res["db_id"] != artist.id:
@@ -105,18 +105,18 @@ class YasoundSongManager(models.Manager):
         logger.debug('Found : %d/%d (%d%%), errors = %d (%d%%)' % (found, count, 100*found/count, errors, 100*errors/count))
         if self._max_song:
             song = self.get(id=self._max_song['db_id'])
-            logger.debug('slowest song : %d:%s|%s|%s (%f)' % (song.id, 
-                                                              song.name, 
-                                                              song.album_name, 
-                                                              song.artist_name, 
+            logger.debug('slowest song : %d:%s|%s|%s (%f)' % (song.id,
+                                                              song.name,
+                                                              song.album_name,
+                                                              song.artist_name,
                                                               self._max_query))
-                     
+
     def last_indexed(self):
         doc = yasearch_indexer.get_last_song_doc()
         if doc and doc.count() > 0:
             return self.get(id=doc[0]['db_id'])
         return None
-    
+
     def _check_candidates(self, songs, name, album, artist):
         best_ratio = 0
         best_song = None
@@ -125,7 +125,7 @@ class YasoundSongManager(models.Manager):
 
             if name is not None and song["name"] is not None:
                 ratio_song = fuzz.token_sort_ratio(name, song["name"])
-                
+
             if album is not None and song["album"] is not None:
                 ratio_album = fuzz.token_sort_ratio(album, song["album"])
 
@@ -137,7 +137,7 @@ class YasoundSongManager(models.Manager):
                 best_ratio = ratio
                 best_song = song
         return best_song, best_ratio
-    
+
     def find_fuzzy(self, name, album, artist, limit=5):
         from time import time
         start = time()
@@ -152,7 +152,7 @@ class YasoundSongManager(models.Manager):
             self._max_query = elapsed
             self._max_song = song
         return song
-    
+
     def search_fuzzy(self, search_text, limit=25, exclude_song_ids=[]):
         print 'search fuzzy "%s"' % search_text
         songs = yasearch_search.search_song(search_text, remove_common_words=True, exclude_ids=exclude_song_ids)
@@ -160,7 +160,7 @@ class YasoundSongManager(models.Manager):
         if not search_text:
             return results
 
-        for s in songs:            
+        for s in songs:
             song_info_list = []
             if s["name"] is not None:
                 song_info_list.append(s["name"])
@@ -172,21 +172,21 @@ class YasoundSongManager(models.Manager):
             ratio = yasearch_utils.token_set_ratio(search_text.lower(), song_info.lower(), method='mean')
             res = (s, ratio)
             results.append(res)
-            
+
         sorted_results = sorted(results, key=lambda r: r[1], reverse=True)
         return sorted_results[:limit]
-    
+
     def search(self, search_text, offset=0, count=25, tolerance=0.75):
         limit = offset + count
-        
+
         songs = list(self.filter(Q(name_simplified__iexact=search_text) | Q(artist_name_simplified__iexact=search_text) | Q(album_name_simplified__iexact=search_text)))
         exact_count = len(songs)
-        
+
         if exact_count < limit:
             exclude_ids = []
             for s in songs:
                 exclude_ids.append(s.id)
-                
+
             fuzzy_limit = limit - exact_count
             res = self.search_fuzzy(search_text, fuzzy_limit, exclude_song_ids=exclude_ids)
             best_score = None
@@ -198,14 +198,14 @@ class YasoundSongManager(models.Manager):
                 if score < best_score * tolerance:
                     break
                 songs.append(YasoundSong.objects.get(id=song_id))
-                
+
         final_songs = songs[offset:offset+count]
         return final_songs
-            
-            
-            
-            
-    
+
+
+
+
+
 class YasoundSong(models.Model):
     objects = YasoundSongManager()
     artist = models.ForeignKey(YasoundArtist, null=True, blank=True)
@@ -240,11 +240,11 @@ class YasoundSong(models.Model):
     cover_filename = models.CharField(max_length=45, blank=True, null=True)
     quality = models.SmallIntegerField(blank=True, null=True)
     owner_id = models.IntegerField(blank=True, null=True)
-    
-    
+
+
     def generate_buy_link(self):
         return buylink.generate_buy_link(self.name, self.album_name, self.artist_name)
-    
+
     @property
     def cover_url(self):
         if not self.cover_filename:
@@ -255,20 +255,20 @@ class YasoundSong(models.Model):
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
             return None
-        
+
 
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_song(self, upsert, insert)
 
     def get_song_path(self):
         return os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
-    
+
     def get_song_preview_path(self):
         song_path = os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
         name, extension = os.path.splitext(song_path)
         preview = u'%s_preview64%s' % (name, extension)
         return preview
-    
+
     def get_song_hq_path(self):
         return os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
 
@@ -277,7 +277,7 @@ class YasoundSong(models.Model):
         name, extension = os.path.splitext(song_path)
         lq = u'%s_lq%s' % (name, extension)
         return lq
-        
+
     def find_lastfm_fingerprintid(self):
         song_path = os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
         return lastfm.find_fingerprintid(song_path)
@@ -289,10 +289,10 @@ class YasoundSong(models.Model):
             if fingerprintid:
                 self.lastfm_fingerprint_id = fingerprintid
                 self.save()
-                
+
         if not fingerprintid:
             return None
-        
+
         rank = 0.0
         try:
             rank = float(lastfm.find_rank(fingerprintid))
@@ -318,7 +318,7 @@ class YasoundSong(models.Model):
         else:
             metadata, valid = lastfm.find_by_name_artist(name=name, artist=artist)
 
-        s = None        
+        s = None
         if valid and self.lastfm_id and metadata.get('id') == self.lastfm_id:
             s = {
                 'name': metadata.get('name'),
@@ -326,7 +326,7 @@ class YasoundSong(models.Model):
                 'album': metadata.get('album'),
             }
         return s
-    
+
     def _musicbrainz_data(self):
         musicbrainzngs.set_useragent("Yasound", "0.1", "https://yasound.com")
         s = None
@@ -335,14 +335,14 @@ class YasoundSong(models.Model):
             return s
 
         name, album, artist = '', '', ''
-        try:        
+        try:
             data = musicbrainzngs.get_recording_by_id(mbid, includes=['artists', 'releases'])
             artist = data.get('recording').get('artist-credit')[0].get('artist').get('name')
             album = data.get('recording').get('release-list')[0].get('title')
             name = data.get('recording').get('title')
         except:
             pass
-        
+
         if name != '' or artist != '' or album != '':
             s =  {
                 'name': name,
@@ -350,15 +350,15 @@ class YasoundSong(models.Model):
                 'artist': artist
             }
         return s
-        
+
     def find_synonyms(self):
         name, artist, album = self.name, self.artist_name, self.album_name
         name = name.lower() if name is not None else ''
         artist = artist.lower() if artist is not None else ''
         album = album.lower() if album is not None else ''
-        
+
         synonyms = []
-        
+
         lastfm_data = self._lastfm_data()
         if lastfm_data:
             if lastfm_data['name'].lower() != name \
@@ -372,9 +372,9 @@ class YasoundSong(models.Model):
                or musicbrainz_data['artist'].lower() != artist \
                or musicbrainz_data['album'].lower() != album:
                 synonyms.append(musicbrainz_data)
-            
+
         return synonyms
-            
+
     def find_backup_path(self):
         song_path = self.get_song_path()
         name, extension = os.path.splitext(song_path)
@@ -386,27 +386,28 @@ class YasoundSong(models.Model):
             backup_path =  u'%s_quarantine_%d%s' % (name, i, extension)
             path_exists = os.path.exists(backup_path)
         return backup_path
-                
-            
+
+
     def replace(self, new_file, lastfm_fingerprint_id=None):
         if not os.path.exists(new_file):
             logger.info('new_file %s does not exist' % (new_file))
             return
-        
+
         logger.debug('file of %d is being replaced' % (self.id))
         song_path = self.get_song_path()
         path = os.path.dirname(song_path)
 
-        if self.file_exists():        
+        if self.file_exists():
             backup_path = self.find_backup_path()
             shutil.copy(song_path, backup_path)
             logger.debug('original file saved at %s' % (backup_path))
-        
+
         if not os.path.exists(path):
             logger.debug('creating path %s' % (path))
             os.makedirs(path)
         shutil.copy(new_file, song_path)
         self.generate_preview()
+        self.generate_low_quality()
 
         # update db attributes
         if lastfm_fingerprint_id is not None:
@@ -414,20 +415,26 @@ class YasoundSong(models.Model):
         self.filesize = os.path.getsize(song_path)
         self.save()
         logger.debug('replacement of %s done' % (self.id))
-    
+
     def get_filepath_for_preview(self):
         song_path = self.get_song_path()
         name, extension = os.path.splitext(song_path)
         preview = u'%s_preview64%s' % (name, extension)
         return preview
 
+    def get_filepath_for_lq(self):
+        song_path = self.get_song_path()
+        name, extension = os.path.splitext(song_path)
+        preview = u'%s_lq%s' % (name, extension)
+        return preview
+
     def generate_preview(self):
         import subprocess as sub
-        source = self.get_song_path() 
+        source = self.get_song_path()
         destination = self.get_filepath_for_preview()
-        
+
         logger.debug('generating preview for %s' % (source))
-        args = [settings.FFMPEG_BIN, 
+        args = [settings.FFMPEG_BIN,
                 '-i',
                 source]
         args.extend(settings.FFMPEG_GENERATE_PREVIEW_OPTIONS.split(" "))
@@ -437,7 +444,24 @@ class YasoundSong(models.Model):
         if len(errors) == 0:
             logger.error('error while generating preview of %d' % (self.id))
             logger.error(errors)
-        
+
+    def generate_low_quality(self):
+        import subprocess as sub
+        source = self.get_song_path()
+        destination = self.get_filepath_for_lq()
+
+        logger.debug('generating lq for %s' % (source))
+        args = [settings.FFMPEG_BIN,
+                '-i',
+                source]
+        args.extend(settings.FFMPEG_CONVERT_LOW_QUALITY_OPTIONS.split(" "))
+        args.append(destination)
+        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
+        _output, errors = p.communicate()
+        if len(errors) == 0:
+            logger.error('error while generating lq of %d' % (self.id))
+            logger.error(errors)
+
     def file_exists(self):
         path = self.get_song_path()
         return os.path.exists(path)
@@ -445,19 +469,19 @@ class YasoundSong(models.Model):
     class Meta:
         db_table = u'yasound_song'
         db_name = u'yasound'
-        
+
     def __unicode__(self):
         return self.name
 
 class YasoundSongGenre(models.Model):
     song = models.ForeignKey(YasoundSong)
     genre = models.ForeignKey(YasoundGenre)
-    
+
     class Meta:
         db_table = u'yasound_song_genre'
         db_name = u'yasound'
         unique_together = ('song', 'genre')
-        
+
     def __unicode__(self):
         return self.genre.name
 

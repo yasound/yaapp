@@ -222,6 +222,13 @@ class TestModels(TestCase):
         url = radio.web_url
         self.assertEquals(url, 'http://localhost:8000/listen/' + radio.uuid)
 
+    def test_md5(self):
+        name = 'name'
+        artist = 'artist'
+        album = 'album'
+        s = SongMetadata(name=name, artist_name=artist, album_name=album)
+        self.assertEquals(s.calculate_hash_name(), 'e1c0b58dcdb486247329be94a4b8eee4')
+
 class TestNextSong(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]
@@ -664,6 +671,10 @@ class TestImport(TestCase):
         self.assertTrue(preview_path.find("preview64") > -1)
         self.assertEquals(len(os.path.basename(preview_path)), len('789_preview64.mp3'))
 
+        lq_path = yasound_song.get_filepath_for_lq()
+        self.assertTrue(lq_path.find("lq") > -1)
+        self.assertEquals(len(os.path.basename(lq_path)), len('789_lq.mp3'))
+
     def test_create_song_instance(self):
         radio = Radio.objects.radio_for_user(self.user)
 
@@ -744,6 +755,15 @@ class TestImport(TestCase):
         self.assertEquals(sm.name, 'my mp3')
         self.assertEquals(sm.artist_name, 'my artist')
         self.assertEquals(sm.album_name, 'my album')
+
+        yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
+        path = yasound_song.get_song_path()
+        preview_path = yasound_song.get_song_preview_path()
+        lq_path = yasound_song.get_song_lq_path()
+
+        self.assertTrue(os.path.isfile(path))
+        self.assertTrue(os.path.isfile(preview_path))
+        self.assertTrue(os.path.isfile(lq_path))
 
     def test_import_without_metadata_in_file_and_with_given_metadata_and_radio(self):
         radio = Radio.objects.radio_for_user(self.user)

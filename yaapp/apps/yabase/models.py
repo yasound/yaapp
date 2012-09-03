@@ -21,7 +21,7 @@ import datetime
 import django.db.models.options as options
 import json
 import logging
-import md5
+import hashlib
 import os
 import random
 import settings as yabase_settings
@@ -66,7 +66,7 @@ class SongMetadata(models.Model):
     hash_name = models.CharField(max_length=32, blank=True, null=True)
 
     def calculate_hash_name(self, commit=True):
-        hash_name = md5.new()
+        hash_name = hashlib.md5()
         hash_name.update(get_simplified_name(self.name))
         hash_name.update(get_simplified_name(self.album_name))
         hash_name.update(get_simplified_name(self.artist_name))
