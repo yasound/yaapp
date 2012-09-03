@@ -127,12 +127,10 @@ Yasound.Views.Deezer.TrackCell = Backbone.View.extend({
     },
 
     onImportSucceded: function (message) {
-        colibri(gettext('Song imported'));
         $(this.el).removeClass('import-error').addClass('import-ok');
     },
 
     onImportFailed: function (message) {
-        colibri(message, 'colibri-error');
         $(this.el).removeClass('import-ok').addClass('import-error');
     }
 });
