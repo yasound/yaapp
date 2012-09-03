@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 19:10+0200\n"
+"POT-Creation-Date: 2012-09-03 10:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -352,7 +352,7 @@ msgstr ""
 #: templates/yabase/app/programming/songInstances.mustache:13
 #: templates/yabase/app/programming/upload.mustache:15
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:10
-#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:26
+#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:27
 msgid "Action"
 msgstr "Action"
 
@@ -1170,21 +1170,21 @@ msgstr "Ecoute actuellement :"
 #: templates/yabase/app/programming/addFromServer.mustache:5
 #: templates/yabase/app/programming/addFromServer.mustache:19
 #: templates/yabase/app/programming/songInstances.mustache:10
-#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:23
+#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:24
 msgid "Track"
 msgstr "Piste"
 
 #: templates/yabase/app/programming/addFromServer.mustache:6
 #: templates/yabase/app/programming/addFromServer.mustache:20
 #: templates/yabase/app/programming/songInstances.mustache:11
-#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:24
+#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:25
 msgid "Album"
 msgstr "Album"
 
 #: templates/yabase/app/programming/addFromServer.mustache:7
 #: templates/yabase/app/programming/addFromServer.mustache:21
 #: templates/yabase/app/programming/songInstances.mustache:12
-#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:25
+#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:26
 msgid "Artist"
 msgstr "Artiste"
 
@@ -1288,6 +1288,10 @@ msgstr "ajouter"
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:2
 msgid "Import your playlists"
 msgstr "Importer vos playlists"
+
+#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:20
+msgid "Import all"
+msgstr "Tout Importer"
 
 #: templates/yabase/app/programming/deezer/playlistCell.mustache:4
 msgid "details"
