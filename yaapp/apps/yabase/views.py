@@ -1137,6 +1137,10 @@ class WebAppView(View):
     def notifications(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
 
+    def new_radio(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 5
+        return context, 'yabase/webapp.html'
+
     def signup(self, request, context, *args, **kwargs):
         if request.method == 'POST':
             form = WebAppSignupForm(request.POST)

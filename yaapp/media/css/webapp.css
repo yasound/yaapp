@@ -2697,7 +2697,7 @@ ul .radio-with-stats-cells li {
 }
 
 #radio-creation-container form {
-    width:350px;
+    width:440px;
     margin-left:170px;
     margin-top:30px;
     float:left;
@@ -2710,8 +2710,6 @@ ul .radio-with-stats-cells li {
 
 #radio-creation-container .radio-creation-style {
     position:relative;
-    border:1px solid #d7dadc;
-    border-radius:5px;
     width:108px;
     height:42px;
     margin:0px 0px 0px 20px;
@@ -2742,6 +2740,13 @@ ul .radio-with-stats-cells li {
     height:42px;
 }
 
+#radio-creation-container .radio-creation-style select {
+    font-size:17px;
+    height:42px;
+    padding-top:8px;
+    width:180px;
+}
+
 #radio-creation-container .radio-creation-name {
     height:34px;
     font-size:17px;
@@ -2753,12 +2758,12 @@ ul .radio-with-stats-cells li {
 
 #radio-creation-container .radio-creation-tags {
     height:34px;
-    width:339px;
+    width:411px;
     margin-bottom:30px;
 }
 
 #radio-creation-container textarea {
-    width:339px;
+    width:411px;
     height:120px;
 }
 
