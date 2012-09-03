@@ -7,10 +7,12 @@
         <h3>{% trans 'Quick registration with Facebook or Twitter' %}</h3>
         <div class='signup-btns'>
             <div class="signup-btn-fbk">
-    		    	<a href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+    		    	<a class='screen-social-btn'href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+                    <a class='mobile-social-btn'href="{% url socialauth_begin 'facebook' %}?next=/app/" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
     	    </div>
     	    <div class="signup-btn-twitter">
-    		    	<a href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+    		    	<a class='screen-social-btn'href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+                    <a class='mobile-social-btn'href="{% url socialauth_begin 'twitter' %}?next=/app/" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
     	    </div>
 	    </div>
 		<div id="signup-separation-line">&nbsp;</div>
