@@ -562,6 +562,33 @@ def stop_listening_to_radio(request, radio_uuid):
     res = '%s stopped listening to "%s" (listening duration = %d)' % (client, radio, listening_duration)
     return HttpResponse(res)
 
+@csrf_exempt
+def radio_has_stopped(request, radio_uuid):
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+
+    LISTENING_DURATION_PARAM_NAME = 'listening_duration'
+    listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio.stopped_playing(listening_duration)
+    return HttpResponse('ok')
+
+@csrf_exempt
+def song_played(request, radio_uuid, songinstance_id):
+    if not check_http_method(request, ['post']):
+        return HttpResponse(status=405)
+
+    key = request.GET.get('key', 0)
+    if key != settings.SCHEDULER_KEY:
+        return HttpResponseForbidden()
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    song_instance = get_object_or_404(SongInstance, id=songinstance_id)
+    radio.song_starts_playing(song_instance)
+
+    return HttpResponse('ok')
+
 @check_api_key(methods=['GET',], login_required=False)
 def get_current_song(request, radio_id):
     song_json = SongInstance.objects.get_current_song_json(radio_id)
