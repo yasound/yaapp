@@ -322,7 +322,7 @@ class SongImporter:
         args = [settings.FFMPEG_BIN,
                 '-i',
                 source]
-        args.extend(settings.FFMPEG_CONVERT_TO_MP3_OPTIONS.split(" "))
+        args.extend(settings.FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS.split(" "))
         args.append(destination)
         p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
         output, errors = p.communicate()
@@ -645,6 +645,10 @@ class SongImporter:
             self._log(_('generating preview'))
             song.generate_preview()
             self._log("generated mp3 preview file : %s" % (song.get_song_preview_path()))
+
+            self._log(_('generating low quality'))
+            song.generate_low_quality()
+            self._log("generated mp3 low quality file : %s" % (song.get_song_lq_path()))
 
             song.filesize = os.path.getsize(mp3_path)
             song.save()

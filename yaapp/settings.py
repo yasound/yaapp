@@ -835,10 +835,6 @@ FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ar 44100 -ab 192000 -y' # convert to mp3
 FFMPEG_CONVERT_LOW_QUALITY_OPTIONS = '-ar 22050 -ab 64000 -y -reservoir 0' # convert option when generating mp3 preview
 FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS = '-ar 44100 -ab 192000 -y -reservoir 0' # convert to mp3
 
-if LOCAL_MODE:
-    FFMPEG_GENERATE_PREVIEW_OPTIONS = '-ar 24000 -ab 64000 -y' # convert option when generating mp3 preview
-    FFMPEG_CONVERT_TO_MP3_OPTIONS = '-ar 44100 -ab 192000 -y' # convert to mp3
-
 if PRODUCTION_MODE:
     SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
