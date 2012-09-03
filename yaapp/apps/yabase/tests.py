@@ -222,6 +222,13 @@ class TestModels(TestCase):
         url = radio.web_url
         self.assertEquals(url, 'http://localhost:8000/listen/' + radio.uuid)
 
+    def test_md5(self):
+        name = 'name'
+        artist = 'artist'
+        album = 'album'
+        s = SongMetadata(name=name, artist_name=artist, album_name=album)
+        self.assertEquals(s.calculate_hash_name(), 'e1c0b58dcdb486247329be94a4b8eee4')
+
 class TestNextSong(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]
