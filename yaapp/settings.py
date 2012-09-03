@@ -912,6 +912,13 @@ IGNORE_TESTS = (
     'emencia.django.newsletter',
     'bootstrap',
 )
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pyflakes',
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',
+)
+
 JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 
 SCHEDULER_KEY = 'pibs9wn20fnq-1nfk8762ncuwecydgso'
