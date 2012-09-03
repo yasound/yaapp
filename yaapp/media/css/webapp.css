@@ -3200,7 +3200,7 @@ ul .radio-with-stats-cells li {
 .yabutton {
     display:block;
     height:31px;
-	padding:7px 15px;
+	padding:0px 15px;
 	background-image:url('../app/images/btn-more.png');
     background-repeat:repeat-x;
     border:1px solid #cbcdc9;
