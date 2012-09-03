@@ -3477,6 +3477,7 @@ ul .radio-with-stats-cells li {
 
     .signup-container h2 {
         font-size:28px;
+        margin:20px 0px;
     }
 
     .signup-container h3 {
@@ -3514,6 +3515,25 @@ ul .radio-with-stats-cells li {
 
     .signup-container #signup-input {
         margin-top:10px;
+    }
+
+    .signup-container h3 a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        color: #08C;
+        font-size: 19px;
+        font-weight: normal;
+        margin:10px 0px;
+        line-height:30px;
+    }
+
+    .signup-container .mobile-lost-password {
+        width:100%;
+        text-align:center;
+        text-decoration: underline;
+        color:#7C7C7C;
+        margin:0px;
     }
 
 /*-- PROFILE --*/
