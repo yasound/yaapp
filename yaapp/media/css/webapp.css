@@ -2025,6 +2025,17 @@ ul#notifications {
     width:400px;
 }
 
+#deezer-tracks-container .import-error {
+    color: red;
+    text-decoration: underline;
+}
+
+#deezer-tracks-container .import-ok {
+    color: blue;
+    font-weight: bold;
+}
+
+
 #radio-actions-container {
     width:213px;
     border:1px solid #b6b6b7;
