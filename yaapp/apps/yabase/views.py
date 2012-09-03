@@ -524,10 +524,6 @@ def start_listening_to_radio(request, radio_uuid):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
-    key = request.GET.get('key', 0)
-    if key != SCHEDULER_KEY:
-        return HttpResponseForbidden()
-
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio.user_started_listening(request.user)
 
@@ -548,10 +544,6 @@ def stop_listening_to_radio(request, radio_uuid):
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
-
-    key = request.GET.get('key', 0)
-    if key != SCHEDULER_KEY:
-        return HttpResponseForbidden()
 
     LISTENING_DURATION_PARAM_NAME = 'listening_duration'
     listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
@@ -575,10 +567,6 @@ def radio_has_stopped(request, radio_uuid):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
-    key = request.GET.get('key', 0)
-    if key != SCHEDULER_KEY:
-        return HttpResponseForbidden()
-
     LISTENING_DURATION_PARAM_NAME = 'listening_duration'
     listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
 
@@ -592,7 +580,7 @@ def song_played(request, radio_uuid, songinstance_id):
         return HttpResponse(status=405)
 
     key = request.GET.get('key', 0)
-    if key != SCHEDULER_KEY:
+    if key != settings.SCHEDULER_KEY:
         return HttpResponseForbidden()
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)

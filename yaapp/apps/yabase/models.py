@@ -839,6 +839,7 @@ class Radio(models.Model):
             'nb_current_users' : self.nb_current_users,
             'tags' : self.tags_to_string(),
             'picture': self.picture_url,
+            'large_picture': self.large_picture_url,
             'ready': self.ready,
             'stream_url' : self.stream_url,
             'web_url': self.web_url,
@@ -1027,6 +1028,16 @@ class Radio(models.Model):
         if self.picture:
             try:
                 return get_thumbnail(self.picture, '210x210', format='PNG', crop='center').url
+            except:
+                return yaapp_settings.DEFAULT_IMAGE
+        else:
+            return yaapp_settings.DEFAULT_IMAGE
+
+    @property
+    def large_picture_url(self):
+        if self.picture:
+            try:
+                return get_thumbnail(self.picture, '640x640', format='PNG', crop='center').url
             except:
                 return yaapp_settings.DEFAULT_IMAGE
         else:
@@ -1517,6 +1528,16 @@ class WallEvent(models.Model):
         if self.user_picture:
             try:
                 url = get_thumbnail(self.user_picture, '100x100', crop='center').url
+            except:
+                url = yaapp_settings.DEFAULT_IMAGE
+        else:
+            url = yaapp_settings.DEFAULT_IMAGE
+        return url
+
+    def user_large_picture_url(self):
+        if self.user_picture:
+            try:
+                url = get_thumbnail(self.user_picture, '640x640', crop='center').url
             except:
                 url = yaapp_settings.DEFAULT_IMAGE
         else:
