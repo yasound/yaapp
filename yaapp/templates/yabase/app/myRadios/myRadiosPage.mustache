@@ -9,8 +9,10 @@
 </div>
 {% if user_profile.permissions.create_radio %}
 <div class='row'>
-    <div class='span12 pagination-centered' id='create-radio-container'>
+    <div class='span12'>
+        <div id='create-radio-container'>
         <a class='yabutton-large' id='create-radio-btn' href='{% url webapp_new_radio %}'>{% trans "Create radio" %}</a>
+        </div>
     </div>
 </div>
 {% endif %}

@@ -672,7 +672,7 @@ body {
 }
 
 #sub-header-container {
-    max-width:940px; 
+    max-width:940px;
     height:55px;
     position:relative;
 }
@@ -1177,10 +1177,15 @@ input::-webkit-input-placeholder {
 #pagination {
 	display:block;
 	min-width:150px;
-	float:left;
-	margin-left:43%;
+    width:940px;
+    text-align: center;
 }
 
+#pagination-wall {
+    display:block;
+    width:100%;
+    text-align: center;
+}
 
 .btn-breadcrumb {
 	height:41px;
@@ -2251,11 +2256,11 @@ ul#notifications {
 }
 
 #favorites-zone {
-    max-width: 940px;   
+    max-width: 940px;
 }
 
 #friends-zone {
-    max-width: 940px;   
+    max-width: 940px;
 }
 
 .profile-background {
@@ -2578,6 +2583,9 @@ ul .radio-with-stats-cells li {
 
 #create-radio-container {
     margin-top:14px;
+    display: block;
+    text-align:center;
+    width:940px;
 }
 
 
@@ -3572,7 +3580,7 @@ a.yabutton-small {
     .signup-container #signup-input input, .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
-        padding-left:10px;    
+        padding-left:10px;
     }
 
     .signup-container #signup-input #signup-save-btn {
@@ -3699,7 +3707,7 @@ a.yabutton-small {
 }
 /* Landscape phone to portrait tablet */
 @media (min-width: 480px) and (max-width: 767px) {
-    
+
 /*-- SIGNUP --*/
     .signup-container {
         width:100%;
@@ -3728,7 +3736,7 @@ a.yabutton-small {
     .signup-container #signup-input input, .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
-        padding-left:10px;    
+        padding-left:10px;
     }
 
     .signup-container #signup-input #signup-save-btn {
@@ -3793,8 +3801,13 @@ a.yabutton-small {
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
+<<<<<<< HEAD
     
 /*-- SIGNUP --*/
+=======
+
+    /*-- SIGNUP --*/
+>>>>>>> 1784d989b3f4796d9970c9e46577c1e1e3487d9d
     .signup-container {
         width:100%;
         height:100%;
@@ -3820,7 +3833,7 @@ a.yabutton-small {
     .signup-container #signup-input input, .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
-        padding-left:10px;    
+        padding-left:10px;
     }
 
     .signup-container #signup-input #signup-save-btn {
