@@ -52,6 +52,11 @@ body {
     max-width:940px;
 }
 
+.max-width-span4 {
+    max-width:300px;
+    margin-left: 0px;
+}
+
 /**
  * Header
  */
@@ -1234,6 +1239,7 @@ input::-webkit-input-placeholder {
 
 #footer .container {
     position:relative;
+    max-width:940px;
 }
 
 .blocks {
@@ -1943,7 +1949,7 @@ ul .user-cell:hover .caption {
 
 .wall-container {
 	background-color:white;
-	width:620px;
+	max-width:620px;
 	margin-top:24px;
 	padding-bottom:10px;
 	border-radius:20px;
@@ -2240,7 +2246,20 @@ ul#notifications {
  * User profile
  */
 
+.user-radios {
+    max-width: 940px;
+}
+
+#favorites-zone {
+    max-width: 940px;   
+}
+
+#friends-zone {
+    max-width: 940px;   
+}
+
 .profile-background {
+    max-width:940px;
 	background-color:white;
 	margin:0px 0px 25px 0px;
 	box-shadow:0px 0px 10px #e2e2e2;
@@ -3618,6 +3637,7 @@ a.yabutton-small {
 	.validated {
 		display:none;
 	}
+
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
         background-image:url('../app/images/my-radio/my-radio-bg-mobile.png');
