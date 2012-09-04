@@ -33,6 +33,7 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+import requests
 
 logger = logging.getLogger("yaapp.account")
 
@@ -346,7 +347,7 @@ class UserProfile(models.Model):
             pass
 
         try:
-            if self.picture is None:
+            if not self.picture:
                 self.update_with_social_picture()
         except:
             pass
@@ -402,7 +403,7 @@ class UserProfile(models.Model):
             pass
 
         try:
-            if self.picture is None:
+            if not self.picture:
                 self.update_with_social_picture()
         except:
             pass
@@ -810,11 +811,31 @@ class UserProfile(models.Model):
         # update radios picture
         radios = self.own_radios(only_ready_radios=False)
         for r in radios:
-            r.set_picture(f)
+            if not r.picture:
+                r.set_picture(f)
+
+    def update_with_twitter_picture(self):
+        if not self.twitter_enabled:
+            return
+
+        params = {
+            'id': self.twitter_uid,
+            'size': 'bigger'
+        }
+        r = requests.get('https://api.twitter.com/1/users/profile_image', params=params)
+        f = ContentFile(r.content)
+        self.set_picture(f)
+        # update radios picture
+        radios = self.own_radios(only_ready_radios=False)
+        for r in radios:
+            if not r.picture:
+                r.set_picture(f)
 
     def update_with_social_picture(self):
         if self.facebook_enabled:
             self.update_with_facebook_picture()
+        elif self.twitter_enabled:
+            self.update_with_twitter_picture()
 
     def update_with_social_data(self):
         self.update_with_social_picture()
