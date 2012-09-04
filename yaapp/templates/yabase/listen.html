@@ -55,11 +55,11 @@
            <div id="radio">
                <div id='radio-picture' class='thumbnail'>
                    {% if radio.picture %}
-                   {% thumbnail radio.picture "256x256" format='PNG' as im %}
-                   <img src="{{ im.url }}" width="256px" height="256px" alt='{% trans "Radio logo" %}'/>
+                   {% thumbnail radio.picture "210x210" format='PNG' as im %}
+                   <img src="{{ im.url }}" width="210px" height="210px" alt='{% trans "Radio logo" %}'/>
                    {% endthumbnail %}
                    {% else %}
-                   <img src="/media/images/default_image.png" width="256px" height="256px" alt='{% trans "Radio logo" %}'/>
+                   <img src="/media/images/default_image.png" width="210px" height="210px" alt='{% trans "Radio logo" %}'/>
                    {% endif %}
                </div>
                <div id='radio-title'>
