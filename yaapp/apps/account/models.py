@@ -896,14 +896,15 @@ class UserProfile(models.Model):
             friend_profile = f.userprofile
             friend_profile.my_friend_created_radio(self, radio)
 
-    def logged(self, request):
+    def logged(self, request=None):
         for f in self.friends.all():
             try:
                 friend_profile = f.userprofile
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
-        self.check_geo_localization(request)
+        if request is not None:
+            self.check_geo_localization(request)
 
     def add_to_group(self, group_name):
         g, _created = Group.objects.get_or_create(name=group_name)
