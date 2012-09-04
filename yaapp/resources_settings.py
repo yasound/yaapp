@@ -84,6 +84,8 @@ PIPELINE_JS = {
             'js/app/radio/views.js',
             'js/app/myRadios/models.js',
             'js/app/myRadios/views.js',
+            'js/app/newRadio/models.js',
+            'js/app/newRadio/views.js',
             'js/app/search/models.js',
             'js/app/search/views.js',
             'js/app/favorites/models.js',
