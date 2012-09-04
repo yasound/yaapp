@@ -30,6 +30,22 @@ class SettingsRadioForm(BootstrapModelForm):
         self.cleaned_data['tags'] = tags
         return tags
 
+class NewRadioForm(BootstrapModelForm):
+    name = forms.CharField(label=_('Name'), required=True, max_length=255)
+    tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
+
+    class Meta:
+        model = Radio
+        fields = ('name', 'genre', 'description', 'tags', 'picture')
+        layout = (
+            Fieldset('', 'name', 'genre', 'description', 'tags', 'picture'),
+        )
+
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        tags = clean_tags(tags)
+        self.cleaned_data['tags'] = tags
+        return tags
 
 class MyInformationsForm(BootstrapModelForm):
     bio_text = forms.CharField(label=_('Biography'), widget=forms.widgets.Textarea(attrs={'rows':5, 'cols':60}), required=False)
