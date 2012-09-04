@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic.base import View
-from forms import SettingsRadioForm
+from forms import SettingsRadioForm, NewRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata
 from shutil import rmtree
@@ -1138,7 +1138,32 @@ class WebAppView(View):
         return context, 'yabase/webapp.html'
 
     def new_radio(self, request, context, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('webapp'))
+
+        if request.method == 'POST':
+            form = NewRadioForm(request.POST, request.FILES)
+            if form.is_valid():
+                radio = form.save(commit=False)
+                radio.creator = request.user
+                radio.save()
+                form.save_m2m()
+                if request.is_ajax():
+                    data = {
+                        'success': True,
+                        'url': 'radio/%s/programming/' % (radio.uuid)
+                    }
+                    response = json.dumps(data)
+                    return HttpResponse(response, mimetype='application/json')
+                return HttpResponseRedirect(reverse('webapp_programming', args=[radio.uuid]))
+            else:
+                if request.is_ajax():
+                    return self._ajax_error(form.errors)
+        else:
+            form = NewRadioForm()
+
         context['submenu_number'] = 5
+        context['form'] = form
         return context, 'yabase/webapp.html'
 
     def signup(self, request, context, *args, **kwargs):

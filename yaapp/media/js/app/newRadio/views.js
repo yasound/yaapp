@@ -4,7 +4,8 @@ Namespace('Yasound.Views');
 
 Yasound.Views.NewRadioPage = Backbone.View.extend({
     events: {
-        "change input[type='file']": 'onFileChange'
+        "change input[type='file']": "onFileChange",
+        "submit #new-radio-form": "submit"
     },
 
     initialize: function() {
@@ -27,7 +28,7 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
 
     submit: function(e) {
         e.preventDefault();
-        var form = $('#login-form', this.el);
+        var form = $('#new-radio-form', this.el);
         $('.error-msg', form).remove();
         $('input').removeClass('error');
 
@@ -35,7 +36,7 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
         $.post(url, form.serializeArray(), function(data) {
             var success = data.success;
             if (!data.success) {
-                colibri(gettext('Login error'));
+                colibri(gettext('Error'));
                 var errors = data.errors;
                 if (errors) {
                     _.each(errors, function(value, key) {
@@ -45,7 +46,9 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
                     });
                 }
             } else {
-                window.location = '/app/';
+                Yasound.App.Router.navigate(data.url, {
+                    trigger: true
+                });
             }
         }).error(function() {
             colibri(gettext('Error while login in'), 'colibri-error');

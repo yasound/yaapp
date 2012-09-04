@@ -5,11 +5,11 @@
         <h1>
             Création d'une radio Yasound
         </h1>
-        <form action='{% url webapp_new_radio %}' method='post'>{% csrf_token %}
+        <form id='new-radio-form' action='{% url webapp_new_radio %}' enctype="multipart/form-data" method='post'>{% csrf_token %}
             <div id='form-left'>
-                <input class='radio-creation-textfield radio-creation-name' type='text' required="required" placeholder='{% trans "Name" %}' />
+                <input class='radio-creation-textfield radio-creation-name' name='name' type='text' required="required" placeholder='{% trans "Name" %}' />
                 <div class='radio-creation-style'>
-                    <select>
+                    <select name='genre'>
                         <option selected value="style_all">Tous Styles</option>
                         <option value="style_classique">Classique</option>
                         <option value="style_blues">Blues</option>
@@ -27,8 +27,8 @@
                         <option value="style_misc">Divers</option>
                     </select>
                 </div>
-                <input class='radio-creation-textfield radio-creation-tags' type='text' placeholder='{% trans "Tags" %}' />
-                <textarea class='radio-creation-textfield radio-creation-description' type='textarea' placeholder='{% trans "Description" %}'></textarea>
+                <input class='radio-creation-textfield radio-creation-tags' type='text' id='id_tags' name='tags' placeholder='{% trans "Tags" %}' />
+                <textarea class='radio-creation-textfield radio-creation-description' name='description' type='textarea' placeholder='{% trans "Description" %}'></textarea>
             </div>
             <div class='radio-creation-image-container'>
                 <div class='radio-creation-image'>
@@ -36,10 +36,11 @@
                 </div>
                 <div class='upload-content yabutton-small'>
                     <span>{% trans "Choose a picture" %}</span>
-                    <input type='file' />
+                    <input type='file' name='picture'/>
                 </div>
             </div>
             <input class='radio-creation-submit yabutton-large' type='submit' value='{% trans "Create the radio" %}' />
         </form>
+        {{ form }}
     </div>
 </div>

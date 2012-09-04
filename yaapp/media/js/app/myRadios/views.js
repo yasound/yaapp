@@ -197,6 +197,10 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
 Yasound.Views.MyRadiosPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.MyRadios({}),
 
+    events: {
+        "click #create-radio-btn": "onCreateRadio"
+    },
+
     initialize: function () {
     },
 
@@ -233,5 +237,12 @@ Yasound.Views.MyRadiosPage = Backbone.View.extend({
         }
         this.resultsView.clear();
         this.collection.goTo(0);
+    },
+
+    onCreateRadio: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radios/new/", {
+            trigger: true
+        });
     }
 });
