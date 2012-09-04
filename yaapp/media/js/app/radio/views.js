@@ -480,7 +480,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.wallEvents,
-            el: $('#pagination', this.el)
+            el: $('#pagination-wall', this.el)
         });
 
         if (this.model.get('id')) {
