@@ -13,6 +13,10 @@ class EmailAuthBackend(object):
         try:
             user = User.objects.get(email=username)
             if user.check_password(password):
+                try:
+                    user.get_profile().logged()
+                except:
+                    pass
                 return user
         except User.DoesNotExist:
             return None 

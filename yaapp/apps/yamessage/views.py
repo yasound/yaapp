@@ -15,7 +15,6 @@ def get_notifications(request):
     offset = int(request.REQUEST.get('offset', 0))
     limit = request.REQUEST.get('limit', None)
     read_status = request.REQUEST.get('read_status', 'all')
-
     if limit is not None:
         limit = int(limit)
 

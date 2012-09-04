@@ -1401,7 +1401,7 @@ class TestBroadcastMessage(TestCase):
 
     def test_broadcast_ok(self):
         radio = Radio.objects.radio_for_user(self.user)
-        res = self.client.post(reverse('yabase.views.radio_broadcast_message', args=[radio.uuid]), {'message': 'hello, world'})
+        res = self.client.post(reverse('yabase.views.radio_broadcast_message', args=[radio.uuid]), {'message': '<b>hello, world</b>'})
         self.assertEquals(res.status_code, 200)
 
 class TestTags(TestCase):

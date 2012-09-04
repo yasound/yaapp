@@ -37,6 +37,11 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
         except:
             pass
 
+        try:
+            profile.logged()
+        except:
+            pass
+
         return {'user': user}
     if not username:
         return None
@@ -91,6 +96,11 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             try:
                 if profile.picture is None:
                     profile.update_with_social_picture()
+            except:
+                pass
+            
+            try:
+                profile.logged()
             except:
                 pass
 

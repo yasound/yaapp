@@ -43,9 +43,11 @@ class NotificationsManager():
             except Radio.DoesNotExist:
                 pass
         text = self.text_for_notification(notif_type, params)
+        html = self.html_for_notification(notif_type, params)
         d = datetime.datetime.now()
         notif = {'type': notif_type,
                  'text': text,
+                 'html': html,
                  'date': d,
                  'dest_user_id': recipient_user_id,
                  'from_user_id': from_user_id,
@@ -64,6 +66,15 @@ class NotificationsManager():
     def text_for_notification(self, notification_type, params):
 
         raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['text'])
+        if params is not None:
+            text = raw_text % params
+        else:
+            text = raw_text
+        return text
+
+    def html_for_notification(self, notification_type, params):
+
+        raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['html'])
         if params is not None:
             text = raw_text % params
         else:
