@@ -3659,24 +3659,48 @@ a.yabutton-small {
 
 /*-- FOOTER --*/
 
-	#connected-users {
+	#connected-users,
+    .footer-separation {
 		display:none;
 	}
 
-    .footer-separation {
-        display:none;
-    }
     #footer {
         width:100%;
+        position:absolute;
         margin-left:-20px;
         margin-right:-20px;
     }
-}
 
+    #minutes {
+        text-align:center;
+        width:40%;
+        position:relative;
+        float:none;
+        margin:20px auto;
+    }
+
+    #minutes p {
+        position:static;
+        width:auto;
+        margin-left:0;
+        text-align:center;
+    }
+
+    #minutes span {
+        font-size:32px;
+        margin-top:20px;
+        float:none;
+        margin:0 auto;
+    }
+
+    #contacts {
+       display:none;
+    }
+}
 /* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
+@media (min-width: 480px) and (max-width: 767px) {
     
-    /*-- SIGNUP --*/
+/*-- SIGNUP --*/
     .signup-container {
         width:100%;
         height:100%;
@@ -3684,11 +3708,12 @@ a.yabutton-small {
 
     .signup-container h2 {
         font-size:28px;
-        margin:20px 0px;
+        margin:10px 0px;
     }
 
     .signup-container h3 {
         font-size: 19px;
+        margin:10px;
     }
 
     .signup-container .signup-btn-fbk, .signup-container .signup-btn-twitter {
@@ -3743,24 +3768,44 @@ a.yabutton-small {
         margin:0px;
     }
 
+/*-- FOOTER --*/
+
+    #connected-users,
+    .footer-separation {
+        display:none;
+    }
+
+    #footer {
+        width:100%;
+        position:absolute;
+        margin-left:-20px;
+        margin-right:-20px;
+    }
+
+    #minutes {
+        margin-right:20px;
+    }
+
+    #contacts {
+        margin-left:20px;
+    }
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     
-    /*-- SIGNUP --*/
+/*-- SIGNUP --*/
     .signup-container {
         width:100%;
         height:100%;
     }
 
     .signup-container h2 {
-        font-size:28px;
-        margin:20px 0px;
+        margin:35px 0px;
     }
 
     .signup-container h3 {
-        font-size: 19px;
+        margin:20px 0px;
     }
 
     .signup-container .signup-btn-fbk, .signup-container .signup-btn-twitter {
@@ -3780,16 +3825,6 @@ a.yabutton-small {
 
     .signup-container #signup-input #signup-save-btn {
         margin-right:2px;
-    }
-
-    .signup-btns .screen-social-btn {
-        display:none;
-    }
-
-    .signup-btns .mobile-social-btn {
-        display:block;
-        text-align:center;
-        margin:0px;
     }
 
     .signup-container #signup-input {
