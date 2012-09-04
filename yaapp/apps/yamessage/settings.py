@@ -34,47 +34,68 @@ TEXT_NOTIF_FRIEND_CREATED_RADIO = _("%(user_name)s created his radio")
 TEXT_NOTIF_MESSAGE_FROM_YASOUND = _("you have a message from Yasound")
 TEXT_NOTIF_MESSAGE_FROM_USER    = _("%s")
 
+HTML_NOTIF_FRIEND_IN_RADIO      = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> is listening to your radio")
+HTML_NOTIF_USER_IN_RADIO        = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> is listening to your radio")
+HTML_NOTIF_FRIEND_ONLINE        = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> is online on Yasound")
+HTML_NOTIF_MESSAGE_IN_WALL      = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> posted a message on your wall")
+HTML_NOTIF_SONG_LIKED           = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> liked '%(song_name)s' on your radio")
+HTML_NOTIF_RADIO_IN_FAVORITES   = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> added your radio as a favorite")
+HTML_NOTIF_RADIO_SHARED         = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> shared your radio")
+HTML_NOTIF_FRIEND_CREATED_RADIO = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> created his radio")
+HTML_NOTIF_MESSAGE_FROM_YASOUND = _("you have a message from Yasound")
+HTML_NOTIF_MESSAGE_FROM_USER    = _("%s")
+
 YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'
 
 NOTIF_INFOS = {
                TYPE_NOTIF_FRIEND_IN_RADIO: {
                                             'text': TEXT_NOTIF_FRIEND_IN_RADIO,
+                                            'html': HTML_NOTIF_FRIEND_IN_RADIO,
                                             'loc_key': APNS_LOC_KEY_FRIEND_IN_RADIO
                                             },
                TYPE_NOTIF_USER_IN_RADIO: {
                                             'text': TEXT_NOTIF_USER_IN_RADIO,
+                                            'html': HTML_NOTIF_USER_IN_RADIO,
                                             'loc_key': APNS_LOC_KEY_USER_IN_RADIO
                                             },
                TYPE_NOTIF_FRIEND_ONLINE: {
                                             'text': TEXT_NOTIF_FRIEND_ONLINE,
+                                            'html': HTML_NOTIF_FRIEND_ONLINE,
                                             'loc_key': APNS_LOC_KEY_FRIEND_ONLINE
                                             },
                TYPE_NOTIF_MESSAGE_IN_WALL: {
                                             'text': TEXT_NOTIF_MESSAGE_IN_WALL,
+                                            'html': HTML_NOTIF_MESSAGE_IN_WALL,
                                             'loc_key': APNS_LOC_KEY_MESSAGE_IN_WALL
                                             },
                TYPE_NOTIF_SONG_LIKED: {
                                             'text': TEXT_NOTIF_SONG_LIKED,
+                                            'html': HTML_NOTIF_SONG_LIKED,
                                             'loc_key': APNS_LOC_KEY_SONG_LIKED
                                             },
                TYPE_NOTIF_RADIO_IN_FAVORITES: {
                                             'text': TEXT_NOTIF_RADIO_IN_FAVORITES,
+                                            'html': HTML_NOTIF_RADIO_IN_FAVORITES,
                                             'loc_key': APNS_LOC_KEY_RADIO_IN_FAVORITES
                                             },
                TYPE_NOTIF_RADIO_SHARED: {
                                             'text': TEXT_NOTIF_RADIO_SHARED,
+                                            'html': HTML_NOTIF_RADIO_SHARED,
                                             'loc_key': APNS_LOC_KEY_RADIO_SHARED
                                             },
                TYPE_NOTIF_FRIEND_CREATED_RADIO: {
                                             'text': TEXT_NOTIF_FRIEND_CREATED_RADIO,
+                                            'html': HTML_NOTIF_FRIEND_CREATED_RADIO,
                                             'loc_key': APNS_LOC_KEY_FRIEND_CREATED_RADIO
                                             },
                TYPE_NOTIF_MESSAGE_FROM_YASOUND: {
                                             'text': TEXT_NOTIF_MESSAGE_FROM_YASOUND,
+                                            'html': HTML_NOTIF_MESSAGE_FROM_YASOUND,
                                             'loc_key': APNS_LOC_KEY_MESSAGE_FROM_YASOUND
                                             },
                TYPE_NOTIF_MESSAGE_FROM_USER: {
                                             'text': TEXT_NOTIF_MESSAGE_FROM_USER,
+                                            'html': HTML_NOTIF_MESSAGE_FROM_USER,
                                             'loc_key': APNS_LOC_KEY_MESSAGE_FROM_USER
                                             },
                }

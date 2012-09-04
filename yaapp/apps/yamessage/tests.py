@@ -53,6 +53,11 @@ class TestNotifications(TestCase):
             m.add_notification(user.id, yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'})
             self.assertEqual(m.notifications.count(), 1)
 
+            notification = m.notifications.find_one()
+            self.assertEquals(notification.get('text'), m.text_for_notification(yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'}))
+            self.assertEquals(notification.get('html'), m.html_for_notification(yamessage_settings.TYPE_NOTIF_MESSAGE_FROM_YASOUND, {'url': 'yasound.com'}))
+
+
     def test_add_notif_from_user(self):
         """
         Tests that a menu description can be added
@@ -86,6 +91,16 @@ class TestNotifications(TestCase):
             profile.my_friend_is_online(friend_profile=profile2)
 
             self.assertEqual(m.notifications.count(), 1)
+
+            notification = m.notifications.find_one()
+            notif_params = {
+                'user_name': unicode(profile2),
+                'user_username': profile2.user.username,
+                'user_id': profile2.user.id
+            }
+
+            self.assertEquals(notification.get('text'), m.text_for_notification(yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE, notif_params))
+            self.assertEquals(notification.get('html'), m.html_for_notification(yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE, notif_params))
 
             profile._user_in_my_radio_internal(user_profile=profile2, radio=radio)
             self.assertEqual(m.notifications.count(), 2)
