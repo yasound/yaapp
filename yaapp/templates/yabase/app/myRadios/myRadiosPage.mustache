@@ -1,9 +1,18 @@
 {% load i18n %}
 <div class='row'>
     <div class='span12'>
-    <ul id='results' class='radio-with-stats-cells'>
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    </ul>
-    <div class='cell-pagination' id='pagination'></div>
+        <ul id='results' class='radio-with-stats-cells'>
+        <img class='loading-mask' src='/media/images/loading.gif'/>
+        </ul>
+        <div class='cell-pagination' id='pagination'></div>
     </div>
 </div>
+{% if user_profile.permissions.create_radio %}
+<div class='row'>
+    <div class='span12'>
+        <div id='create-radio-container'>
+        <a class='yabutton-large' id='create-radio-btn' href='{% url webapp_new_radio %}'>{% trans "Create radio" %}</a>
+        </div>
+    </div>
+</div>
+{% endif %}

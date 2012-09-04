@@ -916,6 +916,10 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
  * Programming page
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
+    events: {
+        "click #edit-settings-btn": "onSettings"
+    },
+
     initialize: function() {
         _.bindAll(this, 'render', 'onClose');
     },
@@ -929,9 +933,18 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
     render: function(uuid) {
         this.reset();
+        this.uuid = uuid;
         $(this.el).html(ich.programmingPageTemplate());
 
         this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
         return this;
-    }
+    },
+
+    onSettings: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.uuid + '/edit/', {
+            trigger: true
+        });
+    },
+
 });

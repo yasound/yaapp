@@ -1,0 +1,65 @@
+/*jslint nomen: true, vars: true, bitwise: true, browser: true, eqeq: true, evil: true, undef: true, white: true, newcap: true */
+/*extern Ext, $ */
+Namespace('Yasound.Views');
+
+Yasound.Views.NewRadioPage = Backbone.View.extend({
+    events: {
+        "change input[type='file']": "onFileChange",
+        "submit #new-radio-form": "submit"
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'templateLoaded', 'submit', 'onFileChange');
+    },
+
+    onClose: function() {},
+
+    reset: function() {},
+
+    render: function() {
+        this.reset();
+        ich.loadRemoteTemplate('newRadio/newRadioPage.mustache', 'newRadioPageTemplate', this.templateLoaded);
+        return this;
+    },
+
+    templateLoaded: function() {
+        $(this.el).html(ich.newRadioPageTemplate());
+    },
+
+    submit: function(e) {
+        e.preventDefault();
+        var form = $('#new-radio-form', this.el);
+        $('.error-msg', form).remove();
+        $('input').removeClass('error');
+
+        var url = window.location.href;
+        $.post(url, form.serializeArray(), function(data) {
+            var success = data.success;
+            if (!data.success) {
+                colibri(gettext('Error'));
+                var errors = data.errors;
+                if (errors) {
+                    _.each(errors, function(value, key) {
+                        var $input = $('input[name=' + key + ']', form);
+                        $input.addClass('error');
+                        $input.after('<div class="error-msg">' + value + '</div>');
+                    });
+                }
+            } else {
+                Yasound.App.Router.navigate(data.url, {
+                    trigger: true
+                });
+            }
+        }).error(function() {
+            colibri(gettext('Error while login in'), 'colibri-error');
+        });
+    },
+
+    onFileChange: function (e) {
+        var that = this;
+        $('.radio-creation-image img', that.el).remove();
+        window.loadImage(e.target.files[0], function (img) {
+            $('.radio-creation-image', that.el).append(img);
+        }, {maxWidth: 216});
+    }
+});

@@ -118,14 +118,14 @@ Yasound.Views.Radio = Backbone.View.extend({
     },
 
     onSettings: function (e) {
-        event.preventDefault();
+        e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/edit/', {
             trigger: true
         });
     },
 
     onProgramming: function (e) {
-        event.preventDefault();
+        e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/programming/', {
             trigger: true
         });
@@ -480,7 +480,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.wallEvents,
-            el: $('#pagination', this.el)
+            el: $('#pagination-wall', this.el)
         });
 
         if (this.model.get('id')) {
@@ -668,7 +668,7 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
     },
 
     onProgramming: function (e) {
-        event.preventDefault();
+        e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.uuid + '/programming/', {
             trigger: true
         });

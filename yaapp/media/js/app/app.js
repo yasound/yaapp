@@ -145,6 +145,7 @@ $(document).ready(function () {
             "search/:query/": "search",
             "favorites/": "myFavorites",
             "radios/": "myRadios",
+            "radios/new/": "newRadio",
             "top/": "top",
             "users/": "users",
             "profile/:username/": "profile",
@@ -405,7 +406,6 @@ $(document).ready(function () {
             this.setCurrentRadioUUID(uuid);
         },
 
-        // owner favorites page
         myRadios: function () {
             this.clearView('my-radios');
 
@@ -414,6 +414,14 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.MyRadiosPage({
                 el: '#webapp-content'
             }).render(genre);
+        },
+
+        newRadio: function () {
+            this.clearView('my-radios');
+
+            this.currentView = new Yasound.Views.NewRadioPage({
+                el: '#webapp-content'
+            }).render();
         },
 
         legal: function() {
