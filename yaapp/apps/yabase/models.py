@@ -32,6 +32,7 @@ import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 from django.db.models import F
+from django.template.defaultfilters import striptags
 
 
 logger = logging.getLogger("yaapp.yabase")
@@ -1173,6 +1174,8 @@ class Radio(models.Model):
         self.save()
 
     def broadcast_message(self, message):
+        message = striptags(message)
+
         from task import async_radio_broadcast_message
         async_radio_broadcast_message(self, message)
 
