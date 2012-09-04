@@ -2696,7 +2696,7 @@ ul .radio-with-stats-cells li {
     padding-top:50px;
 }
 
-#radio-creation-container form {
+#radio-creation-container form #form-left{
     width:440px;
     margin-left:170px;
     margin-top:30px;

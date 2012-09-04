@@ -5,39 +5,41 @@
         <h1>
             Création d'une radio Yasound
         </h1>
-        <form>
-            <input class='radio-creation-textfield radio-creation-name' type='text' placeholder='{% trans "Name" %}' />
-            <div class='radio-creation-style'>
-                <select>
-                    <option selected value="style_all">Tous Styles</option>
-                    <option value="style_classique">Classique</option>
-                    <option value="style_blues">Blues</option>
-                    <option value="style_alternative">Alternative</option>
-                    <option value="style_electro">Electro</option>
-                    <option value="style_chanson_francaise">Chanson française</option>
-                    <option value="style_jazz">Jazz</option>
-                    <option value="style_pop">Pop</option>
-                    <option value="style_reggae">Reggae</option>
-                    <option value="style_rock">Rock</option>
-                    <option value="style_metal">Metal</option>
-                    <option value="style_hiphop">Hip hop</option>
-                    <option value="style_rnbsoul">Rnb / Soul</option>
-                    <option value="style_world">World</option>
-                    <option value="style_misc">Divers</option>
-                </select>
+        <form action='{% url webapp_new_radio %}' method='post'>{% csrf_token %}
+            <div id='form-left'>
+                <input class='radio-creation-textfield radio-creation-name' type='text' required="required" placeholder='{% trans "Name" %}' />
+                <div class='radio-creation-style'>
+                    <select>
+                        <option selected value="style_all">Tous Styles</option>
+                        <option value="style_classique">Classique</option>
+                        <option value="style_blues">Blues</option>
+                        <option value="style_alternative">Alternative</option>
+                        <option value="style_electro">Electro</option>
+                        <option value="style_chanson_francaise">Chanson française</option>
+                        <option value="style_jazz">Jazz</option>
+                        <option value="style_pop">Pop</option>
+                        <option value="style_reggae">Reggae</option>
+                        <option value="style_rock">Rock</option>
+                        <option value="style_metal">Metal</option>
+                        <option value="style_hiphop">Hip hop</option>
+                        <option value="style_rnbsoul">Rnb / Soul</option>
+                        <option value="style_world">World</option>
+                        <option value="style_misc">Divers</option>
+                    </select>
+                </div>
+                <input class='radio-creation-textfield radio-creation-tags' type='text' placeholder='{% trans "Tags" %}' />
+                <textarea class='radio-creation-textfield radio-creation-description' type='textarea' placeholder='{% trans "Description" %}'></textarea>
             </div>
-            <input class='radio-creation-textfield radio-creation-tags' type='text' placeholder='{% trans "Tags" %}' />
-            <textarea class='radio-creation-textfield radio-creation-description' type='textarea' placeholder='{% trans "Description" %}'></textarea>
+            <div class='radio-creation-image-container'>
+                <div class='radio-creation-image'>
+                    <img src='/media/images/default_image.png' width='216' height='216'/>
+                </div>
+                <div class='upload-content yabutton-small'>
+                    <span>{% trans "Choose a picture" %}</span>
+                    <input type='file' />
+                </div>
+            </div>
+            <input class='radio-creation-submit yabutton-large' type='submit' value='{% trans "Create the radio" %}' />
         </form>
-        <div class='radio-creation-image-container'>
-            <div class='radio-creation-image'>
-                <img src='/media/images/default_image.png' width='216' height='216'/>
-            </div>
-            <div class='upload-content yabutton-small'>
-                <span>{% trans "Choose a picture" %}</span>
-                <input type='file' />
-            </div>
-        </div>
-        <input class='radio-creation-submit yabutton-large' type='submit' value='{% trans "Create the radio" %}' />
     </div>
 </div>
