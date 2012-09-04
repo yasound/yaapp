@@ -2544,6 +2544,11 @@ ul .radio-with-stats-cells li {
 	border-radius:10px;
 }
 
+#create-radio-container {
+    margin-top:14px;
+}
+
+
 /**
  * SignUp
  */
@@ -3179,7 +3184,6 @@ ul .radio-with-stats-cells li {
  */
 
 .yabutton-large {
-    display:block;
     height:41px;
 	padding:10px 20px;
     background-image:url('../app/images/btn-more.png');
@@ -3196,10 +3200,17 @@ ul .radio-with-stats-cells li {
     font-size:15px;
 }
 
+a.yabutton-large {
+    display: inline;
+}
 .yabutton-large:hover {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
+}
+
+a.yabutton-large:hover {
+    text-decoration:none;
 }
 
 .yabutton {
@@ -3222,10 +3233,19 @@ ul .radio-with-stats-cells li {
 	margin:25px 21px 0px 0px;
 }
 
+a.yabutton {
+    display: inline;
+}
+
+
 .yabutton:hover {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
+}
+
+a.yabutton:hover {
+    text-decoration:none;
 }
 
 .yabutton-small {
@@ -3246,12 +3266,19 @@ ul .radio-with-stats-cells li {
     vertical-align:middle;
 }
 
+a.yabutton-small {
+    display: inline;
+}
+
+
 .yabutton-small:hover {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
 }
-
+.yabutton-small:hover {
+    text-decoration: none;
+}
 .yatooltip {
 	opacity:100;
 	text-decoration:none;
