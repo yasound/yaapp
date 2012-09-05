@@ -66,6 +66,7 @@ radio_enabled_playlist = RadioEnabledPlaylistResource()
 radio_all_playlist = RadioAllPlaylistResource()
 playlist_matched_songs = MatchedSongResource()
 
+from yadeezer.views import DeezerAppView
 
 user_favorite_radios = UserFavoriteRadioResource()
 
@@ -259,6 +260,7 @@ urlpatterns = patterns('',
 
     # deezer communication
     url(r'^deezer/(?P<username>\S+)/$', 'yadeezer.views.deezer_communication', name='deezer_communication'),
+    url(r'^deezer/$', DeezerAppView.as_view(), {'page': 'home'}, name='deezerapp'),
     url(r'^api/v1/deezer/', include('yadeezer.urls')),
 
     #email confirmation

@@ -1262,7 +1262,7 @@ class WebAppView(View):
             'my_informations_form': my_informations_form,
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
-            'minutes': _get_global_minutes(),
+            'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
         }
@@ -1354,7 +1354,7 @@ class WebAppView(View):
             'my_informations_form': my_informations_form,
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
-            'minutes': _get_global_minutes(),
+            'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
         }
@@ -1721,7 +1721,7 @@ def my_programming_yasound_songs(request, radio_uuid):
 
     raise Http404
 
-def _get_global_minutes():
+def get_global_minutes():
     minutes = cache.get('public.stat.minutes')
     if not minutes:
         mm = GlobalMetricsManager()
