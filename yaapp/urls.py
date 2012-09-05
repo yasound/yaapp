@@ -66,8 +66,6 @@ radio_enabled_playlist = RadioEnabledPlaylistResource()
 radio_all_playlist = RadioAllPlaylistResource()
 playlist_matched_songs = MatchedSongResource()
 
-from yadeezer.views import DeezerAppView
-
 user_favorite_radios = UserFavoriteRadioResource()
 
 js_info_dict = {
@@ -179,7 +177,6 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/most_active_radio/$', 'yabase.views.most_active_radios'),
 
-    url(r'^api/v1/notify_streamer/$', 'yabase.views.notify_streamer'),
     url(r'^api/v1/ping/$', 'yabase.views.ping'),
 
     url(r'^api/v1/public_stats/$', 'yabase.views.public_stats'),
@@ -258,10 +255,8 @@ urlpatterns = patterns('',
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
 
-    # deezer communication
-    url(r'^deezer/(?P<username>\S+)/$', 'yadeezer.views.deezer_communication', name='deezer_communication'),
-    url(r'^deezer/$', DeezerAppView.as_view(), {'page': 'home'}, name='deezerapp'),
-    url(r'^api/v1/deezer/', include('yadeezer.urls')),
+    # deezer
+    url(r'^', include('yadeezer.urls')),
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),

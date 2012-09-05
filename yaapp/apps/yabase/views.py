@@ -1526,42 +1526,6 @@ def most_active_radios(request):
 
 @csrf_exempt
 @check_api_key(methods=['POST',], login_required=True)
-def notify_streamer(request):
-    radio_uuid = request.REQUEST.get('radio_uuid')
-    if not radio_uuid:
-        raise Http404
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-
-    username = None
-    api_key = None
-
-    if request.user.is_authenticated():
-        username = request.user.username
-        try:
-            api_key = ApiKey.objects.get(user=request.user).key
-        except:
-            pass
-    if username is None or api_key is None:
-        raise Http404
-
-    stream_url = radio.stream_url
-
-    custom_headers = {
-        'username': username,
-        'api_key': api_key
-    }
-    logger.debug('notify_streamer: url = %s' % (stream_url))
-    return HttpResponse('OK') # disabled right now
-    try:
-        r = requests.get(stream_url, headers=custom_headers)
-        logger.debug('result: %d' % (r.status_code))
-    except Exception, e:
-        logger.debug('error:')
-        logger.debug(e)
-    return HttpResponse('OK')
-
-@csrf_exempt
-@check_api_key(methods=['POST',], login_required=True)
 def ping(request):
     profile = request.user.get_profile()
     profile.authenticated()
