@@ -1710,6 +1710,7 @@ input::-webkit-input-placeholder {
 }
 
 .wall-event-message img.user {
+    position:absolute;
     margin-top: 8px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -1723,18 +1724,24 @@ input::-webkit-input-placeholder {
     float:left;
 }
 
+.wall-event-message .wall-img-song,
+.wall-event-message .wall-img-like {
+    position:absolute;
+}
+
+.wall-event-message .date {
+    float:right;
+    line-height:36px;
+    margin-right:10px;
+}
+
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
 }
 
-.wall-event-message .date,
-.wall-event-message h2 {
-    line-height: 17px;
-    margin-right:5px;
-}
-
-.wall-event-message h2 a {
+.wall-event-message h2 a,
+.wall-event-message h2 span {
     float:left;
     margin-right:10px;
 }
@@ -1780,7 +1787,6 @@ input::-webkit-input-placeholder {
 .wall-event-message .date-like {
     color:#97989B;
     display:block;
-    float:left;
     margin:0px;
 }
 
@@ -2001,14 +2007,15 @@ ul .user-cell:hover .caption {
 
 .wall-event-message h2 {
 	font-size:13px;
+    margin-left:100px;
+    margin-bottom:10px;
 	font-weight:bold;
 }
 
 .wall-event-message p {
 	margin-top:30px;
-    max-height:35px;
-	text-overflow:ellipsis;
-	overflow:hidden;
+    margin-left:100px;
+    margin-right:10px;
 }
 
 .submit-btn {
@@ -3458,6 +3465,12 @@ a.yabutton-small {
 /* Landscape phones and down */
 @media (max-width: 480px)  {
 
+/*-- COMMONS --*/
+    #scroll-top-container {
+        display:none;
+        opacity:0;
+    }
+
 /*-- HEADER --*/
     
     #header {
@@ -3575,7 +3588,7 @@ a.yabutton-small {
 
 /*-- RADIO-CELL --*/
 	.profile-background, .radio-cells {
-		width:480px;
+		width:480px !important;
 	}
 
 /*-- SIGNUP --*/
@@ -3647,7 +3660,7 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-    .max-width-span4 {
+    .wall-responsive-span4 {
         display:none;
     }
 
@@ -3771,6 +3784,12 @@ a.yabutton-small {
 /* Landscape phone to portrait tablet */
 @media (min-width: 480px) and (max-width: 767px) {
 
+/*-- COMMONS --*/
+    #scroll-top-container {
+        display:none;
+        opacity:0;
+    }
+
 /*-- HEADER --*/
     #header {
         position:fixed;
@@ -3846,8 +3865,9 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-    .max-width-span4 {
+    .wall-responsive-span4 {
         display:none;
+        margin-left:0px;
     }
 
     .input-xxlarge {
@@ -3987,7 +4007,7 @@ a.yabutton-small {
     }
 
     .wall-container {
-        width: 100%;
+        width: 56%;
         max-width:400px;
     }
 
@@ -3995,8 +4015,9 @@ a.yabutton-small {
         margin-right:5%;
     }
 
-    .span4 {
+    .wall-responsive-span4 {
         width:300px;
+        margin-left:0px;
     }
 
 /*-- FOOTER --*/
