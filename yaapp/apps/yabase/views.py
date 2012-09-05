@@ -1703,7 +1703,7 @@ def public_stats(request):
     public global stats (minutes listened on yasound)
     """
     data = {
-        'minutes': _get_global_minutes()
+        'minutes': get_global_minutes()
     }
     response = json.dumps(data)
     return HttpResponse(response, mimetype='application/json')
