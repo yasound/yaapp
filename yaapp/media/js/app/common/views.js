@@ -365,8 +365,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (Yasound.App.MySound) {
             if (Yasound.App.MySound.playState == 1) {
                 $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-
-                this.notifyStreamer();
             }
             volumeSlider.slider('value', Yasound.App.MySound.volume);
         }
@@ -389,7 +387,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#btn-unfavorite', this.el).removeClass('is-favorite').addClass('is-not-favorite');
         }
 
-        this.ping();
+        if (Yasound.App.userAuthenticated) {
+            this.ping();
+        }
         return this;
     },
 
@@ -401,8 +401,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             Yasound.App.MySound.setVolume(this.savedVolume);
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
             $('#volume-slider').slider('value', Yasound.App.MySound.volume);
-
-            this.notifyStreamer();
         } else {
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
             this.savedVolume = Yasound.App.MySound.volume;
@@ -487,17 +485,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                 }
             });
         }, 60000);
-
-    },
-
-    notifyStreamer: function() {
-        var query = $.ajax({
-            type: 'POST',
-            url: '/api/v1/notify_streamer/',
-            data: {
-                radio_uuid: this.radio.get('uuid')
-            }
-        });
     }
 });
 
