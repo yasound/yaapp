@@ -1276,6 +1276,7 @@ class WebAppView(View):
                 return result
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
+
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         POST method dispatcher
