@@ -1008,94 +1008,6 @@ class WebAppView(View):
         response = json.dumps(data)
         return HttpResponse(response, mimetype='application/json')
 
-    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
-        """
-        GET method dispatcher. Calls related methods for specific pages
-        """
-        authorized, redirection = self._check_auth(request, radio_uuid)
-        if not authorized:
-            return redirection
-
-        notification_count = 0
-
-        my_informations_form = None
-        my_accounts_form = None
-        my_notifications_form = None
-        display_associate_facebook = False
-        display_associate_twitter = False
-
-
-        if request.user.is_authenticated():
-            user_profile = request.user.get_profile()
-            user_uuid = user_profile.own_radio.uuid
-
-            nm = NotificationsManager()
-            notification_count = nm.unread_count(request.user.id)
-
-            display_associate_facebook = not request.user.get_profile().facebook_enabled
-            display_associate_twitter = not request.user.get_profile().twitter_enabled
-            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
-            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
-            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
-
-        else:
-            user_uuid = 0
-            user_profile = None
-
-        push_url = self._get_push_url(request)
-        enable_push = settings.ENABLE_PUSH
-
-        facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = absolute_url(reverse('webapp'))
-
-        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
-
-        genre_form = RadioGenreForm()
-
-        has_radios = False
-        radio_count = 0;
-        if request.user.is_authenticated():
-            radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
-        if radio_count > 0:
-            has_radios = True
-
-
-        context = {
-            'user_uuid': user_uuid,
-            'user_id' : user_id,
-            'push_url': push_url,
-            'enable_push': enable_push,
-            'current_uuid': radio_uuid,
-            'facebook_app_id': settings.FACEBOOK_APP_ID,
-            'facebook_share_picture': facebook_share_picture,
-            'facebook_share_link': facebook_share_link,
-            'facebook_channel_url': facebook_channel_url,
-            'user_profile': user_profile,
-            'import_itunes_form': ImportItunesForm(user=request.user),
-            'notification_count': notification_count,
-            'genre_form': genre_form,
-            'has_radios': has_radios,
-            'submenu_number': 1,
-            'display_associate_facebook': display_associate_facebook,
-            'display_associate_twitter': display_associate_twitter,
-            'my_informations_form': my_informations_form,
-            'my_accounts_form': my_accounts_form,
-            'my_notifications_form': my_notifications_form,
-            'minutes': _get_global_minutes(),
-            'deezer_channel_url': absolute_url(reverse('deezer_channel')),
-            'deezer_app_id': settings.DEEZER_APP_ID,
-        }
-
-        if hasattr(self, page):
-            handler = getattr(self, page)
-            result = handler(request, context, *args, **kwargs)
-            if type(result) == type(()):
-                context, template_name = result[0], result[1]
-            else:
-                return result
-
-        return render_to_response(template_name, context, context_instance=RequestContext(request))
-
     def home(self, request, context, *args, **kwargs):
         radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
 
@@ -1277,9 +1189,97 @@ class WebAppView(View):
 
         return context, 'yabase/webapp.html'
 
+    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
+        """
+        GET method dispatcher. Calls related methods for specific pages
+        """
+        authorized, redirection = self._check_auth(request, radio_uuid)
+        if not authorized:
+            return redirection
+
+        notification_count = 0
+
+        my_informations_form = None
+        my_accounts_form = None
+        my_notifications_form = None
+        display_associate_facebook = False
+        display_associate_twitter = False
+
+
+        if request.user.is_authenticated():
+            user_profile = request.user.get_profile()
+            user_uuid = user_profile.own_radio.uuid
+
+            nm = NotificationsManager()
+            notification_count = nm.unread_count(request.user.id)
+
+            display_associate_facebook = not request.user.get_profile().facebook_enabled
+            display_associate_twitter = not request.user.get_profile().twitter_enabled
+            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
+            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
+
+        else:
+            user_uuid = 0
+            user_profile = None
+
+        push_url = self._get_push_url(request)
+        enable_push = settings.ENABLE_PUSH
+
+        facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
+        facebook_share_link = absolute_url(reverse('webapp'))
+
+        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+
+        genre_form = RadioGenreForm()
+
+        has_radios = False
+        radio_count = 0;
+        if request.user.is_authenticated():
+            radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
+        if radio_count > 0:
+            has_radios = True
+
+
+        context = {
+            'user_uuid': user_uuid,
+            'user_id' : user_id,
+            'push_url': push_url,
+            'enable_push': enable_push,
+            'current_uuid': radio_uuid,
+            'facebook_app_id': settings.FACEBOOK_APP_ID,
+            'facebook_share_picture': facebook_share_picture,
+            'facebook_share_link': facebook_share_link,
+            'facebook_channel_url': facebook_channel_url,
+            'user_profile': user_profile,
+            'import_itunes_form': ImportItunesForm(user=request.user),
+            'notification_count': notification_count,
+            'genre_form': genre_form,
+            'has_radios': has_radios,
+            'submenu_number': 1,
+            'display_associate_facebook': display_associate_facebook,
+            'display_associate_twitter': display_associate_twitter,
+            'my_informations_form': my_informations_form,
+            'my_accounts_form': my_accounts_form,
+            'my_notifications_form': my_notifications_form,
+            'minutes': get_global_minutes(),
+            'deezer_channel_url': absolute_url(reverse('deezer_channel')),
+            'deezer_app_id': settings.DEEZER_APP_ID,
+        }
+
+        if hasattr(self, page):
+            handler = getattr(self, page)
+            result = handler(request, context, *args, **kwargs)
+            if type(result) == type(()):
+                context, template_name = result[0], result[1]
+            else:
+                return result
+
+        return render_to_response(template_name, context, context_instance=RequestContext(request))
+
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
-        POST method dispatcher. Save data from profile page right now.
+        POST method dispatcher
         """
         self._check_auth(request, radio_uuid)
 
@@ -1354,7 +1354,7 @@ class WebAppView(View):
             'my_informations_form': my_informations_form,
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
-            'minutes': _get_global_minutes(),
+            'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
         }
@@ -1526,42 +1526,6 @@ def most_active_radios(request):
 
 @csrf_exempt
 @check_api_key(methods=['POST',], login_required=True)
-def notify_streamer(request):
-    radio_uuid = request.REQUEST.get('radio_uuid')
-    if not radio_uuid:
-        raise Http404
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-
-    username = None
-    api_key = None
-
-    if request.user.is_authenticated():
-        username = request.user.username
-        try:
-            api_key = ApiKey.objects.get(user=request.user).key
-        except:
-            pass
-    if username is None or api_key is None:
-        raise Http404
-
-    stream_url = radio.stream_url
-
-    custom_headers = {
-        'username': username,
-        'api_key': api_key
-    }
-    logger.debug('notify_streamer: url = %s' % (stream_url))
-    return HttpResponse('OK') # disabled right now
-    try:
-        r = requests.get(stream_url, headers=custom_headers)
-        logger.debug('result: %d' % (r.status_code))
-    except Exception, e:
-        logger.debug('error:')
-        logger.debug(e)
-    return HttpResponse('OK')
-
-@csrf_exempt
-@check_api_key(methods=['POST',], login_required=True)
 def ping(request):
     profile = request.user.get_profile()
     profile.authenticated()
@@ -1721,7 +1685,7 @@ def my_programming_yasound_songs(request, radio_uuid):
 
     raise Http404
 
-def _get_global_minutes():
+def get_global_minutes():
     minutes = cache.get('public.stat.minutes')
     if not minutes:
         mm = GlobalMetricsManager()
