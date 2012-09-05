@@ -1961,7 +1961,6 @@ ul .user-cell:hover .caption {
 }
 
 .wall-event-message, .form-search {
-	width:620px;
 	min-height:104px;
 	margin:0px;
 	padding:0px;
@@ -3434,6 +3433,24 @@ a.yabutton-small {
     display:none;
  }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Landscape phones and down */
 @media (max-width: 480px)  {
 
@@ -3625,6 +3642,19 @@ a.yabutton-small {
         margin:0px;
     }
 
+/*-- WALL --*/
+    .max-width-span4 {
+        display:none;
+    }
+
+    .input-xxlarge {
+        width:85%;
+    }
+
+    .wall-btn-responsive {
+        margin-right:5%;
+    }
+
 /*-- PROFILE --*/
 	.profile-bio {
 		width:225px;
@@ -3651,6 +3681,7 @@ a.yabutton-small {
 		display:none;
 	}
 
+
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
         background-image:url('../app/images/my-radio/my-radio-bg-mobile.png');
@@ -3673,6 +3704,7 @@ a.yabutton-small {
 /*-- FOOTER --*/
 
 	#connected-users,
+    #contacts,
     .footer-separation {
 		display:none;
 	}
@@ -3705,19 +3737,42 @@ a.yabutton-small {
         float:none;
         margin:0 auto;
     }
-
-    #contacts {
-       display:none;
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Landscape phone to portrait tablet */
 @media (min-width: 480px) and (max-width: 767px) {
-    /*-- HEADER --*/
-    
+
+/*-- HEADER --*/
     #header {
         position:fixed;
         z-index: 10;
     }
+
 /*-- SIGNUP --*/
     .signup-container {
         width:100%;
@@ -3786,6 +3841,23 @@ a.yabutton-small {
         margin:0px;
     }
 
+/*-- WALL --*/
+    .max-width-span4 {
+        display:none;
+    }
+
+    .input-xxlarge {
+        width:90%;
+    }
+
+    .wall-container {
+        width: 100%;
+    }
+
+    .wall-btn-responsive {
+        margin-right:5%;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
@@ -3808,6 +3880,33 @@ a.yabutton-small {
         margin-left:20px;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -3872,6 +3971,23 @@ a.yabutton-small {
         text-decoration: underline;
         color:#7C7C7C;
         margin:0px;
+    }
+
+/*-- WALL --*/
+    .max-width-span4 {
+        display:none;
+    }
+
+    .input-xxlarge {
+        width:85%;
+    }
+
+    .wall-container {
+        width: 100%;
+    }
+
+    .wall-btn-responsive {
+        margin-right:5%;
     }
 
 }
