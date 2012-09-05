@@ -940,11 +940,11 @@ class Radio(models.Model):
         self.current_song_play_date = datetime.datetime.now()
 
         # TODO: use a signal instead
-        song_json = SongInstance.objects.set_current_song_json(self.id, song)
+        song_json = SongInstance.objects.set_current_song_json(self.id, song_instance)
 
         self.save()
 
-        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song)
+        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song_instance)
 
         song_instance.last_play_time = datetime.datetime.now()
         song_instance.play_count += 1

@@ -1151,7 +1151,8 @@ class WebAppView(View):
                 if request.is_ajax():
                     data = {
                         'success': True,
-                        'url': 'radio/%s/programming/' % (radio.uuid)
+                        'url': 'radio/%s/programming/' % (radio.uuid),
+                        'upload_photo_url': reverse('yabase.views.radio_picture', args=[radio.uuid])
                     }
                     response = json.dumps(data)
                     return HttpResponse(response, mimetype='application/json')
