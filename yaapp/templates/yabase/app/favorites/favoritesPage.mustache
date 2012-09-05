@@ -1,13 +1,13 @@
 {% load i18n %}
 {% if request.user.is_authenticated %}
-<div class='span12 no-margin'>
+<div class='no-margin'>
     <ul id='results' class='radio-cells'>
     <img class='loading-mask' src='/media/images/loading.gif'/>
     </ul>
     <div class='cell-pagination' id='pagination'></div>
 </div>
 {% else %}
-<div class='span12 no-margin'>
+<div class='no-margin'>
 	<div class='favorites-login-container'>
 		<img src="/media/app/images/icon-star-big-blue.png">
 		<p class='favorites-login-p'>{% trans "Log in to view your favorites." %}</p>

@@ -896,14 +896,15 @@ class UserProfile(models.Model):
             friend_profile = f.userprofile
             friend_profile.my_friend_created_radio(self, radio)
 
-    def logged(self, request):
+    def logged(self, request=None):
         for f in self.friends.all():
             try:
                 friend_profile = f.userprofile
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
-        self.check_geo_localization(request)
+        if request is not None:
+            self.check_geo_localization(request)
 
     def add_to_group(self, group_name):
         g, _created = Group.objects.get_or_create(name=group_name)
@@ -959,6 +960,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(friend_profile),
             'user_id': friend_profile.user.id,
+            'user_username': friend_profile.user.username,
             'radio_id': radio.id
         }
         m = NotificationsManager()
@@ -985,6 +987,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
+            'user_username': user_profile.user.username,
             'radio_id': radio.id
         }
         m = NotificationsManager()
@@ -1009,7 +1012,8 @@ class UserProfile(models.Model):
         m = NotificationsManager()
         notif_params = {
             'user_name': unicode(friend_profile),
-            'user_id': friend_profile.user.id
+            'user_id': friend_profile.user.id,
+            'user_username': friend_profile.user.username,
         }
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE,
@@ -1037,6 +1041,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
+            'user_username': user_profile.user.username,
             'radio_id': radio.id
         }
         m = NotificationsManager()
@@ -1066,7 +1071,8 @@ class UserProfile(models.Model):
             'song_name': unicode(song),
             'user_id': user_profile.user.id,
             'radio_id': radio.id,
-            'song_id': song.id
+            'song_id': song.id,
+            'user_username': user_profile.user.username,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
@@ -1090,6 +1096,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
+            'user_username': user_profile.user.username,
             'radio_id': radio.id
         }
         m = NotificationsManager()
@@ -1114,6 +1121,7 @@ class UserProfile(models.Model):
         notif_params = {
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
+            'user_username': user_profile.user.username,
             'radio_id': radio.id
         }
         m = NotificationsManager()
@@ -1135,6 +1143,7 @@ class UserProfile(models.Model):
         # store notification
         notif_params = {
             'user_name': unicode(friend_profile),
+            'user_username': friend_profile.user.username,
             'user_id': friend_profile.user.id,
             'radio_id': radio.id
         }

@@ -1,17 +1,21 @@
 {% load i18n %}
 {% if request.user.is_authenticated %}
-<div class='span12'>
-    <ul id='results'>
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    </ul>
-    <div class='cell-pagination' id='pagination'></div>
+<div class='row'>
+    <div class='span12'>
+        <ul id='results'>
+        <img class='loading-mask' src='/media/images/loading.gif'/>
+        </ul>
+        <div class='cell-pagination' id='pagination'></div>
+    </div>
 </div>
 {% else %}
-<div class='span12 no-margin'>
-	<div class='friends-login-container'>
-		<img src="/media/app/images/friends-icon-large.png">
-		<p class='friends-login-p'>{% trans "Log in to view your friends." %}</p>
-		<button id='login-btn'>{% trans "Login" %}</button>
-	</div>
+<div class='row'>
+    <div class='span12'>
+    	<div class='friends-login-container'>
+    		<img src="/media/app/images/friends-icon-large.png">
+    		<p class='friends-login-p'>{% trans "Log in to view your friends." %}</p>
+    		<button id='login-btn'>{% trans "Login" %}</button>
+    	</div>
+    </div>
 </div>
 {% endif %}

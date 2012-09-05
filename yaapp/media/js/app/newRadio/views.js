@@ -24,10 +24,20 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
 
     templateLoaded: function() {
         $(this.el).html(ich.newRadioPageTemplate());
+        var that = this;
+
+        $('#upload-photo').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                that.pictureData = data;
+            }
+        });
+
     },
 
     submit: function(e) {
         e.preventDefault();
+        var that = this;
         var form = $('#new-radio-form', this.el);
         $('.error-msg', form).remove();
         $('input').removeClass('error');
@@ -46,6 +56,8 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
                     });
                 }
             } else {
+                $('#upload-photo').fileupload('option', 'url', data.upload_photo_url);
+                that.pictureData.submit();
                 Yasound.App.Router.navigate(data.url, {
                     trigger: true
                 });

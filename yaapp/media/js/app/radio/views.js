@@ -56,7 +56,8 @@ Yasound.Views.Radio = Backbone.View.extend({
         "click #user": "selectUser",
         "click #radio-actions-container #like-btn": "onLike",
         "click #radio-actions-container #settings-btn": "onSettings",
-        "click #radio-actions-container #programming-btn": "onProgramming"
+        "click #radio-actions-container #programming-btn": "onProgramming",
+        "click #radio-actions-container #broadcast-btn": "onBroadcast"
     },
 
     initialize: function () {
@@ -128,6 +129,22 @@ Yasound.Views.Radio = Backbone.View.extend({
         e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/programming/', {
             trigger: true
+        });
+    },
+
+    onBroadcast: function (e) {
+        e.preventDefault();
+        var that = this;
+        var $textarea = $('#modal-broadcast textarea');
+
+        $('#modal-broadcast').modal('show');
+        $('#modal-broadcast').one('shown', function() {
+            $textarea.focus();
+        });
+
+        $('#modal-broadcast .btn-primary').one('click', function () {
+            $('#modal-broadcast').modal('hide');
+            that.model.broadcast($textarea.val());
         });
     }
 });

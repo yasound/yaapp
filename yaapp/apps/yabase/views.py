@@ -1151,7 +1151,8 @@ class WebAppView(View):
                 if request.is_ajax():
                     data = {
                         'success': True,
-                        'url': 'radio/%s/programming/' % (radio.uuid)
+                        'url': 'radio/%s/programming/' % (radio.uuid),
+                        'upload_photo_url': reverse('yabase.views.radio_picture', args=[radio.uuid])
                     }
                     response = json.dumps(data)
                     return HttpResponse(response, mimetype='application/json')
@@ -1827,6 +1828,7 @@ def my_radios(request, radio_uuid=None):
 
         default_name = u'%s - %s' % ( _('new radio'), unicode(request.user.get_profile()))
         radio = Radio.objects.create(creator=request.user, name=default_name)
+        radio.get_or_create_default_playlist()
         data = radio.as_dict(request_user=request.user)
         return api_response(data)
     elif request.method == 'DELETE' and radio_uuid is not None:
