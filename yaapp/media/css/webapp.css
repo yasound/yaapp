@@ -1850,6 +1850,10 @@ input::-webkit-input-placeholder {
     display:none;
 }
 
+#modal-broadcast .modal-body textarea {
+    width: 100%;
+}
+
 /**
  * User cell
  */

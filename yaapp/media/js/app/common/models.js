@@ -127,6 +127,15 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
         return genre_data[genre_id];
     },
 
+    broadcast: function (message) {
+        var url = '/api/v1/radio/' + this.get('uuid') + '/broadcast_message/';
+        var that = this;
+        var params = {
+            message: message
+        };
+        $.post(url, params);
+    },
+
     toJSON: function() {
         var data = Yasound.Data.Models.Radio.__super__.toJSON.apply(this);
         if (data.name.length > 18) {
