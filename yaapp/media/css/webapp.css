@@ -3931,7 +3931,8 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container .signup-btn-fbk, .signup-container .signup-btn-twitter {
+    .signup-container .signup-btn-fbk, 
+    .signup-container .signup-btn-twitter {
         width:80%;
         margin: 10px 10%;
     }
@@ -3940,7 +3941,8 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container #signup-input input, .signup-container #signup-input .right-input {
+    .signup-container #signup-input input, 
+    .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
         padding-left:10px;
@@ -3988,6 +3990,17 @@ a.yabutton-small {
 
     .wall-btn-responsive {
         margin-right:5%;
+    }
+/*-- FOOTER --*/
+
+    #connected-users,
+    .footer-separation {
+        display:none;
+    }
+
+    #footer {
+        width:100%;
+        position:absolute;
     }
 
 }
