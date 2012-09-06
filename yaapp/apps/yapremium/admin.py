@@ -6,7 +6,7 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('name_en', 'sku_en', 'duration', 'enabled')
+    list_display = ('id', 'name_en', 'sku_en', 'duration', 'enabled')
     search_fields = ( 'name_en', 'sku_en', )
 admin.site.register(Subscription, SubscriptionAdmin)
 
