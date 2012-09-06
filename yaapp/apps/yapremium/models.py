@@ -204,7 +204,8 @@ class Gift(models.Model):
             'max': self.max_per_user,
             'count': count,
             'last_achievement_date': last_achievement_date,
-            'picture_url': picture_url
+            'picture_url': picture_url,
+            'action_url_ios': self.action_url_ios
         }
         return data
 
