@@ -7,6 +7,7 @@ from dateutil.relativedelta import *
 from sorl.thumbnail import get_thumbnail, delete
 import settings as yapremium_settings
 from yabase.models import Radio
+from transmeta import TransMeta
 
 
 class Service(models.Model):
@@ -45,6 +46,8 @@ class SubscriptionManager(models.Manager):
 
 
 class Subscription(models.Model):
+    __metaclass__ = TransMeta
+
     objects = SubscriptionManager()
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -77,6 +80,7 @@ class Subscription(models.Model):
 
     class Meta:
         verbose_name = _('subscription')
+        translate = ('name', 'description', 'sku')
 
 
 class UserSubscription(models.Model):
@@ -141,6 +145,8 @@ class UserService(models.Model):
 
 
 class Gift(models.Model):
+    __metaclass__ = TransMeta
+
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     enabled = models.BooleanField(_('enabled'), default=False)
@@ -214,6 +220,7 @@ class Gift(models.Model):
 
     class Meta:
         verbose_name = _('gift')
+        translate = ('name', 'description',)
 
 
 class Achievement(models.Model):

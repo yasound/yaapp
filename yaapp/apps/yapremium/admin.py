@@ -6,8 +6,8 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sku', 'duration', 'enabled')
-    search_fields = ( 'name', 'sku', )
+    list_display = ('name_en', 'sku_en', 'duration', 'enabled')
+    search_fields = ( 'name_en', 'sku_en', )
 admin.site.register(Subscription, SubscriptionAdmin)
 
 class UserSubscriptionAdmin(admin.ModelAdmin):
@@ -21,7 +21,7 @@ class UserServiceAdmin(admin.ModelAdmin):
 admin.site.register(UserService, UserServiceAdmin)
 
 class GiftAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'action', 'service', 'duration', 'max_per_user')
+    list_display = ('id', 'name_en', 'action', 'service', 'duration', 'max_per_user')
 admin.site.register(Gift, GiftAdmin)
 
 class AchievementAdmin(admin.ModelAdmin):
