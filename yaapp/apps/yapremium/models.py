@@ -195,7 +195,7 @@ class Gift(models.Model):
         enabled = True
         if not self.enabled:
             enabled = False
-        elif count == self.max_per_user:
+        elif count >= self.max_per_user:
             enabled = False
 
         if count > 0:
