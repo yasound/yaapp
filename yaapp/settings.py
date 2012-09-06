@@ -852,6 +852,8 @@ else:
     RECOMMENDATION_CACHE = '/tmp/'
 
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
+GIFT_DEFAULT_IMAGE_TODO = MEDIA_URL +'images/default-gift-todo.png'
+GIFT_DEFAULT_IMAGE_DONE = MEDIA_URL +'images/default-gift-done.png'
 
 # temp files
 if PRODUCTION_MODE:
