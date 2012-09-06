@@ -1177,7 +1177,7 @@ input::-webkit-input-placeholder {
 #pagination {
 	display:block;
 	min-width:150px;
-    width:940px;
+    width:100%;
     text-align: center;
 }
 
@@ -2479,6 +2479,7 @@ ul#notifications {
  */
 
 .radio-with-stats-cells{
+    width:100%;
     list-style: none;
 	margin:0px;
 }
@@ -2492,9 +2493,21 @@ ul .radio-with-stats-cells li {
 	float:left;
 	display:block;
 	height:260px;
-	width:940px;
+	width:100%;
 	margin-top:23px;
-	background-image:url('../app/images/my-radio/my-radio-bg.png');
+	background-image: linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+
+    background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.35, rgb(241,241,241)),
+    color-stop(0.68, rgb(255,255,255))
+    );
 	border-radius:10px;
 	box-shadow:1px 2px 2px #dcdcdc;
 }
@@ -3485,8 +3498,9 @@ a.yabutton-small {
     }
 
 	#results {
-		width:480px;
+		width:100%;
 	}
+
 	#pagination {
 		margin-left:18.5%;
 	}
@@ -3701,21 +3715,42 @@ a.yabutton-small {
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        background-image:url('../app/images/my-radio/my-radio-bg-mobile.png');
+        
     }
-    .radio-with-stats-cells .radio-with-stats {
-        width:465px;
-        height:520px;
+
+    .radio-with-stats-cells .stats {
+        float:right;
+        height:95px;
+        margin-top:10px;
+        margin-right:10px;
     }
-    .radio-with-stats .stats {
-        float:left;
+
+    .stats em {
+        font-size: 28px;
+    }
+
+    .stats .minutes-spent em {
+        margin-bottom:0px;
+        margin-top: 10px;
+    }
+    
+    .stats .new-messages em {
+        margin-bottom:0px;
+        margin-top:10px;
+    }
+
+    .radio-with-stats .radio-toolbar {
+        float:right;
+        margin-left:10px;
+    }
+
+    .radio-with-stats .radio-toolbar button {
         display:block;
+        float:left;
     }
-    .radio-with-stats .chartdiv {
-        height:20%;
-        width:20%;
-        height:45% !important;
-        width:90% !important;
+
+    .radio-with-stats .radio-toolbar .edit-radio {
+        clear:left
     }
 
 /*-- NOTIFICATIONS --*/
