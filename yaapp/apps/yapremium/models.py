@@ -7,6 +7,7 @@ from dateutil.relativedelta import *
 from sorl.thumbnail import get_thumbnail, delete
 import settings as yapremium_settings
 from yabase.models import Radio
+from yacore.http import absolute_url
 from transmeta import TransMeta
 
 
@@ -210,7 +211,7 @@ class Gift(models.Model):
             'max': self.max_per_user,
             'count': count,
             'last_achievement_date': last_achievement_date,
-            'picture_url': picture_url,
+            'picture_url': absolute_url(picture_url),
             'action_url_ios': self.action_url_ios
         }
         return data
