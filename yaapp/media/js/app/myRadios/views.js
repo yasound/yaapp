@@ -70,7 +70,8 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
     events: {
         'plothover .chartdiv': 'plotHover',
         'click .edit-radio': 'onEditRadio',
-        'click .edit-playlist': 'onEditPlaylist'
+        'click .edit-playlist': 'onEditPlaylist',
+        'click .delete-radio': 'onDeleteRadio'
     },
 
     initialize: function () {
@@ -190,6 +191,22 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/programming/', {
             trigger: true
         });
+    },
+
+    onDeleteRadio: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-delete-radio').modal('show');
+        $('#modal-delete-radio .btn-primary').one('click', function () {
+            val = $('#modal-delete-radio input').val();
+            if (val == gettext('yes')) {
+                that.model.destroy();
+                that.remove();
+            }
+            $('#modal-delete-radio input').val('');
+            $('#modal-delete-radio').modal('hide');
+        });
+
     }
 
 });

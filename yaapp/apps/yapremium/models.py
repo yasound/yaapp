@@ -232,7 +232,7 @@ class Achievement(models.Model):
     achievement_date = models.DateTimeField(_('achievement date'))
 
     def __unicode__(self):
-        return u'%s-%s-%s' % (self.user, self.rule, self.achievement_date)
+        return u'%s-%s-%s' % (self.user, self.gift, self.achievement_date)
 
     class Meta:
         verbose_name = _('achievement')

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-05 11:53+0200\n"
+"POT-Creation-Date: 2012-09-06 16:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,8 @@ msgstr "disponible sur l'appstore"
 #: templates/account/password_reset_form.html:56
 #: templates/account/signup.html:27
 #: templates/account/signup.html.py:75
+#: templates/deezer/inapp.html:161
+#: templates/deezer/inapp.html.py:173
 #: templates/web/menu.html:16
 #: templates/yabase/webapp.html:322
 #: templates/yabase/webapp.html.py:334
@@ -60,6 +62,7 @@ msgstr "Se déconnecter"
 #: templates/base.html:47
 #: templates/account/login.html:8
 #: templates/account/login.html.py:55
+#: templates/deezer/inapp.html:194
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
 #: templates/yabase/webapp.html:355
@@ -83,6 +86,7 @@ msgstr "Vous êtes déjà authentifié"
 
 #: templates/account/login.html:32
 #: templates/account/login.html.py:40
+#: templates/deezer/inapp.html:196
 #: templates/yabase/webapp.html:357
 #: templates/yabase/app/login/login.mustache:10
 msgid "Login with Facebook"
@@ -90,12 +94,14 @@ msgstr "Se connecter avec Facebook"
 
 #: templates/account/login.html:36
 #: templates/account/login.html.py:44
+#: templates/deezer/inapp.html:197
 #: templates/yabase/webapp.html:358
 #: templates/yabase/app/login/login.mustache:14
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
 #: templates/account/login.html:59
+#: templates/deezer/inapp.html:206
 #: templates/yabase/webapp.html:367
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
@@ -155,6 +161,7 @@ msgstr "\n"
 
 #: templates/account/signup.html:8
 #: templates/account/signup.html.py:56
+#: templates/deezer/inapp.html:192
 #: templates/yabase/webapp.html:353
 msgid "Signup"
 msgstr "S'inscrire"
@@ -172,6 +179,110 @@ msgstr "S'inscrire avec Facebook"
 #: templates/account/signup.html.py:44
 msgid "Signup with Twitter"
 msgstr "S'inscrire avec Twitter"
+
+#: templates/deezer/inapp.html:159
+#: templates/deezer/inapp.html.py:171
+#: templates/yabase/webapp.html:320
+#: templates/yabase/webapp.html.py:332
+msgid "My profile"
+msgstr "Mon profil"
+
+#: templates/deezer/inapp.html:160
+#: templates/deezer/inapp.html.py:172
+#: templates/yabase/webapp.html:321
+#: templates/yabase/webapp.html.py:333
+msgid "My settings"
+msgstr "Mes paramètres"
+
+#: templates/deezer/inapp.html:188
+#: templates/yabase/webapp.html:349
+msgid "No gifts"
+msgstr "Aucun cadeau"
+
+#: templates/deezer/inapp.html:200
+#: templates/yabase/webapp.html:361
+#: templates/yabase/app/login/login.mustache:19
+msgid "Email login"
+msgstr "Connexion avec email"
+
+#: templates/deezer/inapp.html:201
+#: templates/yabase/webapp.html:362
+#: templates/yabase/app/login/login.mustache:22
+#: templates/yabase/app/signup/signup.mustache:23
+msgid "Email"
+msgstr "Email"
+
+#: templates/deezer/inapp.html:202
+#: templates/yabase/webapp.html:363
+#: templates/yabase/app/login/login.mustache:23
+#: templates/yabase/app/signup/signup.mustache:24
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/deezer/inapp.html:223
+#: templates/yabase/webapp.html:417
+msgid "Connection error"
+msgstr "Erreur de connexion"
+
+#: templates/deezer/inapp.html:226
+#: templates/yabase/webapp.html:420
+msgid "Unable to connect Yasound server right now."
+msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
+
+#: templates/deezer/inapp.html:230
+#: templates/deezer/inapp.html.py:245
+#: templates/yabase/webapp.html:424
+#: templates/yabase/webapp.html.py:439
+#: templates/yabase/app/radio/radioPage.mustache:59
+msgid "Dismiss"
+msgstr "Fermer"
+
+#: templates/deezer/inapp.html:231
+#: templates/yabase/webapp.html:425
+msgid "Reload page"
+msgstr "Recharger la page"
+
+#: templates/deezer/inapp.html:238
+#: templates/yabase/webapp.html:432
+msgid "You are not logged in"
+msgstr "Vous n'êtes pas authentifié"
+
+#: templates/deezer/inapp.html:241
+#: templates/yabase/webapp.html:435
+msgid "You have to login to access the requested resource."
+msgstr "Vous devez être authentifié pour accéder à cette ressource."
+
+#: templates/deezer/inapp.html:246
+#: templates/yabase/webapp.html:440
+msgid "Go to login page"
+msgstr "Aller à la page de login"
+
+#: templates/deezer/inapp.html:259
+#: templates/newsletter/newsletter_historic.html:24
+#: templates/yabase/webapp.html:453
+#: templates/yabase/app/static/contact.mustache:4
+msgid "Contact"
+msgstr ""
+
+#: templates/deezer/inapp.html:260
+#: templates/yabase/webapp.html:454
+msgid "Legal informations"
+msgstr "Mentions légales"
+
+#: templates/deezer/inapp.html:280
+#: templates/yabase/webapp.html:474
+msgid "Connected users"
+msgstr "Utilisateurs connectés"
+
+#: templates/deezer/inapp.html:284
+#: templates/yabase/webapp.html:478
+msgid "See all"
+msgstr "Tous les voir"
+
+#: templates/deezer/inapp.html:293
+#: templates/yabase/webapp.html:487
+msgid "minutes of music have been played"
+msgstr "minutes de musique ont été écoutées"
 
 #: templates/emailconfirmation/confirm_email.html:4
 #: templates/emailconfirmation/confirm_email.html:10
@@ -340,12 +451,6 @@ msgstr ""
 #: templates/web/radio.html:18
 msgid "Date"
 msgstr "Date"
-
-#: templates/newsletter/newsletter_historic.html:24
-#: templates/yabase/webapp.html:453
-#: templates/yabase/app/static/contact.mustache:4
-msgid "Contact"
-msgstr ""
 
 #: templates/newsletter/newsletter_historic.html:25
 #: templates/yabase/app/programming/addFromServer.mustache:22
@@ -894,37 +999,6 @@ msgstr "Sans nom"
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
-#: templates/yabase/webapp.html:320
-#: templates/yabase/webapp.html.py:332
-msgid "My profile"
-msgstr "Mon profil"
-
-#: templates/yabase/webapp.html:321
-#: templates/yabase/webapp.html.py:333
-msgid "My settings"
-msgstr "Mes paramètres"
-
-#: templates/yabase/webapp.html:349
-msgid "No gifts"
-msgstr "Aucun cadeau"
-
-#: templates/yabase/webapp.html:361
-#: templates/yabase/app/login/login.mustache:19
-msgid "Email login"
-msgstr "Connexion avec email"
-
-#: templates/yabase/webapp.html:362
-#: templates/yabase/app/login/login.mustache:22
-#: templates/yabase/app/signup/signup.mustache:23
-msgid "Email"
-msgstr "Email"
-
-#: templates/yabase/webapp.html:363
-#: templates/yabase/app/login/login.mustache:23
-#: templates/yabase/app/signup/signup.mustache:24
-msgid "Password"
-msgstr "Mot de passe"
-
 #: templates/yabase/webapp.html:384
 #: templates/yabase/app/track.mustache:40
 #: templates/yabase/app/radio/radio.mustache:28
@@ -963,6 +1037,7 @@ msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
 #: templates/yabase/webapp.html:409
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:22
 #: templates/yabase/app/programming/songInstances.mustache:38
 #: templates/yabase/app/radio/radioPage.mustache:30
 #: templates/yabase/app/radio/radioPage.mustache:45
@@ -972,6 +1047,7 @@ msgid "No thank you"
 msgstr "Non merci"
 
 #: templates/yabase/webapp.html:410
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:23
 #: templates/yabase/app/programming/songInstances.mustache:39
 #: templates/yabase/app/radio/radioPage.mustache:31
 #: templates/yabase/app/radio/radioPage.mustache:46
@@ -979,52 +1055,6 @@ msgstr "Non merci"
 #: templates/yabase/app/settings/settingsPage.mustache:98
 msgid "Yes i want"
 msgstr "Oui je le veux"
-
-#: templates/yabase/webapp.html:417
-msgid "Connection error"
-msgstr "Erreur de connexion"
-
-#: templates/yabase/webapp.html:420
-msgid "Unable to connect Yasound server right now."
-msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
-
-#: templates/yabase/webapp.html:424
-#: templates/yabase/webapp.html.py:439
-#: templates/yabase/app/radio/radioPage.mustache:59
-msgid "Dismiss"
-msgstr "Fermer"
-
-#: templates/yabase/webapp.html:425
-msgid "Reload page"
-msgstr "Recharger la page"
-
-#: templates/yabase/webapp.html:432
-msgid "You are not logged in"
-msgstr "Vous n'êtes pas authentifié"
-
-#: templates/yabase/webapp.html:435
-msgid "You have to login to access the requested resource."
-msgstr "Vous devez être authentifié pour accéder à cette ressource."
-
-#: templates/yabase/webapp.html:440
-msgid "Go to login page"
-msgstr "Aller à la page de login"
-
-#: templates/yabase/webapp.html:454
-msgid "Legal informations"
-msgstr "Mentions légales"
-
-#: templates/yabase/webapp.html:474
-msgid "Connected users"
-msgstr "Utilisateurs connectés"
-
-#: templates/yabase/webapp.html:478
-msgid "See all"
-msgstr "Tous les voir"
-
-#: templates/yabase/webapp.html:487
-msgid "minutes of music have been played"
-msgstr "minutes de musique ont été écoutées"
 
 #: templates/yabase/app/landing.html:2
 msgid "You are not authenticated"
@@ -1095,7 +1125,7 @@ msgstr "Favoris"
 
 #: templates/yabase/app/common/subMenu.html:39
 #: templates/yabase/app/common/subMenu.mustache:38
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:14
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:31
 msgid "Create radio"
 msgstr "Créer une radio"
 
@@ -1135,13 +1165,26 @@ msgstr "Utiliser Facebook"
 msgid "Use Twitter"
 msgstr "Utiliser Twitter"
 
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:14
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:6
+msgid "Delete radio"
+msgstr "Supprimer la radio"
+
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:17
+msgid "Do you really want to delete this radio? This action cannot be undone."
+msgstr "Voulez-vous vraiment supprimer cette radio ? Cette action est irréversible."
+
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:18
+msgid "Enter \"yes\" to confirm:"
+msgstr "Entrez \"oui\" pour confirmer :"
+
+#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:7
 #: templates/yabase/app/radio/editRadioPage.mustache:5
 #: templates/yabase/app/radio/radio.mustache:32
 msgid "Edit playlist"
 msgstr "Editer la playlist"
 
-#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:7
+#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:8
 #: templates/yabase/app/programming/programmingPage.mustache:4
 #: templates/yabase/app/radio/radio.mustache:31
 msgid "Edit settings"
@@ -1164,13 +1207,13 @@ msgid "Create the radio"
 msgstr "Créer la radio"
 
 #: templates/yabase/app/notifications/notificationsPage.mustache:4
-msgid "Mark all as read"
-msgstr "Marquer tous comme lus"
-
-#: templates/yabase/app/notifications/notificationsPage.mustache:5
 #: templates/yabase/app/settings/settingsPage.mustache:9
 msgid "Notifications"
 msgstr "Notifications"
+
+#: templates/yabase/app/notifications/notificationsPage.mustache:5
+msgid "Mark all as read"
+msgstr "Marquer tous comme lus"
 
 #: templates/yabase/app/profile/profilePage.mustache:8
 msgid "All radios"
