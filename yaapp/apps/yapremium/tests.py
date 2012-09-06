@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from yapremium.models import Subscription, UserSubscription, Service, UserService
+from yapremium.models import Subscription, UserSubscription, Service, UserService, Gift, Achievement
 from task import check_expiration_date
 import settings as yapremium_settings
 from datetime import *
@@ -10,6 +10,7 @@ from dateutil.relativedelta import *
 from utils import verify_receipt
 import json
 
+
 class TestModel(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
@@ -17,7 +18,6 @@ class TestModel(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user
-
 
     def test_available(self):
         self.assertEquals(len(Subscription.objects.available_subscriptions()), 0)
@@ -61,7 +61,6 @@ class TestView(TestCase):
         self.client.login(username="test", password="test")
         self.user = user
 
-
     def test_get_subscriptions(self):
         sub = Subscription.objects.create(name='sub', sku='com.yasound.yasound.inappHD1y', enabled=True)
 
@@ -70,8 +69,50 @@ class TestView(TestCase):
         data = json.loads(res.content)
         self.assertEquals(data.get('meta').get('total_count'), 1)
 
-        res = self.client.post(reverse('yapremium.views.subscriptions', args=[sub.sku,]))
+        res = self.client.post(reverse('yapremium.views.subscriptions', args=[sub.sku, ]))
         self.assertEquals(res.status_code, 403)
+
+    def test_get_gifts(self):
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+            enabled=True)
+
+        res = self.client.get(reverse('yapremium.views.gifts'))
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('meta').get('total_count'), 1)
+
+        item = data.get('objects')[0]
+        self.assertTrue(item.get('enabled'))
+        self.assertEquals(item.get('count'), 0)
+        self.assertEquals(item.get('max'), 1)
+
+
+        achievement = Achievement.objects.create(user=self.user, gift=gift, achievement_date=datetime(2012, 8, 24, 0, 0))
+
+        res = self.client.get(reverse('yapremium.views.gifts'))
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('meta').get('total_count'), 1)
+
+        item = data.get('objects')[0]
+        self.assertFalse(item.get('enabled'))
+        self.assertEquals(item.get('count'), 1)
+        self.assertEquals(item.get('max'), 1)
+        self.assertEquals(item.get('last_achievement_date'), '2012-08-24T00:00:00')
+
+        self.client.logout()
+
+        res = self.client.get(reverse('yapremium.views.gifts'))
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('meta').get('total_count'), 1)
+
+        item = data.get('objects')[0]
+        self.assertTrue(item.get('enabled'))
 
 class TestExpirationDate(TestCase):
     def setUp(self):
@@ -80,7 +121,6 @@ class TestExpirationDate(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user
-
 
     def test_generate_service_for_user(self):
         today = date.today()
@@ -122,8 +162,3 @@ class TestExpirationDate(TestCase):
         check_expiration_date()
         user_service = UserService.objects.get(user=self.user, service=service)
         self.assertFalse(user_service.active)
-
-
-
-
-

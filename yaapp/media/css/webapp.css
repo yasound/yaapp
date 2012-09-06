@@ -1446,14 +1446,14 @@ input::-webkit-input-placeholder {
     border: 2px solid white;
     background-color:#4e4f52;
     border-radius: 10px 10px 0px 0px;
-    opacity:0.9;
-    filter:alpha(opacity=90);
+    opacity:0.65;
+    filter:alpha(opacity=65);
 }
 
 #scroll-top-container img {
     margin:12px;
-    opacity:0.9;
-    filter:alpha(opacity=9);
+    opacity:0.70;
+    filter:alpha(opacity=70);
 }
 
 .hidden-scroll {
@@ -1710,6 +1710,7 @@ input::-webkit-input-placeholder {
 }
 
 .wall-event-message img.user {
+    position:absolute;
     margin-top: 8px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -1723,18 +1724,24 @@ input::-webkit-input-placeholder {
     float:left;
 }
 
+.wall-event-message .wall-img-song,
+.wall-event-message .wall-img-like {
+    position:absolute;
+}
+
+.wall-event-message .date {
+    float:right;
+    line-height:36px;
+    margin-right:10px;
+}
+
 .wall-event-message .date, .wall-event-message p {
 	color:#97989b;
 	text-shadow:1px 1px white;
 }
 
-.wall-event-message .date,
-.wall-event-message h2 {
-    line-height: 17px;
-    margin-right:5px;
-}
-
-.wall-event-message h2 a {
+.wall-event-message h2 a,
+.wall-event-message h2 span {
     float:left;
     margin-right:10px;
 }
@@ -1780,7 +1787,6 @@ input::-webkit-input-placeholder {
 .wall-event-message .date-like {
     color:#97989B;
     display:block;
-    float:left;
     margin:0px;
 }
 
@@ -2001,14 +2007,15 @@ ul .user-cell:hover .caption {
 
 .wall-event-message h2 {
 	font-size:13px;
+    margin-left:100px;
+    margin-bottom:10px;
 	font-weight:bold;
 }
 
 .wall-event-message p {
 	margin-top:30px;
-    max-height:35px;
-	text-overflow:ellipsis;
-	overflow:hidden;
+    margin-left:100px;
+    margin-right:10px;
 }
 
 .submit-btn {
@@ -2067,7 +2074,7 @@ ul#notifications {
     width:213px;
     border:1px solid #b6b6b7;
     border-radius:10px;
-    box-shadow: 0px 0px 4px #b6b6b7;
+    box-shadow: 0px 0px 4px #cfcfcf;
     background-color:#f7f7f7;
     margin-left:3px;
     margin-top:30px;
@@ -2143,6 +2150,7 @@ ul#notifications {
 }
 
 .notifications-container {
+    position:relative;
     border-radius:7px;
     box-shadow:0px 1px 4px #e2e2e2;
     background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
@@ -2154,7 +2162,7 @@ ul#notifications {
 
 .notification-container {
     position:relative;
-    height:67px;
+    min-height:67px;
     border-top:1px solid #e3e3e3;
     box-shadow: 0px 1px 1px white inset;
     padding-left: 102px;
@@ -2162,17 +2170,13 @@ ul#notifications {
 }
 
 .notification-container .text-notification {
-    position:absolute;
-    top:25px;
+    margin-top:25px;
     width:500px;
-    height:39px;
-    overflow:hidden;
     font-size:17px;
     color:#434343;
     font-weight: normal;
-    color:#434343;
     font-size: 17px;
-    font-weight: normal;
+    padding-bottom:23px;
 }
 
 .notifications-heart
@@ -2214,27 +2218,29 @@ ul#notifications {
     background-repeat: no-repeat;
     position:absolute;
     left:20px;
-    top:15px;
+    top:21%;
     background-image:url('../app/images/notifications/notifications-balloon-icon.png');
 }
 
 .notification-container .close-icon {
+    height:20px;
     display:block;
     position:absolute;
-    top:25px;
+    bottom:33%;
     right:20px;
     height:20px;
     width:20px;
     background-image:url('../app/images/notifications/notifications-close.png');
 }
 
-.notification-container .date {
-    float:right;
+.notification-container .notifications-date{
+    height:20px;
+    position:absolute;
+    bottom:33%;
+    right:46px;
     color:#b3b3b3;
     font-size: 17px;
     font-weight: normal;
-    margin-right:55px;
-    margin-top:25px;
 }
 
 .notification-odd {
@@ -2246,8 +2252,9 @@ ul#notifications {
 }
 
 .notifications-container #mark-all-read-btn {
-    margin-top:46px;
-    margin-right:20px;
+    position: absolute;
+    top: 45px;
+    right: 31px;
 }
 
 /**
@@ -3458,6 +3465,12 @@ a.yabutton-small {
 /* Landscape phones and down */
 @media (max-width: 480px)  {
 
+/*-- COMMONS --*/
+    #scroll-top-container {
+        display:none;
+        opacity:0;
+    }
+
 /*-- HEADER --*/
     
     #header {
@@ -3575,7 +3588,7 @@ a.yabutton-small {
 
 /*-- RADIO-CELL --*/
 	.profile-background, .radio-cells {
-		width:480px;
+		width:480px !important;
 	}
 
 /*-- SIGNUP --*/
@@ -3647,7 +3660,7 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-    .max-width-span4 {
+    .wall-responsive-span4 {
         display:none;
     }
 
@@ -3703,6 +3716,35 @@ a.yabutton-small {
         width:20%;
         height:45% !important;
         width:90% !important;
+    }
+
+/*-- NOTIFICATIONS --*/
+    
+    .notifications-container {
+        position:relative;
+    }
+
+    .notification-container .notifications-date {
+        display:none;   
+    }
+
+    .notifications-container h1 {
+        font-size:28px;
+        padding-left:10px;
+        text-align:center;
+        vertical-align:text-top;
+    }
+
+    .notifications-container #mark-all-read-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .notification-container .text-notification {
+        width:68%;
+        font-size:15px;
+        word-wrap:break-word;
     }
 
 /*-- FOOTER --*/
@@ -3770,6 +3812,12 @@ a.yabutton-small {
 
 /* Landscape phone to portrait tablet */
 @media (min-width: 480px) and (max-width: 767px) {
+
+/*-- COMMONS --*/
+    #scroll-top-container {
+        display:none;
+        opacity:0;
+    }
 
 /*-- HEADER --*/
     #header {
@@ -3846,8 +3894,9 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-    .max-width-span4 {
+    .wall-responsive-span4 {
         display:none;
+        margin-left:0px;
     }
 
     .input-xxlarge {
@@ -3856,10 +3905,40 @@ a.yabutton-small {
 
     .wall-container {
         width: 100%;
+        max-width: 800px;
     }
 
     .wall-btn-responsive {
         margin-right:5%;
+    }
+
+/*-- NOTIFICATIONS --*/
+    
+    .notifications-container {
+        position:relative;
+    }
+
+    .notification-container .notifications-date {
+        display:none;   
+    }
+
+    .notifications-container h1 {
+        font-size: 42px;
+        padding-left:10px;
+        text-align:center;
+        vertical-align:text-top;
+    }
+
+    .notifications-container #mark-all-read-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .notification-container .text-notification {
+        width:85%;
+        font-size:17px;
+        word-wrap:break-word;
     }
 
 /*-- FOOTER --*/
@@ -3980,21 +4059,41 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-    .max-width-span4 {
-        display:none;
-    }
 
     .input-xxlarge {
-        width:85%;
+        width:80%;
     }
 
     .wall-container {
-        width: 100%;
+        width: 56%;
+        max-width:400px;
     }
 
     .wall-btn-responsive {
         margin-right:5%;
     }
+
+    .wall-responsive-span4 {
+        width:300px;
+        margin-left:0px;
+    }
+
+/*-- NOTIFICATIONS --*/
+    
+    .notifications-container {
+        position:relative;
+    }
+
+    .notification-container .notifications-date {
+        display:none;   
+    }
+
+    .notification-container .text-notification {
+        width:85%;
+        font-size:17px;
+        word-wrap:break-word;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,

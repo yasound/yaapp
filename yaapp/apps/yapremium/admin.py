@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Service, Subscription, UserSubscription, UserService, GiftRule, Achievement
+from models import Service, Subscription, UserSubscription, UserService, Gift, Achievement
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('stype',)
@@ -20,11 +20,11 @@ class UserServiceAdmin(admin.ModelAdmin):
     search_fields = ( 'user__username', 'user__email', 'user__user_profile__name')
 admin.site.register(UserService, UserServiceAdmin)
 
-class GiftRuleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'action', 'gift', 'duration', 'max_per_user')
-admin.site.register(GiftRule, GiftRuleAdmin)
+class GiftAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'action', 'service', 'duration', 'max_per_user')
+admin.site.register(Gift, GiftAdmin)
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'rule', 'achievement_date',)
+    list_display = ('id', 'user', 'gift', 'achievement_date',)
     search_fields = ( 'user__username', 'user__email', 'user__user_profile__name')
 admin.site.register(Achievement, AchievementAdmin)
