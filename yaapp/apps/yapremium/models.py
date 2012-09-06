@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from datetime import *
 from dateutil.relativedelta import *
+from sorl.thumbnail import get_thumbnail, delete
 import settings as yapremium_settings
 from yabase.models import Radio
 
@@ -105,6 +106,7 @@ class UserSubscription(models.Model):
     def __unicode__(self):
         return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
 
+
 class UserService(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -137,28 +139,87 @@ class UserService(models.Model):
         }
         return data
 
-class GiftRule(models.Model):
+
+class Gift(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
-    action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
-    gift = models.ForeignKey(Service, verbose_name=_('service'))
-    duration = models.IntegerField(_('duration'), default=1)
-    max_per_user = models.IntegerField(_('max per user'), default=1)
     enabled = models.BooleanField(_('enabled'), default=False)
 
+    name = models.CharField(_('name'), max_length=255, blank=True)
+    description = models.TextField(_('description'), blank=True)
+
+    action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
+    action_url_ios = models.TextField(_('iOS action url'), blank=True)
+
+    service = models.ForeignKey(Service, verbose_name=_('service'))
+    duration = models.IntegerField(_('duration'), default=1)
+    max_per_user = models.IntegerField(_('max per user'), default=1)
+
+    picture_todo = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
+    picture_done = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
+
+    @property
+    def picture_todo_url(self):
+        if self.picture_todo:
+            try:
+                return get_thumbnail(self.picture_todo, '210x210', format='PNG', crop='center').url
+            except:
+                pass
+        return settings.GIFT_DEFAULT_IMAGE_TODO
+
+    @property
+    def picture_done_url(self):
+        if self.picture_done:
+            try:
+                return get_thumbnail(self.picture_done, '210x210', format='PNG', crop='center').url
+            except:
+                pass
+        return settings.GIFT_DEFAULT_IMAGE_DONE
+
+    def as_dict(self, user):
+        count = 0
+        last_achievement_date = None
+        if user is not None and user.is_authenticated():
+            achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
+            count = achievements.count()
+            if count > 0:
+                last_achievement_date = achievements[0].achievement_date
+
+        enabled = True
+        if not self.enabled:
+            enabled = False
+        elif count == self.max_per_user:
+            enabled = False
+
+        if count > 0:
+            picture_url = self.picture_todo_url
+        else:
+            picture_url = self.picture_done_url
+
+        data = {
+            'id': self.id,
+            'enabled': enabled,
+            'name': self.name,
+            'description': self.description,
+            'max': self.max_per_user,
+            'count': count,
+            'last_achievement_date': last_achievement_date,
+            'picture_url': picture_url
+        }
+        return data
+
     def __unicode__(self):
-        return u'%s' % (self.get_action_display)
+        return self.name
 
     class Meta:
-        verbose_name = _('gift rule')
-        verbose_name_plural = _('gift rules')
+        verbose_name = _('gift')
 
 
 class Achievement(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
-    rule = models.ForeignKey(GiftRule, verbose_name=_('rule'))
+    gift = models.ForeignKey(Gift, verbose_name=_('gift'))
     achievement_date = models.DateTimeField(_('achievement date'))
 
     def __unicode__(self):

@@ -1,4 +1,4 @@
-from models import Subscription, UserSubscription, UserService
+from models import Subscription, UserSubscription, UserService, Gift
 from django.shortcuts import get_object_or_404
 from yacore.api import api_response
 from yacore.decorators import check_api_key
@@ -55,6 +55,22 @@ def services(request, subscription_sku=None):
         data = []
         for us in qs:
             data.append(us.as_dict())
+        response = api_response(data, total_count, limit=limit, offset=offset)
+        return response
+    raise Http404
+
+@csrf_exempt
+@check_api_key(methods=['GET'], login_required=False)
+def gifts(request, subscription_sku=None):
+    if request.method == 'GET':
+        limit = int(request.REQUEST.get('limit', 25))
+        offset = int(request.REQUEST.get('offset', 0))
+        qs = Gift.objects.all()
+        total_count = qs.count()
+        qs = qs[offset:offset+limit]
+        data = []
+        for gift in qs:
+            data.append(gift.as_dict(request.user))
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     raise Http404
