@@ -2150,6 +2150,7 @@ ul#notifications {
 }
 
 .notifications-container {
+    position:relative;
     border-radius:7px;
     box-shadow:0px 1px 4px #e2e2e2;
     background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
@@ -2251,8 +2252,9 @@ ul#notifications {
 }
 
 .notifications-container #mark-all-read-btn {
-    margin-top:46px;
-    margin-right:20px;
+    position: absolute;
+    top: 45px;
+    right: 31px;
 }
 
 /**
@@ -3716,6 +3718,35 @@ a.yabutton-small {
         width:90% !important;
     }
 
+/*-- NOTIFICATIONS --*/
+    
+    .notifications-container {
+        position:relative;
+    }
+
+    .notification-container .notifications-date {
+        display:none;   
+    }
+
+    .notifications-container h1 {
+        font-size:28px;
+        padding-left:10px;
+        text-align:center;
+        vertical-align:text-top;
+    }
+
+    .notifications-container #mark-all-read-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .notification-container .text-notification {
+        width:68%;
+        font-size:15px;
+        word-wrap:break-word;
+    }
+
 /*-- FOOTER --*/
 
 	#connected-users,
@@ -3881,6 +3912,35 @@ a.yabutton-small {
         margin-right:5%;
     }
 
+/*-- NOTIFICATIONS --*/
+    
+    .notifications-container {
+        position:relative;
+    }
+
+    .notification-container .notifications-date {
+        display:none;   
+    }
+
+    .notifications-container h1 {
+        font-size: 42px;
+        padding-left:10px;
+        text-align:center;
+        vertical-align:text-top;
+    }
+
+    .notifications-container #mark-all-read-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .notification-container .text-notification {
+        width:85%;
+        font-size:17px;
+        word-wrap:break-word;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
@@ -4016,6 +4076,22 @@ a.yabutton-small {
     .wall-responsive-span4 {
         width:300px;
         margin-left:0px;
+    }
+
+/*-- NOTIFICATIONS --*/
+    
+    .notifications-container {
+        position:relative;
+    }
+
+    .notification-container .notifications-date {
+        display:none;   
+    }
+
+    .notification-container .text-notification {
+        width:85%;
+        font-size:17px;
+        word-wrap:break-word;
     }
 
 /*-- FOOTER --*/
