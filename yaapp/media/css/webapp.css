@@ -3457,6 +3457,11 @@ a.yabutton-small {
     display:none;
  }
 
+ .radio-with-stats .radio-toolbar .responsive-edit-radio,
+ .radio-with-stats .radio-toolbar .responsive-edit-playlist {
+    display:none;
+ }
+
 
 
 
@@ -3715,11 +3720,13 @@ a.yabutton-small {
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        
+        height:510px;
     }
 
     .radio-with-stats-cells .stats {
         float:right;
+        clear:right;
+        width:20%;
         height:95px;
         margin-top:10px;
         margin-right:10px;
@@ -3741,16 +3748,40 @@ a.yabutton-small {
 
     .radio-with-stats .radio-toolbar {
         float:right;
-        margin-left:10px;
+        margin:10px;
     }
 
     .radio-with-stats .radio-toolbar button {
+        margin-right:0px;
         display:block;
-        float:left;
+        float:right;
     }
 
     .radio-with-stats .radio-toolbar .edit-radio {
-        clear:left
+        display:block;
+        clear:right;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-playlist {
+        display:block;
+        margin-left:2px;
+        margin-bottom:10px;
+    }
+
+    .radio-with-stats .radio-cell-parent {
+        margin-right:0px;
+        margin-left:10px;
+        margin-top:10px;
+    }
+
+    .tickLabel {
+        padding-right:0px;
+    }
+
+    .radio-with-stats .chartdiv {
+        margin-right:10px;
+        height: 50% !important;
+        width: 95% !important;
     }
 
 /*-- NOTIFICATIONS --*/
@@ -3976,6 +4007,58 @@ a.yabutton-small {
         word-wrap:break-word;
     }
 
+/*-- MY RADIO --*/
+    .radio-with-stats-cells .radio-with-stats {
+        height:510px;
+    }
+
+    .radio-with-stats-cells .stats {
+        float:right;
+        clear:right;
+        width:20%;
+        height:95px;
+        margin-top:10px;
+        margin-right:30px;
+    }
+
+    .stats em {
+        font-size: 42px;
+    }
+
+
+    .radio-with-stats .radio-toolbar {
+        float:right;
+        margin:10px;
+        margin-right:30px;
+    }
+
+    .radio-with-stats .radio-toolbar button {
+        margin-right:0px;
+        display:block;
+        float:right;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-radio {
+        display:block;
+        margin-right:10px;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-playlist {
+        display:block;
+        margin-left:2px;
+        margin-bottom:10px;
+    }
+
+    .tickLabel {
+        padding-right:15px;
+    }
+
+    .radio-with-stats .chartdiv {
+        margin-right:30px;
+        height: 50% !important;
+        width: 92% !important;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
@@ -4127,6 +4210,17 @@ a.yabutton-small {
         width:85%;
         font-size:17px;
         word-wrap:break-word;
+    }
+
+/*-- MY RADIO --*/
+    .radio-with-stats .chartdiv {
+        margin-right:10px;
+        height: 91% !important;
+        width: 39% !important;
+    }
+
+    .radio-with-stats .radio-toolbar {
+        margin-right:0px;
     }
 
 /*-- FOOTER --*/
