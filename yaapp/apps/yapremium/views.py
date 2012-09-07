@@ -8,6 +8,7 @@ from django.http import Http404, HttpResponse, HttpResponseNotFound, \
     HttpResponseBadRequest, HttpResponseRedirect
 import utils as yapremium_utils
 import logging
+from transmeta import get_real_fieldname
 logger = logging.getLogger("yaapp.yapremium")
 
 @csrf_exempt
@@ -25,7 +26,11 @@ def subscriptions(request, subscription_sku=None):
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     elif request.method == 'POST' and subscription_sku is not None:
-        subscription = get_object_or_404(Subscription, sku=subscription_sku)
+        sku_fieldname = get_real_fieldname('sku')
+        kwargs = {
+            '{0}__{1}'.format(sku_fieldname, 'exact'): subscription_sku,
+        }
+        subscription = get_object_or_404(Subscription, **kwargs)
         receipt = request.REQUEST.get('receipt')
         username = request.REQUEST.get('username')
         if username != request.user.username:

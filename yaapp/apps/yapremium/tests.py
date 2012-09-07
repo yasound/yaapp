@@ -62,14 +62,14 @@ class TestView(TestCase):
         self.user = user
 
     def test_get_subscriptions(self):
-        sub = Subscription.objects.create(name='sub', sku='com.yasound.yasound.inappHD1y', enabled=True)
+        sub = Subscription.objects.create(name='sub', sku_en='com.yasound.yasound.inappHD1y', enabled=True)
 
         res = self.client.get(reverse('yapremium.views.subscriptions'))
         self.assertEquals(res.status_code, 200)
         data = json.loads(res.content)
         self.assertEquals(data.get('meta').get('total_count'), 1)
 
-        res = self.client.post(reverse('yapremium.views.subscriptions', args=[sub.sku, ]))
+        res = self.client.post(reverse('yapremium.views.subscriptions', kwargs={'subscription_sku':sub.sku}))
         self.assertEquals(res.status_code, 403)
 
     def test_get_gifts(self):
@@ -113,6 +113,33 @@ class TestView(TestCase):
 
         item = data.get('objects')[0]
         self.assertTrue(item.get('enabled'))
+
+class TestGift(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+
+    def test_create_account(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_CREATE_ACCOUNT,
+            duration=4,
+            max_per_user=1,
+            enabled=True)
+
+        user3 = User.objects.create(email="user3@yasound.com", username="user3")
+        self.assertTrue(user3.get_profile().permissions.hd)
+
+
+
 
 class TestExpirationDate(TestCase):
     def setUp(self):

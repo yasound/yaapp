@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import signals
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -8,8 +9,10 @@ from sorl.thumbnail import get_thumbnail, delete
 import settings as yapremium_settings
 from yabase.models import Radio
 from yacore.http import absolute_url
+from account.models import UserProfile
 from transmeta import TransMeta
 
+from task import async_check_gift
 
 class Service(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -186,7 +189,7 @@ class Gift(models.Model):
     def as_dict(self, user):
         count = 0
         last_achievement_date = None
-        if user is not None and user.is_authenticated():
+        if user is not None and not user.is_anonymous():
             achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
             count = achievements.count()
             if count > 0:
@@ -219,12 +222,33 @@ class Gift(models.Model):
     def __unicode__(self):
         return self.name
 
+    def available(self, user):
+        if not self.enabled:
+            return False
+
+        if user is not None and not user.is_anonymous():
+
+            achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
+            count = achievements.count()
+            if count >= self.max_per_user:
+                return False
+
+        return True
+
     class Meta:
         verbose_name = _('gift')
         translate = ('name', 'description',)
 
 
+class AchievementManager(models.Manager):
+    def create_from_gift(self, user, gift):
+        today = date.today()
+        obj = self.create(user=user, gift=gift, achievement_date=today)
+        UserService.objects.create(user=user, service=gift.service)
+        return obj
+
 class Achievement(models.Model):
+    objects = AchievementManager()
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
@@ -236,3 +260,13 @@ class Achievement(models.Model):
 
     class Meta:
         verbose_name = _('achievement')
+
+
+def new_user_profile_handler(sender, instance, created, **kwargs):
+    if created:
+        async_check_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
+
+def install_handlers():
+    signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+
+install_handlers()
