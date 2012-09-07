@@ -96,6 +96,12 @@ Yasound.Utils.disableFX = function() {
 }
 
 Yasound.Utils.enableFX = function () {
+    if (Yasound.App.isMobile) {
+        // fadeIn/fadeOut sucks on iPad
+        Yasound.App.enableFX = false;
+        return;
+    }
+
     if ($.browser.msie) {
         if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
             Yasound.App.enableFX = false;
