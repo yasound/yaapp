@@ -131,13 +131,19 @@ class TestGift(TestCase):
             description='description',
             service=service,
             action=yapremium_settings.ACTION_CREATE_ACCOUNT,
-            duration=4,
+            duration=1,
             max_per_user=1,
             enabled=True)
 
         user3 = User.objects.create(email="user3@yasound.com", username="user3")
         self.assertTrue(user3.get_profile().permissions.hd)
 
+        us = UserService.objects.get(user=user3, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        one_month = today + relativedelta(months=+1)
+        self.assertEquals(us.expiration_date.date(), one_month)
 
 
 

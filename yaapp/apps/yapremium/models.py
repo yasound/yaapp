@@ -11,6 +11,7 @@ from yabase.models import Radio
 from yacore.http import absolute_url
 from account.models import UserProfile
 from transmeta import TransMeta
+import utils as yapremium_utils
 
 from task import async_check_gift
 
@@ -77,11 +78,6 @@ class Subscription(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name)
 
-    def calculate_expiration_date(self, today=None):
-        if not today:
-            today = date.today()
-        return today + relativedelta(months=+self.duration)
-
     class Meta:
         verbose_name = _('subscription')
         translate = ('name', 'description', 'sku')
@@ -99,16 +95,12 @@ class UserSubscription(models.Model):
         verbose_name_plural = _('user subscriptions')
 
     def save(self, *args, **kwargs):
-        self.expiration_date = self.subscription.calculate_expiration_date()
+        self.expiration_date = yapremium_utils.calculate_expiration_date(duration=self.subscription.duration)
         super(UserSubscription, self).save(*args, **kwargs)
 
         for service in self.subscription.services.all():
             us, _created = UserService.objects.get_or_create(service=service, user=self.user)
-            if not us.active:
-                us.expiration_date = self.subscription.calculate_expiration_date()
-            else:
-                us.expiration_date = self.subscription.calculate_expiration_date(us.expiration_date)
-            us.active = True
+            us.calculate_expiration_date(duration=self.subscription.duration)
             us.save()
 
     def __unicode__(self):
@@ -137,6 +129,23 @@ class UserService(models.Model):
         else:
             self.service.disable(self.user)
         super(UserService, self).save(*args, **kwargs)
+
+    def calculate_expiration_date(self, duration):
+        today = date.today()
+        start_day = today
+
+        if self.expiration_date is not None:
+            if self.expiration_date >= today:
+                start_day = self.expiration_date
+
+        self.expiration_date = yapremium_utils.calculate_expiration_date(today=start_day, duration=duration)
+
+        if self.expiration_date >= today:
+            self.active = True
+        else:
+            self.active = False
+        self.save()
+
 
     def as_dict(self):
         data = {
@@ -244,7 +253,8 @@ class AchievementManager(models.Manager):
     def create_from_gift(self, user, gift):
         today = date.today()
         obj = self.create(user=user, gift=gift, achievement_date=today)
-        UserService.objects.create(user=user, service=gift.service)
+        us, _created = UserService.objects.get_or_create(user=user, service=gift.service)
+        us.calculate_expiration_date(duration=gift.duration)
         return obj
 
 class Achievement(models.Model):
