@@ -1,7 +1,12 @@
 {% load i18n %}
 <div class='notification-container'>
-	<div class='<% type %>'></div>
+	<div class='<% type %>'>&nbsp;</div>
 	<a class="close-icon" data-dismiss="alert" href="#"></a>
 	<div class='notifications-date'><% formatted_date %></div>
+    <%#from_radio_uuid%>
+    <div>
+        {% trans "message from radio:" %} <a href='/app/radio/<%from_radio_uuid%>/' data-uuid='<%from_radio_uuid%>' class='radio-link'><%from_radio_name%></a>
+    </div>
+    <%/from_radio_uuid%>
 	<div class='<%#read%>read<%/read%> text-notification'><%#html%><%{html %><%/html%><%^html%><% text %><%/html%></div>
 </div>

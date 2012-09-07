@@ -36,27 +36,31 @@ class NotificationsManager():
                 pass
 
         from_radio_name = None
+        from_radio_uuid = None
         if from_radio_id is not None:
             try:
                 r = Radio.objects.get(id=from_radio_id)
                 from_radio_name = r.name
+                from_radio_uuid = r.uuid
             except Radio.DoesNotExist:
                 pass
         text = self.text_for_notification(notif_type, params)
         html = self.html_for_notification(notif_type, params)
         d = datetime.datetime.now()
-        notif = {'type': notif_type,
-                 'text': text,
-                 'html': html,
-                 'date': d,
-                 'dest_user_id': recipient_user_id,
-                 'from_user_id': from_user_id,
-                 'from_user_name': from_user_name,
-                 'from_radio_id': from_radio_id,
-                 'from_radio_name': from_radio_name,
-                 'read': False,
-                 'params': params
-                 }
+        notif = {
+            'type': notif_type,
+            'text': text,
+            'html': html,
+            'date': d,
+            'dest_user_id': recipient_user_id,
+            'from_user_id': from_user_id,
+            'from_user_name': from_user_name,
+            'from_radio_id': from_radio_id,
+            'from_radio_uuid': from_radio_uuid,
+            'from_radio_name': from_radio_name,
+            'read': False,
+            'params': params
+        }
         self.notifications.insert(notif)
         yamessage_signals.new_notification.send(sender=self, notification=notif)
 
