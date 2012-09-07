@@ -7,7 +7,8 @@ Yasound.Views.Notification = Backbone.View.extend({
     className: 'notification',
     events: {
         "click .close": "onRemove",
-        "click .profile": "onProfile"
+        "click .profile": "onProfile",
+        "click a.radio-link": "onRadio"
     },
 
     initialize: function () {
@@ -41,7 +42,15 @@ Yasound.Views.Notification = Backbone.View.extend({
         e.preventDefault();
         var username = $(e.target).attr('data-username');
         Yasound.App.Router.navigate("profile/" + username + '/', {
-                trigger: true
+            trigger: true
+        });
+    },
+
+    onRadio: function (e) {
+        e.preventDefault();
+        var uuid = $(e.target).attr('data-uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
         });
     }
 });

@@ -227,6 +227,7 @@ $(document).ready(function () {
                     Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
                 };
 
+                this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
