@@ -4,6 +4,9 @@ import base64
 import urllib2
 import requests
 import logging
+from datetime import *
+from dateutil.relativedelta import *
+
 logger = logging.getLogger("yaapp.yapremium")
 
 def verify_receipt(receipt, encode=False):
@@ -25,3 +28,9 @@ def verify_receipt(receipt, encode=False):
         return True
 
     return False
+
+
+def calculate_expiration_date(duration, today=None):
+    if not today:
+        today = date.today()
+    return today + relativedelta(months=+duration)

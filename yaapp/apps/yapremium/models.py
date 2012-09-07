@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import signals
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -8,10 +9,16 @@ from sorl.thumbnail import get_thumbnail, delete
 import settings as yapremium_settings
 from yabase.models import Radio
 from yacore.http import absolute_url
+from account.models import UserProfile
 from transmeta import TransMeta
+import utils as yapremium_utils
 
+from task import async_win_gift
 
 class Service(models.Model):
+    """
+    A service which can be activated or disabled
+    """
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     stype = models.IntegerField(_('service'), choices=yapremium_settings.SERVICE_CHOICES, unique=True)
@@ -45,8 +52,10 @@ class SubscriptionManager(models.Manager):
     def available_subscriptions(self):
         return self.filter(enabled=True)
 
-
 class Subscription(models.Model):
+    """
+    A subscription can be purchased by a user and is related to one ore more services
+    """
     __metaclass__ = TransMeta
 
     objects = SubscriptionManager()
@@ -74,17 +83,15 @@ class Subscription(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name)
 
-    def calculate_expiration_date(self, today=None):
-        if not today:
-            today = date.today()
-        return today + relativedelta(months=+self.duration)
-
     class Meta:
         verbose_name = _('subscription')
         translate = ('name', 'description', 'sku')
 
 
 class UserSubscription(models.Model):
+    """
+    Item bought by a user
+    """
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
@@ -96,23 +103,21 @@ class UserSubscription(models.Model):
         verbose_name_plural = _('user subscriptions')
 
     def save(self, *args, **kwargs):
-        self.expiration_date = self.subscription.calculate_expiration_date()
+        self.expiration_date = yapremium_utils.calculate_expiration_date(duration=self.subscription.duration)
         super(UserSubscription, self).save(*args, **kwargs)
 
         for service in self.subscription.services.all():
             us, _created = UserService.objects.get_or_create(service=service, user=self.user)
-            if not us.active:
-                us.expiration_date = self.subscription.calculate_expiration_date()
-            else:
-                us.expiration_date = self.subscription.calculate_expiration_date(us.expiration_date)
-            us.active = True
-            us.save()
+            us.calculate_expiration_date(duration=self.subscription.duration)
 
     def __unicode__(self):
         return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
 
 
 class UserService(models.Model):
+    """
+    User service association. Contains a user, service and an expiration_date
+    """
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
@@ -135,6 +140,29 @@ class UserService(models.Model):
             self.service.disable(self.user)
         super(UserService, self).save(*args, **kwargs)
 
+    def calculate_expiration_date(self, duration, commit=True):
+        """
+        (re)calculate expiration date given a new duration
+        """
+        today = date.today()
+        start_day = today # start date for calculating duration is by default the current day
+
+        if self.expiration_date is not None:
+            if self.expiration_date >= today:
+                # expiration date in future ? we increment the given expiration date
+                start_day = self.expiration_date
+
+        self.expiration_date = yapremium_utils.calculate_expiration_date(today=start_day, duration=duration)
+
+        # now we can check if the service is available
+        if self.expiration_date >= today:
+            self.active = True
+        else:
+            self.active = False
+
+        if commit:
+            self.save()
+
     def as_dict(self):
         data = {
             'id': self.id,
@@ -146,6 +174,9 @@ class UserService(models.Model):
 
 
 class Gift(models.Model):
+    """
+    A gift can be won by user depending on the action she make
+    """
     __metaclass__ = TransMeta
 
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -156,11 +187,11 @@ class Gift(models.Model):
     description = models.TextField(_('description'), blank=True)
 
     action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
-    action_url_ios = models.TextField(_('iOS action url'), blank=True)
+    action_url_ios = models.TextField(_('iOS action url'), blank=True) # special field used by iOS to navigate to action menu
 
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
-    max_per_user = models.IntegerField(_('max per user'), default=1)
+    max_per_user = models.IntegerField(_('max per user'), default=1) # one-shot gift is max_per_user=1
 
     picture_todo = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
     picture_done = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
@@ -186,7 +217,7 @@ class Gift(models.Model):
     def as_dict(self, user):
         count = 0
         last_achievement_date = None
-        if user is not None and user.is_authenticated():
+        if user is not None and not user.is_anonymous():
             achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
             count = achievements.count()
             if count > 0:
@@ -219,12 +250,37 @@ class Gift(models.Model):
     def __unicode__(self):
         return self.name
 
+    def available(self, user):
+        if not self.enabled:
+            return False
+
+        if user is not None and not user.is_anonymous():
+
+            achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
+            count = achievements.count()
+            if count >= self.max_per_user:
+                return False
+
+        return True
+
     class Meta:
         verbose_name = _('gift')
         translate = ('name', 'description',)
 
 
+class AchievementManager(models.Manager):
+    def create_from_gift(self, user, gift):
+        today = date.today()
+        obj = self.create(user=user, gift=gift, achievement_date=today)
+        us, _created = UserService.objects.get_or_create(user=user, service=gift.service)
+        us.calculate_expiration_date(duration=gift.duration)
+        return obj
+
 class Achievement(models.Model):
+    """
+    Store gift won by a user
+    """
+    objects = AchievementManager()
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
@@ -236,3 +292,15 @@ class Achievement(models.Model):
 
     class Meta:
         verbose_name = _('achievement')
+
+
+# handlers are used to calculate gift achievements
+
+def new_user_profile_handler(sender, instance, created, **kwargs):
+    if created:
+        async_win_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
+
+def install_handlers():
+    signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+
+install_handlers()

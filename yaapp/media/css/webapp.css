@@ -1177,7 +1177,7 @@ input::-webkit-input-placeholder {
 #pagination {
 	display:block;
 	min-width:150px;
-    width:940px;
+    width:100%;
     text-align: center;
 }
 
@@ -2479,6 +2479,7 @@ ul#notifications {
  */
 
 .radio-with-stats-cells{
+    width:100%;
     list-style: none;
 	margin:0px;
 }
@@ -2492,9 +2493,21 @@ ul .radio-with-stats-cells li {
 	float:left;
 	display:block;
 	height:260px;
-	width:940px;
+	width:100%;
 	margin-top:23px;
-	background-image:url('../app/images/my-radio/my-radio-bg.png');
+	background-image: linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+
+    background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.35, rgb(241,241,241)),
+    color-stop(0.68, rgb(255,255,255))
+    );
 	border-radius:10px;
 	box-shadow:1px 2px 2px #dcdcdc;
 }
@@ -3485,10 +3498,7 @@ a.yabutton-small {
     }
 
 	#results {
-		width:480px;
-	}
-	#pagination {
-		margin-left:18.5%;
+		width:100%;
 	}
 
 /*-- MENU --*/
@@ -3701,21 +3711,73 @@ a.yabutton-small {
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        background-image:url('../app/images/my-radio/my-radio-bg-mobile.png');
+        height:510px;
     }
-    .radio-with-stats-cells .radio-with-stats {
-        width:465px;
-        height:520px;
-    }
-    .radio-with-stats .stats {
-        float:left;
-        display:block;
-    }
-    .radio-with-stats .chartdiv {
-        height:20%;
+
+    .radio-with-stats-cells .stats {
+        float:right;
+        clear:right;
         width:20%;
-        height:45% !important;
-        width:90% !important;
+        height:95px;
+        margin-top:0px;
+        margin-right:10px;
+    }
+
+    .stats em {
+        font-size: 28px;
+    }
+
+    .stats .minutes-spent em {
+        margin-bottom:0px;
+        margin-top: 10px;
+    }
+    
+    .stats .new-messages em {
+        margin-bottom:0px;
+        margin-top:10px;
+    }
+
+    .radio-with-stats .radio-toolbar {
+        float:right;
+        margin:10px;
+    }
+
+    .radio-with-stats .radio-toolbar button {
+        margin-right:0px;
+        display:block;
+        float:right;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-radio {
+        display:block;
+        clear:right;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-playlist {
+        clear:right;
+        display:block;
+        margin-left:2px;
+        margin-bottom:10px;
+    }
+
+    .radio-with-stats .radio-toolbar .delete-radio {
+        margin-bottom:10px;
+    }
+
+    .radio-with-stats .radio-cell-parent {
+        margin-right:0px;
+        margin-left:10px;
+        margin-top:10px;
+    }
+
+    .tickLabel {
+        padding-right:0px;
+    }
+
+    .radio-with-stats .chartdiv {
+        margin-right:10px;
+        height: 50% !important;
+        width: 95% !important;
     }
 
 /*-- NOTIFICATIONS --*/
@@ -3941,6 +4003,66 @@ a.yabutton-small {
         word-wrap:break-word;
     }
 
+/*-- MY RADIO --*/
+    .radio-with-stats-cells .radio-with-stats {
+        height:510px;
+    }
+
+    .radio-with-stats-cells .stats {
+        float:right;
+        clear:right;
+        width:20%;
+        height:95px;
+        margin-top:10px;
+        margin-right:2%;
+    }
+
+    .stats em {
+        font-size: 42px;
+    }
+
+
+    .radio-with-stats .radio-toolbar {
+        float:right;
+        margin:3%;
+        margin-right:2%;
+        margin-left: 0px;
+        margin-top:23px;
+    }
+
+    .radio-with-stats .radio-toolbar button {
+        margin-right:0px;
+        display:block;
+        float:right;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-radio {
+        display:block;
+        margin-right:5px;
+    }
+
+    .radio-with-stats .radio-toolbar .edit-playlist {
+        display:block;
+        margin-left:2px;
+        margin-right:5px;
+        margin-bottom:10px;
+    }
+
+    .tickLabel {
+        padding-right:15px;
+    }
+
+    .radio-with-stats .chartdiv {
+        margin-right:30px;
+        height: 50% !important;
+        width: 92% !important;
+    }
+
+    .radio-with-stats .radio-cell-parent {
+        margin-right:0px;
+        margin-left:3%;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
@@ -4092,6 +4214,17 @@ a.yabutton-small {
         width:85%;
         font-size:17px;
         word-wrap:break-word;
+    }
+
+/*-- MY RADIO --*/
+    .radio-with-stats .chartdiv {
+        margin-right:10px;
+        height: 91% !important;
+        width: 39% !important;
+    }
+
+    .radio-with-stats .radio-toolbar {
+        margin-right:0px;
     }
 
 /*-- FOOTER --*/

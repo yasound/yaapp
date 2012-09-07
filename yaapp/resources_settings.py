@@ -80,6 +80,7 @@ PIPELINE_JS = {
         'source_filenames': [
             'js/app/common/models.js',
             'js/app/common/views.js',
+            'js/app/mobileMenus/views.js',
             'js/app/radio/models.js',
             'js/app/radio/views.js',
             'js/app/myRadios/models.js',
