@@ -2274,6 +2274,7 @@ ul#notifications {
 }
 
 .profile-background {
+    min-width:470px;
     max-width:940px;
 	background-color:white;
 	margin:0px 0px 25px 0px;
@@ -3536,12 +3537,6 @@ a.yabutton-small {
     #sub-header-pointer {
         display:none;
     }
-    .selected {
-
-    }
-    #selection, #top, #friends, #favorites {
-        display:none;
-    }
 
     #sub-header-nav {
         width:185px
@@ -3595,11 +3590,6 @@ a.yabutton-small {
 	#search-bar #search-input {
         width:50px;
     }
-
-/*-- RADIO-CELL --*/
-	.profile-background, .radio-cells {
-		width:480px !important;
-	}
 
 /*-- SIGNUP --*/
     .signup-container {
@@ -3683,28 +3673,64 @@ a.yabutton-small {
     }
 
 /*-- PROFILE --*/
-	.profile-bio {
-		width:225px;
-		height:60px;
-		float:left;
-		clear:both;
-	}
+
 	.user-btn {
 		float:left;
 		margin:0px;
 		margin-right:10px;
 		margin-bottom:10px;
 	}
+
 	#infos h2 {
 		display:block;
 		float:none;
+        font-size: 21px;
+        line-height:20px;
+        margin-bottom:10px;
 	}
-	#comments,
-	#radios-btn,
-	#favorites-btn,
-	#friends-btn,
+	
+    #infos em {
+        font-size: 14px;
+    }
+
+    #user-profile #picture {
+        margin:3%;
+    }
+
+    #infos {
+        width:40%;
+        height:170px;
+    }
+
+    #infos .user-btn {
+        margin-left:0px;
+        clear:left;
+    }
+
+    .user-radios {
+        height:100%;
+        float:left;
+    }
+
+    .zone-title {
+        height:30px;
+    }
+
+    #favorites-zone {
+        width:100%;
+        float:left;
+    }
+
+    #friends-zone {
+        float:left;
+        width:100%;
+    }
+
+    #comments,
 	.sd-hd-small,
-	.validated {
+	.validated,
+    #user-profile .separation-high,
+    .profile-bio {
 		display:none;
 	}
 
@@ -4063,6 +4089,78 @@ a.yabutton-small {
         margin-left:3%;
     }
 
+/*-- PROFILE --*/
+
+    .user-btn {
+        float:left;
+        margin:0px;
+        margin-right:10px;
+        margin-bottom:10px;
+    }
+
+    #infos h2 {
+        display:block;
+        float:none;
+        font-size: 21px;
+        line-height:20px;
+        margin-bottom:10px;
+    }
+    
+    #infos em {
+        font-size: 14px;
+    }
+
+    #user-profile #picture {
+        margin:3%;
+    }
+
+    #infos {
+        width:59%;
+        height:170px;
+    }
+
+    #infos .logout-btn {
+        margin-left:0px;
+        clear:left;
+    }
+
+    .user-radios {
+        height:100%;
+        float:left;
+    }
+
+    .zone-title {
+        height:30px;
+    }
+
+    #favorites-zone {
+        width:100%;
+        height:100%;
+        float:left;
+    }
+
+    .profile-bio {
+        width:100%;
+        height:63px;
+    }
+
+    #infos #logout-btn {
+        clear:left;
+        margin-left:0px;
+    }
+
+    #friends-zone {
+        float:left;
+        width:100%;
+    }
+
+    #comments,
+    .sd-hd-small,
+    .validated,
+    #user-profile .separation-high {
+        display:none;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
@@ -4115,7 +4213,7 @@ a.yabutton-small {
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
-    /*-- HEADER --*/
+/*-- HEADER --*/
     
     #header {
         position:fixed;
@@ -4225,6 +4323,28 @@ a.yabutton-small {
 
     .radio-with-stats .radio-toolbar {
         margin-right:0px;
+    }
+
+/*-- PROFILE --*/
+    #infos {
+        width:70%;
+        height:170px;
+    }
+
+    #comments,
+    .sd-hd-small,
+    .validated,
+    #user-profile .separation-high {
+        display:none;
+    }
+    
+    .profile-bio {
+        width:100%
+    }
+
+    #friends-zone {
+        float:left;
+        width:100%;
     }
 
 /*-- FOOTER --*/
