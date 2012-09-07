@@ -3686,7 +3686,7 @@ a.yabutton-small {
 		float:none;
         font-size: 21px;
         line-height:20px;
-        margin-bottom:10px;
+        margin-bottom:10px; 
 	}
 	
     #infos em {
@@ -3733,7 +3733,6 @@ a.yabutton-small {
     .profile-bio {
 		display:none;
 	}
-
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
@@ -3833,6 +3832,41 @@ a.yabutton-small {
         width:68%;
         font-size:15px;
         word-wrap:break-word;
+    }
+
+/*-- SETTINGS --*/
+    #settings-nav {
+        width:100%;
+        float:left;
+    }
+
+    .row-fluid .settings-container {
+        float:left;
+        width:100%;
+    }
+
+    .settings-content-container {
+        padding-right:0px;
+    }
+
+    #settings-nav li span {
+        text-align: center;
+        margin-left:0px;
+    }
+
+    .twitter_share_options .controls, 
+    .facebook_share_options .controls, 
+    .notifications .controls {
+        right:0px;
+    }
+
+    .settings-content-container {
+        width:90%;
+        padding-left:15px;
+    }
+
+    .upload-container {
+        display:none;
     }
 
 /*-- FOOTER --*/
@@ -4161,6 +4195,41 @@ a.yabutton-small {
         display:none;
     }
 
+/*-- SETTINGS --*/
+    #settings-nav {
+        width:100%;
+        float:left;
+    }
+
+    .row-fluid .settings-container {
+        float:left;
+        width:100%;
+    }
+
+    .settings-content-container {
+        padding-right:0px;
+    }
+
+    #settings-nav li span {
+        text-align: center;
+        margin-left:0px;
+    }
+
+    .twitter_share_options .controls, 
+    .facebook_share_options .controls, 
+    .notifications .controls {
+        right:0px;
+    }
+
+    .settings-content-container {
+        width:90%;
+        padding-left:15px;
+    }
+
+    .upload-container {
+        display:none;
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
@@ -4347,6 +4416,32 @@ a.yabutton-small {
         width:100%;
     }
 
+/*-- SETTINGS --*/
+
+    .row-fluid .settings-container {
+        float:left;
+        width:100%;
+    }
+
+    .settings-content-container {
+        width:50%;
+        padding-right:0px;
+    }
+
+    #settings-nav {
+        width:270px
+    }
+
+    .upload-container .upload-content {
+        width:30%;
+    }
+
+    .twitter_share_options .controls, 
+    .facebook_share_options .controls, 
+    .notifications .controls {
+        right:0px;
+    }
+    
 /*-- FOOTER --*/
 
     #connected-users,
