@@ -296,6 +296,9 @@
       <div class="navbar-inner">
         <div class="container">
 			<div id="brand-logo">
+          <div id='mobile-menu' class='visible-phone'>
+            <div id= 'mobile-menu-btn'>MENU</div>
+          </div>
 				<a href="{% url webapp %}" id='btn-webapp'>
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
@@ -441,7 +444,12 @@
     </div>
 </div>
 
-<div id='webapp-container'>{% block content%}{%endblock%}</div>
+<div id='webapp-container'>
+            <div id='mobile-menu-content' class='hidden-display'>
+              hello, world
+            </div>
+
+  {% block content%}{%endblock%}</div>
 
 
 <div id='pre-footer'>&nbsp;</div>
