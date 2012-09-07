@@ -7,6 +7,7 @@ from dateutil.relativedelta import *
 from sorl.thumbnail import get_thumbnail, delete
 import settings as yapremium_settings
 from yabase.models import Radio
+from yacore.http import absolute_url
 from transmeta import TransMeta
 
 
@@ -194,7 +195,7 @@ class Gift(models.Model):
         enabled = True
         if not self.enabled:
             enabled = False
-        elif count == self.max_per_user:
+        elif count >= self.max_per_user:
             enabled = False
 
         if count > 0:
@@ -210,7 +211,7 @@ class Gift(models.Model):
             'max': self.max_per_user,
             'count': count,
             'last_achievement_date': last_achievement_date,
-            'picture_url': picture_url,
+            'picture_url': absolute_url(picture_url),
             'action_url_ios': self.action_url_ios
         }
         return data
@@ -231,7 +232,7 @@ class Achievement(models.Model):
     achievement_date = models.DateTimeField(_('achievement date'))
 
     def __unicode__(self):
-        return u'%s-%s-%s' % (self.user, self.rule, self.achievement_date)
+        return u'%s-%s-%s' % (self.user, self.gift, self.achievement_date)
 
     class Meta:
         verbose_name = _('achievement')
