@@ -3,18 +3,31 @@
     <div class='radio-cell-parent'>
     </div>
     <div class='radio-toolbar'>
-        <button class='yabutton-small right delete-radio'>{% trans "Delete radio" %}</button>
-        <button class='yabutton-small right edit-playlist'>{% trans "Edit playlist" %}</button>
-        <button class='yabutton-small right edit-radio'>{% trans "Edit settings" %}</button>
+        <button class='yabutton-small right delete-radio'>
+            <span class='hidden-phone'>{% trans "Delete radio" %}</span>
+            <span class='visible-phone'>{% trans "Delete" %}</span>
+        </button>
+        <button class='yabutton-small right edit-playlist'>
+            <span class='hidden-phone'>{% trans "Edit playlist" %}</span>
+            <span class='visible-phone'>{% trans "Playlist" %}</span>
+        </button>
+        <button class='yabutton-small right edit-radio'>
+            <span class='hidden-phone'>{% trans "Edit settings" %}</span>
+            <span class='visible-phone'>{% trans "Settings" %}</span>
+        </button>
     </div>
     <div class='stats'>
 		<div class='minutes-spent'>
-	    	<em><% overall_listening_time %></em>
-			<span>minutes de musique ont été écoutées</span>
+	    	<em class='hidden-phone'><% overall_listening_time %></em>
+			<span class='hidden-phone'>{% trans "Minutes of music played" %}</span>
+            <em class='visible-phone'><% overall_listening_time %></em>
+            <span class='visible-phone'>{% trans "Listening time" %}</span>
 		</div>
 		<div class='new-messages'>
-			<em><% new_wall_messages_count %></em>
-		    <span>nouveaux messages</span>
+			<em class='hidden-phone'><% new_wall_messages_count %></em>
+		    <span class='hidden-phone'>{% trans "New messages" %}</span>
+            <em class='visible-phone'><% new_wall_messages_count %></em>
+            <span class='visible-phone'>{% trans "Messages" %}</span>
 		</div>
     </div>
     <div class="chartdiv" style="width: 450px; height: 200px; padding: 0px; position: relative;">
