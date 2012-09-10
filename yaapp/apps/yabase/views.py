@@ -871,8 +871,7 @@ def song_instance_cover(request, song_instance_id):
     album = yasound_song.album
     if not album:
         return HttpResponseNotFound()
-#    album = get_object_or_404(YasoundAlbum, id=album_id)
-    url = album.cover_url
+    url = album.large_cover_url
     if not url:
         url = '/media/images/default_image.png'
     return HttpResponseRedirect(url)

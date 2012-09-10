@@ -352,7 +352,7 @@ class UserProfile(models.Model):
         except:
             pass
 
-        account_signals.facebook_accound_added.send(sender=self, user=self.user)
+        account_signals.facebook_account_added.send(sender=self, user=self.user)
 
         return True, _('OK')
 
@@ -373,7 +373,7 @@ class UserProfile(models.Model):
         # remove social-auth account
         self.user.social_auth.filter(provider='facebook').delete()
 
-        account_signals.facebook_accound_removed.send(sender=self, user=self.user)
+        account_signals.facebook_account_removed.send(sender=self, user=self.user)
 
         return True, _('OK')
 
@@ -412,7 +412,7 @@ class UserProfile(models.Model):
         except:
             pass
 
-        account_signals.twitter_accound_added.send(sender=self, user=self.user)
+        account_signals.twitter_account_added.send(sender=self, user=self.user)
 
         return True, _('OK')
 
@@ -433,7 +433,7 @@ class UserProfile(models.Model):
         # remove social-auth account
         self.user.social_auth.filter(provider='twitter').delete()
 
-        account_signals.twitter_accound_removed.send(sender=self, user=self.user)
+        account_signals.twitter_account_removed.send(sender=self, user=self.user)
 
         return True, _('OK')
 
@@ -452,7 +452,7 @@ class UserProfile(models.Model):
 
         EmailAddress.objects.add_email(self.user, email)
 
-        account_signals.yasound_accound_added.send(sender=self, user=self.user)
+        account_signals.yasound_account_added.send(sender=self, user=self.user)
 
         return True, _('OK')
 
@@ -472,7 +472,7 @@ class UserProfile(models.Model):
 
         EmailAddress.objects.filter(user=self.user).delete()
 
-        account_signals.yasound_accound_removed.send(sender=self, user=self.user)
+        account_signals.yasound_account_removed.send(sender=self, user=self.user)
 
         return True, _('OK')
 
