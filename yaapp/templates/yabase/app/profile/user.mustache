@@ -13,6 +13,7 @@
 	    <%/is_friend%>
         <%/owner%>
 	</span>
+    <em class='visible-phone'><% agc %></em>
     <%^owner%>
 	<button type="button" class="user-btn yabutton-large right" id='follow'>
     	<%#is_friend%>{% trans "Unfollow" %}<%/is_friend%>
@@ -20,10 +21,10 @@
 	</button>
     <%/owner%>
     <%#owner%>
-    <button type="button" class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
+    <button type="button" id='logout-btn' class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
     <button type="button" id='settings-btn' class="user-btn yabutton right"><a href='{% url webapp_settings %}'>{% trans "Settings" %}</a></button>
     <%/owner%>
-    <em><% agc %></em>
+    <em class='hidden-phone'><% agc %></em>
     <p class="profile-bio"><% bio_text %></p>
    </div>
 	<div class='separation-high'>
