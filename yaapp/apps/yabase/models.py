@@ -129,6 +129,7 @@ class SongInstanceManager(models.Manager):
                             song_dict['artist'] = live_data['artist']
                             song_dict['album'] = live_data['album']
                             song_dict['cover'] = live_data['cover']
+                            song_dict['large_cover'] = live_data['large_cover']
                         except:
                             pass
 
@@ -151,6 +152,7 @@ class SongInstanceManager(models.Manager):
                         song_dict['artist'] = live_data['artist']
                         song_dict['album'] = live_data['album']
                         song_dict['cover'] = live_data['cover']
+                        song_dict['large_cover'] = live_data['large_cover']
                     except:
                         pass
 
@@ -214,15 +216,19 @@ class SongInstance(models.Model):
 
 
         cover = None
+        large_cover = None
         if include_cover:
             if song.cover_filename:
                 cover = song.cover_url
+                large_cover = song.large_cover_url
             if cover is None and song.album:
                 cover = song.album.cover_url
+                large_cover = song.album.large_cover_url
 
         if cover is None:
             cover = '/media/images/default_album.png'
         desc_dict['cover'] = cover
+        desc_dict['large_cover'] = large_cover
 
         return desc_dict
 
@@ -1135,7 +1141,8 @@ class Radio(models.Model):
                 'id': si.id,
                 'album': album,
                 'artist': artist,
-                'cover': '/media/images/on_air.png'
+                'cover': '/media/images/on_air.png',
+                'large_cover': '/media/images/on_air.png'
             }
 
             if not self.ready:

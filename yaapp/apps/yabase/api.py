@@ -890,11 +890,14 @@ class SearchSongResource(ModelResource):
         yasound_song = bundle.obj
         if yasound_song.album:
             cover = yasound_song.album.cover_url
+            large_cover = yasound_song.album.large_cover_url
         elif yasound_song.cover_filename:
             cover = yasound_song.cover_url
+            large_cover = yasound_song.large_cover_url
         else:
             cover = None
         bundle.data['cover'] = cover
+        bundle.data['large_cover'] = large_cover
         return bundle
 
 

@@ -31,8 +31,8 @@ def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
         "song": song,
         "elapsed": elapsed,
         "form": form,
-    }, context_instance=RequestContext(request))    
-    
+    }, context_instance=RequestContext(request))
+
 @csrf_exempt
 def find_fuzzy_json(request):
     decoded = simplejson.loads(request.raw_post_data)
@@ -42,7 +42,7 @@ def find_fuzzy_json(request):
     key = decoded['key']
     if key != FUZZY_KEY:
         return HttpResponseForbidden()
-    
+
     song = YasoundSong.objects.find_fuzzy(name, album, artist)
     if song:
         db_id = song['db_id']
@@ -58,9 +58,9 @@ def album_cover(request, album_id):
         return HttpResponse(status=401)
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
-    
+
     album = get_object_or_404(YasoundAlbum, id=album_id)
-    url = album.cover_url
+    url = album.large_cover_url
     if not url:
         url = '/media/images/default_image.png'
     return HttpResponseRedirect(url)

@@ -6,7 +6,7 @@ from task import check_expiration_date
 import settings as yapremium_settings
 from datetime import *
 from dateutil.relativedelta import *
-
+from account import signals as account_signals
 from utils import verify_receipt
 import json
 
@@ -146,6 +146,55 @@ class TestGift(TestCase):
         self.assertEquals(us.expiration_date.date(), one_month)
 
 
+    def test_add_facebook_account(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT,
+            duration=1,
+            max_per_user=1,
+            enabled=True)
+
+        account_signals.facebook_account_added.send(sender=user2.get_profile(), user=user2)
+
+        user2 = User.objects.get(id=user2.id) # reload object
+        self.assertTrue(user2.get_profile().permissions.hd)
+
+        us = UserService.objects.get(user=user2, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        one_month = today + relativedelta(months=+1)
+        self.assertEquals(us.expiration_date.date(), one_month)
+
+    def test_add_twitter_account(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT,
+            duration=1,
+            max_per_user=1,
+            enabled=True)
+
+        account_signals.twitter_account_added.send(sender=user2.get_profile(), user=user2)
+
+        user2 = User.objects.get(id=user2.id) # reload object
+        self.assertTrue(user2.get_profile().permissions.hd)
+
+        us = UserService.objects.get(user=user2, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        one_month = today + relativedelta(months=+1)
+        self.assertEquals(us.expiration_date.date(), one_month)
 
 class TestExpirationDate(TestCase):
     def setUp(self):

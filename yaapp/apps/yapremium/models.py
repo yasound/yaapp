@@ -13,6 +13,8 @@ from account.models import UserProfile
 from transmeta import TransMeta
 import utils as yapremium_utils
 
+import account.signals as account_signals
+
 from task import async_win_gift
 
 class Service(models.Model):
@@ -300,7 +302,14 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
         async_win_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
 
+def facebook_account_added_handler(sender, user, **kwargs):
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
+
+def twitter_account_added_handler(sender, user, **kwargs):
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
+
 def install_handlers():
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
-
+    account_signals.facebook_account_added.connect(facebook_account_added_handler)
+    account_signals.twitter_account_added.connect(twitter_account_added_handler)
 install_handlers()
