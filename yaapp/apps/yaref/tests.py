@@ -2,13 +2,15 @@
 from django.test import TestCase
 from yaref.models import YasoundSong
 from yaref.mongo import SongAdditionalInfosManager
-from yasearch.utils import get_simplified_name
+from yasearch.utils import get_simplified_name, build_dms
+from yasearch import settings as yasearch_settings
+
 import buylink
 
 class TestUtils(TestCase):
     def setUp(self):
         pass
-    
+
     def test_get_simplified_name(self):
         name = u"スマイライフ"
         simplified_name = get_simplified_name(name)
@@ -25,7 +27,7 @@ class TestUtils(TestCase):
         name = "Alan's Psychedelic Breakfast"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"alan s psychedelic breakfast")
-           
+
         name = "Another Brick in the Wall, Pt. 3"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"another brick in the wall pt 3")
@@ -49,11 +51,11 @@ class TestUtils(TestCase):
         name = u"Москва"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"moskva")
-        
+
         name = u"שיפל"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"shypl")
-        
+
         name = u"طبيب"
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, u"tbyb")
@@ -65,16 +67,34 @@ class TestUtils(TestCase):
         name = None
         simplified_name = get_simplified_name(name)
         self.assertEquals(simplified_name, None)
-  
+
+    def test_build_dms(self):
+        query = 'Les plus belles chansons françaises'
+        dms = build_dms(query, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        self.assertEquals(dms, ['XNSN', 'FRNS', 'PLS'])
+
+        query = u'Les plus belles chansons françaises'
+        dms = build_dms(query, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        self.assertEquals(dms, ['XNSN', 'FRNS', 'PLS'])
+
+        query = 'Les plus belles chansons francaises'
+        dms = build_dms(query, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        self.assertEquals(dms, ['XNSN', 'FRNK', 'PLS'])
+
+
+        query = 'Portela h\xc3\xa9'
+        dms = build_dms(query, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        self.assertEquals(dms, ['PRTL'])
+
 class TestBuyLink(TestCase):
     def setUp(self):
         pass
-    
+
     def test_generate_buy_link_ok(self):
         name = 'gatekeeper'
         artist = 'feist'
         album = 'let it die'
-        
+
         url = buylink.generate_buy_link(name, album, artist)
         self.assertIsNotNone(url)
 
@@ -82,22 +102,22 @@ class TestBuyLink(TestCase):
         name = 'gatekeeper'
         artist = 'feist'
         album = 'wrong album'
-        
+
         url = buylink.generate_buy_link(name, album, artist)
         self.assertIsNotNone(url)
-    
+
     def test_generate_buy_link_with_no_results(self):
         name = 'sdpsdlsds'
         artist = 'sdsdsd'
         album = 'sdsdsdds'
-        
+
         url = buylink.generate_buy_link(name, album, artist)
         self.assertIsNone(url)
 
 class TestFind(TestCase):
     def setUp(self):
         pass
-    
+
     def test_find_mbid(self):
         s = YasoundSong(name='Believe', artist_name='Cher', lastfm_id='1019817')
         mbid = s.find_mbid()
@@ -107,13 +127,13 @@ class TestFind(TestCase):
         s = YasoundSong(name='hi', artist_name='world', lastfm_id='1019817', musicbrainz_id='028523f5-23b3-4910-adc1-46d932e2fb55')
         synonyms = s.find_synonyms()
         self.assertEquals(len(synonyms), 2)
-        
+
 # disabled because response from echonest is not consistent
 #        metadata = synonyms[0]
 #        self.assertEquals(metadata.get('name'), 'Believe')
 #        self.assertEquals(metadata.get('artist'), 'Cher')
 #        self.assertEquals(metadata.get('album'), 'Believe')
-        
+
 class TestAdditionalInfo(TestCase):
     def setUp(self):
         sa = SongAdditionalInfosManager()
@@ -135,9 +155,8 @@ class TestAdditionalInfo(TestCase):
         doc = sa.information(1)
         self.assertEquals(doc.get('conversion_status').get('preview_generated'), False)
         self.assertEquals(doc.get('verified'), True)
-        
+
         sa.remove_information(1, 'conversion_status')
         doc = sa.information(1)
-        self.assertIsNone(doc.get('conversion_status'))    
+        self.assertIsNone(doc.get('conversion_status'))
         self.assertEquals(doc.get('verified'), True)
-    

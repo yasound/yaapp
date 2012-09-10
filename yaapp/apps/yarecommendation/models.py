@@ -326,6 +326,5 @@ def new_radio(sender, instance, created, **kwargs):
         async_add_radio.apply_async(args=[instance], countdown=60*60)
 
 def install_handlers():
-    pass
-    # signals.post_save.connect(new_radio, sender=Radio)
+    signals.post_save.connect(new_radio, sender=Radio)
 install_handlers()

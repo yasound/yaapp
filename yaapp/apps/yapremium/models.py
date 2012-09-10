@@ -17,6 +17,7 @@ import account.signals as account_signals
 
 from task import async_win_gift
 
+
 class Service(models.Model):
     """
     A service which can be activated or disabled
@@ -53,6 +54,7 @@ class Service(models.Model):
 class SubscriptionManager(models.Manager):
     def available_subscriptions(self):
         return self.filter(enabled=True)
+
 
 class Subscription(models.Model):
     """
@@ -116,10 +118,17 @@ class UserSubscription(models.Model):
         return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
 
 
+class UserServiceManager(models.Manager):
+    def generate(self, service, user, duration):
+        us, _created = UserService.objects.get_or_create(service=service, user=user)
+        us.calculate_expiration_date(duration=duration, commit=True)
+        return us
+
 class UserService(models.Model):
     """
     User service association. Contains a user, service and an expiration_date
     """
+    objects = UserServiceManager()
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
@@ -147,12 +156,12 @@ class UserService(models.Model):
         (re)calculate expiration date given a new duration
         """
         today = date.today()
-        start_day = today # start date for calculating duration is by default the current day
+        start_day = today  # start date for calculating duration is by default the current day
 
         if self.expiration_date is not None:
-            if self.expiration_date >= today:
+            if self.expiration_date.date() >= today:
                 # expiration date in future ? we increment the given expiration date
-                start_day = self.expiration_date
+                start_day = self.expiration_date.date()
 
         self.expiration_date = yapremium_utils.calculate_expiration_date(today=start_day, duration=duration)
 
@@ -169,6 +178,8 @@ class UserService(models.Model):
         data = {
             'id': self.id,
             'service': self.service.get_stype_display(),
+            'service_type': self.service.stype,
+            'service_id': self.service.id,
             'active': self.active,
             'expiration_date': self.expiration_date,
         }
@@ -189,11 +200,11 @@ class Gift(models.Model):
     description = models.TextField(_('description'), blank=True)
 
     action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
-    action_url_ios = models.TextField(_('iOS action url'), blank=True) # special field used by iOS to navigate to action menu
+    action_url_ios = models.TextField(_('iOS action url'), blank=True)  # special field used by iOS to navigate to action menu
 
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
-    max_per_user = models.IntegerField(_('max per user'), default=1) # one-shot gift is max_per_user=1
+    max_per_user = models.IntegerField(_('max per user'), default=1)  # one-shot gift is max_per_user=1
 
     picture_todo = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
     picture_done = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
@@ -278,6 +289,7 @@ class AchievementManager(models.Manager):
         us.calculate_expiration_date(duration=gift.duration)
         return obj
 
+
 class Achievement(models.Model):
     """
     Store gift won by a user
@@ -296,17 +308,74 @@ class Achievement(models.Model):
         verbose_name = _('achievement')
 
 
+class PromocodeManager(models.Manager):
+    def is_valid(self, code, user):
+        try:
+            promocode = self.get(code=code, enabled=True)
+        except Promocode.DoesNotExist:
+            return False, None
+
+        if promocode.unique:
+            if UserPromocode.objects.filter(promocode=promocode).count() > 0:
+                return False, None
+        elif UserPromocode.objects.filter(promocode=promocode, user=user).count() > 0:
+            return False, None
+
+        return True, promocode
+
+    def create_from_code(self, code, user):
+        today = date.today()
+        is_valid, promocode = self.is_valid(code=code, user=user)
+        if is_valid:
+            promocode = self.get(code=code)
+            up = UserPromocode.objects.create(user=user, promocode=promocode, usage_date=today)
+            us = UserService.objects.generate(service=promocode.service, user=user, duration=promocode.duration)
+            return up
+        return None
+
+class Promocode(models.Model):
+    objects = PromocodeManager()
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
+    code = models.CharField(_('code'), max_length=30, unique=True)
+    enabled = models.BooleanField(_('enabled'), default=False)
+    service = models.ForeignKey(Service, verbose_name=_('service'))
+    duration = models.IntegerField(_('duration'), default=1)
+    unique = models.BooleanField(_('unique'), default=False)
+
+    def __unicode__(self):
+        return self.code
+
+    class Meta:
+        verbose_name = _('promocode')
+
+class UserPromocode(models.Model):
+    user = models.ForeignKey(User, verbose_name=_('user'))
+    promocode = models.ForeignKey(Promocode, verbose_name=_('promo code'))
+    usage_date = models.DateTimeField(_('usage date'))
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.user, self.promocode)
+
+    class Meta:
+        verbose_name = _('user promocode')
+        verbose_name_plural = _('user promocodes')
+
+
 # handlers are used to calculate gift achievements
 
 def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
         async_win_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
 
+
 def facebook_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
 
+
 def twitter_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
+
 
 def install_handlers():
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)

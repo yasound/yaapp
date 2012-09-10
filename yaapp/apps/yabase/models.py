@@ -129,6 +129,7 @@ class SongInstanceManager(models.Manager):
                             song_dict['artist'] = live_data['artist']
                             song_dict['album'] = live_data['album']
                             song_dict['cover'] = live_data['cover']
+                            song_dict['large_cover'] = live_data['large_cover']
                         except:
                             pass
 
@@ -151,6 +152,7 @@ class SongInstanceManager(models.Manager):
                         song_dict['artist'] = live_data['artist']
                         song_dict['album'] = live_data['album']
                         song_dict['cover'] = live_data['cover']
+                        song_dict['large_cover'] = live_data['large_cover']
                     except:
                         pass
 
@@ -214,15 +216,20 @@ class SongInstance(models.Model):
 
 
         cover = None
+        large_cover = None
         if include_cover:
             if song.cover_filename:
                 cover = song.cover_url
+                large_cover = song.large_cover_url
             if cover is None and song.album:
                 cover = song.album.cover_url
+                large_cover = song.album.large_cover_url
 
         if cover is None:
             cover = '/media/images/default_album.png'
+            large_cover = '/media/images/default_album.png'
         desc_dict['cover'] = cover
+        desc_dict['large_cover'] = large_cover
 
         return desc_dict
 
@@ -1094,11 +1101,7 @@ class Radio(models.Model):
         self.creator.userprofile.my_radio_shared(user.userprofile, self)
 
     def post_message(self, user, message):
-        WallEvent(radio=self,
-                  start_date=datetime.datetime.now(),
-                  type=yabase_settings.EVENT_MESSAGE,
-                  user=user,
-                  text=message).save()
+        WallEvent.objects.add_post_message_event(radio=self, user=user, message=message)
 
     def duplicate(self):
         new_radio = self.__class__.objects.create(creator=self.creator,
@@ -1135,7 +1138,8 @@ class Radio(models.Model):
                 'id': si.id,
                 'album': album,
                 'artist': artist,
-                'cover': '/media/images/on_air.png'
+                'cover': '/media/images/on_air.png',
+                'large_cover': '/media/images/on_air.png'
             }
 
             if not self.ready:
@@ -1373,9 +1377,7 @@ class WallEventManager(models.Manager):
             current_song = radio.current_song
             if current_song and (len(song_events) == 0 or current_song.id != song_events[0].song_id):
                 s = radio.current_song
-                song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s)
-                song_event.start_date = radio.current_song_play_date
-                song_event.save()
+                song_event = WallEvent.objects.create(radio=radio, type=yabase_settings.EVENT_SONG, song=s, start_date = radio.current_song_play_date)
         else:
             live_data = radio.live_data()
             if not live_data:
@@ -1390,9 +1392,8 @@ class WallEventManager(models.Manager):
                                                       type=yabase_settings.EVENT_SONG,
                                                       song_name=song_name,
                                                       song_artist=song_artist,
-                                                      song_album=song_album)
-                song_event.start_date = datetime.datetime.now()
-                song_event.save()
+                                                      song_album=song_album,
+                                                      start_date=datetime.datetime.now())
 
 
     def create_like_event(self, radio, song, user):
@@ -1435,6 +1436,15 @@ class WallEventManager(models.Manager):
         if can_add:
             self.add_current_song_event(radio)
             self.create_like_event(radio, song, user)
+
+    def add_post_message_event(self, radio, user, message):
+        self.add_current_song_event(radio)
+        self.create(radio=radio,
+            start_date=datetime.datetime.now(),
+            type=yabase_settings.EVENT_MESSAGE,
+            user=user,
+            text=message)
+
 
     class Meta:
         db_name = u'default'

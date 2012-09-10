@@ -495,7 +495,6 @@ class WallEventResource(ModelResource):
 
     def obj_create(self, bundle, request=None, **kwargs):
         if bundle.data['type'] == yabase_settings.EVENT_SONG:
-            print 'cannot post Song messages'
             return None
 
         radio_uri = bundle.data['radio']
@@ -507,7 +506,6 @@ class WallEventResource(ModelResource):
             return None
 
         WallEvent.objects.add_current_song_event(radio)
-        print bundle.data
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
         wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event
         wall_event_resource.obj.save()
@@ -890,11 +888,14 @@ class SearchSongResource(ModelResource):
         yasound_song = bundle.obj
         if yasound_song.album:
             cover = yasound_song.album.cover_url
+            large_cover = yasound_song.album.large_cover_url
         elif yasound_song.cover_filename:
             cover = yasound_song.cover_url
+            large_cover = yasound_song.large_cover_url
         else:
             cover = None
         bundle.data['cover'] = cover
+        bundle.data['large_cover'] = large_cover
         return bundle
 
 

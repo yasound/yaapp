@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Service, Subscription, UserSubscription, UserService, Gift, Achievement
+from models import Service, Subscription, UserSubscription, UserService, Gift, Achievement, Promocode, UserPromocode
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('stype',)
@@ -28,3 +28,11 @@ class AchievementAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'gift', 'achievement_date',)
     search_fields = ( 'user__username', 'user__email', 'user__user_profile__name')
 admin.site.register(Achievement, AchievementAdmin)
+
+class PromocodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code', 'service', 'duration', 'enabled', 'unique')
+admin.site.register(Promocode, PromocodeAdmin)
+
+class UserPromocodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'promocode', 'usage_date',)
+admin.site.register(UserPromocode, UserPromocodeAdmin)
