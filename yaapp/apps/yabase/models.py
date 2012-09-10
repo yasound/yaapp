@@ -227,6 +227,7 @@ class SongInstance(models.Model):
 
         if cover is None:
             cover = '/media/images/default_album.png'
+            large_cover = '/media/images/default_album.png'
         desc_dict['cover'] = cover
         desc_dict['large_cover'] = large_cover
 
