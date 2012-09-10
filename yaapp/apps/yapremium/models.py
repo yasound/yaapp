@@ -355,7 +355,7 @@ class UserPromocode(models.Model):
     usage_date = models.DateTimeField(_('usage date'))
 
     def __unicode__(self):
-        return u'%s - %s' % (user, promocode)
+        return u'%s - %s' % (self.user, self.promocode)
 
     class Meta:
         verbose_name = _('user promocode')
