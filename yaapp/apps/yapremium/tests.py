@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from yapremium.models import Subscription, UserSubscription, Service, UserService, Gift, Achievement
+from yapremium.models import Subscription, UserSubscription, Service, UserService, Gift, Achievement, Promocode, UserPromocode
 from task import check_expiration_date
 import settings as yapremium_settings
 from datetime import *
@@ -69,7 +69,7 @@ class TestView(TestCase):
         data = json.loads(res.content)
         self.assertEquals(data.get('meta').get('total_count'), 1)
 
-        res = self.client.post(reverse('yapremium.views.subscriptions', kwargs={'subscription_sku':sub.sku}))
+        res = self.client.post(reverse('yapremium.views.subscriptions', kwargs={'subscription_sku': sub.sku}))
         self.assertEquals(res.status_code, 403)
 
     def test_get_gifts(self):
@@ -89,7 +89,6 @@ class TestView(TestCase):
         self.assertTrue(item.get('enabled'))
         self.assertEquals(item.get('count'), 0)
         self.assertEquals(item.get('max'), 1)
-
 
         achievement = Achievement.objects.create(user=self.user, gift=gift, achievement_date=datetime(2012, 8, 24, 0, 0))
 
@@ -113,6 +112,7 @@ class TestView(TestCase):
 
         item = data.get('objects')[0]
         self.assertTrue(item.get('enabled'))
+
 
 class TestGift(TestCase):
     def setUp(self):
@@ -145,7 +145,6 @@ class TestGift(TestCase):
         one_month = today + relativedelta(months=+1)
         self.assertEquals(us.expiration_date.date(), one_month)
 
-
     def test_add_facebook_account(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
         self.assertFalse(user2.get_profile().permissions.hd)
@@ -161,7 +160,7 @@ class TestGift(TestCase):
 
         account_signals.facebook_account_added.send(sender=user2.get_profile(), user=user2)
 
-        user2 = User.objects.get(id=user2.id) # reload object
+        user2 = User.objects.get(id=user2.id)  # reload object
         self.assertTrue(user2.get_profile().permissions.hd)
 
         us = UserService.objects.get(user=user2, service=service)
@@ -186,7 +185,7 @@ class TestGift(TestCase):
 
         account_signals.twitter_account_added.send(sender=user2.get_profile(), user=user2)
 
-        user2 = User.objects.get(id=user2.id) # reload object
+        user2 = User.objects.get(id=user2.id)  # reload object
         self.assertTrue(user2.get_profile().permissions.hd)
 
         us = UserService.objects.get(user=user2, service=service)
@@ -195,6 +194,7 @@ class TestGift(TestCase):
         today = date.today()
         one_month = today + relativedelta(months=+1)
         self.assertEquals(us.expiration_date.date(), one_month)
+
 
 class TestExpirationDate(TestCase):
     def setUp(self):
@@ -244,3 +244,80 @@ class TestExpirationDate(TestCase):
         check_expiration_date()
         user_service = UserService.objects.get(user=self.user, service=service)
         self.assertFalse(user_service.active)
+
+
+class TestPromocode(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+
+    def test_is_valid_with_bad_code(self):
+
+        is_valid, promocode = Promocode.objects.is_valid(code='toto', user=self.user)
+        self.assertFalse(is_valid)
+        self.assertIsNone(promocode)
+
+    def test_is_valid_with_good_code(self):
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        promocode = Promocode.objects.create(code='code', duration=12, service=service, enabled=True)
+        is_valid, promocode2 = Promocode.objects.is_valid(code='code', user=self.user)
+        self.assertTrue(is_valid)
+        self.assertEquals(promocode2.id, promocode.id)
+
+    def test_is_valid_without_unique(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        today = date.today()
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        promocode = Promocode.objects.create(code='code', duration=12, service=service, enabled=True)
+
+        up = UserPromocode.objects.create(user=self.user, usage_date=today, promocode=promocode)
+
+        is_valid, promocode2 = Promocode.objects.is_valid(code='code', user=self.user)
+        self.assertFalse(is_valid)
+        self.assertIsNone(promocode2)
+
+        is_valid, promocode2 = Promocode.objects.is_valid(code='code', user=user2)
+        self.assertTrue(is_valid)
+        self.assertIsNotNone(promocode2)
+
+    def test_is_valid_with_unique2(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        today = date.today()
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        promocode = Promocode.objects.create(code='code', duration=12, service=service, enabled=True, unique=True)
+
+        up = UserPromocode.objects.create(user=self.user, usage_date=today, promocode=promocode)
+
+        is_valid, promocode2 = Promocode.objects.is_valid(code='code', user=user2)
+        self.assertFalse(is_valid)
+        self.assertIsNone(promocode2)
+
+    def test_create_from_bad_code(self):
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        promocode = Promocode.objects.create(code='code', duration=12, service=service)
+
+        up = Promocode.objects.create_from_code(code='toutou', user=self.user)
+        self.assertIsNone(up)
+
+
+    def test_create_from_good_code(self):
+        today = date.today()
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        promocode = Promocode.objects.create(code='code', duration=12, service=service, enabled=True)
+        promocode2 = Promocode.objects.create(code='code2', duration=24, service=service, enabled=True)
+
+        up = Promocode.objects.create_from_code(code='code', user=self.user)
+        self.assertIsNotNone(up)
+
+        us = UserService.objects.get(service=service, user=self.user)
+        self.assertEquals(us.expiration_date.date(), today + relativedelta(months=+promocode.duration))
+
+        up = Promocode.objects.create_from_code(code='code2', user=self.user)
+        self.assertIsNotNone(up)
+
+        us = UserService.objects.get(service=service, user=self.user)
+        self.assertEquals(us.expiration_date.date(), today + relativedelta(months=+promocode.duration+promocode2.duration))
+
