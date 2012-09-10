@@ -1277,6 +1277,8 @@ class TestWallPost(TestCase):
         playlist.save()
 
         self.radio = radio
+        self.radio.current_song = SongInstance.objects.filter(playlist=playlist).order_by('?')[0]
+        self.radio.save()
 
     def test_like_song(self):
         redis = Mock(name='redis')
@@ -1317,6 +1319,7 @@ class TestWallPost(TestCase):
             res = self.client.post(reverse('yabase.views.post_message', args=[self.radio.uuid]), {'message': 'hello, world'})
             self.assertEquals(res.status_code, 200)
             self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 1)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).count(), 1)
 
             # delete posted message
             message = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)[0]
@@ -1324,6 +1327,7 @@ class TestWallPost(TestCase):
             res = self.client.delete(reverse('yabase.views.delete_message', args=[message.id]))
             self.assertEquals(res.status_code, 200)
             self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 0)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).count(), 1)
 
 
             # post to another radio
@@ -1331,6 +1335,7 @@ class TestWallPost(TestCase):
             res = self.client.post(reverse('yabase.views.post_message', args=[other_radio.uuid]), {'message': 'hello, world'})
             self.assertEquals(res.status_code, 200)
             self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 1)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).count(), 1)
 
             # delete posted message : impossible because user is not the owner of radio
             message = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE, radio=other_radio)[0]
@@ -1348,6 +1353,7 @@ class TestWallPost(TestCase):
             res = self.client.post(reverse('yabase.views.post_message', args=[self.radio.uuid]), {'message': 'hello, world'})
             self.assertEquals(res.status_code, 200)
             self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(), 1)
+            self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_SONG).count(), 1)
 
             message = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)[0]
             res = self.client.post(reverse('yabase.views.report_message_as_abuse', args=[message.id]))
