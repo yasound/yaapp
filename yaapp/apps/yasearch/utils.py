@@ -2,7 +2,6 @@
 import settings as yasearch_settings
 import string
 import re
-import unicodedata
 from unidecode import unidecode
 
 from fuzzywuzzy import fuzz
@@ -12,21 +11,24 @@ REG_TOKEN = re.compile("[\w\d]+")
 
 exclude = string.punctuation
 exclude_regex = re.compile(r"[%s]" % re.escape(exclude))
+
+
 def _replace_punctuation_with_space(s):
     """
     """
     return exclude_regex.sub(u" ", s)
 
+
 def get_simplified_name(s):
     """
-    return simplified name : 
-    * remove multiple spaces, eol, tabs and punctuations 
+    return simplified name :
+    * remove multiple spaces, eol, tabs and punctuations
     * lower everything
     * return unicode
     """
     if s is None:
         return None
-    
+
     if not isinstance(s, unicode):
         s = unicode(s, 'utf-8')
     s = ' '.join(_replace_punctuation_with_space(s).split()).lower()
@@ -42,18 +44,24 @@ def _is_digit(val):
         return True
     except ValueError:
         return False
-    
+
+
 def build_dms(sentence, remove_common_words=False, exceptions_list=None):
     dms = []
     if not sentence:
         return dms
+
+    if not isinstance(sentence, unicode):
+        sentence = unicode(sentence, 'utf-8')
+
     if sentence == exceptions_list:
         remove_common_words = False
+
     sentence = _replace_punctuation_with_space(sentence)
     words = sorted(sentence.lower().split())
     for word in words:
         if remove_common_words and (word in yasearch_settings.FUZZY_COMMON_WORDS or (not _is_digit(word) and len(word) <= 2)):
-            continue 
+            continue
         if _is_digit(word):
             value = word
             if value not in dms:
@@ -69,10 +77,12 @@ def build_dms(sentence, remove_common_words=False, exceptions_list=None):
                 dms.append(value)
     return sorted(dms, key=len, reverse=True)
 
-        
+
 def token_set_ratio(s1, s2, method):
-    if s1 is None: raise TypeError("s1 is None")
-    if s2 is None: raise TypeError("s2 is None")
+    if s1 is None:
+        raise TypeError("s1 is None")
+    if s2 is None:
+        raise TypeError("s2 is None")
 
     # pull tokens
     tokens1 = set(REG_TOKEN.findall(s1))
@@ -107,5 +117,3 @@ def token_set_ratio(s1, s2, method):
     else:
         ratio = max(pairwise)
     return ratio
-
-    
