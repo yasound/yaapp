@@ -249,13 +249,16 @@ $(document).ready(function () {
                 this.commonContext.errorHandler = new Yasound.App.ErrorHandler().render();
                 this.commonContext.streamFunction = function (model, stream_url) {
                     Yasound.App.SoundConfig.url = stream_url;
-                    if (!Yasound.App.MySound) {
-                        Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-                        Yasound.App.MySound.mute();
-                    } else {
-                        Yasound.App.MySound.unload();
-                        Yasound.App.MySound.play(Yasound.App.SoundConfig);
+
+                    if (this.streamerSecondCall) {
+                        if (!Yasound.App.MySound) {
+                            Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+                        } else {
+                            Yasound.App.MySound.unload();
+                            Yasound.App.MySound.play(Yasound.App.SoundConfig);
+                        }
                     }
+                    this.streamerSecondCall = true;
                 };
 
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
