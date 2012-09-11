@@ -141,7 +141,7 @@ Yasound.Premium.Handler.DeletePromocode = function(records, success) {
                     ids.push(record.data.id);
                 });
                 Ext.Ajax.request({
-                    url: String.format('/yabackoffice/premium/promocodes/delete/'),
+                    url: String.format('/yabackoffice/premium/promocodes/'),
                     success: function(result, request){
                         success();
                     },
@@ -150,7 +150,8 @@ Yasound.Premium.Handler.DeletePromocode = function(records, success) {
                     method: 'POST',
                     timeout: 1000 * 60 * 5,
                     params: {
-                        promocode_id: ids
+                        promocode_id: ids,
+                        'action': 'delete'
                     }
                 });
             }
@@ -158,10 +159,32 @@ Yasound.Premium.Handler.DeletePromocode = function(records, success) {
    });
 };
 
+
+Yasound.Premium.Handler.ExportPromocode = function(records, success) {
+    ids = [];
+    Ext.each(records, function(record) {
+        ids.push(record.data.id);
+    });
+    var maskingAjax = new Ext.data.Connection({});
+
+    maskingAjax.request({
+        disableCaching: true,
+        url: String.format('/yabackoffice/premium/promocodes/'),
+        form: Ext.fly('frmDummy'),
+        params: {
+            promocode_id: ids,
+            'action': 'export'
+        },
+        method: 'POST',
+        timeout: 1000 * 60 * 5,
+        isUpload: true
+    });
+};
+
 //------------------------------------------
 // UI
 //------------------------------------------
-Yasound.Premium.UI.ServiceCombo = function () {
+Yasound.Premium.UI.ServiceCombo = function (value) {
     return {
         xtype: 'combo',
         allowBlank:false,
@@ -173,6 +196,7 @@ Yasound.Premium.UI.ServiceCombo = function () {
         }),
         valueField:'id',
         displayField:'label',
+        value: value,
         typeAhead: true,
         mode: 'local',
         triggerAction: 'all',
@@ -229,7 +253,7 @@ Yasound.Premium.UI.EditPromocodeForm = function(record) {
     return {
         xtype: 'form',
         bodyStyle:'padding:5px 5px 0',
-        items: [Yasound.Premium.UI.ServiceCombo(), {
+        items: [Yasound.Premium.UI.ServiceCombo(record.data.service_id), {
                 fieldLabel: gettext('Service duration (months)'),
                 xtype: 'numberfield',
                 name: 'duration',
@@ -296,15 +320,30 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                         grid.getStore().reload();
                     });
                 }
+            }, '-', {
+                text: gettext('Export'),
+                iconCls: 'silk-page-excel',
+                ref: '../exportButton',
+                disabled: true,
+                handler: function (b, e) {
+                    var grid = b.ownerCt.ownerCt;
+                    selection = grid.getSelectionModel().getSelections();
+
+                    Yasound.Premium.Handler.ExportPromocode(selection, function () {
+                        grid.getStore().reload();
+                    });
+                }
             }],
             listeners: {
                 'selected': function (grid, id, record) {
                     grid.editButton.setDisabled(false);
                     grid.deleteButton.setDisabled(false);
+                    grid.exportButton.setDisabled(false);
                 },
                 'unselected': function (grid) {
                     grid.editButton.setDisabled(true);
                     grid.deleteButton.setDisabled(true);
+                    grid.exportButton.setDisabled(true);
                 }
             }
         }, {
@@ -350,15 +389,30 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                         grid.getStore().reload();
                     });
                 }
+            }, '-', {
+                text: gettext('Export'),
+                iconCls: 'silk-page-excel',
+                ref: '../exportButton',
+                disabled: true,
+                handler: function (b, e) {
+                    var grid = b.ownerCt.ownerCt;
+                    selection = grid.getSelectionModel().getSelections();
+
+                    Yasound.Premium.Handler.ExportPromocode(selection, function () {
+                        grid.getStore().reload();
+                    });
+                }
             }],
             listeners: {
                 'selected': function (grid, id, record) {
                     grid.editButton.setDisabled(false);
                     grid.deleteButton.setDisabled(false);
+                    grid.exportButton.setDisabled(false);
                 },
                 'unselected': function (grid) {
                     grid.editButton.setDisabled(true);
                     grid.deleteButton.setDisabled(true);
+                    grid.exportButton.setDisabled(true);
                 }
             }
         }],

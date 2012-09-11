@@ -41,6 +41,7 @@ import utils as yabackoffice_utils
 from yasearch.models import MostPopularSongsManager
 from yametrics.matching_errors import MatchingErrorsManager
 from yabase.export_utils import export_pur
+from yapremium import export as yapremium_export
 from yahistory.models import UserHistory
 from yasearch.utils import get_simplified_name
 from yapremium.models import Promocode, Service
@@ -1247,21 +1248,21 @@ def premium_promocodes(request, promocode_id=None):
         data = {"success":True,"message":"ok"}
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
+    elif request.method == 'POST':
+        action = request.REQUEST.get('action')
+        if action == 'delete':
+            promocode_ids = request.REQUEST.getlist('promocode_id')
+            Promocode.objects.filter(id__in=promocode_ids).update(enabled=False)
 
-    raise Http404
+            data = {"success":True,"message":"ok"}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+        elif action == 'export':
+            promocode_ids = request.REQUEST.get('promocode_id', [])
+            qs = Promocode.objects.filter(id__in=promocode_ids.split(','))
+            data = yapremium_export.export_promocodes_excel(qs)
 
-
-@csrf_exempt
-@login_required
-def premium_promocodes_delete(request):
-    if not request.user.is_superuser:
-        raise Http404()
-
-    if request.method == 'POST':
-        promocode_ids = request.REQUEST.getlist('promocode_id')
-        Promocode.objects.filter(id__in=promocode_ids).update(enabled=False)
-
-        data = {"success":True,"message":"ok"}
-        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
-        return resp
+            response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+            response['Content-Disposition'] = 'attachment; filename=users.xls'
+            return response
     raise Http404
