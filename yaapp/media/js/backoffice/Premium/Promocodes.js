@@ -21,6 +21,9 @@ Yasound.Premium.Handler.GenerateUniqueCodes = function (success) {
         buttons: [{
             text: gettext('Submit'),
             handler: function(){
+                if (!form.getForm().isValid()) {
+                    return;
+                }
                 var values = form.getForm().getFieldValues();
                 Ext.Ajax.request({
                     url: String.format('/yabackoffice/premium/unique_promocodes/'),
@@ -59,6 +62,9 @@ Yasound.Premium.Handler.CreateNonUniqueCode = function (success) {
         buttons: [{
             text: gettext('Submit'),
             handler: function(){
+                if (!form.getForm().isValid()) {
+                    return;
+                }
                 var values = form.getForm().getFieldValues();
                 Ext.Ajax.request({
                     url: String.format('/yabackoffice/premium/non_unique_promocodes/'),
@@ -98,6 +104,9 @@ Yasound.Premium.Handler.EditPromocode = function (record, success) {
         buttons: [{
             text: gettext('Submit'),
             handler: function(){
+                if (!form.getForm().isValid()) {
+                    return;
+                }
                 var values = form.getForm().getFieldValues();
                 Ext.Ajax.request({
                     url: String.format('/yabackoffice/premium/promocodes/{0}/', record.data.id),
@@ -152,26 +161,31 @@ Yasound.Premium.Handler.DeletePromocode = function(records, success) {
 //------------------------------------------
 // UI
 //------------------------------------------
+Yasound.Premium.UI.ServiceCombo = function () {
+    return {
+        xtype: 'combo',
+        allowBlank:false,
+        fieldLabel: 'Service',
+        hiddenName:'service_id',
+        store: new Ext.data.ArrayStore({
+            fields: ['id', 'label'],
+            data : [[1, 'HD']]
+        }),
+        valueField:'id',
+        displayField:'label',
+        typeAhead: true,
+        mode: 'local',
+        triggerAction: 'all',
+        emptyText: gettext('Select a service...'),
+        selectOnFocus:true
+    };
+};
+
 Yasound.Premium.UI.UniquePromocodesForm = function() {
     return {
         xtype: 'form',
         bodyStyle:'padding:5px 5px 0',
-        items: [{
-            xtype: 'combo',
-            fieldLabel: 'Service',
-            hiddenName:'service_id',
-            store: new Ext.data.ArrayStore({
-                fields: ['id', 'label'],
-                data : [[1, 'HD']]
-            }),
-            valueField:'id',
-            displayField:'label',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText: gettext('Select a service...'),
-            selectOnFocus:true
-        }, {
+        items: [Yasound.Premium.UI.ServiceCombo(), {
                 fieldLabel: gettext('Service duration (months)'),
                 xtype: 'numberfield',
                 name: 'duration',
@@ -195,25 +209,11 @@ Yasound.Premium.UI.NonUniquePromocodeForm = function() {
     return {
         xtype: 'form',
         bodyStyle:'padding:5px 5px 0',
-        items: [{
-            xtype: 'combo',
-            fieldLabel: 'Service',
-            hiddenName:'service_id',
-            store: new Ext.data.ArrayStore({
-                fields: ['id', 'label'],
-                data : [[1, 'HD']]
-            }),
-            valueField:'id',
-            displayField:'label',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText: gettext('Select a service...'),
-            selectOnFocus:true
-        }, {
+        items: [Yasound.Premium.UI.ServiceCombo(), {
                 fieldLabel: gettext('Service Duration (months)'),
                 xtype: 'numberfield',
                 name: 'duration',
+                allowBlank:false,
                 value: 1
         }, {
                 fieldLabel: gettext('Code'),
@@ -229,23 +229,7 @@ Yasound.Premium.UI.EditPromocodeForm = function(record) {
     return {
         xtype: 'form',
         bodyStyle:'padding:5px 5px 0',
-        items: [{
-            xtype: 'combo',
-            fieldLabel: 'Service',
-            hiddenName:'service_id',
-            store: new Ext.data.ArrayStore({
-                fields: ['id', 'label'],
-                data : [[1, 'HD']]
-            }),
-            valueField:'id',
-            displayField:'label',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            value: record.data.service_id,
-            emptyText: gettext('Select a service...'),
-            selectOnFocus:true
-        }, {
+        items: [Yasound.Premium.UI.ServiceCombo(), {
                 fieldLabel: gettext('Service duration (months)'),
                 xtype: 'numberfield',
                 name: 'duration',
@@ -278,7 +262,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
             url: '/yabackoffice/premium/non_unique_promocodes/',
             region: 'center',
             tbar: [{
-                text: 'Create code',
+                text: gettext('Create code'),
                 iconCls: 'silk-table-add',
                 handler: function (b, e) {
                     var grid = b.ownerCt.ownerCt;
@@ -287,7 +271,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                     });
                 }
             }, {
-                text: 'Edit',
+                text: gettext('Edit'),
                 iconCls: 'silk-table-edit',
                 ref: '../editButton',
                 disabled: true,
@@ -300,7 +284,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                     });
                 }
             }, {
-                text: 'Delete',
+                text: gettext('Delete'),
                 iconCls: 'silk-table-delete',
                 ref: '../deleteButton',
                 disabled: true,
@@ -332,7 +316,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
             width: 400,
             split: true,
             tbar: [{
-                text: 'Generate codes',
+                text: gettext('Generate codes'),
                 iconCls: 'silk-table-add',
                 handler: function (b, e) {
                     var grid = b.ownerCt.ownerCt;
@@ -341,7 +325,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                     });
                 }
             }, {
-                text: 'Edit',
+                text: gettext('Edit'),
                 iconCls: 'silk-table-edit',
                 ref: '../editButton',
                 disabled: true,
@@ -354,7 +338,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                     });
                 }
             }, {
-                text: 'Delete',
+                text: gettext('Delete'),
                 iconCls: 'silk-table-delete',
                 ref: '../deleteButton',
                 disabled: true,
