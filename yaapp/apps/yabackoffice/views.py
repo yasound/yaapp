@@ -1165,14 +1165,29 @@ def premium_non_unique_promocodes(request):
     if not request.user.is_superuser:
         raise Http404()
 
-    qs = Promocode.objects.filter(unique=False, enabled=True)
-    grid = PromocodeGrid()
-    filters = [
-        'code'
-    ]
-    jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
-    resp = utils.JsonResponse(jsonr)
-    return resp
+    if request.method == 'GET':
+        qs = Promocode.objects.filter(unique=False)
+        grid = PromocodeGrid()
+        filters = [
+            'code'
+        ]
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    elif request.method == 'POST':
+        service_id = request.REQUEST.get('service_id')
+        duration = request.REQUEST.get('duration', 1)
+        code = request.REQUEST.get('code')
+
+        Promocode.objects.create(service=Service.objects.get(id=service_id),
+            duration=duration,
+            code=code,
+            enabled=True,
+            unique=False)
+        data = {"success":True,"message":"ok"}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
+    raise Http404
 
 @csrf_exempt
 @login_required
@@ -1203,4 +1218,50 @@ def premium_unique_promocodes(request):
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
 
+    raise Http404
+
+@csrf_exempt
+@login_required
+def premium_promocodes(request, promocode_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'PUT' and promocode_id is not None:
+        coerce_put_post(request)
+        promocode = get_object_or_404(Promocode, id=promocode_id)
+        service_id = request.REQUEST.get('service_id')
+        duration = request.REQUEST.get('duration', 1)
+        code = request.REQUEST.get('code')
+        enabled = request.REQUEST.get('enabled')
+        service = get_object_or_404(Service, id=service_id)
+
+        promocode.code = code
+        promocode.service = service
+        promocode.duration = duration
+        if enabled == 'true':
+            promocode.enabled = True
+        else:
+            promocode.enabled = False
+
+        promocode.save()
+        data = {"success":True,"message":"ok"}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
+
+    raise Http404
+
+
+@csrf_exempt
+@login_required
+def premium_promocodes_delete(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'POST':
+        promocode_ids = request.REQUEST.getlist('promocode_id')
+        Promocode.objects.filter(id__in=promocode_ids).update(enabled=False)
+
+        data = {"success":True,"message":"ok"}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
     raise Http404

@@ -3,7 +3,7 @@
 //------------------------------------------
 
 Yasound.Premium.Data.PromocodeStore = function (url) {
-    var fields = [ 'id', 'code', 'enabled', 'unique', 'service', {
+    var fields = [ 'id', 'code', 'enabled', 'unique', 'service', 'service_id', 'duration', {
         name:'created',
         type: 'date',
         dateFormat: 'Y-m-d H:i:s'
@@ -28,7 +28,7 @@ Yasound.Premium.UI.PromocodeColumnModel = function () {
         xtype: 'datecolumn',
         format: 'd/m/Y H:i:s',
         sortable: true,
-        width: 20
+        width: 70
     }, {
         header: gettext('Code'),
         dataIndex: 'code',
@@ -39,7 +39,13 @@ Yasound.Premium.UI.PromocodeColumnModel = function () {
         header: gettext('Service'),
         dataIndex: 'service',
         sortable: true,
-        width: 50,
+        width: 20,
+        filterable: false
+    }, {
+        header: gettext('Duration'),
+        dataIndex: 'duration',
+        sortable: true,
+        width: 20,
         filterable: false
     }];
     return cm;
@@ -86,7 +92,16 @@ Yasound.Premium.UI.PromocodeGrid = Ext.extend(Ext.grid.GridPanel, {
             view: new Ext.grid.GroupingView({
                 hideGroupedColumn: false,
                 forceFit: true,
-                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
+                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})'),
+                getRowClass: function(row, index){
+                    var data = row.data;
+                    var cls = '';
+                    if (!data.enabled) {
+                        cls = 'deleted';
+                    }
+                    return cls;
+                }
+
             }),
             plugins: [ new Ext.ux.grid.GridHeaderFilters()],
             listeners: {
