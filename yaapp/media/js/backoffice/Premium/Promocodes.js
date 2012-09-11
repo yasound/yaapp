@@ -26,6 +26,7 @@ Yasound.Premium.Handler.GenerateUniqueCodes = function (success) {
                     url: String.format('/yabackoffice/premium/unique_promocodes/'),
                     success: function(result, request){
                         success();
+                        win.close();
                     },
                     failure: function(result, request){
                     },

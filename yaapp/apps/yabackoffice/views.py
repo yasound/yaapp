@@ -1201,5 +1201,6 @@ def premium_unique_promocodes(request):
             count=count)
         data = {"success":True,"message":"ok"}
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
 
     raise Http404
