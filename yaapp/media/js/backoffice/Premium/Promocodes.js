@@ -370,7 +370,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                 disabled: true,
                 handler: function (b, e) {
                     var grid = b.ownerCt.ownerCt;
-                    selection = grid.getSelectionModel().getSelections();
+                    selection = grid.getSelectionModel().getSelected();
 
                     Yasound.Premium.Handler.EditPromocode(selection, function () {
                         grid.getStore().reload();
