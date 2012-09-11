@@ -1,13 +1,15 @@
 from django.conf import settings
 import json
 import base64
-import urllib2
 import requests
 import logging
+import string
+import random
 from datetime import *
 from dateutil.relativedelta import *
 
 logger = logging.getLogger("yaapp.yapremium")
+
 
 def verify_receipt(receipt, encode=False):
     """
@@ -34,3 +36,14 @@ def calculate_expiration_date(duration, today=None):
     if not today:
         today = date.today()
     return today + relativedelta(months=+duration)
+
+
+def generate_code_name(prefix=''):
+    from models import Promocode
+    code_length = 6
+    suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(code_length))
+    code_name = prefix + suffix
+    while Promocode.objects.filter(code=code_name).count() > 0:
+        suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(code_length))
+        code_name = prefix + suffix
+    return code_name
