@@ -1188,6 +1188,12 @@ class WebAppView(View):
 
         return context, 'yabase/webapp.html'
 
+    def _default_radio_uuid(self, user):
+        radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
+        if radios.count() > 0:
+            return radios[0].uuid
+        return None
+
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -1239,6 +1245,9 @@ class WebAppView(View):
         if radio_count > 0:
             has_radios = True
 
+
+        if not radio_uuid:
+            radio_uuid = self._default_radio_uuid(request.user)
 
         context = {
             'user_uuid': user_uuid,
