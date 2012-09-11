@@ -92,3 +92,14 @@ class WallEventGrid(grids.ModelGrid):
 
 class PromocodeGrid(grids.ModelGrid):
     model = Promocode
+    list_mapping= [
+        'id',
+        'service',
+        'code',
+        'created',
+        'enabled',
+        'duration'
+    ]
+    mapping = {
+        'service_id': 'service__id',
+    }
