@@ -249,7 +249,7 @@ class Gift(models.Model):
             picture_url = self.picture_done_url
 
         completed_url = None
-        if self.action == yapremium_settings.ACTION_WATCH_TUTORIAL:
+        if self.action == yapremium_settings.ACTION_WATCH_TUTORIAL and not user.is_anonymous():
             completed_url = reverse('yapremium.views.action_watch_tutorial_completed', args=[user.username])
 
         data = {
