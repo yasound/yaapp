@@ -30,10 +30,10 @@ Yasound.Backoffice.Handler.HandleUrlToken = function(token){
             var component_id = parts[1];
             var argumentCount = parts.length - 2;
             var component = Ext.getCmp(component_id);
-            
+
             var args = [];
             args.push(component);
-            
+
             if (argumentCount > 0) {
                 var i;
                 for (i = 0; i < argumentCount; i++) {
@@ -61,7 +61,7 @@ Ext.onReady(function(){
     loadingMask.hide();
     Ext.QuickTips.init();
     Ext.History.init();
-    
+
     var tabPanelRadios = {
         id: 'radios-tab',
         expanded: false,
@@ -100,32 +100,6 @@ Ext.onReady(function(){
         })]
     };
 
-    var tabPanelSearchEngine = {
-        id: 'search-engine-tab',
-        expanded: false,
-        listeners: {
-            'tabchange': function(tabPanel, tab){
-                Ext.History.add(tabPanel.id + '/' + tab.id);
-            }
-        },
-        items: [{
-            title: gettext('Search engine'),
-            id: 'search-engine-top-panel',
-            tabTip: gettext('Search engine tools'),
-            style: 'padding: 10px;',
-            html: '<h1>Search Engine</h1>',
-            listeners: {
-                'activate': function(p){
-                    var tabPanel = p.findParentByType('grouptab');
-                    var nextItem = p.nextSibling();
-                    tabPanel.setActiveTab(nextItem);
-                }
-            }
-        }, Ext.apply(Yasound.SearchEngine.UI.Fuzzy(), {
-            iconCls: 'x-icon-templates'
-        })]    		
-    };
-    
     var tabPanelInvitations = {
         id: 'invitations-tab',
         expanded: false,
@@ -147,9 +121,9 @@ Ext.onReady(function(){
             }
         }, Ext.apply(Yasound.Invitations.UI.Panel(), {
             iconCls: 'x-icon-templates'
-        })]    		
+        })]
     };
-    
+
     var tabPanelModeration = {
             id: 'moderation-tab',
             expanded: false,
@@ -177,9 +151,9 @@ Ext.onReady(function(){
                 iconCls: 'x-icon-templates'
             }), Ext.apply(Yasound.Moderation.UI.AbusePanel(), {
                 iconCls: 'x-icon-templates'
-            })]         
-        }    
-    
+            })]
+        };
+
     var tabPanelUsers = {
             id: 'user-tab',
             expanded: false,
@@ -205,8 +179,8 @@ Ext.onReady(function(){
                 iconCls: 'x-icon-templates'
             }), Ext.apply(Yasound.Users.UI.HistoryPanel(), {
                 iconCls: 'x-icon-templates'
-            })]         
-        }    
+            })]
+        };
 
     var tabPanelStatistics = {
         id: 'statistics-tab',
@@ -237,9 +211,9 @@ Ext.onReady(function(){
         }), Ext.apply(Yasound.Backoffice.UI.RejectedSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Rejected songs')
-        })]    		
+        })]
     };
-    
+
     var tabPanelMenus = {
             id: 'menus-tab',
             expanded: false,
@@ -261,9 +235,9 @@ Ext.onReady(function(){
                 }
             }, Ext.apply(Yasound.Menus.UI.Panel(), {
                 iconCls: 'x-icon-templates'
-            })]    		
+            })]
         };
-    
+
     var tabPanelActivityScore = {
             id: 'activity-score-tab',
             expanded: false,
@@ -287,9 +261,9 @@ Ext.onReady(function(){
                 }
             }, Ext.apply(Yasound.RadioActivityScoreSettings.UI.Panel(), {
                 iconCls: 'x-icon-templates'
-            })]    		
+            })]
         };
-    
+
     var tabPanels = {
         xtype: 'grouptabpanel',
         id: 'group-panel',
@@ -300,15 +274,14 @@ Ext.onReady(function(){
         activeGroup: 0,
         items: []
     };
-    
-    tabPanels.items.push(tabPanelRadios, 
-    					 tabPanelSearchEngine,
-    					 tabPanelInvitations,
-    					 tabPanelStatistics,
-    					 tabPanelModeration,
-    					 tabPanelUsers,
-    					 tabPanelMenus,
-    					 tabPanelActivityScore);
+
+    tabPanels.items.push(tabPanelRadios,
+                         tabPanelInvitations,
+                         tabPanelStatistics,
+                         tabPanelModeration,
+                         tabPanelUsers,
+                         tabPanelMenus,
+                         tabPanelActivityScore);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',
@@ -334,13 +307,13 @@ Ext.onReady(function(){
                 region: 'center',
                 layout: 'fit',
                 items: [tabPanels]
-            }]	
+            }]
         }]
     });
-    
+
     // Handle this change event in order to restore the UI to the appropriate history state
     Ext.History.on('change', function(token){
-    	Yasound.Backoffice.Handler.HandleUrlToken(token);
+        Yasound.Backoffice.Handler.HandleUrlToken(token);
     });
 });
 
