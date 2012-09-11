@@ -363,7 +363,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
         this.generateSocialShare();
         if (Yasound.App.MySound) {
-            if (!Yasound.App.MySound.muted) {
+            if (Yasound.App.MySound.playState == 1) {
                 $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
             }
             volumeSlider.slider('value', Yasound.App.MySound.volume);
@@ -395,14 +395,19 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     togglePlay: function (e) {
         e.preventDefault();
-        if (Yasound.App.MySound.muted) {
+        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
+            if (!Yasound.App.MySound) {
+                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+            } else {
+                Yasound.App.MySound.unload();
+                Yasound.App.MySound.play(Yasound.App.SoundConfig);
+            }
             Yasound.App.MySound.setVolume(this.savedVolume);
-            Yasound.App.MySound.unmute();
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
             $('#volume-slider').slider('value', Yasound.App.MySound.volume);
         } else {
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.MySound.mute();
+            Yasound.App.MySound.unload();
         }
     },
 
