@@ -15,6 +15,7 @@ $(document).ready(function () {
     Yasound.App.hasRadios = g_has_radios;
     Yasound.App.stickyViews = [];
     Yasound.App.uploadCount = 0;
+    Yasound.App.defaultRadioUUID = g_default_radio_uuid;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
@@ -67,7 +68,7 @@ $(document).ready(function () {
         e.preventDefault();
         $('html, body').animate({scrollTop: 0}, 400);
         return false;
-    })
+    });
 
 
     /**
@@ -114,6 +115,8 @@ $(document).ready(function () {
     soundManager.debugMode = false;
     soundManager.useFlashBlock = true;
     soundManager.flashVersion = 9;
+    soundManager.useHighPerformance = true;
+    soundManager.useFastPolling = true;
 
     Yasound.App.MySound = undefined;
 
@@ -208,6 +211,31 @@ $(document).ready(function () {
             }
             $('#webapp-container').append("<div class='container' id='webapp-content'/>");
             $('html, body').scrollTop(0);
+
+            if (!this.radioContext) {
+                var that = this;
+                this.radioContext = {
+                    currentSong: new Yasound.Data.Models.CurrentSong()
+                };
+
+                this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
+                    model: this.radioContext.currentSong,
+                    radio: this.currentRadio,
+                    el: $('#player')
+                });
+                this.radioContext.currentSongView.radio = this.currentRadio;
+
+                this.currentRadio.on('change:id', function (model, id) {
+                    model.currentSong = that.radioContext.currentSong;
+                    that.radioContext.currentSong.set('radioId', id);
+                    that.radioContext.currentSong.fetch();
+                    that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
+                    that.pushManager.monitorRadio(model);
+                });
+
+                this.radioContext.radioUUID = 0;
+                this.setCurrentRadioUUID(Yasound.App.defaultRadioUUID);
+            }
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -220,11 +248,14 @@ $(document).ready(function () {
                 this.commonContext = {};
                 this.commonContext.errorHandler = new Yasound.App.ErrorHandler().render();
                 this.commonContext.streamFunction = function (model, stream_url) {
-                    if (!(typeof Yasound.App.MySound === "undefined")) {
-                        Yasound.App.MySound.destruct();
-                    }
                     Yasound.App.SoundConfig.url = stream_url;
-                    Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+                    if (!Yasound.App.MySound) {
+                        Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+                        Yasound.App.MySound.mute();
+                    } else {
+                        Yasound.App.MySound.unload();
+                        Yasound.App.MySound.play(Yasound.App.SoundConfig);
+                    }
                 };
 
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
@@ -375,28 +406,6 @@ $(document).ready(function () {
         // radio details page
         radio: function (uuid) {
             this.clearView();
-
-            if (!this.radioContext) {
-                var that = this;
-                this.radioContext = {
-                    currentSong: new Yasound.Data.Models.CurrentSong()
-                };
-
-                this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
-                    model: this.radioContext.currentSong,
-                    radio: this.currentRadio,
-                    el: $('#player')
-                });
-                this.radioContext.currentSongView.radio = this.currentRadio;
-
-                this.currentRadio.on('change:id', function (model, id) {
-                    model.currentSong = that.radioContext.currentSong;
-                    that.radioContext.currentSong.set('radioId', id);
-                    that.radioContext.currentSong.fetch();
-                    that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
-                    that.pushManager.monitorRadio(model);
-                });
-            }
 
             this.currentView = new Yasound.Views.RadioPage({
                 model: this.currentRadio,
