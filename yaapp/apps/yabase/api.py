@@ -894,6 +894,8 @@ class SearchSongResource(ModelResource):
             large_cover = yasound_song.large_cover_url
         else:
             cover = None
+            large_cover = None
+
         bundle.data['cover'] = cover
         bundle.data['large_cover'] = large_cover
         return bundle
