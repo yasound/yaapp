@@ -7,7 +7,7 @@ import settings as yapremium_settings
 from datetime import *
 from dateutil.relativedelta import *
 from account import signals as account_signals
-from utils import verify_receipt
+from utils import verify_receipt, generate_code_name
 import json
 
 
@@ -321,3 +321,26 @@ class TestPromocode(TestCase):
         us = UserService.objects.get(service=service, user=self.user)
         self.assertEquals(us.expiration_date.date(), today + relativedelta(months=+promocode.duration+promocode2.duration))
 
+    def test_view(self):
+        today = date.today()
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+
+        res = self.client.post(reverse('yapremium.views.activate_promocode'), {'code': 'code1'})
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('success'), False)
+
+        promocode = Promocode.objects.create(code='code', duration=12, service=service, enabled=True)
+
+        res = self.client.post(reverse('yapremium.views.activate_promocode'), {'code': 'code'})
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('success'), True)
+
+        us = UserService.objects.get(service=service, user=self.user)
+        self.assertEquals(us.expiration_date.date(), today + relativedelta(months=+promocode.duration))
+
+    def test_generate_code_name(self):
+        code_name = generate_code_name(prefix='YA-')
+        self.assertEquals(len(code_name), 9)
+        self.assertEquals(code_name[:3], 'YA-')

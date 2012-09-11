@@ -193,6 +193,8 @@
 .silk-shape-align-bottom { background-image: url(fam/shape_align_bottom.png) !important; background-repeat: no-repeat; }
 .silk-stop { background-image: url(fam/stop.png) !important; background-repeat: no-repeat; }
 .silk-table { background-image: url(fam/table.png) !important; background-repeat: no-repeat; }
+.silk-table-add { background-image: url(fam/table_add.png) !important; background-repeat: no-repeat; }
+.silk-table-delete { background-image: url(fam/table_delete.png) !important; background-repeat: no-repeat; }
 .silk-table-edit { background-image: url(fam/table_edit.png) !important; background-repeat: no-repeat; }
 .silk-table-go { background-image: url(fam/table_go.png) !important; background-repeat: no-repeat; }
 .silk-table-multiple { background-image: url(fam/table_multiple.png) !important; background-repeat: no-repeat; }

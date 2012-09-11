@@ -73,6 +73,8 @@ PIPELINE_JS = {
             'js/backoffice/Song/RejectedSongs.js',
             'js/backoffice/RadioActivityScoreSettings/SettingsGrid.js',
             'js/backoffice/RadioActivityScoreSettings/RadioActivityScoreSettings.js',
+            'js/backoffice/Premium/PromocodeGrid.js',
+            'js/backoffice/Premium/Promocodes.js',
         ]
     },
     'webapp-all': {

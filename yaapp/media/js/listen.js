@@ -81,7 +81,7 @@ $(document).ready(function() {
                     var name = data.name;
                     var artist = data.artist;
                     var album = data.album;
-                    var cover = data.cover;
+                    var cover = data.large_cover;
 
                     $('#track-name').text(name);
                     $('#track-artist').text(artist);
