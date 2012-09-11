@@ -90,4 +90,6 @@ def gifts(request, subscription_sku=None):
 @check_api_key(methods=['POST'])
 def action_watch_tutorial_completed(request, username):
     user = get_object_or_404(User, username=username)
+    if request.user.username != user.username:
+        return HttpResponse(status=401)
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
