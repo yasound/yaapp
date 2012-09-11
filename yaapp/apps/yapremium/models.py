@@ -5,12 +5,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from datetime import *
 from dateutil.relativedelta import *
-from sorl.thumbnail import get_thumbnail, delete
+from sorl.thumbnail import get_thumbnail
 import settings as yapremium_settings
-from yabase.models import Radio
 from yacore.http import absolute_url
 from account.models import UserProfile
 from transmeta import TransMeta
+from django.core.urlresolvers import reverse
 import utils as yapremium_utils
 
 import account.signals as account_signals
@@ -123,6 +123,7 @@ class UserServiceManager(models.Manager):
         us, _created = UserService.objects.get_or_create(service=service, user=user)
         us.calculate_expiration_date(duration=duration, commit=True)
         return us
+
 
 class UserService(models.Model):
     """
@@ -247,6 +248,10 @@ class Gift(models.Model):
         else:
             picture_url = self.picture_done_url
 
+        completed_url = None
+        if self.action == yapremium_settings.ACTION_WATCH_TUTORIAL:
+            completed_url = reverse('yapremium.views.action_watch_tutorial_completed', args=[user.username])
+
         data = {
             'id': self.id,
             'enabled': enabled,
@@ -256,7 +261,8 @@ class Gift(models.Model):
             'count': count,
             'last_achievement_date': last_achievement_date,
             'picture_url': absolute_url(picture_url),
-            'action_url_ios': self.action_url_ios
+            'action_url_ios': self.action_url_ios,
+            'completed_url': completed_url
         }
         return data
 
@@ -329,7 +335,7 @@ class PromocodeManager(models.Manager):
         if is_valid:
             promocode = self.get(code=code)
             up = UserPromocode.objects.create(user=user, promocode=promocode, usage_date=today)
-            us = UserService.objects.generate(service=promocode.service, user=user, duration=promocode.duration)
+            UserService.objects.generate(service=promocode.service, user=user, duration=promocode.duration)
             return up
         return None
 
@@ -340,6 +346,7 @@ class PromocodeManager(models.Manager):
                 service=service,
                 duration=duration,
                 unique=True)
+
 
 class Promocode(models.Model):
     objects = PromocodeManager()
@@ -356,6 +363,7 @@ class Promocode(models.Model):
 
     class Meta:
         verbose_name = _('promocode')
+
 
 class UserPromocode(models.Model):
     user = models.ForeignKey(User, verbose_name=_('user'))
