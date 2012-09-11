@@ -1,4 +1,4 @@
-from models import Subscription, UserSubscription, UserService, Gift
+from models import Subscription, UserSubscription, UserService, Gift, Promocode
 from django.shortcuts import get_object_or_404
 from yacore.api import api_response
 from yacore.decorators import check_api_key
@@ -10,6 +10,7 @@ import logging
 from transmeta import get_real_fieldname
 from task import async_win_gift
 import settings as yapremium_settings
+import json
 
 logger = logging.getLogger("yaapp.yapremium")
 
@@ -93,3 +94,15 @@ def action_watch_tutorial_completed(request, username):
     if request.user.username != user.username:
         return HttpResponse(status=401)
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
+
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def activate_promocode(request):
+    code = request.REQUEST.get('code')
+    up = Promocode.objects.create_from_code(code=code, user=request.user)
+    success = False
+    if up:
+        success = True
+    res = {'success': success}
+    response = json.dumps(res)
+    return HttpResponse(response)
