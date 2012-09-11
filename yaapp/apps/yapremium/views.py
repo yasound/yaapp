@@ -4,12 +4,15 @@ from yacore.api import api_response
 from yacore.decorators import check_api_key
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponse
 import utils as yapremium_utils
 import logging
 from transmeta import get_real_fieldname
+from task import async_win_gift
+import settings as yapremium_settings
+
 logger = logging.getLogger("yaapp.yapremium")
+
 
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST'])
@@ -19,7 +22,7 @@ def subscriptions(request, subscription_sku=None):
         offset = int(request.REQUEST.get('offset', 0))
         qs = Subscription.objects.available_subscriptions()
         total_count = qs.count()
-        qs = qs[offset:offset+limit]
+        qs = qs[offset:offset +limit]
         data = []
         for subscription in qs:
             data.append(subscription.as_dict(request.user))
@@ -48,6 +51,7 @@ def subscriptions(request, subscription_sku=None):
 
     raise Http404
 
+
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST'])
 def services(request, subscription_sku=None):
@@ -56,13 +60,14 @@ def services(request, subscription_sku=None):
         offset = int(request.REQUEST.get('offset', 0))
         qs = UserService.objects.filter(user=request.user)
         total_count = qs.count()
-        qs = qs[offset:offset+limit]
+        qs = qs[offset:offset +limit]
         data = []
         for us in qs:
             data.append(us.as_dict())
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     raise Http404
+
 
 @csrf_exempt
 @check_api_key(methods=['GET'], login_required=False)
@@ -72,10 +77,17 @@ def gifts(request, subscription_sku=None):
         offset = int(request.REQUEST.get('offset', 0))
         qs = Gift.objects.all()
         total_count = qs.count()
-        qs = qs[offset:offset+limit]
+        qs = qs[offset:offset +limit]
         data = []
         for gift in qs:
             data.append(gift.as_dict(request.user))
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     raise Http404
+
+
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def action_watch_tutorial_completed(request, username):
+    user = get_object_or_404(User, username=username)
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
