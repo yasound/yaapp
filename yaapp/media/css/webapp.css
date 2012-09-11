@@ -1,4 +1,4 @@
-/**
+    /**
  * Common
  */
 
@@ -3497,11 +3497,175 @@ a.yabutton-small {
         width:100%;
     }
 
+    body {
+        padding-right:0px;
+        padding-left:0px;
+    }
+
+    #header {
+        margin-left:0px;
+        margin-right:0px;
+    }
+
 /*-- HEADER --*/
     
     #header {
         position:fixed;
         z-index:10;
+        margin-left:0px;
+        margin-right:0px;
+        padding-left:0px;
+        padding-right:0px;
+    }
+
+    #player,
+    .header-separation,
+    #user-menu {
+        display:none;
+    }
+
+
+    .navbar-inner .container {
+        text-align: center;
+        height:50px;
+        margin-top:25px;
+    }
+
+    #brand-logo {
+        display:inline;
+        float:none;
+        margin-top:20px;
+    }
+
+    .navbar-fixed-top {
+        top: 0;
+    }
+
+    .navbar-fixed-top, .navbar-fixed-bottom {
+        position: fixed;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+        margin-bottom: 0;
+    }
+
+    #header .navbar-inner {
+        background-image: url(/media/app/images/header_bg.png);
+        background-repeat: repeat-x;
+        height:76px;
+        padding-top:1px;
+        padding-bottom:0px;
+    }
+
+    .responsive-settings-btn {
+        float:left;
+        margin-left:5.22%;
+        margin-top:-6px;
+    }
+
+    .responsive-settings-btn2 {
+        float:right;
+        margin-right:10%;
+        margin-top:-6px;
+    }
+
+/*-- SUB-HEADER --*/
+    
+    #sub-header {
+        display:block;
+        background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(54,60,64)),
+            color-stop(1, rgb(75,81,85))
+        );
+        border:1px solid black;
+        box-shadow: none;
+    }
+
+    .responsive-container {
+        width:100%;
+        margin:0px 5.22%;
+    }
+    
+    #responsive-play-btn {
+        -webkit-appearance: none;
+        height:30px;
+        width:30px;
+        float:left;
+        margin: 11px 0px 0px 2.1%;
+        border-radius:50%;
+        background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(54,60,64)),
+            color-stop(1, rgb(105,111,115))
+        );
+        border:1px solid #272b2e;
+        box-shadow: 0px 1px 2px #6a7176;
+        position:relative;
+        cursor:pointer;
+    }
+
+    .responsive-play-btn i {
+        position:absolute;
+        top:7px;
+        left:8px;
+    }
+
+    #responsive-song {
+        float:left;
+        margin-top:10px;
+    }
+
+    .responsive-infos {
+        margin:10px 0px 0px 3.8%;
+        width:39.5%;
+        max-width:330px;
+        float:left;
+        overflow:hidden;
+    }
+
+    #responsive-player-artist {
+        font-size: 13px;
+        color:#a6b1b9;
+        text-shadow: 0px -1px black;
+    }
+
+    #responsive-player-title {
+        font-size: 11px;
+        line-height:15px;
+        color:#cdd9e1;
+        text-shadow: 0px -1px black;
+    }
+
+    .responsive-header-social-btn {
+        margin-top:14px;
+        display:block;
+        float:right;
+        margin-right:5.2%;
+    }
+
+    .responsive-container {
+        width:auto;
+    }
+
+    #responsive-love-btn {
+        margin-right:10px;
     }
 
 /*-- CONTAINER --*/
@@ -3957,6 +4121,18 @@ a.yabutton-small {
         width:100%;
     }
 
+    body {
+        padding-right:0px;
+        padding-left:0px;
+    }
+
+    #header {
+        margin-left:0px;
+        margin-right:0px;
+        padding-left:0px;
+        padding-right:0px;
+    }
+
 /*-- HEADER --*/
 
     #player,
@@ -3996,6 +4172,116 @@ a.yabutton-small {
         height: 76px;
         padding-top:1px;
         padding-bottom:0px;
+    }
+
+    .responsive-settings-btn {
+        float:left;
+        margin-left:15%;
+        margin-top:-6px;
+    }
+
+    .responsive-settings-btn2 {
+        float:right;
+        margin-right:15%;
+        margin-top:-6px;
+    }
+
+/*-- SUB-HEADER --*/
+    
+    #sub-header {
+        display:block;
+        background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(54,60,64)),
+            color-stop(1, rgb(75,81,85))
+        );
+        border:1px solid black;
+    }
+
+    .responsive-container {
+        width:100%;
+        margin:0px 15%;
+    }
+    
+    #responsive-play-btn {
+        -webkit-appearance: none;
+        height:30px;
+        width:30px;
+        float:left;
+        margin: 11px 0px 0px 2.1%;
+        border-radius:50%;
+        background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(54,60,64)),
+            color-stop(1, rgb(105,111,115))
+        );
+        border:1px solid #272b2e;
+        box-shadow: 0px 1px 2px #6a7176;
+        position:relative;
+        cursor:pointer;
+    }
+
+    .responsive-play-btn i {
+        position:absolute;
+        top:7px;
+        left:8px;
+    }
+
+    #responsive-song {
+        float:left;
+        margin-top:10px;
+    }
+
+    .responsive-infos {
+        margin:10px 0px 0px 3.8%;
+        width:39.5%;
+        max-width:330px;
+        float:left;
+        overflow:hidden;
+    }
+
+    #responsive-player-artist {
+        font-size: 13px;
+        color:#a6b1b9;
+        text-shadow: 0px -1px black;
+    }
+
+    #responsive-player-title {
+        font-size: 11px;
+        line-height:15px;
+        color:#cdd9e1;
+        text-shadow: 0px -1px black;
+    }
+
+    .responsive-header-social-btn {
+        margin-top:14px;
+        display:block;
+        float:right;
+        margin-right:5.2%;
+    }
+
+    .responsive-container {
+        width:auto;
+    }
+
+    #responsive-love-btn {
+        margin-right:10px;
     }
 
 /*-- SIGNUP --*/
@@ -4338,6 +4624,18 @@ a.yabutton-small {
         width:100%;
     }
 
+    body {
+        padding-right:0px;
+        padding-left:0px;
+    }
+
+    #header {
+        margin-left:0px;
+        margin-right:0px;
+        padding-left:0px;
+        padding-right:0px;
+    }
+
 /*-- HEADER --*/
     
     #header {
@@ -4389,10 +4687,6 @@ a.yabutton-small {
         padding-top:7px;
     }
 
-    #sub-header {
-        display:none;
-    }
-
     .nav-collapse {
         clear:none;
         overflow:visible;
@@ -4429,6 +4723,31 @@ a.yabutton-small {
         padding-bottom:0px;
     }
 
+/*-- SUB-HEADER --*/
+    
+    #sub-header-separation {
+        display:none;
+    }
+
+    #search-input {
+        width:80px;
+    }
+
+    #search-bar {
+        width:108px;
+    }
+    
+    #sub-header-nav {
+        width:310px;
+    }
+
+    #create-radio {
+        width:125px;
+    }
+
+    #sub-header {
+
+    }
 /*-- SIGNUP --*/
     .signup-container {
         width:100%;

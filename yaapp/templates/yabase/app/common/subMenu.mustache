@@ -1,7 +1,24 @@
 	{% load i18n %}
 {% load thumbnail %}        
 <div id="sub-header">
-    <div class="container" id="sub-header-container">
+    <div class="responsive-container visible-phone">
+        <a id='responsive-song'href="{% url webapp_radio current_uuid %}" class='yatooltip'>
+            <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
+        </a>
+        <a id="responsive-play-btn">
+            <i class="responsive-icon-play"></i>
+        </a>
+        <div class='responsive-infos'>
+            <div id='responsive-player-artist'>Hello World<% name %></div>
+            <div id='responsive-player-title'>Hello World<% name %></div>
+        </div>
+        <div class="responsive-header-social-btn">
+            <img id='responsive-love-btn' src="/media/app/images/responsive-share-icon.png" />
+            <img id='responsive-share-btn' src="/media/app/images/responsive-heart-icon-orange.png" />
+        </div>
+    </div>
+
+    <div class="container hidden-phone" id="sub-header-container">
 		<div id="sub-header-pointer" class='menu{{submenu_number}}'></div>
         <ul id="sub-header-nav">
             <li class="first {% ifequal submenu_number 1 %}selected{% endifequal %}">
