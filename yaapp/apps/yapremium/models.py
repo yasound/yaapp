@@ -333,6 +333,14 @@ class PromocodeManager(models.Manager):
             return up
         return None
 
+    def generate_unique_codes(self, service, duration, count=50, prefix='YA-'):
+        for i in range(0, count):
+            self.create(code=yapremium_utils.generate_code_name(prefix),
+                enabled=True,
+                service=service,
+                duration=duration,
+                unique=True)
+
 class Promocode(models.Model):
     objects = PromocodeManager()
     created = models.DateTimeField(_('created'), auto_now_add=True)

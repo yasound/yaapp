@@ -20,7 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from emailconfirmation.models import EmailConfirmation, EmailAddress
 from emencia.django.newsletter.models import Contact
 from extjs import utils
-from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid
+from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid, PromocodeGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid, WallEventGrid
 from yabackoffice.models import BackofficeRadio
@@ -43,15 +43,17 @@ from yametrics.matching_errors import MatchingErrorsManager
 from yabase.export_utils import export_pur
 from yahistory.models import UserHistory
 from yasearch.utils import get_simplified_name
+from yapremium.models import Promocode, Service
+from yapremium import settings as yapremium_settings
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))
-    
+
 @csrf_exempt
 @login_required
 def radio_unmatched_song(request, radio_id):
@@ -76,7 +78,7 @@ def radio_songs(request, radio_id):
         qs = SongInstance.objects.filter(playlist__radio=radio)
 
         yasound_song_id = request.REQUEST.get('yasound_song_id')
-        
+
         filters = [('name', 'metadata__name'),
                    ('artist_name', 'metadata__artist_name'),
                    ('album_name', 'metadata__album_name')]
@@ -142,9 +144,9 @@ def radio_remove_duplicate_songs(request, radio_id):
             if si.metadata == prev_metadata and prev_metadata is not None:
                 duplicates.append(si.id)
             prev_metadata = si.metadata
-        
+
         radio.delete_song_instances(duplicates)
-        
+
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': ''
@@ -217,7 +219,7 @@ def radios(request, radio_id=None):
             jsonr = grid.get_rows_json(qs, start=start, limit=limit)
             resp = utils.JsonResponse(jsonr)
             return resp
-        
+
         filters = ['id', 'name', ('creator_profile', 'creator__userprofile__name')]
         grid = RadioGrid()
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters=filters)
@@ -241,9 +243,9 @@ def radios(request, radio_id=None):
             message = _("Invalid input")
             errors = form.errors
             success = False
-            
+
             json_data = json.JSONEncoder(ensure_ascii=False).encode({
-                'success': success, 
+                'success': success,
                 'errors': errors,
                 'message': message,
             })
@@ -256,7 +258,7 @@ def radios(request, radio_id=None):
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
     raise Http404
-       
+
 
 @csrf_exempt
 @login_required
@@ -274,10 +276,10 @@ def invitations(request, type='all', invitation_id=None):
             qs = Invitation.objects.accepted()
         else:
             qs = Invitation.objects.all()
-            
+
         grid = InvitationGrid()
-        filters = ['fullname', 
-                   'email', 
+        filters = ['fullname',
+                   'email',
                    ('radio', 'radio__name'),
                    ('user_profile',  'user__profile__name')]
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
@@ -302,9 +304,9 @@ def invitations(request, type='all', invitation_id=None):
             message = _("Invalid input")
             errors = form.errors
             success = False
-            
+
             json_data = json.JSONEncoder(ensure_ascii=False).encode({
-                'success': success, 
+                'success': success,
                 'errors': errors,
                 'message': message,
             })
@@ -315,13 +317,13 @@ def invitations(request, type='all', invitation_id=None):
         data = {"success":True,"message":"ok","data":[]}
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
-        
+
 @csrf_exempt
 @login_required
 def invitation_generate_message(request, invitation_id):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     invitation = get_object_or_404(Invitation, id=invitation_id)
     subject, message = invitation.generate_message(commit=False)
     data = {
@@ -333,13 +335,13 @@ def invitation_generate_message(request, invitation_id):
         'data': data
     })
     return HttpResponse(json_data, mimetype='application/json')
-    
+
 @csrf_exempt
 @login_required
 def invitation_send(request, invitation_id):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     invitation = get_object_or_404(Invitation, id=invitation_id)
     invitation.send()
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
@@ -347,8 +349,8 @@ def invitation_send(request, invitation_id):
         'message': ''
     })
     return HttpResponse(json_data, mimetype='application/json')
-        
-    
+
+
 @csrf_exempt
 @login_required
 def invitation_save(request):
@@ -361,7 +363,7 @@ def invitation_save(request):
         radio_id = request.REQUEST.get('radio_id')
         subject = request.REQUEST.get('subject')
         message = request.REQUEST.get('message')
-        
+
         invitation = get_object_or_404(Invitation, id=invitation_id)
         invitation.fullname = fullname
         invitation.email = email
@@ -375,7 +377,7 @@ def invitation_save(request):
             'message': ''
         })
         return HttpResponse(json_data, mimetype='application/json')
-        
+
     raise Http404
 
 
@@ -404,7 +406,7 @@ def yasound_songs(request, song_id=None):
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
         resp = utils.JsonResponse(jsonr)
         return resp
-    raise Http404   
+    raise Http404
 
 @csrf_exempt
 @login_required
@@ -414,7 +416,7 @@ def yasound_songs_find_metadata(request, song_id=None):
 
     ids = request.REQUEST.getlist('yasound_song_id')
     yasound_songs = YasoundSong.objects.filter(id__in=ids)
-    
+
     res = ''
     for song in yasound_songs:
         synonyms = song.find_synonyms()
@@ -457,11 +459,11 @@ def yasound_songs_replace_metadata(request, song_id=None):
                 song.album_name = album
                 song.album_name_simplified = get_simplified_name(album)
                 to_save = True
-                
+
             if to_save:
                 song.save()
                 song.build_fuzzy_index(upsert=True)
-            
+
             break # only first synonym is handled
 
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
@@ -475,19 +477,19 @@ def yasound_songs_replace_metadata(request, song_id=None):
 def rejected_songs(request):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     if request.method == 'GET':
         mm = MatchingErrorsManager()
         skip = int(request.REQUEST.get('start', 0))
         limit = int(request.REQUEST.get('limit', 25))
-        
+
         docs = mm.all(skip=skip, limit=limit)
 
         data = []
         for doc in docs:
             yasound_song = YasoundSong.objects.get(id=doc.get('yasound_song_id'))
             reject_count = doc.get('reject_count')
-            
+
             data.append({
                 'id': yasound_song.id,
                 'name': yasound_song.name,
@@ -502,7 +504,7 @@ def rejected_songs(request):
         })
         resp = utils.JsonResponse(json_data)
         return resp
-    raise Http404   
+    raise Http404
 
 @csrf_exempt
 @login_required
@@ -540,7 +542,7 @@ def users(request, user_id=None):
             users = User.objects.filter(userprofile__id__in=ids)
             for user in users:
                 Contact.objects.filter(email=user.email).delete()
-                
+
         elif action == 'enable':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=True)
@@ -551,16 +553,16 @@ def users(request, user_id=None):
             else:
                 qs = User.objects.filter(is_active=True)
             data = account_export.export_excel(qs)
-            
+
             response = HttpResponse(data, mimetype='application/vnd.ms-excel')
             response['Content-Disposition'] = 'attachment; filename=users.xls'
-            return response        
+            return response
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': ''
         })
         return HttpResponse(json_data, mimetype='application/json')
-    raise Http404 
+    raise Http404
 
 @login_required
 def users_history(request):
@@ -569,7 +571,7 @@ def users_history(request):
     if request.method == 'GET':
         start = int(request.REQUEST.get('start', 0))
         limit = int(request.REQUEST.get('limit', 25))
-        
+
         user_id = int(request.REQUEST.get('user_id', 0))
         uh = UserHistory()
         qs = []
@@ -584,13 +586,13 @@ def users_history(request):
             details = doc.get('data')
             if not details:
                 continue
-            
+
             radio = details.get('radio_name', '')
             message = details.get('message', '')
             song = details.get('song_name', '')
             share_type = details.get('share_type', '')
             atype = details.get('atype', '')
-                
+
             data.append({
                 'username': user_name,
                 'date': doc.get('date'),
@@ -607,9 +609,9 @@ def users_history(request):
             'results': count
         })
         resp = utils.JsonResponse(json_data)
-        return resp  
+        return resp
 
-    raise Http404 
+    raise Http404
 
 @csrf_exempt
 @login_required
@@ -618,7 +620,7 @@ def wall_events(request, wall_event_id=None):
         raise Http404()
     if request.method == 'GET':
         qs = WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE)
-        filters = ['user_name', 
+        filters = ['user_name',
                    ('user_id', 'user__userprofile__id', 'exact'),
                    ('radio_id', 'radio__id', 'exact'),
                    'text']
@@ -632,7 +634,7 @@ def wall_events(request, wall_event_id=None):
         data = {"success":True,"message":"ok","data":[]}
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
-    raise Http404 
+    raise Http404
 
 
 @csrf_exempt
@@ -641,7 +643,7 @@ def radios_stats_created(request):
     if not request.user.is_superuser:
         raise Http404()
 
-    data = []    
+    data = []
     for i in range(1, 10):
         data.append({
             'timestamp': 'timestamp%d' %(i),
@@ -654,56 +656,56 @@ def radios_stats_created(request):
     })
     resp = utils.JsonResponse(json_data)
     return resp
-    
+
 @csrf_exempt
 @login_required
 def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     overall_listening_time = Radio.objects.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
     try:
         overall_listening_time_str = datetime.timedelta(seconds=overall_listening_time)
     except:
         overall_listening_time_str = _('Unavailable')
-        
+
     total_friend_count = cache.get('total_friend_count')
     if total_friend_count is None:
         total_friend_count = _('Unavailable')
-        
+
     facebook_user_count = UserProfile.objects.exclude(facebook_token='').count()
     twitter_user_count = UserProfile.objects.exclude(twitter_token='').count()
     yasound_user_count = UserProfile.objects.exclude(yasound_email='').count()
-    
+
     confirmed_emails = EmailAddress.objects.filter(verified=True).count()
     email_address_count = EmailAddress.objects.all().count()
     not_confirmed_emails = EmailAddress.objects.filter(verified=False).count()
-    confirmed_emails_ratio = '%.2f' % ( 100 * float(confirmed_emails) / float(email_address_count) ) 
+    confirmed_emails_ratio = '%.2f' % ( 100 * float(confirmed_emails) / float(email_address_count) )
 
     device_notifications_activated = Device.objects.filter(ios_token__gt=0).count()
-    
+
     song_metadata_count = SongMetadata.objects.all().count()
     unmatched_song_metadata_count = SongMetadata.objects.filter(yasound_song_id__isnull=True).count()
     matched_songs_ratio = '%.2f' % (100-(100*float(unmatched_song_metadata_count)/float(song_metadata_count)))
 
     ready_radio_count = Radio.objects.filter(ready=True).count()
     total_radio = Radio.objects.all().count()
-    
-    ready_radio_ratio = '%.2f' %  ( 100 * float(ready_radio_count) / float(total_radio) ) 
+
+    ready_radio_ratio = '%.2f' %  ( 100 * float(ready_radio_count) / float(total_radio) )
 
     try:
-        r = requests.get('http://yas-web-01.ig-1.net:8000/ping')    
+        r = requests.get('http://yas-web-01.ig-1.net:8000/ping')
         streamer_status = r.text
     except:
         streamer_status = _('Unavailable')
-        
+
     um = UserMetricsManager()
     messages_per_user = um.calculate_messages_per_user_mean()
     likes_per_user = um.calculate_likes_per_user_mean()
-    
+
     email_count = User.objects.filter(email__contains='@', is_active=True).count()
     newsletter_subscribers = Contact.objects.filter(subscriber=True).count()
-    
+
     return render_to_response(template_name, {
         "user_count": User.objects.filter(is_active=True).count(),
         "ready_radio_count": ready_radio_count,
@@ -731,7 +733,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
         "likes_per_user": likes_per_user,
         "email_count": email_count,
         "newsletter_subscribers": newsletter_subscribers,
-    }, context_instance=RequestContext(request))  
+    }, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
@@ -740,7 +742,7 @@ def radio_tags(request, template_name='yabackoffice/radio_tags.html'):
         raise Http404()
 
     return render_to_response(template_name, {
-    }, context_instance=RequestContext(request))  
+    }, context_instance=RequestContext(request))
 
 def _format_metrics(metrics):
     for metric in metrics:
@@ -749,7 +751,7 @@ def _format_metrics(metrics):
                 try:
                     listening_time = float(metric['listening_time'])
                     listening_count = float(metric['listening_count'])
-        
+
                     average_duration = listening_time / listening_count
                     formatted_time = datetime.timedelta(seconds=int(average_duration))
 
@@ -762,51 +764,51 @@ def _format_metrics(metrics):
                 metric['listening_time'] = formatted_time
             except:
                 pass
-            
-    return metrics        
+
+    return metrics
 
 @csrf_exempt
 @login_required
 def metrics(request, template_name='yabackoffice/metrics.html'):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     mm = GlobalMetricsManager()
     metrics = mm.get_current_metrics()
     _format_metrics(metrics)
-              
+
     return render_to_response(template_name, {
         "metrics": metrics,
-    }, context_instance=RequestContext(request)) 
+    }, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
 def past_month_metrics(request, template_name='yabackoffice/metrics.html'):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     mm = GlobalMetricsManager()
     metrics = mm.get_past_month_metrics()
     _format_metrics(metrics)
-    
+
     return render_to_response(template_name, {
         "metrics": metrics,
-    }, context_instance=RequestContext(request)) 
+    }, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
 def past_year_metrics(request, template_name='yabackoffice/metrics.html'):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     mm = GlobalMetricsManager()
     metrics = mm.get_past_year_metrics()
     _format_metrics(metrics)
-    
+
     return render_to_response(template_name, {
         "metrics": metrics,
-    }, context_instance=RequestContext(request)) 
-    
+    }, context_instance=RequestContext(request))
+
 @csrf_exempt
 def light_metrics(request, template_name='yabackoffice/light_metrics.html'):
     user_count = User.objects.all().count()
@@ -815,21 +817,21 @@ def light_metrics(request, template_name='yabackoffice/light_metrics.html'):
         overall_listening_time_str = datetime.timedelta(seconds=overall_listening_time)
     except:
         overall_listening_time_str = _('Unavailable')
-    
+
     return render_to_response(template_name, {
         'user_count': user_count,
         "ready_radio_count": Radio.objects.filter(ready=True).count(),
         "listening_time": unicode(overall_listening_time_str),
         "wall_message_count": WallEvent.objects.filter(type=yabase_settings.EVENT_MESSAGE).count(),
-    }, context_instance=RequestContext(request)) 
-    
-    
+    }, context_instance=RequestContext(request))
+
+
 @csrf_exempt
 @login_required
 def songmetadata_top_missing(request):
     if not request.user.is_superuser:
         raise Http404
-    
+
     if request.method == 'GET':
         tm =TopMissingSongsManager()
         qs = tm.all()
@@ -845,12 +847,12 @@ def songmetadata_top_missing(request):
                 })
         response = {
             'data': data,
-            'results': qs.count(), 
+            'results': qs.count(),
             'success': True
-        }            
+        }
         resp = utils.JsonResponse(json.dumps(response))
         return resp
-    
+
     raise Http404
 
 @csrf_exempt
@@ -858,11 +860,11 @@ def songmetadata_top_missing(request):
 def songmetadata_most_popular(request):
     if not request.user.is_superuser:
         raise Http404
-    
+
     if request.method == 'GET':
         start = int(request.REQUEST.get('start', 0))
         limit = int(request.REQUEST.get('limit', 25))
-        
+
         mm = MostPopularSongsManager()
         qs = mm.all(start, limit)
         data = []
@@ -876,12 +878,12 @@ def songmetadata_most_popular(request):
             })
         response = {
             'data': data,
-            'results': qs.count(), 
+            'results': qs.count(),
             'success': True
-        }            
+        }
         resp = utils.JsonResponse(json.dumps(response))
         return resp
-    
+
     raise Http404
 
 @csrf_exempt
@@ -893,10 +895,10 @@ def songmetadata_export_most_popular(request):
     mm = MostPopularSongsManager()
     qs = mm.all(start=0, limit=10534)
     data = export_pur(qs)
-    
+
     response = HttpResponse(data, mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=songs.xls'
-    return response        
+    return response
 
 def _compare_metrics(m1, m2):
     order = [
@@ -906,7 +908,7 @@ def _compare_metrics(m1, m2):
         TimedMetricsManager.SLOT_15D,
         TimedMetricsManager.SLOT_30D,
         TimedMetricsManager.SLOT_90D,
-        TimedMetricsManager.SLOT_90D_MORE, 
+        TimedMetricsManager.SLOT_90D_MORE,
     ]
     order1 = order.index(m1.get('timestamp'))
     order2 = order.index(m2.get('timestamp'))
@@ -917,18 +919,18 @@ def _compare_metrics(m1, m2):
 def metrics_graph_animators(request):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     tm = TimedMetricsManager()
     metrics = tm.all()
-    data = []    
-    for metric in metrics: 
+    data = []
+    for metric in metrics:
         data.append({
             'timestamp': metric['type'],
-            'animator_activity': metric['animator_activity'] if 'animator_activity' in metric else 0 
+            'animator_activity': metric['animator_activity'] if 'animator_activity' in metric else 0
         })
- 
+
     data.sort(cmp=_compare_metrics)
-    
+
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
         'data': data,
@@ -946,11 +948,11 @@ def metrics_graph_posts(request):
 
     um  = UserMetricsManager()
     metrics = um.messages_stats()
-    data = []    
+    data = []
     for metric in metrics:
         data.append({
             'message_count': metric['_id'],
-            'user_count': metric['value'] 
+            'user_count': metric['value']
         })
 
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
@@ -969,11 +971,11 @@ def metrics_graph_likes(request):
 
     um  = UserMetricsManager()
     metrics = um.likes_stats()
-    data = []    
+    data = []
     for metric in metrics:
         data.append({
             'like_count': metric['_id'],
-            'user_count': metric['value'] 
+            'user_count': metric['value']
         })
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
         'success': True,
@@ -988,14 +990,14 @@ def metrics_graph_likes(request):
 def metrics_graph_listen(request):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     tm = TimedMetricsManager()
     metrics = tm.all()
-    data = []    
-    for metric in metrics: 
+    data = []
+    for metric in metrics:
         data.append({
             'timestamp': metric['type'],
-            'listen_activity': metric['listen_activity'] if 'listen_activity' in metric else 0 
+            'listen_activity': metric['listen_activity'] if 'listen_activity' in metric else 0
         })
     data.sort(cmp=_compare_metrics)
     json_data = json.JSONEncoder(ensure_ascii=False).encode({
@@ -1011,10 +1013,10 @@ def metrics_graph_listen(request):
 def metrics_graph_shares(request):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     tm = TimedMetricsManager()
     metrics = tm.all()
-    data = []    
+    data = []
     for metric in metrics:
         data.append({
             'timestamp': metric['type'],
@@ -1037,10 +1039,10 @@ def metrics_graph_shares(request):
 def radio_activity_score_factors(request, coeff_id=None):
     if not request.user.is_superuser:
         raise Http404()
-    
+
     from yametrics.models import RadioPopularityManager
     manager = RadioPopularityManager()
-    
+
     if request.method == 'GET':
         coeffs = manager.coeff_documents()
         data = []
@@ -1050,24 +1052,24 @@ def radio_activity_score_factors(request, coeff_id=None):
                          'name': i['name'],
                          'value': i['value']
                          })
-         
+
         json_data = MongoAwareEncoder(ensure_ascii=False).encode({
             'success': True,
             'data': data,
             'results': len(data)
         })
         resp = utils.JsonResponse(json_data)
-        return resp  
+        return resp
     elif request.method == 'PUT' and coeff_id is not None:
         coerce_put_post(request)
-        data = request.REQUEST.get('data') 
+        data = request.REQUEST.get('data')
         decoded_data = json.loads(data)
         manager.update_coeff_doc(coeff_id, decoded_data)
-        
+
         res = {"success":True}
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(res))
         return utils.JsonResponse(resp)
-    
+
     res = {"success":False}
     resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(res))
     return utils.JsonResponse(resp)
@@ -1083,7 +1085,7 @@ def find_musicbrainz_id(request):
         'message': ''
     })
     return HttpResponse(json_data, mimetype='application/json')
-         
+
 @csrf_exempt
 @login_required
 def abuse_notifications(request):
@@ -1091,7 +1093,7 @@ def abuse_notifications(request):
         raise Http404()
     manager = AbuseManager()
     abuse_notifications = manager.all()
-    data = []    
+    data = []
     for notification in abuse_notifications:
         radio = Radio.objects.get(id=notification.get('radio'))
         sender = User.objects.get(id=notification.get('sender'))
@@ -1105,7 +1107,7 @@ def abuse_notifications(request):
                 continue
         else:
             user = User.objects.get(id=notification.get('user'))
-            
+
         data.append({
             '_id': notification.get('_id'),
             'date': notification.get('date'),
@@ -1121,7 +1123,7 @@ def abuse_notifications(request):
     }, cls=MongoAwareEncoder)
     resp = utils.JsonResponse(json_data)
     return resp
-    
+
 @csrf_exempt
 @login_required
 def delete_abuse_notification(request):
@@ -1137,11 +1139,11 @@ def delete_abuse_notification(request):
         except WallEvent.DoesNotExist:
             pass
         manager.delete(id)
-        
+
     data = {"success":True,"message":"ok","data":[]}
     resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
     return resp
-    
+
 @csrf_exempt
 @login_required
 def ignore_abuse_notification(request):
@@ -1151,8 +1153,54 @@ def ignore_abuse_notification(request):
     manager = AbuseManager()
     for id in ids:
         manager.delete(id)
-        
+
     data = {"success":True,"message":"ok","data":[]}
     resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
     return resp
 
+
+@csrf_exempt
+@login_required
+def premium_non_unique_promocodes(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    qs = Promocode.objects.filter(unique=False, enabled=True)
+    grid = PromocodeGrid()
+    filters = [
+        'code'
+    ]
+    jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+    resp = utils.JsonResponse(jsonr)
+    return resp
+
+@csrf_exempt
+@login_required
+def premium_unique_promocodes(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        qs = Promocode.objects.filter(unique=True, enabled=True)
+        grid = PromocodeGrid()
+        filters = [
+            'code'
+        ]
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    elif request.method == 'POST':
+        service_id = request.REQUEST.get('service_id')
+        duration = request.REQUEST.get('duration', 1)
+        prefix = request.REQUEST.get('prefix', 'YA-')
+        count = int(request.REQUEST.get('count', 50))
+
+        Promocode.objects.generate_unique_codes(service=Service.objects.get(id=service_id),
+            duration=duration,
+            prefix=prefix,
+            count=count)
+        data = {"success":True,"message":"ok"}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
+
+    raise Http404

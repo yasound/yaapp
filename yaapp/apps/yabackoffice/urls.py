@@ -21,7 +21,7 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^yasound_songs/find_metadata/$', 'yasound_songs_find_metadata'),
     url(r'^yasound_songs/replace_metadata/$', 'yasound_songs_replace_metadata'),
     url(r'^rejected_songs$', 'rejected_songs'),
-    
+
     url(r'^invitations/$', 'invitations', {'type': 'all'}),
     url(r'^invitations/pending$', 'invitations', {'type': 'pending'}),
     url(r'^invitations/pending/(?P<invitation_id>\d+)$', 'invitations', {'type': 'pending'}),
@@ -49,15 +49,18 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^metrics/graphs/posts/$', 'metrics_graph_posts'),
     url(r'^metrics/graphs/likes/$', 'metrics_graph_likes'),
     url(r'^light_metrics/', 'light_metrics', name='light_metrics'),
-    
-    
+
+
     url(r'^radio_activity_score_factors$', 'radio_activity_score_factors'),
     url(r'^radio_activity_score_factors/(?P<coeff_id>\S+)$', 'radio_activity_score_factors'),
-    
+
     url(r'^find_musicbrainz_id/$', 'find_musicbrainz_id'),
-    
+
     url(r'^abuse_notifications$', 'abuse_notifications'),
     url(r'^abuse/delete/$', 'delete_abuse_notification'),
     url(r'^abuse/ignore/$', 'ignore_abuse_notification'),
-    
+
+
+    url(r'^premium/unique_promocodes/$', 'premium_unique_promocodes'),
+    url(r'^premium/non_unique_promocodes$', 'premium_non_unique_promocodes'),
 )
