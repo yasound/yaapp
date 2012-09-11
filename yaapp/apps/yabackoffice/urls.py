@@ -64,5 +64,5 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^premium/unique_promocodes/$', 'premium_unique_promocodes'),
     url(r'^premium/non_unique_promocodes/$', 'premium_non_unique_promocodes'),
     url(r'^premium/promocodes/(?P<promocode_id>\d+)/$', 'premium_promocodes'),
-    url(r'^premium/promocodes/delete/$', 'premium_promocodes_delete'),
+    url(r'^premium/promocodes/$', 'premium_promocodes'),
 )
