@@ -4,7 +4,9 @@ from yaref.models import YasoundSong
 from yaref.mongo import SongAdditionalInfosManager
 from yasearch.utils import get_simplified_name, build_dms
 from yasearch import settings as yasearch_settings
+from yasearch.models import build_mongodb_index
 
+import test_utils as yaref_test_utils
 import buylink
 
 class TestUtils(TestCase):
@@ -160,3 +162,72 @@ class TestAdditionalInfo(TestCase):
         doc = sa.information(1)
         self.assertIsNone(doc.get('conversion_status'))
         self.assertEquals(doc.get('verified'), True)
+
+class TestFuzzy(TestCase):
+    def setUp(self):
+        pass
+
+    def test_karaoke(self):
+        bad_cure = yaref_test_utils.generate_yasound_song(name='from the edge of the deep green sea',
+            artist='tribute to the cure',
+            album='wish')
+
+        good_cure = yaref_test_utils.generate_yasound_song(name='from the edge of the deep green sea',
+            artist='the cure',
+            album='wish')
+
+
+        bad_queen = yaref_test_utils.generate_yasound_song(name='innuendo',
+            artist='queen',
+            album='karaoke version')
+
+        good_queen = yaref_test_utils.generate_yasound_song(name='innuendo',
+            artist='queen',
+            album='good version')
+
+        good_pixies = yaref_test_utils.generate_yasound_song(name='where is my mind',
+            artist='pixies',
+            album='live at houston (1992)')
+
+        bad_pixies = yaref_test_utils.generate_yasound_song(name='where is my mind',
+            artist='pixies',
+            album='karaoke')
+
+        bad_pixies2 = yaref_test_utils.generate_yasound_song(name='where is my mind',
+            artist='tribute to the pixies',
+            album='karaoke')
+
+        build_mongodb_index(erase=True)
+
+        res = YasoundSong.objects.find_fuzzy(name='where is my mind',
+            artist='the pixies',
+            album='')
+        self.assertEquals(res.get('db_id'), good_pixies.id)
+
+
+        res = YasoundSong.objects.find_fuzzy(name='from the edge of the deep green sea',
+            artist='the cure',
+            album='wish')
+        self.assertEquals(res.get('db_id'), good_cure.id)
+
+        res = YasoundSong.objects.find_fuzzy(name='innuendo',
+            artist='queen',
+            album='')
+        self.assertEquals(res.get('db_id'), good_queen.id)
+
+        res = YasoundSong.objects.find_fuzzy(name='innuendo',
+            artist='queen',
+            album='karaoke')
+        self.assertEquals(res.get('db_id'), bad_queen.id)
+
+        res = YasoundSong.objects.find_fuzzy(name='where is my mind',
+            artist='',
+            album='')
+        self.assertEquals(res.get('db_id'), good_pixies.id)
+
+
+
+        res = YasoundSong.objects.find_fuzzy(name='where is my mind',
+            artist='',
+            album='karaoke')
+        self.assertEquals(res.get('db_id'), bad_pixies.id)
