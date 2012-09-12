@@ -141,7 +141,7 @@ def radio_recommendations(request):
         # find similar radios from artist list
         m = ClassifiedRadiosManager()
         res = m.find_similar_radios(artists)
-        radio_ids = [x[1] for x in res]
+        radio_ids = [int(x[1]) for x in res]
         logger.info('similar radios length %d', len(radio_ids))
         for r in radio_ids:
             if r in user_radio_ids:
