@@ -109,14 +109,16 @@ def radio_recommendations(request):
 
     # if a list of artists is provided, compute a list of similar radios and add it in recommendation
     data = request.FILES['artists_data']
+    data_content_compressed = ''
     if data:
-        content_compressed = data.read()
+        data_content_compressed = data.read()
+    if len(data_content_compressed) > 0:
         # decompress data
         try:
-            content_uncompressed = zlib.decompress(content_compressed)
+            content_uncompressed = zlib.decompress(data_content_compressed)
         except Exception, e:
             logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
-            return
+            return api_response(None)
         # build artist list from binray data
         binary = BinaryData(content_uncompressed)
         artists = []
