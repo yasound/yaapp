@@ -148,7 +148,9 @@ def radio_recommendations(request):
                 logger.info('radio in user radios')
                 continue  # dont't add user's radios in similar radios list
             try:
+                logger.info('try to get radio with id %d', r)
                 radio = Radio.objects.get(id=r)
+                logger.info('radio with id %d: %s', r, radio)
                 recommended_radios.append(radio)
                 logger.info('append radio in receommendations "%s"', radio)
             except:
