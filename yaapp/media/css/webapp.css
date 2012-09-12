@@ -3484,6 +3484,8 @@ a.yabutton-small {
 
 
 
+
+
 /* Landscape phones and down */
 @media (max-width: 480px)  {
 
@@ -3500,6 +3502,8 @@ a.yabutton-small {
     body {
         padding-right:0px;
         padding-left:0px;
+        margin-left:5px;
+        margin-right:5px;
     }
 
     #header {
@@ -3528,7 +3532,7 @@ a.yabutton-small {
     .navbar-inner .container {
         text-align: center;
         height:50px;
-        margin-top:25px;
+        margin-top:18px;
     }
 
     #brand-logo {
@@ -3552,9 +3556,11 @@ a.yabutton-small {
     #header .navbar-inner {
         background-image: url(/media/app/images/header_bg.png);
         background-repeat: repeat-x;
-        height:76px;
+        height:60px;
         padding-top:1px;
         padding-bottom:0px;
+        padding-left:0px;
+        padding-right:0px;
     }
 
     .responsive-settings-btn {
@@ -3565,7 +3571,7 @@ a.yabutton-small {
 
     .responsive-settings-btn2 {
         float:right;
-        margin-right:10%;
+        margin-right:5.22%;
         margin-top:-6px;
     }
 
@@ -3588,6 +3594,10 @@ a.yabutton-small {
         );
         border:1px solid black;
         box-shadow: none;
+        height:43px;
+        position:fixed;
+        top:61px;
+        margin-left:-6px;
     }
 
     .responsive-container {
@@ -3600,7 +3610,7 @@ a.yabutton-small {
         height:30px;
         width:30px;
         float:left;
-        margin: 11px 0px 0px 2.1%;
+        margin: 6px 0px 0px 2.1%;
         border-radius:50%;
         background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
         background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
@@ -3629,12 +3639,12 @@ a.yabutton-small {
 
     #responsive-song {
         float:left;
-        margin-top:10px;
+        margin-top:6px;
     }
 
     .responsive-infos {
-        margin:10px 0px 0px 3.8%;
-        width:39.5%;
+        margin:6px 0px 0px 3.8%;
+        width:30.5%;
         max-width:330px;
         float:left;
         overflow:hidden;
@@ -3654,18 +3664,17 @@ a.yabutton-small {
     }
 
     .responsive-header-social-btn {
-        margin-top:14px;
+        margin-top:9px;
         display:block;
         float:right;
-        margin-right:5.2%;
     }
 
     .responsive-container {
         width:auto;
     }
 
-    #responsive-love-btn {
-        margin-right:10px;
+    #responsive-share-btn {
+        margin-right:7px;
     }
 
 /*-- CONTAINER --*/
@@ -4056,7 +4065,7 @@ a.yabutton-small {
     #footer {
         width:100%;
         position:absolute;
-        margin-left:-20px;
+        margin-left:-5px;
         margin-right:-20px;
     }
 
@@ -4124,6 +4133,8 @@ a.yabutton-small {
     body {
         padding-right:0px;
         padding-left:0px;
+        margin-left:10px;
+        margin-right:10px;
     }
 
     #header {
@@ -4141,11 +4152,14 @@ a.yabutton-small {
         display:none;
     }
 
+    #header {
+        height:60px;
+    }
 
     .navbar-inner .container {
         text-align: center;
         height:50px;
-        margin-top:25px;
+        margin-top:18px;
     }
 
     #brand-logo {
@@ -4169,7 +4183,7 @@ a.yabutton-small {
     #header .navbar-inner {
         background-image: url(/media/app/images/header_bg.png);
         background-repeat: repeat-x;
-        height: 76px;
+        height:60px;
         padding-top:1px;
         padding-bottom:0px;
         padding-right:0;
@@ -4206,6 +4220,11 @@ a.yabutton-small {
             color-stop(1, rgb(75,81,85))
         );
         border:1px solid black;
+        height:43px;
+        z-index:9;
+        position:fixed;
+        top:61px;
+        margin-left:-11px;
     }
 
     .responsive-container {
@@ -4218,7 +4237,7 @@ a.yabutton-small {
         height:30px;
         width:30px;
         float:left;
-        margin: 11px 0px 0px 2.1%;
+        margin: 6px 0px 0px 2.1%;
         border-radius:50%;
         background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
         background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
@@ -4247,11 +4266,11 @@ a.yabutton-small {
 
     #responsive-song {
         float:left;
-        margin-top:10px;
+        margin-top:6px;
     }
 
     .responsive-infos {
-        margin:10px 0px 0px 3.8%;
+        margin:6px 0px 0px 3.8%;
         width:39.5%;
         max-width:330px;
         float:left;
@@ -4272,7 +4291,7 @@ a.yabutton-small {
     }
 
     .responsive-header-social-btn {
-        margin-top:14px;
+        margin-top:9px;
         display:block;
         float:right;
     }
@@ -4281,8 +4300,8 @@ a.yabutton-small {
         width:auto;
     }
 
-    #responsive-love-btn {
-        margin-right:10px;
+    #responsive-share-btn {
+        margin-right:7px;
     }
 
 /*-- SIGNUP --*/
@@ -4310,7 +4329,8 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container #signup-input input, .signup-container #signup-input .right-input {
+    .signup-container #signup-input input, 
+    .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
         padding-left:10px;
@@ -4578,7 +4598,7 @@ a.yabutton-small {
     #footer {
         width:100%;
         position:absolute;
-        margin-left:-20px;
+        margin-left:-10px;
         margin-right:-20px;
     }
 
@@ -4746,8 +4766,12 @@ a.yabutton-small {
         width:125px;
     }
 
-    #sub-header {
+    #create-radio:hover {
+        width:125px;
+    }
 
+    #sub-header {
+        z-index:9;
     }
 /*-- SIGNUP --*/
     .signup-container {
