@@ -96,6 +96,7 @@
        var g_has_radios = {% if has_radios %}true{% else %}false{% endif %};
        var g_page = '{{ g_page }}';
        var g_bootstrapped_data = {% if bdata %}{{ bdata|safe }}{% else %}undefined{% endif %};
+       var g_default_radio_uuid = '{{ current_uuid }}';
     </script>
 
 
@@ -295,7 +296,7 @@
     <div class="navbar navbar-fixed-top" id='header'>
       <div class="navbar-inner">
         <div class="container">
-			<div id="brand-logo">
+      <div id="brand-logo">
           <div id='mobile-menu' class='visible-phone'>
             {# <div id= 'mobile-menu-btn'>MENU</div> #}
           </div>
@@ -303,6 +304,12 @@
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
+      <div class='visible-phone responsive-settings-btn'>
+        <img src="/media/app/images/responsive-settings-btn.png">
+      </div>
+      <div class='visible-phone responsive-settings-btn2'>
+        <img src="/media/app/images/responsive-settings-btn.png">
+      </div>
             <div class="header-separation">
                 <img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
             </div>
@@ -379,7 +386,7 @@
 		</div>
 	</div>
 	</div>
-	<div id='submenu-container' class='hidden-phone' >{% include 'yabase/app/common/subMenu.html' %}</div>
+	<div id='submenu-container' >{% include 'yabase/app/common/subMenu.html' %}</div>
 
 <div class="modal hide fade" id="modal-share">
     <div class="modal-header">
