@@ -203,7 +203,8 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         'click #my-profile-btn': 'myProfile',
         'click #my-settings-btn': 'mySettings',
         'click #logout-btn': 'logout',
-        'click #messages-btn': 'notifications'
+        'click #messages-btn': 'notifications',
+        'click #gift-btn': 'gifts'
     },
 
     initialize: function() {
@@ -254,6 +255,14 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         e.preventDefault();
         this.hidePopupProfile();
         Yasound.App.Router.navigate('notifications/', {
+            trigger: true
+        });
+    },
+
+    gifts: function(e) {
+        e.preventDefault();
+        this.hidePopupProfile();
+        Yasound.App.Router.navigate('gifts/', {
             trigger: true
         });
     },

@@ -249,9 +249,10 @@ class Gift(models.Model):
             picture_url = self.picture_done_url
 
         completed_url = None
+        action_url = None
         if self.action == yapremium_settings.ACTION_WATCH_TUTORIAL and not user.is_anonymous():
             completed_url = reverse('yapremium.views.action_watch_tutorial_completed', args=[user.username])
-
+            action_url
         data = {
             'id': self.id,
             'enabled': enabled,
@@ -262,7 +263,8 @@ class Gift(models.Model):
             'last_achievement_date': last_achievement_date,
             'picture_url': absolute_url(picture_url),
             'action_url_ios': self.action_url_ios,
-            'completed_url': completed_url
+            'completed_url': completed_url,
+            'action_url': action_url
         }
         return data
 
