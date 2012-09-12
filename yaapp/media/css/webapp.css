@@ -2274,7 +2274,6 @@ ul#notifications {
 }
 
 .profile-background {
-    min-width:470px;
     max-width:940px;
 	background-color:white;
 	margin:0px 0px 25px 0px;
@@ -3504,6 +3503,7 @@ a.yabutton-small {
         padding-left:0px;
         margin-left:5px;
         margin-right:5px;
+        margin-top: -40px;
     }
 
     #header {
@@ -4135,6 +4135,7 @@ a.yabutton-small {
         padding-left:0px;
         margin-left:10px;
         margin-right:10px;
+        margin-top: -40px;
     }
 
     #header {
