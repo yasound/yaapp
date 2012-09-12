@@ -971,6 +971,11 @@ input::-webkit-input-placeholder {
     cursor:pointer;
 }
 
+#radios .radio-cell,
+#favorites .radio-cell {
+    margin-left:13px;
+}
+
 .radio-container {
 	float:left;
 	height:209px;
@@ -4188,9 +4193,12 @@ a.yabutton-small {
             margin-left:0px;
         }
         
-        .radio-cells li,
-        #radios li,
-        #favorites li {
+        .radio-cells li {
+            margin-left:5%;
+        }
+
+        #radios .radio-cell,
+        #favorites .radio-cell {
             width:150px;
             height:150px;
             margin-left:3%;
@@ -4243,7 +4251,7 @@ a.yabutton-small {
 
         .radio-cell .radio-icon {
             top:10px;
-            left:85px;
+            left:100px;
         }
 
         .radio-cell .tag {
@@ -4316,6 +4324,13 @@ a.yabutton-small {
         width:100%;
     }
 
+    .radio-cells {
+        margin-left:0px;
+    }
+
+    .radio-cells li {
+        margin-left:8px;
+    }
 
 /*-- FOOTER --*/
 
