@@ -4313,6 +4313,7 @@ a.yabutton-small {
 
     .profile-background {
         float:left;
+        width:100%;
     }
 
 
@@ -4860,6 +4861,7 @@ a.yabutton-small {
     
     .profile-background {
         float:left;
+        width:100%;
     }
     
 /*-- FOOTER --*/
