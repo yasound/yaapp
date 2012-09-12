@@ -132,20 +132,50 @@ class YasoundSongManager(models.Manager):
             return self.get(id=doc[0]['db_id'])
         return None
 
+    def _is_probably_cover_or_karaoke(self, s):
+        if 'karaoke' in s:
+            return True
+        if 'cover' in s:
+            return True
+        if 'covers' in s:
+            return True
+        if 'reprise' in s:
+            return True
+        if 'reprises' in s:
+            return True
+        if 'tribute' in s:
+            return True
+        if 'hommage' in s:
+            return True
+
     def _check_candidates(self, songs, name, album, artist):
         best_ratio = 0
         best_song = None
+
+        name_is_probably_cover_or_karaoke = self._is_probably_cover_or_karaoke(name)
+        album_is_probably_cover_or_karaoke = self._is_probably_cover_or_karaoke(album)
+        artist_is_probably_cover_or_karaoke = self._is_probably_cover_or_karaoke(artist)
+
         for song in songs:
             ratio_song, ratio_album, ratio_artist = 0, 0, 0
 
             if name is not None and song["name"] is not None:
                 ratio_song = fuzz.token_sort_ratio(name, song["name"])
 
+                if not name_is_probably_cover_or_karaoke and self._is_probably_cover_or_karaoke(song['name']):
+                    ratio_song -= 20
+
             if album is not None and song["album"] is not None:
                 ratio_album = fuzz.token_sort_ratio(album, song["album"])
 
+                if not album_is_probably_cover_or_karaoke and self._is_probably_cover_or_karaoke(song['album']):
+                    ratio_album -= 20
+
             if artist is not None and song["artist"] is not None:
                 ratio_artist = fuzz.token_sort_ratio(artist, song["artist"])
+                if not artist_is_probably_cover_or_karaoke and self._is_probably_cover_or_karaoke(song['artist']):
+                    ratio_artist -= 20
+
             ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
 
             if ratio >= best_ratio and ratio > 50:
