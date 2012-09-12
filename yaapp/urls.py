@@ -206,7 +206,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/delete_all_notifications/$', 'yamessage.views.delete_all_notifications'),
     url(r'^api/v1/notifications/mark_all_as_read/$', 'yamessage.views.mark_all_as_read'),
 
-    url(r'^api/v1/similar_radios_from_artist_list/$', 'yabase.views.similar_radios_from_artist_list'),
+    url(r'^api/v1/radio_recommendations/$', 'yabase.views.radio_recommendations'),
 
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
