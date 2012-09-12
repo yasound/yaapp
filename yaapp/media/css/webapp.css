@@ -4172,6 +4172,8 @@ a.yabutton-small {
         height: 76px;
         padding-top:1px;
         padding-bottom:0px;
+        padding-right:0;
+        padding-left:0;
     }
 
     .responsive-settings-btn {
@@ -4273,7 +4275,6 @@ a.yabutton-small {
         margin-top:14px;
         display:block;
         float:right;
-        margin-right:5.2%;
     }
 
     .responsive-container {
