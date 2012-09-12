@@ -145,11 +145,14 @@ def radio_recommendations(request):
         logger.info('similar radios length %d', len(radio_ids))
         for r in radio_ids:
             if r in user_radio_ids:
+                logger.info('radio in user radios')
                 continue  # dont't add user's radios in similar radios list
             try:
                 radio = Radio.objects.get(id=r)
                 recommended_radios.append(radio)
+                logger.info('append radio in receommendations "%s"', radio)
             except:
+                logger.info('can't get radio with id %d, r)
                 pass
     # build response
     response = []
