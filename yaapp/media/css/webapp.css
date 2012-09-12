@@ -951,6 +951,7 @@ input::-webkit-input-placeholder {
   margin-left: 20px;
 }
 
+
 .radio-cells li {
 	margin:0;
 	padding:0;
@@ -2285,9 +2286,6 @@ ul#notifications {
 .profile-background .radio-cells {
     margin-left:0;
 }
-.profile-background .radio-cell {
-    margin-left:13px;
-}
 
 #user-profile {
 	display:block;
@@ -3469,6 +3467,13 @@ a.yabutton-small {
     display:none;
 }
 
+.responsive-radio-toolbar {
+    display:none;
+}
+
+.responsive-stats {
+    display:none;
+}
 
 
 
@@ -3933,8 +3938,8 @@ a.yabutton-small {
     .radio-with-stats-cells .stats {
         float:right;
         clear:right;
-        width:20%;
-        height:95px;
+        width:40%;
+        height:137px;
         margin-top:0px;
         margin-right:10px;
     }
@@ -3981,6 +3986,7 @@ a.yabutton-small {
     }
 
     .radio-with-stats .radio-cell-parent {
+        width:155px;
         margin-right:0px;
         margin-left:10px;
         margin-top:10px;
@@ -3995,6 +4001,60 @@ a.yabutton-small {
         height: 50% !important;
         width: 95% !important;
     }
+
+    .radio-with-stats .radio-toolbar {
+        display:none;
+    }
+
+    .responsive-radio-toolbar {
+        float:right;
+        width:165px;
+        display:block;
+    }
+
+    .responsive-radio-toolbar .responsive-delete-icon {
+        height:25px;
+        width:50px;
+        background-image: linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(162,3,0)),
+        color-stop(1, rgb(228,105,103))
+        );
+        border:1px solid #8b1313;
+        border-radius:5px;
+        box-shadow: inset 0px 1px 1px white;
+    }
+
+    .responsive-radio-toolbar .responsive-playlist-icon,
+    .responsive-radio-toolbar .responsive-settings-icon {
+        height:25px;
+        width:50px;
+        background-image: linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(9,115,177)),
+            color-stop(1, rgb(117,201,250))
+        );
+        border:1px solid #085987;
+        border-radius:5px;
+        box-shadow: inset 0px 1px 1px white;
+    }
+
 
 /*-- NOTIFICATIONS --*/
     
@@ -4062,7 +4122,14 @@ a.yabutton-small {
 
 /*-- RADIO-CELL --*/
         
-        #results li {
+        body .radio-cell {
+            margin-left:0px;
+        }
+        
+        .radio-cells li,
+        #radios li,
+        #friends-zone li,
+        #favorites li {
             width:150px;
             height:150px;
             margin-left:3%;
@@ -4070,22 +4137,42 @@ a.yabutton-small {
 
         }
 
-        #results li .radio-cell {
+        
+        .radio-with-stats-cells li .radio-cell,
+        .radio-cells li .radio-cell,
+        #radios li .radio-cell,
+        #friends-zone li .radio-cell,
+        #favorites li .radio-cell {
             width:150px;
             height:150px;
         }
 
-        #results li .radio-cell .radio-container {
+        
+        .radio-with-stats-cells li .radio-cell .radio-container,
+        .radio-cells li .radio-cell .radio-container,
+        #friends-zone li .radio-cell .radio-container,
+        #favorites li .radio-cell .radio-container,
+        #radios li .radio-cell .radio-container {
             width:145px;
             height:150px;
         }
 
-        #results li .radio-cell .radio-container .picture {
+        
+        .radio-with-stats-cells li .radio-cell .radio-container .picture,
+        .radio-cells li .radio-cell .radio-container .picture,
+        #radios li .radio-cell .radio-container .picture,
+        #friends-zone li .radio-cell .radio-container .picture,
+        #favorites li .radio-cell .radio-container .picture {
             height:150px;
             width:150px;
         }
 
-        #results li .radio-cell .radio-container .picture .caption {
+        
+        .radio-with-stats-cells li .radio-cell .radio-container .picture .caption,
+        .radio-cells li .radio-cell .radio-container .picture .caption,
+        #friends-zone li .radio-cell .radio-container .picture .caption,
+        #favorites li .radio-cell .radio-container .picture .caption,
+        #radios li .radio-cell .radio-container .picture .caption {
             width:150px;
         }
 
@@ -4164,6 +4251,7 @@ a.yabutton-small {
         float:none;
         margin:0 auto;
     }
+
 }
 
 
@@ -4506,14 +4594,18 @@ a.yabutton-small {
         clear:right;
         width:20%;
         height:95px;
-        margin-top:10px;
+        margin-top:0px;
         margin-right:2%;
     }
 
     .stats em {
-        font-size: 42px;
+        font-size: 42px; 
     }
 
+    .stats .minutes-spent em,
+    .stats .new-messages em {
+        margin-bottom: 15px;
+    }
 
     .radio-with-stats .radio-toolbar {
         float:right;
