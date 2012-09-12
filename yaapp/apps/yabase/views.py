@@ -152,7 +152,7 @@ def radio_recommendations(request):
                 recommended_radios.append(radio)
                 logger.info('append radio in receommendations "%s"', radio)
             except:
-                logger.info('can't get radio with id %d, r)
+                logger.info('cannot get radio with id %d', r)
                 pass
     # build response
     response = []
