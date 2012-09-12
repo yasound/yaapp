@@ -3249,13 +3249,19 @@ ul .radio-with-stats-cells li {
  * Gift
  */
 
+.gift-container {
+    margin:12px;
+}
+
 .gift-container img {
     float: left;
+    margin-right:12px;
 }
 
 
 .gift-container div.action {
     float:right;
+    margin-right:12px;
 }
 
 /**
