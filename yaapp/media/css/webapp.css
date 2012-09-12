@@ -951,6 +951,7 @@ input::-webkit-input-placeholder {
   margin-left: 20px;
 }
 
+
 .radio-cells li {
 	margin:0;
 	padding:0;
@@ -2267,14 +2268,13 @@ ul#notifications {
 
 #favorites-zone {
     max-width: 940px;
-}
+}   
 
 #friends-zone {
     max-width: 940px;
 }
 
 .profile-background {
-    min-width:470px;
     max-width:940px;
 	background-color:white;
 	margin:0px 0px 25px 0px;
@@ -2285,9 +2285,6 @@ ul#notifications {
 
 .profile-background .radio-cells {
     margin-left:0;
-}
-.profile-background .radio-cell {
-    margin-left:13px;
 }
 
 #user-profile {
@@ -3466,6 +3463,21 @@ a.yabutton-small {
     display:none;
  }
 
+ .small-profile-picture {
+    display:none;
+}
+
+.responsive-radio-toolbar {
+    display:none;
+}
+
+.responsive-stats {
+    display:none;
+}
+
+
+
+
 
 
 
@@ -3500,6 +3512,9 @@ a.yabutton-small {
     body {
         padding-right:0px;
         padding-left:0px;
+        margin-left:5px;
+        margin-right:5px;
+        margin-top: -40px;
     }
 
     #header {
@@ -3528,7 +3543,7 @@ a.yabutton-small {
     .navbar-inner .container {
         text-align: center;
         height:50px;
-        margin-top:25px;
+        margin-top:18px;
     }
 
     #brand-logo {
@@ -3552,9 +3567,11 @@ a.yabutton-small {
     #header .navbar-inner {
         background-image: url(/media/app/images/header_bg.png);
         background-repeat: repeat-x;
-        height:76px;
+        height:60px;
         padding-top:1px;
         padding-bottom:0px;
+        padding-left:0px;
+        padding-right:0px;
     }
 
     .responsive-settings-btn {
@@ -3565,7 +3582,7 @@ a.yabutton-small {
 
     .responsive-settings-btn2 {
         float:right;
-        margin-right:10%;
+        margin-right:5.22%;
         margin-top:-6px;
     }
 
@@ -3588,6 +3605,10 @@ a.yabutton-small {
         );
         border:1px solid black;
         box-shadow: none;
+        height:43px;
+        position:fixed;
+        top:61px;
+        margin-left:-6px;
     }
 
     .responsive-container {
@@ -3600,7 +3621,7 @@ a.yabutton-small {
         height:30px;
         width:30px;
         float:left;
-        margin: 11px 0px 0px 2.1%;
+        margin: 6px 0px 0px 2.1%;
         border-radius:50%;
         background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
         background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
@@ -3629,12 +3650,12 @@ a.yabutton-small {
 
     #responsive-song {
         float:left;
-        margin-top:10px;
+        margin-top:6px;
     }
 
     .responsive-infos {
-        margin:10px 0px 0px 3.8%;
-        width:39.5%;
+        margin:6px 0px 0px 3.8%;
+        width:30.5%;
         max-width:330px;
         float:left;
         overflow:hidden;
@@ -3654,18 +3675,17 @@ a.yabutton-small {
     }
 
     .responsive-header-social-btn {
-        margin-top:14px;
+        margin-top:9px;
         display:block;
         float:right;
-        margin-right:5.2%;
     }
 
     .responsive-container {
         width:auto;
     }
 
-    #responsive-love-btn {
-        margin-right:10px;
+    #responsive-share-btn {
+        margin-right:7px;
     }
 
 /*-- CONTAINER --*/
@@ -3912,14 +3932,14 @@ a.yabutton-small {
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        height:510px;
+        height:370px;
     }
 
     .radio-with-stats-cells .stats {
         float:right;
         clear:right;
-        width:20%;
-        height:95px;
+        width:40%;
+        height:136px;
         margin-top:0px;
         margin-right:10px;
     }
@@ -3966,6 +3986,7 @@ a.yabutton-small {
     }
 
     .radio-with-stats .radio-cell-parent {
+        width:155px;
         margin-right:0px;
         margin-left:10px;
         margin-top:10px;
@@ -3980,6 +4001,60 @@ a.yabutton-small {
         height: 50% !important;
         width: 95% !important;
     }
+
+    .radio-with-stats .radio-toolbar {
+        display:none;
+    }
+
+    .responsive-radio-toolbar {
+        float:right;
+        width:165px;
+        display:block;
+    }
+
+    .responsive-radio-toolbar .responsive-delete-icon {
+        height:25px;
+        width:50px;
+        background-image: linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
+
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(162,3,0)),
+        color-stop(1, rgb(228,105,103))
+        );
+        border:1px solid #8b1313;
+        border-radius:5px;
+        box-shadow: inset 0px 1px 1px white;
+    }
+
+    .responsive-radio-toolbar .responsive-playlist-icon,
+    .responsive-radio-toolbar .responsive-settings-icon {
+        height:25px;
+        width:50px;
+        background-image: linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(9,115,177)),
+            color-stop(1, rgb(117,201,250))
+        );
+        border:1px solid #085987;
+        border-radius:5px;
+        box-shadow: inset 0px 1px 1px white;
+    }
+
 
 /*-- NOTIFICATIONS --*/
     
@@ -4045,6 +4120,101 @@ a.yabutton-small {
         display:none;
     }
 
+/*-- RADIO-CELL --*/
+        
+        body .radio-cell {
+            margin-left:0px;
+        }
+        
+        .radio-cells li,
+        #radios li,
+        #friends-zone li,
+        #favorites li {
+            width:150px;
+            height:150px;
+            margin-left:3%;
+            margin-top:3%;
+
+        }
+
+        
+        .radio-with-stats-cells li .radio-cell,
+        .radio-cells li .radio-cell,
+        #radios li .radio-cell,
+        #friends-zone li .radio-cell,
+        #favorites li .radio-cell {
+            width:150px;
+            height:150px;
+        }
+
+        
+        .radio-with-stats-cells li .radio-cell .radio-container,
+        .radio-cells li .radio-cell .radio-container,
+        #friends-zone li .radio-cell .radio-container,
+        #favorites li .radio-cell .radio-container,
+        #radios li .radio-cell .radio-container {
+            width:145px;
+            height:150px;
+        }
+
+        
+        .radio-with-stats-cells li .radio-cell .radio-container .picture,
+        .radio-cells li .radio-cell .radio-container .picture,
+        #radios li .radio-cell .radio-container .picture,
+        #friends-zone li .radio-cell .radio-container .picture,
+        #favorites li .radio-cell .radio-container .picture {
+            height:150px;
+            width:150px;
+        }
+
+        
+        .radio-with-stats-cells li .radio-cell .radio-container .picture .caption,
+        .radio-cells li .radio-cell .radio-container .picture .caption,
+        #friends-zone li .radio-cell .radio-container .picture .caption,
+        #favorites li .radio-cell .radio-container .picture .caption,
+        #radios li .radio-cell .radio-container .picture .caption {
+            width:150px;
+        }
+
+        .big-profile-picture {
+            display:none;
+        }
+
+        .small-profile-picture {
+            display:block;
+        }
+
+        .radio-cell .radio-icon {
+            top:10px;
+            left:85px;
+        }
+
+        .radio-cell .tag {
+            display:none;
+        }
+
+        .radio-cell .caption {
+            width:145px;
+            bottom:4px;
+            left:0px;
+            height:40px;
+        }
+
+        .radio-cell .caption h5 {
+            font-size: 12px;
+            padding-top:3px;
+            line-height:13px;
+        }
+
+        .radio-cell .mask {
+            width:146px;
+            height:145px;
+        }
+
+        .radio-cell .radio-id {
+            display:none;
+        }
+
 /*-- FOOTER --*/
 
 	#connected-users,
@@ -4056,7 +4226,7 @@ a.yabutton-small {
     #footer {
         width:100%;
         position:absolute;
-        margin-left:-20px;
+        margin-left:-5px;
         margin-right:-20px;
     }
 
@@ -4081,6 +4251,7 @@ a.yabutton-small {
         float:none;
         margin:0 auto;
     }
+
 }
 
 
@@ -4124,6 +4295,9 @@ a.yabutton-small {
     body {
         padding-right:0px;
         padding-left:0px;
+        margin-left:10px;
+        margin-right:10px;
+        margin-top: -40px;
     }
 
     #header {
@@ -4141,11 +4315,14 @@ a.yabutton-small {
         display:none;
     }
 
+    #header {
+        height:60px;
+    }
 
     .navbar-inner .container {
         text-align: center;
         height:50px;
-        margin-top:25px;
+        margin-top:18px;
     }
 
     #brand-logo {
@@ -4169,9 +4346,11 @@ a.yabutton-small {
     #header .navbar-inner {
         background-image: url(/media/app/images/header_bg.png);
         background-repeat: repeat-x;
-        height: 76px;
+        height:60px;
         padding-top:1px;
         padding-bottom:0px;
+        padding-right:0;
+        padding-left:0;
     }
 
     .responsive-settings-btn {
@@ -4204,6 +4383,11 @@ a.yabutton-small {
             color-stop(1, rgb(75,81,85))
         );
         border:1px solid black;
+        height:43px;
+        z-index:9;
+        position:fixed;
+        top:61px;
+        margin-left:-11px;
     }
 
     .responsive-container {
@@ -4216,7 +4400,7 @@ a.yabutton-small {
         height:30px;
         width:30px;
         float:left;
-        margin: 11px 0px 0px 2.1%;
+        margin: 6px 0px 0px 2.1%;
         border-radius:50%;
         background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
         background-image: -o-linear-gradient(bottom, rgb(54,60,64) 0%, rgb(105,111,115) 100%);
@@ -4245,11 +4429,11 @@ a.yabutton-small {
 
     #responsive-song {
         float:left;
-        margin-top:10px;
+        margin-top:6px;
     }
 
     .responsive-infos {
-        margin:10px 0px 0px 3.8%;
+        margin:6px 0px 0px 3.8%;
         width:39.5%;
         max-width:330px;
         float:left;
@@ -4270,18 +4454,17 @@ a.yabutton-small {
     }
 
     .responsive-header-social-btn {
-        margin-top:14px;
+        margin-top:9px;
         display:block;
         float:right;
-        margin-right:5.2%;
     }
 
     .responsive-container {
         width:auto;
     }
 
-    #responsive-love-btn {
-        margin-right:10px;
+    #responsive-share-btn {
+        margin-right:7px;
     }
 
 /*-- SIGNUP --*/
@@ -4309,7 +4492,8 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container #signup-input input, .signup-container #signup-input .right-input {
+    .signup-container #signup-input input, 
+    .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
         padding-left:10px;
@@ -4408,18 +4592,23 @@ a.yabutton-small {
     .radio-with-stats-cells .stats {
         float:right;
         clear:right;
-        width:20%;
+        width:40%;
         height:95px;
-        margin-top:10px;
+        margin-top:0px;
         margin-right:2%;
     }
 
     .stats em {
-        font-size: 42px;
+        font-size: 42px; 
     }
 
+    .stats .minutes-spent em,
+    .stats .new-messages em {
+        margin-bottom: 15px;
+    }
 
     .radio-with-stats .radio-toolbar {
+        max-width:45%;
         float:right;
         margin:3%;
         margin-right:2%;
@@ -4577,7 +4766,7 @@ a.yabutton-small {
     #footer {
         width:100%;
         position:absolute;
-        margin-left:-20px;
+        margin-left:-10px;
         margin-right:-20px;
     }
 
@@ -4745,8 +4934,12 @@ a.yabutton-small {
         width:125px;
     }
 
-    #sub-header {
+    #create-radio:hover {
+        width:125px;
+    }
 
+    #sub-header {
+        z-index:9;
     }
 /*-- SIGNUP --*/
     .signup-container {
