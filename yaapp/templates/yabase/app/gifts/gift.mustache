@@ -1,0 +1,7 @@
+{% load i18n %}
+<div class='gift-container'>
+    <img src='<%picture_url%>'/>
+    <div class='action'><%#action_url%><a class='yabutton-small' href='<% action_url %>' <%#data_url%>data-url='<%data_url%>'<%/data_url%> <%#target%>target='<%target%>'<%/target%>>{% trans "Perform the action" %}</a><%/action_url%></div>
+    <h4><% name %></h4>
+    <p><% description %></p>
+</div>
