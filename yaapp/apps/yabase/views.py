@@ -104,17 +104,14 @@ def radio_recommendations(request):
     check_api_key_Authentication(request)
 
     # recommendation starts with selection
-    selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
-    recommended_radios = selection_radios
-    logger.info('selection radios length %d', len(selection_radios))
+    selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
+    recommended_radios = list(selection_radios)
 
     # if a list of artists is provided, compute a list of similar radios and add it in recommendation
     data = request.FILES['artists_data']
     data_content_compressed = ''
-    logger.info('radio recommendations')
     if data:
         data_content_compressed = data.read()
-        logger.info('data_content_compressed length %d', len(data_content_compressed))
     if len(data_content_compressed) > 0:
         # decompress data
         try:
@@ -131,7 +128,6 @@ def radio_recommendations(request):
             song_count = binary.get_int16()
             if tag == 'ARTS':
                 artists.append(a)
-        logger.info('artists length %d', len(artists))
         # get ids of user's radios
         user_radio_ids = []
         if request.user and request.user.is_authenticated():
@@ -142,19 +138,13 @@ def radio_recommendations(request):
         m = ClassifiedRadiosManager()
         res = m.find_similar_radios(artists)
         radio_ids = [int(x[1]) for x in res]
-        logger.info('similar radios length %d', len(radio_ids))
         for r in radio_ids:
             if r in user_radio_ids:
-                logger.info('radio in user radios')
                 continue  # dont't add user's radios in similar radios list
             try:
-                logger.info('try to get radio with id %d', r)
                 radio = Radio.objects.get(id=r)
-                logger.info('radio with id %d: %s', r, radio)
                 recommended_radios.append(radio)
-                logger.info('append radio in receommendations "%s"', radio)
             except:
-                logger.info('cannot get radio with id %d', r)
                 pass
     # build response
     response = []
