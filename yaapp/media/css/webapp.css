@@ -4259,6 +4259,10 @@ a.yabutton-small {
         margin-right:6.5%;
     }
 
+    .profile-background {
+        float:left;
+    }
+
 
 /*-- FOOTER --*/
 
@@ -4800,7 +4804,12 @@ a.yabutton-small {
     .upload-container {
         display:none;
     }
-
+/*-- FRIENDS --*/
+    
+    .profile-background {
+        float:left;
+    }
+    
 /*-- FOOTER --*/
 
     #connected-users,
