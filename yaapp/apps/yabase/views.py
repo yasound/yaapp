@@ -104,8 +104,8 @@ def radio_recommendations(request):
     check_api_key_Authentication(request)
 
     # recommendation starts with selection
-    selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
-    recommended_radios = selection_radios
+    selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
+    recommended_radios = list(selection_radios)
 
     # if a list of artists is provided, compute a list of similar radios and add it in recommendation
     data = request.FILES['artists_data']
@@ -119,7 +119,7 @@ def radio_recommendations(request):
         except Exception, e:
             logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
             return api_response(None)
-        # build artist list from binray data
+        # build artist list from binary data
         binary = BinaryData(content_uncompressed)
         artists = []
         while not binary.is_done():
@@ -137,7 +137,7 @@ def radio_recommendations(request):
         # find similar radios from artist list
         m = ClassifiedRadiosManager()
         res = m.find_similar_radios(artists)
-        radio_ids = [x[1] for x in res]
+        radio_ids = [int(x[1]) for x in res]
         for r in radio_ids:
             if r in user_radio_ids:
                 continue  # dont't add user's radios in similar radios list

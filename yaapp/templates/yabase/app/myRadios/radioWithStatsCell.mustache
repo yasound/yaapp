@@ -4,31 +4,35 @@
     </div>
     <div class='radio-toolbar'>
         <button class='yabutton-small right delete-radio'>
-            <span class='hidden-phone'>{% trans "Delete radio" %}</span>
-            <span class='visible-phone'>{% trans "Delete" %}</span>
+            <span class=''>{% trans "Delete" %}</span>
         </button>
         <button class='yabutton-small right edit-playlist'>
-            <span class='hidden-phone'>{% trans "Edit playlist" %}</span>
-            <span class='visible-phone'>{% trans "Playlist" %}</span>
+            <span class=''>{% trans "Playlist" %}</span>
         </button>
         <button class='yabutton-small right edit-radio'>
-            <span class='hidden-phone'>{% trans "Edit settings" %}</span>
-            <span class='visible-phone'>{% trans "Settings" %}</span>
+            <span class=''>{% trans "Settings" %}</span>
         </button>
     </div>
     <div class='stats'>
 		<div class='minutes-spent'>
-	    	<em class='hidden-phone'><% overall_listening_time %></em>
-			<span class='hidden-phone'>{% trans "Minutes of music played" %}</span>
-            <em class='visible-phone'><% overall_listening_time %></em>
-            <span class='visible-phone'>{% trans "Listening time" %}</span>
+	    	<em class=''><% overall_listening_time %></em>
+			<span class=''>{% trans "Minutes of music played" %}</span>
 		</div>
 		<div class='new-messages'>
-			<em class='hidden-phone'><% new_wall_messages_count %></em>
-		    <span class='hidden-phone'>{% trans "New messages" %}</span>
-            <em class='visible-phone'><% new_wall_messages_count %></em>
-            <span class='visible-phone'>{% trans "Messages" %}</span>
+			<em class=''><% new_wall_messages_count %></em>
+		    <span class=''>{% trans "New messages" %}</span>
 		</div>
+    </div>
+    <div class='responsive-radio-toolbar'>
+        <button class='responsive-delete-icon'>
+            <img src="/media/app/images/responsive-icon-delete.png">
+        </button>
+        <button class='responsive-playlist-icon'>
+            <img src="/media/app/images/responsive-icon-playlist.png">
+        </button>
+        <button class='responsive-settings-icon'>
+            <img src="/media/app/images/responsive-icon-settings.png">
+        </button>
     </div>
     <div class="chartdiv" style="width: 450px; height: 200px; padding: 0px; position: relative;">
     </div>
