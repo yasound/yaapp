@@ -1046,7 +1046,14 @@ class WebAppView(View):
         return context, 'yabase/webapp.html'
 
     def notifications(self, request, context, *args, **kwargs):
-        return context, 'yabase/webapp.html'
+        if request.user.is_authenticated():
+            m = NotificationsManager()
+            notifications = list(m.notifications_for_recipient(request.user.id, count=25, read_status='unread'))
+            context['notifications'] = notifications
+            context['bdata'] = json.dumps([notification for notification in notifications], cls=MongoAwareEncoder)
+            context['g_page'] = 'notifications'
+        return context, 'yabase/app/notifications/notificationsPage.html'
+
 
     def new_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():

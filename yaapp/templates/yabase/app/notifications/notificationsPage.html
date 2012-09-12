@@ -1,0 +1,19 @@
+{% extends "yabase/webapp.html" %}
+{% load i18n %}
+{% block content %}
+<div class='container' id='webapp-content'>
+    <div class='row-fluid'>
+        <div class='span12 notifications-container'>
+            <h1>{% trans "Notifications" %}</h1>
+            <button type="button" class="yabutton-small right" id='mark-all-read-btn'>{% trans "Mark all as read" %}</button>
+
+            <ul id='notifications'>
+                {% for notification in notifications %}
+                <li>{% include 'yabase/app/notifications/notification.html' %}</li>
+                {% endfor %}
+            </ul>
+            <div id='pagination'></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
