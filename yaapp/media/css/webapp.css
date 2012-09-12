@@ -3932,14 +3932,14 @@ a.yabutton-small {
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
-        height:510px;
+        height:370px;
     }
 
     .radio-with-stats-cells .stats {
         float:right;
         clear:right;
         width:40%;
-        height:137px;
+        height:136px;
         margin-top:0px;
         margin-right:10px;
     }
@@ -4592,7 +4592,7 @@ a.yabutton-small {
     .radio-with-stats-cells .stats {
         float:right;
         clear:right;
-        width:20%;
+        width:40%;
         height:95px;
         margin-top:0px;
         margin-right:2%;
@@ -4608,6 +4608,7 @@ a.yabutton-small {
     }
 
     .radio-with-stats .radio-toolbar {
+        max-width:45%;
         float:right;
         margin:3%;
         margin-right:2%;
