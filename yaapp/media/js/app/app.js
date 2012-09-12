@@ -58,7 +58,7 @@ $(document).ready(function () {
         return $(document).height() - this.scrollTop() - this.height();
     };
     $win.scroll(function () {
-        if ($win.scrollTop() > 500 && $win.scrollBottom()!=0) {
+        if ($win.scrollTop() > 500 && $win.scrollBottom()!==0) {
             $('#scroll-top-container').fadeIn(200);
         } else if ($win.scrollTop() < 500 ) {
             $('#scroll-top-container').fadeOut(200);
@@ -165,6 +165,7 @@ $(document).ready(function () {
             "signup/": "signup",
             "login/": "login",
             "radio/:uuid/*args": "radio",
+            "gifts/": "gifts",
             "*args": "index"
         },
 
@@ -467,7 +468,16 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.LoginPage({
                 el: '#webapp-content'
             }).render();
+        },
+
+        gifts: function() {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.GiftsPage({
+                el: '#webapp-content'
+            }).render();
         }
+
 
     });
 
