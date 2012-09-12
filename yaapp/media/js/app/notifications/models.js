@@ -7,7 +7,7 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
     url: function () {
         return '/api/v1/notifications/' + this.get('id') + '/';
     },
-    
+
     getDate: function() {
         var timeZone = '+01:00';
         if (moment().isDST()) {
@@ -18,11 +18,11 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
         theDate = moment(theDate + timeZone);
         return theDate;
     },
-    
+
     getFormattedDate: function() {
         return this.getDate().format('LLLL');
     },
-    
+
     markAsRead: function() {
         this.set({'read': true}, {silent: true});
         var url = '/api/v1/update_notification/' + this.id + '/';
@@ -33,7 +33,7 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
            data: JSON.stringify(this.toJSON())
         });
     },
-    
+
     remove: function() {
         var url = '/api/v1/delete_notification/' + this.id + '/';
         $.ajax({
@@ -41,31 +41,32 @@ Yasound.Data.Models.Notification = Backbone.Model.extend({
            type: 'DELETE'
         });
     }
-    
+
 });
 
 Yasound.Data.Models.Notifications = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.Notification,
-    url: '/api/v1/notifications/', 
+    url: '/api/v1/notifications/',
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
     perPage: 25,
     page:0,
     customAttribute1: 'read_status',
     customParam1: 'unread',
-    
-    
+
+
     parse: function(response) {
         var results = response.objects;
         this.totalCount = response.meta.total_count;
         this.totalPages = this.totalCount / this.perPage;
         return results;
     },
-    
+
     fetchFirst: function() {
         var savedPage = this.page;
         this.page = 0;
         var that = this;
+
         this.fetch({
             success: function() {
                 that.page = savedPage;
@@ -74,5 +75,5 @@ Yasound.Data.Models.Notifications = Backbone.Paginator.requestPager.extend({
                 that.page = savedPage;
             }
         });
-    }    
+    }
 });

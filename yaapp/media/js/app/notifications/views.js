@@ -23,7 +23,11 @@ Yasound.Views.Notification = Backbone.View.extend({
         var data = this.model.toJSON();
         data.formatted_date = this.model.getFormattedDate();
 
-        $(this.el).hide().html(ich.notificationTemplate(data)).fadeIn(200);
+        if (Yasound.App.enableFX) {
+            $(this.el).hide().html(ich.notificationTemplate(data)).fadeIn(200);
+        } else {
+            $(this.el).html(ich.notificationTemplate(data));
+        }
 
         return this;
     },
@@ -180,7 +184,11 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        this.notifications.fetch();
+        if (g_bootstrapped_data) {
+            this.notifications.reset(g_bootstrapped_data);
+        } else {
+            this.notifications.fetch();
+        }
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification, this);

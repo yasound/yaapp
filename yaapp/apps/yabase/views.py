@@ -1046,7 +1046,14 @@ class WebAppView(View):
         return context, 'yabase/webapp.html'
 
     def notifications(self, request, context, *args, **kwargs):
-        return context, 'yabase/webapp.html'
+        if request.user.is_authenticated():
+            m = NotificationsManager()
+            notifications = list(m.notifications_for_recipient(request.user.id, count=25, read_status='unread'))
+            context['notifications'] = notifications
+            context['bdata'] = json.dumps([notification for notification in notifications], cls=MongoAwareEncoder)
+            context['g_page'] = 'notifications'
+        return context, 'yabase/app/notifications/notificationsPage.html'
+
 
     def new_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
@@ -1188,6 +1195,12 @@ class WebAppView(View):
 
         return context, 'yabase/webapp.html'
 
+    def _default_radio_uuid(self, user):
+        radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
+        if radios.count() > 0:
+            return radios[0].uuid
+        return None
+
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
@@ -1239,6 +1252,9 @@ class WebAppView(View):
         if radio_count > 0:
             has_radios = True
 
+
+        if not radio_uuid:
+            radio_uuid = self._default_radio_uuid(request.user)
 
         context = {
             'user_uuid': user_uuid,
