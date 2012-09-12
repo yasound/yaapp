@@ -250,9 +250,17 @@ class Gift(models.Model):
 
         completed_url = None
         action_url = None
+        data_url = None
+        target = None
+
         if self.action == yapremium_settings.ACTION_WATCH_TUTORIAL and not user.is_anonymous():
             completed_url = reverse('yapremium.views.action_watch_tutorial_completed', args=[user.username])
-            action_url
+            action_url = 'http://www.youtube.com/watch?v=YkFaWMN6Rsg&feature=plcp'
+            target = '_blank'
+        elif self.action == yapremium_settings.ACTION_CREATE_ACCOUNT:
+            action_url = reverse('webapp_signup')
+            data_url = '/signup/'
+
         data = {
             'id': self.id,
             'enabled': enabled,
@@ -264,7 +272,9 @@ class Gift(models.Model):
             'picture_url': absolute_url(picture_url),
             'action_url_ios': self.action_url_ios,
             'completed_url': completed_url,
-            'action_url': action_url
+            'action_url': action_url,
+            'data_url': data_url,
+            'target': target
         }
         return data
 

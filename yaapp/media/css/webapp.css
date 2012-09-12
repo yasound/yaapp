@@ -3246,6 +3246,19 @@ ul .radio-with-stats-cells li {
 }
 
 /**
+ * Gift
+ */
+
+.gift-container img {
+    float: left;
+}
+
+
+.gift-container div.action {
+    float:right;
+}
+
+/**
  * common items
  */
 
@@ -3508,7 +3521,7 @@ a.yabutton-small {
     }
 
 /*-- HEADER --*/
-    
+
     #header {
         position:fixed;
         z-index:10;
@@ -3570,7 +3583,7 @@ a.yabutton-small {
     }
 
 /*-- SUB-HEADER --*/
-    
+
     #sub-header {
         display:block;
         background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
@@ -3594,7 +3607,7 @@ a.yabutton-small {
         width:100%;
         margin:0px 5.22%;
     }
-    
+
     #responsive-play-btn {
         -webkit-appearance: none;
         height:30px;
@@ -3862,9 +3875,9 @@ a.yabutton-small {
 		float:none;
         font-size: 21px;
         line-height:20px;
-        margin-bottom:10px; 
+        margin-bottom:10px;
 	}
-	
+
     #infos em {
         font-size: 14px;
     }
@@ -3932,7 +3945,7 @@ a.yabutton-small {
         margin-bottom:0px;
         margin-top: 10px;
     }
-    
+
     .stats .new-messages em {
         margin-bottom:0px;
         margin-top:10px;
@@ -3982,13 +3995,13 @@ a.yabutton-small {
     }
 
 /*-- NOTIFICATIONS --*/
-    
+
     .notifications-container {
         position:relative;
     }
 
     .notification-container .notifications-date {
-        display:none;   
+        display:none;
     }
 
     .notifications-container h1 {
@@ -4030,8 +4043,8 @@ a.yabutton-small {
         margin-left:0px;
     }
 
-    .twitter_share_options .controls, 
-    .facebook_share_options .controls, 
+    .twitter_share_options .controls,
+    .facebook_share_options .controls,
     .notifications .controls {
         right:0px;
     }
@@ -4116,7 +4129,7 @@ a.yabutton-small {
         display:none;
         opacity:0;
     }
-    
+
     #pagination {
         width:100%;
     }
@@ -4187,7 +4200,7 @@ a.yabutton-small {
     }
 
 /*-- SUB-HEADER --*/
-    
+
     #sub-header {
         display:block;
         background-image: linear-gradient(bottom, rgb(54,60,64) 0%, rgb(75,81,85) 100%);
@@ -4210,7 +4223,7 @@ a.yabutton-small {
         width:100%;
         margin:0px 15%;
     }
-    
+
     #responsive-play-btn {
         -webkit-appearance: none;
         height:30px;
@@ -4372,13 +4385,13 @@ a.yabutton-small {
     }
 
 /*-- NOTIFICATIONS --*/
-    
+
     .notifications-container {
         position:relative;
     }
 
     .notification-container .notifications-date {
-        display:none;   
+        display:none;
     }
 
     .notifications-container h1 {
@@ -4476,7 +4489,7 @@ a.yabutton-small {
         line-height:20px;
         margin-bottom:10px;
     }
-    
+
     #infos em {
         font-size: 14px;
     }
@@ -4552,8 +4565,8 @@ a.yabutton-small {
         margin-left:0px;
     }
 
-    .twitter_share_options .controls, 
-    .facebook_share_options .controls, 
+    .twitter_share_options .controls,
+    .facebook_share_options .controls,
     .notifications .controls {
         right:0px;
     }
@@ -4637,14 +4650,14 @@ a.yabutton-small {
     }
 
 /*-- HEADER --*/
-    
+
     #header {
         position:fixed;
         z-index: 10;
     }
 
     .navbar-inner .container {
-        width: 724px;       
+        width: 724px;
     }
 
     #min-level,
@@ -4724,7 +4737,7 @@ a.yabutton-small {
     }
 
 /*-- SUB-HEADER --*/
-    
+
     #sub-header-separation {
         display:none;
     }
@@ -4736,7 +4749,7 @@ a.yabutton-small {
     #search-bar {
         width:108px;
     }
-    
+
     #sub-header-nav {
         width:310px;
     }
@@ -4762,7 +4775,7 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container .signup-btn-fbk, 
+    .signup-container .signup-btn-fbk,
     .signup-container .signup-btn-twitter {
         width:80%;
         margin: 10px 10%;
@@ -4772,7 +4785,7 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container #signup-input input, 
+    .signup-container #signup-input input,
     .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
@@ -4827,13 +4840,13 @@ a.yabutton-small {
     }
 
 /*-- NOTIFICATIONS --*/
-    
+
     .notifications-container {
         position:relative;
     }
 
     .notification-container .notifications-date {
-        display:none;   
+        display:none;
     }
 
     .notification-container .text-notification {
@@ -4865,7 +4878,7 @@ a.yabutton-small {
     #user-profile .separation-high {
         display:none;
     }
-    
+
     .profile-bio {
         width:100%
     }
@@ -4895,12 +4908,12 @@ a.yabutton-small {
         width:30%;
     }
 
-    .twitter_share_options .controls, 
-    .facebook_share_options .controls, 
+    .twitter_share_options .controls,
+    .facebook_share_options .controls,
     .notifications .controls {
         right:0px;
     }
-    
+
 /*-- FOOTER --*/
 
     #connected-users,
