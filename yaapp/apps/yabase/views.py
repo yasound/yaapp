@@ -98,49 +98,57 @@ def upload_playlists(request, radio_id):
     return HttpResponse(asyncRes.task_id)
 
 @csrf_exempt
-def similar_radios_from_artist_list(request):
+def radio_recommendations(request):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     check_api_key_Authentication(request)
 
-    user_radio_ids = []
-    if request.user and request.user.is_authenticated():
-        radios = request.user.userprofile.own_radios(only_ready_radios=False)
-        for r in radios:
-            user_radio_ids.append(r.id)
+    # recommendation starts with selection
+    selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
+    recommended_radios = selection_radios
 
-
+    # if a list of artists is provided, compute a list of similar radios and add it in recommendation
     data = request.FILES['artists_data']
-    content_compressed = data.read()
-
-    try:
-        content_uncompressed = zlib.decompress(content_compressed)
-    except Exception, e:
-        logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
-        return
-
-    binary = BinaryData(content_uncompressed)
-    artists = []
-    while not binary.is_done():
-        tag = binary.get_tag()
-        a = binary.get_string()
-        song_count = binary.get_int16()
-        if tag == 'ARTS':
-            artists.append(a)
-
-    m = ClassifiedRadiosManager()
-    res = m.find_similar_radios(artists)
-    radio_ids = [x[1] for x in res]
-    data = []
-    for r in radio_ids:
-        if r in user_radio_ids:
-            continue # dont't add user's radios
+    if data:
+        content_compressed = data.read()
+        # decompress data
         try:
-            radio = Radio.objects.get(id=r)
-            data.append(radio.as_dict(request_user=request.user))
-        except:
-            pass
-    return api_response(data)
+            content_uncompressed = zlib.decompress(content_compressed)
+        except Exception, e:
+            logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
+            return
+        # build artist list from binray data
+        binary = BinaryData(content_uncompressed)
+        artists = []
+        while not binary.is_done():
+            tag = binary.get_tag()
+            a = binary.get_string()
+            song_count = binary.get_int16()
+            if tag == 'ARTS':
+                artists.append(a)
+        # get ids of user's radios
+        user_radio_ids = []
+        if request.user and request.user.is_authenticated():
+            radios = request.user.userprofile.own_radios(only_ready_radios=False)
+            for r in radios:
+                user_radio_ids.append(r.id)
+        # find similar radios from artist list
+        m = ClassifiedRadiosManager()
+        res = m.find_similar_radios(artists)
+        radio_ids = [x[1] for x in res]
+        for r in radio_ids:
+            if r in user_radio_ids:
+                continue  # dont't add user's radios in similar radios list
+            try:
+                radio = Radio.objects.get(id=r)
+                recommended_radios.append(radio)
+            except:
+                pass
+    # build response
+    response = []
+    for r in recommended_radios:
+        response.append(r.as_dict(request_user=request.user))
+    return api_response(response)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
