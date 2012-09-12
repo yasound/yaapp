@@ -2267,7 +2267,7 @@ ul#notifications {
 
 #favorites-zone {
     max-width: 940px;
-}
+}   
 
 #friends-zone {
     max-width: 940px;
@@ -3465,6 +3465,12 @@ a.yabutton-small {
     display:none;
  }
 
+ .small-profile-picture {
+    display:none;
+}
+
+
+
 
 
 
@@ -4053,6 +4059,74 @@ a.yabutton-small {
     .upload-container {
         display:none;
     }
+
+/*-- RADIO-CELL --*/
+        
+        #results li {
+            width:150px;
+            height:150px;
+            margin-left:3%;
+            margin-top:3%;
+
+        }
+
+        #results li .radio-cell {
+            width:150px;
+            height:150px;
+        }
+
+        #results li .radio-cell .radio-container {
+            width:145px;
+            height:150px;
+        }
+
+        #results li .radio-cell .radio-container .picture {
+            height:150px;
+            width:150px;
+        }
+
+        #results li .radio-cell .radio-container .picture .caption {
+            width:150px;
+        }
+
+        .big-profile-picture {
+            display:none;
+        }
+
+        .small-profile-picture {
+            display:block;
+        }
+
+        .radio-cell .radio-icon {
+            top:10px;
+            left:85px;
+        }
+
+        .radio-cell .tag {
+            display:none;
+        }
+
+        .radio-cell .caption {
+            width:145px;
+            bottom:4px;
+            left:0px;
+            height:40px;
+        }
+
+        .radio-cell .caption h5 {
+            font-size: 12px;
+            padding-top:3px;
+            line-height:13px;
+        }
+
+        .radio-cell .mask {
+            width:146px;
+            height:145px;
+        }
+
+        .radio-cell .radio-id {
+            display:none;
+        }
 
 /*-- FOOTER --*/
 
