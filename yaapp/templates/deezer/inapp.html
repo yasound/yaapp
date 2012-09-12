@@ -77,6 +77,8 @@
     <!--[if gte IE 8]><script src="/media/blueimp/js/cors/jquery.xdr-transport.js"></script><![endif]-->
     <script src="/media/js/load-image.min.js"></script>
 
+    <script src="/media/js/deezer/deezer.js"></script>
+
 
     <!--[if (gte IE 6)&(lte IE 8)]>
       <script type="text/javascript" src="/media/js/selectivizr-min.js"></script>
@@ -247,7 +249,12 @@
     </div>
 </div>
 
-<div id='webapp-container'>{% block content%}{%endblock%}</div>
+<div id='webapp-container'>
+  <button id='test1'>load 1</button>
+  <button id='test2'>load 2</button>
+  <div id='deezer-player' style='width:100%;height:300px;'; align='center'></div>
+
+  {% block content%}{%endblock%}</div>
 
 
 <div id='pre-footer'>&nbsp;</div>
@@ -307,7 +314,16 @@
 <script>
   DZ.init({
     appId  : {{ deezer_app_id }},
-    channelUrl : '{{ deezer_channel_url }}'
+    channelUrl : '{{ deezer_channel_url }}',
+    player : {
+      container : 'deezer-player',
+      cover : true,
+      playlist : true,
+      width : 400,
+      height : 400,
+      format : 'vertical',
+      onload : function(){}
+    }
   });
 </script>
 
