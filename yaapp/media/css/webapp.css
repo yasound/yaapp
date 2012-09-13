@@ -3002,6 +3002,7 @@ ul .radio-with-stats-cells li {
     color:#434343;
     font-size:17px;
     margin-bottom:9px;
+    margin-right:15px;
 }
 
 .save-btn {
@@ -3532,6 +3533,10 @@ a.yabutton-small {
     display:none;
 }
 
+.small-friend-picture {
+    display:block;
+}
+
 
 
 
@@ -3752,7 +3757,7 @@ a.yabutton-small {
     }
 
 	#results {
-		width:100%;
+		width:104%;
 	}
 
 /*-- MENU --*/
@@ -3944,20 +3949,22 @@ a.yabutton-small {
 
     #infos em {
         font-size: 14px;
+        margin-bottom:10px;
     }
 
     #user-profile #picture {
         margin:3%;
+        margin-top:20px;
     }
 
     #user-profile #picture img {
-        height:140px;
-        width:140px;
+        height:125px;
+        width:125px;
     }
 
     #user-profile #picture {
-        height:140px;
-        width:150px;
+        height:135px;
+        width:135px;
     }
 
     #infos {
@@ -3996,6 +4003,10 @@ a.yabutton-small {
     .profile-bio {
 		display:none;
 	}
+
+    #user-profile:after {
+        left:61px;
+    }
 
 /*-- MY RADIO --*/
     .radio-with-stats-cells .radio-with-stats {
@@ -4053,10 +4064,10 @@ a.yabutton-small {
     }
 
     .radio-with-stats .radio-cell-parent {
-        width:155px;
+        width:145px;
         margin-right:0px;
         margin-left:10px;
-        margin-top:10px;
+        margin-top:20px;
     }
 
     .tickLabel {
@@ -4075,13 +4086,13 @@ a.yabutton-small {
 
     .responsive-radio-toolbar {
         float:right;
-        width:165px;
+        width:140px;
         display:block;
     }
 
     .responsive-radio-toolbar .responsive-delete-icon {
         height:25px;
-        width:50px;
+        width:40px;
         background-image: linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
         background-image: -o-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
         background-image: -moz-linear-gradient(bottom, rgb(162,3,0) 0%, rgb(228,105,103) 100%);
@@ -4103,7 +4114,7 @@ a.yabutton-small {
     .responsive-radio-toolbar .responsive-playlist-icon,
     .responsive-radio-toolbar .responsive-settings-icon {
         height:25px;
-        width:50px;
+        width:40px;
         background-image: linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
         background-image: -o-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
         background-image: -moz-linear-gradient(bottom, rgb(9,115,177) 0%, rgb(117,201,250) 100%);
@@ -4187,6 +4198,12 @@ a.yabutton-small {
         display:none;
     }
 
+    .settings-container h1 {
+        padding:25px;
+        padding-left:15px;
+        font-size:25px;
+    }
+
 /*-- RADIO-CELL --*/
         
         body .radio-cell {
@@ -4194,13 +4211,13 @@ a.yabutton-small {
         }
         
         .radio-cells li {
-            margin-left:5%;
+            margin-left:3%;
         }
 
         #radios .radio-cell,
         #favorites .radio-cell {
-            width:150px;
-            height:150px;
+            width:140px;
+            height:140px;
             margin-left:3%;
             margin-top:3%;
 
@@ -4211,8 +4228,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell,
         #radios li .radio-cell,
         #favorites li .radio-cell {
-            width:150px;
-            height:150px;
+            width:140px;
+            height:140px;
         }
 
         
@@ -4220,8 +4237,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container,
         #friends-zone li .radio-cell .radio-container,
         #radios li .radio-cell .radio-container {
-            width:145px;
-            height:150px;
+            width:135px;
+            height:140px;
         }
 
         
@@ -4229,8 +4246,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container .picture,
         #radios li .radio-cell .radio-container .picture,
         #favorites li .radio-cell .radio-container .picture {
-            height:150px;
-            width:150px;
+            height:140px;
+            width:140px;
         }
 
         
@@ -4238,7 +4255,7 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container .picture .caption,
         #favorites li .radio-cell .radio-container .picture .caption,
         #radios li .radio-cell .radio-container .picture .caption {
-            width:150px;
+            width:140px;
         }
 
         .big-profile-picture {
@@ -4259,7 +4276,7 @@ a.yabutton-small {
         }
 
         .radio-cell .caption {
-            width:145px;
+            width:135px;
             bottom:4px;
             left:0px;
             height:40px;
@@ -4272,8 +4289,8 @@ a.yabutton-small {
         }
 
         .radio-cell .mask {
-            width:146px;
-            height:145px;
+            width:136px;
+            height:135px;
         }
 
         .radio-cell .radio-id {
@@ -4284,8 +4301,8 @@ a.yabutton-small {
     
     ul .user-cell,
     ul .mask-user {
-        width:116px;
-        height:116px;
+        width:115px;
+        height:115px;
     }
 
     ul .user-cell .user-cell-inner {
@@ -4311,12 +4328,12 @@ a.yabutton-small {
     }
 
     #friends-zone ul {
-        margin-left:7.5%;
+        margin-left:10px;
     }
 
     ul .user-cell,
     ul .mask-user {
-        margin-right:6.5%;
+        margin-right:10px;
     }
 
     .profile-background {
@@ -4325,18 +4342,35 @@ a.yabutton-small {
     }
 
     .radio-cells {
-        margin-left:0px;
+        margin-left:-6px;
     }
 
     .radio-cells li {
-        margin-left:8px;
+        margin-left:0px;
+    }
+
+    .big-friend-picture {
+        display:none;
+    }
+
+    .small-friend-picture {
+        display:block;
+    }
+
+    #results {
+        margin-left:10px;
     }
 
 /*-- SETTINGS MENU --*/
+
+    .menu-bg {
+
+    }
     
     #mobile-menu-content {
-        margin-left:3%;
-        margin-right:3%;    
+        margin-left: -8px;
+        margin-right: -7px;
+        margin-top: -53px; 
     }
 
     .phone-menu-list {
@@ -4589,6 +4623,7 @@ a.yabutton-small {
         position:fixed;
         top:61px;
         margin-left:-11px;
+        box-shadow:none;
     }
 
     .responsive-container {
@@ -4966,8 +5001,9 @@ a.yabutton-small {
 /*-- SETTINGS MENU --*/
     
     #mobile-menu-content {
-        margin-left:3%;
-        margin-right:3%;    
+        margin-left: -14px;
+        margin-right: -16px;
+        margin-top: -53px; 
     }
 
     .phone-menu-list {
