@@ -3977,6 +3977,10 @@ a.yabutton-small {
         clear:left;
     }
 
+    #infos #follow {
+        font-size: 13px;
+    }
+
     .user-radios {
         height:100%;
         float:left;
