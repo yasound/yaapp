@@ -30,7 +30,7 @@
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
-    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
+    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.current_localestom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
 	<link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
 
 
@@ -297,15 +297,12 @@
       <div class="navbar-inner">
         <div class="container">
       <div id="brand-logo">
-          <div id='mobile-menu' class='visible-phone'>
-            {# <div id= 'mobile-menu-btn'>MENU</div> #}
-          </div>
 				<a href="{% url webapp %}" id='btn-webapp'>
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
-      <div class='visible-phone responsive-settings-btn'>
-        <img src="/media/app/images/responsive-settings-btn.png">
+      <div id='mobile-menu' class='visible-phone responsive-settings-btn'>
+        <img id= 'mobile-menu-btn' src="/media/app/images/responsive-settings-btn.png">
       </div>
       <div class='visible-phone responsive-settings-btn2'>
         <img src="/media/app/images/responsive-settings-btn.png">
@@ -453,6 +450,38 @@
 
 <div id='webapp-container'>
             <div id='mobile-menu-content' class='hidden-display'>
+              <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
+                <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
+                <span>Sign In</span>
+              </a>
+              <!-- <a href='#' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
+                <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
+                <span>Profile</span>
+              </a> -->
+              <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
+                <span>My Radios</span>
+              </a>
+              <a href='#' id='phone-menu-notifications' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-envelope-icon.png" alt='notifications'>
+                <span>Notifications</span>
+              </a>
+              <a href='#' id='phone-menu-gifts' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-gift-icon.png" alt='gifts'>
+                <span>Gifts</span>
+              </a>
+              <a href='#' id='phone-menu-mysettings' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-mysettings.png" alt='settings'>
+                <span>Settings</span>
+              </a>
+              <a href='#' id='phone-menu-myfriends' class='phone-menu-list phone-menu-last'>
+                <img src="/media/app/images/responsive-friends-icon.png" alt='my friends'>
+                <span>My Friends</span>
+              </a>
+              <!-- <a href='#' id='phone-menu-signout' class='phone-menu-list phone-menu-last'>
+                <img src="/media/app/images/responsive-icon-signout.png" alt='sign out'/>
+                <span>Sign Out</span>
+              </a> -->
             </div>
 
   {% block content%}{%endblock%}</div>
