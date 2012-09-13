@@ -202,6 +202,8 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         _.map(this.views, function (view) {
             view.close();
         });
+        // remove all existing items inside the view (bootstraped data for instance)
+        $(this.el).html('');
         this.views = [];
     },
 
@@ -284,11 +286,23 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         data.formatted_start_date= date.fromNow();
 
         if (this.model.get('type') == 'M') {
-            $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
+            if (Yasound.App.enableFX) {
+                $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
+            } else {
+                $(this.el).html(ich.wallEventTemplateMessage(data));
+            }
         } else if (this.model.get('type') == 'S') {
-            $(this.el).hide().html(ich.wallEventTemplateSong(data)).fadeIn(200);
+            if (Yasound.App.enableFX) {
+                $(this.el).hide().html(ich.wallEventTemplateSong(data)).fadeIn(200);
+            } else {
+                $(this.el).html(ich.wallEventTemplateSong(data));
+            }
         } else if (this.model.get('type') == 'L') {
-            $(this.el).hide().html(ich.wallEventTemplateLike(data)).fadeIn(200);
+            if (Yasound.App.enableFX) {
+                $(this.el).hide().html(ich.wallEventTemplateLike(data)).fadeIn(200);
+            } else {
+                $(this.el).html(ich.wallEventTemplateLike(data));
+            }
         }
         return this;
     },
@@ -500,8 +514,14 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             el: $('#pagination-wall', this.el)
         });
 
+        this.wallEventsView.clear();
+
         if (this.model.get('id')) {
-            this.wallEvents.goTo(0);
+            if (g_bootstrapped_data) {
+                this.wallEvents.reset(g_bootstrapped_data.wall_events);
+            } else {
+                this.wallEvents.goTo(0);
+            }
             this.radioUsers.fetch();
         }
 

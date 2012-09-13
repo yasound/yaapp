@@ -1563,6 +1563,25 @@ class WallEvent(models.Model):
             return self.user.username
         return None
 
+    def as_dict(self):
+        data = {
+            'id': self.id,
+            'user_id': self.user.id if self.user is not None else None,
+            'user_name': self.user_name,
+            'user_username': self.user.username if self.user is not None else None,
+            'user_picture': self.user_picture_url,
+            'radio_id': self.radio.id,
+            'song_id': self.song.id if self.song is not None else None,
+            'song_name': self.song_name,
+            'song_album': self.song_album,
+            'song_artist': self.song_artist,
+            'song_cover_filename': self.song_cover_filename,
+            'start_date': self.start_date,
+            'text': self.text,
+            'type': self.type,
+        }
+        return data
+
     class Meta:
         db_name = u'default'
 
