@@ -1030,7 +1030,16 @@ class WebAppView(View):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         context['radio'] = radio
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        return context, 'yabase/app/radio/radio.html'
+
+        wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
+        context['wall_events'] = wall_events
+
+        bdata = {
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events]
+        }
+        context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
+
+        return context, 'yabase/app/radio/radioPage.html'
 
     def search(self, request, context, *args, **kwargs):
         from yasearch.models import search_radio
