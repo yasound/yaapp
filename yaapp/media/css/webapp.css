@@ -3645,7 +3645,36 @@ a.yabutton-small {
     .responsive-settings-btn2 {
         float:right;
         margin-right:5.22%;
-        margin-top:-6px;
+        margin-top:-1px;
+    }
+
+    .responsive-settings-btn2 .switch-container {
+        margin:0px;
+    }
+
+    #mobile-menu-btn {
+        display:block;
+        height:30px;
+        width:43px;
+        background-image: linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(37,39,40)),
+            color-stop(1, rgb(80,85,86))
+        );
+        border:1px solid black;
+        border-radius:5px;
+        box-shadow: 0px 1px 1px #414445;
+    }
+
+    #mobile-menu-btn img {
+        margin-top:4px;
     }
 
 /*-- SUB-HEADER --*/
@@ -4453,6 +4482,26 @@ a.yabutton-small {
         margin:12px 14px 0px 16px;
     }
 
+    #phone-menu-favorites img {
+        margin:9px 14px 0px 16px;
+    }
+
+    #phone-menu-top img {
+        margin:12px 13px 0px 17px;
+    }
+
+    #phone-menu-selection img {
+        margin:9px 14px 0px 16px;
+    }
+
+    #phone-menu-share img {
+        margin:12px 15px 0px 17px;
+    }
+
+    #phone-menu-buy img {
+        margin:13px 18px 0px 13px;
+    }
+
 
 /*-- FOOTER --*/
 
@@ -4471,7 +4520,7 @@ a.yabutton-small {
 
     #minutes {
         text-align:center;
-        width:40%;
+        width:70%;
         position:relative;
         float:none;
         margin:20px auto;
@@ -4602,6 +4651,36 @@ a.yabutton-small {
         float:right;
         margin-right:15%;
         margin-top:-6px;
+    }
+
+    #mobile-menu-btn {
+        display:block;
+        height:30px;
+        width:43px;
+        background-image: linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(37,39,40) 0%, rgb(80,85,86) 100%);
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(37,39,40)),
+            color-stop(1, rgb(80,85,86))
+        );
+        border:1px solid black;
+        border-radius:5px;
+        box-shadow: 0px 1px 1px #414445;
+    }
+
+    #mobile-menu-btn img {
+        margin-top:4px;
+    }
+
+    .responsive-settings-btn2 .switch-container {
+        margin:0px;
+        margin-top:6px;
     }
 
 /*-- SUB-HEADER --*/
@@ -5084,6 +5163,26 @@ a.yabutton-small {
 
     #phone-menu-signout img {
         margin:12px 14px 0px 16px;
+    }
+
+    #phone-menu-favorites img {
+        margin:9px 14px 0px 16px;
+    }
+
+    #phone-menu-top img {
+        margin:12px 13px 0px 17px;
+    }
+
+    #phone-menu-selection img {
+        margin:9px 14px 0px 16px;
+    }
+
+    #phone-menu-share img {
+        margin:12px 15px 0px 17px;
+    }
+
+    #phone-menu-buy img {
+        margin:13px 18px 0px 13px;
     }
 
 /*-- FOOTER --*/

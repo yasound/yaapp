@@ -302,10 +302,15 @@
 				</a>
 			</div>
       <div id='mobile-menu' class='visible-phone responsive-settings-btn'>
-        <img id= 'mobile-menu-btn' src="/media/app/images/responsive-settings-btn.png">
+        <a id= 'mobile-menu-btn'>
+          <img src="/media/app/images/phone-settings-icon.png" alt='phone settings icon'>
+        </a>
       </div>
-      <div class='visible-phone responsive-settings-btn2'>
-        <img src="/media/app/images/responsive-settings-btn.png">
+      <div class='visible-phone responsive-settings-btn2'> 
+        <div class="switch-container">
+            <input type="checkbox"/>
+            <span class='hd-bg' />
+        </div>
       </div>
             <div class="header-separation">
                 <img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
@@ -452,36 +457,57 @@
             <div id='mobile-menu-content' class='hidden-display'>
               <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
                 <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
-                <span>Sign In</span>
+                <span>{% trans 'Sign In' %}</span>
               </a>
-              <!-- <a href='#' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
+              <a href='#' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
                 <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
                 <span>Profile</span>
-              </a> -->
+              </a>
               <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
-                <span>My Radios</span>
+                <span>{% trans 'My Radios' %}</span>
               </a>
               <a href='#' id='phone-menu-notifications' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-envelope-icon.png" alt='notifications'>
-                <span>Notifications</span>
+                <span>{% trans 'Notifications' %}</span>
               </a>
               <a href='#' id='phone-menu-gifts' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-gift-icon.png" alt='gifts'>
-                <span>Gifts</span>
+                <span>{% trans 'Gifts' %}</span>
               </a>
-              <a href='#' id='phone-menu-mysettings' class='phone-menu-list phone-menu-last'>
+              <a href='#' id='phone-menu-mysettings' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-icon-mysettings.png" alt='settings'>
-                <span>Settings</span>
+                <span>{% trans 'Settings' %}</span>
               </a>
-              <!-- <a href='#' id='phone-menu-myfriends' class='phone-menu-list phone-menu-last'>
+              <a href='#' id='phone-menu-myfriends' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-friends-icon.png" alt='my friends'>
-                <span>My Friends</span>
-              </a> -->
-              <!-- <a href='#' id='phone-menu-signout' class='phone-menu-list phone-menu-last'>
+                <span>{% trans 'My Friends' %}</span>
+              </a>
+              <a href='#' id='phone-menu-signout' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-icon-signout.png" alt='sign out'/>
-                <span>Sign Out</span>
-              </a> -->
+                <span>{% trans 'Sign Out' %}</span>
+              </a>
+              <a href='#' id='phone-menu-favorites' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='favorites'>
+                <span>{% trans 'Favorites' %}</span>
+              </a>
+              <a href='#' id='phone-menu-top' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='top'>
+                <span>{% trans 'Top' %}</span>
+              </a>
+              <a href='#' id='phone-menu-selection' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='selection'>
+                <span>{% trans 'Selection' %}</span>
+              </a>
+              <a href='#' id='phone-menu-share' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-share.png" alt='share'>
+                <span>{% trans 'Share' %}</span>
+              </a>
+              <a href='#' id='phone-menu-buy' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-buy.png" alt='buy'>
+                <span>{% trans 'Buy song' %}</span>
+              </a>
+
             </div>
 
   {% block content%}{%endblock%}</div>
