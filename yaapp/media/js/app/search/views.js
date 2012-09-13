@@ -109,9 +109,9 @@ Yasound.Views.SearchPage = Backbone.View.extend({
             collection: this.collection,
             el: $('#results', this.el)
         });
-        
+
         this.collection.fetch();
-        
+
         return this;
     }
 });

@@ -9,10 +9,11 @@
             <img class='loading-mask' src='/media/images/loading.gif'/>
             {% endif %}
             {% for notification in notifications %}
-            <li>{% include 'yabase/app/notifications/notification.mustache' %}</li>
+            {% cycle 'notification-even' 'notification-odd' as row_color silent %}
+            <li>{% include 'yabase/app/notifications/notification.mustache' with row_color=row_color%}</li>
             {% endfor %}
 
         </ul>
-        <div id='pagination'></div>
+        <div id='pagination'>{% include "yabase/app/pagination.mustache" %}</div>
 	</div>
 </div>

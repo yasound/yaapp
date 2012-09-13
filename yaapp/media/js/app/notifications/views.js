@@ -184,11 +184,7 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
             el: $('#pagination', this.el)
         });
 
-        if (g_bootstrapped_data) {
-            this.notifications.reset(g_bootstrapped_data);
-        } else {
-            this.notifications.fetch();
-        }
+        this.notifications.fetch();
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification, this);

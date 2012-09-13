@@ -1057,8 +1057,21 @@ class WebAppView(View):
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
+        from yametrics.models import RadioPopularityManager
+        manager = RadioPopularityManager()
+        radio_info = manager.most_popular(limit=16)
+        radios = []
+        for i in radio_info:
+            try:
+                r = Radio.objects.get(id=i['db_id'])
+            except Radio.DoesNotExist:
+                continue
+            radios.append(r)
+        context['radios'] = radios
+        context['bdata'] = json.dumps([radio.as_dict(request.user) for radio in radios], cls=MongoAwareEncoder)
         context['submenu_number'] = 2
-        return context, 'yabase/webapp.html'
+        context['mustache_template'] = 'yabase/app/top/topRadiosPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def favorites(self, request, context, *args, **kwargs):
         context['submenu_number'] = 4

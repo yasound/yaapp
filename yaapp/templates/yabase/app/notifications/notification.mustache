@@ -1,12 +1,14 @@
 {% load i18n %}
-<div class='notification-container'>
+<div class='notification-container {{row_color}}'>
 	<div class='{{ notification.type|default:'<% type %>' }}'>&nbsp;</div>
 	<a class="close-icon" data-dismiss="alert" href="#"></a>
 	<div class='notifications-date'>{{ notification.date|default:'<% formatted_date %>' }}</div>
-    {% if notification.from_radio_uuid %}
-    <div>
-        {% trans "message from radio:" %} <a href='/app/radio/{{notification.from_radio_uuid}}/' data-uuid='<{{notification.from_radio_uuid}}' class='radio-link'>{{notification.from_radio_name}}</a>
-    </div>
+    {% if notification %}
+        {% if notification.from_radio_uuid %}
+        <div>
+            {% trans "message from radio:" %} <a href='/app/radio/{{notification.from_radio_uuid}}/' data-uuid='<{{notification.from_radio_uuid}}' class='radio-link'>{{notification.from_radio_name}}</a>
+        </div>
+        {% endif %}
     {% else %}
     <%#from_radio_uuid%>
     <div>
