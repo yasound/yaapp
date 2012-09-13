@@ -971,6 +971,11 @@ input::-webkit-input-placeholder {
     cursor:pointer;
 }
 
+#radios .radio-cell,
+#favorites .radio-cell {
+    margin-left:13px;
+}
+
 .radio-container {
 	float:left;
 	height:209px;
@@ -3945,8 +3950,18 @@ a.yabutton-small {
         margin:3%;
     }
 
+    #user-profile #picture img {
+        height:140px;
+        width:140px;
+    }
+
+    #user-profile #picture {
+        height:140px;
+        width:150px;
+    }
+
     #infos {
-        width:40%;
+        width:47%;
         height:170px;
     }
 
@@ -4178,10 +4193,12 @@ a.yabutton-small {
             margin-left:0px;
         }
         
-        .radio-cells li,
-        #radios li,
-        #friends-zone li,
-        #favorites li {
+        .radio-cells li {
+            margin-left:5%;
+        }
+
+        #radios .radio-cell,
+        #favorites .radio-cell {
             width:150px;
             height:150px;
             margin-left:3%;
@@ -4193,7 +4210,6 @@ a.yabutton-small {
         .radio-with-stats-cells li .radio-cell,
         .radio-cells li .radio-cell,
         #radios li .radio-cell,
-        #friends-zone li .radio-cell,
         #favorites li .radio-cell {
             width:150px;
             height:150px;
@@ -4203,7 +4219,6 @@ a.yabutton-small {
         .radio-with-stats-cells li .radio-cell .radio-container,
         .radio-cells li .radio-cell .radio-container,
         #friends-zone li .radio-cell .radio-container,
-        #favorites li .radio-cell .radio-container,
         #radios li .radio-cell .radio-container {
             width:145px;
             height:150px;
@@ -4213,7 +4228,6 @@ a.yabutton-small {
         .radio-with-stats-cells li .radio-cell .radio-container .picture,
         .radio-cells li .radio-cell .radio-container .picture,
         #radios li .radio-cell .radio-container .picture,
-        #friends-zone li .radio-cell .radio-container .picture,
         #favorites li .radio-cell .radio-container .picture {
             height:150px;
             width:150px;
@@ -4222,7 +4236,6 @@ a.yabutton-small {
         
         .radio-with-stats-cells li .radio-cell .radio-container .picture .caption,
         .radio-cells li .radio-cell .radio-container .picture .caption,
-        #friends-zone li .radio-cell .radio-container .picture .caption,
         #favorites li .radio-cell .radio-container .picture .caption,
         #radios li .radio-cell .radio-container .picture .caption {
             width:150px;
@@ -4238,7 +4251,7 @@ a.yabutton-small {
 
         .radio-cell .radio-icon {
             top:10px;
-            left:85px;
+            left:100px;
         }
 
         .radio-cell .tag {
@@ -4266,6 +4279,58 @@ a.yabutton-small {
         .radio-cell .radio-id {
             display:none;
         }
+
+/*-- FRIEND-CELL --*/
+    
+    ul .user-cell,
+    ul .mask-user {
+        width:116px;
+        height:116px;
+    }
+
+    ul .user-cell .user-cell-inner {
+        width:116px;
+        height:116px;  
+    }
+    
+    ul .mask-user .caption-user {
+        height:75px;
+        overflow:hidden;
+        top: 23px;
+        left: 5px;
+    }
+
+    .caption-user h5,
+    .caption-user span {
+        font-size: 13px;
+    }
+
+    .user-cell-inner img {
+        max-width:100%;
+        max-height:100%;
+    }
+
+    #friends-zone ul {
+        margin-left:7.5%;
+    }
+
+    ul .user-cell,
+    ul .mask-user {
+        margin-right:6.5%;
+    }
+
+    .profile-background {
+        float:left;
+        width:100%;
+    }
+
+    .radio-cells {
+        margin-left:0px;
+    }
+
+    .radio-cells li {
+        margin-left:8px;
+    }
 
 /*-- FOOTER --*/
 
@@ -4807,7 +4872,13 @@ a.yabutton-small {
     .upload-container {
         display:none;
     }
-
+/*-- FRIENDS --*/
+    
+    .profile-background {
+        float:left;
+        width:100%;
+    }
+    
 /*-- FOOTER --*/
 
     #connected-users,
