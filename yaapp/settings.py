@@ -383,6 +383,7 @@ INSTALLED_APPS = (
     'yarecommendation',
     'yapremium',
     'yadeezer',
+    'yageoperm',
     # newsletter,
     #'tinymce',
     'tagging',

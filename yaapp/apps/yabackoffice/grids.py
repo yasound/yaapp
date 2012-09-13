@@ -5,22 +5,25 @@ from yabase.models import SongInstance, WallEvent
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 from yapremium.models import Promocode
+from yageoperm.models import Country
+
 
 class SongInstanceGrid(grids.ModelGrid):
     model = SongInstance
-    list_mapping=[
+    list_mapping = [
             'id',
             ]
     mapping = {
-        'name' : 'metadata__name',
+        'name': 'metadata__name',
         'artist_name': 'metadata__artist_name',
-        'album_name' : 'metadata__album_name',
+        'album_name': 'metadata__album_name',
         'yasound_song_id': 'metadata__yasound_song_id'
     }
 
+
 class RadioGrid(grids.ModelGrid):
     model = BackofficeRadio
-    list_mapping=[
+    list_mapping = [
             'id',
             'name',
             'created',
@@ -34,9 +37,10 @@ class RadioGrid(grids.ModelGrid):
         'creator_profile_id': 'creator__userprofile__id',
     }
 
+
 class InvitationGrid(grids.ModelGrid):
     model = Invitation
-    list_mapping=[
+    list_mapping = [
             'id',
             'fullname',
             'user',
@@ -55,16 +59,17 @@ class InvitationGrid(grids.ModelGrid):
 
 class YasoundSongGrid(grids.ModelGrid):
     model = YasoundSong
-    list_mapping=[
+    list_mapping = [
             'id',
             'name',
             'artist_name',
             'album_name',
     ]
 
+
 class UserProfileGrid(grids.ModelGrid):
     model = UserProfile
-    list_mapping=[
+    list_mapping = [
             'id',
             'account_type',
             'facebook_uid',
@@ -79,9 +84,10 @@ class UserProfileGrid(grids.ModelGrid):
             'email': 'user__email',
     }
 
+
 class WallEventGrid(grids.ModelGrid):
     model = WallEvent
-    list_mapping=[
+    list_mapping = [
             'id',
             'type',
             'user_name',
@@ -90,9 +96,10 @@ class WallEventGrid(grids.ModelGrid):
     exclude = ['picture', 'user_picture']
     mapping = {}
 
+
 class PromocodeGrid(grids.ModelGrid):
     model = Promocode
-    list_mapping= [
+    list_mapping = [
         'id',
         'service',
         'code',
@@ -103,3 +110,7 @@ class PromocodeGrid(grids.ModelGrid):
     mapping = {
         'service_id': 'service__id',
     }
+
+
+class CountryGrid(grids.ModelGrid):
+    model = Country

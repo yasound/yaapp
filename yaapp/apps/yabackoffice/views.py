@@ -20,7 +20,8 @@ from django.views.decorators.csrf import csrf_exempt
 from emailconfirmation.models import EmailConfirmation, EmailAddress
 from emencia.django.newsletter.models import Contact
 from extjs import utils
-from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid, PromocodeGrid
+from grids import SongInstanceGrid, RadioGrid, \
+    InvitationGrid, YasoundSongGrid, PromocodeGrid, CountryGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid, WallEventGrid
 from yabackoffice.models import BackofficeRadio
@@ -46,6 +47,7 @@ from yahistory.models import UserHistory
 from yasearch.utils import get_simplified_name
 from yapremium.models import Promocode, Service
 from yapremium import settings as yapremium_settings
+from yageoperm.models import Country
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -1266,3 +1268,22 @@ def premium_promocodes(request, promocode_id=None):
             response['Content-Disposition'] = 'attachment; filename=users.xls'
             return response
     raise Http404
+
+@csrf_exempt
+@login_required
+def geoperm_countries(request):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        qs = Country.objects.all().order_by('code')
+        grid = CountryGrid()
+        filters = [
+            'code',
+            'name'
+        ]
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    raise Http404
+
