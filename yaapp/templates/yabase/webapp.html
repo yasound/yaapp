@@ -119,7 +119,7 @@
    </script>
 
    <script type='text/html' id='radioPageTemplate'>
-     {% include "yabase/app/radio/radioPage.mustache" %}
+     {% include "yabase/app/radio/radioPage.mustache" with wall_events=None%}
    </script>
 
    <script type="text/html" id="wallEventTemplateMessage">
@@ -167,7 +167,7 @@
 
 
    <script type='text/html' id='topRadiosPageTemplate'>
-     {% include "yabase/app/top/topRadiosPage.mustache" %}
+     {% include "yabase/app/top/topRadiosPage.mustache" with radios=None %}
    </script>
 
    <script type='text/html' id='usersPageTemplate'>
@@ -202,7 +202,7 @@
    </script>
 
    <script type="text/html" id="notificationsPageTemplate">
-      {% include "yabase/app/notifications/notificationsPage.mustache" %}
+      {% include "yabase/app/notifications/notificationsPage.mustache" with notifications=None%}
    </script>
 
    <script type="text/html" id="notificationTemplate">

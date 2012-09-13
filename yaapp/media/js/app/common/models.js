@@ -39,9 +39,6 @@ Yasound.Data.Paginator = Backbone.Paginator.requestPager.extend({
             return lastObject.get('id');
         }
     },
-    comparator: function(obj) {
-        return -parseInt(obj.get("id"), 10);
-    },
 
     fetchFirst: function() {
         var savedPage = this.page;

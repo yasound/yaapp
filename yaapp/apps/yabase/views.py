@@ -103,9 +103,13 @@ def radio_recommendations(request):
         return HttpResponse(status=405)
     check_api_key_Authentication(request)
 
+    limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
+    skip = int(request.GET.get('skip', 0))
+
     # recommendation starts with selection
     selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
-    recommended_radios = list(selection_radios)
+    selection_radios = list(selection_radios)
+    recommended_radios = selection_radios[skip:(skip + limit)]
 
     # if a list of artists is provided, compute a list of similar radios and add it in recommendation
     data = request.FILES['artists_data']
@@ -125,7 +129,7 @@ def radio_recommendations(request):
         while not binary.is_done():
             tag = binary.get_tag()
             a = binary.get_string()
-            song_count = binary.get_int16()
+            _song_count = binary.get_int16()  # not used for now, but needs to be read to go forward in binary stream
             if tag == 'ARTS':
                 artists.append(a)
         # get ids of user's radios
@@ -136,7 +140,10 @@ def radio_recommendations(request):
                 user_radio_ids.append(r.id)
         # find similar radios from artist list
         m = ClassifiedRadiosManager()
-        res = m.find_similar_radios(artists)
+        # limit and offset for find_similar_radios
+        limit_similar = max(0, limit - len(recommended_radios))
+        skip_similar = max(0, skip - len(selection_radios))
+        res = m.find_similar_radios(artists, offset=skip_similar, limit=limit_similar)
         radio_ids = [int(x[1]) for x in res]
         for r in radio_ids:
             if r in user_radio_ids:
@@ -150,7 +157,7 @@ def radio_recommendations(request):
     response = []
     for r in recommended_radios:
         response.append(r.as_dict(request_user=request.user))
-    return api_response(response)
+    return api_response(response, limit=limit, offset=skip)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
@@ -1030,7 +1037,16 @@ class WebAppView(View):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         context['radio'] = radio
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        return context, 'yabase/app/radio/radio.html'
+
+        wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
+        context['wall_events'] = wall_events
+
+        bdata = {
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events]
+        }
+        context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
+
+        return context, 'yabase/app/radio/radioPage.html'
 
     def search(self, request, context, *args, **kwargs):
         from yasearch.models import search_radio
@@ -1041,8 +1057,21 @@ class WebAppView(View):
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
+        from yametrics.models import RadioPopularityManager
+        manager = RadioPopularityManager()
+        radio_info = manager.most_popular(limit=16)
+        radios = []
+        for i in radio_info:
+            try:
+                r = Radio.objects.get(id=i['db_id'])
+            except Radio.DoesNotExist:
+                continue
+            radios.append(r)
+        context['radios'] = radios
+        context['bdata'] = json.dumps([radio.as_dict(request.user) for radio in radios], cls=MongoAwareEncoder)
         context['submenu_number'] = 2
-        return context, 'yabase/webapp.html'
+        context['mustache_template'] = 'yabase/app/top/topRadiosPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def favorites(self, request, context, *args, **kwargs):
         context['submenu_number'] = 4

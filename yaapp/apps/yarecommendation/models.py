@@ -120,7 +120,7 @@ class ClassifiedRadiosManager():
     def _co_occurrences(self, a, b):
         return float(len(self._intersect(a, b)))
 
-    def find_similar_radios(self, artists):
+    def find_similar_radios(self, artists, offset=0, limit=20):
         ma = MapArtistManager()
         similarities = []
         if len(artists) == 0:
@@ -145,7 +145,7 @@ class ClassifiedRadiosManager():
                 similarities.append((similarity, doc.get('db_id')))
         similarities.sort()
         similarities.reverse()
-        similarities = similarities[0:20]
+        similarities = similarities[offset:(offset + limit)]
         return similarities
 
     def find2(self, classification):
