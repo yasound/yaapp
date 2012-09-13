@@ -3,9 +3,15 @@
 	<div class='span12 notifications-container'>
 	    <h1>{% trans "Notifications" %}</h1>
 	    <button type="button" class="yabutton-small right" id='mark-all-read-btn'>{% trans "Mark all as read" %}</button>
-	    
+
         <ul id='notifications'>
+            {% if not notifications %}
             <img class='loading-mask' src='/media/images/loading.gif'/>
+            {% endif %}
+            {% for notification in notifications %}
+            <li>{% include 'yabase/app/notifications/notification.mustache' %}</li>
+            {% endfor %}
+
         </ul>
         <div id='pagination'></div>
 	</div>
