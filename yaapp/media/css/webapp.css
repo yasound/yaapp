@@ -5074,6 +5074,29 @@ a.yabutton-small {
         color-stop(1, rgb(75,81,85))
         );
     }
+
+    .phone-menu-list:active {
+        display:block;
+        height:43px;
+        width:100%;
+        border-top:1px solid black;
+        border-left:1px solid black;
+        border-right:1px solid black;
+        box-shadow:inset 0px 1px 1px #61686c;
+        background-image: linear-gradient(bottom, rgb(75,80,85) 0%, rgb(54,60,64) 100%);
+        background-image: -o-linear-gradient(bottom, rgb(75,80,85) 0%, rgb(54,60,64) 100%);
+        background-image: -moz-linear-gradient(bottom, rgb(75,80,85) 0%, rgb(54,60,64) 100%);
+        background-image: -webkit-linear-gradient(bottom, rgb(75,80,85) 0%, rgb(54,60,64) 100%);
+        background-image: -ms-linear-gradient(bottom, rgb(75,80,85) 0%, rgb(54,60,64) 100%);
+
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(75,80,85)),
+            color-stop(1, rgb(54,60,64))
+        );
+    }
     
     .phone-menu-first {
         border-radius:5px 5px 0px 0px;
