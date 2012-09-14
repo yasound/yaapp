@@ -76,7 +76,7 @@ def gifts(request, subscription_sku=None):
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
-        qs = Gift.objects.all()
+        qs = Gift.objects.filter(enabled=True)
         total_count = qs.count()
         qs = qs[offset:offset +limit]
         data = []
