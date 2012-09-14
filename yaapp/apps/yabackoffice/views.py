@@ -20,7 +20,8 @@ from django.views.decorators.csrf import csrf_exempt
 from emailconfirmation.models import EmailConfirmation, EmailAddress
 from emencia.django.newsletter.models import Contact
 from extjs import utils
-from grids import SongInstanceGrid, RadioGrid, InvitationGrid, YasoundSongGrid, PromocodeGrid
+from grids import SongInstanceGrid, RadioGrid, \
+    InvitationGrid, YasoundSongGrid, PromocodeGrid, CountryGrid, GeoFeatureGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid, WallEventGrid
 from yabackoffice.models import BackofficeRadio
@@ -46,7 +47,8 @@ from yahistory.models import UserHistory
 from yasearch.utils import get_simplified_name
 from yapremium.models import Promocode, Service
 from yapremium import settings as yapremium_settings
-
+from yageoperm.models import Country, GeoFeature
+from django.db import IntegrityError
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
     if not request.user.is_superuser:
@@ -1265,4 +1267,98 @@ def premium_promocodes(request, promocode_id=None):
             response = HttpResponse(data, mimetype='application/vnd.ms-excel')
             response['Content-Disposition'] = 'attachment; filename=users.xls'
             return response
+    raise Http404
+
+@csrf_exempt
+@login_required
+def geoperm_countries(request, country_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        qs = Country.objects.all().order_by('code')
+        grid = CountryGrid()
+        filters = [
+            'code',
+            'name'
+        ]
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    elif request.method == 'POST':
+        action = request.REQUEST.get('action')
+        if action == 'delete':
+            country_ids = request.REQUEST.getlist('country_id')
+            Country.objects.filter(id__in=country_ids).delete()
+            data = {"success":True,"message":"ok"}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+        else:
+            name = request.REQUEST.get('name')
+            code = request.REQUEST.get('code')
+            try:
+                Country.objects.create(name=name, code=code)
+                data = {"success":True,"message":"ok"}
+            except IntegrityError:
+                data = {"success":False,"message":unicode(_('This country already exists'))}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+    elif request.method == 'PUT' and country_id is not None:
+        coerce_put_post(request)
+        country = get_object_or_404(Country, id=country_id)
+        name = request.REQUEST.get('name')
+        code = request.REQUEST.get('code')
+        country.name = name
+        country.code = code
+        try:
+            country.save()
+            data = {"success":True,"message":"ok"}
+        except IntegrityError:
+            data = {"success":False,"message":unicode(_('This country already exists'))}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
+    raise Http404
+
+@csrf_exempt
+@login_required
+def geoperm_countries_features(request, country_id, geofeature_id=None):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        qs = GeoFeature.objects.filter(country__id=country_id).order_by('feature')
+        grid = GeoFeatureGrid()
+        jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs)
+        resp = utils.JsonResponse(jsonr)
+        return resp
+    elif request.method == 'POST':
+        action = request.REQUEST.get('action')
+        if action == 'delete':
+            geofeature_ids = request.REQUEST.getlist('geofeature_id')
+            GeoFeature.objects.filter(id__in=geofeature_ids).delete()
+            data = {"success":True,"message":"ok"}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+        else:
+            feature = request.REQUEST.get('feature')
+            try:
+                GeoFeature.objects.create(feature=feature, country=Country.objects.get(id=country_id))
+                data = {"success":True,"message":"ok"}
+            except IntegrityError:
+                data = {"success":False,"message":unicode(_('This feature already exists'))}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+    elif request.method == 'PUT' and geofeature_id is not None:
+        coerce_put_post(request)
+        geofeature = get_object_or_404(GeoFeature, id=geofeature_id)
+        feature = request.REQUEST.get('feature')
+        geofeature.feature = feature
+        try:
+            geofeature.save()
+            data = {"success":True,"message":"ok"}
+        except IntegrityError:
+            data = {"success":False,"message":unicode(_('This feature already exists'))}
+
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+        return resp
     raise Http404

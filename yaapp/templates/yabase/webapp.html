@@ -30,7 +30,7 @@
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
-    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
+    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.current_localestom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
 	<link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
 
 
@@ -297,18 +297,20 @@
       <div class="navbar-inner">
         <div class="container">
       <div id="brand-logo">
-          <div id='mobile-menu' class='visible-phone'>
-            {# <div id= 'mobile-menu-btn'>MENU</div> #}
-          </div>
 				<a href="{% url webapp %}" id='btn-webapp'>
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
-      <div class='visible-phone responsive-settings-btn'>
-        <img src="/media/app/images/responsive-settings-btn.png">
+      <div id='mobile-menu' class='visible-phone responsive-settings-btn'>
+        <a id= 'mobile-menu-btn'>
+          <img src="/media/app/images/phone-settings-icon.png" alt='phone settings icon'>
+        </a>
       </div>
-      <div class='visible-phone responsive-settings-btn2'>
-        <img src="/media/app/images/responsive-settings-btn.png">
+      <div class='visible-phone responsive-settings-btn2'> 
+        <div class="switch-container">
+            <input type="checkbox"/>
+            <span class='hd-bg' />
+        </div>
       </div>
             <div class="header-separation">
                 <img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation">
@@ -451,8 +453,61 @@
     </div>
 </div>
 
-<div id='webapp-container'>
+<div id='webapp-container'>  
             <div id='mobile-menu-content' class='hidden-display'>
+              <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
+                <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
+                <span>{% trans 'Sign In' %}</span>
+              </a>
+              <a href='#' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
+                <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
+                <span>Profile</span>
+              </a>
+              <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
+                <span>{% trans 'My Radios' %}</span>
+              </a>
+              <a href='#' id='phone-menu-notifications' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-envelope-icon.png" alt='notifications'>
+                <span>{% trans 'Notifications' %}</span>
+              </a>
+              <a href='#' id='phone-menu-gifts' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-gift-icon.png" alt='gifts'>
+                <span>{% trans 'Gifts' %}</span>
+              </a>
+              <a href='#' id='phone-menu-mysettings' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-mysettings.png" alt='settings'>
+                <span>{% trans 'Settings' %}</span>
+              </a>
+              <a href='#' id='phone-menu-myfriends' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-friends-icon.png" alt='my friends'>
+                <span>{% trans 'My Friends' %}</span>
+              </a>
+              <a href='#' id='phone-menu-signout' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-signout.png" alt='sign out'/>
+                <span>{% trans 'Sign Out' %}</span>
+              </a>
+              <a href='#' id='phone-menu-favorites' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='favorites'>
+                <span>{% trans 'Favorites' %}</span>
+              </a>
+              <a href='#' id='phone-menu-top' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='top'>
+                <span>{% trans 'Top' %}</span>
+              </a>
+              <a href='#' id='phone-menu-selection' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='selection'>
+                <span>{% trans 'Selection' %}</span>
+              </a>
+              <a href='#' id='phone-menu-share' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-share.png" alt='share'>
+                <span>{% trans 'Share' %}</span>
+              </a>
+              <a href='#' id='phone-menu-buy' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-buy.png" alt='buy'>
+                <span>{% trans 'Buy song' %}</span>
+              </a>
+
             </div>
 
   {% block content%}{%endblock%}</div>

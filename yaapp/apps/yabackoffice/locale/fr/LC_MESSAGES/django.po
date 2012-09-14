@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-08 16:13+0100\n"
+"POT-Creation-Date: 2012-09-14 10:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: views.py:190 views.py:251
+#: views.py:246
+#: views.py:307
 msgid "Invalid input"
-msgstr ""
+msgstr "Donnée invalide"
+
+#: views.py:673
+#: views.py:677
+#: views.py:703
+#: views.py:822
+msgid "Unavailable"
+msgstr "Indisponible"
+
+#: views.py:1303
+#: views.py:1317
+msgid "This country already exists"
+msgstr "Ce pays existe déjà"
+
+#: views.py:1348
+#: views.py:1360
+msgid "This feature already exists"
+msgstr "Cette fonctionnalité existe déjà"
+

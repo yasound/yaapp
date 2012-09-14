@@ -75,6 +75,9 @@ PIPELINE_JS = {
             'js/backoffice/RadioActivityScoreSettings/RadioActivityScoreSettings.js',
             'js/backoffice/Premium/PromocodeGrid.js',
             'js/backoffice/Premium/Promocodes.js',
+            'js/backoffice/Geoperm/CountryGrid.js',
+            'js/backoffice/Geoperm/GeoFeatureGrid.js',
+            'js/backoffice/Geoperm/Geoperm.js',
         ]
     },
     'webapp-all': {

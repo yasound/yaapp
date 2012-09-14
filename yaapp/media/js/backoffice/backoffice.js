@@ -14,6 +14,7 @@ Ext.namespace("Yasound.WallEvents.UI", "Yasound.WallEvents.Handler", "Yasound.Wa
 Ext.namespace("Yasound.RadioActivityScoreSettings.UI", "Yasound.RadioActivityScoreSettings.Handler", "Yasound.RadioActivityScoreSettings.Data");
 Ext.namespace("Yasound.Settings.UI", "Yasound.Settings.Handler", "Yasound.Settings.Data");
 Ext.namespace("Yasound.Premium.UI", "Yasound.Premium.Handler", "Yasound.Premium.Data");
+Ext.namespace("Yasound.Geoperm.UI", "Yasound.Geoperm.Handler", "Yasound.Geoperm.Data");
 
 //------------------------------------------
 // Datastore
@@ -291,6 +292,32 @@ Ext.onReady(function(){
             })]
         };
 
+    var tabPanelGeoperm = {
+            id: 'geoperm-tab',
+            expanded: false,
+            listeners: {
+                'tabchange': function(tabPanel, tab){
+                    Ext.History.add(tabPanel.id + '/' + tab.id);
+                }
+            },
+            items: [{
+                title: gettext('Geo permissions'),
+                id: 'geoperm-top-panel',
+                tabTip: gettext('Geo permissions'),
+                style: 'padding: 10px;',
+                html: '<h1>Geo permissions</h1>',
+                listeners: {
+                    'activate': function(p){
+                        var tabPanel = p.findParentByType('grouptab');
+                        var nextItem = p.nextSibling();
+                        tabPanel.setActiveTab(nextItem);
+                    }
+                }
+            }, Ext.apply(Yasound.Geoperm.UI.Panel(), {
+                iconCls: 'x-icon-templates'
+            })]
+        };
+
     var tabPanels = {
         xtype: 'grouptabpanel',
         id: 'group-panel',
@@ -309,7 +336,8 @@ Ext.onReady(function(){
                          tabPanelUsers,
                          tabPanelMenus,
                          tabPanelActivityScore,
-                         tabPanelPremium);
+                         tabPanelPremium,
+                         tabPanelGeoperm);
 
     var viewport = new Ext.Viewport({
         layout: 'fit',

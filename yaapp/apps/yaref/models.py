@@ -177,8 +177,7 @@ class YasoundSongManager(models.Manager):
                     ratio_artist -= 20
 
             ratio = ratio_song + ratio_album / 4 + ratio_artist / 4
-
-            if ratio >= best_ratio and ratio > 50:
+            if ratio >= best_ratio and ratio > 60:
                 best_ratio = ratio
                 best_song = song
         return best_song, best_ratio
