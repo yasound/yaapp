@@ -114,7 +114,6 @@ class UserResource(ModelResource):
 
         if bundle.request.user == user:
             userprofile.fill_user_bundle_with_login_infos(bundle)
-            userprofile.update_geopermissions(bundle.request)
         return bundle
 
     def obj_update(self, bundle, request=None, **kwargs):
