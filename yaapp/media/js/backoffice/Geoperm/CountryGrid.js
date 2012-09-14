@@ -6,7 +6,7 @@ Yasound.Geoperm.Data.CountryStore = function () {
     var fields = [ 'id', 'code', 'name' ];
     var sortInfo = {
         field: 'code',
-        direction: 'DESC'
+        direction: 'ASC'
     };
     var url = '/yabackoffice/geoperm/countries/';
     return new Yasound.Utils.SimpleStore(url, fields, sortInfo, 'id');

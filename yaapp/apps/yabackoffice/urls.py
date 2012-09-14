@@ -67,5 +67,6 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^premium/promocodes/$', 'premium_promocodes'),
 
     url(r'^geoperm/countries/$', 'geoperm_countries'),
+    url(r'^geoperm/countries/(?P<country_id>\d+)/$', 'geoperm_countries'),
 
 )

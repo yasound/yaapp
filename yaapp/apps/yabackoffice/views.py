@@ -1271,7 +1271,7 @@ def premium_promocodes(request, promocode_id=None):
 
 @csrf_exempt
 @login_required
-def geoperm_countries(request):
+def geoperm_countries(request, country_id=None):
     if not request.user.is_superuser:
         raise Http404()
 
@@ -1284,6 +1284,32 @@ def geoperm_countries(request):
         ]
         jsonr = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
         resp = utils.JsonResponse(jsonr)
+        return resp
+    elif request.method == 'POST':
+        action = request.REQUEST.get('action')
+        if action == 'delete':
+            country_ids = request.REQUEST.getlist('country_id')
+            Country.objects.filter(id__in=country_ids).delete()
+            data = {"success":True,"message":"ok"}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+        else:
+            name = request.REQUEST.get('name')
+            code = request.REQUEST.get('code')
+            Country.objects.create(name=name, code=code)
+            data = {"success":True,"message":"ok"}
+            resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
+            return resp
+    elif request.method == 'PUT' and country_id is not None:
+        coerce_put_post(request)
+        country = get_object_or_404(Country, id=country_id)
+        name = request.REQUEST.get('name')
+        code = request.REQUEST.get('code')
+        country.name = name
+        country.code = code
+        country.save()
+        data = {"success":True,"message":"ok"}
+        resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp
     raise Http404
 
