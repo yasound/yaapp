@@ -3589,6 +3589,10 @@ a.yabutton-small {
     }
 
 /*-- HEADER --*/
+    
+    #mobile-menu-content-logo {
+
+    }
 
     #header {
         position:fixed;
@@ -3794,7 +3798,7 @@ a.yabutton-small {
     }
 
 	#results {
-		width:104%;
+		width:100%;
 	}
 
 /*-- MENU --*/
@@ -4399,7 +4403,7 @@ a.yabutton-small {
     }
 
     #results {
-        margin-left:10px;
+        margin-left:0px;
     }
 
 /*-- SETTINGS MENU --*/

@@ -42,7 +42,7 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
 Yasound.Views.MobileMenuLogo = Backbone.View.extend({
     el: '#mobile-menu-logo',
     events: {
-        "click #mobile-menu-btn-logo": "toggleMenuLogo"
+        "click #mobile-menu-btn-logo": "toggleMenu"
     },
 
     initialize: function() {
@@ -56,7 +56,7 @@ Yasound.Views.MobileMenuLogo = Backbone.View.extend({
         return this;
     },
 
-    toggleMenuLogo: function (e) {
+    toggleMenu: function (e) {
         e.preventDefault();
         $("#mobile-menu-content-logo").toggle();
         $("#mobile-menu-content-logo").siblings().toggle();
