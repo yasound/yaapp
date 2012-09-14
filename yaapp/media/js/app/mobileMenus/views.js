@@ -31,6 +31,7 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
     toggleMenu: function (e) {
         e.preventDefault();
         var menu = $("#mobile-menu-content");
+        $('html, body').animate({scrollTop: 0}, 400);
         if (menu.is(':visible')) {
             $('#webapp-content').show();
         } else {
@@ -64,6 +65,7 @@ Yasound.Views.MobileMenuLogo = Backbone.View.extend({
     toggleMenu: function (e) {
         e.preventDefault();
         var menu = $("#mobile-menu-content-logo");
+        $('html, body').animate({scrollTop: 0}, 400);
         if (menu.is(':visible')) {
             $('#webapp-content').show();
         } else {
@@ -96,6 +98,7 @@ Yasound.Views.MobileMenuShare = Backbone.View.extend({
 
     toggleMenu: function (e) {
         e.preventDefault();
+        $('html, body').animate({scrollTop: 0}, 400);
         var menu = $("#mobile-menu-content-share");
         if (menu.is(':visible')) {
             $('#webapp-content').show();
