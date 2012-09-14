@@ -3656,7 +3656,7 @@ a.yabutton-small {
 
     .responsive-settings-btn2 {
         float:right;
-        margin-right:5.22%;
+        margin-right:1%;
         margin-top:-1px;
     }
 
@@ -4321,7 +4321,7 @@ a.yabutton-small {
 
         .radio-cell .radio-icon {
             top:10px;
-            left:100px;
+            left:90px;
         }
 
         .radio-cell .tag {
