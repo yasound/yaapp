@@ -1821,7 +1821,7 @@ class TestProgramming(TestCase):
 
 class TestMyRadios(TestCase):
     def setUp(self):
-        self.user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        self.user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=False)
         self.user.set_password('test')
         self.user.save()
 
