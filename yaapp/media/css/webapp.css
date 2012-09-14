@@ -4344,8 +4344,8 @@ a.yabutton-small {
     }
     
     #mobile-menu-content {
-        margin-left: -8px;
-        margin-right: -7px;
+        margin-left: -5px;
+        margin-right: -3px;
         margin-top: -53px; 
     }
 
@@ -4371,12 +4371,12 @@ a.yabutton-small {
         );
     }
     
-    .phone-menu-first {
+    /*.phone-menu-first {
         border-radius:5px 5px 0px 0px;
-    }
+    }*/
 
     .phone-menu-last {
-        border-radius:0px 0px 5px 5px;
+        /*border-radius:0px 0px 5px 5px;*/
         border-bottom:1px solid black;
     }
 
@@ -4447,8 +4447,8 @@ a.yabutton-small {
 
 /*-- LOGO MENU --*/
     #mobile-menu-content-logo {
-        margin-left: -14px;
-        margin-right: -16px;
+        margin-left: -5px;
+        margin-right: -3px;
         margin-top: -53px; 
     }
 
@@ -5048,8 +5048,8 @@ a.yabutton-small {
 /*-- SETTINGS MENU --*/
     
     #mobile-menu-content {
-        margin-left: -14px;
-        margin-right: -16px;
+        margin-left: -10px;
+        margin-right: -8px;
         margin-top: -53px; 
     }
 
@@ -5098,12 +5098,12 @@ a.yabutton-small {
         );
     }
     
-    .phone-menu-first {
+    /*.phone-menu-first {
         border-radius:5px 5px 0px 0px;
-    }
+    }*/
 
     .phone-menu-last {
-        border-radius:0px 0px 5px 5px;
+        /*border-radius:0px 0px 5px 5px;*/
         border-bottom:1px solid black;
     }
 
