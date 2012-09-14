@@ -30,8 +30,13 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
 
     toggleMenu: function (e) {
         e.preventDefault();
-        $("#mobile-menu-content").toggle();
-        $("#mobile-menu-content").siblings().toggle();
+        var menu = $("#mobile-menu-content");
+        if (menu.is(':visible')) {
+            $('#webapp-content').show();
+        } else {
+            menu.siblings().hide();
+        }
+        menu.toggle();
     }
 });
 
@@ -42,7 +47,7 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
 Yasound.Views.MobileMenuLogo = Backbone.View.extend({
     el: '#mobile-menu-logo',
     events: {
-        "click #mobile-menu-btn-logo": "toggleMenuLogo"
+        "click #mobile-menu-btn-logo": "toggleMenu"
     },
 
     initialize: function() {
@@ -56,10 +61,15 @@ Yasound.Views.MobileMenuLogo = Backbone.View.extend({
         return this;
     },
 
-    toggleMenuLogo: function (e) {
+    toggleMenu: function (e) {
         e.preventDefault();
-        $("#mobile-menu-content-logo").toggle();
-        $("#mobile-menu-content-logo").siblings().toggle();
+        var menu = $("#mobile-menu-content-logo");
+        if (menu.is(':visible')) {
+            $('#webapp-content').show();
+        } else {
+            menu.siblings().hide();
+        }
+        menu.toggle();
     }
 });
 
@@ -84,10 +94,15 @@ Yasound.Views.MobileMenuShare = Backbone.View.extend({
         return this;
     },
 
-    toggleMenuLogo: function (e) {
+    toggleMenu: function (e) {
         e.preventDefault();
-        $("#mobile-menu-content").toggle();
-        $("#mobile-menu-content").siblings().toggle();
+        var menu = $("#mobile-menu-content-share");
+        if (menu.is(':visible')) {
+            $('#webapp-content').show();
+        } else {
+            menu.siblings().hide();
+        }
+        menu.toggle();
     }
 });
 
