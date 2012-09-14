@@ -23,11 +23,12 @@ import urllib
 import uuid
 import time
 from yacore.http import fill_app_infos
+from yageoperm import utils as yageoperm_utils
 
 from django.utils.translation import ugettext_lazy as _
 
 import logging
-from yacore.geoip import can_login
+from yacore.geoip import request_country
 logger = logging.getLogger("yaapp.account")
 
 
@@ -81,7 +82,8 @@ class YasoundPublicAuthentication(YasoundApiKeyAuthentication):
 
 class YasoundBasicAuthentication(BasicAuthentication):
     def is_authenticated(self, request, **kwargs):
-        if not can_login(request):
+        country = request_country(request)
+        if not yageoperm_utils.can_login(request.user, country):
             return False
 
         fill_app_infos(request)
@@ -297,7 +299,8 @@ def _download_facebook_profile(token):
 
 class SocialAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        if not can_login(request):
+        country = request_country(request)
+        if not yageoperm_utils.can_login(request.user, country):
             return False
 
         authenticated = False
