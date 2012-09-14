@@ -887,7 +887,6 @@ GEOIP_CITY_DATABASE = os.path.join(PROJECT_PATH, 'GeoLiteCity.dat')
 GEOIP_LOOKUP = 'REMOTE_ADDR'
 if DJANGO_MODE == 'PRODUCTION':
     GEOIP_LOOKUP = 'HTTP_X_REAL_IP'
-GEOIP_AUTHORIZED_COUNTRIES = ('FR',)
 # newsletter
 NEWSLETTER_DEFAULT_HEADER_SENDER = 'Yasound Newsletter <noreply@yasound.com>'
 
