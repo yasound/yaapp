@@ -3783,12 +3783,20 @@ a.yabutton-small {
         float:right;
     }
 
+    #responsive-love-btn {
+
+    }
+
     .responsive-container {
         width:auto;
     }
 
     #responsive-share-btn {
         margin-right:7px;
+    }
+
+    #mobile-menu-share {
+        display:inline;
     }
 
 /*-- CONTAINER --*/
@@ -4514,6 +4522,10 @@ a.yabutton-small {
         margin:13px 18px 0px 13px;
     }
 
+/*-- LOGO MENU --*/
+
+/*-- SHARE MENU --*/
+
 
 /*-- FOOTER --*/
 
@@ -4800,6 +4812,10 @@ a.yabutton-small {
 
     #responsive-share-btn {
         margin-right:7px;
+    }
+
+    #mobile-menu-share {
+        display:inline;
     }
 
 /*-- SIGNUP --*/
@@ -5200,7 +5216,14 @@ a.yabutton-small {
     #phone-menu-buy img {
         margin:13px 18px 0px 13px;
     }
-
+/*-- LOGO MENU --*/
+    
+    #mobile-menu-content-logo {
+        margin-left: -14px;
+        margin-right: -16px;
+        margin-top: -53px; 
+    }
+    
 /*-- FOOTER --*/
 
     #connected-users,

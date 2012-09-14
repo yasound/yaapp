@@ -263,9 +263,9 @@ $(document).ready(function () {
                 };
 
                 
-                this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenu({}).render();
-                this.commonContext.mobileMenuShareView = new Yasound.Views.MobileMenuLogo({}).render();
-                this.commonContext.mobileMenuView = new Yasound.Views.MobileMenuShare({}).render();
+                this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
+                this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
+                this.commonContext.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render();
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
