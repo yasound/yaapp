@@ -4453,7 +4453,11 @@ a.yabutton-small {
     }
 
 /*-- SHARE MENU --*/
-
+    #mobile-menu-content-share {
+        margin-left: -14px;
+        margin-right: -16px;
+        margin-top: -53px; 
+    }
 
 /*-- FOOTER --*/
 
@@ -5151,7 +5155,15 @@ a.yabutton-small {
         margin-right: -16px;
         margin-top: -53px; 
     }
+
+/*-- SHARE MENU --*/
     
+    #mobile-menu-content-share {
+        margin-left: -14px;
+        margin-right: -16px;
+        margin-top: -53px; 
+    }
+
 /*-- FOOTER --*/
 
     #connected-users,
