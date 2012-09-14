@@ -47,6 +47,7 @@ class NewRadioForm(BootstrapModelForm):
         self.cleaned_data['tags'] = tags
         return tags
 
+
 class MyInformationsForm(BootstrapModelForm):
     bio_text = forms.CharField(label=_('Biography'), widget=forms.widgets.Textarea(attrs={'rows':5, 'cols':60}), required=False)
     class Meta:

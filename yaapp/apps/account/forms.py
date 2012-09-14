@@ -16,7 +16,8 @@ from hashlib import sha1
 from models import UserProfile, EmailUser
 from random import choice
 from string import letters
-from yacore.geoip import request_country, can_login
+from yacore.geoip import request_country
+from yageoperm import utils as yageoperm_utils
 import re
 alnum_re = re.compile(r'^\w+$')
 
@@ -49,13 +50,14 @@ class LoginForm(forms.Form):
         return self.cleaned_data
 
     def login(self, request):
-        if can_login(request):
+        country = request_country(request)
+        if yageoperm_utils.can_login(request.user, country):
             if self.is_valid():
                 login(request, self.user)
                 request.session.set_expiry(60 * 60 * 24 * 7 * 3)
                 return True
         return False
-    
+
 
 class LostPasswordForm(forms.Form):
     login = forms.CharField(label=_('Email'), max_length=256, help_text=_('Enter your email or login'))
@@ -67,7 +69,7 @@ class UserForm(forms.Form):
         super(UserForm, self).__init__(*args, **kwargs)
 
 class UserProfileForm(UserForm):
-    
+
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         try:
@@ -92,23 +94,23 @@ class SignupForm(forms.Form):
     username = forms.CharField(label=_("Username"), widget=forms.TextInput(attrs={'placeholder': _('Username')}))
     email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
     password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
-        
+
     def clean_username(self):
         profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
         if profiles.count() > 0:
             raise forms.ValidationError(u"This username is already taken. Please choose another.")
         return self.cleaned_data["username"]
-    
+
     def clean_email(self):
         user = User.objects.filter(email__exact=self.cleaned_data["email"])
         if not user:
-            
+
             return self.cleaned_data["email"]
         raise forms.ValidationError(u"This email is already taken. Please choose another.")
 
     def save(self):
         from api import build_random_username
-        
+
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
         username = build_random_username()
@@ -117,12 +119,12 @@ class SignupForm(forms.Form):
             user = EmailUser.objects.get(email=email)
             user.is_active = False
             user.save()
-            
+
             user.get_profile().name = self.cleaned_data["username"]
             user.get_profile().save()
-            
+
             EmailAddress.objects.add_email(new_user, email)
-            
+
             return username, email
         return False
 
@@ -131,7 +133,7 @@ class WebAppSignupForm(forms.Form):
     email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
     password1 = forms.CharField(label=_("Password"), required=True, widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
     password2 = forms.CharField(label=_("Password confirmation"), required=True, widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
-        
+
     def clean_password2(self):
         if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
             if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
@@ -143,7 +145,7 @@ class WebAppSignupForm(forms.Form):
         if profiles.count() > 0:
             raise forms.ValidationError(u"This username is already taken. Please choose another.")
         return self.cleaned_data["username"]
-    
+
     def clean_email(self):
         user = User.objects.filter(email__exact=self.cleaned_data["email"])
         if not user:
@@ -152,7 +154,7 @@ class WebAppSignupForm(forms.Form):
 
     def save(self):
         from api import build_random_username
-        
+
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
         username = build_random_username()
@@ -163,9 +165,9 @@ class WebAppSignupForm(forms.Form):
             user.save()
             user.get_profile().name = self.cleaned_data["username"]
             user.get_profile().save()
-            
+
             EmailAddress.objects.add_email(new_user, email)
-            
+
             return username, email
         return False
 
@@ -180,7 +182,7 @@ class FastSignupForm(forms.Form):
     password2 = forms.CharField(label=_("Password (again)"), required=False, widget=forms.PasswordInput())
     create_account = forms.BooleanField(label=_("Create an account with these informations ?"), required=False)
     newsletter_accepted = forms.BooleanField(label=_("Register to newsletter ?"), required=False)
-        
+
     def clean_email(self):
         user = EmailUser.objects.filter(email__exact=self.cleaned_data["email"], userprofile__anonymous=False)
         if not user:
@@ -191,9 +193,9 @@ class FastSignupForm(forms.Form):
         if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
             if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
                 raise forms.ValidationError(u"You must type the same password each time.")
-            
+
         return self.cleaned_data
-        
+
     def save(self):
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
@@ -220,24 +222,24 @@ class FastSignupForm(forms.Form):
 
 
 class AddEmailForm(forms.Form):
-    
+
     def __init__(self, data=None, user=None):
         super(AddEmailForm, self).__init__(data=data)
         self.user = user
-    
+
     email = forms.EmailField(label="Email", required=True, widget=forms.TextInput())
-    
+
     def clean_email(self):
         try:
             EmailAddress.objects.get(user=self.user, email=self.cleaned_data["email"])
         except EmailAddress.DoesNotExist:
             return self.cleaned_data["email"]
         raise forms.ValidationError(u"This email address already associated with this account.")
-    
+
     def save(self):
         self.user.message_set.create(message="Confirmation email sent to %s" % self.cleaned_data["email"])
         return EmailAddress.objects.add_email(self.user, self.cleaned_data["email"])
-        
+
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': _('Email')}), max_length=75)
 
@@ -276,16 +278,16 @@ class PasswordResetForm(forms.Form):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            
+
             subject, message = EmailTemplate.objects.generate_mail(EmailTemplate.EMAIL_TYPE_LOST, c)
             send_mail(subject, message, from_email, [user.email])
-        
+
 class ChangePasswordForm(UserForm):
 
     oldpassword = forms.CharField(label=_("Current Password"), widget=forms.PasswordInput(render_value=False))
     password1 = forms.CharField(label=_("New Password"), widget=forms.PasswordInput(render_value=False))
     password2 = forms.CharField(label=_("New Password (again)"), widget=forms.PasswordInput(render_value=False))
-    
+
     def clean_oldpassword(self):
         if not self.user.check_password(self.cleaned_data.get("oldpassword")):
             raise forms.ValidationError(_("Please type your current password."))
@@ -301,7 +303,7 @@ class ChangePasswordForm(UserForm):
         self.user.set_password(self.cleaned_data['password1'])
         self.user.save()
         self.user.message_set.create(message=ugettext(u"Password successfully changed."))
-        
+
 class SetPasswordForm(forms.Form):
     """
     A form that lets a user change set his/her password without

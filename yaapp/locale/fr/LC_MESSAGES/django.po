@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 10:27+0200\n"
+"POT-Creation-Date: 2012-09-14 13:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1004,6 +1004,7 @@ msgid "Gifts"
 msgstr "Cadeaux"
 
 #: templates/yabase/webapp.html:480
+#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:13
 #: templates/yabase/app/profile/user.mustache:25
 #: templates/yabase/app/settings/settingsPage.mustache:5
 msgid "Settings"
@@ -1161,10 +1162,6 @@ msgstr "Supprimer"
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:9
 msgid "Playlist"
 msgstr "Playlist"
-
-#: templates/yabase/app/myRadios/radioWithStatsCell.mustache:13
-msgid "<SPAN></SPAN>ettings"
-msgstr ""
 
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:19
 msgid "Minutes of music played"

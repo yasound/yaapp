@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-17 23:56+0200\n"
+"POT-Creation-Date: 2012-09-14 13:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,8 @@ msgid "Songs"
 msgstr "Chansons"
 
 #: export_utils.py:20
+#: forms.py:17
+#: forms.py:34
 msgid "Name"
 msgstr "Nom"
 
@@ -30,103 +32,113 @@ msgstr "Nom"
 msgid "Artist"
 msgstr "Artiste"
 
-#: forms.py:16
+#: forms.py:18
+#: forms.py:35
 msgid "Tags"
 msgstr "Tags"
 
-#: forms.py:16
+#: forms.py:18
+#: forms.py:35
 msgid "A comma-separated list of tags"
 msgstr "Une liste de tags séparés par des virgules"
 
-#: forms.py:33
+#: forms.py:52
 msgid "Biography"
 msgstr "Biographie"
 
-#: forms.py:42
-#: forms.py:213
+#: forms.py:68
+msgid "Invalid birthday"
+msgstr ""
+
+#: forms.py:70
+msgid "Invalide birthday"
+msgstr ""
+
+#: forms.py:74
+#: forms.py:247
 msgid "Password"
 msgstr "Mot de passe"
 
-#: forms.py:43
-#: forms.py:214
+#: forms.py:75
+#: forms.py:248
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: forms.py:75
-#: forms.py:80
-#: forms.py:232
-#: forms.py:279
+#: forms.py:109
+#: forms.py:114
+#: forms.py:266
+#: forms.py:313
 msgid "Listen"
 msgstr "J'écoute un morceau"
 
-#: forms.py:76
-#: forms.py:81
-#: forms.py:233
-#: forms.py:280
+#: forms.py:110
+#: forms.py:115
+#: forms.py:267
+#: forms.py:314
 msgid "Like song"
 msgstr "J'aime le morceau"
 
-#: forms.py:77
-#: forms.py:82
-#: forms.py:234
-#: forms.py:281
+#: forms.py:111
+#: forms.py:116
+#: forms.py:268
+#: forms.py:315
 msgid "Post message"
 msgstr "Je poste un message"
 
-#: forms.py:78
-#: forms.py:83
-#: forms.py:235
-#: forms.py:282
+#: forms.py:112
+#: forms.py:117
+#: forms.py:269
+#: forms.py:316
 msgid "Update programming"
 msgstr "Je mets à jour ma programmation"
 
-#: forms.py:85
+#: forms.py:119
 msgid "A user enters"
 msgstr "Un auditeur entre"
 
-#: forms.py:86
+#: forms.py:120
 msgid "A friend enters"
 msgstr "Un ami entre"
 
-#: forms.py:87
+#: forms.py:121
 msgid "A friend goes online"
 msgstr "Un ami passe en ligne"
 
-#: forms.py:88
+#: forms.py:122
 msgid "A message is posted"
 msgstr "Un auditeur a écrit un message"
 
-#: forms.py:89
+#: forms.py:123
 msgid "Someone likes a song"
 msgstr "Un auditeur aime une chanson"
 
-#: forms.py:90
+#: forms.py:124
 msgid "My radio is added as favorite"
 msgstr "Un auditeur ajoute ma radio à ses favoris"
 
-#: forms.py:91
+#: forms.py:125
 msgid "Someone shared my radio"
 msgstr "Un auditeur partage ma radio"
 
-#: forms.py:92
+#: forms.py:126
 msgid "A friend creates his radio"
 msgstr "Un ami crée une radio"
 
-#: forms.py:98
+#: forms.py:132
 msgid "Notifications"
 msgstr "Notifications"
 
-#: forms.py:108
-#: forms.py:238
+#: forms.py:142
+#: forms.py:272
 msgid "Facebook share options"
 msgstr "Options de partage de Facebook"
 
-#: forms.py:114
-#: forms.py:285
+#: forms.py:148
+#: forms.py:319
 msgid "Twitter share options"
 msgstr "Options de partage de twitter"
 
-#: forms.py:326
+#: forms.py:360
 msgid "Please paste from iTunes"
 msgstr "Veuillez effectuer un copier/coller depuis iTunes"
 
@@ -198,106 +210,110 @@ msgstr ""
 msgid "generating preview"
 msgstr ""
 
-#: import_utils.py:671
+#: import_utils.py:649
+msgid "generating low quality"
+msgstr ""
+
+#: import_utils.py:675
 msgid "Association between YasoundSong and SongMetadata done"
 msgstr ""
 
-#: import_utils.py:679
+#: import_utils.py:683
 msgid "Building mongodb index"
 msgstr ""
 
-#: models.py:67
+#: models.py:65
 msgid "yasound song id"
 msgstr ""
 
-#: models.py:327
+#: models.py:332
 msgid "song"
 msgstr "chanson"
 
-#: models.py:328
-#: models.py:1263
+#: models.py:333
+#: models.py:1311
 msgid "user"
 msgstr "utilisateur"
 
-#: models.py:336
+#: models.py:341
 msgid "Song user"
 msgstr ""
 
-#: models.py:547
+#: models.py:555
 msgid "creator"
 msgstr "créateur"
 
-#: models.py:548
-#: models.py:1572
+#: models.py:556
+#: models.py:1655
 msgid "created"
 msgstr ""
 
-#: models.py:549
-#: models.py:1573
+#: models.py:557
+#: models.py:1656
 msgid "updated"
 msgstr ""
 
-#: models.py:553
-#: models.py:1574
+#: models.py:561
+#: models.py:1657
 msgid "name"
 msgstr "nom"
 
-#: models.py:554
+#: models.py:562
 msgid "picture"
 msgstr ""
 
-#: models.py:555
+#: models.py:563
 msgid "url"
 msgstr ""
 
-#: models.py:556
+#: models.py:564
 msgid "uuid"
 msgstr ""
 
-#: models.py:557
-#: models.py:1575
+#: models.py:565
+#: models.py:1658
 msgid "description"
 msgstr "description"
 
-#: models.py:558
+#: models.py:566
 msgid "genre"
 msgstr "genre"
 
-#: models.py:559
+#: models.py:567
 msgid "thene"
 msgstr ""
 
-#: models.py:560
+#: models.py:568
 msgid "tags"
 msgstr ""
 
-#: models.py:580
+#: models.py:588
 msgid "current song"
 msgstr ""
 
-#: models.py:1262
-#: models.py:1594
+#: models.py:1310
+#: models.py:1677
 msgid "radio"
 msgstr "radio"
 
-#: models.py:1278
+#: models.py:1326
 msgid "Radio user"
 msgstr ""
 
-#: models.py:1576
+#: models.py:1659
 msgid "activated"
 msgstr "activé"
 
-#: models.py:1590
-#: models.py:1593
+#: models.py:1673
+#: models.py:1676
 msgid "featured content"
 msgstr ""
 
-#: models.py:1595
+#: models.py:1678
 msgid "order"
 msgstr ""
 
-#: models.py:1602
+#: models.py:1685
 msgid "featured radio"
 msgstr ""
 
@@ -394,15 +410,30 @@ msgstr "Sélection"
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: views.py:1704
+#: views.py:1109
+#: views.py:1869
+msgid "You are not allowed to create a radio"
+msgstr "Vous n'avez le droit de créer une radio"
+
+#: views.py:1120
+#: views.py:1877
+msgid "This feature is not yet available for your country"
+msgstr "Cette fonctionnalité n'est pas encore accessible pour votre pays"
+
+#: views.py:1881
+#, fuzzy
+msgid "new radio"
+msgstr "radio"
+
+#: views.py:1928
 msgid "The provided file is too big"
 msgstr "Le fichier transmis est trop gros"
 
-#: views.py:1706
+#: views.py:1930
 msgid "The provided file is too small"
 msgstr "Le fichier transmis est trop petit"
 
-#: views.py:1708
+#: views.py:1932
 msgid "The file format is not supported"
 msgstr "Le format de fichier n'est pas supporté"
 

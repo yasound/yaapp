@@ -33,6 +33,7 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from yacore.geoip import request_country
 import requests
 
 logger = logging.getLogger("yaapp.account")
@@ -1303,7 +1304,6 @@ class UserProfile(models.Model):
     def update_position_coords(self, save=True):
         coords = latitude_longitude_to_coords(self.latitude, self.longitude, 'degrees')
         UserProfile.objects.filter(id=self.id).update(x_coord=coords[0], y_coord=coords[1], z_coord=coords[2])
-
 
 
 def create_user_profile(sender, instance, created, **kwargs):
