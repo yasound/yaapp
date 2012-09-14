@@ -308,7 +308,7 @@ Yasound.Geoperm.UI.FeatureForm = function(record) {
         items: [{
             xtype: 'combo',
             allowBlank:false,
-            fieldLabel: 'Feature',
+            fieldLabel: gettext('Feature'),
             hiddenName:'feature',
             store: new Ext.data.ArrayStore({
                 fields: ['id', 'label'],

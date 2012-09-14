@@ -444,7 +444,7 @@ msgstr "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
 
 #: js/backoffice/Geoperm/GeoFeatureGrid.js:22
 msgid "Feature"
-msgstr ""
+msgstr "Fonctionnalité"
 
 #: js/backoffice/Geoperm/Geoperm.js:11
 msgid "Create a country"
@@ -463,7 +463,7 @@ msgstr "Valider"
 
 #: js/backoffice/Geoperm/Geoperm.js:57
 msgid "Edit country"
-msgstr ""
+msgstr "Editer le pays"
 
 #: js/backoffice/Geoperm/Geoperm.js:102
 #: js/backoffice/Geoperm/Geoperm.js:230
@@ -495,11 +495,11 @@ msgstr "Voulez-vous supprimer ce pays ?"
 
 #: js/backoffice/Geoperm/Geoperm.js:139
 msgid "Add a feature"
-msgstr ""
+msgstr "Ajouter une fonctionnalité"
 
 #: js/backoffice/Geoperm/Geoperm.js:185
 msgid "Edit feature"
-msgstr ""
+msgstr "Editer la fonctionnalité"
 
 #: js/backoffice/Geoperm/Geoperm.js:231
 msgid "Do you want to delete the feature ?"
@@ -541,11 +541,11 @@ msgstr "Supprimer"
 
 #: js/backoffice/Geoperm/Geoperm.js:387
 msgid "Features"
-msgstr ""
+msgstr "Fonctionnalités"
 
 #: js/backoffice/Geoperm/Geoperm.js:393
 msgid "Add feature"
-msgstr ""
+msgstr "Ajouter une fonctionnalité"
 
 #: js/backoffice/Invitations/InvitationForm.js:28
 msgid "Enter name of VIP"
