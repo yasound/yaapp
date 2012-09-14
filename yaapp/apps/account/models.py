@@ -33,6 +33,8 @@ import yamessage.settings as yamessage_settings
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from yageoperm import utils as yageoperm_utils
+from yacore.geoip import request_country
 import requests
 
 logger = logging.getLogger("yaapp.account")
@@ -918,6 +920,9 @@ class UserProfile(models.Model):
         if request is not None:
             self.check_geo_localization(request)
 
+        if request:
+            self.update_geopermissions(request)
+
     def add_to_group(self, group_name):
         g, _created = Group.objects.get_or_create(name=group_name)
         g.user_set.add(self.user)
@@ -1304,6 +1309,14 @@ class UserProfile(models.Model):
         coords = latitude_longitude_to_coords(self.latitude, self.longitude, 'degrees')
         UserProfile.objects.filter(id=self.id).update(x_coord=coords[0], y_coord=coords[1], z_coord=coords[2])
 
+    def update_geopermissions(self, request):
+        if not request:
+            return
+        country = request_country(request)
+        can_create_radio = yageoperm_utils.can_create_radio(self.user, country)
+        if can_create_radio != self.permissions.create_radio:
+            self.permissions.create_radio = can_create_radio
+            self.save()
 
 
 def create_user_profile(sender, instance, created, **kwargs):
