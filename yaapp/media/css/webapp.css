@@ -4523,6 +4523,11 @@ a.yabutton-small {
     }
 
 /*-- LOGO MENU --*/
+    #mobile-menu-content-logo {
+        margin-left: -14px;
+        margin-right: -16px;
+        margin-top: -53px; 
+    }
 
 /*-- SHARE MENU --*/
 
