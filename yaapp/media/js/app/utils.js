@@ -26,7 +26,7 @@ Yasound.Utils.cellsPerPage = function() {
     var cellHeight = 217;
 
     var rows =  Math.ceil(containerHeight / cellHeight);
-    return rows*4;
+    return rows*4 * 2;
 };
 
 Yasound.Utils.userCellsPerPage = function() {
@@ -37,7 +37,7 @@ Yasound.Utils.userCellsPerPage = function() {
     var cellHeight = 158;
 
     var rows =  Math.ceil(containerHeight / cellHeight);
-    return rows*5;
+    return rows*5 * 2;
 };
 
 Yasound.Utils.saveStickyView = function(key, view) {
