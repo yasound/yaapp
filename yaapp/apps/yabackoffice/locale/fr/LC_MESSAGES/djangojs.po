@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-11 13:44+0200\n"
+"POT-Creation-Date: 2012-09-14 10:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:51
+#: js/app/app.js:52
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
@@ -30,120 +30,121 @@ msgstr "Données sauvegardées avec succès"
 msgid "Error while saving data"
 msgstr "Erreur lors de la sauvegarde des données"
 
-#: js/app/common/models.js:109
+#: js/app/common/models.js:106
 msgid "All genres"
 msgstr "Tous Styles"
 
-#: js/app/common/models.js:110
+#: js/app/common/models.js:107
 msgid "Classical"
 msgstr "Classique"
 
-#: js/app/common/models.js:111
+#: js/app/common/models.js:108
 msgid "Blues"
 msgstr "Blues"
 
-#: js/app/common/models.js:112
+#: js/app/common/models.js:109
 msgid "Alternative"
 msgstr "Alternative"
 
-#: js/app/common/models.js:113
+#: js/app/common/models.js:110
 msgid "Electro"
 msgstr "Electro"
 
-#: js/app/common/models.js:114
+#: js/app/common/models.js:111
 msgid "French Music"
 msgstr "Chanson Française"
 
-#: js/app/common/models.js:115
+#: js/app/common/models.js:112
 msgid "Jazz"
 msgstr "Jazz"
 
-#: js/app/common/models.js:116
+#: js/app/common/models.js:113
 msgid "Pop"
 msgstr "Pop"
 
-#: js/app/common/models.js:117
+#: js/app/common/models.js:114
 msgid "Reggae"
 msgstr "Reggae"
 
-#: js/app/common/models.js:118
+#: js/app/common/models.js:115
 msgid "Rock"
 msgstr "Rock"
 
-#: js/app/common/models.js:119
+#: js/app/common/models.js:116
 msgid "Metal"
 msgstr "Metal"
 
-#: js/app/common/models.js:120
+#: js/app/common/models.js:117
 msgid "Hip Hop"
 msgstr "Hip Hop"
 
-#: js/app/common/models.js:121
+#: js/app/common/models.js:118
 msgid "RnB / Soul"
 msgstr "RnB / Soul"
 
-#: js/app/common/models.js:122
+#: js/app/common/models.js:119
 msgid "World"
 msgstr "World"
 
-#: js/app/common/models.js:123
+#: js/app/common/models.js:120
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:192
-#: js/app/common/views.js:327
+#: js/app/common/models.js:189
+#: js/app/common/views.js:336
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:193
+#: js/app/common/models.js:190
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:194
-#: js/app/common/views.js:328
+#: js/app/common/models.js:191
+#: js/app/common/views.js:337
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:255
+#: js/app/common/models.js:252
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:261
+#: js/app/common/models.js:258
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:263
+#: js/app/common/models.js:260
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:268
+#: js/app/common/views.js:277
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:325
+#: js/app/common/views.js:334
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/common/views.js:449
+#: js/app/common/views.js:460
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/common/views.js:756
+#: js/app/common/views.js:767
 #: js/app/login/views.js:39
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:769
+#: js/app/common/views.js:780
 #: js/app/login/views.js:52
 #: js/app/newRadio/views.js:66
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:803
+#: js/app/common/views.js:814
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:805
+#: js/app/common/views.js:816
+#: js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
 
@@ -208,11 +209,11 @@ msgstr "oui"
 msgid "Error"
 msgstr "Erreur"
 
-#: js/app/notifications/views.js:34
+#: js/app/notifications/views.js:38
 msgid "Notification marked as read"
 msgstr "Notification marquée comme lue"
 
-#: js/app/notifications/views.js:36
+#: js/app/notifications/views.js:40
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
@@ -232,11 +233,11 @@ msgstr "L'analyse de l'import iTunes a démarré"
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:677
+#: js/app/radio/views.js:697
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:678
+#: js/app/radio/views.js:698
 #: js/app/settings/views.js:167
 #: js/app/settings/views.js.py:177
 msgid "Error while saving settings"
@@ -271,48 +272,48 @@ msgstr "Erreur d'inscription"
 msgid "Error while creating account"
 msgstr "Erreur lors de création du compte"
 
-#: js/backoffice/backoffice.js:72
+#: js/backoffice/backoffice.js:73
 #: js/backoffice/Moderation/Radios.js:14
 #: js/backoffice/Radio/Radios.js:380
 #: js/backoffice/Radio/UnmatchedSongs.js:21
 msgid "Radios"
 msgstr "Radios"
 
-#: js/backoffice/backoffice.js:74
+#: js/backoffice/backoffice.js:75
 msgid "Song management"
 msgstr "Gestion des chansons"
 
-#: js/backoffice/backoffice.js:88
+#: js/backoffice/backoffice.js:89
 #: js/backoffice/Radio/UnmatchedSongs.js:38
 msgid "Unmatched songs"
 msgstr "Chansons non détectées"
 
-#: js/backoffice/backoffice.js:91
+#: js/backoffice/backoffice.js:92
 #: js/backoffice/Song/MissingSongs.js:44
 msgid "Missing songs"
 msgstr "Chansons manquantes"
 
-#: js/backoffice/backoffice.js:94
+#: js/backoffice/backoffice.js:95
 msgid "Upload new songs to yasound"
 msgstr "Envoyer les nouvelles chansons vers yasound"
 
-#: js/backoffice/backoffice.js:97
+#: js/backoffice/backoffice.js:98
 #: js/backoffice/Radio/AllSongs.js:61
 msgid "All songs"
 msgstr "Toutes les chansons"
 
-#: js/backoffice/backoffice.js:110
+#: js/backoffice/backoffice.js:111
 #: js/backoffice/Invitations/Invitations.js:182
 msgid "Invitations"
 msgstr "Invitations"
 
-#: js/backoffice/backoffice.js:134
-#: js/backoffice/backoffice.js.py:136
+#: js/backoffice/backoffice.js:135
+#: js/backoffice/backoffice.js.py:137
 msgid "Moderation"
 msgstr "Modération"
 
-#: js/backoffice/backoffice.js:164
-#: js/backoffice/backoffice.js.py:166
+#: js/backoffice/backoffice.js:165
+#: js/backoffice/backoffice.js.py:167
 #: js/backoffice/Moderation/Radios.js:20
 #: js/backoffice/Moderation/Users.js:14
 #: js/backoffice/Moderation/Users.js:19
@@ -324,47 +325,227 @@ msgstr "Modération"
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: js/backoffice/backoffice.js:192
+#: js/backoffice/backoffice.js:193
 #: js/backoffice/Statistics/Statistics.js:269
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: js/backoffice/backoffice.js:194
+#: js/backoffice/backoffice.js:195
 msgid "Useful stats"
 msgstr "Statistiques utiles"
 
-#: js/backoffice/backoffice.js:208
+#: js/backoffice/backoffice.js:209
 #: js/backoffice/Song/MostPopularSongs.js:29
 #: js/backoffice/Song/MostPopularSongs.js:33
 msgid "Most popular songs"
 msgstr "Chansons les plus populaires"
 
-#: js/backoffice/backoffice.js:211
+#: js/backoffice/backoffice.js:212
 #: js/backoffice/Song/RejectedSongs.js:18
 #: js/backoffice/Song/RejectedSongs.js:22
 msgid "Rejected songs"
 msgstr "Chansons rejetées"
 
-#: js/backoffice/backoffice.js:224
+#: js/backoffice/backoffice.js:225
 #: js/backoffice/Menus/Menus.js:187
 msgid "Menus"
 msgstr "Menus"
 
-#: js/backoffice/backoffice.js:248
+#: js/backoffice/backoffice.js:249
 msgid "Activity score factors"
 msgstr "Pondération des scores d'activités"
 
-#: js/backoffice/backoffice.js:250
+#: js/backoffice/backoffice.js:251
 msgid "factors to compute radio activity score"
 msgstr "Pondération pour calculer le score d'une radio"
 
-#: js/backoffice/backoffice.js:274
+#: js/backoffice/backoffice.js:275
 msgid "Premium"
 msgstr "Premium"
 
-#: js/backoffice/backoffice.js:276
+#: js/backoffice/backoffice.js:277
 msgid "premium settings"
 msgstr "Paramètres premium"
+
+#: js/backoffice/backoffice.js:301
+#: js/backoffice/backoffice.js.py:303
+#: js/backoffice/Geoperm/Geoperm.js:448
+msgid "Geo permissions"
+msgstr "Geo permissions"
+
+#: js/backoffice/Geoperm/CountryGrid.js:23
+#: js/backoffice/Geoperm/Geoperm.js:281
+#: js/backoffice/Premium/PromocodeGrid.js:33
+#: js/backoffice/Premium/Promocodes.js:242
+#: js/backoffice/Premium/Promocodes.js:261
+msgid "Code"
+msgstr "Code"
+
+#: js/backoffice/Geoperm/CountryGrid.js:34
+#: js/backoffice/Geoperm/Geoperm.js:287
+#: js/backoffice/Invitations/InvitationGrid.js:30
+#: js/backoffice/Menus/MenuGrid.js:23
+#: js/backoffice/Radio/RadioGrid.js:47
+#: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:26
+#: js/backoffice/Users/UserGrid.js:31
+msgid "Name"
+msgstr "Nom"
+
+#: js/backoffice/Geoperm/CountryGrid.js:78
+#: js/backoffice/Geoperm/GeoFeatureGrid.js:64
+#: js/backoffice/Invitations/InvitationGrid.js:133
+#: js/backoffice/Menus/MenuGrid.js:111
+#: js/backoffice/Moderation/AbuseGrid.js:113
+#: js/backoffice/Premium/PromocodeGrid.js:86
+#: js/backoffice/Radio/SongInstanceGrid.js:97
+#: js/backoffice/Radio/YasoundSongGrid.js:115
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:61
+#: js/backoffice/Song/RejectedSongGrid.js:88
+#: js/backoffice/Users/UserGrid.js:147
+#: js/backoffice/Users/UserHistoryGrid.js:90
+#: js/backoffice/WallEvent/WallEventGrid.js:107
+msgid "Displaying {0} - {1} of {2}"
+msgstr "Affichage de {0} - {1} sur {2}"
+
+#: js/backoffice/Geoperm/CountryGrid.js:79
+#: js/backoffice/Geoperm/GeoFeatureGrid.js:65
+#: js/backoffice/Invitations/InvitationGrid.js:134
+#: js/backoffice/Menus/MenuGrid.js:112
+#: js/backoffice/Moderation/AbuseGrid.js:114
+#: js/backoffice/Premium/PromocodeGrid.js:87
+#: js/backoffice/Radio/SongInstanceGrid.js:98
+#: js/backoffice/Radio/YasoundSongGrid.js:116
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:62
+#: js/backoffice/Song/RejectedSongGrid.js:89
+#: js/backoffice/Users/UserGrid.js:148
+#: js/backoffice/Users/UserHistoryGrid.js:91
+#: js/backoffice/WallEvent/WallEventGrid.js:108
+msgid "Nothing to display"
+msgstr "Rien à afficher"
+
+#: js/backoffice/Geoperm/CountryGrid.js:87
+#: js/backoffice/Geoperm/GeoFeatureGrid.js:73
+#: js/backoffice/Moderation/AbuseGrid.js:122
+#: js/backoffice/Premium/PromocodeGrid.js:95
+#: js/backoffice/Radio/SongInstanceGrid.js:106
+#: js/backoffice/Radio/YasoundSongGrid.js:125
+#: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:75
+#: js/backoffice/Song/MissingSongMetadataGrid.js:61
+#: js/backoffice/Song/MostPopularSongMetadataGrid.js:70
+#: js/backoffice/Song/RejectedSongGrid.js:98
+#: js/backoffice/Users/UserHistoryGrid.js:99
+#: js/backoffice/WallEvent/WallEventGrid.js:116
+#, perl-brace-format
+msgid ""
+"{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"elements\" : "
+"\"element\"]})"
+msgstr "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
+"\"élément\"]})"
+
+#: js/backoffice/Geoperm/GeoFeatureGrid.js:22
+msgid "Feature"
+msgstr ""
+
+#: js/backoffice/Geoperm/Geoperm.js:11
+msgid "Create a country"
+msgstr "Créer un pays"
+
+#: js/backoffice/Geoperm/Geoperm.js:22
+#: js/backoffice/Geoperm/Geoperm.js:68
+#: js/backoffice/Geoperm/Geoperm.js:150
+#: js/backoffice/Geoperm/Geoperm.js:196
+#: js/backoffice/Premium/Promocodes.js:22
+#: js/backoffice/Premium/Promocodes.js:63
+#: js/backoffice/Premium/Promocodes.js:105
+#: js/backoffice/Radio/RadioForm.js:52
+msgid "Submit"
+msgstr "Valider"
+
+#: js/backoffice/Geoperm/Geoperm.js:57
+msgid "Edit country"
+msgstr ""
+
+#: js/backoffice/Geoperm/Geoperm.js:102
+#: js/backoffice/Geoperm/Geoperm.js:230
+#: js/backoffice/Invitations/Invitations.js:10
+#: js/backoffice/Invitations/Invitations.js:35
+#: js/backoffice/Invitations/Invitations.js:102
+#: js/backoffice/Invitations/Invitations.js:124
+#: js/backoffice/Moderation/Abuse.js:10
+#: js/backoffice/Moderation/Abuse.js:41
+#: js/backoffice/Moderation/Radios.js:44
+#: js/backoffice/Moderation/Users.js:44
+#: js/backoffice/Premium/Promocodes.js:134
+#: js/backoffice/Radio/Radios.js:13
+#: js/backoffice/Radio/Radios.js.py:44
+#: js/backoffice/Radio/Radios.js:67
+#: js/backoffice/Radio/Radios.js.py:91
+#: js/backoffice/Radio/Radios.js:115
+#: js/backoffice/Radio/Radios.js.py:265
+#: js/backoffice/Radio/Radios.js:297
+#: js/backoffice/Users/Users.js:10
+#: js/backoffice/Users/Users.js.py:42
+#: js/backoffice/Users/Users.js:95
+msgid "Confirmation"
+msgstr "Confirmation"
+
+#: js/backoffice/Geoperm/Geoperm.js:103
+msgid "Do you want to delete the country ?"
+msgstr "Voulez-vous supprimer ce pays ?"
+
+#: js/backoffice/Geoperm/Geoperm.js:139
+msgid "Add a feature"
+msgstr ""
+
+#: js/backoffice/Geoperm/Geoperm.js:185
+msgid "Edit feature"
+msgstr ""
+
+#: js/backoffice/Geoperm/Geoperm.js:231
+msgid "Do you want to delete the feature ?"
+msgstr "Voulez-vous supprimer cette fonctionnalité ?"
+
+#: js/backoffice/Geoperm/Geoperm.js:316
+msgid "Login"
+msgstr "Se connecter"
+
+#: js/backoffice/Geoperm/Geoperm.js:326
+msgid "Select a feature..."
+msgstr "Sélectionner une fonctionnalité"
+
+#: js/backoffice/Geoperm/Geoperm.js:335
+msgid "Countries"
+msgstr "Pays"
+
+#: js/backoffice/Geoperm/Geoperm.js:339
+msgid "Create new country"
+msgstr "Créer un nouveau pays"
+
+#: js/backoffice/Geoperm/Geoperm.js:348
+#: js/backoffice/Geoperm/Geoperm.js:402
+#: js/backoffice/Premium/Promocodes.js:297
+#: js/backoffice/Premium/Promocodes.js:366
+msgid "Edit"
+msgstr "Editer"
+
+#: js/backoffice/Geoperm/Geoperm.js:359
+#: js/backoffice/Geoperm/Geoperm.js:413
+#: js/backoffice/Invitations/Invitations.js:118
+#: js/backoffice/Moderation/Radios.js:38
+#: js/backoffice/Moderation/Users.js:38
+#: js/backoffice/Premium/Promocodes.js:310
+#: js/backoffice/Premium/Promocodes.js:379
+#: js/backoffice/Radio/Radios.js:291
+msgid "Delete"
+msgstr "Supprimer"
+
+#: js/backoffice/Geoperm/Geoperm.js:387
+msgid "Features"
+msgstr ""
+
+#: js/backoffice/Geoperm/Geoperm.js:393
+msgid "Add feature"
+msgstr ""
 
 #: js/backoffice/Invitations/InvitationForm.js:28
 msgid "Enter name of VIP"
@@ -406,14 +587,6 @@ msgstr "Transmission des informations..."
 msgid "Cancel"
 msgstr "Annuler"
 
-#: js/backoffice/Invitations/InvitationGrid.js:30
-#: js/backoffice/Menus/MenuGrid.js:23
-#: js/backoffice/Radio/RadioGrid.js:47
-#: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:26
-#: js/backoffice/Users/UserGrid.js:31
-msgid "Name"
-msgstr "Nom"
-
 #: js/backoffice/Invitations/InvitationGrid.js:40
 #: js/backoffice/Users/UserGrid.js:41
 msgid "Email"
@@ -433,56 +606,6 @@ msgstr "Utilisateur associé"
 #: js/backoffice/Invitations/InvitationGrid.js:71
 msgid "Sent at"
 msgstr "Envoyée le"
-
-#: js/backoffice/Invitations/InvitationGrid.js:133
-#: js/backoffice/Menus/MenuGrid.js:111
-#: js/backoffice/Moderation/AbuseGrid.js:113
-#: js/backoffice/Premium/PromocodeGrid.js:86
-#: js/backoffice/Radio/SongInstanceGrid.js:97
-#: js/backoffice/Radio/YasoundSongGrid.js:115
-#: js/backoffice/Song/MostPopularSongMetadataGrid.js:61
-#: js/backoffice/Song/RejectedSongGrid.js:88
-#: js/backoffice/Users/UserGrid.js:147
-#: js/backoffice/Users/UserHistoryGrid.js:90
-#: js/backoffice/WallEvent/WallEventGrid.js:107
-msgid "Displaying {0} - {1} of {2}"
-msgstr "Affichage de {0} - {1} sur {2}"
-
-#: js/backoffice/Invitations/InvitationGrid.js:134
-#: js/backoffice/Menus/MenuGrid.js:112
-#: js/backoffice/Moderation/AbuseGrid.js:114
-#: js/backoffice/Premium/PromocodeGrid.js:87
-#: js/backoffice/Radio/SongInstanceGrid.js:98
-#: js/backoffice/Radio/YasoundSongGrid.js:116
-#: js/backoffice/Song/MostPopularSongMetadataGrid.js:62
-#: js/backoffice/Song/RejectedSongGrid.js:89
-#: js/backoffice/Users/UserGrid.js:148
-#: js/backoffice/Users/UserHistoryGrid.js:91
-#: js/backoffice/WallEvent/WallEventGrid.js:108
-msgid "Nothing to display"
-msgstr "Rien à afficher"
-
-#: js/backoffice/Invitations/Invitations.js:10
-#: js/backoffice/Invitations/Invitations.js:35
-#: js/backoffice/Invitations/Invitations.js:102
-#: js/backoffice/Invitations/Invitations.js:124
-#: js/backoffice/Moderation/Abuse.js:10
-#: js/backoffice/Moderation/Abuse.js:41
-#: js/backoffice/Moderation/Radios.js:44
-#: js/backoffice/Moderation/Users.js:44
-#: js/backoffice/Premium/Promocodes.js:134
-#: js/backoffice/Radio/Radios.js:13
-#: js/backoffice/Radio/Radios.js.py:44
-#: js/backoffice/Radio/Radios.js:67
-#: js/backoffice/Radio/Radios.js.py:91
-#: js/backoffice/Radio/Radios.js:115
-#: js/backoffice/Radio/Radios.js.py:265
-#: js/backoffice/Radio/Radios.js:297
-#: js/backoffice/Users/Users.js:10
-#: js/backoffice/Users/Users.js.py:42
-#: js/backoffice/Users/Users.js:95
-msgid "Confirmation"
-msgstr "Confirmation"
 
 #: js/backoffice/Invitations/Invitations.js:11
 msgid "Do you want to generate invitation message ?"
@@ -511,15 +634,6 @@ msgstr "Voulez-vous créer une nouvelle invitation ?"
 #: js/backoffice/Invitations/Invitations.js:110
 msgid "New VIP"
 msgstr "Nouveau VIP"
-
-#: js/backoffice/Invitations/Invitations.js:118
-#: js/backoffice/Moderation/Radios.js:38
-#: js/backoffice/Moderation/Users.js:38
-#: js/backoffice/Premium/Promocodes.js:286
-#: js/backoffice/Premium/Promocodes.js:340
-#: js/backoffice/Radio/Radios.js:291
-msgid "Delete"
-msgstr "Supprimer"
 
 #: js/backoffice/Invitations/Invitations.js:125
 msgid "Do you want to delete invitation ?"
@@ -596,23 +710,6 @@ msgstr "Utilisateur"
 msgid "Text"
 msgstr "Texte"
 
-#: js/backoffice/Moderation/AbuseGrid.js:122
-#: js/backoffice/Premium/PromocodeGrid.js:95
-#: js/backoffice/Radio/SongInstanceGrid.js:106
-#: js/backoffice/Radio/YasoundSongGrid.js:125
-#: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:75
-#: js/backoffice/Song/MissingSongMetadataGrid.js:61
-#: js/backoffice/Song/MostPopularSongMetadataGrid.js:70
-#: js/backoffice/Song/RejectedSongGrid.js:98
-#: js/backoffice/Users/UserHistoryGrid.js:99
-#: js/backoffice/WallEvent/WallEventGrid.js:116
-#, perl-brace-format
-msgid ""
-"{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"elements\" : "
-"\"element\"]})"
-msgstr "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
-"\"élément\"]})"
-
 #: js/backoffice/Moderation/Radios.js:34
 #: js/backoffice/Moderation/Users.js:33
 msgid "Comments"
@@ -627,12 +724,6 @@ msgstr "Voulez-vous supprimer ce commentaire ?"
 msgid "Created"
 msgstr "Crée le"
 
-#: js/backoffice/Premium/PromocodeGrid.js:33
-#: js/backoffice/Premium/Promocodes.js:218
-#: js/backoffice/Premium/Promocodes.js:237
-msgid "Code"
-msgstr "Code"
-
 #: js/backoffice/Premium/PromocodeGrid.js:39
 msgid "Service"
 msgstr "Service"
@@ -646,13 +737,6 @@ msgstr "Durée"
 msgid "Promocode generator"
 msgstr "Générateur de code"
 
-#: js/backoffice/Premium/Promocodes.js:22
-#: js/backoffice/Premium/Promocodes.js:63
-#: js/backoffice/Premium/Promocodes.js:105
-#: js/backoffice/Radio/RadioForm.js:52
-msgid "Submit"
-msgstr "Valider"
-
 #: js/backoffice/Premium/Promocodes.js:94
 msgid "Promocode"
 msgstr "Promocode"
@@ -661,53 +745,54 @@ msgstr "Promocode"
 msgid "Do you want to delete the code(s) ?"
 msgstr "Voulez-vous supprimer ce(s) code(s) ?"
 
-#: js/backoffice/Premium/Promocodes.js:178
+#: js/backoffice/Premium/Promocodes.js:202
 msgid "Select a service..."
 msgstr "Sélectionner un service"
 
-#: js/backoffice/Premium/Promocodes.js:188
-#: js/backoffice/Premium/Promocodes.js:232
+#: js/backoffice/Premium/Promocodes.js:212
+#: js/backoffice/Premium/Promocodes.js:256
 msgid "Service duration (months)"
 msgstr "Durée du service (mois)"
 
-#: js/backoffice/Premium/Promocodes.js:193
+#: js/backoffice/Premium/Promocodes.js:217
 msgid "Prefix"
 msgstr "Préfixe"
 
-#: js/backoffice/Premium/Promocodes.js:199
+#: js/backoffice/Premium/Promocodes.js:223
 msgid "Quantity"
 msgstr "Quantité"
 
-#: js/backoffice/Premium/Promocodes.js:212
+#: js/backoffice/Premium/Promocodes.js:236
 msgid "Service Duration (months)"
 msgstr "Durée du service (mois)"
 
-#: js/backoffice/Premium/Promocodes.js:243
+#: js/backoffice/Premium/Promocodes.js:267
 msgid "Enabled"
 msgstr "Activé"
 
-#: js/backoffice/Premium/Promocodes.js:254
+#: js/backoffice/Premium/Promocodes.js:278
 msgid "Promocodes"
 msgstr "Promocodes"
 
-#: js/backoffice/Premium/Promocodes.js:259
+#: js/backoffice/Premium/Promocodes.js:283
 msgid "Permanent codes"
 msgstr "Codes permanents"
 
-#: js/backoffice/Premium/Promocodes.js:264
+#: js/backoffice/Premium/Promocodes.js:288
 msgid "Create code"
 msgstr "Créer un code"
 
-#: js/backoffice/Premium/Promocodes.js:273
-#: js/backoffice/Premium/Promocodes.js:327
-msgid "Edit"
-msgstr "Editer"
+#: js/backoffice/Premium/Promocodes.js:323
+#: js/backoffice/Premium/Promocodes.js:392
+#: js/backoffice/Song/MostPopularSongs.js:42
+msgid "Export"
+msgstr "Exporter"
 
-#: js/backoffice/Premium/Promocodes.js:311
+#: js/backoffice/Premium/Promocodes.js:350
 msgid "Unique usage codes"
 msgstr "Codes à usage unique"
 
-#: js/backoffice/Premium/Promocodes.js:318
+#: js/backoffice/Premium/Promocodes.js:357
 msgid "Generate codes"
 msgstr "Générer des codes"
 
@@ -901,10 +986,6 @@ msgstr "Rafraichir"
 #: js/backoffice/Song/MissingSongs.js:68
 msgid "Upload file"
 msgstr "Importer un titre"
-
-#: js/backoffice/Song/MostPopularSongs.js:42
-msgid "Export"
-msgstr "Exporter"
 
 #: js/backoffice/Song/RejectedSongGrid.js:46
 msgid "Reject count"
