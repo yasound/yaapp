@@ -3820,84 +3820,6 @@ a.yabutton-small {
         display:none;
     }
 
-
-/*-- SUBMENU --*/
-	#fix-genre {
-		display:none;
-	}
-    .genre-selector {
-        display:none;
-    }
-
-	#radio-style-symbol {
-		display:none;
-	}
-	#create-radio {
-		width:90px;
-	}
-	#create-radio:hover {
-		width:90px;
-	}
-	#sub-header-separation {
-		display:none;
-	}
-    #sub-header-pointer {
-        display:none;
-    }
-
-    #sub-header-nav {
-        width:185px
-    }
-
-    #sub-header-nav li,
-    #sub-header-nav li .first {
-        width:30px;
-        height:30px;
-        padding-left:0px;
-        padding-top:0px;
-    }
-
-    #sub-header-nav li .mobile-selection {
-        display:block;
-        height:40px;
-        width:40px;
-        background-image:url('../app/images/selection-sub-menu.png');
-        background-repeat:no-repeat;
-        margin-left:25px;
-        margin-top:20px
-    }
-    #sub-header-nav li .mobile-top {
-        display:block;
-        height:30px;
-        width:30px;
-        background-image:url('../app/images/top-sub-menu.png');
-        margin-top:12px;
-        margin-left:20px;
-    }
-    #sub-header-nav li .mobile-friends {
-        display:block;
-        height:30px;
-        width:30px;
-        background-image:url('../app/images/friends-sub-menu.png');
-        margin-top:12px;
-        margin-left:20px;
-    }
-    #sub-header-nav li .mobile-favorites {
-        display:block;
-        height:30px;
-        width:30px;
-        background-image:url('../app/images/favorites-sub-menu.png');
-        margin-top:14px;
-        margin-left:24px;
-    }
-    #search-bar {
-        width:80px;
-        float:left;
-    }
-	#search-bar #search-input {
-        width:50px;
-    }
-
 /*-- SIGNUP --*/
     .signup-container {
         width:100%;
@@ -4400,6 +4322,7 @@ a.yabutton-small {
 
     .radio-cells li {
         margin-left:0px;
+        margin-right:7px;
     }
 
     .big-friend-picture {
