@@ -296,11 +296,16 @@
     <div class="navbar navbar-fixed-top" id='header'>
       <div class="navbar-inner">
         <div class="container">
-      <div id="brand-logo">
+      <div id="brand-logo" >
 				<a href="{% url webapp %}" id='btn-webapp'>
 					<img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
 				</a>
 			</div>
+      <div id="mobile-menu-logo">
+        <a id='mobile-menu-btn-logo'>
+          <img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
+        </a>
+      </div>
       <div id='mobile-menu' class='visible-phone responsive-settings-btn'>
         <a id= 'mobile-menu-btn'>
           <img src="/media/app/images/phone-settings-icon.png" alt='phone settings icon'>
@@ -453,7 +458,7 @@
     </div>
 </div>
 
-<div id='webapp-container'>  
+<div id='webapp-container'>
             <div id='mobile-menu-content' class='hidden-display'>
               <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
                 <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
@@ -507,8 +512,22 @@
                 <img src="/media/app/images/responsive-icon-buy.png" alt='buy'>
                 <span>{% trans 'Buy song' %}</span>
               </a>
-
             </div>
+
+            <div id='mobile-menu-content-logo' class='hidden-display'>
+                <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
+                  <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
+                  <span>{% trans 'Sign In' %}</span>
+                </a>
+            </div>
+
+            <div id='mobile-menu-content-share' class='hidden-display'>
+                <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
+                  <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
+                  <span>{% trans 'Sign In' %}</span>
+                </a>
+            </div>
+
 
   {% block content%}{%endblock%}</div>
 
