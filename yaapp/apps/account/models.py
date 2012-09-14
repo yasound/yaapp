@@ -34,6 +34,7 @@ import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 from yacore.geoip import request_country
+from yageoperm import utils as yageoperm_utils
 import requests
 
 logger = logging.getLogger("yaapp.account")
@@ -246,7 +247,8 @@ class UserProfile(models.Model):
     permissions = BitField(flags=(
         'create_radio',
         'hd',
-        'selection'
+        'selection',
+        'geo_create_radio'
         ),
         default=(1)
     ) #defaut = YES (create_radio)
@@ -611,6 +613,7 @@ class UserProfile(models.Model):
             data['owner'] = True
             data['permissions'] = {
                 'create_radio': True if self.permissions.create_radio else False,
+                'geo_create_radio': True if self.permissions.geo_create_radio else False,
                 'hd': True if self.permissions.hd else False,
                 'selection': True if self.permissions.selection else False,
             }
@@ -651,6 +654,15 @@ class UserProfile(models.Model):
 
         return data
 
+
+    def update_geo_restrictions(self, request):
+        country = request_country(request)
+        geo_create_radio = yageoperm_utils.can_create_radio(self.user, country)
+        if self.permissions.geo_create_radio != geo_create_radio:
+            self.permissions.geo_create_radio = geo_create_radio
+            self.save()
+
+
     def fill_user_bundle(self, bundle, include_own_current_radios=False, include_all_radios=False):
         user_dict = self.as_dict(request_user=bundle.request.user,
                                  include_own_current_radios=include_own_current_radios,
@@ -658,6 +670,8 @@ class UserProfile(models.Model):
         bundle.data.update(user_dict)
 
     def fill_user_bundle_with_login_infos(self, bundle):
+        self.update_geo_restrictions(bundle.request)
+
         if self.user:
             bundle.data['username'] = self.user.username
 

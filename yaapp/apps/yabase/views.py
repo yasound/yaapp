@@ -1843,6 +1843,7 @@ def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
+    request.user.get_profile().update_geo_restrictions(request)
 
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
