@@ -17,6 +17,10 @@ class GeoFeature(models.Model):
     country = models.ForeignKey(Country, verbose_name=_('country'))
     feature = models.IntegerField(_('feature'), choices=yageoperm_settings.FEATURE_CHOICES, default=yageoperm_settings.FEATURE_LOGIN)
 
+    @property
+    def feature_display(self):
+        return self.get_feature_display()
+
     class Meta:
         verbose_name = _('geo feature')
         unique_together = ('country', 'feature')

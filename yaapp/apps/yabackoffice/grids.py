@@ -5,7 +5,7 @@ from yabase.models import SongInstance, WallEvent
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
 from yapremium.models import Promocode
-from yageoperm.models import Country
+from yageoperm.models import Country, GeoFeature
 
 
 class SongInstanceGrid(grids.ModelGrid):
@@ -114,3 +114,16 @@ class PromocodeGrid(grids.ModelGrid):
 
 class CountryGrid(grids.ModelGrid):
     model = Country
+
+class GeoFeatureGrid(grids.ModelGrid):
+    model = GeoFeature
+    list_mapping = [
+        'id',
+        'country',
+        'feature',
+    ]
+    mapping = {
+        'country_name': 'country__name',
+        'country_id': 'country__id',
+        'feature_display': 'feature_display',
+    }

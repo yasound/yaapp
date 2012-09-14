@@ -3,7 +3,7 @@
 //------------------------------------------
 
 Yasound.Geoperm.Data.GeoFeatureStore = function (url) {
-    var fields = [ 'id', 'country_name', 'feature_display' ];
+    var fields = [ 'id', 'country_name', 'country_id', 'feature_display', 'feature' ];
     var sortInfo = {
         field: 'code',
         direction: 'DESC'
@@ -20,7 +20,7 @@ Yasound.Geoperm.Data.GeoFeatureStore = function (url) {
 Yasound.Geoperm.UI.GeoFeatureColumnModel = function () {
     var cm = [{
         header: gettext('Feature'),
-        dataIndex: 'feature',
+        dataIndex: 'feature_display',
         sortable: true,
         width: 30,
         filterable: false
@@ -96,6 +96,9 @@ Yasound.Geoperm.UI.GeoFeatureGrid = Ext.extend(Ext.grid.GridPanel, {
         var gridRows = parseInt((bodyHeight - heightOther) / rowHeight, 10);
 
         this.getBottomToolbar().pageSize = gridRows;
+        if (this.disabled) {
+            return;
+        }
         this.getStore().reload({
             params: {
                 start: 0,
@@ -108,6 +111,12 @@ Yasound.Geoperm.UI.GeoFeatureGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     reload: function () {
         this.getStore().reload();
+    },
+    setCountryId: function(id) {
+        this.countryId = id;
+        var url = String.format('/yabackoffice/geoperm/countries/{0}/features/', id);
+        this.store.proxy.setUrl(url, true);
+        this.calculatePageSize();
     }
 });
 Ext.reg('geofeaturegrid', Yasound.Geoperm.UI.GeoFeatureGrid);
