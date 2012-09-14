@@ -1099,6 +1099,15 @@ class WebAppView(View):
             return HttpResponseRedirect(reverse('webapp'))
 
         if request.method == 'POST':
+            profile = request.user.get_profile()
+            if not profile.permissions.create_radio:
+                if request.is_ajax():
+                    data = {
+                        'success': False
+                    }
+                    return api_response(data)
+                else:
+                    return HttpResponseRedirect(reverse('webapp'))
             form = NewRadioForm(request.POST, request.FILES)
             if form.is_valid():
                 radio = form.save(commit=False)
@@ -1819,6 +1828,9 @@ def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
+
+    request.user.get_profile().update_geopermissions(request)
+
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
