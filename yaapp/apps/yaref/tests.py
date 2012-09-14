@@ -231,3 +231,25 @@ class TestFuzzy(TestCase):
             artist='',
             album='karaoke')
         self.assertEquals(res.get('db_id'), bad_pixies.id)
+
+    def test_bad_matching(self):
+        justice = yaref_test_utils.generate_yasound_song(name='Get It Together',
+            artist='Justus League, Joe Scudda',
+            album='Triple Play: The Second Inning')
+
+        build_mongodb_index(erase=True)
+
+        res = YasoundSong.objects.find_fuzzy(name="we've got to",
+            artist='ayo',
+            album='billie-eve')
+        self.assertIsNone(res)
+
+        ayo = yaref_test_utils.generate_yasound_song(name="we've got to",
+            artist='ayo',
+            album='billie-eve')
+        build_mongodb_index(erase=True)
+
+        res = YasoundSong.objects.find_fuzzy(name="we've got to",
+            artist='ayo',
+            album='billie-eve')
+        print res
