@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load thumbnail %}
 {% load compressed %}
+{% load compress %}
 {% load straight_include %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasoundev: http://ogp.me/ns/fb/yasoundev#">
@@ -13,8 +14,6 @@
     <meta name="copyright" content="Yasound SAS" />
     <meta http-equiv="Cache-control" content="public" />
     <meta name="language" content="french" />
-    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap-responsive.css">
 
 <!--[if lt IE 9]>
 <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
@@ -28,6 +27,10 @@
     <link rel="image_src" href="/media/yaweb/images/logo.png" />
 
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+
+    {% compress css %}
+    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap-responsive.css">
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
     <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
@@ -38,6 +41,7 @@
     <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
 
     <link rel="stylesheet" href="/media/css/webapp.css"/>
+    {% endcompress %}
 
 	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>

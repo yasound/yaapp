@@ -286,6 +286,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -388,7 +389,8 @@ INSTALLED_APPS = (
     #'tinymce',
     'tagging',
     'emencia.django.newsletter',
-    'yashow'
+    'yashow',
+    'compressor',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -746,16 +748,6 @@ else:
                 "task": "stats.task.radio_listening_stats_task",
                 "schedule": crontab(minute=0, hour='*'),
             },
-        }
-    elif hostname == 'yas-web-02':
-        CELERYBEAT_SCHEDULE = {
-            "leaderboard_update-every-hour": {
-                "task": "yabase.task.leaderboard_update_task",
-                "schedule": crontab(minute=0, hour='*'),
-            },
-        }
-    elif hostname == 'yas-web-03':
-        CELERYBEAT_SCHEDULE = {
             "resend_confirmations": {
                 "task": "emailconfirmation.task.resend_confirmations_task",
                 "schedule": crontab(minute=0, hour='10'),
@@ -763,17 +755,7 @@ else:
             "service_expiration": {
                 "task": "yapremium.task.check_expiration_date",
                 "schedule": crontab(minute=0, hour='12'),
-            }
-        }
-    elif hostname == 'yas-web-04':
-        CELERYBEAT_SCHEDULE = {
-            "check_users_are_alive": {
-                "task": "account.task.check_live_status_task",
-                "schedule": crontab(minute='*/10', hour='*'),
             },
-        }
-    elif hostname == 'yas-web-05':
-        CELERYBEAT_SCHEDULE = {
             "build-mongodb-index": {
                 "task": "yasearch.task.build_mongodb_index",
                 "schedule": crontab(minute="*/30"),
@@ -783,22 +765,24 @@ else:
                 "schedule": crontab(minute=0, hour='05'),
             },
         }
-    elif hostname == 'yas-web-06':
+    elif hostname == 'yas-web-02':
         CELERYBEAT_SCHEDULE = {
+            "leaderboard_update-every-hour": {
+                "task": "yabase.task.leaderboard_update_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+            "check_users_are_alive": {
+                "task": "account.task.check_live_status_task",
+                "schedule": crontab(minute='*/10', hour='*'),
+            },
             "need-sync-songs": {
                 "task": "yabase.task.process_need_sync_songs",
                 "schedule": crontab(minute=0, hour='*'),
             },
-        }
-    elif hostname == 'yas-web-07':
-        CELERYBEAT_SCHEDULE = {
             "calculate_top_missing_songs": {
                 "task": "yametrics.task.calculate_top_missing_songs_task",
                 "schedule": crontab(minute=0, hour='03'),
             },
-        }
-    elif hostname == 'yas-web-08':
-        CELERYBEAT_SCHEDULE = {
             "raido_popularity": {
                 "task": "yametrics.task.popularity_update_task",
                 "schedule": crontab(minute=0, hour='*'),
@@ -824,9 +808,15 @@ else :
 
 PIPELINE_ROOT=MEDIA_ROOT
 PIPELINE_VERSION=True
-from resources_settings import PIPELINE_JS, PIPELINE_JS
+from resources_settings import PIPELINE_JS
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 PIPELINE_CSS_COMPRESSOR = () # no css compression
+
+# css compression
+COMPRESS_OFFLINE = True
+COMPRESS_URL =  MEDIA_URL
+COMPRESS_ROOT = MEDIA_ROOT
+COMPRESS_OUTPUT_DIR = 'compressed' # /media/compressed/
 
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
