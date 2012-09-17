@@ -796,7 +796,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "keypress #search-input"    : 'search',
         "change #id_genre"          : 'genre',
         "click #create-radio"       : 'myRadios',
-        "click #responsive-play-btn": "togglePlay"
+        "click #responsive-play-btn": "togglePlay",
+        "click #responsive-love-btn": "like"
     },
 
     initialize: function() {
@@ -926,5 +927,12 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
             Yasound.App.MySound.unload();
         }
+    },
+
+    like: function (e) {
+        e.preventDefault();
+        var songId = this.model.get('id');
+        var url = '/api/v1/song/' + songId + '/liker/';
+        $.post(url);
     }
 });
