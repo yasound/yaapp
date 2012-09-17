@@ -1,21 +1,20 @@
 	{% load i18n %}
-{% load thumbnail %}        
+{% load thumbnail %}
 <div id="sub-header">
     <div class="responsive-container visible-phone">
         <a id='responsive-song'href="{% url webapp_radio current_uuid %}" class='yatooltip'>
             <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
         </a>
-        <a id="responsive-play-btn">
-            <i class="responsive-icon-play"></i>
+        <a id="play-btn">
+            <i class="icon-play"></i>
         </a>
         <div class='responsive-infos'>
-            <div id='responsive-player-artist'>Hello World<% name %></div>
-            <div id='responsive-player-title'>Hello World<% name %></div>
+            <div id='responsive-player-title'><% name %></div>
         </div>
         <div class="responsive-header-social-btn">
             <a href="#"><img id='responsive-love-btn' src="/media/app/images/responsive-heart-icon-orange.png" /></a>
             <div id='mobile-menu-share'>
-                <a id='responsive-share-btn'href="#">
+                <a id='responsive-share-btn' href="#">
                     <img src="/media/app/images/responsive-share-icon.png" />
                 </a>
             </div>
@@ -49,7 +48,7 @@
 					<div id="fix-genre">
                     {{ genre_form.genre }}
 					</div>
-				</p>			
+				</p>
             </form>
         </div>
         <div id="sub-header-separation">

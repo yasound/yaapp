@@ -795,10 +795,13 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #favorites"          : "favorites",
         "keypress #search-input"    : 'search',
         "change #id_genre"          : 'genre',
-        "click #create-radio"       : 'myRadios'
+        "click #create-radio"       : 'myRadios',
+        "click #responsive-play-btn": "togglePlay"
     },
+
     initialize: function() {
         _.bindAll(this, 'render', 'selectMenu');
+        this.model.bind('change', this.render, this);
     },
     reset: function() {
     },
@@ -806,8 +809,9 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     },
     render: function() {
         this.reset();
-        $(this.el).html(ich.subMenuTemplate());
-        this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render();
+        var jsonModel = this.model.toJSON();
+        $(this.el).html(ich.subMenuTemplate(jsonModel));
+        this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render(jsonModel);
 
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         $("select", this.el).uniform();
@@ -903,6 +907,24 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             Yasound.App.Router.navigate('/radios/', {
                 trigger: true
             });
+        }
+    },
+
+    togglePlay: function (e) {
+        e.preventDefault();
+        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
+            if (!Yasound.App.MySound) {
+                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+            } else {
+                Yasound.App.MySound.unload();
+                Yasound.App.MySound.play(Yasound.App.SoundConfig);
+            }
+            Yasound.App.MySound.setVolume(this.savedVolume);
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+        } else {
+            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
+            Yasound.App.MySound.unload();
         }
     }
 });

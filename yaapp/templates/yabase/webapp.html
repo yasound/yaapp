@@ -30,7 +30,7 @@
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
-    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.current_localestom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
+    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
 	<link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
 
 
@@ -311,7 +311,7 @@
           <img src="/media/app/images/phone-settings-icon.png" alt='phone settings icon'>
         </a>
       </div>
-      <div class='visible-phone responsive-settings-btn2'> 
+      <div class='visible-phone responsive-settings-btn2'>
         <div class="switch-container">
             <input type="checkbox"/>
             <span class='hd-bg' />
@@ -459,38 +459,47 @@
 </div>
 
 <div id='webapp-container'>
-            <div id='mobile-menu-content' class='hidden-display'>
-              <a href='#' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
-                <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
-                <span>{% trans 'Sign In' %}</span>
-              </a>
-              <a href='#' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
-                <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
-                <span>Profile</span>
-              </a>
-              <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
-                <span>{% trans 'My Radios' %}</span>
-              </a>
-              <a href='#' id='phone-menu-notifications' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-envelope-icon.png" alt='notifications'>
-                <span>{% trans 'Notifications' %}</span>
-              </a>
-              <a href='#' id='phone-menu-gifts' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-gift-icon.png" alt='gifts'>
-                <span>{% trans 'Gifts' %}</span>
-              </a>
-              <a href='#' id='phone-menu-mysettings' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-mysettings.png" alt='settings'>
-                <span>{% trans 'Settings' %}</span>
-              </a>
-              <a href='#' id='phone-menu-signout' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-signout.png" alt='sign out'/>
-                <span>{% trans 'Sign Out' %}</span>
-              </a>
-            </div>
+      <div id='mobile-menu-content' class='hidden-display'>
+        {% if request.user.is_anonymous %}
+        <a href='{% url webapp_login %}' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
+          <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
+          <span>{% trans 'Sign In' %}</span>
+        </a>
+        {% else %}
+        <a href='{% url webapp_profile request.user.username %}' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
+           {% if user_profile.picture %}
+            {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
+            <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
+           {% endthumbnail %}
+           {% else %}
+          <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
+           {% endif %}
+          <span>Profile</span>
+        </a>
+        <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
+          <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
+          <span>{% trans 'My radios' %}</span>
+        </a>
+        <a href='#' id='phone-menu-notifications' class='phone-menu-list'>
+          <img src="/media/app/images/responsive-envelope-icon.png" alt='notifications'>
+          <span>{% trans 'Notifications' %}</span>
+        </a>
+        <a href='#' id='phone-menu-gifts' class='phone-menu-list'>
+          <img src="/media/app/images/responsive-gift-icon.png" alt='gifts'>
+          <span>{% trans 'Gifts' %}</span>
+        </a>
+        <a href='#' id='phone-menu-mysettings' class='phone-menu-list'>
+          <img src="/media/app/images/responsive-icon-mysettings.png" alt='settings'>
+          <span>{% trans 'Settings' %}</span>
+        </a>
+        <a href='/logout/?next=/app/' id='phone-menu-signout' class='phone-menu-list'>
+          <img src="/media/app/images/responsive-icon-signout.png" alt='sign out'/>
+          <span>{% trans 'Logout' %}</span>
+        </a>
+        {% endif %}
+      </div>
 
-            
+
             <div id='mobile-menu-content-logo' class='hidden-display'>
               <a href='#' id='phone-menu-selection' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-icon-favorite.png" alt='selection'>
@@ -510,14 +519,12 @@
               </a>
             </div>
 
-
-            
             <div id='mobile-menu-content-share' class='hidden-display'>
-              <a href='#' id='phone-menu-share' class='phone-menu-list'>
+              <a id='phone-menu-share' class='phone-menu-list' data-toggle="modal" href="#modal-share">
                 <img src="/media/app/images/responsive-icon-share.png" alt='share'>
                 <span>{% trans 'Share' %}</span>
               </a>
-              <a href='#' id='phone-menu-buy' class='phone-menu-list'>
+              <a href='#' target='_blank' id='phone-menu-buy' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-icon-buy.png" alt='buy'>
                 <span>{% trans 'Buy song' %}</span>
               </a>

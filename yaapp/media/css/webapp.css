@@ -3719,7 +3719,7 @@ a.yabutton-small {
         margin:0px 5.22%;
     }
 
-    #responsive-play-btn {
+    #play-btn {
         -webkit-appearance: none;
         height:30px;
         width:30px;
@@ -3745,7 +3745,7 @@ a.yabutton-small {
         cursor:pointer;
     }
 
-    .responsive-play-btn i {
+    #play-btn i {
         position:absolute;
         top:7px;
         left:8px;
@@ -4678,7 +4678,7 @@ a.yabutton-small {
         margin:0px 15%;
     }
 
-    #responsive-play-btn {
+    #play-btn {
         -webkit-appearance: none;
         height:30px;
         width:30px;
@@ -4704,7 +4704,7 @@ a.yabutton-small {
         cursor:pointer;
     }
 
-    .responsive-play-btn i {
+    #play-btn i {
         position:absolute;
         top:7px;
         left:8px;

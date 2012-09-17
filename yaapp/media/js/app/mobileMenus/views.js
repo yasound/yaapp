@@ -6,38 +6,81 @@
 
 Namespace('Yasound.Views');
 
-
-/**
- * Settings Menu
- */
-
-Yasound.Views.MobileMenu = Backbone.View.extend({
-    el: '#mobile-menu',
-    events: {
-        "click #mobile-menu-btn": "toggleMenu"
-    },
-
+Yasound.Views.BaseMobileMenu = Backbone.View.extend({
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'toggleMenu');
     },
 
-    onClose: function() {
-    },
+    onClose: function() {},
 
     render: function() {
+        $(this.menuButton).on('click', this.toggleMenu);
         return this;
     },
 
-    toggleMenu: function (e) {
+    toggleMenu: function(e) {
         e.preventDefault();
-        var menu = $("#mobile-menu-content");
-        $('html, body').animate({scrollTop: 0}, 400);
+        var menu = this.$el;
+        $('html, body').animate({
+            scrollTop: 0
+        }, 400);
         if (menu.is(':visible')) {
             $('#webapp-content').show();
         } else {
             menu.siblings().hide();
         }
         menu.toggle();
+    },
+
+    goTo: function(e, url) {
+        e.preventDefault();
+        Yasound.App.Router.navigate(url, {
+            trigger: true
+        });
+        this.$el.hide();
+        $('#webapp-content').show();
+    }
+
+});
+/**
+ * Settings Menu
+ */
+
+Yasound.Views.MobileMenu = Yasound.Views.BaseMobileMenu.extend({
+    el: '#mobile-menu-content',
+    menuButton: '#mobile-menu-btn',
+
+    events: {
+        "click #phone-menu-profile": "myProfile",
+        "click #phone-menu-myradios": "myRadios",
+        "click #phone-menu-notifications": "notifications",
+        "click #phone-menu-gifts": "gifts",
+        "click #phone-menu-mysettings": "mySettings",
+        "click #phone-menu-signout": "logout"
+    },
+
+    myRadios: function(e) {
+        this.goTo(e, '/radios/');
+    },
+
+    myProfile: function(e) {
+        this.goTo(e, '/profile/' + Yasound.App.username + '/');
+    },
+
+    mySettings: function(e) {
+        this.goTo(e, '/settings/');
+    },
+
+    notifications: function(e) {
+        this.goTo(e, '/notifications/');
+    },
+
+    gifts: function(e) {
+        this.goTo(e, 'gifts/');
+    },
+
+    logout: function(e) {
+        window.location = '/logout';
     }
 });
 
@@ -45,33 +88,28 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
  * Logo Menu
  */
 
-Yasound.Views.MobileMenuLogo = Backbone.View.extend({
-    el: '#mobile-menu-logo',
+Yasound.Views.MobileMenuLogo = Yasound.Views.BaseMobileMenu.extend({
+    el: '#mobile-menu-content-logo',
+    menuButton: '#mobile-menu-btn-logo',
+
     events: {
-        "click #mobile-menu-btn-logo": "toggleMenu"
+        "click #phone-menu-selection": "selection",
+        "click #phone-menu-top": "top",
+        "click #phone-menu-myfriends": "friends",
+        "click #phone-menu-favorites": "favorites"
     },
 
-    initialize: function() {
-        _.bindAll(this, 'render');
+    selection: function(e) {
+        this.goTo(e, '/');
     },
-
-    onClose: function() {
+    top: function(e) {
+        this.goTo(e, '/top/');
     },
-
-    render: function() {
-        return this;
+    friends: function(e) {
+        this.goTo(e, '/friends/');
     },
-
-    toggleMenu: function (e) {
-        e.preventDefault();
-        var menu = $("#mobile-menu-content-logo");
-        $('html, body').animate({scrollTop: 0}, 400);
-        if (menu.is(':visible')) {
-            $('#webapp-content').show();
-        } else {
-            menu.siblings().hide();
-        }
-        menu.toggle();
+    favorites: function(e) {
+        this.goTo(e, '/favorites/');
     }
 });
 
@@ -79,34 +117,26 @@ Yasound.Views.MobileMenuLogo = Backbone.View.extend({
  * Share Menu
  */
 
-Yasound.Views.MobileMenuShare = Backbone.View.extend({
-    el: '#mobile-menu-share',
+Yasound.Views.MobileMenuShare = Yasound.Views.BaseMobileMenu.extend({
+    el: '#mobile-menu-content-share',
+    menuButton: '#responsive-share-btn',
+
     events: {
-        "click #responsive-share-btn": "toggleMenu"
+        "click #phone-menu-share": "share",
+        "click #phone-menu-buy": "buy"
     },
 
-    initialize: function() {
-        _.bindAll(this, 'render');
+    render: function (data) {
+        var that = Yasound.Views.MobileMenuShare.__super__.render.apply(this);
+        $('#phone-menu-buy', this.el).attr('href', data.buy_link);
+        return that;
     },
 
-    onClose: function() {
+    share: function (e) {
+
     },
 
-    render: function() {
-        return this;
-    },
+    buy: function (e) {
 
-    toggleMenu: function (e) {
-        e.preventDefault();
-        $('html, body').animate({scrollTop: 0}, 400);
-        var menu = $("#mobile-menu-content-share");
-        if (menu.is(':visible')) {
-            $('#webapp-content').show();
-        } else {
-            menu.siblings().hide();
-        }
-        menu.toggle();
     }
 });
-
-
