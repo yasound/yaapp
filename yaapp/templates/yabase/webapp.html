@@ -474,7 +474,7 @@
            {% else %}
           <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
            {% endif %}
-          <span>Profile</span>
+          <span>{% trans "My profile" %}</span>
         </a>
         <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
           <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
@@ -511,7 +511,7 @@
               </a>
               <a href='#' id='phone-menu-myfriends' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-friends-icon.png" alt='my friends'>
-                <span>{% trans 'My Friends' %}</span>
+                <span>{% trans 'My friends' %}</span>
               </a>
               <a href='#' id='phone-menu-favorites' class='phone-menu-list'>
                 <img src="/media/app/images/responsive-icon-favorite.png" alt='favorites'>
@@ -526,8 +526,8 @@
                 <span>{% trans 'Share' %}</span>
               </a>
               <a href='#' target='_blank' id='phone-menu-buy' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-buy.png" alt='buy'>
-                <span>{% trans 'Buy song' %}</span>
+                <img src="/media/app/images/responsive-icon-buy.png" alt='{% trans "Buy on iTunes" %}'>
+                <span>{% trans 'Buy on iTunes' %}</span>
               </a>
             </div>
 
