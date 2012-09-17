@@ -163,12 +163,6 @@ Yasound.Views.UserCell = Backbone.View.extend({
 
     onUser: function (e) {
         e.preventDefault();
-        var tagNameTarget = $(e.target).prop('tagName');
-        if (tagNameTarget == 'IMG') {
-            // do nothing if image clicked (because it is the delete image)
-            return;
-        }
-
         var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/', {
             trigger: true
