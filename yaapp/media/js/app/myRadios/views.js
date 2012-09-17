@@ -71,7 +71,10 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         'plothover .chartdiv': 'plotHover',
         'click .edit-radio': 'onEditRadio',
         'click .edit-playlist': 'onEditPlaylist',
-        'click .delete-radio': 'onDeleteRadio'
+        'click .delete-radio': 'onDeleteRadio',
+        'click .responsive-settings-icon': 'onEditRadio',
+        'click .responsive-playlist-icon': 'onEditPlaylist',
+        'click .responsive-delete-icon': 'onDeleteRadio'
     },
 
     initialize: function () {
