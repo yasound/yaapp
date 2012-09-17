@@ -4379,7 +4379,8 @@ a.yabutton-small {
     }
 
     .user-radios .radio-cells li {
-        margin-right:2px;
+        margin-right:0px;
+        margin-left:-3px;
     }
 
     .big-friend-picture {
