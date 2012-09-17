@@ -204,15 +204,6 @@ $(document).ready(function () {
             }
             this.alreadyLoaded = true;
 
-            this.buildCommonContext(selectedMenu);
-            if (this.currentView) {
-                this.currentView.reset();
-                this.currentView.close();
-                this.currentView = undefined;
-            }
-            $('#webapp-container').append("<div class='container' id='webapp-content'/>");
-            $('html, body').scrollTop(0);
-
             if (!this.radioContext) {
                 var that = this;
                 this.radioContext = {
@@ -237,6 +228,16 @@ $(document).ready(function () {
                 this.radioContext.radioUUID = 0;
                 this.setCurrentRadioUUID(Yasound.App.defaultRadioUUID);
             }
+
+            this.buildCommonContext(selectedMenu);
+            if (this.currentView) {
+                this.currentView.reset();
+                this.currentView.close();
+                this.currentView = undefined;
+            }
+            $('#webapp-container').append("<div class='container' id='webapp-content'/>");
+            $('html, body').scrollTop(0);
+
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -275,7 +276,9 @@ $(document).ready(function () {
 
                 $('#submenu-container').append("<div id='submenu-content'/>");
                 this.commonContext.subMenuView = new Yasound.Views.SubMenu({
-                    el: '#submenu-content'
+                    el: '#submenu-content',
+                    model: this.radioContext.currentSong,
+                    radio: this.currentRadio
                 }).render();
             }
             this.commonContext.subMenuView.selectMenu(selectedMenu);
