@@ -274,9 +274,8 @@ $(document).ready(function () {
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 
 
-                $('#submenu-container').append("<div id='submenu-content'/>");
                 this.commonContext.subMenuView = new Yasound.Views.SubMenu({
-                    el: '#submenu-content',
+                    el: '#submenu-container',
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio
                 }).render();
