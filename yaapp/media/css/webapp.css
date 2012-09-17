@@ -3589,10 +3589,6 @@ a.yabutton-small {
     }
 
 /*-- HEADER --*/
-    
-    #mobile-menu-content-logo {
-
-    }
 
     #header {
         position:fixed;
@@ -4192,8 +4188,8 @@ a.yabutton-small {
 
         #radios .radio-cell,
         #favorites .radio-cell {
-            width:140px;
-            height:140px;
+            width:145px;
+            height:145px;
             margin-left:3%;
             margin-top:3%;
 
@@ -4204,8 +4200,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell,
         #radios li .radio-cell,
         #favorites li .radio-cell {
-            width:140px;
-            height:140px;
+            width:145px;
+            height:145px;
         }
 
         
@@ -4213,8 +4209,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container,
         #friends-zone li .radio-cell .radio-container,
         #radios li .radio-cell .radio-container {
-            width:135px;
-            height:140px;
+            width:140px;
+            height:145px;
         }
 
         
@@ -4222,8 +4218,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container .picture,
         #radios li .radio-cell .radio-container .picture,
         #favorites li .radio-cell .radio-container .picture {
-            height:140px;
-            width:140px;
+            height:145px;
+            width:145px;
         }
 
         
@@ -4231,7 +4227,7 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container .picture .caption,
         #favorites li .radio-cell .radio-container .picture .caption,
         #radios li .radio-cell .radio-container .picture .caption {
-            width:140px;
+            width:145px;
         }
 
         .big-profile-picture {
@@ -4252,7 +4248,7 @@ a.yabutton-small {
         }
 
         .radio-cell .caption {
-            width:135px;
+            width:140px;
             bottom:4px;
             left:0px;
             height:40px;
@@ -4265,12 +4261,22 @@ a.yabutton-small {
         }
 
         .radio-cell .mask {
-            width:136px;
-            height:135px;
+            width:141px;
+            height:140px;
         }
 
         .radio-cell .radio-id {
             display:none;
+        }
+
+        .radio-cells {
+            margin-left:-6px;
+        }
+
+        .radio-cells li {
+            height:147px;
+            margin-left:0px;
+            margin-right:2px;
         }
 
 /*-- FRIEND-CELL --*/
@@ -4317,15 +4323,6 @@ a.yabutton-small {
         width:100%;
     }
 
-    .radio-cells {
-        margin-left:-6px;
-    }
-
-    .radio-cells li {
-        margin-left:0px;
-        margin-right:7px;
-    }
-
     .user-radios .radio-cells li {
         margin-right:2px;
     }
@@ -4341,6 +4338,8 @@ a.yabutton-small {
     #results {
         margin-left:0px;
     }
+
+
 
 /*-- SETTINGS MENU --*/
 
