@@ -465,12 +465,12 @@
 <div id='webapp-container'>
       <div id='mobile-menu-content' class='hidden-display'>
         {% if request.user.is_anonymous %}
-        <a href='{% url webapp_login %}' id='phone-menu-signin' class='phone-menu-list phone-menu-first'>
+        <a href='{% url webapp_login %}' id='phone-menu-signin' class='phone-menu-list'>
           <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
           <span>{% trans 'Sign In' %}</span>
         </a>
         {% else %}
-        <a href='{% url webapp_profile request.user.username %}' id='phone-menu-profile' class='phone-menu-list phone-menu-first'>
+        <a href='{% url webapp_profile request.user.username %}' id='phone-menu-profile' class='phone-menu-list'>
            {% if user_profile.picture %}
             {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
             <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
