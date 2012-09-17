@@ -48,7 +48,7 @@ def deploy():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
-        run("DJANGO_MODE='%s' ./manage.py compress --noinput" % (DJANGO_MODE))
+        run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         if DJANGO_MODE == 'production':
             if not exists("./media/cache"):
                 run("ln -s /data/glusterfs-mnt/replica2all/front/cache ./media/cache")
@@ -73,7 +73,7 @@ def update():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
-        run("DJANGO_MODE='%s' ./manage.py compress --noinput" % (DJANGO_MODE))
+        run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         run("/etc/init.d/yaapp restart")
 
 def restart_all():
