@@ -286,6 +286,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -388,7 +389,8 @@ INSTALLED_APPS = (
     #'tinymce',
     'tagging',
     'emencia.django.newsletter',
-    'yashow'
+    'yashow',
+    'compressor',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -809,6 +811,12 @@ PIPELINE_VERSION=True
 from resources_settings import PIPELINE_JS
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 PIPELINE_CSS_COMPRESSOR = () # no css compression
+
+# css compression
+COMPRESS_OFFLINE = True
+COMPRESS_URL =  MEDIA_URL
+COMPRESS_ROOT = MEDIA_ROOT
+COMPRESS_OUTPUT_DIR = 'c' # /media/c/
 
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
