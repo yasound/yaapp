@@ -4325,6 +4325,10 @@ a.yabutton-small {
         margin-right:7px;
     }
 
+    .user-radios .radio-cells li {
+        margin-right:2px;
+    }
+
     .big-friend-picture {
         display:none;
     }
