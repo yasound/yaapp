@@ -805,6 +805,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     render: function() {
         this.reset();
         var jsonModel = this.model.toJSON();
+        $(this.el).html('');
         $(this.el).html(ich.subMenuTemplate(jsonModel));
         this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render(jsonModel);
 
