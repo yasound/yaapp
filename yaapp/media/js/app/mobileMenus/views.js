@@ -9,12 +9,13 @@ Namespace('Yasound.Views');
 Yasound.Views.BaseMobileMenu = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'toggleMenu');
+        $(this.menuButton).on('click', this.toggleMenu);
     },
 
-    onClose: function() {},
+    onClose: function() {
+    },
 
     render: function() {
-        $(this.menuButton).on('click', this.toggleMenu);
         return this;
     },
 
@@ -121,22 +122,9 @@ Yasound.Views.MobileMenuShare = Yasound.Views.BaseMobileMenu.extend({
     el: '#mobile-menu-content-share',
     menuButton: '#responsive-share-btn',
 
-    events: {
-        "click #phone-menu-share": "share",
-        "click #phone-menu-buy": "buy"
-    },
-
     render: function (data) {
         var that = Yasound.Views.MobileMenuShare.__super__.render.apply(this);
         $('#phone-menu-buy', this.el).attr('href', data.buy_link);
         return that;
-    },
-
-    share: function (e) {
-
-    },
-
-    buy: function (e) {
-
     }
 });
