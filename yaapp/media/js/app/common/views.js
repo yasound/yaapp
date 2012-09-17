@@ -41,9 +41,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         return this;
     },
     onHover: function (e) {
-        if (Yasound.App.isMobile) {
-            return;
-        }
         var mask = $('.mask', this.el);
         if (!mask.is(":visible")) {
             if (Yasound.App.enableFX) {
@@ -63,9 +60,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         }
     },
     onLeave: function (e) {
-        if (Yasound.App.isMobile) {
-            return;
-        }
         var mask = $('.mask', this.el);
         if (Yasound.App.enableFX) {
             mask.fadeOut(300);
