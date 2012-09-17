@@ -4406,13 +4406,9 @@ a.yabutton-small {
 
 /*-- SETTINGS MENU --*/
 
-    .menu-bg {
-
-    }
-
     #mobile-menu-content {
-        margin-left: -8px;
-        margin-right: -7px;
+        margin-left: -5px;
+        margin-right: -3px;
         margin-top: -53px;
     }
 
@@ -4514,15 +4510,15 @@ a.yabutton-small {
 
 /*-- LOGO MENU --*/
     #mobile-menu-content-logo {
-        margin-left: -14px;
-        margin-right: -16px;
+        margin-left: -5px;
+        margin-right: -3px;
         margin-top: -53px;
     }
 
 /*-- SHARE MENU --*/
     #mobile-menu-content-share {
-        margin-left: -14px;
-        margin-right: -16px;
+        margin-left: -5px;
+        margin-right: -3px;
         margin-top: -53px;
     }
 
