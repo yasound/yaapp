@@ -126,6 +126,12 @@ Yasound.Views.MobileMenuShare = Yasound.Views.BaseMobileMenu.extend({
         "click #phone-menu-buy": "buy"
     },
 
+    render: function (data) {
+        var that = Yasound.Views.MobileMenuShare.__super__.render.apply(this);
+        $('#phone-menu-buy', this.el).attr('href', data.buy_link);
+        return that;
+    },
+
     share: function (e) {
 
     },

@@ -809,8 +809,9 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     },
     render: function() {
         this.reset();
-        $(this.el).html(ich.subMenuTemplate(this.model.toJSON()));
-        this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render();
+        var jsonModel = this.model.toJSON();
+        $(this.el).html(ich.subMenuTemplate(jsonModel));
+        this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render(jsonModel);
 
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         $("select", this.el).uniform();
