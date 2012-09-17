@@ -43,7 +43,8 @@
     <link rel="stylesheet" href="/media/css/webapp.css"/>
     {% endcompress %}
 
-	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
+{% compress js %}
+   	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
     <script type="text/javascript" src='/media/js/moment-lang-all.min.js'></script>
@@ -57,7 +58,6 @@
     <script type="text/javascript" src='/media/js/backbone-tastypie.js'></script>
     <script type="text/javascript" src='/media/js/backbone.paginator.js'></script>
     <script type="text/javascript" src='/media/bootstrap/js/bootstrap.min.js'></script>
-    <script type="text/javascript" src='/media/js/socket.io.js'></script>
     <script type="text/javascript" src='/media/js/pubsub.js'></script>
     <script type="text/javascript" src='/media/js/Namespace.js'></script>
     <script type="text/javascript" src='/media/js/colibri/colibri.js'></script>
@@ -69,6 +69,9 @@
     <script type="text/javascript" type="text/javascript" src="/media/js/flot/jquery.flot.selection.js"></script>
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
+{% endcompress %}
+
+    <script type="text/javascript" src='/media/js/socket.io.js'></script>
 
     <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
