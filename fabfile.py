@@ -52,6 +52,8 @@ def deploy():
         if DJANGO_MODE == 'production':
             if not exists("./media/cache"):
                 run("ln -s /data/glusterfs-mnt/replica2all/front/cache ./media/cache")
+            if not exists("./media/compressed"):
+                run("ln -s /data/glusterfs-mnt/replica2all/front/compressed ./media/compressed")
             if not exists("./media/pictures"):
                 run("ln -s /data/glusterfs-mnt/replica2all/front/pictures ./media/pictures")
             if not exists("./media/covers"):
