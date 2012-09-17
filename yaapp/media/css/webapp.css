@@ -3602,7 +3602,7 @@ a.yabutton-small {
         margin-right:0px;
     }
 
-<<<<<<< HEAD
+
 /*-- SIGNIN SUBMENU --*/
     .friends-login-container .friends-login-p {
         width:50%;
@@ -3633,11 +3633,6 @@ a.yabutton-small {
         font-size:21px;
         margin-top:10px;
     }
-=======
-/*-- HEADER --*/
-
-    #mobile-menu-content-logo {
->>>>>>> bbc3a1dd2990877aaf154393a160bf95a5f09338
 
     .favorites-login-container button {
         width:90%;
@@ -4442,15 +4437,10 @@ a.yabutton-small {
         color-stop(1, rgb(75,81,85))
         );
     }
-<<<<<<< HEAD
-    
-    /*.phone-menu-first {
-=======
 
     .phone-menu-first {
->>>>>>> bbc3a1dd2990877aaf154393a160bf95a5f09338
         border-radius:5px 5px 0px 0px;
-    }*/
+    }
 
     .phone-menu-last {
         /*border-radius:0px 0px 5px 5px;*/
@@ -4524,15 +4514,9 @@ a.yabutton-small {
 
 /*-- LOGO MENU --*/
     #mobile-menu-content-logo {
-<<<<<<< HEAD
-        margin-left: -5px;
-        margin-right: -3px;
-        margin-top: -53px; 
-=======
         margin-left: -14px;
         margin-right: -16px;
         margin-top: -53px;
->>>>>>> bbc3a1dd2990877aaf154393a160bf95a5f09338
     }
 
 /*-- SHARE MENU --*/
@@ -5151,15 +5135,10 @@ a.yabutton-small {
 /*-- SETTINGS MENU --*/
 
     #mobile-menu-content {
-<<<<<<< HEAD
-        margin-left: -10px;
-        margin-right: -8px;
-        margin-top: -53px; 
-=======
+
         margin-left: -14px;
         margin-right: -16px;
         margin-top: -53px;
->>>>>>> bbc3a1dd2990877aaf154393a160bf95a5f09338
     }
 
     .phone-menu-list {
@@ -5206,15 +5185,12 @@ a.yabutton-small {
             color-stop(1, rgb(54,60,64))
         );
     }
-<<<<<<< HEAD
-    
-    /*.phone-menu-first {
-=======
+
 
     .phone-menu-first {
->>>>>>> bbc3a1dd2990877aaf154393a160bf95a5f09338
+
         border-radius:5px 5px 0px 0px;
-    }*/
+    }
 
     .phone-menu-last {
         /*border-radius:0px 0px 5px 5px;*/
