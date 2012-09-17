@@ -133,6 +133,24 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
         $.post(url, params);
     },
 
+    fetchAuthenticatedURL: function (callback) {
+        var url = '/api/v1/streamer_auth_token/';
+        var streamURL = this.get('stream_url');
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var token = data.token;
+                // callback(streamURL + '?token=' + token); DISABLED RIGHT NOW
+                callback(streamURL);
+            },
+            failure: function() {
+                callback(streamURL);
+            }
+        });
+    },
+
     toJSON: function() {
         var data = Yasound.Data.Models.Radio.__super__.toJSON.apply(this);
         if (data.name.length > 18) {
