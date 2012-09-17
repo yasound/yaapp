@@ -1095,6 +1095,9 @@ class WebAppView(View):
             context['g_page'] = 'notifications'
         return context, 'yabase/app/notifications/notificationsPage.html'
 
+    def radios(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 5
+        return context, 'yabase/webapp.html'
 
     def new_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
