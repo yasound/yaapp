@@ -43,6 +43,7 @@ from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
 from yageoperm import utils as yageoperm_utils
 
+from account.views import fast_connected_users_by_distance
 import import_utils
 import json
 import logging
@@ -1322,6 +1323,8 @@ class WebAppView(View):
         if not radio_uuid:
             radio_uuid = self._default_radio_uuid(request.user)
 
+        connected_users = fast_connected_users_by_distance(request, internal=True)
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1346,6 +1349,7 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
+            'connected_users': connected_users
         }
 
         if hasattr(self, page):

@@ -508,6 +508,7 @@ def connected_users_by_distance(request):
         else:
             profiles = UserProfile.objects.connected_userprofiles(coords[0], coords[1], skip=skip, limit=limit)
     data = []
+
     if profiles:
         for p in profiles:
             data.append(p.as_dict(request_user=request.user))
@@ -515,7 +516,7 @@ def connected_users_by_distance(request):
 
 
 @check_api_key(methods=['GET'], login_required=False)
-def fast_connected_users_by_distance(request):
+def fast_connected_users_by_distance(request, internal=False):
     skip = 0
     limit = 13
     data = []
@@ -550,6 +551,9 @@ def fast_connected_users_by_distance(request):
     if key is not None and profiles is not None:
         # first time we get data
         cache.set(key, data, 60*5)
+
+    if internal:
+        return data
 
     return api_response(data, limit=limit, offset=skip)
 
