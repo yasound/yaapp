@@ -162,7 +162,7 @@
    </script>
 
    <script type="text/html" id="connectedUserTemplate">
-      {% include "yabase/app/common/connectedUser.mustache" %}
+      {% include "yabase/app/common/connectedUser.mustache" with user=None%}
    </script>
 
    <script type="text/html" id="subMenuTemplate">
@@ -568,6 +568,9 @@
 				{% trans "Connected users" %}
 			</p>
 			<div id="img-users">
+        {% for user in connected_users %}
+        <span class='connected-user-cell'>{% include 'yabase/app/common/connectedUser.mustache' %}</span>
+        {% endfor %}
 				<a href="#" id="footer-button">
 				    <span id="footer-button-text">{% trans "See all" %}</span>
 				</a>
