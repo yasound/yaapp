@@ -816,7 +816,7 @@ PIPELINE_CSS_COMPRESSOR = () # no css compression
 COMPRESS_OFFLINE = True
 COMPRESS_URL =  MEDIA_URL
 COMPRESS_ROOT = MEDIA_ROOT
-COMPRESS_OUTPUT_DIR = 'c' # /media/c/
+COMPRESS_OUTPUT_DIR = 'compressed' # /media/compressed/
 
 # FFMPEG settings
 FFMPEG_BIN = 'ffmpeg' # path to binary
