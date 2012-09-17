@@ -3541,6 +3541,14 @@ a.yabutton-small {
     display:none;
 }
 
+.friends-login-small {
+    display:none;
+}
+
+.favorites-login-small {
+    display:none;
+}
+
 
 
 
@@ -3587,6 +3595,53 @@ a.yabutton-small {
         margin-left:0px;
         margin-right:0px;
     }
+
+/*-- SIGNIN SUBMENU --*/
+    .friends-login-container .friends-login-p {
+        width:50%;
+        margin-left:25%;
+        font-size:21px;
+        margin-top:10px;
+    }
+
+    .friends-login-container button {
+        width:90%;
+        margin-top:10px;
+        font-size:21px;
+        height:60px;
+    }
+
+    .friends-login-large {
+        display:none;
+    }
+
+    .friends-login-small {
+        display:inline;
+    }
+
+    
+    .favorites-login-container .favorites-login-p {
+        width:50%;
+        margin-left:25%;
+        font-size:21px;
+        margin-top:10px;
+    }
+
+    .favorites-login-container button {
+        width:90%;
+        margin-top:10px;
+        font-size:21px;
+        height:60px;
+    }
+
+    .favorites-login-large   {
+        display:none;
+    }
+
+    .favorites-login-small {
+        display:inline;
+    }
+
 
 /*-- HEADER --*/
 
@@ -4555,6 +4610,25 @@ a.yabutton-small {
         padding-right:0px;
     }
 
+/*-- SIGNIN SUBMENU --*/
+    .friends-login-container .friends-login-p {
+        width:50%;
+        margin-left:25%;
+    }
+
+    .friends-login-container button {
+        width:90%;
+    }
+
+    .favorites-login-container .favorites-login-p {
+        width:50%;
+        margin-left:25%;
+    }
+
+    .favorites-login-container button {
+        width:90%;
+    }
+
 /*-- HEADER --*/
 
     #player,
@@ -5259,6 +5333,12 @@ a.yabutton-small {
         margin-right:0px;
         padding-left:0px;
         padding-right:0px;
+    }
+
+/*-- SIGNIN SUBMENU --*/
+    .friends-login-container .friends-login-p,
+    .favorites-login-container .favorites-login-p {
+        margin-left:188px;
     }
 
 /*-- HEADER --*/
