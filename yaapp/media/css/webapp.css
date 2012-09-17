@@ -3757,6 +3757,7 @@ a.yabutton-small {
     }
 
     .responsive-infos {
+        height:30px;
         margin:6px 0px 0px 3.8%;
         width:30.5%;
         max-width:330px;
@@ -4716,6 +4717,7 @@ a.yabutton-small {
     }
 
     .responsive-infos {
+        height:30px;
         margin:6px 0px 0px 3.8%;
         width:39.5%;
         max-width:330px;
