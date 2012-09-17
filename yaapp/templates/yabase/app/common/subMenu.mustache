@@ -1,20 +1,23 @@
 	{% load i18n %}
-{% load thumbnail %}        
+{% load thumbnail %}
 <div id="sub-header">
     <div class="responsive-container visible-phone">
         <a id='responsive-song'href="{% url webapp_radio current_uuid %}" class='yatooltip'>
             <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
         </a>
-        <a id="responsive-play-btn">
-            <i class="responsive-icon-play"></i>
+        <a id="play-btn">
+            <i class="icon-play"></i>
         </a>
         <div class='responsive-infos'>
-            <div id='responsive-player-artist'>Hello World<% name %></div>
-            <div id='responsive-player-title'>Hello World<% name %></div>
+            <div id='responsive-player-title'><% name %></div>
         </div>
         <div class="responsive-header-social-btn">
-            <a href="#"><img id='responsive-share-btn' src="/media/app/images/responsive-heart-icon-orange.png" /></a>
-            <a href="#"><img id='responsive-love-btn' src="/media/app/images/responsive-share-icon.png" /></a>
+            <a href="#"><img id='responsive-love-btn' src="/media/app/images/responsive-heart-icon-orange.png" /></a>
+            <div id='mobile-menu-share'>
+                <a id='responsive-share-btn' href="#">
+                    <img src="/media/app/images/responsive-share-icon.png" />
+                </a>
+            </div>
         </div>
     </div>
 
@@ -22,20 +25,20 @@
 		<div id="sub-header-pointer" class='menu{{submenu_number}}'></div>
         <ul id="sub-header-nav">
             <li class="first {% ifequal submenu_number 1 %}selected{% endifequal %}">
-                <a href='#' class='mobile-selection'></a>
-                <a href='#' id="selection">{% trans "Selection" %}</a>
+                <a href='{% url webapp %}' class='mobile-selection'></a>
+                <a href='{% url webapp %}' id="selection">{% trans "Selection" %}</a>
             </li>
             <li class="{% ifequal submenu_number 2 %}selected{% endifequal %}">
-                <a href='#' class='mobile-top'></a>
-                <a href='#' id='top' >{% trans "Top" %}</a>
+                <a href='{% url webapp_top %}' class='mobile-top'></a>
+                <a href='{% url webapp_top %}' id='top' >{% trans "Top" %}</a>
             </li>
             <li class="{% ifequal submenu_number 3 %}selected{% endifequal %}">
-                <a href='#' class='mobile-friends'></a>
-                <a href='#' id='friends'>{% trans "My friends" %}</a>
+                <a href='{% url webapp_friends %}' class='mobile-friends'></a>
+                <a href='{% url webapp_friends %}' id='friends'>{% trans "My friends" %}</a>
             </li>
             <li class="{% ifequal submenu_number 4 %}selected{% endifequal %}">
-                <a href='#' class='mobile-favorites'></a>
-                <a href='#' id='favorites'>{% trans "Favorites" %}</a>
+                <a href='{% url webapp_favorites %}' class='mobile-favorites'></a>
+                <a href='{% url webapp_favorites %}' id='favorites'>{% trans "Favorites" %}</a>
             </li>
         </ul>
         <div>
@@ -45,13 +48,13 @@
 					<div id="fix-genre">
                     {{ genre_form.genre }}
 					</div>
-				</p>			
+				</p>
             </form>
         </div>
         <div id="sub-header-separation">
         </div>
             {% if request.user.is_authenticated %}
-            <a id="create-radio" href="#">
+            <a id="create-radio" href="{% url webapp_radios %}">
                 <span>{% trans "Create radio" %}</span>
             </a>
             {% endif %}

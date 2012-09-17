@@ -40,6 +40,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
     },
+
     onHover: function (e) {
         if (Yasound.App.isMobile) {
             return;
@@ -63,9 +64,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         }
     },
     onLeave: function (e) {
-        if (Yasound.App.isMobile) {
-            return;
-        }
         var mask = $('.mask', this.el);
         if (Yasound.App.enableFX) {
             mask.fadeOut(300);
@@ -79,21 +77,19 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 	onRadio: function (e) {
         e.preventDefault();
         var mask = $('.mask', this.el);
-        if (!mask.is(":visible")) {
-            $("li .mask", $(this.el).parent()).fadeOut(300);
-            this.currentSongModel.fetch();
-            mask.removeClass('hidden').fadeIn(300);
-            $('.radio-border', this.el).fadeIn(300);
-        } else {
+        if (Yasound.App.enableFX) {
             mask.fadeOut(300);
             $('.radio-border', this.el).fadeOut(300);
-            var uuid = this.model.get('uuid');
-            Yasound.App.Router.navigate("radio/" + uuid + '/', {
-                trigger: true
-            });
+        } else {
+            mask.hide();
+            $('.radio-border', this.el).hide();
         }
-
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
     },
+
     refreshCurrentSong: function(e) {
         var el = $('.current-song', this.el);
 		var el2 = $('.current-artist', this.el2);
@@ -167,12 +163,6 @@ Yasound.Views.UserCell = Backbone.View.extend({
 
     onUser: function (e) {
         e.preventDefault();
-        var tagNameTarget = $(e.target).prop('tagName');
-        if (tagNameTarget == 'IMG') {
-            // do nothing if image clicked (because it is the delete image)
-            return;
-        }
-
         var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/', {
             trigger: true
@@ -795,10 +785,14 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #favorites"          : "favorites",
         "keypress #search-input"    : 'search',
         "change #id_genre"          : 'genre',
-        "click #create-radio"       : 'myRadios'
+        "click #create-radio"       : 'myRadios',
+        "click #responsive-play-btn": "togglePlay",
+        "click #responsive-love-btn": "like"
     },
+
     initialize: function() {
         _.bindAll(this, 'render', 'selectMenu');
+        this.model.bind('change', this.render, this);
     },
     reset: function() {
     },
@@ -806,7 +800,11 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     },
     render: function() {
         this.reset();
-        $(this.el).html(ich.subMenuTemplate());
+        var jsonModel = this.model.toJSON();
+        $(this.el).html('');
+        $(this.el).html(ich.subMenuTemplate(jsonModel));
+        this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render(jsonModel);
+
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         $("select", this.el).uniform();
 
@@ -902,5 +900,30 @@ Yasound.Views.SubMenu = Backbone.View.extend({
                 trigger: true
             });
         }
+    },
+
+    togglePlay: function (e) {
+        e.preventDefault();
+        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
+            if (!Yasound.App.MySound) {
+                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
+            } else {
+                Yasound.App.MySound.unload();
+                Yasound.App.MySound.play(Yasound.App.SoundConfig);
+            }
+            Yasound.App.MySound.setVolume(this.savedVolume);
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+        } else {
+            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
+            Yasound.App.MySound.unload();
+        }
+    },
+
+    like: function (e) {
+        e.preventDefault();
+        var songId = this.model.get('id');
+        var url = '/api/v1/song/' + songId + '/liker/';
+        $.post(url);
     }
 });

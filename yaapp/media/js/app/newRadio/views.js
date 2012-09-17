@@ -46,7 +46,11 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
         $.post(url, form.serializeArray(), function(data) {
             var success = data.success;
             if (!data.success) {
-                colibri(gettext('Error'));
+                if (data.message) {
+                    colibri(data.message, 'colibri-error');
+                } else {
+                    colibri(gettext('Error while creating radio'));
+                }
                 var errors = data.errors;
                 if (errors) {
                     _.each(errors, function(value, key) {

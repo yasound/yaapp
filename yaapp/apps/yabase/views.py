@@ -35,11 +35,13 @@ from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method, absolute_url
+from yacore.geoip import request_country
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager
 from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
+from yageoperm import utils as yageoperm_utils
 
 import import_utils
 import json
@@ -1093,12 +1095,37 @@ class WebAppView(View):
             context['g_page'] = 'notifications'
         return context, 'yabase/app/notifications/notificationsPage.html'
 
+    def radios(self, request, context, *args, **kwargs):
+        context['submenu_number'] = 5
+        return context, 'yabase/webapp.html'
 
     def new_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('webapp'))
 
         if request.method == 'POST':
+            profile = request.user.get_profile()
+            if not profile.permissions.create_radio:
+                if request.is_ajax():
+                    data = {
+                        'success': False,
+                        'message': unicode(_('You are not allowed to create a radio'))
+                    }
+                    return api_response(data)
+                else:
+                    return HttpResponseRedirect(reverse('webapp'))
+
+            country = request_country(request)
+            if not yageoperm_utils.can_create_radio(request.user, country):
+                if request.is_ajax():
+                    data = {
+                        'success': False,
+                        'message': unicode(_('This feature is not yet available for your country'))
+                    }
+                    return api_response(data)
+                else:
+                    return HttpResponseRedirect(reverse('webapp'))
+
             form = NewRadioForm(request.POST, request.FILES)
             if form.is_valid():
                 radio = form.save(commit=False)
@@ -1819,6 +1846,8 @@ def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
+    request.user.get_profile().update_geo_restrictions(request)
+
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
@@ -1840,7 +1869,16 @@ def my_radios(request, radio_uuid=None):
         profile = request.user.get_profile()
         if not profile.permissions.create_radio:
             data = {
-                'success': False
+                'success': False,
+                'message': unicode(_('You are not allowed to create a radio'))
+            }
+            return api_response(data)
+
+        country = request_country(request)
+        if not yageoperm_utils.can_create_radio(request.user, country):
+            data = {
+                'success': False,
+                'message': unicode(_('This feature is not yet available for your country'))
             }
             return api_response(data)
 

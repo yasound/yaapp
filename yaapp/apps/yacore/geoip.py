@@ -27,24 +27,7 @@ def request_coords(request):
 
 def request_country(request):
     return ip_country(request.META[settings.GEOIP_LOOKUP])
-
-
-
-def can_login(request):
-    if not (settings.PRODUCTION_MODE or settings.DEVELOPMENT_MODE):
-        return True
     
-    if request.user.is_superuser:
-        return True
-
-    c = request_country(request)
-    if c in settings.GEOIP_AUTHORIZED_COUNTRIES:
-        return True
-    else:
-        logger.info('login impossible for country "%s"' % (c))
-    return False
-    
-
 if __name__ == '__main__':
     import doctest
     doctest.testmod()

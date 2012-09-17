@@ -1,13 +1,4 @@
 {% load i18n %}
-<div class='row-fluid'>
-    <div class='span12'>
-        <ul id='results' class='radio-with-stats-cells'>
-        <img class='loading-mask' src='/media/images/loading.gif'/>
-        </ul>
-        <div class='cell-pagination' id='pagination'></div>
-    </div>
-</div>
-
 <div class="modal hide fade" id="modal-delete-radio">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
@@ -23,6 +14,16 @@
         <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
     </div>
 </div>
+
+<div class='row-fluid'>
+    <div class='span12'>
+        <ul id='results' class='radio-with-stats-cells'>
+        <img class='loading-mask' src='/media/images/loading.gif'/>
+        </ul>
+        <div class='cell-pagination' id='pagination'></div>
+    </div>
+</div>
+
 
 {% if user_profile.permissions.create_radio %}
 <div class='row'>
