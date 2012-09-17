@@ -40,6 +40,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
     },
+
     onHover: function (e) {
         if (Yasound.App.isMobile) {
             return;
@@ -63,9 +64,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         }
     },
     onLeave: function (e) {
-        if (Yasound.App.isMobile) {
-            return;
-        }
         var mask = $('.mask', this.el);
         if (Yasound.App.enableFX) {
             mask.fadeOut(300);
@@ -79,21 +77,19 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 	onRadio: function (e) {
         e.preventDefault();
         var mask = $('.mask', this.el);
-        if (!mask.is(":visible")) {
-            $("li .mask", $(this.el).parent()).fadeOut(300);
-            this.currentSongModel.fetch();
-            mask.removeClass('hidden').fadeIn(300);
-            $('.radio-border', this.el).fadeIn(300);
-        } else {
+        if (Yasound.App.enableFX) {
             mask.fadeOut(300);
             $('.radio-border', this.el).fadeOut(300);
-            var uuid = this.model.get('uuid');
-            Yasound.App.Router.navigate("radio/" + uuid + '/', {
-                trigger: true
-            });
+        } else {
+            mask.hide();
+            $('.radio-border', this.el).hide();
         }
-
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
     },
+
     refreshCurrentSong: function(e) {
         var el = $('.current-song', this.el);
 		var el2 = $('.current-artist', this.el2);
@@ -167,12 +163,6 @@ Yasound.Views.UserCell = Backbone.View.extend({
 
     onUser: function (e) {
         e.preventDefault();
-        var tagNameTarget = $(e.target).prop('tagName');
-        if (tagNameTarget == 'IMG') {
-            // do nothing if image clicked (because it is the delete image)
-            return;
-        }
-
         var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/', {
             trigger: true
@@ -811,6 +801,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     render: function() {
         this.reset();
         var jsonModel = this.model.toJSON();
+        $(this.el).html('');
         $(this.el).html(ich.subMenuTemplate(jsonModel));
         this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render(jsonModel);
 

@@ -43,3 +43,4 @@ django-tinymce
 pygeoip
 -e git+https://github.com/yasound/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
 unicodecsv
+django_compressor

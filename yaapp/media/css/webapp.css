@@ -1953,6 +1953,12 @@ ul .user-cell:hover .caption {
     top: -65px;
 }
 
+.user-cell img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
 #user-menu {
     margin-top: 0px;
     margin-left:0;
@@ -2273,7 +2279,7 @@ ul#notifications {
 
 #favorites-zone {
     max-width: 940px;
-}   
+}
 
 #friends-zone {
     max-width: 940px;
@@ -3541,6 +3547,14 @@ a.yabutton-small {
     display:none;
 }
 
+.friends-login-small {
+    display:none;
+}
+
+.favorites-login-small {
+    display:none;
+}
+
 
 
 
@@ -3588,11 +3602,55 @@ a.yabutton-small {
         margin-right:0px;
     }
 
-/*-- HEADER --*/
-    
-    #mobile-menu-content-logo {
 
+/*-- SIGNIN SUBMENU --*/
+    .friends-login-container .friends-login-p {
+        width:50%;
+        margin-left:25%;
+        font-size:21px;
+        margin-top:10px;
     }
+
+    .friends-login-container button {
+        width:90%;
+        margin-top:10px;
+        font-size:21px;
+        height:60px;
+    }
+
+    .friends-login-large {
+        display:none;
+    }
+
+    .friends-login-small {
+        display:inline;
+    }
+
+    
+    .favorites-login-container .favorites-login-p {
+        width:50%;
+        margin-left:25%;
+        font-size:21px;
+        margin-top:10px;
+    }
+
+    .favorites-login-container button {
+        width:90%;
+        margin-top:10px;
+        font-size:21px;
+        height:60px;
+    }
+
+    .favorites-login-large   {
+        display:none;
+    }
+
+    .favorites-login-small {
+        display:inline;
+    }
+
+
+/*-- HEADER --*/
 
     #header {
         position:fixed;
@@ -3719,7 +3777,7 @@ a.yabutton-small {
         margin:0px 5.22%;
     }
 
-    #responsive-play-btn {
+    #play-btn {
         -webkit-appearance: none;
         height:30px;
         width:30px;
@@ -3745,7 +3803,7 @@ a.yabutton-small {
         cursor:pointer;
     }
 
-    .responsive-play-btn i {
+    #play-btn i {
         position:absolute;
         top:7px;
         left:8px;
@@ -3757,6 +3815,7 @@ a.yabutton-small {
     }
 
     .responsive-infos {
+        height:30px;
         margin:6px 0px 0px 3.8%;
         width:30.5%;
         max-width:330px;
@@ -4180,57 +4239,57 @@ a.yabutton-small {
     }
 
 /*-- RADIO-CELL --*/
-        
+
         body .radio-cell {
             margin-left:0px;
         }
-        
+
         .radio-cells li {
             margin-left:3%;
         }
 
         #radios .radio-cell,
         #favorites .radio-cell {
-            width:140px;
-            height:140px;
+            width:145px;
+            height:145px;
             margin-left:3%;
             margin-top:3%;
 
         }
 
-        
+
         .radio-with-stats-cells li .radio-cell,
         .radio-cells li .radio-cell,
         #radios li .radio-cell,
         #favorites li .radio-cell {
-            width:140px;
-            height:140px;
+            width:145px;
+            height:145px;
         }
 
-        
+
         .radio-with-stats-cells li .radio-cell .radio-container,
         .radio-cells li .radio-cell .radio-container,
         #friends-zone li .radio-cell .radio-container,
         #radios li .radio-cell .radio-container {
-            width:135px;
-            height:140px;
+            width:140px;
+            height:145px;
         }
 
-        
+
         .radio-with-stats-cells li .radio-cell .radio-container .picture,
         .radio-cells li .radio-cell .radio-container .picture,
         #radios li .radio-cell .radio-container .picture,
         #favorites li .radio-cell .radio-container .picture {
-            height:140px;
-            width:140px;
+            height:145px;
+            width:145px;
         }
 
-        
+
         .radio-with-stats-cells li .radio-cell .radio-container .picture .caption,
         .radio-cells li .radio-cell .radio-container .picture .caption,
         #favorites li .radio-cell .radio-container .picture .caption,
         #radios li .radio-cell .radio-container .picture .caption {
-            width:140px;
+            width:145px;
         }
 
         .big-profile-picture {
@@ -4251,7 +4310,7 @@ a.yabutton-small {
         }
 
         .radio-cell .caption {
-            width:135px;
+            width:140px;
             bottom:4px;
             left:0px;
             height:40px;
@@ -4264,16 +4323,26 @@ a.yabutton-small {
         }
 
         .radio-cell .mask {
-            width:136px;
-            height:135px;
+            width:141px;
+            height:140px;
         }
 
         .radio-cell .radio-id {
             display:none;
         }
 
+        .radio-cells {
+            margin-left:-6px;
+        }
+
+        .radio-cells li {
+            height:147px;
+            margin-left:0px;
+            margin-right:2px;
+        }
+
 /*-- FRIEND-CELL --*/
-    
+
     ul .user-cell,
     ul .mask-user {
         width:115px;
@@ -4282,9 +4351,9 @@ a.yabutton-small {
 
     ul .user-cell .user-cell-inner {
         width:116px;
-        height:116px;  
+        height:116px;
     }
-    
+
     ul .mask-user .caption-user {
         height:75px;
         overflow:hidden;
@@ -4316,13 +4385,9 @@ a.yabutton-small {
         width:100%;
     }
 
-    .radio-cells {
-        margin-left:-6px;
-    }
-
-    .radio-cells li {
+    .user-radios .radio-cells li {
+        margin-right:1px;
         margin-left:0px;
-        margin-right:7px;
     }
 
     .big-friend-picture {
@@ -4337,16 +4402,18 @@ a.yabutton-small {
         margin-left:0px;
     }
 
+
+
 /*-- SETTINGS MENU --*/
 
     .menu-bg {
 
     }
-    
+
     #mobile-menu-content {
         margin-left: -8px;
         margin-right: -7px;
-        margin-top: -53px; 
+        margin-top: -53px;
     }
 
     .phone-menu-list {
@@ -4370,13 +4437,13 @@ a.yabutton-small {
         color-stop(1, rgb(75,81,85))
         );
     }
-    
+
     .phone-menu-first {
         border-radius:5px 5px 0px 0px;
     }
 
     .phone-menu-last {
-        border-radius:0px 0px 5px 5px;
+        /*border-radius:0px 0px 5px 5px;*/
         border-bottom:1px solid black;
     }
 
@@ -4396,7 +4463,7 @@ a.yabutton-small {
     #phone-menu-signin img {
         margin: 10px 12px 0px 13px;
     }
-        
+
     #phone-menu-profile img {
         margin: 7px 12px 0px 13px;
     }
@@ -4449,14 +4516,14 @@ a.yabutton-small {
     #mobile-menu-content-logo {
         margin-left: -14px;
         margin-right: -16px;
-        margin-top: -53px; 
+        margin-top: -53px;
     }
 
 /*-- SHARE MENU --*/
     #mobile-menu-content-share {
         margin-left: -14px;
         margin-right: -16px;
-        margin-top: -53px; 
+        margin-top: -53px;
     }
 
 /*-- FOOTER --*/
@@ -4549,6 +4616,25 @@ a.yabutton-small {
         margin-right:0px;
         padding-left:0px;
         padding-right:0px;
+    }
+
+/*-- SIGNIN SUBMENU --*/
+    .friends-login-container .friends-login-p {
+        width:50%;
+        margin-left:25%;
+    }
+
+    .friends-login-container button {
+        width:90%;
+    }
+
+    .favorites-login-container .favorites-login-p {
+        width:50%;
+        margin-left:25%;
+    }
+
+    .favorites-login-container button {
+        width:90%;
     }
 
 /*-- HEADER --*/
@@ -4674,7 +4760,7 @@ a.yabutton-small {
         margin:0px 15%;
     }
 
-    #responsive-play-btn {
+    #play-btn {
         -webkit-appearance: none;
         height:30px;
         width:30px;
@@ -4700,7 +4786,7 @@ a.yabutton-small {
         cursor:pointer;
     }
 
-    .responsive-play-btn i {
+    #play-btn i {
         position:absolute;
         top:7px;
         left:8px;
@@ -4712,6 +4798,7 @@ a.yabutton-small {
     }
 
     .responsive-infos {
+        height:30px;
         margin:6px 0px 0px 3.8%;
         width:39.5%;
         max-width:330px;
@@ -4775,7 +4862,7 @@ a.yabutton-small {
         margin:20px 0px;
     }
 
-    .signup-container #signup-input input, 
+    .signup-container #signup-input input,
     .signup-container #signup-input .right-input {
         width:80%;
         margin: 10px 0%;
@@ -4882,7 +4969,7 @@ a.yabutton-small {
     }
 
     .stats em {
-        font-size: 42px; 
+        font-size: 42px;
     }
 
     .stats .minutes-spent em,
@@ -5039,18 +5126,19 @@ a.yabutton-small {
         display:none;
     }
 /*-- FRIENDS --*/
-    
+
     .profile-background {
         float:left;
         width:100%;
     }
 
 /*-- SETTINGS MENU --*/
-    
+
     #mobile-menu-content {
+
         margin-left: -14px;
         margin-right: -16px;
-        margin-top: -53px; 
+        margin-top: -53px;
     }
 
     .phone-menu-list {
@@ -5097,13 +5185,15 @@ a.yabutton-small {
             color-stop(1, rgb(54,60,64))
         );
     }
-    
+
+
     .phone-menu-first {
+
         border-radius:5px 5px 0px 0px;
     }
 
     .phone-menu-last {
-        border-radius:0px 0px 5px 5px;
+        /*border-radius:0px 0px 5px 5px;*/
         border-bottom:1px solid black;
     }
 
@@ -5123,7 +5213,7 @@ a.yabutton-small {
     #phone-menu-signin img {
         margin: 10px 12px 0px 13px;
     }
-        
+
     #phone-menu-profile img {
         margin: 7px 12px 0px 13px;
     }
@@ -5172,19 +5262,19 @@ a.yabutton-small {
         margin:13px 18px 0px 13px;
     }
 /*-- LOGO MENU --*/
-    
+
     #mobile-menu-content-logo {
         margin-left: -14px;
         margin-right: -16px;
-        margin-top: -53px; 
+        margin-top: -53px;
     }
 
 /*-- SHARE MENU --*/
-    
+
     #mobile-menu-content-share {
         margin-left: -14px;
         margin-right: -16px;
-        margin-top: -53px; 
+        margin-top: -53px;
     }
 
 /*-- FOOTER --*/
@@ -5254,6 +5344,12 @@ a.yabutton-small {
         margin-right:0px;
         padding-left:0px;
         padding-right:0px;
+    }
+
+/*-- SIGNIN SUBMENU --*/
+    .friends-login-container .friends-login-p,
+    .favorites-login-container .favorites-login-p {
+        margin-left:188px;
     }
 
 /*-- HEADER --*/
