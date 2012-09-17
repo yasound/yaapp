@@ -81,3 +81,11 @@ def mark_all_as_read(request):
     response = {'succeeded': True}
     res = json.dumps(response)
     return HttpResponse(res)
+
+@check_api_key(methods=['GET'])
+def unread_count(request):
+    m = NotificationsManager()
+    unread_count = m.unread_count(request.user.id)
+    response = {'unread_count': unread_count}
+    res = json.dumps(response)
+    return HttpResponse(res)
