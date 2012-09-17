@@ -4345,17 +4345,23 @@ a.yabutton-small {
 
     ul .user-cell,
     ul .mask-user {
-        width:115px;
-        height:115px;
+        width:65px;
+        height:65px;
+        border:3px solid white;
+    }
+
+    ul .user-cell:hover,
+    ul .mask-user:hover {
+        display:none;
     }
 
     ul .user-cell .user-cell-inner {
-        width:116px;
-        height:116px;
+        width:64px;
+        height:64px;
     }
 
     ul .mask-user .caption-user {
-        height:75px;
+        height:28px;
         overflow:hidden;
         top: 23px;
         left: 5px;
