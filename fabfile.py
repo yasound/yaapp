@@ -48,7 +48,6 @@ def deploy():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
-        run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         if DJANGO_MODE == 'production':
             if not exists("./media/cache"):
                 run("ln -s /data/glusterfs-mnt/replica2all/front/cache ./media/cache")
@@ -62,6 +61,7 @@ def deploy():
                 run("ln -s /data/glusterfs-mnt/replica2all/album-cover ./media/covers/albums")
             if not exists("./media/covers/songs"):
                 run("ln -s /data/glusterfs-mnt/replica2all/song-cover ./media/covers/songs")
+        run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
