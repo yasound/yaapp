@@ -4245,14 +4245,14 @@ a.yabutton-small {
         }
 
         .radio-cells li {
-            margin-left:3%;
+            margin-left:4%;
         }
 
         #radios .radio-cell,
         #favorites .radio-cell {
-            width:145px;
-            height:145px;
-            margin-left:3%;
+            width:152px;
+            height:152px;
+            margin-left:1.5%;
             margin-top:3%;
 
         }
@@ -4262,8 +4262,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell,
         #radios li .radio-cell,
         #favorites li .radio-cell {
-            width:145px;
-            height:145px;
+            width:152px;
+            height:152px;
         }
 
 
@@ -4271,8 +4271,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container,
         #friends-zone li .radio-cell .radio-container,
         #radios li .radio-cell .radio-container {
-            width:140px;
-            height:145px;
+            width:147px;
+            height:152px;
         }
 
 
@@ -4280,8 +4280,8 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container .picture,
         #radios li .radio-cell .radio-container .picture,
         #favorites li .radio-cell .radio-container .picture {
-            height:145px;
-            width:145px;
+            height:152px;
+            width:152px;
         }
 
 
@@ -4289,7 +4289,7 @@ a.yabutton-small {
         .radio-cells li .radio-cell .radio-container .picture .caption,
         #favorites li .radio-cell .radio-container .picture .caption,
         #radios li .radio-cell .radio-container .picture .caption {
-            width:145px;
+            width:152px;
         }
 
         .big-profile-picture {
@@ -4310,7 +4310,7 @@ a.yabutton-small {
         }
 
         .radio-cell .caption {
-            width:140px;
+            width:147px;
             bottom:4px;
             left:0px;
             height:40px;
@@ -4323,8 +4323,8 @@ a.yabutton-small {
         }
 
         .radio-cell .mask {
-            width:141px;
-            height:140px;
+            width:147px;
+            height:147px;
         }
 
         .radio-cell .radio-id {
@@ -4336,7 +4336,7 @@ a.yabutton-small {
         }
 
         .radio-cells li {
-            height:147px;
+            height:152px;
             margin-left:0px;
             margin-right:2px;
         }
