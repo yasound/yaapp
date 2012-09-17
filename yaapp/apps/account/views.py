@@ -665,6 +665,7 @@ def user_picture(request, username):
         return HttpResponse(response_data, mimetype="application/json")
     raise Http404
 
+
 @check_api_key(methods=['GET'])
 def get_streamer_auth_token(request):
     token = uuid.uuid4().hex
@@ -674,6 +675,7 @@ def get_streamer_auth_token(request):
     response_data = json.dumps(response)
     return HttpResponse(response_data)
 
+
 @check_api_key(methods=['GET'], login_required=False)
 def check_streamer_auth_token(request, token):
     key = 'token-%s' % (token)
@@ -682,5 +684,3 @@ def check_streamer_auth_token(request, token):
     response = {'user_id': user_id}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
-
-

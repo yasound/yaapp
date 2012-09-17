@@ -205,6 +205,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/delete_notification/(?P<notif_id>\S+)/$', 'yamessage.views.delete_notification'),
     url(r'^api/v1/delete_all_notifications/$', 'yamessage.views.delete_all_notifications'),
     url(r'^api/v1/notifications/mark_all_as_read/$', 'yamessage.views.mark_all_as_read'),
+    url(r'^api/v1/notifications/unread_count/$', 'yamessage.views.unread_count'),
 
     url(r'^api/v1/radio_recommendations/$', 'yabase.views.radio_recommendations'),
 
