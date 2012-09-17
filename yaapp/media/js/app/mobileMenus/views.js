@@ -56,19 +56,19 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
     },
 
     myRadios: function(e) {
-        this.goTo(e, 'radios/');
+        this.goTo(e, '/radios/');
     },
 
     myProfile: function(e) {
-        this.goTo(e, 'profile/' + Yasound.App.username + '/');
+        this.goTo(e, '/profile/' + Yasound.App.username + '/');
     },
 
     mySettings: function(e) {
-        this.goTo(e, 'settings/');
+        this.goTo(e, '/settings/');
     },
 
     notifications: function(e) {
-        this.goTo(e, 'notifications/');
+        this.goTo(e, '/notifications/');
     },
 
     gifts: function(e) {
@@ -85,18 +85,22 @@ Yasound.Views.MobileMenu = Backbone.View.extend({
  */
 
 Yasound.Views.MobileMenuLogo = Backbone.View.extend({
-    el: '#mobile-menu-logo',
+    el: '#mobile-menu-content-logo',
     events: {
-        "click #mobile-menu-btn-logo": "toggleMenu"
+        "click #phone-menu-selection": "selection",
+        "click #phone-menu-top": "top",
+        "click #phone-menu-myfriends": "friends",
+        "click #phone-menu-favorites": "favorites"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'toggleMenu');
     },
 
     onClose: function() {},
 
     render: function() {
+        $('#mobile-menu-btn-logo').on('click', this.toggleMenu);
         return this;
     },
 
@@ -112,7 +116,28 @@ Yasound.Views.MobileMenuLogo = Backbone.View.extend({
             menu.siblings().hide();
         }
         menu.toggle();
-    }
+    },
+
+    goTo: function(e, url) {
+        e.preventDefault();
+        Yasound.App.Router.navigate(url, {
+            trigger: true
+        });
+        this.$el.hide();
+    },
+
+    selection: function(e) {
+        this.goTo(e, '/');
+    },
+    top: function(e) {
+        this.goTo(e, '/top/');
+    },
+    friends: function(e) {
+        this.goTo(e, '/friends/');
+    },
+    favorites: function(e) {
+        this.goTo(e, '/favorites/');
+    },
 });
 
 /**
