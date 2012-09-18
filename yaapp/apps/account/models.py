@@ -806,7 +806,13 @@ class UserProfile(models.Model):
             yasound_friend_count = len(friends)
             logger.debug('among them, %d are registered at yasound', yasound_friend_count)
 
-            self.friends = friends
+            for friend in friends:
+                self.friends.add(friend)
+                # for facebook, relation is bidirectional, so we add the
+                # current user as friend of his friends
+                friend_profile = friend.userprofile
+                if friend_profile is not None:
+                    friend_profile.friends.add(self.user)
             self.save()
 
         if self.twitter_enabled:
@@ -818,13 +824,6 @@ class UserProfile(models.Model):
             for friend in friends:
                 self.friends.add(friend)
             self.save()
-
-        for user in self.friends.all():
-            profile = user.userprofile
-            if profile is None:
-                continue
-            profile.friends.add(self.user)
-            profile.save()
 
         return friend_count, yasound_friend_count
 
