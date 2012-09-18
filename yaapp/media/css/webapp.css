@@ -2927,8 +2927,8 @@ ul .radio-with-stats-cells li {
 }
 
 .settings-container #programming-btn {
-    margin-top:46px;
-    margin-right:20px;
+    margin-top:6px;
+    margin-right:6px;
 }
 
 #settings-nav {
@@ -4105,7 +4105,7 @@ a.yabutton-small {
         width:145px;
         margin-right:0px;
         margin-left:10px;
-        margin-top:20px;
+        margin-top:9px;
     }
 
     .tickLabel {
@@ -4169,7 +4169,7 @@ a.yabutton-small {
         border:1px solid #085987;
         border-radius:5px;
         box-shadow: inset 0px 1px 1px white;
-    }
+    }    
 
 
 /*-- NOTIFICATIONS --*/
