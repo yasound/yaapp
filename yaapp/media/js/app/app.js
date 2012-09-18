@@ -108,98 +108,7 @@ $(document).ready(function () {
         }
     };
 
-
-    soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
-    soundManager.preferFlash = true;
-    soundManager.useHTML5Audio = true;
-    soundManager.debugMode = false;
-    soundManager.useFlashBlock = true;
-    soundManager.flashVersion = 9;
-    soundManager.useHighPerformance = true;
-    soundManager.useFastPolling = true;
-
-    Yasound.App.MySound = undefined;
-
-    Yasound.App.SoundConfig = {
-        id: 'yasoundMainPlay',
-        url: '/',
-        baseUrl: undefined,
-        autoPlay: true,
-        autoLoad: true,
-        volume: 100, // volume is saved across different streams
-        stream: true,
-
-        isPlaying: function () {
-            if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
-                return false;
-            }
-            return true;
-        },
-
-        setBaseUrl: function(baseUrl) {
-            this.baseUrl = baseUrl;
-            if (this.isPlaying()) {
-                this.stop();
-                this.play();
-            }
-        },
-
-        stop: function () {
-            if (!(typeof Yasound.App.MySound === "undefined")) {
-                Yasound.App.MySound.unload();
-            }
-        },
-
-        play: function (callback) {
-            if (!callback) {
-                callback = function() {};
-            }
-            var that = this;
-
-            var url = '/api/v1/streamer_auth_token/';
-            var streamURL = this.baseUrl;
-            if (Yasound.App.userAuthenticated) {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        var token = data.token;
-                        var fullURL = streamURL + '/?token=' + token
-                        that.url = fullURL;
-
-                        if ((typeof Yasound.App.MySound === "undefined")) {
-                            Yasound.App.MySound = soundManager.createSound(that);
-                        } else {
-                            Yasound.App.MySound.play(that);
-                        }
-                        callback();
-                    },
-                    failure: function() {
-                        callback();
-                    }
-                });
-            } else {
-                that.url = that.baseUrl;
-                if ((typeof Yasound.App.MySound === "undefined")) {
-                    Yasound.App.MySound = soundManager.createSound(that);
-                } else {
-                    Yasound.App.MySound.play(that);
-                }
-                callback();
-            }
-
-        }
-    };
-
-    // called in case of problem with flash player (flashblock for instance)
-    soundManager.ontimeout(function () {
-        if (!(typeof Yasound.App.MySound === "undefined")) {
-            Yasound.App.MySound.destruct();
-        }
-        Yasound.App.MySound = undefined;
-        $('#play i').removeClass('icon-stop').addClass('icon-play');
-    });
+    Yasound.App.player = Yasound.Player.SoundManager();
 
     /**
      * Application controller
@@ -313,7 +222,7 @@ $(document).ready(function () {
                 this.commonContext = {};
                 this.commonContext.errorHandler = new Yasound.App.ErrorHandler().render();
                 this.commonContext.streamFunction = function (model, stream_url) {
-                    Yasound.App.SoundConfig.setBaseUrl(stream_url);
+                    Yasound.App.player.setBaseUrl(stream_url);
                 };
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
