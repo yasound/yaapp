@@ -26,11 +26,10 @@ $(document).ready(function () {
         Yasound.Utils.enableFX();
     }
 
-    Yasound.App.waitForSoundManager = true;
+    Yasound.App.waitForSoundManager = false;
 
     if ($.browser.msie) {
         if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
-            Yasound.App.waitForSoundManager = false;
             g_enable_push = false;
         }
     }
@@ -108,7 +107,19 @@ $(document).ready(function () {
         }
     };
 
-    Yasound.App.player = Yasound.Player.SoundManager();
+    /**
+     * Sound engine initialization
+     */
+    if (g_sound_player == 'soundmanager') {
+        Yasound.App.player = Yasound.Player.SoundManager();
+        Yasound.App.waitForSoundManager = true;
+
+        if ($.browser.msie) {
+            if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+                Yasound.App.waitForSoundManager = false;
+            }
+        }
+    }
 
     /**
      * Application controller

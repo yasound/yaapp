@@ -1352,7 +1352,8 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
-            'connected_users': connected_users
+            'connected_users': connected_users,
+            'sound_player': 'soundmanager',
         }
 
         if hasattr(self, page):
@@ -1445,6 +1446,7 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
+            'sound_player': 'soundmanager',
         }
 
         if hasattr(self, page):
