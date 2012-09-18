@@ -1038,14 +1038,17 @@ class WebAppView(View):
 
     def radio(self, request, context, *args, **kwargs):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
+        if radio.current_song:
+            context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-
         wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
         context['wall_events'] = wall_events
 
         bdata = {
-            'wall_events': [wall_event.as_dict() for wall_event in wall_events]
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'radio': [radio.as_dict(request.user)],
         }
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
 

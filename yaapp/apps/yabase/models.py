@@ -888,6 +888,15 @@ class Radio(models.Model):
         self.computing_next_songs = True
         self.save()
 
+    def is_favorite(self, user):
+        """
+        Return true if user has added this radio as a favorite
+        """
+        if RadioUser.objects.filter(radio__id=self.id, user=user, favorite=True).count() > 0:
+            return True
+        return False
+
+
     @property
     def is_locked(self):
         return self.computing_next_songs
