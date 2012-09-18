@@ -394,19 +394,17 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     togglePlay: function (e) {
         e.preventDefault();
-        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
-            if (!Yasound.App.MySound) {
-                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-            } else {
-                Yasound.App.MySound.unload();
-                Yasound.App.MySound.play(Yasound.App.SoundConfig);
-            }
-            Yasound.App.MySound.setVolume(this.savedVolume);
-            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+        if (!Yasound.App.SoundConfig.isPlaying()) {
+            Yasound.App.SoundConfig.stop();
+            var that = this;
+            Yasound.App.SoundConfig.play(function() {
+                Yasound.App.MySound.setVolume(that.savedVolume);
+                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+                $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+            });
         } else {
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.MySound.unload();
+            Yasound.App.SoundConfig.stop();
         }
     },
 
@@ -788,7 +786,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "keypress #search-input"    : 'search',
         "change #id_genre"          : 'genre',
         "click #create-radio"       : 'myRadios',
-        "click #responsive-play-btn": "togglePlay",
+        "click #play-btn": "togglePlay",
         "click #responsive-love-btn": "like"
     },
 
@@ -906,19 +904,16 @@ Yasound.Views.SubMenu = Backbone.View.extend({
 
     togglePlay: function (e) {
         e.preventDefault();
-        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
-            if (!Yasound.App.MySound) {
-                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-            } else {
-                Yasound.App.MySound.unload();
-                Yasound.App.MySound.play(Yasound.App.SoundConfig);
-            }
-            Yasound.App.MySound.setVolume(this.savedVolume);
-            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+        if (!Yasound.App.SoundConfig.isPlaying()) {
+            var that = this;
+            Yasound.App.SoundConfig.play(function () {
+                Yasound.App.MySound.setVolume(that.savedVolume);
+                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+                $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+            });
         } else {
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.MySound.unload();
+            Yasound.App.SoundConfig.stop();
         }
     },
 
