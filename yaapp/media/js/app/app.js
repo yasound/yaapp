@@ -15,6 +15,7 @@ $(document).ready(function () {
     Yasound.App.hasRadios = g_has_radios;
     Yasound.App.stickyViews = [];
     Yasound.App.uploadCount = 0;
+    Yasound.App.root = g_root;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
@@ -462,14 +463,14 @@ $(document).ready(function () {
     if (!Yasound.App.waitForSoundManager) {
         Backbone.history.start({
             pushState: true,
-            root: '/app/',
+            root: Yasound.App.root,
             silent: false
         });
     } else {
         soundManager.onready(function () {
             Backbone.history.start({
                 pushState: true,
-                root: '/app/',
+                root: Yasound.App.root,
                 silent: false
             });
         });
