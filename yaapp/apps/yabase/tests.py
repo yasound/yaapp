@@ -229,6 +229,20 @@ class TestModels(TestCase):
         s = SongMetadata(name=name, artist_name=artist, album_name=album)
         self.assertEquals(s.calculate_hash_name(), 'e1c0b58dcdb486247329be94a4b8eee4')
 
+    def test_is_favorite(self):
+        radio = self.radio
+        user = self.user
+        RadioUser.objects.all().delete()
+
+        self.assertFalse(radio.is_favorite(user))
+
+        ru = RadioUser.objects.create(radio=radio, user=user)
+        self.assertFalse(radio.is_favorite(user))
+
+        ru.favorite=True
+        ru.save()
+        self.assertTrue(radio.is_favorite(user))
+
 class TestNextSong(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]

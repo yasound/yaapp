@@ -1,38 +1,60 @@
 {% load i18n %}
    <div id='webapp-radio-picture' class='thumbnail'>
-       <img src="<% picture %>" width="210px" height="210px"/>
+       <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="210px" height="210px"/>
        <div id='webapp-title-radio'>
-          <h2><% name %> {% trans "by" %}
-          <a id='user' href='/app/profile/<%#creator%><% username %>/'><% name %><%/creator%></a>
+          <h2>{{ radio.name|default:'<% name %>' }} {% trans "by" %}
+          <a id='user' href='/app/profile/{{ radio.creator.username|default:'<%#creator%><% username %>' }}/'>{{ radio.creator.userprofile.name|default:'<% name %><%/creator%>' }}</a>
           </h2>
        </div>
    </div>
    <div id='webapp-radio-title'>
         <div class='favorites-nbr-container'>
-          <span class='favorites-nbr'><% favorites %></span>
+          <span class='favorites-nbr'>{{ radio.favorites|default:'<% favorites %>' }}</span>
           <img src="/media/app/images/star-small-gradient.png">
           <div class='favorites-txt'>{% trans "favorites" %}</div>
         </div>
         {% if request.user.is_authenticated %}
-        <a class="btn" id='btn-favorite'>
-          <img src='/media/app/images/star-small-white.png' />
-          <span>{% trans 'Add to favorite' %}</span>
-        </a>
-        <a class="btn" id='btn-unfavorite'>
-          <img src='/media/app/images/star-small-grey.png' />
-          <span>{% trans 'Remove from favorite' %}</span>
-        </a>
+          {% if radio %}
+            {% if radio.favorite %}
+              <a class="btn" id='btn-unfavorite'>
+                <img src='/media/app/images/star-small-grey.png' />
+                <span>{% trans 'Remove from favorite' %}</span>
+              </a>
+            {% else %}
+              <a class="btn" id='btn-favorite'>
+                <img src='/media/app/images/star-small-white.png' />
+                <span>{% trans 'Add to favorite' %}</span>
+              </a>
+            {% endif %}
+          {% else %}
+            <a class="btn" id='btn-favorite'>
+              <img src='/media/app/images/star-small-white.png' />
+              <span>{% trans 'Add to favorite' %}</span>
+            </a>
+            <a class="btn" id='btn-unfavorite'>
+              <img src='/media/app/images/star-small-grey.png' />
+              <span>{% trans 'Remove from favorite' %}</span>
+            </a>
+          {% endif %}
         {% endif %}
    </div>
 	<ul id='radio-actions-container'>
 		<li class='wall-first-child'><a data-toggle="modal" href="#modal-share"><img src="/media/app/images/radio/radio-icon-share.png"/><span>{% trans "Share" %}</span></a></li>
-		<%#creator%>
-    <%#owner%>
-		<li><a href="/app/<%uuid%>/settings/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Edit settings" %}</span></a></li>
-		<li><a href="/app/<%uuid%>/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Edit playlist" %}</span></a></li>
-    <li><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
-		<%/owner%>
-    <%/creator%>
+    {% if radio %}
+      {% ifequal radio.creator request.user %}
+        <li><a href="/app/radio/{{ radio.uuid }}/edit/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Edit settings" %}</span></a></li>
+        <li><a href="/app/radio/{{ radio.uuid }}/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Edit playlist" %}</span></a></li>
+        <li><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
+      {% endifequal %}
+    {% else %}
+  		<%#creator%>
+      <%#owner%>
+  		<li><a href="/app/radio/<%uuid%>/edit/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Edit settings" %}</span></a></li>
+  		<li><a href="/app/radio/<%uuid%>/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Edit playlist" %}</span></a></li>
+      <li><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
+  		<%/owner%>
+      <%/creator%>
+    {% endif %}
     <li class='wall-last-child'><a href="#" id="like-btn"><img src="/media/app/images/radio/radio-icon-heart.png"/><span>{% trans "Like song" %}</span></a></li>
     {# <li class='wall-last-child'><a  href="#"><img class='actions-btn' src="/media/app/images/radio/radio-icon-embed.png"/>intégrer la radio sur mon site</a></li> #}
 	</ul>

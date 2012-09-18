@@ -43,6 +43,7 @@ from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
 from yageoperm import utils as yageoperm_utils
 
+from account.views import fast_connected_users_by_distance
 import import_utils
 import json
 import logging
@@ -1037,14 +1038,17 @@ class WebAppView(View):
 
     def radio(self, request, context, *args, **kwargs):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
+        if radio.current_song:
+            context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-
         wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
         context['wall_events'] = wall_events
 
         bdata = {
-            'wall_events': [wall_event.as_dict() for wall_event in wall_events]
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'radio': [radio.as_dict(request.user)],
         }
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
 
@@ -1322,6 +1326,8 @@ class WebAppView(View):
         if not radio_uuid:
             radio_uuid = self._default_radio_uuid(request.user)
 
+        connected_users = fast_connected_users_by_distance(request, internal=True)
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1346,6 +1352,7 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
+            'connected_users': connected_users
         }
 
         if hasattr(self, page):

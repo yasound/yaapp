@@ -613,6 +613,7 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
     },
 
     clear: function() {
+        $('span.connected-user-cell', this.el).remove();
         _.map(this.views, function(view) {
             view.close();
         });
@@ -644,6 +645,7 @@ Yasound.Views.ConnectedUsers = Backbone.View.extend({
 
 Yasound.Views.ConnectedUserCell = Backbone.View.extend({
     tagName: 'span',
+    className: 'connected-user-cell',
 
     events: {
         "click a": "onUser"

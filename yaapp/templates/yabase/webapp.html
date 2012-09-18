@@ -45,7 +45,8 @@
     <link rel="stylesheet" href="/media/css/webapp.css"/>
     {% endcompress %}
 
-	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
+{% compress js %}
+   	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
     <script type="text/javascript" src='/media/js/moment-lang-all.min.js'></script>
@@ -59,7 +60,6 @@
     <script type="text/javascript" src='/media/js/backbone-tastypie.js'></script>
     <script type="text/javascript" src='/media/js/backbone.paginator.js'></script>
     <script type="text/javascript" src='/media/bootstrap/js/bootstrap.min.js'></script>
-    <script type="text/javascript" src='/media/js/socket.io.js'></script>
     <script type="text/javascript" src='/media/js/pubsub.js'></script>
     <script type="text/javascript" src='/media/js/Namespace.js'></script>
     <script type="text/javascript" src='/media/js/colibri/colibri.js'></script>
@@ -71,6 +71,9 @@
     <script type="text/javascript" type="text/javascript" src="/media/js/flot/jquery.flot.selection.js"></script>
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
+{% endcompress %}
+
+    <script type="text/javascript" src='/media/js/socket.io.js'></script>
 
     <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -107,10 +110,10 @@
 
 
    <script type="text/html" id="radioTemplate">
-      {% include "yabase/app/radio/radio.mustache" %}
+      {% include "yabase/app/radio/radio.mustache" with radio=None %}
    </script>
    <script type="text/html" id="trackInRadioTemplate">
-      {% include "yabase/app/radio/track.mustache" %}
+      {% include "yabase/app/radio/track.mustache" with yasound_song=None %}
    </script>
 
    <script type="text/html" id="trackTemplate">
@@ -164,7 +167,7 @@
    </script>
 
    <script type="text/html" id="connectedUserTemplate">
-      {% include "yabase/app/common/connectedUser.mustache" %}
+      {% include "yabase/app/common/connectedUser.mustache" with user=None%}
    </script>
 
    <script type="text/html" id="subMenuTemplate">
@@ -570,6 +573,9 @@
 				{% trans "Connected users" %}
 			</p>
 			<div id="img-users">
+        {% for user in connected_users %}
+        <span class='connected-user-cell'>{% include 'yabase/app/common/connectedUser.mustache' %}</span>
+        {% endfor %}
 				<a href="#" id="footer-button">
 				    <span id="footer-button-text">{% trans "See all" %}</span>
 				</a>
