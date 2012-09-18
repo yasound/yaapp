@@ -892,6 +892,9 @@ class Radio(models.Model):
         """
         Return true if user has added this radio as a favorite
         """
+        if user.is_anonymous():
+            return False
+
         if RadioUser.objects.filter(radio__id=self.id, user=user, favorite=True).count() > 0:
             return True
         return False
