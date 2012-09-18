@@ -98,3 +98,30 @@ Yasound.Player.SoundManager = function () {
     };
     return mgr;
 };
+
+
+Yasound.Player.Deezer = function () {
+
+    var mgr = {
+        isPlaying: function () {
+            return false;
+        },
+
+        setBaseUrl: function(baseUrl) {
+        },
+
+        setVolume: function (volume) {
+        },
+
+        volume: function () {
+            return 0;
+        },
+
+        stop: function () {
+        },
+
+        play: function (callback) {
+        }
+    };
+    return mgr;
+};

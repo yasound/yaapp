@@ -120,6 +120,8 @@ $(document).ready(function () {
                 Yasound.App.waitForSoundManager = false;
             }
         }
+    } else if (g_sound_player == 'deezer') {
+        Yasound.App.player = Yasound.Player.Deezer();
     }
 
     /**

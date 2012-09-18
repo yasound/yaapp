@@ -7,5 +7,5 @@ urlpatterns = patterns('yadeezer.views',
 
     url(r'^api/v1/deezer/import_track/(?P<radio_uuid>\S+)/$', 'import_track'),
 
-    url(r'^deezer/$', WebAppView.as_view(), {'page': 'home', 'root': '/deezer/'}),
+    url(r'^deezer/$', WebAppView.as_view(), {'page': 'home', 'root': '/deezer/', 'sound_player': 'deezer'}),
 )

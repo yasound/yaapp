@@ -1271,7 +1271,7 @@ class WebAppView(View):
             return radios[0].uuid
         return None
 
-    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', *args, **kwargs):
+    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', sound_player='soundmanager', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
         """
@@ -1353,7 +1353,7 @@ class WebAppView(View):
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
             'connected_users': connected_users,
-            'sound_player': 'soundmanager',
+            'sound_player': sound_player,
             'root': root,
         }
 
@@ -1367,7 +1367,7 @@ class WebAppView(View):
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
-    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', *args, **kwargs):
+    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', sound_player='soundmanager', *args, **kwargs):
         """
         POST method dispatcher
         """
@@ -1447,7 +1447,7 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
-            'sound_player': 'soundmanager',
+            'sound_player': sound_player,
             'root': root,
         }
 

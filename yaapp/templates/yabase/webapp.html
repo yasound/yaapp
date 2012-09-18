@@ -50,7 +50,6 @@
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
     <script type="text/javascript" src='/media/js/moment-lang-all.min.js'></script>
-    <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>
     <script type="text/javascript" src='/media/js/json2.js'></script>
     <script type="text/javascript" src='/media/js/mustache-django-friendly.js'></script>
     <script type="text/javascript" src='/media/js/ICanHaz-no-mustache.min.js'></script>
@@ -72,6 +71,10 @@
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
 {% endcompress %}
+
+    {% ifequal sound_player 'soundmanager' %}
+    <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>
+    {% endifequal %}
 
     <script type="text/javascript" src='/media/js/socket.io.js'></script>
 
