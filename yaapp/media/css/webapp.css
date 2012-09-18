@@ -3540,6 +3540,10 @@ a.yabutton-small {
 }
 
 .small-friend-picture {
+    display:none;
+}
+
+.large-friend-picture {
     display:block;
 }
 
@@ -4350,8 +4354,10 @@ a.yabutton-small {
         border:3px solid white;
         margin-right:5.3%;
         margin-left:5.3%;
-        margin-top:4%;
-        margin-bottom:4%;
+        margin-top:20px;
+        margin-bottom:20px;
+        overflow:visible;
+        position:relative;
     }
 
     ul .user-cell:hover,
@@ -4371,8 +4377,17 @@ a.yabutton-small {
     .responsive-user-caption {
         display:block;
         position:absolute;
-
+        width:160%;
+        height:28px;
+        bottom:-35px;
+        left:-20px;
+        text-align:center;
+        overflow:hidden;
     }
+
+     .responsive-user-caption h5 {
+        line-height:13px;
+     }
 
     .caption-user h5,
     .caption-user span {
@@ -4382,6 +4397,12 @@ a.yabutton-small {
     .user-cell-inner img {
         max-width:100%;
         max-height:100%;
+    }
+
+    .user-cell-inner img:hover {
+        max-width:100%;
+        max-height:100%;
+        position:relative;
     }
 
     #friends-zone ul {
@@ -4398,7 +4419,7 @@ a.yabutton-small {
         margin-left:0px;
     }
 
-    .big-friend-picture {
+    .large-friend-picture {
         display:none;
     }
 
@@ -4411,7 +4432,8 @@ a.yabutton-small {
     }
 
     ul .mask-user {
-        background-color:rgba(0,0,0,0);
+        position:absolute;
+        opacity:0;
         border:none;
     }
 
