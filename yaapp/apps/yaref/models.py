@@ -18,6 +18,8 @@ import utils as yaref_utils
 import yasearch.indexer as yasearch_indexer
 import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
+from django.utils.translation import ugettext_lazy as _
+
 logger = logging.getLogger("yaapp.yaref")
 
 
@@ -310,6 +312,23 @@ class YasoundSong(models.Model):
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
             return None
+
+    @property
+    def title(self):
+        name = self.name
+        artist_name = self.artist_name
+        album_name = self.album_name
+
+        if name == '':
+            name = _('Unknown song')
+        if album_name == '':
+            album_name = _('Unknown artist')
+
+        if album_name != '':
+            return u'%s %s %s %s %s' % (name, _('by'), artist_name, _('on'), album_name)
+        else:
+            return u'%s %s %s' % (name, _('by'), artist_name)
+
 
 
     def build_fuzzy_index(self, upsert=False, insert=True):
