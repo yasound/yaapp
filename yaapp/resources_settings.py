@@ -126,6 +126,7 @@ PIPELINE_JS = {
             'js/app/push.js',
             'js/app/utils.js',
             'js/app/error.js',
+            'js/app/soundPlayer.js',
             'js/app/app.js',
         ]
     }

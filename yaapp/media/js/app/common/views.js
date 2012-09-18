@@ -349,7 +349,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
-        this.savedVolume = 100;
         document.title = this.model.title();
 
         var volumeSlider = $('#volume-slider');
@@ -361,12 +360,10 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         volumeSlider.bind("slide", this.onVolumeSlide);
 
         this.generateSocialShare();
-        if (Yasound.App.MySound) {
-            if (Yasound.App.MySound.playState == 1) {
-                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            }
-            volumeSlider.slider('value', Yasound.App.MySound.volume);
+        if (Yasound.App.player.isPlaying()) {
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         }
+        volumeSlider.slider('value', Yasound.App.player.volume());
 
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
@@ -394,29 +391,19 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     togglePlay: function (e) {
         e.preventDefault();
-        if (!Yasound.App.SoundConfig.isPlaying()) {
-            Yasound.App.SoundConfig.stop();
-            var that = this;
-            Yasound.App.SoundConfig.play(function() {
-                Yasound.App.MySound.setVolume(that.savedVolume);
+        if (!Yasound.App.player.isPlaying()) {
+            Yasound.App.player.play(function() {
                 $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-                $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+                $('#volume-slider').slider('value', Yasound.App.player.volume());
             });
         } else {
+            Yasound.App.player.stop();
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.SoundConfig.stop();
         }
     },
 
     onVolumeSlide: function(e, ui) {
-        var soundVolume = ui.value;
-        this.savedVolume = soundVolume;
-        if (Yasound.App.MySound) {
-            Yasound.App.MySound.setVolume(soundVolume);
-            Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
-        } else {
-            Yasound.App.SoundConfig.volume = soundVolume;
-        }
+        Yasound.App.player.setVolume(ui.value);
     },
 
     like: function (e) {
@@ -815,6 +802,10 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             $('#create-radio span').html(gettext('Create radio'));
         }
 
+        if (Yasound.App.player.isPlaying()) {
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+        }
+
         return this;
     },
     selectMenu: function(menu) {
@@ -904,16 +895,14 @@ Yasound.Views.SubMenu = Backbone.View.extend({
 
     togglePlay: function (e) {
         e.preventDefault();
-        if (!Yasound.App.SoundConfig.isPlaying()) {
+        if (!Yasound.App.player.isPlaying()) {
             var that = this;
-            Yasound.App.SoundConfig.play(function () {
-                Yasound.App.MySound.setVolume(that.savedVolume);
+            Yasound.App.player.play(function () {
                 $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-                $('#volume-slider').slider('value', Yasound.App.MySound.volume);
             });
         } else {
             $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.SoundConfig.stop();
+            Yasound.App.player.stop();
         }
     },
 
