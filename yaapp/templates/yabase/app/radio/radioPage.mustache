@@ -1,8 +1,8 @@
 {% load i18n %}
 <div class='row'>
 <div class='span4 wall-responsive-span4'>
-    <div id='webapp-track'>{#{% include "yabase/app/radio/track.mustache" %} #}</div>
-    <div id='webapp-radio'>{# {% include "yabase/app/radio/radio.mustache" %} #}</div>
+    <div id='webapp-track'>{% if yasound_song %} {% include "yabase/app/radio/track.mustache" %} {% endif %}</div>
+    <div id='webapp-radio'>{% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}</div>
     <div class='well'>
     <ul id='webapp-radio-users' class='thumbnails'></ul>
     </div>
