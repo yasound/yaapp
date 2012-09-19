@@ -42,8 +42,8 @@
 		<li class='wall-first-child'><a data-toggle="modal" href="#modal-share"><img src="/media/app/images/radio/radio-icon-share.png"/><span>{% trans "Share" %}</span></a></li>
     {% if radio %}
       {% ifequal radio.creator request.user %}
-        <li><a href="/app/radio/{{ radio.uuid }}/edit/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Edit settings" %}</span></a></li>
-        <li><a href="/app/radio/{{ radio.uuid }}/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Edit playlist" %}</span></a></li>
+        <li><a href="/app/radio/{{ radio.uuid }}/edit/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
+        <li><a href="/app/radio/{{ radio.uuid }}/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
         <li><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
       {% endifequal %}
     {% else %}
