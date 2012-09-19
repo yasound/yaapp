@@ -3630,7 +3630,7 @@ a.yabutton-small {
         display:inline;
     }
 
-    
+
     .favorites-login-container .favorites-login-p {
         width:50%;
         margin-left:25%;
@@ -4440,7 +4440,7 @@ a.yabutton-small {
     #friends-zone .user-cell {
         margin-right:4.5%;
         margin-left:4.5%;
-    }  
+    }
 
 
 /*-- SETTINGS MENU --*/
@@ -4501,6 +4501,10 @@ a.yabutton-small {
 
     #phone-menu-profile img {
         margin: 7px 12px 0px 13px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 2px solid white;
     }
 
     #phone-menu-myradios img {
@@ -5251,6 +5255,10 @@ a.yabutton-small {
 
     #phone-menu-profile img {
         margin: 7px 12px 0px 13px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 2px solid white;
     }
 
     #phone-menu-myradios img {
