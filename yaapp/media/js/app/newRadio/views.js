@@ -61,7 +61,9 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
                 }
             } else {
                 $('#upload-photo').fileupload('option', 'url', data.upload_photo_url);
-                that.pictureData.submit();
+                if (that.pictureData) {
+                    that.pictureData.submit();
+                }
                 Yasound.App.Router.navigate(data.url, {
                     trigger: true
                 });

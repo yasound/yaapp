@@ -15,6 +15,7 @@ $(document).ready(function () {
     Yasound.App.hasRadios = g_has_radios;
     Yasound.App.stickyViews = [];
     Yasound.App.uploadCount = 0;
+    Yasound.App.root = g_root;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
@@ -26,11 +27,10 @@ $(document).ready(function () {
         Yasound.Utils.enableFX();
     }
 
-    Yasound.App.waitForSoundManager = true;
+    Yasound.App.waitForSoundManager = false;
 
     if ($.browser.msie) {
         if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
-            Yasound.App.waitForSoundManager = false;
             g_enable_push = false;
         }
     }
@@ -107,36 +107,14 @@ $(document).ready(function () {
             }
         }
     };
-
-
-    soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
-    soundManager.preferFlash = true;
-    soundManager.useHTML5Audio = true;
-    soundManager.debugMode = false;
-    soundManager.useFlashBlock = true;
-    soundManager.flashVersion = 9;
-    soundManager.useHighPerformance = true;
-    soundManager.useFastPolling = true;
-
-    Yasound.App.MySound = undefined;
-
-    Yasound.App.SoundConfig = {
-        id: 'yasoundMainPlay',
-        url: undefined,
-        autoPlay: true,
-        autoLoad: true,
-        volume: 100, // volume is saved across different streams
-        stream: true
-    };
-
-    // called in case of problem with flash player (flashblock for instance)
-    soundManager.ontimeout(function () {
-        if (!(typeof Yasound.App.MySound === "undefined")) {
-            Yasound.App.MySound.destruct();
-        }
-        Yasound.App.MySound = undefined;
-        $('#play i').removeClass('icon-stop').addClass('icon-play');
-    });
+    /**
+     * Sound engine initialization
+     */
+    if (g_sound_player == 'soundmanager') {
+        Yasound.App.player = Yasound.Player.SoundManager();
+    } else if (g_sound_player == 'deezer') {
+        Yasound.App.player = Yasound.Player.Deezer();
+    }
 
     /**
      * Application controller
@@ -250,20 +228,8 @@ $(document).ready(function () {
                 this.commonContext = {};
                 this.commonContext.errorHandler = new Yasound.App.ErrorHandler().render();
                 this.commonContext.streamFunction = function (model, stream_url) {
-                    Yasound.App.SoundConfig.url = stream_url;
-
-                    if (this.streamerSecondCall) {
-                        if (!Yasound.App.MySound) {
-                            Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-                        } else {
-                            Yasound.App.MySound.unload();
-                            Yasound.App.MySound.play(Yasound.App.SoundConfig);
-                        }
-                    }
-                    this.streamerSecondCall = true;
+                    Yasound.App.player.setBaseUrl(stream_url);
                 };
-
-
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
                 this.commonContext.userMenuView = new Yasound.Views.UserMenu({}).render();
@@ -413,6 +379,7 @@ $(document).ready(function () {
 
         // radio details page
         radio: function (uuid) {
+            Yasound.App.player.setAutoplay(true);
             this.clearView();
 
             this.currentView = new Yasound.Views.RadioPage({
@@ -422,6 +389,7 @@ $(document).ready(function () {
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
+
         },
 
         myRadios: function () {
@@ -488,19 +456,11 @@ $(document).ready(function () {
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
 
-    if (!Yasound.App.waitForSoundManager) {
+    Yasound.App.player.init(function () {
         Backbone.history.start({
             pushState: true,
-            root: '/app/',
+            root: Yasound.App.root,
             silent: false
         });
-    } else {
-        soundManager.onready(function () {
-            Backbone.history.start({
-                pushState: true,
-                root: '/app/',
-                silent: false
-            });
-        });
-    }
+    });
 });
