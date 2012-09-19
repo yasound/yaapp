@@ -355,6 +355,7 @@ class RadioPopularityManager():
         collection = self.radios
         collection.remove({'$or': [{'activity': {'$exists': False, }}, {'activity': 0}] })
 
+        radio_ids = []
         docs = collection.find()
         for d in docs:
             activity = d['activity']
@@ -363,6 +364,14 @@ class RadioPopularityManager():
             last_activity = activity
             activity = 0
             collection.update({'db_id': d['db_id']}, {'$set': {'progression': new_progression, 'activity': activity, 'last-activity': last_activity} })
+            # update Radio.popularity_score
+            radio_id = d['db_id']
+            radio_ids.append(radio_id)
+            Radio.objects.filter(id=radio_id).update(popularity_score=new_progression)
+
+        # reset popularity score for all other radios
+        Radio.objects.exclude(id__in=radio_ids).update(popularity_score=0)
+
 
     def remove_radio(self, radio_id):
         collection = self.radios
