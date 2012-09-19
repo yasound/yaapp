@@ -98,3 +98,81 @@ Yasound.Player.SoundManager = function () {
     };
     return mgr;
 };
+
+
+Yasound.Player.Deezer = function () {
+
+    var mgr = {
+        currentSongBinded: false,
+        deezerId: 0,
+        playing: false,
+        trackLoaded: false,
+
+        isPlaying: function () {
+            return mgr.playing;
+        },
+
+        setBaseUrl: function(baseUrl) {
+            if (!mgr.currentSongBinded) {
+                Yasound.App.Router.radioContext.currentSong.on('change', mgr.refreshSong);
+                mgr.currentSongBinded = true;
+            }
+        },
+
+        refreshSong: function (song) {
+            console.log('deezer -- refresh song');
+            // TODO: load into deezer player
+            var title = song.title();
+            var query = '/search?q=' + title + '&order=RANKING';
+            DZ.api(query, function (response) {
+                var total = response.total;
+                if (total > 0) {
+                    var item = response.data[0];
+                    var deezerId = item.id;
+                    if (!deezerId || deezerId === mgr.deezerId) {
+                        mgr.stop();
+                        return;
+                    }
+                    mgr.deezerId = deezerId;
+                    mgr.trackLoaded = false;
+                    if (mgr.isPlaying()) {
+                        mgr.play();
+                    }
+                }
+            });
+        },
+
+        setVolume: function (volume) {
+        },
+
+        volume: function () {
+            return 0;
+        },
+
+        stop: function () {
+            if (mgr.isPlaying()) {
+                DZ.player.pause();
+                mgr.playing = false;
+            }
+        },
+
+        play: function (callback) {
+            if (!callback) {
+                callback = function () {};
+            }
+
+            if (!mgr.trackLoaded) {
+                if (mgr.deezerId !== 0) {
+                    DZ.player.playTracks([mgr.deezerId], 0, function(response) {});
+                    mgr.trackLoaded = true;
+                }
+            } else {
+                if (DZ && DZ.player) {
+                    DZ.player.play();
+                }
+            }
+            mgr.playing = true;
+        }
+    };
+    return mgr;
+};

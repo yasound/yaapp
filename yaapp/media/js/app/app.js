@@ -15,6 +15,7 @@ $(document).ready(function () {
     Yasound.App.hasRadios = g_has_radios;
     Yasound.App.stickyViews = [];
     Yasound.App.uploadCount = 0;
+    Yasound.App.root = g_root;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
@@ -26,11 +27,10 @@ $(document).ready(function () {
         Yasound.Utils.enableFX();
     }
 
-    Yasound.App.waitForSoundManager = true;
+    Yasound.App.waitForSoundManager = false;
 
     if ($.browser.msie) {
         if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
-            Yasound.App.waitForSoundManager = false;
             g_enable_push = false;
         }
     }
@@ -108,7 +108,21 @@ $(document).ready(function () {
         }
     };
 
-    Yasound.App.player = Yasound.Player.SoundManager();
+    /**
+     * Sound engine initialization
+     */
+    if (g_sound_player == 'soundmanager') {
+        Yasound.App.player = Yasound.Player.SoundManager();
+        Yasound.App.waitForSoundManager = true;
+
+        if ($.browser.msie) {
+            if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+                Yasound.App.waitForSoundManager = false;
+            }
+        }
+    } else if (g_sound_player == 'deezer') {
+        Yasound.App.player = Yasound.Player.Deezer();
+    }
 
     /**
      * Application controller
@@ -451,14 +465,14 @@ $(document).ready(function () {
     if (!Yasound.App.waitForSoundManager) {
         Backbone.history.start({
             pushState: true,
-            root: '/app/',
+            root: Yasound.App.root,
             silent: false
         });
     } else {
         soundManager.onready(function () {
             Backbone.history.start({
                 pushState: true,
-                root: '/app/',
+                root: Yasound.App.root,
                 silent: false
             });
         });
