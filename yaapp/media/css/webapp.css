@@ -57,6 +57,10 @@ body {
     margin-left: 0px;
 }
 
+.float-right {
+    float:right;
+}
+
 /**
  * Header
  */
@@ -1543,7 +1547,7 @@ input::-webkit-input-placeholder {
 /*    background-color: #F5F5F5;*/
     border-radius: 6px 6px 6px 6px;
     padding: 40px;
-    padding-bottom: 60px;
+    padding-bottom: 0px;
 /*    background-image: url(/media/images/icon-radio.png);*/
     background-repeat: no-repeat;
     background-position: 10px 10px;
@@ -1567,10 +1571,6 @@ input::-webkit-input-placeholder {
     position:relative;
     width: 212px;
     margin: 0px auto;
-}
-
-#webapp-radio-users li {
-    background-color: white;
 }
 
 #webapp-radio-users img {
@@ -1703,6 +1703,61 @@ input::-webkit-input-placeholder {
     margin:0px;
     padding:0px;
 }
+
+.audience-nbr-container {
+    margin:10px 0px;
+}
+
+.wall-audience-container {
+    width:220px;
+    margin:0px 40px;
+}
+
+.wall-audience-container .audience-txt {
+    float:right;
+    color:#999999;
+    margin-top:9px;
+    text-shadow:1px 1px white;
+    font-weight: bold;
+    font-size:13px;
+}
+
+.audience-nbr {
+    margin-right:5px;
+    vertical-align: middle;
+    font-size: 30px;
+    color:#434343;
+    font-weight: bold;
+}
+
+.wall-audience-container .user {
+    border-radius:50%;
+    box-shadow:0px 2px 2px #b1b2b2;
+    border:2px solid white;
+}
+
+#webapp-radio-users {
+    margin-left:-6px;
+}
+
+#webapp-radio-users li {
+    margin-left:9px;
+    margin-bottom:10px;
+}
+
+.wall-audience-container .audience-btn {
+    line-height:27px;
+    color:#58595c;
+    font-size:15px;
+    text-shadow:1px 1px white;
+}
+
+
+
+
+
+
+
 
 #wall {
     list-style: none;
@@ -2002,12 +2057,16 @@ ul .user-cell:hover .caption {
 	);
 }
 
-.search-query {
-	margin:10px;
+
+
+.form-search .search-query {
+	margin:20px;
 	margin-left:30px;
+    height:91px;
 }
 
 .form-search {
+    position:relative;
 	border-radius:20px 20px 0px 0px;
 }
 
@@ -2030,10 +2089,10 @@ ul .user-cell:hover .caption {
     margin-right:10px;
 }
 
-.submit-btn {
-	margin:10px;
-	float:right;
-	margin-right:30px;
+.form-search .submit-btn {
+    position:absolute;
+    top:71px;
+    right:40px;
 }
 
 .special-comment {
@@ -3956,8 +4015,8 @@ a.yabutton-small {
         display:none;
     }
 
-    .input-xxlarge {
-        width:85%;
+    .form-search .wall-textarea {
+        height:20px;
     }
 
     .wall-btn-responsive {

@@ -3,8 +3,14 @@
 <div class='span4 wall-responsive-span4'>
     <div id='webapp-track'>{% if yasound_song %} {% include "yabase/app/radio/track.mustache" %} {% endif %}</div>
     <div id='webapp-radio'>{% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}</div>
-    <div class='well'>
-    <ul id='webapp-radio-users' class='thumbnails'></ul>
+    <div class='wall-audience-container'>
+        <div class='audience-nbr-container'>
+          <span class='audience-nbr'>{{ radio.audience|default:'<% audience %>' }}</span>
+          <img src="/media/app/images/icon-friends-gradient.png">
+          <div class='audience-txt'>{% trans "audience" %}</div>
+        </div>
+        <ul id='webapp-radio-users' class='thumbnails'></ul>
+        <div class='yabutton-small audience-btn float-right'>{% trans "Show all" %}</div>
     </div>
 </div>
 <div class='span8 wall-container'>

@@ -1,6 +1,10 @@
 {% load i18n %}
 <div class='wall-event-message'>
-	<img class='wall-img-like' src='/media/images/like.png' width='32px' height='32px'/>
+	<div class='radio-picto'>
+				<a href='/app/radio/<% uuid %>/'>
+				  <img src="<% picture %>" width="28" height="28" alt="Radio Picto">
+				</a>
+			</div>
 	<p></p>
 	<h2><a href='/app/profile/{{wall_event.user.username|default:'<% user_username %>'}}/'>{{ wall_event.user_name|default:'<% user_name %>' }}</a> <span>{% trans "likes" %} {{ wall_event.song_name|default:'<% song_name %>' }}</span></h2>
 	<div class='date'>{{ wall_event.start_date|default:'<% formatted_start_date %>' }}</div>
