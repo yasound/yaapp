@@ -1,0 +1,30 @@
+{% load i18n %}
+            <div id='mobile-menu-content-logo' class='hidden-display'>
+              <a href='#' id='phone-menu-selection' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='selection'>
+                <span>{% trans 'Selection' %}</span>
+              </a>
+              <a href='#' id='phone-menu-top' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='top'>
+                <span>{% trans 'Top' %}</span>
+              </a>
+              <a href='#' id='phone-menu-myfriends' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-friends-icon.png" alt='my friends'>
+                <span>{% trans 'My friends' %}</span>
+              </a>
+              <a href='#' id='phone-menu-favorites' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-favorite.png" alt='favorites'>
+                <span>{% trans 'Favorites' %}</span>
+              </a>
+            </div>
+
+            <div id='mobile-menu-content-share' class='hidden-display'>
+              <a id='phone-menu-share' class='phone-menu-list' data-toggle="modal" href="#modal-share">
+                <img src="/media/app/images/responsive-icon-share.png" alt='share'>
+                <span>{% trans 'Share' %}</span>
+              </a>
+              <a href='#' target='_blank' id='phone-menu-buy' class='phone-menu-list'>
+                <img src="/media/app/images/responsive-icon-buy.png" alt='{% trans "Buy on iTunes" %}'>
+                <span>{% trans 'Buy on iTunes' %}</span>
+              </a>
+            </div>
