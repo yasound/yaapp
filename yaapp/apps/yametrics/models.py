@@ -315,7 +315,7 @@ class RadioPopularityManager():
                 temp_radios = self.most_popular_radios(limit=l, skip=offset, genre=None)
                 for r in temp_radios:
                     if r.genre == genre:
-                        radios.append(i)
+                        radios.append(r)
                 offset += len(temp_radios)
                 ok = len(temp_radios) > 0
                 need_more = len(radios) < (skip + limit)
