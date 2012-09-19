@@ -379,6 +379,7 @@ $(document).ready(function () {
 
         // radio details page
         radio: function (uuid) {
+            Yasound.App.player.setAutoplay(true);
             this.clearView();
 
             this.currentView = new Yasound.Views.RadioPage({
@@ -388,6 +389,7 @@ $(document).ready(function () {
 
             this.radioContext.radioUUID = 0;
             this.setCurrentRadioUUID(uuid);
+
         },
 
         myRadios: function () {

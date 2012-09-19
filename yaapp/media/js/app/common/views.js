@@ -304,13 +304,17 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     initialize: function () {
         this.model.bind('change', this.render, this);
-        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare');
+        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare', 'onPlayerPlay', 'onPlayerStop');
 
         $('#fb_share').click(this.facebookShare);
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
+
+        $.unsubscribe('/player/play', this.onPlayerPlay);
+        $.unsubscribe('/player/stop', this.onPlayerStop);
+
         if (this.pingIntervalId) {
             clearInterval(this.pingIntervalId);
         }
@@ -386,19 +390,28 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (Yasound.App.userAuthenticated) {
             this.ping();
         }
+
+        $.subscribe('/player/play', this.onPlayerPlay);
+        $.subscribe('/player/stop', this.onPlayerStop);
+
         return this;
+    },
+
+    onPlayerPlay: function () {
+        $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+        $('#volume-slider').slider('value', Yasound.App.player.volume());
+    },
+
+    onPlayerStop: function () {
+        $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
     },
 
     togglePlay: function (e) {
         e.preventDefault();
         if (!Yasound.App.player.isPlaying()) {
-            Yasound.App.player.play(function() {
-                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-                $('#volume-slider').slider('value', Yasound.App.player.volume());
-            });
+            Yasound.App.player.play();
         } else {
             Yasound.App.player.stop();
-            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
         }
     },
 
@@ -778,12 +791,14 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'selectMenu');
+        _.bindAll(this, 'render', 'selectMenu', 'onPlayerPlay', 'onPlayerStop');
         this.model.bind('change', this.render, this);
     },
     reset: function() {
     },
     onClose: function() {
+        $.unsubscribe('/player/play', this.onPlayerPlay);
+        $.unsubscribe('/player/stop', this.onPlayerStop);
     },
     render: function() {
         this.reset();
@@ -805,6 +820,9 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         if (Yasound.App.player.isPlaying()) {
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         }
+
+        $.subscribe('/player/play', this.onPlayerPlay);
+        $.subscribe('/player/stop', this.onPlayerStop);
 
         return this;
     },
@@ -893,15 +911,19 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         }
     },
 
+    onPlayerPlay: function () {
+        $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+    },
+
+    onPlayerStop: function () {
+        $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
+    },
+
     togglePlay: function (e) {
         e.preventDefault();
         if (!Yasound.App.player.isPlaying()) {
-            var that = this;
-            Yasound.App.player.play(function () {
-                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            });
+            Yasound.App.player.play();
         } else {
-            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
             Yasound.App.player.stop();
         }
     },
