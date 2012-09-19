@@ -14,6 +14,9 @@ import yabase.settings as yabase_settings
 from django.conf import settings
 import datetime
 from models import UserAdditionalInfosManager
+from yamessage.models import NotificationsManager
+from yamessage import settings as yamessage_settings
+from pymongo import DESCENDING
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -666,6 +669,45 @@ class TestFacebookSharePrefs(TestCase):
         self.assertEquals(pref_dict, prefs_now)
 
 
+class TestNotifications(TestCase):
+    def setUp(self):
+        erase_index()
 
+        nm = NotificationsManager()
+        nm.notifications.drop()
+
+    def test_friend_is_online(self):
+        nm = NotificationsManager()
+        user1 = User.objects.create(email="user1@yasound.com", username="user1")
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+
+        user1.get_profile().friends.add(user2)
+
+        user2.get_profile().my_friend_is_online(user1.get_profile())
+
+        notifications = nm.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)])
+        self.assertEquals(notifications.count(), 1)
+
+        user2.get_profile().my_friend_is_online(user1.get_profile())
+
+        notifications = nm.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)])
+        self.assertEquals(notifications.count(), 1)
+
+        nm.notifications.drop()
+
+        notifications = nm.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)])
+        self.assertEquals(notifications.count(), 0)
+
+        user2.get_profile().my_friend_is_online(user1.get_profile())
+        notifications = nm.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)])
+        self.assertEquals(notifications.count(), 1)
+
+        notification = notifications[0]
+        notification['date'] = datetime.datetime(2007, 01, 01, 0, 0, 0)
+        nm.update_notification(notification)
+
+        user2.get_profile().my_friend_is_online(user1.get_profile())
+        notifications = nm.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)])
+        self.assertEquals(notifications.count(), 2)
 
 

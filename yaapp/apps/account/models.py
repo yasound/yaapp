@@ -36,6 +36,7 @@ import yasearch.utils as yasearch_utils
 from yacore.geoip import request_country
 from yageoperm import utils as yageoperm_utils
 import requests
+from pymongo import DESCENDING
 
 logger = logging.getLogger("yaapp.account")
 
@@ -1036,6 +1037,19 @@ class UserProfile(models.Model):
 
         # store notification
         m = NotificationsManager()
+
+        last_notifications = m.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)]).limit(1)
+        if last_notifications.count() > 0:
+            last_notification = last_notifications[0]
+            last_notification_date = last_notification.get('date')
+            now = datetime.datetime.now()
+            diff = (now - last_notification_date)
+            total_seconds = diff.days * 86400 + diff.seconds
+            if total_seconds < 60*60:
+                last_notification['date'] = now
+                m.update_notification(last_notification)
+                return
+
         notif_params = {
             'user_name': unicode(friend_profile),
             'user_id': friend_profile.user.id,
