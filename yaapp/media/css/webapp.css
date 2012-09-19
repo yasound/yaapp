@@ -297,57 +297,36 @@ body {
 }
 
 
-.switch-container {
+#hd-button {
+    cursor: pointer;
     margin-top:25px;
     margin-left:20px;
     float:left;
     display:block;
-    height:25px;
-    width:80px;
+    height:27px;
+    width:46px;
     position:relative;
     overflow:hidden;
 }
 
-.switch-container input[type="checkbox"] {
-    -webkit-appearance:none;
-    opacity:0;
-    height:25px;
-    width:80px;
-    position:absolute;
-    border:none;
-    z-index: 2;
+#hd-button-mobile {
+    cursor: pointer;
+    margin-top:0px;
+    margin-left:20px;
+    float:left;
+    display:block;
+    height:27px;
+    width:46px;
+    position:relative;
+    overflow:hidden;
 }
 
-.switch-container input[type="checkbox"]~.hd-bg {
-    display:inline-block;
-    height:25px;
-    width:80px;
-    position:absolute;
-    background-image:url('../app/images/SD-HD.png');
-    background-position:-46px 50%;
-    background-repeat:no-repeat;
-    border-radius:20px;
-    border:none;
-    -webkit-transition:background-position 0.2s ease;
-    -moz-transition:background-position 0.2s ease;
-    transition:background-position 0.2s ease;
-    z-index: 0;
+.hd-enabled {
+    background-image:url('../app/images/hd-enabled.png');
 }
 
-/*
-.switch-container input[type="checkbox"]:checked~.hd-bg {
-    background-position:10px 50%;
-}
-*/
-
-.switch {
-    display:inline-block;
-    height:25px;
-    width:70px;
-    position:absolute;
-    background-image:url('../app/images/SD-HD.png');
-    background-position:-45px 50%;
-    background-repeat:no-repeat;
+.hd-disabled {
+    background-image:url('../app/images/hd-disabled.png');
 }
 
 #SD {

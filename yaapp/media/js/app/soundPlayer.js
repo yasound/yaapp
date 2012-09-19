@@ -12,6 +12,11 @@ Yasound.Player.SoundManager = function () {
     soundManager.useHighPerformance = true;
     soundManager.useFastPolling = true;
 
+    var async = true;
+    if (Yasound.App.isMobile) {
+        async = false;
+    }
+
     var mgr = {
         config : {
             id: 'yasoundMainPlay',
@@ -73,6 +78,7 @@ Yasound.Player.SoundManager = function () {
             if (Yasound.App.userAuthenticated) {
                 $.ajax({
                     url: url,
+                    async: async,
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {

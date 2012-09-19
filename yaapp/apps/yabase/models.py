@@ -591,7 +591,9 @@ class Radio(models.Model):
 
     current_song_play_date = models.DateTimeField(null=True, blank=True)
 
-    new_wall_messages_count = models.IntegerField(default=0) # number of new messages since last creator visit
+    new_wall_messages_count = models.IntegerField(default=0)  # number of new messages since last creator visit
+
+    popularity_score = models.IntegerField(default=0)  # updated by yametrics.RadioPopularityManager.compute_progression
 
     def __unicode__(self):
         if self.name:

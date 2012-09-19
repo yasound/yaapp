@@ -1597,22 +1597,19 @@ def radio_broadcast_message(request, radio_uuid):
 
 @check_api_key(methods=['GET'], login_required=False)
 def most_active_radios(request):
-    from yametrics.models import RadioPopularityManager
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
-    genre = request.GET.get('genre', '')
+    genre = request.GET.get('genre', None)
 
-    manager = RadioPopularityManager()
-    radio_info = manager.most_popular(limit=limit, skip=skip)
+    if genre is not None:
+        qs = Radio.objects.filter(genre=genre)
+    else:
+        qs = Radio.objects
+    radios = qs.order_by('-popularity_score', '-favorites')[skip:(skip + limit)]
     radio_data = []
-    for i in radio_info:
-        try:
-            r = Radio.objects.get(id=i['db_id'])
-        except Radio.DoesNotExist:
-            continue
-        if genre and r.genre != genre:
-            continue
+    for r in radios:
         radio_data.append(r.as_dict(request_user=request.user))
+
     response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
     return response
 

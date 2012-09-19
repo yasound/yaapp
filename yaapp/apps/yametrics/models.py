@@ -290,6 +290,37 @@ class RadioPopularityManager():
         else:
             return collection.find().sort([('progression', DESCENDING)]).skip(skip).limit(limit)
 
+    def most_popular_radios(self, limit=10, skip=0, genre=None):
+        """
+        return radio objects
+        """
+        if genre is None:
+            radios = []
+            info = self.most_popular(limit=limit, skip=skip, db_only=True)
+            for i in info:
+                radio_id = i['db_id']
+                try:
+                    r = Radio.objects.get(id=radio_id)
+                except Radio.DoesNotExist:
+                    continue
+                radios.append(r)
+            return radios
+        else:
+            offset = 0
+            l = limit
+            ok = True
+            need_more = True
+            radios = []
+            while ok and need_more:
+                temp_radios = self.most_popular_radios(limit=l, skip=offset, genre=None)
+                for r in temp_radios:
+                    if r.genre == genre:
+                        radios.append(r)
+                offset += len(temp_radios)
+                ok = len(temp_radios) > 0
+                need_more = len(radios) < (skip + limit)
+            return radios[skip:(skip + limit)]
+
     def action(self, radio_id, activity_type):
         inc = self.settings.find({'name':activity_type})[0]['value']
 
@@ -324,6 +355,7 @@ class RadioPopularityManager():
         collection = self.radios
         collection.remove({'$or': [{'activity': {'$exists': False, }}, {'activity': 0}] })
 
+        radio_ids = []
         docs = collection.find()
         for d in docs:
             activity = d['activity']
@@ -332,6 +364,14 @@ class RadioPopularityManager():
             last_activity = activity
             activity = 0
             collection.update({'db_id': d['db_id']}, {'$set': {'progression': new_progression, 'activity': activity, 'last-activity': last_activity} })
+            # update Radio.popularity_score
+            radio_id = d['db_id']
+            radio_ids.append(radio_id)
+            Radio.objects.filter(id=radio_id).update(popularity_score=new_progression)
+
+        # reset popularity score for all other radios
+        Radio.objects.exclude(id__in=radio_ids).update(popularity_score=0)
+
 
     def remove_radio(self, radio_id):
         collection = self.radios
