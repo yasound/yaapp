@@ -23,6 +23,7 @@ Yasound.Player.SoundManager = function () {
         },
         baseUrl: undefined,
         soundHandler: undefined,
+        autoplay: false,
 
         isPlaying: function () {
             if (typeof mgr.soundHandler === "undefined" || mgr.soundHandler.playState != 1) {
@@ -33,7 +34,7 @@ Yasound.Player.SoundManager = function () {
 
         setBaseUrl: function(baseUrl) {
             mgr.baseUrl = baseUrl;
-            if (mgr.isPlaying()) {
+            if (mgr.isPlaying() || mgr.autoplay) {
                 mgr.stop();
                 mgr.play();
             }
@@ -53,12 +54,18 @@ Yasound.Player.SoundManager = function () {
         stop: function () {
             if (!(typeof mgr.soundHandler === "undefined")) {
                 mgr.soundHandler.unload();
+                $.publish('/player/stop');
             }
         },
 
-        play: function (callback) {
-            if (!callback) {
-                callback = function() {};
+        setAutoplay: function (autoplay) {
+            mgr.autoplay = autoplay;
+            mgr.play();
+        },
+
+        play: function () {
+            if (mgr.isPlaying()) {
+                return;
             }
 
             var url = '/api/v1/streamer_auth_token/';
@@ -78,10 +85,9 @@ Yasound.Player.SoundManager = function () {
                         } else {
                             mgr.soundHandler.play(mgr.config);
                         }
-                        callback();
+                        $.publish('/player/play');
                     },
                     failure: function() {
-                        callback();
                     }
                 });
             } else {
@@ -91,7 +97,7 @@ Yasound.Player.SoundManager = function () {
                 } else {
                     mgr.soundHandler.play(mgr.config);
                 }
-                callback();
+                $.publish('/player/play');
             }
 
         },
@@ -125,6 +131,7 @@ Yasound.Player.Deezer = function () {
         deezerId: 0,
         playing: false,
         trackLoaded: false,
+        autoplay: false,
 
         isPlaying: function () {
             return mgr.playing;
@@ -171,14 +178,16 @@ Yasound.Player.Deezer = function () {
             if (mgr.isPlaying()) {
                 DZ.player.pause();
                 mgr.playing = false;
+                $.publish('/player/stop');
             }
         },
 
-        play: function (callback) {
-            if (!callback) {
-                callback = function () {};
-            }
+        setAutoplay: function (autoplay) {
+            mgr.autoplay = autoplay;
+            mgr.play();
+        },
 
+        play: function () {
             if (!mgr.trackLoaded) {
                 if (mgr.deezerId !== 0) {
                     DZ.player.playTracks([mgr.deezerId], 0, function(response) {});
@@ -190,6 +199,7 @@ Yasound.Player.Deezer = function () {
                 }
             }
             mgr.playing = true;
+            $.publish('/player/play');
         },
 
         init: function (callback) {
