@@ -107,19 +107,11 @@ $(document).ready(function () {
             }
         }
     };
-
     /**
      * Sound engine initialization
      */
     if (g_sound_player == 'soundmanager') {
         Yasound.App.player = Yasound.Player.SoundManager();
-        Yasound.App.waitForSoundManager = true;
-
-        if ($.browser.msie) {
-            if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
-                Yasound.App.waitForSoundManager = false;
-            }
-        }
     } else if (g_sound_player == 'deezer') {
         Yasound.App.player = Yasound.Player.Deezer();
     }
@@ -462,19 +454,11 @@ $(document).ready(function () {
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
 
-    if (!Yasound.App.waitForSoundManager) {
+    Yasound.App.player.init(function () {
         Backbone.history.start({
             pushState: true,
             root: Yasound.App.root,
             silent: false
         });
-    } else {
-        soundManager.onready(function () {
-            Backbone.history.start({
-                pushState: true,
-                root: Yasound.App.root,
-                silent: false
-            });
-        });
-    }
+    });
 });
