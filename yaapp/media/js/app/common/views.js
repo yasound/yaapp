@@ -810,7 +810,6 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
         $("select", this.el).uniform();
 
-
         if (Yasound.App.hasRadios) {
             $('#create-radio span').html(gettext('My radios'));
         } else {

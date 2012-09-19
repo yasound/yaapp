@@ -57,6 +57,10 @@ body {
     margin-left: 0px;
 }
 
+.float-right {
+    float:right;
+}
+
 /**
  * Header
  */
@@ -293,57 +297,36 @@ body {
 }
 
 
-.switch-container {
+#hd-button {
+    cursor: pointer;
     margin-top:25px;
     margin-left:20px;
     float:left;
     display:block;
-    height:25px;
-    width:80px;
+    height:27px;
+    width:46px;
     position:relative;
     overflow:hidden;
 }
 
-.switch-container input[type="checkbox"] {
-    -webkit-appearance:none;
-    opacity:0;
-    height:25px;
-    width:80px;
-    position:absolute;
-    border:none;
-    z-index: 2;
+#hd-button-mobile {
+    cursor: pointer;
+    margin-top:0px;
+    margin-left:20px;
+    float:left;
+    display:block;
+    height:27px;
+    width:46px;
+    position:relative;
+    overflow:hidden;
 }
 
-.switch-container input[type="checkbox"]~.hd-bg {
-    display:inline-block;
-    height:25px;
-    width:80px;
-    position:absolute;
-    background-image:url('../app/images/SD-HD.png');
-    background-position:-46px 50%;
-    background-repeat:no-repeat;
-    border-radius:20px;
-    border:none;
-    -webkit-transition:background-position 0.2s ease;
-    -moz-transition:background-position 0.2s ease;
-    transition:background-position 0.2s ease;
-    z-index: 0;
+.hd-enabled {
+    background-image:url('../app/images/hd-enabled.png');
 }
 
-/*
-.switch-container input[type="checkbox"]:checked~.hd-bg {
-    background-position:10px 50%;
-}
-*/
-
-.switch {
-    display:inline-block;
-    height:25px;
-    width:70px;
-    position:absolute;
-    background-image:url('../app/images/SD-HD.png');
-    background-position:-45px 50%;
-    background-repeat:no-repeat;
+.hd-disabled {
+    background-image:url('../app/images/hd-disabled.png');
 }
 
 #SD {
@@ -1543,7 +1526,7 @@ input::-webkit-input-placeholder {
 /*    background-color: #F5F5F5;*/
     border-radius: 6px 6px 6px 6px;
     padding: 40px;
-    padding-bottom: 60px;
+    padding-bottom: 0px;
 /*    background-image: url(/media/images/icon-radio.png);*/
     background-repeat: no-repeat;
     background-position: 10px 10px;
@@ -1567,10 +1550,6 @@ input::-webkit-input-placeholder {
     position:relative;
     width: 212px;
     margin: 0px auto;
-}
-
-#webapp-radio-users li {
-    background-color: white;
 }
 
 #webapp-radio-users img {
@@ -1703,6 +1682,61 @@ input::-webkit-input-placeholder {
     margin:0px;
     padding:0px;
 }
+
+.audience-nbr-container {
+    margin:10px 0px;
+}
+
+.wall-audience-container {
+    width:220px;
+    margin:0px 40px;
+}
+
+.wall-audience-container .audience-txt {
+    float:right;
+    color:#999999;
+    margin-top:9px;
+    text-shadow:1px 1px white;
+    font-weight: bold;
+    font-size:13px;
+}
+
+.audience-nbr {
+    margin-right:5px;
+    vertical-align: middle;
+    font-size: 30px;
+    color:#434343;
+    font-weight: bold;
+}
+
+.wall-audience-container .user {
+    border-radius:50%;
+    box-shadow:0px 2px 2px #b1b2b2;
+    border:2px solid white;
+}
+
+#webapp-radio-users {
+    margin-left:-6px;
+}
+
+#webapp-radio-users li {
+    margin-left:9px;
+    margin-bottom:10px;
+}
+
+.wall-audience-container .audience-btn {
+    line-height:27px;
+    color:#58595c;
+    font-size:15px;
+    text-shadow:1px 1px white;
+}
+
+
+
+
+
+
+
 
 #wall {
     list-style: none;
@@ -2002,12 +2036,16 @@ ul .user-cell:hover .caption {
 	);
 }
 
-.search-query {
-	margin:10px;
+
+
+.form-search .search-query {
+	margin:20px;
 	margin-left:30px;
+    height:91px;
 }
 
 .form-search {
+    position:relative;
 	border-radius:20px 20px 0px 0px;
 }
 
@@ -2030,10 +2068,10 @@ ul .user-cell:hover .caption {
     margin-right:10px;
 }
 
-.submit-btn {
-	margin:10px;
-	float:right;
-	margin-right:30px;
+.form-search .submit-btn {
+    position:absolute;
+    top:71px;
+    right:40px;
 }
 
 .special-comment {
@@ -3956,8 +3994,8 @@ a.yabutton-small {
         display:none;
     }
 
-    .input-xxlarge {
-        width:85%;
+    .form-search .wall-textarea {
+        height:20px;
     }
 
     .wall-btn-responsive {
@@ -4536,11 +4574,11 @@ a.yabutton-small {
     }
 
     #phone-menu-top img {
-        margin:12px 13px 0px 17px;
+        margin:7px 17px 0px 20px;
     }
 
     #phone-menu-selection img {
-        margin:9px 14px 0px 16px;
+        margin:9px 15px 0px 16px;
     }
 
     #phone-menu-share img {
@@ -5202,6 +5240,11 @@ a.yabutton-small {
         );
     }
 
+    .phone-menu-profile img {
+        border:2px solid white;
+        border-radius:50%;
+    }
+
     .phone-menu-list:active {
         display:block;
         height:43px;
@@ -5290,11 +5333,11 @@ a.yabutton-small {
     }
 
     #phone-menu-top img {
-        margin:12px 13px 0px 17px;
+        margin:7px 17px 0px 20px;
     }
 
     #phone-menu-selection img {
-        margin:9px 14px 0px 16px;
+        margin:9px 15px 0px 16px;
     }
 
     #phone-menu-share img {

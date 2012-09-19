@@ -1,9 +1,9 @@
 {% load i18n %}
 
-<div class="switch-container">
-    <input type="checkbox"/>
-    <span class='hd-bg' />
+<div id="hd-button" class='hd-disabled'>
+    &nbsp;
 </div>
+
 <div id="radio-picto">
     <a href="{% url webapp_radio current_uuid %}" class='yatooltip'>
         <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
@@ -38,7 +38,7 @@
     <div class="responsive-volume-btn">
         <img src="/media/app/images/responsive-higher-volume.png">
     </div>
-</div>  
+</div>
 
 
 <div class="header-social-btn" id="first-social-btn">

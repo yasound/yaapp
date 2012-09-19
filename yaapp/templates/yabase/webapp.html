@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load i18n %}
 {% load thumbnail %}
 {% load compressed %}
 {% load compress %}
@@ -330,9 +329,8 @@
         </a>
       </div>
       <div class='visible-phone responsive-settings-btn2'>
-        <div class="switch-container">
-            <input type="checkbox"/>
-            <span class='hd-bg' />
+        <div id="hd-button-mobile" class='hd-disabled'>
+            &nbsp;
         </div>
       </div>
             <div class="header-separation">
@@ -477,133 +475,15 @@
 </div>
 
 <div id='webapp-container'>
-      <div id='mobile-menu-content' class='hidden-display'>
-        {% if request.user.is_anonymous %}
-        <a href='{% url webapp_login %}' id='phone-menu-signin' class='phone-menu-list'>
-          <img src="/media/app/images/responsive-icon-signin.png" alt='sign in'/>
-          <span>{% trans 'Sign In' %}</span>
-        </a>
-        {% else %}
-        <a href='{% url webapp_profile request.user.username %}' id='phone-menu-profile' class='phone-menu-list'>
-           {% if user_profile.picture %}
-            {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
-            <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
-           {% endthumbnail %}
-           {% else %}
-          <img src="/media/app/images/portrait1.png" width='28' height='28' alt='profile picture'>
-           {% endif %}
-          <span>{% trans "My profile" %}</span>
-        </a>
-        <a href='#' id='phone-menu-myradios' class='phone-menu-list'>
-          <img src="/media/app/images/responsive-mic-icon.png" alt='my radios'>
-          <span>{% trans 'My radios' %}</span>
-        </a>
-        <a href='#' id='phone-menu-notifications' class='phone-menu-list'>
-          <img src="/media/app/images/responsive-envelope-icon.png" alt='notifications'>
-          <span>{% trans 'Notifications' %}</span>
-        </a>
-        <a href='#' id='phone-menu-gifts' class='phone-menu-list'>
-          <img src="/media/app/images/responsive-gift-icon.png" alt='gifts'>
-          <span>{% trans 'Gifts' %}</span>
-        </a>
-        <a href='#' id='phone-menu-mysettings' class='phone-menu-list'>
-          <img src="/media/app/images/responsive-icon-mysettings.png" alt='settings'>
-          <span>{% trans 'Settings' %}</span>
-        </a>
-        <a href='/logout/?next=/app/' id='phone-menu-signout' class='phone-menu-list'>
-          <img src="/media/app/images/responsive-icon-signout.png" alt='sign out'/>
-          <span>{% trans 'Logout' %}</span>
-        </a>
-        {% endif %}
-      </div>
-
-
-            <div id='mobile-menu-content-logo' class='hidden-display'>
-              <a href='#' id='phone-menu-selection' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-favorite.png" alt='selection'>
-                <span>{% trans 'Selection' %}</span>
-              </a>
-              <a href='#' id='phone-menu-top' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-favorite.png" alt='top'>
-                <span>{% trans 'Top' %}</span>
-              </a>
-              <a href='#' id='phone-menu-myfriends' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-friends-icon.png" alt='my friends'>
-                <span>{% trans 'My friends' %}</span>
-              </a>
-              <a href='#' id='phone-menu-favorites' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-favorite.png" alt='favorites'>
-                <span>{% trans 'Favorites' %}</span>
-              </a>
-            </div>
-
-            <div id='mobile-menu-content-share' class='hidden-display'>
-              <a id='phone-menu-share' class='phone-menu-list' data-toggle="modal" href="#modal-share">
-                <img src="/media/app/images/responsive-icon-share.png" alt='share'>
-                <span>{% trans 'Share' %}</span>
-              </a>
-              <a href='#' target='_blank' id='phone-menu-buy' class='phone-menu-list'>
-                <img src="/media/app/images/responsive-icon-buy.png" alt='{% trans "Buy on iTunes" %}'>
-                <span>{% trans 'Buy on iTunes' %}</span>
-              </a>
-            </div>
-
+  {% include "yabase/app/mobileLeftMenu.html" %}
+  {% include "yabase/app/mobileCenterMenu.html" %}
 
   {% block content%}{%endblock%}</div>
 
 
 <div id='pre-footer'>&nbsp;</div>
 <div id='footer'>
-<div class='container'>
-    <footer>
-		<div id="contacts" class="blocks">
-			<p>
-				<a id='btn-contact' href="{% url webapp_contact %}" class="footer-text-color1" title="{% trans 'Contact' %}">{% trans "Contact" %}</a> -
-				<a id='btn-legal' href="{% url webapp_legal %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
-			</p>
-			<p>
-				<a href="https://facebook.com/yasound" class="footer-text-color2" title="facebook" target='_blank'>
-					<img src="/media/app/images/facebook_logo.png" alt="facebook"/>
-					<span>Facebook</span>
-				</a>
-				<a href="https://twitter.com/YasoundSAS" class="footer-text-color2" title="twitter" target='_blank'>
-					<img src="/media/app/images/twitter_logo.png" alt="twitter" class="padding-social-logo"/>
-					<span>Twitter</span>
-				</a>
-			</p>
-		</div>
-
-		<div class="footer-separation">
-			<img src="/media/app/images/separation.png" width="4" height="81" alt="separation"/>
-		</div>
-
-		<div id="connected-users" class="blocks">
-			<p id="text-users">
-				{% trans "Connected users" %}
-			</p>
-			<div id="img-users">
-        {% for user in connected_users %}
-        <span class='connected-user-cell'>{% include 'yabase/app/common/connectedUser.mustache' %}</span>
-        {% endfor %}
-				<a href="#" id="footer-button">
-				    <span id="footer-button-text">{% trans "See all" %}</span>
-				</a>
-			</div>
-		</div>
-		<div class="footer-separation">
-			<img src="/media/app/images/separation.png" width="4" height="81" alt="separation"/>
-		</div>
-		<div id="minutes" class="blocks">
-			<span class="footer-text-color1" >{{ minutes }}</span>
-			<p class="footer-text-color2" >{% trans "minutes of music have been played" %}</p>
-		</div>
-	<p id="copyright">&copy; Yasound 2012</p>
-  <a href='#' id='scroll-top-container' style='display:none;'>
-    <img src="/media/app/images/scroll-top.png">
-  </a>
-	</footer>
-</div>
-</div>
+  {% include "yabase/app/footer.html" %}
 </body>
 {% endblock %}
 
