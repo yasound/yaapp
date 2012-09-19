@@ -564,7 +564,7 @@ class Radio(models.Model):
     uuid = models.CharField(_('uuid'), max_length=48, blank=True)
     description = models.TextField(_('description'), blank=True)
     genre = models.CharField(_('genre'), max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
-    theme = models.CharField(_('thene'), max_length=255, blank=True)
+    theme = models.CharField(_('theme'), max_length=255, blank=True)
     tags = TaggableManager(_('tags'), blank=True)
 
     anonymous_audience = models.IntegerField(default=0)
