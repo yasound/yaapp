@@ -4532,11 +4532,11 @@ a.yabutton-small {
     }
 
     #phone-menu-top img {
-        margin:12px 13px 0px 17px;
+        margin:7px 17px 0px 20px;
     }
 
     #phone-menu-selection img {
-        margin:9px 14px 0px 16px;
+        margin:9px 15px 0px 16px;
     }
 
     #phone-menu-share img {
@@ -5198,6 +5198,11 @@ a.yabutton-small {
         );
     }
 
+    .phone-menu-profile img {
+        border:2px solid white;
+        border-radius:50%;
+    }
+
     .phone-menu-list:active {
         display:block;
         height:43px;
@@ -5282,11 +5287,11 @@ a.yabutton-small {
     }
 
     #phone-menu-top img {
-        margin:12px 13px 0px 17px;
+        margin:7px 17px 0px 20px;
     }
 
     #phone-menu-selection img {
-        margin:9px 14px 0px 16px;
+        margin:9px 15px 0px 16px;
     }
 
     #phone-menu-share img {
