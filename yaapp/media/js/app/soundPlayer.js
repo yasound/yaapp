@@ -94,6 +94,25 @@ Yasound.Player.SoundManager = function () {
                 callback();
             }
 
+        },
+
+        init: function (callback) {
+            if (!callback) {
+                callback = function () { };
+            }
+
+            var waitForSM = true;
+            if ($.browser.msie) {
+                if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+                    waitForSM = false;
+                }
+            }
+
+            if (waitForSM) {
+                soundManager.onready(callback);
+            } else {
+                callback();
+            }
         }
     };
     return mgr;
@@ -101,7 +120,6 @@ Yasound.Player.SoundManager = function () {
 
 
 Yasound.Player.Deezer = function () {
-
     var mgr = {
         currentSongBinded: false,
         deezerId: 0,
@@ -172,6 +190,18 @@ Yasound.Player.Deezer = function () {
                 }
             }
             mgr.playing = true;
+        },
+
+        init: function (callback) {
+            if (!callback) {
+                callback = function () { };
+            }
+            DZ.init({
+                ajax : true
+            });
+            DZ.ready(function(sdk_options){
+                callback();
+            });
         }
     };
     return mgr;
