@@ -1,14 +1,14 @@
 {% load i18n %}
 <div class='row'>
 <div class='span4 wall-responsive-span4'>
-    <div id='webapp-track'></div>
-    <div id='webapp-radio'></div>
+    <div id='webapp-track'>{% if yasound_song %} {% include "yabase/app/radio/track.mustache" %} {% endif %}</div>
+    <div id='webapp-radio'>{% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}</div>
     <div class='well'>
     <ul id='webapp-radio-users' class='thumbnails'></ul>
     </div>
 </div>
 <div class='span8 wall-container'>
-    <div id='webapp-wall-input'>{% include "yabase/app/radio/wallInput.mustache" %}</div>
+    <div id='webapp-wall-input'>{% if request.user.is_authenticated %}{% include "yabase/app/radio/wallInput.mustache" %} {% endif %}</div>
     <div>
     <ul id='wall'>
         {% if not wall_events %}

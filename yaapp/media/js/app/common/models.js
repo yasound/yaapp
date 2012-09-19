@@ -142,8 +142,10 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             dataType: 'json',
             success: function(data) {
                 var token = data.token;
-                // callback(streamURL + '?token=' + token); DISABLED RIGHT NOW
-                callback(streamURL);
+                var fullURL = streamURL + '/?token=' + token
+                console.log(fullURL);
+                callback(fullURL);
+                //callback(streamURL);
             },
             failure: function() {
                 callback(streamURL);

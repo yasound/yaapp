@@ -304,13 +304,17 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     initialize: function () {
         this.model.bind('change', this.render, this);
-        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare');
+        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare', 'onPlayerPlay', 'onPlayerStop');
 
         $('#fb_share').click(this.facebookShare);
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
+
+        $.unsubscribe('/player/play', this.onPlayerPlay);
+        $.unsubscribe('/player/stop', this.onPlayerStop);
+
         if (this.pingIntervalId) {
             clearInterval(this.pingIntervalId);
         }
@@ -349,7 +353,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.trackTemplate(this.model.toJSON()));
-        this.savedVolume = 100;
         document.title = this.model.title();
 
         var volumeSlider = $('#volume-slider');
@@ -361,12 +364,10 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         volumeSlider.bind("slide", this.onVolumeSlide);
 
         this.generateSocialShare();
-        if (Yasound.App.MySound) {
-            if (Yasound.App.MySound.playState == 1) {
-                $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            }
-            volumeSlider.slider('value', Yasound.App.MySound.volume);
+        if (Yasound.App.player.isPlaying()) {
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         }
+        volumeSlider.slider('value', Yasound.App.player.volume());
 
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
@@ -389,36 +390,33 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (Yasound.App.userAuthenticated) {
             this.ping();
         }
+
+        $.subscribe('/player/play', this.onPlayerPlay);
+        $.subscribe('/player/stop', this.onPlayerStop);
+
         return this;
+    },
+
+    onPlayerPlay: function () {
+        $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+        $('#volume-slider').slider('value', Yasound.App.player.volume());
+    },
+
+    onPlayerStop: function () {
+        $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
     },
 
     togglePlay: function (e) {
         e.preventDefault();
-        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
-            if (!Yasound.App.MySound) {
-                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-            } else {
-                Yasound.App.MySound.unload();
-                Yasound.App.MySound.play(Yasound.App.SoundConfig);
-            }
-            Yasound.App.MySound.setVolume(this.savedVolume);
-            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+        if (!Yasound.App.player.isPlaying()) {
+            Yasound.App.player.play();
         } else {
-            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.MySound.unload();
+            Yasound.App.player.stop();
         }
     },
 
     onVolumeSlide: function(e, ui) {
-        var soundVolume = ui.value;
-        this.savedVolume = soundVolume;
-        if (Yasound.App.MySound) {
-            Yasound.App.MySound.setVolume(soundVolume);
-            Yasound.App.SoundConfig.volume = Yasound.App.MySound.volume;
-        } else {
-            Yasound.App.SoundConfig.volume = soundVolume;
-        }
+        Yasound.App.player.setVolume(ui.value);
     },
 
     like: function (e) {
@@ -788,17 +786,19 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "keypress #search-input"    : 'search',
         "change #id_genre"          : 'genre',
         "click #create-radio"       : 'myRadios',
-        "click #responsive-play-btn": "togglePlay",
+        "click #play-btn": "togglePlay",
         "click #responsive-love-btn": "like"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'selectMenu');
+        _.bindAll(this, 'render', 'selectMenu', 'onPlayerPlay', 'onPlayerStop');
         this.model.bind('change', this.render, this);
     },
     reset: function() {
     },
     onClose: function() {
+        $.unsubscribe('/player/play', this.onPlayerPlay);
+        $.unsubscribe('/player/stop', this.onPlayerStop);
     },
     render: function() {
         this.reset();
@@ -816,6 +816,13 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         } else {
             $('#create-radio span').html(gettext('Create radio'));
         }
+
+        if (Yasound.App.player.isPlaying()) {
+            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+        }
+
+        $.subscribe('/player/play', this.onPlayerPlay);
+        $.subscribe('/player/stop', this.onPlayerStop);
 
         return this;
     },
@@ -904,21 +911,20 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         }
     },
 
+    onPlayerPlay: function () {
+        $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
+    },
+
+    onPlayerStop: function () {
+        $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
+    },
+
     togglePlay: function (e) {
         e.preventDefault();
-        if (typeof Yasound.App.MySound === "undefined" || Yasound.App.MySound.playState != 1) {
-            if (!Yasound.App.MySound) {
-                Yasound.App.MySound = soundManager.createSound(Yasound.App.SoundConfig);
-            } else {
-                Yasound.App.MySound.unload();
-                Yasound.App.MySound.play(Yasound.App.SoundConfig);
-            }
-            Yasound.App.MySound.setVolume(this.savedVolume);
-            $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
-            $('#volume-slider').slider('value', Yasound.App.MySound.volume);
+        if (!Yasound.App.player.isPlaying()) {
+            Yasound.App.player.play();
         } else {
-            $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
-            Yasound.App.MySound.unload();
+            Yasound.App.player.stop();
         }
     },
 

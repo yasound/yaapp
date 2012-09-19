@@ -1038,14 +1038,17 @@ class WebAppView(View):
 
     def radio(self, request, context, *args, **kwargs):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
+        if radio.current_song:
+            context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-
         wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
         context['wall_events'] = wall_events
 
         bdata = {
-            'wall_events': [wall_event.as_dict() for wall_event in wall_events]
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'radio': [radio.as_dict(request.user)],
         }
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
 
@@ -1268,7 +1271,7 @@ class WebAppView(View):
             return radios[0].uuid
         return None
 
-    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
+    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', sound_player='soundmanager', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
         """
@@ -1349,7 +1352,9 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
-            'connected_users': connected_users
+            'connected_users': connected_users,
+            'sound_player': sound_player,
+            'root': root,
         }
 
         if hasattr(self, page):
@@ -1362,7 +1367,7 @@ class WebAppView(View):
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
-    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', *args, **kwargs):
+    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', sound_player='soundmanager', *args, **kwargs):
         """
         POST method dispatcher
         """
@@ -1442,6 +1447,8 @@ class WebAppView(View):
             'minutes': get_global_minutes(),
             'deezer_channel_url': absolute_url(reverse('deezer_channel')),
             'deezer_app_id': settings.DEEZER_APP_ID,
+            'sound_player': sound_player,
+            'root': root,
         }
 
         if hasattr(self, page):

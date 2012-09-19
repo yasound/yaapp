@@ -2927,8 +2927,8 @@ ul .radio-with-stats-cells li {
 }
 
 .settings-container #programming-btn {
-    margin-top:46px;
-    margin-right:20px;
+    margin-top:6px;
+    margin-right:6px;
 }
 
 #settings-nav {
@@ -3540,6 +3540,10 @@ a.yabutton-small {
 }
 
 .small-friend-picture {
+    display:none;
+}
+
+.large-friend-picture {
     display:block;
 }
 
@@ -3626,7 +3630,7 @@ a.yabutton-small {
         display:inline;
     }
 
-    
+
     .favorites-login-container .favorites-login-p {
         width:50%;
         margin-left:25%;
@@ -4101,7 +4105,7 @@ a.yabutton-small {
         width:145px;
         margin-right:0px;
         margin-left:10px;
-        margin-top:20px;
+        margin-top:9px;
     }
 
     .tickLabel {
@@ -4345,21 +4349,45 @@ a.yabutton-small {
 
     ul .user-cell,
     ul .mask-user {
-        width:115px;
-        height:115px;
+        width:65px;
+        height:65px;
+        border:3px solid white;
+        margin-right:5.3%;
+        margin-left:5.3%;
+        margin-top:20px;
+        margin-bottom:20px;
+        overflow:visible;
+        position:relative;
+    }
+
+    ul .user-cell:hover,
+    ul .mask-user:hover {
+        display:none;
     }
 
     ul .user-cell .user-cell-inner {
-        width:116px;
-        height:116px;
+        width:64px;
+        height:64px;
     }
 
     ul .mask-user .caption-user {
-        height:75px;
-        overflow:hidden;
-        top: 23px;
-        left: 5px;
+        display:none;
     }
+
+    .responsive-user-caption {
+        display:block;
+        position:absolute;
+        width:160%;
+        height:28px;
+        bottom:-35px;
+        left:-20px;
+        text-align:center;
+        overflow:hidden;
+    }
+
+     .responsive-user-caption h5 {
+        line-height:13px;
+     }
 
     .caption-user h5,
     .caption-user span {
@@ -4371,13 +4399,14 @@ a.yabutton-small {
         max-height:100%;
     }
 
-    #friends-zone ul {
-        margin-left:10px;
+    .user-cell-inner img:hover {
+        max-width:100%;
+        max-height:100%;
+        position:relative;
     }
 
-    ul .user-cell,
-    ul .mask-user {
-        margin-right:10px;
+    #friends-zone ul {
+        margin-left:10px;
     }
 
     .profile-background {
@@ -4390,7 +4419,7 @@ a.yabutton-small {
         margin-left:0px;
     }
 
-    .big-friend-picture {
+    .large-friend-picture {
         display:none;
     }
 
@@ -4402,6 +4431,16 @@ a.yabutton-small {
         margin-left:0px;
     }
 
+    ul .mask-user {
+        position:absolute;
+        opacity:0;
+        border:none;
+    }
+
+    #friends-zone .user-cell {
+        margin-right:4.5%;
+        margin-left:4.5%;
+    }
 
 
 /*-- SETTINGS MENU --*/
@@ -4462,6 +4501,10 @@ a.yabutton-small {
 
     #phone-menu-profile img {
         margin: 7px 12px 0px 13px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 2px solid white;
     }
 
     #phone-menu-myradios img {
@@ -5212,6 +5255,10 @@ a.yabutton-small {
 
     #phone-menu-profile img {
         margin: 7px 12px 0px 13px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 2px solid white;
     }
 
     #phone-menu-myradios img {

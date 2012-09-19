@@ -5,7 +5,8 @@ Namespace('Yasound.Views');
 Yasound.Views.NewRadioPage = Backbone.View.extend({
     events: {
         "change input[type='file']": "onFileChange",
-        "submit #new-radio-form": "submit"
+        "submit #new-radio-form": "submit",
+        "click .radio-creation-image img": "selectImage"
     },
 
     initialize: function() {
@@ -61,7 +62,9 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
                 }
             } else {
                 $('#upload-photo').fileupload('option', 'url', data.upload_photo_url);
-                that.pictureData.submit();
+                if (that.pictureData) {
+                    that.pictureData.submit();
+                }
                 Yasound.App.Router.navigate(data.url, {
                     trigger: true
                 });
@@ -69,6 +72,11 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
         }).error(function() {
             colibri(gettext('Error while login in'), 'colibri-error');
         });
+    },
+
+    selectImage: function (e) {
+        e.preventDefault();
+        $('#upload-photo').trigger('click');
     },
 
     onFileChange: function (e) {

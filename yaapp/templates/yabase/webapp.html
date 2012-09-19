@@ -14,6 +14,8 @@
     <meta name="copyright" content="Yasound SAS" />
     <meta http-equiv="Cache-control" content="public" />
     <meta name="language" content="french" />
+    <meta name="format-detection" content="telephone=no">
+
 
 <!--[if lt IE 9]>
 <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
@@ -48,7 +50,6 @@
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
     <script type="text/javascript" src='/media/js/moment-lang-all.min.js'></script>
-    <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>
     <script type="text/javascript" src='/media/js/json2.js'></script>
     <script type="text/javascript" src='/media/js/mustache-django-friendly.js'></script>
     <script type="text/javascript" src='/media/js/ICanHaz-no-mustache.min.js'></script>
@@ -70,6 +71,14 @@
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
 {% endcompress %}
+
+    {% ifequal sound_player 'soundmanager' %}
+    <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>
+    {% endifequal %}
+
+    {% ifequal sound_player 'deezer' %}
+    <script type="text/javascript" src="http://cdn-files.deezer.com/js/min/dzapp.js"></script>
+    {% endifequal %}
 
     <script type="text/javascript" src='/media/js/socket.io.js'></script>
 
@@ -94,6 +103,7 @@
     {% compressed_js 'webapp-all' %}
     <script type="text/javascript">
        moment.lang('{{request.LANGUAGE_CODE}}');
+       var g_root = '{{ root }}';
        var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};
        var g_username = '{% if request.user.is_authenticated %}{{request.user.username}}{% endif %}';
        var g_push_url = '{{ push_url }}';
@@ -104,14 +114,15 @@
        var g_page = '{{ g_page }}';
        var g_bootstrapped_data = {% if bdata %}{{ bdata|safe }}{% else %}undefined{% endif %};
        var g_default_radio_uuid = '{{ current_uuid }}';
+       var g_sound_player = '{{ sound_player }}';
     </script>
 
 
    <script type="text/html" id="radioTemplate">
-      {% include "yabase/app/radio/radio.mustache" %}
+      {% include "yabase/app/radio/radio.mustache" with radio=None %}
    </script>
    <script type="text/html" id="trackInRadioTemplate">
-      {% include "yabase/app/radio/track.mustache" %}
+      {% include "yabase/app/radio/track.mustache" with yasound_song=None %}
    </script>
 
    <script type="text/html" id="trackTemplate">
@@ -596,6 +607,7 @@
 </body>
 {% endblock %}
 
+{% ifnotequal sound_player 'deezer' %}
 <div id="dz-root"></div>
 <script src="http://cdn-files.deezer.com/js/min/dz.js"></script>
 <script>
@@ -604,6 +616,7 @@
     channelUrl : '{{ deezer_channel_url }}'
   });
 </script>
+{% endifnotequal %}
 
 <script type="text/javascript">
 // GOOGLE ANALYTICS
