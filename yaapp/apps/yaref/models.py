@@ -50,9 +50,6 @@ class YasoundAlbum(models.Model):
 
     @property
     def cover_url(self):
-        print "------------------------"
-        print self.id
-        print self.cover_filename
         if not self.cover_filename:
             return None
         short_url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
@@ -249,7 +246,19 @@ class YasoundSongManager(models.Manager):
         return final_songs
 
 
-
+    def get_cover_url(self, filename, size='64x64'):
+        url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
+                        yaref_utils.convert_filename_to_filepath(filename))
+        try:
+            return get_thumbnail(url, size, crop='center').url
+        except:
+            url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
+                             yaref_utils.convert_filename_to_filepath(filename))
+            try:
+                return get_thumbnail(url, size, crop='center').url
+            except:
+                return None
+        return None
 
 
 class YasoundSong(models.Model):

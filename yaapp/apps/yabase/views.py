@@ -109,6 +109,7 @@ def radio_recommendations(request):
     # read url params
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
+    genre = request.GET.get('genre', None)
     recommendation_token = request.GET.get('recommendation_token', None)
     # check if artist list is provided
     artist_data_file = request.FILES.get('artists_data', None)
@@ -158,8 +159,13 @@ def radio_recommendations(request):
         recommendations = []  # no recommendations
 
     # recommendation starts with editorial selection
-    selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
+    qs = Radio.objects.ready_objects()
+    if genre is not None:
+        qs = qs.filter(genre=genre)
+    selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
     selection_radios = list(selection_radios)
+    # limit the number of editorial radios
+    # shuffle the list in order not to choose always the same radios
     from random import shuffle
     shuffle(selection_radios)
     selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
@@ -173,18 +179,32 @@ def radio_recommendations(request):
     # results: second part
     reco_skip = max(0, skip - selection_radios_count)
     reco_limit = max(0, limit - selection_radios_count)
-    for radio_id in recommendations[reco_skip:(reco_skip + reco_limit)]:
-        try:
-            r = Radio.objects.get(id=radio_id)
-        except Radio.DoesNotExist:
-            continue
-        radio_data.append(r.as_dict(request_user=request.user))
+
+    recommended_radios = []
+    counter = 0
+    for radio_id in recommendations:
+            try:
+                r = Radio.objects.get(id=radio_id)
+            except Radio.DoesNotExist:
+                continue
+
+            if genre is None or genre == r.genre:  # get radio with the right genre
+                recommended_radios.append(r)
+                counter += 1
+            if counter > (reco_skip + reco_limit):
+                break
+
+    for radio in recommended_radios[reco_skip:(reco_skip + reco_limit)]:
+        radio_data.append(radio.as_dict(request_user=request.user))
 
     if len(radio_data) < limit:
         need_more = limit - len(radio_data)
         selection_radios_ids = [r.id for r in selection_radios]
         exclude_ids = selection_radios_ids + recommendations
-        extra_radios = Radio.objects.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[:need_more]
+        qs = Radio.objects
+        if genre is not None:
+            qs = qs.filter(genre=genre)
+        extra_radios = qs.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[:need_more]
         for r in extra_radios:
             radio_data.append(r.as_dict(request_user=request.user))
 
