@@ -2019,18 +2019,31 @@ ul .user-cell:hover .caption {
 
 #wall-event-song img {
     position:static;
-    margin:15.5555556% 30px;
+    margin:7px 30px;
+    border-radius:4px;
+}
+
+#wall-event-song h2 {
+    line-height:15px;
+    font-size: 14px;
+    color:#5a5a5a;
+    font-weight: normal;
+    text-shadow:1px 1px white;
+    max-width:52.5%;
+    float:left;
+    margin: 16px 0px;
+}
+
+#wall-event-song .date-comment {
+    line-height:15px;
+    font-size: 14px;
+    float:right;
+    margin: 16px 20px;
+    max-width:26%;
 }
 
 #webapp-wall-input {
 	margin:0px;
-}
-
-#wall-event-song h2 {
-    line-height:13px;
-    max-width:60.5%;
-    float:left;
-    margin: 16px 0px;
 }
 
 .wall-container {
