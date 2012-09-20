@@ -10,7 +10,7 @@
    <div id='webapp-radio-title'>
         <div class='favorites-nbr-container'>
           <span class='favorites-nbr'>{{ radio.favorites|default:'<% favorites %>' }}</span>
-          <img src="/media/app/images/star-small-gradient.png">
+          <img src="/media/app/images/icon-star-gradient.png">
           <div class='favorites-txt'>{% trans "favorites" %}</div>
         </div>
         {% if request.user.is_authenticated %}
@@ -32,7 +32,7 @@
               <span>{% trans 'Add to favorite' %}</span>
             </a>
             <a class="btn" id='btn-unfavorite'>
-              <img src='/media/app/images/star-small-grey.png' />
+              <img src='/media/app/images/star-small-grey.png' / >
               <span>{% trans 'Remove from favorite' %}</span>
             </a>
           {% endif %}
