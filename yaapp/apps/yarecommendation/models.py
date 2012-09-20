@@ -18,7 +18,8 @@ import random
 from scipy.io import mmread, mmwrite
 import os
 import numpy
-from datetime import datetime
+from datetime import datetime, timedelta
+import settings as yarecommendation_settings
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -357,7 +358,12 @@ class RadioRecommendationsCache():
         radio_ids = doc['radio_ids']
         return radio_ids
 
-    def clean_deprecated_recommendations(self, date_limit):
+    def clean_deprecated_recommendations(self, recommendation_lifetime=yarecommendation_settings.DEFAULT_RECOMMENDATION_LIFETIME):
+        """
+        removes all entries older than (now - recommendation_lifetime)
+        recommendation_lifetime is in seconds
+        """
+        date_limit = datetime.now() - timedelta(seconds=recommendation_lifetime)
         self.recommendations.remove({'save_date': {'$lt': date_limit}})
 
     def save_artists(self, artist_list, user):
