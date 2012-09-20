@@ -1688,8 +1688,8 @@ input::-webkit-input-placeholder {
 }
 
 .wall-audience-container {
-    width:220px;
-    margin:0px 40px;
+    width:213px;
+    margin:0px 47px;
 }
 
 .wall-audience-container .audience-txt {
@@ -1720,7 +1720,7 @@ input::-webkit-input-placeholder {
 }
 
 #webapp-radio-users li {
-    margin-left:9px;
+    margin-left:7px;
     margin-bottom:10px;
 }
 
@@ -2019,15 +2019,18 @@ ul .user-cell:hover .caption {
 
 #wall-event-song img {
     position:static;
-    margin:7px 30px;
+    margin:15.5555556% 30px;
 }
 
 #webapp-wall-input {
 	margin:0px;
 }
 
-#wall-event-song h2 span {
+#wall-event-song h2 {
     line-height:13px;
+    max-width:60.5%;
+    float:left;
+    margin: 16px 0px;
 }
 
 .wall-container {
