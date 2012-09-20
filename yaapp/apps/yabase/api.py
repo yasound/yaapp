@@ -510,6 +510,8 @@ class WallEventResource(ModelResource):
 class RadioWallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=False)
     user_username = fields.CharField(attribute='username', default=None, readonly=True)
+    radio_uuid = fields.CharField(attribute='radio_uuid', default=None, readonly=True)
+    song_cover_url = fields.CharField(attribute='song_cover_url', default=None, readonly=True)
 
     class Meta:
         queryset = WallEvent.objects.all().order_by('-start_date', 'type')

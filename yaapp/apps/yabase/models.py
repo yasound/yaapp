@@ -1576,10 +1576,20 @@ class WallEvent(models.Model):
         return url
 
     @property
+    def song_cover_url(self):
+        if self.song_cover_filename:
+            return YasoundSong.objects.get_cover_url(self.song_cover_filename)
+        return None
+
+    @property
     def username(self):
         if self.user:
             return self.user.username
         return None
+
+    @property
+    def radio_uuid(self):
+        return self.radio.uuid
 
     def as_dict(self):
         data = {
@@ -1589,11 +1599,13 @@ class WallEvent(models.Model):
             'user_username': self.user.username if self.user is not None else None,
             'user_picture': self.user_picture_url,
             'radio_id': self.radio.id,
+            'radio_uuid': self.radio.uuid,
             'song_id': self.song.id if self.song is not None else None,
             'song_name': self.song_name,
             'song_album': self.song_album,
             'song_artist': self.song_artist,
             'song_cover_filename': self.song_cover_filename,
+            'song_cover_url': self.song_cover_url,
             'start_date': self.start_date,
             'text': self.text,
             'type': self.type,
