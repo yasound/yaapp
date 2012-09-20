@@ -65,9 +65,13 @@ Yasound.Views.NewRadioPage = Backbone.View.extend({
                 if (that.pictureData) {
                     that.pictureData.submit();
                 }
-                Yasound.App.Router.navigate(data.url, {
-                    trigger: true
+                $('#modal-radio-created').modal('show');
+                $('#modal-radio-created').one('hidden', function () {
+                    Yasound.App.Router.navigate(data.url, {
+                        trigger: true
+                    });
                 });
+
             }
         }).error(function() {
             colibri(gettext('Error while login in'), 'colibri-error');

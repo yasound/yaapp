@@ -1,9 +1,24 @@
 {% load i18n %}
 
 <div class='row-fluid'>
+
+    <div class="modal hide fade" id="modal-radio-created" data-keyboard='false' backdrop='static'>
+        <div class="modal-header">
+            <h3>{% trans "Radio created" %}</h3>
+        </div>
+        <div class="modal-body">
+            <p>{% trans "Your radio has been created successfully." %}</p>
+            <p>{% trans "You will be redirected to the programming page where you will be able to add content" %}</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Go to programming page" %}</a>
+        </div>
+    </div>
+
+
     <div id='radio-creation-container' class='span12'>
         <h1>
-            Création d'une radio Yasound
+            {% trans "Yasound radio creation" %}
         </h1>
         <form id='new-radio-form' action='{% url webapp_new_radio %}' enctype="multipart/form-data" method='post'>{% csrf_token %}
             <div id='form-left'>
