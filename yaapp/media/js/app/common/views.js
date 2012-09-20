@@ -444,6 +444,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
         var obj = {
             method: 'feed',
+            display: 'popup',
             link: link,
             picture: Yasound.App.FacebookShare.picture,
             name: gettext('Yasound share'),
