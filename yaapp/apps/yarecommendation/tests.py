@@ -147,6 +147,5 @@ class TestRecommenationsCache(TestCase):
         self.assertEqual(self.manager.recommendations.count(), 1)
 
         from datetime import datetime, timedelta
-        limit = datetime.now() + timedelta(seconds=1)
-        self.manager.clean_deprecated_recommendations(limit)
+        self.manager.clean_deprecated_recommendations(-1)  # lifetime = -1 to be sure the recommendation save date is older than the limit
         self.assertEqual(self.manager.recommendations.count(), 0)

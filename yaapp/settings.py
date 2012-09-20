@@ -739,7 +739,13 @@ if not PRODUCTION_MODE:
         "service_expiration": {
             "task": "yapremium.task.check_expiration_date",
             "schedule": crontab(minute=0, hour='12'),
+        },
+        "recommendations_cache_clean": {
+            "task": "yarecommendation.task.async_clean_recommendation_cache",
+            "schedule": crontab(minute=0, hour='*'),
         }
+
+
     }
 else:
     if hostname == 'yas-web-01':
@@ -764,6 +770,10 @@ else:
                 "task": "yametrics.task.daily_metrics",
                 "schedule": crontab(minute=0, hour='05'),
             },
+            "recommendations_cache_clean": {
+            "task": "yarecommendation.task.async_clean_recommendation_cache",
+            "schedule": crontab(minute=0, hour='*'),
+            }
         }
     elif hostname == 'yas-web-02':
         CELERYBEAT_SCHEDULE = {
