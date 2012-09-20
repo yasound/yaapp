@@ -1732,12 +1732,6 @@ input::-webkit-input-placeholder {
 }
 
 
-
-
-
-
-
-
 #wall {
     list-style: none;
     margin-left: 0;
@@ -2004,8 +1998,36 @@ ul .user-cell:hover .caption {
  * Wall
  */
 
+#wall-event-song {
+    min-height:45px;
+    border:1px solid #cbcbcb;
+    box-shadow:inset 0px 1px 1px #f9f9f9;
+    background-image: linear-gradient(bottom, rgb(216,219,222) 0%, rgb(239,239,239) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(216,219,222) 0%, rgb(239,239,239) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(216,219,222) 0%, rgb(239,239,239) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(216,219,222) 0%, rgb(239,239,239) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(216,219,222) 0%, rgb(239,239,239) 100%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(216,219,222)),
+        color-stop(1, rgb(239,239,239))
+    );
+}
+
+#wall-event-song img {
+    position:static;
+    margin:7px 30px;
+}
+
 #webapp-wall-input {
 	margin:0px;
+}
+
+#wall-event-song h2 span {
+    line-height:13px;
 }
 
 .wall-container {
