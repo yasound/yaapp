@@ -6,6 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasoundev: http://ogp.me/ns/fb/yasoundev#">
     <title>{% block head_title %}Yasound{% endblock %}</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="/media/app/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel." />
@@ -125,7 +126,7 @@
    </script>
 
    <script type="text/html" id="trackTemplate">
-      {% include "yabase/app/track.mustache" %}
+      {% include "yabase/app/track.mustache" with yasound_song=None %}
    </script>
 
    <script type='text/html' id='profilePageTemplate'>
@@ -405,6 +406,9 @@
                 </div>
             </div>
             <div id='player'>
+              {% if yasound_song %}
+              {% include 'yabase/app/track.mustache' %}
+              {% endif %}
             </div>
 		</div>
 	</div>

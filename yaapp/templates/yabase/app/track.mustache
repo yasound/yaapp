@@ -1,12 +1,16 @@
 {% load i18n %}
-
 <div id="hd-button" class='hd-disabled'>
     &nbsp;
 </div>
 
 <div id="radio-picto">
     <a href="{% url webapp_radio current_uuid %}" class='yatooltip'>
+
+        {% if yasound_song %}
+        <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="Radio Picto">
+        {% else %}
         <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
+        {% endif %}
         <span class="yatoolelt">{% trans "Go to radio" %}</span>
     </a>
 </div>
@@ -23,7 +27,7 @@
     </div>
 
     <div id='slider-container'>
-        <div id='player-title'><% name %></div>
+        <div id='player-title'>{{ yasound_song.title|default:'<% name %>' }}</div>
         <span class="tooltip"></span>
         <div id="volume-slider"></div>
         <span class="volume"></span>

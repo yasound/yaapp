@@ -407,6 +407,8 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.radioUserTemplate(data));
+        $('.user', this.el).tooltip({title: data.name});
+
         return this;
     },
     selectUser: function (event) {
@@ -434,6 +436,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     reset: function () {
+        this.radioUsers.unbind('add', this.onRadioUsersChanged, this);
+        this.radioUsers.unbind('remove', this.onRadioUsersChanged, this);
+        this.radioUsers.unbind('reset', this.onRadioUsersChanged, this);
+
         if (this.wallPosted) {
             $.unsubscribe('/wall/posted', this.wallPosted);
         }
@@ -464,7 +470,12 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
     render: function () {
         this.reset();
+
         $(this.el).html(ich.radioPageTemplate());
+
+        this.radioUsers.bind('add', this.onRadioUsersChanged, this);
+        this.radioUsers.bind('remove', this.onRadioUsersChanged, this);
+        this.radioUsers.bind('reset', this.onRadioUsersChanged, this);
 
         var that = this;
         var wallPosted = function () {
@@ -502,6 +513,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             collection: this.radioUsers,
             el: $('#webapp-radio-users', this.el)
         });
+
 
         this.wallEventsView = new Yasound.Views.PaginatedWallEvents({
             collection: this.wallEvents,
@@ -561,6 +573,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             return;
         }
         this.wallEventsView.removeView(viewToRemove);
+    },
+
+    onRadioUsersChanged: function (collection) {
+        $('.audience-nbr', this.el).html(collection.length);
     }
 });
 
