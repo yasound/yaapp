@@ -328,6 +328,7 @@ class RadioRecommendationsCache():
         self.db = settings.MONGO_DB
         self.recommendations = self.db.recommendation_cache.recommendations
         self.recommendations.ensure_index("token", unique=True)
+        self.recommendations.ensure_index("save_date")
         self.artists = self.db.recommendation_cache.artists
         self.artists.ensure_index("user_id", unique=True)
 
