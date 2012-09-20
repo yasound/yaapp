@@ -7,7 +7,12 @@
 				</a>
                 {% else %}
                 <a href='/app/radio/<% radio_uuid %>/'>
+                  <%#song_cover_url %>
                   <img src="<% song_cover_url %>" width="32" height="32" alt="Radio Picto">
+                  <%/song_cover_url%>
+                  <%^song_cover_url %>
+                  <img class='wall-img-song' src='/media/images/default_album.png' width='32px' height='32px'/>
+                  <%/song_cover_url%>
                 </a>
                 {% endif %}
 			</div>
