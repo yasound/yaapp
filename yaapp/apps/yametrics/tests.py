@@ -400,6 +400,8 @@ class TestRadioPopularityManager(TestCase):
         manager.radios.insert({'db_id': radio_id_1, 'activity':activity, 'last_activity':last_activity})
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 1)
+        self.assertEquals(Radio.objects.filter(popularity_score__gt=0).count(), 1)
+        self.assertEquals(Radio.objects.filter(popularity_score=0).count(), 0)
 
 
         doc = manager.radios.find({'db_id': radio_id_1})[0]
@@ -445,7 +447,6 @@ class TestRadioPopularityManager(TestCase):
 
         manager.compute_progression()
         self.assertEquals(manager.radios.count(), 4)
-
 
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)
         manager.action(radio_id_1, yametrics_settings.ACTIVITY_LISTEN)

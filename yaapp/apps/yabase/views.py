@@ -38,7 +38,7 @@ from yacore.http import check_api_key_Authentication, check_http_method, absolut
 from yacore.geoip import request_country
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
-from yarecommendation.models import ClassifiedRadiosManager
+from yarecommendation.models import ClassifiedRadiosManager, RadioRecommendationsCache
 from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
 from yageoperm import utils as yageoperm_utils
@@ -52,6 +52,7 @@ import requests
 import settings as yabase_settings
 import uuid
 import zlib
+import urllib
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -105,62 +106,162 @@ def radio_recommendations(request):
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
     check_api_key_Authentication(request)
-
+    # read url params
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
+    recommendation_token = request.GET.get('recommendation_token', None)
+    # check if artist list is provided
+    artist_data_file = request.FILES.get('artists_data', None)
+    artist_data = None
+    if artist_data_file:
+        artist_data_compressed = artist_data_file.read()
+        if len(artist_data_compressed) > 0:
+            try:
+                artist_data = zlib.decompress(artist_data_compressed)
+            except Exception, e:
+                logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
 
-    # recommendation starts with selection
+    recommendations = None
+    if recommendation_token is not None:
+        # read radio recommendations from mongodb. they have computed and stored in a previous call
+        cache_manager = RadioRecommendationsCache()
+        recommendations = cache_manager.get_recommendations(recommendation_token)
+
+    if recommendations is None:
+        # 1 - try to get artist list
+        artists = None
+        if artist_data is not None:
+            # build artist list from binary data
+            binary = BinaryData(artist_data)
+            artists = []
+            while not binary.is_done():
+                tag = binary.get_tag()
+                a = binary.get_string()
+                _song_count = binary.get_int16()  # not used for now, but needs to be read to go forward in binary stream
+                if tag == 'ARTS':
+                    artists.append(a)
+        elif request.user is not None and request.user.is_authenticated():
+            # try to load artist list from mongo
+            cache_manager = RadioRecommendationsCache()
+            artists = cache_manager.get_artists(request.user)
+        if artists is not None and len(artists) > 0:
+            # 2 - compute recommendations from artist list
+            m = ClassifiedRadiosManager()
+            res = m.find_similar_radios(artists, offset=0, limit=yabase_settings.RADIO_RECOMMENDATION_COMPUTE_COUNT)
+            radio_ids = [int(x[1]) for x in res]
+            recommendations = radio_ids
+            # 3 - cache recommendations
+            cache_manager = RadioRecommendationsCache()
+            recommendation_token = cache_manager.save_recommendations(recommendations)
+
+    if recommendations is None:
+        recommendations = []  # no recommendations
+
+    # recommendation starts with editorial selection
     selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
     selection_radios = list(selection_radios)
-    recommended_radios = selection_radios[skip:(skip + limit)]
+    from random import shuffle
+    shuffle(selection_radios)
+    selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
+    selection_radios = selection_radios[:selection_radios_count]
 
-    # if a list of artists is provided, compute a list of similar radios and add it in recommendation
-    data = request.FILES['artists_data']
-    data_content_compressed = ''
-    if data:
-        data_content_compressed = data.read()
-    if len(data_content_compressed) > 0:
-        # decompress data
+    radio_data = []
+    # results: first part
+    for r in selection_radios[skip:(skip + limit)]:
+        radio_data.append(r.as_dict(request_user=request.user))
+
+    # results: second part
+    reco_skip = max(0, skip - selection_radios_count)
+    reco_limit = max(0, limit - selection_radios_count)
+    for radio_id in recommendations[reco_skip:(reco_skip + reco_limit)]:
         try:
-            content_uncompressed = zlib.decompress(data_content_compressed)
-        except Exception, e:
-            logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
-            return api_response(None)
-        # build artist list from binary data
-        binary = BinaryData(content_uncompressed)
-        artists = []
-        while not binary.is_done():
-            tag = binary.get_tag()
-            a = binary.get_string()
-            _song_count = binary.get_int16()  # not used for now, but needs to be read to go forward in binary stream
-            if tag == 'ARTS':
-                artists.append(a)
-        # get ids of user's radios
-        user_radio_ids = []
-        if request.user and request.user.is_authenticated():
-            radios = request.user.userprofile.own_radios(only_ready_radios=False)
-            for r in radios:
-                user_radio_ids.append(r.id)
-        # find similar radios from artist list
-        m = ClassifiedRadiosManager()
-        # limit and offset for find_similar_radios
-        limit_similar = max(0, limit - len(recommended_radios))
-        skip_similar = max(0, skip - len(selection_radios))
-        res = m.find_similar_radios(artists, offset=skip_similar, limit=limit_similar)
-        radio_ids = [int(x[1]) for x in res]
-        for r in radio_ids:
-            if r in user_radio_ids:
-                continue  # dont't add user's radios in similar radios list
-            try:
-                radio = Radio.objects.get(id=r)
-                recommended_radios.append(radio)
-            except:
-                pass
-    # build response
-    response = []
-    for r in recommended_radios:
-        response.append(r.as_dict(request_user=request.user))
-    return api_response(response, limit=limit, offset=skip)
+            r = Radio.objects.get(id=radio_id)
+        except Radio.DoesNotExist:
+            continue
+        radio_data.append(r.as_dict(request_user=request.user))
+
+    if len(radio_data) < limit:
+        need_more = limit - len(radio_data)
+        selection_radios_ids = [r.id for r in selection_radios]
+        exclude_ids = selection_radios_ids + recommendations
+        extra_radios = Radio.objects.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[:need_more]
+        for r in extra_radios:
+            radio_data.append(r.as_dict(request_user=request.user))
+
+    params = {'skip': skip + limit}
+    if recommendation_token is not None:
+        params['token'] = recommendation_token
+    params_string = urllib.urlencode(params)
+    next_url = reverse("yabase.views.radio_recommendations")
+    next_url += '?%s' % params_string
+    response = api_response(radio_data, limit=limit, offset=skip, next_url=next_url)
+    return response
+
+
+
+
+
+# @csrf_exempt
+# def radio_recommendations(request):
+#     if not check_http_method(request, ['post']):
+#         return HttpResponse(status=405)
+#     check_api_key_Authentication(request)
+
+#     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
+#     skip = int(request.GET.get('skip', 0))
+
+    # # recommendation starts with selection
+    # selection_radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
+    # selection_radios = list(selection_radios)
+    # recommended_radios = selection_radios[skip:(skip + limit)]
+
+#     # if a list of artists is provided, compute a list of similar radios and add it in recommendation
+#     data = request.FILES['artists_data']
+#     data_content_compressed = ''
+#     if data:
+#         data_content_compressed = data.read()
+#     if len(data_content_compressed) > 0:
+#         # decompress data
+        # try:
+        #     content_uncompressed = zlib.decompress(data_content_compressed)
+        # except Exception, e:
+        #     logger.error("Cannot handle content_compressed: %s" % (unicode(e)))
+#             return api_response(None)
+        # # build artist list from binary data
+        # binary = BinaryData(content_uncompressed)
+        # artists = []
+        # while not binary.is_done():
+        #     tag = binary.get_tag()
+        #     a = binary.get_string()
+        #     _song_count = binary.get_int16()  # not used for now, but needs to be read to go forward in binary stream
+        #     if tag == 'ARTS':
+        #         artists.append(a)
+#         # get ids of user's radios
+#         user_radio_ids = []
+#         if request.user and request.user.is_authenticated():
+#             radios = request.user.userprofile.own_radios(only_ready_radios=False)
+#             for r in radios:
+#                 user_radio_ids.append(r.id)
+#         # find similar radios from artist list
+        # m = ClassifiedRadiosManager()
+        # # limit and offset for find_similar_radios
+        # limit_similar = max(0, limit - len(recommended_radios))
+        # skip_similar = max(0, skip - len(selection_radios))
+        # res = m.find_similar_radios(artists, offset=skip_similar, limit=limit_similar)
+#         radio_ids = [int(x[1]) for x in res]
+#         for r in radio_ids:
+#             if r in user_radio_ids:
+#                 continue  # dont't add user's radios in similar radios list
+#             try:
+#                 radio = Radio.objects.get(id=r)
+#                 recommended_radios.append(radio)
+#             except:
+#                 pass
+#     # build response
+#     response = []
+#     for r in recommended_radios:
+#         response.append(r.as_dict(request_user=request.user))
+#     return api_response(response, limit=limit, offset=skip)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):

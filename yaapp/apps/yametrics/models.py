@@ -368,10 +368,8 @@ class RadioPopularityManager():
             radio_id = d['db_id']
             radio_ids.append(radio_id)
             Radio.objects.filter(id=radio_id).update(popularity_score=new_progression)
-
         # reset popularity score for all other radios
         Radio.objects.exclude(id__in=radio_ids).update(popularity_score=0)
-
 
     def remove_radio(self, radio_id):
         collection = self.radios
