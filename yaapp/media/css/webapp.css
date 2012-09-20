@@ -4141,12 +4141,29 @@ a.yabutton-small {
     }
 
     .form-search .wall-textarea {
-        height:20px;
+        width:93%;
+    }
+
+    .form-search .submit-btn {
+        top:62px;
+        right:0px;
     }
 
     .wall-btn-responsive {
         margin-right:5%;
     }
+
+    #wall-event-song h2, 
+    #wall-event-like h2 {
+        max-width: 35.5%;
+    }
+
+    .form-search .search-query {
+        margin-left:14px;
+    }
+
+
+
 
 /*-- PROFILE --*/
 
@@ -5181,6 +5198,16 @@ a.yabutton-small {
         margin-right:5%;
     }
 
+    .wall-like-container {
+        width:100px;
+
+    }
+
+    .form-search .submit-btn {
+        right:10px;
+        top:63px;
+    }
+
 /*-- NOTIFICATIONS --*/
 
     .notifications-container {
@@ -5796,7 +5823,7 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-
+    
     .input-xxlarge {
         width:80%;
     }
@@ -5815,6 +5842,18 @@ a.yabutton-small {
         margin-left:0px;
     }
 
+    #wall-event-song h2, 
+    #wall-event-like h2 {
+        max-width: 40.5%;
+    }
+    
+    .wall-like-container {
+        width:100px;   
+    }
+
+    .form-search .submit-btn {
+        right:10px;
+    }
 /*-- NOTIFICATIONS --*/
 
     .notifications-container {
