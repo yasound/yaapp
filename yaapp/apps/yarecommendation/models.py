@@ -18,6 +18,7 @@ import random
 from scipy.io import mmread, mmwrite
 import os
 import numpy
+from datetime import datetime
 logger = logging.getLogger("yaapp.yarecommendation")
 
 
@@ -319,6 +320,59 @@ class RadiosKMeansManager():
         if len(ind) > 0:
             return [radios[radio_index] for radio_index in ind[0]]
         return []
+
+
+class RadioRecommendationsCache():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.recommendations = self.db.recommendation_cache.recommendations
+        self.recommendations.ensure_index("token", unique=True)
+        self.artists = self.db.recommendation_cache.artists
+        self.artists.ensure_index("user_id", unique=True)
+
+    def drop(self):
+        self.recommendations.drop()
+        self.artists.drop()
+
+    def convert_token(self, token):
+        internal_token = 'recommendations_%s' % (token)
+        return internal_token
+
+    def save_recommendations(self, recommended_radios_ids):
+        import uuid
+        token = uuid.uuid4().hex
+        internal_token = self.convert_token(token)
+        doc = {'save_date': datetime.now(),
+                'token': internal_token,
+                'radio_ids': recommended_radios_ids
+        }
+        self.recommendations.insert(doc, safe=True)
+        return token
+
+    def get_recommendations(self, token):
+        internal_token = self.convert_token(token)
+        doc = self.recommendations.find_one({'token': internal_token})
+        if doc is None:
+            return None
+        radio_ids = doc['radio_ids']
+        return radio_ids
+
+    def clean_deprecated_recommendations(self, date_limit):
+        self.recommendations.remove({'save_date': {'$lt': date_limit}})
+
+    def save_artists(self, artist_list, user):
+        doc = {'user_id': user.id,
+                'save_date': datetime.now(),
+                'artists': artist_list
+        }
+        self.artists.update({'user_id': doc['user_id']}, doc, upsert=True)
+
+    def get_artists(self, user):
+        artist_list = self.artists.find_one({'user_id': user.id})
+        if artist_list is None:
+            return None
+        return artist_list['artists']
+
 
 
 def new_radio(sender, instance, created, **kwargs):
