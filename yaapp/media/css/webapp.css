@@ -2074,6 +2074,72 @@ ul .user-cell:hover .caption {
     margin-right:14px;
 }
 
+#wall-event-messages .wall-profile-picture {
+    float:left;
+    border:3px solid white;
+    border-radius:50%;
+    box-shadow: 0px 2px 2px #d4d4d4;
+    width:50px;
+    height:50px;
+    margin:13px 21px;
+    overflow:hidden;
+}
+
+#wall-event-messages {
+    min-height:45px;
+    background-image: linear-gradient(bottom, rgb(248,248,248) 0%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(248,248,248) 0%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(248,248,248) 0%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(248,248,248) 0%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(248,248,248) 0%, rgb(255,255,255) 65%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(248,248,248)),
+        color-stop(0.65, rgb(255,255,255))
+    );
+}
+
+#wall-event-messages h2 {
+    margin-left:0px;
+    margin-top:9px;
+}
+
+#wall-event-messages img {
+    margin:0px;
+    width:48px;
+    height:48px;
+}
+
+#wall-event-messages p {
+    position:static;
+    margin:0px;
+    margin-top:24px;
+    max-width:100%;
+    clear:right;
+}
+
+#wall-event-messages h2 a {
+    max-width: 60%;
+    line-height: 14px;
+    margin-bottom:10px;
+    margin-right:4px;
+    font-weight: normal;
+}
+
+#wall-event-messages .date-comment {
+    line-height:14px;
+    float:left;
+}
+
+.wall-messages-text {
+    float:left;
+    width:60%;
+}
+
+
 .wall-like-container {
     float:left;
     margin-top:11px;
@@ -2092,24 +2158,11 @@ ul .user-cell:hover .caption {
 	border-radius:20px;
 }
 
-.wall-event-message, .form-search {
-	min-height:104px;
+.wall-event-message, 
+.form-search {
 	margin:0px;
 	padding:0px;
 	overflow:hidden;
-
-	background-image: linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
-	background-image: -o-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
-	background-image: -moz-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
-	background-image: -webkit-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
-	background-image: -ms-linear-gradient(bottom, rgb(247,247,247) 14%, rgb(255,255,255) 79%);
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0.14, rgb(247,247,247)),
-		color-stop(0.79, rgb(255,255,255))
-	);
 }
 
 
@@ -2123,6 +2176,19 @@ ul .user-cell:hover .caption {
 .form-search {
     position:relative;
 	border-radius:20px 20px 0px 0px;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 0%, rgb(255,255,255) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 0%, rgb(255,255,255) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 0%, rgb(255,255,255) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 0%, rgb(255,255,255) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 0%, rgb(255,255,255) 100%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(241,241,241)),
+        color-stop(1, rgb(255,255,255))
+    );
 }
 
 .wall-event-message img.user {
@@ -2138,6 +2204,7 @@ ul .user-cell:hover .caption {
 }
 
 .wall-event-message p {
+    color:#484a4e;
 	margin-top:30px;
     margin-left:100px;
     margin-right:10px;
