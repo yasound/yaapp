@@ -988,12 +988,14 @@ class UserProfile(models.Model):
             'user_name': unicode(friend_profile),
             'user_id': friend_profile.user.id,
             'user_username': friend_profile.user.username,
-            'radio_id': radio.id
+            'radio_id': radio.id,
+            'radio_name': radio.name,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_FRIEND_IN_RADIO,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.friend_in_radio:
@@ -1015,12 +1017,14 @@ class UserProfile(models.Model):
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
-            'radio_id': radio.id
+            'radio_id': radio.id,
+            'radio_name': radio.name,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_USER_IN_RADIO,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.user_in_radio:
@@ -1082,12 +1086,14 @@ class UserProfile(models.Model):
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
-            'radio_id': radio.id
+            'radio_id': radio.id,
+            'radio_name': radio.name,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_MESSAGE_IN_WALL,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.message_posted:
@@ -1111,6 +1117,7 @@ class UserProfile(models.Model):
             'song_name': unicode(song),
             'user_id': user_profile.user.id,
             'radio_id': radio.id,
+            'radio_name': radio.name,
             'song_id': song.id,
             'user_username': user_profile.user.username,
         }
@@ -1118,6 +1125,7 @@ class UserProfile(models.Model):
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_SONG_LIKED,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.song_liked:
@@ -1137,12 +1145,14 @@ class UserProfile(models.Model):
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
-            'radio_id': radio.id
+            'radio_id': radio.id,
+            'radio_name': radio.name,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_RADIO_IN_FAVORITES,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.radio_in_favorites:
@@ -1162,12 +1172,14 @@ class UserProfile(models.Model):
             'user_name': unicode(user_profile),
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
-            'radio_id': radio.id
+            'radio_id': radio.id,
+            'radio_name': radio.name,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_RADIO_SHARED,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.radio_shared:
@@ -1185,12 +1197,14 @@ class UserProfile(models.Model):
             'user_name': unicode(friend_profile),
             'user_username': friend_profile.user.username,
             'user_id': friend_profile.user.id,
-            'radio_id': radio.id
+            'radio_id': radio.id,
+            'radio_name': radio.name,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
                            yamessage_settings.TYPE_NOTIF_FRIEND_CREATED_RADIO,
                            notif_params,
+                           from_radio_id=radio.id,
                            language=self.language)
 
         if not self.notifications_preferences.friend_created_radio:
