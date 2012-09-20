@@ -407,6 +407,8 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.radioUserTemplate(data));
+        $('.user', this.el).tooltip({title: data.name});
+
         return this;
     },
     selectUser: function (event) {
