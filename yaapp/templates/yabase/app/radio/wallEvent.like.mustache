@@ -1,22 +1,28 @@
 {% load i18n %}
 {% load thumbnail %}
-<div class='wall-event-message'>
+<div id='wall-event-like' class='wall-event-message'>
 	<div class='radio-picto'>
                 {% if radio %}
 				<a href='/app/radio/{{ radio.uuid }}/'>
                   {% thumbnail radio.picture "28x28" format='PNG' as im %}
-                  <img src='{{im.url}}' width='28px' height='28px' alt='Radio picto'/>
+                  <img src='{{im.url}}' width='32px' height='32px' alt='Radio picto'/>
                   {% endthumbnail %}
 				</a>
                 {% else %}
                 <%#radio%>
                 <a href='/app/radio/<% uuid %>/'>
-                  <img src="<% picture %>" width="28" height="28" alt="Radio Picto">
+                  <img src="<% picture %>" width="32" height="32" alt="Radio Picto">
                 </a>
                 <%/radio%>
                 {% endif %}
 			</div>
-	<p></p>
-	<h2><a href='/app/profile/{{wall_event.user.username|default:'<% user_username %>'}}/'>{{ wall_event.user_name|default:'<% user_name %>' }}</a> <span>{% trans "likes" %} {{ wall_event.song_name|default:'<% song_name %>' }}</span></h2>
-	<div class='date'>{{ wall_event.start_date|default:'<% formatted_start_date %>' }}</div>
+	<h2>
+    <span>{{ wall_event.song_name|default:'<% song_name %>' }}</span>
+    <img src="/media/app/images/wall-icon-heart.png"/>
+    <div class='wall-like-container'>
+      <a href='/app/profile/{{wall_event.user.username|default:'<% user_username %>'}}/'>{{ wall_event.user_name|default:'<% user_name %>' }}</a>
+      <em>{% trans "likes" %}</em>
+    </div>
+  </h2>
+	<div class='date date-comment'>{{ wall_event.start_date|default:'<% formatted_start_date %>' }}</div>
 </div>

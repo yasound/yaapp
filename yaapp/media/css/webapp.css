@@ -1753,11 +1753,6 @@ input::-webkit-input-placeholder {
     border: 1px solid #c1c1c1;
 }
 
-.wall-event-message img {
-    margin: 36px;
-    float:left;
-}
-
 .wall-event-message .wall-img-song,
 .wall-event-message .wall-img-like {
     position:absolute;
@@ -1777,7 +1772,6 @@ input::-webkit-input-placeholder {
 .wall-event-message h2 a,
 .wall-event-message h2 span {
     float:left;
-    margin-right:10px;
 }
 
 .like-comment {
@@ -1998,7 +1992,8 @@ ul .user-cell:hover .caption {
  * Wall
  */
 
-#wall-event-song {
+#wall-event-song,
+#wall-event-like {
     min-height:45px;
     border:1px solid #cbcbcb;
     box-shadow:inset 0px 1px 1px #f9f9f9;
@@ -2017,29 +2012,72 @@ ul .user-cell:hover .caption {
     );
 }
 
-#wall-event-song img {
+#wall-event-song img,
+#wall-event-like .radio-picto {
     position:static;
+    float:left;
     margin:7px 30px;
     border-radius:4px;
 }
 
-#wall-event-song h2 {
+#wall-event-like img {
+    border-radius:4px;
+}
+
+#wall-event-song h2,
+#wall-event-like h2 {
     line-height:15px;
-    font-size: 14px;
-    color:#5a5a5a;
-    font-weight: normal;
-    text-shadow:1px 1px white;
     max-width:52.5%;
     float:left;
     margin: 16px 0px;
+    font-size:14px;
 }
 
-#wall-event-song .date-comment {
+#wall-event-song .date-comment,
+#wall-event-like .date-comment {
     line-height:15px;
     font-size: 14px;
     float:right;
     margin: 16px 20px;
     max-width:26%;
+    font-size: 14px;
+}
+
+#wall-event-like h2 span,
+#wall-event-song h2 span {
+    font-weight:bold;
+    color:#5a5a5a;
+    text-shadow:1px 1px white;
+}
+
+#wall-event-like h2 a {
+    display:block;
+    font-weight:normal;
+    line-height: 15px;
+    text-shadow:none;
+    margin-right:4px;
+}
+
+#wall-event-like h2 em {
+    float:left;
+    font-style:normal;
+    font-weight:normal;
+    line-height: 15px;
+    color:#222325;
+    text-shadow:none;
+}
+
+#wall-event-like h2 img {
+    float:left;
+    clear:left;
+    margin-top:11px;
+    margin-right:14px;
+}
+
+.wall-like-container {
+    float:left;
+    margin-top:11px;
+    width:270px;
 }
 
 #webapp-wall-input {
@@ -2097,7 +2135,6 @@ ul .user-cell:hover .caption {
 	font-size:13px;
     margin-left:100px;
     margin-bottom:10px;
-	font-weight:bold;
 }
 
 .wall-event-message p {
