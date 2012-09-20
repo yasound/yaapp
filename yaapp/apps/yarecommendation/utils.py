@@ -1,4 +1,5 @@
 from math import sqrt
+from math import sqrt
 import sys
 
 def sim_distance(doc1, doc2):
@@ -61,7 +62,7 @@ def tail_call_optimized(g):
     optimization. It does this by throwing an exception
     if it is it's own grandparent, and catching such
     exceptions to fake the tail call optimization.
-    
+
     This function fails if the decorated
     function recurses in a non-tail context.
     """
