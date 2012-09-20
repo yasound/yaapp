@@ -146,6 +146,19 @@ $(document).ready(function () {
             "gifts/": "gifts",
             "*args": "index"
         },
+        initialize: function() {
+            return this.bind('all', this._trackPageview);
+        },
+
+        _trackPageview: function() {
+            var loc = window.location;
+            var proto = loc.protocol;
+            var host = loc.host;
+            var begin = proto + '//' + host;
+            var full = loc.href;
+            var url = loc.href.substring(begin.length);
+            return _gaq.push(['_trackPageview', url]);
+        },
 
         currentRadio: new Yasound.Data.Models.Radio({
             uuid: 0
