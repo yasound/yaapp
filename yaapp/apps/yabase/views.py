@@ -1066,16 +1066,7 @@ class WebAppView(View):
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
-        from yametrics.models import RadioPopularityManager
-        manager = RadioPopularityManager()
-        radio_info = manager.most_popular(limit=16)
-        radios = []
-        for i in radio_info:
-            try:
-                r = Radio.objects.get(id=i['db_id'])
-            except Radio.DoesNotExist:
-                continue
-            radios.append(r)
+        radios = most_active_radios(request, internal=True)
         context['radios'] = radios
         context['bdata'] = json.dumps([radio.as_dict(request.user) for radio in radios], cls=MongoAwareEncoder)
         context['submenu_number'] = 2
@@ -1599,16 +1590,19 @@ def radio_broadcast_message(request, radio_uuid):
 
 
 @check_api_key(methods=['GET'], login_required=False)
-def most_active_radios(request):
+def most_active_radios(request, internal=False):
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
-    genre = request.GET.get('genre', None)
+    genre = request.GET.get('genre', '')
 
-    if genre is not None:
+    if genre != '':
         qs = Radio.objects.filter(genre=genre)
     else:
         qs = Radio.objects
     radios = qs.order_by('-popularity_score', '-favorites')[skip:(skip + limit)]
+    if internal:
+        return radios
+
     radio_data = []
     for r in radios:
         radio_data.append(r.as_dict(request_user=request.user))
