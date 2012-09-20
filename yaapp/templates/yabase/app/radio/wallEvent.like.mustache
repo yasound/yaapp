@@ -1,9 +1,20 @@
 {% load i18n %}
+{% load thumbnail %}
 <div class='wall-event-message'>
 	<div class='radio-picto'>
-				<a href='/app/radio/<% uuid %>/'>
-				  <img src="<% picture %>" width="28" height="28" alt="Radio Picto">
+                {% if radio %}
+				<a href='/app/radio/{{ radio.uuid }}/'>
+                  {% thumbnail radio.picture "28x28" format='PNG' as im %}
+                  <img src='{{im.url}}' width='28px' height='28px' alt='Radio picto'/>
+                  {% endthumbnail %}
 				</a>
+                {% else %}
+                <%#radio%>
+                <a href='/app/radio/<% uuid %>/'>
+                  <img src="<% picture %>" width="28" height="28" alt="Radio Picto">
+                </a>
+                <%/radio%>
+                {% endif %}
 			</div>
 	<p></p>
 	<h2><a href='/app/profile/{{wall_event.user.username|default:'<% user_username %>'}}/'>{{ wall_event.user_name|default:'<% user_name %>' }}</a> <span>{% trans "likes" %} {{ wall_event.song_name|default:'<% song_name %>' }}</span></h2>

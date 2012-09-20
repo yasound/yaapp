@@ -5,9 +5,9 @@
     <div id='webapp-radio'>{% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}</div>
     <div class='wall-audience-container'>
         <div class='audience-nbr-container'>
-          <span class='audience-nbr'>{{ radio.audience|default:'<% audience %>' }}</span>
+          <span class='audience-nbr'>0</span>
           <img src="/media/app/images/icon-friends-gradient.png">
-          <div class='audience-txt'>{% trans "audience" %}</div>
+          <div class='audience-txt'>{% trans "listeners" %}</div>
         </div>
         <ul id='webapp-radio-users' class='thumbnails'></ul>
         <div class='yabutton-small audience-btn float-right'>{% trans "Show all" %}</div>
