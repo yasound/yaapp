@@ -1,19 +1,19 @@
 {% load i18n %}
-{% load thumbnail %}
 <div id='wall-event-like' class='wall-event-message'>
 	<div class='radio-picto'>
-                {% if radio %}
-				<a href='/app/radio/{{ radio.uuid }}/'>
-                  {% thumbnail radio.picture "28x28" format='PNG' as im %}
-                  <img src='{{im.url}}' width='32px' height='32px' alt='Radio picto'/>
-                  {% endthumbnail %}
+                {% if wall_event %}
+				<a href='/app/radio/{{ wall_event.radio_uuid }}/'>
+                <img src='{{ wall_event.song_cover_url|default:'/media/images/default_album.png' }}' width='32px' height='32px' alt='Radio picto'/>
 				</a>
                 {% else %}
-                <%#radio%>
-                <a href='/app/radio/<% uuid %>/'>
-                  <img src="<% picture %>" width="32" height="32" alt="Radio Picto">
+                <a href='/app/radio/<% radio_uuid %>/'>
+                  <%#song_cover_url %>
+                  <img src="<% song_cover_url %>" width="32" height="32" alt="Song Picto">
+                  <%/song_cover_url%>
+                  <%^song_cover_url %>
+                  <img src='/media/images/default_album.png' width='32px' height='32px'/>
+                  <%/song_cover_url%>
                 </a>
-                <%/radio%>
                 {% endif %}
 			</div>
 	<h2>
