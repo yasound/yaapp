@@ -22,6 +22,10 @@ body {
     display: none;
 }
 
+.clear {
+    clear: both;
+}
+
 
 .share {
     float: left;
@@ -4420,6 +4424,39 @@ a.yabutton-small {
         padding:25px;
         padding-left:15px;
         font-size:25px;
+    }
+
+/*-- new radio --*/
+    .row-fluid #radio-creation-container {
+        float:left;
+        width:100%;
+        height:100%;
+    }
+
+    .row-fluid #radio-creation-container h1 {
+        padding:25px;
+        padding-left:15px;
+        font-size:25px;
+    }
+
+    .row-fluid #radio-creation-container form {
+        float:left;
+        width:100%;
+    }
+
+    .row-fluid #radio-creation-container form input,  .row-fluid #radio-creation-container form textarea{
+        width:90%;
+        margin-left:12px;
+    }
+    .row-fluid #radio-creation-container form #form-left {
+        margin-left: 0;
+        width:100%;
+    }
+
+    .row-fluid #radio-creation-container form .radio-creation-submit {
+        margin: 0 auto;
+        margin-top:12px;
+        margin-left:12px;
     }
 
 /*-- RADIO-CELL --*/

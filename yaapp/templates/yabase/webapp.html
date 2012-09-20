@@ -125,7 +125,7 @@
    </script>
 
    <script type="text/html" id="trackTemplate">
-      {% include "yabase/app/track.mustache" %}
+      {% include "yabase/app/track.mustache" with yasound_song=None %}
    </script>
 
    <script type='text/html' id='profilePageTemplate'>
@@ -405,6 +405,9 @@
                 </div>
             </div>
             <div id='player'>
+              {% if yasound_song %}
+              {% include 'yabase/app/track.mustache' %}
+              {% endif %}
             </div>
 		</div>
 	</div>
