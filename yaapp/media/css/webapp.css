@@ -356,7 +356,7 @@ body {
 }
 
 .is-not-favorite {
-    background-image:url("/media/app/images/favorite-radio.png") ;
+    background-image:url("../app/images/favorite-radio.png") ;
 }
 
 .is-favorite {
