@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-10 11:58+0200\n"
+"POT-Creation-Date: 2012-09-20 17:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,9 +20,8 @@ msgstr ""
 
 #: settings.py:26
 #: settings.py:27
-#, python-format
-msgid "%(user_name)s is listening to your radio"
-msgstr "%(user_name)s écoute votre radio"
+msgid "%(user_name)s is listening to your radio \"%(radio_name)s\""
+msgstr "%(user_name)s écoute votre radio \"%(radio_name)s\""
 
 #: settings.py:28
 #, python-format
@@ -30,29 +29,24 @@ msgid "%(user_name)s is online on Yasound"
 msgstr "%(user_name)s s'est connecté à Yasound"
 
 #: settings.py:29
-#, python-format
-msgid "%(user_name)s posted a message on your wall"
-msgstr "%(user_name)s a posté un message sur votre mur"
+msgid "%(user_name)s posted a message on your radio \"%(radio_name)s\""
+msgstr "%(user_name)s a posté un message sur votre radio \"%(radio_name)s\""
 
 #: settings.py:30
-#, python-format
-msgid "%(user_name)s liked '%(song_name)s' on your radio"
-msgstr "%(user_name)s aime votre titre '%(song_name)s'"
+msgid "%(user_name)s liked '%(song_name)s' on radio \"%(radio_name)s\""
+msgstr "%(user_name)s aime le titre '%(song_name)s' sur la radio \"%(radio_name)s\""
 
 #: settings.py:31
-#, python-format
-msgid "%(user_name)s added your radio as a favorite"
-msgstr "%(user_name)s a ajouté votre radio à ses favoris"
+msgid "%(user_name)s added \"%(radio_name)s\" as a favorite"
+msgstr "%(user_name)s a ajouté \"%(radio_name)s\" à ses favoris"
 
 #: settings.py:32
-#, python-format
-msgid "%(user_name)s shared your radio"
-msgstr "%(user_name)s a partagé votre radio"
+msgid "%(user_name)s shared your radio \"%(radio_name)s\""
+msgstr "%(user_name)s a partagé votre radio \"%(radio_name)s\""
 
 #: settings.py:33
-#, python-format
-msgid "%(user_name)s created his radio"
-msgstr "%(user_name)s a créé sa radio"
+msgid "%(user_name)s created a radio: \"%(radio_name)s\""
+msgstr "%(user_name)s a créé sa radio : \"%(radio_name)s\""
 
 #: settings.py:34
 #: settings.py:45
