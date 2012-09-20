@@ -857,6 +857,9 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
                                                album_name=album_name)[0]
 
     song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata)
+    if radio.ready == False:
+        radio.ready = True
+        radio.save()
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
