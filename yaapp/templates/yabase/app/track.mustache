@@ -7,7 +7,7 @@
     <a href="{% url webapp_radio current_uuid %}" class='yatooltip'>
 
         {% if yasound_song %}
-        <img id='track-image' src='{{ yasound_song.cover_url }}' width="48" height="48" alt="Radio Picto">
+        <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="Radio Picto">
         {% else %}
         <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
         {% endif %}
