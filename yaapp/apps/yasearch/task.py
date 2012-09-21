@@ -1,6 +1,5 @@
 from celery.task import task
 import models
-from indexer import add_radio, remove_radio
 from yacore.database import flush_transaction
 
 from yabase.models import Radio
@@ -30,8 +29,11 @@ def async_add_radio(radio_id):
         radio = Radio.objects.get(id=radio_id)
     except:
         return
-    add_radio(radio, upsert=True, insert=False)
+    if not radio.ready:
+        radio.remove_from_fuzzy_index()
+    else:
+        radio.build_fuzzy_index(upsert=True, insert=False)
 
 @task(ignore_result=True)
 def async_remove_radio(radio):
-    remove_radio(radio)
+    radio.remove_from_fuzzy_index()

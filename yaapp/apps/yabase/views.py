@@ -41,6 +41,7 @@ from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager, RadioRecommendationsCache
 from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
+from yasearch.models import RadiosManager
 from yageoperm import utils as yageoperm_utils
 
 from account.views import fast_connected_users_by_distance
@@ -1181,10 +1182,10 @@ class WebAppView(View):
         return context, 'yabase/app/radio/radioPage.html'
 
     def search(self, request, context, *args, **kwargs):
-        from yasearch.models import search_radio
         query = kwargs['query']
 
-        result = search_radio(query)
+        rm = RadiosManager()
+        result = rm.search(query)
         context['submenu_number'] = 6
         return context, 'yabase/app/searchPage.html'
 

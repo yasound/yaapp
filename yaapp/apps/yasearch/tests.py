@@ -12,14 +12,14 @@ class TestMostPopularSong(TestCase):
         user.set_password('test')
         user.save()
         self.client.login(username="test", password="test")
-        self.user = user        
-            
+        self.user = user
+
     def test_add_song(self):
         radio = Radio.objects.radio_for_user(self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio = radio
         playlist.save()
-        
+
         manager = MostPopularSongsManager()
         self.assertEquals(manager.all().count(), 5)
 
@@ -27,7 +27,7 @@ class TestMostPopularSong(TestCase):
         other_song_instance = SongInstance.objects.create(metadata=song_instance.metadata, playlist=playlist)
 
         self.assertEquals(manager.all().count(), 5)
-        
+
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 2)
         self.assertEquals(docs[1].get('songinstance__count'), 1)
@@ -38,15 +38,12 @@ class TestMostPopularSong(TestCase):
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 11)
         self.assertEquals(manager.all().count(), 5)
-        
+
         manager.populate()
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 11)
         self.assertEquals(manager.all().count(), 5)
-        
+
         song_instance.delete()
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 10)
-        
-        
-        

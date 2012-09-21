@@ -16,11 +16,13 @@ import indexer as yasearch_indexer
 import logging
 import settings as yasearch_settings
 import utils as yasearch_utils
+import string
 
 
-LOCK_EXPIRE = 60 * 10 # Lock expires in 10 minutes
+LOCK_EXPIRE = 60 * 10  # Lock expires in 10 minutes
 
 logger = logging.getLogger("yaapp.yaref")
+
 
 def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     """
@@ -60,7 +62,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                     song.build_fuzzy_index(upsert=True)
                     if i % 10000 == 0 and i != 0:
                         elapsed = time() - start
-                        logger.info("processed %d/%d (%d%%) songs in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                        logger.info("processed %d/%d (%d%%) songs in %s seconds" % (i +1, count, 100*i/count, str(elapsed)))
                         start = time()
             else:
                 bulk = indexer.begin_bulk_insert()
@@ -70,7 +72,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                         indexer.commit_bulk_insert_songs(bulk)
                         bulk = indexer.begin_bulk_insert()
                         elapsed = time() - start
-                        logger.info("processed %d/%d (%d%%) songs in % seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                        logger.info("processed %d/%d (%d%%) songs in % seconds" % (i +1, count, 100*i/count, str(elapsed)))
                         start = time()
                 indexer.commit_bulk_insert_songs(bulk)
                 elapsed = time() - start
@@ -79,6 +81,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
 #
 #    Radio
 #
+    rm = RadiosManager()
     radios = Radio.objects.all()
     last_indexed = Radio.objects.last_indexed()
     if last_indexed:
@@ -93,19 +96,19 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                 radio.build_fuzzy_index(upsert=True)
                 if i % 10000 == 0 and i != 0:
                     elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) radios in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                    logger.info("processed %d/%d (%d%%) radios in %s seconds" % (i +1, count, 100*i/count, str(elapsed)))
                     start = time()
         else:
-            bulk = indexer.begin_bulk_insert()
+            bulk = rm.begin_bulk_insert()
             for i, radio in enumerate(queryset_iterator(radios)):
                 bulk.append(radio.build_fuzzy_index(upsert=False, insert=False))
                 if i % 10000 == 0 and i != 0:
-                    indexer.commit_bulk_insert_radios(bulk)
-                    bulk = indexer.begin_bulk_insert()
+                    rm.commit_bulk_insert(bulk)
+                    bulk = rm.begin_bulk_insert()
                     elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) radios in % seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                    logger.info("processed %d/%d (%d%%) radios in % seconds" % (i +1, count, 100*i/count, str(elapsed)))
                     start = time()
-            indexer.commit_bulk_insert_radios(bulk)
+            rm.commit_bulk_insert(bulk)
             elapsed = time() - start
             logger.info("processed %d/%d (%d%%) radios in % seconds" % (count, count, 100, str(elapsed)))
 
@@ -131,7 +134,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                 user.userprofile.build_fuzzy_index(upsert=True)
                 if i % 10000 == 0 and i != 0:
                     elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) users in %s seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                    logger.info("processed %d/%d (%d%%) users in %s seconds" % (i +1, count, 100*i/count, str(elapsed)))
                     start = time()
         else:
             bulk = indexer.begin_bulk_insert()
@@ -141,37 +144,20 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
                     indexer.commit_bulk_insert_users(bulk)
                     bulk = indexer.begin_bulk_insert()
                     elapsed = time() - start
-                    logger.info("processed %d/%d (%d%%) users in % seconds" % (i+1, count, 100*i/count, str(elapsed)))
+                    logger.info("processed %d/%d (%d%%) users in % seconds" % (i +1, count, 100*i/count, str(elapsed)))
                     start = time()
             indexer.commit_bulk_insert_users(bulk)
             elapsed = time() - start
             logger.info("processed %d/%d (%d%%) users in % seconds" % (count, count, 100, str(elapsed)))
 
-
     logger.info("building mongodb index")
 
     if not skip_songs:
         indexer.build_index_songs()
-    indexer.build_index_radios()
     indexer.build_index_users()
 
     release_lock()
     logger.info("done")
-
-
-def search_radio(search_text, radio_min_score=40, ready_radios_only=True, radios_with_creator_only=True):
-    radio_results = Radio.objects.search_fuzzy(search_text, 20)
-    radios = []
-    for r in radio_results:
-        radio_id = r[0]["db_id"]
-        score = r[1]
-        if score >= radio_min_score:
-            r = Radio.objects.get(id=radio_id)
-            if (r.ready or not ready_radios_only) and (r.creator or not radios_with_creator_only):
-                radios.append(r)
-        else:
-            break
-    return radios
 
 def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True, radios_with_creator_only=True):
     user_results = UserProfile.objects.search_user_fuzzy(search_text, 5)
@@ -191,6 +177,7 @@ def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True,
                 radios.append(r)
     return radios
 
+
 def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_with_creator_only=True):
     song_results = YasoundSong.objects.search_fuzzy(search_text, 1000)
     songs = []
@@ -204,12 +191,111 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
     radios = radio_queryset.filter(current_song__metadata__yasound_song_id__in=songs).order_by('-overall_listening_time')[:limit]
     return radios
 
+
+class RadiosManager():
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.radios
+        self.collection.ensure_index("db_id")
+        self.collection.ensure_index("name_dms")
+        self.collection.ensure_index("genre_dms")
+        self.collection.ensure_index("tags_dms")
+        self.collection.ensure_index("all_dms")
+
+    def add_radio(self, radio, upsert=False, insert=True):
+        name_dms = yasearch_utils.build_dms(unicode(radio), True)
+        genre_dms = yasearch_utils.build_dms(radio.genre, True)
+        tags_dms = yasearch_utils.build_dms(radio.tags_to_string(), True)
+
+        all_dms = []
+        all_dms.extend(name_dms)
+        all_dms.extend(genre_dms)
+        all_dms.extend(tags_dms)
+        all_dms = list(set(all_dms))
+
+        radio_doc = {
+            "db_id": radio.id,
+            "name": radio.name,
+            "genre": radio.genre,
+            "tags": radio.tags_to_string(),
+
+            "name_dms": name_dms,
+            "genre_dms": genre_dms,
+            "tags_dms": tags_dms,
+            "all_dms": all_dms,
+        }
+        if upsert:
+            self.collection.update({"db_id": radio.id}, {"$set": radio_doc}, upsert=True, safe=True)
+        elif insert:
+            self.collection.insert(radio_doc, safe=True)
+        return radio_doc
+
+    def remove_radio(self, radio):
+        doc = self.collection.find_one({"db_id": radio.id})
+        if doc is not None:
+            self.collection.remove({'_id': doc['_id']})
+
+    def _find_docs(self, query, remove_common_words=True):
+        dms_search = yasearch_utils.build_dms(query, remove_common_words)
+        print dms_search
+        if not query or len(dms_search) == 0:
+            return []
+
+        options = {
+            "db_id": True,
+            "name": True,
+            "genre": True,
+            "tags": True,
+        }
+        res = self.collection.find({"all_dms": {"$all": dms_search}},  options)
+        return res
+
+    def _score_result(self, query, docs, limit=10, min_score=None):
+        results = []
+        for r in docs:
+            radio_info_list = []
+            if r["name"] is not None:
+                radio_info_list.append(r["name"])
+            if r["genre"] is not None:
+                radio_info_list.append(r["genre"])
+            if r["tags"] is not None:
+                radio_info_list.append(r["tags"])
+            radio_info = string.join(radio_info_list)
+            ratio = yasearch_utils.token_set_ratio(query.lower(), radio_info.lower(), method='mean')
+            if min_score is not None and ratio < min_score:
+                continue
+            res = (r, ratio)
+            results.append(res)
+
+        sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
+        return sorted_results[:limit]
+
+    def search(self, query, min_score=None, limit=10):
+        docs = self._find_docs(query)
+        docs = self._score_result(query, docs, limit=limit, min_score=min_score)
+        radios = [Radio.objects.get(id=r[0]['db_id']) for r in docs]
+        return radios
+
+    def last_doc(self):
+        try:
+            return self.collection.find().sort([("db_id", DESCENDING)]).limit(1)[0]
+        except:
+            return None
+
+    def begin_bulk_insert(self):
+        return []
+
+    def commit_bulk_insert(self, data):
+        if len(data) > 0:
+            self.collection.insert(data, safe=True)
+
+
 class MostPopularSongsManager():
     def __init__(self):
         self.max_size = settings.MOST_POPULAR_SONG_COLLECTION_SIZE
         self.db = settings.MONGO_DB
         self.collection = self.db.search.mostpopularsongs
-        self.collection.ensure_index([("db_id", ASCENDING),("songinstance__count", DESCENDING)])
+        self.collection.ensure_index([("db_id", ASCENDING), ("songinstance__count", DESCENDING)])
         self.collection.ensure_index("db_id", unique=True)
         self.collection.ensure_index("songinstance__count")
         self.collection.ensure_index("song_dms")
@@ -227,7 +313,7 @@ class MostPopularSongsManager():
         for metadata in qs:
             song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
             artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
-            album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+            album_dms = yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
             doc = {
                 'db_id': metadata.id,
                 'yasound_song_id': metadata.yasound_song_id,
@@ -271,7 +357,7 @@ class MostPopularSongsManager():
 
         song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
-        album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
+        album_dms = yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         doc = {
             'db_id': metadata.id,
             'yasound_song_id': metadata.yasound_song_id,
@@ -287,7 +373,7 @@ class MostPopularSongsManager():
                           {"$set": doc}, upsert=True, safe=True)
 
         doc_count = self.collection.find().count()
-        if doc_count >  self.max_size:
+        if doc_count > self.max_size:
             if least_popular_doc:
                 self.delete(least_popular_doc.get('db_id'))
         return True
@@ -306,13 +392,13 @@ class MostPopularSongsManager():
 
         query_items = []
         if artist and len(dms_artist) > 0:
-            query_items.append({"artist_dms":{"$all": dms_artist}})
+            query_items.append({"artist_dms": {"$all": dms_artist}})
 
         if album and len(dms_album) > 0:
-            query_items.append({"album_dms":{"$in": dms_album}})
+            query_items.append({"album_dms": {"$in": dms_album}})
 
         if name and len(dms_name) > 0:
-            query_items.append({"song_dms":{"$all": dms_name}})
+            query_items.append({"song_dms": {"$all": dms_name}})
 
         if len(query_items) == 0:
             return []
@@ -325,8 +411,9 @@ class MostPopularSongsManager():
             "album": True,
         }
 
-        res = self.collection.find_one({"$and":query_items}, fields)
+        res = self.collection.find_one({"$and": query_items}, fields)
         return res
+
 
 def new_song_instance(sender, instance, created, **kwargs):
     if created:
@@ -335,11 +422,14 @@ def new_song_instance(sender, instance, created, **kwargs):
 def song_instance_deleted(sender, instance, **kwargs):
     async_remove_song.delay(instance.metadata.id)
 
+
 def radio_updated_handler(sender, instance, created, **kwargs):
     async_add_radio.delay(instance.id)
 
+
 def radio_deleted_handler(sender, instance, **kwargs):
     async_remove_radio.delay(instance)
+
 
 def install_handlers():
     signals.post_save.connect(radio_updated_handler, sender=Radio)
@@ -347,4 +437,3 @@ def install_handlers():
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
     signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
 install_handlers()
-
