@@ -1130,13 +1130,23 @@ class WebAppView(View):
         context['mustache_template'] = 'yabase/app/top/topRadiosPage.mustache'
         return context, 'yabase/app/static.html'
 
+    def legal(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/static/legal.mustache'
+        return context, 'yabase/app/static.html'
+
+    def contact(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/static/contact.mustache'
+        return context, 'yabase/app/static.html'
+
     def favorites(self, request, context, *args, **kwargs):
         context['submenu_number'] = 4
-        return context, 'yabase/webapp.html'
+        context['mustache_template'] = 'yabase/app/favorites/favoritesPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def friends(self, request, context, *args, **kwargs):
         context['submenu_number'] = 3
-        return context, 'yabase/webapp.html'
+        context['mustache_template'] = 'yabase/app/friends/friendsPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
@@ -2045,3 +2055,18 @@ def radio_picture(request, radio_uuid):
         return HttpResponse(response_data, mimetype="application/json")
     raise Http404
 
+
+@check_api_key(methods=['GET',], login_required=False)
+def listeners(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
+    skip = int(request.GET.get('skip', 0))
+
+    qs = radio.current_users()
+
+    qs = qs[skip:limit+skip]
+    data = []
+    for user in qs:
+        data.append(user.userprofile.as_dict(request.user))
+    response = api_response(data, limit=limit, offset=skip)
+    return response
