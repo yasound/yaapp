@@ -1204,11 +1204,13 @@ class WebAppView(View):
 
     def favorites(self, request, context, *args, **kwargs):
         context['submenu_number'] = 4
-        return context, 'yabase/webapp.html'
+        context['mustache_template'] = 'yabase/app/favorites/favoritesPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def friends(self, request, context, *args, **kwargs):
         context['submenu_number'] = 3
-        return context, 'yabase/webapp.html'
+        context['mustache_template'] = 'yabase/app/friends/friendsPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
