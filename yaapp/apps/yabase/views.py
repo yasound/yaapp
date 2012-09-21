@@ -1194,6 +1194,14 @@ class WebAppView(View):
         context['mustache_template'] = 'yabase/app/top/topRadiosPage.mustache'
         return context, 'yabase/app/static.html'
 
+    def legal(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/static/legal.mustache'
+        return context, 'yabase/app/static.html'
+
+    def contact(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/static/contact.mustache'
+        return context, 'yabase/app/static.html'
+
     def favorites(self, request, context, *args, **kwargs):
         context['submenu_number'] = 4
         return context, 'yabase/webapp.html'
