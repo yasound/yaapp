@@ -1169,6 +1169,8 @@ class WebAppView(View):
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
         context['wall_events'] = wall_events
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
+        context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
 
         bdata = {
             'wall_events': [wall_event.as_dict() for wall_event in wall_events],
@@ -1452,6 +1454,7 @@ class WebAppView(View):
             radio_uuid = self._default_radio_uuid(request.user)
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
+
 
         context = {
             'user_uuid': user_uuid,
