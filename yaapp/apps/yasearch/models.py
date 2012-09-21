@@ -9,7 +9,8 @@ from time import time
 from yabase.models import Radio, SongMetadata, SongInstance
 from yacore.database import queryset_iterator
 from yaref.models import YasoundSong
-from yasearch.task import async_add_song, async_remove_song
+from yasearch.task import async_add_song, async_remove_song, \
+    async_add_radio, async_remove_radio
 import indexer
 import indexer as yasearch_indexer
 import logging
@@ -30,12 +31,12 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     release_lock = lambda: cache.delete(lock_id)
     if not acquire_lock():
         logger.info('build_mongodb_index locked')
-        return    
-    
+        return
+
     if erase:
         logger.info("deleting index")
         indexer.erase_index(skip_songs=skip_songs)
-    
+
     if upsert:
         logger.info("using upsert")
     else:
@@ -107,7 +108,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
             indexer.commit_bulk_insert_radios(bulk)
             elapsed = time() - start
             logger.info("processed %d/%d (%d%%) radios in % seconds" % (count, count, 100, str(elapsed)))
-            
+
 #
 #    User
 #
@@ -116,8 +117,8 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
     doc = yasearch_indexer.get_last_user_doc()
     last_indexed = None
     if doc and doc.count() > 0:
-        last_indexed = User.objects.get(id=doc[0]['db_id']) 
-    
+        last_indexed = User.objects.get(id=doc[0]['db_id'])
+
     if last_indexed:
         logger.info("last indexed user = %d" % (last_indexed.id))
         users = users.filter(id__gt=last_indexed.id, userprofile__isnull=False)
@@ -145,19 +146,19 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
             indexer.commit_bulk_insert_users(bulk)
             elapsed = time() - start
             logger.info("processed %d/%d (%d%%) users in % seconds" % (count, count, 100, str(elapsed)))
-    
-    
+
+
     logger.info("building mongodb index")
-    
+
     if not skip_songs:
-        indexer.build_index_songs() 
-    indexer.build_index_radios() 
-    indexer.build_index_users()      
-    
+        indexer.build_index_songs()
+    indexer.build_index_radios()
+    indexer.build_index_users()
+
     release_lock()
     logger.info("done")
-    
-    
+
+
 def search_radio(search_text, radio_min_score=40, ready_radios_only=True, radios_with_creator_only=True):
     radio_results = Radio.objects.search_fuzzy(search_text, 20)
     radios = []
@@ -171,7 +172,7 @@ def search_radio(search_text, radio_min_score=40, ready_radios_only=True, radios
         else:
             break
     return radios
-    
+
 def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True, radios_with_creator_only=True):
     user_results = UserProfile.objects.search_user_fuzzy(search_text, 5)
     users = []
@@ -189,7 +190,7 @@ def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True,
             if r.creator or not radios_with_creator_only:
                 radios.append(r)
     return radios
-    
+
 def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_with_creator_only=True):
     song_results = YasoundSong.objects.search_fuzzy(search_text, 1000)
     songs = []
@@ -202,7 +203,7 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
         radio_queryset = radio_queryset.filter(creator__isnull=False)
     radios = radio_queryset.filter(current_song__metadata__yasound_song_id__in=songs).order_by('-overall_listening_time')[:limit]
     return radios
-    
+
 class MostPopularSongsManager():
     def __init__(self):
         self.max_size = settings.MOST_POPULAR_SONG_COLLECTION_SIZE
@@ -212,12 +213,12 @@ class MostPopularSongsManager():
         self.collection.ensure_index("db_id", unique=True)
         self.collection.ensure_index("songinstance__count")
         self.collection.ensure_index("song_dms")
-        self.collection.ensure_index("artist_dms") 
+        self.collection.ensure_index("artist_dms")
         self.collection.ensure_index("album_dms")
 
     def drop(self):
         self.collection.drop()
-                
+
     def populate(self):
         limit = self.max_size
         qs = SongMetadata.objects.filter(yasound_song_id__isnull=False).annotate(Count('songinstance')).order_by('-songinstance__count')[:limit]
@@ -239,23 +240,23 @@ class MostPopularSongsManager():
                 'album_dms': album_dms
             }
             self.collection.insert(doc, safe=True)
-    
+
     def remove_song(self, metadata):
         songinstance__count = SongInstance.objects.filter(metadata=metadata).count()
         if songinstance__count <= 1:
             self.delete(metadata.id)
         else:
-            self.collection.update({'db_id': metadata.id}, 
+            self.collection.update({'db_id': metadata.id},
                                    {"$inc": {'songinstance__count': -1}},
                                    safe=True)
-            
+
     def add_song(self, song_instance):
         doc_count = self.collection.find().count()
 
         metadata = song_instance.metadata
         if not metadata.yasound_song_id > 0:
             return False
-        
+
         songinstance__count = SongInstance.objects.filter(metadata=metadata).count()
 
         docs = self.collection.find().sort('songinstance__count', ASCENDING).limit(1)
@@ -267,7 +268,7 @@ class MostPopularSongsManager():
         if least_popular_doc and least_popular_doc.get('songinstance__count') >= songinstance__count:
             if doc_count >= self.max_size:
                 return False
-        
+
         song_dms = yasearch_utils.build_dms(metadata.name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         artist_dms = yasearch_utils.build_dms(metadata.artist_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         album_dms =  yasearch_utils.build_dms(metadata.album_name, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
@@ -284,38 +285,38 @@ class MostPopularSongsManager():
         }
         self.collection.update({"db_id": metadata.id},
                           {"$set": doc}, upsert=True, safe=True)
-        
+
         doc_count = self.collection.find().count()
         if doc_count >  self.max_size:
             if least_popular_doc:
                 self.delete(least_popular_doc.get('db_id'))
         return True
-    
+
     def delete(self, db_id):
         self.collection.remove({'db_id': db_id}, safe=True)
-    
+
     def all(self, start=0, limit=25):
         docs = self.collection.find().skip(start).limit(limit).sort([('songinstance__count', DESCENDING)])
         return docs
-    
+
     def find(self, name, artist, album, remove_common_words=True):
         dms_name = yasearch_utils.build_dms(name, remove_common_words)
         dms_artist = yasearch_utils.build_dms(artist, remove_common_words)
         dms_album = yasearch_utils.build_dms(album, remove_common_words)
-        
+
         query_items = []
         if artist and len(dms_artist) > 0:
             query_items.append({"artist_dms":{"$all": dms_artist}})
-    
+
         if album and len(dms_album) > 0:
             query_items.append({"album_dms":{"$in": dms_album}})
-    
+
         if name and len(dms_name) > 0:
             query_items.append({"song_dms":{"$all": dms_name}})
-    
+
         if len(query_items) == 0:
             return []
-    
+
         fields = {
             "db_id": True,
             "yasound_song_id": True,
@@ -323,20 +324,27 @@ class MostPopularSongsManager():
             "artist": True,
             "album": True,
         }
-        
-        res = self.collection.find_one({"$and":query_items}, fields)  
+
+        res = self.collection.find_one({"$and":query_items}, fields)
         return res
-    
+
 def new_song_instance(sender, instance, created, **kwargs):
     if created:
-        async_add_song.delay(instance)
+        async_add_song.delay(instance.id)
 
 def song_instance_deleted(sender, instance, **kwargs):
-    async_remove_song.delay(instance.metadata)
+    async_remove_song.delay(instance.metadata.id)
+
+def radio_updated_handler(sender, instance, created, **kwargs):
+    async_add_radio.delay(instance.id)
+
+def radio_deleted_handler(sender, instance, **kwargs):
+    async_remove_radio.delay(instance)
 
 def install_handlers():
+    signals.post_save.connect(radio_updated_handler, sender=Radio)
     signals.post_save.connect(new_song_instance, sender=SongInstance)
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
-install_handlers()    
-        
-    
+    signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
+install_handlers()
+
