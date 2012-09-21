@@ -787,8 +787,10 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "keypress #search-input"    : 'search',
         "change #id_genre"          : 'genre',
         "click #create-radio"       : 'myRadios',
-        "click #play-btn": "togglePlay",
-        "click #responsive-love-btn": "like"
+        "click #play-btn"           : "togglePlay",
+        "click #responsive-love-btn": "like",
+        "click #responsive-song"    : "displayRadio",
+        "click .responsive-infos"   : "displayRadio"
     },
 
     initialize: function() {
@@ -933,5 +935,19 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
-    }
+    },
+
+    displayRadio: function (event) {
+        event.preventDefault();
+        var radio = Yasound.App.Router.currentRadio;
+        if (radio) {
+            var uuid = radio.get('uuid');
+            if (uuid) {
+                Yasound.App.Router.navigate("radio/" + uuid + '/', {
+                    trigger: true
+                });
+            }
+        }
+    },
+
 });
