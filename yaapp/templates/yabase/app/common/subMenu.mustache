@@ -2,7 +2,7 @@
 {% load thumbnail %}
 <div id="sub-header">
     <div class="responsive-container visible-phone">
-        <a id='responsive-song'href="{% url webapp_radio current_uuid %}" class='yatooltip'>
+        <a id='responsive-song' href="{% url webapp_radio current_uuid %}" class='yatooltip'>
             <img id='track-image' src='{% if not static %}<% cover %>{% endif %}' width="32" height="32" alt="Radio Picto">
         </a>
         <a id="play-btn">

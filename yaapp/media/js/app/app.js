@@ -475,5 +475,7 @@ $(document).ready(function () {
             root: Yasound.App.root,
             silent: false
         });
+        $('#loading-mask').hide();
+        $('#loading').hide();
     });
 });

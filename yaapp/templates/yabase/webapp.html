@@ -16,7 +16,6 @@
     <meta name="language" content="french" />
     <meta name="format-detection" content="telephone=no">
 
-
 <!--[if lt IE 9]>
 <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
 <script type="text/javascript" type="text/javascript" src="/media/js/flot/excanvas.min.js"></script>
@@ -29,6 +28,37 @@
     <link rel="image_src" href="/media/yaweb/images/logo.png" />
 
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+
+<style type="text/css">
+HTML, BODY { height: 100%; }
+#loading-mask {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: #f0f0f0;
+     z-index: 2000;
+}
+#loading {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     z-index: 2002;
+}
+#loading span {
+     background: url('/media/images/loader-gray.gif') no-repeat left center;
+     padding: 5px 30px;
+     position:relative;
+     margin:0 auto;
+     left:-60px;
+     top:-20px;
+     display: block;
+     color: black;
+}
+</style>
+
+
 
     {% compress css %}
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
@@ -283,6 +313,17 @@
 
 </head>
 <body>
+<div id="loading-mask" style="display:none;"></div>
+<div id="loading" style="display:none;">
+<span id="loading-message">{% trans "Loading application..." %}</span>
+</div>
+
+<script type="text/javascript">
+    document.getElementById('loading-message').innerHTML = "{% trans 'Yasound' %}";
+    document.getElementById('loading-mask').style.removeProperty("display");
+    document.getElementById('loading').style.removeProperty("display");
+</script>
+
 {% block body %}
 
 <div id="fb-root"></div>
