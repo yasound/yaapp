@@ -1456,7 +1456,11 @@ class WebAppView(View):
 
 
         if request.user.is_authenticated():
-            user_uuid = request.user.get_profile().own_radio.uuid
+            if request.user.get_profile().own_radio:
+                user_uuid = request.user.get_profile().own_radio.uuid
+            else:
+                user_uuid = None
+
             user_profile  = request.user.get_profile()
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
