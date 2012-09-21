@@ -211,6 +211,8 @@ def radio_recommendations(request):
     params = {'skip': skip + limit}
     if recommendation_token is not None:
         params['token'] = recommendation_token
+    if genre:
+        params['genre'] = genre
     params_string = urllib.urlencode(params)
     next_url = reverse("yabase.views.radio_recommendations")
     next_url += '?%s' % params_string
@@ -1662,7 +1664,14 @@ def most_active_radios(request, internal=False):
     for r in radios:
         radio_data.append(r.as_dict(request_user=request.user))
 
-    response = api_response(radio_data, len(radio_data), limit=limit, offset=skip)
+    params = {'skip': skip + limit}
+    if genre != '':
+        params['genre'] = genre
+    params_string = urllib.urlencode(params)
+    next_url = reverse("yabase.views.most_active_radios")
+    next_url += '?%s' % params_string
+
+    response = api_response(radio_data, len(radio_data), limit=limit, offset=skip, next_url=next_url)
     return response
 
 @csrf_exempt
