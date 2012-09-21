@@ -1572,7 +1572,6 @@ input::-webkit-input-placeholder {
     -moz-border-radius: 50%;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #c1c1c1;
 }
 
 #webapp-radio-title {
@@ -2162,7 +2161,7 @@ ul .user-cell:hover .caption {
 	border-radius:20px;
 }
 
-.wall-event-message, 
+.wall-event-message,
 .form-search {
 	margin:0px;
 	padding:0px;
@@ -4153,7 +4152,7 @@ a.yabutton-small {
         margin-right:5%;
     }
 
-    #wall-event-song h2, 
+    #wall-event-song h2,
     #wall-event-like h2 {
         max-width: 35.5%;
     }
@@ -5823,7 +5822,7 @@ a.yabutton-small {
     }
 
 /*-- WALL --*/
-    
+
     .input-xxlarge {
         width:80%;
     }
@@ -5842,13 +5841,13 @@ a.yabutton-small {
         margin-left:0px;
     }
 
-    #wall-event-song h2, 
+    #wall-event-song h2,
     #wall-event-like h2 {
         max-width: 40.5%;
     }
-    
+
     .wall-like-container {
-        width:100px;   
+        width:100px;
     }
 
     .form-search .submit-btn {
