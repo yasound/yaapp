@@ -161,6 +161,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/$', 'yabase.views.radio_picture'),
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture'),
 
+    # listeners
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/listeners/$', 'yabase.views.listeners', name='listeners'),
+
 
     # api (will override any other url)
     (r'^api/', include(api.urls)),

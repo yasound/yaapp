@@ -425,6 +425,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     intervalId: undefined,
     wallPosted: undefined,
 
+    events: {
+        "click .audience-btn": "displayListeners"
+    },
+
     initialize: function () {
         _.bindAll(this, 'removeWallEvent');
         this.model.bind('change', this.render, this);
@@ -577,6 +581,13 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
     onRadioUsersChanged: function (collection) {
         $('.audience-nbr', this.el).html(collection.length);
+    },
+
+    displayListeners: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/listeners/', {
+            trigger: true
+        });
     }
 });
 
@@ -639,6 +650,51 @@ Yasound.Views.UserRadiosPage = Backbone.View.extend({
     onBack: function(e) {
         e.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.username + '/', {
+            trigger: true
+        });
+    }
+});
+
+Yasound.Views.ListenersPage = Backbone.View.extend({
+    collection: new Yasound.Data.Models.Listeners({}),
+
+    events: {
+        'click #back-btn': 'onBack'
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'onBack');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+        if (this.resultsView) {
+            this.resultsView.close();
+            this.resultsViews = undefined;
+        }
+    },
+
+    render: function(uuid) {
+        this.reset();
+        this.uuid = uuid;
+        $(this.el).html(ich.listenersPageTemplate());
+        this.collection.uuid = uuid;
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
+
+        this.resultsView = new Yasound.Views.Friends({
+            collection: this.collection,
+            el: $('#results', this.el)
+        });
+
+        this.collection.fetch();
+        return this;
+    },
+
+    onBack: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.uuid + '/', {
             trigger: true
         });
     }
