@@ -142,7 +142,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             dataType: 'json',
             success: function(data) {
                 var token = data.token;
-                var fullURL = streamURL + '/?token=' + token
+                var fullURL = streamURL + '/?token=' + token;
                 console.log(fullURL);
                 callback(fullURL);
                 //callback(streamURL);
@@ -183,6 +183,40 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
             }, 10000);
         }
     },
+
+    rawTitle: function () {
+        var model = this;
+        var context = {
+            name: function() {
+                var s = model.get('name');
+                if (!s) {
+                    return gettext('Unknown song');
+                }
+                return s;
+            },
+            artist: function() {
+                var s = model.get('artist');
+                if (!s) {
+                    return gettext('Unknown artist');
+                }
+                return s;
+            },
+            album: function() {
+                var s = model.get('album');
+                if (!s) {
+                    return gettext('Unknown album');
+                }
+                return s;
+            }
+
+        };
+        var str = context.name() + ' ' + ' ' + context.artist();
+        if (context.album() != gettext('Unknown album')) {
+            str = str + ' ' +  ' ' + context.album();
+        }
+        return str;
+    },
+
     title: function() {
         var model = this;
         var context = {
