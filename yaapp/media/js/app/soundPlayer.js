@@ -155,12 +155,19 @@ Yasound.Player.Deezer = function () {
             // TODO: load into deezer player
             var title = song.title();
             var query = '/search?q=' + title + '&order=RANKING';
+            console.log('query is "' + query + '"');
             DZ.api(query, function (response) {
+                console.log('response is');
+                console.log(response);
+
                 var total = response.total;
                 if (total > 0) {
+                    console.log('found ' + total + ' items');
                     var item = response.data[0];
                     var deezerId = item.id;
+                    console.log('id is ' + deezerId);
                     if (!deezerId || deezerId === mgr.deezerId) {
+                        console.log('stopping music');
                         mgr.stop();
                         return;
                     }
@@ -196,6 +203,7 @@ Yasound.Player.Deezer = function () {
         play: function () {
             if (!mgr.trackLoaded) {
                 if (mgr.deezerId !== 0) {
+                    console.log('loading track ' + mgr.deezerId);
                     DZ.player.playTracks([mgr.deezerId], 0, function(response) {});
                     mgr.trackLoaded = true;
                 }
