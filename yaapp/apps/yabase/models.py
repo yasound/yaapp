@@ -1084,7 +1084,9 @@ class Radio(models.Model):
 
     @property
     def stream_url(self):
-        url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
+        url = self.url
+        if url is None or url == '':
+            url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
         return url
 
     @property
