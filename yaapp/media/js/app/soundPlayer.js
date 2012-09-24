@@ -153,7 +153,7 @@ Yasound.Player.Deezer = function () {
         refreshSong: function (song) {
             console.log('deezer -- refresh song');
             // TODO: load into deezer player
-            var title = song.title();
+            var title = song.rawTitle();
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
             DZ.api(query, function (response) {
