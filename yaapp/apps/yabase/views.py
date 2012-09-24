@@ -163,6 +163,10 @@ def radio_recommendations(request):
 
     # recommendation starts with editorial selection
     qs = Radio.objects.ready_objects()
+    if request.user is not None and request.user.is_authenticated():
+        # don't add user's radios
+        # and the radios he has put in his favorites
+        qs = qs.exclude(creator=request.user).exclude(radiouser__user=request.user, radiouser__favorite=True)
     if genre is not None:
         qs = qs.filter(genre=genre)
     selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
@@ -183,6 +187,15 @@ def radio_recommendations(request):
     reco_skip = max(0, skip - selection_radios_count)
     reco_limit = max(0, limit - selection_radios_count)
 
+    request_user = None
+    favorite_radio_ids = []
+    if request.user is not None and request.user.is_authenticated():
+        request_user = request.user
+        print 'favorite A'
+        favorite_radio_ids = Radio.objects.filter(radiouser__user=request_user, radiouser__favorite=True).values_list('id', flat=True)
+        print 'favorite B'
+        print favorite_radio_ids
+
     recommended_radios = []
     counter = 0
     for radio_id in recommendations:
@@ -191,7 +204,10 @@ def radio_recommendations(request):
             except Radio.DoesNotExist:
                 continue
 
-            if genre is None or genre == r.genre:  # get radio with the right genre
+            genre_ok = genre is None or genre == r.genre  # get radio with the right genre
+            creator_ok = r.creator != request_user
+            favorite_ok = r.id not in favorite_radio_ids
+            if genre_ok and creator_ok and favorite_ok:
                 recommended_radios.append(r)
                 counter += 1
             if counter > (reco_skip + reco_limit):
@@ -208,6 +224,10 @@ def radio_recommendations(request):
         qs = Radio.objects
         if genre is not None:
             qs = qs.filter(genre=genre)
+        if request.user is not None and request.user.is_authenticated():
+            # don't add user's radios
+            # and the radios he has put in his favorites
+            qs = qs.exclude(creator=request.user).exclude(radiouser__user=request.user, radiouser__favorite=True)
         extra_radios = qs.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[need_more_offset:(need_more_offset + need_more)]
         for r in extra_radios:
             radio_data.append(r.as_dict(request_user=request.user))
