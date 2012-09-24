@@ -193,7 +193,7 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
 
 
 class RadiosManager():
-    BOOST_ARTIST = 1.2
+    BOOST_SONG = 1.2
 
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -203,6 +203,7 @@ class RadiosManager():
         self.collection.ensure_index("genre_dms")
         self.collection.ensure_index("tags_dms")
         self.collection.ensure_index("all_dms")
+        self.collection.ensure_index("song.all")
 
     def drop(self):
         self.collection.drop()
@@ -226,18 +227,23 @@ class RadiosManager():
 
         song_dict = None
         if song_instance:
-            song_dict = song_instance.song_description(include_cover=False, info_from_yasound_db=True)
-            song_dict['name_simplified'] = yasearch_utils.get_simplified_name(song_dict.get('name'))
-            song_dict['artist_simplified'] = yasearch_utils.get_simplified_name(song_dict.get('artist'))
-            song_dict['album_simplified'] = yasearch_utils.get_simplified_name(song_dict.get('album'))
-            song_dict['name_dms'] = yasearch_utils.build_dms(song_dict.get('name'), remove_common_words=True)
-            song_dict['artist_dms'] = yasearch_utils.build_dms(song_dict.get('artist'), remove_common_words=True)
-            song_dict['album_dms'] = yasearch_utils.build_dms(song_dict.get('album'), remove_common_words=True)
-            song_all_dms = []
-            song_all_dms.extend(song_dict['name_dms'])
-            song_all_dms.extend(song_dict['artist_dms'])
-            song_all_dms.extend(song_dict['album_dms'])
-            song_dict['all_dms'] = list(set(song_all_dms))
+            song_description = song_instance.song_description(include_cover=False, info_from_yasound_db=True)
+            name_simplified = yasearch_utils.get_simplified_name(song_description.get('name'))
+            artist_simplified = yasearch_utils.get_simplified_name(song_description.get('artist'))
+            album_simplified = yasearch_utils.get_simplified_name(song_description.get('album'))
+
+            song_all = []
+            if name_simplified:
+                song_all.extend(name_simplified.split(' '))
+            if artist_simplified:
+                song_all.extend(artist_simplified.split(' '))
+            if album_simplified:
+                song_all.extend(album_simplified.split(' '))
+            if len(song_all) > 0:
+                song_all = list(set(sorted(song_all)))
+                song_dict = {
+                    'all': song_all
+                }
 
 
         radio_doc = {
@@ -277,41 +283,33 @@ class RadiosManager():
         }
 
         query = query.lower()
-        queries = query.split(' ')
-
-        qs = []
-        for q in queries:
-            qs.append({'song.artist_simplified': q})
-        if len(qs) == 1:
-            query_artist = qs[0]
-        else:
-            query_artist = {'$or': qs}
-
-        query_artist = {'$or': [query_artist, {'song.artist_simplified': query}]}
-
-        query_fuzzy = {"all_dms": {"$all": dms_search}}
-
+        song_search = yasearch_utils.get_simplified_name(query).split(' ')
+        query_song = {'song.all': {'$all': song_search}}
+        query_radio = {"all_dms": {"$all": dms_search}}
 
         final_query = {'$or': [
-                query_fuzzy,
-                query_artist
+                query_radio,
+                query_song
             ]
         }
 
         res = self.collection.find(final_query,  options)
         return res
 
-    def _score_artist(self, query, doc, min_score):
+    def _score_song(self, query, doc, min_score):
         matched = False
         ratio = 0.0
         song = doc.get('song')
         if song is None:
             return matched, ratio
-        if song.get('artist_simplified') is None:
+        if song.get('all') is None:
             return matched, ratio
 
-        ratio = yasearch_utils.token_set_ratio(query.lower(), song.get('artist_simplified'), method='mean')
-        ratio = ratio*RadiosManager.BOOST_ARTIST
+        items = query.split(' ')
+        sorted_query = ' '.join(sorted(items))
+
+        ratio = yasearch_utils.token_set_ratio(sorted_query.lower(), ' '.join(song.get('all')), method='mean')
+        ratio = ratio*RadiosManager.BOOST_SONG
         if min_score is not None and ratio < min_score:
             matched = False
         else:
@@ -322,7 +320,7 @@ class RadiosManager():
     def _score_result(self, query, docs, limit=10, min_score=None):
         results = []
         for r in docs:
-            matched, ratio = self._score_artist(query, r, min_score=min_score)
+            matched, ratio = self._score_song(query, r, min_score=min_score)
             if matched:
                 res = (r, ratio)
                 results.append(res)
@@ -413,7 +411,6 @@ class MostPopularSongsManager():
 
     def add_song(self, song_instance):
         doc_count = self.collection.find().count()
-
         metadata = song_instance.metadata
         if not metadata.yasound_song_id > 0:
             return False
@@ -492,10 +489,10 @@ class MostPopularSongsManager():
 
 def new_song_instance(sender, instance, created, **kwargs):
     if created:
-        async_add_song.delay(instance.id)
+        async_add_song.delay(instance)
 
 def song_instance_deleted(sender, instance, **kwargs):
-    async_remove_song.delay(instance.metadata.id)
+    async_remove_song.delay(instance.metadata)
 
 
 def radio_updated_handler(sender, instance, created, **kwargs):

@@ -10,6 +10,7 @@ class TestMostPopularSong(TestCase):
     def setUp(self):
         manager = MostPopularSongsManager()
         manager.drop()
+        YasoundSong.objects.all().delete()
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
