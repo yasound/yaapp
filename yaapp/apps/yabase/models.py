@@ -466,32 +466,18 @@ class RadioManager(models.Manager):
         return self.filter(id__in=ids)
 
     def last_indexed(self):
-        doc = yasearch_indexer.get_last_radio_doc()
-        if doc and doc.count() > 0:
-            return self.get(id=doc[0]['db_id'])
-        return None
+        from yasearch.models import RadiosManager
+        rm = RadiosManager()
+        doc = rm.last_doc()
+        if doc is not None:
+            return self.get(id=doc.get('db_id'))
+        else:
+            return None
 
     def search_fuzzy(self, search_text, limit=5):
-        radios = yasearch_search.search_radio(search_text, remove_common_words=True)
-        results = []
-        if not search_text:
-            return results
-
-        for r in radios:
-            radio_info_list = []
-            if r["name"] is not None:
-                radio_info_list.append(r["name"])
-            if r["genre"] is not None:
-                radio_info_list.append(r["genre"])
-            if r["tags"] is not None:
-                radio_info_list.append(r["tags"])
-            radio_info = string.join(radio_info_list)
-            ratio = yasearch_utils.token_set_ratio(search_text.lower(), radio_info.lower(), method='mean')
-            res = (r, ratio)
-            results.append(res)
-
-        sorted_results = sorted(results, key=lambda i: i[1], reverse=True)
-        return sorted_results[:limit]
+        from yasearch.models import RadiosManager
+        rm = RadiosManager()
+        return rm.search(query=search_text, limit=limit)
 
     def delete_fake_radios(self):
         self.filter(name__startswith='____fake____').delete()
@@ -1078,10 +1064,14 @@ class Radio(models.Model):
 
 
     def build_fuzzy_index(self, upsert=False, insert=True):
-        return yasearch_indexer.add_radio(self, upsert, insert)
+        from yasearch.models import RadiosManager
+        rm = RadiosManager()
+        return rm.add_radio(self, upsert, insert)
 
     def remove_from_fuzzy_index(self):
-        return yasearch_indexer.remove_radio(self)
+        from yasearch.models import RadiosManager
+        rm = RadiosManager()
+        return rm.remove_radio(self)
 
     def build_picture_filename(self):
         filename = 'radio_%d_picture.png' % self.id
@@ -1284,14 +1274,6 @@ def update_leaderboard():
         Radio.objects.filter(id=radio_id).update(leaderboard_rank=current_rank, leaderboard_favorites=favs)
         count += 1
         last_favorites = favs
-
-def radio_deleted(sender, instance, created=None, **kwargs):
-    if isinstance(instance, Radio):
-        radio = instance
-    else:
-        return
-    radio.remove_from_fuzzy_index()
-
 
 
 class RadioUserManager(models.Manager):
@@ -1743,7 +1725,6 @@ def new_current_song_handler(sender, radio, song_json, song, **kwargs):
 
 def install_handlers():
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
-    signals.pre_delete.connect(radio_deleted, sender=Radio)
     signals.post_delete.connect(next_song_deleted, sender=NextSong)
     yabase_signals.new_current_song.connect(new_current_song_handler)
 install_handlers()

@@ -41,6 +41,7 @@ from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager, RadioRecommendationsCache
 from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
+from yasearch.models import RadiosManager
 from yageoperm import utils as yageoperm_utils
 
 from account.views import fast_connected_users_by_distance
@@ -1105,6 +1106,8 @@ class WebAppView(View):
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:25]
         context['wall_events'] = wall_events
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
+        context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
 
         bdata = {
             'wall_events': [wall_event.as_dict() for wall_event in wall_events],
@@ -1115,10 +1118,10 @@ class WebAppView(View):
         return context, 'yabase/app/radio/radioPage.html'
 
     def search(self, request, context, *args, **kwargs):
-        from yasearch.models import search_radio
         query = kwargs['query']
 
-        result = search_radio(query)
+        rm = RadiosManager()
+        result = rm.search(query)
         context['submenu_number'] = 6
         return context, 'yabase/app/searchPage.html'
 
@@ -1391,6 +1394,7 @@ class WebAppView(View):
             radio_uuid = self._default_radio_uuid(request.user)
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
+
 
         context = {
             'user_uuid': user_uuid,

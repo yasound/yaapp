@@ -16,7 +16,7 @@ from tastypie.utils import trailing_slash
 from yabase.models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, \
     NextSong, RadioUser, SongUser, FeaturedRadio
 from yaref.models import YasoundSong
-from yasearch.models import search_radio, search_radio_by_user, \
+from yasearch.models import search_radio_by_user, \
     search_radio_by_song
 import datetime
 import json
@@ -206,7 +206,9 @@ class SearchRadioResource(ModelResource):
         obj_list = super(SearchRadioResource, self).get_object_list(request)
         if search:
             # apply search
-            obj_list = search_radio(search)
+            from yasearch.models import RadiosManager
+            rm = RadiosManager()
+            obj_list = rm.search(search, min_score=40)
         return obj_list
 
     def obj_get_list(self, request=None, **kwargs):

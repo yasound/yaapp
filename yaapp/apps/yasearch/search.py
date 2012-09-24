@@ -14,7 +14,7 @@ def find_song(name, album, artist, remove_common_words=True, accurate_album=Fals
     dms_name = yasearch_utils.build_dms(name, remove_common_words)
     dms_artist = yasearch_utils.build_dms(artist, remove_common_words)
     dms_album = yasearch_utils.build_dms(album, remove_common_words)
-    
+
     query_items = []
     if artist and len(dms_artist) > 0:
         query_items.append({"artist_dms":{"$all": dms_artist}})
@@ -23,7 +23,7 @@ def find_song(name, album, artist, remove_common_words=True, accurate_album=Fals
         album_op = '$all'
     else:
         album_op ='$in'
-        
+
     if album and len(dms_album) > 0:
         query_items.append({"album_dms":{album_op: dms_album}})
 
@@ -32,8 +32,8 @@ def find_song(name, album, artist, remove_common_words=True, accurate_album=Fals
 
     if len(query_items) == 0:
         return []
-    
-    res = db.songs.find({"$and":query_items}, 
+
+    res = db.songs.find({"$and":query_items},
                          {
                         "db_id": True,
                         "name": True,
@@ -47,15 +47,15 @@ def find_song(name, album, artist, remove_common_words=True, accurate_album=Fals
 #
 # SEARCH
 #
-   
+
 def search_song(search_text, remove_common_words=True, exclude_ids=[]):
     db = settings.MONGO_DB
     dms_search = yasearch_utils.build_dms(search_text, remove_common_words)
-    
+
     if not search_text or len(dms_search) == 0:
         return []
 
-    res = db.songs.find({ "all_dms":{"$all": dms_search}, "db_id":{"$nin": exclude_ids} }, 
+    res = db.songs.find({ "all_dms":{"$all": dms_search}, "db_id":{"$nin": exclude_ids} },
                          {
                         "db_id": True,
                         "name": True,
@@ -69,29 +69,13 @@ def search_song(search_text, remove_common_words=True, exclude_ids=[]):
 def search_user(search_text, remove_common_words=True):
     db = settings.MONGO_DB
     dms_search = yasearch_utils.build_dms(search_text, remove_common_words)
-    
+
     if not search_text or len(dms_search) == 0:
         return []
 
-    res = db.users.find({"name_dms":{"$all": dms_search}}, 
+    res = db.users.find({"name_dms":{"$all": dms_search}},
                          {
                         "db_id": True,
                         "name": True,
-                    });
-    return res
-
-def search_radio(search_text, remove_common_words=True):
-    db = settings.MONGO_DB
-    dms_search = yasearch_utils.build_dms(search_text, remove_common_words)
-    
-    if not search_text or len(dms_search) == 0:
-        return []
-
-    res = db.radios.find({"all_dms":{"$all": dms_search}}, 
-                         {
-                        "db_id": True,
-                        "name": True,
-                        "genre": True,
-                        "tags": True,
                     });
     return res

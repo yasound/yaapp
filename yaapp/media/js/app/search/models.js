@@ -4,7 +4,7 @@ Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.RadioSearchResults = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.Radio,
-    url: '/api/v1/search_radio/',
+    url: '/api/v1/search/',
     setQuery: function(query) {
         this.reset();
         this.query = query;

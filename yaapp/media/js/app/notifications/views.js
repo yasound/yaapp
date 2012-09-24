@@ -6,7 +6,7 @@ Yasound.Views.Notification = Backbone.View.extend({
     tagName: 'li',
     className: 'notification',
     events: {
-        "click .close": "onRemove",
+        "click .close-icon": "onRemove",
         "click .profile": "onProfile",
         "click a.radio-link": "onRadio"
     },
