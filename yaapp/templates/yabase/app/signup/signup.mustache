@@ -54,7 +54,7 @@
         {% url logout as logout_url %}
         {% blocktrans %}
         <p class='lead'>
-            <a href='{{logout_url}}/?next=/app/signup/'>Logout</a> to switch user.
+            <a href='{{logout_url}}/?next={{ root }}signup/'>Logout</a> to switch user.
         </p>
         {% endblocktrans %}
 
