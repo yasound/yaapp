@@ -1902,8 +1902,10 @@ def public_stats(request):
     response = json.dumps(data)
     return HttpResponse(response, mimetype='application/json')
 
-def load_template(request, template_name):
-    context = {}
+def load_template(request, template_name, root='/app/'):
+    context = {
+        'root': root
+    }
     if template_name == 'radio/editRadioPage.mustache':
         uuid = request.REQUEST.get('uuid', '')
         radio = get_object_or_404(Radio, uuid=uuid)
