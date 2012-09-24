@@ -15,7 +15,7 @@ Yasound.Data.Paginator = Backbone.Paginator.requestPager.extend({
     perPage: 16,
     page:0,
     lastId: 0,
-    queryAttribute: 'search',
+    queryAttribute: 'q',
     params: {},
 
     parse: function(response) {
