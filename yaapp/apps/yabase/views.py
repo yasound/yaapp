@@ -999,7 +999,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     radio_picture_absolute_url = absolute_url(radio.picture_url)
     flash_player_absolute_url = absolute_url('/media/player.swf')
 
-    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
+    radio_url = radio.stream_url
     return render_to_response(template_name, {
         "radio": radio,
         "radio_url": radio_url,
@@ -1048,7 +1048,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
     radio_absolute_url =  absolute_url(reverse('yabase.views.web_listen', args=[radio_uuid]))
-    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid)
+    radio_url = radio.stream_url
     flash_player_absolute_url = absolute_url('/media/player.swf')
 
     return render_to_response(template_name, {
