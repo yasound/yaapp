@@ -28,4 +28,5 @@ urlpatterns = patterns('yabase.views',
     url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
 
     url(r'^app/tpl/(?P<template_name>\S+)/$', 'load_template'),
+    url(r'^deezer/tpl/(?P<template_name>\S+)/$', 'load_template', {'root': '/deezer/'}),
 )

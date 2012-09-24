@@ -32,15 +32,15 @@
 	</div>
    <div id='comments'>
         <%#history%>
-   		<h2><% human_date %> {% trans "on" %} <a id='radio-history' href='/app/radio/<% radio_uuid %>/'><% radio_name %></a></h2>
+   		<h2><% human_date %> {% trans "on" %} <a id='radio-history' href='{{ root }}radio/<% radio_uuid %>/'><% radio_name %></a></h2>
 		<blockquote>&laquo; <% message %> &raquo;</blockquote>
         <%/history%>
 		<div class='artist-comment'>
 		    <%#current_radio%>
 			{% trans "Currently listening to:" %}
-			 <a id='radio-activity' href='/app/radio/<% uuid %>/'><% name %></a>
+			 <a id='radio-activity' href='{{ root }}radio/<% uuid %>/'><% name %></a>
 			<div class='radio-picto'>
-				<a href='/app/radio/<% uuid %>/'>
+				<a href='{{ root }}radio/<% uuid %>/'>
 				  <img src="<% picture %>" width="32" height="32" alt="Radio Picto">
 				</a>
 			</div>

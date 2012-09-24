@@ -3,8 +3,8 @@ from yacore.api import api_response
 from models import RadiosManager
 from yabase.models import Radio
 
-def search(request):
-    query = request.REQUEST.get('search', '')
+def search_radios(request):
+    query = request.REQUEST.get('q', '')
     limit = int(request.REQUEST.get('limit', 25))
     skip = int(request.GET.get('skip', 0))
 
