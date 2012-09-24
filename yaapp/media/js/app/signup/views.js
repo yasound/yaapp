@@ -47,7 +47,7 @@ Yasound.Views.SignupPage = Backbone.View.extend({
             } else {
                 $('#modal-after-signup').modal('show');
                 $('#modal-after-signup').one('hidden', function () {
-                    window.location = '/app/';
+                    window.location = Yasound.App.root;
                 });
             }
         }).error(function() {

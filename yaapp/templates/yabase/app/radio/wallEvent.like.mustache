@@ -2,11 +2,11 @@
 <div id='wall-event-like' class='wall-event-message'>
 	<div class='radio-picto'>
                 {% if wall_event %}
-				<a href='/app/radio/{{ wall_event.radio_uuid }}/'>
+				<a href='{{ root }}radio/{{ wall_event.radio_uuid }}/'>
                 <img src='{{ wall_event.song_cover_url|default:'/media/images/default_album.png' }}' width='32px' height='32px' alt='Radio picto'/>
 				</a>
                 {% else %}
-                <a href='/app/radio/<% radio_uuid %>/'>
+                <a href='{{ root }}radio/<% radio_uuid %>/'>
                   <%#song_cover_url %>
                   <img src="<% song_cover_url %>" width="32" height="32" alt="Song Picto">
                   <%/song_cover_url%>
@@ -20,7 +20,7 @@
     <span>{{ wall_event.song_name|default:'<% song_name %>' }}</span>
     <img src="/media/app/images/wall-icon-heart.png"/>
     <div class='wall-like-container'>
-      <a href='/app/profile/{{wall_event.user.username|default:'<% user_username %>'}}/'>{{ wall_event.user_name|default:'<% user_name %>' }}</a>
+      <a href='{{ root }}profile/{{wall_event.user.username|default:'<% user_username %>'}}/'>{{ wall_event.user_name|default:'<% user_name %>' }}</a>
       <em>{% trans "likes" %}</em>
     </div>
   </h2>

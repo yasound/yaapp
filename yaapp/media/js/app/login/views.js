@@ -46,7 +46,7 @@ Yasound.Views.LoginPage = Backbone.View.extend({
                     });
                 }
             } else {
-                window.location = '/app/';
+                window.location = Yasound.App.root;
             }
         }).error(function() {
             colibri(gettext('Error while login in'), 'colibri-error');

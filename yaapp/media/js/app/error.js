@@ -37,7 +37,7 @@ Yasound.App.ErrorHandler = Backbone.View.extend({
 
             $('#modal-error').modal('show');
             $('#modal-error .btn-primary').one('click', function () {
-                window.location = '/app/';
+                window.location = Yasound.App.root;
             });
 
             this.enableErrorHandling = false;

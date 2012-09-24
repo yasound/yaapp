@@ -3,7 +3,7 @@
        <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="210px" height="210px"/>
        <div id='webapp-title-radio'>
           <h2>{{ radio.name|default:'<% name %>' }} {% trans "by" %}
-          <a id='user' href='/app/profile/{{ radio.creator.username|default:'<%#creator%><% username %>' }}/'>{{ radio.creator.userprofile.name|default:'<% name %><%/creator%>' }}</a>
+          <a id='user' href='{{ root }}profile/{{ radio.creator.username|default:'<%#creator%><% username %>' }}/'>{{ radio.creator.userprofile.name|default:'<% name %><%/creator%>' }}</a>
           </h2>
        </div>
    </div>
@@ -42,15 +42,15 @@
 		<li class='wall-first-child'><a data-toggle="modal" href="#modal-share"><img src="/media/app/images/radio/radio-icon-share.png"/><span>{% trans "Share" %}</span></a></li>
     {% if radio %}
       {% ifequal radio.creator request.user %}
-        <li><a href="/app/radio/{{ radio.uuid }}/edit/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
-        <li><a href="/app/radio/{{ radio.uuid }}/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
+        <li><a href='{{ root }}radio/{{ radio.uuid }}/edit/' id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
+        <li><a href='{{ root }}radio/{{ radio.uuid }}/programming/' id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
         <li><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
       {% endifequal %}
     {% else %}
   		<%#creator%>
       <%#owner%>
-  		<li><a href="/app/radio/<%uuid%>/edit/" id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
-  		<li><a href="/app/radio/<%uuid%>/programming/" id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
+  		<li><a href='{{ root }}radio/<%uuid%>/edit/' id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
+  		<li><a href='{{ root }}radio/<%uuid%>/programming/' id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
       <li><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
   		<%/owner%>
       <%/creator%>

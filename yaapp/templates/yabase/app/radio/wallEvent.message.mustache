@@ -28,7 +28,7 @@
 	{% endif %}
 	<div class='wall-messages-text'>
 		<p>{{ wall_event.text|default:'<% text %>' }}</p>
-		<h2><a href='/app/profile/{{ wall_event.username|default:'<% user_username %>' }}/'>{{ wall_event.user_name|default:'<% user_name %>'}}</a></h2>
+		<h2><a href='{{ root }}profile/{{ wall_event.username|default:'<% user_username %>' }}/'>{{ wall_event.user_name|default:'<% user_name %>'}}</a></h2>
 		<div class='date date-comment'>{{ wall_event.start_date|default:'<% formatted_start_date %>' }}</div>
 	</div>
 </div>
