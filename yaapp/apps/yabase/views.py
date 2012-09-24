@@ -104,7 +104,7 @@ def upload_playlists(request, radio_id):
 
 @csrf_exempt
 def radio_recommendations(request):
-    if not check_http_method(request, ['post']):
+    if not check_http_method(request, ['post', 'get']):
         return HttpResponse(status=405)
     check_api_key_Authentication(request)
     # read url params
@@ -113,7 +113,9 @@ def radio_recommendations(request):
     genre = request.GET.get('genre', None)
     recommendation_token = request.GET.get('recommendation_token', None)
     # check if artist list is provided
-    artist_data_file = request.FILES.get('artists_data', None)
+    artist_data_file = None
+    if request.method == 'POST':
+        artist_data_file = request.FILES.get('artists_data', None)
     artist_data = None
     if artist_data_file:
         artist_data_compressed = artist_data_file.read()
@@ -199,13 +201,14 @@ def radio_recommendations(request):
         radio_data.append(radio.as_dict(request_user=request.user))
 
     if len(radio_data) < limit:
-        need_more = limit - len(radio_data)
         selection_radios_ids = [r.id for r in selection_radios]
         exclude_ids = selection_radios_ids + recommendations
+        need_more = limit - len(radio_data)
+        need_more_offset = max(0, skip - len(exclude_ids))
         qs = Radio.objects
         if genre is not None:
             qs = qs.filter(genre=genre)
-        extra_radios = qs.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[:need_more]
+        extra_radios = qs.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[need_more_offset:(need_more_offset + need_more)]
         for r in extra_radios:
             radio_data.append(r.as_dict(request_user=request.user))
 
