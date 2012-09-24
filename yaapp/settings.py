@@ -813,6 +813,8 @@ API_LIMIT_PER_PAGE = 0 # no pagination for now
 # pipeline
 if PRODUCTION_MODE :
     PIPELINE = True
+elif DEVELOPMENT_MODE:
+    PIPELINE = True
 else :
     PIPELINE = False
 
