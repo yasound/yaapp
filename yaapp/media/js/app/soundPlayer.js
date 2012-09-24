@@ -224,6 +224,7 @@ Yasound.Player.Deezer = function () {
                 ajax : true
             });
             DZ.ready(function(sdk_options){
+                DZ.canvas.setSize(1125);
                 callback();
             });
         }
