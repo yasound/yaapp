@@ -2,7 +2,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from yabase import tests_utils as yabase_tests_utils
 from yabase.models import Radio, SongInstance
-from yasearch.models import MostPopularSongsManager
+from models import MostPopularSongsManager, RadiosManager
+from yaref import test_utils as yaref_test_utils
+from yaref.models import YasoundSong
 
 class TestMostPopularSong(TestCase):
     def setUp(self):
@@ -47,3 +49,75 @@ class TestMostPopularSong(TestCase):
         song_instance.delete()
         docs = manager.all()
         self.assertEquals(docs[0].get('songinstance__count'), 10)
+
+class TestRadio(TestCase):
+
+    def setUp(self):
+        manager = RadiosManager()
+        manager.drop()
+        YasoundSong.objects.all().delete()
+        self.manager = manager
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+
+    def test_basic_search(self):
+        res = self.manager.search('radio1')
+        self.assertEquals(len(res), 0)
+
+        radio = Radio.objects.create(name='radio1')
+        playlist = yabase_tests_utils.generate_playlist()
+        playlist.radio = radio
+        playlist.save()
+        res = self.manager.search('radio1')
+        self.assertEquals(len(res), 1)
+
+        yaref_test_utils.generate_yasound_song(name='song', artist='artist', album='album')
+        radio.current_song = SongInstance.objects.get(id=1)
+        radio.save()
+
+        res = self.manager.search('artist')
+        self.assertEquals(len(res), 1)
+
+    def test_basic_search_artist_with_space(self):
+        res = self.manager.search('radio1')
+        self.assertEquals(len(res), 0)
+
+        radio = Radio.objects.create(name='radio1')
+        playlist = yabase_tests_utils.generate_playlist()
+        playlist.radio = radio
+        playlist.save()
+        res = self.manager.search('radio1')
+        self.assertEquals(len(res), 1)
+
+        yaref_test_utils.generate_yasound_song(name='song', artist='the cure', album='album')
+        radio.current_song = SongInstance.objects.get(id=1)
+        radio.save()
+
+        res = self.manager.search('the cure')
+        self.assertEquals(len(res), 1)
+
+    def test_search_artist_name(self):
+        res = self.manager.search('radio1')
+        self.assertEquals(len(res), 0)
+
+        radio1 = Radio.objects.create(name='radio1')
+        playlist = yabase_tests_utils.generate_playlist()
+        playlist.radio = radio1
+        playlist.save()
+
+        yaref_test_utils.generate_yasound_song(name='song', artist='artist', album='album')
+        radio1.current_song = SongInstance.objects.get(id=1)
+        radio1.save()
+
+        radio2 = Radio.objects.create(name='artist')
+        playlist = yabase_tests_utils.generate_playlist()
+        playlist.radio2 = radio2
+        playlist.save()
+
+        res = self.manager.search('artist')
+        self.assertEquals(len(res), 2)
+
+        self.assertEquals(res[0].id, radio1.id)
