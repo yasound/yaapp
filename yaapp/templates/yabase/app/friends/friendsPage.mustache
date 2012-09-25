@@ -15,7 +15,7 @@
     		<img class='friends-login-large'src="/media/app/images/friends-icon-large.png" height='230' width='260'>
             <img class='friends-login-small'src="/media/app/images/friends-icon-large.png" height='153' width='173'>
     		<p class='friends-login-p'>{% trans "Log in to view your friends." %}</p>
-            <form action='{% url webapp_login %}' method='get'>
+            <form action='{% url webapp_login app_name %}' method='get'>
     		<button id='login-btn'>{% trans "Login" %}</button>
             </form>
     	</div>

@@ -258,7 +258,7 @@ class Gift(models.Model):
             action_url = 'http://www.youtube.com/watch?v=YkFaWMN6Rsg&feature=plcp'
             target = '_blank'
         elif self.action == yapremium_settings.ACTION_CREATE_ACCOUNT:
-            action_url = reverse('webapp_signup')
+            action_url = reverse('webapp_default_signup')
             data_url = '/signup/'
 
         data = {
