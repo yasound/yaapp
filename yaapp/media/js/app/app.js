@@ -143,7 +143,9 @@ $(document).ready(function () {
             "login/": "login",
             "radio/:uuid/*args": "radio",
             "gifts/": "gifts",
-            "*args": "static"
+            "legal/": "legal",
+            "contact/": "contact",
+            "*args": "index"
         },
         initialize: function() {
             return this.bind('all', this._trackPageview);
@@ -429,6 +431,14 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.NewRadioPage({
                 el: '#webapp-content'
             }).render();
+        },
+
+        legal: function () {
+            return this.static('legal');
+        },
+
+        contact: function () {
+            return this.static('contact');
         },
 
         static: function(page) {
