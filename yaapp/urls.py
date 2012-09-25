@@ -262,8 +262,6 @@ urlpatterns = patterns('',
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
 
-    # deezer
-    url(r'^', include('yadeezer.urls')),
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
@@ -279,6 +277,9 @@ urlpatterns = patterns('',
 
 
     (r'^', include('yabase.urls')),
+
+    # deezer
+    url(r'^', include('yadeezer.urls')),
 
 )
 
