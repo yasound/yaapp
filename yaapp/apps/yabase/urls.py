@@ -30,3 +30,8 @@ urlpatterns = patterns('yabase.views',
     url(r'^app/tpl/(?P<template_name>\S+)/$', 'load_template'),
     url(r'^deezer/tpl/(?P<template_name>\S+)/$', 'load_template', {'root': '/deezer/'}),
 )
+
+urlpatterns += (
+    url(r'^app/logout/$', 'django.contrib.auth.views.logout', {"next_page": "/app/"}, name="app_logout"),
+    url(r'^deezer/logout/$', 'django.contrib.auth.views.logout', {"next_page": "/deezer"}, name="deezer_logout"),
+)
