@@ -3,44 +3,37 @@
  * evil: true, undef: true, white: true, newcap: true
  */
 /* extern Ext, $ */
-Namespace('Yasound.Views.Static');
+Namespace('Yasound.Views');
 
 /**
- * Legal page
+ * Generic static page
  */
-Yasound.Views.Static.LegalPage = Backbone.View.extend({
+Yasound.Views.StaticPage = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'render', 'templateLoaded');
     },
     reset: function() {
 
     },
-    render: function () {
+
+    templateUrl: function (page) {
+        return 'static/' + page + '.mustache';
+    },
+
+    templateName: function (page) {
+        return 'static' + page + 'Template';
+    },
+
+    render: function (page) {
         this.reset();
-        ich.loadRemoteTemplate('static/legal.mustache', 'staticLegalPageTemplate', this.templateLoaded);
+        this.page = page;
+        ich.loadRemoteTemplate(this.templateUrl(page), this.templateName(page), this.templateLoaded);
         return this;
     },
+
     templateLoaded: function() {
-        $(this.el).html(ich.staticLegalPageTemplate());
+        var page = this.page;
+        $(this.el).html(ich[this.templateName(page)]());
     }
 });
 
-/**
- * Contact page
- */
-Yasound.Views.Static.ContactPage = Backbone.View.extend({
-    initialize: function () {
-        _.bindAll(this, 'render', 'templateLoaded');
-    },
-    reset: function() {
-
-    },
-    render: function () {
-        this.reset();
-        ich.loadRemoteTemplate('static/contact.mustache', 'staticContactPageTemplate', this.templateLoaded);
-        return this;
-    },
-    templateLoaded: function() {
-        $(this.el).html(ich.staticContactPageTemplate());
-    }
-});
