@@ -1915,7 +1915,6 @@ def load_template(request, template_name, root='/app/'):
         context['radio'] = radio
         context['settings_radio_form'] = SettingsRadioForm(instance=radio)
 
-
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, context, context_instance=RequestContext(request))
 
