@@ -1,8 +1,8 @@
 {% load i18n %}
 <h2>{% trans "You are not authenticated" %}</h2>
 <p class='lead'>{% trans "Where to go now ?" %}</p>
-{% url webapp_login as login_url %}
-{% url webapp_signup as signup_url %}
+{% url webapp_login app_name as login_url %}
+{% url webapp_signup app_name as signup_url %}
 {% url lost_password as lost_password_url %}
 {% blocktrans %}
 <p class='lead'>

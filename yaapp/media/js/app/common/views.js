@@ -259,7 +259,7 @@ Yasound.Views.UserMenu = Backbone.View.extend({
 
     logout: function(e) {
         e.preventDefault();
-        window.location = '/logout';
+        window.location = Yasound.App.root + 'logout';
         return false;
     },
 

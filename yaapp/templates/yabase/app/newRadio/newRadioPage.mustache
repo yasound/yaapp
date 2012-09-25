@@ -20,7 +20,7 @@
         <h1>
             {% trans "Yasound radio creation" %}
         </h1>
-        <form id='new-radio-form' action='{% url webapp_new_radio %}' enctype="multipart/form-data" method='post'>{% csrf_token %}
+        <form id='new-radio-form' action='{% url webapp_new_radio app_name %}' enctype="multipart/form-data" method='post'>{% csrf_token %}
             <div id='form-left'>
                 <input class='radio-creation-textfield radio-creation-name' name='name' type='text' required="required" placeholder='{% trans "Name" %}' />
                 <div class='radio-creation-style'>

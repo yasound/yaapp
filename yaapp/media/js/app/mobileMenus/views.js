@@ -81,7 +81,7 @@ Yasound.Views.MobileMenu = Yasound.Views.BaseMobileMenu.extend({
     },
 
     logout: function(e) {
-        window.location = '/logout';
+        window.location = Yasound.App.root + 'logout';
     }
 });
 

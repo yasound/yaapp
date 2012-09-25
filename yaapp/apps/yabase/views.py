@@ -1192,7 +1192,7 @@ class WebAppView(View):
 
     def new_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp'))
+            return HttpResponseRedirect(reverse('webapp', args=self.app_name))
 
         if request.method == 'POST':
             profile = request.user.get_profile()
@@ -1204,7 +1204,7 @@ class WebAppView(View):
                     }
                     return api_response(data)
                 else:
-                    return HttpResponseRedirect(reverse('webapp'))
+                    return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
 
             country = request_country(request)
             if not yageoperm_utils.can_create_radio(request.user, country):
@@ -1215,7 +1215,7 @@ class WebAppView(View):
                     }
                     return api_response(data)
                 else:
-                    return HttpResponseRedirect(reverse('webapp'))
+                    return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
 
             form = NewRadioForm(request.POST, request.FILES)
             if form.is_valid():
@@ -1231,7 +1231,7 @@ class WebAppView(View):
                     }
                     response = json.dumps(data)
                     return HttpResponse(response, mimetype='application/json')
-                return HttpResponseRedirect(reverse('webapp_programming', args=[radio.uuid]))
+                return HttpResponseRedirect(reverse('webapp_programming', args=[self.app_name, radio.uuid]))
             else:
                 if request.is_ajax():
                     return self._ajax_error(form.errors)
@@ -1254,7 +1254,7 @@ class WebAppView(View):
                     response = json.dumps(data)
                     return HttpResponse(response, mimetype='application/json')
                 else:
-                    return HttpResponseRedirect(reverse('webapp'))
+                    return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
             else:
                 if request.is_ajax():
                     data = {
@@ -1274,7 +1274,7 @@ class WebAppView(View):
                 if request.is_ajax():
                     return self._ajax_success()
                 else:
-                    return HttpResponseRedirect(reverse('webapp'))
+                    return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
             else:
                 if request.is_ajax():
                     return self._ajax_error(form.errors)
@@ -1284,7 +1284,7 @@ class WebAppView(View):
 
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp_login'))
+            return HttpResponseRedirect(reverse('webapp_login', args=[self.app_name]))
 
         if request.method == 'POST':
             my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
@@ -1298,7 +1298,7 @@ class WebAppView(View):
                     my_informations_form.save()
                     if request.is_ajax():
                         return self._ajax_success()
-                    return HttpResponseRedirect(reverse('webapp_settings'))
+                    return HttpResponseRedirect(reverse('webapp_settings', args=[self.app_name]))
                 else:
                     if request.is_ajax():
                         return self._ajax_error(my_informations_form.errors)
@@ -1308,7 +1308,7 @@ class WebAppView(View):
                     my_accounts_form.save()
                     if request.is_ajax():
                         return self._ajax_success()
-                    return HttpResponseRedirect(reverse('webapp_settings'))
+                    return HttpResponseRedirect(reverse('webapp_settings', args=[self.app_name]))
                 else:
                     if request.is_ajax():
                         return self._ajax_error(my_accounts_form.errors)
@@ -1318,7 +1318,7 @@ class WebAppView(View):
                     my_notifications_form.save()
                     if request.is_ajax():
                         return self._ajax_success()
-                    return HttpResponseRedirect(reverse('webapp_settings'))
+                    return HttpResponseRedirect(reverse('webapp_settings', args=[self.app_name]))
                 else:
                     if request.is_ajax():
                         return self._ajax_error(my_notifications_form.errors)
@@ -1331,7 +1331,7 @@ class WebAppView(View):
 
     def edit_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp'))
+            return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
 
         if request.method == 'POST':
             action = request.REQUEST.get('action')
@@ -1345,7 +1345,7 @@ class WebAppView(View):
                     form.save()
                     if request.is_ajax():
                         return self._ajax_success()
-                    return HttpResponseRedirect(reverse('webapp_edit_radio', args=[uuid]))
+                    return HttpResponseRedirect(reverse('webapp_edit_radio', args=[self.app_name, uuid]))
                 else:
                     if request.is_ajax():
                         return self._ajax_error(form.errors)
@@ -1358,10 +1358,11 @@ class WebAppView(View):
             return radios[0].uuid
         return None
 
-    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', sound_player='soundmanager', *args, **kwargs):
+    def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', app_name='app', *args, **kwargs):
         """
         GET method dispatcher. Calls related methods for specific pages
         """
+        self.app_name = app_name
         authorized, redirection = self._check_auth(request, radio_uuid)
         if not authorized:
             return redirection
@@ -1399,7 +1400,7 @@ class WebAppView(View):
         enable_push = settings.ENABLE_PUSH
 
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = absolute_url(reverse('webapp'))
+        facebook_share_link = absolute_url(reverse('webapp', args=[self.app_name]))
 
         facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
 
@@ -1418,6 +1419,14 @@ class WebAppView(View):
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
+        if len(app_name) > 0:
+            root = '/' + app_name + '/'
+        else:
+            root = '/'
+
+        sound_player = 'soundmanager'
+        if app_name == 'deezer':
+            sound_player = 'deezer'
 
         context = {
             'user_uuid': user_uuid,
@@ -1446,6 +1455,7 @@ class WebAppView(View):
             'connected_users': connected_users,
             'sound_player': sound_player,
             'root': root,
+            'app_name': app_name,
         }
 
         if hasattr(self, page):
@@ -1458,10 +1468,11 @@ class WebAppView(View):
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
-    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', root='/app/', sound_player='soundmanager', *args, **kwargs):
+    def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', app_name='app', *args, **kwargs):
         """
         POST method dispatcher
         """
+        self.app_name = app_name
         self._check_auth(request, radio_uuid)
 
         user_uuid = 0
@@ -1482,7 +1493,7 @@ class WebAppView(View):
         has_radios = False
 
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = absolute_url(reverse('webapp'))
+        facebook_share_link = absolute_url(reverse('webapp', args=[self.app_name]))
 
 
         if request.user.is_authenticated():
@@ -1518,6 +1529,15 @@ class WebAppView(View):
 
         genre_form = RadioGenreForm()
 
+        if len(app_name) > 0:
+            root = '/' + app_name + '/'
+        else:
+            root = '/'
+
+        sound_player = 'soundmanager'
+        if app_name == 'deezer':
+            sound_player = 'deezer'
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1544,6 +1564,7 @@ class WebAppView(View):
             'deezer_app_id': settings.DEEZER_APP_ID,
             'sound_player': sound_player,
             'root': root,
+            'app_name': app_name,
         }
 
         if hasattr(self, page):
@@ -1902,9 +1923,20 @@ def public_stats(request):
     response = json.dumps(data)
     return HttpResponse(response, mimetype='application/json')
 
-def load_template(request, template_name, root='/app/'):
+def logout(request, app_name='app'):
+    next_url = reverse('webapp', args=[app_name])
+    logout_url = reverse('django.contrib.auth.views.logout')
+    return HttpResponseRedirect(logout_url + '?next=%s' % (next_url))
+
+def load_template(request, template_name, app_name='app'):
+    if len(app_name) > 0:
+        root = '/' + app_name + '/'
+    else:
+        root = '/'
+
     context = {
-        'root': root
+        'root': root,
+        'app_name': app_name
     }
     if template_name == 'radio/editRadioPage.mustache':
         uuid = request.REQUEST.get('uuid', '')
@@ -1914,7 +1946,6 @@ def load_template(request, template_name, root='/app/'):
 
         context['radio'] = radio
         context['settings_radio_form'] = SettingsRadioForm(instance=radio)
-
 
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, context, context_instance=RequestContext(request))

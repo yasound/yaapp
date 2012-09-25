@@ -107,8 +107,6 @@ body {
     display:block;
     width:100px;
     margin-top:31px;
-
-    /*margin-left:12px;*/
     color:white;
     text-align: center;
 }
@@ -5733,6 +5731,20 @@ a.yabutton-small {
     #mobile-menu-logo {
         display:none;
     }
+
+    #login {
+        font-size:12px;
+    }
+
+    #login #signup-btn {
+        width: auto;
+    }
+
+    #login #login-btn {
+        width: auto;
+        margin-left:12px;
+    }
+
 
 /*-- SUB-HEADER --*/
 

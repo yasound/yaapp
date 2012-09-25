@@ -139,13 +139,11 @@ $(document).ready(function () {
             "radio/:uuid/programming/": "programming",
             "radio/:uuid/edit/": "editRadio",
             "radio/:uuid/listeners/": "listeners",
-            "legal/": "legal",
-            "contact/": "contact",
             "signup/": "signup",
             "login/": "login",
             "radio/:uuid/*args": "radio",
             "gifts/": "gifts",
-            "*args": "index"
+            "*args": "static"
         },
         initialize: function() {
             return this.bind('all', this._trackPageview);
@@ -433,20 +431,14 @@ $(document).ready(function () {
             }).render();
         },
 
-        legal: function() {
+        static: function(page) {
             this.clearView();
 
-            this.currentView = new Yasound.Views.Static.LegalPage({
-                el: '#webapp-content'
-            }).render();
-        },
+            page = page.replace('/', '');
 
-        contact: function() {
-            this.clearView();
-
-            this.currentView = new Yasound.Views.Static.ContactPage({
+            this.currentView = new Yasound.Views.StaticPage({
                 el: '#webapp-content'
-            }).render();
+            }).render(page);
         },
 
         signup: function() {
