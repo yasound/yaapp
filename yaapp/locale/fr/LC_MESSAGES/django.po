@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-21 11:49+0200\n"
+"POT-Creation-Date: 2012-09-26 14:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,6 @@ msgstr "disponible sur l'appstore"
 #: templates/account/password_reset_form.html:30
 #: templates/account/password_reset_form.html:56
 #: templates/account/signup.html:27 templates/account/signup.html.py:75
-#: templates/deezer/inapp.html:163 templates/deezer/inapp.html.py:175
 #: templates/web/menu.html:16 templates/yabase/webapp.html:401
 #: templates/yabase/webapp.html.py:413
 #: templates/yabase/app/mobileLeftMenu.html:38
@@ -55,9 +54,8 @@ msgid "Logout"
 msgstr "Se déconnecter"
 
 #: templates/base.html:47 templates/account/login.html:8
-#: templates/account/login.html.py:55 templates/deezer/inapp.html:196
-#: templates/web/index.html:4 templates/web/menu.html:19
-#: templates/yabase/webapp.html:434
+#: templates/account/login.html.py:55 templates/web/index.html:4
+#: templates/web/menu.html:19 templates/yabase/webapp.html:434
 #: templates/yabase/app/favorites/favoritesPage.mustache:16
 #: templates/yabase/app/friends/friendsPage.mustache:19
 #: templates/yabase/app/login/login.mustache:24
@@ -76,19 +74,18 @@ msgid "You are already authenticated"
 msgstr "Vous êtes déjà authentifié"
 
 #: templates/account/login.html:32 templates/account/login.html.py:40
-#: templates/deezer/inapp.html:198 templates/yabase/webapp.html:436
+#: templates/yabase/webapp.html:436
 #: templates/yabase/app/login/login.mustache:10
 msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
 #: templates/account/login.html:36 templates/account/login.html.py:44
-#: templates/deezer/inapp.html:199 templates/yabase/webapp.html:437
+#: templates/yabase/webapp.html:437
 #: templates/yabase/app/login/login.mustache:14
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
-#: templates/account/login.html:59 templates/deezer/inapp.html:208
-#: templates/yabase/webapp.html:446
+#: templates/account/login.html:59 templates/yabase/webapp.html:446
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
 
@@ -146,7 +143,7 @@ msgstr ""
 "\t\t\t\t"
 
 #: templates/account/signup.html:8 templates/account/signup.html.py:56
-#: templates/deezer/inapp.html:194 templates/yabase/webapp.html:432
+#: templates/yabase/webapp.html:432
 msgid "Signup"
 msgstr "S'inscrire"
 
@@ -161,91 +158,6 @@ msgstr "S'inscrire avec Facebook"
 #: templates/account/signup.html:36 templates/account/signup.html.py:44
 msgid "Signup with Twitter"
 msgstr "S'inscrire avec Twitter"
-
-#: templates/deezer/inapp.html:161 templates/deezer/inapp.html.py:173
-#: templates/yabase/webapp.html:399 templates/yabase/webapp.html.py:411
-#: templates/yabase/app/mobileLeftMenu.html:18
-msgid "My profile"
-msgstr "Mon profil"
-
-#: templates/deezer/inapp.html:162 templates/deezer/inapp.html.py:174
-#: templates/yabase/webapp.html:400 templates/yabase/webapp.html.py:412
-msgid "My settings"
-msgstr "Mes paramètres"
-
-#: templates/deezer/inapp.html:190 templates/yabase/webapp.html:428
-msgid "No gifts"
-msgstr "Aucun cadeau"
-
-#: templates/deezer/inapp.html:202 templates/yabase/webapp.html:440
-#: templates/yabase/app/login/login.mustache:19
-msgid "Email login"
-msgstr "Connexion avec email"
-
-#: templates/deezer/inapp.html:203 templates/yabase/webapp.html:441
-#: templates/yabase/app/login/login.mustache:22
-#: templates/yabase/app/signup/signup.mustache:23
-msgid "Email"
-msgstr "Email"
-
-#: templates/deezer/inapp.html:204 templates/yabase/webapp.html:442
-#: templates/yabase/app/login/login.mustache:23
-#: templates/yabase/app/signup/signup.mustache:24
-msgid "Password"
-msgstr "Mot de passe"
-
-#: templates/deezer/inapp.html:225 templates/yabase/webapp.html:499
-msgid "Connection error"
-msgstr "Erreur de connexion"
-
-#: templates/deezer/inapp.html:228 templates/yabase/webapp.html:502
-msgid "Unable to connect Yasound server right now."
-msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
-
-#: templates/deezer/inapp.html:232 templates/deezer/inapp.html.py:247
-#: templates/yabase/webapp.html:506 templates/yabase/webapp.html.py:521
-#: templates/yabase/app/radio/radioPage.mustache:79
-msgid "Dismiss"
-msgstr "Fermer"
-
-#: templates/deezer/inapp.html:233 templates/yabase/webapp.html:507
-msgid "Reload page"
-msgstr "Recharger la page"
-
-#: templates/deezer/inapp.html:240 templates/yabase/webapp.html:514
-msgid "You are not logged in"
-msgstr "Vous n'êtes pas authentifié"
-
-#: templates/deezer/inapp.html:243 templates/yabase/webapp.html:517
-msgid "You have to login to access the requested resource."
-msgstr "Vous devez être authentifié pour accéder à cette ressource."
-
-#: templates/deezer/inapp.html:248 templates/yabase/webapp.html:522
-msgid "Go to login page"
-msgstr "Aller à la page de login"
-
-#: templates/deezer/inapp.html:266
-#: templates/newsletter/newsletter_historic.html:24
-#: templates/yabase/app/footer.html:6
-#: templates/yabase/app/static/contact.mustache:4
-msgid "Contact"
-msgstr ""
-
-#: templates/deezer/inapp.html:267 templates/yabase/app/footer.html:7
-msgid "Legal informations"
-msgstr "Mentions légales"
-
-#: templates/deezer/inapp.html:287 templates/yabase/app/footer.html:27
-msgid "Connected users"
-msgstr "Utilisateurs connectés"
-
-#: templates/deezer/inapp.html:291 templates/yabase/app/footer.html:34
-msgid "See all"
-msgstr "Tous les voir"
-
-#: templates/deezer/inapp.html:300 templates/yabase/app/footer.html:43
-msgid "minutes of music have been played"
-msgstr "minutes de musique ont été écoutées"
 
 #: templates/emailconfirmation/confirm_email.html:4
 #: templates/emailconfirmation/confirm_email.html:10
@@ -416,6 +328,12 @@ msgstr ""
 #: templates/web/radio.html:18
 msgid "Date"
 msgstr "Date"
+
+#: templates/newsletter/newsletter_historic.html:24
+#: templates/yabase/app/footer.html:6
+#: templates/yabase/app/static/contact.mustache:4
+msgid "Contact"
+msgstr ""
 
 #: templates/newsletter/newsletter_historic.html:25
 #: templates/yabase/app/programming/addFromServer.mustache:22
@@ -925,13 +843,43 @@ msgstr "Sans nom"
 #: templates/yabase/listen.html:89 templates/yabase/song.html:90
 #: templates/yabase/app/mobileCenterMenu.html:27
 #: templates/yabase/app/mobileCenterMenu.html:28
-#: templates/yabase/app/track.mustache:61
+#: templates/yabase/app/track.mustache:64
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
+#: templates/yabase/webapp.html:399 templates/yabase/webapp.html.py:411
+#: templates/yabase/app/mobileLeftMenu.html:18
+msgid "My profile"
+msgstr "Mon profil"
+
+#: templates/yabase/webapp.html:400 templates/yabase/webapp.html.py:412
+msgid "My settings"
+msgstr "Mes paramètres"
+
+#: templates/yabase/webapp.html:428
+msgid "No gifts"
+msgstr "Aucun cadeau"
+
+#: templates/yabase/webapp.html:440
+#: templates/yabase/app/login/login.mustache:19
+msgid "Email login"
+msgstr "Connexion avec email"
+
+#: templates/yabase/webapp.html:441
+#: templates/yabase/app/login/login.mustache:22
+#: templates/yabase/app/signup/signup.mustache:23
+msgid "Email"
+msgstr "Email"
+
+#: templates/yabase/webapp.html:442
+#: templates/yabase/app/login/login.mustache:23
+#: templates/yabase/app/signup/signup.mustache:24
+msgid "Password"
+msgstr "Mot de passe"
+
 #: templates/yabase/webapp.html:466
 #: templates/yabase/app/mobileCenterMenu.html:24
-#: templates/yabase/app/track.mustache:50
+#: templates/yabase/app/track.mustache:53
 #: templates/yabase/app/radio/radio.mustache:42
 msgid "Share"
 msgstr "Partager"
@@ -986,6 +934,51 @@ msgstr "Non merci"
 #: templates/yabase/app/settings/settingsPage.mustache:98
 msgid "Yes i want"
 msgstr "Oui je le veux"
+
+#: templates/yabase/webapp.html:499
+msgid "Connection error"
+msgstr "Erreur de connexion"
+
+#: templates/yabase/webapp.html:502
+msgid "Unable to connect Yasound server right now."
+msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
+
+#: templates/yabase/webapp.html:506 templates/yabase/webapp.html.py:521
+#: templates/yabase/app/radio/radioPage.mustache:79
+msgid "Dismiss"
+msgstr "Fermer"
+
+#: templates/yabase/webapp.html:507
+msgid "Reload page"
+msgstr "Recharger la page"
+
+#: templates/yabase/webapp.html:514
+msgid "You are not logged in"
+msgstr "Vous n'êtes pas authentifié"
+
+#: templates/yabase/webapp.html:517
+msgid "You have to login to access the requested resource."
+msgstr "Vous devez être authentifié pour accéder à cette ressource."
+
+#: templates/yabase/webapp.html:522
+msgid "Go to login page"
+msgstr "Aller à la page de login"
+
+#: templates/yabase/app/footer.html:7
+msgid "Legal informations"
+msgstr "Mentions légales"
+
+#: templates/yabase/app/footer.html:27
+msgid "Connected users"
+msgstr "Utilisateurs connectés"
+
+#: templates/yabase/app/footer.html:34
+msgid "See all"
+msgstr "Tous les voir"
+
+#: templates/yabase/app/footer.html:43
+msgid "minutes of music have been played"
+msgstr "minutes de musique ont été écoutées"
 
 #: templates/yabase/app/landing.html:2
 msgid "You are not authenticated"
@@ -1071,6 +1064,11 @@ msgstr "Paramètres"
 msgid "Show more"
 msgstr "Charger plus"
 
+#: templates/yabase/app/searchPage.mustache:5
+#, fuzzy
+msgid "No result found"
+msgstr "Aucune vérification trouvée"
+
 #: templates/yabase/app/track.mustache:14
 msgid "Go to radio"
 msgstr "Aller sur la radio"
@@ -1079,7 +1077,7 @@ msgstr "Aller sur la radio"
 msgid "Favorite"
 msgstr "Favoris"
 
-#: templates/yabase/app/track.mustache:56
+#: templates/yabase/app/track.mustache:59
 #: templates/yabase/app/radio/radio.mustache:58
 msgid "Like song"
 msgstr "J'aime le morceau"
@@ -1552,12 +1550,12 @@ msgid "You are currently logged as"
 msgstr "Vous êtes actuellement connecté sous"
 
 #: templates/yabase/app/signup/signup.mustache:55
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
 "        <p class='lead'>\n"
-"            <a href='%(logout_url)s/?next=/app/signup/'>Logout</a> to switch "
-"user.\n"
+"            <a href='%(logout_url)s/?next=%(root)ssignup/'>Logout</a> to "
+"switch user.\n"
 "        </p>\n"
 "        "
 msgstr ""

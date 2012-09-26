@@ -65,6 +65,10 @@ body {
     float:right;
 }
 
+.empty {
+    font-size: 18px;
+}
+
 /**
  * Header
  */
