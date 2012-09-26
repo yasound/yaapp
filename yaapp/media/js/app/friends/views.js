@@ -61,7 +61,8 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Friends({}),
 
     events: {
-        'click #login-btn': 'onLogin'
+        'click #login-btn': 'onLogin',
+        'click #invite-facebook': 'onInviteFacebook'
     },
 
     initialize: function() {
@@ -104,6 +105,15 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         e.preventDefault();
         Yasound.App.Router.navigate("login/", {
             trigger: true
+        });
+    },
+
+    onInviteFacebook: function (e) {
+        e.preventDefault();
+        FB.ui({
+            method: 'apprequests',
+            display: 'popup',
+            message: gettext('Invite your friends on Yasound')
         });
     }
 });
