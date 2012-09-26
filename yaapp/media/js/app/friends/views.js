@@ -113,7 +113,14 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         FB.ui({
             method: 'apprequests',
             display: 'popup',
-            message: gettext('Invite your friends on Yasound')
+            message: gettext('Join me on Yasound and let\'s share music'),
+            picture: g_facebook_share_picture
+        }, function(response) {
+            if(response && response.hasOwnProperty('to')) {
+                for(i = 0; i < response.to.length; i++) {
+                    console.log("" + i + " ID: " + response.to[i]);
+                }
+            }
         });
     }
 });
