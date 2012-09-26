@@ -145,6 +145,7 @@ $(document).ready(function () {
             "gifts/": "gifts",
             "legal/": "legal",
             "contact/": "contact",
+            "about/": "about",
             "*args": "index"
         },
         initialize: function() {
@@ -439,6 +440,10 @@ $(document).ready(function () {
 
         contact: function () {
             return this.static('contact');
+        },
+
+        about: function () {
+            return this.static('about');
         },
 
         static: function(page) {

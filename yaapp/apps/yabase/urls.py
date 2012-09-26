@@ -18,13 +18,15 @@ urlpatterns = patterns('yabase.views',
     url(r'^app/radio/(?P<radio_uuid>\w+)/programming/$', WebAppView.as_view(),  {'page': 'programming'}, name='webapp_default_programming'),
     url(r'^app/radio/(?P<radio_uuid>\w+)/edit/$', WebAppView.as_view(),  {'page': 'edit_radio'}, name='webapp_default_edit_radio'),
     url(r'^app/radio/(?P<radio_uuid>\w+)/listeners/$', WebAppView.as_view(),  {'page': 'listeners'}, name='webapp_default_listeners'),
-    url(r'^app/legal/$', WebAppView.as_view(), {'page': 'legal'}, name='webapp_default_legal'),
-    url(r'^app/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_default_contact'),
     url(r'^app/signup/$', WebAppView.as_view(), {'page': 'signup'}, name='webapp_default_signup'),
     url(r'^app/login/$', WebAppView.as_view(), {'page': 'login'}, name='webapp_default_login'),
     url(r'^app/users/$', WebAppView.as_view(), {'page': 'users'}, name='webapp_default_users'),
     url(r'^app/gifts/$', WebAppView.as_view(), {'page': 'gifts'}, name='webapp_default_gifts'),
     url(r'^app/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_default_profile'),
+
+    url(r'^app/legal/$', WebAppView.as_view(), {'page': 'legal'}, name='webapp_default_legal'),
+    url(r'^app/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_default_contact'),
+    url(r'^app/about/$', WebAppView.as_view(), {'page': 'abount'}, name='webapp_default_about'),
 
     url(r'^tpl/(?P<template_name>\S+)/$', 'load_template'),
 
@@ -43,15 +45,17 @@ urlpatterns = patterns('yabase.views',
     url(r'^(?P<app_name>\w+)/radio/(?P<radio_uuid>\w+)/programming/$', WebAppView.as_view(),  {'page': 'programming'}, name='webapp_programming'),
     url(r'^(?P<app_name>\w+)/radio/(?P<radio_uuid>\w+)/edit/$', WebAppView.as_view(),  {'page': 'edit_radio'}, name='webapp_edit_radio'),
     url(r'^(?P<app_name>\w+)/radio/(?P<radio_uuid>\w+)/listeners/$', WebAppView.as_view(),  {'page': 'listeners'}, name='webapp_listeners'),
-    url(r'^(?P<app_name>\w+)/legal/$', WebAppView.as_view(), {'page': 'legal'}, name='webapp_legal'),
-    url(r'^(?P<app_name>\w+)/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_contact'),
     url(r'^(?P<app_name>\w+)/signup/$', WebAppView.as_view(), {'page': 'signup'}, name='webapp_signup'),
     url(r'^(?P<app_name>\w+)/login/$', WebAppView.as_view(), {'page': 'login'}, name='webapp_login'),
     url(r'^(?P<app_name>\w+)/users/$', WebAppView.as_view(), {'page': 'users'}, name='webapp_users'),
     url(r'^(?P<app_name>\w+)/gifts/$', WebAppView.as_view(), {'page': 'gifts'}, name='webapp_gifts'),
     url(r'^(?P<app_name>\w+)/profile/(?P<user_id>\S+)/$', WebAppView.as_view(), {'page': 'profile'}, name='webapp_profile'),
 
-    url(r'^(?P<app_name>\w+)/tpl/(?P<template_name>\S+)/$', 'load_template'),
 
+    url(r'^(?P<app_name>\w+)/legal/$', WebAppView.as_view(), {'page': 'legal'}, name='webapp_legal'),
+    url(r'^(?P<app_name>\w+)/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_contact'),
+    url(r'^(?P<app_name>\w+)/about/$', WebAppView.as_view(), {'page': 'about'}, name='webapp_about'),
+
+    url(r'^(?P<app_name>\w+)/tpl/(?P<template_name>\S+)/$', 'load_template'),
     url(r'^(?P<app_name>\w+)/logout/$', 'logout'),
 )
