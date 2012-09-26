@@ -215,6 +215,11 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/radio_recommendations/$', 'yabase.views.radio_recommendations'),
 
+    # friends invitation
+    url(r'^api/v1/invite_ios_contacts/$', 'account.views.invite_ios_contacts'),
+    url(r'^api/v1/invite_facebook_friends/$', 'account.views.invite_facebook_friends'),
+    url(r'^api/v1/invite_twitter_friends/$', 'account.views.invite_twitter_friends'),
+
     # web front end
     url(r'^$', 'yaweb.views.index', name='index'),
 
