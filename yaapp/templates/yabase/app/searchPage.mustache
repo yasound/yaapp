@@ -1,4 +1,8 @@
+{% load i18n %}
 <div class='span12'>
-    <ul id='results' class='radio-cells'></ul>
+    <ul id='results' class='radio-cells'>
+        <img class='loading-mask' src='/media/images/loading.gif'/>
+        <div class='empty' style='display:none'>{% trans "No result found" %}</div>
+    </ul>
     <div id='pagination'></div>
 </div>

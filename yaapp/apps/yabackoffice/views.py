@@ -896,7 +896,7 @@ def songmetadata_export_most_popular(request):
         raise Http404
 
     mm = MostPopularSongsManager()
-    qs = mm.all(start=0, limit=10534)
+    qs = mm.all(start=0, limit=16000)
     data = export_pur(qs)
 
     response = HttpResponse(data, mimetype='application/vnd.ms-excel')

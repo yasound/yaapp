@@ -65,6 +65,10 @@ body {
     float:right;
 }
 
+.empty {
+    font-size: 18px;
+}
+
 /**
  * Header
  */
@@ -3434,6 +3438,28 @@ ul .radio-with-stats-cells li {
     font-weight:bold;
     margin:55px 0px;
 }
+
+.invite {
+    margin-top:64px;
+    margin-left:45px;
+}
+
+.invite ul {
+    list-style: none;
+    margin-left:0;
+}
+
+.invite ul li {
+    margin-left:0;
+}
+
+#invite-facebook {
+    font-size:14px;
+    background: url(../app/images/friends/friend-facebook.png) 0 50% no-repeat;
+    padding:32px;
+    padding-left:40px;
+}
+
 
 /**
  * Gift
