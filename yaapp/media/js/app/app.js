@@ -146,6 +146,7 @@ $(document).ready(function () {
             "legal/": "legal",
             "contact/": "contact",
             "about/": "about",
+            "jobs/": "jobs",
             "*args": "index"
         },
         initialize: function() {
@@ -440,6 +441,10 @@ $(document).ready(function () {
 
         contact: function () {
             return this.static('contact');
+        },
+
+        jobs: function () {
+            return this.static('jobs');
         },
 
         about: function () {
