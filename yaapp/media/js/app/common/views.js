@@ -332,6 +332,18 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         return share;
     },
 
+    radioUrl: function () {
+        if (!this.radio) {
+            return '';
+        }
+
+        var protocol = window.location.protocol;
+        var host = window.location.host;
+
+        var url =  protocol + '//' + host + Yasound.App.root + 'radio/' + this.radio.get('uuid');
+        return url;
+    },
+
     generateFacebookText: function () {
         return this.generateTwitterText();
     },
@@ -341,7 +353,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#tw_share').hide();
         } else {
             var twitterParams = {
-                url: '' + window.location,
+                url: this.radioUrl(),
                 text: this.generateTwitterText(),
                 hashtags: 'yasound'
             };
@@ -948,6 +960,6 @@ Yasound.Views.SubMenu = Backbone.View.extend({
                 });
             }
         }
-    },
+    }
 
 });
