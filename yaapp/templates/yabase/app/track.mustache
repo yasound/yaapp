@@ -17,11 +17,13 @@
     <a id="favorite-radio" class='is-not-favorite yatooltip' href="#">
             <span class="yatoolelt">{% trans "Favorite" %}</span>
     </a>
+    {% ifnotequal app_name 'deezer' %}
     <a id="play-btn">
         <i class="icon-play"></i>
     </a>
-
+    {% endifnotequal %}
 <div id="sound-level">
+    {% ifnotequal app_name 'deezer' %}
     <div id="min-level">
         <img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
     </div>
@@ -42,6 +44,7 @@
     <div class="responsive-volume-btn">
         <img src="/media/app/images/responsive-higher-volume.png">
     </div>
+    {% endifnotequal %}
 </div>
 
 
