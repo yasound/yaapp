@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# yascheduler app
+
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/bin:/usr/bin
+
+
+
+# source function library
+. /lib/lsb/init-functions
+
+test -x $DAEMON || exit 0
+
+
+DAEMON=/usr/bin/python
+ARGS="/var/www/scheduler.yasound.com/root/yascheduler/run.py"
+NAME="yascheduler"
+USER=customer
+ENV="dev"
+
+PID="/tmp/yascheduler.pid"
+
+whoami=$(whoami)
+
+if ! [ ${UID} -eq 0 -o "x${whoami}" = "xcustomer" ];then
+  echo "error id"
+  exit 2
+fi
+
+export DJANGO_MODE=${ENV}
+
+case "$1" in
+  start)
+    echo "Starting server"
+    /sbin/start-stop-daemon --start --pidfile $PID \
+        --user ${USER} --group ${USER} \
+        -b --make-pidfile \
+        --chuid customer \
+        --exec $DAEMON $ARGS
+    if [ ${UID} -eq 0  ];then
+       chown customer: $PID
+    else
+       ${CMD}
+    fi
+    ;;
+  stop)
+    echo "Stopping server"
+    /sbin/start-stop-daemon --stop --pidfile $PID --verbose
+    ;;
+  *)
+    echo "Usage: /etc/init.d/${NAME} {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
