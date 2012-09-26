@@ -19,11 +19,13 @@ def export_pur(songs):
     headerBG = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;')     
     ws.write(line, col+0, _('Name'), headerBG)
     ws.write(line, col+1, _('Artist'), headerBG)
+    ws.write(line, col+2, _('Album'), headerBG)
 
     line, col = 1, 0
     for item in songs:
         name = item.get('name')
         artist = item.get('artist')
+        album = item.get('album')
         if len(artist) <= 0:
             continue
         if 'piste' in artist.lower():
@@ -33,6 +35,7 @@ def export_pur(songs):
 
         ws.write(line, col+0, name)
         ws.write(line, col+1, artist)
+        ws.write(line, col+2, album)
 
         line = line+1
 
