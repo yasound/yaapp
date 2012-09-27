@@ -112,6 +112,7 @@ def radio_recommendations(request):
     skip = int(request.GET.get('skip', 0))
     genre = request.GET.get('genre', None)
     recommendation_token = request.GET.get('token', None)
+    logger.info('reco token: %s' % recommendation_token)
     # check if artist list is provided
     artist_data_file = None
     if request.method == 'POST':
@@ -157,6 +158,7 @@ def radio_recommendations(request):
             # 3 - cache recommendations
             cache_manager = RadioRecommendationsCache()
             recommendation_token = cache_manager.save_recommendations(recommendations)
+            logger.info('reco saved,  token: %s' % recommendation_token)
 
     if recommendations is None:
         recommendations = []  # no recommendations
@@ -237,6 +239,7 @@ def radio_recommendations(request):
     params_string = urllib.urlencode(params)
     next_url = reverse("yabase.views.radio_recommendations")
     next_url += '?%s' % params_string
+    logger.info('reco next url: %s' % next_url)
     response = api_response(radio_data, limit=limit, offset=skip, next_url=next_url)
     return response
 
