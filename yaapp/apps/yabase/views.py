@@ -112,6 +112,7 @@ def radio_recommendations(request):
     skip = int(request.GET.get('skip', 0))
     genre = request.GET.get('genre', None)
     recommendation_token = request.GET.get('token', None)
+    logger.info('radio_recommendations  skip=%d, limit=%d, genre=%s, token=%s' % (skip, limit, genre, token))
     # check if artist list is provided
     artist_data_file = None
     if request.method == 'POST':
@@ -177,11 +178,15 @@ def radio_recommendations(request):
     shuffle(selection_radios)
     selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
     selection_radios = selection_radios[:selection_radios_count]
+    selection_radios_ids = [x.id for x in selection_radios]
 
     radio_data = []
     # results: first part
+    s = 0
     for r in selection_radios[skip:(skip + limit)]:
         radio_data.append(r.as_dict(request_user=request.user))
+        s += 1
+    logger.info('%d radios from selection' % s)
 
     # results: second part
     reco_skip = max(0, skip - selection_radios_count)
@@ -201,23 +206,27 @@ def radio_recommendations(request):
             except Radio.DoesNotExist:
                 continue
 
+            id_ok = r.id not in selection_radios_ids
             genre_ok = genre is None or genre == r.genre  # get radio with the right genre
             creator_ok = r.creator != request_user
             favorite_ok = r.id not in favorite_radio_ids
-            if genre_ok and creator_ok and favorite_ok:
+            if id_ok and genre_ok and creator_ok and favorite_ok:
                 recommended_radios.append(r)
                 counter += 1
             if counter > (reco_skip + reco_limit):
                 break
 
+    r = 0
     for radio in recommended_radios[reco_skip:(reco_skip + reco_limit)]:
         radio_data.append(radio.as_dict(request_user=request.user))
+        r += 1
+    logger.info('%d radios from recommendation' % r)
 
     if len(radio_data) < limit:
-        selection_radios_ids = [r.id for r in selection_radios]
         exclude_ids = selection_radios_ids + recommendations
         need_more = limit - len(radio_data)
         need_more_offset = max(0, skip - len(exclude_ids))
+        logger.info('not enough radios in selection and recommendations => add %d popular radios' % need_more)
         qs = Radio.objects
         if genre is not None:
             qs = qs.filter(genre=genre)
@@ -226,8 +235,13 @@ def radio_recommendations(request):
             # and the radios he has put in his favorites
             qs = qs.exclude(creator=request.user).exclude(radiouser__user=request.user, radiouser__favorite=True)
         extra_radios = qs.exclude(id__in=exclude_ids).order_by('-popularity_score', '-favorites')[need_more_offset:(need_more_offset + need_more)]
+        e = 0
         for r in extra_radios:
             radio_data.append(r.as_dict(request_user=request.user))
+            e += 1
+        logger.info('%d extra radios' % e)
+
+    logger.info('%d total radios' % len(radio_data))
 
     params = {'skip': skip + limit}
     if recommendation_token is not None:
