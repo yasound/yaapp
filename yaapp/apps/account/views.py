@@ -685,7 +685,11 @@ def check_streamer_auth_token(request, token):
     key = 'token-%s' % (token)
     user_id = cache.get(key)
     cache.delete(key)  # the token can be used only once
-    response = {'user_id': user_id}
+    user = User.objects.get(id=user_id)
+    response = {
+                'user_id': user_id,
+                'hd_enabled': user.userprofile.hd_enabled
+                }
     response_data = json.dumps(response)
     return HttpResponse(response_data)
 
