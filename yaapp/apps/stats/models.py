@@ -6,12 +6,12 @@ class RadioListeningStatManager(models.Manager):
     def daily_stats(self, radio, nb_days=30):
         ref = datetime.now() - timedelta(days=nb_days)
         original_stats = self.filter(date__gt=ref, radio=radio).order_by('date')
-        
+
         results = []
         # create RadioListeningStat for each day, but DON'T SAVE IT !!! it must not be added in the database
         date = None
         daily_stat = None
-        for hourly_stat in original_stats: 
+        for hourly_stat in original_stats:
             if not date or date.date() != hourly_stat.date.date():
                 date = hourly_stat.date
                 date = date.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -28,8 +28,8 @@ class RadioListeningStatManager(models.Manager):
                 daily_stat.likes = hourly_stat.likes
                 daily_stat.dislikes = hourly_stat.dislikes
         return results
-    
-    
+
+
 class RadioListeningStat(models.Model):
     objects = RadioListeningStatManager()
     radio = models.ForeignKey('yabase.Radio')
@@ -40,15 +40,16 @@ class RadioListeningStat(models.Model):
     favorites = models.IntegerField()
     likes = models.IntegerField()
     dislikes = models.IntegerField()
-    
+
     def __unicode__(self):
         return 'stat for %s' % self.radio
-    
+
     def as_dict(self):
         data = {
             'id': self.id,
             'date': self.date,
             'overall_listening_time': self.overall_listening_time,
+            'overall_listening_time_minutes': self.overall_listening_time / 60.0,
             'audience_peak': self.audience_peak,
             'connections': self.connections,
             'favorites': self.favorites,
@@ -56,4 +57,3 @@ class RadioListeningStat(models.Model):
             'dislikes': self.dislikes,
         }
         return data
-        
