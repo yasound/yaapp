@@ -444,6 +444,7 @@ class TestImportPlaylist(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
         erase_index()
@@ -629,6 +630,7 @@ class TestImport(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user
+        Radio.objects.create(creator=user)
 
         try:
             os.remove('./apps/yabase/fixtures/mp3/d.mp3')
@@ -1119,6 +1121,7 @@ class TestRadioDeleted(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
 
@@ -1205,6 +1208,7 @@ class TestSongInstanceDeleted(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
 
@@ -1279,6 +1283,7 @@ class TestWallPost(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
         self.key = ApiKey.objects.get(user=self.user).key
@@ -1379,6 +1384,7 @@ class TestDuplicate(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
         self.key = ApiKey.objects.get(user=self.user).key
@@ -1413,6 +1419,7 @@ class TestBroadcastMessage(TestCase):
         user.save()
         self.client.login(username="broadcast", password="test")
         self.user = user
+        Radio.objects.create(creator=user)
 
     def test_broadcast_not_owner(self):
         other_radio = Radio.objects.create(name='other')
@@ -1429,6 +1436,7 @@ class TestTags(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
 
@@ -1664,7 +1672,7 @@ class TestProgramming(TestCase):
         self.user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         self.user.set_password('test')
         self.user.save()
-
+        Radio.objects.create(creator=self.user)
         self.client.login(username="test", password="test")
 
         self.radio = Radio.objects.radio_for_user(self.user)
@@ -1838,6 +1846,7 @@ class TestMyRadios(TestCase):
         self.user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=False)
         self.user.set_password('test')
         self.user.save()
+        Radio.objects.create(creator=self.user)
 
         self.client.login(username="test", password="test")
 
