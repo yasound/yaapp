@@ -23,7 +23,6 @@ import datetime
 import json
 import logging
 import math
-import math
 import settings as account_settings
 import signals as account_signals
 import tweepy
@@ -1351,11 +1350,6 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         _profile, _created = UserProfile.objects.get_or_create(user=instance)
 
-def create_radio(sender, instance, created, **kwargs):
-    if created:
-        radio, created = Radio.objects.get_or_create(creator=instance)
-        radio.save()
-
 
 def create_ml_contact(sender, instance, created, **kwargs):
     if created:
@@ -1577,8 +1571,6 @@ def install_handlers():
     post_save.connect(create_user_profile, sender=EmailUser)
     post_save.connect(create_api_key, sender=User)
     post_save.connect(create_api_key, sender=EmailUser)
-    post_save.connect(create_radio, sender=User)
-    post_save.connect(create_radio, sender=EmailUser)
     post_save.connect(create_ml_contact, sender=UserProfile)
     post_save.connect(new_radio_created, sender=Radio)
     pre_delete.connect(user_profile_deleted, sender=UserProfile)
