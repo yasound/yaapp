@@ -112,7 +112,7 @@ def radio_recommendations(request):
     skip = int(request.GET.get('skip', 0))
     genre = request.GET.get('genre', None)
     recommendation_token = request.GET.get('token', None)
-    logger.info('radio_recommendations  skip=%d, limit=%d, genre=%s, token=%s' % (skip, limit, genre, token))
+    logger.info('radio_recommendations  skip=%d, limit=%d, genre=%s, token=%s' % (skip, limit, genre, recommendation_token))
     # check if artist list is provided
     artist_data_file = None
     if request.method == 'POST':
