@@ -111,7 +111,7 @@ def radio_recommendations(request):
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
     genre = request.GET.get('genre', None)
-    recommendation_token = request.GET.get('recommendation_token', None)
+    recommendation_token = request.GET.get('token', None)
     # check if artist list is provided
     artist_data_file = None
     if request.method == 'POST':
@@ -191,10 +191,7 @@ def radio_recommendations(request):
     favorite_radio_ids = []
     if request.user is not None and request.user.is_authenticated():
         request_user = request.user
-        print 'favorite A'
         favorite_radio_ids = Radio.objects.filter(radiouser__user=request_user, radiouser__favorite=True).values_list('id', flat=True)
-        print 'favorite B'
-        print favorite_radio_ids
 
     recommended_radios = []
     counter = 0

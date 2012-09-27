@@ -688,3 +688,58 @@ def check_streamer_auth_token(request, token):
     response = {'user_id': user_id}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
+
+@csrf_exempt
+@check_api_key(methods=['POST'], login_required=True)
+def invite_ios_contacts(request):
+    post_data = request.POST.keys()[0]
+    if post_data is None:
+        response = {'success': False, 'error': 'no emails provided'}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+    contacts = json.loads(post_data)
+    # contact['emails'] = ['joe@yasound.com', 'joe@gmail.com', 'joe@yahoo.com']
+    # contact['firstName'] = 'joe'
+    # contact['lastName'] = 'dalton'
+
+    #TODO: send invitation email to given contacts
+    response = {'success': True}
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+@csrf_exempt
+@check_api_key(methods=['POST'], login_required=True)
+def invite_facebook_friends(request):
+
+    if not request.user.userprofile.facebook_enabled:
+        response = {'success': False, 'error': 'userprofile has no facebook account associated'}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+
+    post_data = request.POST.keys()[0]
+    if post_data is None:
+        response = {'success': False, 'error': 'no facebook ids provided'}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+    facebook_user_ids = json.loads(post_data)
+    facebook_user_ids = [int(x) for x in facebook_user_ids]
+
+    #TODO: send message to selected facebook friends
+    response = {'success': True}
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+@csrf_exempt
+@check_api_key(methods=['POST'], login_required=True)
+def invite_twitter_friends(request):
+    if not request.user.userprofile.twitter_enabled:
+        response = {'success': False, 'error': 'userprofile has no twitter account associated'}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+
+    #TODO: post invitation message in user's twitter timeline
+    response = {'success': True}
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+
