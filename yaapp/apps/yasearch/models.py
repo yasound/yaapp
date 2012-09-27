@@ -228,22 +228,23 @@ class RadiosManager():
         song_dict = None
         if song_instance:
             song_description = song_instance.song_description(include_cover=False, info_from_yasound_db=True)
-            name_simplified = yasearch_utils.get_simplified_name(song_description.get('name'))
-            artist_simplified = yasearch_utils.get_simplified_name(song_description.get('artist'))
-            album_simplified = yasearch_utils.get_simplified_name(song_description.get('album'))
+            if song_description is not None:
+                name_simplified = yasearch_utils.get_simplified_name(song_description.get('name'))
+                artist_simplified = yasearch_utils.get_simplified_name(song_description.get('artist'))
+                album_simplified = yasearch_utils.get_simplified_name(song_description.get('album'))
 
-            song_all = []
-            if name_simplified:
-                song_all.extend(name_simplified.split(' '))
-            if artist_simplified:
-                song_all.extend(artist_simplified.split(' '))
-            if album_simplified:
-                song_all.extend(album_simplified.split(' '))
-            if len(song_all) > 0:
-                song_all = list(set(sorted(song_all)))
-                song_dict = {
-                    'all': song_all
-                }
+                song_all = []
+                if name_simplified:
+                    song_all.extend(name_simplified.split(' '))
+                if artist_simplified:
+                    song_all.extend(artist_simplified.split(' '))
+                if album_simplified:
+                    song_all.extend(album_simplified.split(' '))
+                if len(song_all) > 0:
+                    song_all = list(set(sorted(song_all)))
+                    song_dict = {
+                        'all': song_all
+                    }
 
 
         radio_doc = {
