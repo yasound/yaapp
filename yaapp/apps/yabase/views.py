@@ -1917,7 +1917,7 @@ def get_global_minutes():
         listening_time = 0
         for metric in metrics:
             if 'listening_time' in metric:
-                listening_time += float(metric['listening_time'])
+                listening_time += float(metric['listening_time']) / 60.0
         minutes = intcomma(int(listening_time)).replace(',', ' ')
         cache.set('public.stat.minutes', minutes, 60*5)
     return minutes
