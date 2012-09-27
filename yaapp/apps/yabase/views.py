@@ -112,7 +112,6 @@ def radio_recommendations(request):
     skip = int(request.GET.get('skip', 0))
     genre = request.GET.get('genre', None)
     recommendation_token = request.GET.get('token', None)
-    logger.debug('radio_recommendations  skip=%d, limit=%d, genre=%s, token=%s' % (skip, limit, genre, recommendation_token))
     # check if artist list is provided
     artist_data_file = None
     if request.method == 'POST':
@@ -186,7 +185,6 @@ def radio_recommendations(request):
     for r in selection_radios[skip:(skip + limit)]:
         radio_data.append(r.as_dict(request_user=request.user))
         s += 1
-    logger.debug('%d radios from selection' % s)
 
     # results: second part
     reco_skip = max(0, skip - selection_radios_count)
@@ -220,13 +218,11 @@ def radio_recommendations(request):
     for radio in recommended_radios[reco_skip:(reco_skip + reco_limit)]:
         radio_data.append(radio.as_dict(request_user=request.user))
         r += 1
-    logger.debug('%d radios from recommendation' % r)
 
     if len(radio_data) < limit:
         exclude_ids = selection_radios_ids + recommendations
         need_more = limit - len(radio_data)
         need_more_offset = max(0, skip - len(exclude_ids))
-        logger.debug('not enough radios in selection and recommendations => add %d popular radios' % need_more)
         qs = Radio.objects
         if genre is not None:
             qs = qs.filter(genre=genre)
@@ -239,9 +235,7 @@ def radio_recommendations(request):
         for r in extra_radios:
             radio_data.append(r.as_dict(request_user=request.user))
             e += 1
-        logger.debug('%d extra radios' % e)
 
-    logger.debug('%d total radios' % len(radio_data))
 
     params = {'skip': skip + limit}
     if recommendation_token is not None:
