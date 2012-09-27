@@ -72,6 +72,7 @@ class TestNotifications(TestCase):
 
             user = User(email="test@yasound.com", username="username", is_superuser=False, is_staff=False)
             user.save()
+            Radio.objects.create(creator=user)
 
             profile = user.get_profile()
             profile.name = 'username'

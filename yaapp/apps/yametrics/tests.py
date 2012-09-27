@@ -19,6 +19,7 @@ class TestGlobalMetricsManager(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
 
@@ -351,6 +352,7 @@ class TestRadioPopularityManager(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
 
@@ -558,6 +560,7 @@ class TestAbuseManager(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
+        Radio.objects.create(creator=user)
         self.client.login(username="test", password="test")
         self.user = user
 

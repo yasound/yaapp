@@ -162,9 +162,9 @@ class TestProfile(TestCase):
         self.assertTrue(profile1.permissions.create_radio)
 
         radios = Radio.objects.filter(creator=user1)
-        self.assertEquals(radios.count(), 1)
+        self.assertEquals(radios.count(), 0)
 
-        for i in range(0, settings.MAX_RADIO_PER_USER):
+        for i in range(0, settings.MAX_RADIO_PER_USER+1):
             Radio.objects.create(creator=user1)
 
         profile1 = UserProfile.objects.get(id=profile1.id)
@@ -473,7 +473,9 @@ class TestCurrentRadio(TestCase):
     def test_current_radio(self):
         user_profile = self.user.get_profile()
         owned_radio = user_profile.own_radio
-        self.assertEquals(owned_radio.id, 1)
+        self.assertIsNone(owned_radio)
+
+        owned_radio = Radio.objects.create(creator=self.user)
 
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio = owned_radio
