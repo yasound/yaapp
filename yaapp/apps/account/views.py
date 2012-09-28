@@ -31,7 +31,6 @@ import json
 import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
-from django.core.cache import cache
 import uuid
 
 logger = logging.getLogger("yaapp.account")
@@ -685,13 +684,18 @@ def check_streamer_auth_token(request, token):
     key = 'token-%s' % (token)
     user_id = cache.get(key)
     cache.delete(key)  # the token can be used only once
-    user = User.objects.get(id=user_id)
+
+    if user_id is None:
+        raise Http404
+
+    profile = get_object_or_404(UserProfile, user__id=user_id)
+
     response = {
-                'user_id': user_id,
-                'hd_enabled': user.userprofile.hd_enabled
-                }
+        'user_id': profile.user.id,
+        'hd_enabled': True if profile.permissions.hd else False
+    }
     response_data = json.dumps(response)
-    return HttpResponse(response_data)
+    return HttpResponse(response_data, mimetype='application/json')
 
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
