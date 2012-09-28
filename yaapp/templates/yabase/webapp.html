@@ -146,6 +146,7 @@ HTML, BODY { height: 100%; }
        var g_bootstrapped_data = {% if bdata %}{{ bdata|safe }}{% else %}undefined{% endif %};
        var g_default_radio_uuid = '{{ current_uuid }}';
        var g_sound_player = '{{ sound_player }}';
+       var g_show_welcome_popup = {% if show_welcome_popup %}true{% else %}false{% endif %};
     </script>
 
 
@@ -523,6 +524,21 @@ HTML, BODY { height: 100%; }
         <a href="#" class="btn btn-primary">{% trans "Go to login page" %}</a>
     </div>
 </div>
+
+<div class="modal hide fade" id="modal-what-next">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Welcome to Yasound" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Welcome to Yasound" %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>
+
 
 <div id='webapp-container'>
   {% include "yabase/app/mobileLeftMenu.html" %}
