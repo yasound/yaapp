@@ -1,16 +1,16 @@
 {% load i18n %}
 {% if request.user.is_authenticated %}
 <div class='row'>
+    <div class='span12 invite'>
+        <ul>
+            <li><a href='#' id='invite-facebook'>{% trans "Invite your facebook friends" %}</a></li>
+        </ul>
+    </div>
     <div class='span12'>
         <ul id='results'>
         <img class='loading-mask' src='/media/images/loading.gif'/>
         </ul>
         <div class='cell-pagination' id='pagination'></div>
-    </div>
-    <div class='span12 invite'>
-        <ul>
-            <li><a href='#' id='invite-facebook'>{% trans "Invite your facebook friends" %}</a></li>
-        </ul>
     </div>
 </div>
 {% else %}

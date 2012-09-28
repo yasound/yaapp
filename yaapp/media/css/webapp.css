@@ -3441,7 +3441,8 @@ ul .radio-with-stats-cells li {
 }
 
 .invite {
-    margin-top:64px;
+    margin-top:10px;
+    margin-bottom:64px;
     margin-left:45px;
 }
 
