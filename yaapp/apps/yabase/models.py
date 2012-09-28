@@ -841,6 +841,7 @@ class Radio(models.Model):
             'web_url': self.web_url,
             'genre': self.genre,
             'overall_listening_time': self.overall_listening_time,
+            'overall_listening_time_minutes': int(self.overall_listening_time / 60.0),
             'description': self.description,
             'genre':self.genre,
             'theme':self.theme,
