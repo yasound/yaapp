@@ -2580,6 +2580,7 @@ ul#notifications {
 	width:100%;
 	background-image:url('../app/images/profile/separation-line.png');
 	background-repeat:repeat-x;
+    clear:both;
 }
 
 #comments {

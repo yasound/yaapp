@@ -133,6 +133,7 @@ $(document).ready(function () {
             "profile/:username/": "profile",
             "profile/:username/favorites/": "userFavorites",
             "profile/:username/friends/": "userFriends",
+            "profile/:username/followers/": "userFollowers",
             "profile/:username/radios/": "userRadios",
             "settings/": "settings",
             "friends/": "myFriends",
@@ -365,6 +366,14 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.UserFriendsPage({
+                el: '#webapp-content'
+            }).render(username);
+        },
+
+        userFollowers: function (username) {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.UserFollowersPage({
                 el: '#webapp-content'
             }).render(username);
         },

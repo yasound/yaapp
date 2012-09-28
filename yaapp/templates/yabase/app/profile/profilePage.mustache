@@ -6,12 +6,12 @@
 
   <div class='user-radios span12 no-margin'>
     <button class='yabutton right' id='radios-btn'>{% trans 'All radios' %}</button>
-	<h2 class='zone-title'>{% trans "Radios" %}</h2> 
+	<h2 class='zone-title'>{% trans "Radios" %}</h2>
     <ul class='radio-cells' id='radios'>
     </ul>
   <div class='separation-line'></div>
   </div>
-  
+
   <div class='span12 no-margin' id='favorites-zone'>
     <button class='yabutton right' id='favorites-btn'>{% trans 'All favorites' %}</button>
     <h2 class='zone-title'>{% trans "Favorites" %}</h2>
@@ -20,10 +20,20 @@
   <div class='separation-line'></div>
   </div>
 
- <div class='span12 no-margin' id='friends-zone'>
-    <button class='yabutton right' id='friends-btn'>{% trans 'All friends' %}</button>
-    <h2 class='zone-title'>{% trans "Friends" %}</h2>
-    <ul class='' id='friends'>
+   <div class='span12 no-margin' id='friends-zone'>
+      <button class='yabutton right' id='friends-btn'>{% trans 'All people' %}</button>
+      <h2 class='zone-title'>{% trans "People you follow" %}</h2>
+      <ul class='' id='friends'>
+      </ul>
+     <div class='separation-line'></div>
+  </div>
+
+
+  <div class='span12 no-margin' id='followers-zone'>
+    <button class='yabutton right' id='followers-btn'>{% trans 'All people' %}</button>
+    <h2 class='zone-title'>{% trans "People following you" %}</h2>
+    <ul class='' id='followers'>
     </ul>
   </div>
+
 </div>
