@@ -49,7 +49,7 @@ class RadioListeningStat(models.Model):
             'id': self.id,
             'date': self.date,
             'overall_listening_time': self.overall_listening_time,
-            'overall_listening_time_minutes': self.overall_listening_time / 60.0,
+            'overall_listening_time_minutes': int(self.overall_listening_time / 60.0),
             'audience_peak': self.audience_peak,
             'connections': self.connections,
             'favorites': self.favorites,
