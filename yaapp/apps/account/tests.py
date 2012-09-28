@@ -713,3 +713,31 @@ class TestNotifications(TestCase):
         self.assertEquals(notifications.count(), 2)
 
 
+class TestWebPreferences(TestCase):
+    def setUp(self):
+        erase_index()
+        ua = UserAdditionalInfosManager()
+        ua.erase_informations()
+
+    def test_preferences(self):
+        user1 = User.objects.create(email="user1@yasound.com", username="user1")
+        profile1 = user1.get_profile()
+        preferences = profile1.web_preferences()
+        self.assertEquals(preferences, {})
+
+        profile1.set_web_preferences('pref1', True)
+        preferences = profile1.web_preferences()
+        self.assertEquals(len(preferences), 1)
+        self.assertTrue(preferences['pref1'])
+
+        profile1.set_web_preferences('pref1', False)
+        preferences = profile1.web_preferences()
+        self.assertEquals(len(preferences), 1)
+        self.assertFalse(preferences['pref1'])
+
+        profile1.set_web_preferences('pref2', 42)
+        preferences = profile1.web_preferences()
+        self.assertEquals(len(preferences), 2)
+        self.assertFalse(preferences['pref1'])
+        self.assertEquals(preferences[''], 42)
+

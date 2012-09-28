@@ -1345,6 +1345,19 @@ class UserProfile(models.Model):
         coords = latitude_longitude_to_coords(self.latitude, self.longitude, 'degrees')
         UserProfile.objects.filter(id=self.id).update(x_coord=coords[0], y_coord=coords[1], z_coord=coords[2])
 
+    def web_preferences(self):
+        ua = UserAdditionalInfosManager()
+        information = ua.information(self.user.id)
+        if information is None:
+            return {}
+        else:
+            return information.get('web_preferences')
+
+    def set_web_preferences(self, preference, value):
+        preferences = self.web_preferences()
+        preferences[preference] = value
+        ua = UserAdditionalInfosManager()
+        ua.add_information(self.user.id, 'web_preferences', preferences)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -1455,8 +1468,8 @@ class UserAdditionalInfosManager():
     def erase_informations(self):
         self.collection.drop()
 
-    def add_information(self, user_id, information):
-        self.collection.update({'db_id': user_id}, {'$set': information}, upsert=True, safe=True)
+    def add_information(self, user_id, information_key, data):
+        self.collection.update({'db_id': user_id}, {'$set': {information_key: data}}, upsert=True, safe=True)
 
     def remove_information(self, user_id, information_key):
         self.collection.update({'db_id': user_id}, {'$unset': {information_key: 1}}, upsert=True, safe=True)

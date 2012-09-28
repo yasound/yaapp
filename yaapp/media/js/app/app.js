@@ -17,6 +17,7 @@ $(document).ready(function () {
     Yasound.App.uploadCount = 0;
     Yasound.App.root = g_root;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
+    Yasound.App.showWelcomePopup = g_show_welcome_popup;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
@@ -231,6 +232,12 @@ $(document).ready(function () {
             }
             $('#webapp-container').append("<div class='container' id='webapp-content'/>");
             $('html, body').scrollTop(0);
+
+
+            if (Yasound.App.showWelcomePopup) {
+                $('#modal-what-next').modal('show');
+                Yasound.App.showWelcomePopup = false;
+            }
 
         },
 

@@ -1385,12 +1385,22 @@ class WebAppView(View):
         display_associate_twitter = False
 
 
+        show_welcome_popup = False
+
         if request.user.is_authenticated():
             user_profile = request.user.get_profile()
             if user_profile.own_radio:
                 user_uuid = user_profile.own_radio.uuid
             else:
                 user_uuid = None
+
+
+            if user_profile.web_preferences().get('hide_welcome_popup'):
+                show_welcome_popup = False
+            else:
+                show_welcome_popup = True
+
+            user_profile.set_web_preferences('hide_welcome_popup', True)
 
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
@@ -1465,6 +1475,7 @@ class WebAppView(View):
             'sound_player': sound_player,
             'root': root,
             'app_name': app_name,
+            'show_welcome_popup': show_welcome_popup
         }
 
         if hasattr(self, page):
@@ -1519,6 +1530,12 @@ class WebAppView(View):
             if radio_count > 0:
                 has_radios = True
 
+            if user_profile.web_preferences().get('hide_welcome_popup'):
+                show_welcome_popup = False
+            else:
+                show_welcome_popup = True
+
+            user_profile.set_web_preferences('hide_welcome_popup', True)
 
         import_itunes_form = ImportItunesForm()
 
@@ -1547,6 +1564,9 @@ class WebAppView(View):
         if app_name == 'deezer':
             sound_player = 'deezer'
 
+
+        show_welcome_popup = True
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1574,6 +1594,7 @@ class WebAppView(View):
             'sound_player': sound_player,
             'root': root,
             'app_name': app_name,
+            'show_welcome_popup': show_welcome_popup
         }
 
         if hasattr(self, page):
