@@ -98,6 +98,10 @@ Yasound.Player.SoundManager = function () {
                 });
             } else {
                 mgr.config.url = mgr.baseUrl;
+                if (!mgr.config.url) {
+                    return;
+                }
+
                 if ((typeof mgr.soundHandler === "undefined")) {
                     mgr.soundHandler = soundManager.createSound(mgr.config);
                 } else {
