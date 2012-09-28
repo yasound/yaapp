@@ -242,7 +242,8 @@ class SignupResource(ModelResource):
         user_profile.update_with_bundle(bundle, True)
 
         radio = Radio.objects.radio_for_user(user)
-        radio.create_name(user)
+        if radio is not None:
+            radio.create_name(user)
 
         return user_resource
 
@@ -397,7 +398,8 @@ class SocialAuthentication(Authentication):
                 request.user = user
 
                 radio = Radio.objects.radio_for_user(user)
-                radio.create_name(user)
+                if radio is not None:
+                    radio.create_name(user)
                 logger.info('facebook user created')
                 authenticated = True
         elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
@@ -448,7 +450,8 @@ class SocialAuthentication(Authentication):
                 request.user = user
 
                 radio = Radio.objects.radio_for_user(user)
-                radio.create_name(user)
+                if radio is not None:
+                    radio.create_name(user)
                 authenticated = True
         else:
             return False
