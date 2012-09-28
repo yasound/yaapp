@@ -739,5 +739,5 @@ class TestWebPreferences(TestCase):
         preferences = profile1.web_preferences()
         self.assertEquals(len(preferences), 2)
         self.assertFalse(preferences['pref1'])
-        self.assertEquals(preferences[''], 42)
+        self.assertEquals(preferences['pref2'], 42)
 
