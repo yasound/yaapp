@@ -502,14 +502,13 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         $.subscribe("/wall/posted", wallPosted);
 
 
-        if (Yasound.App.userAuthenticated) {
-            this.wallInputView = new Yasound.Views.WallInput({
-                model: this.model,
-                el: $('#webapp-wall-input', this.el)
-            });
-            this.wallInputView.radioUUID = this.model.get('uuid');
-            this.wallInputView.render();
-        }
+        this.wallInputView = new Yasound.Views.WallInput({
+            model: this.model,
+            el: $('#webapp-wall-input', this.el)
+        });
+        this.wallInputView.radioUUID = this.model.get('uuid');
+        this.wallInputView.render();
+
         this.radioView = new Yasound.Views.Radio({
             model: this.model,
             el: $('#webapp-radio', this.el)
