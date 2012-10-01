@@ -449,7 +449,7 @@ class RadioManager(models.Manager):
         self.all().update(computing_next_songs=False)
 
     def ready_objects(self):
-        return self.filter(ready=True, creator__isnull=False)
+        return self.filter(ready=True, creator__isnull=False, deleted=False)
 
     def most_actives(self):
         from yametrics.models import RadioMetricsManager
@@ -543,6 +543,7 @@ class Radio(models.Model):
     updated = models.DateTimeField(_('updated'), auto_now=True)
 
     ready = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
 
     name = models.CharField(_('name'), max_length=255)
     picture = models.ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
@@ -591,6 +592,11 @@ class Radio(models.Model):
             except:
                 return unicode(self.creator)
         return self.name
+
+    def delete(self):
+        self.deleted = True
+        self.save()
+        yabase_signals.radio_deleted.send(sender=self, radio=self)
 
     def save(self, *args, **kwargs):
         update_mongo = False

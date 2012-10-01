@@ -110,7 +110,7 @@ class RadioResource(ModelResource):
     large_picture = fields.CharField(attribute='large_picture_url', default=None, readonly=True)
 
     class Meta:
-        queryset = Radio.objects.filter(creator__isnull=False)
+        queryset = Radio.objects.filter(creator__isnull=False, deleted=False)
         resource_name = 'radio'
         fields = ['id', 'name', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
@@ -154,7 +154,7 @@ class PublicRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
 
     class Meta:
-        queryset = Radio.objects.filter(creator__isnull=False)
+        queryset = Radio.objects.filter(creator__isnull=False, deleted=False)
         resource_name = 'public_radio'
         fields = ['id', 'name', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites']
         include_resource_uri = False;

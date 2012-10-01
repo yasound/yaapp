@@ -519,9 +519,9 @@ class UserProfile(models.Model):
 
     def own_radios(self, only_ready_radios=True):
         if only_ready_radios:
-            radios = Radio.objects.filter(creator=self.user, ready=True)
+            radios = Radio.objects.filter(creator=self.user, ready=True, deleted=False)
         else:
-            radios = Radio.objects.filter(creator=self.user)
+            radios = Radio.objects.filter(creator=self.user, deleted=False)
         return radios
 
     @property
@@ -529,12 +529,12 @@ class UserProfile(models.Model):
         current = self.listened_radio
         if not current:
             current = self.connected_radio
-        return current
+        return current if current and current.deleted == False else None
 
     @property
     def listened_radio(self):
         try:
-            r =  RadioUser.objects.filter(user=self.user, listening=True, radio__ready=True)[:1][0].radio
+            r =  RadioUser.objects.filter(user=self.user, listening=True, radio__ready=True, radio__deleted=False)[:1][0].radio
             if not r.is_valid:
                 return None
             return r
@@ -544,7 +544,7 @@ class UserProfile(models.Model):
     @property
     def connected_radio(self):
         try:
-            r = RadioUser.objects.filter(user=self.user, connected=True, radio__ready=True)[:1][0].radio
+            r = RadioUser.objects.filter(user=self.user, connected=True, radio__ready=True, radio__deleted=False)[:1][0].radio
             if not r.is_valid:
                 return None
             return r
@@ -643,12 +643,12 @@ class UserProfile(models.Model):
         if include_own_current_radios:
             # own radio (the first one)
             own_radio = self.own_radio
-            if own_radio and own_radio.ready:
+            if own_radio and own_radio.ready and not own_radio.deleted:
                 data['own_radio'] = own_radio.as_dict(request_user=request_user)
 
             # current radio
             current_radio = self.current_radio
-            if current_radio and current_radio.ready:
+            if current_radio and current_radio.ready and not current_radio.deleted:
                 data['current_radio'] = current_radio.as_dict(request_user=request_user)
 
         if include_all_radios:

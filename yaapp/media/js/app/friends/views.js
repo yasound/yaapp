@@ -111,9 +111,18 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         });
 
 
+        var that = this;
         if (Yasound.App.userAuthenticated) {
-            this.collection.fetch();
-            this.followers.fetch();
+            this.collection.fetch({
+                success: function (collection, response) {
+                    $('#friends-count', that.el).html(collection.totalCount);
+                }
+            });
+            this.followers.fetch({
+                success: function (collection, response) {
+                    $('#followers-count', that.el).html(collection.totalCount);
+                }
+            });
         }
 
         return this;

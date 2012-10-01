@@ -144,8 +144,8 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
     },
 
     modelLoaded: function(model, response) {
-        $('#friends-count', this.el).html(this.model.get('friends_count'));
-        $('#followers-count', this.el).html(this.model.get('followers_count'));
+        $('.friends-count', this.el).html(this.model.get('friends_count'));
+        $('.followers-count', this.el).html(this.model.get('followers_count'));
 
         this.radios.setUsername(model.get('username')).fetch();
         this.favorites.setUsername(model.get('username')).fetch();

@@ -29,7 +29,7 @@ def async_add_radio(radio_id):
         radio = Radio.objects.get(id=radio_id)
     except:
         return
-    if not radio.ready:
+    if not radio.ready or radio.deleted:
         radio.remove_from_fuzzy_index()
     else:
         radio.build_fuzzy_index(upsert=True, insert=False)

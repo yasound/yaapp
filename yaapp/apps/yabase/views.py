@@ -1757,6 +1757,8 @@ def most_active_radios(request, internal=False):
         qs = Radio.objects.filter(genre=genre)
     else:
         qs = Radio.objects
+
+    qs = qs.exclude(deleted=True)
     radios = qs.order_by('-popularity_score', '-favorites')[skip:(skip + limit)]
     if internal:
         return radios
@@ -2074,7 +2076,7 @@ def my_radios(request, radio_uuid=None):
         if radio.creator != request.user:
             return HttpResponse(status=401)
 
-        Radio.objects.delete_radio(radio)
+        radio.delete()
         data = {
             'success': True
         }
