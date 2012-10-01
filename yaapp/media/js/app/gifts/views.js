@@ -98,3 +98,33 @@ Yasound.Views.GiftsPage = Backbone.View.extend({
         this.gifts.fetch();
     }
 });
+
+Yasound.Views.GiftsPopup = Backbone.View.extend({
+    events: {
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'refresh');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+    },
+
+    render: function() {
+        this.reset();
+        this.gifts = new Yasound.Data.Models.Gifts({});
+        this.giftsView = new Yasound.Views.Gifts({
+            collection: this.gifts,
+            el: $('#gifts', this.el)
+        });
+        return this;
+    },
+
+    refresh: function () {
+        this.giftsView.clear();
+        this.gifts.fetch();
+    }
+});
