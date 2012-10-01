@@ -41,12 +41,12 @@ $(document).ready(function () {
     if (Yasound.App.appName == 'deezer') {
         var height = 0;
         $(document).bind('DOMSubtreeModified', function() {
-            var newHeight = $('#yasound').parent().parent().height();
+            var newHeight = $(document).height();
             if(newHeight != height) {
                 height = newHeight;
                 console.log(height)
                 if (DZ && DZ.canvas) {
-                    DZ.canvas.setSize(newHeight);
+                    //DZ.canvas.setSize(newHeight);
                 }
             }
         });
