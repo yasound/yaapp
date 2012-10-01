@@ -82,6 +82,7 @@ class UserProfileGrid(grids.ModelGrid):
             'is_active': 'user__is_active',
             'date_joined': 'user__date_joined',
             'email': 'user__email',
+            'hd_enabled': 'permissions__hd__is_set',
     }
 
 

@@ -549,6 +549,18 @@ def users(request, user_id=None):
         elif action == 'enable':
             ids = request.REQUEST.getlist('users_id')
             User.objects.filter(userprofile__id__in=ids).update(is_active=True)
+        elif action == 'enable_hd':
+            ids = request.REQUEST.getlist('users_id')
+            profiles = UserProfile.objects.filter(id__in=ids)
+            for profile in profiles:
+                profile.permissions.hd = True
+                profile.save()
+        elif action == 'disable_hd':
+            ids = request.REQUEST.getlist('users_id')
+            profiles = UserProfile.objects.filter(id__in=ids)
+            for profile in profiles:
+                profile.permissions.hd = False
+                profile.save()
         elif action == 'export':
             ids = request.REQUEST.getlist('users_id')
             if len(ids) > 0 and len(ids[0]) > 0:

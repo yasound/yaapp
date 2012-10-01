@@ -3,13 +3,14 @@
 //------------------------------------------
 
 Yasound.Users.Data.UserStore = function() {
-	var fields = ['id', 
-	              'name', 
+	var fields = ['id',
+	              'name',
 	              'account_type',
 	              'user_id',
 	              'email',
 	              'is_active',
 	              'date_joined',
+                  'hd_enabled',
 	              'facebook_uid', {
 					name: 'last_authentication_date',
 					type: 'date',
@@ -37,7 +38,7 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "name"
-        }        	
+        }
     }, {
         header: gettext('Email'),
         dataIndex: 'email',
@@ -47,7 +48,7 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "email"
-        }           
+        }
     }, {
         header: gettext('Facebook UID'),
         dataIndex: 'facebook_uid',
@@ -57,7 +58,7 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "facebook_uid"
-        }        	
+        }
     }, {
         header: gettext('Join date'),
         dataIndex: 'date_joined',
@@ -95,11 +96,11 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
             return gettext('No');
         }
     }];
-	
+
 	if (sm) {
-		cm.splice(0, 0, sm); 
+		cm.splice(0, 0, sm);
 	}
-	
+
     return cm;
 };
 
@@ -124,13 +125,13 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
         this.pageSize = 25;
         this.store = Yasound.Users.Data.UserStore();
         this.store.pageSize = this.pageSize;
-        
+
     	var sm = new Ext.grid.CheckboxSelectionModel({
             singleSelect: this.singleSelect,
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);
 					}, this);
 					if (!sm.hasSelection()) {
 						this.grid.fireEvent('deselected', this.grid);
@@ -138,7 +139,7 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             }
         });
-    	
+
         var config = {
             tbar: this.tbar,
             bbar: new Ext.PagingToolbar({
@@ -147,7 +148,7 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
                 displayInfo: true,
                 displayMsg: gettext('Displaying {0} - {1} of {2}'),
                 emptyMsg: gettext("Nothing to display")
-            }),            
+            }),
             loadMask: false,
             sm: sm,
             cm: new Ext.grid.ColumnModel(Yasound.Users.UI.UserColumnModel(this.checkboxSelect ? sm : null)),
@@ -160,9 +161,11 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
                     var cls = '';
                     if (!data.is_active) {
                         cls = 'red';
+                    } else if (data.hd_enabled) {
+                        cls = 'green';
                     }
                     return cls;
-                }                
+                }
             }),
         	plugins: [Yasound.Users.UI.UserFilters(), new Ext.ux.grid.GridHeaderFilters()],
         	listeners: {
@@ -190,6 +193,6 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
 		this.getBottomToolbar().pageSize = gridRows;
 		this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
-    
+
 });
 Ext.reg('usergrid', Yasound.Users.UI.UserGrid);

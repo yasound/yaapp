@@ -3,6 +3,10 @@
     color: #FF0000;
 }
 
+.green td {
+    color: #00aa00;
+}
+
 .deleted td {
   text-decoration: line-through;
 }
