@@ -46,7 +46,7 @@ $(document).ready(function () {
                 height = newHeight;
                 console.log(height)
                 if (DZ && DZ.canvas) {
-                    DZ.canvas.setSize(newHeight);
+                    DZ.canvas.setSize(1024);
                 }
             }
         });
@@ -212,7 +212,6 @@ $(document).ready(function () {
         clearView: function (selectedMenu) {
             if (DZ && DZ.canvas) {
                 DZ.canvas.setSize(1024);
-                $(document).height(1024)
             }
 
             if (this.alreadyLoaded) {
