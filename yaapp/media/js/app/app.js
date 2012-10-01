@@ -18,6 +18,7 @@ $(document).ready(function () {
     Yasound.App.root = g_root;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
+    Yasound.App.hd = g_hd_enabled;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;

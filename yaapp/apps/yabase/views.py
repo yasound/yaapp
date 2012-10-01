@@ -1386,6 +1386,7 @@ class WebAppView(View):
 
 
         show_welcome_popup = False
+        hd_enabled = False
 
         if request.user.is_authenticated():
             user_profile = request.user.get_profile()
@@ -1394,6 +1395,7 @@ class WebAppView(View):
             else:
                 user_uuid = None
 
+            hd_enabled = user_profile.permissions.hd.is_set
 
             if user_profile.web_preferences().get('hide_welcome_popup'):
                 show_welcome_popup = False
@@ -1475,7 +1477,8 @@ class WebAppView(View):
             'sound_player': sound_player,
             'root': root,
             'app_name': app_name,
-            'show_welcome_popup': show_welcome_popup
+            'show_welcome_popup': show_welcome_popup,
+            'hd_enabled': hd_enabled,
         }
 
         if hasattr(self, page):
@@ -1515,7 +1518,7 @@ class WebAppView(View):
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = absolute_url(reverse('webapp', args=[self.app_name]))
 
-
+        hd_enabled = False
         if request.user.is_authenticated():
             if request.user.get_profile().own_radio:
                 user_uuid = request.user.get_profile().own_radio.uuid
@@ -1525,6 +1528,8 @@ class WebAppView(View):
             user_profile  = request.user.get_profile()
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
+
+            hd_enabled = user_profile.permissions.hd.is_set
 
             radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
             if radio_count > 0:
@@ -1594,7 +1599,8 @@ class WebAppView(View):
             'sound_player': sound_player,
             'root': root,
             'app_name': app_name,
-            'show_welcome_popup': show_welcome_popup
+            'show_welcome_popup': show_welcome_popup,
+            'hd_enabled': hd_enabled,
         }
 
         if hasattr(self, page):

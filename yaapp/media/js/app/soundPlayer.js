@@ -84,6 +84,9 @@ Yasound.Player.SoundManager = function () {
                     success: function(data) {
                         var token = data.token;
                         var fullURL = streamURL + '/?token=' + token;
+                        if (Yasound.App.hd) {
+                            fullURL = fullURL + '&hd=1';
+                        }
                         mgr.config.url = fullURL;
 
                         if ((typeof mgr.soundHandler === "undefined")) {
