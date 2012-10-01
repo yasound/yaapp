@@ -706,19 +706,22 @@ def get_streamer_auth_token(request):
 
 @check_api_key(methods=['GET'], login_required=False)
 def check_streamer_auth_token(request, token):
+    logger.info('check_streamer_auth_token called with token=%s' % (token))
     key = 'token-%s' % (token)
     user_id = cache.get(key)
     cache.delete(key)  # the token can be used only once
 
     if user_id is None:
+        logger.info('user_id is none')
         raise Http404
 
     profile = get_object_or_404(UserProfile, user__id=user_id)
-
     response = {
         'user_id': profile.user.id,
         'hd_enabled': True if profile.permissions.hd else False
     }
+    logger.info('found profile')
+    logger.info(response)
     response_data = json.dumps(response)
     return HttpResponse(response_data, mimetype='application/json')
 
