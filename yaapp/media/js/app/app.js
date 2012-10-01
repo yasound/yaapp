@@ -195,6 +195,8 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
+            console.log($(document).height());
+
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
                 Yasound.Utils.enableFX();
