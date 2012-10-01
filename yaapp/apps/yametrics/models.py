@@ -655,6 +655,14 @@ def radio_deleted_handler(sender, instance, created=None, **kwargs):
     rm = RadioMetricsManager()
     rm.remove_radio(radio.id)
 
+def radio_updated_handler(sender, instance, created=None, **kwargs):
+    radio = instance
+    if radio.deleted == True:
+        rp = RadioPopularityManager()
+        rp.remove_radio(radio.id)
+
+        rm = RadioMetricsManager()
+        rm.remove_radio(radio.id)
 
 def dislike_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_dislike', 1)
@@ -711,6 +719,7 @@ def install_handlers():
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
     signals.post_save.connect(new_radio_handler, sender=Radio)
+    signals.post_save.connect(radio_updated_handler, sender=Radio)
     signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
 
     yabase_signals.dislike_radio.connect(dislike_radio_handler)

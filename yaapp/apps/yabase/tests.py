@@ -243,6 +243,16 @@ class TestModels(TestCase):
         ru.save()
         self.assertTrue(radio.is_favorite(user))
 
+    def test_deleted(self):
+        radio = self.radio
+        self.assertIsNotNone(user.own_radio)
+
+        radio.delete()
+        radio.save()
+        self.assertIsNone(user.own_radio)
+
+
+
 class TestNextSong(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]
