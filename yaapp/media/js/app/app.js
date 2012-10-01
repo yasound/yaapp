@@ -18,6 +18,7 @@ $(document).ready(function () {
     Yasound.App.root = g_root;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
+    Yasound.App.hd = g_hd_enabled;
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
@@ -133,6 +134,7 @@ $(document).ready(function () {
             "profile/:username/": "profile",
             "profile/:username/favorites/": "userFavorites",
             "profile/:username/friends/": "userFriends",
+            "profile/:username/followers/": "userFollowers",
             "profile/:username/radios/": "userRadios",
             "settings/": "settings",
             "friends/": "myFriends",
@@ -365,6 +367,14 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.UserFriendsPage({
+                el: '#webapp-content'
+            }).render(username);
+        },
+
+        userFollowers: function (username) {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.UserFollowersPage({
                 el: '#webapp-content'
             }).render(username);
         },

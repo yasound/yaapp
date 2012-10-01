@@ -51,7 +51,7 @@ Yasound.App.ErrorHandler = Backbone.View.extend({
                 });
                 $('#modal-error-disconnected').modal('hide');
             });
-            this.enableErrorHandling = false;
+            this.enableErrorHandling = true;
         }
 
     },

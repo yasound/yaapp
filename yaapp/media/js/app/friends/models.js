@@ -11,3 +11,13 @@ Yasound.Data.Models.Friends = Yasound.Data.Paginator.extend({
         return this;
     }
 });
+
+Yasound.Data.Models.Followers = Yasound.Data.Paginator.extend({
+    model: Yasound.Data.Models.User,
+    url: '/api/v1/followers/',
+    setUsername: function (username) {
+        this.username = username;
+        this.url = '/api/v1/user/' + username + '/followers/';
+        return this;
+    }
+});

@@ -574,6 +574,31 @@ def user_friends(request, username):
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
 
+@check_api_key(methods=['GET'], login_required=False)
+def user_followers(request, username=None):
+    """
+    Simple view which returns the followers for given user.
+    The tastypie version only support id as user input
+    """
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+
+    if username:
+        user = get_object_or_404(User, username=username)
+    elif request.user.is_authenticated():
+        user = request.user
+    else:
+        raise Http404
+
+    qs = UserProfile.objects.filter(friends=user)
+    total_count = qs.count()
+    qs = qs[offset:offset+limit]
+    data = []
+    for user_profile in qs:
+        data.append(user_profile.as_dict(request_user=request.user))
+    response = api_response(data, total_count, limit=limit, offset=offset)
+    return response
+
 @csrf_exempt
 @check_api_key(methods=['DELETE', 'POST'], login_required=True)
 def user_friends_add_remove(request, username, friend):
@@ -587,9 +612,9 @@ def user_friends_add_remove(request, username, friend):
     if not profile:
         raise Http404
     if request.method == 'DELETE':
-        profile.friends.remove(friend)
+        profile.remove_friend(friend)
     elif request.method == 'POST':
-        profile.friends.add(friend)
+        profile.add_friend(friend)
 
     response = {'success':True}
     res = json.dumps(response)

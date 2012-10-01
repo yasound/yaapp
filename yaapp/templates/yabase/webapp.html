@@ -147,6 +147,7 @@ HTML, BODY { height: 100%; }
        var g_default_radio_uuid = '{{ current_uuid }}';
        var g_sound_player = '{{ sound_player }}';
        var g_show_welcome_popup = {% if show_welcome_popup %}true{% else %}false{% endif %};
+       var g_hd_enabled = {% if hd_enabled %}true{% else %}false{% endif %};
     </script>
 
 
@@ -230,6 +231,9 @@ HTML, BODY { height: 100%; }
    <script type='text/html' id='userFriendsPageTemplate'>
      {% include "yabase/app/friends/userFriendsPage.mustache" %}
    </script>
+   <script type='text/html' id='userFollowersPageTemplate'>
+     {% include "yabase/app/friends/userFollowersPage.mustache" %}
+   </script>
    <script type='text/html' id='userRadiosPageTemplate'>
      {% include "yabase/app/radio/userRadiosPage.mustache" %}
    </script>
@@ -246,10 +250,10 @@ HTML, BODY { height: 100%; }
      {% include "yabase/app/friends/friendsPage.mustache" %}
    </script>
 
-{% if request.user.is_authenticated %}
    <script type="text/html" id="wallInputTemplate">
       {% include "yabase/app/radio/wallInput.mustache" %}
    </script>
+{% if request.user.is_authenticated %}
 
    <script type="text/html" id="settingsPageTemplate">
       {% include "yabase/app/settings/settingsPage.mustache" %}

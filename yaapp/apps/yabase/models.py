@@ -846,6 +846,8 @@ class Radio(models.Model):
             'genre':self.genre,
             'theme':self.theme,
             'audience_peak': self.audience_peak,
+            'leaderboard_rank': self.leaderboard_rank,
+            'leaderboard_favorites': self.leaderboard_favorites,
             'created': self.created,
             'creator': self.creator.userprofile.as_dict(request_user=request_user),
         }

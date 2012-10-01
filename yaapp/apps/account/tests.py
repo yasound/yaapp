@@ -55,23 +55,19 @@ class TestProfile(TestCase):
         user.save()
         self.assertEqual(user.get_profile(), UserProfile.objects.get(id=1))
 
-        info = {
-            'connected_account' : ['deezer', 'soundclound']
-        }
+        info = ['deezer', 'soundclound']
 
         ua = UserAdditionalInfosManager()
-        ua.add_information(user.id, info)
+        ua.add_information(user.id, 'connected_account', info)
 
         doc = ua.information(user.id)
         self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
 
         info = {
-            'deezer': {
-                'token': 'token1',
-                'expiration': 'no-expiration'
-            }
+            'token': 'token1',
+            'expiration': 'no-expiration'
         }
-        ua.add_information(user.id, info)
+        ua.add_information(user.id, 'deezer', info)
 
         doc = ua.information(user.id)
         self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
@@ -99,13 +95,51 @@ class TestProfile(TestCase):
         self.assertFalse(profile1.can_give_personal_infos(user2))
         self.assertTrue(profile1.can_give_personal_infos(user1))
 
-        profile1.friends.add(user2)
+        profile1.add_friend(user2)
         self.assertFalse(profile1.can_give_personal_infos(user2))
 
         profile1.privacy = account_settings.PRIVACY_FRIENDS
         profile1.save()
 
         self.assertTrue(profile1.can_give_personal_infos(user2))
+
+
+    def test_friends(self):
+        user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
+        user2 = User.objects.create(email="user2@yasound.com", username="user2", is_superuser=False, is_staff=False)
+
+        profile1 = user1.get_profile()
+        profile2 = user2.get_profile()
+        self.assertEquals(profile1.friends_count, 0)
+        self.assertEquals(profile1.followers_count, 0)
+
+
+        profile2.add_friend(user1)
+
+        profile1 = UserProfile.objects.get(id=profile1.id)
+        profile2 = UserProfile.objects.get(id=profile2.id)
+
+        self.assertEquals(profile1.friends_count, 0)
+        self.assertEquals(profile1.followers_count, 1)
+        self.assertEquals(profile2.friends_count, 1)
+
+        profile2.remove_friend(user1)
+
+        profile1 = UserProfile.objects.get(id=profile1.id)
+        profile2 = UserProfile.objects.get(id=profile2.id)
+
+        self.assertEquals(profile1.friends_count, 0)
+        self.assertEquals(profile1.followers_count, 0)
+        self.assertEquals(profile2.friends_count, 0)
+
+        profile1.add_friend(user2)
+
+        profile1 = UserProfile.objects.get(id=profile1.id)
+        profile2 = UserProfile.objects.get(id=profile2.id)
+
+        self.assertEquals(profile1.friends_count, 1)
+        self.assertEquals(profile2.followers_count, 1)
+        self.assertEquals(profile2.friends_count, 0)
 
 
     def test_index_fuzzy(self):
@@ -683,7 +717,7 @@ class TestNotifications(TestCase):
         user1 = User.objects.create(email="user1@yasound.com", username="user1")
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
 
-        user1.get_profile().friends.add(user2)
+        user1.get_profile().add_friend(user2)
 
         user2.get_profile().my_friend_is_online(user1.get_profile())
 

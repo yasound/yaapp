@@ -84,6 +84,9 @@ Yasound.Player.SoundManager = function () {
                     success: function(data) {
                         var token = data.token;
                         var fullURL = streamURL + '/?token=' + token;
+                        if (Yasound.App.hd) {
+                            fullURL = fullURL + '&hd=1';
+                        }
                         mgr.config.url = fullURL;
 
                         if ((typeof mgr.soundHandler === "undefined")) {
@@ -98,6 +101,10 @@ Yasound.Player.SoundManager = function () {
                 });
             } else {
                 mgr.config.url = mgr.baseUrl;
+                if (!mgr.config.url) {
+                    return;
+                }
+
                 if ((typeof mgr.soundHandler === "undefined")) {
                     mgr.soundHandler = soundManager.createSound(mgr.config);
                 } else {

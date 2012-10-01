@@ -2483,6 +2483,27 @@ ul#notifications {
     margin-left:0;
 }
 
+
+.common-background {
+    max-width:940px;
+    background-color:white;
+    margin:0px 0px 25px 0px;
+    box-shadow:0px 0px 10px #e2e2e2;
+    border-radius:20px;
+    padding-bottom:27px;
+}
+
+.common-background .radio-cells {
+    margin-left:0;
+}
+
+.common-background h1 {
+    line-height:18px;
+    margin-left:22px;
+    margin-top:30px;
+    margin-bottom:30px;
+}
+
 #user-profile {
 	display:block;
 	position:relative;
@@ -2580,6 +2601,7 @@ ul#notifications {
 	width:100%;
 	background-image:url('../app/images/profile/separation-line.png');
 	background-repeat:repeat-x;
+    clear:both;
 }
 
 #comments {
@@ -3440,7 +3462,8 @@ ul .radio-with-stats-cells li {
 }
 
 .invite {
-    margin-top:64px;
+    margin-top:10px;
+    margin-bottom:64px;
     margin-left:45px;
 }
 
@@ -4247,6 +4270,10 @@ a.yabutton-small {
         height:30px;
     }
 
+    .common-background h1 {
+        height:30px;
+    }
+
     #favorites-zone {
         width:100%;
         float:left;
@@ -4666,6 +4693,11 @@ a.yabutton-small {
     }
 
     .profile-background {
+        float:left;
+        width:100%;
+    }
+
+    .common-background {
         float:left;
         width:100%;
     }
@@ -5368,6 +5400,10 @@ a.yabutton-small {
         height:30px;
     }
 
+    .common-bacground h1 {
+        height:30px;
+    }
+
     #favorites-zone {
         width:100%;
         height:100%;
@@ -5433,6 +5469,11 @@ a.yabutton-small {
 /*-- FRIENDS --*/
 
     .profile-background {
+        float:left;
+        width:100%;
+    }
+
+    .common-background {
         float:left;
         width:100%;
     }
