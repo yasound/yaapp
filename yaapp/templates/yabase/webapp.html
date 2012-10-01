@@ -103,7 +103,9 @@ HTML, BODY { height: 100%; }
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.toggle.buttons.js" type="text/javascript"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
+    <script src="/media/js/slimScroll.js" type="text/javascript"></script>
 {% endcompress %}
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.js"></script>
 
     {% ifequal sound_player 'soundmanager' %}
     <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>
@@ -548,15 +550,13 @@ HTML, BODY { height: 100%; }
         <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
     </div>
 </div>
-
-
+<div id='webapp-container-parent'>
 <div id='webapp-container'>
   {% include "yabase/app/mobileLeftMenu.html" %}
   {% include "yabase/app/mobileCenterMenu.html" %}
 
   {% block content%}{%endblock%}</div>
-
-
+</div>
 <div id='pre-footer'>&nbsp;</div>
 <div id='footer'>
   {% include "yabase/app/footer.html" %}
