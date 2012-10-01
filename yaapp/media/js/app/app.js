@@ -38,7 +38,13 @@ $(document).ready(function () {
         }
     }
 
+    Yasound.app.deezerUpdate = false;
+
     if (Yasound.App.appName == 'deezer') {
+        if (Yasound.app.deezerUpdate) {
+            Yasound.app.deezerUpdate = false;
+            return;
+        }
         var height = 0;
         $(document).bind('DOMSubtreeModified', function() {
             var newHeight = $(document).height();
@@ -46,7 +52,8 @@ $(document).ready(function () {
                 height = newHeight;
                 console.log(height)
                 if (DZ && DZ.canvas) {
-                    DZ.canvas.setSize(1024);
+                    Yasound.app.deezerUpdate = true;
+                    DZ.canvas.setSize(height);
                 }
             }
         });
@@ -211,6 +218,7 @@ $(document).ready(function () {
         // this function must be called between every routes
         clearView: function (selectedMenu) {
             if (DZ && DZ.canvas) {
+                Yasound.app.deezerUpdate = true;
                 DZ.canvas.setSize(1024);
             }
 
