@@ -223,7 +223,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/invite_twitter_friends/$', 'account.views.invite_twitter_friends'),
 
     # web front end
-    url(r'^$', 'yaweb.views.index', name='index'),
+    url(r'^$', 'yaweb.views.stay_tuned', name='stay_tuned'),
 
     # special case for iOS client
     url(r'^legal/eula.html$', 'yaweb.views.eula', name='eula'),

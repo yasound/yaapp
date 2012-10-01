@@ -27,6 +27,12 @@ def index(request, template_name='yaweb/index.html', template_name_mobile='yaweb
         'production_mode': settings.PRODUCTION_MODE
     }, context_instance=RequestContext(request))
 
+@csrf_exempt
+def stay_tuned(request, template_name='yaweb/stay_tuned.html'):
+    return render_to_response(template_name, {
+        'current_page': 'index',
+        'production_mode': settings.PRODUCTION_MODE
+    }, context_instance=RequestContext(request))
 
 def about(request, template_name='yaweb/about.html'):
     return render_to_response(template_name, {
