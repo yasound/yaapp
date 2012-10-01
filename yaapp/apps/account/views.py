@@ -612,9 +612,9 @@ def user_friends_add_remove(request, username, friend):
     if not profile:
         raise Http404
     if request.method == 'DELETE':
-        profile.friends.remove(friend)
+        profile.remove_friend(friend)
     elif request.method == 'POST':
-        profile.friends.add(friend)
+        profile.add_friend(friend)
 
     response = {'success':True}
     res = json.dumps(response)

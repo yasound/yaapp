@@ -253,6 +253,9 @@ class UserProfile(models.Model):
         default=(1)
     ) #defaut = YES (create_radio)
 
+    friends_count = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+
     @property
     def facebook_enabled(self):
         return account_settings.ACCOUNT_TYPE_FACEBOOK in self.account_type or \
@@ -813,6 +816,7 @@ class UserProfile(models.Model):
                 friend_profile = friend.userprofile
                 if friend_profile is not None:
                     friend_profile.friends.add(self.user)
+            self.update_friends_count(commit=False)
             self.save()
 
         if self.twitter_enabled:
@@ -823,9 +827,26 @@ class UserProfile(models.Model):
             friends = User.objects.filter(userprofile__twitter_uid__in=friends_ids)
             for friend in friends:
                 self.friends.add(friend)
+            self.update_friends_count(commit=False)
             self.save()
 
         return friend_count, yasound_friend_count
+
+    def add_friend(self, user):
+        self.friends.add(user)
+        self.update_friends_count()
+        try:
+            UserProfile.objects.get(user=user).update_friends_count()
+        except UserProfile.DoesNotExist:
+            pass
+
+    def remove_friend(self, user):
+        self.friends.remove(user)
+        self.update_friends_count()
+        try:
+            UserProfile.objects.get(user=user).update_friends_count()
+        except UserProfile.DoesNotExist:
+            pass
 
     def update_with_facebook_picture(self):
         if not self.facebook_enabled:
@@ -1358,6 +1379,12 @@ class UserProfile(models.Model):
         preferences[preference] = value
         ua = UserAdditionalInfosManager()
         ua.add_information(self.user.id, 'web_preferences', preferences)
+
+    def update_friends_count(self, commit=True):
+        self.friends_count = self.friends.count()
+        self.followers_count = UserProfile.objects.filter(friends=self.user).count()
+        if commit:
+            self.save()
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
