@@ -38,15 +38,16 @@ $(document).ready(function () {
         }
     }
 
-    if (Yasound.App.appName == 'deezer') {
+    if (Yasound.App.appName == 'app') {
         var height = 0;
         $(document).bind('DOMSubtreeModified', function() {
-            if($(this).height() != height) {
-                console.log($(this).height());
+            var newHeight = $('#yasound').parent().parent().height();
+            if(newHeight != height) {
+                height = newHeight;
+                console.log(height)
                 if (DZ && DZ.canvas) {
-                    DZ.canvas.setSize($(document).height());
+                    DZ.canvas.setSize(newHeight);
                 }
-                height = $(this).height();
             }
         });
     }
@@ -209,6 +210,10 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
+            if (DZ && DZ.canvas) {
+                DZ.canvas.setSize(1024);
+            }
+
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
                 Yasound.Utils.enableFX();
