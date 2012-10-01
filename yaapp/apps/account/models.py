@@ -610,7 +610,9 @@ class UserProfile(models.Model):
                 'large_picture': self.large_picture_url,
                 'name': self.name,
                 'username': self.user.username,
-                'bio_text': self.bio_text[:190] if self.bio_text is not None else None
+                'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
+                'friends_count': self.friends_count,
+                'followers_count': self.followers_count,
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
