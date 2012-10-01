@@ -38,6 +38,19 @@ $(document).ready(function () {
         }
     }
 
+    if (Yasound.App.appName == 'deezer') {
+        var height = 0;
+        $(document).bind('DOMSubtreeModified', function() {
+            if($(this).height() != height) {
+                console.log($(this).height());
+                if (DZ && DZ.canvas) {
+                    DZ.canvas.setSize($(document).height());
+                }
+                height = $(this).height();
+            }
+        });
+    }
+
     $.subscribe('/programming/upload_started', function () {
         Yasound.App.uploadCount = Yasound.App.uploadCount + 1;
     });
@@ -196,12 +209,6 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
-            if (Yasound.App.appName == 'deezer') {
-                if (DZ) {
-                    DZ.canvas.setSize($(document).height());
-                }
-            }
-
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
                 Yasound.Utils.enableFX();
