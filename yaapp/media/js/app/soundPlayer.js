@@ -26,6 +26,7 @@ Yasound.Player.SoundManager = function () {
             volume: 100,
             stream: true
         },
+        hd: Yasound.App.hd,
         baseUrl: undefined,
         soundHandler: undefined,
         autoplay: false,
@@ -84,7 +85,7 @@ Yasound.Player.SoundManager = function () {
                     success: function(data) {
                         var token = data.token;
                         var fullURL = streamURL + '/?token=' + token;
-                        if (Yasound.App.hd) {
+                        if (mgr.hd) {
                             fullURL = fullURL + '&hd=1';
                         }
                         mgr.config.url = fullURL;
@@ -115,6 +116,15 @@ Yasound.Player.SoundManager = function () {
 
         },
 
+        setHD: function (hd) {
+            if (hd == mgr.hd) {
+                return;
+            }
+            mgr.hd = hd;
+            mgr.stop();
+            mgr.play();
+        },
+
         init: function (callback) {
             if (!callback) {
                 callback = function () { };
@@ -140,6 +150,7 @@ Yasound.Player.SoundManager = function () {
 
 Yasound.Player.Deezer = function () {
     var mgr = {
+        hd: false,
         currentSongBinded: false,
         deezerId: 0,
         playing: false,
@@ -221,6 +232,10 @@ Yasound.Player.Deezer = function () {
             }
             mgr.playing = true;
             $.publish('/player/play');
+        },
+
+        setHD: function (hd) {
+            return;
         },
 
         init: function (callback) {

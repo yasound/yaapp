@@ -1,6 +1,13 @@
 {% load i18n %}
-<div id="hd-button" class='hd-disabled'>
-    &nbsp;
+<div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
+   <div id='hd-box-container' class='hidden'>
+    <div id='hd-status'>
+      <label for='hd-checkbox'>{% trans "HD" %}</label>
+        <div id="hd-checkbox-container">
+            <input type='checkbox' id='hd-checkbox' {% if hd_enabled %}checked='checked'{% else %}disabled=""{% endif %}>
+        </div>
+    </div>
+   </div>
 </div>
 
 <div id="radio-picto">

@@ -271,7 +271,53 @@ body {
     left:50%;
 }
 
+/**
+ * HD box
+ */
+#hd-box-container {
+    position:absolute;
+    top:45px;
+    left:-180px;
+    display:block;
+    width:400px;
+    background-color:rgba(44, 46, 47, 0.99);
+    border:1px solid black;
+    border-radius:5px;
+    box-shadow:0px 0px 2px grey inset;
+    padding:12px;
+}
 
+
+#hd-box-container button {
+    width:257px;
+    height:38px;
+    background-image:url('../app/images/login/login-btn-connection.png');
+    background-repeat:repeat-x;
+    color:#414244;
+    font-size:15px;
+    padding:0px;
+    margin-top:4px;
+    border:none;
+    border-radius:3px;
+    box-shadow: 0px 1px 1px #202020;
+}
+
+#hd-box-container:before {
+    content:url('../app/images/login/login-tooltip.png');
+    position:absolute;
+    top:-13px;
+    left:48%;
+}
+#hd-box-container #hd-status {
+    height:120px;
+}
+
+#hd-box-container #hd-status label {
+    display:inline;
+}
+#hd-box-container #hd-status #hd-checkbox-container {
+    float:right;
+}
 
 #header .navbar-inner {
     background-image: url(/media/app/images/header_bg.png);
@@ -312,7 +358,6 @@ body {
     height:27px;
     width:46px;
     position:relative;
-    overflow:hidden;
 }
 
 #hd-button-mobile {
