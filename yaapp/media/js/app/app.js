@@ -16,6 +16,7 @@ $(document).ready(function () {
     Yasound.App.stickyViews = [];
     Yasound.App.uploadCount = 0;
     Yasound.App.root = g_root;
+    Yasound.App.appName = g_app_name;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
     Yasound.App.hd = g_hd_enabled;
@@ -195,7 +196,11 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
-            console.log($(document).height());
+            if (Yasound.App.appName == 'deezer') {
+                if (DZ) {
+                    DZ.canvas.setSize($(document).height());
+                }
+            }
 
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
