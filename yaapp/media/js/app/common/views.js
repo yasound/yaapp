@@ -299,12 +299,15 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #play-btn": "togglePlay",
         "click #love-btn": "like",
         "click #radio-picto a": "displayRadio",
-        "click #favorite-radio": "favorite"
+        "click #favorite-radio": "favorite",
+        "hover #hd-button": "displayPopupHD",
+        "mouseleave #hd-button": "hidePopupHD",
+        "click #hd-checkbox": "onHD"
     },
 
     initialize: function () {
         this.model.bind('change', this.render, this);
-        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare', 'onPlayerPlay', 'onPlayerStop');
+        _.bindAll(this, 'render', 'onVolumeSlide', 'togglePlay', 'favorite', 'facebookShare', 'onPlayerPlay', 'onPlayerStop', 'hidePopupHD', 'onHD');
 
         $('#fb_share').click(this.facebookShare);
     },
@@ -364,7 +367,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     },
 
     render: function () {
-        $(this.el).html(ich.trackTemplate(this.model.toJSON()));
+        var data = this.model.toJSON();
+        data['hd'] = Yasound.App.player.hd;
+        $(this.el).html(ich.trackTemplate(data));
         document.title = this.model.title();
 
         var volumeSlider = $('#volume-slider');
@@ -405,6 +410,10 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
+
+        $('#hd-checkbox-container').toggleButtons({
+            onChange: this.onHD
+        });
 
         return this;
     },
@@ -481,6 +490,32 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
+    displayPopupHD: function (e) {
+        if (this.closeTimer) {
+            this.closeTimer = clearTimeout(this.closeTimer);
+        }
+
+        $('#hd-box-container', this.el).removeClass('hidden');
+        $('#hd-box-container', this.el).one('mousenter', this.displayPopupHD);
+    },
+
+    hidePopupHD: function() {
+        this.closeTimer = setTimeout(function() {
+            $('#hd-box-container', this.el).addClass('hidden');
+        }, 300);
+    },
+
+    onHD: function (e, checked) {
+        if ((typeof checked === "undefined")) {
+            checked = $(e.target).attr('checked');
+        }
+        if (checked) {
+            $('#hd-button').removeClass('hd-disabled').addClass('hd-enabled');
+        } else {
+            $('#hd-button').removeClass('hd-enabled').addClass('hd-disabled');
+        }
+        Yasound.App.player.setHD(checked);
+    },
 
     ping: function() {
         if (this.pingIntervalId) {
