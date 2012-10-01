@@ -593,7 +593,7 @@ class Radio(models.Model):
                 return unicode(self.creator)
         return self.name
 
-    def delete(self):
+    def mark_as_deleted(self):
         self.deleted = True
         self.save()
         yabase_signals.radio_deleted.send(sender=self, radio=self)

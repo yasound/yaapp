@@ -2076,7 +2076,7 @@ def my_radios(request, radio_uuid=None):
         if radio.creator != request.user:
             return HttpResponse(status=401)
 
-        radio.delete()
+        radio.mark_as_deleted()
         data = {
             'success': True
         }

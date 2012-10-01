@@ -720,6 +720,10 @@ if not PRODUCTION_MODE:
             "task": "emailconfirmation.task.resend_confirmations_task",
             "schedule": crontab(minute=0, hour='10'),
         },
+        "delete_radios": {
+            "task": "yabase.task.delete_radios_definitively",
+            "schedule": crontab(minute=0, hour='01'),
+        },
 #        "delete_expired_confirmations": {
 #            "task": "emailconfirmation.task.delete_expired_confirmations_task",
 #            "schedule": crontab(minute=0, hour='12'),
@@ -771,9 +775,13 @@ else:
                 "schedule": crontab(minute=0, hour='05'),
             },
             "recommendations_cache_clean": {
-            "task": "yarecommendation.task.async_clean_recommendation_cache",
-            "schedule": crontab(minute=0, hour='*'),
-            }
+                "task": "yarecommendation.task.async_clean_recommendation_cache",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+            "delete_radios": {
+                "task": "yabase.task.delete_radios_definitively",
+                "schedule": crontab(minute=0, hour='01'),
+            },
         }
     elif hostname == 'yas-web-02':
         CELERYBEAT_SCHEDULE = {
@@ -930,3 +938,5 @@ JENKINS_TASKS = (
 JENKINS_TEST_RUNNER="ignoretests.jenkins.JenkinsIgnoreTestSuiteRunner"
 
 SCHEDULER_KEY = 'pibs9wn20fnq-1nfk8762ncuwecydgso'
+
+RADIO_DELETE_DAYS = 30

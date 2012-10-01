@@ -13,9 +13,11 @@ import os
 import signals as yabase_signals
 import time
 import zlib
+import datetime
 from yabase import settings as yabase_settings
 logger = logging.getLogger("yaapp.yabase")
 from yacore.binary import BinaryData
+from django.conf import settings
 
 @task(ignore_result=True)
 def leaderboard_update_task():
@@ -246,3 +248,12 @@ def async_import_from_itunes(radio, data):
             playlist, _created = radio.get_or_create_default_playlist()
             import_from_string(name, album, artist, playlist)
 
+
+@task
+def delete_radios_definitively():
+    from models import Radio
+    today = datetime.datetime.today()
+    expiration_date = today - datetime.timedelta(days=settings.RADIO_DELETE_DAYS)
+    radios = Radio.objects.filter(deleted=True, updated__lt=expiration_date)
+    for radio in radios:
+        radio.delete()
