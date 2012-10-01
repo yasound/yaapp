@@ -1,0 +1,17 @@
+
+body {
+    background: url(../images/staytuned/background.png) repeat;
+}
+
+#logo {
+    background: url(../images/staytuned/logo.png) no-repeat;
+    display:block;
+    width:433px;
+    height:413px;
+    text-indent: -9999px;
+    overflow: hidden;
+    position:absolute;
+    left:50%;
+    top:20%;
+    margin-left:-216px;
+}
