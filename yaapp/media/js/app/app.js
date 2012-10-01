@@ -38,11 +38,11 @@ $(document).ready(function () {
         }
     }
 
-    Yasound.app.deezerUpdate = false;
+    Yasound.App.deezerUpdate = false;
 
     if (Yasound.App.appName == 'deezer') {
-        if (Yasound.app.deezerUpdate) {
-            Yasound.app.deezerUpdate = false;
+        if (Yasound.App.deezerUpdate) {
+            Yasound.App.deezerUpdate = false;
             return;
         }
         var height = 0;
@@ -50,9 +50,9 @@ $(document).ready(function () {
             var newHeight = $(document).height();
             if(newHeight != height) {
                 height = newHeight;
-                console.log(height)
+                console.log(height);
                 if (DZ && DZ.canvas) {
-                    Yasound.app.deezerUpdate = true;
+                    Yasound.App.deezerUpdate = true;
                     DZ.canvas.setSize(height);
                 }
             }
@@ -218,7 +218,7 @@ $(document).ready(function () {
         // this function must be called between every routes
         clearView: function (selectedMenu) {
             if (DZ && DZ.canvas) {
-                Yasound.app.deezerUpdate = true;
+                Yasound.App.deezerUpdate = true;
                 DZ.canvas.setSize(1024);
             }
 
