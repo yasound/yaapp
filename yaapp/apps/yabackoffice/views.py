@@ -256,7 +256,7 @@ def radios(request, radio_id=None):
     elif request.method == 'DELETE':
         radio = get_object_or_404(Radio, id=radio_id)
         radio.empty_next_songs_queue()
-        radio.delete()
+        radio.mark_as_deleted()
         data = {"success":True,"message":"ok","data":[]}
         resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(data))
         return resp

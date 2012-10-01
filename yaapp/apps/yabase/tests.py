@@ -27,9 +27,35 @@ import os
 import settings as yabase_settings
 import simplejson as json
 from django.test.client import RequestFactory
-from task import fast_import
-
+from task import fast_import, delete_radios_definitively
+import datetime
 import uploader
+
+def turn_off_auto_now(Clazz, field_name):
+    def auto_now_off(field):
+        field.auto_now = False
+    iter_fields_and_do(Clazz, field_name, auto_now_off)
+
+def turn_on_auto_now(Clazz, field_name):
+    def auto_now_off(field):
+        field.auto_now = True
+    iter_fields_and_do(Clazz, field_name, auto_now_off)
+
+def turn_off_auto_now_add(Clazz, field_name):
+    def auto_now_add_off(field):
+        field.auto_now_add = False
+    iter_fields_and_do(Clazz, field_name, auto_now_add_off)
+
+def turn_on_auto_now_add(Clazz, field_name):
+    def auto_now_add_off(field):
+        field.auto_now_add = True
+    iter_fields_and_do(Clazz, field_name, auto_now_add_off)
+
+def iter_fields_and_do(Clazz, field_name, func):
+    for field in Clazz._meta.local_fields:
+        if field.name == field_name:
+            func(field)
+
 
 class TestMiddleware(TestCase):
     def setUp(self):
@@ -245,13 +271,33 @@ class TestModels(TestCase):
 
     def test_deleted(self):
         radio = self.radio
-        self.assertIsNotNone(user.own_radio)
+        user = self.user
 
-        radio.delete()
+        self.assertIsNotNone(user.get_profile().own_radio)
+
+        radio.mark_as_deleted()
         radio.save()
-        self.assertIsNone(user.own_radio)
+        self.assertIsNone(user.get_profile().own_radio)
 
+        delete_radios_definitively()
 
+        self.assertEquals(Radio.objects.all().count(), 1)
+
+        today = datetime.datetime.today()
+        past_date = today - datetime.timedelta(days=settings.RADIO_DELETE_DAYS+1)
+
+        turn_off_auto_now(Radio, "updated")
+
+        radio.updated = past_date
+        radio.save()
+
+        turn_on_auto_now(Radio, "updated")
+
+        self.assertEquals(Radio.objects.all().count(), 1)
+
+        delete_radios_definitively()
+
+        self.assertEquals(Radio.objects.all().count(), 0)
 
 class TestNextSong(TestCase):
     multi_db = True
