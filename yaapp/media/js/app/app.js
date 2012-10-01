@@ -38,7 +38,7 @@ $(document).ready(function () {
         }
     }
 
-    if (Yasound.App.appName == 'app') {
+    if (Yasound.App.appName == 'deezer') {
         var height = 0;
         $(document).bind('DOMSubtreeModified', function() {
             var newHeight = $('#yasound').parent().parent().height();
