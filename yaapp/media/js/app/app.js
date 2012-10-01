@@ -38,25 +38,23 @@ $(document).ready(function () {
         }
     }
 
-    Yasound.App.deezerUpdate = false;
 
     if (Yasound.App.appName == 'deezer') {
-        if (Yasound.App.deezerUpdate) {
-            Yasound.App.deezerUpdate = false;
-            return;
-        }
-        var height = 0;
-        $(document).bind('DOMSubtreeModified', function() {
-            var newHeight = $(document).height();
-            if(newHeight != height) {
-                height = newHeight;
-                console.log(height);
-                if (DZ && DZ.canvas) {
-                    Yasound.App.deezerUpdate = true;
-                    DZ.canvas.setSize(height);
-                }
-            }
+        $('#webapp-container-parent').slimScroll({
+            position: 'left',
+            height: '100%',
+            color: '#00f',
+            size: '10px',
+            railVisible: true,
+            alwaysVisible: true
         });
+        // var height = 0;
+        // $(document).bind('DOMSubtreeModified', function() {
+        //     var newHeight = $(document).height();
+        //     if(newHeight != height) {
+        //         height = newHeight;
+        //     }
+        // });
     }
 
     $.subscribe('/programming/upload_started', function () {
@@ -217,10 +215,6 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
-            if (DZ && DZ.canvas) {
-                Yasound.App.deezerUpdate = true;
-                DZ.canvas.setSize(1024);
-            }
 
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
