@@ -21,3 +21,14 @@ SERVICE_CHOICES = (
     (SERVICE_HD, _('HD')),
     (SERVICE_SELECTION, _('Selection')),
 )
+
+
+DURATION_DAY = 0
+DURATION_WEEK = 1
+DURATION_MONTH = 2
+
+DURATION_UNIT_CHOICES = (
+    (DURATION_DAY, _('Day')),
+    (DURATION_WEEK, _('Week')),
+    (DURATION_MONTH, _('Month')),
+)
