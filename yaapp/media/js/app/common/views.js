@@ -433,6 +433,12 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
 
+        if (Yasound.App.player.isPlaying()) {
+            this.onPlayerPlay();
+        } else {
+            this.onPlayerStop();
+        }
+
         $('#hd-checkbox-container').toggleButtons({
             onChange: this.onHD
         });
