@@ -214,6 +214,8 @@ class Gift(models.Model):
     duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_MONTH)
     max_per_user = models.IntegerField(_('max per user'), default=1)  # one-shot gift is max_per_user=1
 
+    delay = models.IntegerField(_('delay between 2 gifts'), blank=True, null=True)
+
     picture_todo = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
     picture_done = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
 
@@ -247,7 +249,7 @@ class Gift(models.Model):
         enabled = True
         if not self.enabled:
             enabled = False
-        elif count >= self.max_per_user:
+        elif count >= self.max_per_user and self.max_per_user > 0:
             enabled = False
 
         if count > 0:
@@ -292,10 +294,18 @@ class Gift(models.Model):
 
         if user is not None and not user.is_anonymous():
 
-            achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
+            achievements = Achievement.objects.filter(user=user, gift=self).order_by('-achievement_date')
             count = achievements.count()
-            if count >= self.max_per_user:
+            if count >= self.max_per_user and self.max_per_user > 0:
                 return False
+
+            if count > 0 and self.delay is not None:
+                now = datetime.now()
+                achievement_date = achievements[0].achievement_date
+                diff = now - achievement_date
+                days = diff.days
+                if days <= self.delay:
+                    return False
 
         return True
 
