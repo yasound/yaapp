@@ -98,6 +98,16 @@ $(document).ready(function () {
             trigger: true
         });
     });
+    $('#btn-about').click(function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('about/', {
+            trigger: true
+        });
+    });
+    $('#btn-help').click(function(e) {
+        e.preventDefault();
+        new Yasound.Views.TutorialWindow().render();
+    });
 
     Backbone.View.prototype.close = function () {
         if (this.sticky) {
@@ -497,6 +507,7 @@ $(document).ready(function () {
 
         tutorial: function () {
             new Yasound.Views.TutorialWindow().render();
+            return this.index();
         },
 
         staticPage: function(page) {
