@@ -259,14 +259,9 @@ class Gift(models.Model):
         data_url = None
         target = None
 
-        if self.action == yapremium_settings.ACTION_WATCH_TUTORIAL and not user.is_anonymous():
-            completed_url = reverse('yapremium.views.action_watch_tutorial_completed', args=[user.username])
-            action_url = 'http://www.youtube.com/watch?v=YkFaWMN6Rsg&feature=plcp'
-            target = '_blank'
-        else:
-            if self.action_url_web:
-                action_url = reverse(self.action_url_web)
-            data_url = self.action_url_web_ajax
+        if self.action_url_web:
+            action_url = reverse(self.action_url_web)
+        data_url = self.action_url_web_ajax
 
         data = {
             'id': self.id,
