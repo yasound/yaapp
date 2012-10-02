@@ -71,6 +71,7 @@ Yasound.Player.SoundManager = function () {
 
         play: function () {
             if (mgr.isPlaying()) {
+                $.publish('/player/play');
                 return;
             }
 
