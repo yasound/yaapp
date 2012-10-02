@@ -13,10 +13,11 @@ import task
 import yabase.settings as yabase_settings
 from django.conf import settings
 import datetime
-from models import UserAdditionalInfosManager
+from models import UserAdditionalInfosManager, InvitationsManager
 from yamessage.models import NotificationsManager
 from yamessage import settings as yamessage_settings
 from pymongo import DESCENDING
+
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -61,7 +62,7 @@ class TestProfile(TestCase):
         ua.add_information(user.id, 'connected_account', info)
 
         doc = ua.information(user.id)
-        self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
+        self.assertEquals(doc.get('connected_account'), ['deezer', 'soundclound'])
 
         info = {
             'token': 'token1',
@@ -70,12 +71,12 @@ class TestProfile(TestCase):
         ua.add_information(user.id, 'deezer', info)
 
         doc = ua.information(user.id)
-        self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
-        self.assertEquals(doc.get('deezer').get('token'),  'token1')
+        self.assertEquals(doc.get('connected_account'), ['deezer', 'soundclound'])
+        self.assertEquals(doc.get('deezer').get('token'), 'token1')
 
         ua.remove_information(user.id, 'deezer')
         doc = ua.information(user.id)
-        self.assertEquals(doc.get('connected_account'),  ['deezer', 'soundclound'])
+        self.assertEquals(doc.get('connected_account'), ['deezer', 'soundclound'])
         self.assertIsNone(doc.get('deezer'))
 
     def test_privacy(self):
@@ -103,7 +104,6 @@ class TestProfile(TestCase):
 
         self.assertTrue(profile1.can_give_personal_infos(user2))
 
-
     def test_friends(self):
         user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
         user2 = User.objects.create(email="user2@yasound.com", username="user2", is_superuser=False, is_staff=False)
@@ -112,7 +112,6 @@ class TestProfile(TestCase):
         profile2 = user2.get_profile()
         self.assertEquals(profile1.friends_count, 0)
         self.assertEquals(profile1.followers_count, 0)
-
 
         profile2.add_friend(user1)
 
@@ -141,11 +140,9 @@ class TestProfile(TestCase):
         self.assertEquals(profile2.followers_count, 1)
         self.assertEquals(profile2.friends_count, 0)
 
-
     def test_index_fuzzy(self):
         user = User(email="test@yasound.com", username="username", is_superuser=False, is_staff=False)
         user.save()
-
         profile = user.get_profile()
         profile.name = 'username'
         profile.save()
@@ -164,8 +161,6 @@ class TestProfile(TestCase):
 
         users = UserProfile.objects.search_user_fuzzy('babar')
         self.assertEquals(len(users), 1)
-
-
 
     def test_index_fuzzy_delete(self):
         user = User(email="test@yasound.com", username="username", is_superuser=False, is_staff=False)
@@ -189,7 +184,6 @@ class TestProfile(TestCase):
         users = UserProfile.objects.search_user_fuzzy('babar')
         self.assertEquals(len(users), 1)
 
-
     def test_permissions_create_radio(self):
         user1 = User.objects.create(email="user1@yasound.com", username="user1", is_superuser=False, is_staff=False)
         profile1 = user1.get_profile()
@@ -198,7 +192,7 @@ class TestProfile(TestCase):
         radios = Radio.objects.filter(creator=user1)
         self.assertEquals(radios.count(), 0)
 
-        for i in range(0, settings.MAX_RADIO_PER_USER+1):
+        for i in range(0, settings.MAX_RADIO_PER_USER + 1):
             Radio.objects.create(creator=user1)
 
         profile1 = UserProfile.objects.get(id=profile1.id)
@@ -237,7 +231,7 @@ class TestMultiAccount(TestCase):
         profile.account_type = account_settings.ACCOUNT_MULT_FACEBOOK
         profile.save()
         profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
-        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR + account_settings.ACCOUNT_MULT_TWITTER)
 
         self.assertTrue(profile.facebook_enabled)
         self.assertTrue(profile.twitter_enabled)
@@ -261,7 +255,7 @@ class TestMultiAccount(TestCase):
         profile.account_type = account_settings.ACCOUNT_MULT_FACEBOOK
         profile.save()
         profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
-        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR + account_settings.ACCOUNT_MULT_TWITTER)
 
         self.assertTrue(profile.facebook_enabled)
         self.assertTrue(profile.twitter_enabled)
@@ -269,7 +263,6 @@ class TestMultiAccount(TestCase):
 
         profile.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
         self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
-
 
         self.assertFalse(profile.facebook_enabled)
         self.assertTrue(profile.twitter_enabled)
@@ -280,15 +273,14 @@ class TestMultiAccount(TestCase):
         profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
         profile.save()
         profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
-        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
-
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR + account_settings.ACCOUNT_MULT_TWITTER)
 
     def test_multi_from_old_and_remove(self):
         profile = self.jerome.get_profile()
         profile.account_type = account_settings.ACCOUNT_TYPE_FACEBOOK
         profile.save()
         profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
-        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR+account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_FACEBOOK + account_settings.ACCOUNT_TYPE_SEPARATOR + account_settings.ACCOUNT_MULT_TWITTER)
 
         profile.remove_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
         self.assertEquals(profile.account_type, account_settings.ACCOUNT_MULT_TWITTER)
@@ -348,11 +340,9 @@ class TestMultiAccount(TestCase):
         self.jerome.email = 'jbl@yasound.com'
         self.jerome.save()
 
-
         # re-add with same address
         res, message = profile.add_yasound_account('jbl@yasound.com', 'password')
         self.assertTrue(res)
-
 
         # re-add facebook
         # let's test the yasound removal
@@ -363,7 +353,7 @@ class TestMultiAccount(TestCase):
                                      expiration_date='now')
         self.assertTrue(profile.facebook_enabled)
 
-        res, _message =  profile.add_facebook_account(uid='1460646148',
+        res, _message = profile.add_facebook_account(uid='1460646148',
                                      token='BAAENXOrG1O8BAFrSfnZCW6ZBeDPI77iwxuVV4pyerdxAZC6p0UmWH2u4OzIGhsHVH7AolQYcC5IQbqCiDzrF0CNtNbMaHrbdgVv8qWjX8LRRxhlb4E4',
                                      username='toto',
                                      email='jerome@blondon.fr',
@@ -496,6 +486,7 @@ class TestFacebook(TestCase):
 """
         self.client.post(reverse('facebook_update'), json, content_type='application/json')
 
+
 class TestCurrentRadio(TestCase):
     def setUp(self):
         # jbl
@@ -586,6 +577,7 @@ class TestDevice(TestCase):
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_SANDBOX).count(), 1)
         self.assertEquals(Device.objects.filter(user=user, uuid=uuid, ios_token_type=account_settings.IOS_TOKEN_TYPE_PRODUCTION).count(), 1)
 
+
 class TestApi(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
@@ -597,8 +589,8 @@ class TestApi(TestCase):
         self.username = self.user.username
 
     def testTopLimitation(self):
-        url = reverse('api_dispatch_list', kwargs={'resource_name': 'popular_user', 'api_name': 'v1',})
-        res = self.client.get(url,{'api_key': self.key, 'username': self.username})
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'popular_user', 'api_name': 'v1', })
+        res = self.client.get(url, {'api_key': self.key, 'username': self.username})
         self.assertEquals(res.status_code, 200)
         data = res.content
         decoded_data = json.loads(data)
@@ -616,7 +608,6 @@ class TestFacebookSharePrefs(TestCase):
         self.user = user
         self.key = ApiKey.objects.get(user=self.user).key
         self.username = self.user.username
-
 
     def test_facebook_share_prefs(self):
         profile = self.user.userprofile
@@ -664,9 +655,8 @@ class TestFacebookSharePrefs(TestCase):
         res = self.client.post('/api/v1/facebook_share_preferences/?api_key=%s&username=%s' % (self.key, self.username), pref_dict, content_type='application/json')
         self.assertEquals(res.status_code, 405)
 
-        res = self.client.get('/api/v1/facebook_share_preferences/',{'api_key': self.key, 'username': self.username})
+        res = self.client.get('/api/v1/facebook_share_preferences/', {'api_key': self.key, 'username': self.username})
         self.assertEquals(res.status_code, 200)
-
 
         res = self.client.post('/api/v1/set_facebook_share_preferences/', pref_dict)
         self.assertEquals(res.status_code, 401)
@@ -685,7 +675,7 @@ class TestFacebookSharePrefs(TestCase):
 
     def test_get_view(self):
         profile = self.user.userprofile
-        res = self.client.get('/api/v1/facebook_share_preferences/',{'api_key': self.key, 'username': self.username})
+        res = self.client.get('/api/v1/facebook_share_preferences/', {'api_key': self.key, 'username': self.username})
         self.assertEquals(res.status_code, 200)
         prefs = json.loads(res.content)
         self.assertEqual(prefs, profile.facebook_share_preferences())
@@ -775,3 +765,45 @@ class TestWebPreferences(TestCase):
         self.assertFalse(preferences['pref1'])
         self.assertEquals(preferences['pref2'], 42)
 
+
+class TestInvitationsManager(TestCase):
+    def setUp(self):
+        erase_index()
+        ia = InvitationsManager()
+        ia.erase_informations()
+
+    def test_add(self):
+        user1 = User.objects.create(email="user1@yasound.com", username="user1")
+        profile1 = user1.get_profile()
+
+        ia = InvitationsManager()
+
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 42))
+
+        ia.add_invitations(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, [42, 43, 44])
+
+        self.assertTrue(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 42))
+        self.assertTrue(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 43))
+        self.assertTrue(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 44))
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 45))
+
+        ia.add_invitations(profile1.user.id, InvitationsManager.TYPE_EMAIL, ['jerome@blondon.fr'])
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 'jerome@blondon.fr'))
+        self.assertTrue(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_EMAIL, 'jerome@blondon.fr'))
+
+        ia.add_invitations(profile1.user.id, InvitationsManager.TYPE_TWITTER, ['jbl2024'])
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 'jbl2024'))
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_EMAIL, 'jbl2024'))
+        self.assertTrue(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_TWITTER, 'jbl2024'))
+
+        ia.remove_invitation(profile1.user.id, InvitationsManager.TYPE_TWITTER, 'jbl2024')
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 'jbl2024'))
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_EMAIL, 'jbl2024'))
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_TWITTER, 'jbl2024'))
+
+        ia.remove_invitation(profile1.user.id, InvitationsManager.TYPE_EMAIL, 'jerome@blondon.fr')
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_FACEBOOK, 'jerome@blondon.fr'))
+        self.assertFalse(ia.has_invitation(profile1.user.id, InvitationsManager.TYPE_EMAIL, 'jerome@blondon.fr'))
+
+        users_id = ia.find_invitation_providers(InvitationsManager.TYPE_FACEBOOK, 42)
+        self.assertEquals(users_id[0].get('db_id'), user1.id)

@@ -37,11 +37,14 @@ logger = logging.getLogger("yaapp.account")
 
 PICTURE_FILE_TAG = 'picture'
 
+
 class DivErrorList(ErrorList):
     def __unicode__(self):
         return self.as_divs()
+
     def as_divs(self):
-        if not self: return u''
+        if not self:
+            return u''
         return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
 
 
@@ -56,7 +59,7 @@ def set_user_picture(request, user_id):
     except User.DoesNotExist:
         return HttpResponse('user does not exist')
 
-    if not request.FILES.has_key(PICTURE_FILE_TAG):
+    if PICTURE_FILE_TAG not in request.FILES:
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
@@ -64,6 +67,7 @@ def set_user_picture(request, user_id):
 
     res = 'picture OK for user: %s' % unicode(user)
     return HttpResponse(res)
+
 
 def get_subscription(request):
     if not check_api_key_Authentication(request):
@@ -75,6 +79,7 @@ def get_subscription(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     subscription = profile.subscription
     return HttpResponse(subscription)
+
 
 def login(request, template_name='account/login.html'):
     next = request.REQUEST.get('next')
@@ -278,7 +283,7 @@ def facebook_update(request):
 
     elif request.method == 'POST':
         logger.debug('received update from facebook')
-        json_data =  json.loads(request.read())
+        json_data = json.loads(request.read())
         logger.debug(json_data)
 
         if type(json_data) == type([]):
@@ -360,7 +365,7 @@ def password_reset_confirm(request, uidb36=None, token=None,
             if form.is_valid():
                 form.save()
                 messages.success(request, _("Your password has been successfully reset."))
-                user.backend='django.contrib.auth.backends.ModelBackend'
+                user.backend ='django.contrib.auth.backends.ModelBackend'
                 auth_login(request, user)
                 return HttpResponseRedirect(post_reset_redirect)
         else:
@@ -383,7 +388,7 @@ def associate(request):
         return HttpResponse(status=401)
 
     cookies = request.COOKIES
-    if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+    if account_settings.APP_KEY_COOKIE_NAME not in cookies:
         return HttpResponse(status=401)
     if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
         return HttpResponse(status=401)
@@ -424,7 +429,7 @@ def dissociate(request):
         return HttpResponse(status=401)
 
     cookies = request.COOKIES
-    if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+    if account_settings.APP_KEY_COOKIE_NAME not in cookies:
         return HttpResponse(status=401)
     if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
         return HttpResponse(status=401)
@@ -482,7 +487,7 @@ def user_authenticated(request):
 def update_localization(request):
     data = request.POST.keys()[0]
     obj = json.loads(data)
-    if not obj.has_key('latitude') or not obj.has_key('longitude'):
+    if 'latitude' not in obj or 'longitude' not in obj:
         return HttpResponseNotFound()
     lat = obj['latitude']
     lon = obj['longitude']
@@ -493,7 +498,6 @@ def update_localization(request):
 def connected_users_by_distance(request):
     skip = int(request.GET.get('skip', 0))
     limit = int(request.GET.get('limit', 20))
-
 
     if request.user and request.user.is_authenticated():
         userprofile = request.user.userprofile
@@ -537,7 +541,7 @@ def fast_connected_users_by_distance(request, internal=False):
             profiles = None
         else:
             sanitized_coords = '%s' % ([coords])
-            sanitized_coords = sanitized_coords.replace('[','').replace(']','').replace(' ', '').replace('(','').replace(')','').replace(',','-')
+            sanitized_coords = sanitized_coords.replace('[', '').replace(']','').replace(' ', '').replace('(','').replace(')','').replace(',','-')
             key = '%s.fast_connected_users' % (sanitized_coords)
             data = cache.get(key, [])
             if not data:
@@ -549,7 +553,7 @@ def fast_connected_users_by_distance(request, internal=False):
 
     if key is not None and profiles is not None:
         # first time we get data
-        cache.set(key, data, 60*5)
+        cache.set(key, data, 60 *5)
 
     if internal:
         return data
@@ -567,7 +571,7 @@ def user_friends(request, username):
     user = get_object_or_404(User, username=username)
     qs = UserProfile.objects.filter(user__in=user.get_profile().friends.all())
     total_count = qs.count()
-    qs = qs[offset:offset+limit]
+    qs = qs[offset:offset +limit]
     data = []
     for user_profile in qs:
         data.append(user_profile.as_dict(request_user=request.user))
@@ -592,7 +596,7 @@ def user_followers(request, username=None):
 
     qs = UserProfile.objects.filter(friends=user)
     total_count = qs.count()
-    qs = qs[offset:offset+limit]
+    qs = qs[offset:offset +limit]
     data = []
     for user_profile in qs:
         data.append(user_profile.as_dict(request_user=request.user))
@@ -616,7 +620,7 @@ def user_friends_add_remove(request, username, friend):
     elif request.method == 'POST':
         profile.add_friend(friend)
 
-    response = {'success':True}
+    response = {'success': True}
     res = json.dumps(response)
     return HttpResponse(res)
 
@@ -639,7 +643,7 @@ def user_picture(request, username):
         return HttpResponse(status=401)
 
     if request.method == 'POST':
-        if not request.FILES.has_key(PICTURE_FILE_TAG):
+        if PICTURE_FILE_TAG not in request.FILES:
             return HttpResponseBadRequest('Must upload a file')
 
         f = request.FILES[PICTURE_FILE_TAG]
@@ -664,7 +668,7 @@ def user_picture(request, username):
         user_profile.set_picture(f)
 
         # url for deleting the file in case user decides to delete it
-        response_data["delete_url"] = reverse('account.views.user_picture', kwargs={'username':user.username})
+        response_data["delete_url"] = reverse('account.views.user_picture', kwargs={'username': user.username})
         response_data["delete_type"] = "DELETE"
         response_data["url"] = user_profile.picture_url
 
@@ -739,6 +743,9 @@ def invite_ios_contacts(request):
     # contact['lastName'] = 'dalton'
 
     #TODO: send invitation email to given contacts
+    profile = request.user.get_profile()
+    profile.invite_email_friends(contacts['emails'])
+
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
@@ -760,10 +767,14 @@ def invite_facebook_friends(request):
     facebook_user_ids = json.loads(post_data)
     facebook_user_ids = [int(x) for x in facebook_user_ids]
 
+    profile = request.user.get_profile()
+    profile.invite_facebook_friends(facebook_user_ids)
+
     #TODO: send message to selected facebook friends
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
+
 
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
@@ -774,6 +785,16 @@ def invite_twitter_friends(request):
         return HttpResponse(response_data)
 
     #TODO: post invitation message in user's twitter timeline
+    post_data = request.POST.keys()[0]
+    if post_data is None:
+        response = {'success': False, 'error': 'no twitter ids provided'}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+
+    twitter_uids = json.loads(post_data)
+    profile = request.user.get_profile()
+    profile.invite_twitter_friends(twitter_uids)
+
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)

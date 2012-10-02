@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from celery.task import task
 from datetime import *
+from account.models import UserProfile, InvitationsManager
+import settings as yapremium_settings
 
 
 @task
@@ -23,3 +25,12 @@ def async_win_gift(user_id, action):
         if gift.available(user):
             # yipee ! gift is won
             Achievement.objects.create_from_gift(user=user, gift=gift)
+
+
+@task
+def async_check_for_invitation(type, uid):
+    ia = InvitationsManager()
+    users = ia.find_invitation_providers(type, uid)
+    for user in users:
+        user_id = user.get('db_id')
+        async_win_gift.delay(user_id, yapremium_settings.ACTION_INVITE_FRIEND)

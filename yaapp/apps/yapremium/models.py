@@ -8,14 +8,14 @@ from dateutil.relativedelta import *
 from sorl.thumbnail import get_thumbnail
 import settings as yapremium_settings
 from yacore.http import absolute_url
-from account.models import UserProfile
+from account.models import UserProfile, InvitationsManager
 from transmeta import TransMeta
 from django.core.urlresolvers import reverse
 import utils as yapremium_utils
 
 import account.signals as account_signals
 
-from task import async_win_gift
+from task import async_win_gift, async_check_for_invitation
 
 
 class Service(models.Model):
@@ -396,13 +396,24 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
         async_win_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
 
+        if instance.user.email:
+            async_check_for_invitation(InvitationsManager.TYPE_EMAIL, instance.user.email)
+        if instance.facebook_enabled:
+            async_check_for_invitation(InvitationsManager.TYPE_FACEBOOK, instance.facebook_uid)
+        if instance.twitter_enabled:
+            async_check_for_invitation(InvitationsManager.TYPE_TWITTER, instance.twitter_uid)
+
 
 def facebook_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
+    user_profile = UserProfile.objects.get(user=user)
+    async_check_for_invitation(InvitationsManager.TYPE_FACEBOOK, user_profile.facebook_uid)
 
 
 def twitter_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
+    user_profile = UserProfile.objects.get(user=user)
+    async_check_for_invitation(InvitationsManager.TYPE_TWITTER, user_profile.twitter_uid)
 
 
 def install_handlers():

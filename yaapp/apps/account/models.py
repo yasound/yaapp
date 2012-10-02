@@ -482,6 +482,18 @@ class UserProfile(models.Model):
 
         return True, _('OK')
 
+    def invite_facebook_friends(facebook_ids):
+        ia = InvitationsManager()
+        ia.add_invitations(self.user.id, InvitationsManager.TYPE_FACEBOOK, facebook_ids)
+
+    def invite_twitter_friends(twitter_ids):
+        ia = InvitationsManager()
+        ia.add_invitations(self.user.id, InvitationsManager.TYPE_TWITTER, twitter_ids)
+
+    def invite_email_friends(emails):
+        ia = InvitationsManager()
+        ia.add_invitations(self.user.id, InvitationsManager.TYPE_EMAIL, emails)
+
     def __unicode__(self):
         if self.name:
             return self.name
@@ -1508,6 +1520,39 @@ class UserAdditionalInfosManager():
 
     def remove_user(self, user_id):
         self.collection.remove({'db_id': user_id})
+
+
+class InvitationsManager():
+
+    TYPE_FACEBOOK = 'facebook'
+    TYPE_TWITTER = 'twitter'
+    TYPE_EMAIL = 'email'
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.account.users.invitations
+        self.collection.ensure_index('db_id', unique=True)
+        self.collection.ensure_index(InvitationsManager.TYPE_FACEBOOK)
+        self.collection.ensure_index(InvitationsManager.TYPE_TWITTER)
+        self.collection.ensure_index(InvitationsManager.TYPE_EMAIL)
+
+    def erase_informations(self):
+        self.collection.drop()
+
+    def add_invitations(self, user_id, type, uids):
+        self.collection.update({'db_id': user_id}, {'$pushAll': {type: uids}}, upsert=True, safe=True)
+
+    def remove_invitation(self, user_id, type, uid):
+        self.collection.update({'db_id': user_id}, {'$pull': {type: uid}}, upsert=True, safe=True)
+
+    def has_invitation(self, user_id, type, uid):
+        if self.collection.find_one({'db_id': user_id, type:uid}):
+            return True
+        return False
+
+    def find_invitation_providers(self, type, uid):
+        db_ids = self.collection.find({type:uid}, {'db_id': True, '_id': False})
+        return db_ids
 
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):
