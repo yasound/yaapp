@@ -2181,3 +2181,10 @@ def listeners(request, radio_uuid):
         data.append(user.userprofile.as_dict(request.user))
     response = api_response(data, limit=limit, offset=skip)
     return response
+
+@check_api_key(methods=['GET',], login_required=False)
+def user_watched_tutorial(request):
+    yabase_signals.user_watched_tutorial.send(sender=request.user,
+                                              user=request.user)
+    res = {'success': True}
+    return HttpResponse(json.dumps(res), mimetype='application/json')

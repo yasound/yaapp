@@ -798,5 +798,3 @@ def invite_twitter_friends(request):
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
-
-

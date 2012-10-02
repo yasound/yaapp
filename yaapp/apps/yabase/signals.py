@@ -1,6 +1,7 @@
 import django.dispatch
 
 buy_link                = django.dispatch.Signal(providing_args=['radio', 'user', 'song_instance'])
+user_watched_tutorial   = django.dispatch.Signal(providing_args=['user'])
 user_started_listening  = django.dispatch.Signal(providing_args=['radio', 'user'])
 user_stopped_listening  = django.dispatch.Signal(providing_args=['radio', 'user', 'duration'])
 new_wall_event          = django.dispatch.Signal(providing_args=['wall_event'])

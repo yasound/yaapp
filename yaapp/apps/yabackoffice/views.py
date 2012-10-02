@@ -598,9 +598,9 @@ def users_history(request):
         for doc in qs:
             user_name = doc.get('user_name')
             history_type = doc.get('type')
-            details = doc.get('data')
+            details = doc.get('data', {})
             if not details:
-                continue
+                details = {}
 
             radio = details.get('radio_name', '')
             message = details.get('message', '')
