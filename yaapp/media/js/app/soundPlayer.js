@@ -60,7 +60,6 @@ Yasound.Player.SoundManager = function () {
         stop: function () {
             if (!(typeof mgr.soundHandler === "undefined")) {
                 mgr.soundHandler.unload();
-                console.log('publishing /player/stop');
                 $.publish('/player/stop');
             }
         },
@@ -72,7 +71,6 @@ Yasound.Player.SoundManager = function () {
 
         play: function () {
             if (mgr.isPlaying()) {
-                console.log('publishing /player/play');
                 $.publish('/player/play');
                 return;
             }
@@ -98,7 +96,6 @@ Yasound.Player.SoundManager = function () {
                         } else {
                             mgr.soundHandler.play(mgr.config);
                         }
-                        console.log('publishing /player/play');
                         $.publish('/player/play');
                     },
                     failure: function() {
@@ -116,7 +113,6 @@ Yasound.Player.SoundManager = function () {
                     mgr.soundHandler.play(mgr.config);
                 }
                 $.publish('/player/play');
-                console.log('publishing /player/play');
             }
 
         },
