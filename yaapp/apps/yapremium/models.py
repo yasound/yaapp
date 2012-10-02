@@ -207,6 +207,7 @@ class Gift(models.Model):
     action_url_ios = models.TextField(_('iOS action url'), blank=True)  # special field used by iOS to navigate to action menu
     action_url_web = models.TextField(_('web action url'), blank=True)  # special field used by webapp to navigate to action menu
     action_url_web_ajax = models.TextField(_('web action ajax url'), blank=True)  # special field used by webapp to navigate to action menu
+    completed_url = models.TextField(_('completed url'), blank=True)  # special field used by webapp to navigate to action menu
 
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
@@ -261,6 +262,8 @@ class Gift(models.Model):
 
         if self.action_url_web:
             action_url = reverse(self.action_url_web)
+        if self.completed_url:
+            completed_url = reverse(self.completed_url)
         data_url = self.action_url_web_ajax
 
         data = {
