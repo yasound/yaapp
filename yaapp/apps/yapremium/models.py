@@ -237,7 +237,7 @@ class Gift(models.Model):
         count = 0
         last_achievement_date = None
         if user is not None and not user.is_anonymous():
-            achievements = Achievement.objects.filter(user=user).order_by('-achievement_date')
+            achievements = Achievement.objects.filter(user=user, gift=self).order_by('-achievement_date')
             count = achievements.count()
             if count > 0:
                 last_achievement_date = achievements[0].achievement_date
