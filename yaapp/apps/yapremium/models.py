@@ -202,6 +202,8 @@ class Gift(models.Model):
 
     action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
     action_url_ios = models.TextField(_('iOS action url'), blank=True)  # special field used by iOS to navigate to action menu
+    action_url_web = models.TextField(_('web action url'), blank=True)  # special field used by webapp to navigate to action menu
+    action_url_web_ajax = models.TextField(_('web action ajax url'), blank=True)  # special field used by webapp to navigate to action menu
 
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
@@ -257,9 +259,9 @@ class Gift(models.Model):
             completed_url = reverse('yapremium.views.action_watch_tutorial_completed', args=[user.username])
             action_url = 'http://www.youtube.com/watch?v=YkFaWMN6Rsg&feature=plcp'
             target = '_blank'
-        elif self.action == yapremium_settings.ACTION_CREATE_ACCOUNT:
-            action_url = reverse('webapp_default_signup')
-            data_url = '/signup/'
+        else:
+            action_url = reverse(self.action_url_web)
+            data_url = self.action_url_web_ajax
 
         data = {
             'id': self.id,

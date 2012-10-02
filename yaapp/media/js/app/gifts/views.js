@@ -25,6 +25,16 @@ Yasound.Views.Gift = Backbone.View.extend({
             $(this.el).html(ich.giftTemplate(data));
         }
 
+        $('a', this.el).on('click', function(e) {
+            var url = $(e.target).data('url');
+            if (!url) {
+                return;
+            }
+            e.preventDefault();
+            Yasound.App.Router.navigate(url, {
+                trigger: true
+            });
+        })
         return this;
     }
 });
