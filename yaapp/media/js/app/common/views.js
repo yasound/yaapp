@@ -394,6 +394,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
         this.userMenu = new Yasound.Views.UserMenu({}).render();
 
+        if (this.loginView) {
+            this.loginView.close();
+            this.loginView = undefined;
+        }
+        this.loginView = new Yasound.Views.LogIn({}).render();
+
+
         var volumeSlider = $('#volume-slider');
         volumeSlider.slider({
             range: "min",

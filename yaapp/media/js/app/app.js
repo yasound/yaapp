@@ -280,7 +280,6 @@ $(document).ready(function () {
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
-                this.commonContext.LogIn = new Yasound.Views.LogIn({}).render();
                 this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 
