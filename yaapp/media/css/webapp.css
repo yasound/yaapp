@@ -3680,6 +3680,11 @@ ul#gifts {
     background-color:#f4f4f4;
 }
 
+.gift-container .done {
+    float:right;
+    margin-right:12px;
+    color: #00aa00;
+}
 
 .gift-container img {
     float: left;

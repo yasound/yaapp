@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-02 14:56+0200\n"
+"POT-Creation-Date: 2012-10-02 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1177,7 +1177,11 @@ msgstr "Connectez-vous pour afficher vos amis."
 msgid "Followers"
 msgstr "Personnes qui vous suivent"
 
-#: templates/yabase/app/gifts/gift.mustache:4
+#: templates/yabase/app/gifts/gift.mustache:6
+msgid "action done"
+msgstr "action effectuée"
+
+#: templates/yabase/app/gifts/gift.mustache:10
 msgid "Perform the action"
 msgstr "Effectuer l'action"
 
