@@ -4897,7 +4897,9 @@ a.yabutton-small {
         margin-left:4.5%;
     }
 
-
+    #webapp-container {
+        margin-top: 158px;
+    }
 /*-- SETTINGS MENU --*/
 
     #mobile-menu-content {
