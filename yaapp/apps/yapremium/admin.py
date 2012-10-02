@@ -21,7 +21,7 @@ class UserServiceAdmin(admin.ModelAdmin):
 admin.site.register(UserService, UserServiceAdmin)
 
 class GiftAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_en', 'action', 'service', 'duration', 'max_per_user')
+    list_display = ('id', 'name_en', 'action', 'service', 'duration', 'duration_unit', 'max_per_user')
 admin.site.register(Gift, GiftAdmin)
 
 class AchievementAdmin(admin.ModelAdmin):
@@ -30,7 +30,7 @@ class AchievementAdmin(admin.ModelAdmin):
 admin.site.register(Achievement, AchievementAdmin)
 
 class PromocodeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code', 'service', 'duration', 'enabled', 'unique')
+    list_display = ('id', 'code', 'service', 'duration', 'duration_unit', 'enabled', 'unique')
 admin.site.register(Promocode, PromocodeAdmin)
 
 class UserPromocodeAdmin(admin.ModelAdmin):

@@ -69,6 +69,7 @@ class Subscription(models.Model):
     sku = models.CharField(_('sku'), max_length=255, blank=True)
     description = models.TextField(_('description'), blank=True)
     duration = models.IntegerField(_('duration'), default=1)
+    duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_MONTH)
     enabled = models.BooleanField(_('enabled'), default=False)
     order = models.IntegerField(_('order'), default=0)
     highlighted = models.BooleanField(_('highlighted'), default=False)
@@ -79,6 +80,7 @@ class Subscription(models.Model):
             'id': self.id,
             'sku': self.sku,
             'duration': self.duration,
+            'duration_unit': self.duration_unit,
             'enabled': self.enabled,
             'highlighted': self.highlighted,
         }
@@ -107,21 +109,21 @@ class UserSubscription(models.Model):
         verbose_name_plural = _('user subscriptions')
 
     def save(self, *args, **kwargs):
-        self.expiration_date = yapremium_utils.calculate_expiration_date(duration=self.subscription.duration)
+        self.expiration_date = yapremium_utils.calculate_expiration_date(duration=self.subscription.duration, duration_unit=self.subscription.duration_unit)
         super(UserSubscription, self).save(*args, **kwargs)
 
         for service in self.subscription.services.all():
             us, _created = UserService.objects.get_or_create(service=service, user=self.user)
-            us.calculate_expiration_date(duration=self.subscription.duration)
+            us.calculate_expiration_date(duration=self.subscription.duration, duration_unit=self.subscription.duration_unit)
 
     def __unicode__(self):
         return u'%s - %s' % (unicode(self.user), unicode(self.subscription))
 
 
 class UserServiceManager(models.Manager):
-    def generate(self, service, user, duration):
+    def generate(self, service, user, duration, duration_unit):
         us, _created = UserService.objects.get_or_create(service=service, user=user)
-        us.calculate_expiration_date(duration=duration, commit=True)
+        us.calculate_expiration_date(duration=duration, duration_unit=duration_unit, commit=True)
         return us
 
 
@@ -152,7 +154,7 @@ class UserService(models.Model):
             self.service.disable(self.user)
         super(UserService, self).save(*args, **kwargs)
 
-    def calculate_expiration_date(self, duration, commit=True):
+    def calculate_expiration_date(self, duration, duration_unit, commit=True):
         """
         (re)calculate expiration date given a new duration
         """
@@ -164,7 +166,7 @@ class UserService(models.Model):
                 # expiration date in future ? we increment the given expiration date
                 start_day = self.expiration_date.date()
 
-        self.expiration_date = yapremium_utils.calculate_expiration_date(today=start_day, duration=duration)
+        self.expiration_date = yapremium_utils.calculate_expiration_date(today=start_day, duration=duration, duration_unit=duration_unit)
 
         # now we can check if the service is available
         if self.expiration_date >= today:
@@ -207,6 +209,7 @@ class Gift(models.Model):
 
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
+    duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_MONTH)
     max_per_user = models.IntegerField(_('max per user'), default=1)  # one-shot gift is max_per_user=1
 
     picture_todo = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
@@ -260,7 +263,8 @@ class Gift(models.Model):
             action_url = 'http://www.youtube.com/watch?v=YkFaWMN6Rsg&feature=plcp'
             target = '_blank'
         else:
-            action_url = reverse(self.action_url_web)
+            if self.action_url_web:
+                action_url = reverse(self.action_url_web)
             data_url = self.action_url_web_ajax
 
         data = {
@@ -306,7 +310,7 @@ class AchievementManager(models.Manager):
         today = date.today()
         obj = self.create(user=user, gift=gift, achievement_date=today)
         us, _created = UserService.objects.get_or_create(user=user, service=gift.service)
-        us.calculate_expiration_date(duration=gift.duration)
+        us.calculate_expiration_date(duration=gift.duration, duration_unit=gift.duration_unit)
         return obj
 
 
@@ -349,7 +353,7 @@ class PromocodeManager(models.Manager):
         if is_valid:
             promocode = self.get(code=code)
             up = UserPromocode.objects.create(user=user, promocode=promocode, usage_date=today)
-            UserService.objects.generate(service=promocode.service, user=user, duration=promocode.duration)
+            UserService.objects.generate(service=promocode.service, user=user, duration=promocode.duration, duration_unit=promocode.duration_unit)
             return up
         return None
 
@@ -370,6 +374,7 @@ class Promocode(models.Model):
     enabled = models.BooleanField(_('enabled'), default=False)
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
+    duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_MONTH)
     unique = models.BooleanField(_('unique'), default=False)
 
     def __unicode__(self):

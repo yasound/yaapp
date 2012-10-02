@@ -7,7 +7,7 @@ import string
 import random
 from datetime import *
 from dateutil.relativedelta import *
-
+import settings as yapremium_settings
 logger = logging.getLogger("yaapp.yapremium")
 
 
@@ -32,10 +32,16 @@ def verify_receipt(receipt, encode=False):
     return False
 
 
-def calculate_expiration_date(duration, today=None):
+def calculate_expiration_date(duration, duration_unit, today=None):
     if not today:
         today = date.today()
-    return today + relativedelta(months=+duration)
+
+    if duration_unit == yapremium_settings.DURATION_DAY:
+        return today + relativedelta(days=+duration)
+    elif duration_unit == yapremium_settings.DURATION_WEEK:
+        return today + relativedelta(weeks=+duration)
+    elif duration_unit == yapremium_settings.DURATION_MONTH:
+        return today + relativedelta(months=+duration)
 
 
 def generate_code_name(prefix=''):
