@@ -131,7 +131,8 @@ class TestGift(TestCase):
             description='description',
             service=service,
             action=yapremium_settings.ACTION_CREATE_ACCOUNT,
-            duration=1,
+            duration=2,
+            duration_unit=yapremium_settings.DURATION_DAY,
             max_per_user=1,
             enabled=True)
 
@@ -142,8 +143,8 @@ class TestGift(TestCase):
         self.assertTrue(us.active)
 
         today = date.today()
-        one_month = today + relativedelta(months=+1)
-        self.assertEquals(us.expiration_date.date(), one_month)
+        two_days = today + relativedelta(days=+2)
+        self.assertEquals(us.expiration_date.date(), two_days)
 
     def test_add_facebook_account(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
