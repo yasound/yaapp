@@ -7,6 +7,7 @@ import settings as yapremium_settings
 from datetime import *
 from dateutil.relativedelta import *
 from account import signals as account_signals
+from yabase import signals as yabase_signals
 from utils import verify_receipt, generate_code_name
 import json
 
@@ -196,6 +197,30 @@ class TestGift(TestCase):
         one_month = today + relativedelta(months=+1)
         self.assertEquals(us.expiration_date.date(), one_month)
 
+    def test_watch_tutorial(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+            duration=1,
+            max_per_user=1,
+            enabled=True)
+
+        yabase_signals.user_watched_tutorial.send(sender=user2.get_profile(), user=user2)
+
+        user2 = User.objects.get(id=user2.id)  # reload object
+        self.assertTrue(user2.get_profile().permissions.hd)
+
+        us = UserService.objects.get(user=user2, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        one_month = today + relativedelta(months=+1)
+        self.assertEquals(us.expiration_date.date(), one_month)
 
 class TestExpirationDate(TestCase):
     def setUp(self):

@@ -10,7 +10,7 @@ Namespace('Yasound.Views');
  */
 Yasound.Views.TutorialWindow = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'render', 'templateLoaded');
+        _.bindAll(this, 'render', 'templateLoaded', 'notifyServer');
     },
     reset: function() {
 
@@ -38,9 +38,27 @@ Yasound.Views.TutorialWindow = Backbone.View.extend({
             show: true,
             backdrop: true
         });
+
+        var timer;
+        timer = setTimeout(function() {
+            that.notifyServer();
+        }, 60*1000*3);
+
         $('#modal-window').one('hidden', function () {
+            if (timer) {
+                clearTimeout(timer);
+                timer = undefined;
+            }
             that.close();
-        })
+        });
+    },
+
+    notifyServer: function () {
+        var url = '/api/v1/user_watched_tutorial/';
+        $.ajax({
+           url: url,
+           type: 'POST'
+        });
     }
 });
 
