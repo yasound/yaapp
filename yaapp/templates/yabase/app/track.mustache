@@ -127,7 +127,7 @@
     <div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
        <div id='hd-box-container' class='hidden'>
         <div id='hd-status'>
-          <label for='hd-checkbox'>{% trans "HD" %}</label>
+          <label for='hd-checkbox'>{% trans "HD" %} {% if hd_expiration_date %}({% trans "enabled until" %} {{ hd_expiration_date|date:"DATE_FORMAT" }}) {% endif %}</label>
             <div id="hd-checkbox-container">
                 <input type='checkbox' id='hd-checkbox' {% if hd_enabled %}checked='checked'{% else %}disabled=""{% endif %}>
             </div>
@@ -160,6 +160,26 @@
             <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
           </div>
             </div>
+
+          <div id='hd-without-login'>
+          <div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
+             <div id='hd-box-container' class='hidden'>
+              <div id='hd-status'>
+                <label for='hd-checkbox'>{% trans "HD" %}</label>
+                  <div id="hd-checkbox-container">
+                      <input type='checkbox' id='hd-checkbox' {% if hd_enabled %}checked='checked'{% else %}disabled=""{% endif %}>
+                  </div>
+              </div>
+              <div id='gifts-container'>
+                  <ul id='gifts'>
+                      <img class='loading-mask' src='/media/images/loading.gif'/>
+                  </ul>
+                  <div id='pagination'></div>
+              </div>
+             </div>
+          </div>
+        </div>
+
             {% endif %}
         </div>
     </div>

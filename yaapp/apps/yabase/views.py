@@ -1387,6 +1387,7 @@ class WebAppView(View):
 
         show_welcome_popup = False
         hd_enabled = False
+        hd_expiration_date = None
 
         if request.user.is_authenticated():
             user_profile = request.user.get_profile()
@@ -1396,6 +1397,7 @@ class WebAppView(View):
                 user_uuid = None
 
             hd_enabled = user_profile.permissions.hd.is_set
+            hd_expiration_date = user_profile.hd_expiration_date
 
             if user_profile.web_preferences().get('hide_welcome_popup'):
                 show_welcome_popup = False
@@ -1479,6 +1481,7 @@ class WebAppView(View):
             'app_name': app_name,
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
+            'hd_expiration_date': hd_expiration_date,
         }
 
         if hasattr(self, page):
@@ -1519,6 +1522,7 @@ class WebAppView(View):
         facebook_share_link = absolute_url(reverse('webapp', args=[self.app_name]))
 
         hd_enabled = False
+        hd_expiration_date = None
         if request.user.is_authenticated():
             if request.user.get_profile().own_radio:
                 user_uuid = request.user.get_profile().own_radio.uuid
@@ -1530,6 +1534,7 @@ class WebAppView(View):
             notification_count = nm.unread_count(request.user.id)
 
             hd_enabled = user_profile.permissions.hd.is_set
+            hd_expiration_date = user_profile.hd_expiration_date
 
             radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
             if radio_count > 0:
@@ -1601,6 +1606,7 @@ class WebAppView(View):
             'app_name': app_name,
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
+            'hd_expiration_date': hd_expiration_date,
         }
 
         if hasattr(self, page):

@@ -522,6 +522,21 @@ class UserProfile(models.Model):
         return SUBSCRIPTION_NONE
 
     @property
+    def hd_expiration_date(self):
+        if not self.permissions.hd.is_set:
+            return None
+
+        from yapremium.models import UserService
+        from yapremium import settings as yapremium_settings
+        try:
+            us = UserService.objects.get(user=self.user, service__stype=yapremium_settings.SERVICE_HD)
+        except UserService.DoesNotExist:
+            return None
+
+        return us.expiration_date
+
+
+    @property
     def own_radio(self):
         radios = self.own_radios(only_ready_radios=False)
         if radios.count() == 0:

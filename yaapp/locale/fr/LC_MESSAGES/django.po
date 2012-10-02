@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-01 10:44+0200\n"
+"POT-Creation-Date: 2012-10-02 14:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,9 +51,9 @@ msgstr "disponible sur l'appstore"
 #: templates/account/signup.html:27
 #: templates/account/signup.html.py:75
 #: templates/web/menu.html:16
-#: templates/yabase/webapp.html:407
-#: templates/yabase/webapp.html.py:419
 #: templates/yabase/app/mobileLeftMenu.html:38
+#: templates/yabase/app/track.mustache:100
+#: templates/yabase/app/track.mustache:112
 #: templates/yabase/app/profile/user.mustache:24
 msgid "Logout"
 msgstr "Se déconnecter"
@@ -63,7 +63,7 @@ msgstr "Se déconnecter"
 #: templates/account/login.html.py:55
 #: templates/web/index.html:4
 #: templates/web/menu.html:19
-#: templates/yabase/webapp.html:440
+#: templates/yabase/app/track.mustache:148
 #: templates/yabase/app/favorites/favoritesPage.mustache:16
 #: templates/yabase/app/friends/friendsPage.mustache:40
 #: templates/yabase/app/login/login.mustache:24
@@ -72,8 +72,8 @@ msgid "Login"
 msgstr "Se connecter"
 
 #: templates/account/login.html:24
-#: templates/yabase/webapp.html:535
-#: templates/yabase/webapp.html.py:538
+#: templates/yabase/webapp.html:469
+#: templates/yabase/webapp.html.py:472
 #: templates/yabase/app/login/login.mustache:5
 msgid "Welcome to Yasound"
 msgstr "Bienvenue sur Yasound"
@@ -86,20 +86,20 @@ msgstr "Vous êtes déjà authentifié"
 
 #: templates/account/login.html:32
 #: templates/account/login.html.py:40
-#: templates/yabase/webapp.html:442
+#: templates/yabase/app/track.mustache:150
 #: templates/yabase/app/login/login.mustache:10
 msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
 #: templates/account/login.html:36
 #: templates/account/login.html.py:44
-#: templates/yabase/webapp.html:443
+#: templates/yabase/app/track.mustache:151
 #: templates/yabase/app/login/login.mustache:14
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
 #: templates/account/login.html:59
-#: templates/yabase/webapp.html:452
+#: templates/yabase/app/track.mustache:160
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
 
@@ -158,12 +158,12 @@ msgstr "\n"
 
 #: templates/account/signup.html:8
 #: templates/account/signup.html.py:56
-#: templates/yabase/webapp.html:438
+#: templates/yabase/app/track.mustache:146
 msgid "Signup"
 msgstr "S'inscrire"
 
 #: templates/account/signup.html:24
-#: templates/yabase/webapp.html:332
+#: templates/yabase/webapp.html:340
 msgid "Yasound"
 msgstr "Yasound"
 
@@ -681,12 +681,16 @@ msgstr "Auditeurs"
 msgid "Fans"
 msgstr "Fans"
 
+#: templates/web/stay_tuned.html:4
+msgid "Stay tuned"
+msgstr ""
+
 #: templates/yabackoffice/index.html:9
 msgid "Backoffice"
 msgstr "Backoffice"
 
 #: templates/yabackoffice/index.html:40
-#: templates/yabase/webapp.html:328
+#: templates/yabase/webapp.html:336
 msgid "Loading application..."
 msgstr "Chargement de l'application..."
 
@@ -895,82 +899,48 @@ msgstr "Sans nom"
 #: templates/yabase/song.html:90
 #: templates/yabase/app/mobileCenterMenu.html:27
 #: templates/yabase/app/mobileCenterMenu.html:28
-#: templates/yabase/app/track.mustache:64
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
-#: templates/yabase/webapp.html:405
-#: templates/yabase/webapp.html.py:417
-#: templates/yabase/app/mobileLeftMenu.html:18
-msgid "My profile"
-msgstr "Mon profil"
-
 #: templates/yabase/webapp.html:406
-#: templates/yabase/webapp.html.py:418
-msgid "My settings"
-msgstr "Mes paramètres"
-
-#: templates/yabase/webapp.html:434
-msgid "No gifts"
-msgstr "Aucun cadeau"
-
-#: templates/yabase/webapp.html:446
-#: templates/yabase/app/login/login.mustache:19
-msgid "Email login"
-msgstr "Connexion avec email"
-
-#: templates/yabase/webapp.html:447
-#: templates/yabase/app/login/login.mustache:22
-#: templates/yabase/app/signup/signup.mustache:23
-msgid "Email"
-msgstr "Email"
-
-#: templates/yabase/webapp.html:448
-#: templates/yabase/app/login/login.mustache:23
-#: templates/yabase/app/signup/signup.mustache:24
-msgid "Password"
-msgstr "Mot de passe"
-
-#: templates/yabase/webapp.html:472
 #: templates/yabase/app/mobileCenterMenu.html:24
-#: templates/yabase/app/track.mustache:53
-#: templates/yabase/app/radio/radio.mustache:42
+#: templates/yabase/app/track.mustache:25
 msgid "Share"
 msgstr "Partager"
 
-#: templates/yabase/webapp.html:475
+#: templates/yabase/webapp.html:409
 msgid "Share this song on:"
 msgstr "Partager ce titre sur :"
 
-#: templates/yabase/webapp.html:478
+#: templates/yabase/webapp.html:412
 #: templates/yabase/app/settings/settingsPage.mustache:20
 #: templates/yabase/app/settings/settingsPage.mustache:31
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/yabase/webapp.html:479
+#: templates/yabase/webapp.html:413
 #: templates/yabase/app/settings/settingsPage.mustache:44
 #: templates/yabase/app/settings/settingsPage.mustache:55
 msgid "Twitter"
 msgstr "Twitter"
 
-#: templates/yabase/webapp.html:483
-#: templates/yabase/webapp.html.py:542
+#: templates/yabase/webapp.html:417
+#: templates/yabase/webapp.html.py:476
 #: templates/yabase/app/radio/editRadioPage.mustache:31
 #: templates/yabase/app/settings/settingsPage.mustache:128
 msgid "Close"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:490
+#: templates/yabase/webapp.html:424
 #: templates/yabase/app/profile/user.mustache:19
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: templates/yabase/webapp.html:493
+#: templates/yabase/webapp.html:427
 msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
-#: templates/yabase/webapp.html:497
+#: templates/yabase/webapp.html:431
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:13
 #: templates/yabase/app/programming/songInstances.mustache:38
 #: templates/yabase/app/radio/radioPage.mustache:50
@@ -980,7 +950,7 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 msgid "No thank you"
 msgstr "Non merci"
 
-#: templates/yabase/webapp.html:498
+#: templates/yabase/webapp.html:432
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:14
 #: templates/yabase/app/programming/songInstances.mustache:39
 #: templates/yabase/app/radio/radioPage.mustache:51
@@ -990,33 +960,33 @@ msgstr "Non merci"
 msgid "Yes i want"
 msgstr "Oui je le veux"
 
-#: templates/yabase/webapp.html:505
+#: templates/yabase/webapp.html:439
 msgid "Connection error"
 msgstr "Erreur de connexion"
 
-#: templates/yabase/webapp.html:508
+#: templates/yabase/webapp.html:442
 msgid "Unable to connect Yasound server right now."
 msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
 
-#: templates/yabase/webapp.html:512
-#: templates/yabase/webapp.html.py:527
+#: templates/yabase/webapp.html:446
+#: templates/yabase/webapp.html.py:461
 #: templates/yabase/app/radio/radioPage.mustache:79
 msgid "Dismiss"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:513
+#: templates/yabase/webapp.html:447
 msgid "Reload page"
 msgstr "Recharger la page"
 
-#: templates/yabase/webapp.html:520
+#: templates/yabase/webapp.html:454
 msgid "You are not logged in"
 msgstr "Vous n'êtes pas authentifié"
 
-#: templates/yabase/webapp.html:523
+#: templates/yabase/webapp.html:457
 msgid "You have to login to access the requested resource."
 msgstr "Vous devez être authentifié pour accéder à cette ressource."
 
-#: templates/yabase/webapp.html:528
+#: templates/yabase/webapp.html:462
 msgid "Go to login page"
 msgstr "Aller à la page de login"
 
@@ -1090,6 +1060,12 @@ msgstr "Favoris"
 msgid "Sign In"
 msgstr "S'inscrire"
 
+#: templates/yabase/app/mobileLeftMenu.html:18
+#: templates/yabase/app/track.mustache:98
+#: templates/yabase/app/track.mustache:110
+msgid "My profile"
+msgstr "Mon profil"
+
 #: templates/yabase/app/mobileLeftMenu.html:22
 msgid "My radios"
 msgstr "Mes radios"
@@ -1109,8 +1085,8 @@ msgstr "Cadeaux"
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:13
 #: templates/yabase/app/profile/user.mustache:25
 #: templates/yabase/app/programming/programmingPage.mustache:4
-#: templates/yabase/app/radio/radio.mustache:45
-#: templates/yabase/app/radio/radio.mustache:52
+#: templates/yabase/app/radio/radio.mustache:44
+#: templates/yabase/app/radio/radio.mustache:51
 #: templates/yabase/app/settings/settingsPage.mustache:5
 msgid "Settings"
 msgstr "Paramètres"
@@ -1123,18 +1099,40 @@ msgstr "Charger plus"
 msgid "No result found"
 msgstr "Aucun résultat trouvé"
 
-#: templates/yabase/app/track.mustache:14
-msgid "Go to radio"
-msgstr "Aller sur la radio"
-
-#: templates/yabase/app/track.mustache:18
+#: templates/yabase/app/track.mustache:21
 msgid "Favorite"
 msgstr "Favoris"
 
-#: templates/yabase/app/track.mustache:59
-#: templates/yabase/app/radio/radio.mustache:58
-msgid "Like song"
-msgstr "J'aime le morceau"
+#: templates/yabase/app/track.mustache:99
+#: templates/yabase/app/track.mustache:111
+msgid "My settings"
+msgstr "Mes paramètres"
+
+#: templates/yabase/app/track.mustache:130
+#: templates/yabase/app/track.mustache:168
+msgid "HD"
+msgstr ""
+
+#: templates/yabase/app/track.mustache:130
+msgid "enabled until"
+msgstr "activée jusqu'au"
+
+#: templates/yabase/app/track.mustache:154
+#: templates/yabase/app/login/login.mustache:19
+msgid "Email login"
+msgstr "Connexion avec email"
+
+#: templates/yabase/app/track.mustache:155
+#: templates/yabase/app/login/login.mustache:22
+#: templates/yabase/app/signup/signup.mustache:23
+msgid "Email"
+msgstr "Email"
+
+#: templates/yabase/app/track.mustache:156
+#: templates/yabase/app/login/login.mustache:23
+#: templates/yabase/app/signup/signup.mustache:24
+msgid "Password"
+msgstr "Mot de passe"
 
 #: templates/yabase/app/common/subMenu.mustache:37
 msgid "People"
@@ -1221,8 +1219,8 @@ msgstr "Supprimer"
 #: templates/yabase/app/programming/programmingPage.mustache:5
 #: templates/yabase/app/programming/programmingPage.mustache:12
 #: templates/yabase/app/radio/editRadioPage.mustache:5
-#: templates/yabase/app/radio/radio.mustache:46
-#: templates/yabase/app/radio/radio.mustache:53
+#: templates/yabase/app/radio/radio.mustache:45
+#: templates/yabase/app/radio/radio.mustache:52
 msgid "Programming"
 msgstr "Programmation"
 
@@ -1483,8 +1481,8 @@ msgstr "Retirer des favoris"
 msgid "Add to favorite"
 msgstr "Ajouter aux favoris"
 
-#: templates/yabase/app/radio/radio.mustache:47
-#: templates/yabase/app/radio/radio.mustache:54
+#: templates/yabase/app/radio/radio.mustache:46
+#: templates/yabase/app/radio/radio.mustache:53
 msgid "Broadcast to your fans"
 msgstr "Message aux abonnés"
 

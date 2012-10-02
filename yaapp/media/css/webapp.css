@@ -87,10 +87,12 @@ body {
     display:block;
     float:left;
     position:relative;
-    font-size:15px;
+    font-size:12px;
     color: white;
     padding:0px;
     text-decoration:none;
+    margin-left:-20px;
+    margin-top:-8px;
 }
 
 #login a {
@@ -100,7 +102,7 @@ body {
 #login #signup-btn {
     float:left;
     display:block;
-    width:70px;
+    width:60px;
     margin-top:31px;
     color:white;
     text-align: center;
@@ -109,7 +111,7 @@ body {
 #login #login-btn {
     float:left;
     display:block;
-    width:100px;
+    width:80px;
     margin-top:31px;
     color:white;
     text-align: center;
@@ -234,6 +236,7 @@ body {
     right:20px;
 }
 
+
 #profile-box-container {
     position:absolute;
     top:45px;
@@ -357,6 +360,11 @@ body {
     height:27px;
     width:46px;
     position:relative;
+}
+
+#hd-without-login {
+    float:left;
+    margin-top:16px;
 }
 
 #hd-button-mobile {
