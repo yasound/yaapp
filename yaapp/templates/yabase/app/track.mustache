@@ -37,18 +37,17 @@
                     {% else %}
                     <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
                     {% endif %}
-                    <span class="yatoolelt">{% trans "Go to radio" %}</span>
                 </a>
             </div>
             <span>{{ yasound_song.title|default:'<% name %>' }}</span>
 
             <div class='button-group'>
                 <a href="#" id="love-btn" class='yatooltip-share'>
-                    <span class="yatoolelt-share">{% trans "Like song" %}</span>
+                    {# <span class="yatoolelt-share">{% trans "Like song" %}</span> #}
                 </a>
 
                 <a href="<% buy_link %>" id="shop-btn" class='yatooltip' target="_blank">
-                    <span class="yatoolelt">{% trans "Buy on iTunes" %}</span>
+                    {# <span class="yatoolelt">{% trans "Buy on iTunes" %}</span> #}
                 </a>
 
             </div>
