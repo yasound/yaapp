@@ -151,6 +151,7 @@ $(document).ready(function () {
             "legal/": "legal",
             "contact/": "contact",
             "about/": "about",
+            "tutorial/": "tutorial",
             "jobs/": "jobs",
             "*args": "index"
         },
@@ -479,22 +480,26 @@ $(document).ready(function () {
         },
 
         legal: function () {
-            return this.static('legal');
+            return this.staticPage('legal');
         },
 
         contact: function () {
-            return this.static('contact');
+            return this.staticPage('contact');
         },
 
         jobs: function () {
-            return this.static('jobs');
+            return this.staticPage('jobs');
         },
 
         about: function () {
-            return this.static('about');
+            return this.staticPage('about');
         },
 
-        static: function(page) {
+        tutorial: function () {
+            new Yasound.Views.TutorialWindow().render();
+        },
+
+        staticPage: function(page) {
             this.clearView();
 
             page = page.replace('/', '');
