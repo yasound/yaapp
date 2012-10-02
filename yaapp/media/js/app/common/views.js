@@ -1001,11 +1001,9 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     },
     myRadios: function(e) {
         e.preventDefault();
-        if (Yasound.App.hasRadios) {
-            Yasound.App.Router.navigate('/radios/', {
-                trigger: true
-            });
-        }
+        Yasound.App.Router.navigate('/radios/', {
+            trigger: true
+        });
     },
 
     onPlayerPlay: function () {

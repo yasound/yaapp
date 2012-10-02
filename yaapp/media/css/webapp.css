@@ -69,6 +69,9 @@ body {
     font-size: 18px;
 }
 
+#modal-window {
+    width:auto;
+}
 /**
  * Header
  */
@@ -1406,13 +1409,14 @@ input::-webkit-input-placeholder {
     float: left;
     width: 211px;
     margin-right: 0px;
-    margin-top: 58px;
+    margin-top: 38px;
 }
 
 #contacts p {
     color: white;
     overflow: hidden;
     border:0;
+    text-align: center;
 }
 
 #contacts p a {

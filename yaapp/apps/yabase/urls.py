@@ -28,6 +28,7 @@ urlpatterns = patterns('yabase.views',
     url(r'^app/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_default_contact'),
     url(r'^app/about/$', WebAppView.as_view(), {'page': 'about'}, name='webapp_default_about'),
     url(r'^app/jobs/$', WebAppView.as_view(), {'page': 'jobs'}, name='webapp_default_jobs'),
+    url(r'^app/tutorial/$', WebAppView.as_view(), {'page': 'tutorial'}, name='webapp_default_tutorial'),
 
     url(r'^tpl/(?P<template_name>\S+)/$', 'load_template'),
 
@@ -57,6 +58,7 @@ urlpatterns = patterns('yabase.views',
     url(r'^(?P<app_name>\w+)/contact/$', WebAppView.as_view(), {'page': 'contact'}, name='webapp_contact'),
     url(r'^(?P<app_name>\w+)/about/$', WebAppView.as_view(), {'page': 'about'}, name='webapp_about'),
     url(r'^(?P<app_name>\w+)/jobs/$', WebAppView.as_view(), {'page': 'jobs'}, name='webapp_jobs'),
+    url(r'^(?P<app_name>\w+)/tutorial/$', WebAppView.as_view(), {'page': 'tutorial'}, name='webapp_tutorial'),
 
     url(r'^(?P<app_name>\w+)/tpl/(?P<template_name>\S+)/$', 'load_template'),
     url(r'^(?P<app_name>\w+)/logout/$', 'logout'),

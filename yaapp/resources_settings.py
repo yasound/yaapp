@@ -120,6 +120,7 @@ PIPELINE_JS = {
             'js/app/home/models.js',
             'js/app/gifts/views.js',
             'js/app/gifts/models.js',
+            'js/app/tutorial/views.js',
             'js/app/static/views.js',
             'js/app/static/models.js',
             'js/app/templateLoader.js',

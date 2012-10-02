@@ -3,10 +3,6 @@
     <footer>
         <div id="contacts" class="blocks">
             <p>
-                <a id='btn-contact' href="{% url webapp_contact app_name %}" class="footer-text-color1" title="{% trans 'Contact' %}">{% trans "Contact" %}</a> -
-                <a id='btn-legal' href="{% url webapp_legal app_name %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
-            </p>
-            <p>
                 <a href="https://facebook.com/yasound" class="footer-text-color2" title="facebook" target='_blank'>
                     <img src="/media/app/images/facebook_logo.png" alt="facebook"/>
                     <span>Facebook</span>
@@ -15,6 +11,18 @@
                     <img src="/media/app/images/twitter_logo.png" alt="twitter" class="padding-social-logo"/>
                     <span>Twitter</span>
                 </a>
+            </p>
+            <p>
+                <a id='btn-about' href="{% url webapp_about app_name %}"
+                    class="footer-text-color1"
+                    title="{% trans 'About' %}">{% trans 'About' %}</a> -
+                <a id='btn-help' href="{% url webapp_tutorial app_name %}"
+                    class="footer-text-color1"
+                    title="{% trans 'Help' %}">{% trans "Help" %}</a>
+            </p>
+            <p>
+                <a id='btn-contact' href="{% url webapp_contact app_name %}" class="footer-text-color1" title="{% trans 'Contact' %}">{% trans "Contact" %}</a> -
+                <a id='btn-legal' href="{% url webapp_legal app_name %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
             </p>
         </div>
 
