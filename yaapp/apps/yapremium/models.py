@@ -14,6 +14,7 @@ from django.core.urlresolvers import reverse
 import utils as yapremium_utils
 
 import account.signals as account_signals
+from yabase import signals as yabase_signals
 
 from task import async_win_gift, async_check_for_invitation
 
@@ -360,7 +361,7 @@ class PromocodeManager(models.Manager):
     def generate_unique_codes(self, service, duration, count=50, prefix='YA-'):
         for i in range(0, count):
             self.create(code=yapremium_utils.generate_code_name(prefix),
-                enabled=True,
+                        enabled=True,
                 service=service,
                 duration=duration,
                 unique=True)
@@ -423,8 +424,13 @@ def twitter_account_added_handler(sender, user, **kwargs):
     async_check_for_invitation(InvitationsManager.TYPE_TWITTER, user_profile.twitter_uid)
 
 
+def user_watched_tutorial_handler(sender, user, **kwargs):
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
+
+
 def install_handlers():
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
     account_signals.facebook_account_added.connect(facebook_account_added_handler)
     account_signals.twitter_account_added.connect(twitter_account_added_handler)
+    yabase_signals.user_watched_tutorial.connect(user_watched_tutorial_handler)
 install_handlers()
