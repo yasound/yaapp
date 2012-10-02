@@ -39,24 +39,6 @@ $(document).ready(function () {
     }
 
 
-    if (Yasound.App.appName == 'deezer') {
-        $('#webapp-container-parent').slimScroll({
-            position: 'left',
-            height: '100%',
-            color: '#00f',
-            size: '10px',
-            railVisible: true,
-            alwaysVisible: true
-        });
-        // var height = 0;
-        // $(document).bind('DOMSubtreeModified', function() {
-        //     var newHeight = $(document).height();
-        //     if(newHeight != height) {
-        //         height = newHeight;
-        //     }
-        // });
-    }
-
     $.subscribe('/programming/upload_started', function () {
         Yasound.App.uploadCount = Yasound.App.uploadCount + 1;
     });
@@ -173,7 +155,32 @@ $(document).ready(function () {
             "*args": "index"
         },
         initialize: function() {
+            if (Yasound.App.appName == 'app') {
+                this.bind('all', this._updateDeezerCanvas);
+            }
+
             return this.bind('all', this._trackPageview);
+        },
+
+        _updateDeezerCanvas: function () {
+            if (DZ && DZ.canvas) {
+                DZ.canvas.setSize(1024);
+            }
+            var timeOut;
+            $(document).bind('DOMSubtreeModified', function() {
+                if (timeOut) {
+                    clearTimeout(timeOut);
+                    timeOut = undefined;
+                }
+                timeOut = setTimeout(function() {
+                    console.log('timeout');
+                    console.log($(document).height());
+                    if (DZ && DZ.canvas) {
+                        DZ.canvas.setSize($(document).height());
+                    }
+                }, 3000);
+            });
+
         },
 
         _trackPageview: function() {
