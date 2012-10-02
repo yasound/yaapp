@@ -250,6 +250,14 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
         return str;
     },
 
+    title_wrapped: function() {
+        var title = this.title();
+        if (title.length > 56) {
+            return title.substr(0, 56);
+        }
+        return title;
+    },
+
     like: function () {
         var songId = this.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
@@ -259,6 +267,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
     toJSON: function() {
         var data = Yasound.Data.Models.CurrentSong.__super__.toJSON.apply(this);
         data['title'] = this.title();
+        data['title_wrapped'] = this.title_wrapped();
         return data;
     }
 });
