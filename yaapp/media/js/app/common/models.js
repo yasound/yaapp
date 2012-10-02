@@ -252,8 +252,8 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
     title_wrapped: function() {
         var title = this.title();
-        if (title.length > 56) {
-            return title.substr(0, 56);
+        if (title.length > 53) {
+            return title.substr(0, 53);
         }
         return title;
     },
