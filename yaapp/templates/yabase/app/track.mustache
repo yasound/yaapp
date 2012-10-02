@@ -1,79 +1,166 @@
 {% load i18n %}
-<div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
-   <div id='hd-box-container' class='hidden'>
-    <div id='hd-status'>
-      <label for='hd-checkbox'>{% trans "HD" %}</label>
-        <div id="hd-checkbox-container">
-            <input type='checkbox' id='hd-checkbox' {% if hd_enabled %}checked='checked'{% else %}disabled=""{% endif %}>
+{% load thumbnail %}
+
+
+
+    {% ifnotequal app_name 'deezer' %}
+    <div id='radio-cover'>
+        <img src="<% radio_picture %>" width="77" height="80" alt="Radio Picture"/>
+        <div id="play-btn-large" class='play'>
+            &nbsp;
+        </div>
+     </div>
+    {% endifnotequal %}
+
+    <div id='metadata-container'>
+        <div id='radio-title'>
+            <span><% radio_name %></span>
+            <div class='button-group'>
+
+                <a id="favorite-radio" class='is-not-favorite yatooltip' href="#">
+                        <span class="yatoolelt">{% trans "Favorite" %}</span>
+                </a>
+
+                <a id="share-btn" data-toggle="modal" href="#modal-share" class='yatooltip-share'>
+                <span class="yatoolelt-share">{% trans "Share" %}</span>
+                </a>
+
+            </div>
+
+        </div>
+        <div id='player-title'>
+            <div id="radio-picto">
+                <a href="{% url webapp_radio app_name current_uuid %}" class='yatooltip'>
+
+                    {% if yasound_song %}
+                    <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="Radio Picto">
+                    {% else %}
+                    <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
+                    {% endif %}
+                </a>
+            </div>
+            <span>{{ yasound_song.title|default:'<% name %>' }}</span>
+
+            <div class='button-group'>
+                <a href="#" id="love-btn" class='yatooltip-share'>
+                    {# <span class="yatoolelt-share">{% trans "Like song" %}</span> #}
+                </a>
+
+                <a href="<% buy_link %>" id="shop-btn" class='yatooltip' target="_blank">
+                    {# <span class="yatoolelt">{% trans "Buy on iTunes" %}</span> #}
+                </a>
+
+            </div>
         </div>
     </div>
-    <div id='gifts-container'>
-        <ul id='gifts'>
-            <img class='loading-mask' src='/media/images/loading.gif'/>
-        </ul>
-        <div id='pagination'></div>
-    </div>
-   </div>
-</div>
-
-<div id="radio-picto">
-    <a href="{% url webapp_radio app_name current_uuid %}" class='yatooltip'>
-
-        {% if yasound_song %}
-        <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="Radio Picto">
-        {% else %}
-        <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
-        {% endif %}
-        <span class="yatoolelt">{% trans "Go to radio" %}</span>
-    </a>
-</div>
-    <a id="favorite-radio" class='is-not-favorite yatooltip' href="#">
-            <span class="yatoolelt">{% trans "Favorite" %}</span>
-    </a>
-    {% ifnotequal app_name 'deezer' %}
-    <a id="play-btn">
-        <i class="icon-play"></i>
-    </a>
-    {% endifnotequal %}
-<div id="sound-level">
-    {% ifnotequal app_name 'deezer' %}
-    <div id="min-level">
-        <img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
-    </div>
-
-    <div id='slider-container'>
-        <div id='player-title'>{{ yasound_song.title|default:'<% name %>' }}</div>
-        <span class="tooltip"></span>
-        <div id="volume-slider"></div>
-        <span class="volume"></span>
-    </div>
-
-    <div id="max-level">
-        <img src="/media/app/images/higher-volume.png" width="11" height="11" alt="Higher Volume">
-    </div>
-    <div class="responsive-volume-btn">
-            <img src="/media/app/images/responsive-lower-volume.png">
-    </div>
-    <div class="responsive-volume-btn">
-        <img src="/media/app/images/responsive-higher-volume.png">
-    </div>
-    {% endifnotequal %}
-</div>
-
-
-<div class="header-social-btn" id="first-social-btn">
-    <a id="share-btn" data-toggle="modal" href="#modal-share" class='yatooltip-share'>
-    <span class="yatoolelt-share">{% trans "Share" %}</span>
-    </a>
 
 </div>
-<div class="header-social-btn">
-    <a href="#" id="love-btn" class='yatooltip-share'>
-        <span class="yatoolelt-share">{% trans "Like song" %}</span>
-    </a>
-</div>
-<div class="header-social-btn">
-    <a href="<% buy_link %>" id="shop-btn" class='yatooltip' target="_blank">
-        <span class="yatoolelt">{% trans "Buy on iTunes" %}</span>
-    </a>
-</div>
+
+<div class="nav-collapse">
+    <div class='pull-right'>
+
+        <div id="sound-level">
+            {% ifnotequal app_name 'deezer' %}
+            <div id="min-level">
+                <img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
+            </div>
+
+            <div id='slider-container'>
+                <span class="tooltip"></span>
+                <div id="volume-slider"></div>
+                <span class="volume"></span>
+            </div>
+
+            <div id="max-level">
+                <img src="/media/app/images/higher-volume.png" width="11" height="11" alt="Higher Volume">
+            </div>
+            <div class="responsive-volume-btn">
+                    <img src="/media/app/images/responsive-lower-volume.png">
+            </div>
+            <div class="responsive-volume-btn">
+                <img src="/media/app/images/responsive-higher-volume.png">
+            </div>
+            {% endifnotequal %}
+        </div>
+
+
+        <div id='user-menu'>
+
+
+            {% if request.user.is_authenticated %}
+            <div id="profile-picture">
+               {% if user_profile.picture %}
+                   {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
+                    <a href='{% url webapp_profile app_name request.user.username %}' class='yatooltip'>
+                        <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
+           <div id='profile-box-container' class='hidden'>
+            <div>
+              <button id='my-profile-btn'>{% trans "My profile" %}</button>
+              <button id='my-settings-btn'>{% trans "My settings" %}</button>
+              <button id='logout-btn'>{% trans "Logout" %}</button>
+            </div>
+           </div>
+                    </a>
+                   {% endthumbnail %}
+               {% else %}
+                    <a href='{% url webapp_profile app_name request.user.username %}' class='yatooltip'>
+                        <img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"/>
+           <div id='profile-box-container' class='hidden'>
+            <div>
+              <button id='my-profile-btn'>{% trans "My profile" %}</button>
+              <button id='my-settings-btn'>{% trans "My settings" %}</button>
+              <button id='logout-btn'>{% trans "Logout" %}</button>
+            </div>
+           </div>
+                    </a>
+
+               {% endif %}
+
+
+            </div>
+            <div>
+                <a id="messages-btn" class="header-notification yatooltip" href="{% url webapp_notifications app_name %}">
+                    <span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
+                </a>
+            </div>
+            <div class="header-notification" id="last-social-btn">
+    <div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
+       <div id='hd-box-container' class='hidden'>
+        <div id='hd-status'>
+          <label for='hd-checkbox'>{% trans "HD" %}</label>
+            <div id="hd-checkbox-container">
+                <input type='checkbox' id='hd-checkbox' {% if hd_enabled %}checked='checked'{% else %}disabled=""{% endif %}>
+            </div>
+        </div>
+        <div id='gifts-container'>
+            <ul id='gifts'>
+                <img class='loading-mask' src='/media/images/loading.gif'/>
+            </ul>
+            <div id='pagination'></div>
+        </div>
+       </div>
+    </div>
+            </div>
+            {% else %}
+            <div id='login'>
+              <a class='float-left' id='signup-btn' href='{% url webapp_signup app_name %}'>{% trans 'Signup' %}</a>
+          <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
+          <a class='float-left login-btn' id='login-btn' href='{% url webapp_login app_name %}'>{% trans 'Login' %}</a>
+          <div id='login-box-container' class='hidden'>
+            <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
+            <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next= {{ root }}" rel="nofollow"><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
+            <div class='login-separation-line'></div>
+            <form id='popup-login-form' method='post' action="{% url webapp_login app_name %}">{% csrf_token %}
+              <span>{% trans "Email login" %}</span>
+              <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
+              <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
+              <input type='hidden' name='action' value='login'/>
+              <input id='login-btn-connection' type='submit' value='Connexion'/>
+            </form>
+            <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
+          </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+

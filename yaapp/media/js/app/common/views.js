@@ -297,12 +297,15 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     events: {
         "click #play-btn": "togglePlay",
+        "click #play-btn-large": "togglePlay",
         "click #love-btn": "like",
         "click #radio-picto a": "displayRadio",
         "click #favorite-radio": "favorite",
         "hover #hd-button": "displayPopupHD",
         "mouseleave #hd-button": "hidePopupHD",
-        "click #hd-checkbox": "onHD"
+        "click #hd-checkbox": "onHD",
+        "click #player-title": "displayRadio",
+        "click #radio-title": "displayRadio"
     },
 
     initialize: function () {
@@ -378,8 +381,18 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         data['hd'] = Yasound.App.player.hd;
+        if (this.radio) {
+            data['radio_picture'] = this.radio.get('picture');
+            data['radio_name'] = this.radio.get('name');
+        }
         $(this.el).html(ich.trackTemplate(data));
         document.title = this.model.title();
+
+        if (this.userMenu) {
+            this.userMenu.close();
+            this.userMenu = undefined;
+        }
+        this.userMenu = new Yasound.Views.UserMenu({}).render();
 
         var volumeSlider = $('#volume-slider');
         volumeSlider.slider({
@@ -428,11 +441,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     },
 
     onPlayerPlay: function () {
+        $('#play-btn-large').removeClass('play').addClass('pause');
         $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         $('#volume-slider').slider('value', Yasound.App.player.volume());
     },
 
     onPlayerStop: function () {
+        $('#play-btn-large').removeClass('pause').addClass('play');
         $('#play-btn i').removeClass('icon-pause').addClass('icon-play');
     },
 

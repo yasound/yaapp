@@ -277,7 +277,7 @@ body {
 #hd-box-container {
     position:absolute;
     top:45px;
-    left:-180px;
+    left:-378px;
     display:block;
     width:400px;
     background-color:rgba(44, 46, 47, 0.99);
@@ -306,7 +306,7 @@ body {
     content:url('../app/images/login/login-tooltip.png');
     position:absolute;
     top:-13px;
-    left:48%;
+    right:14px;
 }
 #hd-box-container #hd-status {
     height:48px;
@@ -322,15 +322,15 @@ body {
 #header .navbar-inner {
     background-image: url(/media/app/images/header_bg.png);
     background-repeat: repeat-x;
-    height: 76px;
+    height: 113px;
 }
 
 #brand-logo {
     display:block;
     float:left;
-    margin-top:27px;
-    width:138px;
-    height:23;
+    margin-top:10px;
+    width:110px;
+    height:86px;
 }
 
 .header-separation {
@@ -351,9 +351,8 @@ body {
 
 #hd-button {
     cursor: pointer;
-    margin-top:25px;
+    margin-top:4px;
     margin-left:20px;
-    float:left;
     display:block;
     height:27px;
     width:46px;
@@ -389,34 +388,32 @@ body {
 #radio-picto {
     height:32px;
     width:32px;
-    display:inline-block;
     float:left;
-    margin: 21px 0px 0px 21px;
+    margin-left:8px;
+    margin-top:-6px;
+    margin-right:12px;
 }
 
 #favorite-radio {
-    height:36px;
-    width:37px;
+    height:20px;
+    width:24px;
     display:inline-block;
     float:left;
-    margin: 21px 0px 0px 19px;
 }
 
 .is-not-favorite {
-    background-image:url("../app/images/favorite-radio.png") ;
+    background-image:url("../app/images/favorite-radio-small.png") ;
 }
 
 .is-favorite {
-    background-image:url('../app/images/over-star.png');
+    background-image:url('../app/images/over-star-small.png');
 }
 
 #favorite-radio:hover{
-    background-image:url('../app/images/over-star.png');
-    height:36px;
-    width:37px;
-    display:inline-block;
+    background-image:url('../app/images/over-star-small.png');
+    height:20px;
+    width:24px;
     float:left;
-    margin: 21px 0px 0px 19px;
 }
 
 #play-btn {
@@ -477,7 +474,7 @@ body {
     display:inline-block;
     float:left;
     width:188px;
-    padding-top:17px;
+    padding-top:0px;
     padding-left:20px;
 }
 
@@ -569,6 +566,7 @@ body {
     width:25px;
     background-image:url('../app/images/shop-btn.png');
     background-repeat:no-repeat;
+    overflow:visible;
 }
 
 #player #shop-btn:hover {
@@ -578,6 +576,62 @@ body {
     width:25px;
     background-image:url('../app/images/hover-shop-btn.png');
     background-repeat:no-repeat;
+}
+
+#player #metadata-container {
+    float:left;
+    width:453px;
+    margin-top:19px;
+    margin-left:12px;
+}
+
+#player #metadata-container #radio-title {
+    margin-bottom:16px;
+    color: #d5d7d8;
+    font-size:15px;
+    cursor:pointer;
+}
+
+#player #metadata-container #radio-title span:hover {
+    color: white;
+}
+
+#player #metadata-container .button-group {
+    float:right;
+    margin-right:12px;
+}
+
+#player #metadata-container .button-group a {
+    margin-left:8px;
+}
+
+#player #radio-cover {
+    float:left;
+    margin-left:44px;
+    padding-top:16px;
+    width:77px;
+    height:80px;
+}
+
+#player #radio-cover img {
+    position:absolute;
+    border-radius:8px;
+}
+
+#player #radio-cover #play-btn-large {
+    width:77px;
+    height:80px;
+    position:absolute;
+    cursor: pointer;
+}
+
+
+#player #radio-cover .play {
+    background:url('../app/images/play-btn-large.png') no-repeat 50% 50%;
+}
+
+#player #radio-cover .pause {
+    background:url('../app/images/pause-btn-large.png') no-repeat 50% 50%;
 }
 
 #profile-picture {
@@ -644,7 +698,7 @@ body {
     background-repeat:no-repeat;
     position:relative;
     top:19px;
-    left:26px;
+    left:36px;
     padding:0px;
     text-decoration:none;
 }
@@ -656,7 +710,7 @@ body {
     background-repeat:no-repeat;
     position:relative;
     top:19px;
-    left:26px;
+    left:36px;
 }
 
 #gift-btn {
@@ -701,7 +755,7 @@ body {
     box-shadow: 3px 0px 4px #cfcfcf;
     clear:both;
     position:fixed;
-    top:76px;
+    top:113px;
     z-index:25;
 }
 
@@ -1262,7 +1316,7 @@ input::-webkit-input-placeholder {
 
 
 #webapp-container {
-    margin-top: 158px;
+    margin-top: 195px;
 	min-height:822px;
 	margin-bottom:16px;
 }
@@ -1523,16 +1577,25 @@ input::-webkit-input-placeholder {
 }
 
 #player #player-title {
-    position:fixed;
     display:block;
-    height:20px;
-    width:275px;
+    float:left;
+    top:68px;
+    height:42px;
+    padding-top:12px;
+    width:453px;
     color:#999e9f;
     font-size:13px;
-	padding-left:6px;
 	overflow:hidden;
+    background: url('../app/images/title_bg.png') no-repeat;
+    cursor:pointer;
 }
 
+#player #player-title span {
+    width:330px;
+}
+#player #player-title span:hover {
+    color: #D5D7D8;
+}
 #player #details {
     margin-top: 4px;
     float: left;
@@ -1568,6 +1631,7 @@ input::-webkit-input-placeholder {
 #player #volume-control {
     cursor: pointer;
 }
+
 
 /**
  * Radio page
@@ -3695,6 +3759,7 @@ a.yabutton-small {
 	opacity:0;
 	display:none;
 	position:absolute;
+    z-index:3000;
 }
 
 .yatooltip:hover .yatoolelt {
@@ -3738,6 +3803,7 @@ a.yabutton-small {
 	opacity:0;
 	display:none;
 	position:absolute;
+    z-index:3000;
 }
 
 .yatooltip-share:hover .yatoolelt-share {
