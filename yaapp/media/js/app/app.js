@@ -178,7 +178,7 @@ $(document).ready(function () {
                     if (DZ && DZ.canvas) {
                         DZ.canvas.setSize($(document).height());
                     }
-                }, 3000);
+                }, 1500);
             });
 
         },
