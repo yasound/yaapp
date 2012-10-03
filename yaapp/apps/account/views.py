@@ -32,6 +32,7 @@ import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
 import uuid
+import tweepy
 
 logger = logging.getLogger("yaapp.account")
 
@@ -771,7 +772,7 @@ def invite_facebook_friends(request):
 
 
 @csrf_exempt
-@check_api_key(methods=['POST'], login_required=True)
+@check_api_key(methods=['POST', 'GET'], login_required=True)
 def invite_twitter_friends(request):
     if not request.user.userprofile.twitter_enabled:
         response = {'success': False, 'error': 'userprofile has no twitter account associated'}
@@ -779,15 +780,21 @@ def invite_twitter_friends(request):
         return HttpResponse(response_data)
 
     #TODO: post invitation message in user's twitter timeline
-    post_data = request.POST.keys()[0]
-    if post_data is None:
-        response = {'success': False, 'error': 'no twitter ids provided'}
-        response_data = json.dumps(response)
-        return HttpResponse(response_data)
-
-    twitter_uids = json.loads(post_data)
     profile = request.user.get_profile()
-    profile.invite_twitter_friends(twitter_uids)
+    auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+    auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
+    api = tweepy.API(auth)
+    friends_ids = api.friends_ids()
+
+    post_data = request.POST.keys()[0]
+    if post_data is not None:
+        data = json.loads(post_data)
+        message = data.get('message')
+        if message:
+            api.update_status(message)
+
+
+    profile.invite_twitter_friends(friends_ids)
 
     response = {'success': True}
     response_data = json.dumps(response)
