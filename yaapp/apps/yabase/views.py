@@ -1757,6 +1757,11 @@ def radio_broadcast_message(request, radio_uuid):
 def most_active_radios(request, internal=False):
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
+    offset = int(request.GET.get('offset', 0))
+
+    if skip == 0 and offset > 0:
+        skip = offset
+
     genre = request.GET.get('genre', '')
 
     if genre != '':
@@ -1765,6 +1770,7 @@ def most_active_radios(request, internal=False):
         qs = Radio.objects
 
     qs = qs.exclude(deleted=True)
+    total_count = qs.count()
     radios = qs.order_by('-popularity_score', '-favorites')[skip:(skip + limit)]
     if internal:
         return radios
@@ -1780,7 +1786,7 @@ def most_active_radios(request, internal=False):
     next_url = reverse("yabase.views.most_active_radios")
     next_url += '?%s' % params_string
 
-    response = api_response(radio_data, len(radio_data), limit=limit, offset=skip, next_url=next_url)
+    response = api_response(radio_data, total_count, limit=limit, offset=skip, next_url=next_url)
     return response
 
 @csrf_exempt
