@@ -494,6 +494,27 @@ HTML, BODY { height: 100%; }
   {% include "yabase/app/mobileLeftMenu.html" %}
   {% include "yabase/app/mobileCenterMenu.html" %}
 
+  <div class='teaser container'>
+    <div class='row'>
+      <div class='span4'>
+          <p><strong>Ecoutez</strong> la plus grande base de radios du monde</p>
+          <img src='/media/app/images/teaser/listen.png' width='223' height='197'/>
+      </div>
+      <div class='span4'>
+          <p><strong>Partagez</strong> votre écoute avec vos amis</p>
+          <img src='/media/app/images/teaser/share.png' width='249' height='197'/>
+      </div>
+      <div class='span4'>
+          <div id='close-btn-container'>
+            <a id='close-btn' class="yabutton-small" href="#"><i class="icon-remove"></i> {% trans "Close" %}</a>
+          </div>
+          <p><strong>Créez</strong> votre radio facilement</p>
+          <img src='/media/app/images/teaser/create.png' width='196' height='197'/>
+
+      </div>
+    </div>
+  </div>
+
   {% block content%}{%endblock%}</div>
 </div>
 <div id='pre-footer'>&nbsp;</div>
