@@ -41,7 +41,7 @@ Yasound.Views.Gift = Backbone.View.extend({
 
 Yasound.Views.Gifts = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'addOne', 'addAll');
+        _.bindAll(this, 'addOne', 'addAll', 'clear');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -55,13 +55,14 @@ Yasound.Views.Gifts = Backbone.View.extend({
     },
 
     addAll: function () {
-        $('.loading-mask', this.el).remove();
+        $('.loading-mask', this.el).hide();
         this.collection.each(this.addOne);
         $('li', this.el).filter(':odd').removeClass('gift-even').addClass('gift-odd');
         $('li', this.el).filter(':even').removeClass('gift-even').addClass('gift-even');
     },
 
     clear: function () {
+        $('.loading-mask', this.el).show();
         _.map(this.views, function (view) {
             view.close();
         });
@@ -110,31 +111,36 @@ Yasound.Views.GiftsPage = Backbone.View.extend({
 });
 
 Yasound.Views.GiftsPopup = Backbone.View.extend({
+    gifts: new Yasound.Data.Models.Gifts({}),
+
     events: {
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'refresh');
+        _.bindAll(this, 'render');
     },
 
     onClose: function() {
+        this.giftsView.close();
     },
 
     reset: function() {
+        if (this.query) {
+            this.query.abort();
+            this.query = undefined;
+        }
     },
 
     render: function() {
         this.reset();
-        this.gifts = new Yasound.Data.Models.Gifts({});
-        this.giftsView = new Yasound.Views.Gifts({
-            collection: this.gifts,
-            el: $('#gifts', this.el)
-        });
-        return this;
-    },
-
-    refresh: function () {
+        if (!this.giftsView) {
+            this.giftsView = new Yasound.Views.Gifts({
+                collection: this.gifts,
+                el: $('#gifts', this.el)
+            });
+        }
         this.giftsView.clear();
-        this.gifts.fetch();
+        this.query = this.gifts.fetch();
+        return this;
     }
 });
