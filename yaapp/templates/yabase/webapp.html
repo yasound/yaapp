@@ -316,14 +316,14 @@ HTML, BODY { height: 100%; }
       {% include "yabase/app/programming/yasoundSongCell.mustache" %}
    </script>
 
+
+{% endif %}
    <script type='text/html' id='myRadiosPageTemplate'>
      {% include "yabase/app/myRadios/myRadiosPage.mustache" %}
    </script>
    <script type='text/html' id='radioWithStatsCellTemplate'>
      {% include "yabase/app/myRadios/radioWithStatsCell.mustache" %}
    </script>
-
-{% endif %}
 
 {% endblock %}
 
@@ -498,16 +498,12 @@ HTML, BODY { height: 100%; }
     <div class='row'>
       <div class='span4' id='teaser-listen'>
           {% url webapp_top app_name as link %}
-          {% blocktrans %}
-          <p><a href='{{ link}}'>Listen</a> to the biggest radio database in the world</p>
-          {% endblocktrans %}
+          {% blocktrans %}<p><a href='{{ link }}'>Listen</a> to the biggest radio database in the world</p>{% endblocktrans %}
           <img src='/media/app/images/teaser/listen.png' width='223' height='197'/>
       </div>
       <div class='span4' id='teaser-share'>
           {% url webapp_friends app_name as link %}
-          {% blocktrans %}
-          <p><a href='{{ link}}'>Share</a> your listening<br/>with your friends</p>
-          {% endblocktrans %}
+          {% blocktrans %}<p><a href='{{ link }}'>Share</a> your listening<br/>with your friends</p>{% endblocktrans %}
           <img src='/media/app/images/teaser/share.png' width='249' height='197'/>
       </div>
       <div class='span4' id='teaser-create'>
@@ -515,9 +511,7 @@ HTML, BODY { height: 100%; }
             <a id='close-btn' class="yabutton-small" href="#"><i class="icon-remove"></i> {% trans "Close" %}</a>
           </div>
           {% url webapp_myradios app_name as link %}
-          {% blocktrans %}
-          <p><a href='{{ link}}'>Create</a> your radio <br/>easily</p>
-          {% endblocktrans %}
+          {% blocktrans %}<p><a href='{{ link }}'>Create</a> your radio <br/>easily</p>{% endblocktrans %}
           <img src='/media/app/images/teaser/create.png' width='196' height='197'/>
 
       </div>
