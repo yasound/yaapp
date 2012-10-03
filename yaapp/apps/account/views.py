@@ -793,7 +793,6 @@ def invite_twitter_friends(request):
         if message:
             api.update_status(message)
 
-
     profile.invite_twitter_friends(friends_ids)
 
     response = {'success': True}
