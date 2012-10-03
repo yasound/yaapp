@@ -140,6 +140,7 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
             });
         }
         this.giftsView.clear();
+
         this.query = this.gifts.fetch();
         return this;
     }
