@@ -542,9 +542,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (!this.giftsPopup) {
             this.giftsPopup = new Yasound.Views.GiftsPopup({
                 el: '#hd-box-container #gifts-container'
-            }).render();
+            })
         }
-        this.giftsPopup.refresh();
+        this.giftsPopup.render();
     },
 
     hidePopupHD: function() {
