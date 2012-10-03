@@ -38,6 +38,8 @@ Yasound.Views.TutorialWindow = Backbone.View.extend({
             show: true,
             backdrop: true
         });
+        var play = Yasound.App.player.isPlaying();
+        Yasound.App.player.stop();
 
         var timer;
         timer = setTimeout(function() {
@@ -48,6 +50,9 @@ Yasound.Views.TutorialWindow = Backbone.View.extend({
             if (timer) {
                 clearTimeout(timer);
                 timer = undefined;
+            }
+            if (play) {
+            Yasound.App.player.play();
             }
             that.close();
         });
