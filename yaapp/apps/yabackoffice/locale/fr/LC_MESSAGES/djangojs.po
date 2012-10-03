@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 10:20+0200\n"
+"POT-Creation-Date: 2012-10-03 13:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:52
+#: js/app/app.js:56
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
@@ -90,124 +90,145 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:189
-#: js/app/common/views.js:336
-msgid "by"
-msgstr "par"
-
-#: js/app/common/models.js:190
+#: js/app/common/models.js:211
+#: js/app/common/models.js.py:244
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:191
-#: js/app/common/views.js:337
+#: js/app/common/models.js:243
+#: js/app/common/views.js:345
+msgid "by"
+msgstr "par"
+
+#: js/app/common/models.js:245
+#: js/app/common/views.js:346
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:252
+#: js/app/common/models.js:315
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:258
+#: js/app/common/models.js:321
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:260
+#: js/app/common/models.js:323
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:277
+#: js/app/common/views.js:267
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:334
+#: js/app/common/views.js:343
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/common/views.js:460
+#: js/app/common/views.js:507
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/common/views.js:767
+#: js/app/common/views.js:853
 #: js/app/login/views.js:39
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:780
+#: js/app/common/views.js:866
 #: js/app/login/views.js:52
-#: js/app/newRadio/views.js:66
+#: js/app/newRadio/views.js:77
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:814
+#: js/app/common/views.js:911
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:816
+#: js/app/common/views.js:913
 #: js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
 
-#: js/app/myRadios/views.js:121
+#: js/app/friends/views.js:144
+msgid "Join me on Yasound and let's share music"
+msgstr "Rejoinds moi sur Yasound et partageons notre musique"
+
+#: js/app/friends/views.js:166
+msgid "Thank you"
+msgstr "Merci"
+
+#: js/app/friends/views.js:166
+msgid "Your friends have been invited successfully."
+msgstr "Vos amis ont été invités avec succès."
+
+#: js/app/friends/views.js:169
+msgid "Error"
+msgstr "Erreur"
+
+#: js/app/friends/views.js:169
+msgid "Error while communicating with Yasound, please retry late"
+msgstr "Erreur lors de la communication avec Yasound, veuillez réessayer ultérieurement."
+
+#: js/app/myRadios/views.js:124
 #, fuzzy
 msgid "%b %d"
 msgstr "%d %b"
 
-#: js/app/myRadios/views.js:122
+#: js/app/myRadios/views.js:125
 msgid "jan"
 msgstr "jan"
 
-#: js/app/myRadios/views.js:123
+#: js/app/myRadios/views.js:126
 msgid "feb"
 msgstr "fev"
 
-#: js/app/myRadios/views.js:124
+#: js/app/myRadios/views.js:127
 msgid "mar"
 msgstr "mar"
 
-#: js/app/myRadios/views.js:125
+#: js/app/myRadios/views.js:128
 msgid "apr"
 msgstr "avr"
 
-#: js/app/myRadios/views.js:126
+#: js/app/myRadios/views.js:129
 msgid "may"
 msgstr "mai"
 
-#: js/app/myRadios/views.js:127
+#: js/app/myRadios/views.js:130
 msgid "jun"
 msgstr "juin"
 
-#: js/app/myRadios/views.js:128
+#: js/app/myRadios/views.js:131
 msgid "jul"
 msgstr "juil"
 
-#: js/app/myRadios/views.js:129
+#: js/app/myRadios/views.js:132
 msgid "aug"
 msgstr "aout"
 
-#: js/app/myRadios/views.js:130
+#: js/app/myRadios/views.js:133
 msgid "sept"
 msgstr "sept"
 
-#: js/app/myRadios/views.js:131
+#: js/app/myRadios/views.js:134
 msgid "oct"
 msgstr "oct"
 
-#: js/app/myRadios/views.js:132
+#: js/app/myRadios/views.js:135
 msgid "nov"
 msgstr "nov"
 
-#: js/app/myRadios/views.js:133
+#: js/app/myRadios/views.js:136
 msgid "dec"
 msgstr "dec"
 
-#: js/app/myRadios/views.js:202
+#: js/app/myRadios/views.js:205
 msgid "yes"
 msgstr "oui"
 
-#: js/app/newRadio/views.js:49
-msgid "Error"
-msgstr "Erreur"
+#: js/app/newRadio/views.js:53
+msgid "Error while creating radio"
+msgstr "Erreur lors de création de la radio"
 
 #: js/app/notifications/views.js:38
 msgid "Notification marked as read"
@@ -233,11 +254,11 @@ msgstr "L'analyse de l'import iTunes a démarré"
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:697
+#: js/app/radio/views.js:777
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:698
+#: js/app/radio/views.js:778
 #: js/app/settings/views.js:167
 #: js/app/settings/views.js.py:177
 msgid "Error while saving settings"
@@ -320,8 +341,8 @@ msgstr "Modération"
 #: js/backoffice/Statistics/Statistics.js:136
 #: js/backoffice/Statistics/Statistics.js:163
 #: js/backoffice/Users/History.js:21
-#: js/backoffice/Users/Users.js:130
-#: js/backoffice/Users/Users.js.py:137
+#: js/backoffice/Users/Users.js:159
+#: js/backoffice/Users/Users.js.py:166
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -387,7 +408,7 @@ msgstr "Code"
 #: js/backoffice/Menus/MenuGrid.js:23
 #: js/backoffice/Radio/RadioGrid.js:47
 #: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:26
-#: js/backoffice/Users/UserGrid.js:31
+#: js/backoffice/Users/UserGrid.js:32
 msgid "Name"
 msgstr "Nom"
 
@@ -401,7 +422,7 @@ msgstr "Nom"
 #: js/backoffice/Radio/YasoundSongGrid.js:115
 #: js/backoffice/Song/MostPopularSongMetadataGrid.js:61
 #: js/backoffice/Song/RejectedSongGrid.js:88
-#: js/backoffice/Users/UserGrid.js:147
+#: js/backoffice/Users/UserGrid.js:148
 #: js/backoffice/Users/UserHistoryGrid.js:90
 #: js/backoffice/WallEvent/WallEventGrid.js:107
 msgid "Displaying {0} - {1} of {2}"
@@ -417,7 +438,7 @@ msgstr "Affichage de {0} - {1} sur {2}"
 #: js/backoffice/Radio/YasoundSongGrid.js:116
 #: js/backoffice/Song/MostPopularSongMetadataGrid.js:62
 #: js/backoffice/Song/RejectedSongGrid.js:89
-#: js/backoffice/Users/UserGrid.js:148
+#: js/backoffice/Users/UserGrid.js:149
 #: js/backoffice/Users/UserHistoryGrid.js:91
 #: js/backoffice/WallEvent/WallEventGrid.js:108
 msgid "Nothing to display"
@@ -443,6 +464,7 @@ msgstr "{text} ({[values.rs.length]} {[values.rs.length > 1 ? \"éléments\" : "
 "\"élément\"]})"
 
 #: js/backoffice/Geoperm/GeoFeatureGrid.js:22
+#: js/backoffice/Geoperm/Geoperm.js:311
 msgid "Feature"
 msgstr "Fonctionnalité"
 
@@ -485,7 +507,7 @@ msgstr "Editer le pays"
 #: js/backoffice/Radio/Radios.js:297
 #: js/backoffice/Users/Users.js:10
 #: js/backoffice/Users/Users.js.py:42
-#: js/backoffice/Users/Users.js:95
+#: js/backoffice/Users/Users.js:124
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -588,7 +610,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: js/backoffice/Invitations/InvitationGrid.js:40
-#: js/backoffice/Users/UserGrid.js:41
+#: js/backoffice/Users/UserGrid.js:42
 msgid "Email"
 msgstr "Email"
 
@@ -1072,33 +1094,33 @@ msgstr "Historique"
 msgid "Please select user"
 msgstr "Veuillez sélectionner un utilisateur"
 
-#: js/backoffice/Users/UserGrid.js:51
+#: js/backoffice/Users/UserGrid.js:52
 msgid "Facebook UID"
 msgstr "UID facebook"
 
-#: js/backoffice/Users/UserGrid.js:61
+#: js/backoffice/Users/UserGrid.js:62
 msgid "Join date"
 msgstr "Date d'inscription"
 
-#: js/backoffice/Users/UserGrid.js:68
+#: js/backoffice/Users/UserGrid.js:69
 msgid "Last authentication"
 msgstr "Dernière authentification"
 
-#: js/backoffice/Users/UserGrid.js:75
+#: js/backoffice/Users/UserGrid.js:76
 msgid "Superuser?"
 msgstr "Superutilisateur ?"
 
-#: js/backoffice/Users/UserGrid.js:81
-#: js/backoffice/Users/UserGrid.js.py:92
+#: js/backoffice/Users/UserGrid.js:82
+#: js/backoffice/Users/UserGrid.js.py:93
 msgid "Yes"
 msgstr "Oui"
 
-#: js/backoffice/Users/UserGrid.js:83
-#: js/backoffice/Users/UserGrid.js.py:94
+#: js/backoffice/Users/UserGrid.js:84
+#: js/backoffice/Users/UserGrid.js.py:95
 msgid "No"
 msgstr "Non"
 
-#: js/backoffice/Users/UserGrid.js:86
+#: js/backoffice/Users/UserGrid.js:87
 msgid "Actived?"
 msgstr "Activé ?"
 
@@ -1130,27 +1152,35 @@ msgstr "Voulez-vous désactiver les utilisateurs sélectionnés ?"
 msgid "Do you want to mark the user(s) as fake ?"
 msgstr "Voulez-vous marquer cet utilisateur comme étant invalide ?"
 
-#: js/backoffice/Users/Users.js:96
+#: js/backoffice/Users/Users.js:125
 msgid "Do you want to enable the selected user(s)"
 msgstr "Voulez-vous activer les utilisateurs sélectionnés ?"
 
-#: js/backoffice/Users/Users.js:141
+#: js/backoffice/Users/Users.js:170
 msgid "Enable"
 msgstr "Activer"
 
-#: js/backoffice/Users/Users.js:151
+#: js/backoffice/Users/Users.js:180
 msgid "Disable"
 msgstr "Désactiver"
 
-#: js/backoffice/Users/Users.js:161
+#: js/backoffice/Users/Users.js:190
 msgid "Report as fake user"
 msgstr "Déclarer comme utilisateur invalide"
 
-#: js/backoffice/Users/Users.js:171
+#: js/backoffice/Users/Users.js:200
+msgid "Enable HD"
+msgstr "Activer la HD"
+
+#: js/backoffice/Users/Users.js:209
+msgid "Disable HD"
+msgstr "Désactiver la HD"
+
+#: js/backoffice/Users/Users.js:218
 msgid "Export selected users"
 msgstr "Exporter les utilisateurs sélectionnés"
 
-#: js/backoffice/Users/Users.js:182
+#: js/backoffice/Users/Users.js:228
 msgid "Export all users"
 msgstr "Exporter tous les utilisateurs"
 
