@@ -494,21 +494,30 @@ HTML, BODY { height: 100%; }
   {% include "yabase/app/mobileLeftMenu.html" %}
   {% include "yabase/app/mobileCenterMenu.html" %}
 
-  <div class='teaser container'>
+  <div class='container' id='teaser'>
     <div class='row'>
-      <div class='span4'>
-          <p><strong>Ecoutez</strong> la plus grande base de radios du monde</p>
+      <div class='span4' id='teaser-listen'>
+          {% url webapp_top app_name as link %}
+          {% blocktrans %}
+          <p><a href='{{ link}}'>Listen</a> to the biggest radio database in the world</p>
+          {% endblocktrans %}
           <img src='/media/app/images/teaser/listen.png' width='223' height='197'/>
       </div>
-      <div class='span4'>
-          <p><strong>Partagez</strong> votre écoute avec vos amis</p>
+      <div class='span4' id='teaser-share'>
+          {% url webapp_friends app_name as link %}
+          {% blocktrans %}
+          <p><a href='{{ link}}'>Share</a> your listening<br/>with your friends</p>
+          {% endblocktrans %}
           <img src='/media/app/images/teaser/share.png' width='249' height='197'/>
       </div>
-      <div class='span4'>
+      <div class='span4' id='teaser-create'>
           <div id='close-btn-container'>
             <a id='close-btn' class="yabutton-small" href="#"><i class="icon-remove"></i> {% trans "Close" %}</a>
           </div>
-          <p><strong>Créez</strong> votre radio facilement</p>
+          {% url webapp_myradios app_name as link %}
+          {% blocktrans %}
+          <p><a href='{{ link}}'>Create</a> your radio <br/>easily</p>
+          {% endblocktrans %}
           <img src='/media/app/images/teaser/create.png' width='196' height='197'/>
 
       </div>

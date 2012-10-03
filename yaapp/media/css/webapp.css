@@ -3957,39 +3957,45 @@ a.yabutton-small {
 }
 
 
-.teaser {
+#teaser {
     text-align:center;
     font-size:18px;
     font-family: 'PT Sans', sans-serif;
     margin-bottom:12px;
 }
 
-.teaser .span4 {
+#teaser .span4 {
     background: url(../app/images/teaser/separator.png) no-repeat 100% 50%;
 }
 
-.teaser p {
+#teaser p {
     margin:20px;
     margin-left:50px;
     margin-right:50px;
     margin-bottom:35px;
     line-height:24px;
+    color:#353a3c;
 }
 
-.teaser img {
+#teaser p a {
+    font-weight: bold;
+    color:#353a3c;
+}
+
+#teaser img {
     margin-top:0px;
     margin-bottom:12px;
 }
 
-.teaser .span4 #close-btn-container {
+#teaser .span4 #close-btn-container {
     float:right;
 }
 
-.teaser .span4 .auto-hide {
+#teaser .span4 .auto-hide {
     display: none;
 }
 
-.teaser:hover .auto-hide{
+#teaser:hover .auto-hide{
     display: block;
 }
 
