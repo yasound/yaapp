@@ -9,10 +9,10 @@ Namespace('Yasound.Views');
 Yasound.Views.Teaser = Backbone.View.extend({
     el: '#teaser',
     events: {
-        'click #close-btn'          : 'slideUp',
-        'click #teaser-listen a'    : 'listen',
-        'click #teaser-create a'    : 'create',
-        'click #teaser-share a'     : 'share'
+        'click #close-btn'           : 'slideUp',
+        'click #teaser-listen p a'    : 'listen',
+        'click #teaser-create p a'    : 'create',
+        'click #teaser-share p a'     : 'share'
     },
 
     initialize: function() {
