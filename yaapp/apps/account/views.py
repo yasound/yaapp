@@ -753,12 +753,6 @@ def invite_ios_contacts(request):
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
 def invite_facebook_friends(request):
-
-    if not request.user.userprofile.facebook_enabled:
-        response = {'success': False, 'error': 'userprofile has no facebook account associated'}
-        response_data = json.dumps(response)
-        return HttpResponse(response_data)
-
     post_data = request.POST.keys()[0]
     if post_data is None:
         response = {'success': False, 'error': 'no facebook ids provided'}

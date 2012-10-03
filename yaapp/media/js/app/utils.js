@@ -110,3 +110,9 @@ Yasound.Utils.enableFX = function () {
     }
     Yasound.App.enableFX = true;
 }
+
+Yasound.Utils.dialog = function (title, body) {
+    $('#modal-dialog h3').html(title);
+    $('#modal-dialog p').html(body);
+    $('#modal-dialog').modal('show');
+}

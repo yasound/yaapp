@@ -67,7 +67,7 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'notifyFacebookInvitations');
     },
 
     onClose: function() {
@@ -144,9 +144,28 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             picture: g_facebook_share_picture
         }, function(response) {
             if(response && response.hasOwnProperty('to')) {
+                var users = [];
                 for(i = 0; i < response.to.length; i++) {
-                    console.log("" + i + " ID: " + response.to[i]);
+                    users.push(response.to[i]);
                 }
+                that.notifyFacebookInvitations(users);
+            }
+        });
+    },
+
+    notifyFacebookInvitations: function (users) {
+        var url = '/api/v1/invite_facebook_friends/';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(users),
+            contentType: 'application/json',
+            success: function(data) {
+                Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+            },
+            failure: function() {
+                Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
             }
         });
     }
