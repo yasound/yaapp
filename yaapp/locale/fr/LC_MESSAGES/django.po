@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 17:40+0200\n"
+"POT-Creation-Date: 2012-10-03 18:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr "Se déconnecter"
 #: templates/web/menu.html:19
 #: templates/yabase/app/track.mustache:148
 #: templates/yabase/app/favorites/favoritesPage.mustache:16
-#: templates/yabase/app/friends/friendsPage.mustache:72
+#: templates/yabase/app/friends/friendsPage.mustache:90
 #: templates/yabase/app/login/login.mustache:24
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:46
 #: templates/yabase/app/signup/signup.mustache:43
@@ -946,6 +946,7 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
 #: templates/yabase/webapp.html:429
 #: templates/yabase/app/friends/friendsPage.mustache:14
+#: templates/yabase/app/friends/friendsPage.mustache:33
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:14
 #: templates/yabase/app/programming/songInstances.mustache:38
 #: templates/yabase/app/radio/radioPage.mustache:50
@@ -1198,34 +1199,51 @@ msgstr "Invitez vos amis avec Twitter"
 msgid "Post message"
 msgstr "Poster le message"
 
-#: templates/yabase/app/friends/friendsPage.mustache:23
+#: templates/yabase/app/friends/friendsPage.mustache:22
+#: templates/yabase/app/friends/friendsPage.mustache:25
+msgid "Invite your friends by mail"
+msgstr "Invitez vos amis par mail"
+
+#: templates/yabase/app/friends/friendsPage.mustache:27
+msgid "Recipient email"
+msgstr "Email du destinataire"
+
+#: templates/yabase/app/friends/friendsPage.mustache:28
+msgid "Subject"
+msgstr "Sujet"
+
+#: templates/yabase/app/friends/friendsPage.mustache:34
+msgid "Send mail"
+msgstr "Envoyer le mail"
+
+#: templates/yabase/app/friends/friendsPage.mustache:41
 msgid "Invite your friends"
 msgstr "Invitez vos amis"
 
-#: templates/yabase/app/friends/friendsPage.mustache:27
+#: templates/yabase/app/friends/friendsPage.mustache:45
 msgid "Invite your facebook friends"
 msgstr "Invitez vos amis facebook"
 
-#: templates/yabase/app/friends/friendsPage.mustache:32
+#: templates/yabase/app/friends/friendsPage.mustache:50
 msgid "Invite your friends with twitter"
 msgstr "Invitez vos amis avec twitter"
 
-#: templates/yabase/app/friends/friendsPage.mustache:37
+#: templates/yabase/app/friends/friendsPage.mustache:55
 msgid "Invite your friends by email"
 msgstr "Invitez vos amis par mail"
 
-#: templates/yabase/app/friends/friendsPage.mustache:45
+#: templates/yabase/app/friends/friendsPage.mustache:63
 #: templates/yabase/app/friends/userFriendsPage.mustache:4
 #: templates/yabase/app/profile/profilePage.mustache:25
 msgid "People you follow"
 msgstr "Personnes que vous suivez"
 
-#: templates/yabase/app/friends/friendsPage.mustache:54
+#: templates/yabase/app/friends/friendsPage.mustache:72
 #: templates/yabase/app/profile/profilePage.mustache:34
 msgid "People following you"
 msgstr "Personnes qui vous suivent"
 
-#: templates/yabase/app/friends/friendsPage.mustache:70
+#: templates/yabase/app/friends/friendsPage.mustache:88
 msgid "Log in to view your friends."
 msgstr "Connectez-vous pour afficher vos amis."
 

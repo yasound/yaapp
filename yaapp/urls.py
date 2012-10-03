@@ -223,6 +223,7 @@ urlpatterns = patterns('',
 
     # friends invitation
     url(r'^api/v1/invite_ios_contacts/$', 'account.views.invite_ios_contacts'),
+    url(r'^api/v1/invite_email_friends/$', 'account.views.invite_email_friends'),
     url(r'^api/v1/invite_facebook_friends/$', 'account.views.invite_facebook_friends'),
     url(r'^api/v1/invite_twitter_friends/$', 'account.views.invite_twitter_friends'),
 

@@ -64,7 +64,8 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     events: {
         'click #login-btn': 'onLogin',
         'click #invite-facebook': 'onInviteFacebook',
-        'click #invite-twitter': 'onInviteTwitter'
+        'click #invite-twitter': 'onInviteTwitter',
+        'click #invite-email': 'onInviteEmail'
     },
 
     initialize: function() {
@@ -170,6 +171,27 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
 
     },
 
+    onInviteEmail: function (e) {
+        e.preventDefault();
+        var body = gettext('Join me on yasound: https://yasound.com');
+        var subject = gettext('Join me on Yasound');
+
+        $('#modal-invite-email textarea').val(body);
+        $('#modal-invite-email recipients').val('');
+        $('#modal-invite-email #subject').val(subject);
+
+        $('#modal-invite-email').modal('show');
+        var that = this;
+        $('#modal-invite-email .btn-primary').one('click', function () {
+            $('#modal-invite-email').modal('hide');
+            var message = $('#modal-invite-email textarea').val();
+            var subject = $('#modal-invite-email #subject').val();
+            var recipients = $('#modal-invite-email #recipients').val();
+            that.notifyEmailInvitations(recipients, subject, message);
+        });
+
+    },
+
     notifyFacebookInvitations: function (users) {
         var url = '/api/v1/invite_facebook_friends/';
         $.ajax({
@@ -198,6 +220,31 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             data: JSON.stringify({message: message}),
+            success: function(data) {
+                if (!(data.success)) {
+                    Yasound.Utils.dialog(gettext('Error'), data.error);
+                } else {
+                    Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+                }
+            },
+            failure: function() {
+                Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
+            }
+        });
+    },
+
+    notifyEmailInvitations: function (recipients, subject, message) {
+        var url = '/api/v1/invite_email_friends/';
+        var data = {
+            recipients: recipients,
+            subject: subject,
+            message: message
+        }
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
             success: function(data) {
                 if (!(data.success)) {
                     Yasound.Utils.dialog(gettext('Error'), data.error);

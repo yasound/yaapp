@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 17:43+0200\n"
+"POT-Creation-Date: 2012-10-03 18:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,33 +149,46 @@ msgstr "Mes radios"
 msgid "Create radio"
 msgstr "Créer une radio"
 
-#: js/app/friends/views.js:145
+#: js/app/friends/views.js:146
 msgid "Join me on Yasound and let's share music"
-msgstr "Rejoinds moi sur Yasound et partageons notre musique"
+msgstr "Rejoins moi sur Yasound et partageons notre musique"
 
-#: js/app/friends/views.js:160
+#: js/app/friends/views.js:161
 msgid "Join me on #yasound https://yasound.com"
 msgstr "Rejoins moi sur #yasound https://yasound.com"
 
-#: js/app/friends/views.js:183
-#: js/app/friends/views.js.py:189
-#: js/app/friends/views.js:203
-#: js/app/friends/views.js.py:209
+#: js/app/friends/views.js:176
+msgid "Join me on yasound: https://yasound.com"
+msgstr "Rejoins moi sur yasound : https://yasound.com"
+
+#: js/app/friends/views.js:177
+msgid "Join me on Yasound"
+msgstr "Rejoins moi sur Yasound"
+
+#: js/app/friends/views.js:205
+#: js/app/friends/views.js.py:211
+#: js/app/friends/views.js:225
+#: js/app/friends/views.js.py:231
+#: js/app/friends/views.js:250
+#: js/app/friends/views.js.py:256
 msgid "Error"
 msgstr "Erreur"
 
-#: js/app/friends/views.js:185
-#: js/app/friends/views.js.py:205
+#: js/app/friends/views.js:207
+#: js/app/friends/views.js.py:227
+#: js/app/friends/views.js:252
 msgid "Thank you"
 msgstr "Merci"
 
-#: js/app/friends/views.js:185
-#: js/app/friends/views.js.py:205
+#: js/app/friends/views.js:207
+#: js/app/friends/views.js.py:227
+#: js/app/friends/views.js:252
 msgid "Your friends have been invited successfully."
 msgstr "Vos amis ont été invités avec succès."
 
-#: js/app/friends/views.js:189
-#: js/app/friends/views.js.py:209
+#: js/app/friends/views.js:211
+#: js/app/friends/views.js.py:231
+#: js/app/friends/views.js:256
 msgid "Error while communicating with Yasound, please retry late"
 msgstr "Erreur lors de la communication avec Yasound, veuillez réessayer "
 "ultérieurement."

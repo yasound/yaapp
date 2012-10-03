@@ -772,14 +772,13 @@ def invite_facebook_friends(request):
 
 
 @csrf_exempt
-@check_api_key(methods=['POST', 'GET'], login_required=True)
+@check_api_key(methods=['POST',], login_required=True)
 def invite_twitter_friends(request):
     if not request.user.userprofile.twitter_enabled:
         response = {'success': False, 'error': unicode(_('no twitter account associated'))}
         response_data = json.dumps(response)
         return HttpResponse(response_data)
 
-    #TODO: post invitation message in user's twitter timeline
     profile = request.user.get_profile()
     auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
@@ -794,6 +793,34 @@ def invite_twitter_friends(request):
             api.update_status(message)
 
     profile.invite_twitter_friends(friends_ids)
+
+    response = {'success': True}
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+@csrf_exempt
+@check_api_key(methods=['POST',], login_required=True)
+def invite_email_friends(request):
+    profile = request.user.get_profile()
+
+    post_data = request.POST.keys()[0]
+    if post_data is None:
+        response = {'success': False, 'error': unicode(_('no data'))}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+
+    data = json.loads(post_data)
+    message = data.get('message')
+    subject = data.get('subject')
+    emails = data.get('recipients')
+
+    if emails is None:
+        response = {'success': False, 'error': unicode(_('no email provided'))}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+
+    friends = emails.split(',')
+    profile.invite_email_friends(friends)
 
     response = {'success': True}
     response_data = json.dumps(response)

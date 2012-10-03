@@ -3710,6 +3710,15 @@ ul .radio-with-stats-cells li {
     height:80px;
 }
 
+#modal-invite-email input {
+    width:100%;
+    margin-bottom:12px;
+}
+#modal-invite-email textarea {
+    width:100%;
+    height:80px;
+}
+
 /**
  * Gift
  */
