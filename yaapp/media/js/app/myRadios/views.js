@@ -110,7 +110,7 @@ Yasound.Views.RadioWithStatsCell = Backbone.View.extend({
         var chart_data = [];
         if (stats) {
             _.each(stats, function(stat) {
-                if (stat['connections']) {
+                if (!(typeof stat['connections'] === "undefined")) {
                     var date = Yasound.Utils.momentDate(stat['date']).unix()*1000;
                     chart_data.push([date, stat['connections']]);
                 }
