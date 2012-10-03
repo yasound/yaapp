@@ -3705,6 +3705,11 @@ ul .radio-with-stats-cells li {
     color:black;
 }
 
+#modal-invite-twitter textarea {
+    width:100%;
+    height:80px;
+}
+
 /**
  * Gift
  */

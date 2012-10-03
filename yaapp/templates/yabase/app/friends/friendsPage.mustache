@@ -1,6 +1,22 @@
 {% load i18n %}
 {% if request.user.is_authenticated %}
 
+<div class="modal hide fade" id="modal-invite-twitter">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Post on twitter" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Invite your friends on Twitter" %}</p>
+        <textarea></textarea>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Post message" %}</a>
+    </div>
+</div>
+
+
 <div class='row common-background'>
 
     <div class='span12 no-margin invite'>
@@ -13,7 +29,7 @@
             </li>
             <li>
                 <div id='invite-twitter'>
-                    <a href='#' target='_blank'>{% trans "Invite your friends with twitter" %}</a>
+                    <a href='#'>{% trans "Invite your friends with twitter" %}</a>
                 </div>
             </li>
             <li>

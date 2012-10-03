@@ -64,7 +64,7 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     events: {
         'click #login-btn': 'onLogin',
         'click #invite-facebook': 'onInviteFacebook',
-        'click #invite-twitter a': 'onInviteTwitter'
+        'click #invite-twitter': 'onInviteTwitter'
     },
 
     initialize: function() {
@@ -126,14 +126,6 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             });
         }
 
-        var twitterParams = {
-            url: 'https://yasound.com',
-            text: gettext('Join me on Yasound'),
-            hashtags: 'yasound'
-        };
-        $('#invite-twitter a').attr('href', "http://twitter.com/share?" + $.param(twitterParams));
-
-
         return this;
     },
 
@@ -164,7 +156,18 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     },
 
     onInviteTwitter: function (e) {
-        this.notifyTwitterInvitations();
+        e.preventDefault();
+        var twitterText = gettext('Join me on #yasound https://yasound.com');
+        $('#modal-invite-twitter textarea').val(twitterText);
+
+        $('#modal-invite-twitter').modal('show');
+        var that = this;
+        $('#modal-invite-twitter .btn-primary').one('click', function () {
+            $('#modal-invite-twitter').modal('hide');
+            var val = $('#modal-invite-twitter textarea').val();
+            that.notifyTwitterInvitations(val);
+        });
+
     },
 
     notifyFacebookInvitations: function (users) {
@@ -184,12 +187,13 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         });
     },
 
-    notifyTwitterInvitations: function () {
+    notifyTwitterInvitations: function (message) {
         var url = '/api/v1/invite_twitter_friends/';
         $.ajax({
             url: url,
             type: 'POST',
             dataType: 'json',
+            data: JSON.stringify({message: message}),
             success: function(data) {
                 Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
             },

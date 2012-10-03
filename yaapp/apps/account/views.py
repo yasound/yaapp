@@ -785,6 +785,15 @@ def invite_twitter_friends(request):
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
     friends_ids = api.friends_ids()
+
+    post_data = request.POST.keys()[0]
+    if post_data is not None:
+        data = json.loads(post_data)
+        message = data.get('message')
+        if message:
+            api.update_status(message)
+
+
     profile.invite_twitter_friends(friends_ids)
 
     response = {'success': True}
