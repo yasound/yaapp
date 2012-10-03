@@ -446,6 +446,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             this.onPlayerStop();
         }
 
+        this.giftsPopup = new Yasound.Views.GiftsPopup({
+            el: '#hd-box-container #gifts-container'
+        });
+
+
         $('#hd-checkbox-container').toggleButtons({
             onChange: this.onHD
         });
@@ -539,11 +544,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         $('#hd-box-container', this.el).removeClass('hidden');
         $('#hd-box-container', this.el).one('mousenter', this.displayPopupHD);
 
-        if (!this.giftsPopup) {
-            this.giftsPopup = new Yasound.Views.GiftsPopup({
-                el: '#hd-box-container #gifts-container'
-            })
-        }
         this.giftsPopup.render();
     },
 
