@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
+from dateutil.relativedelta import *
 
 
 class RadioListeningStatManager(models.Manager):
@@ -27,7 +28,35 @@ class RadioListeningStatManager(models.Manager):
                 daily_stat.favorite = hourly_stat.favorites
                 daily_stat.likes = hourly_stat.likes
                 daily_stat.dislikes = hourly_stat.dislikes
-        return results
+
+        # add missing days
+        prev_date = None
+        final_result = []
+        first = True
+        for stat in results:
+            if first:
+                final_result.append(stat)
+                prev_date = stat.date
+                first = False
+                continue
+
+            if prev_date is None:
+                continue
+            diff = stat.date - prev_date
+            if diff.days >= 1:
+                for day in range(1, diff.days):
+                    date = prev_date + relativedelta(days=+day)
+                    final_result.append(RadioListeningStat(date=date,
+                        radio=radio,
+                        connections=0,
+                        audience_peak=0,
+                        overall_listening_time=0,
+                        favorites=0,
+                        likes=0,
+                        dislikes=0))
+            final_result.append(stat)
+            prev_date = stat.date
+        return final_result
 
 
 class RadioListeningStat(models.Model):
