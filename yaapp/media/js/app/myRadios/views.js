@@ -218,7 +218,8 @@ Yasound.Views.MyRadiosPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.MyRadios({}),
 
     events: {
-        "click #create-radio-btn": "onCreateRadio"
+        "click #create-radio-btn": "onCreateRadio",
+        'click #login-btn': 'onLogin'
     },
 
     initialize: function () {
@@ -244,8 +245,9 @@ Yasound.Views.MyRadiosPage = Backbone.View.extend({
             collection: this.collection,
             el: $('#pagination', this.el)
         });
-
-        this.onGenreChanged('', genre);
+        if (Yasound.App.userAuthenticated) {
+            this.onGenreChanged('', genre);
+        }
         return this;
     },
 
@@ -262,6 +264,13 @@ Yasound.Views.MyRadiosPage = Backbone.View.extend({
     onCreateRadio: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate("radios/new/", {
+            trigger: true
+        });
+    },
+
+    onLogin: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("login/", {
             trigger: true
         });
     }

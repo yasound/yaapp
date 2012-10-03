@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 08:18+0200\n"
+"POT-Creation-Date: 2012-10-03 08:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,6 +67,7 @@ msgstr "Se déconnecter"
 #: templates/yabase/app/favorites/favoritesPage.mustache:16
 #: templates/yabase/app/friends/friendsPage.mustache:40
 #: templates/yabase/app/login/login.mustache:24
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:46
 #: templates/yabase/app/signup/signup.mustache:43
 msgid "Login"
 msgstr "Se connecter"
@@ -927,7 +928,7 @@ msgstr "Twitter"
 #: templates/yabase/webapp.html:415
 #: templates/yabase/webapp.html.py:474
 #: templates/yabase/webapp.html:486
-#: templates/yabase/webapp.html.py:515
+#: templates/yabase/webapp.html.py:511
 #: templates/yabase/app/radio/editRadioPage.mustache:31
 #: templates/yabase/app/settings/settingsPage.mustache:128
 msgid "Close"
@@ -943,7 +944,7 @@ msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
 #: templates/yabase/webapp.html:429
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:13
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:14
 #: templates/yabase/app/programming/songInstances.mustache:38
 #: templates/yabase/app/radio/radioPage.mustache:50
 #: templates/yabase/app/radio/radioPage.mustache:65
@@ -953,7 +954,7 @@ msgid "No thank you"
 msgstr "Non merci"
 
 #: templates/yabase/webapp.html:430
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:14
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:15
 #: templates/yabase/app/programming/songInstances.mustache:39
 #: templates/yabase/app/radio/radioPage.mustache:51
 #: templates/yabase/app/radio/radioPage.mustache:66
@@ -995,35 +996,20 @@ msgstr "Aller à la page de login"
 #: templates/yabase/webapp.html:501
 #, python-format
 msgid ""
-"\n"
-"          <p><a href='%(link)s'>Listen</a> to the biggest radio database in "
-"the world</p>\n"
-"          "
-msgstr "\n"
-"          <p><a href='%(link)s'>Ecoutez</a> la plus grandebase de radios au monde</p>\n"
-"          "
+"<p><a href='%(link)s'>Listen</a> to the biggest radio database in the world</"
+"p>"
+msgstr "<p><a href='%(link)s'>Ecoutez</a> la plus grande base de radios au monde</p>"
 
-#: templates/yabase/webapp.html:508
+#: templates/yabase/webapp.html:506
 #, python-format
 msgid ""
-"\n"
-"          <p><a href='%(link)s'>Share</a> your listening<br/>with your "
-"friends</p>\n"
-"          "
-msgstr "\n"
-"          <p><a href='%(link)s'>Partagez</a> votre écoute avec vos amis</p>\n"
-"          "
+"<p><a href='%(link)s'>Share</a> your listening<br/>with your friends</p>"
+msgstr "<p><a href='%(link)s'>Partagez</a> votre écoute avec vos amis</p>"
 
-#: templates/yabase/webapp.html:518
+#: templates/yabase/webapp.html:514
 #, python-format
-msgid ""
-"\n"
-"          <p><a href='%(link)s'>Create</a> your radio <br/>easily</p>\n"
-"          "
-msgstr "\n"
-"          <p><a href='%(link)s'>Créez</a> votre radio facilement</p>\n"
-"          "
-
+msgid "<p><a href='%(link)s'>Create</a> your radio <br/>easily</p>"
+msgstr "<p><a href='%(link)s'>Créez</a> votre radio facilement</p>"
 
 #: templates/yabase/app/footer.html:18
 msgid "About"
@@ -1182,7 +1168,7 @@ msgid "People"
 msgstr "Personnes"
 
 #: templates/yabase/app/common/subMenu.mustache:58
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:32
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:33
 msgid "Create radio"
 msgstr "Créer une radio"
 
@@ -1246,17 +1232,21 @@ msgstr "Utiliser Facebook"
 msgid "Use Twitter"
 msgstr "Utiliser Twitter"
 
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:5
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:6
 msgid "Delete radio"
 msgstr "Supprimer la radio"
 
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:8
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:9
 msgid "Do you really want to delete this radio? This action cannot be undone."
 msgstr "Voulez-vous vraiment supprimer cette radio ? Cette action est irréversible."
 
-#: templates/yabase/app/myRadios/myRadiosPage.mustache:9
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:10
 msgid "Enter \"yes\" to confirm:"
 msgstr "Entrez \"oui\" pour confirmer :"
+
+#: templates/yabase/app/myRadios/myRadiosPage.mustache:44
+msgid "Log in to create your radio."
+msgstr "Connectez-vous pour créer votre radio."
 
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:7
 msgid "Delete"
@@ -1744,9 +1734,8 @@ msgstr "\n"
 "Jean-Marc Plueger et Sébastien Métrot.</p>"
 
 #: templates/yabase/app/static/jobs.mustache:4
-#, fuzzy
 msgid "Yasound is hiring"
-msgstr "Yasound arrive prochainement."
+msgstr "Yasound recrute"
 
 #: templates/yabase/app/static/jobs.mustache:17
 msgid ""
