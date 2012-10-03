@@ -2,16 +2,31 @@
 {% if request.user.is_authenticated %}
 
 <div class='row common-background'>
-    <div class='span12 no-margin'>
-        <h1>{% trans "People you follow" %} (<span id='friends-count'></span>)</h1>
+
+    <div class='span12 no-margin invite'>
+        <h1>{% trans "Invite your friends" %}</h1>
+        <ul>
+            <li>
+                <div id='invite-facebook'>
+                    <a href='#'>{% trans "Invite your facebook friends" %}</a
+                </div>
+            </li>
+            <li>
+                <div id='invite-twitter'>
+                    <a href='#' target='_blank'>{% trans "Invite your friends with twitter" %}</a>
+                </div>
+            </li>
+            <li>
+                <div id='invite-email'>
+                    <a href='#'>{% trans "Invite your friends by email" %}</a
+                </div>
+            </li>
+        </ul>
+        <div class='separation-line'></div>
     </div>
 
-    <div class='span12 invite'>
-        <ul>
-            <li><a href='#' id='invite-facebook'>{% trans "Invite your facebook friends" %}</a></li>
-        </ul>
-    </div>
     <div class='span12 no-margin '>
+        <h1>{% trans "People you follow" %} (<span id='friends-count'></span>)</h1>
         <ul id='results'>
         <img class='loading-mask' src='/media/images/loading-white.gif'/>
         </ul>

@@ -72,6 +72,21 @@ body {
 #modal-window {
     width:auto;
 }
+
+#login-btn-facebook {
+    background-image: url('../app/images/login/login-btn-fbk.png');
+    background-repeat: repeat-x;
+    border:1px solid #082029;
+    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0;
+}
+
+#login-btn-twitter {
+    background-image: url('../app/images/login/login-btn-twitter.png');
+    background-repeat: repeat-x;
+    border:1px solid #0f1d3c;
+    box-shadow: 0px 1px 1px #636566, inset 0px 1px 1px #baf2fe;
+}
+
 /**
  * Header
  */
@@ -144,6 +159,7 @@ body {
     width:255px;
     margin:15px;
     border-radius:3px;
+    font-size:15px;
 }
 
 #login-box-container a:hover {
@@ -163,19 +179,6 @@ body {
     margin-left:47px;
 }
 
-#login-box-container #login-btn-facebook {
-    background-image: url('../app/images/login/login-btn-fbk.png');
-    background-repeat: repeat-x;
-    border:1px solid #082029;
-    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0;
-}
-
-#login-box-container #login-btn-twitter {
-    background-image: url('../app/images/login/login-btn-twitter.png');
-    background-repeat: repeat-x;
-    border:1px solid #0f1d3c;
-    box-shadow: 0px 1px 1px #636566, inset 0px 1px 1px #baf2fe;
-}
 
 #login-box-container .login-separation-line {
     height:1px;
@@ -3647,15 +3650,60 @@ ul .radio-with-stats-cells li {
 
 .invite ul li {
     margin-left:0;
+    float:left;
 }
 
 #invite-facebook {
-    font-size:14px;
-    background: url(../app/images/friends/friend-facebook.png) 0 50% no-repeat;
-    padding:32px;
-    padding-left:40px;
+    height:175px;
+    cursor:pointer;
+    width:258px;
+    margin:15px;
+    margin-left:35px;
+    font-size:15px;
+    background: url('../app/images/friends/invite-facebook.png') no-repeat 50% 50%;
 }
 
+#invite-facebook a {
+    display:block;
+    position:relative;
+    left:44px;
+    top:142px;
+    color:white;
+}
+
+#invite-twitter {
+    height:175px;
+    cursor:pointer;
+    width:258px;
+    margin:15px;
+    font-size:15px;
+    background: url('../app/images/friends/invite-twitter.png') no-repeat 50% 50%;
+}
+
+#invite-twitter a {
+    display:block;
+    position:relative;
+    left:44px;
+    top:142px;
+    color:white;
+}
+
+#invite-email {
+    height:175px;
+    cursor:pointer;
+    width:258px;
+    margin:15px;
+    font-size:15px;
+    background: url('../app/images/friends/invite-email.png') no-repeat 50% 50%;
+}
+
+#invite-email a {
+    display:block;
+    position:relative;
+    left:44px;
+    top:142px;
+    color:black;
+}
 
 /**
  * Gift

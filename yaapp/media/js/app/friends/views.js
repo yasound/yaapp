@@ -63,11 +63,12 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
 
     events: {
         'click #login-btn': 'onLogin',
-        'click #invite-facebook': 'onInviteFacebook'
+        'click #invite-facebook': 'onInviteFacebook',
+        'click #invite-twitter a': 'onInviteTwitter'
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'notifyFacebookInvitations');
+        _.bindAll(this, 'render', 'notifyFacebookInvitations', 'notifyTwitterInvitations');
     },
 
     onClose: function() {
@@ -125,6 +126,14 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             });
         }
 
+        var twitterParams = {
+            url: 'https://yasound.com',
+            text: gettext('Join me on Yasound'),
+            hashtags: 'yasound'
+        };
+        $('#invite-twitter a').attr('href', "http://twitter.com/share?" + $.param(twitterParams));
+
+
         return this;
     },
 
@@ -154,6 +163,10 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         });
     },
 
+    onInviteTwitter: function (e) {
+        this.notifyTwitterInvitations();
+    },
+
     notifyFacebookInvitations: function (users) {
         var url = '/api/v1/invite_facebook_friends/';
         $.ajax({
@@ -162,6 +175,21 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             dataType: 'json',
             data: JSON.stringify(users),
             contentType: 'application/json',
+            success: function(data) {
+                Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+            },
+            failure: function() {
+                Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
+            }
+        });
+    },
+
+    notifyTwitterInvitations: function () {
+        var url = '/api/v1/invite_twitter_friends/';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
             success: function(data) {
                 Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
             },

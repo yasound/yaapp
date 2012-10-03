@@ -12,6 +12,7 @@ from emailconfirmation.models import EmailAddress
 from facepy import GraphAPI
 from settings import SUBSCRIPTION_NONE, SUBSCRIPTION_PREMIUM
 from social_auth.signals import socialauth_registered
+from social_auth.models import UserSocialAuth
 from sorl.thumbnail import ImageField, get_thumbnail, delete
 from tastypie.models import create_api_key
 from yabase import signals as yabase_signals
@@ -1650,6 +1651,33 @@ def new_social_user(sender, user, response, details, **kwargs):
         profile.facebook_token = access_token
         profile.save()
 
+def social_user_updated(sender, instance, created=None, **kwargs):
+    if instance.extra_data is None or len(instance.extra_data) == 0:
+        return
+
+    response = instance.extra_data
+    backend_name = instance.provider.lower()
+    user = instance.user
+
+    if backend_name == 'twitter':
+        access_token = response.get('access_token')
+        tokens = dict(tok.split('=') for tok in access_token.split('&'))
+        token = tokens.get('oauth_token', '')
+        token_secret = tokens.get('oauth_token_secret', '')
+
+        profile = user.get_profile()
+        if len(token) > 0:
+            profile.twitter_token = token
+        if len(token_secret) > 0:
+            profile.twitter_token_secret = token_secret
+        profile.save()
+    elif backend_name == 'facebook':
+        access_token = response.get('access_token', '')
+        profile = user.get_profile()
+        if len(access_token) > 0:
+            profile.facebook_token = access_token
+        profile.save()
+
 def new_radio_created(sender, instance, created=None, **kwargs):
     if not created:
         return
@@ -1682,5 +1710,6 @@ def install_handlers():
     yabase_signals.new_animator_activity.connect(new_animator_activity)
 
     socialauth_registered.connect(new_social_user)
+    post_save.connect(social_user_updated, sender=UserSocialAuth)
 install_handlers()
 
