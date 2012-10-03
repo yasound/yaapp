@@ -190,6 +190,7 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     events: {
         'click #profile-picture a': 'myProfile',
         'hover #profile-picture a': 'displayPopupProfile',
+        'mouseleave #profile-picture a': 'hidePopupProfile',
         'click #my-profile-btn': 'myProfile',
         'click #my-settings-btn': 'mySettings',
         'click #logout-btn': 'logout',
@@ -210,10 +211,6 @@ Yasound.Views.UserMenu = Backbone.View.extend({
         }
     },
     render: function() {
-        var that = this;
-        $(this.el).parent().on('mouseleave', function() {
-            that.hidePopupProfile();
-        });
         return this;
     },
 
@@ -279,11 +276,16 @@ Yasound.Views.UserMenu = Backbone.View.extend({
     },
 
     displayPopupProfile: function (e) {
+        if (this.closeTimer) {
+            this.closeTimer = clearTimeout(this.closeTimer);
+        }
         $('#profile-box-container', this.el).removeClass('hidden');
     },
 
     hidePopupProfile: function() {
-        $('#profile-box-container', this.el).addClass('hidden');
+        this.closeTimer = setTimeout(function() {
+            $('#profile-box-container', this.el).addClass('hidden');
+        }, 300);
     }
 });
 
