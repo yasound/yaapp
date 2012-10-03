@@ -482,15 +482,15 @@ class UserProfile(models.Model):
 
         return True, _('OK')
 
-    def invite_facebook_friends(facebook_ids):
+    def invite_facebook_friends(self, facebook_ids):
         ia = InvitationsManager()
         ia.add_invitations(self.user.id, InvitationsManager.TYPE_FACEBOOK, facebook_ids)
 
-    def invite_twitter_friends(twitter_ids):
+    def invite_twitter_friends(self, twitter_ids):
         ia = InvitationsManager()
         ia.add_invitations(self.user.id, InvitationsManager.TYPE_TWITTER, twitter_ids)
 
-    def invite_email_friends(emails):
+    def invite_email_friends(self, emails):
         ia = InvitationsManager()
         ia.add_invitations(self.user.id, InvitationsManager.TYPE_EMAIL, emails)
 
@@ -1555,7 +1555,7 @@ class InvitationsManager():
         self.collection.drop()
 
     def add_invitations(self, user_id, type, uids):
-        self.collection.update({'db_id': user_id}, {'$pushAll': {type: uids}}, upsert=True, safe=True)
+        self.collection.update({'db_id': user_id}, {'$addToSet': {type: {'$each': uids} } }, upsert=True, safe=True)
 
     def remove_invitation(self, user_id, type, uid):
         self.collection.update({'db_id': user_id}, {'$pull': {type: uid}}, upsert=True, safe=True)
