@@ -179,7 +179,11 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             data: JSON.stringify(users),
             contentType: 'application/json',
             success: function(data) {
-                Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+                if (!(data.success)) {
+                    Yasound.Utils.dialog(gettext('Error'), data.error);
+                } else {
+                    Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+                }
             },
             failure: function() {
                 Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
@@ -195,7 +199,11 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             dataType: 'json',
             data: JSON.stringify({message: message}),
             success: function(data) {
-                Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+                if (!(data.success)) {
+                    Yasound.Utils.dialog(gettext('Error'), data.error);
+                } else {
+                    Yasound.Utils.dialog(gettext('Thank you'), gettext('Your friends have been invited successfully.'));
+                }
             },
             failure: function() {
                 Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));

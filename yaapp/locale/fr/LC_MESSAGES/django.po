@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 08:58+0200\n"
+"POT-Creation-Date: 2012-10-03 17:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr "Se déconnecter"
 #: templates/web/menu.html:19
 #: templates/yabase/app/track.mustache:148
 #: templates/yabase/app/favorites/favoritesPage.mustache:16
-#: templates/yabase/app/friends/friendsPage.mustache:40
+#: templates/yabase/app/friends/friendsPage.mustache:72
 #: templates/yabase/app/login/login.mustache:24
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:46
 #: templates/yabase/app/signup/signup.mustache:43
@@ -928,7 +928,8 @@ msgstr "Twitter"
 #: templates/yabase/webapp.html:415
 #: templates/yabase/webapp.html.py:474
 #: templates/yabase/webapp.html:486
-#: templates/yabase/webapp.html.py:511
+#: templates/yabase/webapp.html.py:500
+#: templates/yabase/webapp.html:524
 #: templates/yabase/app/radio/editRadioPage.mustache:31
 #: templates/yabase/app/settings/settingsPage.mustache:128
 msgid "Close"
@@ -944,6 +945,7 @@ msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
 #: templates/yabase/webapp.html:429
+#: templates/yabase/app/friends/friendsPage.mustache:14
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:14
 #: templates/yabase/app/programming/songInstances.mustache:38
 #: templates/yabase/app/radio/radioPage.mustache:50
@@ -993,20 +995,20 @@ msgstr "Vous devez être authentifié pour accéder à cette ressource."
 msgid "Go to login page"
 msgstr "Aller à la page de login"
 
-#: templates/yabase/webapp.html:501
+#: templates/yabase/webapp.html:514
 #, python-format
 msgid ""
 "<p><a href='%(link)s'>Listen</a> to the biggest radio database in the world</"
 "p>"
 msgstr "<p><a href='%(link)s'>Ecoutez</a> la plus grande base de radios au monde</p>"
 
-#: templates/yabase/webapp.html:506
+#: templates/yabase/webapp.html:519
 #, python-format
 msgid ""
 "<p><a href='%(link)s'>Share</a> your listening<br/>with your friends</p>"
 msgstr "<p><a href='%(link)s'>Partagez</a> votre écoute avec vos amis</p>"
 
-#: templates/yabase/webapp.html:514
+#: templates/yabase/webapp.html:527
 #, python-format
 msgid "<p><a href='%(link)s'>Create</a> your radio <br/>easily</p>"
 msgstr "<p><a href='%(link)s'>Créez</a> votre radio facilement</p>"
@@ -1183,22 +1185,47 @@ msgstr "Connectez-vous pour afficher vos favoris."
 msgid "Back to profile"
 msgstr "Retour au profil"
 
-#: templates/yabase/app/friends/friendsPage.mustache:5
+#: templates/yabase/app/friends/friendsPage.mustache:7
+msgid "Post on twitter"
+msgstr "Poster sur twitter"
+
+#: templates/yabase/app/friends/friendsPage.mustache:10
+msgid "Invite your friends on Twitter"
+msgstr "Invitez vos amis avec Twitter"
+
+#: templates/yabase/app/friends/friendsPage.mustache:15
+#: templates/yabase/app/radio/wallInput.mustache:4
+msgid "Post message"
+msgstr "Poster le message"
+
+#: templates/yabase/app/friends/friendsPage.mustache:23
+msgid "Invite your friends"
+msgstr "Invitez vos amis"
+
+#: templates/yabase/app/friends/friendsPage.mustache:27
+msgid "Invite your facebook friends"
+msgstr "Invitez vos amis facebook"
+
+#: templates/yabase/app/friends/friendsPage.mustache:32
+msgid "Invite your friends with twitter"
+msgstr "Invitez vos amis avec twitter"
+
+#: templates/yabase/app/friends/friendsPage.mustache:37
+msgid "Invite your friends by email"
+msgstr "Invitez vos amis par mail"
+
+#: templates/yabase/app/friends/friendsPage.mustache:45
 #: templates/yabase/app/friends/userFriendsPage.mustache:4
 #: templates/yabase/app/profile/profilePage.mustache:25
 msgid "People you follow"
 msgstr "Personnes que vous suivez"
 
-#: templates/yabase/app/friends/friendsPage.mustache:10
-msgid "Invite your facebook friends"
-msgstr "Invitez vos amis facebook"
-
-#: templates/yabase/app/friends/friendsPage.mustache:22
+#: templates/yabase/app/friends/friendsPage.mustache:54
 #: templates/yabase/app/profile/profilePage.mustache:34
 msgid "People following you"
 msgstr "Personnes qui vous suivent"
 
-#: templates/yabase/app/friends/friendsPage.mustache:38
+#: templates/yabase/app/friends/friendsPage.mustache:70
 msgid "Log in to view your friends."
 msgstr "Connectez-vous pour afficher vos amis."
 
@@ -1571,10 +1598,6 @@ msgstr "signaler comme abusif"
 #: templates/yabase/app/radio/wallEvent.message.mustache:24
 msgid "delete"
 msgstr "supprimer"
-
-#: templates/yabase/app/radio/wallInput.mustache:4
-msgid "Post message"
-msgstr "Poster un message"
 
 #: templates/yabase/app/settings/settingsPage.mustache:7
 msgid "My informations"

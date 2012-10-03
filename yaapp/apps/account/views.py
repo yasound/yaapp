@@ -735,7 +735,7 @@ def check_streamer_auth_token(request, token):
 def invite_ios_contacts(request):
     post_data = request.POST.keys()[0]
     if post_data is None:
-        response = {'success': False, 'error': 'no emails provided'}
+        response = {'success': False, 'error': unicode(_('no emails provided'))}
         response_data = json.dumps(response)
         return HttpResponse(response_data)
     contacts = json.loads(post_data)
@@ -756,7 +756,7 @@ def invite_ios_contacts(request):
 def invite_facebook_friends(request):
     post_data = request.POST.keys()[0]
     if post_data is None:
-        response = {'success': False, 'error': 'no facebook ids provided'}
+        response = {'success': False, 'error': unicode(_('no facebook ids provided'))}
         response_data = json.dumps(response)
         return HttpResponse(response_data)
     facebook_user_ids = json.loads(post_data)
@@ -775,7 +775,7 @@ def invite_facebook_friends(request):
 @check_api_key(methods=['POST', 'GET'], login_required=True)
 def invite_twitter_friends(request):
     if not request.user.userprofile.twitter_enabled:
-        response = {'success': False, 'error': 'userprofile has no twitter account associated'}
+        response = {'success': False, 'error': unicode(_('no twitter account associated'))}
         response_data = json.dumps(response)
         return HttpResponse(response_data)
 
