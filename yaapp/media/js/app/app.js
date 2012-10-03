@@ -109,6 +109,15 @@ $(document).ready(function () {
         new Yasound.Views.TutorialWindow().render();
     });
 
+    $('.teaser #close-btn').click(function (e) {
+        e.preventDefault();
+        $('.teaser').slideUp();
+    })
+
+    if (!Yasound.App.isMobile) {
+        $('.teaser #close-btn-container').addClass('auto-hide');
+    }
+
     Backbone.View.prototype.close = function () {
         if (this.sticky) {
             this.el.parentNode.removeChild(this.el);
@@ -169,7 +178,6 @@ $(document).ready(function () {
             if (Yasound.App.appName == 'deezer') {
                 this.bind('all', this._updateDeezerCanvas);
             }
-
             return this.bind('all', this._trackPageview);
         },
 
@@ -237,6 +245,8 @@ $(document).ready(function () {
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
                 Yasound.Utils.enableFX();
+                $('.teaser').slideUp();
+
             }
             this.alreadyLoaded = true;
 

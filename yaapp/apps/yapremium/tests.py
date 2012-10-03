@@ -222,6 +222,35 @@ class TestGift(TestCase):
         one_month = today + relativedelta(months=+1)
         self.assertEquals(us.expiration_date.date(), one_month)
 
+    def test_gift_delay(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+            duration=1,
+            max_per_user=0,
+            delay=3,
+            enabled=True)
+
+        self.assertTrue(gift.available(user2))
+
+        yabase_signals.user_watched_tutorial.send(sender=user2.get_profile(), user=user2)
+
+        self.assertFalse(gift.available(user2))
+
+        today = datetime.today()
+        past = today + relativedelta(days=-4)
+
+        Achievement.objects.all().update(achievement_date=past)
+
+        self.assertTrue(gift.available(user2))
+
+
+
 class TestExpirationDate(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
