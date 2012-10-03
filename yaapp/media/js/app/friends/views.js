@@ -136,6 +136,7 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
     },
 
     onInviteFacebook: function (e) {
+        var that = this;
         e.preventDefault();
         FB.ui({
             method: 'apprequests',
