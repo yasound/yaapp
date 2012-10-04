@@ -21,7 +21,7 @@ Yasound.Views.Share = Backbone.View.extend({
     render: function(radio) {
         this.reset();
         this.radio = radio;
-        $(this.el).html(ich.sharePageTemplate());
+        $(this.el).html(ich.sharePageTemplate(radio.toJSON()));
         this.generateSocialShare();
         return this;
     },

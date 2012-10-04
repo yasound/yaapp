@@ -147,8 +147,8 @@
           <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
           <a class='float-left login-btn' id='login-btn' href='{% url webapp_login app_name %}'>{% trans 'Login' %}</a>
           <div id='login-box-container' class='hidden'>
-            <a id='login-btn-facebook' class='btn-facebook' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
-            <a id='login-btn-twitter' class='btn-twitter' href="{% url socialauth_begin 'twitter' %}?next= {{ root }}" rel="nofollow"><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
+            <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
+            <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next= {{ root }}" rel="nofollow"><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
             <div class='login-separation-line'></div>
             <form id='popup-login-form' method='post' action="{% url webapp_login app_name %}">{% csrf_token %}
               <span>{% trans "Email login" %}</span>

@@ -87,6 +87,45 @@ body {
     box-shadow: 0px 1px 1px #636566, inset 0px 1px 1px #baf2fe;
 }
 
+.btn-facebook {
+    background-image: url('../app/images/login/login-btn-fbk.png');
+    background-repeat: repeat-x;
+    background-position: 50% 0%;
+    border:1px solid #082029;
+    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0;
+    height:28px;
+    display: block;
+    padding-top:10px;
+    /*width:160px;*/
+}
+.btn-facebook img {
+    position:relative;
+    left:8px;
+    top:-2px;
+}
+.btn-facebook span {
+    margin-left:24px;
+}
+
+.btn-twitter {
+    background-image: url('../app/images/login/login-btn-twitter.png');
+    background-repeat: repeat-x;
+    background-position: 50% 0%;
+    border:1px solid #082029;
+    box-shadow: 0px 1px 1px #696b6c, inset 0px 1px 1px #a2bbf0;
+    height:28px;
+    display: block;
+    padding-top:10px;
+    /*width:160px;*/
+}
+.btn-twitter img {
+    position:relative;
+    left:8px;
+    top:-2px;
+}
+.btn-twitter span {
+    margin-left:24px;
+}
 /**
  * Header
  */
@@ -1054,6 +1093,35 @@ input::-webkit-input-placeholder {
     -webkit-box-shadow:none;
     -moz-box-shadow:none;
     -o-box-shadow:none;
+}
+
+#modal-share ul {
+    margin-left: 0;
+    list-style:none;
+    width:100%;
+}
+
+#modal-share ul li {
+    float:left;
+    width:190px;
+    margin-bottom:12px;
+}
+
+#modal-share ul li:first-child {
+    margin-right:20px;
+}
+
+#modal-share label {
+    margin-top:12px;
+}
+
+#modal-share #widget {
+    width:100%;
+    height:100%;
+}
+
+#modal-share #stream {
+    width:100%;
 }
 
 /*--- LOADER IMAGE ---*/
