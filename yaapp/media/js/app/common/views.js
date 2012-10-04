@@ -500,14 +500,17 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
             var el = $('#modal-share .modal-body');
-            new Yasound.Views.Share({
-                el: el,
-                model: this.model
-            }).render(this.radio);
+
+            if (!this.shareView) {
+                this.shareView = new Yasound.Views.Share({
+                    el: el,
+                    model: this.model
+                });
+            }
+            this.shareView.render(this.radio);
         } else {
             Yasound.Utils.dialog(gettext('Error'), gettext('Nothing to share'));
         }
-
     },
 
     ping: function() {
