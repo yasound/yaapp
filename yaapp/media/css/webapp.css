@@ -87,7 +87,7 @@ body {
     box-shadow: 0px 1px 1px #636566, inset 0px 1px 1px #baf2fe;
 }
 
-.btn-facebook {
+.share .btn-facebook {
     background-image: url('../app/images/login/login-btn-fbk.png');
     background-repeat: repeat-x;
     background-position: 50% 0%;
@@ -98,16 +98,16 @@ body {
     padding-top:10px;
     /*width:160px;*/
 }
-.btn-facebook img {
+.share .btn-facebook img {
     position:relative;
     left:8px;
     top:-2px;
 }
-.btn-facebook span {
+.share .btn-facebook span {
     margin-left:24px;
 }
 
-.btn-twitter {
+.share .btn-twitter {
     background-image: url('../app/images/login/login-btn-twitter.png');
     background-repeat: repeat-x;
     background-position: 50% 0%;
@@ -118,12 +118,12 @@ body {
     padding-top:10px;
     /*width:160px;*/
 }
-.btn-twitter img {
+.share .btn-twitter img {
     position:relative;
     left:8px;
     top:-2px;
 }
-.btn-twitter span {
+.share .btn-twitter span {
     margin-left:24px;
 }
 /**
