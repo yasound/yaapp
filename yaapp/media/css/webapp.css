@@ -881,11 +881,11 @@ body {
 }
 
 #sub-header-pointer.menu3 {
-    left:160px;
+    left:166px;
 }
 
 #sub-header-pointer.menu4 {
-    left:240px;
+    left:250px;
 }
 
 #sub-header-pointer.menu5 {
@@ -3478,6 +3478,9 @@ ul .radio-with-stats-cells li {
     cursor: pointer;
     text-shadow:1px 1px 1px white;
 }
+.save-btn[disabled=disabled] {
+    color:#aaaaaa;
+}
 
 .save-btn:hover {
     box-shadow:1px 3px 4px #e3e3e3;
@@ -4113,6 +4116,10 @@ a.yabutton-small {
 
 #teaser .span4 {
     background: url(../app/images/teaser/separator.png) no-repeat 100% 50%;
+}
+
+#teaser .last {
+    background: none;
 }
 
 #teaser p {

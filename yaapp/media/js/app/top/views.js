@@ -119,7 +119,7 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
-        });
+        }).setTitle(gettext('Next radios'));
 
         this.collection.params.genre = genre;
 

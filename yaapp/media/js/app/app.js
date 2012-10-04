@@ -106,7 +106,21 @@ $(document).ready(function () {
     });
     $('#btn-help').click(function(e) {
         e.preventDefault();
-        new Yasound.Views.TutorialWindow().render();
+        Yasound.App.Router.navigate('help/', {
+            trigger: true
+        });
+    });
+    $('#btn-press').click(function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('press/', {
+            trigger: true
+        });
+    });
+    $('#btn-jobs').click(function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('jobs/', {
+            trigger: true
+        });
     });
 
     Backbone.View.prototype.close = function () {
@@ -161,8 +175,9 @@ $(document).ready(function () {
             "legal/": "legal",
             "contact/": "contact",
             "about/": "about",
-            "tutorial/": "tutorial",
+            "help/": "help",
             "jobs/": "jobs",
+            "press/": "press",
             "*args": "index"
         },
         initialize: function() {
@@ -276,7 +291,7 @@ $(document).ready(function () {
 
 
             if (Yasound.App.showWelcomePopup) {
-                $('#modal-what-next').modal('show');
+                // TODO : remove
                 Yasound.App.showWelcomePopup = false;
             }
 
@@ -502,8 +517,16 @@ $(document).ready(function () {
             return this.staticPage('jobs');
         },
 
+        press: function () {
+            return this.staticPage('press');
+        },
+
         about: function () {
             return this.staticPage('about');
+        },
+
+        help: function () {
+            return this.staticPage('help');
         },
 
         tutorial: function () {

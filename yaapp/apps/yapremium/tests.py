@@ -75,9 +75,16 @@ class TestView(TestCase):
 
     def test_get_gifts(self):
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
-        gift = Gift.objects.create(name='gift',
+        gift = Gift.objects.create(name_en='gift',
             description='description',
             service=service,
+            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+            enabled=True)
+
+        gift_for_anonymous = Gift.objects.create(name_en='gift for anonymous',
+            description='description',
+            service=service,
+            authentication_needed=False,
             action=yapremium_settings.ACTION_WATCH_TUTORIAL,
             enabled=True)
 
@@ -90,6 +97,7 @@ class TestView(TestCase):
         self.assertTrue(item.get('enabled'))
         self.assertEquals(item.get('count'), 0)
         self.assertEquals(item.get('max'), 1)
+        self.assertEquals(item.get('name'), 'gift')
 
         achievement = Achievement.objects.create(user=self.user, gift=gift, achievement_date=datetime(2012, 8, 24, 0, 0))
 
@@ -113,6 +121,7 @@ class TestView(TestCase):
 
         item = data.get('objects')[0]
         self.assertTrue(item.get('enabled'))
+        self.assertEquals(item.get('name'), 'gift for anonymous')
 
 
 class TestGift(TestCase):

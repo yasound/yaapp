@@ -202,7 +202,9 @@ class Gift(models.Model):
     enabled = models.BooleanField(_('enabled'), default=False)
 
     name = models.CharField(_('name'), max_length=255, blank=True)
+    sku = models.CharField(_('sku'), max_length=255, blank=True)
     description = models.TextField(_('description'), blank=True)
+    authentication_needed = models.BooleanField(_('authentication needed'), default=True)
 
     action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
     action_url_ios = models.TextField(_('iOS action url'), blank=True)  # special field used by iOS to navigate to action menu
@@ -273,6 +275,7 @@ class Gift(models.Model):
             'id': self.id,
             'enabled': enabled,
             'name': self.name,
+            'sku': self.sku,
             'description': self.description,
             'max': self.max_per_user,
             'count': count,

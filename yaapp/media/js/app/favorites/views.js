@@ -37,7 +37,7 @@ Yasound.Views.FavoritesPage = Backbone.View.extend({
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
-        });
+        }).setTitle(gettext('Next favorites'));
 
         if (Yasound.App.userAuthenticated) {
             this.onGenreChanged('', genre);
@@ -110,7 +110,7 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
-        });
+        }).setTitle(gettext('Next radios'));
 
         this.onGenreChanged('', genre);
     },

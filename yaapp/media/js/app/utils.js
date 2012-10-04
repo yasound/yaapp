@@ -64,6 +64,9 @@ Yasound.Utils.submitForm = function (options) {
     $('.error-msg', form).remove();
     $('input', form).removeClass('error');
 
+    var button = $("button[type='submit']", form);
+    button.attr('disabled', 'disabled');
+    var savedText = button.html();
     $.post(url, form.serializeArray(), function(data) {
         var success = data.success;
         if (!data.success) {
@@ -86,8 +89,10 @@ Yasound.Utils.submitForm = function (options) {
                 options.success();
             }
         }
+        button.removeAttr('disabled');
     }).error(function() {
         colibri(options.errorMessage, 'colibri-error');
+        button.removeAttr('disabled');
     });
 };
 

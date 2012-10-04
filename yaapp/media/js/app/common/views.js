@@ -532,6 +532,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 });
 
 Yasound.Views.Pagination = Backbone.View.extend({
+    title: gettext('Show more'),
+
     events: {
         'click button.servernext': 'nextResultPage',
         'click a.serverprevious': 'previousResultPage',
@@ -547,7 +549,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
     tagName: 'aside',
 
     initialize: function () {
-        _.bindAll(this, 'scroll');
+        _.bindAll(this, 'scroll', 'setTitle');
 
         $(window).on('scroll', this.scroll);
         this.locked = true;
@@ -561,13 +563,18 @@ Yasound.Views.Pagination = Backbone.View.extend({
         this.collection.unbind('reset', this.render);
     },
 
+    setTitle: function (title) {
+        this.title = title;
+        return this;
+    },
+
     render: function () {
         this.locked = false;
         var info = this.collection.info();
         var page = info.page;
         var totalPages = info.totalPages;
         if (page+1 < totalPages) {
-            this.$el.html(ich.paginationTemplate());
+            this.$el.html(ich.paginationTemplate({title: this.title}));
         } else {
             this.$el.html('');
         }

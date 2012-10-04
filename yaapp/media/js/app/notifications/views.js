@@ -182,7 +182,7 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.notifications,
             el: $('#pagination', this.el)
-        });
+        }).setTitle(gettext('Next notifications'));
 
         this.notifications.fetch();
 
