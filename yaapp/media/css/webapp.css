@@ -1117,6 +1117,10 @@ input::-webkit-input-placeholder {
     margin-left:13px;
 }
 
+.profile-background .radio-cell {
+    margin-left:13px;
+}
+
 .radio-container {
 	float:left;
 	height:209px;

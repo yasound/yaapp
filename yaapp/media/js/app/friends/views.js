@@ -287,6 +287,15 @@ Yasound.Views.UserFriendsPage = Backbone.View.extend({
 
         this.username = this.collection.username;
         $(this.el).html(ich.userFriendsPageTemplate());
+
+        this.user = new Yasound.Data.Models.User({username:username}),
+        this.userView = new Yasound.Views.User({
+            model: this.user,
+            el: $('#user-profile', this.el)
+        });
+        this.user.fetch();
+
+
         this.resultsView = new Yasound.Views.Friends({
             collection: this.collection,
             el: $('#results', this.el)
@@ -338,6 +347,14 @@ Yasound.Views.UserFollowersPage = Backbone.View.extend({
 
         this.username = this.collection.username;
         $(this.el).html(ich.userFollowersPageTemplate());
+
+        this.user = new Yasound.Data.Models.User({username:username}),
+        this.userView = new Yasound.Views.User({
+            model: this.user,
+            el: $('#user-profile', this.el)
+        });
+        this.user.fetch();
+
         this.resultsView = new Yasound.Views.Friends({
             collection: this.collection,
             el: $('#results', this.el)
