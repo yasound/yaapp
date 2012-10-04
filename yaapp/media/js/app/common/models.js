@@ -87,6 +87,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
                 that.set('favorite', true);
                 $.publish('/radio/favorite');
                 that.trigger('radioFavorite');
+                that.fetch();
             }
         });
     },
@@ -99,6 +100,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
                 that.set('favorite', false);
                 $.publish('/radio/not_favorite');
                 that.trigger('radioNotFavorite');
+                that.fetch();
             }
         });
     },
