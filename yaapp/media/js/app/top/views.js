@@ -115,7 +115,6 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
             collection: this.collection,
             el: $('#results', this.el)
         });
-
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.collection,
             el: $('#pagination', this.el)
@@ -126,7 +125,7 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
         if (g_bootstrapped_data) {
             this.collection.reset(g_bootstrapped_data);
         } else {
-            this.collection.fetch();
+            this.collection.goTo(0);
         }
 
         return this;
