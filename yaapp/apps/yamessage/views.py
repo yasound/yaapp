@@ -29,7 +29,7 @@ def get_notifications(request):
                                                  read_status=read_status)
     notifs = list(notif_cursor)
 
-    yamessage_signals.send(sender=request.user, user=request.user)
+    yamessage_signals.access_notifications.send(sender=request.user, user=request.user)
 
     return api_response(notifs, total_count=total_count, limit=limit, offset=offset)
 
