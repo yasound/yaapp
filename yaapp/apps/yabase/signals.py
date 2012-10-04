@@ -11,6 +11,7 @@ neutral_like_radio      = django.dispatch.Signal(providing_args=['radio', 'user'
 favorite_radio          = django.dispatch.Signal(providing_args=['radio', 'user'])
 not_favorite_radio      = django.dispatch.Signal(providing_args=['radio', 'user'])
 new_current_song        = django.dispatch.Signal(providing_args=['radio', 'song_json', 'song'])
+access_my_radios        =  django.dispatch.Signal(providing_args=['user'])
 
 radio_shared            = django.dispatch.Signal(providing_args=['radio', 'user', 'share_type'])
 radio_deleted           = django.dispatch.Signal(providing_args=['radio',])
@@ -21,3 +22,4 @@ new_moderator_abuse_msg_activity = django.dispatch.Signal(providing_args=['user'
 
 new_animator_activity    = django.dispatch.Signal(providing_args=['user', 'radio', 'atype', 'details'])
 user_started_listening_song = django.dispatch.Signal(providing_args=['radio', 'user', 'song'])
+

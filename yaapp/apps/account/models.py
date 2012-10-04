@@ -687,6 +687,33 @@ class UserProfile(models.Model):
 
         return data
 
+    def is_complete(self):
+        """
+        return True if all informations are filled in
+        """
+
+        if self.name == '':
+            return False
+
+        if self.gender == '':
+            return False
+
+        if self.birthday is None:
+            return False
+
+        if self.city == '':
+            return False
+
+        if self.bio_text is None:
+            return False
+
+        if self.bio_text == '':
+            return False
+
+        if self.picture is None:
+            return False
+
+        return True
 
     def update_geo_restrictions(self, request):
         country = request_country(request)

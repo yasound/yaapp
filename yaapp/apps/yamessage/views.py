@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from models import NotificationsManager
 from yacore.decorators import check_api_key
 from yacore.api import MongoAwareEncoder, api_response
+import signals as yamessage_signals
 import json
 
 
@@ -27,6 +28,9 @@ def get_notifications(request):
                                                  date_lower_than=date_lower_than,
                                                  read_status=read_status)
     notifs = list(notif_cursor)
+
+    yamessage_signals.send(sender=request.user, user=request.user)
+
     return api_response(notifs, total_count=total_count, limit=limit, offset=offset)
 
 

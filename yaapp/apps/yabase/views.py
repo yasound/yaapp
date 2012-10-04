@@ -2059,6 +2059,9 @@ def my_radios(request, radio_uuid=None):
                 stats_data.append(stat.as_dict())
             radio_data['stats'] = stats_data
             data.append(radio_data)
+
+        yabase_signals.access_my_radios.send(sender=request.user, user=request.user)
+
         response = api_response(data, total_count, limit=limit, offset=offset)
         return response
     elif request.method == 'POST':
