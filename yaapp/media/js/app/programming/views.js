@@ -182,8 +182,8 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
         "keypress #find-artist-input": "onFindArtist",
         "click #find-btn": "onFind",
         "keypress #find-fuzzy-input": "onFindFuzzyInput",
-        "click #find-fuzzy-btn": "onFindFuzzy"
-
+        "click #find-fuzzy-btn": "onFindFuzzy",
+        "click #advanced": "onAdvanced"
     },
 
     initialize: function() {
@@ -257,6 +257,10 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 
         this.songsView.clear();
         this.songs.findFuzzy(criteria);
+    },
+
+    onAdvanced: function (e) {
+        $('#advanced-search', this.el).toggle();
     }
 
 });

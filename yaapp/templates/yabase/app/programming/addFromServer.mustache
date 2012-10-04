@@ -1,16 +1,18 @@
 {% load i18n %}
-{% load i18n %}
-
-<form class="well form-inline">
-    <input type='text' id='find-track-input' placeholder='{% trans "Track" %}'/>
-    <input type='text' id='find-album-input' class='input-small' placeholder='{% trans "Album" %}'/>
-    <input type='text' id='find-artist-input' placeholder='{% trans "Artist" %}'/>
-    <input type='submit' class='yabutton-small' id='find-btn' value='{% trans 'find' %}'/>
-</form>
 
 <form class="well form-inline">
     <input type='text' id='find-fuzzy-input' placeholder='{% trans "Global search" %}'/>
     <input type='submit' class='yabutton-small' id='find-fuzzy-btn' value='{% trans 'find' %}'/>
+    <label class="checkbox">
+    <input type="checkbox" id='advanced'>{% trans "Advanced search "%}</input>
+  </label>
+</form>
+
+<form class="well form-inline" style="display:none" id='advanced-search'>
+    <input type='text' id='find-track-input' placeholder='{% trans "Track" %}'/>
+    <input type='text' id='find-album-input' class='input-small' placeholder='{% trans "Album" %}'/>
+    <input type='text' id='find-artist-input' placeholder='{% trans "Artist" %}'/>
+    <input type='submit' class='yabutton-small' id='find-btn' value='{% trans 'find' %}'/>
 </form>
 
 <table class="table table-bordered table-striped">

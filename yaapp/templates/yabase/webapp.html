@@ -77,7 +77,7 @@ HTML, BODY { height: 100%; }
     <link rel="stylesheet" href="/media/css/webapp.css"/>
     {% endcompress %}
 
-{# {% compress js %} #}
+{% compress js %}
    	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
@@ -103,7 +103,7 @@ HTML, BODY { height: 100%; }
     <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
     <script src="/media/js/jquery.toggle.buttons.js" type="text/javascript"></script>
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
-{# {% endcompress %} #}
+{% endcompress %}
 
     {% ifequal sound_player 'soundmanager' %}
     <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>

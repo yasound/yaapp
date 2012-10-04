@@ -834,7 +834,6 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 PIPELINE_CSS_COMPRESSOR = () # no css compression
 
 # css compression
-COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = True
 COMPRESS_URL =  MEDIA_URL
 COMPRESS_ROOT = MEDIA_ROOT
