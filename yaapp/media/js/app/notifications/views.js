@@ -77,6 +77,13 @@ Yasound.Views.Notifications = Backbone.View.extend({
     addAll: function () {
         $('.loading-mask', this.el).remove();
         this.collection.each(this.addOne);
+
+        if (this.collection.length == 0) {
+            $('.empty', this.el).show();
+        } else {
+            $('.empty', this.el).hide();
+        }
+
         $('li', this.el).filter(':odd').removeClass('notification-even').addClass('notification-odd');
         $('li', this.el).filter(':even').removeClass('notification-even').addClass('notification-even');
     },
