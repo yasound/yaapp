@@ -13,30 +13,6 @@
           <img src="/media/app/images/icon-star-gradient.png">
           <div class='favorites-txt'>{% trans "favorites" %}</div>
         </div>
-        {% if request.user.is_authenticated %}
-          {% if radio %}
-            {% if radio.favorite %}
-              <a class="btn" id='btn-unfavorite'>
-                <img src='/media/app/images/star-small-grey.png' />
-                <span>{% trans 'Remove from favorite' %}</span>
-              </a>
-            {% else %}
-              <a class="btn" id='btn-favorite'>
-                <img src='/media/app/images/star-small-white.png' />
-                <span>{% trans 'Add to favorite' %}</span>
-              </a>
-            {% endif %}
-          {% else %}
-            <a class="btn" id='btn-favorite'>
-              <img src='/media/app/images/star-small-white.png' />
-              <span>{% trans 'Add to favorite' %}</span>
-            </a>
-            <a class="btn" id='btn-unfavorite'>
-              <img src='/media/app/images/star-small-grey.png' / >
-              <span>{% trans 'Remove from favorite' %}</span>
-            </a>
-          {% endif %}
-        {% endif %}
    </div>
 	<ul id='radio-actions-container'>
     {% if radio %}
