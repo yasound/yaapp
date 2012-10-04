@@ -15,6 +15,7 @@ import utils as yapremium_utils
 
 import account.signals as account_signals
 from yabase import signals as yabase_signals
+from yamessage import signals as yamessage_signals
 
 from task import async_win_gift, async_check_for_invitation
 
@@ -420,6 +421,12 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
             async_check_for_invitation(InvitationsManager.TYPE_TWITTER, instance.twitter_uid)
 
 
+def user_profile_updated_handler(sender, instance, created, **kwargs):
+    profile = instance
+    if profile.is_complete():
+        async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_FILL_IN_PROFILE)
+
+
 def facebook_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
     user_profile = UserProfile.objects.get(user=user)
@@ -436,9 +443,20 @@ def user_watched_tutorial_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
 
 
+def access_my_radios_handler(sender, user, **kwargs):
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_VIEW_STATS)
+
+
+def access_notifications_handler(sender, user, **kwargs):
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_VIEW_NOTIFICATIONS)
+
+
 def install_handlers():
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
+    signals.post_save.connect(user_profile_updated_handler, sender=UserProfile)
     account_signals.facebook_account_added.connect(facebook_account_added_handler)
     account_signals.twitter_account_added.connect(twitter_account_added_handler)
     yabase_signals.user_watched_tutorial.connect(user_watched_tutorial_handler)
+    yabase_signals.access_my_radios.connect(access_my_radios_handler)
+    yamessage_signals.access_notifications.connect(access_notifications_handler)
 install_handlers()
