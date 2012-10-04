@@ -60,7 +60,7 @@ class SongMetadata(models.Model):
     score = models.FloatField(null=True, blank=True)
     duration = models.FloatField(null=True, blank=True)
     genre = models.CharField(max_length=255, null=True, blank=True)
-    picture = models.ImageField(upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    picture = models.ImageField(upload_to=yaapp_settings.RADIO_PICTURE_FOLDER, null=True, blank=True)
 
     yasound_song_id = models.IntegerField(_('yasound song id'), null=True, blank=True) # song ID in the Song db
 
@@ -546,7 +546,7 @@ class Radio(models.Model):
     deleted = models.BooleanField(default=False)
 
     name = models.CharField(_('name'), max_length=255)
-    picture = models.ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    picture = models.ImageField(_('picture'), upload_to=yaapp_settings.RADIO_PICTURE_FOLDER, null=True, blank=True)
     url = models.URLField(_('url'), null=True, blank=True)
     uuid = models.CharField(_('uuid'), max_length=48, blank=True)
     description = models.TextField(_('description'), blank=True)
