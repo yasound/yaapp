@@ -316,67 +316,23 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             'onVolumeSlide',
             'togglePlay',
             'favorite',
-            'facebookShare',
             'onPlayerPlay',
             'onPlayerStop',
             'hidePopupHD',
             'onHD',
-            'displayPopupHD');
-
-        $('#fb_share').click(this.facebookShare);
+            'displayPopupHD',
+            'onShare');
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
+        $('#modal-share').off('show', this.onShare);
 
         $.unsubscribe('/player/play', this.onPlayerPlay);
         $.unsubscribe('/player/stop', this.onPlayerStop);
 
         if (this.pingIntervalId) {
             clearInterval(this.pingIntervalId);
-        }
-    },
-
-    generateTwitterText: function () {
-        if (!this.radio) {
-            return '';
-        }
-
-        var share = gettext('I am listening to');
-        share += ' ' + this.model.get('name') + ', ';
-        share += gettext('by') + ' ' + this.model.get('artist') + ' ';
-        share += gettext('on') + ' ' + this.radio.get('name');
-        return share;
-    },
-
-    radioUrl: function () {
-        if (!this.radio) {
-            return '';
-        }
-
-        var protocol = window.location.protocol;
-        var host = window.location.host;
-
-        var url =  protocol + '//' + host + Yasound.App.root + 'radio/' + this.radio.get('uuid');
-        return url;
-    },
-
-    generateFacebookText: function () {
-        return this.generateTwitterText();
-    },
-
-    generateSocialShare: function () {
-        if (!this.radio) {
-            $('#tw_share').hide();
-        } else {
-            var twitterParams = {
-                url: this.radioUrl(),
-                text: this.generateTwitterText(),
-                hashtags: 'yasound'
-            };
-            $('#tw_share').show();
-            $('#tw_share').attr('href', "http://twitter.com/share?" + $.param(twitterParams));
-            $('meta[name=description]').attr('description', this.generateFacebookText());
         }
     },
 
@@ -411,22 +367,10 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         });
         volumeSlider.bind("slide", this.onVolumeSlide);
 
-        this.generateSocialShare();
         if (Yasound.App.player.isPlaying()) {
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         }
         volumeSlider.slider('value', Yasound.App.player.volume());
-
-        // hide social buttons if current song is empty
-        if (this.model.get('id')) {
-            $('#share-btn', this.el).show();
-            $('#tw_share').show();
-            $('#fb_share').show();
-        } else {
-            $('#share-btn', this.el).hide();
-            $('#tw_share').hide();
-            $('#fb_share').hide();
-        }
 
         var radio = Yasound.App.Router.currentRadio;
         if (radio && radio.get('favorite')) {
@@ -456,6 +400,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         $('#hd-checkbox-container').toggleButtons({
             onChange: this.onHD
         });
+
+        $('#modal-share').on('show', this.onShare);
 
         return this;
     },
@@ -504,23 +450,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    facebookShare: function (event) {
-        event.preventDefault();
-        var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
-        var obj = {
-            method: 'feed',
-            display: 'popup',
-            link: link,
-            picture: Yasound.App.FacebookShare.picture,
-            name: gettext('Yasound share'),
-            caption: this.generateFacebookText(),
-            description: ''
-        };
-        function callback (response) {
-        }
-        FB.ui(obj, callback);
-    },
-
     favorite: function(e) {
         e.preventDefault();
         var radio = Yasound.App.Router.currentRadio;
@@ -565,6 +494,20 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#hd-button').removeClass('hd-enabled').addClass('hd-disabled');
         }
         Yasound.App.player.setHD(checked);
+    },
+
+    onShare: function (e) {
+        // hide social buttons if current song is empty
+        if (this.model.get('id')) {
+            var el = $('#modal-share .modal-body');
+            new Yasound.Views.Share({
+                el: el,
+                model: this.model
+            }).render(this.radio);
+        } else {
+            Yasound.Utils.dialog(gettext('Error'), gettext('Nothing to share'));
+        }
+
     },
 
     ping: function() {

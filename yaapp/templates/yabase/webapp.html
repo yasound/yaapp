@@ -325,6 +325,10 @@ HTML, BODY { height: 100%; }
      {% include "yabase/app/myRadios/radioWithStatsCell.mustache" %}
    </script>
 
+   <script type='text/html' id='sharePageTemplate'>
+     {% include "yabase/app/radio/sharePage.mustache" %}
+   </script>
+
 {% endblock %}
 
 </head>
@@ -404,12 +408,6 @@ HTML, BODY { height: 100%; }
         <h3>{% trans "Share" %}</h3>
     </div>
     <div class="modal-body">
-        <p>{% trans "Share this song on:" %}
-        </p>
-        <ul>
-        <li><a href='#' id='fb_share'>{% trans "Facebook" %}</a></li>
-        <li><a href='#' id='tw_share' target='blank'>{% trans "Twitter" %}</a></li>
-        </ul>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>

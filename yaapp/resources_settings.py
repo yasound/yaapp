@@ -124,6 +124,7 @@ PIPELINE_JS = {
             'js/app/teaser/views.js',
             'js/app/static/views.js',
             'js/app/static/models.js',
+            'js/app/share/views.js',
             'js/app/templateLoader.js',
             'js/app/push.js',
             'js/app/utils.js',
