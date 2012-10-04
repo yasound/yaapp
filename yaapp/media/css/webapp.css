@@ -2594,6 +2594,10 @@ ul#notifications {
     color:#434343;
 }
 
+.notifications-container .empty {
+    margin:31px;
+}
+
 .notifications-container {
     position:relative;
     border-radius:7px;

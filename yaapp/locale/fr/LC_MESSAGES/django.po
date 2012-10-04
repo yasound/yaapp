@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-04 17:09+0200\n"
+"POT-Creation-Date: 2012-10-04 18:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -347,7 +347,7 @@ msgid "Date"
 msgstr "Date"
 
 #: templates/newsletter/newsletter_historic.html:24
-#: templates/yabase/app/footer.html:24
+#: templates/yabase/app/footer.html:32
 #: templates/yabase/app/static/contact.mustache:4
 msgid "Contact"
 msgstr ""
@@ -1003,22 +1003,32 @@ msgid "About"
 msgstr "A propos"
 
 #: templates/yabase/app/footer.html:21
+#: templates/yabase/app/static/help.mustache:4
 msgid "Help"
 msgstr "Aide"
 
-#: templates/yabase/app/footer.html:25
+#: templates/yabase/app/footer.html:26
+#: templates/yabase/app/static/press.mustache:4
+msgid "Press"
+msgstr "Presse"
+
+#: templates/yabase/app/footer.html:29
+msgid "Jobs"
+msgstr ""
+
+#: templates/yabase/app/footer.html:33
 msgid "Legal informations"
 msgstr "Mentions légales"
 
-#: templates/yabase/app/footer.html:35
+#: templates/yabase/app/footer.html:43
 msgid "Connected users"
 msgstr "Utilisateurs connectés"
 
-#: templates/yabase/app/footer.html:42
+#: templates/yabase/app/footer.html:50
 msgid "See all"
 msgstr "Tous les voir"
 
-#: templates/yabase/app/footer.html:51
+#: templates/yabase/app/footer.html:59
 msgid "minutes of music have been played"
 msgstr "minutes de musique ont été écoutées"
 
@@ -1341,6 +1351,10 @@ msgstr "message de la radio :"
 #: templates/yabase/app/notifications/notificationsPage.mustache:5
 msgid "Mark all as read"
 msgstr "Marquer tous comme lus"
+
+#: templates/yabase/app/notifications/notificationsPage.mustache:15
+msgid "Congratulations! You have read all your notifications."
+msgstr "Félicitations ! Vous avez lu toutes vos notifications"
 
 #: templates/yabase/app/profile/profilePage.mustache:8
 msgid "All radios"
