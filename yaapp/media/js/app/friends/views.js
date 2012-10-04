@@ -16,8 +16,20 @@ Yasound.Views.Friends = Backbone.View.extend({
         this.collection.unbind('reset', this.addAll);
     },
 
+    beforeFetch: function() {
+        if (this.loadingMask) {
+            this.loadingMask.show();
+        }
+    },
+
     addAll: function() {
-        $('.loading-mask', this.el).remove();
+        if (!this.loadingMask) {
+            var mask = this.$el.siblings('.loading-mask');
+            this.loadingMask = mask;
+        }
+
+        this.loadingMask.hide();
+
         this.collection.each(this.addOne);
     },
 

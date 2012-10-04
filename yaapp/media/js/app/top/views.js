@@ -20,15 +20,16 @@ Yasound.Views.TopResults = Backbone.View.extend({
 
     beforeFetch: function() {
         if (this.loadingMask) {
-            $(this.el).append(this.loadingMask);
+            this.loadingMask.show();
         }
     },
     addAll: function() {
-        var mask = $('.loading-mask', this.el);
         if (!this.loadingMask) {
+            var mask = this.$el.siblings('.loading-mask');
             this.loadingMask = mask;
         }
-        mask.hide();
+
+        this.loadingMask.hide();
 
         if (this.collection.length == 0) {
             $('.empty', this.el).show();
