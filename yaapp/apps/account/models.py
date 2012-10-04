@@ -220,7 +220,7 @@ class UserProfile(models.Model):
     language = models.CharField(_('language'), max_length=10, choices=yaapp_settings.LANGUAGES, default=yaapp_settings.DEFAULT_USER_LANGUAGE_CODE)
 
     bio_text = models.TextField(_('bio'), null=True, blank=True)
-    picture = ImageField(_('picture'), upload_to=yaapp_settings.PICTURE_FOLDER, null=True, blank=True)
+    picture = ImageField(_('picture'), upload_to=yaapp_settings.USER_PICTURE_FOLDER, null=True, blank=True)
     email_confirmed = models.BooleanField(_('email confirmed'),default=False)
     friends = models.ManyToManyField(User, verbose_name=_('friends'), related_name='friends_profile', null=True, blank=True)
     last_authentication_date = models.DateTimeField(_('last authentication date'),null=True, blank=True)

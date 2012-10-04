@@ -55,13 +55,17 @@ def deploy():
                 run("ln -s /data/glusterfs-mnt/replica2all/front/compressed ./media/compressed")
             if not exists("./media/pictures"):
                 run("ln -s /data/glusterfs-mnt/replica2all/front/pictures ./media/pictures")
+            if not exists("./media/user_pictures"):
+                run("ln -s /data/glusterfs-mnt/replica2all/front/user_pictures ./media/user_pictures")
+            if not exists("./media/radio_pictures"):
+                run("ln -s /data/glusterfs-mnt/replica2all/front/radio_pictures ./media/radio_pictures")
             if not exists("./media/covers"):
                 run("mkdir ./media/covers/")
             if not exists("./media/covers/albums"):
                 run("ln -s /data/glusterfs-mnt/replica2all/album-cover ./media/covers/albums")
             if not exists("./media/covers/songs"):
                 run("ln -s /data/glusterfs-mnt/replica2all/song-cover ./media/covers/songs")
-        run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
+        #run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
@@ -75,7 +79,7 @@ def update():
         run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
-        run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
+        #run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         run("/etc/init.d/yaapp restart")
 
 def restart_all():
