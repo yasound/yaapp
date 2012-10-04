@@ -536,7 +536,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.wallEvents,
             el: $('#pagination-wall', this.el)
-        });
+        }).setTitle(gettext('Next messages'));
 
         this.wallEventsView.clear();
 
