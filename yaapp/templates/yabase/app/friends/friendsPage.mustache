@@ -16,6 +16,24 @@
     </div>
 </div>
 
+<div class="modal hide fade" id="modal-invite-email">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Invite your friends by mail" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Invite your friends by mail" %}</p>
+        <form>
+        <input placeholder='{% trans "Recipient email" %}' id='recipients'>
+        <input placeholder='{% trans "Subject" %}' id='subject'>
+        <textarea></textarea>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Send mail" %}</a>
+    </div>
+</div>
 
 <div class='row common-background'>
 
@@ -44,8 +62,8 @@
     <div class='span12 no-margin '>
         <h1>{% trans "People you follow" %} (<span id='friends-count'></span>)</h1>
         <ul id='results'>
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
         </ul>
+        <img class='loading-mask' src='/media/images/loading-white.gif'/>
         <div class='cell-pagination' id='pagination'></div>
         <div class='separation-line'></div>
     </div>
@@ -55,8 +73,8 @@
     </div>
     <div class='span12 no-margin '>
         <ul id='followers'>
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
         </ul>
+        <img class='loading-mask' src='/media/images/loading-white.gif'/>
         <div class='cell-pagination' id='followers-pagination'></div>
     </div>
 

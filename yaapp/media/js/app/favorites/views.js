@@ -93,7 +93,14 @@ Yasound.Views.UserFavoritesPage = Backbone.View.extend({
         if (username) {
             this.collection.setUsername(username);
             this.username = username;
+            this.user = new Yasound.Data.Models.User({username:username}),
+            this.userView = new Yasound.Views.User({
+                model: this.user,
+                el: $('#user-profile', this.el)
+            });
+            this.user.fetch();
         }
+
 
         this.resultsView = new Yasound.Views.SearchResults({
             collection: this.collection,

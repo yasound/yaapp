@@ -22,15 +22,16 @@ Yasound.Views.RadioResults = Backbone.View.extend({
 
     beforeFetch: function() {
         if (this.loadingMask) {
-            $(this.el).append(this.loadingMask);
+            this.loadingMask.show();
         }
     },
     addAll: function() {
-        var mask = $('.loading-mask', this.el);
         if (!this.loadingMask) {
+            var mask = this.$el.siblings('.loading-mask');
             this.loadingMask = mask;
         }
-        mask.remove();
+
+        this.loadingMask.hide();
         this.collection.each(this.addOne);
     },
 
