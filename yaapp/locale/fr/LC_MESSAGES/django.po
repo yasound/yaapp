@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-04 10:00+0200\n"
+"POT-Creation-Date: 2012-10-04 17:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1107,10 +1107,6 @@ msgstr "Cadeaux"
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/yabase/app/pagination.mustache:3
-msgid "Show more"
-msgstr "Charger plus"
-
 #: templates/yabase/app/searchPage.mustache:5
 msgid "No result found"
 msgstr "Aucun résultat trouvé"
@@ -1201,8 +1197,8 @@ msgid "Send mail"
 msgstr "Envoyer le mail"
 
 #: templates/yabase/app/friends/friendsPage.mustache:41
-msgid "Invite your friends"
-msgstr "Invitez vos amis"
+msgid "Invite your friends and win HD"
+msgstr "Invitez vos amis et gagnez de la HD"
 
 #: templates/yabase/app/friends/friendsPage.mustache:45
 msgid "Invite your facebook friends"

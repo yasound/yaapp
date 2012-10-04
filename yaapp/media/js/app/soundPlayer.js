@@ -122,8 +122,10 @@ Yasound.Player.SoundManager = function () {
                 return;
             }
             mgr.hd = hd;
-            mgr.stop();
-            mgr.play();
+            if (mgr.isPlaying()) {
+                mgr.stop();
+                mgr.play();
+            }
         },
 
         init: function (callback) {

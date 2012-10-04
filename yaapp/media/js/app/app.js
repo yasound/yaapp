@@ -276,7 +276,7 @@ $(document).ready(function () {
 
 
             if (Yasound.App.showWelcomePopup) {
-                $('#modal-what-next').modal('show');
+                // TODO : remove
                 Yasound.App.showWelcomePopup = false;
             }
 
