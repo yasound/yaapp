@@ -16,9 +16,17 @@
                 <a id='btn-about' href="{% url webapp_about app_name %}"
                     class="footer-text-color1"
                     title="{% trans 'About' %}">{% trans 'About' %}</a> -
-                <a id='btn-help' href="{% url webapp_tutorial app_name %}"
+                <a id='btn-help' href="{% url webapp_help app_name %}"
                     class="footer-text-color1"
                     title="{% trans 'Help' %}">{% trans "Help" %}</a>
+            </p>
+            <p>
+                <a id='btn-press' href="{% url webapp_press app_name %}"
+                    class="footer-text-color1"
+                    title="{% trans 'Press' %}">{% trans 'Press' %}</a> -
+                <a id='btn-jobs' href="{% url webapp_jobs app_name %}"
+                    class="footer-text-color1"
+                    title="{% trans 'Jobs' %}">{% trans "Jobs" %}</a>
             </p>
             <p>
                 <a id='btn-contact' href="{% url webapp_contact app_name %}" class="footer-text-color1" title="{% trans 'Contact' %}">{% trans "Contact" %}</a> -
