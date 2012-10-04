@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from models import UserHistory
+from models import UserHistory, ProgrammingHistory
 from yabase.models import Radio
 import datetime
 from yabase import settings as yabase_settings
+
 
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
@@ -34,7 +35,7 @@ class TestGlobalMetricsManager(TestCase):
         docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
         self.assertEquals(docs.count(), 1)
 
-    def test_add_listen_radio_event(self):
+    def test_add_listen_radio_event2(self):
         uh = UserHistory()
         r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
         uh.add_listen_radio_event(user_id=self.user.id, radio_uuid=r.uuid)
@@ -202,3 +203,49 @@ class TestGlobalMetricsManager(TestCase):
 
         docs = uh.history_for_user(self.user.id, infinite=True, etype=UserHistory.ETYPE_LISTEN_RADIO)
         self.assertEquals(docs.count(), 0)
+
+
+class TestProgrammingHistory(TestCase):
+    def setUp(self):
+        pm = ProgrammingHistory()
+        pm.erase_metrics()
+
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+
+    def test_insert_event(self):
+        pm = ProgrammingHistory()
+        doc = pm.generate_event(ProgrammingHistory.PTYPE_UPLOAD_PLAYLIST)
+        self.assertTrue(doc.get('_id') is not None)
+        self.assertEquals(doc.get('status'), ProgrammingHistory.STATUS_PENDING)
+
+    def test_update_event(self):
+        pm = ProgrammingHistory()
+        doc = pm.generate_event(ProgrammingHistory.PTYPE_UPLOAD_PLAYLIST)
+        prevId = doc.get('_id')
+
+        doc['user_id'] = self.user.id
+        doc['status'] = ProgrammingHistory.STATUS_FINISHED
+        doc['data'] = {
+            'key': 'value'
+        }
+        doc = pm.update_event(doc)
+        self.assertEquals(doc.get('_id'), prevId)
+        self.assertEquals(doc.get('status'), ProgrammingHistory.STATUS_FINISHED)
+
+    def test_add_details(self):
+        pm = ProgrammingHistory()
+        doc = pm.generate_event(ProgrammingHistory.PTYPE_UPLOAD_PLAYLIST)
+        prevId = doc.get('_id')
+
+        details = {
+            'artist': 'artist',
+            'status': 'failed'
+        }
+        pm.add_details(doc, details)
+
+        details = pm.details_for_event(doc)
+        self.assertEquals(details.count(), 1)

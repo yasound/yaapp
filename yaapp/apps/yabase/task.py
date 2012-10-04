@@ -18,6 +18,8 @@ from yabase import settings as yabase_settings
 logger = logging.getLogger("yaapp.yabase")
 from yacore.binary import BinaryData
 from django.conf import settings
+from yahistory.models import ProgrammingHistory
+
 
 @task(ignore_result=True)
 def leaderboard_update_task():
@@ -26,9 +28,6 @@ def leaderboard_update_task():
     update_leaderboard()
     flush_transaction()
     logger.info('leaderboard_update_task finished')
-
-
-
 
 
 @transaction.commit_on_success
@@ -44,7 +43,6 @@ def process_playlists_exec(radio, content_compressed, task=None):
     logger.info('*** process_playlists ***')
 
     start = time.time()
-
 
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
@@ -113,7 +111,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
             if song_instance:
                 found += 1
             else:
-                notfound +=1
+                notfound += 1
 
         elif tag == REMOVE_PLAYLIST:
             _device_playlist_name = data.get_string()
@@ -121,7 +119,6 @@ def process_playlists_exec(radio, content_compressed, task=None):
         elif tag == REMOTE_PLAYLIST:
             _device_playlist_name = data.get_string()
             _device_source = data.get_string()
-
 
     logger.info('playlist parsing finished, computing ready flag')
     songs_ok = SongInstance.objects.filter(playlist__in=radio.playlists.all(), metadata__yasound_song_id__gt=0)[:1]
@@ -142,6 +139,7 @@ def process_playlists_exec(radio, content_compressed, task=None):
         logger.info('launching task for remaining songs')
         async_find_remaining_songs.delay(remaining_songs, playlist.id)
     return found, notfound
+
 
 @task
 def async_find_remaining_songs(songs, playlist_id):
@@ -164,6 +162,7 @@ def async_find_remaining_songs(songs, playlist_id):
         radio.ready = True
         radio.save()
         radio.fill_next_songs_queue()
+
 
 @task
 def process_playlists(radio, content_compressed):
@@ -189,13 +188,16 @@ def process_need_sync_songs_exec():
             song.need_sync = False
             song.save()
 
+
 @task
 def process_need_sync_songs():
     return process_need_sync_songs_exec()
 
+
 @task
 def process_upload_song(filepath, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
     logger.debug('processing %s' % (filepath))
+
     sm, _messages = import_utils.import_song(filepath=filepath, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
     if song_id and sm:
         SongInstance.objects.filter(id=song_id).update(metadata=sm)
@@ -203,15 +205,18 @@ def process_upload_song(filepath, metadata=None, convert=True, song_id=None, all
     logger.debug('deleting %s' % (path))
     rmtree(path)
 
+
 @task
 def generate_preview(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
     yasound_song.generate_preview()
 
+
 @task
 def extract_song_cover(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
     import_utils.extract_song_cover(yasound_song)
+
 
 @task(ignore_result=True)
 def async_dispatch_user_started_listening_song(radio, song):
@@ -226,6 +231,7 @@ def async_dispatch_user_started_listening_song(radio, song):
                                                         user=ru.user,
                                                         song=song)
 
+
 @task(ignore_result=True)
 def async_radio_broadcast_message(radio, message):
     recipients = User.objects.filter(radiouser__radio=radio, radiouser__favorite=True)
@@ -233,8 +239,17 @@ def async_radio_broadcast_message(radio, message):
     for recipient in recipients:
         recipient.get_profile().send_message(sender=radio.creator, radio=radio, message=message)
 
+
 @task(ignore_result=True)
 def async_import_from_itunes(radio, data):
+    pm = ProgrammingHistory()
+    event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_IMPORT_FROM_ITUNES,
+        user=radio.creator,
+        radio=radio,
+        status=ProgrammingHistory.STATUS_PENDING)
+
+    success = 0
+    failure = 0
     yabase_signals.new_animator_activity.send(sender=radio,
                                               user=radio.creator,
                                               radio=radio,
@@ -246,7 +261,30 @@ def async_import_from_itunes(radio, data):
         logger.info('name=%s, album=%s, artist=%s' % (unicode(name), unicode(album), unicode(artist)))
         if len(name) > 0:
             playlist, _created = radio.get_or_create_default_playlist()
-            import_from_string(name, album, artist, playlist)
+            song_instance = import_from_string(name, album, artist, playlist)
+
+            data = {
+                'artist': artist,
+                'name': name,
+                'album': album
+            }
+            if song_instance.metadata.yasound_song_id is not None:
+                data['status'] = ProgrammingHistory.STATUS_SUCCESS
+                success += 1
+            else:
+                data['status'] = ProgrammingHistory.STATUS_FAILED
+                failure += 1
+
+            pm.add_details(event, data)
+
+    data = {
+        'success': success,
+        'failure': failure
+    }
+
+    event['status'] = ProgrammingHistory.STATUS_FINISHED
+    event['data'] = data
+    pm.update_event(event)
 
 
 @task

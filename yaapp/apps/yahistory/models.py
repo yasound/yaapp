@@ -10,6 +10,7 @@ from yahistory.task import async_add_listen_radio_event, \
 from yaref.models import YasoundSong
 import datetime
 import logging
+from bson.objectid import ObjectId
 
 logger = logging.getLogger("yaapp.yahistory")
 
@@ -213,6 +214,95 @@ class UserHistory():
             query['type'] = etype
 
         return self.collection.find(query).sort([('start_date', DESCENDING)])
+
+
+class ProgrammingHistory():
+    PTYPE_UPLOAD_PLAYLIST      = 'upload_playlist'
+    PTYPE_UPLOAD_FILE          = 'upload_file'
+    PTYPE_ADD_FROM_YASOUND     = 'add_from_yasound'
+    PTYPE_ADD_FROM_DEEZER      = 'add_from_deezer'
+    PTYPE_IMPORT_FROM_ITUNES   = 'import_from_itunes'
+    PTYPE_REMOVE_FROM_PLAYLIST = 'remove_from_playlist'
+
+    STATUS_SUCCESS = 'success'
+    STATUS_FINISHED = 'finished'
+    STATUS_FAILED = 'failed'
+    STATUS_PENDING = 'pending'
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.history.programming
+        self.details = self.db.history.programming.details
+        self.collection.ensure_index("user_id")
+        self.collection.ensure_index("radio_id")
+        self.collection.ensure_index("updated")
+        self.collection.ensure_index("status")
+
+        self.details.ensure_index('event_id')
+
+    def erase_metrics(self):
+        self.collection.drop()
+        self.details.drop()
+
+    def generate_event(self, event_type, status=STATUS_PENDING, user=None, radio=None, data=None):
+        now = datetime.datetime.now()
+        doc = {
+            'created': now,
+            'updated': now,
+            'radio_id': radio.id if radio is not None else None,
+            'user_id': user.id if user is not None else None,
+            'status': status,
+            'type': event_type,
+        }
+        doc_id = self.collection.insert(doc, safe=True)
+        return self.collection.find_one({'_id': doc_id})
+
+    def add_details(self, event, details):
+        details['event_id'] = event.get('_id')
+        self.details.insert(details, safe=True)
+
+    def update_event(self, event):
+        now = datetime.datetime.now()
+        event['updated'] = now
+        doc_id = self.collection.save(event, safe=True)
+        return self.collection.find_one({'_id': doc_id})
+
+    def find_event(self, event_id):
+        if isinstance(event_id, str) or isinstance(event_id, unicode):
+            event_id = ObjectId(event_id)
+        return self.collection.find_one({'_id': event_id})
+
+
+    def finished(self, event):
+        event['status'] = ProgrammingHistory.STATUS_FINISHED
+        return self.update_event(event)
+
+    def failed(self, event):
+        event['status'] = ProgrammingHistory.STATUS_FAILED
+        return self.update_event(event)
+
+    def events_for_user(self, user, status=None):
+        if status:
+            return self.collection.find({'user_id': user.id, 'status': status}).sort([('updated', DESCENDING)])
+        else:
+            return self.collection.find({'user_id': user.id}).sort([('updated', DESCENDING)])
+
+    def events_for_radio(self, radio, status=None, skip=None, limit=None):
+        if status:
+            qs = self.collection.find({'radio_id': radio.id, 'status': status})
+        else:
+            qs = self.collection.find({'radio_id': radio.id})
+
+        if skip is not None:
+            qs = qs.skip(skip)
+
+        if limit:
+            qs = qs.limit(limit)
+
+        return qs.sort([('updated', DESCENDING)])
+
+    def details_for_event(self, event):
+        return self.details.find({'event_id': event.get('_id')})
 
 # event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):

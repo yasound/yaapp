@@ -1,0 +1,45 @@
+{% load i18n %}
+
+<div class="modal hide fade" id="modal-status-details">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Details" %}</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Artist" %}</th>
+                <th>{% trans "Album" %}</th>
+                <th>{% trans "Status" %}</th>
+            </tr>
+        </thead>
+        <tbody id='status-details-list'>
+        </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>
+
+
+<div>
+    <h2>{% trans "History" %}</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Action" %}</th>
+        </tr>
+    </thead>
+    <tbody id='status-list'>
+    </tbody>
+</table>
+
+</div>
+

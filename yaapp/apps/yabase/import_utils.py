@@ -92,6 +92,7 @@ import mimetypes
 import md5
 from yasearch.models import MostPopularSongsManager
 from yaref.task import async_find_synonyms
+from yahistory.models import ProgrammingHistory
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -770,6 +771,7 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
     """
 
     # normalize metadata radio_id
+    radio = None
     if metadata:
         radio_id = metadata.get('radio_id')
         radio_uuid = metadata.get('radio_uuid')
@@ -780,16 +782,39 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
             except:
                 pass
 
+    event = None
+
+    if radio is not None:
+        pm = ProgrammingHistory()
+        event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_UPLOAD_FILE,
+            user=radio.creator,
+            radio=radio,
+            status=ProgrammingHistory.STATUS_PENDING)
+
     importer = SongImporter()
     sm, messages = importer.import_song(filepath, metadata, convert, allow_unknown_song, song_metadata_id=song_metadata_id)
     if sm and sm.yasound_song_id:
+
+        details = {
+            'name': sm.name,
+            'artist': sm.artist_name,
+            'album': sm.album_name,
+        }
+
         try:
             yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
             importer.extract_song_cover(yasound_song, filepath)
-        except:
-            pass
-        async_find_synonyms.delay(sm.yasound_song_id)
 
+            if event:
+                details['status'] = ProgrammingHistory.STATUS_SUCCESS
+                pm.add_details(event, details)
+                pm.finished(event)
+        except:
+            if event:
+                details['status'] = ProgrammingHistory.STATUS_FAILED
+                pm.add_details(event, details)
+                pm.failed(event)
+        async_find_synonyms.delay(sm.yasound_song_id)
 
     return sm, messages
 

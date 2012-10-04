@@ -194,3 +194,43 @@ Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
         this.goTo(0);
     }
 });
+
+Yasound.Data.Models.ProgrammingStatus = Backbone.Model.extend({
+    idAttribute: "_id",
+    toJSON: function() {
+        var data = Yasound.Data.Models.Radio.__super__.toJSON.apply(this);
+        data.formatted_date = moment(data.updated).format('LLL')
+        return data;
+    }
+
+});
+
+Yasound.Data.Models.ProgrammingStatusList = Yasound.Data.Paginator.extend({
+    model: Yasound.Data.Models.ProgrammingStatus,
+    url: '/api/v1/programming/',
+    setUUID: function(uuid) {
+        this.uuid = uuid;
+        this.url = '/api/v1/radio/' + this.uuid + '/programming/status/';
+        return this;
+    }
+});
+
+Yasound.Data.Models.ProgrammingStatusDetail = Backbone.Model.extend({
+    idAttribute: "_id",
+    toJSON: function() {
+        var data = Yasound.Data.Models.Radio.__super__.toJSON.apply(this);
+        data.formatted_date = moment(data.updated).format('LLL')
+        return data;
+    }
+
+});
+
+Yasound.Data.Models.ProgrammingStatusDetails = Yasound.Data.Paginator.extend({
+    model: Yasound.Data.Models.ProgrammingStatusDetail,
+    url: '/api/v1/programming/',
+    setID: function(id) {
+        this.id = id;
+        this.url = '/api/v1/programming/status/' + id + '/';
+        return this;
+    }
+});
