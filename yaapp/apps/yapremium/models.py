@@ -424,7 +424,7 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
 def user_profile_updated_handler(sender, instance, created, **kwargs):
     profile = instance
     if profile.is_complete():
-        async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_FILL_IN_PROFILE)
+        async_win_gift.delay(user_id=profile.user.id, action=yapremium_settings.ACTION_FILL_IN_PROFILE)
 
 
 def facebook_account_added_handler(sender, user, **kwargs):
