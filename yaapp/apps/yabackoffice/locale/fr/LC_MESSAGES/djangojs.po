@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-04 16:48+0200\n"
+"POT-Creation-Date: 2012-10-04 17:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,10 @@ msgstr "Données sauvegardées avec succès"
 #: js/app/utils.js:62
 msgid "Error while saving data"
 msgstr "Erreur lors de la sauvegarde des données"
+
+#: js/app/utils.js:70
+msgid "Sending data"
+msgstr "Transmission des données"
 
 #: js/app/common/models.js:106
 msgid "All genres"

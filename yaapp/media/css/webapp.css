@@ -3478,6 +3478,9 @@ ul .radio-with-stats-cells li {
     cursor: pointer;
     text-shadow:1px 1px 1px white;
 }
+.save-btn[disabled=disabled] {
+    color:#aaaaaa;
+}
 
 .save-btn:hover {
     box-shadow:1px 3px 4px #e3e3e3;
