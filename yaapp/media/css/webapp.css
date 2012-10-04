@@ -4115,6 +4115,10 @@ a.yabutton-small {
     background: url(../app/images/teaser/separator.png) no-repeat 100% 50%;
 }
 
+#teaser .last {
+    background: none;
+}
+
 #teaser p {
     margin:20px;
     margin-left:50px;
