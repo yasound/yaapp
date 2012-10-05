@@ -1030,12 +1030,14 @@ Yasound.Views.ProgrammingStatus = Backbone.View.extend({
     onDetails: function (e) {
         e.preventDefault();
         var view = new Yasound.Views.ProgrammingStatusDetails({
-            el:'#status-details-list'
+            tagName: 'tbody'
         }).render(this.model.id);
+
+        $('#status-details-list').append(view.el);
 
         $('#modal-status-details').modal('show');
         $('#modal-status-details').one('hidden', function () {
-            view.clear();
+            view.close();
         })
     }
 });

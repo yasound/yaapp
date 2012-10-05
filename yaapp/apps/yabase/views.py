@@ -54,6 +54,7 @@ import settings as yabase_settings
 import uuid
 import zlib
 import urllib
+from yahistory.models import ProgrammingHistory
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -1686,18 +1687,33 @@ def status(request):
 
 
 @check_api_key(methods=['PUT', 'DELETE', 'POST'])
-def delete_song_instance(request, song_instance_id):
+def delete_song_instance(request, song_instance_id, event=None):
     song = get_object_or_404(SongInstance, pk=song_instance_id)
 
     if request.user != song.playlist.radio.creator:
         return HttpResponse(status=401)
 
+    details = {
+        'name': song.metadata.name,
+        'artist': song.metadata.artist_name,
+        'album': song.metadata.album_name,
+    }
 
     logging.getLogger("yaapp.yabase.delete_song").info('deleting song instance %s' % song.id)
     song.delete()
 
     # if radio has no more songs, set ready to False
     radio = song.playlist.radio
+
+    pm = ProgrammingHistory()
+    if event is None:
+        event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_REMOVE_FROM_PLAYLIST,
+            user=radio.creator,
+            radio=radio,
+            status=ProgrammingHistory.STATUS_PENDING)
+        pm.finished(event)
+
+    pm.add_details_success(event, details)
 
     yabase_signals.new_animator_activity.send(sender=request.user,
                                               user=request.user,
@@ -1853,8 +1869,16 @@ def my_programming(request, radio_uuid, song_instance_id=None):
             artists = request.REQUEST.getlist('artist')
             albums = request.REQUEST.getlist('album')
             tracks = radio.programming(artists, albums)
+
+            pm = ProgrammingHistory()
+            event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_REMOVE_FROM_PLAYLIST,
+                user=radio.creator,
+                radio=radio,
+                status=ProgrammingHistory.STATUS_PENDING)
+
             for track in tracks:
-                delete_song_instance(request, track.get('id'))
+                delete_song_instance(request, track.get('id'), event=event)
+            pm.finished(event)
 
     response = programming_response(request, radio)
     return response
