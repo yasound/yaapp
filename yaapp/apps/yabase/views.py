@@ -1591,10 +1591,50 @@ class WebAppView(View):
         referal_username = request.REQUEST.get('username', '')
         if referal == 'twitter' and referal_username != '':
             next = '?referal=twitter%%26username=%s' % (referal_username)
+        if referal == 'email' and referal_username != '':
+            next = '?referal=email%%26username=%s' % (referal_username)
 
         twitter_referal = False
+        email_referal = False
+
         if request.user.is_authenticated():
             twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
+            email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
+            user_profile = request.user.get_profile()
+            if user_profile.own_radio:
+                user_uuid = user_profile.own_radio.uuid
+            else:
+                user_uuid = None
+
+            if referal == 'twitter' and user_profile.twitter_uid is not None:
+                inviter_profile = UserProfile.objects.get(user__username=referal_username)
+                if inviter_profile.id != user_profile.id:
+                    if not inviter_profile.has_invited_twitter_friend(user_profile.twitter_uid):
+                        inviter_profile.invite_twitter_friends([user_profile.twitter_uid])
+                        logger.debug('new invitation!')
+                        async_check_for_invitation.delay(InvitationsManager.TYPE_TWITTER, user_profile.twitter_uid)
+                else:
+                    logger.debug('referal already taken into account')
+
+            if referal == 'email' and user_profile.user.email is not None:
+                inviter_profile = UserProfile.objects.get(user__username=referal_username)
+                if inviter_profile.id != user_profile.id:
+                    if not inviter_profile.has_invited_email_friend(user_profile.user.email):
+                        inviter_profile.invite_email_friends([user_profile.user.email])
+                        logger.debug('new invitation!')
+                        async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, user_profile.user.email)
+                else:
+                    logger.debug('referal already taken into account')
+
+
+
+
+
+
+
+
+
+
             if request.user.get_profile().own_radio:
                 user_uuid = request.user.get_profile().own_radio.uuid
             else:
@@ -1676,6 +1716,7 @@ class WebAppView(View):
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
             'twitter_referal': twitter_referal,
+            'email_referal': email_referal,
             'next': next,
         }
 
