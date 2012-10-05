@@ -159,14 +159,13 @@ class WebAppSignupForm(forms.Form):
         password = self.cleaned_data["password1"]
         username = build_random_username()
         if email and username:
-            new_user = EmailUser.objects.create_user(username, email, password)
+            EmailUser.objects.create_user(username, email, password)
             user = EmailUser.objects.get(email=email)
             user.is_active = False
             user.save()
-            user.get_profile().name = self.cleaned_data["username"]
-            user.get_profile().save()
-
-            EmailAddress.objects.add_email(new_user, email)
+            profile = user.get_profile()
+            profile.name = self.cleaned_data["username"]
+            profile.add_yasound_account(email, password)
 
             return username, email
         return False
