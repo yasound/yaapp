@@ -1543,6 +1543,7 @@ class WebAppView(View):
             'hd_expiration_date': hd_expiration_date,
             'twitter_referal': twitter_referal,
             'email_referal': email_referal,
+            'referal_username': referal_username,
             'next': next,
         }
 
@@ -1717,6 +1718,7 @@ class WebAppView(View):
             'hd_expiration_date': hd_expiration_date,
             'twitter_referal': twitter_referal,
             'email_referal': email_referal,
+            'referal_username': referal_username,
             'next': next,
         }
 
