@@ -86,8 +86,8 @@ def get_root(app_name):
     else:
         root = '/'
 
-    if app_name == 'app':
-        root = '/'
+    # if app_name == 'app':
+    #     root = '/'
     return root
 
 
@@ -1414,7 +1414,10 @@ class WebAppView(View):
         hd_enabled = False
         hd_expiration_date = None
 
+        twitter_referal = False
         if request.user.is_authenticated():
+            twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
+
             user_profile = request.user.get_profile()
             if user_profile.own_radio:
                 user_uuid = user_profile.own_radio.uuid
@@ -1473,6 +1476,7 @@ class WebAppView(View):
         if app_name == 'deezer':
             sound_player = 'deezer'
 
+
         context = {
             'user_uuid': user_uuid,
             'user_id' : user_id,
@@ -1504,6 +1508,7 @@ class WebAppView(View):
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
+            'twitter_referal': twitter_referal
         }
 
         if hasattr(self, page):
@@ -1545,7 +1550,9 @@ class WebAppView(View):
 
         hd_enabled = False
         hd_expiration_date = None
+        twitter_referal = False
         if request.user.is_authenticated():
+            twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
             if request.user.get_profile().own_radio:
                 user_uuid = request.user.get_profile().own_radio.uuid
             else:
@@ -1626,6 +1633,7 @@ class WebAppView(View):
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
+            'twitter_referal': twitter_referal,
         }
 
         if hasattr(self, page):
