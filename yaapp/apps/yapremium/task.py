@@ -3,7 +3,8 @@ from celery.task import task
 from datetime import *
 from account.models import UserProfile, InvitationsManager
 import settings as yapremium_settings
-
+import logging
+logger = logging.getLogger("yaapp.yapremium")
 
 @task
 def check_expiration_date():
@@ -30,7 +31,9 @@ def async_win_gift(user_id, action):
 @task
 def async_check_for_invitation(type, uid):
     ia = InvitationsManager()
+    logger.info('checking for invitation for type = %s, uid = %s' % (type, uid))
     users = ia.find_invitation_providers(type, uid)
     for user in users:
         user_id = user.get('db_id')
-        async_win_gift.delay(user_id, yapremium_settings.ACTION_INVITE_FRIEND)
+        logger.info('and the winner is %s' % (user_id))
+        async_win_gift.delay(user_id, yapremium_settings.ACTION_INVITE_FRIENDS)

@@ -153,6 +153,7 @@ HTML, BODY { height: 100%; }
        var g_hd_enabled = {% if hd_enabled %}true{% else %}false{% endif %};
        {% if twitter_referal %}
        var g_twitter_referal = '{{ twitter_referal|safe }}';
+       var g_next = '{{ referal_args|safe}}';
        {% endif %}
     </script>
 
@@ -169,6 +170,13 @@ HTML, BODY { height: 100%; }
 
    <script type="text/html" id="trackTemplate">
       {% include "yabase/app/track.mustache" with yasound_song=None %}
+   </script>
+
+   <script type="text/html" id="signupPageTemplate">
+      {% include "yabase/app/signup/signup.mustache" %}
+   </script>
+   <script type="text/html" id="loginPageTemplate">
+      {% include "yabase/app/login/login.mustache" %}
    </script>
 
    <script type='text/html' id='profilePageTemplate'>

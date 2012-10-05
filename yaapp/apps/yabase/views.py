@@ -55,6 +55,9 @@ import uuid
 import zlib
 import urllib
 
+from account.models import InvitationsManager
+from yapremium.task import async_check_for_invitation
+
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
@@ -1409,20 +1412,36 @@ class WebAppView(View):
         display_associate_facebook = False
         display_associate_twitter = False
 
-
         show_welcome_popup = False
         hd_enabled = False
         hd_expiration_date = None
 
         twitter_referal = False
+
+        next = ''
+        referal = request.REQUEST.get('referal', '')
+        referal_username = request.REQUEST.get('username', '')
+        if referal == 'twitter' and referal_username != '':
+            next = '?referal=twitter%%26username=%s' % (referal_username)
+
+
         if request.user.is_authenticated():
             twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
-
             user_profile = request.user.get_profile()
             if user_profile.own_radio:
                 user_uuid = user_profile.own_radio.uuid
             else:
                 user_uuid = None
+
+            if referal == 'twitter' and user_profile.twitter_uid is not None:
+                inviter_profile = UserProfile.objects.get(user__username=referal_username)
+                if inviter_profile.id != user_profile.id:
+                    if not inviter_profile.has_invited_twitter_friend(user_profile.twitter_uid):
+                        inviter_profile.invite_twitter_friends([user_profile.twitter_uid])
+                        logger.debug('new invitation!')
+                        async_check_for_invitation.delay(InvitationsManager.TYPE_TWITTER, user_profile.twitter_uid)
+                else:
+                    logger.debug('referal already taken into account')
 
             hd_enabled = user_profile.permissions.hd.is_set
             hd_expiration_date = user_profile.hd_expiration_date
@@ -1508,7 +1527,8 @@ class WebAppView(View):
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
-            'twitter_referal': twitter_referal
+            'twitter_referal': twitter_referal,
+            'next': next,
         }
 
         if hasattr(self, page):
@@ -1550,6 +1570,13 @@ class WebAppView(View):
 
         hd_enabled = False
         hd_expiration_date = None
+
+        next = ''
+        referal = request.REQUEST.get('referal', '')
+        referal_username = request.REQUEST.get('username', '')
+        if referal == 'twitter' and referal_username != '':
+            next = '?referal=twitter%%26username=%s' % (referal_username)
+
         twitter_referal = False
         if request.user.is_authenticated():
             twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
@@ -1634,6 +1661,7 @@ class WebAppView(View):
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
             'twitter_referal': twitter_referal,
+            'next': next,
         }
 
         if hasattr(self, page):
