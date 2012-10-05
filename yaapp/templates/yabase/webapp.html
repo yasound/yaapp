@@ -151,6 +151,9 @@ HTML, BODY { height: 100%; }
        var g_sound_player = '{{ sound_player }}';
        var g_show_welcome_popup = {% if show_welcome_popup %}true{% else %}false{% endif %};
        var g_hd_enabled = {% if hd_enabled %}true{% else %}false{% endif %};
+       {% if twitter_referal %}
+       var g_twitter_referal = '{{ twitter_referal|safe }}';
+       {% endif %}
     </script>
 
 

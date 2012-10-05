@@ -192,16 +192,8 @@ elif PRODUCTION_MODE:
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
             'LOCATION': [
-                'yas-web-01:11211',
-                'yas-web-02:11211',
-                'yas-web-03:11211',
-                'yas-web-04:11211',
-                'yas-web-05:11211',
-                'yas-web-06:11211',
-                'yas-web-07:11211',
                 'yas-web-08:11211',
                 'yas-web-09:11211',
-                'yas-web-10:11211',
             ]
         }
     }
@@ -647,7 +639,7 @@ PUSH_REDIS_DB = 0
 YASOUND_PUSH_PORT = 9000
 
 if LOCAL_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://yas-web-08.ig-1.net:8000/'
     YASOUND_RADIO_WEB_URL = 'http://localhost:8000/listen/'
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
@@ -655,7 +647,7 @@ elif DEVELOPMENT_MODE:
     YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-01.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://yas-web-08.ig-1.net:8000/'
     YASOUND_RADIO_WEB_URL = 'https://yasound.com/listen/'
     ENABLE_PUSH = True
     PUSH_REDIS_HOST = 'yas-sql-01'
@@ -753,7 +745,7 @@ if not PRODUCTION_MODE:
 
     }
 else:
-    if hostname == 'yas-web-01':
+    if hostname == 'yas-web-08':
         CELERYBEAT_SCHEDULE = {
             "radio-listening-stat-every-hour": {
                 "task": "stats.task.radio_listening_stats_task",
@@ -784,7 +776,7 @@ else:
                 "schedule": crontab(minute=0, hour='01'),
             },
         }
-    elif hostname == 'yas-web-02':
+    elif hostname == 'yas-web-09':
         CELERYBEAT_SCHEDULE = {
             "leaderboard_update-every-hour": {
                 "task": "yabase.task.leaderboard_update_task",

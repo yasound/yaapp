@@ -80,6 +80,16 @@ def task_status(request, task_id):
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
+def get_root(app_name):
+    if len(app_name) > 0:
+        root = '/' + app_name + '/'
+    else:
+        root = '/'
+
+    # if app_name == 'app':
+    #     root = '/'
+    return root
+
 
 @csrf_exempt
 def upload_playlists(request, radio_id):
@@ -1404,7 +1414,10 @@ class WebAppView(View):
         hd_enabled = False
         hd_expiration_date = None
 
+        twitter_referal = False
         if request.user.is_authenticated():
+            twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
+
             user_profile = request.user.get_profile()
             if user_profile.own_radio:
                 user_uuid = user_profile.own_radio.uuid
@@ -1457,14 +1470,12 @@ class WebAppView(View):
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
-        if len(app_name) > 0:
-            root = '/' + app_name + '/'
-        else:
-            root = '/'
+        root = get_root(app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer':
             sound_player = 'deezer'
+
 
         context = {
             'user_uuid': user_uuid,
@@ -1497,6 +1508,7 @@ class WebAppView(View):
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
+            'twitter_referal': twitter_referal
         }
 
         if hasattr(self, page):
@@ -1538,7 +1550,9 @@ class WebAppView(View):
 
         hd_enabled = False
         hd_expiration_date = None
+        twitter_referal = False
         if request.user.is_authenticated():
+            twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
             if request.user.get_profile().own_radio:
                 user_uuid = request.user.get_profile().own_radio.uuid
             else:
@@ -1580,10 +1594,7 @@ class WebAppView(View):
 
         genre_form = RadioGenreForm()
 
-        if len(app_name) > 0:
-            root = '/' + app_name + '/'
-        else:
-            root = '/'
+        root = get_root(app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer':
@@ -1622,6 +1633,7 @@ class WebAppView(View):
             'show_welcome_popup': show_welcome_popup,
             'hd_enabled': hd_enabled,
             'hd_expiration_date': hd_expiration_date,
+            'twitter_referal': twitter_referal,
         }
 
         if hasattr(self, page):
@@ -2105,10 +2117,7 @@ def logout(request, app_name='app'):
     return HttpResponseRedirect(logout_url + '?next=%s' % (next_url))
 
 def load_template(request, template_name, app_name='app'):
-    if len(app_name) > 0:
-        root = '/' + app_name + '/'
-    else:
-        root = '/'
+    root = get_root(app_name)
 
     context = {
         'root': root,
