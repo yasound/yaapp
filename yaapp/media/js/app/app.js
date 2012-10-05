@@ -123,6 +123,7 @@ $(document).ready(function () {
         });
     });
 
+
     Backbone.View.prototype.close = function () {
         if (this.sticky) {
             this.el.parentNode.removeChild(this.el);
@@ -251,7 +252,9 @@ $(document).ready(function () {
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
                 Yasound.Utils.enableFX();
-                this.commonContext.teaserView.slideUp();
+                if (this.commonContext.teaserView) {
+                    this.commonContext.teaserView.slideUp();
+                }
             }
             this.alreadyLoaded = true;
 
@@ -314,7 +317,10 @@ $(document).ready(function () {
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
-                this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+
+                if (!cookies.get('hideteaser')) {
+                    this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+                }
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 
 

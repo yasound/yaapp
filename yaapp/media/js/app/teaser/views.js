@@ -20,6 +20,7 @@ Yasound.Views.Teaser = Backbone.View.extend({
     },
 
     render: function() {
+        $('#teaser').show();
         if (!Yasound.App.isMobile) {
             $('#close-btn-container', this.el).addClass('auto-hide');
         }
@@ -29,6 +30,7 @@ Yasound.Views.Teaser = Backbone.View.extend({
     slideUp: function (e) {
         if (e) {
             e.preventDefault();
+            cookies.set('hideteaser', true);
         }
         this.$el.slideUp();
     },
