@@ -153,7 +153,9 @@ HTML, BODY { height: 100%; }
        var g_hd_enabled = {% if hd_enabled %}true{% else %}false{% endif %};
        {% if twitter_referal %}
        var g_twitter_referal = '{{ twitter_referal|safe }}';
-       var g_next = '{{ referal_args|safe}}';
+       {% endif %}
+       {% if email_referal %}
+       var g_email_referal = '{{ email_referal|safe }}';
        {% endif %}
     </script>
 

@@ -189,7 +189,7 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
 
     onInviteEmail: function (e) {
         e.preventDefault();
-        var body = gettext('Join me on yasound: https://yasound.com');
+        var body = gettext('Join me on yasound: ' + g_email_referal);
         var subject = gettext('Join me on Yasound');
 
         $('#modal-invite-email textarea').val(body);

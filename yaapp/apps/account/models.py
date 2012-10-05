@@ -495,6 +495,10 @@ class UserProfile(models.Model):
         ia = InvitationsManager()
         ia.add_invitations(self.user.id, InvitationsManager.TYPE_TWITTER, twitter_ids)
 
+    def has_invited_email_friend(self, email):
+        ia = InvitationsManager()
+        return ia.has_invitation(self.user.id, InvitationsManager.TYPE_EMAIL, email)
+
     def invite_email_friends(self, emails):
         ia = InvitationsManager()
         ia.add_invitations(self.user.id, InvitationsManager.TYPE_EMAIL, emails)
