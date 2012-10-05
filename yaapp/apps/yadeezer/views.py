@@ -117,10 +117,10 @@ def import_track(request, radio_uuid):
     if qs.count() > 0:
         yasound_song = qs[0]
         pm.add_details_success(event, details)
-        pm.finished(event)
+        pm.success(event)
     else:
         pm.add_details_failed(event, details)
-        pm.finished(event)
+        pm.failed(event)
         res = {
             'success': False,
             'message': unicode(_('Cannot match song'))
