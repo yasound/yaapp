@@ -807,7 +807,7 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
 
             if event:
                 pm.add_details_success(event, details)
-                pm.finished(event)
+                pm.success(event)
         except:
             if event:
                 pm.add_details_failed(event, details)

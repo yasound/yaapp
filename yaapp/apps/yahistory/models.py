@@ -286,6 +286,10 @@ class ProgrammingHistory():
         event['status'] = ProgrammingHistory.STATUS_FINISHED
         return self.update_event(event)
 
+    def success(self, event):
+        event['status'] = ProgrammingHistory.STATUS_SUCCESS
+        return self.update_event(event)
+
     def failed(self, event):
         event['status'] = ProgrammingHistory.STATUS_FAILED
         return self.update_event(event)

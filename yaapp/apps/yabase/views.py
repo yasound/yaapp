@@ -959,7 +959,7 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
         'album': song_instance.metadata.album_name,
     }
     pm.add_details_success(event, details)
-    pm.finished(event)
+    pm.success(event)
 
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
@@ -1725,7 +1725,7 @@ def delete_song_instance(request, song_instance_id, event=None):
             user=radio.creator,
             radio=radio,
             status=ProgrammingHistory.STATUS_PENDING)
-        pm.finished(event)
+        pm.success(event)
 
     pm.add_details_success(event, details)
 
