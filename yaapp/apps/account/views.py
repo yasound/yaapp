@@ -783,7 +783,6 @@ def invite_twitter_friends(request):
     auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
-    friends_ids = api.friends_ids()
 
     post_data = request.POST.keys()[0]
     if post_data is not None:
@@ -791,8 +790,6 @@ def invite_twitter_friends(request):
         message = data.get('message')
         if message:
             api.update_status(message)
-
-    profile.invite_twitter_friends(friends_ids)
 
     response = {'success': True}
     response_data = json.dumps(response)

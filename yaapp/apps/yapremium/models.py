@@ -417,11 +417,9 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
         async_win_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
 
         if instance.user.email:
-            async_check_for_invitation(InvitationsManager.TYPE_EMAIL, instance.user.email)
+            async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, instance.user.email)
         if instance.facebook_enabled:
-            async_check_for_invitation(InvitationsManager.TYPE_FACEBOOK, instance.facebook_uid)
-        if instance.twitter_enabled:
-            async_check_for_invitation(InvitationsManager.TYPE_TWITTER, instance.twitter_uid)
+            async_check_for_invitation.delay(InvitationsManager.TYPE_FACEBOOK, instance.facebook_uid)
 
 
 def user_profile_updated_handler(sender, instance, created, **kwargs):
@@ -433,13 +431,13 @@ def user_profile_updated_handler(sender, instance, created, **kwargs):
 def facebook_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
     user_profile = UserProfile.objects.get(user=user)
-    async_check_for_invitation(InvitationsManager.TYPE_FACEBOOK, user_profile.facebook_uid)
+    async_check_for_invitation.delay(InvitationsManager.TYPE_FACEBOOK, user_profile.facebook_uid)
 
 
 def twitter_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
     user_profile = UserProfile.objects.get(user=user)
-    async_check_for_invitation(InvitationsManager.TYPE_TWITTER, user_profile.twitter_uid)
+    async_check_for_invitation.delay(InvitationsManager.TYPE_TWITTER, user_profile.twitter_uid)
 
 
 def user_watched_tutorial_handler(sender, user, **kwargs):

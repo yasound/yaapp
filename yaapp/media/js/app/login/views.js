@@ -8,7 +8,7 @@ Yasound.Views.LoginPage = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'templateLoaded', 'submit');
+        _.bindAll(this, 'render', 'submit');
     },
 
     onClose: function() {},
@@ -17,11 +17,6 @@ Yasound.Views.LoginPage = Backbone.View.extend({
 
     render: function() {
         this.reset();
-        ich.loadRemoteTemplate('login/login.mustache', 'loginPageTemplate', this.templateLoaded);
-        return this;
-    },
-
-    templateLoaded: function() {
         $(this.el).html(ich.loginPageTemplate());
         $("select", this.el).uniform({});
     },

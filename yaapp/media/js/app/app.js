@@ -174,6 +174,7 @@ $(document).ready(function () {
             "radio/:uuid/edit/": "editRadio",
             "radio/:uuid/listeners/": "listeners",
             "signup/": "signup",
+            "signup/*args": "signup",
             "login/": "login",
             "radio/:uuid/*args": "radio",
             "gifts/": "gifts",

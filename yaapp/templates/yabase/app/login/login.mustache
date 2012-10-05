@@ -11,8 +11,8 @@
                     <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
             </div>
             <div class="signup-btn-twitter">
-                    <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
-                    <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
+                    <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
+                    <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
             </div>
         </div>
         <div id="signup-separation-line">&nbsp;</div>

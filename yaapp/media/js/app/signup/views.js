@@ -8,7 +8,7 @@ Yasound.Views.SignupPage = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'templateLoaded', 'submit');
+        _.bindAll(this, 'render', 'submit');
     },
 
     onClose: function() {},
@@ -17,11 +17,6 @@ Yasound.Views.SignupPage = Backbone.View.extend({
 
     render: function() {
         this.reset();
-        ich.loadRemoteTemplate('signup/signup.mustache', 'signupPageTemplate', this.templateLoaded);
-        return this;
-    },
-
-    templateLoaded: function() {
         $(this.el).html(ich.signupPageTemplate());
     },
 
