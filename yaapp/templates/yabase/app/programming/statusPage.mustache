@@ -1,4 +1,19 @@
 {% load i18n %}
+<div class="modal hide fade" id="modal-remove-status">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Remove" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Do you really want to remove this item ?" %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+    </div>
+</div>
+
 
 <div class="modal hide fade" id="modal-status-details">
     <div class="modal-header">
