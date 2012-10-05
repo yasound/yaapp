@@ -376,7 +376,7 @@ body {
 #brand-logo {
     display:block;
     float:left;
-    margin-top:10px;
+    margin-top:15px;
     width:110px;
     height:86px;
 }
@@ -399,11 +399,11 @@ body {
 
 #hd-button {
     cursor: pointer;
-    margin-top:4px;
     margin-left:20px;
     display:block;
-    height:27px;
-    width:46px;
+    height:37px;
+    float:right;
+    width:60px;
     position:relative;
 }
 
@@ -414,23 +414,27 @@ body {
 
 #hd-button-mobile {
     cursor: pointer;
-    margin-top:0px;
+    margin-top:-4px;
     margin-left:20px;
     float:left;
     display:block;
-    height:27px;
-    width:46px;
+    height:37px;
+    width:60px;
+
     position:relative;
     overflow:hidden;
 }
 
 .hd-enabled {
-    background-image:url('../app/images/hd-enabled.png');
+    background-image: url('../app/images/header-sprite.png');
+    background-position: -138px -68px;
 }
 
 .hd-disabled {
-    background-image:url('../app/images/hd-disabled.png');
+    background-image: url('../app/images/header-sprite.png');
+    background-position: 0 -30px;
 }
+
 
 #SD {
     position:absolute;
@@ -442,8 +446,8 @@ body {
     height:32px;
     width:32px;
     float:left;
-    margin-left:8px;
-    margin-top:-6px;
+    margin-left:6px;
+    margin-top:-7px;
     margin-right:12px;
 }
 
@@ -639,10 +643,14 @@ body {
 }
 
 #player #metadata-container #radio-title {
-    margin-bottom:16px;
+    margin-bottom:12px;
     color: #d5d7d8;
     font-size:15px;
     cursor:pointer;
+}
+#player #metadata-container #radio-title span {
+    width:70%;
+    line-height:25px;
 }
 
 #player #metadata-container #radio-title span:hover {
@@ -661,7 +669,7 @@ body {
 #player #radio-cover {
     float:left;
     margin-left:44px;
-    padding-top:16px;
+    padding-top:19px;
     width:77px;
     height:80px;
 }
@@ -672,8 +680,8 @@ body {
 }
 
 #player #radio-cover #play-btn-large {
-    width:77px;
-    height:80px;
+    width:76px;
+    height:76px;
     position:absolute;
     cursor: pointer;
 }
@@ -783,26 +791,22 @@ body {
 
 #messages-btn {
 	display:block;
-	float:left;
-    height:33px;
-    width:36px;
-    background-image:url('../app/images/messages-btn.png');
-    background-repeat:no-repeat;
+    height:37px;
+    width:41px;
+    background-image:url('../app/images/header-sprite.png');
+    background-position: 0 -68px;
     position:relative;
-    top:19px;
-    left:36px;
+    top:60px;
+    left:38%;
     padding:0px;
     text-decoration:none;
 }
 
 #messages-btn:hover {
-    height:33px;
-    width:36px;
-    background-image:url('../app/images/hover-messages-btn.png');
-    background-repeat:no-repeat;
-    position:relative;
-    top:19px;
-    left:36px;
+    height:37px;
+    width:41px;
+    background-image:url('../app/images/header-sprite.png');
+    background-position:-170px -30px;
 }
 
 #gift-btn {
@@ -1718,8 +1722,8 @@ input::-webkit-input-placeholder {
 #player #player-title {
     display:block;
     float:left;
-    top:68px;
-    height:42px;
+    top:66px;
+    height:38px;
     padding-top:12px;
     width:453px;
     color:#999e9f;
