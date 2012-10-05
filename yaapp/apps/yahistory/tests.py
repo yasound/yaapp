@@ -243,9 +243,25 @@ class TestProgrammingHistory(TestCase):
 
         details = {
             'artist': 'artist',
-            'status': 'failed'
+            'status': ProgrammingHistory.STATUS_SUCCESS
         }
         pm.add_details(doc, details)
 
         details = pm.details_for_event(doc)
         self.assertEquals(details.count(), 1)
+
+        details2 = {
+            'artist': 'artist2'
+        }
+        pm.add_details_success(doc, details2)
+
+        details3 = {
+            'artist': 'artist3'
+        }
+        pm.add_details_failed(doc, details3)
+
+        success = pm.details_for_event(doc, status=ProgrammingHistory.STATUS_SUCCESS)
+        self.assertEquals(success.count(), 2)
+
+        failed = pm.details_for_event(doc, status=ProgrammingHistory.STATUS_FAILED)
+        self.assertEquals(failed.count(), 1)

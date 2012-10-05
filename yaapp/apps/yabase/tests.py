@@ -30,6 +30,7 @@ from django.test.client import RequestFactory
 from task import fast_import, delete_radios_definitively
 import datetime
 import uploader
+from yahistory.models import ProgrammingHistory
 
 def turn_off_auto_now(Clazz, field_name):
     def auto_now_off(field):
@@ -504,6 +505,8 @@ class TestImportPlaylist(TestCase):
         self.client.login(username="test", password="test")
         self.user = user
         erase_index()
+        pm = ProgrammingHistory()
+        pm.erase_metrics()
 
     def test_import_empty(self):
         radio = Radio.objects.radio_for_user(self.user)
@@ -525,9 +528,22 @@ class TestImportPlaylist(TestCase):
         # all songs are enabled
         self.assertEquals(SongInstance.objects.filter(enabled=True).count(), 492)
 
+        pm = ProgrammingHistory()
+        event = list(pm.events_for_radio(radio))[0]
+        self.assertEquals(pm.details_for_event(event).count(), 643)
+
+        details_success = pm.details_for_event(event, status=ProgrammingHistory.STATUS_SUCCESS)
+        self.assertEquals(details_success.count(), 0)
+
+        details_failed = pm.details_for_event(event, status=ProgrammingHistory.STATUS_FAILED)
+        self.assertEquals(details_failed.count(), 643)
+
 
     def test_import_ok_with_references(self):
+        pm = ProgrammingHistory()
         radio = Radio.objects.radio_for_user(self.user)
+        self.assertEquals(pm.events_for_radio(radio).count(), 0)
+
         f = open('./apps/yabase/fixtures/playlist.data')
         content_compressed = f.read()
         f.close()
@@ -538,6 +554,17 @@ class TestImportPlaylist(TestCase):
         process_playlists_exec(radio, content_compressed=content_compressed)
         self.assertEquals(SongInstance.objects.all().count(), 492)
         self.assertEquals(SongMetadata.objects.filter(yasound_song_id__isnull=True).count(), 491)
+
+        self.assertEquals(pm.events_for_radio(radio).count(), 1)
+
+        event = list(pm.events_for_radio(radio))[0]
+        self.assertEquals(pm.details_for_event(event).count(), 643)
+
+        details_success = pm.details_for_event(event, status=ProgrammingHistory.STATUS_SUCCESS)
+        self.assertEquals(details_success.count(), 1)
+
+        details_failed = pm.details_for_event(event, status=ProgrammingHistory.STATUS_FAILED)
+        self.assertEquals(details_failed.count(), 642)
 
     def test_fast_import(self):
         mm = MostPopularSongsManager()

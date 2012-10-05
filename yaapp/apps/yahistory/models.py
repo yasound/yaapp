@@ -259,7 +259,16 @@ class ProgrammingHistory():
 
     def add_details(self, event, details):
         details['event_id'] = event.get('_id')
-        self.details.insert(details, safe=True)
+        return self.details.insert(details, safe=True)
+
+    def add_details_success(self, event, details):
+        details['status'] = ProgrammingHistory.STATUS_SUCCESS
+        return self.add_details(event, details)
+
+    def add_details_failed(self, event, details):
+        details['status'] = ProgrammingHistory.STATUS_FAILED
+        return self.add_details(event, details)
+
 
     def update_event(self, event):
         now = datetime.datetime.now()
@@ -301,8 +310,11 @@ class ProgrammingHistory():
 
         return qs.sort([('updated', DESCENDING)])
 
-    def details_for_event(self, event):
-        return self.details.find({'event_id': event.get('_id')})
+    def details_for_event(self, event, status=None):
+        if status:
+            return self.details.find({'event_id': event.get('_id'), 'status': status})
+        else:
+            return self.details.find({'event_id': event.get('_id')})
 
 # event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):

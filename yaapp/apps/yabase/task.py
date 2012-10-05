@@ -44,6 +44,12 @@ def process_playlists_exec(radio, content_compressed, task=None):
 
     start = time.time()
 
+    pm = ProgrammingHistory()
+    event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_UPLOAD_PLAYLIST,
+        user=radio.creator,
+        radio=radio,
+        status=ProgrammingHistory.STATUS_PENDING)
+
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
     ALBUM_TAG = 'ALBM'
@@ -90,6 +96,12 @@ def process_playlists_exec(radio, content_compressed, task=None):
             _order = data.get_int32()
             song_name = data.get_string()
 
+            details = {
+                'name': song_name,
+                'artist': album_name,
+                'album': artist_name,
+            }
+
             creator = radio.creator
             if creator is not None and creator.is_superuser:
                 song_instance = fast_import(song_name=song_name,
@@ -107,7 +119,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
                 song_instance = import_from_string(song_name=song_name,
                                                    album_name=album_name,
                                                    artist_name=artist_name,
-                                                   playlist=playlist)
+                                                   playlist=playlist,
+                                                   event=event)
             if song_instance:
                 found += 1
             else:
@@ -134,6 +147,8 @@ def process_playlists_exec(radio, content_compressed, task=None):
 
     elapsed = time.time() - start
     logger.info('found: %d - not found: %d - total: %d in in %s seconds' % (found, notfound, count, elapsed))
+
+    pm.finished(event)
 
     if len(remaining_songs) > 0:
         logger.info('launching task for remaining songs')
