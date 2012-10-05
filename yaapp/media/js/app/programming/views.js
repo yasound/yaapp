@@ -1005,7 +1005,8 @@ Yasound.Views.ProgrammingStatusDetails = Backbone.View.extend({
 Yasound.Views.ProgrammingStatus = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        "click button": "onDetails"
+        "click .open": "onDetails",
+        "click .delete": "onRemove"
     },
 
     initialize: function () {

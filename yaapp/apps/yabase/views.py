@@ -1990,10 +1990,10 @@ def my_programming_yasound_songs(request, radio_uuid):
 
 
 @csrf_exempt
-@check_api_key(methods=['GET', 'POST', ], login_required=True)
+@check_api_key(methods=['GET', 'POST'], login_required=True)
 def programming_status_details(request, event_id):
     pm = ProgrammingHistory()
-    print "yes"
+
     event = pm.find_event(event_id)
     if event and event.get('user_id') == request.user.id:
         details = pm.details_for_event(event)
@@ -2014,8 +2014,8 @@ def programming_status_details(request, event_id):
     raise Http404
 
 @csrf_exempt
-@check_api_key(methods=['GET', 'POST', ], login_required=True)
-def my_programming_status(request, radio_uuid):
+@check_api_key(methods=['GET', 'POST', 'DELETE'], login_required=True)
+def my_programming_status(request, radio_uuid, event_id=None):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     if request.user != radio.creator:
         return HttpResponse(status=401)
@@ -2057,6 +2057,21 @@ def my_programming_status(request, radio_uuid):
             res.append(status)
         response = api_response(res, total_count, limit=limit, offset=offset)
         return response
+    elif request.method == 'DELETE' and event_id is not None:
+        pm = ProgrammingHistory()
+        event = pm.find_event(event_id)
+        if event is not None:
+            pm.remove_event(event)
+            data = {
+                'success': True,
+            }
+            return api_response(data)
+        else:
+            data = {
+                'success': False,
+                'message': unicode(_('Unknown event'))
+            }
+            return api_response(data)
 
     raise Http404
 

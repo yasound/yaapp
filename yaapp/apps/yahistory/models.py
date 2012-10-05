@@ -320,6 +320,11 @@ class ProgrammingHistory():
         else:
             return self.details.find({'event_id': event.get('_id')})
 
+    def remove_event(self, event):
+        self.details.remove({'event_id': event.get('_id')}, safe=True)
+        self.collection.remove({'_id': event.get('_id')}, safe=True)
+
+
 # event handlers
 def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
