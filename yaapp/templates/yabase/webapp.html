@@ -147,6 +147,8 @@ HTML, BODY { height: 100%; }
        var g_has_radios = {% if has_radios %}true{% else %}false{% endif %};
        var g_page = '{{ g_page }}';
        var g_bootstrapped_data = {% if bdata %}{{ bdata|safe }}{% else %}undefined{% endif %};
+       var g_next_url = {% if next_url %}'{{ next_url|safe }}'{% else %}undefined{% endif %};
+       var g_base_url = {% if base_url %}'{{ base_url|safe }}'{% else %}undefined{% endif %};
        var g_default_radio_uuid = '{{ current_uuid }}';
        var g_sound_player = '{{ sound_player }}';
        var g_show_welcome_popup = {% if show_welcome_popup %}true{% else %}false{% endif %};
@@ -224,7 +226,7 @@ HTML, BODY { height: 100%; }
    </script>
 
    <script type='text/html' id='homePageTemplate'>
-     {% include "yabase/app/home/homePage.mustache" %}
+     {% include "yabase/app/home/homePage.mustache" with radio=None %}
    </script>
 
    <script type="text/html" id="connectedUserTemplate">

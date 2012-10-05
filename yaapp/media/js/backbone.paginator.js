@@ -28,7 +28,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 				queryMap[this.customAttribute1] =  this.customParam1;
 				queryMap[this.formatAttribute] =  this.format;
 				queryMap[this.customAttribute2] = this.customParam2;
-				queryMap[this.queryAttribute] =  this.query; 
+				queryMap[this.queryAttribute] =  this.query;
 
 			var params = _.extend({
 				type: 'GET',
@@ -139,7 +139,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 				next: false,
 				page_set: [],
 				startRecord: (self.page - 1) * this.displayPerPage + 1,
-				endRecord: Math.min(totalRecords, self.page * this.displayPerPage) 
+				endRecord: Math.min(totalRecords, self.page * this.displayPerPage)
 			};
 
 			if (self.page > 1) {
@@ -152,7 +152,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 
 			info.pageSet = self.setPagination(info);
 
-			self.information = info;			
+			self.information = info;
 			return info;
 		},
 
@@ -221,7 +221,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 			var queryMap = {}, params;
 			queryMap[this.perPageAttribute] =  this.perPage;
 			queryMap[this.skipAttribute] = this.page * this.perPage;
-			
+
 			if (this.sortField) {
 			    queryMap[this.orderAttribute] =  this.sortField;
 			}
@@ -240,12 +240,14 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 			if (this.params) {
 			    _.extend(queryMap, this.params);
 			}
-			
+
 			var data = queryMap;
 			if (json) {
 			    data = JSON.stringify(data);
 			}
-			
+			if (!this.baseUrl) {
+				this.baseUrl = _.result(this, 'url');
+			}
 			params = _.extend({
 				type: type,
                 data: data,
@@ -259,11 +261,18 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 
 
 		requestNextPage: function () {
+			if (this.next) {
+				this.url = this.next;
+				this.page += 1;
+				this.pager();
+				return;
+			}
+
 			if ( this.page !== undefined && this.page < this.totalPages) {
 				this.page += 1;
 				// customize as needed. For the Netflix API, skipping ahead based on
 				// page * number of results per page was necessary. You may have a
-				// simpler server-side pagination API where just updating 
+				// simpler server-side pagination API where just updating
 				// the 'page' value is all you need to do.
 				// This applies similarly to requestPreviousPage()
 				this.pager();
@@ -286,9 +295,16 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 		},
 
 		goTo: function ( page ) {
+			if (page == 0 && this.next) {
+				this.page = 0;
+				this.url = this.baseUrl;
+				this.pager();
+				return;
+			}
+
 			if(page !== undefined){
 				this.page = parseInt(page, 10);
-				this.pager();				
+				this.pager();
 			}
 		},
 
@@ -296,7 +312,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 			if( count !== undefined ){
 				this.page = this.firstPage;
 				this.perPage = count;
-				this.pager();				
+				this.pager();
 			}
 		},
 
@@ -307,9 +323,9 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 				firstPage: this.firstPage,
 				totalPages: this.totalPages,
 				lastPage: this.totalPages,
-				perPage: this.perPage
+				perPage: this.perPage,
+		        next: this.next
 			};
-
 			this.information = info;
 			return info;
 		},

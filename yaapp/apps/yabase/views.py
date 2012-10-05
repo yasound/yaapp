@@ -115,15 +115,11 @@ def upload_playlists(request, radio_id):
 
     return HttpResponse(asyncRes.task_id)
 
-@csrf_exempt
-def radio_recommendations(request):
-    if not check_http_method(request, ['post', 'get']):
-        return HttpResponse(status=405)
-    check_api_key_Authentication(request)
+def radio_recommendations_process(request, internal=False):
     # read url params
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
-    genre = request.GET.get('genre', None)
+    genre = request.GET.get('genre', '')
     recommendation_token = request.GET.get('token', None)
     # check if artist list is provided
     artist_data_file = None
@@ -180,7 +176,7 @@ def radio_recommendations(request):
         # don't add user's radios
         # and the radios he has put in his favorites
         qs = qs.exclude(creator=request.user).exclude(radiouser__user=request.user, radiouser__favorite=True)
-    if genre is not None:
+    if genre != '':
         qs = qs.filter(genre=genre)
     selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
     selection_radios = list(selection_radios)
@@ -218,7 +214,7 @@ def radio_recommendations(request):
                 continue
 
             id_ok = r.id not in selection_radios_ids
-            genre_ok = genre is None or genre == r.genre  # get radio with the right genre
+            genre_ok = genre == '' or genre == r.genre  # get radio with the right genre
             creator_ok = r.creator != request_user
             favorite_ok = r.id not in favorite_radio_ids
             if id_ok and genre_ok and creator_ok and favorite_ok:
@@ -237,7 +233,7 @@ def radio_recommendations(request):
         need_more = limit - len(radio_data)
         need_more_offset = max(0, skip - len(exclude_ids))
         qs = Radio.objects
-        if genre is not None:
+        if genre != '':
             qs = qs.filter(genre=genre)
         if request.user is not None and request.user.is_authenticated():
             # don't add user's radios
@@ -253,13 +249,24 @@ def radio_recommendations(request):
     params = {'skip': skip + limit}
     if recommendation_token is not None:
         params['token'] = recommendation_token
-    if genre:
+    if genre != '':
         params['genre'] = genre
     params_string = urllib.urlencode(params)
     next_url = reverse("yabase.views.radio_recommendations")
     next_url += '?%s' % params_string
+
+    if internal:
+        return radio_data, next_url
     response = api_response(radio_data, limit=limit, offset=skip, next_url=next_url)
     return response
+
+@csrf_exempt
+def radio_recommendations(request):
+    if not check_http_method(request, ['post', 'get']):
+        return HttpResponse(status=405)
+    check_api_key_Authentication(request)
+
+    return radio_recommendations_process(request=request, internal=False)
 
 @csrf_exempt
 def set_radio_picture(request, radio_id):
@@ -1149,12 +1156,14 @@ class WebAppView(View):
         return HttpResponse(response, mimetype='application/json')
 
     def home(self, request, context, *args, **kwargs):
-        radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
-
+        radios, next_url = radio_recommendations_process(request=request, internal=True)
         context['submenu_number'] = 1
-        context['radios'] = radios
-        context['bdata'] = json.dumps([radio.as_dict() for radio in radios], cls=MongoAwareEncoder)
+        context['radios'] = [Radio.objects.get(id=radio.get('id')) for radio in radios]
+        context['next_url'] = next_url
+        context['base_url'] = reverse('yabase.views.radio_recommendations')
+        context['bdata'] = json.dumps([radio for radio in radios], cls=MongoAwareEncoder)
         context['g_page'] = 'home'
+
         return context, 'yabase/app/home/homePage.html'
 
     def radio(self, request, context, *args, **kwargs):
@@ -1186,8 +1195,10 @@ class WebAppView(View):
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
-        radios = most_active_radios(request, internal=True)
+        radios, next_url = most_active_radios(request, internal=True)
         context['radios'] = radios
+        context['next_url'] = next_url
+        context['base_url'] = reverse('yabase.views.most_active_radios')
         context['bdata'] = json.dumps([radio.as_dict(request.user) for radio in radios], cls=MongoAwareEncoder)
         context['submenu_number'] = 2
         context['mustache_template'] = 'yabase/app/top/topRadiosPage.mustache'
@@ -1900,12 +1911,6 @@ def most_active_radios(request, internal=False):
     qs = qs.exclude(deleted=True)
     total_count = qs.count()
     radios = qs.order_by('-popularity_score', '-favorites')[skip:(skip + limit)]
-    if internal:
-        return radios
-
-    radio_data = []
-    for r in radios:
-        radio_data.append(r.as_dict(request_user=request.user))
 
     params = {'skip': skip + limit}
     if genre != '':
@@ -1913,6 +1918,14 @@ def most_active_radios(request, internal=False):
     params_string = urllib.urlencode(params)
     next_url = reverse("yabase.views.most_active_radios")
     next_url += '?%s' % params_string
+
+    if internal:
+        return radios, next_url
+
+    radio_data = []
+    for r in radios:
+        radio_data.append(r.as_dict(request_user=request.user))
+
 
     response = api_response(radio_data, total_count, limit=limit, offset=skip, next_url=next_url)
     return response

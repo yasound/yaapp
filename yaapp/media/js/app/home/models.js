@@ -5,22 +5,7 @@
 /* extern Ext, $ */
 Namespace('Yasound.Data.Models');
 
-Yasound.Data.Models.SelectedRadios = Backbone.Collection.extend({
+Yasound.Data.Models.SelectedRadios = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.Radio,
-    url: function() {
-        return '/api/v1/selected_radio/';
-    },
-
-    setGenre: function(genre) {
-        if (g_bootstrapped_data) {
-            this.reset(g_bootstrapped_data);
-            return;
-        }
-
-        if (genre == '') {
-            return this.fetch()
-        } else {
-            this.fetch({ data: $.param({ genre: genre}) });
-        }
-    }
+    url: '/api/v1/radio_recommendations/'
 });
