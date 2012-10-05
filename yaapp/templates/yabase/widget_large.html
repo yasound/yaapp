@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasoundev: http://ogp.me/ns/fb/yasoundev#">
     <title>{% trans "Listening to" %} {{ radio }} — Yasound</title>
-    <link rel="icon" type="image/png" href="/media/yaweb/images/favicon.png" />
+    <link rel="icon" type="image/png" href="/media/app/images/favicon.png" />
     <meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile." />
     <meta name="Author" content="Yasound SAS" />
     <meta name="copyright" content="Yasound SAS" />
@@ -20,7 +20,7 @@
     <script type="text/javascript">
         var g_radio_url = '{{ radio_url }}';
         var g_radio_id = '{{ radio.id }}';
-        
+
         var lbl_mute = "{% trans 'Mute' %}";
         var lbl_unmute = "{% trans 'Unmute' %}";
         var lbl_play = "{% trans 'Play' %}";
@@ -39,7 +39,7 @@
 <div class='container-fluid'>
     <div class='row-fluid'>
         <div class='span12'>
-            <a href='{% url yabase.views.web_listen radio.uuid %}' target='_blank'><img src='/media/images/logo.png' alt='Yasound logo' width='130px'/></a>
+           <a href='{% url yabase.views.web_listen radio.uuid %}' target='_blank'><img src='/media/app/images/widget/logo.png' alt='Yasound logo' width='130px'/></a>
            <div id='widget-player'>
                <div id='track-picture' class='thumbnail'>
                    <img id='track-image' src="/media/images/default_image.png" width="120px" height="120px" alt='{% trans "Track logo" %}'/>
@@ -55,10 +55,10 @@
                <div id='track-details'>
                    <h4><span id='track-name'>{% trans "No name" %}</span></h4>
                    <p>{% trans "By"%} <strong><span id='track-artist'></span></strong> - <strong><span id='track-album'></span></strong></p>
-               </div> 
+               </div>
                <div class='clear'></div>
-            </div> 
-        </div>   
+            </div>
+        </div>
     </div>
 </div>
 </body>
