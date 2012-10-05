@@ -5,7 +5,7 @@
 
     {% ifnotequal app_name 'deezer' %}
     <div id='radio-cover'>
-        <img src="<% radio_picture %>" width="77" height="80" alt="Radio Picture"/>
+        <img src="<% radio_picture %>" width="76" height="76" alt="Radio Picture"/>
         <div id="play-btn-large" class='play'>
             &nbsp;
         </div>
@@ -17,12 +17,10 @@
             <span><% radio_name %></span>
             <div class='button-group'>
 
-                <a id="favorite-radio" class='is-not-favorite yatooltip' href="#">
-                        <span class="yatoolelt">{% trans "Favorite" %}</span>
+                <a id="favorite-radio" class='is-not-favorite' href="#">
                 </a>
 
-                <a id="share-btn" data-toggle="modal" href="#modal-share" class='yatooltip-share'>
-                <span class="yatoolelt-share">{% trans "Share" %}</span>
+                <a id="share-btn" data-toggle="modal" href="#modal-share">
                 </a>
 
             </div>
@@ -30,7 +28,7 @@
         </div>
         <div id='player-title'>
             <div id="radio-picto">
-                <a href="{% url webapp_radio app_name current_uuid %}" class='yatooltip'>
+                <a href="{% url webapp_radio app_name current_uuid %}">
 
                     {% if yasound_song %}
                     <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="Radio Picto">
