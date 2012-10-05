@@ -54,7 +54,6 @@ import settings as yabase_settings
 import uuid
 import zlib
 import urllib
-from yahistory.models import ProgrammingHistory
 
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
@@ -947,6 +946,21 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     if radio.ready == False:
         radio.ready = True
         radio.save()
+
+    pm = ProgrammingHistory()
+    event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_ADD_FROM_YASOUND,
+        user=radio.creator,
+        radio=radio,
+        status=ProgrammingHistory.STATUS_PENDING)
+
+    details = {
+        'name': song_instance.metadata.name,
+        'artist': song_instance.metadata.artist_name,
+        'album': song_instance.metadata.album_name,
+    }
+    pm.add_details_success(event, details)
+    pm.finished(event)
+
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
