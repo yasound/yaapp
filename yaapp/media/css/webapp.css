@@ -408,7 +408,11 @@ body {
 }
 
 #hd-without-login {
-    float:left;
+    margin-top:44px;
+}
+
+#hd-without-login #hd-button {
+    margin-left:0px;
     margin-top:16px;
 }
 
