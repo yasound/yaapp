@@ -932,11 +932,6 @@ Yasound.Views.ProgrammingStatusDetail = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).html(ich.programmingStatusDetailsCellTemplate(data));
         return this;
-    },
-
-    onRemove: function (e) {
-        e.preventDefault();
-        this.model.destroy();
     }
 });
 
@@ -1025,7 +1020,12 @@ Yasound.Views.ProgrammingStatus = Backbone.View.extend({
 
     onRemove: function (e) {
         e.preventDefault();
-        this.model.destroy();
+        var that = this;
+        $('#modal-remove-status').modal('show');
+        $('#modal-remove-status .btn-primary').one('click', function () {
+            $('#modal-remove-status').modal('hide');
+            that.model.destroy();
+        });
     },
 
     onDetails: function (e) {
@@ -1039,7 +1039,7 @@ Yasound.Views.ProgrammingStatus = Backbone.View.extend({
         $('#modal-status-details').modal('show');
         $('#modal-status-details').one('hidden', function () {
             view.close();
-        })
+        });
     }
 });
 
@@ -1175,7 +1175,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
     onProgramming: function (e) {
         e.preventDefault();
         $('#status', this.el).hide();
-        $('#playlist', this.el).show()
+        $('#playlist', this.el).show();
 
         $('#status-btn', this.el).parent().removeClass('active');
         $('#programming-btn', this.el).parent().addClass('active');
