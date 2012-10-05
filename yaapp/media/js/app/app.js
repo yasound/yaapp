@@ -21,6 +21,10 @@ $(document).ready(function () {
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
     Yasound.App.hd = g_hd_enabled;
 
+    if (cookies.get('radio')) {
+        Yasound.App.defaultRadioUUID = cookies.get('radio');
+    }
+
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         Yasound.App.isMobile = true;
     }
@@ -235,6 +239,8 @@ $(document).ready(function () {
                 silent: true
             // do not send 'change' event now, fetch will do it right after
             });
+
+            cookies.set('radio', uuid);
 
             var radio = this.currentRadio;
             this.currentRadio.fetch({
