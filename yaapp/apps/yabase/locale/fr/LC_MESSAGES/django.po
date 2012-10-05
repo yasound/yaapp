@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-04 23:16+0200\n"
+"POT-Creation-Date: 2012-10-05 06:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -414,65 +414,73 @@ msgstr "Sélection"
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: views.py:1212
-#: views.py:2134
+#: views.py:1227
+#: views.py:2183
 msgid "You are not allowed to create a radio"
 msgstr "Vous n'avez le droit de créer une radio"
 
-#: views.py:1223
-#: views.py:2142
+#: views.py:1238
+#: views.py:2191
 msgid "This feature is not yet available for your country"
 msgstr "Cette fonctionnalité n'est pas encore accessible pour votre pays"
 
-#: views.py:1989
+#: views.py:2003
+#: views.py:2036
 msgid "success"
 msgstr "succès"
 
-#: views.py:1991
+#: views.py:2005
+#: views.py:2038
 msgid "finished"
 msgstr "terminé"
 
-#: views.py:1993
+#: views.py:2007
+#: views.py:2040
 msgid "failed"
 msgstr "échec"
 
-#: views.py:1995
+#: views.py:2009
+#: views.py:2042
 msgid "pending"
 msgstr "en cours"
 
-#: views.py:1998
+#: views.py:2045
 msgid "playlist upload"
 msgstr "upload de playlist"
 
-#: views.py:2000
+#: views.py:2047
 msgid "file upload"
 msgstr "upload de fichier"
 
-#: views.py:2002
+#: views.py:2049
 msgid "add from yasound"
 msgstr "ajout depuis Yasound"
 
-#: views.py:2004
+#: views.py:2051
+msgid "add from Deezer"
+msgstr "ajout depuis Deezer"
+
+#: views.py:2053
 msgid "import from iTunes"
 msgstr "import depuis iTunes"
 
-#: views.py:2006
+#: views.py:2055
 msgid "remove from playlist"
 msgstr "suppression de la playlist"
 
-#: views.py:2146
+#: views.py:2195
 msgid "new radio"
 msgstr "nouvelle radio"
 
-#: views.py:2193
+#: views.py:2242
 msgid "The provided file is too big"
 msgstr "Le fichier transmis est trop gros"
 
-#: views.py:2195
+#: views.py:2244
 msgid "The provided file is too small"
 msgstr "Le fichier transmis est trop petit"
 
-#: views.py:2197
+#: views.py:2246
 msgid "The file format is not supported"
 msgstr "Le format de fichier n'est pas supporté"
 
