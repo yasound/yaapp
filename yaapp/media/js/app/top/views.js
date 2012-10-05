@@ -107,7 +107,6 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
 
     render: function(genre) {
         this.reset();
-
         $(this.el).html(ich.topRadiosPageTemplate());
         this.collection.perPage = Yasound.Utils.cellsPerPage();
 
@@ -123,7 +122,10 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
         this.collection.params.genre = genre;
 
         if (g_bootstrapped_data) {
-            this.collection.reset(g_bootstrapped_data);
+            this.collection.reset(g_bootstrapped_data, {'silent': true});
+            this.collection.next = g_next_url;
+            this.collection.baseUrl = g_base_url;
+            this.collection.trigger('reset', this.collection);
         } else {
             this.collection.goTo(0);
         }

@@ -344,6 +344,7 @@ $(document).ready(function () {
             this.clearView('selection');
 
             var genre =  this.commonContext.subMenuView.currentGenre();
+
             this.currentView = new Yasound.Views.HomePage({
                 el: '#webapp-content'
             }).render(genre);

@@ -21,6 +21,7 @@ Yasound.Data.Paginator = Backbone.Paginator.requestPager.extend({
     parse: function(response) {
         var results = response.objects;
         this.totalCount = response.meta.total_count;
+        this.next = response.meta.next;
         this.totalPages = Math.ceil(this.totalCount / this.perPage);
         return results;
     },
@@ -145,7 +146,6 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             success: function(data) {
                 var token = data.token;
                 var fullURL = streamURL + '/?token=' + token;
-                console.log(fullURL);
                 callback(fullURL);
                 //callback(streamURL);
             },

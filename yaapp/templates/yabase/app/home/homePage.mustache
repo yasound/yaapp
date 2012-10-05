@@ -1,6 +1,9 @@
 {% load i18n %}
 <div class=''>
     <ul id='selected-radios' class='radio-cells'>
-        <img class='loading-mask' src='/media/images/loading.gif'/>
     </ul>
+    {# {% if not radios %} #}
+    <img class='loading-mask' src='/media/images/loading.gif'/>
+    {# {% endif %} #}
+    <div class='cell-pagination' id='pagination'></div>
 </div>

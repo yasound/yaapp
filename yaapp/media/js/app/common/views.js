@@ -573,8 +573,11 @@ Yasound.Views.Pagination = Backbone.View.extend({
         var info = this.collection.info();
         var page = info.page;
         var totalPages = info.totalPages;
-        if (page+1 < totalPages) {
+
+        if (info.next) {
             this.$el.html(ich.paginationTemplate({title: this.title}));
+        } else if (page+1 < totalPages) {
+                this.$el.html(ich.paginationTemplate({title: this.title}));
         } else {
             this.$el.html('');
         }
