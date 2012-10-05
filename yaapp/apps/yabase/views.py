@@ -2047,6 +2047,8 @@ def my_programming_status(request, radio_uuid):
                 status['formatted_type'] = unicode(_('file upload'))
             if status.get('type') == ProgrammingHistory.PTYPE_ADD_FROM_YASOUND:
                 status['formatted_type'] = unicode(_('add from yasound'))
+            if status.get('type') == ProgrammingHistory.PTYPE_ADD_FROM_DEEZER:
+                status['formatted_type'] = unicode(_('add from Deezer'))
             if status.get('type') == ProgrammingHistory.PTYPE_IMPORT_FROM_ITUNES:
                 status['formatted_type'] = unicode(_('import from iTunes'))
             if status.get('type') == ProgrammingHistory.PTYPE_REMOVE_FROM_PLAYLIST:
