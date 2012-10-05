@@ -33,6 +33,7 @@ import settings as account_settings
 import yabase.settings as yabase_settings
 import uuid
 import tweepy
+from django.core.mail import send_mail
 
 logger = logging.getLogger("yaapp.account")
 
@@ -799,14 +800,7 @@ def invite_twitter_friends(request):
 @check_api_key(methods=['POST',], login_required=True)
 def invite_email_friends(request):
     profile = request.user.get_profile()
-
-    post_data = request.POST.keys()[0]
-    if post_data is None:
-        response = {'success': False, 'error': unicode(_('no data'))}
-        response_data = json.dumps(response)
-        return HttpResponse(response_data)
-
-    data = json.loads(post_data)
+    data = json.loads(request.raw_post_data)
     message = data.get('message')
     subject = data.get('subject')
     emails = data.get('recipients')
@@ -817,7 +811,9 @@ def invite_email_friends(request):
         return HttpResponse(response_data)
 
     friends = emails.split(',')
-    profile.invite_email_friends(friends)
+    for email in friends:
+        subject = "".join(subject.splitlines())
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
 
     response = {'success': True}
     response_data = json.dumps(response)

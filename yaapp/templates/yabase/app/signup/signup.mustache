@@ -19,7 +19,8 @@
         <h3>{% trans 'Email registration' %}</h3>
 	    <form id='signup-form' method='post'>{% csrf_token %}
 	        <div id="signup-input">
-	        	<input placeholder="{% trans 'Choose a user name' %}" required="required" type="text" name="username">
+                <input placeholder="{% trans 'Choose a user name' %}" required="required" type="text" name="username">
+	        	<input type='hidden' name="referal" value='{{ referal_username }}'>
 	        	<input placeholder="{% trans 'Email' %}" type="email" required="required" class="right-input" name="email">
 	        	<input placeholder="{% trans 'Password' %}"class="bottom-input" required="required" type="password" name="password1">
 	        	<input placeholder="{% trans 'Confirm password' %}" class="right-input bottom-input" required="required" type="password" name="password2">
