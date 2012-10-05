@@ -915,13 +915,233 @@ Yasound.Views.ProgrammingFilterAlbum = Backbone.View.extend({
     }
 });
 
+Yasound.Views.ProgrammingStatusDetail = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.programmingStatusDetailsCellTemplate(data));
+        return this;
+    },
+
+    onRemove: function (e) {
+        e.preventDefault();
+        this.model.destroy();
+    }
+});
+
+Yasound.Views.ProgrammingStatusDetails = Backbone.View.extend({
+    collection: new Yasound.Data.Models.ProgrammingStatusDetails({}),
+
+    initialize: function () {
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('destroy', this.onDestroy, this);
+        this.views = [];
+    },
+
+    render: function(id) {
+        this.collection.setID(id);
+        this.collection.fetch();
+        return this;
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('destroy', this.onDestroy);
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (detail) {
+        var currentId = detail.id;
+
+        var found = _.find(this.views, function (view) {
+            if (view.model.id == detail.id) {
+                return true;
+            }
+        });
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+
+        var view = new Yasound.Views.ProgrammingStatusDetail({
+            model: detail
+        });
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    },
+
+    onDestroy: function(model) {
+        this.clear();
+        this.collection.fetch();
+    }
+});
+
+Yasound.Views.ProgrammingStatus = Backbone.View.extend({
+    tagName: 'tr',
+    events: {
+        "click button": "onDetails"
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.programmingStatusCellTemplate(data));
+        return this;
+    },
+
+    onRemove: function (e) {
+        e.preventDefault();
+        this.model.destroy();
+    },
+
+    onDetails: function (e) {
+        e.preventDefault();
+        var view = new Yasound.Views.ProgrammingStatusDetails({
+            tagName: 'tbody'
+        }).render(this.model.id);
+
+        $('#status-details-list').append(view.el);
+
+        $('#modal-status-details').modal('show');
+        $('#modal-status-details').one('hidden', function () {
+            view.close();
+        })
+    }
+});
+
+Yasound.Views.StatusList = Backbone.View.extend({
+    initialize: function () {
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('destroy', this.onDestroy, this);
+        this.views = [];
+    },
+
+    render: function() {
+        return this;
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('destroy', this.onDestroy);
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (status) {
+        var currentId = status.id;
+
+        var found = _.find(this.views, function (view) {
+            if (view.model.id == status.id) {
+                return true;
+            }
+        });
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+
+        var view = new Yasound.Views.ProgrammingStatus({
+            model: status
+        });
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    },
+
+    onDestroy: function(model) {
+        this.clear();
+        this.collection.fetch();
+    }
+});
+
+
+Yasound.Views.Status = Backbone.View.extend({
+    el: '#status',
+    events: {
+
+    },
+
+    initialize: function () {
+    },
+
+    onClose: function () {
+    },
+
+    render: function (uuid) {
+        this.uuid = uuid;
+        $(this.el).html(ich.programmingStatusPageTemplate());
+
+        this.statusList = new Yasound.Data.Models.ProgrammingStatusList({}).setUUID(uuid);
+        this.statusView = new Yasound.Views.StatusList({
+            collection: this.statusList,
+            el: $('#status-list', this.el)
+        }).render();
+
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.statusList,
+            el: $('#pagination', this.el)
+        });
+
+        this.statusList.fetch();
+
+        return this;
+    }
+});
 
 /**
  * Programming page
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     events: {
-        "click #edit-settings-btn": "onSettings"
+        "click #edit-settings-btn": "onSettings",
+        "click #programming-btn": "onProgramming",
+        "click #status-btn": "onStatus"
     },
 
     initialize: function() {
@@ -950,5 +1170,28 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
             trigger: true
         });
     },
+
+    onProgramming: function (e) {
+        e.preventDefault();
+        $('#status', this.el).hide();
+        $('#playlist', this.el).show()
+
+        $('#status-btn', this.el).parent().removeClass('active');
+        $('#programming-btn', this.el).parent().addClass('active');
+    },
+
+    onStatus: function (e) {
+        e.preventDefault();
+        $('#playlist', this.el).hide().parent();
+        $('#status', this.el).show().parent();
+
+        $('#programming-btn', this.el).parent().removeClass('active');
+        $('#status-btn', this.el).parent().addClass('active');
+
+        if (!this.statusView) {
+            this.statusView = new Yasound.Views.Status({});
+        }
+        this.statusView.render(this.uuid);
+    }
 
 });

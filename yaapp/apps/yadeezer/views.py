@@ -14,6 +14,7 @@ from yabase.models import Radio
 from yaref.models import YasoundSong
 from yabase.views import add_song
 from yasearch import utils as yasearch_utils
+from yahistory.models import ProgrammingHistory
 
 from yabase.forms import MyAccountsForm, MyInformationsForm, MyNotificationsForm, RadioGenreForm, ImportItunesForm
 from yabase.views import get_global_minutes
@@ -101,9 +102,25 @@ def import_track(request, radio_uuid):
     if album_name != '':
         qs = qs.filter(album_name_simplified=yasearch_utils.get_simplified_name(album_name))
 
+    pm = ProgrammingHistory()
+    event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_ADD_FROM_DEEZER,
+        user=radio.creator,
+        radio=radio,
+        status=ProgrammingHistory.STATUS_PENDING)
+
+    details = {
+        'name': name,
+        'artist': artist_name,
+        'album': album_name,
+    }
+
     if qs.count() > 0:
         yasound_song = qs[0]
+        pm.add_details_success(event, details)
+        pm.finished(event)
     else:
+        pm.add_details_failed(event, details)
+        pm.finished(event)
         res = {
             'success': False,
             'message': unicode(_('Cannot match song'))

@@ -43,7 +43,7 @@ from yaref.models import YasoundSong
 import yasearch.search as yasearch_search
 from yasearch.models import RadiosManager
 from yageoperm import utils as yageoperm_utils
-
+from yahistory.models import ProgrammingHistory
 from account.views import fast_connected_users_by_distance
 import import_utils
 import json
@@ -946,6 +946,21 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     if radio.ready == False:
         radio.ready = True
         radio.save()
+
+    pm = ProgrammingHistory()
+    event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_ADD_FROM_YASOUND,
+        user=radio.creator,
+        radio=radio,
+        status=ProgrammingHistory.STATUS_PENDING)
+
+    details = {
+        'name': song_instance.metadata.name,
+        'artist': song_instance.metadata.artist_name,
+        'album': song_instance.metadata.album_name,
+    }
+    pm.add_details_success(event, details)
+    pm.finished(event)
+
     res = dict(success=True, created=True, song_instance_id=song_instance.id)
     response = json.dumps(res)
     return HttpResponse(response)
@@ -1686,18 +1701,33 @@ def status(request):
 
 
 @check_api_key(methods=['PUT', 'DELETE', 'POST'])
-def delete_song_instance(request, song_instance_id):
+def delete_song_instance(request, song_instance_id, event=None):
     song = get_object_or_404(SongInstance, pk=song_instance_id)
 
     if request.user != song.playlist.radio.creator:
         return HttpResponse(status=401)
 
+    details = {
+        'name': song.metadata.name,
+        'artist': song.metadata.artist_name,
+        'album': song.metadata.album_name,
+    }
 
     logging.getLogger("yaapp.yabase.delete_song").info('deleting song instance %s' % song.id)
     song.delete()
 
     # if radio has no more songs, set ready to False
     radio = song.playlist.radio
+
+    pm = ProgrammingHistory()
+    if event is None:
+        event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_REMOVE_FROM_PLAYLIST,
+            user=radio.creator,
+            radio=radio,
+            status=ProgrammingHistory.STATUS_PENDING)
+        pm.finished(event)
+
+    pm.add_details_success(event, details)
 
     yabase_signals.new_animator_activity.send(sender=request.user,
                                               user=request.user,
@@ -1853,8 +1883,16 @@ def my_programming(request, radio_uuid, song_instance_id=None):
             artists = request.REQUEST.getlist('artist')
             albums = request.REQUEST.getlist('album')
             tracks = radio.programming(artists, albums)
+
+            pm = ProgrammingHistory()
+            event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_REMOVE_FROM_PLAYLIST,
+                user=radio.creator,
+                radio=radio,
+                status=ProgrammingHistory.STATUS_PENDING)
+
             for track in tracks:
-                delete_song_instance(request, track.get('id'))
+                delete_song_instance(request, track.get('id'), event=event)
+            pm.finished(event)
 
     response = programming_response(request, radio)
     return response
@@ -1949,6 +1987,79 @@ def my_programming_yasound_songs(request, radio_uuid):
         return add_song(request, radio_id=radio.id, playlist_index=0, yasound_song_id=yasound_song_id)
 
     raise Http404
+
+
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST', ], login_required=True)
+def programming_status_details(request, event_id):
+    pm = ProgrammingHistory()
+    print "yes"
+    event = pm.find_event(event_id)
+    if event and event.get('user_id') == request.user.id:
+        details = pm.details_for_event(event)
+        res = []
+        for detail in details:
+            if detail.get('status') == ProgrammingHistory.STATUS_SUCCESS:
+                detail['formatted_status'] = unicode(_('success'))
+            elif detail.get('status') == ProgrammingHistory.STATUS_FINISHED:
+                detail['formatted_status'] = unicode(_('finished'))
+            elif detail.get('status') == ProgrammingHistory.STATUS_FAILED:
+                detail['formatted_status'] = unicode(_('failed'))
+            elif detail.get('status') == ProgrammingHistory.STATUS_PENDING:
+                detail['formatted_status'] = unicode(_('pending'))
+
+            res.append(detail)
+        response = api_response(res, len(res))
+        return response
+    raise Http404
+
+@csrf_exempt
+@check_api_key(methods=['GET', 'POST', ], login_required=True)
+def my_programming_status(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.user != radio.creator:
+        return HttpResponse(status=401)
+
+    if request.method == 'GET':
+        limit = int(request.REQUEST.get('limit', 25))
+        offset = int(request.REQUEST.get('offset', 0))
+
+        pm = ProgrammingHistory()
+
+        events = pm.events_for_radio(radio)
+        total_count = events.count()
+
+        data = pm.events_for_radio(radio, skip=offset, limit=limit)
+        res = []
+        for status in data:
+            if status.get('status') == ProgrammingHistory.STATUS_SUCCESS:
+                status['formatted_status'] = unicode(_('success'))
+            elif status.get('status') == ProgrammingHistory.STATUS_FINISHED:
+                status['formatted_status'] = unicode(_('finished'))
+            elif status.get('status') == ProgrammingHistory.STATUS_FAILED:
+                status['formatted_status'] = unicode(_('failed'))
+            elif status.get('status') == ProgrammingHistory.STATUS_PENDING:
+                status['formatted_status'] = unicode(_('pending'))
+
+            if status.get('type') == ProgrammingHistory.PTYPE_UPLOAD_PLAYLIST:
+                status['formatted_type'] = unicode(_('playlist upload'))
+            if status.get('type') == ProgrammingHistory.PTYPE_UPLOAD_FILE:
+                status['formatted_type'] = unicode(_('file upload'))
+            if status.get('type') == ProgrammingHistory.PTYPE_ADD_FROM_YASOUND:
+                status['formatted_type'] = unicode(_('add from yasound'))
+            if status.get('type') == ProgrammingHistory.PTYPE_ADD_FROM_DEEZER:
+                status['formatted_type'] = unicode(_('add from Deezer'))
+            if status.get('type') == ProgrammingHistory.PTYPE_IMPORT_FROM_ITUNES:
+                status['formatted_type'] = unicode(_('import from iTunes'))
+            if status.get('type') == ProgrammingHistory.PTYPE_REMOVE_FROM_PLAYLIST:
+                status['formatted_type'] = unicode(_('remove from playlist'))
+
+            res.append(status)
+        response = api_response(res, total_count, limit=limit, offset=offset)
+        return response
+
+    raise Http404
+
 
 def get_global_minutes():
     minutes = cache.get('public.stat.minutes')

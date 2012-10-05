@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 13:49+0200\n"
+"POT-Creation-Date: 2012-10-05 06:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,10 @@ msgstr "Nom"
 #: export_utils.py:21
 msgid "Artist"
 msgstr "Artiste"
+
+#: export_utils.py:22
+msgid "Album"
+msgstr ""
 
 #: forms.py:18
 #: forms.py:35
@@ -142,83 +146,83 @@ msgstr "Options de partage de twitter"
 msgid "Please paste from iTunes"
 msgstr "Veuillez effectuer un copier/coller depuis iTunes"
 
-#: import_utils.py:244
+#: import_utils.py:245
 msgid "no echonest info about artist"
 msgstr ""
 
-#: import_utils.py:250
+#: import_utils.py:251
 msgid "artist info not sufficient"
 msgstr ""
 
-#: import_utils.py:254
+#: import_utils.py:255
 msgid "no name for artist"
 msgstr ""
 
-#: import_utils.py:273
+#: import_utils.py:274
 msgid "no lastfm info about album"
 msgstr ""
 
-#: import_utils.py:278
+#: import_utils.py:279
 #, python-format
 msgid "album already in database (%d)"
 msgstr ""
 
-#: import_utils.py:298
+#: import_utils.py:299
 msgid "downloading album cover"
 msgstr ""
 
-#: import_utils.py:552
+#: import_utils.py:553
 #, python-format
 msgid "song metadata given and found : %s"
 msgstr ""
 
-#: import_utils.py:554
+#: import_utils.py:555
 #, python-format
 msgid "song metadata does not exists : %s"
 msgstr ""
 
-#: import_utils.py:558
+#: import_utils.py:559
 msgid "looking for artist"
 msgstr ""
 
-#: import_utils.py:561
+#: import_utils.py:562
 msgid "looking for album"
 msgstr ""
 
-#: import_utils.py:565
+#: import_utils.py:566
 msgid "looking for song"
 msgstr ""
 
-#: import_utils.py:592
+#: import_utils.py:593
 msgid "generating filename"
 msgstr ""
 
-#: import_utils.py:606
+#: import_utils.py:607
 msgid "creating YasoundSong"
 msgstr ""
 
-#: import_utils.py:637
+#: import_utils.py:638
 #, python-format
 msgid "YasoundSong generated, id = %s"
 msgstr ""
 
-#: import_utils.py:639
+#: import_utils.py:640
 msgid "generating file data"
 msgstr ""
 
-#: import_utils.py:645
+#: import_utils.py:646
 msgid "generating preview"
 msgstr ""
 
-#: import_utils.py:649
+#: import_utils.py:650
 msgid "generating low quality"
 msgstr ""
 
-#: import_utils.py:675
+#: import_utils.py:676
 msgid "Association between YasoundSong and SongMetadata done"
 msgstr ""
 
-#: import_utils.py:683
+#: import_utils.py:684
 msgid "Building mongodb index"
 msgstr ""
 
@@ -231,7 +235,7 @@ msgid "song"
 msgstr "chanson"
 
 #: models.py:333
-#: models.py:1311
+#: models.py:1318
 msgid "user"
 msgstr "utilisateur"
 
@@ -239,81 +243,81 @@ msgstr "utilisateur"
 msgid "Song user"
 msgstr ""
 
-#: models.py:555
+#: models.py:541
 msgid "creator"
 msgstr "créateur"
 
-#: models.py:556
-#: models.py:1655
+#: models.py:542
+#: models.py:1674
 msgid "created"
 msgstr ""
 
-#: models.py:557
-#: models.py:1656
+#: models.py:543
+#: models.py:1675
 msgid "updated"
 msgstr ""
 
-#: models.py:561
-#: models.py:1657
+#: models.py:548
+#: models.py:1676
 msgid "name"
 msgstr "nom"
 
-#: models.py:562
+#: models.py:549
 msgid "picture"
 msgstr ""
 
-#: models.py:563
+#: models.py:550
 msgid "url"
 msgstr ""
 
-#: models.py:564
+#: models.py:551
 msgid "uuid"
 msgstr ""
 
-#: models.py:565
-#: models.py:1658
+#: models.py:552
+#: models.py:1677
 msgid "description"
 msgstr "description"
 
-#: models.py:566
+#: models.py:553
 msgid "genre"
 msgstr "genre"
 
-#: models.py:567
-msgid "thene"
+#: models.py:554
+msgid "theme"
 msgstr ""
 
-#: models.py:568
+#: models.py:555
 msgid "tags"
 msgstr ""
 
-#: models.py:588
+#: models.py:575
 msgid "current song"
 msgstr ""
 
-#: models.py:1310
-#: models.py:1677
+#: models.py:1317
+#: models.py:1696
 msgid "radio"
 msgstr "radio"
 
-#: models.py:1326
+#: models.py:1333
 msgid "Radio user"
 msgstr ""
 
-#: models.py:1659
+#: models.py:1678
 msgid "activated"
 msgstr "activé"
 
-#: models.py:1673
-#: models.py:1676
+#: models.py:1692
+#: models.py:1695
 msgid "featured content"
 msgstr ""
 
-#: models.py:1678
+#: models.py:1697
 msgid "order"
 msgstr ""
 
-#: models.py:1685
+#: models.py:1704
 msgid "featured radio"
 msgstr ""
 
@@ -402,38 +406,81 @@ msgstr "Message"
 msgid "Song"
 msgstr "Chanson"
 
-#: settings.py:87
+#: settings.py:90
 msgid "Selection"
 msgstr "Sélection"
 
-#: settings.py:88
+#: settings.py:91
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: views.py:1109
-#: views.py:1869
+#: views.py:1227
+#: views.py:2183
 msgid "You are not allowed to create a radio"
 msgstr "Vous n'avez le droit de créer une radio"
 
-#: views.py:1120
-#: views.py:1877
+#: views.py:1238
+#: views.py:2191
 msgid "This feature is not yet available for your country"
 msgstr "Cette fonctionnalité n'est pas encore accessible pour votre pays"
 
-#: views.py:1881
-#, fuzzy
-msgid "new radio"
-msgstr "radio"
+#: views.py:2003
+#: views.py:2036
+msgid "success"
+msgstr "succès"
 
-#: views.py:1928
+#: views.py:2005
+#: views.py:2038
+msgid "finished"
+msgstr "terminé"
+
+#: views.py:2007
+#: views.py:2040
+msgid "failed"
+msgstr "échec"
+
+#: views.py:2009
+#: views.py:2042
+msgid "pending"
+msgstr "en cours"
+
+#: views.py:2045
+msgid "playlist upload"
+msgstr "upload de playlist"
+
+#: views.py:2047
+msgid "file upload"
+msgstr "upload de fichier"
+
+#: views.py:2049
+msgid "add from yasound"
+msgstr "ajout depuis Yasound"
+
+#: views.py:2051
+msgid "add from Deezer"
+msgstr "ajout depuis Deezer"
+
+#: views.py:2053
+msgid "import from iTunes"
+msgstr "import depuis iTunes"
+
+#: views.py:2055
+msgid "remove from playlist"
+msgstr "suppression de la playlist"
+
+#: views.py:2195
+msgid "new radio"
+msgstr "nouvelle radio"
+
+#: views.py:2242
 msgid "The provided file is too big"
 msgstr "Le fichier transmis est trop gros"
 
-#: views.py:1930
+#: views.py:2244
 msgid "The provided file is too small"
 msgstr "Le fichier transmis est trop petit"
 
-#: views.py:1932
+#: views.py:2246
 msgid "The file format is not supported"
 msgstr "Le format de fichier n'est pas supporté"
 

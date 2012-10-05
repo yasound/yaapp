@@ -92,6 +92,7 @@ import mimetypes
 import md5
 from yasearch.models import MostPopularSongsManager
 from yaref.task import async_find_synonyms
+from yahistory.models import ProgrammingHistory
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -770,6 +771,7 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
     """
 
     # normalize metadata radio_id
+    radio = None
     if metadata:
         radio_id = metadata.get('radio_id')
         radio_uuid = metadata.get('radio_uuid')
@@ -780,16 +782,37 @@ def import_song(filepath, metadata, convert, allow_unknown_song=False, song_meta
             except:
                 pass
 
+    event = None
+
+    if radio is not None:
+        pm = ProgrammingHistory()
+        event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_UPLOAD_FILE,
+            user=radio.creator,
+            radio=radio,
+            status=ProgrammingHistory.STATUS_PENDING)
+
     importer = SongImporter()
     sm, messages = importer.import_song(filepath, metadata, convert, allow_unknown_song, song_metadata_id=song_metadata_id)
     if sm and sm.yasound_song_id:
+
+        details = {
+            'name': sm.name,
+            'artist': sm.artist_name,
+            'album': sm.album_name,
+        }
+
         try:
             yasound_song = YasoundSong.objects.get(id=sm.yasound_song_id)
             importer.extract_song_cover(yasound_song, filepath)
-        except:
-            pass
-        async_find_synonyms.delay(sm.yasound_song_id)
 
+            if event:
+                pm.add_details_success(event, details)
+                pm.finished(event)
+        except:
+            if event:
+                pm.add_details_failed(event, details)
+                pm.failed(event)
+        async_find_synonyms.delay(sm.yasound_song_id)
 
     return sm, messages
 
@@ -862,7 +885,7 @@ def fast_import(song_name, album_name, artist_name, playlist):
     return song_instance
 
 
-def import_from_string(song_name, album_name, artist_name, playlist):
+def import_from_string(song_name, album_name, artist_name, playlist, event=None):
     song_name_simplified = get_simplified_name(song_name)
     album_name_simplified = get_simplified_name(album_name)
     artist_name_simplified = get_simplified_name(artist_name)
@@ -872,6 +895,15 @@ def import_from_string(song_name, album_name, artist_name, playlist):
     hash_name.update(album_name_simplified)
     hash_name.update(artist_name_simplified)
     hash_name_hex = hash_name.hexdigest()
+
+    details = []
+    if event:
+        details = {
+            'name': song_name,
+            'artist': album_name,
+            'album': artist_name,
+        }
+
 
     raw = SongMetadata.objects.raw("SELECT * from yabase_songmetadata WHERE hash_name=%s AND name=%s AND artist_name=%s AND album_name=%s",
                                    [hash_name_hex,
@@ -894,6 +926,8 @@ def import_from_string(song_name, album_name, artist_name, playlist):
             metadata.yasound_song_id = mongo_doc.get('db_id')
             metadata.save()
 
+
+
     raw = SongInstance.objects.raw('SELECT * FROM yabase_songinstance WHERE playlist_id=%s and metadata_id=%s',
                                    [playlist.id,
                                     metadata.id])
@@ -901,6 +935,14 @@ def import_from_string(song_name, album_name, artist_name, playlist):
         song_instance = list(raw)[0]
     else:
         song_instance = SongInstance.objects.create(playlist=playlist, metadata=metadata, frequency=0.5, enabled=True)
+
+
+    if event is not None:
+        pm = ProgrammingHistory()
+        if song_instance.metadata.yasound_song_id:
+            pm.add_details_success(event, details)
+        else:
+            pm.add_details_failed(event, details)
 
 
     return song_instance
