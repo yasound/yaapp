@@ -171,7 +171,7 @@ msgstr "Favoris suivants"
 #: js/app/myRadios/views.js:248
 #: js/app/top/views.js:122
 msgid "Next radios"
-msgstr "Radio suivantes"
+msgstr "Radios suivantes"
 
 #: js/app/friends/views.js:158
 msgid "Join me on Yasound and let's share music"
