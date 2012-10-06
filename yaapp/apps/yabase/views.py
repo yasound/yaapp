@@ -89,8 +89,8 @@ def get_root(app_name):
     else:
         root = '/'
 
-    # if app_name == 'app':
-    #     root = '/'
+    if app_name == 'app':
+        root = '/'
     return root
 
 
