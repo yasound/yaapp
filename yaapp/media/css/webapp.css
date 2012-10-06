@@ -456,25 +456,19 @@ body {
 }
 
 #favorite-radio {
-    height:20px;
-    width:24px;
+    width: 31px;
+    height: 30px;
     display:inline-block;
-    float:left;
+    background-position: -122px 0;
 }
 
-.is-not-favorite {
-    background-image:url("../app/images/favorite-radio-small.png") ;
+#favorite-radio:hover {
+    background-position: -91px 0;
 }
 
-.is-favorite {
-    background-image:url('../app/images/over-star-small.png');
-}
-
-#favorite-radio:hover{
-    background-image:url('../app/images/over-star-small.png');
-    height:20px;
-    width:24px;
-    float:left;
+#favorite-radio.is-favorite,
+#favorite-radio.is-favorite:hover {
+    background-position: -60px 0;
 }
 
 #play-btn {
@@ -587,56 +581,33 @@ body {
 }
 
 #player #share-btn {
-    display:inline-block;
-    float:left;
-    height:18px;
-    width:24px;
-    background-image:url('../app/images/share-btn.png');
+    width: 32px;
+    height: 30px;
+    background-position: -73px -71px;
 }
 
 #player #share-btn:hover {
-    display:inline-block;
-    float:left;
-    height:18px;
-    width:24px;
-    background-image:url('../app/images/hover-share-btn.png');
+    background-position: -41px -71px;
 }
 
 #player #love-btn {
-    display:inline-block;
-    float:left;
-    height:18px;
-    width:20px;
-    background-image:url('../app/images/love-btn.png');
-    background-repeat:no-repeat;
+    width: 25px;
+    height: 24px;
+    background-position: -146px -37px;
 }
 
 #player #love-btn:hover {
-    display:inline-block;
-    float:left;
-    height:18px;
-    width:20px;
-    background-image:url('../app/images/hover-love-btn.png');
-    background-repeat:no-repeat;
+    background-position: -121px -37px;
 }
 
 #player #shop-btn {
-    display:inline-block;
-    float:left;
-    height:19px;
-    width:25px;
-    background-image:url('../app/images/shop-btn.png');
-    background-repeat:no-repeat;
-    overflow:visible;
+    width: 30px;
+    height: 24px;
+    background-position: -30px 0;
 }
 
 #player #shop-btn:hover {
-    display:inline-block;
-    float:left;
-    height:19px;
-    width:25px;
-    background-image:url('../app/images/hover-shop-btn.png');
-    background-repeat:no-repeat;
+    background-position: 0 0;
 }
 
 #player #metadata-container {
@@ -649,12 +620,16 @@ body {
 #player #metadata-container #radio-title {
     margin-bottom:12px;
     color: #d5d7d8;
+    width:449px;
     font-size:15px;
     cursor:pointer;
 }
 #player #metadata-container #radio-title span {
-    width:70%;
     line-height:25px;
+    display:inline-block;
+    width: 377px;
+    overflow:hidden;
+    text-overflow: ellipsis;
 }
 
 #player #metadata-container #radio-title span:hover {
@@ -663,11 +638,12 @@ body {
 
 #player #metadata-container .button-group {
     float:right;
-    margin-right:12px;
+    height: 30px;
+    width: 68px;
 }
-
 #player #metadata-container .button-group a {
-    margin-left:8px;
+    display: inline-block;
+    background-image:url('../app/images/header-sprite.png');
 }
 
 #player #radio-cover {
@@ -6109,12 +6085,6 @@ a.yabutton-small {
         margin-left:12px;
     }
 
-    #radio-picto,
-    #play-btn,
-    #favorite-radio,
-    #favorite-radio:hover {
-        margin-left:10px;
-    }
 
     #profile-picture {
         padding-left:0px;
@@ -6136,9 +6106,24 @@ a.yabutton-small {
     #player #metadata-container {
         width:290px;
     }
+
     #player #metadata-container #player-title {
-        width:290px;
+        width: 290px;
     }
+
+    #player #metadata-container #radio-title {
+        width:286px;
+    }
+
+    #player #metadata-container #radio-title span {
+        line-height:25px;
+        display:inline-block;
+        width: 214px;
+        overflow:hidden;
+        text-overflow: ellipsis;
+    }
+
+
     #player #metadata-container #player-title span {
         display: inline-block;
         overflow: hidden;
