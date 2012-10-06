@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load app_url %}
 {% if request.user.is_authenticated %}
 
 <div class="modal hide fade" id="modal-invite-twitter">
@@ -86,7 +87,7 @@
     		<img class='friends-login-large'src="/media/app/images/friends-icon-large.png" height='230' width='260'>
             <img class='friends-login-small'src="/media/app/images/friends-icon-large.png" height='153' width='173'>
     		<p class='friends-login-p'>{% trans "Log in to view your friends." %}</p>
-            <form action='{% url webapp_login app_name %}' method='get'>
+            <form action='{% app_url webapp_login app_name %}' method='get'>
     		<button id='login-btn'>{% trans "Login" %}</button>
             </form>
     	</div>

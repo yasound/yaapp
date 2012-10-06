@@ -1,1 +1,1 @@
-{% load i18n %}<a href="{% url webapp app_name %}profile/{{ user.username|default:'<% username %>' }}/" class='user'><img class="individual-pictures" src="{{ user.picture|default:'<% picture %>' }}" width="34" height="34" alt="portrait"></a>
+{% load app_url %}{% load i18n %}<a href="{% app_url webapp app_name %}profile/{{ user.username|default:'<% username %>' }}/" class='user'><img class="individual-pictures" src="{{ user.picture|default:'<% picture %>' }}" width="34" height="34" alt="portrait"></a>

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load app_url %}
 
 <div class='row-fluid'>
     <div class='span12 settings-container'>
@@ -32,7 +33,7 @@
                 </div>
             </div>
 
-            <form id='edit-radio' enctype="multipart/form-data" class='' action="{% url webapp_edit_radio app_name radio.uuid %}" method='post'>{% csrf_token %}
+            <form id='edit-radio' enctype="multipart/form-data" class='' action="{% app_url webapp_edit_radio app_name radio.uuid %}" method='post'>{% csrf_token %}
                 {{ settings_radio_form }}
                 <div>
                     <input type='hidden' name='uuid' value='{{ radio.uuid }}'/>

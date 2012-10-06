@@ -109,7 +109,8 @@ class URLNode(Node):
 
         if url.startswith('/app/'):
             url = url[len('/app/'):]
-
+        if len(url) > 0 and url[0] != '/':
+            url = '/' + url
         if self.asvar:
             context[self.asvar] = url
             return ''

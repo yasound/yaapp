@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load app_url %}
 
 {% if request.user.is_anonymous %}
 <div class='row'>
@@ -51,7 +52,7 @@
     <div class='span12'>
         <h2>{% trans "Create your Yasound account" %}</h2>
 
-        <p class='lead'>{% trans "You are currently logged as" %} <a href='{% url webapp_profile app_name request.user.username %}'>{{ request.user.get_profile }}</a></p>
+        <p class='lead'>{% trans "You are currently logged as" %} <a href='{% app_url webapp_profile app_name request.user.username %}'>{{ request.user.get_profile }}</a></p>
         {% url logout as logout_url %}
         {% blocktrans %}
         <p class='lead'>
