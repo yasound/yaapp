@@ -1200,6 +1200,8 @@ class WebAppView(View):
 
     def search(self, request, context, *args, **kwargs):
         query = kwargs['query']
+        if len(query) > 0:
+            query = query[:25]
 
         rm = RadiosManager()
         result = rm.search(query)
