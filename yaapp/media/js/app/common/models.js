@@ -83,26 +83,22 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
     addToFavorite: function () {
         var url = '/api/v1/radio/' + this.get('id') + '/favorite/';
         var that = this;
-        $.post(url, {
-            success: function () {
+        $.post(url, function () {
                 that.set('favorite', true);
                 $.publish('/radio/favorite');
                 that.trigger('radioFavorite');
                 that.fetch();
-            }
         });
     },
 
     removeFromFavorite: function () {
         var url = '/api/v1/radio/' + this.get('id') + '/not_favorite/';
         var that = this;
-        $.post(url, {
-            success: function () {
+        $.post(url, function () {
                 that.set('favorite', false);
                 $.publish('/radio/not_favorite');
                 that.trigger('radioNotFavorite');
                 that.fetch();
-            }
         });
     },
     genre: function() {
