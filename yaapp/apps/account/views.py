@@ -811,7 +811,7 @@ def invite_email_friends(request):
         return HttpResponse(response_data)
 
     friends = emails.split(',')
-    for email in friends:
+    for email in friends[:3]:
         subject = "".join(subject.splitlines())
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
 
