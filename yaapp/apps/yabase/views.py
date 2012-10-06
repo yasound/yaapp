@@ -787,6 +787,8 @@ def upload_song(request, song_id=None):
         try:
             song_instance = SongInstance.objects.get(id=song_id)
             radio = Radio.objects.get(id=song_instance.playlist.radio.id)
+            if request.user != radio.creator:
+                return HttpResponse(status=401)
             yabase_signals.new_animator_activity.send(sender=request.user,
                                                   user=request.user,
                                                   radio=radio,
@@ -817,7 +819,17 @@ def upload_song(request, song_id=None):
         source_f.write(chunk)
     source_f.close()
 
+    if 'radio_uuid' in json_data or 'radio_id' in json_data:
+        if 'radio_uuid' in json_data:
+            radio = Radio.objects.get(uuid=json_data.get('radio_uuid'))
+        else:
+            radio = Radio.objects.get(id=json_data.get('radio_id'))
+
+        if request.user != radio.creator:
+            return HttpResponse(status=401)
+
     logger.info('importing song')
+
     process_upload_song.delay(filepath=source,
                               metadata=json_data,
                               convert=True,
@@ -1225,6 +1237,13 @@ class WebAppView(View):
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
 
+    def programming(self, request, context, *args, **kwargs):
+        radio_uuid = context['current_uuid']
+        radio = get_object_or_404(Radio, uuid=radio_uuid)
+        if radio.creator != request.user:
+            return HttpResponse(status=401)
+        return context, 'yabase/webapp.html'
+
     def notifications(self, request, context, *args, **kwargs):
         if request.user.is_authenticated():
             m = NotificationsManager()
@@ -1387,7 +1406,7 @@ class WebAppView(View):
                 uuid = request.REQUEST.get('uuid', '')
                 radio = get_object_or_404(Radio, uuid=uuid)
                 if radio.creator != request.user:
-                    raise Http404
+                    return HttpResponse(status=401)
                 form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
                 if form.is_valid():
                     form.save()
@@ -2054,6 +2073,9 @@ def my_programming_albums(request, radio_uuid=None):
 @check_api_key(methods=['GET', 'POST', ], login_required=True)
 def my_programming_yasound_songs(request, radio_uuid):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.user != radio.creator:
+        return HttpResponse(status=401)
+
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
@@ -2228,7 +2250,7 @@ def load_template(request, template_name, app_name='app'):
         uuid = request.REQUEST.get('uuid', '')
         radio = get_object_or_404(Radio, uuid=uuid)
         if radio.creator != request.user:
-            raise Http404
+            return HttpResponse(status=401)
 
         context['radio'] = radio
         context['settings_radio_form'] = SettingsRadioForm(instance=radio)
