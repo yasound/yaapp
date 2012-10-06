@@ -1984,6 +1984,8 @@ def programming_albums_response(request, radio):
 @check_api_key(methods=['GET', 'POST',  'DELETE', ], login_required=True)
 def my_programming(request, radio_uuid, song_instance_id=None):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.user != radio.creator:
+        return HttpResponse(status=401)
 
     if song_instance_id is not None and request.method == 'DELETE':
         return delete_song_instance(request, song_instance_id)
