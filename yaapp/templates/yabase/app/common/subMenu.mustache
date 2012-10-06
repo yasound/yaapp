@@ -1,5 +1,6 @@
-	{% load i18n %}
+{% load i18n %}
 {% load thumbnail %}
+{% load app_url %}
 <div id="sub-header">
     <div class="responsive-container visible-phone">
         <a id='responsive-song' href="{% url webapp_radio app_name current_uuid %}" class='yatooltip'>
@@ -30,7 +31,7 @@
             </li>
             <li class="{% ifequal submenu_number 2 %}selected{% endifequal %}">
                 <a href='{% url webapp_top app_name %}' class='mobile-top'></a>
-                <a href='{% url webapp_top app_name %}' id='top' >{% trans "Top" %}</a>
+                <a href='{% app_url webapp_top app_name %}' id='top' >{% trans "Top" %}</a>
             </li>
             <li class="{% ifequal submenu_number 3 %}selected{% endifequal %}">
                 <a href='{% url webapp_friends app_name %}' class='mobile-friends'></a>

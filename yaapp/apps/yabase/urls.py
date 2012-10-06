@@ -34,7 +34,6 @@ urlpatterns = patterns('yabase.views',
 
     url(r'^tpl/(?P<template_name>\S+)/$', 'load_template'),
 
-
     url(r'^(?P<app_name>\w+)/$', WebAppView.as_view(), {'page': 'home'}, name='webapp'),
     url(r'^(?P<app_name>\w+)/radio/(?P<radio_uuid>\w+)/$', WebAppView.as_view(),  {'page': 'radio'}, name='webapp_radio'),
     url(r'^(?P<app_name>\w+)/search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_search'),
