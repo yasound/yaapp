@@ -21,3 +21,10 @@ Yasound.Data.Models.Followers = Yasound.Data.Paginator.extend({
         return this;
     }
 });
+
+Yasound.Data.Models.GoogleContact = Backbone.Model.extend({
+});
+
+Yasound.Data.Models.GoogleContacts = Backbone.Collection.extend({
+    model: Yasound.Data.Models.GoogleContact
+});

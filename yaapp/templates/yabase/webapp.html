@@ -105,6 +105,8 @@ HTML, BODY { height: 100%; }
     <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
 {% endcompress %}
 
+  <script src="https://apis.google.com/js/client.js"></script>
+
     {% ifequal sound_player 'soundmanager' %}
     <script type="text/javascript" src='/media/js/sm/soundmanager2-nodebug-jsmin.js'></script>
     {% endifequal %}
@@ -270,6 +272,10 @@ HTML, BODY { height: 100%; }
    <script type='text/html' id='friendsPageTemplate'>
      {% include "yabase/app/friends/friendsPage.mustache" %}
    </script>
+   <script type='text/html' id='googleContactTemplate'>
+     {% include "yabase/app/friends/googleContact.mustache" %}
+   </script>
+
 
    <script type="text/html" id="wallInputTemplate">
       {% include "yabase/app/radio/wallInput.mustache" %}
