@@ -1,17 +1,17 @@
 {% load i18n %}
-<div class='row'>
-    <div class='span12'>
-    <button class='yabutton right' id='edit-settings-btn'>{% trans 'Settings' %}</button>
-        <h2 class='zone-title'>{% trans "Programming" %}</h2>
+<div class='row  common-background programming'>
+    <div class='span12 no-margin'>
+        <button class='yabutton right' id='edit-settings-btn'>{% trans 'Settings' %}</button>
+        <h1 class='zone-title'>{% trans "Programming" %}</h1>
+        <div class='separation-line'></div>
     </div>
 
-    <div class='span3'>
-        <div class='well'>
-            <ul class="nav nav-list">
-              <li class="nav-header">{% trans "Default playlist" %}</li>
-              <li class="active"><a href="#" id='programming-btn'>{% trans "Programming" %}</a></li>
-              <li class="divider"/>
-              <li><a href="#" id='status-btn'>{% trans "History" %}</a></li>
+    <div class='span3 no-margin'>
+        <div id='programming-menu'>
+            <ul class="">
+              <li class="header">{% trans "Default playlist" %}</li>
+              <li class="active" id='programming-btn'><span>{% trans "Programming" %}</span></li>
+              <li id='status-btn'><span>{% trans "History" %}</span></li>
             </ul>
         </div>
     </div>
