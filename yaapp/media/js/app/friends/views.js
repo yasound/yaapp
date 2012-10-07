@@ -2,6 +2,103 @@
 /*extern Ext, $ */
 Namespace('Yasound.Views');
 
+Yasound.Views.GoogleContact = Backbone.View.extend({
+    tagName: 'tr',
+
+    initialize: function () {
+        _.bindAll(this, 'render');
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.googleContactTemplate(data));
+        return this;
+    }
+});
+
+Yasound.Views.GoogleContacts = Backbone.View.extend({
+    collection: new Yasound.Data.Models.GoogleContacts({}),
+    events: {
+    },
+
+    initialize: function () {
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy', 'onSelect');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('destroy', this.onDestroy, this);
+        this.views = [];
+    },
+
+    render: function(data) {
+        var collection = this.collection;
+        collection.reset();
+        _.each(data.feed.entry, function (entry) {
+            _.each(entry['gd$email'], function (email) {
+                var contact = {
+                    name: entry.title['$t'],
+                    email: email.address
+                };
+                collection.add(contact);
+            });
+        });
+
+        return this;
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('destroy', this.onDestroy);
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).remove();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (contact) {
+        var view = new Yasound.Views.GoogleContact({
+            model: contact
+        });
+        var that = this;
+        $(this.el).append(view.render().el);
+        view.$el.on('click', function () {
+            that.onSelect(contact);
+        })
+        this.views.push(view);
+    },
+
+    onDestroy: function(model) {
+        this.clear();
+    },
+
+    onSelect: function (contact) {
+        var email = contact.get('email');
+        $('#modal-invite-email #recipients').change();
+        var recipients = $('#modal-invite-email #recipients').val();
+        if (recipients.length == 0) {
+            recipients = email;
+        } else {
+            recipients = recipients + ', ' + email;
+        }
+        $('#modal-invite-email #recipients').val(recipients);
+        $('#modal-google-contacts').modal('hide');
+    }
+});
+
 
 Yasound.Views.Friends = Backbone.View.extend({
     initialize: function() {
@@ -77,7 +174,8 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         'click #login-btn': 'onLogin',
         'click #invite-facebook': 'onInviteFacebook',
         'click #invite-twitter': 'onInviteTwitter',
-        'click #invite-email': 'onInviteEmail'
+        'click #invite-email': 'onInviteEmail',
+        'click #google-contacts': 'onGoogleContacts'
     },
 
     initialize: function() {
@@ -255,7 +353,7 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             recipients: recipients,
             subject: subject,
             message: message
-        }
+        };
         $.ajax({
             url: url,
             type: 'POST',
@@ -272,6 +370,55 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
                 Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
             }
         });
+    },
+
+    onGoogleContacts: function (e) {
+        e.preventDefault();
+        var clientId = '271869463998-dvtuhiri7dp06ni4vopm8n68bo96tah2.apps.googleusercontent.com';
+        var apiKey = 'AIzaSyA9pqwDu4yveBRTUXHEASUFNWgyt7le0Ak';
+        var scopes = 'https://www.google.com/m8/feeds';
+
+        function handleClientLoad() {
+          gapi.client.setApiKey(apiKey);
+          window.setTimeout(checkAuth,1);
+        }
+
+        function checkAuth() {
+          gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+        }
+
+        function handleAuthResult(authResult) {
+          if (authResult && !authResult.error) {
+
+            var token = gapi.auth.getToken();
+            $.ajax({
+                url: 'https://www.google.com/m8/feeds/contacts/default/full',
+                dataType: 'jsonp',
+                data: {
+                    access_token: token.access_token,
+                    alt: 'json-in-script'
+                },
+                success: function(data, status) {
+                    var view = new Yasound.Views.GoogleContacts({
+                        tagName: 'tbody'
+                    }).render(data);
+
+                    $('#google-contacts-list').append(view.el);
+
+                    $('#modal-google-contacts').modal('show');
+                    $('#modal-google-contacts').one('hidden', function () {
+                        view.close();
+                    });
+
+                }
+            });
+          } else {
+            console.log(authResult);
+          }
+        }
+
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+
     }
 });
 

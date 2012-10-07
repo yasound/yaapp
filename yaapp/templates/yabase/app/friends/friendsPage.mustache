@@ -24,7 +24,10 @@
     <div class="modal-body">
         <p>{% trans "Invite your friends by mail" %}</p>
         <form>
-        <input placeholder='{% trans "Recipient email" %}' id='recipients'>
+        <div id='recipients-group'>
+            <button class='yabutton-small' id='google-contacts'>{% trans "gmail" %}</button>
+            <input placeholder='{% trans "Recipient email" %}' id='recipients'>
+        </div>
         <input placeholder='{% trans "Subject" %}' id='subject'>
         <textarea></textarea>
         </form>
@@ -32,6 +35,26 @@
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
         <a href="#" class="btn btn-primary">{% trans "Send mail" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-google-contacts">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Details" %}</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered table-striped" id='google-contacts-list'>
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Email" %}</th>
+            </tr>
+        </thead>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
     </div>
 </div>
 
