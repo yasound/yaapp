@@ -1177,8 +1177,8 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         $('#status', this.el).hide();
         $('#playlist', this.el).show();
 
-        $('#status-btn', this.el).parent().removeClass('active');
-        $('#programming-btn', this.el).parent().addClass('active');
+        $('#status-btn', this.el).removeClass('active');
+        $('#programming-btn', this.el).addClass('active');
     },
 
     onStatus: function (e) {
@@ -1186,8 +1186,8 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         $('#playlist', this.el).hide().parent();
         $('#status', this.el).show().parent();
 
-        $('#programming-btn', this.el).parent().removeClass('active');
-        $('#status-btn', this.el).parent().addClass('active');
+        $('#programming-btn', this.el).removeClass('active');
+        $('#status-btn', this.el).addClass('active');
 
         if (!this.statusView) {
             this.statusView = new Yasound.Views.Status({});

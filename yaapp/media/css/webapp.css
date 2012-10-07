@@ -2725,7 +2725,7 @@ ul#notifications {
     background-color:white;
     margin:0px 0px 25px 0px;
     box-shadow:0px 0px 10px #e2e2e2;
-    border-radius:20px;
+    border-radius:7px;
     padding-bottom:27px;
 }
 
@@ -3370,8 +3370,11 @@ ul .radio-with-stats-cells li {
 }
 
 .settings-container #programming-btn {
-    margin-top:6px;
-    margin-right:6px;
+    margin-top:26px;
+    margin-right:21px;
+    padding: 0px 15px;
+    height:31px;
+    font-weight: bold;
 }
 
 #settings-nav {
@@ -4142,17 +4145,77 @@ a.yabutton-small {
 }
 
 
+/**
+ *  Programming page
+ */
+#programming-menu {
 
+}
 
+#programming-menu .header
+,#programming-menu .header:hover
+ {
+    display: block;
+    padding-top:16px;
+    padding-bottom:16px;
+    padding-left:16px;
+    /*padding: 3px 10px;*/
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 18px;
+    text-transform: uppercase;
+}
 
+#programming-menu .divider {
+    *width: 100%;
+    height: 1px;
+    margin: 8px 1px;
+    *margin: -5px 0 5px;
+    overflow: hidden;
+    background-color: #e5e5e5;
+    border-bottom: 1px solid #ffffff;
+}
 
+#programming-menu .active {
+    background-image:url('../app/images/settings/settings-nav-bg-checked.png');
+    border:1px solid #1d86c1;
+    color:white;
+    text-shadow:1px 1px #126898;
+}
 
+#programming-menu .active:hover {
+    background-image:url('../app/images/settings/settings-nav-bg-checked.png');
+    border:1px solid #0b7cbc;
+    text-shadow:1px 1px #126898;
+}
 
+#programming-menu ul li+li:hover {
+    background-image: url('../app/images/settings/settings-nav-bg-hover.png');
+    cursor:pointer;
+}
 
+#programming-menu ul {
+    list-style: none;
+    margin:0;
+}
 
+#programming-menu ul li+li {
+    cursor: pointer;
+    font-size:14px;
+    border-top: 1px solid #E3E3E3;
+}
 
+#programming-menu ul li span {
+    line-height: 36px;
+    padding-left:16px;
+}
 
-
+.programming .span9 {
+    width:650px;
+    padding-left:20px;
+    margin-left:0;
+    border-left: 1px solid #e3e3e3;
+}
 
 
 
