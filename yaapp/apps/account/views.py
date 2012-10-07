@@ -812,6 +812,7 @@ def invite_email_friends(request):
 
     friends = emails.split(',')
     for email in friends[:3]:
+        email = email.strip()
         subject = "".join(subject.splitlines())
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
 
