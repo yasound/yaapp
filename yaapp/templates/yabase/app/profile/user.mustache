@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load app_url %}
 <div class='span12 no-margin'>
    <div id='picture'>
        <img src="<% picture %>" width="148px" height="148px"/>
@@ -22,7 +23,7 @@
     <%/owner%>
     <%#owner%>
     <button type="button" id='logout-btn' class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
-    <button type="button" id='settings-btn' class="user-btn yabutton right"><a href='{% url webapp_settings app_name %}'>{% trans "Settings" %}</a></button>
+    <button type="button" id='settings-btn' class="user-btn yabutton right"><a href='{% app_url webapp_settings app_name %}'>{% trans "Settings" %}</a></button>
     <%/owner%>
     <em class='hidden-phone'><%#followers_count%><% followers_count %> {% trans "followers" %}, <%/followers_count%><% agc %></em>
     <p class="profile-bio"><% bio_text %></p>
