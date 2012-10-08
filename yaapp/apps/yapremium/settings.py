@@ -26,6 +26,7 @@ ACTION_CHOICES = (
     (ACTION_CREATE_RADIO,           _('Create radio')),
     (ACTION_UPDATE_PROGRAMMING,     _('Update programming')),
     (ACTION_FILL_IN_PROFILE,        _('Fill in profile')),
+    (ACTION_VIEW_NOTIFICATIONS,     _('View notifications')),
     (ACTION_VIEW_STATS,             _('View stats')),
 )
 
