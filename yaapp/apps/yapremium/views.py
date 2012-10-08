@@ -8,7 +8,7 @@ from django.http import Http404, HttpResponse
 import utils as yapremium_utils
 import logging
 from transmeta import get_real_fieldname
-from task import async_win_gift
+from task import async_win_gift, async_check_follow_yasound_on_twitter
 import settings as yapremium_settings
 import json
 
@@ -99,6 +99,11 @@ def action_watch_tutorial_completed(request, username):
     if request.user.username != user.username:
         return HttpResponse(status=401)
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
+
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def action_follow_yasound_on_twitter_completed(request, username):
+    async_check_follow_yasound_on_twitter.delay(request.user)
 
 @csrf_exempt
 @check_api_key(methods=['POST'])

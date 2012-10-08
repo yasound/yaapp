@@ -21,7 +21,21 @@ class UserServiceAdmin(admin.ModelAdmin):
 admin.site.register(UserService, UserServiceAdmin)
 
 class GiftAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_en', 'action', 'service', 'duration', 'duration_unit', 'max_per_user')
+    list_display = (
+        'id',
+        'sku',
+        'name_en',
+        'action',
+        'service',
+        'duration',
+        'duration_unit',
+        'max_per_user',
+        'delay',
+        'enabled',
+        'authentication_needed',
+    )
+    list_editable = ('enabled',)
+    list_filter = ('enabled', 'authentication_needed')
 admin.site.register(Gift, GiftAdmin)
 
 class AchievementAdmin(admin.ModelAdmin):

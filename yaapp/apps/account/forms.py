@@ -133,7 +133,7 @@ class SignupForm(forms.Form):
 
 class WebAppSignupForm(forms.Form):
     username = forms.CharField(label=_("Username"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Username')}))
-    referal = forms.CharField(label=_("Referal"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Referal')}))
+    referal = forms.CharField(label=_("Referal"), required=False, widget=forms.TextInput(attrs={'placeholder': _('Referal')}))
     email = forms.EmailField(label=_("Email"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Email')}))
     password1 = forms.CharField(label=_("Password"), required=True, widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
     password2 = forms.CharField(label=_("Password confirmation"), required=True, widget=forms.PasswordInput(attrs={'placeholder': _('Password')}))
@@ -177,7 +177,7 @@ class WebAppSignupForm(forms.Form):
                 if not inviter_profile.has_invited_email_friend(profile.user.email):
                     inviter_profile.invite_email_friends([profile.user.email])
                     async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, profile.user.email)
-                
+
 
             return username, email
         return False
