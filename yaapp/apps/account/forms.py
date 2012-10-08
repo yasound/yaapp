@@ -164,11 +164,10 @@ class WebAppSignupForm(forms.Form):
         referal = self.cleaned_data['referal']
         username = build_random_username()
         if email and username:
-            EmailUser.objects.create_user(username, email, password)
-            user = EmailUser.objects.get(email=email)
+            user = User.objects.create_user(username, email, password)
             user.is_active = False
             user.save()
-            profile = user.get_profile()
+            profile = UserProfile.objects.get(user=user)
             profile.name = self.cleaned_data["username"]
             profile.add_yasound_account(email, password)
 
@@ -177,7 +176,6 @@ class WebAppSignupForm(forms.Form):
                 if not inviter_profile.has_invited_email_friend(profile.user.email):
                     inviter_profile.invite_email_friends([profile.user.email])
                     async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, profile.user.email)
-
 
             return username, email
         return False
