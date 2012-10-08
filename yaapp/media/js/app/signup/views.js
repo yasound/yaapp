@@ -26,6 +26,9 @@ Yasound.Views.SignupPage = Backbone.View.extend({
         $('.error-msg', form).remove();
         $('input').removeClass('error');
 
+        var button = $("input[type='submit']", form);
+        button.attr('disabled', 'disabled');
+
         var url = window.location.href;
         $.post(url, form.serializeArray(), function(data) {
             var success = data.success;
@@ -39,7 +42,9 @@ Yasound.Views.SignupPage = Backbone.View.extend({
                         $input.after('<div class="error-msg">' + value + '</div>');
                     })
                 }
+                button.removeAttr('disabled');
             } else {
+                button.removeAttr('disabled');
                 $('#modal-after-signup').modal('show');
                 $('#modal-after-signup').one('hidden', function () {
                     window.location = Yasound.App.root;
@@ -47,6 +52,7 @@ Yasound.Views.SignupPage = Backbone.View.extend({
             }
         }).error(function() {
             colibri(gettext('Error while creating account', 'colibri-error'));
+            button.removeAttr('disabled');
         });
     }
 });

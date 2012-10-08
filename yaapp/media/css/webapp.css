@@ -3211,6 +3211,10 @@ ul .radio-with-stats-cells li {
     box-shadow:0px 2px 2px #e4e4e4;
 }
 
+.signup-container #signup-input #signup-save-btn[disabled=disabled] {
+    color:#aaaaaa;
+}
+
 /**
  * Radio Creation
  */
