@@ -3,7 +3,9 @@ from celery.task import task
 from datetime import *
 from account.models import UserProfile, InvitationsManager
 import settings as yapremium_settings
+from django.conf import settings
 import logging
+import tweepy
 logger = logging.getLogger("yaapp.yapremium")
 
 @task
@@ -37,3 +39,20 @@ def async_check_for_invitation(type, uid):
         user_id = user.get('db_id')
         logger.info('and the winner is %s' % (user_id))
         async_win_gift.delay(user_id, yapremium_settings.ACTION_INVITE_FRIENDS)
+
+@task
+def async_check_follow_yasound_on_twitter(user_id):
+    profile = UserProfile.objects.get(user__id=user_id)
+    if not profile.twitter_enabled:
+        return
+
+    auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+    auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
+    api = tweepy.API(auth)
+    friends = api.lookup_users(screen_names=['YasoundSAS'])
+    if len(friends) > 0:
+        yasound = friends[0]
+        if yasound.following:
+            async_win_gift(user_id, yapremium_settings.ACTION_FOLLOW_YASOUND_TWITTER)
+
+
