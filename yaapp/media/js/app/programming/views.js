@@ -30,7 +30,7 @@ Yasound.Views.SongInstance = Backbone.View.extend({
 
     onRemove: function (e) {
         e.preventDefault();
-        this.model.destroy();
+        this.model.destroy({wait: true});
     },
 
     onArtist: function (e) {
