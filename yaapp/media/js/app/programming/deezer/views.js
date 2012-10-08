@@ -261,15 +261,15 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
             }
         }, {perms: 'basic_access,email'});
 
-        data = [{
-            id:1,
-            title: 'hello'
-        }, {
-            id:2,
-            title: 'foo'
-        }];
-        that.playlistsView.clear();
-        that.playlists.reset(data);
+        // data = [{
+        //     id:1,
+        //     title: 'hello'
+        // }, {
+        //     id:2,
+        //     title: 'foo'
+        // }];
+        // that.playlistsView.clear();
+        // that.playlists.reset(data);
     },
 
     fetchPlaylists: function (e) {
@@ -293,50 +293,49 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
             }
         });
 
-        if (id ==1) {
-            data = [{
-                id: 1,
-                title: 'Round & Round & Round & Round & Round & Round',
-                artist: {
-                    name: 'the cure and lots of friends, really a lot'
-                },
-                album: {
-                    title: 'wild mood swings'
-                }
-            }, {
-                id: 2,
-                title: 'track2',
-                artist: {
-                    name: 'artist'
-                },
-                album: {
-                    title: 'album'
-                }
-            }
-            ];
-        } else {
-            data = [{
-                id: 3,
-                title: 'track12',
-                artist: {
-                    name: 'artist'
-                },
-                album: {
-                    title: 'album'
-                }
-            }, {
-                id: 4,
-                title: 'track22',
-                artist: {
-                    name: 'artist'
-                },
-                album: {
-                    title: 'album'
-                }
-            }
-            ];
-
-        }
+        // if (id ==1) {
+        //     data = [{
+        //         id: 1,
+        //         title: 'Round & Round & Round & Round & Round & Round',
+        //         artist: {
+        //             name: 'the cure and lots of friends, really a lot'
+        //         },
+        //         album: {
+        //             title: 'wild mood swings'
+        //         }
+        //     }, {
+        //         id: 2,
+        //         title: 'track2',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             title: 'album'
+        //         }
+        //     }
+        //     ];
+        // } else {
+        //     data = [{
+        //         id: 3,
+        //         title: 'track12',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             title: 'album'
+        //         }
+        //     }, {
+        //         id: 4,
+        //         title: 'track22',
+        //         artist: {
+        //             name: 'artist'
+        //         },
+        //         album: {
+        //             title: 'album'
+        //         }
+        //     }
+        //     ];
+        // }
         $('#deezer-tracks-container').fadeIn(200);
         that.tracksView.clear();
         that.tracks.reset(data);
