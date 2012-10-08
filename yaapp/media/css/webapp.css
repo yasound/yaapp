@@ -2472,6 +2472,10 @@ ul#notifications {
     width:100%;
 }
 
+.programming #playlist-actions {
+    margin-bottom: 8px;
+}
+
 #deezer-content {
     clear:both;
 
@@ -2479,13 +2483,17 @@ ul#notifications {
 
 #deezer-playlists-container {
     float:left;
-    width:240px;
+    width:220px;
     margin-right:12px;
+}
+
+#deezer-playlists-container tr {
+    cursor: pointer;
 }
 
 #deezer-tracks-container {
     float:left;
-    width:400px;
+    width:418px;
 }
 
 #deezer-tracks-container .import-error {
@@ -2498,6 +2506,9 @@ ul#notifications {
     font-weight: bold;
 }
 
+#deezer-content #import-all {
+    margin-bottom:8px;
+}
 
 #radio-actions-container {
     width:213px;
@@ -4243,7 +4254,6 @@ a.yabutton-small {
 #programming-toolbar > .active >a {
     border-bottom-color: #DDD;
     background: url('../app/images/programming/programming-toolbar-bg.png') repeat-x;
-    padding-left:1px;
 }
 
 #programming-toolbar .active {
