@@ -312,8 +312,10 @@ Yasound.Data.Models.User = Backbone.Model.extend({
         data['agc'] = '';
         data['human_date'] = this.humanDate();
 
+        var addComma = false;
         if (this.get('age')) {
             data['agc'] = this.get('age') +  ' ' + gettext('years old');
+            addComma = true;
         }
         if (this.get('gender')) {
             var gender = this.get('gender');
@@ -323,10 +325,19 @@ Yasound.Data.Models.User = Backbone.Model.extend({
             } else if (gender == 'F') {
                 gender_display = gettext('female');
             }
-            data['agc'] = data['agc'] + ', ' + gender_display;
+            if (addComma) {
+                data['agc'] = data['agc'] + ', ' + gender_display;
+            } else {
+                data['agc'] = data['agc'] + gender_display;
+            }
+            addComma = true;
         }
         if (this.get('city')) {
-            data['agc'] = data['agc'] + ', ' + this.get('city');
+            if (addComma) {
+                data['agc'] = data['agc'] + ', ' + this.get('city');
+            } else {
+                data['agc'] = data['agc'] + this.get('city');
+            }
         }
         return data;
     },
