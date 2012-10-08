@@ -473,11 +473,15 @@ Yasound.Views.AddFromDesktop =  Backbone.View.extend({
         $('#file-upload', this.el).fileupload({
             dataType: 'json',
             add: function (e, data) {
-                $('#start-all-btn', that.el).show();
                 var view = new Yasound.Views.UploadCell({});
                 view.on('remove', that.onRemoveView);
                 $('#upload-table', that.el).append(view.render(data, uuid).el);
                 that.views.push(view);
+
+                $('#start-all-btn', that.el).hide();
+                $('#stop-all-btn', that.el).show();
+                $('#remove-all-btn', that.el).show();
+                view.start();
             },
             progressall: function (e, data) {
             },
