@@ -1738,10 +1738,16 @@ def new_current_song_handler(sender, radio, song_json, song, **kwargs):
     async_dispatch_user_started_listening_song.delay(radio, song)
 
 
+def song_metadata_updated(sender, instance, created, **kwargs):
+    if instance.yasound_song_id is not None:
+        from yaref.task import async_convert_song
+        async_convert_song.delay(instance.yasound_song_id, exclude_primary=True)
+
 def install_handlers():
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
     signals.post_delete.connect(next_song_deleted, sender=NextSong)
     yabase_signals.new_current_song.connect(new_current_song_handler)
+    signals.post_save.connect(song_metadata_updated, sender=SongMetadata)
 install_handlers()
 
 
