@@ -107,7 +107,7 @@ def action_watch_tutorial_completed(request, username):
 @csrf_exempt
 @check_api_key(methods=['POST'])
 def action_follow_yasound_on_twitter_completed(request, username):
-    async_check_follow_yasound_on_twitter.apply_async(args=[request.user], countdown=60*60)
+    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id], countdown=60*60)
     res = {'success': True}
     response = json.dumps(res)
     return HttpResponse(response)
@@ -127,5 +127,5 @@ def activate_promocode(request):
 
 @check_api_key(methods=['GET'])
 def action_follow_yasound_on_twitter(request):
-    async_check_follow_yasound_on_twitter.apply_async(args=[request.user], countdown=60*60)
+    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id], countdown=60*60)
     return HttpResponseRedirect('https://twitter.com/YasoundSAS')
