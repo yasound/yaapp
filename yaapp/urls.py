@@ -231,7 +231,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/invite_twitter_friends/$', 'account.views.invite_twitter_friends'),
 
     # web front end
-    url(r'^$', 'yaweb.views.stay_tuned', name='index'),
+#    url(r'^$', 'yaweb.views.stay_tuned', name='index'),
 
     # special case for iOS client
     url(r'^legal/eula.html$', 'yaweb.views.eula', name='eula'),
@@ -260,8 +260,8 @@ urlpatterns = patterns('',
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 
     url(r'', include('social_auth.urls')),
-    url(r'^login/$', 'account.views.login', name="login"),
-    url(r'^signup/$', 'account.views.signup', name="signup"),
+    #url(r'^login/$', 'account.views.login', name="login"),
+    #url(r'^signup/$', 'account.views.signup', name="signup"),
     url(r'^login-error/$', 'account.views.error', name='login-error'),
     url(r'^passreset/$','account.views.password_reset', name='lost_password'),
     url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','account.views.password_reset_confirm', name='reset_password_confirm'),

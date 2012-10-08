@@ -2,6 +2,7 @@
 {% load thumbnail %}
 {% load compressed %}
 {% load compress %}
+{% load app_url %}
 {% load straight_include %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasoundev: http://ogp.me/ns/fb/yasoundev#">
@@ -406,7 +407,7 @@ HTML, BODY { height: 100%; }
       <div class="navbar-inner">
         <div class="container">
       <div id="brand-logo" >
-				<a href="{% url webapp app_name %}" id='btn-webapp'>
+				<a href="{% app_url webapp app_name %}" id='btn-webapp'>
 					<img src="/media/app/images/yasound-logo.png" width="110" height="86" alt="Logo Yasound">
 				</a>
 			</div>
@@ -539,12 +540,12 @@ HTML, BODY { height: 100%; }
   <div class='container' id='teaser' style='display:none;'>
     <div class='row'>
       <div class='span4' id='teaser-listen'>
-          {% url webapp_top app_name as link %}
+          {% app_url webapp_top app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Listen</a> to the biggest radio database in the world</p>{% endblocktrans %}
           <img src='/media/app/images/teaser/listen.png' width='223' height='197'/>
       </div>
       <div class='span4' id='teaser-share'>
-          {% url webapp_friends app_name as link %}
+          {% app_url webapp_friends app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Share</a> your listening<br/>with your friends</p>{% endblocktrans %}
           <img src='/media/app/images/teaser/share.png' width='249' height='197'/>
       </div>
@@ -552,7 +553,7 @@ HTML, BODY { height: 100%; }
           <div id='close-btn-container'>
             <a id='close-btn' class="yabutton-small" href="#"><i class="icon-remove"></i> {% trans "Close" %}</a>
           </div>
-          {% url webapp_myradios app_name as link %}
+          {% app_url webapp_myradios app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Create</a> your radio <br/>easily</p>{% endblocktrans %}
           <img src='/media/app/images/teaser/create.png' width='196' height='197'/>
 

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load app_url %}
 
 <div class='row-fluid'>
     <div class='span12 settings-container'>
@@ -12,7 +13,7 @@
             <div>
 
                 <div id='my-accounts' style='display:none;'>
-                    <form id='my-accounts' enctype="multipart/form-data" class='' action="{% url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    <form id='my-accounts' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
                         {{ my_accounts_form }}
 
                         {% if display_associate_facebook %}
@@ -130,7 +131,7 @@
                     </div>
 
 
-                    <form id='my-informations-form' enctype="multipart/form-data" class='' action="{% url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    <form id='my-informations-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
                         {{ my_informations_form }}
 
                         <div>
@@ -141,7 +142,7 @@
                 </div>
 
                 <div id='my-notifications' style='display:none;'>
-                    <form id='my-notifications-form' enctype="multipart/form-data" class='' action="{% url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    <form id='my-notifications-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
                         {{ my_notifications_form }}
                         <div>
                             <input type='hidden' name='action' value='my_notifications'/>
