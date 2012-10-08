@@ -214,10 +214,10 @@ class Gift(models.Model):
 
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
-    duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_MONTH)
+    duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_DAY)
     max_per_user = models.IntegerField(_('max per user'), default=1)  # one-shot gift is max_per_user=1
 
-    delay = models.IntegerField(_('delay between 2 gifts'), blank=True, null=True)
+    delay = models.IntegerField(_('delay between 2 gifts (in days)'), blank=True, null=True)
 
     picture_todo = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
     picture_done = models.ImageField(upload_to=settings.PICTURE_FOLDER, null=True, blank=True)
