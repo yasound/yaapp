@@ -49,7 +49,7 @@ Yasound.Utils.getStickyView = function (key) {
 };
 
 Yasound.Utils.submitForm = function (options) {
-    var options = options || {};
+    options = options || {};
     if (!options.form) {
         return;
     }
@@ -98,7 +98,7 @@ Yasound.Utils.submitForm = function (options) {
 
 Yasound.Utils.disableFX = function() {
     Yasound.App.enableFX = false;
-}
+};
 
 Yasound.Utils.enableFX = function () {
     if (Yasound.App.isMobile) {
@@ -114,13 +114,35 @@ Yasound.Utils.enableFX = function () {
         }
     }
     Yasound.App.enableFX = true;
-}
+};
 
-Yasound.Utils.dialog = function (title, body) {
-    $('#modal-dialog h3').html(title);
-    $('#modal-dialog p').html(body);
-    $('#modal-dialog').modal('show');
-}
+Yasound.Utils.dialog = function (options, body) {
+    var d = {};
+    if ( (typeof options) === (typeof d) ) {
+        title = options.title || gettext('Information');
+        content = options.content || gettext('Information');
+        closeButton = options.closeButton || gettext('Close');
+        cancelButton = options.cancelButton || false;
+        onClose = options.onClose || function () {};
+        $('#modal-dialog h3').html(title);
+        $('#modal-dialog p').html(content);
+        $('#modal-dialog .btn-primary').html(closeButton);
+
+        if (cancelButton) {
+            $('#modal-dialog .btn-cancel').show();
+            $('#modal-dialog .btn-cancel').html(cancelButton);
+        } else {
+            $('#modal-dialog .btn-cancel').hide();
+        }
+        $('#modal-dialog').modal('show');
+        $('#modal-dialog .btn-primary').one('click', onClose);
+    } else {
+        $('#modal-dialog h3').html(options);
+        $('#modal-dialog p').html(body);
+        $('#modal-dialog .btn-cancel').hide();
+        $('#modal-dialog').modal('show');
+    }
+};
 
 Yasound.Utils.getUrlVars = function() {
     var vars = [], hash;
@@ -131,4 +153,4 @@ Yasound.Utils.getUrlVars = function() {
         vars[hash[0]] = hash[1];
     }
     return vars;
-}
+};
