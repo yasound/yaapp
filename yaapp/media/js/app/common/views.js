@@ -28,7 +28,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
     render: function () {
         var data = this.model.toJSON();
-        if (data.name.length > 18) {
+        if (data && data.name && data.name.length > 18) {
             data.name = data.name.substring(0,18) + "...";
         }
         if (Yasound.App.enableFX) {

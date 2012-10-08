@@ -72,7 +72,7 @@ Yasound.Views.RadioTopCell = Yasound.Views.RadioCell.extend({
     render: function (index) {
         var data = this.model.toJSON();
         data['top_rank'] = index;
-        if (data.name.length > 18) {
+        if (data && data.name && data.name.length > 18) {
             data.name = data.name.substring(0,18) + "...";
         }
         if (Yasound.App.enableFX) {
