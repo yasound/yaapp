@@ -5,7 +5,7 @@ Namespace('Yasound.Views.Deezer');
 Yasound.Views.Deezer.PlaylistCell = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        "click .details" : "onDetails"
+        "click" : "onDetails"
     },
 
     initialize: function () {
@@ -207,7 +207,6 @@ Yasound.Views.Deezer.Tracks = Backbone.View.extend({
 
 Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
     events: {
-        "click #import-btn": "onImport",
         "click #deezer-tracks-container #import-all": "onImportAll"
     },
 
@@ -245,11 +244,14 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
             collection: this.tracks
         }).setUUID(uuid);
 
+        this.onImport();
         return this;
     },
 
     onImport: function (e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         var that = this;
         DZ.login(function(response) {
             if (response.authResponse) {
@@ -259,15 +261,15 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
             }
         }, {perms: 'basic_access,email'});
 
-        // data = [{
-        //     id:1,
-        //     title: 'hello'
-        // }, {
-        //     id:2,
-        //     title: 'foo'
-        // }];
-        // that.playlistsView.clear();
-        // that.playlists.reset(data);
+        data = [{
+            id:1,
+            title: 'hello'
+        }, {
+            id:2,
+            title: 'foo'
+        }];
+        that.playlistsView.clear();
+        that.playlists.reset(data);
     },
 
     fetchPlaylists: function (e) {
@@ -291,53 +293,53 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
             }
         });
 
-        // if (id ==1) {
-        //     data = [{
-        //         id: 1,
-        //         title: 'Round & Round & Round',
-        //         artist: {
-        //             name: 'the cure'
-        //         },
-        //         album: {
-        //             title: 'wild mood swings'
-        //         }
-        //     }, {
-        //         id: 2,
-        //         title: 'track2',
-        //         artist: {
-        //             name: 'artist'
-        //         },
-        //         album: {
-        //             title: 'album'
-        //         }
-        //     }
-        //     ];
-        // } else {
-        //     data = [{
-        //         id: 3,
-        //         title: 'track12',
-        //         artist: {
-        //             name: 'artist'
-        //         },
-        //         album: {
-        //             title: 'album'
-        //         }
-        //     }, {
-        //         id: 4,
-        //         title: 'track22',
-        //         artist: {
-        //             name: 'artist'
-        //         },
-        //         album: {
-        //             title: 'album'
-        //         }
-        //     }
-        //     ];
+        if (id ==1) {
+            data = [{
+                id: 1,
+                title: 'Round & Round & Round & Round & Round & Round',
+                artist: {
+                    name: 'the cure and lots of friends, really a lot'
+                },
+                album: {
+                    title: 'wild mood swings'
+                }
+            }, {
+                id: 2,
+                title: 'track2',
+                artist: {
+                    name: 'artist'
+                },
+                album: {
+                    title: 'album'
+                }
+            }
+            ];
+        } else {
+            data = [{
+                id: 3,
+                title: 'track12',
+                artist: {
+                    name: 'artist'
+                },
+                album: {
+                    title: 'album'
+                }
+            }, {
+                id: 4,
+                title: 'track22',
+                artist: {
+                    name: 'artist'
+                },
+                album: {
+                    title: 'album'
+                }
+            }
+            ];
 
-        // }
-        // $('#deezer-tracks-container').fadeIn(200);
-        // that.tracksView.clear();
-        // that.tracks.reset(data);
+        }
+        $('#deezer-tracks-container').fadeIn(200);
+        that.tracksView.clear();
+        that.tracks.reset(data);
     },
 
     onImportAll: function (e) {
