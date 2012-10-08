@@ -25,7 +25,15 @@
         <p>{% trans "Invite your friends by mail" %}</p>
         <form>
         <div id='recipients-group'>
-            <button class='yabutton-small' id='google-contacts'>{% trans "gmail" %}</button>
+            <div class="btn-group">
+              <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                {% trans "Import" %}
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#" id='google-contacts'>{% trans "Google contacts" %}</a></li>
+              </ul>
+            </div>
             <input placeholder='{% trans "Recipient email" %}' id='recipients'>
         </div>
         <input placeholder='{% trans "Subject" %}' id='subject'>
