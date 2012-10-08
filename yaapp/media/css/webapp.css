@@ -3788,12 +3788,12 @@ ul .radio-with-stats-cells li {
 }
 
 #modal-invite-email #recipients-group input {
-    width:83%;
+    width:85%;
     margin-top:4px;
     float:right;
 }
 
-#modal-invite-email #recipients-group button {
+#modal-invite-email #recipients-group .btn-group {
     width:15%;
     float:left;
     margin-left:-6px;
