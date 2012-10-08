@@ -4,7 +4,7 @@ from yacore.api import api_response
 from yacore.decorators import check_api_key
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 import utils as yapremium_utils
 import logging
 from transmeta import get_real_fieldname
@@ -99,13 +99,18 @@ def action_watch_tutorial_completed(request, username):
     if request.user.username != user.username:
         return HttpResponse(status=401)
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
+    res = {'success': True}
+    response = json.dumps(res)
+    return HttpResponse(response)
 
 
 @csrf_exempt
 @check_api_key(methods=['POST'])
 def action_follow_yasound_on_twitter_completed(request, username):
-    async_check_follow_yasound_on_twitter.delay(request.user, countdown=60 * 60)
-
+    async_check_follow_yasound_on_twitter.apply_async(args=[request.user], countdown=60*60)
+    res = {'success': True}
+    response = json.dumps(res)
+    return HttpResponse(response)
 
 @csrf_exempt
 @check_api_key(methods=['POST'])
@@ -118,3 +123,9 @@ def activate_promocode(request):
     res = {'success': success}
     response = json.dumps(res)
     return HttpResponse(response)
+
+
+@check_api_key(methods=['GET'])
+def action_follow_yasound_on_twitter(request):
+    async_check_follow_yasound_on_twitter.apply_async(args=[request.user], countdown=60*60)
+    return HttpResponseRedirect('https://twitter.com/YasoundSAS')
