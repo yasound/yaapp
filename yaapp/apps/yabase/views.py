@@ -2269,7 +2269,7 @@ def user_favorites(request, username):
     """
     limit = int(request.REQUEST.get('limit', 25))
     offset = int(request.REQUEST.get('offset', 0))
-    qs = Radio.objects.filter(radiouser__user__username=username, radiouser__favorite=True)
+    qs = Radio.objects.filter(radiouser__user__username=username, radiouser__favorite=True, deleted=False)
     total_count = qs.count()
     qs = qs[offset:offset+limit]
     data = []
@@ -2286,7 +2286,7 @@ def user_radios(request, username):
     """
     limit = int(request.REQUEST.get('limit', 25))
     offset = int(request.REQUEST.get('offset', 0))
-    qs = Radio.objects.filter(creator__username=username)
+    qs = Radio.objects.filter(creator__username=username, deleted=False)
     total_count = qs.count()
     qs = qs[offset:offset+limit]
     data = []
