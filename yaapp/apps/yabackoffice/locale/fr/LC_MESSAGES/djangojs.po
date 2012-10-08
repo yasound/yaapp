@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-04 17:43+0200\n"
+"POT-Creation-Date: 2012-10-08 10:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:56
+#: js/app/app.js:60
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
@@ -30,94 +30,100 @@ msgstr "Données sauvegardées avec succès"
 msgid "Error while saving data"
 msgstr "Erreur lors de la sauvegarde des données"
 
-#: js/app/utils.js:70
-msgid "Sending data"
-msgstr "Transmission des données"
+#: js/app/utils.js:122
+#: js/app/utils.js.py:123
+msgid "Information"
+msgstr "Information"
 
-#: js/app/common/models.js:106
+#: js/app/utils.js:124
+#: js/backoffice/ux/LoggerWindow.js:14
+msgid "Close"
+msgstr "Fermer"
+
+#: js/app/common/models.js:105
 msgid "All genres"
 msgstr "Tous Styles"
 
-#: js/app/common/models.js:107
+#: js/app/common/models.js:106
 msgid "Classical"
 msgstr "Classique"
 
-#: js/app/common/models.js:108
+#: js/app/common/models.js:107
 msgid "Blues"
 msgstr "Blues"
 
-#: js/app/common/models.js:109
+#: js/app/common/models.js:108
 msgid "Alternative"
 msgstr "Alternative"
 
-#: js/app/common/models.js:110
+#: js/app/common/models.js:109
 msgid "Electro"
 msgstr "Electro"
 
-#: js/app/common/models.js:111
+#: js/app/common/models.js:110
 msgid "French Music"
 msgstr "Chanson Française"
 
-#: js/app/common/models.js:112
+#: js/app/common/models.js:111
 msgid "Jazz"
 msgstr "Jazz"
 
-#: js/app/common/models.js:113
+#: js/app/common/models.js:112
 msgid "Pop"
 msgstr "Pop"
 
-#: js/app/common/models.js:114
+#: js/app/common/models.js:113
 msgid "Reggae"
 msgstr "Reggae"
 
-#: js/app/common/models.js:115
+#: js/app/common/models.js:114
 msgid "Rock"
 msgstr "Rock"
 
-#: js/app/common/models.js:116
+#: js/app/common/models.js:115
 msgid "Metal"
 msgstr "Metal"
 
-#: js/app/common/models.js:117
+#: js/app/common/models.js:116
 msgid "Hip Hop"
 msgstr "Hip Hop"
 
-#: js/app/common/models.js:118
+#: js/app/common/models.js:117
 msgid "RnB / Soul"
 msgstr "RnB / Soul"
 
-#: js/app/common/models.js:119
+#: js/app/common/models.js:118
 msgid "World"
 msgstr "World"
 
-#: js/app/common/models.js:120
+#: js/app/common/models.js:119
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:211
-#: js/app/common/models.js.py:244
+#: js/app/common/models.js:209
+#: js/app/common/models.js.py:242
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:243
+#: js/app/common/models.js:241
 #: js/app/share/views.js:36
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:245
+#: js/app/common/models.js:243
 #: js/app/share/views.js:37
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:315
+#: js/app/common/models.js:313
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:321
+#: js/app/common/models.js:319
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:323
+#: js/app/common/models.js:321
 msgid "female"
 msgstr "femme"
 
@@ -126,12 +132,13 @@ msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
 #: js/app/common/views.js:512
-#: js/app/friends/views.js:217
-#: js/app/friends/views.js.py:223
-#: js/app/friends/views.js:237
-#: js/app/friends/views.js.py:243
-#: js/app/friends/views.js:262
-#: js/app/friends/views.js.py:268
+#: js/app/friends/views.js:272
+#: js/app/friends/views.js.py:319
+#: js/app/friends/views.js:325
+#: js/app/friends/views.js.py:339
+#: js/app/friends/views.js:345
+#: js/app/friends/views.js.py:364
+#: js/app/friends/views.js:370
 msgid "Error"
 msgstr "Erreur"
 
@@ -143,22 +150,22 @@ msgstr "Rien à partager"
 msgid "Show more"
 msgstr "Charger plus"
 
-#: js/app/common/views.js:809
-#: js/app/login/views.js:39
+#: js/app/common/views.js:812
+#: js/app/login/views.js:34
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:822
-#: js/app/login/views.js:52
+#: js/app/common/views.js:825
+#: js/app/login/views.js:47
 #: js/app/newRadio/views.js:77
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:867
+#: js/app/common/views.js:870
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:869
+#: js/app/common/views.js:872
 #: js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
@@ -168,42 +175,47 @@ msgid "Next favorites"
 msgstr "Favoris suivants"
 
 #: js/app/favorites/views.js:113
+#: js/app/home/views.js:47
 #: js/app/myRadios/views.js:248
-#: js/app/top/views.js:122
+#: js/app/top/views.js:120
 msgid "Next radios"
 msgstr "Radios suivantes"
 
-#: js/app/friends/views.js:158
+#: js/app/friends/views.js:256
 msgid "Join me on Yasound and let's share music"
 msgstr "Rejoins moi sur Yasound et partageons notre musique"
 
-#: js/app/friends/views.js:173
-msgid "Join me on #yasound https://yasound.com"
-msgstr "Rejoins moi sur #yasound https://yasound.com"
+#: js/app/friends/views.js:272
+msgid "You must be logged in"
+msgstr "Vous devez être authentifié"
 
-#: js/app/friends/views.js:188
-msgid "Join me on yasound: https://yasound.com"
-msgstr "Rejoins moi sur yasound : https://yasound.com"
+#: js/app/friends/views.js:275
+msgid "Join me on #yasound "
+msgstr "Rejoins moi sur #yasound"
 
-#: js/app/friends/views.js:189
+#: js/app/friends/views.js:290
+msgid "Join me on yasound: "
+msgstr "Rejoins moi sur yasound:"
+
+#: js/app/friends/views.js:291
 msgid "Join me on Yasound"
 msgstr "Rejoins moi sur Yasound"
 
-#: js/app/friends/views.js:219
-#: js/app/friends/views.js.py:239
-#: js/app/friends/views.js:264
+#: js/app/friends/views.js:321
+#: js/app/friends/views.js.py:341
+#: js/app/friends/views.js:366
 msgid "Thank you"
 msgstr "Merci"
 
-#: js/app/friends/views.js:219
-#: js/app/friends/views.js.py:239
-#: js/app/friends/views.js:264
+#: js/app/friends/views.js:321
+#: js/app/friends/views.js.py:341
+#: js/app/friends/views.js:366
 msgid "Your friends have been invited successfully."
 msgstr "Vos amis ont été invités avec succès."
 
-#: js/app/friends/views.js:223
-#: js/app/friends/views.js.py:243
-#: js/app/friends/views.js:268
+#: js/app/friends/views.js:325
+#: js/app/friends/views.js.py:345
+#: js/app/friends/views.js:370
 msgid "Error while communicating with Yasound, please retry late"
 msgstr "Erreur lors de la communication avec Yasound, veuillez réessayer "
 "ultérieurement."
@@ -277,7 +289,7 @@ msgstr "Notification marquée comme lue"
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/notifications/views.js:185
+#: js/app/notifications/views.js:192
 msgid "Next notifications"
 msgstr "Notifications suivantes"
 
@@ -289,11 +301,31 @@ msgstr "Suivre"
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: js/app/programming/views.js:568
+#: js/app/programming/views.js:474
+msgid "Warning"
+msgstr "Attention"
+
+#: js/app/programming/views.js:475
+msgid ""
+"You must own the copyright or have the necessary rights for any content you "
+"upload on Yasound"
+msgstr "Vous devez posséder tous les droits du contenu que vous uploadez sur Yasound"
+
+#: js/app/programming/views.js:479
+msgid "I agree"
+msgstr "Je suis d'accord"
+
+#: js/app/programming/views.js:480
+#: js/backoffice/Invitations/InvitationForm.js:84
+#: js/backoffice/Radio/RadioForm.js:79
+msgid "Cancel"
+msgstr "Annuler"
+
+#: js/app/programming/views.js:587
 msgid "iTunes import analyzis started"
 msgstr "L'analyse de l'import iTunes a démarré"
 
-#: js/app/programming/views.js:569
+#: js/app/programming/views.js:588
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
@@ -340,11 +372,11 @@ msgstr "J'écoute"
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/signup/views.js:38
+#: js/app/signup/views.js:33
 msgid "Registration error"
 msgstr "Erreur d'inscription"
 
-#: js/app/signup/views.js:54
+#: js/app/signup/views.js:49
 msgid "Error while creating account"
 msgstr "Erreur lors de création du compte"
 
@@ -658,11 +690,6 @@ msgstr "Sauver"
 #: js/backoffice/Upload/Upload.js:48
 msgid "Sending informations..."
 msgstr "Transmission des informations..."
-
-#: js/backoffice/Invitations/InvitationForm.js:84
-#: js/backoffice/Radio/RadioForm.js:79
-msgid "Cancel"
-msgstr "Annuler"
 
 #: js/backoffice/Invitations/InvitationGrid.js:40
 #: js/backoffice/Users/UserGrid.js:42
@@ -1238,8 +1265,4 @@ msgstr "Exporter les utilisateurs sélectionnés"
 #: js/backoffice/Users/Users.js:228
 msgid "Export all users"
 msgstr "Exporter tous les utilisateurs"
-
-#: js/backoffice/ux/LoggerWindow.js:14
-msgid "Close"
-msgstr "Fermer"
 
