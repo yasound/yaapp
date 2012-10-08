@@ -266,9 +266,16 @@ class Gift(models.Model):
         target = None
 
         if self.action_url_web:
-            action_url = reverse(self.action_url_web)
+            try:
+                action_url = reverse(self.action_url_web)
+            except:
+                action_url = self.action_url_web
+
         if self.completed_url:
-            completed_url = reverse(self.completed_url)
+            try:
+                completed_url = reverse(self.completed_url)
+            except:
+                completed_url = self.completed_url
         data_url = self.action_url_web_ajax
 
         data = {
