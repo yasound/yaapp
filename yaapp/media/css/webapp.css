@@ -4283,6 +4283,16 @@ a.yabutton-small {
 }
 
 
+#selected-genre {
+    height:48px;
+    margin-top:-27px;
+    background: #999;
+    color:#eee;
+    line-height:48px;
+    font-size:14px;
+    text-align: center;
+}
+
 
 /* Landscape phones and down */
 @media (max-width: 480px)  {
