@@ -104,13 +104,7 @@ class TestView(TestCase):
         res = self.client.get(reverse('yapremium.views.gifts'))
         self.assertEquals(res.status_code, 200)
         data = json.loads(res.content)
-        self.assertEquals(data.get('meta').get('total_count'), 1)
-
-        item = data.get('objects')[0]
-        self.assertFalse(item.get('enabled'))
-        self.assertEquals(item.get('count'), 1)
-        self.assertEquals(item.get('max'), 1)
-        self.assertEquals(item.get('last_achievement_date'), '2012-08-24T00:00:00')
+        self.assertEquals(data.get('meta').get('total_count'), 0)
 
         self.client.logout()
 
@@ -166,6 +160,7 @@ class TestGift(TestCase):
             service=service,
             action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT,
             duration=1,
+            duration_unit=yapremium_settings.DURATION_MONTH,
             max_per_user=1,
             enabled=True)
 
@@ -191,6 +186,7 @@ class TestGift(TestCase):
             service=service,
             action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT,
             duration=1,
+            duration_unit=yapremium_settings.DURATION_MONTH,
             max_per_user=1,
             enabled=True)
 
@@ -216,6 +212,7 @@ class TestGift(TestCase):
             service=service,
             action=yapremium_settings.ACTION_WATCH_TUTORIAL,
             duration=1,
+            duration_unit=yapremium_settings.DURATION_MONTH,
             max_per_user=1,
             enabled=True)
 
@@ -241,6 +238,7 @@ class TestGift(TestCase):
             service=service,
             action=yapremium_settings.ACTION_WATCH_TUTORIAL,
             duration=1,
+            duration_unit=yapremium_settings.DURATION_MONTH,
             max_per_user=0,
             delay=3,
             enabled=True)
