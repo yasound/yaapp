@@ -8,6 +8,9 @@ class Country(models.Model):
     code = models.CharField(_('code'), max_length=4, unique=True)
     name = models.CharField(_('name'), max_length=200, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         verbose_name = _('country')
 

@@ -1,5 +1,14 @@
 from django.utils.translation import ugettext_lazy as _
 
+# Radio origin
+RADIO_ORIGIN_YASOUND    = 0
+RADIO_ORIGIN_RADIOWAYS  = 1
+
+RADIO_ORIGIN_CHOICES = (
+    (RADIO_ORIGIN_YASOUND, _('Yasound')),
+    (RADIO_ORIGIN_RADIOWAYS, _('Radioways')),
+)
+
 # Radio styles
 RADIO_STYLE_ALL         = 'style_all'
 RADIO_STYLE_CLASSICAL   = 'style_classique'
