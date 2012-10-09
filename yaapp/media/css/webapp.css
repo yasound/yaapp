@@ -1717,8 +1717,13 @@ input::-webkit-input-placeholder {
 }
 
 #player #player-title span {
-    width:330px;
+    width: 328px;
+    display: inline-block;
+    overflow: hidden;
+    height: 20px;
+    text-overflow: ellipsis
 }
+
 #player #player-title span:hover {
     color: #D5D7D8;
 }
