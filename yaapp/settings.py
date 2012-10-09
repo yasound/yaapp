@@ -562,6 +562,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+FACEBOOK_PAGE_ID = '184406511594079'
 if PRODUCTION_MODE:
     FACEBOOK_APP_ID              = '296167703762159'
     FACEBOOK_API_SECRET          = 'af4d20f383ed42cabfb4bf4b960bb03f'
