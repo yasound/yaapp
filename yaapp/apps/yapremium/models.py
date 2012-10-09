@@ -262,7 +262,7 @@ class Gift(models.Model):
 
         completed_url = None
         action_url = None
-        data_url = None
+        ajax_url = None
         target = None
 
         if self.action_url_web:
@@ -276,7 +276,7 @@ class Gift(models.Model):
                 completed_url = reverse(self.completed_url)
             except:
                 completed_url = self.completed_url
-        data_url = self.action_url_web_ajax
+        ajax_url = self.action_url_web_ajax
 
         data = {
             'id': self.id,
@@ -291,7 +291,7 @@ class Gift(models.Model):
             'action_url_ios': self.action_url_ios,
             'completed_url': completed_url,
             'action_url': action_url,
-            'data_url': data_url,
+            'ajax_url': ajax_url,
             'target': target
         }
         return data

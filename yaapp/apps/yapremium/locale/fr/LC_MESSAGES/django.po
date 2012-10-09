@@ -1,0 +1,287 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-09 14:07+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: export.py:8
+msgid "Promocode"
+msgstr ""
+
+#: export.py:20
+msgid "Code"
+msgstr ""
+
+#: models.py:27
+#: models.py:68
+#: models.py:103
+#: models.py:137
+#: models.py:200
+#: models.py:342
+#: models.py:391
+msgid "created"
+msgstr ""
+
+#: models.py:28
+#: models.py:69
+#: models.py:104
+#: models.py:138
+#: models.py:201
+#: models.py:343
+#: models.py:392
+msgid "updated"
+msgstr ""
+
+#: models.py:29
+#: models.py:32
+#: models.py:140
+#: models.py:215
+#: models.py:395
+msgid "service"
+msgstr ""
+
+#: models.py:70
+#: models.py:204
+msgid "name"
+msgstr ""
+
+#: models.py:71
+#: models.py:205
+msgid "sku"
+msgstr ""
+
+#: models.py:72
+#: models.py:206
+msgid "description"
+msgstr ""
+
+#: models.py:73
+#: models.py:216
+#: models.py:396
+msgid "duration"
+msgstr ""
+
+#: models.py:74
+#: models.py:217
+#: models.py:397
+msgid "duration unit"
+msgstr ""
+
+#: models.py:75
+#: models.py:202
+#: models.py:394
+msgid "enabled"
+msgstr ""
+
+#: models.py:76
+msgid "order"
+msgstr ""
+
+#: models.py:77
+msgid "highlighted"
+msgstr ""
+
+#: models.py:78
+msgid "services"
+msgstr ""
+
+#: models.py:95
+#: models.py:106
+msgid "subscription"
+msgstr ""
+
+#: models.py:105
+#: models.py:139
+#: models.py:344
+#: models.py:408
+msgid "user"
+msgstr ""
+
+#: models.py:107
+#: models.py:142
+msgid "expiration date"
+msgstr ""
+
+#: models.py:110
+msgid "user subscription"
+msgstr ""
+
+#: models.py:111
+msgid "user subscriptions"
+msgstr ""
+
+#: models.py:145
+msgid "user service"
+msgstr ""
+
+#: models.py:146
+msgid "user services"
+msgstr ""
+
+#: models.py:207
+msgid "authentication needed"
+msgstr ""
+
+#: models.py:209
+msgid "action"
+msgstr ""
+
+#: models.py:210
+msgid "iOS action url"
+msgstr ""
+
+#: models.py:211
+msgid "web action url"
+msgstr ""
+
+#: models.py:212
+msgid "web action ajax url"
+msgstr ""
+
+#: models.py:213
+msgid "completed url"
+msgstr ""
+
+#: models.py:218
+msgid "max per user"
+msgstr ""
+
+#: models.py:220
+msgid "delay between 2 gifts (in days)"
+msgstr ""
+
+#: models.py:324
+#: models.py:345
+msgid "gift"
+msgstr ""
+
+#: models.py:346
+msgid "achievement date"
+msgstr ""
+
+#: models.py:352
+msgid "achievement"
+msgstr ""
+
+#: models.py:393
+msgid "code"
+msgstr ""
+
+#: models.py:398
+msgid "unique"
+msgstr ""
+
+#: models.py:404
+msgid "promocode"
+msgstr ""
+
+#: models.py:409
+msgid "promo code"
+msgstr ""
+
+#: models.py:410
+msgid "usage date"
+msgstr ""
+
+#: models.py:416
+msgid "user promocode"
+msgstr ""
+
+#: models.py:417
+msgid "user promocodes"
+msgstr ""
+
+#: settings.py:18
+msgid "Create account"
+msgstr ""
+
+#: settings.py:19
+msgid "Watch tutorial"
+msgstr ""
+
+#: settings.py:20
+msgid "Add facebook account"
+msgstr ""
+
+#: settings.py:21
+msgid "Add twitter account"
+msgstr ""
+
+#: settings.py:22
+msgid "Invite friends"
+msgstr ""
+
+#: settings.py:23
+msgid "Add email account"
+msgstr ""
+
+#: settings.py:24
+msgid "Follow Yasound on Twitter"
+msgstr ""
+
+#: settings.py:25
+msgid "Register newsletter"
+msgstr ""
+
+#: settings.py:26
+msgid "Create radio"
+msgstr ""
+
+#: settings.py:27
+msgid "Update programming"
+msgstr ""
+
+#: settings.py:28
+msgid "Fill in profile"
+msgstr ""
+
+#: settings.py:29
+msgid "View notifications"
+msgstr ""
+
+#: settings.py:30
+msgid "View stats"
+msgstr ""
+
+#: settings.py:36
+msgid "HD"
+msgstr ""
+
+#: settings.py:37
+msgid "Selection"
+msgstr ""
+
+#: settings.py:45
+msgid "Day"
+msgstr ""
+
+#: settings.py:46
+msgid "Week"
+msgstr ""
+
+#: settings.py:47
+msgid "Month"
+msgstr ""
+
+#: views.py:110
+msgid "your account is not associated with twitter."
+msgstr "votre compte n'est pas associé avec twitter."
+
+#: views.py:120
+msgid "Thank you, your gift will be available soon."
+msgstr "Merci, votre cadeau sera bientôt disponible."
+
