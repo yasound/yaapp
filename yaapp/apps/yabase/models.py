@@ -33,6 +33,7 @@ import yasearch.search as yasearch_search
 import yasearch.utils as yasearch_utils
 from django.db.models import F
 from django.template.defaultfilters import striptags
+from yageoperm.models import Country
 
 
 logger = logging.getLogger("yaapp.yabase")
@@ -541,10 +542,8 @@ class Radio(models.Model):
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
-
     ready = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
-
     name = models.CharField(_('name'), max_length=255)
     picture = models.ImageField(_('picture'), upload_to=yaapp_settings.RADIO_PICTURE_FOLDER, null=True, blank=True)
     url = models.URLField(_('url'), null=True, blank=True)
@@ -553,22 +552,17 @@ class Radio(models.Model):
     genre = models.CharField(_('genre'), max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
     theme = models.CharField(_('theme'), max_length=255, blank=True)
     tags = TaggableManager(_('tags'), blank=True)
-
     anonymous_audience = models.IntegerField(default=0)
     audience_peak = models.FloatField(default=0, null=True, blank=True)
     current_audience_peak = models.FloatField(default=0, null=True, blank=True) # audience peak since last RadioListeningStat
     overall_listening_time = models.FloatField(default=0, null=True, blank=True)
     current_connections = models.IntegerField(default=0) # number of connections since last RadioListeningStat
-
     favorites = models.IntegerField(default=0)
     leaderboard_favorites = models.IntegerField(default=0)
     leaderboard_rank = models.IntegerField(null=True, blank=True)
-
     users = models.ManyToManyField(User, through='RadioUser', blank=True, null=True)
-
     next_songs = models.ManyToManyField(SongInstance, through='NextSong')
     computing_next_songs = models.BooleanField(default=False)
-
     current_song = models.ForeignKey(SongInstance,
                                      null=True,
                                      blank=True,
@@ -577,10 +571,13 @@ class Radio(models.Model):
                                      on_delete=models.SET_NULL)
 
     current_song_play_date = models.DateTimeField(null=True, blank=True)
-
     new_wall_messages_count = models.IntegerField(default=0)  # number of new messages since last creator visit
-
     popularity_score = models.IntegerField(default=0)  # updated by yametrics.RadioPopularityManager.compute_progression
+    origin = models.SmallIntegerField(_('radio origin'), choices=yabase_settings.RADIO_ORIGIN_CHOICES, default=yabase_settings.RADIO_ORIGIN_YASOUND)
+    country = models.ForeignKey(Country, verbose_name=_('country'), null=True, blank=True)
+    city = models.CharField(_('city'), max_length=128, blank=True)
+    latitude = models.FloatField(null=True, blank=True) # degrees
+    longitude = models.FloatField(null=True, blank=True) # degrees
 
     def __unicode__(self):
         if self.name:
