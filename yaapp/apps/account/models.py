@@ -1005,8 +1005,11 @@ class UserProfile(models.Model):
 
     def radio_is_ready(self, radio):
         for f in self.friends.all():
-            friend_profile = f.userprofile
-            friend_profile.my_friend_created_radio(self, radio)
+            try:
+                friend_profile = f.userprofile
+                friend_profile.my_friend_created_radio(self, radio)
+            except:
+                pass
 
     def logged(self, request=None):
         for f in self.friends.all():

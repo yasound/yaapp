@@ -1,15 +1,18 @@
 {% load i18n %}
 <div class='gift-container'>
+    <%#enabled %>
+    <a href='<% action_url %>' <%#data_url%>data-url='<%data_url%>'<%/data_url%> <%#target%>target='<%target%>'<%/target%>>
+    <%/enabled %>
     <img src='<%picture_url%>'/>
 
     <%^enabled%>
     <div class='done'>{% trans "action done" %}</div>
     <%/enabled%>
 
-    <%#enabled %>
-    <div class='action'><%#action_url%><a class='yabutton-small' href='<% action_url %>' <%#data_url%>data-url='<%data_url%>'<%/data_url%> <%#target%>target='<%target%>'<%/target%>>{% trans "Perform the action" %}</a><%/action_url%></div>
-
-    <%/enabled %>
-    <h4><% name %> (<% count %>/<% max %>)</h4>
+    <h4><% name %> (<% count %><%#max%>/<% max %><%/max%>)</h4>
     <p><% description %></p>
+
+    <%#enabled %>
+    </a>
+    <%/enabled %>
 </div>
