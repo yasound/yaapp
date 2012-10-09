@@ -115,7 +115,7 @@ def action_follow_yasound_on_twitter_completed(request):
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
     api.create_friendship(screen_name='YasoundSAS')
-    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id], countdown=60*60)
+    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id])
 
     res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
