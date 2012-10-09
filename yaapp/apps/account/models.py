@@ -639,6 +639,16 @@ class UserProfile(models.Model):
                 return True
         return False
 
+    @property
+    def connected(self):
+        MAX_DELAY_BETWEEN_AUTHENTICATIONS = 10 * 60; # 10 minutes
+        alive = False
+        if self.last_authentication_date:
+            since_last_authentication = datetime.datetime.now() - self.last_authentication_date
+            total_seconds = since_last_authentication.days * 86400 + since_last_authentication.seconds
+            alive = total_seconds <= MAX_DELAY_BETWEEN_AUTHENTICATIONS
+        return alive
+
     def as_dict(self, request_user=None, include_own_current_radios=False, include_all_radios=False):
         data = {
                 'id': self.user.id,
@@ -649,6 +659,7 @@ class UserProfile(models.Model):
                 'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
                 'friends_count': self.friends_count,
                 'followers_count': self.followers_count,
+                'connected': self.connected
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
@@ -966,12 +977,7 @@ class UserProfile(models.Model):
         self.save()
 
     def check_live_status(self):
-        MAX_DELAY_BETWEEN_AUTHENTICATIONS = 10 * 60; # 10 minutes
-        alive = False
-        if self.last_authentication_date:
-            since_last_authentication = datetime.datetime.now() - self.last_authentication_date
-            total_seconds = since_last_authentication.days * 86400 + since_last_authentication.seconds
-            alive = total_seconds <= MAX_DELAY_BETWEEN_AUTHENTICATIONS
+        alive = self.connected
         if not alive:
             RadioUser.objects.filter(user=self.user, connected=True).update(connected=False)
             RadioUser.objects.filter(user=self.user, listening=True).update(listening=False)
