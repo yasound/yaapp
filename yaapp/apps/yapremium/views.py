@@ -74,20 +74,18 @@ def services(request, subscription_sku=None):
 @check_api_key(methods=['GET'], login_required=False)
 def gifts(request, subscription_sku=None):
     if request.method == 'GET':
-        limit = int(request.REQUEST.get('limit', 25))
-        offset = int(request.REQUEST.get('offset', 0))
-
         qs = Gift.objects.filter(enabled=True)
         if request.user.is_anonymous():
             qs = qs.filter(authentication_needed=False)
         else:
             qs = qs.filter(authentication_needed=True)
-        total_count = qs.count()
-        qs = qs[offset:offset + limit]
         data = []
         for gift in qs:
-            data.append(gift.as_dict(request.user))
-        response = api_response(data, total_count, limit=limit, offset=offset)
+            gift_dict = gift.as_dict(request.user)
+            if gift_dict.get('enabled'):
+                data.append(gift_dict)
+
+        response = api_response(data, len(data))
         return response
     raise Http404
 
