@@ -129,7 +129,7 @@ def action_like_yasound_on_facebook_completed(request):
         res = {'success': False, 'message': unicode(_('your account is not associated with facebook.'))}
         response = json.dumps(res)
         return HttpResponse(response)
-    async_check_like_yasound_on_facebook.apply_async(args=[request.user.id])
+    async_check_like_yasound_on_facebook.apply_async(args=[request.user.id], countdown=60*3)
     res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)

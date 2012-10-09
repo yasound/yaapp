@@ -37,7 +37,6 @@ Yasound.Views.Gift = Backbone.View.extend({
             } else {
                 var completed_url = link.data('completed-url');
                 if (completed_url) {
-                    e.preventDefault();
 
                     $('img', that.el).toggle();
                     $.ajax({
@@ -58,6 +57,13 @@ Yasound.Views.Gift = Backbone.View.extend({
                             $('img', that.el).toggle();
                         }
                     });
+                }
+
+                var href = link.attr('href');
+                if (href && href != '' && href !='#') {
+                    return;
+                } else {
+                    e.preventDefault();
                 }
             }
         });
