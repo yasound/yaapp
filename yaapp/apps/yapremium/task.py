@@ -72,7 +72,7 @@ def async_check_like_yasound_on_facebook(user_id):
     path = 'me/likes/%s' % (settings.FACEBOOK_PAGE_ID)
     graph = GraphAPI(facebook_token)
     try:
-        res = graph.post(path=path)
+        res = graph.get(path=path)
         logger.debug(res)
         if len(res.get('data', [])) != 0:
             async_win_gift(user_id, yapremium_settings.ACTION_LIKE_YASOUND_FACEBOOK)
