@@ -9,7 +9,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 import utils as yapremium_utils
 import logging
 from transmeta import get_real_fieldname
-from task import async_win_gift, async_check_follow_yasound_on_twitter
+from task import async_win_gift, async_check_follow_yasound_on_twitter, async_check_like_yasound_on_facebook
 import settings as yapremium_settings
 import json
 import tweepy
@@ -117,6 +117,19 @@ def action_follow_yasound_on_twitter_completed(request):
     api.create_friendship(screen_name='YasoundSAS')
     async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id])
 
+    res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
+    response = json.dumps(res)
+    return HttpResponse(response)
+
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def action_like_yasound_on_facebook_completed(request):
+    profile = request.user.get_profile()
+    if not profile.facebook_enabled:
+        res = {'success': False, 'message': unicode(_('your account is not associated with facebook.'))}
+        response = json.dumps(res)
+        return HttpResponse(response)
+    async_check_like_yasound_on_facebook.apply_async(args=[request.user.id])
     res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)

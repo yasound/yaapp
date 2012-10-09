@@ -13,6 +13,7 @@ ACTION_UPDATE_PROGRAMMING       = 9
 ACTION_FILL_IN_PROFILE          = 10
 ACTION_VIEW_NOTIFICATIONS       = 11
 ACTION_VIEW_STATS               = 12
+ACTION_LIKE_YASOUND_FACEBOOK    = 13
 
 ACTION_CHOICES = (
     (ACTION_CREATE_ACCOUNT,         _('Create account')),
@@ -28,6 +29,7 @@ ACTION_CHOICES = (
     (ACTION_FILL_IN_PROFILE,        _('Fill in profile')),
     (ACTION_VIEW_NOTIFICATIONS,     _('View notifications')),
     (ACTION_VIEW_STATS,             _('View stats')),
+    (ACTION_LIKE_YASOUND_FACEBOOK,  _('Like Yasound on Facebook')),
 )
 
 SERVICE_HD = 0

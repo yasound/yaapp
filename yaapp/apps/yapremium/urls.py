@@ -7,5 +7,6 @@ urlpatterns = patterns('yapremium.views',
     url(r'^gifts/$', 'gifts'),
     url(r'^actions_completed/watch_tutorial/$', 'action_watch_tutorial_completed'),
     url(r'^actions_completed/follow_yasound_on_twitter/$', 'action_follow_yasound_on_twitter_completed'),
+    url(r'^actions_completed/like_yasound_on_facebook/$', 'action_like_yasound_on_facebook_completed'),
     url(r'^activate_promocode/$', 'activate_promocode'),
 )

@@ -6,7 +6,9 @@ import settings as yapremium_settings
 from django.conf import settings
 import logging
 import tweepy
+from facepy import GraphAPI
 logger = logging.getLogger("yaapp.yapremium")
+
 
 @task
 def check_expiration_date():
@@ -40,6 +42,7 @@ def async_check_for_invitation(type, uid):
         logger.info('and the winner is %s' % (user_id))
         async_win_gift.delay(user_id, yapremium_settings.ACTION_INVITE_FRIENDS)
 
+
 @task
 def async_check_follow_yasound_on_twitter(user_id):
     profile = UserProfile.objects.get(user__id=user_id)
@@ -56,3 +59,23 @@ def async_check_follow_yasound_on_twitter(user_id):
             async_win_gift(user_id, yapremium_settings.ACTION_FOLLOW_YASOUND_TWITTER)
 
 
+@task
+def async_check_like_yasound_on_facebook(user_id):
+    profile = UserProfile.objects.get(user__id=user_id)
+    if not profile.facebook_enabled:
+        return
+
+    facebook_token = profile.facebook_token
+    if facebook_token is None:
+        return
+
+    path = 'me/likes/%s' % (settings.FACEBOOK_PAGE_ID)
+    graph = GraphAPI(facebook_token)
+    try:
+        res = graph.post(path=path)
+        logger.debug(res)
+        if len(res.get('data', [])) != 0:
+            async_win_gift(user_id, yapremium_settings.ACTION_LIKE_YASOUND_FACEBOOK)
+    except GraphAPI.FacebookError as e:
+        logger.info(e)
+    logger.debug('done')
