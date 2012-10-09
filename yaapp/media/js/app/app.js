@@ -255,6 +255,12 @@ $(document).ready(function () {
 
         // this function must be called between every routes
         clearView: function (selectedMenu) {
+            var showSelectedGenre = false;
+            if (selectedMenu === 'favorites' ||
+                selectedMenu === 'selection' ||
+                selectedMenu === 'top') {
+                showSelectedGenre = true;
+            }
 
             if (this.alreadyLoaded) {
                 g_bootstrapped_data = undefined;
@@ -305,6 +311,8 @@ $(document).ready(function () {
                 Yasound.App.showWelcomePopup = false;
             }
 
+            this.commonContext.selectedGenreView.setVisible(showSelectedGenre);
+
         },
 
         pushManager: new Yasound.App.PushManager({
@@ -336,6 +344,8 @@ $(document).ready(function () {
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio
                 }).render();
+
+                this.commonContext.selectedGenreView = new Yasound.Views.SelectedGenre({}).render();
             }
             this.commonContext.subMenuView.selectMenu(selectedMenu);
         },

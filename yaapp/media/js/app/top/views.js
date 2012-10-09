@@ -44,7 +44,7 @@ Yasound.Views.TopResults = Backbone.View.extend({
             view.close();
         });
         this.views = [];
-        ths.index = 1;
+        this.index = 1;
     },
 
     addOne: function(radio) {

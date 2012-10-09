@@ -952,8 +952,10 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         });
     },
     genre: function(e) {
-        $.publish('/submenu/genre', $(e.target).val());
+        var genre = $(e.target).val();
+        $.publish('/submenu/genre', genre);
     },
+
     currentGenre: function() {
         return $('#id_genre').val();
     },
@@ -1000,5 +1002,47 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             }
         }
     }
+
+});
+
+Yasound.Views.SelectedGenre = Backbone.View.extend({
+    el: '#selected-genre',
+    events: {},
+    initialize: function() {
+        _.bindAll(this, 'render', 'onGenreChanged');
+        $.subscribe('/submenu/genre', this.onGenreChanged);
+        this.visible = false;
+    },
+
+    onClose: function() {
+        $.unsubscribe('/submenu/genre', this.onGenreChanged);
+    },
+
+    render: function () {
+
+        var genre = $('#id_genre option:selected').val();
+        if (genre === '' || !this.visible) {
+            this.$el.fadeOut(200);
+        } else {
+            var genreDisplay = $('#id_genre option:selected').text();
+            $('span', this.el).html(genreDisplay);
+            this.$el.fadeIn(200);
+        }
+        return this;
+
+    },
+
+    setVisible: function (visible) {
+        this.visible = visible;
+        this.render();
+    },
+
+    onGenreChanged: function (e, genre) {
+        if (!this.visible) {
+            this.$el.hide();
+            return;
+        }
+        this.render();
+    },
 
 });
