@@ -333,7 +333,8 @@ body {
     border-radius:5px;
     box-shadow:0px 0px 2px grey inset;
     padding:12px;
-    overflow:scroll;
+    overflow-x:none;
+    overflow-y:scroll;
     max-height:450px;
 }
 
@@ -3848,6 +3849,9 @@ ul#gifts {
     margin-left: 0;
 }
 
+.gift {
+    border-radius: 4px;
+}
 
 .gift-container {
     position:relative;
@@ -3856,7 +3860,7 @@ ul#gifts {
     box-shadow: 0px 1px 1px white inset;
     padding-left: 12px;
     padding-top:12px;
-
+    border-radius: 4px;
 }
 
 .gift-odd {
@@ -3882,6 +3886,11 @@ ul#gifts {
 .gift-container div.action {
     float:right;
     margin-right:12px;
+}
+
+.gift-container a {
+    text-decoration: none;
+    color: #999;
 }
 
 /**

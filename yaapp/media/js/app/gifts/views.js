@@ -25,12 +25,14 @@ Yasound.Views.Gift = Backbone.View.extend({
             $(this.el).html(ich.giftTemplate(data));
         }
 
+        var that = this;
         $('a', this.el).on('click', function(e) {
-            var url = $(e.target).data('url');
+            var url = $('a', that.el).data('url');
             if (!url) {
                 return;
             }
             e.preventDefault();
+
             Yasound.App.Router.navigate(url, {
                 trigger: true
             });
@@ -140,7 +142,6 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
             });
         }
         this.giftsView.clear();
-
         this.query = this.gifts.fetch();
         return this;
     }
