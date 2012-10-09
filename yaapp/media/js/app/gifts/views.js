@@ -26,17 +26,41 @@ Yasound.Views.Gift = Backbone.View.extend({
         }
 
         var that = this;
-        $('a', this.el).on('click', function(e) {
-            var url = $('a', that.el).data('url');
-            if (!url) {
-                return;
-            }
-            e.preventDefault();
+        var link = $('a', this.el);
+        link.on('click', function(e) {
+            var url = link.data('ajax-url');
+            if (url) {
+                e.preventDefault();
+                Yasound.App.Router.navigate(url, {
+                    trigger: true
+                });
+            } else {
+                var completed_url = link.data('completed-url');
+                if (completed_url) {
+                    e.preventDefault();
 
-            Yasound.App.Router.navigate(url, {
-                trigger: true
-            });
-        })
+                    $('img', that.el).toggle();
+                    $.ajax({
+                        url: completed_url,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function(data) {
+                            if (!(data.success)) {
+                                Yasound.Utils.dialog(gettext('Error'), data.message);
+                            } else {
+                                Yasound.Utils.dialog(gettext('Thank you'), data.message);
+                            }
+                            $('img', that.el).toggle();
+                        },
+                        failure: function() {
+                            Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
+                            $('img', that.el).toggle();
+                        }
+                    });
+                }
+            }
+        });
         return this;
     }
 });

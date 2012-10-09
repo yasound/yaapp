@@ -1,4 +1,5 @@
 from models import Subscription, UserSubscription, UserService, Gift, Promocode
+from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 from yacore.api import api_response
 from yacore.decorators import check_api_key
@@ -11,6 +12,8 @@ from transmeta import get_real_fieldname
 from task import async_win_gift, async_check_follow_yasound_on_twitter
 import settings as yapremium_settings
 import json
+import tweepy
+from django.conf import settings
 
 logger = logging.getLogger("yaapp.yapremium")
 
@@ -92,10 +95,7 @@ def gifts(request, subscription_sku=None):
 
 @csrf_exempt
 @check_api_key(methods=['POST'])
-def action_watch_tutorial_completed(request, username):
-    user = get_object_or_404(User, username=username)
-    if request.user.username != user.username:
-        return HttpResponse(status=401)
+def action_watch_tutorial_completed(request):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
     res = {'success': True}
     response = json.dumps(res)
@@ -104,9 +104,20 @@ def action_watch_tutorial_completed(request, username):
 
 @csrf_exempt
 @check_api_key(methods=['POST'])
-def action_follow_yasound_on_twitter_completed(request, username):
+def action_follow_yasound_on_twitter_completed(request):
+    profile = request.user.get_profile()
+    if not profile.twitter_enabled:
+        res = {'success': False, 'message': unicode(_('your account is not associated with twitter.'))}
+        response = json.dumps(res)
+        return HttpResponse(response)
+
+    auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+    auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
+    api = tweepy.API(auth)
+    api.create_friendship(screen_name='YasoundSAS')
     async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id], countdown=60*60)
-    res = {'success': True}
+
+    res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)
 
@@ -122,8 +133,3 @@ def activate_promocode(request):
     response = json.dumps(res)
     return HttpResponse(response)
 
-
-@check_api_key(methods=['GET'])
-def action_follow_yasound_on_twitter(request):
-    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id], countdown=60*60)
-    return HttpResponseRedirect('https://twitter.com/YasoundSAS')

@@ -1,9 +1,14 @@
 {% load i18n %}
-<div class='gift-container'>
     <%#enabled %>
-    <a href='<% action_url %>' <%#data_url%>data-url='<%data_url%>'<%/data_url%> <%#target%>target='<%target%>'<%/target%>>
+    <a href='<% action_url %>'
+        <%#ajax_url%>data-ajax-url='<%ajax_url%>'<%/ajax_url%>
+        <%#target%>target='<%target%>'<%/target%>
+        <%#completed_url%>data-completed-url='<%completed_url%>'<%/completed_url%>
+    >
+<div class='gift-container'>
     <%/enabled %>
     <img src='<%picture_url%>'/>
+    <img class='loading-mask' src='/media/images/loading.gif' style='display:none;'/>
 
     <%^enabled%>
     <div class='done'>{% trans "action done" %}</div>
@@ -12,7 +17,8 @@
     <h4><% name %> (<% count %><%#max%>/<% max %><%/max%>)</h4>
     <p><% description %></p>
 
+</div>
+
     <%#enabled %>
     </a>
     <%/enabled %>
-</div>
