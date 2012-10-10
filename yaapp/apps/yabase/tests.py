@@ -1411,6 +1411,10 @@ class TestWallPost(TestCase):
             self.client.post(reverse('yabase.views.like_song', args=[song.id]))
             self.assertEquals(WallEvent.objects.filter(type=yabase_settings.EVENT_LIKE).count(), 3)
 
+            likes = WallEvent.objects.likes_for_user(self.user)
+            self.assertEquals(likes.count(), 3)
+
+
     def test_post_message(self):
         redis = Mock(name='redis')
         redis.publish = Mock()
