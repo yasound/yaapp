@@ -709,7 +709,7 @@ def keyfigures(request, template_name='yabackoffice/keyfigures.html'):
     ready_radio_ratio = '%.2f' %  ( 100 * float(ready_radio_count) / float(total_radio) )
 
     try:
-        r = requests.get('http://yas-web-01.ig-1.net:8000/ping')
+        r = requests.get('http://yas-web-08.ig-1.net:8000/ping')
         streamer_status = r.text
     except:
         streamer_status = _('Unavailable')
