@@ -41,7 +41,7 @@ admin.site.register(Gift, GiftAdmin)
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'gift', 'achievement_date',)
     search_fields = ( 'user__username', 'user__email', 'user__user_profile__name')
-    list_filter = ('gift', 'user')
+    list_filter = ('gift',)
 admin.site.register(Achievement, AchievementAdmin)
 
 class PromocodeAdmin(admin.ModelAdmin):
