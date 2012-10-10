@@ -400,7 +400,7 @@ def password_reset_confirm(request, uidb36=None, token=None,
 def associate(request):
     user = request.user
     profile = user.get_profile()
-
+    logger.info('associate called!')
     account_type = request.REQUEST.get('account_type')
     if not account_type:
         return HttpBadRequest(_('Account type is missing from request'))
@@ -433,6 +433,7 @@ def associate(request):
 def dissociate(request):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
+    logger.info('dissociate called!')
 
     cookies = request.COOKIES
     if account_settings.APP_KEY_COOKIE_NAME not in cookies:
