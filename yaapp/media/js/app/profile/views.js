@@ -205,10 +205,12 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         'click #likes-btn': 'displayLikes'
     },
     initialize: function () {
-        _.bindAll(this, 'render', 'modelLoaded');
+        _.bindAll(this, 'render');
+        this.model.bind('change', this.render, this);
     },
 
     onClose: function () {
+        this.model.unbind('change', this.render, this);
     },
 
     reset: function () {
@@ -216,12 +218,13 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
 
     render: function () {
         this.reset();
-        $(this.el).html(ich.profilePageTemplate());
+        var data = this.model.toJSON();
+        $(this.el).html(ich.profilePageTemplate(data));
 
         this.userView = new Yasound.Views.User({
             model: this.model,
             el: $('#user-profile', this.el)
-        });
+        }).render();
 
         this.currentRadioView = new Yasound.Views.RadioCell({
             model: this.model.currentRadio,
@@ -270,22 +273,13 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             el: $('#likes', this.el)
         });
 
-        this.model.fetch({
-            success: this.modelLoaded
-        });
-        return this;
-    },
-
-    modelLoaded: function(model, response) {
-        $('.friends-count', this.el).html(this.model.get('friends_count'));
-        $('.followers-count', this.el).html(this.model.get('followers_count'));
-
-        var username = model.get('username');
+        var username = this.model.get('username');
         this.radios.setUsername(username).fetch();
         this.favorites.setUsername(username).fetch();
         this.friends.setUsername(username).fetch();
         this.followers.setUsername(username).fetch();
         this.likes.setUsername(username).fetch();
+        return this;
     },
 
     displayRadios: function(e) {

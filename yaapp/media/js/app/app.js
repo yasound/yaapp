@@ -503,7 +503,8 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.ProfilePage({
                 model: new Yasound.Data.Models.User({username:username}),
                 el: '#webapp-content'
-            }).render();
+            });
+            this.currentView.model.fetch();
         },
 
         // radio details page
