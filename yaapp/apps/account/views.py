@@ -400,6 +400,7 @@ def associate(request):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
 
+    logger.info('associate called')
     cookies = request.COOKIES
     if account_settings.APP_KEY_COOKIE_NAME not in cookies:
         return HttpResponse(status=401)
@@ -411,6 +412,7 @@ def associate(request):
 
     account_type = request.REQUEST.get('account_type')
     if not account_type:
+        logger.info('associate: Account type is missing from request')
         return HttpBadRequest(_('Account type is missing from request'))
 
     uid = request.REQUEST.get('uid')
@@ -430,6 +432,7 @@ def associate(request):
     elif account_type in account_settings.ACCOUNT_TYPES_YASOUND:
         res, message = profile.add_yasound_account(email, password)
 
+    logger.info('associate: %s:%s' % (res, unicode(message)))
     if res:
         message = _('OK')
         return HttpResponse(unicode(message))
