@@ -167,6 +167,7 @@ $(document).ready(function () {
             "profile/:username/friends/": "userFriends",
             "profile/:username/followers/": "userFollowers",
             "profile/:username/radios/": "userRadios",
+            "profile/:username/likes/": "userLikes",
             "settings/": "settings",
             "friends/": "myFriends",
             "notifications/": "notifications",
@@ -463,6 +464,15 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.UserRadiosPage({
                 el: '#webapp-content'
             }).render('', username);
+        },
+
+        // user's likes
+        userLikes: function (username) {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.UserLikesPage({
+                el: '#webapp-content'
+            }).render(username);
         },
 
         // radio listeners

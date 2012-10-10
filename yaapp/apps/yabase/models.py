@@ -1578,6 +1578,14 @@ class WallEvent(models.Model):
         return None
 
     @property
+    def song_large_cover_url(self):
+        if self.song_cover_filename:
+            return YasoundSong.objects.get_cover_url(self.song_cover_filename, size='210x210')
+        return None
+
+
+
+    @property
     def username(self):
         if self.user:
             return self.user.username
@@ -1602,6 +1610,7 @@ class WallEvent(models.Model):
             'song_artist': self.song_artist,
             'song_cover_filename': self.song_cover_filename,
             'song_cover_url': self.song_cover_url,
+            'song_large_cover_url': self.song_large_cover_url,
             'start_date': self.start_date,
             'text': self.text,
             'type': self.type,

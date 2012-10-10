@@ -727,7 +727,7 @@ def user_likes(request, username):
     offset = int(request.REQUEST.get('offset', 0))
     user = get_object_or_404(User, username=username)
 
-    qs = WallEvent.objects.likes_for_user(user)
+    qs = WallEvent.objects.likes_for_user(user).order_by('-start_date')
     total_count = qs.count()
     qs = qs[offset:offset + limit]
     data = []
