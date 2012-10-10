@@ -68,6 +68,131 @@ Yasound.Views.User = Backbone.View.extend({
     }
 });
 
+Yasound.Views.Like = Backbone.View.extend({
+    tagName: 'li',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.likeCellTemplate(data));
+        return this;
+    }
+});
+
+Yasound.Views.Likes = Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'addOne', 'addAll');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
+    },
+    onClose: function() {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    beforeFetch: function() {
+        if (this.loadingMask) {
+            this.loadingMask.show();
+        }
+    },
+
+    addAll: function() {
+        if (!this.loadingMask) {
+            var mask = this.$el.siblings('.loading-mask');
+            this.loadingMask = mask;
+        }
+
+        this.loadingMask.hide();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function(like) {
+        var view = new Yasound.Views.Like({
+            model: like
+        });
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    }
+});
+
+Yasound.Views.UserLikesPage = Backbone.View.extend({
+    collection: new Yasound.Data.Models.Likes({}),
+
+    events: {
+        'click #back-btn': 'onBack'
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'onBack');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+        if (this.resultsView) {
+            this.resultsView.close();
+            this.resultsViews = undefined;
+        }
+    },
+
+    render: function(username) {
+        this.reset();
+        this.collection.perPage = Yasound.Utils.userCellsPerPage();
+        this.collection.setUsername(username);
+
+        this.username = this.collection.username;
+        $(this.el).html(ich.userLikesPageTemplate());
+
+        this.user = new Yasound.Data.Models.User({username:username}),
+        this.userView = new Yasound.Views.User({
+            model: this.user,
+            el: $('#user-profile', this.el)
+        });
+        this.user.fetch();
+
+        this.resultsView = new Yasound.Views.Likes({
+            collection: this.collection,
+            el: $('#results', this.el)
+        });
+
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.collection,
+            el: $('#pagination', this.el)
+        });
+
+        this.collection.fetch();
+
+        return this;
+    },
+
+    onBack: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.username + '/', {
+            trigger: true
+        });
+    }
+});
+
+
 /**
  * Profile page
  */
@@ -76,7 +201,8 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         'click #radios-btn': 'displayRadios',
         'click #favorites-btn': 'displayFavorites',
         'click #friends-btn': 'displayFriends',
-        'click #followers-btn': 'displayFollowers'
+        'click #followers-btn': 'displayFollowers',
+        'click #likes-btn': 'displayLikes'
     },
     initialize: function () {
         _.bindAll(this, 'render', 'modelLoaded');
@@ -137,6 +263,13 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
             el: $('#followers', this.el)
         });
 
+        this.likes = new Yasound.Data.Models.Likes({});
+        this.likes.perPage = 4;
+        this.likesView = new Yasound.Views.Likes({
+            collection: this.likes,
+            el: $('#likes', this.el)
+        });
+
         this.model.fetch({
             success: this.modelLoaded
         });
@@ -147,10 +280,12 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         $('.friends-count', this.el).html(this.model.get('friends_count'));
         $('.followers-count', this.el).html(this.model.get('followers_count'));
 
-        this.radios.setUsername(model.get('username')).fetch();
-        this.favorites.setUsername(model.get('username')).fetch();
-        this.friends.setUsername(model.get('username')).fetch();
-        this.followers.setUsername(model.get('username')).fetch();
+        var username = model.get('username');
+        this.radios.setUsername(username).fetch();
+        this.favorites.setUsername(username).fetch();
+        this.friends.setUsername(username).fetch();
+        this.followers.setUsername(username).fetch();
+        this.likes.setUsername(username).fetch();
     },
 
     displayRadios: function(e) {
@@ -191,6 +326,14 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         e.preventDefault();
         var username = this.model.get('username');
         Yasound.App.Router.navigate("profile/" + username + '/followers/', {
+            trigger: true
+        });
+    },
+
+    displayLikes: function (e) {
+        e.preventDefault();
+        var username = this.model.get('username');
+        Yasound.App.Router.navigate("profile/" + username + '/likes/', {
             trigger: true
         });
     }
