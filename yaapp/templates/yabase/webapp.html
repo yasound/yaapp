@@ -104,7 +104,7 @@ HTML, BODY { height: 100%; }
     {% endcompress %}
 
 {% compress js %}
-   	<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
+    <script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
     <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
     <script type="text/javascript" src='/media/js/moment.min.js'></script>
     <script type="text/javascript" src='/media/js/moment-lang-all.min.js'></script>
@@ -163,7 +163,58 @@ HTML, BODY { height: 100%; }
       <link rel="stylesheet" href="/media/css/ie.css" />
 	<![endif]-->
 
-    {% compressed_js 'webapp-all' %}
+    {% compress js %}
+    <script type="text/javascript" src='/media/js/app/common/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/common/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/mobileMenus/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/radio/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/radio/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/myRadios/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/myRadios/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/newRadio/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/newRadio/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/search/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/search/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/favorites/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/favorites/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/top/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/top/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/friends/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/friends/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/profile/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/profile/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/settings/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/settings/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/notifications/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/notifications/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/users/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/users/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/deezer/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/deezer/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/signup/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/signup/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/login/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/login/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/home/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/home/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/gifts/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/gifts/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/tutorial/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/teaser/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/static/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/static/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/share/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/templateLoader.js'></script>
+    <script type="text/javascript" src='/media/js/app/push.js'></script>
+    <script type="text/javascript" src='/media/js/app/utils.js'></script>
+    <script type="text/javascript" src='/media/js/app/error.js'></script>
+    <script type="text/javascript" src='/media/js/app/soundPlayer.js'></script>
+    <script type="text/javascript" src='/media/js/app/app.js'></script>
+    {% endcompress %}
+
+
     <script type="text/javascript">
        moment.lang('{{request.LANGUAGE_CODE}}');
        var g_root = '{{ root }}';
