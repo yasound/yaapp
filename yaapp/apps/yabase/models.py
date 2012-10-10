@@ -1457,6 +1457,8 @@ class WallEventManager(models.Manager):
             user=user,
             text=message)
 
+    def likes_for_user(self, user):
+        return self.filter(user=user, type=yabase_settings.EVENT_LIKE)
 
     class Meta:
         db_name = u'default'

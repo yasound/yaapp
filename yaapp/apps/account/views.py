@@ -34,6 +34,7 @@ import yabase.settings as yabase_settings
 import uuid
 import tweepy
 from django.core.mail import send_mail
+from yabase.models import WallEvent
 
 logger = logging.getLogger("yaapp.account")
 
@@ -121,6 +122,7 @@ def login(request, template_name='account/login.html'):
         'next': next,
     }, context_instance=RequestContext(request))
 
+
 def signup(request, template_name='account/signup.html'):
     next = request.REQUEST.get('next')
 
@@ -142,6 +144,7 @@ def signup(request, template_name='account/signup.html'):
         "signup_form": signup_form,
         'next': next,
     }, context_instance=RequestContext(request))
+
 
 def error(request, template_name='account/login_error.html'):
     messages = get_messages(request)
@@ -189,6 +192,7 @@ def get_notifications_preferences(request):
     response = json.dumps(res)
     return HttpResponse(response)
 
+
 @csrf_exempt
 def set_notifications_preferences(request):
     if not check_api_key_Authentication(request):
@@ -213,6 +217,7 @@ def get_facebook_share_preferences(request):
     response = json.dumps(res)
     return HttpResponse(response)
 
+
 @check_api_key(methods=['POST'], login_required=True)
 @csrf_exempt
 def set_facebook_share_preferences(request):
@@ -224,12 +229,14 @@ def set_facebook_share_preferences(request):
     res = 'update_facebook_share_preferences OK'
     return HttpResponse(res)
 
+
 @check_api_key(methods=['GET'], login_required=True)
 def get_twitter_share_preferences(request):
     user_profile = request.user.userprofile
     res = user_profile.twitter_share_preferences()
     response = json.dumps(res)
     return HttpResponse(response)
+
 
 @check_api_key(methods=['POST'], login_required=True)
 @csrf_exempt
@@ -255,7 +262,7 @@ def _parse_facebook_item(item):
         return
 
     entries = item['entry']
-    if type(entries) != type([]):
+    if not isinstance(entries, type([])):
         entries = [entries]
     for entry in entries:
         if 'uid' in entry:
@@ -267,6 +274,7 @@ def _parse_facebook_item(item):
             except:
                 logger.error("cannot find user profile with given uid: %s" % (uid))
                 pass
+
 
 @csrf_exempt
 def facebook_update(request):
@@ -288,12 +296,13 @@ def facebook_update(request):
         json_data = json.loads(request.read())
         logger.debug(json_data)
 
-        if type(json_data) == type([]):
+        if isinstance(json_data, type([])):
             for item in json_data:
                 _parse_facebook_item(item)
         else:
             _parse_facebook_item(json_data)
         return HttpResponse("OK")
+
 
 @csrf_protect
 def password_reset(request, is_admin_site=False,
@@ -336,6 +345,8 @@ def password_reset(request, is_admin_site=False,
                               context_instance=RequestContext(request, current_app=current_app))
 
 # Doesn't need csrf_protect since no-one can guess the URL
+
+
 @never_cache
 def password_reset_confirm(request, uidb36=None, token=None,
                            template_name='account/password_reset_confirm.html',
@@ -348,7 +359,7 @@ def password_reset_confirm(request, uidb36=None, token=None,
     View that checks the hash in a password reset link and presents a
     form for entering a new password.
     """
-    assert uidb36 is not None and token is not None # checked by URLconf
+    assert uidb36 is not None and token is not None  # checked by URLconf
     if get_flavour() == 'mobile':
         template_name = template_name_mobile
 
@@ -367,7 +378,7 @@ def password_reset_confirm(request, uidb36=None, token=None,
             if form.is_valid():
                 form.save()
                 messages.success(request, _("Your password has been successfully reset."))
-                user.backend ='django.contrib.auth.backends.ModelBackend'
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
                 auth_login(request, user)
                 return HttpResponseRedirect(post_reset_redirect)
         else:
@@ -458,6 +469,7 @@ def dissociate(request):
     else:
         return HttpBadRequest(unicode(message))
 
+
 @csrf_exempt
 def user_authenticated(request):
     decoded = simplejson.loads(request.raw_post_data)
@@ -485,6 +497,7 @@ def user_authenticated(request):
     else:
         raise Http404
 
+
 @check_api_key(methods=['POST'], login_required=True)
 def update_localization(request):
     data = request.POST.keys()[0]
@@ -495,6 +508,7 @@ def update_localization(request):
     lon = obj['longitude']
     unit = obj.get('unit', 'degrees')
     request.user.userprofile.set_position(lat, lon, unit)
+
 
 @check_api_key(methods=['GET'], login_required=False)
 def connected_users_by_distance(request):
@@ -543,7 +557,7 @@ def fast_connected_users_by_distance(request, internal=False):
             profiles = None
         else:
             sanitized_coords = '%s' % ([coords])
-            sanitized_coords = sanitized_coords.replace('[', '').replace(']','').replace(' ', '').replace('(','').replace(')','').replace(',','-')
+            sanitized_coords = sanitized_coords.replace('[', '').replace(']', '').replace(' ', '').replace('(', '').replace(')', '').replace(',', '-')
             key = '%s.fast_connected_users' % (sanitized_coords)
             data = cache.get(key, [])
             if not data:
@@ -555,12 +569,13 @@ def fast_connected_users_by_distance(request, internal=False):
 
     if key is not None and profiles is not None:
         # first time we get data
-        cache.set(key, data, 60 *5)
+        cache.set(key, data, 60 * 5)
 
     if internal:
         return data
 
     return api_response(data, limit=limit, offset=skip)
+
 
 @check_api_key(methods=['GET'], login_required=False)
 def user_friends(request, username):
@@ -573,12 +588,13 @@ def user_friends(request, username):
     user = get_object_or_404(User, username=username)
     qs = UserProfile.objects.filter(user__in=user.get_profile().friends.all())
     total_count = qs.count()
-    qs = qs[offset:offset +limit]
+    qs = qs[offset:offset + limit]
     data = []
     for user_profile in qs:
         data.append(user_profile.as_dict(request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
+
 
 @check_api_key(methods=['GET'], login_required=False)
 def user_followers(request, username=None):
@@ -598,12 +614,13 @@ def user_followers(request, username=None):
 
     qs = UserProfile.objects.filter(friends=user)
     total_count = qs.count()
-    qs = qs[offset:offset +limit]
+    qs = qs[offset:offset + limit]
     data = []
     for user_profile in qs:
         data.append(user_profile.as_dict(request_user=request.user))
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
+
 
 @csrf_exempt
 @check_api_key(methods=['DELETE', 'POST'], login_required=True)
@@ -625,6 +642,7 @@ def user_friends_add_remove(request, username, friend):
     response = {'success': True}
     res = json.dumps(response)
     return HttpResponse(res)
+
 
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST', 'DELETE'])
@@ -700,8 +718,30 @@ def user_picture(request, username):
     raise Http404
 
 
+@check_api_key(methods=['GET'], login_required=False)
+def user_likes(request, username):
+    """
+    Returns the likes for a given user
+    """
+    limit = int(request.REQUEST.get('limit', 25))
+    offset = int(request.REQUEST.get('offset', 0))
+    user = get_object_or_404(User, username=username)
+
+    qs = WallEvent.objects.likes_for_user(user)
+    total_count = qs.count()
+    qs = qs[offset:offset + limit]
+    data = []
+    for like in qs:
+        data.append(like.as_dict())
+    response = api_response(data, total_count, limit=limit, offset=offset)
+    return response
+
+
 @check_api_key(methods=['GET'])
 def get_streamer_auth_token(request):
+    """
+    return a temporary token linked to user account to be given to streamer.
+    """
     token = uuid.uuid4().hex
     key = 'token-%s' % (token)
     cache.set(key, request.user.id, 60)
@@ -731,6 +771,7 @@ def check_streamer_auth_token(request, token):
     response_data = json.dumps(response)
     return HttpResponse(response_data, mimetype='application/json')
 
+
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
 def invite_ios_contacts(request):
@@ -751,6 +792,7 @@ def invite_ios_contacts(request):
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
+
 
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=True)
@@ -773,7 +815,7 @@ def invite_facebook_friends(request):
 
 
 @csrf_exempt
-@check_api_key(methods=['POST',], login_required=True)
+@check_api_key(methods=['POST', ], login_required=True)
 def invite_twitter_friends(request):
     if not request.user.userprofile.twitter_enabled:
         response = {'success': False, 'error': unicode(_('no twitter account associated'))}
@@ -796,10 +838,10 @@ def invite_twitter_friends(request):
     response_data = json.dumps(response)
     return HttpResponse(response_data)
 
+
 @csrf_exempt
-@check_api_key(methods=['POST',], login_required=True)
+@check_api_key(methods=['POST', ], login_required=True)
 def invite_email_friends(request):
-    profile = request.user.get_profile()
     data = json.loads(request.raw_post_data)
     message = data.get('message')
     subject = data.get('subject')
