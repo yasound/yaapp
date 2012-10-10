@@ -21,7 +21,6 @@ def check_api_key(methods=['GET', 'POST', 'PUT', 'DELETE'], login_required=True)
 
             coerce_put_post(request)
             authorized = check_api_key_Authentication(request)
-            logger.info('%s:%s authorized:%s' % (request.REQUEST.get('username'), request.REQUEST.get('api_key'), authorized))
             if not authorized:
                 authorized = request.user.is_authenticated()
             if login_required and not authorized:

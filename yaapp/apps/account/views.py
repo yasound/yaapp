@@ -396,11 +396,19 @@ def password_reset_confirm(request, uidb36=None, token=None,
 
 
 @csrf_exempt
-@check_api_key(methods=['POST'], login_required=True)
 def associate(request):
+    if not check_api_key_Authentication(request):
+        return HttpResponse(status=401)
+
+    cookies = request.COOKIES
+    if account_settings.APP_KEY_COOKIE_NAME not in cookies:
+        return HttpResponse(status=401)
+    if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
+        return HttpResponse(status=401)
+
     user = request.user
     profile = user.get_profile()
-    logger.info('associate called!')
+
     account_type = request.REQUEST.get('account_type')
     if not account_type:
         return HttpBadRequest(_('Account type is missing from request'))
@@ -409,7 +417,7 @@ def associate(request):
     token = request.REQUEST.get('token')
     token_secret = request.REQUEST.get('token_secret')
     email = request.REQUEST.get('email')
-    username = request.REQUEST.get('username')
+    username = request.REQUEST.get('social_username')
     password = request.REQUEST.get('password')
     expiration_date = request.REQUEST.get('expiration_date')
 
@@ -433,7 +441,6 @@ def associate(request):
 def dissociate(request):
     if not check_api_key_Authentication(request):
         return HttpResponse(status=401)
-    logger.info('dissociate called!')
 
     cookies = request.COOKIES
     if account_settings.APP_KEY_COOKIE_NAME not in cookies:
