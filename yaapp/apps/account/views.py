@@ -831,12 +831,13 @@ def invite_twitter_friends(request):
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
 
-    post_data = request.POST.keys()[0]
-    if post_data is not None:
-        data = json.loads(post_data)
+    try:
+        data = json.loads(request.raw_post_data)
         message = data.get('message')
         if message:
             api.update_status(message)
+    except:
+        # TODO generate message
 
     response = {'success': True}
     response_data = json.dumps(response)
