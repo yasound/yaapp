@@ -1,0 +1,4 @@
+id_type	type
+1	Radios FM
+2	webradios
+3	TV

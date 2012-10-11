@@ -833,7 +833,7 @@ def invite_twitter_friends(request):
 
     post_data = request.POST.keys()[0]
     if post_data is not None:
-        data = json.loads(post_data)
+        data = json.loads(request.raw_post_data)
         message = data.get('message')
         if message:
             api.update_status(message)
