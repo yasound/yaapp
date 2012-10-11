@@ -1,0 +1,92 @@
+id	genreType_id	fr	uk	es	de
+1	1	Dancefloor	Dancefloor	Dancefloor	Dancefloor
+2	1	Pop	Pop	Pop	Pop
+3	1	Electro-Techno	Electro-Techno	Electro-Techno	Electro-Techno
+4	1	Love	Love	Enrolla	Love
+5	1	Classique	Classical	Clásico	Klassische
+6	1	RnB	RnB	RnB	RnB
+7	2	Généraliste	Generalist	Generalista	Generalist
+8	2	Informations	News	Noticias	Nachrichten
+9	2	Humour	Comedy	Risas	Lachen
+10	2	Talk	Talk	Talk	Talk
+11	3	Latino-varié	Latino-various	Latino-varios	Latein-variiert
+12	3	Latino-Zouk	Latino-Zouk	Latino-Zouk	Latino-Zouk
+13	3	Reggae-Dancehall	Reggae-Dancehall	Reggae-Dancehall	Reggae-Dancehall
+14	3	Oriental	Oriental	Oriental	Orientalisch
+15	1	Oldies	Oldies	Oldies	Oldies
+16	1	Lounge-ambient	Lounge-ambient	Lounge-ambient	Lounge-ambient
+17	1	Country	Country	Country	Country
+18	1	Hard rock	Hard rock	Hard rock	Hard Rock
+19	1	Jazz	Jazz	Jazz	Jazz
+21	1	Variétés	Variety	Variedades	Schlager
+22	3	Indien	Indian	indio	Inder
+23	1	Soul	Soul	Soul	Soul
+24	3	Latino-Tropicale	Latino-Caribbean	Latino-Tropical	Latino-Tropisch
+25	1	Groove-Funk	Groove-Funk	Groove-Funk	Groove-Funk
+27	2	Sport	Sport	Deportes	Sport
+28	1	Rap	Rap	Rap	Rap
+29	1	Hip Hop	Hip Hop	Hip Hop	Hip Hop
+30	1	DJ Mix	DJ Mix	DJ Mix	DJ Mix
+31	1	Electro-Trance	Electro-Trance	Electro-Trance	Electro-Trance
+32	1	Top 50	Top 50	Top 50	Top 50
+33	1	Rock	Rock	Rock	Rock
+34	1	60s	60s	60s	60s
+35	1	70s	70s	70s	70s
+36	1	80s	80s	80s	80s
+37	1	90s	90s	90s	90s
+38	1	Chanson Française	French songs	Canc. Francesas	Französische Lieder
+39	3	Zabavna-Narodna	Zabavna-Narodna	Zabavna-Narodna	Zabavna-Narodna
+40	3	Latino-Salsa	Latino-Salsa	Latino salsa	Latein-Salsa
+41	1	Electro-House	Electro-House	Electro-House	Electro-House
+42	1	Western	Western	Western	Western
+43	1	RocknRoll-Swing	RocknRoll-Swing	RocknRoll-Swing	RocknRoll-Swing
+44	1	Disco	Disco	Disco	Diskomusik
+45	3	Autres pays	Other countries	Mundo-otros	Welt-
+46	2	Chrétien	Christian	Cristiano	Christian
+47	2	Jeu vidéo	Video Games	Videojuegos	Telespiele
+48	1	Indépendant-Alternatif	Independ.-Alternative	Independ.-Alternativa	Unabhäng.-Alternative
+49	1	Urban	Urban	Urban	Urban
+50	1	Rock alternatif	Alternative rock	Rock alternativo	Alternative rock
+52	1	Vintage	Vintage	Vintage	Vintage
+53	2	Communautaire	Community	Comunitario	Gemein
+54	1	Gospel	Gospel	Gospel	Gospel
+56	1	Underground	Underground	Underground	Underground
+57	1	Zen-Nature-Spirituel	Zen-Nature-Spiritual	Zen-Naturaleza	Zen-Natur-Geistigen
+58	1	Acoustique-guitare	Unplugged-guitar	Acústica-Guitarra	Akustik-Gitarre
+62	1	Vocal	Vocal	Vocal	Stimm
+63	1	Live	Live	Live	Live
+64	3	Asiatique	Asian	Asiático	Asiaten
+65	1	Electro-Hard-rave	Electro-Hard-rave	Electro-Hard-rave	Electro-Hard-rave
+67	1	Adulte contemporain	Adult contemporary	Adulto Contemporáneo	Adult Contemporary
+68	1	New age	New age	New age	New age
+69	2	Noël-Fêtes	Christmas-Fiesta	Navidad-Fiesta	Weihnachten-Fest
+71	1	Blues	Blues	Blues	Blues
+74	3	Celtique	Celtic	Céltico	Keltische
+76	2	Culturel	Cultural	Cultural	Kulturell
+81	2	Judaïsme	Jewish	Judaico	Jüdisch
+82	3	Manele	Manela	Manele	Manele
+83	3	Latino-Merengue	Latino-Merengue	Latino-Merengue	Latein-Merengue
+84	1	Heavy Metal	Heavy Metal	Heavy Metal	Heavy Metal
+85	1	Electro-varié	Electro-various	Electro-varios	Electro-variiert
+86	2	Films-TV	Movies-TV	Películas-TV	Films-TV
+88	2	Enfants	children	Niños	Kinder
+91	1	Progressive	Progressive	Progresiva	Vorwärtschreitend
+92	3	Brésilien-Samba	Brazilian-Samba	Brasil-Samba	Brasilianische-Samba
+93	1	Drum and bass	Drum and bass	Drum and bass	Drum and Bass
+94	1	Dubstep	Dubstep	Dubstep	Dubstep
+95	1	Easy listening	Easy listening	Easy listening	Einfaches Hören
+96	1	00s	00s	00s	00s
+97	1	Breakbeat	Breakbeat	Breakbeat	Breakbeat
+98	1	Variés-Divers genres	Various	Varios	Verschiedenes
+99	3	Latino-bachata	Latino-bachata	Latino-bachata	Latein-bachata
+102	3	Irlandais	Irish	Irlandesa	Irin
+103	3	Reggaeton-Ragga	Reggaeton-Ragga	Reggaeton-Ragga	Reggaeton-Ragga
+104	3	Grec	Greek	Griego	Griechisch
+106	3	Latino-cumbia	Latino-cumbia	Latino-cumbia	Latein-cumbia
+109	3	Polka-Tchéque	Polka-Czech	Polka-Checa	Polka-Tschechisch
+110	3	Russe	Russian	Rusia	Russisch
+111	3	Latino-Soca	Latino-Soca	Latino-Soca	Latino-Soca
+112	3	Europe	European	Europa	Europa
+113	3	Turc	Turkish	Turquía	Türkisch
+114	3	Italien	Italian	Italiano	Italienisch
+128	4	Généraliste	General	General	Allgemeine

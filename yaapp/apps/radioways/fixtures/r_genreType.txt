@@ -1,0 +1,5 @@
+id	sigle	fr	uk	es	de
+1	musical	Musicale	Musical	Musical	Musik
+2	thematic	Thématique	Thematic	Temático	Thematisch
+3	World music	Musique du Monde	World music	Música del mundo	Musik der Welt
+4	tv	Télévision	Televisión	Television	Fernseher

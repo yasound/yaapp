@@ -383,6 +383,7 @@ INSTALLED_APPS = (
     'emencia.django.newsletter',
     'yashow',
     'compressor',
+    'radioways',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -548,6 +549,11 @@ LOGGING = {
             'propagate': False,
         },
         'yaapp.yadeezer': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.radioways': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,

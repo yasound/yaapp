@@ -1,0 +1,42 @@
+id	continent_id	sigle	fr	uk	es	de
+2	1	ZA	Afrique du Sud	South Africa	África del Sur	Südafrika
+5	4	DE	Allemagne	Germany	Alemania	Deutschland
+13	3	AR	Argentine	Argentina	Argentina	Argentinien
+17	4	AT	Autriche	Austria	Austria	Österreich
+25	4	BE	Belgique	Belgium	Bélgica	Belgien
+31	3	BO	Bolivie	Bolivia	Bolivia	Bolivien
+34	3	BR	Brésil	Brazil	Brasil	Brasilien
+42	2	CA	Canada	Canada	Canadá	Kanada
+44	3	CL	Chili	Chile	Chile	Chile
+51	6	KR	Corée du Sud	South Korea	Corea del Sur	Südkorea
+53	4	HR	Croatie	Croatia	Croacia	Kroatien
+64	2	US	Etats-Unis	United States	Los Estados Unidos	USA
+66	4	FI	Finlande	Finland	Finlandia	Finland
+67	4	FR	France	France	Francia	Frankreich
+87	4	HU	Hongrie	Hungary	Hungría	Ungarn
+102	3	TC	Iles Turks-et-Caicos	Turks and Caicos Islands	Isla Turks-et-Caicos	Insel Turks-Et-Caicos
+111	4	IE	Irlande	Ireland	Irlanda	Irland
+113	5	IL	Israël	Israel	Israel	Israel
+114	4	IT	Italie	Italy	Italia	Italien
+134	6	MY	Malaisie	Malaysia	Malasia	Malaysia
+145	3	MX	Mexique	Mexico	México	Mexiko
+150	3	MS	Montserrat	Montserrat	Montserrat	Montserrat
+152	6	NP	Népal	Nepal	Nepal	Nepal
+158	6	NU	Nioué	Niue	Nioué	Nioué
+159	4	NO	Norvège	Norway	Noruega	Norwegen
+170	4	NL	Pays-Bas	Netherlands	Países Bajos	Niederlande
+172	4	PL	Pologne	Poland	Polonia	Polen
+175	4	PT	Portugal	Portugal	Portugal	Portugal
+182	4	RO	Roumanie	Romania	Rumania	Rumänien
+183	4	UK	Royaume-Uni	United Kingdom	Reino unido	Vereinigtes Königreich
+184	4	RU	Russie	Russia	Rusia	Rußland
+195	3	SV	Salvador	Salvador	Salvador	Salvador
+206	6	LK	Sri Lanka	Sri Lanka	Sri Lanka	Sri Lanka
+207	4	SE	Suède	Sweden	Suecia	Schweden
+208	4	CH	Suisse	Switzerland	Suiza	Die Schweiz
+209	3	SR	Suriname	Suriname	Suriname	Suriname
+218	6	TH	Thaïlande	Thailand	Tailandia	Das Thailand
+226	4	TR	Turquie	Turkey	Turquía	Die Türkei
+228	4	UA	Ukraine	Ukraine	Ucrania	Die Ukraine
+240	4	RS	Serbie	Serbia	Serbia	Serbien
+243	4	ME	Monténégro	Montenegro	Montenegro	Monténégro
