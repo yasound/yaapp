@@ -4,8 +4,7 @@ from django.shortcuts import get_object_or_404
 from yacore.api import api_response
 from yacore.decorators import check_api_key
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse
 import utils as yapremium_utils
 import logging
 from transmeta import get_real_fieldname
@@ -14,7 +13,7 @@ import settings as yapremium_settings
 import json
 import tweepy
 from django.conf import settings
-
+from yacore.geoip import request_country
 logger = logging.getLogger("yaapp.yapremium")
 
 
@@ -96,7 +95,7 @@ def gifts(request, subscription_sku=None):
 @csrf_exempt
 @check_api_key(methods=['POST'])
 def action_watch_tutorial_completed(request):
-    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
+    async_win_gift.delay(user_id=request.user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
     res = {'success': True}
     response = json.dumps(res)
     return HttpResponse(response)
@@ -114,12 +113,17 @@ def action_follow_yasound_on_twitter_completed(request):
     auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
-    api.create_friendship(screen_name='YasoundSAS')
-    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id])
+
+    country_code = request_country(request)
+    yasound_twitter_account = settings.YASOUND_TWITTER_ACCOUNTS.get(country_code, settings.YASOUND_TWITTER_DEFAULT_ACCOUNT)
+    api.create_friendship(screen_name=yasound_twitter_account)
+
+    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id, yasound_twitter_account])
 
     res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)
+
 
 @csrf_exempt
 @check_api_key(methods=['POST'])
@@ -129,10 +133,11 @@ def action_like_yasound_on_facebook_completed(request):
         res = {'success': False, 'message': unicode(_('your account is not associated with facebook.'))}
         response = json.dumps(res)
         return HttpResponse(response)
-    async_check_like_yasound_on_facebook.apply_async(args=[request.user.id], countdown=60*3)
+    async_check_like_yasound_on_facebook.apply_async(args=[request.user.id], countdown=60 * 3)
     res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)
+
 
 @csrf_exempt
 @check_api_key(methods=['POST'])
@@ -145,4 +150,3 @@ def activate_promocode(request):
     res = {'success': success}
     response = json.dumps(res)
     return HttpResponse(response)
-
