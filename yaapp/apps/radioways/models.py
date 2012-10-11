@@ -30,9 +30,10 @@ class Country(models.Model):
     def __unicode__(self):
         return self.name_fr
 
+
 class Genre(models.Model):
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
-    rtype = models.IntegerField(_('type'), choices=radioways_settings.GENRE_TYPE_CHOICES, default=radioways_settings.GENRE_TYPE_MUSICAL)
+    gtype = models.IntegerField(_('type'), choices=radioways_settings.GENRE_TYPE_CHOICES, default=radioways_settings.GENRE_TYPE_MUSICAL)
     name_fr = models.CharField(_('name (fr)'), max_length=100, blank=True)
     name_uk = models.CharField(_('name (uk)'), max_length=100, blank=True)
     name_es = models.CharField(_('name (es)'), max_length=100, blank=True)
@@ -40,6 +41,7 @@ class Genre(models.Model):
 
     def __unicode__(self):
         return self.name_fr
+
 
 class Radio(models.Model):
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
@@ -56,8 +58,8 @@ class Radio(models.Model):
     stream_url = models.URLField(_('stream url'), max_length=255, blank=True)
     metadata_id = models.IntegerField(_('metadata id'), default=0)
     bitrate = models.SmallIntegerField(_('bitrate'), default=0)
-    codec = models.IntegerField(_('codec'), choices=radioways_settings.CODEC_CHOICES, default=radioways_settings.CODEC_MP3)
-    stream_response_time = models.IntegerField(_('stream response time'), default=0)
+    stream_codec = models.IntegerField(_('codec'), choices=radioways_settings.CODEC_CHOICES, default=radioways_settings.CODEC_MP3)
+    stream_response_time = models.IntegerField(_('stream response time'), null=True, blank=True)
 
     def __unicode__(self):
         return self.name

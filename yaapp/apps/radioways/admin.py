@@ -14,6 +14,6 @@ class GenreAdmin(admin.ModelAdmin):
 admin.site.register(Genre, GenreAdmin)
 
 class RadioAdmin(admin.ModelAdmin):
-    list_display = ('name', 'rtype', 'codec', 'country')
+    list_display = ('radioways_id', 'name', 'rtype', 'stream_codec', 'country')
     raw_id_fields = ('yasound_radio',)
 admin.site.register(Radio, RadioAdmin)
