@@ -1,6 +1,7 @@
 from account import settings as account_settings
 from account.models import UserProfile
 from celery.result import AsyncResult
+from celery import states as celery_states
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
@@ -72,6 +73,8 @@ def task_status(request, task_id):
     metadata = asyncRes.info
     if metadata is not None and 'progress' in metadata:
         progress = metadata['progress']
+    elif status == celery_states.SUCCESS:
+        progress = 1.0
     else:
         progress = 0.0
     message = 'updating...'
