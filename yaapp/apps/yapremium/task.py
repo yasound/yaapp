@@ -44,7 +44,7 @@ def async_check_for_invitation(type, uid):
 
 
 @task
-def async_check_follow_yasound_on_twitter(user_id):
+def async_check_follow_yasound_on_twitter(user_id, yasound_twitter_account):
     profile = UserProfile.objects.get(user__id=user_id)
     if not profile.twitter_enabled:
         return
@@ -52,7 +52,7 @@ def async_check_follow_yasound_on_twitter(user_id):
     auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
-    friends = api.lookup_users(screen_names=['YasoundSAS'])
+    friends = api.lookup_users(screen_names=[yasound_twitter_account])
     if len(friends) > 0:
         yasound = friends[0]
         if yasound.following:
