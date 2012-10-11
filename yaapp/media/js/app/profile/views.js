@@ -94,11 +94,13 @@ Yasound.Views.Likes = Backbone.View.extend({
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('beforeFetch', this.beforeFetch, this);
         this.views = [];
     },
     onClose: function() {
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
+        this.collection.unbind('beforeFetch', this.beforeFetch, this);
     },
 
     beforeFetch: function() {
