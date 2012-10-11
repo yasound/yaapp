@@ -1,0 +1,8 @@
+id	sigle	fr	uk	es	de
+1	A3	Afrique	Africa	África	Afrika
+2	A1	USA-Canada	USA-Canada	EE.UU. -Canadá	USA-Kanada
+3	A2	Amérique Latine-Caraïbes	Latin America-Carribbean	América Latina-el Caribe	Lateinamerika-Karibik
+4	E1	Europe	Europe	Europa	Europa
+5	M1	Moyen-Orient	Middle East	Medio Oriente	Naher Osten
+6	A4	Asie	Asia	Asia	Asien
+7	O1	Océanie	Oceania	Oceanía	Ozeanien
