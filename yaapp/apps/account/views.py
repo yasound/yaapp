@@ -838,7 +838,7 @@ def invite_twitter_friends(request):
             api.update_status(message)
     except:
         # TODO generate message
-
+        pass
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
