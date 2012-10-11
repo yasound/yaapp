@@ -16,7 +16,7 @@ import utils as yapremium_utils
 import account.signals as account_signals
 from yabase import signals as yabase_signals
 from yamessage import signals as yamessage_signals
-
+from yabase.models import Radio
 from task import async_win_gift, async_check_for_invitation
 
 
@@ -204,7 +204,11 @@ class Gift(models.Model):
     name = models.CharField(_('name'), max_length=255, blank=True)
     sku = models.CharField(_('sku'), max_length=255, blank=True)
     description = models.TextField(_('description'), blank=True)
+
     authentication_needed = models.BooleanField(_('authentication needed'), default=True)
+    facebook_needed = models.BooleanField(_('facebook needed'), default=False)
+    twitter_needed = models.BooleanField(_('twitter needed'), default=False)
+    radio_needed = models.BooleanField(_('radio needed'), default=False)
 
     action = models.IntegerField(_('action'), choices=yapremium_settings.ACTION_CHOICES)
     action_url_ios = models.TextField(_('iOS action url'), blank=True)  # special field used by iOS to navigate to action menu
@@ -254,6 +258,24 @@ class Gift(models.Model):
             enabled = False
         elif count >= self.max_per_user and self.max_per_user > 0:
             enabled = False
+
+        if self.facebook_needed:
+            if user.is_anonymous():
+                enabled = False
+            if not user.get_profile().facebook_enabled:
+                enabled = False
+
+        if self.twitter_needed:
+            if user.is_anonymous():
+                enabled = False
+            if not user.get_profile().twitter_enabled:
+                enabled = False
+
+        if self.radio_needed:
+            if user.is_anonymous():
+                enabled = False
+            if Radio.objects.radio_for_user(user) is None:
+                enabled = False
 
         if count > 0:
             picture_url = self.picture_todo_url
