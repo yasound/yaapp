@@ -1575,13 +1575,15 @@ class WallEvent(models.Model):
     def song_cover_url(self):
         if self.song_cover_filename:
             return YasoundSong.objects.get_cover_url(self.song_cover_filename)
-        return None
+        return '/media/images/default_album.png'
+
+
 
     @property
     def song_large_cover_url(self):
         if self.song_cover_filename:
             return YasoundSong.objects.get_cover_url(self.song_cover_filename, size='210x210')
-        return None
+        return '/media/images/default_album.png'
 
 
 

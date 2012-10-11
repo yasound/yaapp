@@ -156,7 +156,7 @@ Yasound.Views.UserLikesPage = Backbone.View.extend({
 
     render: function(username) {
         this.reset();
-        this.collection.perPage = Yasound.Utils.userCellsPerPage();
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
         this.collection.setUsername(username);
 
         this.username = this.collection.username;
