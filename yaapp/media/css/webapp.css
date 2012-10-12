@@ -631,6 +631,7 @@ body {
     line-height:25px;
     display:inline-block;
     width: 377px;
+    height:25px;
     overflow:hidden;
     text-overflow: ellipsis;
 }
