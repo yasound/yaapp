@@ -8,7 +8,7 @@ from yageoperm.models import Country as YasoundCountry
 from yabase import settings as yabase_settings
 
 from account.models import UserProfile
-
+from yametadata.radioways import find_metadata
 import logging
 logger = logging.getLogger("yaapp.radioways")
 
@@ -52,7 +52,12 @@ class Genre(models.Model):
 
 class Radio(models.Model):
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
-    yasound_radio = models.OneToOneField('yabase.Radio', verbose_name=_('yasound radio'), blank=True, null=True, on_delete=models.SET_NULL)
+    yasound_radio = models.OneToOneField('yabase.Radio',
+        verbose_name=_('yasound radio'),
+        blank=True,
+        null=True,
+        related_name='radioways_radio',
+        on_delete=models.SET_NULL)
     genres = models.ManyToManyField(Genre, verbose_name=_('genres'), blank=True, null=True)
     country = models.ForeignKey(Country, verbose_name=_('country'))
     name = models.CharField(_('name'), max_length=255, blank=True)
@@ -99,6 +104,25 @@ class Radio(models.Model):
 
         self.yasound_radio = yasound_radio
         self.save()
+
+    @property
+    def current_song(self):
+        song_dict = {
+            'id': None,
+            'name': None,
+            'artist': None,
+            'album': None,
+            'cover': None,
+            'large_cover': None
+        }
+        res = find_metadata(self.metadata_id)
+        if not res:
+            return song_dict
+
+        metadata = res.get('metadata', {})
+        song_dict['name'] = metadata.get('title')
+        song_dict['artist'] = metadata.get('artist')
+        return song_dict
 
     def __unicode__(self):
         return self.name
