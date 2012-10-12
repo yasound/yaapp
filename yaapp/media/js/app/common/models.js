@@ -170,15 +170,56 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
     // the current song will auto-refresh with either polling or push system
     initialize: function () {
+        _.bindAll(this, 'refresh', 'stopPushOrTimer', 'startPushOrTimer', 'startPush', 'startTimer');
+
         var that = this;
+        that.startPushOrTimer();
+    },
+
+    refresh: function (msg) {
+        this.set(msg);
+    },
+
+    stopPushOrTimer: function () {
+        var that = this;
+        if (that.timer) {
+            clearInterval(that.timer);
+            that.timer = undefined;
+        }
         if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.on('song', function (msg) {
-                that.set(msg);
-            });
+            Yasound.App.Router.pushManager.off('song', this.refresh);
+        }
+    },
+
+    startPushOrTimer: function () {
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.on('song', this.refresh);
         } else {
-            setInterval(function () {
+            that.timer = setInterval(function () {
                 that.fetch();
             }, 10000);
+        }
+    },
+
+    startPush: function () {
+        var that = this;
+        Yasound.App.Router.pushManager.on('song', this.refresh);
+    },
+
+    startTimer: function () {
+        var that = this;
+        that.timer = setInterval(function () {
+            that.fetch();
+        }, 10000);
+
+    },
+
+    setOrigin: function (origin) {
+        this.stopPushOrTimer();
+        if (origin == Yasound.App.RADIOWAYS) {
+            this.startTimer();
+        } else {
+            this.startPushOrTimer();
         }
     },
 

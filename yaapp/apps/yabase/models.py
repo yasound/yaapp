@@ -838,6 +838,7 @@ class Radio(models.Model):
         data = {
             'id': self.id,
             'uuid': self.uuid,
+            'origin': self.origin,
             'name': self.name,
             'likes': likes,
             'favorites': self.favorites,
