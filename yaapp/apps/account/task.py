@@ -1,16 +1,15 @@
 from celery.task import task
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
-from yabase.models import SongInstance
 from yacore.http import absolute_url
 import logging
 import tweepy
 from django.utils import translation
 
 logger = logging.getLogger("yaapp.account")
+
 
 @task
 def scan_friends_task():
@@ -27,12 +26,14 @@ def scan_friends_task():
     cache.set('total_friend_count', total_friend_count)
     cache.set('total_yasound_friend_count', total_yasound_friend_count)
 
+
 @task
 def check_live_status_task():
     from models import UserProfile
 
     for profile in UserProfile.objects.all():
         profile.check_live_status()
+
 
 @task
 def async_check_geo_localization(userprofile, ip):
@@ -45,6 +46,7 @@ def async_check_geo_localization(userprofile, ip):
     if coords is None:
         return
     userprofile.set_position(coords[0], coords[1])
+
 
 def _twitter_api(user_id):
     from models import UserProfile
@@ -76,11 +78,13 @@ def _twitter_api(user_id):
         logger.debug('wrong twitter credentials for user account %s' % (user_id))
         return None
 
+
 def _set_language(user_id):
     from models import UserProfile
     user_profile = UserProfile.objects.get(user__id=user_id)
     language = user_profile.language
     translation.activate(language)
+
 
 @task(ignore_result=True)
 def async_tw_post_message(user_id, radio_uuid, message):
@@ -98,6 +102,7 @@ def async_tw_post_message(user_id, radio_uuid, message):
     api.update_status(status=tweet)
     logger.debug('done')
 
+
 @task(ignore_result=True)
 def async_tw_listen(user_id, radio_uuid, song_title, artist):
     logger.debug('async_tw_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
@@ -109,10 +114,14 @@ def async_tw_listen(user_id, radio_uuid, song_title, artist):
     _set_language(user_id)
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
-    tweet = _('I am listening to %(song)s by %(artist)s on %(url)s #yasound') % {'song':song_title[:7], 'artist':artist[:7], 'url': radio_url}
-    api.update_status(status=tweet)
+    tweet = _('I am listening to %(song)s by %(artist)s on %(url)s #yasound') % {'song': song_title[:7], 'artist': artist[:7], 'url': radio_url}
+    try:
+        api.update_status(status=tweet)
+    except tweepy.error.TweepError, e:
+        logger.error(e)
 
     logger.debug('done')
+
 
 @task(ignore_result=True)
 def async_tw_like_song(user_id, radio_uuid, song_title, artist):
@@ -125,10 +134,11 @@ def async_tw_like_song(user_id, radio_uuid, song_title, artist):
     _set_language(user_id)
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
-    tweet = _('I like %(song)s by %(artist)s on %(url)s #yasound') % {'song':song_title[:7], 'artist':artist[:7], 'url':radio_url}
+    tweet = _('I like %(song)s by %(artist)s on %(url)s #yasound') % {'song': song_title[:7], 'artist': artist[:7], 'url': radio_url}
     api.update_status(status=tweet)
 
     logger.debug('done')
+
 
 @task(ignore_result=True)
 def async_tw_animator_activity(user_id, radio_uuid):
@@ -141,9 +151,7 @@ def async_tw_animator_activity(user_id, radio_uuid):
     _set_language(user_id)
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
-    tweet = _('I have updated my playist on %(url)s #yasound') % {'url':radio_url}
+    tweet = _('I have updated my playist on %(url)s #yasound') % {'url': radio_url}
     api.update_status(status=tweet)
 
     logger.debug('done')
-
-
