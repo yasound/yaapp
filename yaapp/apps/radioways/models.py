@@ -52,7 +52,7 @@ class Genre(models.Model):
 
 class Radio(models.Model):
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
-    yasound_radio = models.OneToOneField('yabase.Radio', verbose_name=_('yasound radio'), blank=True, null=True)
+    yasound_radio = models.OneToOneField('yabase.Radio', verbose_name=_('yasound radio'), blank=True, null=True, on_delete=models.SET_NULL)
     genres = models.ManyToManyField(Genre, verbose_name=_('genres'), blank=True, null=True)
     country = models.ForeignKey(Country, verbose_name=_('country'))
     name = models.CharField(_('name'), max_length=255, blank=True)
@@ -81,6 +81,10 @@ class Radio(models.Model):
         yasound_username = 'yasound_%s' % (sigle)
 
         user, _created = User.objects.get_or_create(username=yasound_username)
+        if user.get_profile().name == '':
+            profile = user.get_profile()
+            profile.name = 'Yasound %s' % (sigle)
+            profile.save()
         yasound_country, _created = YasoundCountry.objects.get_or_create(code=sigle, defaults={'name': unicode(self.country)})
 
         logger.info('creating %s' % self.name)

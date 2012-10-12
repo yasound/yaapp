@@ -33,17 +33,24 @@ class Command(BaseCommand):
         import_type = options.get('import_type')
         import_directory =  options.get('import_directory')
 
+        logger.info('------------------------------------')
+        logger.info('activate: %s', activate)
+        logger.info('import type: %s', import_type)
+        logger.info('import directory: %s', import_directory)
+        logger.info('------------------------------------')
+
         if import_type == 'static':
+            logger.info('importing static data')
             import_continent(os.path.join(import_directory, 'r_continent.txt'))
             import_country(os.path.join(import_directory, 'YasoundCountry.txt'))
             import_genre(os.path.join(import_directory, 'YasoundGenre.txt'))
         elif import_type == 'radios':
+            logger.info('importing radio')
             import_radio(os.path.join(import_directory, 'YasoundRadio.txt'))
             import_radio_genre(os.path.join(import_directory, 'YasoundRadioGenre.txt'))
-        else:
-            logger.error('unknown import type')
 
         if activate:
+            logger.info('activating radios (links with yasound radios)')
             link_to_yasound()
         logger.info('done')
 
