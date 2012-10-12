@@ -108,9 +108,15 @@ class SongInstanceManager(models.Manager):
             return song_json
         else:
             try:
-                radio = Radio.objects.get(id=radio_id)
+                radio = Radio.objects.select_related('radioways_radio').get(id=radio_id)
             except Radio.DoesNotExist:
                 return None
+
+            if radio.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
+                radioways_radio = radio.radioways_radio
+                song_dict = radioways_radio.current_song
+                song_json = json.dumps(song_dict)
+                return song_json
 
             song_instance = None
             try:

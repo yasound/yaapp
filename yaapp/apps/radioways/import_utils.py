@@ -105,7 +105,7 @@ def import_radio(file):
         radio.rate_mm = rate_mm
         radio.logo_id = logo_id
         radio.stream_url = stream_url
-        radio.metatad_id = metadata_id
+        radio.metadata_id = metadata_id
         radio.bitrate = bitrate
         radio.stream_codec = stream_codec
         radio.stream_response_time = stream_response_time if stream_response_time != '' else None
