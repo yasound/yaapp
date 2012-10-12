@@ -1353,9 +1353,6 @@ class RadioUser(models.Model):
             radio = self.radio
             radio.favorites = RadioUser.objects.filter(radio=radio, favorite=True).count()
 
-            # JBL : remove when operation is finished
-            if radio.id == 10853:
-                radio.favorites = 121
             radio.save()
             if self.favorite:
                 radio.added_in_favorites(self.user)
