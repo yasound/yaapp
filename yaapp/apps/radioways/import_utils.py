@@ -1,6 +1,9 @@
 from models import Continent, Country, Genre, Radio
 import settings as radioways_settings
 
+import logging
+logger = logging.getLogger("yaapp.radioways")
+
 def _convert_to_utf8(str):
     try:
         encoded_str = str.decode("iso-8859-1").encode("UTF-8")
@@ -125,5 +128,6 @@ def import_radio_genre(file):
 
 def link_to_yasound():
     qs = Radio.objects.filter(yasound_radio__isnull=True, stream_codec=radioways_settings.CODEC_MP3)
+    logger.info('found %d radios to activate' % (qs.count()))
     for radio in qs:
         radio.link_to_yasound()
