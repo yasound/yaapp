@@ -665,7 +665,7 @@ body {
 #player #radio-cover #play-btn-large {
     width:76px;
     height:76px;
-    position:absolute;
+    position:relative;
     cursor: pointer;
 }
 
