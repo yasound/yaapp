@@ -1,6 +1,7 @@
 from django.test import TestCase
 from models import Continent, Country, Genre, Radio
 from import_utils import import_continent, import_country, import_genre, import_radio, import_radio_genre
+from yabase.models import Radio as YasoundRadio
 
 class TestImport(TestCase):
     def setUp(self):
@@ -43,3 +44,17 @@ class TestImport(TestCase):
         self.assertEquals(Radio.objects.all().count(), 913)
 
         import_radio_genre('./apps/radioways/fixtures/YasoundRadioGenre.txt')
+
+class TestLinkToTasound(TestCase):
+    def setUp(self):
+        import_continent('./apps/radioways/fixtures/r_continent.txt')
+        import_country('./apps/radioways/fixtures/YasoundCountry.txt')
+        import_genre('./apps/radioways/fixtures/YasoundGenre.txt')
+        import_radio('./apps/radioways/fixtures/YasoundRadio.txt')
+        import_radio_genre('./apps/radioways/fixtures/YasoundRadioGenre.txt')
+
+    def test_link(self):
+        self.assertEquals(YasoundRadio.objects.all().count(), 0)
+        radio = Radio.objects.get(id=1)
+        radio.link_to_yasound()
+        self.assertEquals(YasoundRadio.objects.all().count(), 1)

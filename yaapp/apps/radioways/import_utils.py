@@ -1,5 +1,5 @@
 from models import Continent, Country, Genre, Radio
-
+import settings as radioways_settings
 
 def _convert_to_utf8(str):
     try:
@@ -122,3 +122,8 @@ def import_radio_genre(file):
         radio = Radio.objects.get(radioways_id=radio_id)
         genre = Genre.objects.get(radioways_id=genre_id)
         radio.genres.add(genre)
+
+def link_to_yasound():
+    qs = Radio.objects.filter(yasound_radio__isnull=True, stream_codec=radioways_settings.CODEC_MP3)
+    for radio in qs:
+        radio.link_to_yasound()

@@ -1,6 +1,13 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import settings as radioways_settings
+
+from yabase.models import Radio as YasoundRadio
+from yageoperm.models import Country as YasoundCountry
+from yabase import settings as yabase_settings
+
+from account.models import UserProfile
 
 import logging
 logger = logging.getLogger("yaapp.radioways")
@@ -60,6 +67,34 @@ class Radio(models.Model):
     bitrate = models.SmallIntegerField(_('bitrate'), default=0)
     stream_codec = models.IntegerField(_('codec'), choices=radioways_settings.CODEC_CHOICES, default=radioways_settings.CODEC_MP3)
     stream_response_time = models.IntegerField(_('stream response time'), null=True, blank=True)
+
+    def link_to_yasound(self):
+        country = self.country
+        sigle = country.sigle
+        city = self.city
+        stream_url = self.stream_url
+        genres = self.genres.all()
+        tags = ''
+        for genre in genres:
+            tag = '%s, %s, %s, %s' % (genre.name_fr, genre.name_uk, genre.name_es, genre.name_de)
+            tags = tags + ', ' + tag
+        yasound_username = 'yasound_%s' % (sigle)
+
+        user, _created = User.objects.get_or_create(username=yasound_username)
+        yasound_country, _created = YasoundCountry.objects.get_or_create(code=sigle, defaults={'name': unicode(self.country)})
+
+        logger.info('creating %s' % self.name)
+        yasound_radio = YasoundRadio.objects.create(name=self.name,
+            origin=yabase_settings.RADIO_ORIGIN_RADIOWAYS,
+            creator=user,
+            country=yasound_country,
+            city=city,
+            ready=True,
+            url=stream_url)
+        yasound_radio.set_tags(tags)
+
+        self.yasound_radio = yasound_radio
+        self.save()
 
     def __unicode__(self):
         return self.name
