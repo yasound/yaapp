@@ -80,37 +80,6 @@ class TestClassification(TestCase):
         self.assertEquals(classification.get(str(ma.artist_code('artist1'))), 2)
 
 
-class TestCluster(TestCase):
-    def setUp(self):
-        cm = ClassifiedRadiosManager()
-        cm.drop()
-
-        rc = RadiosClusterManager()
-        rc.drop()
-
-        ma = MapArtistManager()
-        ma.drop()
-
-        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
-        user.set_password('test')
-        user.save()
-        self.client.login(username="test", password="test")
-        self.user = user
-
-    def _generate_radios(self, n=10):
-        radios = []
-        for i in range(0, n):
-            user = User.objects.create(email="test@yasound.com", username="%d" % (i), is_superuser=False, is_staff=False)
-            radio = Radio.objects.create(name='%d' % (i), creator=user)
-            playlist = yabase_test_utils.generate_playlist(song_count=10)
-            playlist.radio = radio
-            playlist.save()
-            radio.ready=True
-            radio.save()
-            radios.append(radio)
-        return radios
-
-
 class TestRecommenationsCache(TestCase):
     def setUp(self):
         m = RadioRecommendationsCache()
