@@ -66,17 +66,14 @@ logger = logging.getLogger("yaapp.yabase")
 PICTURE_FILE_TAG = 'picture'
 SONG_FILE_TAG = 'song'
 
-_last_progress = '0.0'
-
 def task_status(request, task_id):
     asyncRes = AsyncResult(task_id=task_id)
     status = asyncRes.state
     metadata = asyncRes.info
     if metadata is not None and 'progress' in metadata:
         progress = metadata['progress']
-        _last_progress = progress
     else:
-        progress = _last_progress
+        progress = '1.0'
 
     message = 'updating...'
     response_dict = {}
