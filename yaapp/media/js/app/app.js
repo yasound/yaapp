@@ -20,6 +20,7 @@ $(document).ready(function () {
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
     Yasound.App.hd = g_hd_enabled;
+    Yasound.App.RADIOWAYS = 1;
 
     if (cookies.get('radio')) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');
@@ -289,8 +290,10 @@ $(document).ready(function () {
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
                 this.currentRadio.on('change:id', function (model, id) {
+                    var origin = model.get('origin');
                     model.currentSong = that.radioContext.currentSong;
                     that.radioContext.currentSong.set('radioId', id);
+                    that.radioContext.currentSong.setOrigin(origin);
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                     that.pushManager.monitorRadio(model);
