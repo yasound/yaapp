@@ -403,10 +403,14 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     tagName: 'li',
     className: 'radio-user',
     events: {
-        'click h5 a': 'selectUser'
+        'click a': 'selectUser'
     },
     initialize: function () {
         this.model.bind('change', this.render, this);
+    },
+
+    beforeRemove: function () {
+        $('.user', this.el).tooltip('hide');
     },
 
     onClose: function () {
@@ -420,6 +424,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
 
         return this;
     },
+
     selectUser: function (event) {
         event.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.model.get('username') + '/', {

@@ -133,6 +133,9 @@ $(document).ready(function () {
             this.el.parentNode.removeChild(this.el);
             Yasound.Utils.saveStickyView(this.stickyKey(), this);
         } else {
+            if (this.beforeRemove) {
+                this.beforeRemove();
+            }
             this.remove();
             this.unbind();
             if (this.onClose) {
