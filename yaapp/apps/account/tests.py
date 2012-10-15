@@ -17,7 +17,8 @@ from models import UserAdditionalInfosManager, InvitationsManager
 from yamessage.models import NotificationsManager
 from yamessage import settings as yamessage_settings
 from pymongo import DESCENDING
-
+from django.test.client import RequestFactory
+from yacore.http import is_iphone_version_1, is_iphone_version_2
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -807,3 +808,16 @@ class TestInvitationsManager(TestCase):
 
         users_id = ia.find_invitation_providers(InvitationsManager.TYPE_FACEBOOK, 42)
         self.assertEquals(users_id[0].get('db_id'), user1.id)
+
+class TestIphoneVersion(TestCase):
+    def setUp(self):
+        pass
+
+    def test_versions(self):
+        request = RequestFactory().get('/?username=100001622138259@facebook&api_key=d6c5200968defb0503a0ecb3ac3111619a6173ed&app_id=com.yasound.yasound&app_version=2.0.38')
+        self.assertFalse(is_iphone_version_1(request))
+        self.assertTrue(is_iphone_version_2(request))
+
+        request = RequestFactory().get('/?username=100001622138259@facebook&api_key=d6c5200968defb0503a0ecb3ac3111619a6173ed&app_id=com.yasound.yasound&app_version=1.0.38')
+        self.assertTrue(is_iphone_version_1(request))
+        self.assertFalse(is_iphone_version_2(request))

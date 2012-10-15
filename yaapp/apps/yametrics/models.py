@@ -9,6 +9,7 @@ from pymongo import DESCENDING
 from task import async_inc_global_value, async_inc_radio_value
 from yabase import settings as yabase_settings, signals as yabase_signals
 from yabase.models import Radio, SongMetadata
+from yabase import settings as yabase_settings
 from yametrics.task import async_activity, async_check_if_new_listener, \
     async_radio_activity, async_report_abuse
 import datetime
@@ -653,7 +654,7 @@ def new_user_profile_handler(sender, instance, created, **kwargs):
 
 
 def new_radio_handler(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.origin == yabase_settings.RADIO_ORIGIN_YASOUND:
         async_inc_global_value.delay('new_radios', 1)
 
 
@@ -675,7 +676,8 @@ def radio_updated_handler(sender, instance, created=None, **kwargs):
         rm = RadioMetricsManager()
         rm.remove_radio(radio.id)
 
-        async_inc_global_value.delay('deleted_radios', 1)
+        if radio.origin == yabase_settings.RADIO_ORIGIN_YASOUND:
+            async_inc_global_value.delay('deleted_radios', 1)
 
 
 def dislike_radio_handler(sender, radio, user, **kwargs):
@@ -740,7 +742,8 @@ def radio_is_ready_handler(sender, radio, **kwargs):
     """
     inc the 'new_real_radios' metric
     """
-    async_inc_global_value.delay('new_real_radios', 1)
+    if radio.origin == yabase_settings.RADIO_ORIGIN_YASOUND:
+        async_inc_global_value.delay('new_real_radios', 1)
 
 
 def install_handlers():
