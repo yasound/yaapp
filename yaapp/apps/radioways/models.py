@@ -5,6 +5,7 @@ All models have a "radioways_id" which is the primary key in the radioways datab
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 import settings as radioways_settings
 
@@ -13,6 +14,7 @@ from yageoperm.models import Country as YasoundCountry
 from yabase import settings as yabase_settings
 
 from yametadata.radioways import find_metadata
+from sorl.thumbnail import get_thumbnail
 import logging
 logger = logging.getLogger("yaapp.radioways")
 
@@ -155,6 +157,14 @@ class Radio(models.Model):
         song_dict['name'] = metadata.get('title')
         song_dict['artist'] = metadata.get('artist')
         return song_dict
+
+    @property
+    def cover_url(self):
+        short_url = '%s%s.png' % (settings.RADIOWAYS_COVER_SHORT_URL, self.radioways_id)
+        try:
+            return get_thumbnail(short_url, '64x64', crop='center').url
+        except:
+            return settings.DEFAULT_IMAGE
 
     def __unicode__(self):
         return self.name

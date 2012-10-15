@@ -687,7 +687,7 @@ ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
 SONG_COVER_SHORT_URL = 'covers/songs/'
 SONG_COVER_URL = MEDIA_URL + SONG_COVER_SHORT_URL
 
-RADIOWAYS_COVER_SHORT_URL = 'radioways/logos'
+RADIOWAYS_COVER_SHORT_URL = 'radioways/logos/'
 
 # celery stuff
 from celery.schedules import crontab
