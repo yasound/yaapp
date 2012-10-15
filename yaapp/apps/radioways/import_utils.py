@@ -1,8 +1,12 @@
 from models import Continent, Country, Genre, Radio
+from django.conf import settings
 import settings as radioways_settings
-
+import os
+import shutil
+import mimetypes
 import logging
 logger = logging.getLogger("yaapp.radioways")
+
 
 def _convert_to_utf8(str):
     try:
@@ -125,6 +129,22 @@ def import_radio_genre(file):
         radio = Radio.objects.get(radioways_id=radio_id)
         genre = Genre.objects.get(radioways_id=genre_id)
         radio.genres.add(genre)
+
+
+def import_logos(path):
+    dest = settings.RADIOWAYS_COVERS_ROOT
+    src_files = os.listdir(path)
+    for file_name in src_files:
+        full_file_name = os.path.join(path, file_name)
+        mimetype = mimetypes.guess_type(full_file_name)[0]
+        if mimetype not in ['image/png', 'image/jpeg', 'image/jpg']:
+            logger.info('mimetype of %s is forbidden: %s' % (full_file_name, mimetype))
+            continue
+
+        logger.info('copying %s to %s' % (full_file_name, dest))
+        if (os.path.isfile(full_file_name)):
+            shutil.copy(full_file_name, dest)
+
 
 def link_to_yasound():
     qs = Radio.objects.filter(yasound_radio__isnull=True, stream_codec=radioways_settings.CODEC_MP3)

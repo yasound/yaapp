@@ -687,6 +687,8 @@ ALBUM_COVER_URL = MEDIA_URL + ALBUM_COVER_SHORT_URL
 SONG_COVER_SHORT_URL = 'covers/songs/'
 SONG_COVER_URL = MEDIA_URL + SONG_COVER_SHORT_URL
 
+RADIOWAYS_COVER_SHORT_URL = 'radioways/logos'
+
 # celery stuff
 from celery.schedules import crontab
 
@@ -852,16 +854,19 @@ if PRODUCTION_MODE:
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
     SONG_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/song-cover/'
     RECOMMENDATION_CACHE = '/data/glusterfs-mnt/replica2all/recommendation/'
+    RADIOWAYS_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/front/radioways/logos/'
 elif DEVELOPMENT_MODE:
     SONGS_ROOT = '/home/customer/data/song/'
     ALBUM_COVERS_ROOT = '/home/customer/data/album-cover/'
     SONG_COVERS_ROOT = '/home/customer/data/song-cover/'
     RECOMMENDATION_CACHE = '/home/customer/data/recommendation/'
+    RADIOWAYS_COVERS_ROOT = '/home/customer/data/radioways/logos/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
     SONG_COVERS_ROOT = '/tmp/'
     RECOMMENDATION_CACHE = '/tmp/'
+    RADIOWAYS_COVERS_ROOT = '/tmp/'
 
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 GIFT_DEFAULT_IMAGE_TODO = MEDIA_URL +'images/default-gift-todo.png'
