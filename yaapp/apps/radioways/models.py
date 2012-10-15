@@ -146,8 +146,8 @@ class Radio(models.Model):
             'name': None,
             'artist': None,
             'album': None,
-            'cover': None,
-            'large_cover': None
+            'cover': settings.DEFAULT_TRACK_IMAGE,
+            'large_cover': settings.DEFAULT_TRACK_IMAGE
         }
         res = find_metadata(self.metadata_id)
         if not res:
