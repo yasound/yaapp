@@ -272,7 +272,7 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             Yasound.Utils.dialog(gettext('Error'), gettext('You must be logged in'));
             return;
         }
-        var twitterText = gettext('Join me on #yasound ' + g_twitter_referal);
+        var twitterText = gettext('Join me on #yasound') + ' ' + g_twitter_referal;
         $('#modal-invite-twitter textarea').val(twitterText);
 
         $('#modal-invite-twitter').modal('show');
