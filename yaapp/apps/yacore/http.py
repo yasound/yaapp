@@ -6,14 +6,34 @@ from tastypie.models import ApiKey
 def fill_app_infos(request):
     request.app_version = request.REQUEST.get('app_version')
     request.app_id = request.REQUEST.get('app_id')
-    
+
+def is_iphone_version_1(request):
+    """
+    check if current user has the v1 version of iPhone app
+    """
+    app_version = request.REQUEST.get('app_version')
+    app_version.split('.')
+    if len(app_version) > 0 and app_version[0] == '1':
+        return True
+    return False
+
+def is_iphone_version_2(request):
+    """
+    check if current user has the v2 version of iPhone app
+    """
+    app_version = request.REQUEST.get('app_version')
+    app_version.split('.')
+    if len(app_version) > 0 and app_version[0] == '2':
+        return True
+    return False
+
 def coerce_put_post(request):
     """
     Django doesn't particularly understand REST.
     In case we send data over PUT, Django won't
     actually look at the data and load it. We need
     to twist its arm here.
-   
+
     The try/except abominiation here is due to a bug
     in mod_python. This should fix it.
     """
@@ -41,9 +61,9 @@ def coerce_put_post(request):
             request._load_post_and_files()
             request.META['REQUEST_METHOD'] = 'PUT'
 
-        request.PUT = request.POST    
-        
-        
+        request.PUT = request.POST
+
+
 
 def check_api_key_Authentication(request):
     request.app_version = request.REQUEST.get('app_version')
@@ -62,7 +82,7 @@ def check_api_key_Authentication(request):
             return False
     except User.DoesNotExist, ApiKey.DoesNotExist:
         return False
-    
+
     user.userprofile.authenticated()
     return True
 
@@ -71,14 +91,14 @@ def check_http_method(request, allowed_methods):
     allowed = [x.lower() for x in allowed_methods]
     ok = method in allowed
     return ok
-        
-        
+
+
 def absolute_url(url):
     """
-    return absolute url : 
-    
+    return absolute url :
+
     /myurl --> https://api.yasound.com/myurl
-    
+
     """
     current_site = Site.objects.get_current()
     protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")

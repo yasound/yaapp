@@ -1739,19 +1739,12 @@ def new_radio_created(sender, instance, created=None, **kwargs):
         profile.permissions.create_radio = False
         profile.save()
 
-def create_radio(sender, instance, created, **kwargs):
-    if created:
-        radio, created = Radio.objects.get_or_create(creator=instance)
-        radio.save()
-
 
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
     post_save.connect(create_user_profile, sender=EmailUser)
     post_save.connect(create_api_key, sender=User)
     post_save.connect(create_api_key, sender=EmailUser)
-    post_save.connect(create_radio, sender=User)
-    post_save.connect(create_radio, sender=EmailUser)
     post_save.connect(create_ml_contact, sender=UserProfile)
     post_save.connect(new_radio_created, sender=Radio)
     pre_delete.connect(user_profile_deleted, sender=UserProfile)

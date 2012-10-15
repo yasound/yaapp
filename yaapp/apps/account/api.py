@@ -22,7 +22,7 @@ import tweepy
 import urllib
 import uuid
 import time
-from yacore.http import fill_app_infos
+from yacore.http import fill_app_infos, is_iphone_version_1
 from yageoperm import utils as yageoperm_utils
 
 from django.utils.translation import ugettext_lazy as _
@@ -241,6 +241,9 @@ class SignupResource(ModelResource):
         user_profile.yasound_email = bundle.data['email']
         user_profile.update_with_bundle(bundle, True)
 
+        if is_iphone_version_1(request):
+            Radio.objects.get_or_create(creator=user)
+
         radio = Radio.objects.radio_for_user(user)
         if radio is not None:
             radio.create_name(user)
@@ -397,6 +400,9 @@ class SocialAuthentication(Authentication):
 
                 request.user = user
 
+                if is_iphone_version_1(request):
+                    Radio.objects.get_or_create(creator=user)
+
                 radio = Radio.objects.radio_for_user(user)
                 if radio is not None:
                     radio.create_name(user)
@@ -449,12 +455,16 @@ class SocialAuthentication(Authentication):
 
                 request.user = user
 
+                if is_iphone_version_1(request):
+                    Radio.objects.get_or_create(creator=user)
+
                 radio = Radio.objects.radio_for_user(user)
                 if radio is not None:
                     radio.create_name(user)
                 authenticated = True
         else:
             return False
+
 
         if authenticated:
             profile.logged(request)

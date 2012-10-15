@@ -10,6 +10,7 @@ from yametrics.models import TopMissingSongsManager, RadioMetricsManager, \
 from yametrics.task import async_activity, update_activities
 import datetime
 import settings as yametrics_settings
+from yabase import settings as yabase_settings
 
 class TestGlobalMetricsManager(TestCase):
     def setUp(self):
@@ -55,6 +56,7 @@ class TestGlobalMetricsManager(TestCase):
         mm = GlobalMetricsManager()
         now = datetime.datetime.now()
         year = now.strftime('%Y')
+
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_radios'], 1)
 
         Radio(name='pizza', ready=True, creator=self.user).save()
@@ -89,10 +91,20 @@ class TestGlobalMetricsManager(TestCase):
         radio.ready = True
         radio.save()
 
-        mm = GlobalMetricsManager()
         metrics = mm.get_metrics_for_timestamp(mm._get_year_timestamp())
         new_real_radios = metrics.get('new_real_radios', 0)
         self.assertEquals(new_real_radios, 1)
+
+        # check if only yasound radios are taken into account
+        radio = Radio.objects.create(creator=self.user, name='new shiny radio', origin=yabase_settings.RADIO_ORIGIN_RADIOWAYS)
+        radio.ready = True
+        radio.save()
+
+        metrics = mm.get_metrics_for_timestamp(mm._get_year_timestamp())
+        new_real_radios = metrics.get('new_real_radios', 0)
+        self.assertEquals(new_real_radios, 1)
+
+
 class TestRadioMetricsManager(TestCase):
     def setUp(self):
         rm = RadioMetricsManager()
