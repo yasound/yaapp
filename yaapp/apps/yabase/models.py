@@ -1056,6 +1056,8 @@ class Radio(models.Model):
             except:
                 return yaapp_settings.DEFAULT_IMAGE
         else:
+            if self.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
+                return self.radioways_radio.cover_url
             return yaapp_settings.DEFAULT_IMAGE
 
     @property
@@ -1066,6 +1068,8 @@ class Radio(models.Model):
             except:
                 return yaapp_settings.DEFAULT_IMAGE
         else:
+            if self.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
+                return self.radioways_radio.cover_url
             return yaapp_settings.DEFAULT_IMAGE
 
     def set_picture(self, data):
