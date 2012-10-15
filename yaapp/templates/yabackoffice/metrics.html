@@ -8,7 +8,7 @@
                 {% trans "Figure" %}
             </th>
             {% for metric in metrics %}
-            <th style="width: 80px;"> 
+            <th style="width: 80px;">
                 {{ metric.timestamp }}
             </th>
             {% endfor %}
@@ -25,7 +25,7 @@
             </td>
             {% endfor %}
         </tr>
-        
+
         <tr>
             <td>
                 {% trans "New radios" %}
@@ -33,6 +33,28 @@
             {% for metric in metrics %}
             <td>
                 {{ metric.new_radios }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "New real radios" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.new_real_radios }}
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>
+                {% trans "Deleted radios" %}
+            </td>
+            {% for metric in metrics %}
+            <td>
+                {{ metric.deleted_radios }}
             </td>
             {% endfor %}
         </tr>
@@ -66,7 +88,7 @@
             </td>
             {% for metric in metrics %}
             <td>
-                {{ metric.average_duration }} 
+                {{ metric.average_duration }}
             </td>
             {% endfor %}
         </tr>
@@ -133,7 +155,7 @@
             </td>
             {% for metric in metrics %}
             <td>
-                {{ metric.new_radio_like }} /  {{ metric.new_radio_dislike }} /  {{ metric.new_radio_neutral }} 
+                {{ metric.new_radio_like }} /  {{ metric.new_radio_dislike }} /  {{ metric.new_radio_neutral }}
             </td>
             {% endfor %}
         </tr>
@@ -144,7 +166,7 @@
             </td>
             {% for metric in metrics %}
             <td>
-                {{ metric.new_favorite_radio }} /  {{ metric.new_not_favorite_radio }} 
+                {{ metric.new_favorite_radio }} /  {{ metric.new_not_favorite_radio }}
             </td>
             {% endfor %}
         </tr>
