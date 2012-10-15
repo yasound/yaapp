@@ -79,8 +79,20 @@ class TestGlobalMetricsManager(TestCase):
         data = mm.get_graph_metrics(['key'])
         self.assertEquals(len(data), 5)
 
+    def test_new_real_radios(self):
+        radio = Radio.objects.create(creator=self.user, name='new shiny radio')
+        mm = GlobalMetricsManager()
+        metrics = mm.get_metrics_for_timestamp(mm._get_year_timestamp())
+        new_real_radios = metrics.get('new_real_radios', 0)
+        self.assertEquals(new_real_radios, 0)
 
+        radio.ready = True
+        radio.save()
 
+        mm = GlobalMetricsManager()
+        metrics = mm.get_metrics_for_timestamp(mm._get_year_timestamp())
+        new_real_radios = metrics.get('new_real_radios', 0)
+        self.assertEquals(new_real_radios, 1)
 class TestRadioMetricsManager(TestCase):
     def setUp(self):
         rm = RadioMetricsManager()

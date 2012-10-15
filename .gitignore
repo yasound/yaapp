@@ -30,3 +30,4 @@ yaapp/.settings/*
 yaapp/media/*-all.*.js
 .rope*
 yaapp.sublime*
+yaapp/doc/_build/*
