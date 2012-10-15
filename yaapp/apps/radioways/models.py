@@ -1,3 +1,8 @@
+"""
+Models for radioways.
+All models have a "radioways_id" which is the primary key in the radioways database.
+"""
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -7,13 +12,15 @@ from yabase.models import Radio as YasoundRadio
 from yageoperm.models import Country as YasoundCountry
 from yabase import settings as yabase_settings
 
-from account.models import UserProfile
 from yametadata.radioways import find_metadata
 import logging
 logger = logging.getLogger("yaapp.radioways")
 
 
 class Continent(models.Model):
+    """A continent.
+    Contains a code (aka sigle) and fr, uk, es & de names.
+    """
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
     sigle = models.CharField(_('sigle'), max_length=4, blank=True)
     name_fr = models.CharField(_('name (fr)'), max_length=100, blank=True)
@@ -26,6 +33,9 @@ class Continent(models.Model):
 
 
 class Country(models.Model):
+    """A country, linked with a continent.
+    Contains a code (aka sigle) and fr, uk, es & de names.
+    """
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
     continent = models.ForeignKey(Continent, verbose_name=_('continent'))
     sigle = models.CharField(_('sigle'), max_length=4, blank=True)
@@ -39,6 +49,9 @@ class Country(models.Model):
 
 
 class Genre(models.Model):
+    """Genre.
+    A genre has a type and name. Genre is translated as tags in yasound radio
+    """
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
     gtype = models.IntegerField(_('type'), choices=radioways_settings.GENRE_TYPE_CHOICES, default=radioways_settings.GENRE_TYPE_MUSICAL)
     name_fr = models.CharField(_('name (fr)'), max_length=100, blank=True)
@@ -51,6 +64,9 @@ class Genre(models.Model):
 
 
 class Radio(models.Model):
+    """Radioways radio
+    A radio, linked with an optional foreign key
+    """
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
     yasound_radio = models.OneToOneField('yabase.Radio',
         verbose_name=_('yasound radio'),
@@ -74,6 +90,9 @@ class Radio(models.Model):
     stream_response_time = models.IntegerField(_('stream response time'), null=True, blank=True)
 
     def link_to_yasound(self):
+        """Create or update the associated yasound radio.
+
+        """
         country = self.country
         sigle = country.sigle
         city = self.city
@@ -107,6 +126,19 @@ class Radio(models.Model):
 
     @property
     def current_song(self):
+        """Return the current song.
+        the returned data is a dict:
+
+        >>> dict = {
+                'id': None,
+                'name': None,
+                'artist': None,
+                'album': None,
+                'cover': None,
+                'large_cover': None
+            }
+        """
+
         song_dict = {
             'id': None,
             'name': None,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-08 10:55+0200\n"
+"POT-Creation-Date: 2012-10-15 14:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:60
+#: js/app/app.js:61
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
@@ -100,30 +100,33 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:209
-#: js/app/common/models.js.py:242
+#: js/app/common/models.js:250
+#: js/app/common/models.js.py:283
+#: js/app/profile/models.js:38
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:241
+#: js/app/common/models.js:282
+#: js/app/profile/models.js:37
 #: js/app/share/views.js:36
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:243
+#: js/app/common/models.js:284
+#: js/app/profile/models.js:39
 #: js/app/share/views.js:37
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:313
+#: js/app/common/models.js:355
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:319
+#: js/app/common/models.js:362
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:321
+#: js/app/common/models.js:364
 msgid "female"
 msgstr "femme"
 
@@ -139,6 +142,8 @@ msgstr "Nouvelle notification reçue"
 #: js/app/friends/views.js:345
 #: js/app/friends/views.js.py:364
 #: js/app/friends/views.js:370
+#: js/app/gifts/views.js:49
+#: js/app/gifts/views.js.py:56
 msgid "Error"
 msgstr "Erreur"
 
@@ -190,7 +195,7 @@ msgid "You must be logged in"
 msgstr "Vous devez être authentifié"
 
 #: js/app/friends/views.js:275
-msgid "Join me on #yasound "
+msgid "Join me on #yasound"
 msgstr "Rejoins moi sur #yasound"
 
 #: js/app/friends/views.js:290
@@ -204,6 +209,7 @@ msgstr "Rejoins moi sur Yasound"
 #: js/app/friends/views.js:321
 #: js/app/friends/views.js.py:341
 #: js/app/friends/views.js:366
+#: js/app/gifts/views.js:51
 msgid "Thank you"
 msgstr "Merci"
 
@@ -216,6 +222,7 @@ msgstr "Vos amis ont été invités avec succès."
 #: js/app/friends/views.js:325
 #: js/app/friends/views.js.py:345
 #: js/app/friends/views.js:370
+#: js/app/gifts/views.js:56
 msgid "Error while communicating with Yasound, please retry late"
 msgstr "Erreur lors de la communication avec Yasound, veuillez réessayer "
 "ultérieurement."
@@ -329,38 +336,42 @@ msgstr "L'analyse de l'import iTunes a démarré"
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:539
+#: js/app/radio/views.js:544
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:783
+#: js/app/radio/views.js:788
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:784
-#: js/app/settings/views.js:167
-#: js/app/settings/views.js.py:177
+#: js/app/radio/views.js:789
+#: js/app/settings/views.js:173
+#: js/app/settings/views.js.py:183
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
 
-#: js/app/settings/views.js:101
+#: js/app/settings/views.js:40
+msgid "dd/mm/yyyy"
+msgstr ""
+
+#: js/app/settings/views.js:107
 msgid "Facebook settings saved"
 msgstr "Paramètres Facebook sauvegardés"
 
-#: js/app/settings/views.js:103
+#: js/app/settings/views.js:109
 msgid "Error while saving Facebook settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Facebook"
 
-#: js/app/settings/views.js:111
+#: js/app/settings/views.js:117
 msgid "Twitter settings saved"
 msgstr "Paramètres Twitter sauvegardés"
 
-#: js/app/settings/views.js:113
+#: js/app/settings/views.js:119
 msgid "Error while saving Twitter settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 
-#: js/app/settings/views.js:166
-#: js/app/settings/views.js.py:176
+#: js/app/settings/views.js:172
+#: js/app/settings/views.js.py:182
 msgid "Settings updated"
 msgstr "Paramètres mis à jour"
 
@@ -372,11 +383,11 @@ msgstr "J'écoute"
 msgid "Yasound share"
 msgstr "Partage Yasound"
 
-#: js/app/signup/views.js:33
+#: js/app/signup/views.js:36
 msgid "Registration error"
 msgstr "Erreur d'inscription"
 
-#: js/app/signup/views.js:49
+#: js/app/signup/views.js:54
 msgid "Error while creating account"
 msgstr "Erreur lors de création du compte"
 

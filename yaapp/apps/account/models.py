@@ -157,8 +157,7 @@ class UserProfileManager(models.Manager):
         return profiles
 
 class UserProfile(models.Model):
-    """
-    Store usefule informations about user.
+    """Store useful informations about user.
 
     account_type can handle multiple values :
      * single ACCOUNT_TYPE_* values
@@ -166,24 +165,24 @@ class UserProfile(models.Model):
 
     Example of valid account_type:
 
-    >> account_type = 'TWITTER'   # only twitter
-    >> account_type = 'TW,FB'     # twitter and facebook
-    >> account_type = 'FACEBOOK'  # only facebook
-    >> account_type = 'FB'        # only facebook
-    >> account_type = 'FB,TW,YA'  # facebook, twitter, yasound
+    >>> user_profile.account_type = 'TWITTER'   # only twitter
+    >>> user_profile.account_type = 'TW,FB'     # twitter and facebook
+    >>> user_profile.account_type = 'FACEBOOK'  # only facebook
+    >>> user_profile.account_type = 'FB'        # only facebook
+    >>> user_profile.account_type = 'FB,TW,YA'  # facebook, twitter, yasound
 
     Instead of checking the account_type field, you should use the following property:
 
-    >> facebook_enabled
-    >> twitter_enabled
-    >> yasound_enabled
+    >>> user_profile.facebook_enabled
+    >>> user_profile.twitter_enabled
+    >>> user_profile.yasound_enabled
 
     The following methods handle the account_type values:
 
-    >> add_account_type()
-    >> remove_account_type()
-
+    >>> user_profile.add_account_type()
+    >>> user_profile.remove_account_type()
     """
+
     objects = UserProfileManager()
     user = models.OneToOneField(User, verbose_name=_('user'))
     name = models.CharField(_('name'), max_length = 60, blank=True)
@@ -273,8 +272,12 @@ class UserProfile(models.Model):
             account_settings.ACCOUNT_MULT_YASOUND in self.account_type
 
     def convert_to_multi_account_type(self, commit=True):
-        """
-        Convert a single account type to a potential multi account type
+        """Convert a single account type to a potential multi account type
+
+        Args:
+            commit: if true the object is saved
+        Returns:
+            account_type
         """
         account_type = self.account_type
         if account_type == account_settings.ACCOUNT_TYPE_FACEBOOK:
