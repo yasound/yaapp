@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-15 10:12+0200\n"
+"POT-Creation-Date: 2012-10-15 17:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -929,7 +929,7 @@ msgstr "Partager"
 #: templates/yabase/webapp.html:642
 #: templates/yabase/app/friends/friendsPage.mustache:66
 #: templates/yabase/app/programming/statusPage.mustache:36
-#: templates/yabase/app/radio/editRadioPage.mustache:32
+#: templates/yabase/app/radio/editRadioPage.mustache:35
 #: templates/yabase/app/settings/settingsPage.mustache:129
 msgid "Close"
 msgstr "Fermer"
@@ -1131,7 +1131,7 @@ msgstr "Cadeaux"
 #: templates/yabase/app/mobileLeftMenu.html:35
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:13
 #: templates/yabase/app/profile/user.mustache:26
-#: templates/yabase/app/programming/programmingPage.mustache:4
+#: templates/yabase/app/programming/programmingPage.mustache:6
 #: templates/yabase/app/radio/radio.mustache:20
 #: templates/yabase/app/radio/radio.mustache:27
 #: templates/yabase/app/settings/settingsPage.mustache:6
@@ -1321,9 +1321,9 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:10
-#: templates/yabase/app/programming/programmingPage.mustache:5
-#: templates/yabase/app/programming/programmingPage.mustache:13
-#: templates/yabase/app/radio/editRadioPage.mustache:6
+#: templates/yabase/app/programming/programmingPage.mustache:8
+#: templates/yabase/app/programming/programmingPage.mustache:15
+#: templates/yabase/app/radio/editRadioPage.mustache:8
 #: templates/yabase/app/radio/radio.mustache:21
 #: templates/yabase/app/radio/radio.mustache:28
 msgid "Programming"
@@ -1479,11 +1479,16 @@ msgstr "Sélectionner des artistes"
 msgid "Select albums"
 msgstr "Sélectionner des albums"
 
-#: templates/yabase/app/programming/programmingPage.mustache:12
+#: templates/yabase/app/programming/programmingPage.mustache:5
+#: templates/yabase/app/radio/editRadioPage.mustache:7
+msgid "Listen now"
+msgstr "Ecouter maintenant"
+
+#: templates/yabase/app/programming/programmingPage.mustache:14
 msgid "Default playlist"
 msgstr "Playlist par défaut"
 
-#: templates/yabase/app/programming/programmingPage.mustache:14
+#: templates/yabase/app/programming/programmingPage.mustache:16
 #: templates/yabase/app/programming/statusPage.mustache:42
 msgid "History"
 msgstr ""
@@ -1585,21 +1590,21 @@ msgstr "Tout Importer"
 msgid "import"
 msgstr "importer"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:7
+#: templates/yabase/app/radio/editRadioPage.mustache:10
 msgid "Radio settings"
 msgstr "Paramètres de la radio"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:11
+#: templates/yabase/app/radio/editRadioPage.mustache:14
 #: templates/yabase/app/settings/settingsPage.mustache:108
 msgid "Upload photo"
 msgstr "Importer une photo"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:25
+#: templates/yabase/app/radio/editRadioPage.mustache:28
 #: templates/yabase/app/settings/settingsPage.mustache:122
 msgid "Upload error"
 msgstr "Erreur d'upload"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:41
+#: templates/yabase/app/radio/editRadioPage.mustache:44
 #: templates/yabase/app/settings/settingsPage.mustache:68
 #: templates/yabase/app/settings/settingsPage.mustache:139
 #: templates/yabase/app/settings/settingsPage.mustache:149

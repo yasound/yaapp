@@ -3,7 +3,10 @@
 
 <div class='row-fluid'>
     <div class='span12 settings-container'>
-        <button type="button" class="yabutton-small right" id='programming-btn'>{% trans "Programming" %}</button>
+        <div class='btn-group right' id='edit-radio-toolbar'>
+            <button type="button" class="yabutton-small" id='listen-btn'>{% trans "Listen now" %}</button>
+            <button type="button" class="yabutton-small" id='programming-btn'>{% trans "Programming" %}</button>
+        </div>
         <h1>{% trans "Radio settings" %}</h1>
         <div class='settings-content-container'>
             <div class='upload-container'>

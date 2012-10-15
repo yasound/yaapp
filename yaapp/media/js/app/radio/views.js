@@ -722,6 +722,7 @@ Yasound.Views.ListenersPage = Backbone.View.extend({
 Yasound.Views.EditRadioPage = Backbone.View.extend({
     events: {
         "click #programming-btn": "onProgramming",
+        "click #listen-btn": "onListen",
         "submit #edit-radio": "onSubmit"
     },
 
@@ -798,6 +799,13 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
     onProgramming: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.uuid + '/programming/', {
+            trigger: true
+        });
+    },
+
+    onListen: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.uuid, {
             trigger: true
         });
     }

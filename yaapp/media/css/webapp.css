@@ -2481,6 +2481,33 @@ ul#notifications {
     width:100%;
 }
 
+.programming-container {
+    border-radius:7px;
+    box-shadow:0px 1px 4px #cccccc;
+    background-image: linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 29%, rgb(255,255,255) 65%);
+ }
+
+ .programming-container h1 {
+    font-size:42px;
+    padding:38px 0px 38px 31px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.programming-container #programming-top-toolbar {
+    margin-top:40px;
+    margin-right:3px;
+    padding: 0px 15px;
+}
+
+.programming-container #programming-top-toolbar button {
+    height:31px;
+    font-weight: bold;
+}
+
 .programming #playlist-actions,
 .programming #upload-actions
  {
@@ -3428,10 +3455,13 @@ ul .radio-with-stats-cells li {
     border-bottom: 1px solid #e3e3e3;
 }
 
-.settings-container #programming-btn {
-    margin-top:26px;
-    margin-right:21px;
+.settings-container #edit-radio-toolbar {
+    margin-top:40px;
+    margin-right:3px;
     padding: 0px 15px;
+}
+
+.settings-container #edit-radio-toolbar button {
     height:31px;
     font-weight: bold;
 }
@@ -4301,7 +4331,7 @@ a.yabutton-small {
     padding-left:16px;
 }
 
-.programming .span9 {
+.programming-container .span9 {
     width:650px;
     padding-left:20px;
     margin-left:0;
