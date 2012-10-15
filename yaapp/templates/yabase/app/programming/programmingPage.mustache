@@ -1,9 +1,11 @@
 {% load i18n %}
-<div class='row  common-background programming'>
+<div class='row  programming-container'>
     <div class='span12 no-margin'>
-        <button class='yabutton right' id='edit-settings-btn'>{% trans 'Settings' %}</button>
-        <h1 class='zone-title'>{% trans "Programming" %}</h1>
-        <div class='separation-line'></div>
+        <div class='btn-group right' id='programming-top-toolbar'>
+            <button type="button" class='yabutton-small' id='listen-btn'>{% trans 'Listen now' %}</button>
+            <button type="button" class='yabutton-small' id='edit-settings-btn'>{% trans 'Settings' %}</button>
+        </div>
+        <h1>{% trans "Programming" %}</h1>
     </div>
 
     <div class='span3 no-margin'>

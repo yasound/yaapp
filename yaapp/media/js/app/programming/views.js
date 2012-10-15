@@ -1156,6 +1156,7 @@ Yasound.Views.Status = Backbone.View.extend({
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     events: {
         "click #edit-settings-btn": "onSettings",
+        "click #listen-btn": "onListen",
         "click #programming-btn": "onProgramming",
         "click #status-btn": "onStatus"
     },
@@ -1183,6 +1184,13 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
     onSettings: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.uuid + '/edit/', {
+            trigger: true
+        });
+    },
+
+    onListen: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.uuid, {
             trigger: true
         });
     },
