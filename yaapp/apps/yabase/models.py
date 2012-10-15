@@ -1117,7 +1117,8 @@ class Radio(models.Model):
                                                   user=self.creator,
                                                   radio=self,
                                                   atype=yabase_settings.ANIMATOR_TYPE_CREATE_RADIO)
-
+        if self.ready:
+            yabase_signals.radio_is_ready.send(sender=self, radio=self)
 
     def shared(self, user, share_type=None):
         yabase_signals.radio_shared.send(sender=self, radio=self, user=user, share_type=share_type)

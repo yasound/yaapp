@@ -14,6 +14,7 @@ from yametrics.task import async_activity, async_check_if_new_listener, \
 import datetime
 import settings as yametrics_settings
 
+
 class GlobalMetricsManager():
     """
     Helper class to store and retrieve key-value metrics
@@ -59,7 +60,7 @@ class GlobalMetricsManager():
             start_date = datetime.datetime.now()
         timestamps = []
 
-        day = start_date + datetime.timedelta(days=-(90-1))
+        day = start_date + datetime.timedelta(days=-(90 - 1))
         for dt in rrule.rrule(rrule.DAILY, dtstart=day, until=start_date):
             timestamps.append(dt.strftime('%Y-%m-%d'))
 
@@ -130,7 +131,6 @@ class GlobalMetricsManager():
                 metrics.append(metric)
         return metrics
 
-
     def get_past_month_metrics(self):
         collection = self.metrics_glob
         timestamps = self._generate_past_month_timestamps()
@@ -157,11 +157,11 @@ class GlobalMetricsManager():
         data = [{
             'timestamp': '-90'
         }, {
-            'timestamp' : '-15'
+            'timestamp': '-15'
         }, {
             'timestamp': '-7'
         }, {
-            'timestamp' : '-3'
+            'timestamp': '-3'
         }, {
             'timestamp': '-1'
         }]
@@ -172,13 +172,13 @@ class GlobalMetricsManager():
 
         current_timestamp = 0
         for i, timestamp in enumerate(timestamps):
-            if i ==  len(timestamps)-15:
+            if i == len(timestamps) - 15:
                 current_timestamp += 1
-            if i ==  len(timestamps)-7:
+            if i == len(timestamps) - 7:
                 current_timestamp += 1
-            if i ==  len(timestamps)-3:
+            if i == len(timestamps) - 3:
                 current_timestamp += 1
-            if i == len(timestamps)-1:
+            if i == len(timestamps) - 1:
                 current_timestamp += 1
 
             metric = collection.find_one({'timestamp': timestamp})
@@ -188,6 +188,7 @@ class GlobalMetricsManager():
                         value = metric[key]
                         data[current_timestamp][key] = data[current_timestamp][key] + value
         return data
+
 
 class TopMissingSongsManager():
     def __init__(self):
@@ -209,10 +210,12 @@ class TopMissingSongsManager():
             }
             collection.update({"db_id": metadata.id},
                               {"$set": doc}, upsert=True, safe=True)
+
     def all(self):
         collection = self.topmissingsongs
         docs = collection.find().sort([('songinstance__count', DESCENDING)])
         return docs
+
 
 class RadioMetricsManager():
     def __init__(self):
@@ -251,9 +254,7 @@ class RadioMetricsManager():
 
     def remove_radio(self, radio_id):
         collection = self.radios
-        collection.remove({'db_id': radio_id }, safe=True)
-
-
+        collection.remove({'db_id': radio_id}, safe=True)
 
 
 class RadioPopularityManager():
@@ -264,18 +265,18 @@ class RadioPopularityManager():
         self.settings = self.db.metrics.radio_popularity_settings
         self.settings.ensure_index("name", unique=True)
 
-        if self.settings.find({'name':yametrics_settings.ACTIVITY_LISTEN}).count() == 0:
-            self.settings.insert({'name':yametrics_settings.ACTIVITY_LISTEN,'value':1})
-        if self.settings.find({'name':yametrics_settings.ACTIVITY_SONG_LIKE}).count() == 0:
-            self.settings.insert({'name':yametrics_settings.ACTIVITY_SONG_LIKE,'value':5})
-        if self.settings.find({'name':yametrics_settings.ACTIVITY_WALL_MESSAGE}).count() == 0:
-            self.settings.insert({'name':yametrics_settings.ACTIVITY_WALL_MESSAGE,'value':5})
-        if self.settings.find({'name':yametrics_settings.ACTIVITY_SHARE}).count() == 0:
-            self.settings.insert({'name':yametrics_settings.ACTIVITY_SHARE,'value':8})
-        if self.settings.find({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES}).count() == 0:
-            self.settings.insert({'name':yametrics_settings.ACTIVITY_ADD_TO_FAVORITES,'value':8})
-        if self.settings.find({'name':yametrics_settings.ACTIVITY_BUY_LINK}).count() == 0:
-            self.settings.insert({'name':yametrics_settings.ACTIVITY_BUY_LINK,'value':0})
+        if self.settings.find({'name': yametrics_settings.ACTIVITY_LISTEN}).count() == 0:
+            self.settings.insert({'name': yametrics_settings.ACTIVITY_LISTEN, 'value': 1})
+        if self.settings.find({'name': yametrics_settings.ACTIVITY_SONG_LIKE}).count() == 0:
+            self.settings.insert({'name': yametrics_settings.ACTIVITY_SONG_LIKE, 'value': 5})
+        if self.settings.find({'name': yametrics_settings.ACTIVITY_WALL_MESSAGE}).count() == 0:
+            self.settings.insert({'name': yametrics_settings.ACTIVITY_WALL_MESSAGE, 'value': 5})
+        if self.settings.find({'name': yametrics_settings.ACTIVITY_SHARE}).count() == 0:
+            self.settings.insert({'name': yametrics_settings.ACTIVITY_SHARE, 'value': 8})
+        if self.settings.find({'name': yametrics_settings.ACTIVITY_ADD_TO_FAVORITES}).count() == 0:
+            self.settings.insert({'name': yametrics_settings.ACTIVITY_ADD_TO_FAVORITES, 'value': 8})
+        if self.settings.find({'name': yametrics_settings.ACTIVITY_BUY_LINK}).count() == 0:
+            self.settings.insert({'name': yametrics_settings.ACTIVITY_BUY_LINK, 'value': 0})
 
     def drop(self):
         self.radios.drop()
@@ -322,7 +323,7 @@ class RadioPopularityManager():
             return radios[skip:(skip + limit)]
 
     def action(self, radio_id, activity_type):
-        inc = self.settings.find({'name':activity_type})[0]['value']
+        inc = self.settings.find({'name': activity_type})[0]['value']
 
         collection = self.radios
         collection.update({"db_id": radio_id},
@@ -330,9 +331,8 @@ class RadioPopularityManager():
                           upsert=True,
                           safe=True)
 
-
     def action_score_coeff(self, activity_type):
-        factor = self.settings.find({'name':activity_type})[0]['value']
+        factor = self.settings.find({'name': activity_type})[0]['value']
         return factor
 
     def coeff_documents(self):
@@ -349,11 +349,11 @@ class RadioPopularityManager():
         if val < 0:
             return
 
-        self.settings.update({'_id':coeff_id}, new_doc)
+        self.settings.update({'_id': coeff_id}, new_doc)
 
     def compute_progression(self):
         collection = self.radios
-        collection.remove({'$or': [{'activity': {'$exists': False, }}, {'activity': 0}] })
+        collection.remove({'$or': [{'activity': {'$exists': False, }}, {'activity': 0}]})
 
         radio_ids = []
         docs = collection.find()
@@ -363,7 +363,7 @@ class RadioPopularityManager():
             new_progression = activity - last_activity
             last_activity = activity
             activity = 0
-            collection.update({'db_id': d['db_id']}, {'$set': {'progression': new_progression, 'activity': activity, 'last-activity': last_activity} })
+            collection.update({'db_id': d['db_id']}, {'$set': {'progression': new_progression, 'activity': activity, 'last-activity': last_activity}})
             # update Radio.popularity_score
             radio_id = d['db_id']
             radio_ids.append(radio_id)
@@ -373,7 +373,8 @@ class RadioPopularityManager():
 
     def remove_radio(self, radio_id):
         collection = self.radios
-        collection.remove({'db_id': radio_id }, safe=True)
+        collection.remove({'db_id': radio_id}, safe=True)
+
 
 class UserMetricsManager():
     def __init__(self):
@@ -404,6 +405,7 @@ class UserMetricsManager():
             return doc[key]
         except:
             return None
+
     def get_doc(self, user_id):
         return self.collection.find_one({'db_id': user_id})
 
@@ -439,7 +441,7 @@ class UserMetricsManager():
         for doc in docs:
             messages = doc['_id']
             users = doc['value']
-            users_messages = users_messages + (messages*users)
+            users_messages = users_messages + (messages * users)
             user_count = user_count + users
         mean = 0
         if user_count > 0:
@@ -487,7 +489,7 @@ class UserMetricsManager():
         for doc in docs:
             likes = doc['_id']
             users = doc['value']
-            users_likes = users_likes + (likes*users)
+            users_likes = users_likes + (likes * users)
             user_count = user_count + users
         mean = 0
         if user_count > 0:
@@ -505,14 +507,16 @@ class UserMetricsManager():
         12 users have likes 20 songs
         """
         return self.db.metrics.likes_stats.find()
+
+
 class TimedMetricsManager():
-    SLOT_24H        = '24h'
-    SLOT_3D         = '3d'
-    SLOT_7D         = '7d'
-    SLOT_15D        = '15d'
-    SLOT_30D        = '30d'
-    SLOT_90D        = '90d'
-    SLOT_90D_MORE   = '90d_more'
+    SLOT_24H = '24h'
+    SLOT_3D = '3d'
+    SLOT_7D = '7d'
+    SLOT_15D = '15d'
+    SLOT_30D = '30d'
+    SLOT_90D = '90d'
+    SLOT_90D_MORE = '90d_more'
 
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -547,15 +551,15 @@ class TimedMetricsManager():
     def slot(self, days):
         if days < 1:
             return self.SLOT_24H
-        elif days in range(1, 3+1):
+        elif days in range(1, 3 + 1):
             return self.SLOT_3D
-        elif days in range(4, 7+1):
+        elif days in range(4, 7 + 1):
             return self.SLOT_7D
-        elif days in range(8, 15+1):
+        elif days in range(8, 15 + 1):
             return self.SLOT_15D
-        elif days in range(16, 30+1):
+        elif days in range(16, 30 + 1):
             return self.SLOT_30D
-        elif days in range(31, 90+1):
+        elif days in range(31, 90 + 1):
             return self.SLOT_90D
         else:
             return self.SLOT_90D_MORE
@@ -605,17 +609,20 @@ def user_started_listening_handler(sender, radio, user, **kwargs):
     async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_LISTEN)
 
+
 def buy_link_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
         async_activity.delay(user.id, yametrics_settings.ACTIVITY_BUY_LINK, throttle=False)
     async_inc_radio_value.delay(radio.id, 'buy_link_count', 1)
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_BUY_LINK)
 
+
 def user_stopped_listening_handler(sender, radio, user, duration, **kwargs):
     async_inc_global_value.delay('listening_time', duration)
     async_inc_global_value.delay('listening_count', 1)
 
     async_inc_radio_value.delay(radio.id, 'current_users', -1)
+
 
 def new_wall_event_handler(sender, wall_event, **kwargs):
     we_type = wall_event.type
@@ -639,13 +646,16 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
 
     async_inc_radio_value.delay(wall_event.radio.id, 'daily_popularity', 1)
 
+
 def new_user_profile_handler(sender, instance, created, **kwargs):
     if created:
         async_inc_global_value.delay('new_users', 1)
 
+
 def new_radio_handler(sender, instance, created, **kwargs):
     if created:
         async_inc_global_value.delay('new_radios', 1)
+
 
 def radio_deleted_handler(sender, instance, created=None, **kwargs):
     radio = instance
@@ -654,6 +664,7 @@ def radio_deleted_handler(sender, instance, created=None, **kwargs):
 
     rm = RadioMetricsManager()
     rm.remove_radio(radio.id)
+
 
 def radio_updated_handler(sender, instance, created=None, **kwargs):
     radio = instance
@@ -664,22 +675,30 @@ def radio_updated_handler(sender, instance, created=None, **kwargs):
         rm = RadioMetricsManager()
         rm.remove_radio(radio.id)
 
+        async_inc_global_value.delay('deleted_radios', 1)
+
+
 def dislike_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_dislike', 1)
+
 
 def like_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_like', 1)
 
+
 def neutral_like_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_radio_neutral_like', 1)
+
 
 def favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_favorite_radio', 1)
     async_inc_radio_value.delay(radio.id, 'daily_popularity', 1)
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_ADD_TO_FAVORITES)
 
+
 def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_inc_global_value.delay('new_not_favorite_radio', 1)
+
 
 def new_device_registered(sender, user, uuid, ios_token, **kwargs):
     if len(ios_token) > 0:
@@ -687,13 +706,16 @@ def new_device_registered(sender, user, uuid, ios_token, **kwargs):
     else:
         async_inc_global_value.delay('device_notifications_disabled', 1)
 
+
 def new_animator_activity(sender, user, radio, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_ANIMATOR)
     async_inc_global_value.delay('new_animator_activity', 1)
 
+
 def new_moderator_del_msg_activity(sender, user, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_DEL_MSG, throttle=False)
     async_inc_global_value.delay('new_moderator_del_msg_activity', 1)
+
 
 def new_moderator_abuse_msg_activity(sender, user, wall_event, **kwargs):
     async_activity.delay(user.id, yametrics_settings.ACTIVITY_MODERATOR_ABUSE_MSG, throttle=False)
@@ -713,6 +735,14 @@ def new_share(sender, radio, user, share_type, **kwargs):
 
     async_radio_activity(radio.id, yametrics_settings.ACTIVITY_SHARE)
 
+
+def radio_is_ready_handler(sender, radio, **kwargs):
+    """
+    inc the 'new_real_radios' metric
+    """
+    async_inc_global_value.delay('new_real_radios', 1)
+
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
     yabase_signals.user_stopped_listening.connect(user_stopped_listening_handler)
@@ -731,6 +761,7 @@ def install_handlers():
     yabase_signals.new_moderator_del_msg_activity.connect(new_moderator_del_msg_activity)
     yabase_signals.new_moderator_abuse_msg_activity.connect(new_moderator_abuse_msg_activity)
     yabase_signals.radio_shared.connect(new_share)
+    yabase_signals.radio_is_ready.connect(radio_is_ready_handler)
     yabase_signals.buy_link.connect(buy_link_handler)
     account_signals.new_device_registered.connect(new_device_registered)
 
