@@ -741,15 +741,18 @@ def user_likes(request, username):
     return response
 
 @check_api_key(methods=['GET'])
-def user_picture(request, username, size='small'):
+def user_picture(request, username, size=''):
     """
     Returns the picture for a given user
     """
     user = get_object_or_404(User, username=username)
-    if size =='small':
-        return HttpResponseRedirect(user.get_profile().picture_url)
-    else:
+    if size =='xs':
+        return HttpResponseRedirect(user.get_profile().small_picture_url)
+    elif size =='xl':
         return HttpResponseRedirect(user.get_profile().large_picture_url)
+    else:
+        return HttpResponseRedirect(user.get_profile().picture_url)
+
 
 
 @check_api_key(methods=['GET'])

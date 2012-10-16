@@ -6,6 +6,7 @@ from yabase.models import Radio
 import datetime
 import settings as yamessage_settings
 import signals as yamessage_signals
+from django.template.loader import render_to_string
 
 if settings.ENABLE_PUSH:
     from push import install_handlers
@@ -77,13 +78,13 @@ class NotificationsManager():
         return text
 
     def html_for_notification(self, notification_type, params):
-
-        raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['html'])
-        if params is not None:
-            text = raw_text % params
+        if type(params) is type({}):
+            template = yamessage_settings.NOTIF_INFOS[notification_type]['html']
+            return render_to_string(template, params)
         else:
-            text = raw_text
-        return text
+            raw_text = unicode(yamessage_settings.NOTIF_INFOS[notification_type]['text'])
+            text = raw_text % params
+            return text
 
     def unread_count(self, user_id):
         return self.notifications.find({'dest_user_id': user_id, 'read': False}).count()

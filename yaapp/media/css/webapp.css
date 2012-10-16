@@ -2661,6 +2661,33 @@ ul#notifications {
     padding-bottom:23px;
 }
 
+.notification-container .text-notification .profile .picture {
+    float:left;
+    width:28px;
+    height:28px;
+    border:2px solid white;
+    border-radius: 50%;
+    margin-right:8px;
+    margin-top:-8px;
+}
+
+.notification-container .text-notification .profile img {
+    border-radius: 50%;
+}
+
+.notification-container .text-notification .radio .picture {
+    display: inline-block;
+    width:28px;
+    height:28px;
+    border-radius: 2px;
+    margin-right:8px;
+    margin-top:-8px;
+}
+
+.notification-container .text-notification .radio img {
+    border-radius: 2px;
+}
+
 .notifications-heart
 ,.type_notif_song_liked
 ,.type_notif_friend_created_radio

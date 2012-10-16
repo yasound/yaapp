@@ -71,7 +71,7 @@ class Radio(models.Model):
     """
     radioways_id = models.IntegerField(_('radioways id'), unique=True)
     yasound_radio = models.OneToOneField('yabase.Radio',
-        verbose_name=_('yasound radio'),
+                                         verbose_name=_('yasound radio'),
         blank=True,
         null=True,
         related_name='radioways_radio',
@@ -158,13 +158,25 @@ class Radio(models.Model):
         song_dict['artist'] = metadata.get('artist')
         return song_dict
 
-    @property
-    def cover_url(self):
+    def get_cover_url(self, size='64x64'):
+        """return cover url, max size is 64x64 (constrained)
+        """
+        size_n = size.split('x')
+        if int(size_n[0]) > 64:
+            size = '64x64'
+
         short_url = '%s%s.png' % (settings.RADIOWAYS_COVER_SHORT_URL, self.radioways_id)
         try:
-            return get_thumbnail(short_url, '64x64', crop='center').url
+            return get_thumbnail(short_url, size, crop='center').url
         except:
-            return settings.DEFAULT_IMAGE
+            return get_thumbnail(settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+
+    @property
+    def cover_url(self):
+        """return standard cover url (64x64)
+        """
+
+        return self.get_cover_url(size='64x64')
 
     def __unicode__(self):
         return self.name

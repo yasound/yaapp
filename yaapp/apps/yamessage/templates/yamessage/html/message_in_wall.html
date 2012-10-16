@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load app_url %}
+{% app_url webapp_default_profile user_username as user_url %}
+{% url user_small_picture user_username as user_picture_url %}
+{% app_url webapp_default_radio radio_uuid as radio_url %}
+{% blocktrans %}
+<a class='profile' data-username='{{ user_username }}' href='{{ user_url }}'>
+    <div class='picture'>
+        <img src='{{ user_picture_url }}'>
+    </div>{{ user_name }}</a> posted a message on <a href='{{ radio_url }}' data-uuid='{{ radio_uuid}}' class='radio'>{{ radio_name }}
+</a>
+{% endblocktrans %}
