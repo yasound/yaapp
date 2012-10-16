@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-20 17:03+0200\n"
+"POT-Creation-Date: 2012-10-16 09:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: settings.py:26
-#: settings.py:27
+#: settings.py:26 settings.py:27
+#, python-format
 msgid "%(user_name)s is listening to your radio \"%(radio_name)s\""
 msgstr "%(user_name)s écoute votre radio \"%(radio_name)s\""
 
@@ -29,43 +29,47 @@ msgid "%(user_name)s is online on Yasound"
 msgstr "%(user_name)s s'est connecté à Yasound"
 
 #: settings.py:29
+#, python-format
 msgid "%(user_name)s posted a message on your radio \"%(radio_name)s\""
 msgstr "%(user_name)s a posté un message sur votre radio \"%(radio_name)s\""
 
 #: settings.py:30
+#, python-format
 msgid "%(user_name)s liked '%(song_name)s' on radio \"%(radio_name)s\""
-msgstr "%(user_name)s aime le titre '%(song_name)s' sur la radio \"%(radio_name)s\""
+msgstr ""
+"%(user_name)s aime le titre '%(song_name)s' sur la radio \"%(radio_name)s\""
 
 #: settings.py:31
+#, python-format
 msgid "%(user_name)s added \"%(radio_name)s\" as a favorite"
 msgstr "%(user_name)s a ajouté \"%(radio_name)s\" à ses favoris"
 
 #: settings.py:32
+#, python-format
 msgid "%(user_name)s shared your radio \"%(radio_name)s\""
 msgstr "%(user_name)s a partagé votre radio \"%(radio_name)s\""
 
 #: settings.py:33
+#, python-format
 msgid "%(user_name)s created a radio: \"%(radio_name)s\""
 msgstr "%(user_name)s a créé sa radio : \"%(radio_name)s\""
 
-#: settings.py:34
-#: settings.py:45
+#: settings.py:34 settings.py:45
 msgid "you have a message from Yasound"
 msgstr "Yasound vous a envoyé un message"
 
-#: settings.py:35
-#: settings.py:46
+#: settings.py:35 settings.py:46
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: settings.py:37
-#: settings.py:38
+#: settings.py:37 settings.py:38
 #, python-format
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> is listening to your radio"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> écoute votre radio"
 
 #: settings.py:39
@@ -73,7 +77,8 @@ msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> is online on Yasound"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> s'est connecté à Yasound"
 
 #: settings.py:40
@@ -81,7 +86,8 @@ msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> posted a message on your wall"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> a posté un message sur votre mur"
 
 #: settings.py:41
@@ -89,7 +95,8 @@ msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> liked '%(song_name)s' on your radio"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> aime votre titre '%(song_name)s'"
 
 #: settings.py:42
@@ -97,7 +104,8 @@ msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> added your radio as a favorite"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> a ajouté votre radio à ses favoris"
 
 #: settings.py:43
@@ -105,7 +113,8 @@ msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> shared your radio"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> a partagé votre radio"
 
 #: settings.py:44
@@ -113,6 +122,6 @@ msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/
 msgid ""
 "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> created his radio"
-msgstr "<a class='profile' data-username='%(user_username)s' href='/app/profile/"
+msgstr ""
+"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
 "%(user_username)s/'>%(user_name)s</a> a créé sa radio"
-
