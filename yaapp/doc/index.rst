@@ -11,11 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   account
+   account/account
    yabase
    yametrics
    radioways
-
 
 Indices and tables
 ==================
