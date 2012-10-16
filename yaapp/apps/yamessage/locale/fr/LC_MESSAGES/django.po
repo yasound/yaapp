@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-16 09:56+0200\n"
+"POT-Creation-Date: 2012-10-16 15:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: settings.py:26 settings.py:27
+#: settings.py:26
+#: settings.py:27
 #, python-format
 msgid "%(user_name)s is listening to your radio \"%(radio_name)s\""
 msgstr "%(user_name)s écoute votre radio \"%(radio_name)s\""
@@ -36,8 +37,7 @@ msgstr "%(user_name)s a posté un message sur votre radio \"%(radio_name)s\""
 #: settings.py:30
 #, python-format
 msgid "%(user_name)s liked '%(song_name)s' on radio \"%(radio_name)s\""
-msgstr ""
-"%(user_name)s aime le titre '%(song_name)s' sur la radio \"%(radio_name)s\""
+msgstr "%(user_name)s aime le titre '%(song_name)s' sur la radio \"%(radio_name)s\""
 
 #: settings.py:31
 #, python-format
@@ -54,74 +54,148 @@ msgstr "%(user_name)s a partagé votre radio \"%(radio_name)s\""
 msgid "%(user_name)s created a radio: \"%(radio_name)s\""
 msgstr "%(user_name)s a créé sa radio : \"%(radio_name)s\""
 
-#: settings.py:34 settings.py:45
+#: settings.py:34
+#: templates/yamessage/html/message_from_yasound.html:1
 msgid "you have a message from Yasound"
 msgstr "Yasound vous a envoyé un message"
 
-#: settings.py:35 settings.py:46
+#: settings.py:35
+#: settings.py:46
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: settings.py:37 settings.py:38
+#: templates/yamessage/html/friend_created_radio.html:6
 #, python-format
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> is listening to your radio"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> écoute votre radio"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> created <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s</a>\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> a crée <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s</a>\n"
 
-#: settings.py:39
+#: templates/yamessage/html/friend_in_radio.html:6
 #, python-format
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> is online on Yasound"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> s'est connecté à Yasound"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> is listening to <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s</a>\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> écoute <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s</a>\n"
 
-#: settings.py:40
-#, python-format
+#: templates/yamessage/html/friend_online.html:5
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> posted a message on your wall"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> a posté un message sur votre mur"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> is online on Yasound\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> s'est connecté sur Yasound\n"
 
-#: settings.py:41
+#: templates/yamessage/html/message_in_wall.html:6
 #, python-format
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> liked '%(song_name)s' on your radio"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> aime votre titre '%(song_name)s'"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> posted a message on <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> a posté un message sur <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
 
-#: settings.py:42
+#: templates/yamessage/html/radio_in_favorites.html:6
 #, python-format
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> added your radio as a favorite"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> a ajouté votre radio à ses favoris"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> added <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a> as a favorite\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> a ajouté <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a> à ses favoris\n"
 
-#: settings.py:43
+#: templates/yamessage/html/radio_shared.html:6
 #, python-format
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> shared your radio"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> a partagé votre radio"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> shared <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> a partagé <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
 
-#: settings.py:44
+#: templates/yamessage/html/song_liked.html:6
+msgid ""
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> liked %(song_name)s on <a href='%(radio_url)s' "
+"data-uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> aime %(song_name)s sur <a href='%(radio_url)s' "
+"data-uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
+
+#: templates/yamessage/html/user_in_radio.html:6
 #, python-format
 msgid ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> created his radio"
-msgstr ""
-"<a class='profile' data-username='%(user_username)s' href='/app/profile/"
-"%(user_username)s/'>%(user_name)s</a> a créé sa radio"
+"\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> is listening to <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
+msgstr "\n"
+"<a class='profile' data-username='%(user_username)s' href='%(user_url)s'>\n"
+"    <div class='picture'>\n"
+"        <img src='%(user_picture_url)s'>\n"
+"    </div>%(user_name)s</a> écoute <a href='%(radio_url)s' data-"
+"uuid='%(radio_uuid)s' class='radio'>%(radio_name)s\n"
+"</a>\n"
+

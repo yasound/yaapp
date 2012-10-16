@@ -1048,29 +1048,38 @@ class Radio(models.Model):
         songs = SongInstance.objects.filter(metadata__yasound_song_id=None, playlist__in=self.playlists.all())
         return songs
 
-    @property
-    def picture_url(self):
+    def get_picture_url(self, size='210x210'):
         if self.picture:
             try:
-                return get_thumbnail(self.picture, '210x210', format='PNG', crop='center').url
+                url = get_thumbnail(self.picture,  size, crop='center', format='PNG').url
             except:
-                return yaapp_settings.DEFAULT_IMAGE
+                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
         else:
             if self.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
-                return self.radioways_radio.cover_url
-            return yaapp_settings.DEFAULT_IMAGE
+                return self.radioways_radio.get_cover_url(size)
+            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+        return url
+
+    @property
+    def picture_url(self):
+        """return standard radio cover url (210x210)
+        """
+
+        return self.get_picture_url(size='210x210')
 
     @property
     def large_picture_url(self):
-        if self.picture:
-            try:
-                return get_thumbnail(self.picture, '640x640', format='PNG', crop='center').url
-            except:
-                return yaapp_settings.DEFAULT_IMAGE
-        else:
-            if self.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
-                return self.radioways_radio.cover_url
-            return yaapp_settings.DEFAULT_IMAGE
+        """return large radio cover url (640x640)
+        """
+
+        return self.get_picture_url(size='210x210')
+
+    @property
+    def small_picture_url(self):
+        """return small radio cover url (28x28)
+        """
+
+        return self.get_picture_url(size='28x28')
 
     def set_picture(self, data):
         filename = self.build_picture_filename()

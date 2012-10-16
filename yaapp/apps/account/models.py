@@ -590,31 +590,33 @@ class UserProfile(models.Model):
         except:
             return None
 
+    def get_picture_url(self, size='100x100'):
+        if self.picture:
+            try:
+                url = get_thumbnail(self.picture,  size, crop='center').url
+            except:
+                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+        else:
+            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+        return url
+
     @property
     def picture_url(self):
         """ return picture url (100x100)
         """
-        if self.picture:
-            try:
-                url = get_thumbnail(self.picture, '100x100', crop='center').url
-            except:
-                url = yaapp_settings.DEFAULT_IMAGE
-        else:
-            url = yaapp_settings.DEFAULT_IMAGE
-        return url
+        return self.get_picture_url(size='100x100')
 
     @property
     def large_picture_url(self):
         """ return large picture url (640x640)
         """
-        if self.picture:
-            try:
-                url = get_thumbnail(self.picture, '640x640', crop='center').url
-            except:
-                url = yaapp_settings.DEFAULT_IMAGE
-        else:
-            url = yaapp_settings.DEFAULT_IMAGE
-        return url
+        return self.get_picture_url(size='640x640')
+
+    @property
+    def small_picture_url(self):
+        """ return large picture url (28x28)
+        """
+        return self.get_picture_url(size='28x28')
 
     @property
     def age(self):
@@ -1090,6 +1092,7 @@ class UserProfile(models.Model):
             'user_id': friend_profile.user.id,
             'user_username': friend_profile.user.username,
             'radio_id': radio.id,
+            'radio_uuid': radio.uuid,
             'radio_name': radio.name,
         }
         m = NotificationsManager()
@@ -1119,6 +1122,7 @@ class UserProfile(models.Model):
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
             'radio_id': radio.id,
+            'radio_uuid': radio.uuid,
             'radio_name': radio.name,
         }
         m = NotificationsManager()
@@ -1188,6 +1192,7 @@ class UserProfile(models.Model):
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
             'radio_id': radio.id,
+            'radio_uuid': radio.uuid,
             'radio_name': radio.name,
         }
         m = NotificationsManager()
@@ -1218,6 +1223,7 @@ class UserProfile(models.Model):
             'song_name': unicode(song),
             'user_id': user_profile.user.id,
             'radio_id': radio.id,
+            'radio_uuid': radio.uuid,
             'radio_name': radio.name,
             'song_id': song.id,
             'user_username': user_profile.user.username,
@@ -1248,6 +1254,7 @@ class UserProfile(models.Model):
             'user_username': user_profile.user.username,
             'radio_id': radio.id,
             'radio_name': radio.name,
+            'radio_uuid': radio.uuid,
         }
         m = NotificationsManager()
         m.add_notification(self.user.id,
@@ -1274,6 +1281,7 @@ class UserProfile(models.Model):
             'user_id': user_profile.user.id,
             'user_username': user_profile.user.username,
             'radio_id': radio.id,
+            'radio_uuid': radio.uuid,
             'radio_name': radio.name,
         }
         m = NotificationsManager()
@@ -1299,6 +1307,7 @@ class UserProfile(models.Model):
             'user_username': friend_profile.user.username,
             'user_id': friend_profile.user.id,
             'radio_id': radio.id,
+            'radio_uuid': radio.uuid,
             'radio_name': radio.name,
         }
         m = NotificationsManager()

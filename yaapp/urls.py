@@ -98,8 +98,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/user/(?P<username>\S+)/followers/$', 'account.views.user_followers'),
     url(r'^api/v1/user/(?P<username>\S+)/likes/$', 'account.views.user_likes'),
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture', {'size': 'large'}),
-    url(r'^api/v1/user/(?P<username>\S+)/picture/large/$', 'account.views.user_picture', {'size': 'large'}),
-    url(r'^api/v1/user/(?P<username>\S+)/picture/small/$', 'account.views.user_picture', {'size': 'small'}),
+    url(r'^api/v1/user/(?P<username>\S+)/picture/xl/$', 'account.views.user_picture', {'size': 'xl'}),
+    url(r'^api/v1/user/(?P<username>\S+)/picture/xs/$', 'account.views.user_picture', {'size': 'xs'}, name='user_small_picture'),
 
     url(r'^api/v1/followers/$', 'account.views.user_followers'),
     url(r'^api/v1/user/(?P<username>\S+)/friends/(?P<friend>\S+)/$', 'account.views.user_friends_add_remove'),
@@ -170,6 +170,8 @@ urlpatterns = patterns('',
 
     # pictures
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/$', 'yabase.views.radio_picture'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xl/$', 'yabase.views.radio_picture', {'size': 'xl'}),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xs/$', 'yabase.views.radio_picture', {'size': 'xs'}, name='radio_small_picture'),
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture'),
 
     # listeners

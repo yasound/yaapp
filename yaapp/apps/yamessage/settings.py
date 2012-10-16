@@ -34,15 +34,15 @@ TEXT_NOTIF_FRIEND_CREATED_RADIO = _("%(user_name)s created a radio: \"%(radio_na
 TEXT_NOTIF_MESSAGE_FROM_YASOUND = _("you have a message from Yasound")
 TEXT_NOTIF_MESSAGE_FROM_USER    = _("%s")
 
-HTML_NOTIF_FRIEND_IN_RADIO      = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> is listening to your radio")
-HTML_NOTIF_USER_IN_RADIO        = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> is listening to your radio")
-HTML_NOTIF_FRIEND_ONLINE        = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> is online on Yasound")
-HTML_NOTIF_MESSAGE_IN_WALL      = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> posted a message on your wall")
-HTML_NOTIF_SONG_LIKED           = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> liked '%(song_name)s' on your radio")
-HTML_NOTIF_RADIO_IN_FAVORITES   = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> added your radio as a favorite")
-HTML_NOTIF_RADIO_SHARED         = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> shared your radio")
-HTML_NOTIF_FRIEND_CREATED_RADIO = _("<a class='profile' data-username='%(user_username)s' href='/app/profile/%(user_username)s/'>%(user_name)s</a> created his radio")
-HTML_NOTIF_MESSAGE_FROM_YASOUND = _("you have a message from Yasound")
+HTML_NOTIF_FRIEND_IN_RADIO      = 'yamessage/html/friend_in_radio.html'
+HTML_NOTIF_USER_IN_RADIO        = 'yamessage/html/user_in_radio.html'
+HTML_NOTIF_FRIEND_ONLINE        = 'yamessage/html/friend_online.html'
+HTML_NOTIF_MESSAGE_IN_WALL      = 'yamessage/html/message_in_wall.html'
+HTML_NOTIF_SONG_LIKED           = 'yamessage/html/song_liked.html'
+HTML_NOTIF_RADIO_IN_FAVORITES   = 'yamessage/html/radio_in_favorites.html'
+HTML_NOTIF_RADIO_SHARED         = 'yamessage/html/radio_shared.html'
+HTML_NOTIF_FRIEND_CREATED_RADIO = 'yamessage/html/friend_created_radio.html'
+HTML_NOTIF_MESSAGE_FROM_YASOUND = 'yamessage/html/message_from_yasound.html'
 HTML_NOTIF_MESSAGE_FROM_USER    = _("%s")
 
 YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME = 'yasound_notif_params'

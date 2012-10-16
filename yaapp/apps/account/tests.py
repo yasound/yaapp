@@ -19,6 +19,7 @@ from yamessage import settings as yamessage_settings
 from pymongo import DESCENDING
 from django.test.client import RequestFactory
 from yacore.http import is_iphone_version_1, is_iphone_version_2
+from yabase.models import SongInstance, SongMetadata, WallEvent
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -737,6 +738,18 @@ class TestNotifications(TestCase):
         notifications = nm.notifications.find({'type': yamessage_settings.TYPE_NOTIF_FRIEND_ONLINE}).sort([('date', DESCENDING)])
         self.assertEquals(notifications.count(), 2)
 
+        radio = Radio.objects.create(name='foo', creator=user1)
+        default_playlist, _created = radio.get_or_create_default_playlist()
+        sm = SongMetadata.objects.create(name='foo')
+        song = SongInstance.objects.create(playlist=default_playlist, metadata=sm)
+        user2.get_profile().song_liked_in_my_radio(user1.get_profile(), radio, song)
+
+        wall_message = WallEvent.objects.create(radio=radio, user=user1)
+        user2.get_profile().message_posted_in_my_radio(wall_message)
+        user2.get_profile().my_radio_added_in_favorites(user1.get_profile(), radio)
+        user2.get_profile().my_radio_shared(user1.get_profile(), radio)
+        user2.get_profile().my_friend_created_radio(user1.get_profile(), radio)
+        user2.get_profile().message_from_yasound('hello, world')
 
 class TestWebPreferences(TestCase):
     def setUp(self):

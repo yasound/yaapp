@@ -2369,14 +2369,21 @@ def radio_leaderboard(request, radio_uuid):
 
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST', 'DELETE'])
-def radio_picture(request, radio_uuid):
+def radio_picture(request, radio_uuid, size=''):
     """
     RESTful view for handling radio picture
     """
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     if request.method == 'GET':
-        return HttpResponseRedirect(radio.picture_url)
+        if size == 'xl':
+            picture_url = radio.large_picture_url
+        elif size == 'xs':
+            picture_url = radio.small_picture_url
+        else:
+            picture_url = radio.picture_url
+
+        return HttpResponseRedirect(picture_url)
 
     if radio.creator != request.user:
         return HttpResponse(status=401)
