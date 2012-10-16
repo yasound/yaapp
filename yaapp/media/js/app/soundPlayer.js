@@ -161,7 +161,7 @@ Yasound.Player.SoundManager = function () {
 Yasound.Player.Deezer = function () {
     var mgr = {
         hd: false,
-        firstLoad: true,
+        radioHasChanged: true,
         currentSongBinded: false,
         deezerId: 0,
         playing: false,
@@ -181,6 +181,7 @@ Yasound.Player.Deezer = function () {
                 Yasound.App.Router.radioContext.currentSong.on('change', mgr.refreshSong);
                 mgr.currentSongBinded = true;
             }
+            mgr.radioHasChanged = true;
         },
 
         refreshSong: function (song) {
@@ -199,7 +200,15 @@ Yasound.Player.Deezer = function () {
                     var deezerId = item.id;
                     mgr.deezerId = deezerId;
                     console.log('id is ' + deezerId);
-                    DZ.player.addToQueue([deezerId]);
+
+                    if (mgr.radioHasChanged) {
+                        console.log('radio has changed, loading track now!');
+                        DZ.player.loadTracks([deezerId]);
+                        mgr.radioHasChanged = false;
+                    } else {
+                        console.log('same radio, do not load track now');
+                        DZ.player.addToQueue([deezerId]);
+                    }
                 }
             });
         },
@@ -231,12 +240,7 @@ Yasound.Player.Deezer = function () {
 
         play: function () {
             if (DZ && DZ.player) {
-                if (mgr.firstLoad && mgr.deezerId) {
-                    DZ.player.playTracks([mgr.deezerId]);
-                    mgr.firstLoad = false;
-                } else {
-                    DZ.player.play();
-                }
+                DZ.player.play();
             }
             $.publish('/player/play');
         },
