@@ -18,7 +18,19 @@ import settings as yametrics_settings
 
 class GlobalMetricsManager():
     """
-    Helper class to store and retrieve key-value metrics
+    Helper class to store and retrieve key-value metrics.
+
+    Examples of metrics:
+
+    >>> metric = {
+        "_id" : ObjectId( "4f7b1b69a9f08713aef06672" ),
+        "new_favorite_radio" : 1,
+        "new_not_favorite_radio" : 1,
+        "new_radios" : 4,
+        "new_users" : 3,
+        "timestamp" : "2012-04-03"
+    }
+
     """
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -80,6 +92,19 @@ class GlobalMetricsManager():
         self.metrics_glob.drop()
 
     def inc_global_value(self, key, value):
+        """inc key with value, for the following timestamps:
+
+        * hourly
+        * daily
+        * monthly
+        * yearly
+
+        :param key: key.
+        :param value: value.
+        :returns: None
+
+        """
+
         collection = self.metrics_glob
 
         timestamps = self._generate_timestamps()
