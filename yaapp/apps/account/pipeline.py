@@ -3,27 +3,28 @@ from account.models import UserProfile
 from django.contrib.auth.models import User
 import settings as account_settings
 
+
 def associate_user(backend, details, response, uid, username, user=None, *args,
                 **kwargs):
-    """
-    this is called by the social auth pipeline when user creation is needed.
+    """Called by the social auth pipeline when user creation is needed.
     We hack it to associate with existing users (by checking the profile fields)
     or create new but with our profile info inside
     """
     backend_name = backend.name.lower()
-
     # existing user
     if user:
         if backend_name == 'facebook':
             profile = user.get_profile()
             if profile and not profile.facebook_enabled:
                 profile.facebook_uid = uid
+                profile.facebook_username = details.get('username')
                 profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
                 profile.save()
         elif backend_name == 'twitter':
             profile = user.get_profile()
             if profile and not profile.twitter_enabled:
                 profile.twitter_uid = uid
+                profile.twitter_username = details.get('username')
                 profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
                 profile.save()
 
@@ -59,6 +60,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             user.save()
             profile = user.get_profile()
             profile.facebook_uid = uid
+            profile.facebook_username = details.get('username')
             profile.name = details.get('fullname')
             profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
             try:
@@ -87,6 +89,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             user.save()
             profile = user.get_profile()
             profile.twitter_uid = uid
+            profile.twitter_username = details.get('username')
             profile.name = details.get('fullname')
             profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
             try:
@@ -98,7 +101,7 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
                     profile.update_with_social_picture()
             except:
                 pass
-            
+
             try:
                 profile.logged()
             except:
@@ -108,4 +111,3 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
                 'user': user,
                 'is_new': True
             }
-
