@@ -592,6 +592,8 @@ class UserProfile(models.Model):
 
     @property
     def picture_url(self):
+        """ return picture url (100x100)
+        """
         if self.picture:
             try:
                 url = get_thumbnail(self.picture, '100x100', crop='center').url
@@ -603,6 +605,8 @@ class UserProfile(models.Model):
 
     @property
     def large_picture_url(self):
+        """ return large picture url (640x640)
+        """
         if self.picture:
             try:
                 url = get_thumbnail(self.picture, '640x640', crop='center').url
