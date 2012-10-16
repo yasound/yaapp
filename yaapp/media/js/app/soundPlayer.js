@@ -203,7 +203,7 @@ Yasound.Player.Deezer = function () {
 
                     if (mgr.radioHasChanged) {
                         console.log('radio has changed, loading track now!');
-                        DZ.player.loadTracks([deezerId]);
+                        DZ.player.playTracks([deezerId]);
                         mgr.radioHasChanged = false;
                     } else {
                         console.log('same radio, do not load track now');
