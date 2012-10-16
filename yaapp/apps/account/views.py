@@ -740,6 +740,17 @@ def user_likes(request, username):
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
 
+@check_api_key(methods=['GET'])
+def user_picture(request, username, size='small'):
+    """
+    Returns the picture for a given user
+    """
+    user = get_object_or_404(User, username=username)
+    if size =='small':
+        return HttpResponseRedirect(user.get_profile().picture_url)
+    else:
+        return HttpResponseRedirect(user.get_profile().large_picture_url)
+
 
 @check_api_key(methods=['GET'])
 def get_streamer_auth_token(request):
