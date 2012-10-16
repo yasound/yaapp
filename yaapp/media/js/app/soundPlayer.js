@@ -166,9 +166,13 @@ Yasound.Player.Deezer = function () {
         playing: false,
         trackLoaded: false,
         autoplay: false,
+        manualStopped: false,
 
         isPlaying: function () {
-            return mgr.playing;
+            if (DZ && DZ.player) {
+                return DZ.player.isPlaying();
+            }
+            return false;
         },
 
         setBaseUrl: function(baseUrl) {
@@ -180,7 +184,6 @@ Yasound.Player.Deezer = function () {
 
         refreshSong: function (song) {
             console.log('deezer -- refresh song');
-            // TODO: load into deezer player
             var title = song.rawTitle();
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
@@ -194,16 +197,7 @@ Yasound.Player.Deezer = function () {
                     var item = response.data[0];
                     var deezerId = item.id;
                     console.log('id is ' + deezerId);
-                    if (!deezerId || deezerId === mgr.deezerId) {
-                        console.log('stopping music');
-                        mgr.stop();
-                        return;
-                    }
-                    mgr.deezerId = deezerId;
-                    mgr.trackLoaded = false;
-                    if (mgr.isPlaying()) {
-                        mgr.play();
-                    }
+                    DZ.player.addToQueue([deezerId]);
                 }
             });
         },
@@ -216,31 +210,27 @@ Yasound.Player.Deezer = function () {
         },
 
         stop: function () {
-            if (mgr.isPlaying()) {
+            mgr.autoplay = false;
+            mgr.manualStopped = true;
+            if (DZ && DZ.player) {
                 DZ.player.pause();
-                mgr.playing = false;
-                $.publish('/player/stop');
             }
+            $.publish('/player/stop');
         },
 
         setAutoplay: function (autoplay) {
-            mgr.autoplay = autoplay;
-            mgr.play();
+            if (!mgr.manualStopped) {
+                mgr.autoplay = autoplay;
+                mgr.play();
+            } else {
+                mgr.autoplay = false;
+            }
         },
 
         play: function () {
-            if (!mgr.trackLoaded) {
-                if (mgr.deezerId !== 0) {
-                    console.log('loading track ' + mgr.deezerId);
-                    DZ.player.playTracks([mgr.deezerId], 0, function(response) {});
-                    mgr.trackLoaded = true;
-                }
-            } else {
-                if (DZ && DZ.player) {
-                    DZ.player.play();
-                }
+            if (DZ && DZ.player) {
+                DZ.player.play();
             }
-            mgr.playing = true;
             $.publish('/player/play');
         },
 
