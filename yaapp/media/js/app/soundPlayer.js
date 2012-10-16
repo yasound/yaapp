@@ -161,6 +161,7 @@ Yasound.Player.SoundManager = function () {
 Yasound.Player.Deezer = function () {
     var mgr = {
         hd: false,
+        firstLoad: true,
         currentSongBinded: false,
         deezerId: 0,
         playing: false,
@@ -196,6 +197,7 @@ Yasound.Player.Deezer = function () {
                     console.log('found ' + total + ' items');
                     var item = response.data[0];
                     var deezerId = item.id;
+                    mgr.deezerId = deezerId;
                     console.log('id is ' + deezerId);
                     DZ.player.addToQueue([deezerId]);
                 }
@@ -229,7 +231,12 @@ Yasound.Player.Deezer = function () {
 
         play: function () {
             if (DZ && DZ.player) {
-                DZ.player.play();
+                if (mgr.firstLoad && mgr.deezerId) {
+                    DZ.player.playTracks([mgr.deezerId]);
+                    mgr.firstLoad = false;
+                } else {
+                    DZ.player.play();
+                }
             }
             $.publish('/player/play');
         },
