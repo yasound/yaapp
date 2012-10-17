@@ -151,6 +151,18 @@ $(document).ready(function () {
         Yasound.App.player = Yasound.Player.SoundManager();
     } else if (g_sound_player == 'deezer') {
         Yasound.App.player = Yasound.Player.Deezer();
+
+        // bugfix for modal display in deezer
+        var refresh = function (e) {
+          e && e.preventDefault();
+          var modal = this.$element;
+          $('.modal.fade').css('transition', 'auto');
+          $('.modal.fade').css('-webkit-transition', 'auto');
+          $('.modal.fade.in').css('top', '300px');
+          return this;
+        };
+        $('.modal').on('shown', $.proxy(refresh, this));
+
     }
 
     /**
