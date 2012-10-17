@@ -177,18 +177,20 @@ Yasound.Player.Deezer = function () {
         },
 
         setBaseUrl: function(baseUrl) {
-            Yasound.App.Router.radioContext.currentSong.one('change', mgr.refreshSong);
+            Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
             console.log('radio has changed');
             mgr.radioHasChanged = true;
         },
 
         refreshSong: function (song) {
             console.log('deezer -- refresh song');
+            Yasound.App.Router.radioContext.currentSong.off('change:name', mgr.refreshSong);
+
             var title = song.rawTitleWithoutAlbum();
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
             DZ.api(query, mgr.searchCallback);
-            Yasound.App.Router.radioContext.currentSong.one('change', mgr.refreshSong);
+            Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
         },
 
         searchCallback: function (response) {
