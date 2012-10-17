@@ -489,7 +489,6 @@ class YasoundSong(models.Model):
             logger.debug('creating path %s' % (path))
             os.makedirs(path)
         shutil.copy(new_file, song_path)
-        self.generate_preview()
         self.generate_low_quality()
 
         # update db attributes

@@ -20,16 +20,16 @@ class GlobalMetricsManager():
     """
     Helper class to store and retrieve key-value metrics.
 
-    Examples of metrics:
+    Examples of metrics::
 
-    >>> metric = {
-        "_id" : ObjectId( "4f7b1b69a9f08713aef06672" ),
-        "new_favorite_radio" : 1,
-        "new_not_favorite_radio" : 1,
-        "new_radios" : 4,
-        "new_users" : 3,
-        "timestamp" : "2012-04-03"
-    }
+        metric = {
+            "_id" : ObjectId( "4f7b1b69a9f08713aef06672" ),
+            "new_favorite_radio" : 1,
+            "new_not_favorite_radio" : 1,
+            "new_radios" : 4,
+            "new_users" : 3,
+            "timestamp" : "2012-04-03"
+        }
 
     """
     def __init__(self):

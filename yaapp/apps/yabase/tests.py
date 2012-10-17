@@ -861,7 +861,7 @@ class TestImport(TestCase):
         lq_path = yasound_song.get_song_lq_path()
 
         self.assertTrue(os.path.isfile(path))
-        self.assertTrue(os.path.isfile(preview_path))
+        self.assertFalse(os.path.isfile(preview_path))
         self.assertTrue(os.path.isfile(lq_path))
 
     def test_import_without_metadata_in_file_and_with_given_metadata_and_radio(self):
