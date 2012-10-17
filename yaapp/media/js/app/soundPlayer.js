@@ -187,7 +187,7 @@ Yasound.Player.Deezer = function () {
 
         refreshSong: function (song) {
             console.log('deezer -- refresh song');
-            var title = song.rawTitle();
+            var title = song.rawTitleWithoutAlbum();
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
             DZ.api(query, mgr.searchCallback);
