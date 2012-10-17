@@ -208,7 +208,7 @@ Yasound.Player.Deezer = function () {
                         DZ.player.playTracks([deezerId]);
                         mgr.radioHasChanged = false;
                     } else {
-                        console.log('same radio, do not load track now');
+                        console.log('same radio, do not load track now, adding it to queue');
                         DZ.player.addToQueue([deezerId]);
                     }
                 } else {
@@ -217,6 +217,8 @@ Yasound.Player.Deezer = function () {
                     if (mgr.radioHasChanged) {
                         console.log('stopping player');
                         DZ.player.pause();
+                    } else {
+                        console.log('same radio, do nothing');
                     }
                 }
             });
@@ -249,13 +251,6 @@ Yasound.Player.Deezer = function () {
 
         play: function () {
             return;
-
-            if (DZ && DZ.player) {
-                if (!mgr.isPlaying() && !mgr.noTrackFound) {
-                    DZ.player.play();
-                    $.publish('/player/play');
-                }
-            }
         },
 
         setHD: function (hd) {
