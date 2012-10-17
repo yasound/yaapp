@@ -193,6 +193,9 @@ def search_radio_by_song(search_text, limit=10, ready_radios_only=True, radios_w
 
 
 class RadiosManager():
+    """Store radio information for upload matching & search
+    """
+
     BOOST_SONG = 1.2
 
     def __init__(self):
@@ -345,10 +348,38 @@ class RadiosManager():
         return sorted_results[:limit]
 
     def search(self, query, min_score=None, limit=10):
+        """search radio, result is ordered with current song first
+        """
+
         docs = self._find_docs(query)
         docs = self._score_result(query, docs, limit=limit, min_score=min_score)
         radios = [Radio.objects.get(id=r[0]['db_id']) for r in docs]
         return radios
+
+    def search_by_current_song(self, query, min_score=None, limit=10):
+        """search radio by current song only
+        """
+
+        dms_search = yasearch_utils.build_dms(query, remove_common_words=False)
+        if not query or len(dms_search) == 0:
+            return []
+
+        options = {
+            "db_id": True,
+            "name": True,
+            "genre": True,
+            "tags": True,
+            "song": True,
+        }
+
+        query = query.lower()
+        song_search = yasearch_utils.get_simplified_name(query).split(' ')
+        query_song = {'song.all': {'$all': song_search}}
+        docs = self.collection.find(query_song,  options)
+        docs = self._score_result(query, docs, limit=limit, min_score=min_score)
+        radios = [Radio.objects.get(id=r[0]['db_id']) for r in docs]
+        return radios
+
 
     def last_doc(self):
         try:
