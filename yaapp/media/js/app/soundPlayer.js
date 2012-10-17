@@ -167,7 +167,7 @@ Yasound.Player.Deezer = function () {
         playing: false,
         trackLoaded: false,
         autoplay: false,
-        noTrackFound: true
+        noTrackFound: true,
         manualStopped: false,
 
         isPlaying: function () {
