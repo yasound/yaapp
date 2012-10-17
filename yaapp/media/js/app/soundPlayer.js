@@ -246,7 +246,9 @@ Yasound.Player.Deezer = function () {
 
         play: function () {
             if (DZ && DZ.player) {
-                DZ.player.play();
+                if (!mgr.isPlaying()) {
+                    DZ.player.play();
+                }
             }
             $.publish('/player/play');
         },
