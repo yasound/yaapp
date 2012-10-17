@@ -167,6 +167,7 @@ Yasound.Player.Deezer = function () {
         trackLoaded: false,
         autoplay: false,
         noTrackFound: true,
+        previousTitle: '',
         manualStopped: false,
 
         isPlaying: function () {
@@ -187,6 +188,12 @@ Yasound.Player.Deezer = function () {
             Yasound.App.Router.radioContext.currentSong.off('change:name', mgr.refreshSong);
 
             var title = song.rawTitleWithoutAlbum();
+            if (title === mgr.previewTitle) {
+                Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
+                return;
+            }
+            mgr.previewTitle = title;
+
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
             DZ.api(query, mgr.searchCallback);
