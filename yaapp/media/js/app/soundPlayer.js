@@ -162,7 +162,6 @@ Yasound.Player.Deezer = function () {
     var mgr = {
         hd: false,
         radioHasChanged: true,
-        currentSongBinded: false,
         deezerId: 0,
         playing: false,
         trackLoaded: false,
@@ -178,11 +177,8 @@ Yasound.Player.Deezer = function () {
         },
 
         setBaseUrl: function(baseUrl) {
-            if (!mgr.currentSongBinded) {
-                Yasound.App.Router.radioContext.currentSong.on('change', mgr.refreshSong);
-                mgr.currentSongBinded = true;
-            }
-            console.log('radio has changed')
+            Yasound.App.Router.radioContext.currentSong.one('change', mgr.refreshSong);
+            console.log('radio has changed');
             mgr.radioHasChanged = true;
         },
 
@@ -192,6 +188,7 @@ Yasound.Player.Deezer = function () {
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
             DZ.api(query, mgr.searchCallback);
+            Yasound.App.Router.radioContext.currentSong.one('change', mgr.refreshSong);
         },
 
         searchCallback: function (response) {
