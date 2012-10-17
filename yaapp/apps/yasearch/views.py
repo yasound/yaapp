@@ -9,7 +9,7 @@ def search_radios(request):
     skip = int(request.GET.get('skip', 0))
 
     rm = RadiosManager()
-    res = rm.search(query)
+    res = rm.search_by_current_song(query)
     total_count = len(res)
     data = []
     for r in res:
