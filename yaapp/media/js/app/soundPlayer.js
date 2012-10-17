@@ -182,6 +182,7 @@ Yasound.Player.Deezer = function () {
                 Yasound.App.Router.radioContext.currentSong.on('change', mgr.refreshSong);
                 mgr.currentSongBinded = true;
             }
+            console.log('radio has changed')
             mgr.radioHasChanged = true;
         },
 
