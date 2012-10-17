@@ -199,13 +199,9 @@ $(document).ready(function () {
 
         _updateDeezerCanvas: function () {
             $(document).bind('DOMSubtreeModified', function() {
-                console.log('document height = ' + $(document).height());
                 var container = $('#webapp-container-parent');
                 var footer = $('#footer');
-
                 var documentHeight = container.height() + footer.height() + 229;
-                console.log('document calculated height = ' + documentHeight);
-
                 if (DZ && DZ.canvas) {
                     DZ.canvas.setSize(documentHeight);
                 }

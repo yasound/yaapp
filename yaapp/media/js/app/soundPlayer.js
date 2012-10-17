@@ -190,38 +190,47 @@ Yasound.Player.Deezer = function () {
             var title = song.rawTitle();
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
-            DZ.api(query, function (response) {
-                console.log('response is');
-                console.log(response);
+            DZ.api(query, mgr.searchCallback);
+        },
 
-                var total = response.total;
-                if (total > 0) {
-                    console.log('found ' + total + ' items');
-                    mgr.noTrackFound = false;
-                    var item = response.data[0];
-                    var deezerId = item.id;
-                    mgr.deezerId = deezerId;
-                    console.log('id is ' + deezerId);
+        searchCallback: function (response) {
+            console.log('response is');
+            console.log(response);
+            var total = response.total;
+            if (total > 0) {
+                console.log('found ' + total + ' items');
+                var item = response.data[0];
+                var deezerId = item.id;
+                mgr.onSongFound(deezerId);
+            } else {
+                mgr.onSongNotFound();
+            }
+        },
 
-                    if (mgr.radioHasChanged) {
-                        console.log('radio has changed, loading track now!');
-                        DZ.player.playTracks([deezerId]);
-                        mgr.radioHasChanged = false;
-                    } else {
-                        console.log('same radio, do not load track now, adding it to queue');
-                        DZ.player.addToQueue([deezerId]);
-                    }
-                } else {
-                    mgr.noTrackFound = true;
-                    console.log('no track found');
-                    if (mgr.radioHasChanged) {
-                        console.log('stopping player');
-                        DZ.player.pause();
-                    } else {
-                        console.log('same radio, do nothing');
-                    }
-                }
-            });
+        onSongFound: function (deezerId) {
+            mgr.noTrackFound = false;
+            mgr.deezerId = deezerId;
+            console.log('id is ' + deezerId);
+
+            if (mgr.radioHasChanged) {
+                console.log('radio has changed, loading track now!');
+                DZ.player.playTracks([deezerId]);
+                mgr.radioHasChanged = false;
+            } else {
+                console.log('same radio, do not load track now, adding it to queue');
+                DZ.player.addToQueue([deezerId]);
+            }
+        },
+
+        onSongNotFound: function () {
+            mgr.noTrackFound = true;
+            console.log('no track found');
+            if (mgr.radioHasChanged) {
+                console.log('radio has changed, stopping player');
+                DZ.player.pause();
+            } else {
+                console.log('same radio, do nothing');
+            }
         },
 
         setVolume: function (volume) {
