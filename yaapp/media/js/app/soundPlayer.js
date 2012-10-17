@@ -167,6 +167,7 @@ Yasound.Player.Deezer = function () {
         playing: false,
         trackLoaded: false,
         autoplay: false,
+        noTrackFound: true
         manualStopped: false,
 
         isPlaying: function () {
@@ -196,6 +197,7 @@ Yasound.Player.Deezer = function () {
                 var total = response.total;
                 if (total > 0) {
                     console.log('found ' + total + ' items');
+                    mgr.noTrackFound = false;
                     var item = response.data[0];
                     var deezerId = item.id;
                     mgr.deezerId = deezerId;
@@ -210,6 +212,7 @@ Yasound.Player.Deezer = function () {
                         DZ.player.addToQueue([deezerId]);
                     }
                 } else {
+                    mgr.noTrackFound = true;
                     console.log('no track found');
                     if (mgr.radioHasChanged) {
                         console.log('stopping player');
@@ -231,8 +234,8 @@ Yasound.Player.Deezer = function () {
             mgr.manualStopped = true;
             if (DZ && DZ.player) {
                 DZ.player.pause();
+                $.publish('/player/stop');
             }
-            $.publish('/player/stop');
         },
 
         setAutoplay: function (autoplay) {
@@ -246,11 +249,11 @@ Yasound.Player.Deezer = function () {
 
         play: function () {
             if (DZ && DZ.player) {
-                if (!mgr.isPlaying()) {
+                if (!mgr.isPlaying() && !mgr.noTrackFound) {
                     DZ.player.play();
+                    $.publish('/player/play');
                 }
             }
-            $.publish('/player/play');
         },
 
         setHD: function (hd) {
