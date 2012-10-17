@@ -256,6 +256,28 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
         return str;
     },
 
+    rawTitleWithoutAlbum: function () {
+        var model = this;
+        var context = {
+            name: function() {
+                var s = model.get('name');
+                if (!s) {
+                    return gettext('');
+                }
+                return s;
+            },
+            artist: function() {
+                var s = model.get('artist');
+                if (!s) {
+                    return gettext('');
+                }
+                return s;
+            }
+        };
+        var str = context.name() + ' ' + ' ' + context.artist();
+        return str;
+    },
+
     title: function() {
         var model = this;
         var context = {
