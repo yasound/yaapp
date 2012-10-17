@@ -222,9 +222,9 @@ def process_upload_song(filepath, metadata=None, convert=True, song_id=None, all
 
 
 @task
-def generate_preview(yasound_song_id):
+def generate_low_quality(yasound_song_id):
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
-    yasound_song.generate_preview()
+    yasound_song.generate_low_quality()
 
 
 @task

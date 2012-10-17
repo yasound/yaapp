@@ -129,9 +129,9 @@ class Radio(models.Model):
     @property
     def current_song(self):
         """Return the current song.
-        the returned data is a dict:
+        the returned data is a dict::
 
-        >>> dict = {
+            dict = {
                 'id': None,
                 'name': None,
                 'artist': None,
@@ -139,6 +139,7 @@ class Radio(models.Model):
                 'cover': None,
                 'large_cover': None
             }
+
         """
 
         song_dict = {

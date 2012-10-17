@@ -163,24 +163,25 @@ class UserProfile(models.Model):
      * single ACCOUNT_TYPE_* values
      * multiple ACCOUNT_MULT_* values
 
-    Example of valid account_type:
+    Example of valid account_type::
 
-    >>> user_profile.account_type = 'TWITTER'   # only twitter
-    >>> user_profile.account_type = 'TW,FB'     # twitter and facebook
-    >>> user_profile.account_type = 'FACEBOOK'  # only facebook
-    >>> user_profile.account_type = 'FB'        # only facebook
-    >>> user_profile.account_type = 'FB,TW,YA'  # facebook, twitter, yasound
+        > user_profile.account_type = 'TWITTER'   # only twitter
+        > user_profile.account_type = 'TW,FB'     # twitter and facebook
+        > user_profile.account_type = 'FACEBOOK'  # only facebook
+        > user_profile.account_type = 'FB'        # only facebook
+        > user_profile.account_type = 'FB,TW,YA'  # facebook, twitter, yasound
 
-    Instead of checking the account_type field, you should use the following property:
+    Instead of checking the account_type field, you should use the following property::
 
-    >>> user_profile.facebook_enabled
-    >>> user_profile.twitter_enabled
-    >>> user_profile.yasound_enabled
+        > user_profile.facebook_enabled
+        > user_profile.twitter_enabled
+        > user_profile.yasound_enabled
 
-    The following methods handle the account_type values:
+    The following methods handle the account_type values::
 
-    >>> user_profile.add_account_type()
-    >>> user_profile.remove_account_type()
+        > user_profile.add_account_type()
+        > user_profile.remove_account_type()
+
     """
 
     objects = UserProfileManager()

@@ -642,11 +642,6 @@ class SongImporter:
             shutil.copy(filepath, mp3_path)
             self._log("copied %s to %s" % (filepath, mp3_path))
 
-            # generate 64kb preview
-            self._log(_('generating preview'))
-            song.generate_preview()
-            self._log("generated mp3 preview file : %s" % (song.get_song_preview_path()))
-
             self._log(_('generating low quality'))
             song.generate_low_quality()
             self._log("generated mp3 low quality file : %s" % (song.get_song_lq_path()))
