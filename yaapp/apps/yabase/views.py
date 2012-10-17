@@ -2093,12 +2093,18 @@ def my_programming_yasound_songs(request, radio_uuid):
             pass
         else:
             qs = YasoundSong.objects.all()
-            if name != '':
-                qs = qs.filter(name_simplified=name)
             if artist != '':
                 qs = qs.filter(artist_name_simplified=artist)
+            if name != '':
+                if artist == '':
+                    qs = qs.filter(name_simplified=name)
+                else:
+                    qs = qs.filter(name_simplified__contains=name)
             if album != '':
-                qs = qs.filter(album_name_simplified=album)
+                if artist == '' and name == '':
+                    qs = qs.filter(album_name_simplified=album)
+                else:
+                    qs = qs.filter(album_name_simplified__contains=album)
 
             total_count = qs.count()
             data = list(qs[offset:offset+limit].values('id', 'name', 'artist_name', 'album_name'))
