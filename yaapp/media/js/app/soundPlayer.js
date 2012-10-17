@@ -209,6 +209,12 @@ Yasound.Player.Deezer = function () {
                         console.log('same radio, do not load track now');
                         DZ.player.addToQueue([deezerId]);
                     }
+                } else {
+                    console.log('no track found');
+                    if (mgr.radioHasChanged) {
+                        console.log('stopping player');
+                        DZ.player.pause();
+                    }
                 }
             });
         },
