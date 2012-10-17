@@ -248,6 +248,8 @@ Yasound.Player.Deezer = function () {
         },
 
         play: function () {
+            return;
+
             if (DZ && DZ.player) {
                 if (!mgr.isPlaying() && !mgr.noTrackFound) {
                     DZ.player.play();
