@@ -19,7 +19,7 @@ def get_notifications(request):
     if limit is not None:
         limit = int(limit)
 
-    total_count = m.notifications_for_recipient(request.user.id).count()
+    total_count = m.notifications_for_recipient(request.user.id, read_status=read_status).count()
 
     notif_cursor = m.notifications_for_recipient(request.user.id,
                                                  count=limit,
