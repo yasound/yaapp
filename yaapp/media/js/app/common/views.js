@@ -302,13 +302,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #play-btn-large": "togglePlay",
         "click #love-btn": "like",
         "click #shop-btn": "shop",
-        "click #radio-picto a": "displayRadio",
+        "click #radio-picto": "displayRadio",
         "click #favorite-radio": "favorite",
         "hover #hd-button": "displayPopupHD",
         "mouseleave #hd-button": "hidePopupHD",
         "click #hd-checkbox": "onHD",
-        "click #player-title": "displayRadio",
-        "click #radio-title": "displayRadio"
+        "click #player-title span": "displayRadio",
+        "click #radio-title span": "displayRadio"
     },
 
     initialize: function () {
