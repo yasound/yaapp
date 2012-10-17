@@ -3,29 +3,44 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from tastypie.models import ApiKey
 
+
 def fill_app_infos(request):
     request.app_version = request.REQUEST.get('app_version')
     request.app_id = request.REQUEST.get('app_id')
 
+
 def is_iphone_version_1(request):
+    """check if current user has the v1 version of iPhone app
     """
-    check if current user has the v1 version of iPhone app
-    """
+
     app_version = request.REQUEST.get('app_version')
-    app_version.split('.')
-    if len(app_version) > 0 and app_version[0] == '1':
+    if app_version is not None:
+        app_version.split('.')
+        if len(app_version) > 0 and app_version[0] == '1':
+            return True
+        return False
+
+    user_agent = request.META.get('HTTP_USER_AGENT', '')
+    if user_agent.startswith('Yasound 1.'):
         return True
     return False
 
+
 def is_iphone_version_2(request):
+    """check if current user has the v2 version of iPhone app
     """
-    check if current user has the v2 version of iPhone app
-    """
+
     app_version = request.REQUEST.get('app_version')
-    app_version.split('.')
-    if len(app_version) > 0 and app_version[0] == '2':
+    if app_version:
+        app_version.split('.')
+        if len(app_version) > 0 and app_version[0] == '2':
+            return True
+        return False
+    user_agent = request.META.get('HTTP_USER_AGENT', '')
+    if user_agent.startswith('Yasound 2.'):
         return True
     return False
+
 
 def coerce_put_post(request):
     """
@@ -64,7 +79,6 @@ def coerce_put_post(request):
         request.PUT = request.POST
 
 
-
 def check_api_key_Authentication(request):
     request.app_version = request.REQUEST.get('app_version')
     request.app_id = request.REQUEST.get('app_id')
@@ -77,7 +91,7 @@ def check_api_key_Authentication(request):
         user = User.objects.get(username=username)
         api_key = ApiKey.objects.get(user=user)
         if api_key.key == key:
-            request.user =user
+            request.user = user
         else:
             return False
     except User.DoesNotExist, ApiKey.DoesNotExist:
@@ -85,6 +99,7 @@ def check_api_key_Authentication(request):
 
     user.userprofile.authenticated()
     return True
+
 
 def check_http_method(request, allowed_methods):
     method = request.method.lower()
