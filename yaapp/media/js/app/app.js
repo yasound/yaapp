@@ -198,27 +198,17 @@ $(document).ready(function () {
         },
 
         _updateDeezerCanvas: function () {
-            if (DZ && DZ.canvas) {
-                DZ.canvas.setSize(1024);
-            }
-            var timeOut;
             $(document).bind('DOMSubtreeModified', function() {
-                if (timeOut) {
-                    clearTimeout(timeOut);
-                    timeOut = undefined;
+                console.log('document height = ' + $(document).height());
+                var container = $('#webapp-container-parent');
+                var footer = $('#footer');
+
+                var documentHeight = container.height() + footer.height() + 229;
+                console.log('document calculated height = ' + documentHeight);
+
+                if (DZ && DZ.canvas) {
+                    DZ.canvas.setSize(documentHeight);
                 }
-                timeOut = setTimeout(function() {
-                    console.log('document height = ' + $(document).height());
-                    var container = $('#webapp-container-parent');
-                    var footer = $('#footer');
-
-                    var documentHeight = container.height() + footer.height() + 229;
-                    console.log('document calculated height = ' + documentHeight);
-
-                    if (DZ && DZ.canvas) {
-                        DZ.canvas.setSize(documentHeight);
-                    }
-                }, 1500);
             });
         },
 
