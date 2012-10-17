@@ -301,6 +301,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #play-btn": "togglePlay",
         "click #play-btn-large": "togglePlay",
         "click #love-btn": "like",
+        "click #shop-btn": "shop",
         "click #radio-picto a": "displayRadio",
         "click #favorite-radio": "favorite",
         "hover #hd-button": "displayPopupHD",
@@ -435,6 +436,12 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
         $.post(url);
+    },
+
+    shop: function (e) {
+        e.preventDefault();
+        var link = $(e.target).attr('href');
+        window.open(link);
     },
 
     displayRadio: function (event) {
