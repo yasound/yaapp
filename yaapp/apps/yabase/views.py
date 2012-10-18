@@ -933,6 +933,7 @@ def add_song(request, radio_id, playlist_index, yasound_song_id):
     playlist_index = int(playlist_index)
     yasound_song_id = int(yasound_song_id)
     radio = get_object_or_404(Radio, id=radio_id)
+    radio.get_or_create_default_playlist()
 
     yabase_signals.new_animator_activity.send(sender=request.user,
                                               user=request.user,
