@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_head %}
+<script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  window.opener.reload();
+  window.close();
+});
+</script>
+{% endblock %}
+{% block content %}
+{% endblock %}
+

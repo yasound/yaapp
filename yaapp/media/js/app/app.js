@@ -2,6 +2,11 @@
 /*extern Ext, $ */
 $(document).ready(function () {
     Namespace('Yasound.App');
+
+    window.reload = function () {
+        window.location = window.location;
+    }
+
     console.log('window.location = ' + window.location)
     // global initializations
     Yasound.App.FacebookShare = {

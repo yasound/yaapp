@@ -2473,3 +2473,6 @@ def user_watched_tutorial(request):
     res = {'success': True}
     return HttpResponse(json.dumps(res), mimetype='application/json')
 
+def close(request, template_name='yabase/close.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))
