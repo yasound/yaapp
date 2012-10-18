@@ -4,7 +4,7 @@ $(document).ready(function () {
     Namespace('Yasound.App');
 
     window.reload = function () {
-        window.location = window.location;
+        window.location = g_root;
     }
 
     console.log('window.location = ' + window.location)
