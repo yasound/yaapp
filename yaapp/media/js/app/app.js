@@ -2,7 +2,7 @@
 /*extern Ext, $ */
 $(document).ready(function () {
     Namespace('Yasound.App');
-
+    console.log('window.location = ' + window.location)
     // global initializations
     Yasound.App.FacebookShare = {
         picture: g_facebook_share_picture,
