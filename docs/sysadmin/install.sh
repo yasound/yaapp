@@ -10,3 +10,7 @@ cp ./etc/nginx/sites-available/yaapp /etc/nginx/sites-available/
 # nginx
 cd /etc/nginx/sites-enabled
 ln -s ../sites-available/yaapp yaapp 
+
+# ffmpeg
+cp ./bin/ffmpeg /usr/local/bin/
+
