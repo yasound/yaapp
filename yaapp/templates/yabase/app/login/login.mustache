@@ -8,8 +8,8 @@
         <div class='signup-btns'>
             <div class="signup-btn-fbk">
                     {% ifequal sound_player 'deezer' %}
-                    <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ request.path }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
-                    <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ request.path }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
+                    <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ request.get_full_path }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
+                    <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ request.get_full_path }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
                     {% else %}
                     <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
                     <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
