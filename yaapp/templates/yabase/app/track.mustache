@@ -4,14 +4,12 @@
 
 
 
-    {% ifnotequal app_name 'deezer' %}
     <div id='radio-cover'>
         <img src="<% radio_picture %>" width="76" height="76" alt="Radio Picture"/>
         <div id="play-btn-large" class='play'>
             &nbsp;
         </div>
      </div>
-    {% endifnotequal %}
 
     <div id='metadata-container'>
         <div id='radio-title'>
@@ -59,7 +57,6 @@
     <div class='pull-right'>
 
         <div id="sound-level">
-            {% ifnotequal app_name 'deezer' %}
             <div id="min-level">
                 <img src="/media/app/images/lower-volume.png" width="8" height="10" alt="Lower Volume">
             </div>
@@ -79,7 +76,6 @@
             <div class="responsive-volume-btn">
                 <img src="/media/app/images/responsive-higher-volume.png">
             </div>
-            {% endifnotequal %}
         </div>
 
 

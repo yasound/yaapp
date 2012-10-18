@@ -545,6 +545,11 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
         this.wallEventsView.clear();
 
+
+        if (Yasound.App.appName == 'deezer') {
+            this.wallEvents.perPage = 10;
+        }
+
         if (this.model.get('id')) {
             if (g_bootstrapped_data) {
                 this.wallEvents.reset(g_bootstrapped_data.wall_events);

@@ -14,6 +14,12 @@
                 </a>
             </p>
             <p>
+                {% ifequal app_name 'deezer' %}
+                <a id='btn-deezer-link-out' href="{% app_url webapp_default %}"
+                    class="link-out"
+                    target="_blank"
+                    title="{% trans 'Yasound' %}">{% trans 'Yasound' %}</a>
+                {% else %}
                 <a id='btn-about' href="{% app_url webapp_about app_name %}"
                     class="footer-text-color1"
                     title="{% trans 'About' %}">{% trans 'About' %}</a> -
@@ -33,6 +39,7 @@
                 <a id='btn-contact' href="{% app_url webapp_contact app_name %}" class="footer-text-color1" title="{% trans 'Contact' %}">{% trans "Contact" %}</a> -
                 <a id='btn-legal' href="{% app_url webapp_legal app_name %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
             </p>
+                {% endifequal %}
         </div>
 
         <div class="footer-separation">
