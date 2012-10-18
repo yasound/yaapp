@@ -20,7 +20,7 @@ $(document).ready(function () {
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
     Yasound.App.hd = g_hd_enabled;
-    Yasound.App.RADIOWAYS = 1;
+    Yasound.App.RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
 
     if (cookies.get('radio')) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');

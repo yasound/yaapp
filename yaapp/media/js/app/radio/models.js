@@ -28,7 +28,7 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     url: '/api/v1/radio/0/wall/',
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
-    perPage: 25,
+    perPage: 15,
     page:0,
 
     parse: function(response) {

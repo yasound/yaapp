@@ -1,6 +1,8 @@
 {% load i18n %}
   <li class="active" id='all'><a href='#'>{% trans "Playlist" %}</a></li>
+  {% ifnotequal app_name 'deezer' %}
   <li id='add-from-server' ><a href='#'>{% trans "Add from server" %}</a></li>
   <li id='add-from-desktop' ><a href='#'>{% trans "Upload" %}</a></li>
   <li id='import-itunes' ><a href='#'>{% trans "Import from iTunes" %}</a></li>
+  {% endifnotequal %}
   <li id='import-deezer' ><a href='#'>{% trans "Import from deezer" %}</a></li>
