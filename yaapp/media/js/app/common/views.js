@@ -435,6 +435,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         e.preventDefault();
         var songId = this.model.get('id');
         var url = '/api/v1/song/' + songId + '/liker/';
+        $.publish('/song/like', this.model);
         $.post(url);
     },
 
