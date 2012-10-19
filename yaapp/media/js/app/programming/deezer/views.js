@@ -253,13 +253,19 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
             e.preventDefault();
         }
         var that = this;
-        DZ.login(function(response) {
+        DZ.getLoginStatus(function(response) {
             if (response.authResponse) {
                 that.fetchPlaylists();
             } else {
-                console.log('User cancelled login or did not fully authorize.');
+                DZ.login(function(response) {
+                    if (response.authResponse) {
+                        that.fetchPlaylists();
+                    } else {
+                        console.log('User cancelled login or did not fully authorize.');
+                    }
+                }, {perms: 'basic_access,email'});
             }
-        }, {perms: 'basic_access,email'});
+        });
 
         // data = [{
         //     id:1,
