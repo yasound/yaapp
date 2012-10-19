@@ -2406,6 +2406,10 @@ ul .user-cell:hover .caption {
 	border-radius:20px;
 }
 
+.wall-container .empty {
+    margin-left:30px;
+}
+
 .wall-event-message,
 .form-search {
 	margin:0px;
