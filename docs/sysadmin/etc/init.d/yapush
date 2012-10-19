@@ -1,6 +1,15 @@
 #!/bin/bash
 #
 # yapush app
+### BEGIN INIT INFO
+# Provides:          yapush
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start yapush
+# Description: yapush
+### END INIT INFO
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/bin:/usr/bin
 
