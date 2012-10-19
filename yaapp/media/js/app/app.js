@@ -197,7 +197,6 @@ $(document).ready(function () {
         initialize: function() {
             if (Yasound.App.appName == 'deezer') {
                 this.bind('all', this._updateDeezerCanvas);
-                Yasound.App.deezerOperations = Yasound.Deezer.Operations();
             }
             return this.bind('all', this._trackPageview);
         },
