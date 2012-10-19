@@ -77,6 +77,13 @@ Yasound.Deezer.Operations = function () {
     };
     $.subscribe('/song/like', mgr.onLike);
 
-    mgr.scanPlaylists();
+    DZ.login(function(response) {
+        if (response.authResponse) {
+            mgr.scanPlaylists();
+        } else {
+            console.log('User cancelled login or did not fully authorize.');
+        }
+    }, {perms: 'basic_access,email,manage_library'});
+
     return mgr;
 };
