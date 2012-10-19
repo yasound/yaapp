@@ -63,11 +63,13 @@ Yasound.Deezer.Operations = function () {
         },
 
         onSongFound: function (deezerId) {
+            console.log('onSongFound: deezerId = ' + deezerId);
             if (mgr.deezerPlaylistId === 0) {
                 console.log('no playlist id, exiting now');
                 return;
             }
-            DZ.api('playlist/' + mgr.deezerPlaylistId + '/tracks', 'POST', {songs: [deezerId]}, function (response) {
+            var url = 'playlist/' + mgr.deezerPlaylistId + '/tracks';
+            DZ.api(url, 'POST', {songs: "" + deezerId}, function (response) {
                 console.log(response);
             });
         },
