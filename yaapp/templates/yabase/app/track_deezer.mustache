@@ -5,12 +5,18 @@
 
 <div id='metadata-container'>
   <div id='radio-title'>
-      <span><% radio_name %></span>
+      <span id='title'><% radio_name %></span>
   </div>
   <div class='button-group'>
-    <a id="favorite-radio" class='is-not-favorite' href="#"></a>
-    <a id="share-btn" data-toggle="modal" href="#modal-share"></a>
-    <a href="#" id="love-btn" class='yatooltip-share'></a>
+    <a id="favorite-radio" class='yatooltip is-not-favorite' href="#">
+        <span class="yatoolelt">{% trans "Favorites" %}</span>
+    </a>
+    <a id="share-btn" class='yatooltip' data-toggle="modal" href="#modal-share">
+        <span class="yatoolelt">{% trans "Share" %}</span>
+    </a>
+    <a href="#" id="love-btn" class='yatooltip-share'>
+      <span class="yatoolelt-share">{% trans "Like song" %}</span>
+    </a>
   </div>
 </div>
 
