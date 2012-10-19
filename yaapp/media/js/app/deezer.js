@@ -10,12 +10,15 @@ Yasound.Deezer.Operations = function () {
         YASOUND_PLAYLIST_TITLE: gettext('Preferred songs on Yasound'),
 
         scanPlaylists: function () {
+            console.log('scanning playlists');
             DZ.api('user/me/playlists', 'GET', function(response) {
+                console.log(response);
                 if (response.total === 0) {
                     mgr.createYasoundPlaylist();
                 } else {
                     _.each(response.data, function(playlist) {
                         if (playlist.title == mgr.YASOUND_PLAYLIST_TITLE) {
+                            console.log('found yasound playlist!');
                             mgr.deezerPlaylistId = player.id;
                         }
                     });
@@ -27,13 +30,17 @@ Yasound.Deezer.Operations = function () {
         },
 
         createYasoundPlaylist: function () {
+            console.log('creating yasound playlist');
             DZ.api('user/me/playlists', 'POST', {title: mgr.YASOUND_PLAYLIST_TITLE}, function (response) {
+                console.log('response is');
+                console.log(response);
                 mgr.deezerPLaylistId = response.id;
             });
         },
 
         onLike: function (song) {
             mgr.yasoundSong = song;
+            var title = song.rawTitleWithoutAlbum();
             var query = '/search?q=' + title + '&order=RANKING';
             console.log('query is "' + query + '"');
             DZ.api(query, mgr.searchCallback);

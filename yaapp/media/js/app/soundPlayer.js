@@ -282,6 +282,8 @@ Yasound.Player.Deezer = function () {
             });
             DZ.ready(function(sdk_options){
                 DZ.canvas.setSize(1125);
+
+                Yasound.App.deezerOperations = Yasound.Deezer.Operations();
                 callback();
             });
         }
