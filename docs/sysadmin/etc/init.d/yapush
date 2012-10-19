@@ -13,7 +13,7 @@ test -x $DAEMON || exit 0
 
 
 DAEMON=/usr/bin/python
-ARGS="/data/vhosts/y/push.yasound.com/root/yapush/run.py"
+ARGS="/data/vhosts/y/yapush/root/yapush/run.py"
 NAME="yapush"
 USER=customer
 ENV="dev"
