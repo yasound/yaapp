@@ -69,7 +69,10 @@ Yasound.Deezer.Operations = function () {
                 return;
             }
             var url = 'playlist/' + mgr.deezerPlaylistId + '/tracks';
-            DZ.api(url, 'POST', {songs: "" + deezerId}, function (response) {
+            var params = {songs: "" + deezerId + ','};
+            console.log('url = ' + url);
+            console.log('params = ' + params);
+            DZ.api(url, 'POST', params, function (response) {
                 console.log(response);
             });
         },
