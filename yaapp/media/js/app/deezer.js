@@ -7,7 +7,7 @@ Yasound.Deezer.Operations = function () {
         yasoundSong: undefined,
         deezerPlaylistId: 0,
 
-        YASOUND_PLAYLIST_TITLE: gettext('Preferred songs on Yasound'),
+        YASOUND_PLAYLIST_TITLE: gettext('Yasound Playlist'),
 
         scanPlaylists: function () {
             console.log('scanning playlists');
@@ -38,7 +38,9 @@ Yasound.Deezer.Operations = function () {
             });
         },
 
-        onLike: function (song) {
+        onLike: function (event, song) {
+            console.log('onLike called!')
+            console.log(song);
             mgr.yasoundSong = song;
             var title = song.rawTitleWithoutAlbum();
             var query = '/search?q=' + title + '&order=RANKING';
