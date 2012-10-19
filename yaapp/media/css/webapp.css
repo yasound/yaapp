@@ -628,7 +628,7 @@ body {
     font-size:15px;
     cursor:pointer;
 }
-#player #metadata-container #radio-title span {
+#player #metadata-container #radio-title #title {
     line-height:25px;
     display:inline-block;
     width: 377px;
@@ -637,7 +637,7 @@ body {
     text-overflow: ellipsis;
 }
 
-#player #metadata-container #radio-title span:hover {
+#player #metadata-container #radio-title #title:hover {
     color: white;
 }
 
@@ -1716,9 +1716,10 @@ input::-webkit-input-placeholder {
 	overflow:hidden;
     background: url('../app/images/title_bg.png') no-repeat;
     cursor:pointer;
+    overflow:visible;
 }
 
-#player #player-title span {
+#player #player-title #track-title {
     width: 328px;
     display: inline-block;
     overflow: hidden;
@@ -1726,7 +1727,7 @@ input::-webkit-input-placeholder {
     text-overflow: ellipsis
 }
 
-#player #player-title span:hover {
+#player #player-title #track-title:hover {
     color: #D5D7D8;
 }
 #player #details {
@@ -4091,92 +4092,92 @@ a.yabutton-small {
 .yabutton-small:hover {
     text-decoration: none;
 }
+
 .yatooltip {
-	opacity:100;
-	text-decoration:none;
-	position:relative;
+    opacity:100;
+    text-decoration:none;
+    position:relative;
 }
 
 .yatooltip:hover {
-	text-decoration:none;
+    text-decoration:none;
 }
 
 .yatooltip .yatoolelt {
-	opacity:0;
-	display:none;
-	position:absolute;
-    z-index:3000;
+    opacity:0;
+    display:none;
+    position:absolute;
+    z-index: 10000;
 }
 
 .yatooltip:hover .yatoolelt {
-	position:absolute;
-	display:block;
-	height:29px;
+    position:absolute;
+    display:block;
+    height:29px;
     width:130px;
-	background-image:url('../app/images/tooltip-bg.png');
-	top:40px;
-	left:-50px;
-	border:1px solid black;
-	box-shadow:0px 1px 0px #999b9c inset;
-	border-radius:6px;
-	color:white;
-	text-shadow:1px 1px 1px black;
-	text-align:center;
-	line-height:30px;
-	opacity:100;
+    background-image:url('../app/images/tooltip-bg.png');
+    top:40px;
+    left:-50px;
+    border:1px solid black;
+    box-shadow:0px 1px 0px #999b9c inset;
+    border-radius:6px;
+    color:white;
+    text-shadow:1px 1px 1px black;
+    text-align:center;
+    line-height:30px;
+    opacity:100;
 }
 
 .yatooltip:hover .yatoolelt:after {
-	content:url('../app/images/tooltip-pointer.png');
-	position:absolute;
-	top:-18px;
-	left:59px;
+    content:url('../app/images/tooltip-pointer.png');
+    position:absolute;
+    top:-18px;
+    left:59px;
 }
 
 
 
 .yatooltip-share {
-	opacity:100;
-	text-decoration:none;
-	position:relative;
+    opacity:100;
+    text-decoration:none;
+    position:relative;
 }
 
 .yatooltip-share:hover {
-	text-decoration:none;
+    text-decoration:none;
 }
 
 .yatooltip-share .yatoolelt-share {
-	opacity:0;
-	display:none;
-	position:absolute;
-    z-index:3000;
+    opacity:0;
+    display:none;
+    position:absolute;
+    z-index: 10000;
 }
 
 .yatooltip-share:hover .yatoolelt-share {
-	position:absolute;
-	display:block;
-	height:29px;
+    position:absolute;
+    display:block;
+    height:29px;
     width:130px;
-	background-image:url('../app/images/tooltip-bg.png');
-	top:40px;
-	left:-57px;
-	border:1px solid black;
-	box-shadow:0px 1px 0px #999b9c inset;
-	border-radius:6px;
-	color:white;
-	text-shadow:1px 1px 1px black;
-	text-align:center;
-	line-height:30px;
-	opacity:100;
+    background-image:url('../app/images/tooltip-bg.png');
+    top:40px;
+    left:-57px;
+    border:1px solid black;
+    box-shadow:0px 1px 0px #999b9c inset;
+    border-radius:6px;
+    color:white;
+    text-shadow:1px 1px 1px black;
+    text-align:center;
+    line-height:30px;
+    opacity:100;
 }
 
 .yatooltip-share:hover .yatoolelt-share:after {
-	content:url('../app/images/tooltip-pointer.png');
-	position:absolute;
-	top:-18px;
-	left:59px;
+    content:url('../app/images/tooltip-pointer.png');
+    position:absolute;
+    top:-18px;
+    left:59px;
 }
-
 .yacheckbox {
     display:block;
     height:17px;
