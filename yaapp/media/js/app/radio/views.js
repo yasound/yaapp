@@ -205,6 +205,11 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
         }
         mask.remove();
         this.collection.each(this.addOne);
+        if (this.collection.length == 0) {
+            $('.empty').show();
+        } else {
+            $('.empty').hide();
+        }
     },
 
     clear: function () {
