@@ -33,6 +33,7 @@ def dev():
     env.forward_agent = 'True'
     env.hosts = [
         'yas-dev-01.ig-1.net',
+        'yas-dev-02.ig-1.net',
     ]
     env.user = "customer"
     WEBSITE_PATH = "/data/vhosts/y/yasound.com/root/"
