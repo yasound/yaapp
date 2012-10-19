@@ -22,7 +22,7 @@
 #set -e
 
 DEFAULT_PID_FILE="/tmp/celerybeat.pid"
-DEFAULT_LOG_FILE="/home/customer/logs/celery/celerybeat.log"
+DEFAULT_LOG_FILE="/data/logs/celery/celerybeat.log"
 DEFAULT_LOG_LEVEL="INFO"
 DEFAULT_CELERYBEAT="celerybeat"
 

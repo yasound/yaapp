@@ -13,7 +13,7 @@ test -x $DAEMON || exit 0
 
 
 DAEMON=/usr/bin/python
-ARGS="/var/www/scheduler.yasound.com/root/yascheduler/run.py"
+ARGS="/data/vhosts/y/scheduler.yasound.com/root/yascheduler/run.py"
 NAME="yascheduler"
 USER=customer
 ENV="dev"

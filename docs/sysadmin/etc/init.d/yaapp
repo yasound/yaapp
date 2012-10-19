@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # yasound django app
-# Iguanesolution 2012 
+# Iguanesolution 2012
 #
 # chkconfig: - 64 36
 # description:  Gunicorn for yasound
@@ -14,7 +14,7 @@
 # Required-Stop:     $nginx $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start yaapp 
+# Short-Description: Start yaapp
 # Description:       Enable yasound django application.
 ### END INIT INFO
 
@@ -27,8 +27,8 @@ ENV="development"
 TIMEOUT=${TIMEOUT-60}
 USER=customer
 DAEMON="/usr/bin/gunicorn"
-APP_ROOT=/var/www/dev.yasound.com/root/yaapp/
-PID="/tmp/gnucorn_yaapp.pid"
+APP_ROOT=/data/vhosts/y/yasound.com/root/yaapp
+PID="/data/tmp/gnucorn_yaapp.pid"
 CONFFILE=/etc/gunicorn/gunicorn.py
 
 APP=deploy
