@@ -951,8 +951,6 @@ class Radio(models.Model):
         self.save()
         atomic_inc(self, 'overall_listening_time', listening_duration)
 
-        self.current_song = None
-        self.current_song_play_date = None
         self.save()
 
     def song_starts_playing(self, song_instance):
