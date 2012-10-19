@@ -681,7 +681,10 @@ else:
     MONGO_DB = Connection().yasound
 
 if TEST_MODE:
-    MONGO_DB = Connection().yasound_test
+    if hostname in ['yas-dev-01', 'yas-dev-02'] :
+        MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@localhost/yasound').yasound_test
+    else:
+        MONGO_DB = Connection().yasound_test
 
 # album images folder
 ALBUM_COVER_SHORT_URL = 'covers/albums/'

@@ -7,7 +7,6 @@ $(document).ready(function () {
         window.location = g_root;
     }
 
-    console.log('window.location = ' + window.location)
     // global initializations
     Yasound.App.FacebookShare = {
         picture: g_facebook_share_picture,
@@ -198,6 +197,7 @@ $(document).ready(function () {
         initialize: function() {
             if (Yasound.App.appName == 'deezer') {
                 this.bind('all', this._updateDeezerCanvas);
+                Yasound.App.deezerOperations = Yasound.Deezer.Operations();
             }
             return this.bind('all', this._trackPageview);
         },
