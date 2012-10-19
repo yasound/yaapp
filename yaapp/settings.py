@@ -856,11 +856,11 @@ if PRODUCTION_MODE:
     RECOMMENDATION_CACHE = '/data/glusterfs-mnt/replica2all/recommendation/'
     RADIOWAYS_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/front/radioways/logos/'
 elif DEVELOPMENT_MODE:
-    SONGS_ROOT = '/home/customer/data/song/'
-    ALBUM_COVERS_ROOT = '/home/customer/data/album-cover/'
-    SONG_COVERS_ROOT = '/home/customer/data/song-cover/'
-    RECOMMENDATION_CACHE = '/home/customer/data/recommendation/'
-    RADIOWAYS_COVERS_ROOT = '/home/customer/data/radioways/logos/'
+    SONGS_ROOT = '/data/storage/song/'
+    ALBUM_COVERS_ROOT = '/data/storage/album-cover/'
+    SONG_COVERS_ROOT = '/data/storage/song-cover/'
+    RECOMMENDATION_CACHE = '/data/storage/recommendation/'
+    RADIOWAYS_COVERS_ROOT = '/data/storage/radioways/logos/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
