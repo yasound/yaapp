@@ -18,8 +18,8 @@
 
 #set -e
 
-DEFAULT_PID_FILE="/tmp/celeryd@%n.pid"
-DEFAULT_LOG_FILE="/home/customer/logs/celery/celeryd@%n.log"
+DEFAULT_PID_FILE="/data/tmp/celeryd@%n.pid"
+DEFAULT_LOG_FILE="/data/logs/celery/celeryd@%n.log"
 DEFAULT_LOG_LEVEL="INFO"
 DEFAULT_NODES="celery"
 DEFAULT_CELERYD="-m celery.bin.celeryd_detach"

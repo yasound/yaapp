@@ -1,12 +1,12 @@
 upstream dev_yasound_com {
-    server      unix:/tmp/gnucorn_yaapp.sock fail_timeout=0;
+    server      unix:/data/tmp/gnucorn_yaapp.sock fail_timeout=0;
 }
 server {
     listen   80;
     server_name dev.yasound.com;
     client_max_body_size 220M;
     # no security problem here, since / is alway passed to upstream
-    root /var/www/dev.yasound.com/root/yaapp;
+    root /data/vhosts/y/yasound.com/root/yaapp;
     # serve directly - analogous for static/staticfiles
     location /media/ {
         # if asset versioning is used
@@ -17,7 +17,7 @@ server {
     location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $http_host;
-        proxy_redirect off;       
+        proxy_redirect off;
 
         if (!-f $request_filename) {
             proxy_pass http://dev_yasound_com;

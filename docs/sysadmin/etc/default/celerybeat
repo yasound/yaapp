@@ -1,5 +1,5 @@
 # Where the Django project is.
-CELERYBEAT_CHDIR="/var/www/dev.yasound.com/root/yaapp"
+CELERYBEAT_CHDIR="/data/vhosts/y/yasound.com/root/yaapp"
 
 # Name of the projects settings module.
 export DJANGO_SETTINGS_MODULE="deploy"
@@ -14,6 +14,6 @@ CELERYBEAT_GROUP="customer"
 
 
 # Extra arguments to celerybeat
-CELERYBEAT_OPTS="--schedule=/home/customer/db/celery/celerybeat-schedule"
+CELERYBEAT_OPTS="--schedule=/data/var/lib/celery/celerybeat-schedule"
 
 ENV='development'
