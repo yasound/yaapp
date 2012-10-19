@@ -2,6 +2,30 @@
 /*extern Ext, $ */
 Namespace('Yasound.Data.Models');
 
+Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
+    idAttribute: "id",
+
+    setUUID: function(uuid) {
+        this.uuid = uuid;
+        return this;
+    },
+
+    addToPlaylist: function() {
+        var url = '/api/v1/radio/' + this.uuid + '/programming/yasound_songs/';
+        var that;
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'yasound_song_id': this.id
+            },
+            success: function() {
+                colibri(gettext('Song added'));
+            }
+        });
+    }
+});
+
 Yasound.Data.Models.SongInstance = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -121,29 +145,8 @@ Yasound.Data.Models.ProgrammingAlbums = Backbone.Collection.extend({
     }
 });
 
-Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
-    idAttribute: "id",
 
-    setUUID: function(uuid) {
-        this.uuid = uuid;
-        return this;
-    },
 
-    addToPlaylist: function() {
-        var url = '/api/v1/radio/' + this.uuid + '/programming/yasound_songs/';
-        var that;
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: {
-                'yasound_song_id': this.id
-            },
-            success: function() {
-                colibri(gettext('Song added'));
-            }
-        });
-    }
-});
 
 Yasound.Data.Models.YasoundSongs = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.YasoundSong,
