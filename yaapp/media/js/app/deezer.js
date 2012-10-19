@@ -19,7 +19,7 @@ Yasound.Deezer.Operations = function () {
                     _.each(response.data, function(playlist) {
                         if (playlist.title == mgr.YASOUND_PLAYLIST_TITLE) {
                             console.log('found yasound playlist!');
-                            mgr.deezerPlaylistId = player.id;
+                            mgr.deezerPlaylistId = playlist.id;
                         }
                     });
                     if (mgr.deezerPlaylistId === 0) {
@@ -39,7 +39,7 @@ Yasound.Deezer.Operations = function () {
         },
 
         onLike: function (event, song) {
-            console.log('onLike called!')
+            console.log('onLike called!');
             console.log(song);
             mgr.yasoundSong = song;
             var title = song.rawTitleWithoutAlbum();
@@ -71,7 +71,8 @@ Yasound.Deezer.Operations = function () {
             var url = 'playlist/' + mgr.deezerPlaylistId + '/tracks';
             var params = {songs: "" + deezerId + ','};
             console.log('url = ' + url);
-            console.log('params = ' + params);
+            console.log('params = ');
+            console.log(params);
             DZ.api(url, 'POST', params, function (response) {
                 console.log(response);
             });
