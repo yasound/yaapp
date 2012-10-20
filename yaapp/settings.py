@@ -942,6 +942,7 @@ DEEZER_SECRET_KEY = '031f1b223dde74d68ca2c8264f289669'
 TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
+    'django.contrib.auth',
     'django_extensions',
     'emencia.django.newsletter',
     'bootstrap',
