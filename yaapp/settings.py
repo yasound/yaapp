@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#x Django settings for yaapp project.
+# Django settings for yaapp project.
 
 import os, sys
 import djcelery
@@ -23,12 +23,18 @@ LOCAL_MODE = not ( PRODUCTION_MODE or DEVELOPMENT_MODE )
 TEST_MODE = 'test' in sys.argv or 'jenkins' in sys.argv
 USE_MYSQL_IN_LOCAL_MODE = os.environ.get('USE_MYSQL', False) and not TEST_MODE
 
+if TEST_MODE:
+    PRODUCTION_MODE = False
+    DEVELOPMENT_MODE = False
+    LOCAL_MODE = True
+
 if PRODUCTION_MODE or DEVELOPMENT_MODE:
     DEBUG = False
 else:
     DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
+
 
 DEFAULT_FROM_EMAIL = "Yasound Notification <noreply@yasound.com>"
 SERVER_EMAIL = "dev@yasound.com"
@@ -682,7 +688,7 @@ else:
 
 if TEST_MODE:
     if hostname in ['yas-dev-01', 'yas-dev-02'] :
-        MONGO_DB = Connection('mongodb://yasound:yiNOAi6P8eQC14L@localhost/yasound').yasound_test
+        MONGO_DB = Connection('mongodb://yasound_test:test@localhost/yasound_test').yasound_test
     else:
         MONGO_DB = Connection().yasound_test
 
