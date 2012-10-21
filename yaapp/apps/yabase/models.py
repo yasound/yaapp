@@ -1049,13 +1049,13 @@ class Radio(models.Model):
     def get_picture_url(self, size='210x210'):
         if self.picture:
             try:
-                url = get_thumbnail(self.picture,  size, crop='center', format='PNG').url
+                url = get_thumbnail(self.picture,  size, crop='center', format='JPEG', quality=70).url
             except:
                 url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
         else:
             if self.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
                 return self.radioways_radio.get_cover_url(size)
-            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=70).url
         return url
 
     @property
