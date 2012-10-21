@@ -260,8 +260,8 @@ class SongInstance(models.Model):
 
     def liked(self, user):
         radio = self.playlist.radio
-        radio_creator_profile = radio.creator.userprofile
-        radio_creator_profile.song_liked_in_my_radio(user_profile=user.userprofile, radio=radio, song=self)
+        radio_creator_profile = radio.creator.get_profile()
+        radio_creator_profile.song_liked_in_my_radio(user_profile=user.get_profile(), radio=radio, song=self)
 
     def duplicate(self, playlist):
         new_song = self.__class__.objects.create(playlist=playlist,
@@ -450,7 +450,7 @@ class RadioManager(models.Manager):
         return self.all().aggregate(Sum('overall_listening_time'))['overall_listening_time__sum']
 
     def radio_for_user(self, user):
-        return user.userprofile.own_radio
+        return user.get_profile().own_radio
 
     def unlock_all(self):
         self.all().update(computing_next_songs=False)
@@ -859,7 +859,7 @@ class Radio(models.Model):
             'leaderboard_rank': self.leaderboard_rank,
             'leaderboard_favorites': self.leaderboard_favorites,
             'created': self.created,
-            'creator': self.creator.userprofile.as_dict(request_user=request_user),
+            'creator': self.creator.get_profile().as_dict(request_user=request_user),
         }
         if request_user == self.creator:
             data['new_wall_messages_count'] = self.new_wall_messages_count
@@ -875,7 +875,7 @@ class Radio(models.Model):
         self.save()
 
     def create_name(self, user):
-        n = user.userprofile.name
+        n = user.get_profile().name
         if not n:
             n = user.username
         self.name = n
@@ -973,11 +973,11 @@ class Radio(models.Model):
         song_instance.save()
 
     def user_connection(self, user):
-        print 'user %s entered radio %s' % (user.userprofile.name, self.name)
+        print 'user %s entered radio %s' % (user.get_profile().name, self.name)
         creator = self.creator
         if not creator:
             return
-        creator_profile = creator.userprofile
+        creator_profile = creator.get_profile()
         creator_profile.user_in_my_radio(creator_profile, self)
 
         # reset unread wall messages count
@@ -1119,11 +1119,11 @@ class Radio(models.Model):
         return url
 
     def added_in_favorites(self, user):
-        creator_profile = self.creator.userprofile
-        creator_profile.my_radio_added_in_favorites(user.userprofile, self)
+        creator_profile = self.creator.get_profile()
+        creator_profile.my_radio_added_in_favorites(user.get_profile(), self)
 
     def now_ready(self):
-        self.creator.userprofile.radio_is_ready(self)
+        self.creator.get_profile().radio_is_ready(self)
         yabase_signals.new_animator_activity.send(sender=self,
                                                   user=self.creator,
                                                   radio=self,
@@ -1133,7 +1133,7 @@ class Radio(models.Model):
 
     def shared(self, user, share_type=None):
         yabase_signals.radio_shared.send(sender=self, radio=self, user=user, share_type=share_type)
-        self.creator.userprofile.my_radio_shared(user.userprofile, self)
+        self.creator.get_profile().my_radio_shared(user.get_profile(), self)
 
     def post_message(self, user, message):
         WallEvent.objects.add_post_message_event(radio=self, user=user, message=message)
@@ -1252,11 +1252,11 @@ class Radio(models.Model):
 
     def message_posted_in_wall(self, wall_event):
         if self.creator:
-            creator_profile = self.creator.userprofile
+            creator_profile = self.creator.get_profile()
             creator_profile.message_posted_in_my_radio(wall_event)
 
             # increment new message count if the creator is not in the radio
-            creator_profile = self.creator.userprofile
+            creator_profile = self.creator.get_profile()
             if creator_profile.connected_radio is not self:
                 Radio.objects.filter(id=self.id).update(new_wall_messages_count=self.new_wall_messages_count+1)
 
@@ -1532,8 +1532,8 @@ class WallEvent(models.Model):
 
         if creation:
             if self.user:
-                self.user_name = self.user.userprofile.name
-                self.user_picture = self.user.userprofile.picture
+                self.user_name = self.user.get_profile().name
+                self.user_picture = self.user.get_profile().picture
             if self.song:
                 yasound_song_id = self.song.metadata.yasound_song_id
                 try:

@@ -23,7 +23,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
     },
     initialize: function () {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'templateLoaded');
     },
 
     onClose: function () {
@@ -34,6 +34,12 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
     render: function () {
         this.reset();
+        // the {} attribute makes the template not cacheable
+        ich.loadRemoteTemplate('settings/settingsPage.mustache', 'settingsPageTemplate', this.templateLoaded, {});
+        return this;
+    },
+
+    templateLoaded: function() {
         $(this.el).html(ich.settingsPageTemplate());
         $("select", this.el).uniform({});
         $('#id_birthday').datepicker({

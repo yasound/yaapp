@@ -74,7 +74,7 @@ def add_user(user, upsert=False, insert=True):
     user_doc = {
         "db_id": user.id,
         "name": user.userprofile.name,
-        "name_dms": yasearch_utils.build_dms(user.userprofile.name, True),
+        "name_dms": yasearch_utils.build_dms(user.get_profile().name, True),
     }
     if upsert:
         db = settings.MONGO_DB

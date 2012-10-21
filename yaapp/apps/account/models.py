@@ -106,7 +106,7 @@ class UserProfileManager(models.Manager):
             lat = lat_min + lat_inc * (i % lat_count)
             lon = lon_min + lon_inc * math.floor(i / lat_count)
             u = User.objects.create(username='_____fake_____%d' % i)
-            p = u.userprofile
+            p = u.get_profile()
             p.set_position(lat, lon)
 
     def remove_fake_users(self):
@@ -594,11 +594,11 @@ class UserProfile(models.Model):
     def get_picture_url(self, size='100x100'):
         if self.picture:
             try:
-                url = get_thumbnail(self.picture,  size, crop='center').url
+                url = get_thumbnail(self.picture,  size, crop='center', format='JPEG', quality=70).url
             except:
-                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=70).url
         else:
-            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=70).url
         return url
 
     @property
@@ -899,7 +899,7 @@ class UserProfile(models.Model):
                 self.friends.add(friend)
                 # for facebook, relation is bidirectional, so we add the
                 # current user as friend of his friends
-                friend_profile = friend.userprofile
+                friend_profile = friend.get_profile()
                 if friend_profile is not None:
                     friend_profile.friends.add(self.user)
             self.update_friends_count(commit=False)
@@ -1022,7 +1022,7 @@ class UserProfile(models.Model):
     def radio_is_ready(self, radio):
         for f in self.friends.all():
             try:
-                friend_profile = f.userprofile
+                friend_profile = f.get_profile()
                 friend_profile.my_friend_created_radio(self, radio)
             except:
                 pass
@@ -1030,7 +1030,7 @@ class UserProfile(models.Model):
     def logged(self, request=None):
         for f in self.friends.all():
             try:
-                friend_profile = f.userprofile
+                friend_profile = f.get_profile()
                 friend_profile.my_friend_is_online(self)
             except:
                 pass
@@ -1059,7 +1059,7 @@ class UserProfile(models.Model):
                                     yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params
                                },
                                loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_USER,
-                               loc_args=[sender.userprofile.name])
+                               loc_args=[sender.get_profile().name])
 
 
     def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
@@ -1176,7 +1176,7 @@ class UserProfile(models.Model):
         self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_ONLINE, loc_args=[friend_profile.name])
 
     def message_posted_in_my_radio(self, wall_message):
-        user_profile = wall_message.user.userprofile
+        user_profile = wall_message.user.get_profile()
         radio = wall_message.radio
 
         if user_profile == self:
@@ -1574,7 +1574,7 @@ class Device(models.Model):
             Device.objects.filter(ios_token=self.ios_token, application_identifier=self.application_identifier).exclude(user=self.user).delete() # be sure to 'forget' old registrations for this device
 
     def __unicode__(self):
-        return u'%s - %s - %s (%s)' % (self.user.userprofile.name, self.application_identifier, self.ios_token, self.ios_token_type);
+        return u'%s - %s - %s (%s)' % (self.user.get_profile().name, self.application_identifier, self.ios_token, self.ios_token_type);
 
 class UserAdditionalInfosManager():
 
