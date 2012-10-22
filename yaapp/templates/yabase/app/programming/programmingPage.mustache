@@ -1,4 +1,22 @@
 {% load i18n %}
+
+<div class="modal hide fade" id="modal-export-deezer">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Export selection to deezer" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Do you want to export the selected tracks to deezer ? " %}</p>
+        <p>{% trans 'Enter a deezer playlist name:' %}</p>
+        <input placeholder={% trans 'Deezer playlist' %}/>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+    </div>
+</div>
+
+
 <div class='row  programming-container'>
     <div class='span12 no-margin'>
 

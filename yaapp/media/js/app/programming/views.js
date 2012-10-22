@@ -338,9 +338,33 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 
     onExportDeezer: function (e) {
         e.preventDefault();
-        this.songInstances.each(function(model) {
-            $.publish('/radio/import/add_from_server', model);
+        var that = this;
+        $('#modal-export-deezer').modal('show');
+        $('#modal-export-deezer .btn-primary').one('click', function () {
+            val = $('#modal-export-deezer input').val();
+            if (val.length !== 0) {
+                var startFunction = function () {
+                    that.songInstances.each(function(model) {
+                        $.publish('/radio/import/add_from_server', model);
+                    });
+                };
+                var endFunction = function () {
+                    var found = Yasound.App.deezerExportOperations.found;
+                    var notFound = Yasound.App.deezerExportOperations.notFound;
+                    console.log(Yasound.App.deezerExportOperations)
+                    var body = gettext('Import results:') + '<br/>';
+                    body += found + ' ' + gettext('tracks founds') + '<br/>' + notFound + ' ' + gettext('tracks not found');
+                    Yasound.Utils.dialog(gettext('Results'),  body);
+                }
+
+                Yasound.App.deezerExportOperations.reset(val, that.songInstances.length, startFunction, endFunction);
+            }
+
+            $('#modal-export-deezer input').val('');
+            $('#modal-export-deezer').modal('hide');
         });
+
+
     }
 });
 
