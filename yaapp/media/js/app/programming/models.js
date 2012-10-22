@@ -27,7 +27,10 @@ Yasound.Data.Models.YasoundSong = Backbone.Model.extend({
 });
 
 Yasound.Data.Models.SongInstance = Backbone.Model.extend({
-    idAttribute: "id"
+    idAttribute: "id",
+    rawTitleWithoutAlbum: function () {
+        return this.get('metadata__name') + ' ' + this.get('metadata__artist_name');
+    }
 });
 
 Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
@@ -99,7 +102,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
                 callback();
             }
         });
-    }
+    },
 });
 
 
