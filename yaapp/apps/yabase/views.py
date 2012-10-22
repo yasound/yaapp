@@ -717,7 +717,7 @@ def song_played(request, radio_uuid, songinstance_id):
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     song_instance = get_object_or_404(SongInstance, id=songinstance_id)
     if song_instance.metadata is not None:
-        logger.info('song_played: %s - %s - %s' % (song_instance.metadata.artist_name, song_instance.metadata.album_name, song_instance.metadata.name)))
+        logger.info('song_played: %s - %s - %s' % (song_instance.metadata.artist_name, song_instance.metadata.album_name, song_instance.metadata.name))
     radio.song_starts_playing(song_instance)
 
     logger.info('song_played: ok')
