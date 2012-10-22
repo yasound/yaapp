@@ -168,6 +168,7 @@ $(document).ready(function () {
             "radios/": "myRadios",
             "radios/new/": "newRadio",
             "top/": "top",
+            "top/:genre/": "top",
             "users/": "users",
             "profile/:username/": "profile",
             "profile/:username/favorites/": "userFavorites",
@@ -344,7 +345,6 @@ $(document).ready(function () {
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio
                 }).render();
-
                 this.commonContext.selectedGenreView = new Yasound.Views.SelectedGenre({}).render();
             }
             this.commonContext.subMenuView.selectMenu(selectedMenu);
@@ -420,11 +420,13 @@ $(document).ready(function () {
         },
 
         // top radios
-        top: function () {
+        top: function (genre) {
             this.clearView('top');
 
+            if (genre) {
+                this.commonContext.subMenuView.setCurrentGenre('style_' + genre);
+            }
             var genre =  this.commonContext.subMenuView.currentGenre();
-
             this.currentView = new Yasound.Views.TopRadiosPage({
                 el: '#webapp-content'
             }).render(genre);
