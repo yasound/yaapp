@@ -31,7 +31,7 @@ Yasound.Views.TopResults = Backbone.View.extend({
 
         this.loadingMask.hide();
 
-        if (this.collection.length == 0) {
+        if (this.collection.length === 0) {
             $('.empty', this.el).show();
         } else {
             $('.empty', this.el).hide();
@@ -90,12 +90,12 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.MostActiveRadios({}),
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onGenreChanged');
-        $.subscribe('/submenu/genre', this.onGenreChanged)
+        _.bindAll(this, 'render', 'onGenreChanged', 'updateGenreSlug');
+        $.subscribe('/submenu/genre', this.onGenreChanged);
     },
 
     onClose: function() {
-        $.unsubscribe('/submenu/genre', this.onGenreChanged)
+        $.unsubscribe('/submenu/genre', this.onGenreChanged);
     },
 
     reset: function() {
@@ -129,11 +129,27 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
         } else {
             this.collection.goTo(0);
         }
-
+        this.updateGenreSlug(genre);
         return this;
     },
 
+    updateGenreSlug: function (genre) {
+        var found = (/^style_/).test(genre);
+        if (found) {
+            var prefix_length = 'style_'.length;
+            var genre_slug = genre.substr(prefix_length, genre.length - prefix_length);
+            Yasound.App.Router.navigate("top/" + genre_slug + '/', {
+                trigger: false
+            });
+        } else {
+            Yasound.App.Router.navigate("top", {
+                trigger: false
+            });
+        }
+    },
+
     onGenreChanged: function(e, genre) {
+        this.updateGenreSlug(genre);
         this.collection.params.genre = genre;
         this.resultsView.clear();
         this.collection.goTo(0);

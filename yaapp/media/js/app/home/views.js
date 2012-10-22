@@ -15,12 +15,12 @@ Yasound.Views.HomePage = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onGenreChanged');
-        $.subscribe('/submenu/genre', this.onGenreChanged)
+        _.bindAll(this, 'render', 'onGenreChanged', 'updateGenreSlug');
+        $.subscribe('/submenu/genre', this.onGenreChanged);
     },
 
     onClose: function() {
-        $.unsubscribe('/submenu/genre', this.onGenreChanged)
+        $.unsubscribe('/submenu/genre', this.onGenreChanged);
     },
 
     reset: function() {
@@ -57,10 +57,27 @@ Yasound.Views.HomePage = Backbone.View.extend({
             this.collection.goTo(0);
         }
 
+        this.updateGenreSlug(genre);
         return this;
     },
 
+    updateGenreSlug: function (genre) {
+        var found = (/^style_/).test(genre);
+        if (found) {
+            var prefix_length = 'style_'.length;
+            var genre_slug = genre.substr(prefix_length, genre.length - prefix_length);
+            Yasound.App.Router.navigate('selection/' + genre_slug + '/', {
+                trigger: false
+            });
+        } else {
+            Yasound.App.Router.navigate("", {
+                trigger: false
+            });
+        }
+    },
+
     onGenreChanged: function(e, genre) {
+        this.updateGenreSlug(genre);
         this.collection.params.genre = genre;
         this.resultsView.clear();
         this.collection.goTo(0);

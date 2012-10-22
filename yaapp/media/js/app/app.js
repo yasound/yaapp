@@ -165,9 +165,11 @@ $(document).ready(function () {
             "radio/:uuid": "radio",
             "search/:query/": "search",
             "favorites/": "myFavorites",
+            "favorites/:genre/": "myFavorites",
             "radios/": "myRadios",
             "radios/new/": "newRadio",
             "top/": "top",
+            "top/:genre/": "top",
             "users/": "users",
             "profile/:username/": "profile",
             "profile/:username/favorites/": "userFavorites",
@@ -192,6 +194,7 @@ $(document).ready(function () {
             "help/": "help",
             "jobs/": "jobs",
             "press/": "press",
+            "selection/:genre/": "index",
             "*args": "index"
         },
         initialize: function() {
@@ -311,7 +314,7 @@ $(document).ready(function () {
                 Yasound.App.showWelcomePopup = false;
             }
 
-            this.commonContext.selectedGenreView.setVisible(showSelectedGenre);
+            this.commonContext.selectedGenreView.setVisible(showSelectedGenre, selectedMenu);
 
         },
 
@@ -344,14 +347,17 @@ $(document).ready(function () {
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio
                 }).render();
-
                 this.commonContext.selectedGenreView = new Yasound.Views.SelectedGenre({}).render();
             }
             this.commonContext.subMenuView.selectMenu(selectedMenu);
         },
 
-        index: function () {
+        index: function (genre) {
             this.clearView('selection');
+
+            if (genre) {
+                this.commonContext.subMenuView.setCurrentGenre('style_' + genre);
+            }
 
             var genre =  this.commonContext.subMenuView.currentGenre();
 
@@ -402,8 +408,12 @@ $(document).ready(function () {
         },
 
         // owner favorites page
-        myFavorites: function () {
+        myFavorites: function (genre) {
             this.clearView('favorites');
+
+            if (genre) {
+                this.commonContext.subMenuView.setCurrentGenre('style_' + genre);
+            }
 
             var genre =  this.commonContext.subMenuView.currentGenre();
 
@@ -420,11 +430,13 @@ $(document).ready(function () {
         },
 
         // top radios
-        top: function () {
+        top: function (genre) {
             this.clearView('top');
 
+            if (genre) {
+                this.commonContext.subMenuView.setCurrentGenre('style_' + genre);
+            }
             var genre =  this.commonContext.subMenuView.currentGenre();
-
             this.currentView = new Yasound.Views.TopRadiosPage({
                 el: '#webapp-content'
             }).render(genre);
