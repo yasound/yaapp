@@ -1039,7 +1039,7 @@ Yasound.Views.SelectedGenre = Backbone.View.extend({
     },
 
     render: function () {
-
+        return this;
         var genre = $('#id_genre option:selected').val();
         if (genre === '' || !this.visible) {
             this.$el.fadeOut(200);
