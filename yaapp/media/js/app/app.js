@@ -621,7 +621,6 @@ $(document).ready(function () {
 
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
-    Yasound.App.deezerExportOperations = Yasound.Deezer.ExportOperations();
 
     Yasound.App.player.init(function () {
         Backbone.history.start({
