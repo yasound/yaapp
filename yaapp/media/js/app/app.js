@@ -336,8 +336,10 @@ $(document).ready(function () {
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
 
-                if (!cookies.get('hideteaser')) {
-                    this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+                if (!Yasound.App.userAuthenticated) {
+                    if (!cookies.get('hideteaser')) {
+                        this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+                    }
                 }
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 

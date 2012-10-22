@@ -35,10 +35,11 @@ Yasound.App.ErrorHandler = Backbone.View.extend({
         if (jqxhr.status === 0) {
             $('body').ajaxSuccess(this.onSuccess);
 
-            $('#modal-error').modal('show');
-            $('#modal-error .btn-primary').one('click', function () {
-                window.location = Yasound.App.root;
-            });
+            // Do nothing in case of error
+            // $('#modal-error').modal('show');
+            // $('#modal-error .btn-primary').one('click', function () {
+            //     window.location = Yasound.App.root;
+            // });
 
             this.enableErrorHandling = false;
         } else if (jqxhr.status === 401) {
