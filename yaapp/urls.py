@@ -300,6 +300,7 @@ urlpatterns = patterns('',
 
     url(r'^close/$', 'yabase.views.close', name='close'),
 
+
     (r'^', include('yabase.urls')),
 
     # deezer
@@ -341,4 +342,9 @@ if settings.LOCAL_MODE:
      (r'^media/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': path.join(settings.PROJECT_PATH, 'media')}),
 
+    )
+
+if settings.LOCAL_MODE or DEVELOPMENT_MODE:
+    urlpatterns += patterns('',
+        (r'^profiling/$', 'yabase.views.profiling'),
     )

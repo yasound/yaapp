@@ -314,7 +314,7 @@ MIDDLEWARE_CLASSES = (
 
 if LOCAL_MODE or DEVELOPMENT_MODE:
     # ios 4 send double slashes. Nginx on prod server handle it gracefully, not on dev & local
-    MIDDLEWARE_CLASSES += ('yabase.middleware.DoubleSlashMiddleware', )
+    MIDDLEWARE_CLASSES += ('yabase.middleware.DoubleSlashMiddleware', 'yabase.middleware.SqlProfilingMiddleware')
 
 ROOT_URLCONF = 'urls'
 
