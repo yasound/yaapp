@@ -153,6 +153,7 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
 
     toJSON: function() {
         var data = Yasound.Data.Models.Radio.__super__.toJSON.apply(this);
+        data.fullname = data.name;
         if (data && data.name && data.name.length > 18) {
             data.name = data.name.substring(0,18) + "...";
         }
