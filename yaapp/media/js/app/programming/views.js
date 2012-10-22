@@ -268,7 +268,8 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 
 Yasound.Views.PlaylistContent =  Backbone.View.extend({
     events: {
-        "click #remove-all": "onRemoveAll"
+        "click #remove-all": "onRemoveAll",
+        "click #export-deezer": "onExportDeezer"
     },
 
     initialize: function() {
@@ -333,8 +334,14 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
                 that.songInstances.goTo(0);
             });
         });
-    }
+    },
 
+    onExportDeezer: function (e) {
+        e.preventDefault();
+        this.songInstances.each(function(model) {
+            $.publish('/radio/import/add_from_server', model);
+        });
+    }
 });
 
 
