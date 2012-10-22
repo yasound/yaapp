@@ -4289,7 +4289,7 @@ a.yabutton-small {
 
 #teaser h1 {
     color: white;
-    text-shadow:1px 1px #0000006d;
+    text-shadow:1px 1px #000000;
     font-size:34px;
     font-weight: 100;
 }
@@ -4336,7 +4336,7 @@ a.yabutton-small {
     display:block;
     margin-top:12px;
     color:white;
-    text-shadow:1px 1px #0000006d;
+    text-shadow:1px 1px #000000;
     height:44px;
     line-height:44px;
     background: url(../app/images/teaser/later-btn.png) no-repeat;
@@ -4351,7 +4351,7 @@ a.yabutton-small {
     margin-bottom:25px;
     line-height:24px;
     color: white;
-    text-shadow:1px 1px #0000006d;
+    text-shadow:1px 1px #000000;
 }
 
 #teaser p a {
