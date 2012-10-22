@@ -102,6 +102,7 @@ Yasound.Deezer.ExportOperations = function () {
         onImport: function (event, song) {
             mgr.yasoundSong = song;
             var title = song.rawTitleWithoutAlbum();
+            console.log('trying to find ' + title);
             var query = '/search?q=' + title + '&order=RANKING';
             DZ.api(query, mgr.searchCallback);
         },
@@ -119,15 +120,18 @@ Yasound.Deezer.ExportOperations = function () {
 
         onSongFound: function (deezerId) {
             if (mgr.deezerPlaylistId === 0) {
+                console.log('no playlist, exiting');
                 return;
             }
             var url = 'playlist/' + mgr.deezerPlaylistId + '/tracks';
             var params = {songs: "" + deezerId + ','};
             DZ.api(url, 'POST', params, function (response) {
+                console.log(response);
             });
         },
 
         onSongNotFound: function () {
+            console.log('not found');
         }
 
     };
