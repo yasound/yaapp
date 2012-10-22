@@ -1150,6 +1150,25 @@ Yasound.Views.Status = Backbone.View.extend({
     }
 });
 
+
+Yasound.Views.RadioInline = Backbone.View.extend({
+
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.radioInlineTemplate(data));
+        return this;
+    }
+});
 /**
  * Programming page
  */
@@ -1163,10 +1182,12 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'render', 'onClose');
+        this.radio = new Yasound.Data.Models.Radio();
     },
 
     onClose: function() {
         this.playlistView.close();
+        this.radioView.close();
     },
 
     reset: function() {
@@ -1176,6 +1197,19 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         this.reset();
         this.uuid = uuid;
         $(this.el).html(ich.programmingPageTemplate());
+
+        this.radio.set({
+                'uuid': uuid,
+                'id': 0
+            }, {
+                silent: true
+        });
+
+        this.radioView = new Yasound.Views.RadioInline({
+            model: this.radio,
+            el: '#radio'
+        });
+        this.radio.fetch();
 
         this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
         return this;

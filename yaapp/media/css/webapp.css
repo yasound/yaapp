@@ -2508,10 +2508,17 @@ ul#notifications {
 
  .programming-container h1 {
     font-size:42px;
-    padding:38px 0px 38px 31px;
-    border-bottom: 1px solid #e3e3e3;
+    padding:38px 0px 14px 31px;
 }
 
+.programming-container #radio {
+    margin-left:33px;
+    font-size:18px;
+    color: #999999;
+    padding-bottom:24px;
+    text-shadow:1px 1px white;
+    /*border-bottom: 1px solid #e3e3e3;*/
+}
 .programming-container #programming-top-toolbar {
     margin-top:40px;
     margin-right:3px;
