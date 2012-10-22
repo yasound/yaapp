@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 20:40+0200\n"
+"POT-Creation-Date: 2012-10-22 21:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -998,8 +998,8 @@ msgid "Create an account"
 msgstr "Je crée un compte"
 
 #: templates/yabase/webapp.html:671
-msgid "Signup later"
-msgstr "M'inscrire plus tard"
+msgid "No, thank you, later"
+msgstr "Non, merci, plus tard"
 
 #: templates/yabase/app/footer.html:25
 msgid "About"
@@ -2076,3 +2076,6 @@ msgstr "Invitation pour rejoindre et tester Yasound"
 #: templates/yaref/find_fuzzy.html:6 templates/yaref/find_fuzzy.html.py:13
 msgid "Fuzzy search"
 msgstr "Recherche floue"
+
+#~ msgid "Signup later"
+#~ msgstr "M'inscrire plus tard"
