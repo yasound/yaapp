@@ -344,18 +344,26 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
         var songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(that.uuid);
         songInstances.fetch({
             success: function () {
+                var t = 0;
                 songInstances.each(function (model) {
-                    $.publish('/radio/import/add_from_server', model);
+                    t = t+1;
+                    setTimeout(function() {
+                        $.publish('/radio/import/add_from_server', model);
+                    }, 1000*t);
                 });
                 var info = songInstances.info();
                 var totalPages = info.totalPages;
                 var i;
+                var t = 0;
                 for (i = 1; i <= totalPages; i++) {
                     songInstances.page = i;
                     songInstances.fetch({
                         success: function () {
                             songInstances.each(function (model) {
-                                $.publish('/radio/import/add_from_server', model);
+                                t = t+1;
+                                setTimeout(function() {
+                                    $.publish('/radio/import/add_from_server', model);
+                                }, t*1000);
                             });
                         }
                     });
@@ -395,8 +403,12 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
             val = $('#modal-export-deezer input').val();
             if (val.length !== 0) {
                 var startFunction = function () {
+                    t = 0;
                     _.each(that.songInstancesView.views, function(view) {
-                        $.publish('/radio/import/add_from_server', view.model);
+                        t = t+1;
+                        setTimeout(function() {
+                            $.publish('/radio/import/add_from_server', view.model);
+                        }, t*1000);
                     });
                 };
                 var endFunction = function () {
