@@ -178,7 +178,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/listeners/$', 'yabase.views.listeners', name='listeners'),
 
 
-    url(r'^api/v1/search/radios/$', 'yasearch.views.search_radios'),
+    url(r'^api/v1/search/radios/$', 'yasearch.views.search_songs_in_radios'),
+    url(r'^api/v1/search/in_radios/$', 'yasearch.views.search_radios'),
 
 
     # misc
