@@ -594,11 +594,11 @@ class UserProfile(models.Model):
     def get_picture_url(self, size='100x100'):
         if self.picture:
             try:
-                url = get_thumbnail(self.picture,  size, crop='center', format='JPEG', quality=70).url
+                url = get_thumbnail(self.picture,  size, crop='center', format='JPEG', quality=90).url
             except:
-                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=70).url
+                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=90).url
         else:
-            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=70).url
+            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=90).url
         return url
 
     @property
