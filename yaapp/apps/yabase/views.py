@@ -1549,8 +1549,8 @@ class WebAppView(View):
         root = get_root(app_name)
 
         sound_player = 'soundmanager'
-        if app_name == 'deezer':
-            sound_player = 'deezer'
+        # if app_name == 'deezer':
+        #     sound_player = 'deezer'
 
 
         context = {
