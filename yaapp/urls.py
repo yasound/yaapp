@@ -344,7 +344,7 @@ if settings.LOCAL_MODE:
 
     )
 
-if settings.LOCAL_MODE or DEVELOPMENT_MODE:
+if settings.LOCAL_MODE or settings.DEVELOPMENT_MODE:
     urlpatterns += patterns('',
         (r'^profiling/$', 'yabase.views.profiling'),
     )
