@@ -269,11 +269,12 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 Yasound.Views.PlaylistContent =  Backbone.View.extend({
     events: {
         "click #remove-all": "onRemoveAll",
-        "click #export-deezer": "onExportDeezer"
+        "click #export-deezer": "onExportDeezer",
+        "click #export-deezer-all": "onExportDeezerAll"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'artistsSelected', 'albumsSelected');
+        _.bindAll(this, 'render', 'artistsSelected', 'albumsSelected', 'exportAllSongs');
     },
 
     onClose: function() {
@@ -289,6 +290,7 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
     },
 
     render: function(uuid) {
+        this.uuid = uuid;
         $(this.el).html(ich.songInstancesTemplate());
         this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
         this.songInstancesView = new Yasound.Views.SongInstances({
@@ -336,6 +338,54 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
         });
     },
 
+
+    exportAllSongs: function (e) {
+        var that = this;
+        var songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(that.uuid);
+        songInstances.fetch({
+            success: function () {
+                songInstances.each(function (model) {
+                    $.publish('/radio/import/add_from_server', model);
+                });
+                var info = songInstances.info();
+                var totalPages = info.totalPages;
+                var i;
+                for (i = 1; i <= totalPages; i++) {
+                    songInstances.page = i;
+                    songInstances.fetch({
+                        success: function () {
+                            songInstances.each(function (model) {
+                                $.publish('/radio/import/add_from_server', model);
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    },
+
+    onExportDeezerAll: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-export-deezer').modal('show');
+        $('#modal-export-deezer .btn-primary').one('click', function () {
+            val = $('#modal-export-deezer input').val();
+            if (val.length !== 0) {
+                var startFunction = that.exportAllSongs;
+                var endFunction = function () {
+                    var found = Yasound.App.deezerExportOperations.found;
+                    var notFound = Yasound.App.deezerExportOperations.notFound;
+                    var body = gettext('Export results:') + '<br/>';
+                    body += gettext('Export in progress');
+                    Yasound.Utils.dialog(gettext('Results'),  body);
+                };
+                Yasound.App.deezerExportOperations.reset(val, that.songInstances.length, startFunction, endFunction);
+            }
+            $('#modal-export-deezer input').val('');
+            $('#modal-export-deezer').modal('hide');
+        });
+    },
+
     onExportDeezer: function (e) {
         e.preventDefault();
         var that = this;
@@ -345,18 +395,17 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
             val = $('#modal-export-deezer input').val();
             if (val.length !== 0) {
                 var startFunction = function () {
-                    that.songInstances.each(function(model) {
-                        $.publish('/radio/import/add_from_server', model);
+                    _.each(that.songInstancesView.views, function(view) {
+                        $.publish('/radio/import/add_from_server', view.model);
                     });
                 };
                 var endFunction = function () {
                     var found = Yasound.App.deezerExportOperations.found;
                     var notFound = Yasound.App.deezerExportOperations.notFound;
-                    console.log(Yasound.App.deezerExportOperations)
-                    var body = gettext('Import results:') + '<br/>';
+                    var body = gettext('Export results:') + '<br/>';
                     body += found + ' ' + gettext('tracks founds') + '<br/>' + notFound + ' ' + gettext('tracks not found');
                     Yasound.Utils.dialog(gettext('Results'),  body);
-                }
+                };
 
                 Yasound.App.deezerExportOperations.reset(val, that.songInstances.length, startFunction, endFunction);
             }

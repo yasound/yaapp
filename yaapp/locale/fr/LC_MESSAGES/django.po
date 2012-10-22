@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 17:40+0200\n"
+"POT-Creation-Date: 2012-10-22 20:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -353,7 +353,7 @@ msgstr ""
 
 #: templates/newsletter/newsletter_historic.html:25
 #: templates/yabase/app/programming/addFromServer.mustache:24
-#: templates/yabase/app/programming/songInstances.mustache:16
+#: templates/yabase/app/programming/songInstances.mustache:17
 #: templates/yabase/app/programming/statusPage.mustache:50
 #: templates/yabase/app/programming/upload.mustache:15
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:24
@@ -905,7 +905,8 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 #: templates/yabase/app/friends/friendsPage.mustache:15
 #: templates/yabase/app/friends/friendsPage.mustache:45
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:15
-#: templates/yabase/app/programming/songInstances.mustache:41
+#: templates/yabase/app/programming/programmingPage.mustache:14
+#: templates/yabase/app/programming/songInstances.mustache:42
 #: templates/yabase/app/programming/statusPage.mustache:12
 #: templates/yabase/app/radio/radioPage.mustache:54
 #: templates/yabase/app/radio/radioPage.mustache:69
@@ -916,7 +917,8 @@ msgstr "Non merci"
 
 #: templates/yabase/webapp.html:561
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:16
-#: templates/yabase/app/programming/songInstances.mustache:42
+#: templates/yabase/app/programming/programmingPage.mustache:15
+#: templates/yabase/app/programming/songInstances.mustache:43
 #: templates/yabase/app/programming/statusPage.mustache:13
 #: templates/yabase/app/radio/radioPage.mustache:55
 #: templates/yabase/app/radio/radioPage.mustache:70
@@ -1116,7 +1118,7 @@ msgstr "Cadeaux"
 #: templates/yabase/app/mobileLeftMenu.html:35
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:13
 #: templates/yabase/app/profile/user.mustache:26
-#: templates/yabase/app/programming/programmingPage.mustache:7
+#: templates/yabase/app/programming/programmingPage.mustache:25
 #: templates/yabase/app/radio/radio.mustache:20
 #: templates/yabase/app/radio/radio.mustache:27
 #: templates/yabase/app/settings/settingsPage.mustache:6
@@ -1325,7 +1327,7 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:10
-#: templates/yabase/app/programming/programmingPage.mustache:9
+#: templates/yabase/app/programming/programmingPage.mustache:27
 #: templates/yabase/app/radio/editRadioPage.mustache:8
 #: templates/yabase/app/radio/radio.mustache:21
 #: templates/yabase/app/radio/radio.mustache:28
@@ -1445,14 +1447,14 @@ msgstr "Recherche avancée"
 
 #: templates/yabase/app/programming/addFromServer.mustache:12
 #: templates/yabase/app/programming/addFromServer.mustache:21
-#: templates/yabase/app/programming/songInstances.mustache:13
+#: templates/yabase/app/programming/songInstances.mustache:14
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:21
 msgid "Track"
 msgstr "Piste"
 
 #: templates/yabase/app/programming/addFromServer.mustache:13
 #: templates/yabase/app/programming/addFromServer.mustache:22
-#: templates/yabase/app/programming/songInstances.mustache:14
+#: templates/yabase/app/programming/songInstances.mustache:15
 #: templates/yabase/app/programming/statusPage.mustache:29
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:22
 msgid "Album"
@@ -1460,7 +1462,7 @@ msgstr "Album"
 
 #: templates/yabase/app/programming/addFromServer.mustache:14
 #: templates/yabase/app/programming/addFromServer.mustache:23
-#: templates/yabase/app/programming/songInstances.mustache:15
+#: templates/yabase/app/programming/songInstances.mustache:16
 #: templates/yabase/app/programming/statusPage.mustache:28
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:23
 msgid "Artist"
@@ -1479,6 +1481,22 @@ msgid "Select albums"
 msgstr "Sélectionner des albums"
 
 #: templates/yabase/app/programming/programmingPage.mustache:6
+msgid "Export selection to deezer"
+msgstr "Exporter la sélection vers Deezer"
+
+#: templates/yabase/app/programming/programmingPage.mustache:9
+msgid "Do you want to export the selected tracks to deezer ? "
+msgstr "Voulez-vous exporter les titres vers Deezer ? "
+
+#: templates/yabase/app/programming/programmingPage.mustache:10
+msgid "Enter a deezer playlist name:"
+msgstr "Entrez un nom de playlist deezer:"
+
+#: templates/yabase/app/programming/programmingPage.mustache:11
+msgid "Deezer playlist"
+msgstr "Playlist Deezer"
+
+#: templates/yabase/app/programming/programmingPage.mustache:24
 #: templates/yabase/app/radio/editRadioPage.mustache:7
 msgid "Listen now"
 msgstr "Ecouter maintenant"
@@ -1510,20 +1528,25 @@ msgstr "Importer depuis Deezer"
 msgid "Remove"
 msgstr "Supprimer"
 
-#: templates/yabase/app/programming/songInstances.mustache:4
-msgid "Remove all songs"
-msgstr "Supprimer tous les morceaux"
-
-#: templates/yabase/app/programming/songInstances.mustache:6
+#: templates/yabase/app/programming/songInstances.mustache:5
 msgid "Export selection to Deezer"
 msgstr "Exporter la sélection vers Deezer"
 
-#: templates/yabase/app/programming/songInstances.mustache:34
+#: templates/yabase/app/programming/songInstances.mustache:6
+#, fuzzy
+msgid "Export all to Deezer"
+msgstr "Exporter la sélection vers Deezer"
+
+#: templates/yabase/app/programming/songInstances.mustache:8
+msgid "Remove all songs"
+msgstr "Supprimer tous les morceaux"
+
+#: templates/yabase/app/programming/songInstances.mustache:35
 #: templates/yabase/app/programming/upload.mustache:8
 msgid "Remove all"
 msgstr "Supprimer tous les morceaux"
 
-#: templates/yabase/app/programming/songInstances.mustache:37
+#: templates/yabase/app/programming/songInstances.mustache:38
 msgid "Do you really want to remove all filtered titles ?"
 msgstr "Voulez-vous vraiment supprimer tous les titres filtrés ?"
 
