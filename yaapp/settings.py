@@ -163,8 +163,10 @@ elif DEVELOPMENT_MODE:
     }
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'yaapp-memory-cache'
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': [
+                'localhost:11211',
+            ]
         }
     }
 
