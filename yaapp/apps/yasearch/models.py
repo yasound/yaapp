@@ -139,7 +139,7 @@ def build_mongodb_index(upsert=False, erase=False, skip_songs=False):
         else:
             bulk = indexer.begin_bulk_insert()
             for i, user in enumerate(queryset_iterator(users)):
-                bulk.append(user.userprofile.build_fuzzy_index(upsert=False, insert=False))
+                bulk.append(user.get_profile().build_fuzzy_index(upsert=False, insert=False))
                 if i % 10000 == 0 and i != 0:
                     indexer.commit_bulk_insert_users(bulk)
                     bulk = indexer.begin_bulk_insert()
@@ -171,7 +171,7 @@ def search_radio_by_user(search_text, user_min_score=50, ready_radios_only=True,
             break
     radios = []
     for u in users:
-        user_radios = u.userprofile.own_radios(only_ready_radios=ready_radios_only)
+        user_radios = u.get_profile().own_radios(only_ready_radios=ready_radios_only)
         for r in user_radios:
             if r.creator or not radios_with_creator_only:
                 radios.append(r)

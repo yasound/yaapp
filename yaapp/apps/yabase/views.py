@@ -407,7 +407,7 @@ def radio_shared(request, radio_id):
         return HttpResponseNotFound()
 
     radio.shared(request.user, share_type)
-    res = 'user %s has shared radio %s' % (request.user.userprofile.name, radio.name)
+    res = 'user %s has shared radio %s' % (request.user.get_profile().name, radio.name)
     return HttpResponse(res)
 
 
@@ -1172,7 +1172,7 @@ class WebAppView(View):
     def home(self, request, context, *args, **kwargs):
         radios, next_url = radio_recommendations_process(request=request, internal=True)
         context['submenu_number'] = 1
-        context['radios'] = [Radio.objects.get(id=radio.get('id')) for radio in radios]
+        context['radios'] = Radio.objects.filter(id__in=[radio.get('id') for radio in radios])
         context['next_url'] = next_url
         context['base_url'] = reverse('yabase.views.radio_recommendations')
         context['bdata'] = json.dumps([radio for radio in radios], cls=MongoAwareEncoder)
@@ -1358,13 +1358,13 @@ class WebAppView(View):
             return HttpResponseRedirect(reverse('webapp_login', args=[self.app_name]))
 
         if request.method == 'POST':
-            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
-            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_informations_form = MyInformationsForm(instance=request.user.get_profile())
+            my_accounts_form = MyAccountsForm(instance=request.user.get_profile())
             my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
 
             action = request.REQUEST.get('action')
             if action == 'my_informations':
-                my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user))
+                my_informations_form = MyInformationsForm(request.POST, request.FILES, instance=request.user.get_profile())
                 if my_informations_form.is_valid():
                     my_informations_form.save()
                     if request.is_ajax():
@@ -1374,7 +1374,7 @@ class WebAppView(View):
                     if request.is_ajax():
                         return self._ajax_error(my_informations_form.errors)
             elif action == 'my_accounts':
-                my_accounts_form = MyAccountsForm(request.POST, instance=UserProfile.objects.get(user=request.user))
+                my_accounts_form = MyAccountsForm(request.POST, instance=request.user.get_profile())
                 if my_accounts_form.is_valid():
                     my_accounts_form.save()
                     if request.is_ajax():
@@ -1466,10 +1466,6 @@ class WebAppView(View):
             twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
             email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
             user_profile = request.user.get_profile()
-            if user_profile.own_radio:
-                user_uuid = user_profile.own_radio.uuid
-            else:
-                user_uuid = None
 
             if referal == 'twitter' and user_profile.twitter_uid is not None:
                 inviter_profile = UserProfile.objects.get(user__username=referal_username)
@@ -1506,12 +1502,11 @@ class WebAppView(View):
 
             display_associate_facebook = not request.user.get_profile().facebook_enabled
             display_associate_twitter = not request.user.get_profile().twitter_enabled
-            my_informations_form = MyInformationsForm(instance=UserProfile.objects.get(user=request.user))
-            my_accounts_form = MyAccountsForm(instance=UserProfile.objects.get(user=request.user))
+            my_informations_form = MyInformationsForm(instance=request.user.get_profile())
+            my_accounts_form = MyAccountsForm(instance=request.user.get_profile())
             my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
 
         else:
-            user_uuid = 0
             user_profile = None
 
         push_url = self._get_push_url(request)
@@ -1527,7 +1522,7 @@ class WebAppView(View):
         has_radios = False
         radio_count = 0;
         if request.user.is_authenticated():
-            radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
+            radio_count = request.user.get_profile().own_radios(only_ready_radios=False).count()
         if radio_count > 0:
             has_radios = True
 
@@ -1545,7 +1540,6 @@ class WebAppView(View):
 
 
         context = {
-            'user_uuid': user_uuid,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
@@ -1598,7 +1592,6 @@ class WebAppView(View):
         self.app_name = app_name
         self._check_auth(request, radio_uuid)
 
-        user_uuid = 0
         user_profile = None
         notification_count = 0
         push_url = self._get_push_url(request)
@@ -1636,10 +1629,6 @@ class WebAppView(View):
             twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
             email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
             user_profile = request.user.get_profile()
-            if user_profile.own_radio:
-                user_uuid = user_profile.own_radio.uuid
-            else:
-                user_uuid = None
 
             if referal == 'twitter' and user_profile.twitter_uid is not None:
                 inviter_profile = UserProfile.objects.get(user__username=referal_username)
@@ -1663,18 +1652,6 @@ class WebAppView(View):
 
 
 
-
-
-
-
-
-
-
-            if request.user.get_profile().own_radio:
-                user_uuid = request.user.get_profile().own_radio.uuid
-            else:
-                user_uuid = None
-
             user_profile  = request.user.get_profile()
             nm = NotificationsManager()
             notification_count = nm.unread_count(request.user.id)
@@ -1682,7 +1659,7 @@ class WebAppView(View):
             hd_enabled = user_profile.permissions.hd.is_set
             hd_expiration_date = user_profile.hd_expiration_date
 
-            radio_count = request.user.userprofile.own_radios(only_ready_radios=False).count()
+            radio_count = request.user.get_profile().own_radios(only_ready_radios=False).count()
             if radio_count > 0:
                 has_radios = True
 
@@ -1721,7 +1698,6 @@ class WebAppView(View):
         show_welcome_popup = True
 
         context = {
-            'user_uuid': user_uuid,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
@@ -1774,7 +1750,7 @@ def radios(request, template_name='web/radios.html'):
 def web_myradio(request, radio_uuid=None, template_name='web/my_radio.html'):
     radio = None
     if not uuid:
-        radios = request.user.userprofile.own_radios(only_ready_radios=True)[0:1]
+        radios = request.user.get_profile().own_radios(only_ready_radios=True)[0:1]
         if radios.count() == 0:
             raise Http404
         else:
@@ -2264,6 +2240,14 @@ def load_template(request, template_name, app_name='app'):
 
         context['radio'] = radio
         context['settings_radio_form'] = SettingsRadioForm(instance=radio)
+    elif template_name == 'settings/settingsPage.mustache':
+        my_informations_form = MyInformationsForm(instance=request.user.get_profile())
+        my_accounts_form = MyAccountsForm(instance=request.user.get_profile())
+        my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
+        context['my_informations_form'] = my_informations_form
+        context['my_accounts_form'] = my_accounts_form
+        context['my_notifications_form'] = my_notifications_form
+        context['user_profile'] = request.user.get_profile()
 
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, context, context_instance=RequestContext(request))
@@ -2315,7 +2299,7 @@ def my_radios(request, radio_uuid=None):
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
-        qs = request.user.userprofile.own_radios(only_ready_radios=False)
+        qs = request.user.get_profile().own_radios(only_ready_radios=False)
         total_count = qs.count()
         qs = qs[offset:offset+limit]
         data = []
@@ -2462,7 +2446,7 @@ def listeners(request, radio_uuid):
     qs = qs[skip:limit+skip]
     data = []
     for user in qs:
-        data.append(user.userprofile.as_dict(request.user))
+        data.append(user.get_profile().as_dict(request.user))
     response = api_response(data, limit=limit, offset=skip)
     return response
 

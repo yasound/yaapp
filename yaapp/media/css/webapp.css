@@ -333,8 +333,7 @@ body {
     border-radius:5px;
     box-shadow:0px 0px 2px grey inset;
     padding:12px;
-    overflow-x:none;
-    overflow-y:scroll;
+    overflow:scroll;
     max-height:450px;
 }
 
@@ -1047,7 +1046,6 @@ input::-webkit-input-placeholder {
     box-shadow:none;
     margin:0px;
     font-size:15px;
-    color:#b0b6b8;
 }
 
 #search-symbol {
@@ -2514,8 +2512,8 @@ ul#notifications {
     font-weight: bold;
 }
 
-.programming #playlist-actions,
-.programming #upload-actions
+.programming-container #playlist-actions,
+.programming-container #upload-actions
  {
     margin-bottom: 8px;
 }

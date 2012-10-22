@@ -66,7 +66,7 @@ def set_user_picture(request, user_id):
         return HttpResponse('request does not contain a picture file')
 
     f = request.FILES[PICTURE_FILE_TAG]
-    user.userprofile.set_picture(f)
+    user.get_profile().set_picture(f)
 
     res = 'picture OK for user: %s' % unicode(user)
     return HttpResponse(res)
@@ -187,7 +187,7 @@ def get_notifications_preferences(request):
     if not check_http_method(request, ['get']):
         return HttpResponse(status=405)
 
-    user_profile = request.user.userprofile
+    user_profile = request.user.get_profile()
     res = user_profile.notif_preferences()
     response = json.dumps(res)
     return HttpResponse(response)
@@ -203,7 +203,7 @@ def set_notifications_preferences(request):
 
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
-    user_profile = request.user.userprofile
+    user_profile = request.user.get_profile()
     user_profile.set_notif_preferences(post_data_dict)
 
     res = 'update_notifications_preferences OK'
@@ -212,7 +212,7 @@ def set_notifications_preferences(request):
 
 @check_api_key(methods=['GET'], login_required=True)
 def get_facebook_share_preferences(request):
-    user_profile = request.user.userprofile
+    user_profile = request.user.get_profile()
     res = user_profile.facebook_share_preferences()
     response = json.dumps(res)
     return HttpResponse(response)
@@ -223,7 +223,7 @@ def get_facebook_share_preferences(request):
 def set_facebook_share_preferences(request):
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
-    user_profile = request.user.userprofile
+    user_profile = request.user.get_profile()
     user_profile.set_facebook_share_preferences(post_data_dict)
 
     res = 'update_facebook_share_preferences OK'
@@ -232,7 +232,7 @@ def set_facebook_share_preferences(request):
 
 @check_api_key(methods=['GET'], login_required=True)
 def get_twitter_share_preferences(request):
-    user_profile = request.user.userprofile
+    user_profile = request.user.get_profile()
     res = user_profile.twitter_share_preferences()
     response = json.dumps(res)
     return HttpResponse(response)
@@ -243,7 +243,7 @@ def get_twitter_share_preferences(request):
 def set_twitter_share_preferences(request):
     data = request.POST.keys()[0]
     post_data_dict = json.loads(data)
-    user_profile = request.user.userprofile
+    user_profile = request.user.get_profile()
     user_profile.set_twitter_share_preferences(post_data_dict)
 
     res = 'update_twitter_share_preferences OK'
@@ -511,7 +511,7 @@ def update_localization(request):
     lat = obj['latitude']
     lon = obj['longitude']
     unit = obj.get('unit', 'degrees')
-    request.user.userprofile.set_position(lat, lon, unit)
+    request.user.get_profile().set_position(lat, lon, unit)
 
 
 @check_api_key(methods=['GET'], login_required=False)
@@ -520,7 +520,7 @@ def connected_users_by_distance(request):
     limit = int(request.GET.get('limit', 20))
 
     if request.user and request.user.is_authenticated():
-        userprofile = request.user.userprofile
+        userprofile = request.user.get_profile()
         profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
     else:
         from yacore.geoip import ip_coords
@@ -547,7 +547,7 @@ def fast_connected_users_by_distance(request, internal=False):
 
     key = None
     if request.user and request.user.is_authenticated():
-        userprofile = request.user.userprofile
+        userprofile = request.user.get_profile()
 
         key = '%d.fast_connected_users' % (userprofile.id)
         data = cache.get(key, [])
@@ -650,7 +650,7 @@ def user_friends_add_remove(request, username, friend):
 
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST', 'DELETE'])
-def user_picture(request, username):
+def user_picture(request, username, size=''):
     """
     RESTful view for handling user picture
     """
@@ -661,7 +661,12 @@ def user_picture(request, username):
         raise Http404
 
     if request.method == 'GET':
-        return HttpResponseRedirect(user_profile.picture_url)
+        if size =='xs':
+            return HttpResponseRedirect(user.get_profile().small_picture_url)
+        elif size =='xl':
+            return HttpResponseRedirect(user.get_profile().large_picture_url)
+        else:
+            return HttpResponseRedirect(user.get_profile().picture_url)
 
     if user != request.user:
         return HttpResponse(status=401)
@@ -739,20 +744,6 @@ def user_likes(request, username):
         data.append(like.as_dict())
     response = api_response(data, total_count, limit=limit, offset=offset)
     return response
-
-@check_api_key(methods=['GET'])
-def user_picture(request, username, size=''):
-    """
-    Returns the picture for a given user
-    """
-    user = get_object_or_404(User, username=username)
-    if size =='xs':
-        return HttpResponseRedirect(user.get_profile().small_picture_url)
-    elif size =='xl':
-        return HttpResponseRedirect(user.get_profile().large_picture_url)
-    else:
-        return HttpResponseRedirect(user.get_profile().picture_url)
-
 
 
 @check_api_key(methods=['GET'])
@@ -835,7 +826,7 @@ def invite_facebook_friends(request):
 @csrf_exempt
 @check_api_key(methods=['POST', ], login_required=True)
 def invite_twitter_friends(request):
-    if not request.user.userprofile.twitter_enabled:
+    if not request.user.get_profile().twitter_enabled:
         response = {'success': False, 'error': unicode(_('no twitter account associated'))}
         response_data = json.dumps(response)
         return HttpResponse(response_data)

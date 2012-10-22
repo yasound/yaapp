@@ -57,7 +57,7 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
             if not request.user.is_active:
                 return False
 
-            userprofile = request.user.userprofile
+            userprofile = request.user.get_profile()
             userprofile.authenticated()
 
         return authenticated
@@ -111,7 +111,7 @@ class UserResource(ModelResource):
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
-        userprofile = user.userprofile
+        userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
 
         if bundle.request.user == user:
@@ -121,7 +121,7 @@ class UserResource(ModelResource):
     def obj_update(self, bundle, request=None, **kwargs):
         user_resource = super(UserResource, self).obj_update(bundle, request, **kwargs)
         user = user_resource.obj
-        user_profile = user.userprofile
+        user_profile = user.get_profile()
         user_profile.update_with_bundle(bundle, False)
         return user_resource
 
@@ -149,7 +149,7 @@ class PublicUserResource(UserResource):
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
-        userprofile = user.userprofile
+        userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
 
         userprofile.fill_user_bundle_with_history(bundle)
@@ -237,7 +237,7 @@ class SignupResource(ModelResource):
         # send confirmation email
         EmailAddress.objects.add_email(user, user.email)
 
-        user_profile = user.userprofile
+        user_profile = user.get_profile()
         user_profile.yasound_email = bundle.data['email']
         user_profile.update_with_bundle(bundle, True)
 
@@ -262,7 +262,7 @@ class LoginResource(ModelResource):
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
-        userprofile = user.userprofile
+        userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
 
         # add social stuff
@@ -378,7 +378,7 @@ class SocialAuthentication(Authentication):
                 if email:
                     user.email = email
                     user.save()
-                profile = user.userprofile
+                profile = user.get_profile()
                 profile.facebook_uid = uid
                 profile.facebook_token = token
                 profile.facebook_username = name
@@ -441,7 +441,7 @@ class SocialAuthentication(Authentication):
                 if email:
                     user.email = email
                     user.save()
-                profile = user.userprofile
+                profile = user.get_profile()
                 profile.twitter_uid = uid
                 profile.twitter_token = token
                 profile.twitter_token_secret = token_secret
@@ -484,7 +484,7 @@ class LoginSocialResource(ModelResource):
     def dehydrate(self, bundle):
         userID = bundle.data['id'];
         user = User.objects.get(pk=userID)
-        userprofile = user.userprofile
+        userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
 
         # add specific login informations

@@ -377,10 +377,6 @@ HTML, BODY { height: 100%; }
    </script>
 {% if request.user.is_authenticated %}
 
-   <script type="text/html" id="settingsPageTemplate">
-      {% include "yabase/app/settings/settingsPage.mustache" %}
-   </script>
-
    <script type="text/html" id="notificationsPageTemplate">
       {% include "yabase/app/notifications/notificationsPage.mustache" with notifications=None%}
    </script>

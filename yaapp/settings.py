@@ -314,7 +314,7 @@ MIDDLEWARE_CLASSES = (
 
 if LOCAL_MODE or DEVELOPMENT_MODE:
     # ios 4 send double slashes. Nginx on prod server handle it gracefully, not on dev & local
-    MIDDLEWARE_CLASSES += ('yabase.middleware.DoubleSlashMiddleware',)
+    MIDDLEWARE_CLASSES += ('yabase.middleware.DoubleSlashMiddleware', )
 
 ROOT_URLCONF = 'urls'
 
@@ -326,7 +326,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "social_auth.context_processors.social_auth_by_type_backends",
-    "yabase.context_processors.my_radios",
     "yabase.context_processors.facebook",
 )
 
@@ -660,8 +659,12 @@ if LOCAL_MODE:
     YASOUND_RADIO_WEB_URL = 'http://localhost:8000/listen/'
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
-    YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
+    if hostname in ['yas-dev-01', 'yas-dev-02']:
+        YASOUND_STREAM_SERVER_URL = 'http://%s.ig-1.net:8000/' % (hostname)
+        YASOUND_RADIO_WEB_URL = 'http://%s.ig-1.net/listen/' % (hostname)
+    else:
+        YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
+        YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://yas-web-08.ig-1.net:8000/'
