@@ -704,6 +704,7 @@ def radio_has_stopped(request, radio_uuid):
 
 @csrf_exempt
 def song_played(request, radio_uuid, songinstance_id):
+    songinstance_id = int(songinstance_id)
     logger.info('song_played radio = %s song_instance_id = %d' % (radio_uuid, songinstance_id))
     if not check_http_method(request, ['post']):
         logger.info('song_played: wrong method')
