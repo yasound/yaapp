@@ -99,7 +99,6 @@ Yasound.Deezer.ExportOperations = function () {
 
         createYasoundPlaylist: function (success) {
             DZ.api('user/me/playlists', 'POST', {title: mgr.playlistTitle}, function (response) {
-                console.log(response);
                 mgr.deezerPlaylistId = response.id;
                 success();
             });
@@ -108,7 +107,6 @@ Yasound.Deezer.ExportOperations = function () {
         onImport: function (event, song) {
             mgr.yasoundSong = song;
             var title = song.rawTitleWithoutAlbum();
-            console.log('trying to find ' + title);
             var query = '/search?q=' + title + '&order=RANKING';
             DZ.api(query, mgr.searchCallback);
         },
@@ -135,13 +133,11 @@ Yasound.Deezer.ExportOperations = function () {
             }
 
             if (mgr.deezerPlaylistId === 0) {
-                console.log('no playlist, exiting');
                 return;
             }
             var url = 'playlist/' + mgr.deezerPlaylistId + '/tracks';
             var params = {songs: "" + deezerId + ','};
             DZ.api(url, 'POST', params, function (response) {
-                console.log(response);
             });
 
         },
@@ -155,7 +151,6 @@ Yasound.Deezer.ExportOperations = function () {
                     mgr.callback = undefined;
                 }
             }
-            console.log('not found');
         },
 
         reset: function (playlistName, total, startCallback, finishCallback) {

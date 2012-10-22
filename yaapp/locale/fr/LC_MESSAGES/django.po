@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 20:25+0200\n"
+"POT-Creation-Date: 2012-10-22 20:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1533,9 +1533,8 @@ msgid "Export selection to Deezer"
 msgstr "Exporter la sélection vers Deezer"
 
 #: templates/yabase/app/programming/songInstances.mustache:6
-#, fuzzy
 msgid "Export all to Deezer"
-msgstr "Exporter la sélection vers Deezer"
+msgstr "Exporter toute la radio vers Deezer"
 
 #: templates/yabase/app/programming/songInstances.mustache:8
 msgid "Remove all songs"
