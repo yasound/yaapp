@@ -1052,7 +1052,8 @@ Yasound.Views.SelectedGenre = Backbone.View.extend({
 
     },
 
-    setVisible: function (visible) {
+    setVisible: function (visible, menu) {
+        this.menu = menu
         this.visible = visible;
         this.render();
     },

@@ -116,11 +116,12 @@ def upload_playlists(request, radio_id):
 
     return HttpResponse(asyncRes.task_id)
 
-def radio_recommendations_process(request, internal=False):
+def radio_recommendations_process(request, internal=False, genre=''):
     # read url params
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
-    genre = request.GET.get('genre', '')
+    if genre == '':
+        genre = request.GET.get('genre', '')
     recommendation_token = request.GET.get('token', None)
     # check if artist list is provided
     artist_data_file = None
@@ -1170,7 +1171,10 @@ class WebAppView(View):
         return HttpResponse(response, mimetype='application/json')
 
     def home(self, request, context, *args, **kwargs):
-        radios, next_url = radio_recommendations_process(request=request, internal=True)
+        genre = ''
+        if 'genre' in kwargs:
+            genre = 'style_%s' % (kwargs['genre'])
+        radios, next_url = radio_recommendations_process(request=request, internal=True, genre=genre)
         context['submenu_number'] = 1
         context['radios'] = Radio.objects.filter(id__in=[radio.get('id') for radio in radios])
         context['next_url'] = next_url
@@ -1211,6 +1215,7 @@ class WebAppView(View):
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
+        genre = ''
         if 'genre' in kwargs:
             genre = 'style_%s' % (kwargs['genre'])
         radios, next_url = most_active_radios(request, internal=True, genre=genre)

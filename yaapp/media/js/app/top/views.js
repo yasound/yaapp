@@ -141,6 +141,10 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
             Yasound.App.Router.navigate("top/" + genre_slug + '/', {
                 trigger: false
             });
+        } else {
+            Yasound.App.Router.navigate("top", {
+                trigger: false
+            });
         }
     },
 
