@@ -99,8 +99,8 @@ Yasound.Deezer.ExportOperations = function () {
 
         createYasoundPlaylist: function (success) {
             DZ.api('user/me/playlists', 'POST', {title: mgr.playlistTitle}, function (response) {
-                mgr.deezerPLaylistId = response.id;
                 console.log(response);
+                mgr.deezerPlaylistId = response.id;
                 success();
             });
         },
