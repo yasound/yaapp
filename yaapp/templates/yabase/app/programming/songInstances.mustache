@@ -1,10 +1,11 @@
 {% load i18n %}
 <div id='programming-filters'></div>
 <div id='playlist-actions'>
-    <button class='yabutton-small' id='remove-all'>{% trans "Remove all songs" %}</button>
     {% ifequal app_name 'deezer' %}
     <button class='yabutton-small' id='export-deezer'>{% trans "Export selection to Deezer" %}</button>
+    <button class='yabutton-small' id='export-deezer-all'>{% trans "Export all to Deezer" %}</button>
     {% endifequal %}
+    <button class='yabutton-small' id='remove-all'>{% trans "Remove all songs" %}</button>
 </div>
 
 <table class="table table-bordered">
