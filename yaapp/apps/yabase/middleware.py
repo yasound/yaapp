@@ -29,6 +29,8 @@ class SqlProfilingMiddleware(object):
         self._add_sql_queries(request)
         return response
     def process_response(self, request, response):
+        if len(SqlProfilingMiddleware.Queries) > 1500:
+            SqlProfilingMiddleware.Queries = SqlProfilingMiddleware.Queries[:1500]
         self._add_sql_queries(request)
         return response
     def process_exception(self, request, exception):
