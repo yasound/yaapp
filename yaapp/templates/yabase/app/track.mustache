@@ -122,7 +122,7 @@
             </div>
             <div class="header-notification" id="last-social-btn">
     <div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
-       <div id='hd-box-container' class='hidden'>
+       <div id='hd-box-container' style='display:none;'>
         <div id='hd-status'>
           <label for='hd-checkbox'>{% trans "HD" %} {% if hd_expiration_date %}({% trans "enabled until" %} {{ hd_expiration_date|date:"DATE_FORMAT" }}) {% endif %}</label>
             <div id="hd-checkbox-container">
