@@ -2513,8 +2513,8 @@ ul#notifications {
     font-weight: bold;
 }
 
-.programming #playlist-actions,
-.programming #upload-actions
+.programming-container #playlist-actions,
+.programming-container #upload-actions
  {
     margin-bottom: 8px;
 }
