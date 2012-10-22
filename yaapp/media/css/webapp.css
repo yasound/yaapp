@@ -2536,6 +2536,12 @@ ul#notifications {
     margin-bottom: 8px;
 }
 
+.programming-container #playlist-actions #progress {
+    float:right;
+    width:200px;
+    margin-right:20px;
+}
+
 #deezer-content {
     clear:both;
 
