@@ -704,17 +704,23 @@ def radio_has_stopped(request, radio_uuid):
 
 @csrf_exempt
 def song_played(request, radio_uuid, songinstance_id):
+    logger.info('song_played radio = %s song_instance_id = %d' % (radio_uuid, songinstance_id))
     if not check_http_method(request, ['post']):
+        logger.info('song_played: wrong method')
         return HttpResponse(status=405)
 
     key = request.GET.get('key', 0)
     if key != settings.SCHEDULER_KEY:
+        logger.info('song_played: wrong scheduler key (%s)' % key)
         return HttpResponseForbidden()
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     song_instance = get_object_or_404(SongInstance, id=songinstance_id)
+    if song_instance.metadata is not None:
+        logger.info('song_played: %s - %s - %s' % (song_instance.metadata.artist_name, song_instance.metadata.album_name, song_instance.metadata.name)))
     radio.song_starts_playing(song_instance)
 
+    logger.info('song_played: ok')
     return HttpResponse('ok')
 
 @check_api_key(methods=['GET',], login_required=False)
