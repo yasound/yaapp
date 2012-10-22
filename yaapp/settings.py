@@ -273,7 +273,7 @@ ADMIN_MEDIA_PREFIX = "/media/statics/admin/"
 FILE_UPLOAD_PERMISSIONS = 0644
 if PRODUCTION_MODE:
     FILE_UPLOAD_TEMP_DIR = '/data/tmp/'
-if DEVELOPMENT_MODE:
+if DEVELOPMENT_MODE or hostname in ['yas-dev-01', 'yas-dev-02']:
     FILE_UPLOAD_TEMP_DIR = '/data/tmp/'
 
 # Additional locations of static files
@@ -878,6 +878,12 @@ elif DEVELOPMENT_MODE:
     SONG_COVERS_ROOT = '/data/storage/song-cover/'
     RECOMMENDATION_CACHE = '/data/storage/recommendation/'
     RADIOWAYS_COVERS_ROOT = '/data/storage/radioways/logos/'
+elif hostname in ['yas-dev-01', 'yas-dev-02']:
+    SONGS_ROOT = '/data/tmp/'
+    ALBUM_COVERS_ROOT = '/data/tmp/'
+    SONG_COVERS_ROOT = '/data/tmp/'
+    RECOMMENDATION_CACHE = '/data/tmp/'
+    RADIOWAYS_COVERS_ROOT = '/data/tmp/'
 else:
     SONGS_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
@@ -893,6 +899,8 @@ GIFT_DEFAULT_IMAGE_DONE = MEDIA_URL +'images/default-gift-done.png'
 
 # temp files
 if PRODUCTION_MODE:
+    TEMP_DIRECTORY = '/data/tmp/'
+else if hostname in ['yas-dev-01', 'yas-dev-02']:
     TEMP_DIRECTORY = '/data/tmp/'
 else:
     TEMP_DIRECTORY = '/tmp/'
