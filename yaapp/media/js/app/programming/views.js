@@ -339,6 +339,7 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
     onExportDeezer: function (e) {
         e.preventDefault();
         var that = this;
+        $('html, body').animate({scrollTop: 0}, 400);
         $('#modal-export-deezer').modal('show');
         $('#modal-export-deezer .btn-primary').one('click', function () {
             val = $('#modal-export-deezer input').val();
