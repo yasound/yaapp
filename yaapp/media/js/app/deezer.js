@@ -2,7 +2,7 @@
 /*extern Ext, $ */
 Namespace('Yasound.Deezer');
 
-Yasound.Deezer.Operations = function () {
+Yasound.Deezer.LikeOperations = function () {
     var mgr = {
         yasoundSong: undefined,
         deezerPlaylistId: 0,
@@ -66,5 +66,103 @@ Yasound.Deezer.Operations = function () {
     };
     $.subscribe('/song/like', mgr.onLike);
     mgr.scanPlaylists();
+    return mgr;
+};
+
+Yasound.Deezer.ExportOperations = function () {
+    var mgr = {
+        yasoundSong: undefined,
+        deezerPlaylistId: 0,
+        total: 0,
+        found: 0,
+        notFound: 0,
+        playlistTitle: gettext('Yasound Import'),
+
+        scanPlaylists: function (success) {
+            DZ.api('user/me/playlists', 'GET', function(response) {
+                if (response.total === 0) {
+                    mgr.createYasoundPlaylist(success);
+                } else {
+                    _.each(response.data, function(playlist) {
+                        if (playlist.title == mgr.playlistTitle) {
+                            mgr.deezerPlaylistId = playlist.id;
+                        }
+                    });
+                    if (mgr.deezerPlaylistId === 0) {
+                        mgr.createYasoundPlaylist(success);
+                    } else {
+                        success();
+                    }
+                }
+            });
+        },
+
+        createYasoundPlaylist: function (success) {
+            DZ.api('user/me/playlists', 'POST', {title: mgr.playlistTitle}, function (response) {
+                mgr.deezerPlaylistId = response.id;
+                success();
+            });
+        },
+
+        onImport: function (event, song) {
+            mgr.yasoundSong = song;
+            var title = song.rawTitleWithoutAlbum();
+            var query = '/search?q=' + title + '&order=RANKING';
+            DZ.api(query, mgr.searchCallback);
+        },
+
+        searchCallback: function (response) {
+            var total = response.total;
+            if (total > 0) {
+                var item = response.data[0];
+                var deezerId = item.id;
+                mgr.onSongFound(deezerId);
+            } else {
+                mgr.onSongNotFound();
+            }
+        },
+
+        onSongFound: function (deezerId) {
+            mgr.found += 1;
+            mgr.total -= 1;
+            if (mgr.total <= 0) {
+                if (mgr.callback) {
+                    mgr.callback();
+                    mgr.callback = undefined;
+                }
+            }
+
+            if (mgr.deezerPlaylistId === 0) {
+                return;
+            }
+            var url = 'playlist/' + mgr.deezerPlaylistId + '/tracks';
+            var params = {songs: "" + deezerId + ','};
+            DZ.api(url, 'POST', params, function (response) {
+            });
+
+        },
+
+        onSongNotFound: function () {
+            mgr.notFound += 1;
+            mgr.total -= 1;
+            if (mgr.total <= 0) {
+                if (mgr.callback) {
+                    mgr.callback();
+                    mgr.callback = undefined;
+                }
+            }
+        },
+
+        reset: function (playlistName, total, startCallback, finishCallback) {
+            mgr.playlistTitle = playlistName;
+            mgr.found = 0;
+            mgr.notFound = 0;
+            mgr.total = total;
+            mgr.callback = finishCallback;
+            mgr.scanPlaylists(startCallback);
+        }
+
+    };
+    $.subscribe('/radio/import/add_from_server', mgr.onImport);
     return mgr;
 };

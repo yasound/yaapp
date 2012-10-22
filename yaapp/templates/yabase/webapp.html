@@ -46,6 +46,8 @@
 <![endif]-->
 
 <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="//use.typekit.net/qfb4bbn.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
 {% block extra_head %}
     {% block fb_open_graph %}{% endblock %}
@@ -256,6 +258,9 @@ HTML, BODY { height: 100%; }
    </script>
    <script type="text/html" id="giftTemplate">
       {% include "yabase/app/gifts/gift.mustache" %}
+   </script>
+   <script type="text/html" id="radioInlineTemplate">
+      {% include "yabase/app/programming/radioInline.mustache" with radio=None %}
    </script>
 
 
@@ -628,6 +633,8 @@ HTML, BODY { height: 100%; }
     </div>
 </div>
 
+<div id='teaser-bg' style='display:none;'></div>
+
 
 <div id='webapp-container-parent'>
 <div id='webapp-container'>
@@ -637,23 +644,34 @@ HTML, BODY { height: 100%; }
 
   <div class='container' id='teaser' style='display:none;'>
     <div class='row'>
-      <div class='span4' id='teaser-listen'>
+      <div class='span12'>
+        <h1>{% trans "Discover <strong>YaSound</strong>, the free <strong>social radios</strong> platform!" %}</h1>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='span3' id='teaser-listen'>
           {% app_url webapp_top app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Listen</a> to the biggest radio database in the world</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/listen.png' width='223' height='197'/>
+          <img src='/media/app/images/teaser/listen.png' width='163' height='136'/>
       </div>
-      <div class='span4' id='teaser-share'>
+      <div class='span3' id='teaser-share'>
           {% app_url webapp_friends app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Share</a> your listening<br/>with your friends</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/share.png' width='249' height='197'/>
+          <img src='/media/app/images/teaser/share.png' width='179' height='141'/>
       </div>
-      <div class='span4 last' id='teaser-create'>
-          <div id='close-btn-container'>
-            <a id='close-btn' class="yabutton-small" href="#"><i class="icon-remove"></i> {% trans "Close" %}</a>
-          </div>
+      <div class='span3' id='teaser-create'>
           {% app_url webapp_myradios app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Create</a> your radio <br/>easily</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/create.png' width='196' height='197'/>
+          <img src='/media/app/images/teaser/create.png' width='144' height='144'/>
+
+      </div>
+      <div class='span3 last' id='teaser-action'>
+          <div id='free'>{% trans "It's free" %}</div>
+          <a id='teaser-signup-now-btn' href='{% app_url webapp_signup app_name %}'>{% trans "Create an account" %}</a>
+          <a id='teaser-signup-later-btn' href='#'>{% trans "No, thank you, later" %}</a>
+          <div id="app">
+              <a href="http://itunes.apple.com/us/app/yasound/id492680161?ls=1&mt=8"><img src="/media/app/images/teaser/appstore_now.png" width="167" height="58"/></a>
+          </div>
 
       </div>
     </div>

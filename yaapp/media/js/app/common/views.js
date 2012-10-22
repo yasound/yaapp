@@ -475,12 +475,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (this.closeTimer) {
             this.closeTimer = clearTimeout(this.closeTimer);
         }
-
-        if (!$('#hd-box-container', this.el).hasClass('hidden')) {
+        if ($('#hd-box-container').is(":visible")) {
             return;
         }
 
-        $('#hd-box-container', this.el).removeClass('hidden');
+        $('#hd-box-container', this.el).show();
         $('#hd-box-container', this.el).one('mousenter', this.displayPopupHD);
 
         this.giftsPopup.render();
@@ -488,7 +487,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
     hidePopupHD: function() {
         this.closeTimer = setTimeout(function() {
-            $('#hd-box-container', this.el).addClass('hidden');
+            $('#hd-box-container', this.el).hide();
         }, 300);
     },
 
@@ -1039,7 +1038,7 @@ Yasound.Views.SelectedGenre = Backbone.View.extend({
     },
 
     render: function () {
-
+        return this;
         var genre = $('#id_genre option:selected').val();
         if (genre === '' || !this.visible) {
             this.$el.fadeOut(200);

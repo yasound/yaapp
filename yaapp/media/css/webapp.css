@@ -2508,10 +2508,17 @@ ul#notifications {
 
  .programming-container h1 {
     font-size:42px;
-    padding:38px 0px 38px 31px;
-    border-bottom: 1px solid #e3e3e3;
+    padding:38px 0px 14px 31px;
 }
 
+.programming-container #radio {
+    margin-left:33px;
+    font-size:18px;
+    color: #999999;
+    padding-bottom:24px;
+    text-shadow:1px 1px white;
+    /*border-bottom: 1px solid #e3e3e3;*/
+}
 .programming-container #programming-top-toolbar {
     margin-top:40px;
     margin-right:3px;
@@ -4260,15 +4267,38 @@ a.yabutton-small {
     display:none;
 }
 
+#teaser-bg {
+    position:absolute;
+    top:168px;
+    background: url(../app/images/teaser/background.jpg) no-repeat 50% 50%;
+    background-size: 100% 100%;
+    width:100%;
+    height:323px;
+    z-index:-10;
+}
 
 #teaser {
     text-align:center;
-    font-size:18px;
-    font-family: 'PT Sans', sans-serif;
+    font-size:16px;
+    font-weight: 100;
+    font-family: 'proxima-nova', sans-serif;
     margin-bottom:12px;
+    z-index:8;
+    height:323px;
 }
 
-#teaser .span4 {
+#teaser h1 {
+    color: white;
+    text-shadow:1px 1px #000000;
+    font-size:34px;
+    font-weight: 100;
+}
+
+#teaser h1 strong {
+    font-weight:400;
+}
+
+#teaser .span3 {
     background: url(../app/images/teaser/separator.png) no-repeat 100% 50%;
 }
 
@@ -4276,18 +4306,57 @@ a.yabutton-small {
     background: none;
 }
 
+#teaser #teaser-action {
+    color: white;
+}
+
+#teaser #teaser-action #free {
+    margin-top:27px;
+    font-weight:100;
+    font-size:15px;
+    font-style: italic;
+    text-align:right;
+    margin-right:40px;
+    padding-right:32px;
+    margin-bottom:6px;
+    background: url(../app/images/teaser/free-arrow.png) no-repeat;
+    background-position: right 6px;
+    height:28px;
+}
+
+#teaser #teaser-action #teaser-signup-now-btn {
+    display:block;
+    color:white;
+    text-shadow:1px 1px #0a7aa1;
+    background: url(../app/images/teaser/create-btn.png) no-repeat;
+    height:43px;
+    line-height:40px;
+}
+#teaser #teaser-action #teaser-signup-later-btn {
+    display:block;
+    margin-top:12px;
+    color:white;
+    text-shadow:1px 1px #000000;
+    height:44px;
+    line-height:44px;
+    background: url(../app/images/teaser/later-btn.png) no-repeat;
+}
+
+#teaser #teaser-action #app {
+    margin-top:12px;
+}
+
 #teaser p {
     margin:20px;
-    margin-left:50px;
-    margin-right:50px;
-    margin-bottom:35px;
+    margin-bottom:25px;
     line-height:24px;
-    color:#353a3c;
+    color: white;
+    text-shadow:1px 1px #000000;
 }
 
 #teaser p a {
-    font-weight: bold;
-    color:#353a3c;
+    font-weight: 400;
+    color: white;
 }
 
 #teaser img {
@@ -4295,11 +4364,11 @@ a.yabutton-small {
     margin-bottom:12px;
 }
 
-#teaser .span4 #close-btn-container {
+#teaser .span3 #close-btn-container {
     float:right;
 }
 
-#teaser .span4 .auto-hide {
+#teaser .span3 .auto-hide {
     display: none;
 }
 
@@ -6359,7 +6428,7 @@ a.yabutton-small {
         width:286px;
     }
 
-    #player #metadata-container #radio-title span {
+    #player #metadata-container #radio-title #title {
         line-height:25px;
         display:inline-block;
         width: 214px;
@@ -6368,7 +6437,7 @@ a.yabutton-small {
     }
 
 
-    #player #metadata-container #player-title span {
+    #player #metadata-container #player-title #track-title {
         display: inline-block;
         overflow: hidden;
         width:155px;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-19 14:40+0200\n"
+"POT-Creation-Date: 2012-10-22 20:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:67
+#: js/app/app.js:65
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
+
+#: js/app/deezer.js:10
+msgid "Yasound Playlist"
+msgstr "Playlist Yasound"
+
+#: js/app/deezer.js:79
+msgid "Yasound Import"
+msgstr "Import Yasound"
 
 #: js/app/utils.js:61
 msgid "Data saved with success"
@@ -98,30 +106,30 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:250 js/app/common/models.js.py:305
+#: js/app/common/models.js:251 js/app/common/models.js.py:306
 #: js/app/profile/models.js:38
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:304 js/app/profile/models.js:37
+#: js/app/common/models.js:305 js/app/profile/models.js:37
 #: js/app/share/views.js:36
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:306 js/app/profile/models.js:39
+#: js/app/common/models.js:307 js/app/profile/models.js:39
 #: js/app/share/views.js:37
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:377
+#: js/app/common/models.js:378
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:384
+#: js/app/common/models.js:385
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:386
+#: js/app/common/models.js:387
 msgid "female"
 msgstr "femme"
 
@@ -154,11 +162,11 @@ msgstr "Erreur de connexion"
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:877
+#: js/app/common/views.js:881
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:879 js/backoffice/Geoperm/Geoperm.js:317
+#: js/app/common/views.js:883 js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
 
@@ -166,7 +174,7 @@ msgstr "Créer une radio"
 msgid "Next favorites"
 msgstr "Favoris suivants"
 
-#: js/app/favorites/views.js:113 js/app/home/views.js:47
+#: js/app/favorites/views.js:131 js/app/home/views.js:47
 #: js/app/myRadios/views.js:248 js/app/top/views.js:120
 msgid "Next radios"
 msgstr "Radios suivantes"
@@ -293,69 +301,89 @@ msgstr "Ne plus suivre"
 msgid "Song added"
 msgstr "Titre ajouté"
 
-#: js/app/programming/views.js:474
+#: js/app/programming/views.js:377 js/app/programming/views.js.py:404
+msgid "Export results:"
+msgstr "Résultats de export:"
+
+#: js/app/programming/views.js:378
+msgid "Export in progress"
+msgstr "Export en cours"
+
+#: js/app/programming/views.js:379 js/app/programming/views.js.py:406
+msgid "Results"
+msgstr "Résultats"
+
+#: js/app/programming/views.js:405
+msgid "tracks founds"
+msgstr "titres trouvés"
+
+#: js/app/programming/views.js:405
+msgid "tracks not found"
+msgstr "titres non trouvés"
+
+#: js/app/programming/views.js:555
 msgid "Warning"
 msgstr "Attention"
 
-#: js/app/programming/views.js:475
+#: js/app/programming/views.js:556
 msgid ""
 "You must own the copyright or have the necessary rights for any content you "
 "upload on Yasound"
 msgstr ""
 "Vous devez posséder tous les droits du contenu que vous uploadez sur Yasound"
 
-#: js/app/programming/views.js:479
+#: js/app/programming/views.js:560
 msgid "I agree"
 msgstr "Je suis d'accord"
 
-#: js/app/programming/views.js:480
+#: js/app/programming/views.js:561
 #: js/backoffice/Invitations/InvitationForm.js:84
 #: js/backoffice/Radio/RadioForm.js:79
 msgid "Cancel"
 msgstr "Annuler"
 
-#: js/app/programming/views.js:587
+#: js/app/programming/views.js:668
 msgid "iTunes import analyzis started"
 msgstr "L'analyse de l'import iTunes a démarré"
 
-#: js/app/programming/views.js:588
+#: js/app/programming/views.js:669
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:544
+#: js/app/radio/views.js:575
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:799
+#: js/app/radio/views.js:831
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:800 js/app/settings/views.js:173
-#: js/app/settings/views.js.py:183
+#: js/app/radio/views.js:832 js/app/settings/views.js:179
+#: js/app/settings/views.js.py:189
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
 
-#: js/app/settings/views.js:40
+#: js/app/settings/views.js:46
 msgid "dd/mm/yyyy"
 msgstr ""
 
-#: js/app/settings/views.js:107
+#: js/app/settings/views.js:113
 msgid "Facebook settings saved"
 msgstr "Paramètres Facebook sauvegardés"
 
-#: js/app/settings/views.js:109
+#: js/app/settings/views.js:115
 msgid "Error while saving Facebook settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Facebook"
 
-#: js/app/settings/views.js:117
+#: js/app/settings/views.js:123
 msgid "Twitter settings saved"
 msgstr "Paramètres Twitter sauvegardés"
 
-#: js/app/settings/views.js:119
+#: js/app/settings/views.js:125
 msgid "Error while saving Twitter settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 
-#: js/app/settings/views.js:172 js/app/settings/views.js.py:182
+#: js/app/settings/views.js:178 js/app/settings/views.js.py:188
 msgid "Settings updated"
 msgstr "Paramètres mis à jour"
 

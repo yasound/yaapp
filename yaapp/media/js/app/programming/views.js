@@ -268,11 +268,13 @@ Yasound.Views.AddFromServer =  Backbone.View.extend({
 
 Yasound.Views.PlaylistContent =  Backbone.View.extend({
     events: {
-        "click #remove-all": "onRemoveAll"
+        "click #remove-all": "onRemoveAll",
+        "click #export-deezer": "onExportDeezer",
+        "click #export-deezer-all": "onExportDeezerAll"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'artistsSelected', 'albumsSelected');
+        _.bindAll(this, 'render', 'artistsSelected', 'albumsSelected', 'exportAllSongs');
     },
 
     onClose: function() {
@@ -288,6 +290,7 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
     },
 
     render: function(uuid) {
+        this.uuid = uuid;
         $(this.el).html(ich.songInstancesTemplate());
         this.songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(uuid);
         this.songInstancesView = new Yasound.Views.SongInstances({
@@ -333,8 +336,98 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
                 that.songInstances.goTo(0);
             });
         });
-    }
+    },
 
+
+    exportAllSongs: function (e) {
+        var that = this;
+        var songInstances = new Yasound.Data.Models.SongInstances({}).setUUID(that.uuid);
+        songInstances.fetch({
+            success: function () {
+                var t = 0;
+                songInstances.each(function (model) {
+                    t = t+1;
+                    setTimeout(function() {
+                        $.publish('/radio/import/add_from_server', model);
+                    }, 1000*t);
+                });
+                var info = songInstances.info();
+                var totalPages = info.totalPages;
+                var i;
+                var t = 0;
+                for (i = 1; i <= totalPages; i++) {
+                    songInstances.page = i;
+                    songInstances.fetch({
+                        success: function () {
+                            songInstances.each(function (model) {
+                                t = t+1;
+                                setTimeout(function() {
+                                    $.publish('/radio/import/add_from_server', model);
+                                }, t*1000);
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    },
+
+    onExportDeezerAll: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('#modal-export-deezer').modal('show');
+        $('#modal-export-deezer .btn-primary').one('click', function () {
+            val = $('#modal-export-deezer input').val();
+            if (val.length !== 0) {
+                var startFunction = that.exportAllSongs;
+                var endFunction = function () {
+                    var found = Yasound.App.deezerExportOperations.found;
+                    var notFound = Yasound.App.deezerExportOperations.notFound;
+                    var body = gettext('Export results:') + '<br/>';
+                    body += gettext('Export in progress');
+                    Yasound.Utils.dialog(gettext('Results'),  body);
+                };
+                Yasound.App.deezerExportOperations.reset(val, that.songInstances.length, startFunction, endFunction);
+            }
+            $('#modal-export-deezer input').val('');
+            $('#modal-export-deezer').modal('hide');
+        });
+    },
+
+    onExportDeezer: function (e) {
+        e.preventDefault();
+        var that = this;
+        $('html, body').animate({scrollTop: 0}, 400);
+        $('#modal-export-deezer').modal('show');
+        $('#modal-export-deezer .btn-primary').one('click', function () {
+            val = $('#modal-export-deezer input').val();
+            if (val.length !== 0) {
+                var startFunction = function () {
+                    t = 0;
+                    _.each(that.songInstancesView.views, function(view) {
+                        t = t+1;
+                        setTimeout(function() {
+                            $.publish('/radio/import/add_from_server', view.model);
+                        }, t*1000);
+                    });
+                };
+                var endFunction = function () {
+                    var found = Yasound.App.deezerExportOperations.found;
+                    var notFound = Yasound.App.deezerExportOperations.notFound;
+                    var body = gettext('Export results:') + '<br/>';
+                    body += found + ' ' + gettext('tracks founds') + '<br/>' + notFound + ' ' + gettext('tracks not found');
+                    Yasound.Utils.dialog(gettext('Results'),  body);
+                };
+
+                Yasound.App.deezerExportOperations.reset(val, that.songInstances.length, startFunction, endFunction);
+            }
+
+            $('#modal-export-deezer input').val('');
+            $('#modal-export-deezer').modal('hide');
+        });
+
+
+    }
 });
 
 
@@ -1150,6 +1243,25 @@ Yasound.Views.Status = Backbone.View.extend({
     }
 });
 
+
+Yasound.Views.RadioInline = Backbone.View.extend({
+
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+    render: function () {
+        var data = this.model.toJSON();
+        $(this.el).html(ich.radioInlineTemplate(data));
+        return this;
+    }
+});
 /**
  * Programming page
  */
@@ -1163,10 +1275,12 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'render', 'onClose');
+        this.radio = new Yasound.Data.Models.Radio();
     },
 
     onClose: function() {
         this.playlistView.close();
+        this.radioView.close();
     },
 
     reset: function() {
@@ -1176,6 +1290,19 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         this.reset();
         this.uuid = uuid;
         $(this.el).html(ich.programmingPageTemplate());
+
+        this.radio.set({
+                'uuid': uuid,
+                'id': 0
+            }, {
+                silent: true
+        });
+
+        this.radioView = new Yasound.Views.RadioInline({
+            model: this.radio,
+            el: '#radio'
+        });
+        this.radio.fetch();
 
         this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
         return this;
