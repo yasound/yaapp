@@ -2469,3 +2469,11 @@ def user_watched_tutorial(request):
 def close(request, template_name='yabase/close.html'):
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))
+
+
+
+def profiling(request):
+    if not request.user.is_superuser:
+        raise Http404
+    from middleware import SqlProfilingMiddleware
+    return render_to_response("yabase/profiling.html", {"queries": SqlProfilingMiddleware.Queries})
