@@ -1603,6 +1603,7 @@ class WebAppView(View):
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
+    @method_decorator(csrf_exempt)
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', app_name='app', *args, **kwargs):
         """
         POST method dispatcher
