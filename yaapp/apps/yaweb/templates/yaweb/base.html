@@ -16,13 +16,13 @@
 <link rel="icon" type="image/png" href="/media/yaweb/images/favicon.png" />
 <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 <link href="/media/yaweb/css/base.css" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]> 
+<!--[if lt IE 9]>
 <link href="/media/yaweb/css/ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-4211339-12']);
+  _gaq.push(['_setAccount', 'UA-27871295-2']);
   _gaq.push(['_trackPageview']);
 
   (function() {
@@ -42,7 +42,7 @@
 window.addEvent('domready', function() {
     var marge = ($('Seb').getSize().y - $('descriptif').getSize().y)/2;
     $('descriptif').setStyle('margin-top',marge);
-    
+
 });
 -->
 </script>
@@ -77,7 +77,7 @@ window.addEvent('domready', function() {
     </div>
     <div id="lang">
     {% for lang in LANGUAGES %}
-    {% if request.LANGUAGE_CODE != lang.0 %} 
+    {% if request.LANGUAGE_CODE != lang.0 %}
     <form action='/i18n/setlang/' method='post' class='lang-form'>{% csrf_token %}
         <input type='hidden' name='language' value='{{lang.0}}'/>
         <input id='lang_{{lang.0}}' type='submit' value='{{lang.1}}'/>
@@ -97,27 +97,27 @@ window.addEvent('domready', function() {
             <span class="current">{% trans "Home page" %}</span> |
         {% else %}
             <a href="{% url index %}">{% trans "Home page" %}</a> |
-        {% endifequal %} 
+        {% endifequal %}
         {% ifequal current_page 'about' %}
             <span class="current">{% trans "About us" %}</span> |
         {% else %}
             <a href="{% url about %}">{% trans "About us" %}</a> |
-        {% endifequal %} 
+        {% endifequal %}
         {% ifequal current_page 'jobs' %}
             <span class="current">{% trans "Careers" %}</span> |
         {% else %}
             <a href="{% url jobs %}">{% trans "Careers" %}</a> |
-        {% endifequal %} 
+        {% endifequal %}
         {% ifequal current_page 'press' %}
             <span class="current">{% trans "Press" %}</span> |
         {% else %}
             <a href="{% url press %}">{% trans "Press" %}</a> |
-        {% endifequal %} 
+        {% endifequal %}
         {% ifequal current_page 'contact' %}
             <span class="current">{% trans "Contact" %}</span> |
         {% else %}
             <a href="{% url contact %}">{% trans "Contact" %}</a> |
-        {% endifequal %} 
+        {% endifequal %}
        <br />
       <span style="font-size: 18px; font-weight:bold">yasound </span><span style="font-size: 10px">{% trans "© 2011 - All rights reserved" %}</span></div>
     <div id="app">
