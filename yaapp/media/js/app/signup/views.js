@@ -33,15 +33,16 @@ Yasound.Views.SignupPage = Backbone.View.extend({
         $.post(url, form.serializeArray(), function(data) {
             var success = data.success;
             if (!data.success) {
-                colibri(gettext('Registration error'));
+                var text = gettext('Registration error');
                 var errors = data.errors;
                 if (errors) {
                     _.each(errors, function(value, key) {
                         var $input = $('input[name=' + key + ']', form);
                         $input.addClass('error');
-                        $input.after('<div class="error-msg">' + value + '</div>');
+                        text =  text + '<br/><br/>' + '<strong>' + value + '</strong>';
                     })
                 }
+                colibri(text);
                 button.removeAttr('disabled');
             } else {
                 button.removeAttr('disabled');
