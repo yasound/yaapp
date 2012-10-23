@@ -4,6 +4,11 @@
     {% ifequal app_name 'deezer' %}
     <button class='yabutton-small' id='export-deezer'>{% trans "Export selection to Deezer" %}</button>
     <button class='yabutton-small' id='export-deezer-all'>{% trans "Export all to Deezer" %}</button>
+
+    <div id='progress' class="progress progress-striped active" style="display:none;">
+      <div class="bar" style="width: 0%"></div>
+    </div>
+
     {% endifequal %}
     <button class='yabutton-small' id='remove-all'>{% trans "Remove all songs" %}</button>
 </div>

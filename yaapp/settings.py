@@ -600,7 +600,7 @@ else:
     FACEBOOK_OPEN_GRAPH_ENABLED  = False
     FACEBOOK_APP_NAMESPACE       = 'yasoundev'
 
-FACEBOOK_SHARE_PICTURE = '/media/yaweb/images/logo.png'
+FACEBOOK_SHARE_PICTURE = '/media/images/logos/yasound-grey.png'
 
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
