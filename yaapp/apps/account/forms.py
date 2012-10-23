@@ -101,7 +101,7 @@ class SignupForm(forms.Form):
     def clean_username(self):
         profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
         if profiles.count() > 0:
-            raise forms.ValidationError(u"This username is already taken. Please choose another.")
+            raise forms.ValidationError(unicode(_("This username is already taken. Please choose another.")))
         return self.cleaned_data["username"]
 
     def clean_email(self):
@@ -109,7 +109,7 @@ class SignupForm(forms.Form):
         if not user:
 
             return self.cleaned_data["email"]
-        raise forms.ValidationError(u"This email is already taken. Please choose another.")
+        raise forms.ValidationError(unicode(_("This email is already taken. Please choose another.")))
 
     def save(self):
         from api import build_random_username
@@ -147,14 +147,14 @@ class WebAppSignupForm(forms.Form):
     def clean_username(self):
         profiles = UserProfile.objects.filter(name__exact=self.cleaned_data["username"])
         if profiles.count() > 0:
-            raise forms.ValidationError(u"This username is already taken. Please choose another.")
+            raise forms.ValidationError(unicode(_("This username is already taken. Please choose another.")))
         return self.cleaned_data["username"]
 
     def clean_email(self):
         user = User.objects.filter(email__exact=self.cleaned_data["email"])
         if not user:
             return self.cleaned_data["email"]
-        raise forms.ValidationError(u"This email is already taken. Please choose another.")
+        raise forms.ValidationError(unicode(_("This email is already taken. Please choose another.")))
 
     def save(self):
         from api import build_random_username
