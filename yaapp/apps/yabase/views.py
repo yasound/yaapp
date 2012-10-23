@@ -1058,6 +1058,10 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     if radio is None:
         raise Http404
 
+    url = reverse('webapp_default_radio', args=[radio.uuid])
+    return HttpResponseRedirect(url)
+
+
     radio_picture_absolute_url = absolute_url(radio.picture_url)
     flash_player_absolute_url = absolute_url('/media/player.swf')
 
