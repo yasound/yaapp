@@ -35,6 +35,7 @@ import uuid
 import tweepy
 from django.core.mail import send_mail
 from yabase.models import WallEvent
+from yacore.http import absolute_url
 
 logger = logging.getLogger("yaapp.account")
 
@@ -661,9 +662,9 @@ def user_picture(request, username, size=''):
         raise Http404
 
     if request.method == 'GET':
-        if size =='xs':
+        if size == 'xs':
             return HttpResponseRedirect(user.get_profile().small_picture_url)
-        elif size =='xl':
+        elif size == 'xl':
             return HttpResponseRedirect(user.get_profile().large_picture_url)
         else:
             return HttpResponseRedirect(user.get_profile().picture_url)
@@ -790,13 +791,28 @@ def invite_ios_contacts(request):
         response_data = json.dumps(response)
         return HttpResponse(response_data)
     contacts = json.loads(post_data)
+
     # contact['emails'] = ['joe@yasound.com', 'joe@gmail.com', 'joe@yahoo.com']
     # contact['firstName'] = 'joe'
     # contact['lastName'] = 'dalton'
 
-    #TODO: send invitation email to given contacts
-    profile = request.user.get_profile()
-    profile.invite_email_friends(contacts['emails'])
+    referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
+
+    emails = []
+    for contact in contacts:
+        emails.extend(contact.get('emails', []))
+
+    subject = _('Join me on YaSound')
+    message = _('Join me on YaSound: %(referal)s') % {'referal': referal}
+
+    message = message + '\n\n'
+    message = message + _("With Yasound, there's no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time online and on your phone.")
+
+    for email in emails:
+        email = email.strip()
+        subject = "".join(subject.splitlines())
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
 
     response = {'success': True}
     response_data = json.dumps(response)

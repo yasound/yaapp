@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-23 06:51+0200\n"
+"POT-Creation-Date: 2012-10-24 15:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -311,8 +311,8 @@ msgstr "Le compte facebook est actuellement attaché à un autre compte."
 #: models.py:449
 #: models.py:468
 #: models.py:488
-#: views.py:437
-#: views.py:471
+#: views.py:438
+#: views.py:472
 msgid "OK"
 msgstr "OK"
 
@@ -410,63 +410,79 @@ msgstr "J'aime %(song)s par %(artist)s sur %(url)s #yasound"
 msgid "I have updated my playist on %(url)s #yasound"
 msgstr "J'ai mis à jour ma programmation sur %(url)s #yasound"
 
-#: views.py:106
+#: views.py:107
 #, python-format
 msgid "Successfully logged in as %(username)s."
 msgstr "Connecté avec succès en tant que %(username)s."
 
-#: views.py:112
-#: views.py:136
+#: views.py:113
+#: views.py:137
 #, python-format
 msgid "Confirmation email sent to %s"
 msgstr "Mail de confirmation envoyé à %s"
 
-#: views.py:336
+#: views.py:337
 msgid "An email was sent to you to reset your password."
 msgstr "Un email vient d'être envoyé afin de réinitialiser votre mot de passe."
 
-#: views.py:380
+#: views.py:381
 msgid "Your password has been successfully reset."
 msgstr "Votre mot de passe à été réinitialisé avec succès."
 
-#: views.py:416
-#: views.py:459
+#: views.py:417
+#: views.py:460
 msgid "Account type is missing from request"
 msgstr "Type de compte inconnu"
 
-#: views.py:427
-#: views.py:462
+#: views.py:428
+#: views.py:463
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: views.py:682
+#: views.py:683
 msgid "The provided file is too big"
 msgstr "Le fichier est trop gros"
 
-#: views.py:684
+#: views.py:685
 msgid "The provided file is too small"
 msgstr "Le fichier est trop petit"
 
-#: views.py:686
+#: views.py:687
 msgid "The file format is not supported"
 msgstr "Le format de fichier n'est pas supporté"
 
-#: views.py:789
+#: views.py:790
 #, fuzzy
 msgid "no emails provided"
 msgstr "email confirmé"
 
-#: views.py:811
+#: views.py:805
+msgid "Join me on YaSound"
+msgstr "Rejoins moi sur YaSound"
+
+#: views.py:806
+#, python-format
+msgid "Join me on YaSound: %(referal)s"
+msgstr "Rejoins moi sur YaSound: %(referal)s"
+
+#: views.py:809
+msgid ""
+"With Yasound, there's no need to listen to music alone anymore. Create your "
+"own radio station instantly and share with your friends in real time online "
+"and on your phone."
+msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur votre mobile et sur le net."
+
+#: views.py:831
 #, fuzzy
 msgid "no facebook ids provided"
 msgstr "uid facebook"
 
-#: views.py:830
+#: views.py:850
 #, fuzzy
 msgid "no twitter account associated"
 msgstr "Compte twitter différent"
 
-#: views.py:861
+#: views.py:881
 #, fuzzy
 msgid "no email provided"
 msgstr "email confirmé"
