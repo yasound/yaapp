@@ -1534,7 +1534,7 @@ class WebAppView(View):
         enable_push = settings.ENABLE_PUSH
 
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = absolute_url(reverse('webapp', args=[self.app_name]))
+        facebook_share_link = absolute_url(reverse('webapp_default'))
 
         facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
 
