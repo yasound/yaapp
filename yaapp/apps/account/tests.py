@@ -834,3 +834,26 @@ class TestIphoneVersion(TestCase):
         request = RequestFactory().get('/?username=100001622138259@facebook&api_key=d6c5200968defb0503a0ecb3ac3111619a6173ed&app_id=com.yasound.yasound&app_version=1.0.38')
         self.assertTrue(is_iphone_version_1(request))
         self.assertFalse(is_iphone_version_2(request))
+
+
+class TestInvitationViews(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test")
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+        self.key = ApiKey.objects.get(user=self.user).key
+        self.username = self.user.username
+
+    def test_invite_ios_contacts(self):
+        data = [
+            {
+                'firstName': 'joe',
+                'lastName': 'dalton',
+                'emails': ['jbl@yasound.com', 'jerome@yasound.com']
+            }
+        ]
+        json_data = json.dumps(data)
+        r = self.client.post(reverse('account.views.invite_ios_contacts'), json_data, content_type="application/json")
+        self.assertEquals(r.status_code, 200)
