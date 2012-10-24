@@ -795,8 +795,11 @@ def invite_ios_contacts(request):
     # contact['lastName'] = 'dalton'
 
     #TODO: send invitation email to given contacts
+    emails = []
+    for c in contacts:
+        emails.append(c['emails'])  # add emails of every contact
     profile = request.user.get_profile()
-    profile.invite_email_friends(contacts['emails'])
+    profile.invite_email_friends(emails)
 
     response = {'success': True}
     response_data = json.dumps(response)
