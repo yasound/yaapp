@@ -377,8 +377,21 @@ Yasound.Data.Models.User = Backbone.Model.extend({
         data['human_date'] = this.humanDate();
 
         var addComma = false;
+
+        if (this.get('followers_count') > 1) {
+            data['agc'] = this.get('followers_count') +  ' ' + gettext('followers');
+            addComma = true;
+
+        } else if (this.get('followers_count') == 1) {
+            data['agc'] = this.get('followers_count') +  ' ' + gettext('follower');
+            addComma = true;
+        }
+
         if (this.get('age')) {
-            data['agc'] = this.get('age') +  ' ' + gettext('years old');
+            if (addComma) {
+                data['agc'] = data['agc'] + ', ';
+            }
+            data['agc'] = data['agc'] + this.get('age') +  ' ' + gettext('years old');
             addComma = true;
         }
         if (this.get('gender')) {
