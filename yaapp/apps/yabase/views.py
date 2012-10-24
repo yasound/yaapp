@@ -1451,6 +1451,9 @@ class WebAppView(View):
         """
         GET method dispatcher. Calls related methods for specific pages
         """
+        if request.path.startswith('/app/'):
+            return HttpResponseRedirect(request.get_full_path()[len('/app'):])
+
         self.app_name = app_name
         authorized, redirection = self._check_auth(request, radio_uuid)
         if not authorized:
