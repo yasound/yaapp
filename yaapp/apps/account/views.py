@@ -798,9 +798,6 @@ def invite_ios_contacts(request):
 
     referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
 
-    from django.utils import translation
-    translation.activate('fr')
-
     emails = []
     for contact in contacts:
         emails.extend(contact.get('emails', []))
@@ -810,8 +807,6 @@ def invite_ios_contacts(request):
 
     message = message + '\n\n'
     message = message + _("With Yasound, there's no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time online and on your phone.")
-
-
 
     for email in emails:
         email = email.strip()
