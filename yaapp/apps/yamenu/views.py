@@ -13,14 +13,14 @@ def menu_description(request):
     app_id = request.app_id
     app_version = request.app_version
     menu = mm.get_menu(language, groups, app_id=app_id, app_version=app_version)
-    
+
     if menu == None:
-        return Http404()
-    
+        raise Http404
+
     sections = menu['sections']
     if not sections:
-        return Http404()
-    
+        raise Http404
+
     res = json.dumps(sections)
     return HttpResponse(res)
-    
+
