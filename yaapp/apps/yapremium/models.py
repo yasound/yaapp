@@ -18,7 +18,7 @@ from yabase import signals as yabase_signals
 from yamessage import signals as yamessage_signals
 from yabase.models import Radio
 from task import async_win_gift, async_check_for_invitation
-
+from django.db import transaction
 
 class Service(models.Model):
     """
@@ -400,13 +400,14 @@ class PromocodeManager(models.Manager):
         return None
 
     def generate_unique_codes(self, service, duration, count=50, prefix='YA-', group=''):
-        for i in range(0, count):
-            self.create(code=yapremium_utils.generate_code_name(prefix),
-                        enabled=True,
-                service=service,
-                group=group,
-                duration=duration,
-                unique=True)
+        with transaction.commit_on_success():
+            for i in range(0, count):
+                self.create(code=yapremium_utils.generate_code_name(prefix),
+                            enabled=True,
+                    service=service,
+                    group=group,
+                    duration=duration,
+                    unique=True)
 
 
 class PromocodeGroup(models.Model):
