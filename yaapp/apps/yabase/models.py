@@ -489,18 +489,18 @@ class RadioManager(models.Manager):
     def delete_fake_radios(self):
         self.filter(name__startswith='____fake____').delete()
 
-    def generate_fake_radios(self, count):
+    def generate_fake_radios(self, count, song_count):
         for _i in range(0, count):
             radio_uuid = uuid.uuid4().hex
             name = '____fake____%s' % radio_uuid
-            logger.info("generating radio %s" % (name))
             radio = Radio(name=name, ready=True, uuid=str(radio_uuid), creator=User.objects.all().order_by('?')[0])
             radio.save()
             playlist, _created = radio.get_or_create_default_playlist()
-            metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:500]
+            metadatas = SongMetadata.objects.filter(yasound_song_id__isnull=False).order_by('?')[:song_count]
             for metadata in metadatas:
                 song_instance = SongInstance(metadata=metadata, playlist=playlist)
                 song_instance.save()
+        logger.info('%d fake radios generated with %d songs' % (count, song_count))
 
     def fix_favorites(self):
         for r in self.all():
