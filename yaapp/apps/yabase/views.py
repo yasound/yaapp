@@ -182,7 +182,13 @@ def radio_recommendations_process(request, internal=False, genre=''):
     # shuffle the list in order not to choose always the same radios
     from random import shuffle
     shuffle(selection_radios)
-    selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
+
+    app_id = request.app_id
+    if app_id == yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER:
+        selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT_IPHONE
+    else:
+        selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
+
     selection_radios = selection_radios[:selection_radios_count]
     selection_radios_ids = [x.id for x in selection_radios]
 
