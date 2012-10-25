@@ -18,12 +18,15 @@ class Command(BaseCommand):
             default=0, help="delete all fake radios"),
         make_option('-m', '--max', dest='radio_count',
             default=50, help="number of radios (default=50)"),
+        make_option('-s', '--song', dest='song_count',
+            default=50, help="number of songs in each radio (default=50)"),
     )
     help = "Generate fake radios"
     args = ''
 
     def handle(self, *app_labels, **options):
         radio_count = int(options.get('radio_count', 50))
+        song_count = int(options.get('song_count', 50))
         delete_radios = options.get('delete_radios', False)
 
         if delete_radios:
@@ -31,7 +34,7 @@ class Command(BaseCommand):
             Radio.objects.delete_fake_radios()
         else:
             logger.info("generating fake radios")
-            Radio.objects.generate_fake_radios(radio_count)
+            Radio.objects.generate_fake_radios(radio_count, song_count)
         logger.info("done")
-        
-        
+
+
