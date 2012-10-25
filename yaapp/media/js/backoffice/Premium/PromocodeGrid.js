@@ -3,7 +3,7 @@
 //------------------------------------------
 
 Yasound.Premium.Data.PromocodeStore = function (url) {
-    var fields = [ 'id', 'code', 'enabled', 'unique', 'service', 'service_id', 'duration', {
+    var fields = [ 'id', 'group', 'code', 'enabled', 'unique', 'service', 'service_id', 'duration', {
         name:'created',
         type: 'date',
         dateFormat: 'Y-m-d H:i:s'
@@ -27,6 +27,11 @@ Yasound.Premium.UI.PromocodeColumnModel = function () {
         dataIndex: 'created',
         xtype: 'datecolumn',
         format: 'd/m/Y H:i:s',
+        sortable: true,
+        width: 70
+    }, {
+        header: gettext('Group'),
+        dataIndex: 'group',
         sortable: true,
         width: 70
     }, {

@@ -103,6 +103,7 @@ class PromocodeGrid(grids.ModelGrid):
     list_mapping = [
         'id',
         'service',
+        'group',
         'code',
         'created',
         'enabled',
@@ -110,6 +111,7 @@ class PromocodeGrid(grids.ModelGrid):
     ]
     mapping = {
         'service_id': 'service__id',
+        'group_id': 'group__id',
     }
 
 
