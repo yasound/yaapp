@@ -174,10 +174,6 @@ def radio_recommendations_process(request, internal=False, genre=''):
 
     # recommendation starts with editorial selection
     qs = Radio.objects.ready_objects()
-    if request.user is not None and request.user.is_authenticated():
-        # don't add user's radios
-        # and the radios he has put in his favorites
-        qs = qs.exclude(creator=request.user).exclude(radiouser__user=request.user, radiouser__favorite=True)
     if genre != '':
         qs = qs.filter(genre=genre)
     selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
