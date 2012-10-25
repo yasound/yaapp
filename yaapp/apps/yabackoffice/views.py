@@ -45,7 +45,7 @@ from yabase.export_utils import export_pur
 from yapremium import export as yapremium_export
 from yahistory.models import UserHistory
 from yasearch.utils import get_simplified_name
-from yapremium.models import Promocode, Service
+from yapremium.models import Promocode, Service, PromocodeGroup
 from yapremium import settings as yapremium_settings
 from yageoperm.models import Country, GeoFeature
 from django.db import IntegrityError
@@ -1192,11 +1192,16 @@ def premium_non_unique_promocodes(request):
     elif request.method == 'POST':
         service_id = request.REQUEST.get('service_id')
         duration = request.REQUEST.get('duration', 1)
+        group_name = request.REQUEST.get('group', '')
         code = request.REQUEST.get('code')
+        group = None;
+        if group_name != '':
+            group, created = PromocodeGroup.objects.get_or_create(name=group_name)
 
         Promocode.objects.create(service=Service.objects.get(id=service_id),
             duration=duration,
             code=code,
+            group=group,
             enabled=True,
             unique=False)
         data = {"success":True,"message":"ok"}
@@ -1223,10 +1228,15 @@ def premium_unique_promocodes(request):
         service_id = request.REQUEST.get('service_id')
         duration = request.REQUEST.get('duration', 1)
         prefix = request.REQUEST.get('prefix', 'YA-')
+        group_name = request.REQUEST.get('group', '')
         count = int(request.REQUEST.get('count', 50))
+        group = None;
+        if group_name != '':
+            group, created = PromocodeGroup.objects.get_or_create(name=group_name)
 
         Promocode.objects.generate_unique_codes(service=Service.objects.get(id=service_id),
             duration=duration,
+            group=group,
             prefix=prefix,
             count=count)
         data = {"success":True,"message":"ok"}
@@ -1247,12 +1257,18 @@ def premium_promocodes(request, promocode_id=None):
         service_id = request.REQUEST.get('service_id')
         duration = request.REQUEST.get('duration', 1)
         code = request.REQUEST.get('code')
+        group_name = request.REQUEST.get('group', '')
         enabled = request.REQUEST.get('enabled')
         service = get_object_or_404(Service, id=service_id)
+
+        group = None;
+        if group_name != '':
+            group, created = PromocodeGroup.objects.get_or_create(name=group_name)
 
         promocode.code = code
         promocode.service = service
         promocode.duration = duration
+        promocode.group = group
         if enabled == 'true':
             promocode.enabled = True
         else:
@@ -1277,7 +1293,16 @@ def premium_promocodes(request, promocode_id=None):
             data = yapremium_export.export_promocodes_excel(qs)
 
             response = HttpResponse(data, mimetype='application/vnd.ms-excel')
-            response['Content-Disposition'] = 'attachment; filename=users.xls'
+            response['Content-Disposition'] = 'attachment; filename=promocodes.xls'
+            return response
+        elif action == 'export_group':
+            group_name = request.REQUEST.get('group')
+            group = get_object_or_404(PromocodeGroup, name=group_name)
+            qs = Promocode.objects.filter(group=group)
+            data = yapremium_export.export_promocodes_excel(qs)
+
+            response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+            response['Content-Disposition'] = 'attachment; filename=promocodes-%s.xls' % (group.name)
             return response
     raise Http404
 

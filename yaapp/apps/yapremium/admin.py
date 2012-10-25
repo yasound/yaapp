@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Service, Subscription, UserSubscription, UserService, Gift, Achievement, Promocode, UserPromocode
+from models import Service, Subscription, UserSubscription, UserService, Gift, Achievement, Promocode, PromocodeGroup, UserPromocode
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('stype',)
@@ -45,8 +45,12 @@ class AchievementAdmin(admin.ModelAdmin):
 admin.site.register(Achievement, AchievementAdmin)
 
 class PromocodeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code', 'service', 'duration', 'duration_unit', 'enabled', 'unique')
+    list_display = ('id', 'group', 'code', 'service', 'duration', 'duration_unit', 'enabled', 'unique')
 admin.site.register(Promocode, PromocodeAdmin)
+
+class PromocodeGroupAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+admin.site.register(PromocodeGroup, PromocodeGroupAdmin)
 
 class UserPromocodeAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'promocode', 'usage_date',)
