@@ -1,9 +1,40 @@
 #player #metadata-container .button-group {
-  float:left;
+  float:right;
   width:100px;
-  margin-top:8px;
+  margin-top:0px;
 }
 
+#player #metadata-container #radio-title {
+  width: 350px;
+}
+
+#sound-level {
+  display:none;
+}
+
+#header .navbar-inner {
+  height: 68px;
+}
+
+#brand-logo {
+  height:auto;
+}
+
+#sub-header {
+  top:69px;
+}
+
+#teaser-bg {
+  top:124px;
+}
+
+#webapp-container {
+  margin-top: 154px;
+}
+
+#messages-btn {
+  top:18px;
+}
 
 .modal {
   position: fixed;
@@ -47,4 +78,11 @@
 #contacts p a.link-out:hover {
     color: #757b7d;
     text-decoration: underline;
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+    #player #metadata-container {
+        width:396px;
+    }
 }

@@ -38,6 +38,11 @@ class TestMapArtist(TestCase):
         code = ma.artist_code(artist)
         self.assertEquals(code, 2)
 
+        artist = 'jean'
+        code = ma.artist_code(artist)
+        self.assertEquals(code, 1)
+
+
 class TestClassification(TestCase):
     def setUp(self):
         cm = ClassifiedRadiosManager()

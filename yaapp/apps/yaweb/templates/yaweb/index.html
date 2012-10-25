@@ -4,7 +4,7 @@
 <head>
 <title>YASOUND | Ma radio, c'est moi</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile." />
+<meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net et sur votre mobile." />
 <meta name="Author" content="Yasound SAS" />
 <meta name="copyright" content="Yasound SAS" />
 <meta http-equiv="Cache-control" content="public" />
@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="YASOUND : Ma radio, c'est moi."/>
 <meta property="fb:admins" content="USER_ID"/>
 <meta property="og:description"
-content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net, et bientôt sur votre mobile."/>
+content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur le net et sur votre mobile."/>
 <link rel="icon" type="image/png" href="/media/yaweb/images/favicon.png" />
 <link href="/media/yaweb/css/intro.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/media/yaweb/js/mootools-core-1.4.5-full-nocompat.js"></script>
@@ -31,7 +31,7 @@ content="Avec Yasound, créez votre radio en un instant, écoutez la musique ave
 <script type="text/javascript">
 // GOOGLE ANALYTICS
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-4211339-12']);
+  _gaq.push(['_setAccount', 'UA-27871295-2']);
   _gaq.push(['_trackPageview']);
 
   (function() {
@@ -39,7 +39,7 @@ content="Avec Yasound, créez votre radio en un instant, écoutez la musique ave
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-  
+
 // ANIMATION
 var pBack = new Array('left','left','center','left');
 var mrCont = new Array('10%','10%','auto','10%');
@@ -48,7 +48,7 @@ var animX = new Array (0,100,-100,100,-100);
 var removedVideo1 = new Object();
 var removedVideo2 = new Object();
 var wx = 0;
-var y = 0; 
+var y = 0;
 var z = 0;
 
 function goToSlide(n) {
@@ -61,11 +61,11 @@ function goToSlide(n) {
     $('imgBack'+slide).fade(0);
     $('imgBack'+n).fade(1);
     $('puce'+slide).set('class','puce');
-    if (slide==1) 
+    if (slide==1)
     {
         removedVideo1 = $('video1').dispose();
     }
-    else if (slide==2) 
+    else if (slide==2)
     {
         removedVideo2 = $('video2').dispose();
     }
@@ -105,15 +105,15 @@ function goToSlide(n) {
     );
     screen1.start(-353,0);
     screen2.start(0,353);
-    slide = n;  
+    slide = n;
     $('puce'+slide).set('class','puceactive');
 }
 
 function resize() {
-    var wx = window.getSize().x; 
-    var y = parseInt((window.getSize().y - 449)/2); 
+    var wx = window.getSize().x;
+    var y = parseInt((window.getSize().y - 449)/2);
     var z = parseInt((window.getSize().y - 50)/2);
-    if (wx<1200) {       
+    if (wx<1200) {
         $('title1').setStyle('font-size','32px');
         $('title1').setStyle('line-height','32px');
     }
@@ -124,17 +124,17 @@ function resize() {
         var x = parseInt((wx - 820)/2)+175;
         var xb = 0;
     }
-    
+
     $('imgBack').setStyle('top', y+'px');
     $('fleches').setStyle('top',z+'px');
-    $('appstore').setStyle('top',(y+470)+'px'); 
-    $('appstore').setStyle('left',(x+169)+'px'); 
+    $('appstore').setStyle('top',(y+470)+'px');
+    $('appstore').setStyle('left',(x+169)+'px');
     Array.each ($$('h1'), function (title,index) {
         title.setStyle('width', (x+500)+'px');
     });
     $('iphone').setStyle('top',(y-60)+'px');
     $('iphone').setStyle('left',(x+546)+'px');
-    for (i=1; i<5; i++) { 
+    for (i=1; i<5; i++) {
         $('content'+i).setStyle('top',y+'px');
         $('content'+i).setStyle('left',x+'px');
         $('imgBack'+i).setStyle('left',xb+'px');

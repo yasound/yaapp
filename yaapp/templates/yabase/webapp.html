@@ -52,7 +52,7 @@
 {% block extra_head %}
     {% block fb_open_graph %}{% endblock %}
 
-    <link rel="image_src" href="/media/yaweb/images/logo.png" />
+    <link rel="image_src" href="/media/images/logos/yasound-grey.png" />
 
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
 
@@ -510,7 +510,11 @@ HTML, BODY { height: 100%; }
         <div class="container">
       <div id="brand-logo" >
 				<a href="{% app_url webapp app_name %}" id='btn-webapp'>
-					<img src="/media/app/images/yasound-logo.png" width="110" height="86" alt="Logo Yasound">
+          {% ifequal app_name 'deezer' %}
+          <img src="/media/images/logos/yasound-inline-grey.png" alt="Logo Yasound">
+          {% else %}
+          <img src="/media/app/images/yasound-logo.png" width="110" height="86" alt="Logo Yasound">
+          {% endifequal %}
 				</a>
 			</div>
       <div id="mobile-menu-logo">

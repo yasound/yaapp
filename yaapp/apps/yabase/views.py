@@ -174,10 +174,6 @@ def radio_recommendations_process(request, internal=False, genre=''):
 
     # recommendation starts with editorial selection
     qs = Radio.objects.ready_objects()
-    if request.user is not None and request.user.is_authenticated():
-        # don't add user's radios
-        # and the radios he has put in his favorites
-        qs = qs.exclude(creator=request.user).exclude(radiouser__user=request.user, radiouser__favorite=True)
     if genre != '':
         qs = qs.filter(genre=genre)
     selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
@@ -186,7 +182,13 @@ def radio_recommendations_process(request, internal=False, genre=''):
     # shuffle the list in order not to choose always the same radios
     from random import shuffle
     shuffle(selection_radios)
-    selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
+
+    app_id = request.app_id
+    if app_id == yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER:
+        selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT_IPHONE
+    else:
+        selection_radios_count = yabase_settings.RADIO_SELECTION_VIEW_COUNT
+
     selection_radios = selection_radios[:selection_radios_count]
     selection_radios_ids = [x.id for x in selection_radios]
 
@@ -1058,6 +1060,10 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     if radio is None:
         raise Http404
 
+    url = reverse('webapp_default_radio', args=[radio.uuid])
+    return HttpResponseRedirect(url)
+
+
     radio_picture_absolute_url = absolute_url(radio.picture_url)
     flash_player_absolute_url = absolute_url('/media/player.swf')
 
@@ -1447,6 +1453,9 @@ class WebAppView(View):
         """
         GET method dispatcher. Calls related methods for specific pages
         """
+        if request.path.startswith('/app/'):
+            return HttpResponseRedirect(request.get_full_path()[len('/app'):])
+
         self.app_name = app_name
         authorized, redirection = self._check_auth(request, radio_uuid)
         if not authorized:
@@ -1527,7 +1536,7 @@ class WebAppView(View):
         enable_push = settings.ENABLE_PUSH
 
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
-        facebook_share_link = absolute_url(reverse('webapp', args=[self.app_name]))
+        facebook_share_link = absolute_url(reverse('webapp_default'))
 
         facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
 
@@ -1599,6 +1608,7 @@ class WebAppView(View):
 
         return render_to_response(template_name, context, context_instance=RequestContext(request))
 
+    @method_decorator(csrf_exempt)
     def post(self, request, radio_uuid=None, query=None, user_id=None, template_name='yabase/webapp.html', page='home', app_name='app', *args, **kwargs):
         """
         POST method dispatcher

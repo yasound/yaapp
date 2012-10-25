@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     window.reload = function () {
         window.location = g_root;
-    }
+    };
 
     // global initializations
     Yasound.App.FacebookShare = {

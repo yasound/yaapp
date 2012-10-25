@@ -9,9 +9,19 @@ import logging
 from datetime import datetime, timedelta
 import settings as yarecommendation_settings
 logger = logging.getLogger("yaapp.yarecommendation")
+from django.core.cache import cache
+import time
 
 
 class MapArtistManager():
+    """This collection stores (code, artist_name) tuples.
+    code is an auto-incremented value.
+
+    """
+
+    NEXT_CODE_LOCK_LIFETIME = 10  # lock expires in 10 seconds
+    WAIT_FOR_LOCK = 3 # wait 3 seconds
+
     def __init__(self):
         self.db = settings.MONGO_DB
         self.collection = self.db.recommendation.map_artist
@@ -29,17 +39,46 @@ class MapArtistManager():
         return next_code
 
     def artist_code(self, artist_name):
+        """
+        get or create artist code based on artist name.
+        this version is thread-safe because it uses a global lock (built with memcached)
+
+        :param: artist_name simplified artist name
+        :returns: code or None
+        """
         code = None
-        doc = self.collection.find_one({'artist': artist_name})
-        if doc is None:
-            code = self.next_code()
-            doc = {
-                'code': code,
-                'artist': artist_name
-            }
-            self.collection.insert(doc, safe=True)
-        else:
-            code = doc.get('code')
+
+        lock_id = "map_artist_code"
+        acquire_lock = lambda: cache.add(lock_id, "true", MapArtistManager.NEXT_CODE_LOCK_LIFETIME)
+        release_lock = lambda: cache.delete(lock_id)
+
+        retry = 0
+        max_retry = 3
+
+        while not acquire_lock():
+            print "waiting (retry = %d / %d)" % (retry, max_retry)
+            time.sleep(MapArtistManager.WAIT_FOR_LOCK)
+            retry += 1
+            if retry > max_retry:
+                print "giving up"
+                return code
+
+        try:
+            doc = self.collection.find_one({'artist': artist_name})
+            if doc is None:
+                code = self.next_code()
+                doc = {
+                    'code': code,
+                    'artist': artist_name
+                }
+                self.collection.insert(doc, safe=True)
+            else:
+                code = doc.get('code')
+        except:
+            pass
+
+        release_lock()
+
         return code
 
     def artist_name(self, code):
@@ -67,8 +106,9 @@ class ClassifiedRadiosManager():
         for artist in artists:
             artist_name = get_simplified_name(artist).replace('.', '').replace('$', '')
             artist_code = ma.artist_code(artist_name)
-            classification[str(artist_code)] = classification.get(str(artist_code), 0) + 1
-            artist_list.append(artist_code)
+            if artist_code is not None:
+                classification[str(artist_code)] = classification.get(str(artist_code), 0) + 1
+                artist_list.append(artist_code)
         doc = {
             'db_id': radio.id,
             'classification': classification,
@@ -97,7 +137,7 @@ class ClassifiedRadiosManager():
             scores = top_matches(docs, doc, 10)
             self.collection.update({'db_id': doc.get('db_id')},
                                    {'$set': {
-                                        'similar_radios': scores
+                                    'similar_radios': scores
                                     }},
                                    upsert=True,
                                    safe=True)
@@ -167,9 +207,9 @@ class RadioRecommendationsCache():
         token = uuid.uuid4().hex
         internal_token = self.convert_token(token)
         doc = {'save_date': datetime.now(),
-                'token': internal_token,
-                'radio_ids': recommended_radios_ids
-        }
+               'token': internal_token,
+               'radio_ids': recommended_radios_ids
+               }
         self.recommendations.insert(doc, safe=True)
         return token
 
@@ -191,9 +231,9 @@ class RadioRecommendationsCache():
 
     def save_artists(self, artist_list, user):
         doc = {'user_id': user.id,
-                'save_date': datetime.now(),
-                'artists': artist_list
-        }
+               'save_date': datetime.now(),
+               'artists': artist_list
+               }
         self.artists.update({'user_id': doc['user_id']}, doc, upsert=True)
 
     def get_artists(self, user):

@@ -15,7 +15,7 @@ class TestFeatures(TestCase):
 
 
     def test_can_login(self):
-        self.assertFalse(yageoperm_utils.can_login(user=self.user, country='FR'))
+        self.assertTrue(yageoperm_utils.can_login(user=self.user, country='FR'))
 
         self.user.is_superuser = True
         self.user.save()
@@ -28,10 +28,10 @@ class TestFeatures(TestCase):
         country = Country.objects.create(code='FR', name='France')
         GeoFeature.objects.create(country=country, feature=yageoperm_settings.FEATURE_LOGIN)
         self.assertTrue(yageoperm_utils.can_login(user=self.user, country='FR'))
-        self.assertFalse(yageoperm_utils.can_login(user=self.user, country='UK'))
+        self.assertTrue(yageoperm_utils.can_login(user=self.user, country='UK'))
 
     def test_can_create_radio(self):
-        self.assertFalse(yageoperm_utils.can_create_radio(user=self.user, country='FR'))
+        self.assertTrue(yageoperm_utils.can_create_radio(user=self.user, country='FR'))
 
         self.user.is_superuser = True
         self.user.save()
@@ -44,4 +44,4 @@ class TestFeatures(TestCase):
         country = Country.objects.create(code='FR', name='France')
         GeoFeature.objects.create(country=country, feature=yageoperm_settings.FEATURE_CREATE_RADIO)
         self.assertTrue(yageoperm_utils.can_create_radio(user=self.user, country='FR'))
-        self.assertFalse(yageoperm_utils.can_create_radio(user=self.user, country='UK'))
+        self.assertTrue(yageoperm_utils.can_create_radio(user=self.user, country='UK'))
