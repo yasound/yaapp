@@ -3,7 +3,6 @@ from django.db.models import signals
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.contrib.auth import signals as auth_signals
 from datetime import *
 from dateutil.relativedelta import *
 from sorl.thumbnail import get_thumbnail
@@ -19,7 +18,7 @@ from yabase import signals as yabase_signals
 from yamessage import signals as yamessage_signals
 from yabase.models import Radio
 from task import async_win_gift, async_check_for_invitation
-
+from django.db import transaction
 
 class Service(models.Model):
     """
@@ -401,26 +400,26 @@ class PromocodeManager(models.Manager):
         return None
 
     def generate_unique_codes(self, service, duration, count=50, prefix='YA-', group=''):
-        for i in range(0, count):
-            self.create(code=yapremium_utils.generate_code_name(prefix),
-                        enabled=True,
-                        service=service,
-                        group=group,
-                        duration=duration,
-                        unique=True)
+        with transaction.commit_on_success():
+            for i in range(0, count):
+                self.create(code=yapremium_utils.generate_code_name(prefix),
+                            enabled=True,
+                    service=service,
+                    group=group,
+                    duration=duration,
+                    unique=True)
 
 
 class PromocodeGroup(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
-    name = models.CharField(_('group'), max_length=100, unique=True)
+    name =  models.CharField(_('group'), max_length=100, unique=True)
 
     def __unicode__(self):
         return self.name
 
     class Meta:
         verbose_name = _('promocode group')
-
 
 class Promocode(models.Model):
     objects = PromocodeManager()
@@ -472,11 +471,6 @@ def user_profile_updated_handler(sender, instance, created, **kwargs):
         async_win_gift.delay(user_id=profile.user.id, action=yapremium_settings.ACTION_FILL_IN_PROFILE)
 
 
-def new_radio_handler(sender, instance, created, **kwargs):
-    if created:
-        async_win_gift.delay(user_id=instance.creator.id, action=yapremium_settings.ACTION_CREATE_RADIO)
-
-
 def facebook_account_added_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
     user_profile = UserProfile.objects.get(user=user)
@@ -501,21 +495,11 @@ def access_notifications_handler(sender, user, **kwargs):
     async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_VIEW_NOTIFICATIONS)
 
 
-def check_for_missed_gifts(sender, request, user, **kwargs):
-    """Check if user has missed a gift
-    """
-    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
-    if Radio.objects.filter(creator__id=user.id).count() > 0:
-        async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_CREATE_RADIO)
-
-
 def install_handlers():
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
     signals.post_save.connect(user_profile_updated_handler, sender=UserProfile)
-    signals.post_save.connect(new_radio_handler, sender=Radio)
     account_signals.facebook_account_added.connect(facebook_account_added_handler)
     account_signals.twitter_account_added.connect(twitter_account_added_handler)
-    auth_signals.user_logged_in.connect(check_for_missed_gifts)
     yabase_signals.user_watched_tutorial.connect(user_watched_tutorial_handler)
     yabase_signals.access_my_radios.connect(access_my_radios_handler)
     yamessage_signals.access_notifications.connect(access_notifications_handler)
