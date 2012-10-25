@@ -25,15 +25,20 @@ Yasound.Premium.Handler.GenerateUniqueCodes = function (success) {
                     return;
                 }
                 var values = form.getForm().getFieldValues();
+                var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                myMask.show();
                 Ext.Ajax.request({
                     url: String.format('/yabackoffice/premium/unique_promocodes/'),
                     success: function(result, request){
                         success();
                         win.close();
+                        myMask.hide();
                     },
                     failure: function(result, request){
+                        myMask.hide();
                     },
                     method: 'POST',
+                    timeout: 1000 * 60 * 5,
                     params: values
                 });
             }
