@@ -1,3 +1,8 @@
 {% load i18n %}
-<h1>{{ radio.name|default:'<% fullname %>' }}</h1>
-<p>{{ radio.description|default:'<% description %>' }}</p>
+{% if radio %}
+<h1>{{ radio.name }}</h1>
+<p>{{ radio.description }}</p>
+{% else %}
+<h1><% fullname %></h1>
+<p><% description %></p>
+{% endif %}
