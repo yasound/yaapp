@@ -10,6 +10,7 @@ from dateutil.relativedelta import *
 from account import signals as account_signals
 from yabase import signals as yabase_signals
 from utils import verify_receipt, generate_code_name
+from yabase.models import Radio
 import json
 
 
@@ -163,6 +164,7 @@ class TestGift(TestCase):
             max_per_user=1,
             enabled=True)
 
+
         user3 = User.objects.create(email="user3@yasound.com", username="user3")
         self.assertTrue(user3.get_profile().permissions.hd)
 
@@ -181,6 +183,33 @@ class TestGift(TestCase):
         self.client.login(username="user2", password="test")
         user2 = User.objects.get(id=user2.id)
         self.assertTrue(user2.get_profile().permissions.hd)
+
+        # again, with new radio
+        radio = Radio.objects.create(creator=user2)
+        radio.ready=True
+        radio.save()
+
+        Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_CREATE_RADIO,
+            duration=3,
+            duration_unit=yapremium_settings.DURATION_DAY,
+            max_per_user=1,
+            enabled=True)
+
+        self.client.logout()
+        self.client.login(username="user2", password="test")
+        user2 = User.objects.get(id=user2.id)
+        self.assertTrue(user2.get_profile().permissions.hd)
+
+        us = UserService.objects.get(user=user2, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        end_date = today + relativedelta(days=+5)
+        self.assertEquals(us.expiration_date.date(), end_date)
+
 
     def test_add_facebook_account(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
@@ -259,6 +288,35 @@ class TestGift(TestCase):
         today = date.today()
         one_month = today + relativedelta(months=+1)
         self.assertEquals(us.expiration_date.date(), one_month)
+
+
+    def test_update_programming(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_UPDATE_PROGRAMMING,
+            duration=3,
+            duration_unit=yapremium_settings.DURATION_MONTH,
+            max_per_user=1,
+            enabled=True)
+
+        radio = Radio.objects.create(creator=user2)
+        yabase_signals.new_animator_activity.send(sender=user2.get_profile(), user=user2, radio=radio, atype=None, details=None)
+
+        user2 = User.objects.get(id=user2.id)  # reload object
+        self.assertTrue(user2.get_profile().permissions.hd)
+
+        us = UserService.objects.get(user=user2, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        end_date = today + relativedelta(months=+3)
+        self.assertEquals(us.expiration_date.date(), end_date)
+
 
     def test_gift_delay(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
