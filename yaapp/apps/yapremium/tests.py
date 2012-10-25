@@ -120,11 +120,7 @@ class TestView(TestCase):
 
 class TestGift(TestCase):
     def setUp(self):
-        user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
-        user.set_password('test')
-        user.save()
-        self.client.login(username="test", password="test")
-        self.user = user
+        pass
 
     def test_create_account(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
@@ -149,6 +145,42 @@ class TestGift(TestCase):
         today = date.today()
         two_days = today + relativedelta(days=+2)
         self.assertEquals(us.expiration_date.date(), two_days)
+
+
+    def test_check_missed_gifts(self):
+        user2 = User.objects.create(email="user2@yasound.com", username="user2")
+        user2.set_password('test')
+        user2.save()
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        gift = Gift.objects.create(name='gift',
+            description='description',
+            service=service,
+            action=yapremium_settings.ACTION_CREATE_ACCOUNT,
+            duration=2,
+            duration_unit=yapremium_settings.DURATION_DAY,
+            max_per_user=1,
+            enabled=True)
+
+        user3 = User.objects.create(email="user3@yasound.com", username="user3")
+        self.assertTrue(user3.get_profile().permissions.hd)
+
+        us = UserService.objects.get(user=user3, service=service)
+        self.assertTrue(us.active)
+
+        today = date.today()
+        two_days = today + relativedelta(days=+2)
+        self.assertEquals(us.expiration_date.date(), two_days)
+
+        # user2 has missed the gift
+        user2 = User.objects.get(id=user2.id)
+        self.assertFalse(user2.get_profile().permissions.hd)
+
+        # .. but logged back!
+        self.client.login(username="user2", password="test")
+        user2 = User.objects.get(id=user2.id)
+        self.assertTrue(user2.get_profile().permissions.hd)
 
     def test_add_facebook_account(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
