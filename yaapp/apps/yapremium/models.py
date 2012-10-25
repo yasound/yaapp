@@ -399,14 +399,26 @@ class PromocodeManager(models.Manager):
             return up
         return None
 
-    def generate_unique_codes(self, service, duration, count=50, prefix='YA-'):
+    def generate_unique_codes(self, service, duration, count=50, prefix='YA-', group=''):
         for i in range(0, count):
             self.create(code=yapremium_utils.generate_code_name(prefix),
                         enabled=True,
                 service=service,
+                group=group,
                 duration=duration,
                 unique=True)
 
+
+class PromocodeGroup(models.Model):
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
+    name =  models.CharField(_('group'), max_length=100, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('promocode group')
 
 class Promocode(models.Model):
     objects = PromocodeManager()
@@ -417,6 +429,7 @@ class Promocode(models.Model):
     service = models.ForeignKey(Service, verbose_name=_('service'))
     duration = models.IntegerField(_('duration'), default=1)
     duration_unit = models.IntegerField(_('duration unit'), choices=yapremium_settings.DURATION_UNIT_CHOICES, default=yapremium_settings.DURATION_MONTH)
+    group = models.ForeignKey(PromocodeGroup, verbose_name=_('group'), blank=True, null=True)
     unique = models.BooleanField(_('unique'), default=False)
 
     def __unicode__(self):

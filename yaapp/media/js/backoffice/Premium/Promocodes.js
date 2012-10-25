@@ -181,6 +181,27 @@ Yasound.Premium.Handler.ExportPromocode = function(records, success) {
     });
 };
 
+Yasound.Premium.Handler.ExportPromocodeByGroup = function() {
+    Ext.Msg.prompt(gettext('Group'), gettext('Please enter group :'), function(btn, text){
+        if (btn == 'ok'){
+            var maskingAjax = new Ext.data.Connection({});
+
+            maskingAjax.request({
+                disableCaching: true,
+                url: String.format('/yabackoffice/premium/promocodes/'),
+                form: Ext.fly('frmDummy'),
+                params: {
+                    group: text,
+                    'action': 'export_group'
+                },
+                method: 'POST',
+                timeout: 1000 * 60 * 5,
+                isUpload: true
+            });
+        }
+    });
+};
+
 //------------------------------------------
 // UI
 //------------------------------------------
@@ -215,6 +236,12 @@ Yasound.Premium.UI.UniquePromocodesForm = function() {
                 name: 'duration',
                 value: 1
         }, {
+                fieldLabel: gettext('Group'),
+                xtype: 'textfield',
+                name: 'group',
+                value: '',
+                allowBlank:true
+            }, {
                 fieldLabel: gettext('Prefix'),
                 xtype: 'textfield',
                 name: 'prefix',
@@ -244,6 +271,11 @@ Yasound.Premium.UI.NonUniquePromocodeForm = function() {
                 xtype: 'textfield',
                 name: 'code',
                 allowBlank:false
+            }, {
+                fieldLabel: gettext('Group'),
+                xtype: 'textfield',
+                name: 'group',
+                allowBlank:true
             }
         ]
     };
@@ -264,6 +296,12 @@ Yasound.Premium.UI.EditPromocodeForm = function(record) {
                 name: 'code',
                 value: record.data.code,
                 allowBlank:false
+            }, {
+                fieldLabel: gettext('Group'),
+                xtype: 'textfield',
+                name: 'group',
+                value: record.data.group,
+                allowBlank:true
             }, {
                 fieldLabel: gettext('Enabled'),
                 xtype: 'checkbox',
@@ -352,7 +390,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
             singleSelect: false,
             url: '/yabackoffice/premium/unique_promocodes/',
             region: 'west',
-            width: 400,
+            width: 600,
             split: true,
             tbar: [{
                 text: gettext('Generate codes'),
@@ -390,7 +428,7 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                     });
                 }
             }, '-', {
-                text: gettext('Export'),
+                text: gettext('Export selection'),
                 iconCls: 'silk-page-excel',
                 ref: '../exportButton',
                 disabled: true,
@@ -401,6 +439,15 @@ Yasound.Premium.UI.PromocodesPanel = function() {
                     Yasound.Premium.Handler.ExportPromocode(selection, function () {
                         grid.getStore().reload();
                     });
+                }
+            }, {
+                text: gettext('Export by group'),
+                iconCls: 'silk-page-excel',
+                ref: '../exportGroupButton',
+                disabled: false,
+                handler: function (b, e) {
+                    var grid = b.ownerCt.ownerCt;
+                    Yasound.Premium.Handler.ExportPromocodeByGroup();
                 }
             }],
             listeners: {

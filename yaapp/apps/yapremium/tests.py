@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from yapremium.models import Subscription, UserSubscription, Service, UserService, Gift, Achievement, Promocode, UserPromocode
+from yapremium.models import Subscription, UserSubscription, Service, UserService, \
+    Gift, Achievement, Promocode, UserPromocode, PromocodeGroup
 from task import check_expiration_date
 import settings as yapremium_settings
 from datetime import *
@@ -37,7 +38,6 @@ class TestModel(TestCase):
 
         us = UserSubscription.objects.create(subscription=subscription, user=self.user)
         self.assertEquals(us.expiration_date, today + relativedelta(months=+subscription.duration))
-
 
 class TestVerifyReceipt(TestCase):
     def setUp(self):
@@ -315,6 +315,16 @@ class TestPromocode(TestCase):
         user.save()
         self.client.login(username="test", password="test")
         self.user = user
+
+    def test_model(self):
+        group, created = PromocodeGroup.objects.get_or_create(name='my group')
+
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        promocode = Promocode.objects.create(code='code', duration=12, service=service, enabled=True)
+        self.assertEquals(promocode.id, 1)
+
+        promocode = Promocode.objects.create(code='code2', duration=12, service=service, enabled=True, group=group)
+        self.assertEquals(promocode.id, 2)
 
     def test_is_valid_with_bad_code(self):
 
