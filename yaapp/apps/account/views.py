@@ -801,6 +801,8 @@ def invite_ios_contacts(request):
     # contact['firstName'] = 'joe'
     # contact['lastName'] = 'dalton'
 
+    logger.debug('invite_ios_contacts: received')
+    logger.debug(contacts)
     referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
 
     emails = []
@@ -819,6 +821,8 @@ def invite_ios_contacts(request):
 
     #     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
 
+    logger.debug('invite_ios_contacts: emails are')
+    logger.debug(emails)
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
