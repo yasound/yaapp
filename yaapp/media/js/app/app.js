@@ -24,7 +24,8 @@ $(document).ready(function () {
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
     Yasound.App.hd = g_hd_enabled;
-    Yasound.App.RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
+    Yasound.App.RADIO_ORIGIN_YASOUND = 0; // constant, radio.origin=0 means radioways radio
+    Yasound.App.RADIO_ORIGIN_RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
 
     if (cookies.get('radio')) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');
@@ -328,7 +329,7 @@ $(document).ready(function () {
                 this.commonContext = {};
                 this.commonContext.errorHandler = new Yasound.App.ErrorHandler().render();
                 this.commonContext.streamFunction = function (model, stream_url) {
-                    Yasound.App.player.setBaseUrl(stream_url);
+                    Yasound.App.player.setBaseUrl(model, stream_url);
                 };
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();

@@ -39,8 +39,9 @@ Yasound.Player.SoundManager = function () {
             return true;
         },
 
-        setBaseUrl: function(baseUrl) {
+        setBaseUrl: function(radio, baseUrl) {
             mgr.baseUrl = baseUrl;
+            mgr.radio = radio;
             if (mgr.isPlaying() || mgr.autoplay) {
                 mgr.stop();
                 mgr.play();
@@ -84,7 +85,7 @@ Yasound.Player.SoundManager = function () {
 
             var url = '/api/v1/streamer_auth_token/';
             var streamURL = mgr.baseUrl;
-            if (Yasound.App.userAuthenticated) {
+            if (Yasound.App.userAuthenticated && mgr.radio && mgr.radio.get('origin') === Yasound.App.RADIO_ORIGIN_YASOUND) {
                 $.ajax({
                     url: url,
                     async: async,
@@ -177,7 +178,7 @@ Yasound.Player.Deezer = function () {
             return false;
         },
 
-        setBaseUrl: function(baseUrl) {
+        setBaseUrl: function(radio, baseUrl) {
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
             console.log('radio has changed');
             mgr.radioHasChanged = true;
