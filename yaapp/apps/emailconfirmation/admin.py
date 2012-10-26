@@ -4,6 +4,7 @@ from models import EmailTemplate
 
 class EmailAddressAdmin(admin.ModelAdmin):
     list_display = ('email', 'user', 'verified', 'primary')
+    list_filter = ('verified',)
 admin.site.register(EmailAddress, EmailAddressAdmin)
 
 class EmailConfirmationAdmin(admin.ModelAdmin):
