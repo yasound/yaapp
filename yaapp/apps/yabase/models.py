@@ -677,8 +677,8 @@ class Radio(models.Model):
         frequencies = songs_queryset.values_list('frequency', flat=True)
         # use frequency * frequency to have high frequencies very different from low frequencies
         # multiply frequency weight by a date factor to have higher probabilities for songs not played since a long time (date factor = 1 for older song, 1 for more recent one)
-        first_idx_factor = 1
-        last_idx_factor = 0.15
+        first_idx_factor = 10
+        last_idx_factor = 0.001
         if (count-1) != 0:
             date_factor_func = lambda x: ((last_idx_factor - first_idx_factor) / (count - 1)) * x + first_idx_factor
         else:
