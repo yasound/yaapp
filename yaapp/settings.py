@@ -67,6 +67,7 @@ MODERATORS = (
 
 CELERY_IMPORTS = (
     "yabase.task",
+    "yabase.push",
     "stats.task",
     "account.task",
     "emailconfirmation.task",

@@ -1,3 +1,4 @@
+from celery.task import task
 from django.conf import settings
 from django.db.models import signals
 from redis import Redis
@@ -8,8 +9,14 @@ import json
 logger = logging.getLogger("yaapp.yabase")
 
 
-def push_wall_event(wall_event, **kwargs):
+@task(ignore_result=True)
+def async_redis_publish(channel, json_data):
     red = Redis(host=settings.PUSH_REDIS_HOST, db=settings.PUSH_REDIS_DB)
+    logger.info("publishing message to %s" % (channel))
+    red.publish(channel, json_data)
+
+
+def push_wall_event(wall_event, **kwargs):
     channel = 'radio.%s' % (wall_event.radio.id)
     logger.info("publishing message to %s" % (channel))
 
@@ -22,11 +29,11 @@ def push_wall_event(wall_event, **kwargs):
         'data': serialized_we[0]
     }
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
-    red.publish(channel, json_data)
+    async_redis_publish.delay(channel, json_data)
+
 
 def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     wall_event = instance
-    red = Redis(host=settings.PUSH_REDIS_HOST, db=settings.PUSH_REDIS_DB)
     channel = 'radio.%s' % (wall_event.radio.id)
     logger.info("publishing message to %s" % (channel))
 
@@ -39,11 +46,10 @@ def push_wall_event_deleted(sender, instance, created=None, **kwargs):
         'data': serialized_we[0]
     }
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
-    red.publish(channel, json_data)
+    async_redis_publish.delay(channel, json_data)
 
 
 def push_current_song(radio, song_json, song, **kwargs):
-    red = Redis(host=settings.PUSH_REDIS_HOST, db=settings.PUSH_REDIS_DB)
     channel = 'radio.%s' % (radio.id)
     data = {
         'event_type': 'song',
@@ -51,7 +57,7 @@ def push_current_song(radio, song_json, song, **kwargs):
     }
 
     json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
-    red.publish(channel, json_data)
+    async_redis_publish.delay(channel, json_data)
 
 
 def install_handlers():
