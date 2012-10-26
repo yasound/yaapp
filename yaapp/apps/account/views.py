@@ -790,12 +790,12 @@ def invite_ios_contacts(request):
         # client v2.0.0. are buggy
         return HttpResponse(status=403)
 
-    post_data = request.POST.keys()[0]
-    if post_data is None:
-        response = {'success': False, 'error': unicode(_('no emails provided'))}
+    try:
+        contacts = json.loads(request.raw_post_data)
+    except:
+        response = {'success': False, 'error': unicode(_('cannot decode contacts'))}
         response_data = json.dumps(response)
         return HttpResponse(response_data)
-    contacts = json.loads(post_data)
 
     # contact['emails'] = ['joe@yasound.com', 'joe@gmail.com', 'joe@yahoo.com']
     # contact['firstName'] = 'joe'
