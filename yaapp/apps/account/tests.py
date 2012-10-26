@@ -599,6 +599,17 @@ class TestApi(TestCase):
         meta = decoded_data['meta']
         self.assertEquals(meta['total_count'], User.objects.all().count())
 
+    def test_decorator_limit_version(self):
+        url = reverse('account.views.invite_ios_contacts')
+        url = url + '/?api_key=%s&username=%s' % (self.key, self.username)
+        data = []
+        json_data = json.dumps(data)
+        res = self.client.post(url, json_data, content_type="application/json")
+        self.assertEquals(res.status_code, 200)
+
+        url = url + '&app_version=2.0.0'
+        res = self.client.post(url, json_data, content_type="application/json")
+        self.assertEquals(res.status_code, 403)
 
 class TestFacebookSharePrefs(TestCase):
     def setUp(self):
