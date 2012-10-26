@@ -253,7 +253,7 @@ msgstr "paramètres de vie privée"
 
 #: models.py:208
 msgid "born"
-msgstr "né le"
+msgstr "né(e) le"
 
 #: models.py:209
 msgid "gender"
