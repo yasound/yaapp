@@ -3,10 +3,12 @@ from django.utils.translation import ugettext_lazy as _
 # Radio origin
 RADIO_ORIGIN_YASOUND    = 0
 RADIO_ORIGIN_RADIOWAYS  = 1
+RADIO_ORIGIN_EXTERNAL   = 2
 
 RADIO_ORIGIN_CHOICES = (
     (RADIO_ORIGIN_YASOUND, _('Yasound')),
     (RADIO_ORIGIN_RADIOWAYS, _('Radioways')),
+    (RADIO_ORIGIN_EXTERNAL, _('External')),
 )
 
 # Radio styles

@@ -218,7 +218,7 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
     setOrigin: function (origin) {
         this.stopPushOrTimer();
-        if (origin == Yasound.App.RADIOWAYS) {
+        if (origin == Yasound.App.RADIO_ORIGIN_RADIOWAYS) {
             this.startTimer();
         } else {
             this.startPushOrTimer();
