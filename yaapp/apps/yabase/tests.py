@@ -298,7 +298,7 @@ class TestModels(TestCase):
 
         delete_radios_definitively()
 
-        self.assertEquals(Radio.objects.all().count(), 0)
+        self.assertEquals(Radio.objects.all().count(), 1) # we do not delete radios right now
 
 class TestNextSong(TestCase):
     multi_db = True

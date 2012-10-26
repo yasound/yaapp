@@ -597,9 +597,10 @@ class Radio(models.Model):
         return self.name
 
     def mark_as_deleted(self):
-        self.deleted = True
-        self.save()
-        yabase_signals.radio_deleted.send(sender=self, radio=self)
+        if not self.deleted:
+            self.deleted = True
+            self.save()
+            yabase_signals.radio_deleted.send(sender=self, radio=self)
 
     def save(self, *args, **kwargs):
         update_mongo = False
