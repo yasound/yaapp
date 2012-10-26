@@ -304,6 +304,7 @@ def async_import_from_itunes(radio, data):
 
 @task
 def delete_radios_definitively():
+    return # JBL : do not delete radios right now
     from models import Radio
     today = datetime.datetime.today()
     expiration_date = today - datetime.timedelta(days=settings.RADIO_DELETE_DAYS)

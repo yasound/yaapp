@@ -683,26 +683,15 @@ def new_radio_handler(sender, instance, created, **kwargs):
         async_inc_global_value.delay('new_radios', 1)
 
 
-def radio_deleted_handler(sender, instance, created=None, **kwargs):
-    radio = instance
+def radio_deleted_handler(sender, radio, **kwargs):
     rp = RadioPopularityManager()
     rp.remove_radio(radio.id)
 
     rm = RadioMetricsManager()
     rm.remove_radio(radio.id)
 
-
-def radio_updated_handler(sender, instance, created=None, **kwargs):
-    radio = instance
-    if radio.deleted == True:
-        rp = RadioPopularityManager()
-        rp.remove_radio(radio.id)
-
-        rm = RadioMetricsManager()
-        rm.remove_radio(radio.id)
-
-        if radio.origin == yabase_settings.RADIO_ORIGIN_YASOUND:
-            async_inc_global_value.delay('deleted_radios', 1)
+    if radio.origin == yabase_settings.RADIO_ORIGIN_YASOUND:
+        async_inc_global_value.delay('deleted_radios', 1)
 
 
 def dislike_radio_handler(sender, radio, user, **kwargs):
@@ -777,8 +766,6 @@ def install_handlers():
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
     signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
     signals.post_save.connect(new_radio_handler, sender=Radio)
-    signals.post_save.connect(radio_updated_handler, sender=Radio)
-    signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
 
     yabase_signals.dislike_radio.connect(dislike_radio_handler)
     yabase_signals.dislike_radio.connect(like_radio_handler)
@@ -791,6 +778,8 @@ def install_handlers():
     yabase_signals.radio_shared.connect(new_share)
     yabase_signals.radio_is_ready.connect(radio_is_ready_handler)
     yabase_signals.buy_link.connect(buy_link_handler)
+    yabase_signals.radio_deleted.connect(radio_deleted_handler)
+
     account_signals.new_device_registered.connect(new_device_registered)
 
 install_handlers()

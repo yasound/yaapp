@@ -65,6 +65,30 @@ class TestGlobalMetricsManager(TestCase):
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_radios'], 3)
         self.assertEquals(mm.get_metrics_for_timestamp(year)['new_users'], 1)
 
+    def test_delete_radios_metrics(self):
+        mm = GlobalMetricsManager()
+        now = datetime.datetime.now()
+        year = now.strftime('%Y')
+
+        self.assertEquals(mm.get_metrics_for_timestamp(year).get('deleted_radios', 0), 0)
+
+        r1 = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r2 = Radio.objects.create(name='ben', ready=True, creator=self.user)
+
+        self.assertEquals(mm.get_metrics_for_timestamp(year)['new_radios'], 3)
+        self.assertEquals(mm.get_metrics_for_timestamp(year)['new_users'], 1)
+
+        r1.mark_as_deleted()
+
+        self.assertEquals(mm.get_metrics_for_timestamp(year)['deleted_radios'], 1)
+
+        # idempotent action
+        r1.mark_as_deleted()
+        self.assertEquals(mm.get_metrics_for_timestamp(year)['deleted_radios'], 1)
+
+        r2.mark_as_deleted()
+        self.assertEquals(mm.get_metrics_for_timestamp(year)['deleted_radios'], 2)
+
     def test_graph_metrics(self):
         mm = GlobalMetricsManager()
         now = datetime.datetime.now()
@@ -270,6 +294,7 @@ class TestTimedMetrics(TestCase):
             else:
                 self.assertEquals(ttype, tm.SLOT_3D)
                 self.assertEquals(doc[yametrics_settings.ACTIVITY_ANIMATOR], 1)
+
 
     def test_messages_stats(self):
         async_activity(self.user.id, yametrics_settings.ACTIVITY_WALL_MESSAGE, throttle=False)
