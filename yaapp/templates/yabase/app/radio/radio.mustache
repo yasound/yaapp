@@ -24,7 +24,7 @@
     {% else %}
   		<%#creator%>
       <%#owner%>
-  		<li><a href='{{ root }}radio/<%uuid%>/edit/' id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
+  		<li class='wall-first-child'><a href='{{ root }}radio/<%uuid%>/edit/' id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
   		<li><a href='{{ root }}radio/<%uuid%>/programming/' id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
       <li class='wall-last-child'><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
   		<%/owner%>
