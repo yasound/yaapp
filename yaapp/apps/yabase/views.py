@@ -1282,7 +1282,7 @@ class WebAppView(View):
 
     def new_radio(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('webapp', args=self.app_name))
+            return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
 
         if request.method == 'POST':
             profile = request.user.get_profile()
