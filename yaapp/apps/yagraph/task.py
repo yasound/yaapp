@@ -1,19 +1,14 @@
 from account.models import UserProfile
 from celery.task import task
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from facepy import GraphAPI
 from yacore.http import absolute_url
 import logging
 logger = logging.getLogger("yaapp.yagraph")
 
-def _facebook_token(user_id):
-    # temp
-    user = User.objects.get(id=user_id)
-    if not user.is_superuser:
-        return None
 
+def _facebook_token(user_id):
     try:
         user_profile = UserProfile.objects.get(user__id=user_id)
     except:
@@ -25,6 +20,7 @@ def _facebook_token(user_id):
         return None
     facebook_token = user_profile.facebook_token
     return facebook_token
+
 
 @task(ignore_result=True)
 def async_post_message(user_id, radio_uuid, message):
@@ -43,6 +39,7 @@ def async_post_message(user_id, radio_uuid, message):
     except GraphAPI.FacebookError as e:
         logger.info(e)
     logger.debug('done')
+
 
 @task(ignore_result=True)
 def async_listen(user_id, radio_uuid, song_title, song_id):
@@ -66,6 +63,7 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
         logger.info(e)
     logger.debug('done')
 
+
 @task(ignore_result=True)
 def async_like_song(user_id, radio_uuid, song_title, song_id):
     logger.debug('async_like_song: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
@@ -85,6 +83,7 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
     except GraphAPI.FacebookError as e:
         logger.info(e)
     logger.debug('done')
+
 
 @task(ignore_result=True)
 def async_animator_activity(user_id, radio_uuid):
