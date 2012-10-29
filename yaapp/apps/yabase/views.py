@@ -730,7 +730,7 @@ def songs_started(request):
         logger.info('songs_started: wrong method')
         return HttpResponse(status=405)
 
-    payload = json.loads(request.POST.keys()[0])
+    payload = json.loads(request.raw_post_data)
 
     key = payload.get('key', 0)
     if key != settings.SCHEDULER_KEY:
