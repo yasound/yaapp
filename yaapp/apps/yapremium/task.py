@@ -21,7 +21,7 @@ def check_expiration_date():
 
 
 @task
-def async_win_gift(user_id, action):
+def async_win_gift(user_id, action, dont_give_anything=False):
     from models import Gift, Achievement
     user = User.objects.get(id=user_id)
     gifts = Gift.objects.filter(action=action, enabled=True)
@@ -29,7 +29,7 @@ def async_win_gift(user_id, action):
     for gift in gifts:
         if gift.available(user):
             # yipee ! gift is won
-            Achievement.objects.create_from_gift(user=user, gift=gift)
+            Achievement.objects.create_from_gift(user=user, gift=gift, dont_give_anything=dont_give_anything)
 
 
 @task

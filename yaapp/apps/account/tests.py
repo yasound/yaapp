@@ -363,6 +363,51 @@ class TestMultiAccount(TestCase):
         self.assertTrue(res)
         self.assertTrue(profile.facebook_enabled)
 
+    def test_is_multi_account(self):
+        # only one account
+        profile = self.jerome.get_profile()
+        self.assertFalse(profile.is_multi_account)
+        profile.add_account_type(account_settings.ACCOUNT_MULT_YASOUND, commit=True)
+
+        self.assertFalse(profile.is_multi_account)
+
+        # add facebook account
+        profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
+        self.assertTrue(profile.is_multi_account)
+
+        # remove it
+        profile.remove_facebook_account()
+        self.assertFalse(profile.is_multi_account)
+
+        # re-add it
+        profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
+
+        self.assertTrue(profile.is_multi_account)
+
+        # re-remove
+        res, message = profile.remove_yasound_account()
+        self.assertFalse(profile.is_multi_account)
+
+        # add twitter
+        profile.add_account_type(account_settings.ACCOUNT_MULT_TWITTER)
+        self.assertTrue(profile.is_multi_account)
+
+        # add facebook
+        profile.add_account_type(account_settings.ACCOUNT_MULT_FACEBOOK)
+        self.assertTrue(profile.is_multi_account)
+
+        # remove twitter
+        profile.remove_twitter_account()
+
+        self.assertFalse(profile.is_multi_account)
+
+        # re-add yasound
+        profile.add_account_type(account_settings.ACCOUNT_MULT_YASOUND)
+        self.assertTrue(profile.is_multi_account)
+
+        # remove facebook
+        profile.remove_facebook_account()
+        self.assertFalse(profile.is_multi_account)
 
 class TestFacebook(TestCase):
     def setUp(self):

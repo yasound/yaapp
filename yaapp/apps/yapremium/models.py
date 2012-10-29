@@ -350,11 +350,14 @@ class Gift(models.Model):
 
 
 class AchievementManager(models.Manager):
-    def create_from_gift(self, user, gift):
+    def create_from_gift(self, user, gift, dont_give_anything=False):
         today = date.today()
         obj = self.create(user=user, gift=gift, achievement_date=today)
         us, _created = UserService.objects.get_or_create(user=user, service=gift.service)
-        us.calculate_expiration_date(duration=gift.duration, duration_unit=gift.duration_unit)
+        if not dont_give_anything:
+            us.calculate_expiration_date(duration=gift.duration, duration_unit=gift.duration_unit)
+        else:
+            us.calculate_expiration_date(duration=gift.duration, duration_unit=0)
         return obj
 
 
@@ -510,8 +513,22 @@ def check_for_missed_gifts(sender, request, user, **kwargs):
         async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_CREATE_RADIO)
 
     profile = user.get_profile()
-    if profile is not None and profile.is_complete():
+    if profile is None:
+        return
+
+    if profile.is_complete():
         async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_FILL_IN_PROFILE)
+
+    if profile.is_multi_account:
+        if profile.facebook_enabled:
+            async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT)
+            if profile.yasound_enabled and profile.twitter_enabled:
+                async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
+                async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_EMAIL_ACCOUNT, dont_give_anything=True)
+        elif profile.twitter_enabled:
+            if profile.yasound_enabled:
+                async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
+                async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_EMAIL_ACCOUNT, dont_give_anything=True)
 
 
 def new_animator_activity_handler(sender, user, radio, **kwargs):

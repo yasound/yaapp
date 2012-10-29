@@ -2270,10 +2270,15 @@ def load_template(request, template_name, app_name='app'):
         my_informations_form = MyInformationsForm(instance=request.user.get_profile())
         my_accounts_form = MyAccountsForm(instance=request.user.get_profile())
         my_notifications_form = MyNotificationsForm(user_profile=request.user.get_profile())
+        display_associate_facebook = not request.user.get_profile().facebook_enabled
+        display_associate_twitter = not request.user.get_profile().twitter_enabled
+
         context['my_informations_form'] = my_informations_form
         context['my_accounts_form'] = my_accounts_form
         context['my_notifications_form'] = my_notifications_form
         context['user_profile'] = request.user.get_profile()
+        context['display_associate_facebook'] = display_associate_facebook
+        context['display_associate_twitter'] = display_associate_twitter
 
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, context, context_instance=RequestContext(request))
