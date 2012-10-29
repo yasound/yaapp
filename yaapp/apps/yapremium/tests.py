@@ -13,7 +13,6 @@ from utils import verify_receipt, generate_code_name
 from yabase.models import Radio
 import json
 
-
 class TestModel(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
@@ -139,7 +138,8 @@ class TestGift(TestCase):
                                    enabled=True)
 
         user3 = User.objects.create(email="user3@yasound.com", username="user3")
-        self.assertTrue(user3.get_profile().permissions.hd)
+        account_signals.new_account.send(sender=user3.get_profile(), user=user3)
+        self.assertTrue(user3.userprofile.permissions.hd)
 
         us = UserService.objects.get(user=user3, service=service)
         self.assertTrue(us.active)
@@ -165,7 +165,8 @@ class TestGift(TestCase):
                                    enabled=True)
 
         user3 = User.objects.create(email="user3@yasound.com", username="user3")
-        self.assertTrue(user3.get_profile().permissions.hd)
+        account_signals.new_account.send(sender=user3.get_profile(), user=user3)
+        self.assertTrue(user3.userprofile.permissions.hd)
 
         us = UserService.objects.get(user=user3, service=service)
         self.assertTrue(us.active)
