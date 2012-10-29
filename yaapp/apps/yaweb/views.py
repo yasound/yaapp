@@ -107,16 +107,21 @@ def logo(request):
 
 
 def download(request, filename):
-    if len(filename) < 4:
+    if len(filename) < len('media/yaweb/presse/'):
+        raise Http404
+    if len(filename) > len('media/yaweb/presse/') + 50:
         raise Http404
     if not filename.startswith('media/yaweb/presse/'):
         raise Http404
     try:
-        file = open(filename,"r")
+        fullpath = os.path.abspath(filename)
+        if '/media/yaweb/presse/' not in fullpath:
+            raise Http404
+        file = open(fullpath,"r")
     except:
         raise Http404
     mimetype = mimetypes.guess_type(filename)[0]
-    if mimetype not in ['application/pdf', 'image/eps', 'application/postscript', 'image/png', 'image/jpeg', 'image/jpg']:
+    if mimetype not in ['application/pdf', 'image/eps', 'application/postscript', 'image/png', 'image/jpeg', 'image/jpg', 'application/zip']:
         raise Http404
     if not mimetype: mimetype = "application/octet-stream"
 

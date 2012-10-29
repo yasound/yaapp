@@ -22,7 +22,7 @@ from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist
     SongMetadata
 from shutil import rmtree
 from stats.models import RadioListeningStat
-from task import process_playlists, process_upload_song
+from task import process_playlists, process_upload_song, async_song_played
 from tastypie.http import HttpNotFound
 from tastypie.models import ApiKey
 from tempfile import mkdtemp
@@ -58,6 +58,7 @@ import urllib
 from account.models import InvitationsManager
 from yapremium.task import async_check_for_invitation
 
+from django.http import HttpResponseForbidden
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
 
 logger = logging.getLogger("yaapp.yabase")
@@ -716,13 +717,7 @@ def song_played(request, radio_uuid, songinstance_id):
         logger.info('song_played: wrong scheduler key (%s)' % key)
         return HttpResponseForbidden()
 
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
-    song_instance = get_object_or_404(SongInstance, id=songinstance_id)
-    if song_instance.metadata is not None:
-        logger.info('song_played: %s - %s - %s' % (song_instance.metadata.artist_name, song_instance.metadata.album_name, song_instance.metadata.name))
-    radio.song_starts_playing(song_instance)
-
-    logger.info('song_played: ok')
+    async_song_played.delay(radio_uuid, songinstance_id)
     return HttpResponse('ok')
 
 @check_api_key(methods=['GET',], login_required=False)

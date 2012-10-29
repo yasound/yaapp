@@ -46,9 +46,9 @@ def process_playlists_exec(radio, content_compressed, task=None):
 
     pm = ProgrammingHistory()
     event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_UPLOAD_PLAYLIST,
-        user=radio.creator,
-        radio=radio,
-        status=ProgrammingHistory.STATUS_PENDING)
+                              user=radio.creator,
+                              radio=radio,
+                              status=ProgrammingHistory.STATUS_PENDING)
 
     PLAYLIST_TAG = 'LIST'
     ARTIST_TAG = 'ARTS'
@@ -259,9 +259,9 @@ def async_radio_broadcast_message(radio, message):
 def async_import_from_itunes(radio, data):
     pm = ProgrammingHistory()
     event = pm.generate_event(event_type=ProgrammingHistory.PTYPE_IMPORT_FROM_ITUNES,
-        user=radio.creator,
-        radio=radio,
-        status=ProgrammingHistory.STATUS_PENDING)
+                              user=radio.creator,
+                              radio=radio,
+                              status=ProgrammingHistory.STATUS_PENDING)
 
     success = 0
     failure = 0
@@ -304,10 +304,21 @@ def async_import_from_itunes(radio, data):
 
 @task
 def delete_radios_definitively():
-    return # JBL : do not delete radios right now
+    return  # JBL : do not delete radios right now
     from models import Radio
     today = datetime.datetime.today()
     expiration_date = today - datetime.timedelta(days=settings.RADIO_DELETE_DAYS)
     radios = Radio.objects.filter(deleted=True, updated__lt=expiration_date)
     for radio in radios:
         radio.delete()
+
+
+@task(ignore_result=True)
+def async_song_played(radio_uuid, songinstance_id):
+    from models import Radio, SongInstance
+    radio = Radio.objects.get(uuid=radio_uuid)
+    song_instance = SongInstance.objects.get(id=songinstance_id)
+    if song_instance.metadata is not None:
+        logger.info('song_played: %s - %s - %s' % (song_instance.metadata.artist_name, song_instance.metadata.album_name, song_instance.metadata.name))
+    radio.song_starts_playing(song_instance)
+    logger.info('song_played: ok')

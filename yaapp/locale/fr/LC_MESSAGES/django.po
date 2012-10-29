@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 22:21+0200\n"
+"POT-Creation-Date: 2012-10-29 15:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,24 +34,19 @@ msgstr "Erreur 500"
 msgid "Internal error."
 msgstr "Erreur interne."
 
-#: templates/base.html:40
-#: templates/base_mobile.html:40
+#: templates/base.html:40 templates/base_mobile.html:40
 #: templates/account/login.html:73
 #: templates/account/password_reset_form.html:50
 #: templates/account/signup.html:69
 msgid "available on appstore"
 msgstr "disponible sur l'appstore"
 
-#: templates/base.html:47
-#: templates/base_mobile.html:47
-#: templates/account/login.html:27
-#: templates/account/login.html.py:79
+#: templates/base.html:47 templates/base_mobile.html:47
+#: templates/account/login.html:27 templates/account/login.html.py:79
 #: templates/account/password_reset_form.html:30
 #: templates/account/password_reset_form.html:56
-#: templates/account/signup.html:27
-#: templates/account/signup.html.py:75
-#: templates/web/menu.html:16
-#: templates/yabase/app/mobileLeftMenu.html:39
+#: templates/account/signup.html:27 templates/account/signup.html.py:75
+#: templates/web/menu.html:16 templates/yabase/app/mobileLeftMenu.html:39
 #: templates/yabase/app/track.mustache:97
 #: templates/yabase/app/track.mustache:109
 #: templates/yabase/app/track_deezer.mustache:43
@@ -60,12 +55,9 @@ msgstr "disponible sur l'appstore"
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: templates/base.html:47
-#: templates/account/login.html:8
-#: templates/account/login.html.py:55
-#: templates/web/index.html:4
-#: templates/web/menu.html:19
-#: templates/yabase/app/track.mustache:145
+#: templates/base.html:47 templates/account/login.html:8
+#: templates/account/login.html.py:55 templates/web/index.html:4
+#: templates/web/menu.html:19 templates/yabase/app/track.mustache:145
 #: templates/yabase/app/track_deezer.mustache:75
 #: templates/yabase/app/favorites/favoritesPage.mustache:17
 #: templates/yabase/app/friends/friendsPage.mustache:122
@@ -75,9 +67,8 @@ msgstr "Se déconnecter"
 msgid "Login"
 msgstr "Se connecter"
 
-#: templates/account/login.html:24
-#: templates/yabase/webapp.html:598
-#: templates/yabase/webapp.html.py:601
+#: templates/account/login.html:24 templates/yabase/webapp.html:602
+#: templates/yabase/webapp.html.py:605
 #: templates/yabase/app/login/login.mustache:5
 msgid "Welcome to Yasound"
 msgstr "Bienvenue sur Yasound"
@@ -88,8 +79,7 @@ msgstr "Bienvenue sur Yasound"
 msgid "You are already authenticated"
 msgstr "Vous êtes déjà authentifié"
 
-#: templates/account/login.html:32
-#: templates/account/login.html.py:40
+#: templates/account/login.html:32 templates/account/login.html.py:40
 #: templates/yabase/app/track.mustache:147
 #: templates/yabase/app/track_deezer.mustache:77
 #: templates/yabase/app/login/login.mustache:11
@@ -97,8 +87,7 @@ msgstr "Vous êtes déjà authentifié"
 msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
-#: templates/account/login.html:36
-#: templates/account/login.html.py:44
+#: templates/account/login.html:36 templates/account/login.html.py:44
 #: templates/yabase/app/track.mustache:148
 #: templates/yabase/app/track_deezer.mustache:78
 #: templates/yabase/app/login/login.mustache:20
@@ -106,8 +95,7 @@ msgstr "Se connecter avec Facebook"
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
-#: templates/account/login.html:59
-#: templates/yabase/app/track.mustache:157
+#: templates/account/login.html:59 templates/yabase/app/track.mustache:157
 #: templates/yabase/app/track_deezer.mustache:87
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
@@ -148,8 +136,7 @@ msgstr "Mot de passe perdu"
 msgid "Reset password"
 msgstr "Réinitialiser le mot de passe"
 
-#: templates/account/registered.html:4
-#: templates/account/registered.html:10
+#: templates/account/registered.html:4 templates/account/registered.html:10
 msgid "Registration processing"
 msgstr "Enregistrement en cours"
 
@@ -160,31 +147,28 @@ msgid ""
 "\t\t\t\tThank your for registering, an email has been sent to %(email)s to "
 "complete process.\n"
 "\t\t\t\t"
-msgstr "\n"
+msgstr ""
+"\n"
 "\t\t\t\tMerci pour votre inscription, un email vient d'être envoyé à "
 "%(email)s afin de compléter le processus.\n"
 "\t\t\t\t"
 
-#: templates/account/signup.html:8
-#: templates/account/signup.html.py:56
+#: templates/account/signup.html:8 templates/account/signup.html.py:56
 #: templates/yabase/app/track.mustache:143
 #: templates/yabase/app/track_deezer.mustache:73
 msgid "Signup"
 msgstr "S'inscrire"
 
-#: templates/account/signup.html:24
-#: templates/yabase/webapp.html:473
-#: templates/yabase/app/footer.html:21
+#: templates/account/signup.html:24 templates/yabase/webapp.html:473
+#: templates/yabase/app/footer.html:24
 msgid "Yasound"
 msgstr "Yasound"
 
-#: templates/account/signup.html:32
-#: templates/account/signup.html.py:40
+#: templates/account/signup.html:32 templates/account/signup.html.py:40
 msgid "Signup with Facebook"
 msgstr "S'inscrire avec Facebook"
 
-#: templates/account/signup.html:36
-#: templates/account/signup.html.py:44
+#: templates/account/signup.html:36 templates/account/signup.html.py:44
 msgid "Signup with Twitter"
 msgstr "S'inscrire avec Twitter"
 
@@ -197,7 +181,8 @@ msgstr "Confirmation d'email"
 msgid ""
 "Your registration is <strong>completed</strong>. You can now create your "
 "radio on Yasound and share it with your friends."
-msgstr "Votre inscription a bien été <strong>confirmée</strong>, vous pouvez "
+msgstr ""
+"Votre inscription a bien été <strong>confirmée</strong>, vous pouvez "
 "désormais créer votre radio sur Yasound et la partager avec vos amis."
 
 #: templates/emailconfirmation/confirm_email.html:30
@@ -212,7 +197,8 @@ msgid ""
 "To confirm this is correct, go to %(activate_url)s\n"
 "\n"
 "The Yasound team.\n"
-msgstr "Une personne sur le site %(site_name)s a indiqué cette adresse email afin de "
+msgstr ""
+"Une personne sur le site %(site_name)s a indiqué cette adresse email afin de "
 "s'inscrire.\n"
 "Pour valider cette adresse, veuillez aller sur %(activate_url)s\n"
 "\n"
@@ -366,7 +352,7 @@ msgstr ""
 
 #: templates/newsletter/newsletter_historic.html:25
 #: templates/yabase/app/programming/addFromServer.mustache:24
-#: templates/yabase/app/programming/songInstances.mustache:17
+#: templates/yabase/app/programming/songInstances.mustache:22
 #: templates/yabase/app/programming/statusPage.mustache:50
 #: templates/yabase/app/programming/upload.mustache:15
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:24
@@ -508,74 +494,52 @@ msgstr ""
 msgid "You have successfully subscribed to the mailing list!"
 msgstr ""
 
-#: templates/web/base.html:7
-#: templates/web/favorite.html:6
-#: templates/web/favorites.html:6
-#: templates/web/friends.html:6
-#: templates/web/selections.html:6
-#: templates/yabase/listen.html:30
-#: templates/yabase/song.html:31
-#: templates/yabase/widget.html:24
+#: templates/web/base.html:7 templates/web/favorite.html:6
+#: templates/web/favorites.html:6 templates/web/friends.html:6
+#: templates/web/selections.html:6 templates/yabase/listen.html:30
+#: templates/yabase/song.html:31 templates/yabase/widget.html:24
 #: templates/yabase/widget_large.html:24
 msgid "Mute"
 msgstr "Couper le son"
 
-#: templates/web/base.html:8
-#: templates/web/favorite.html:7
-#: templates/web/favorites.html:7
-#: templates/web/friends.html:7
-#: templates/web/selections.html:7
-#: templates/yabase/listen.html:31
-#: templates/yabase/song.html:32
-#: templates/yabase/widget.html:25
+#: templates/web/base.html:8 templates/web/favorite.html:7
+#: templates/web/favorites.html:7 templates/web/friends.html:7
+#: templates/web/selections.html:7 templates/yabase/listen.html:31
+#: templates/yabase/song.html:32 templates/yabase/widget.html:25
 #: templates/yabase/widget_large.html:25
 msgid "Unmute"
 msgstr "Rétablir le son"
 
-#: templates/web/base.html:9
-#: templates/web/favorite.html:8
-#: templates/web/favorites.html:8
-#: templates/web/friends.html:8
-#: templates/web/selections.html:8
-#: templates/yabase/listen.html:32
-#: templates/yabase/song.html:33
-#: templates/yabase/widget.html:26
+#: templates/web/base.html:9 templates/web/favorite.html:8
+#: templates/web/favorites.html:8 templates/web/friends.html:8
+#: templates/web/selections.html:8 templates/yabase/listen.html:32
+#: templates/yabase/song.html:33 templates/yabase/widget.html:26
 #: templates/yabase/widget_large.html:26
 msgid "Play"
 msgstr "Jouer"
 
-#: templates/web/base.html:10
-#: templates/web/favorite.html:9
-#: templates/web/favorites.html:9
-#: templates/web/friends.html:9
-#: templates/web/selections.html:9
-#: templates/yabase/listen.html:33
-#: templates/yabase/song.html:34
-#: templates/yabase/widget.html:27
+#: templates/web/base.html:10 templates/web/favorite.html:9
+#: templates/web/favorites.html:9 templates/web/friends.html:9
+#: templates/web/selections.html:9 templates/yabase/listen.html:33
+#: templates/yabase/song.html:34 templates/yabase/widget.html:27
 #: templates/yabase/widget_large.html:27
 msgid "Stop"
 msgstr "Arrêter"
 
-#: templates/web/favorite.html:16
-#: templates/web/favorites.html:17
-#: templates/web/friends.html:17
-#: templates/web/my_radio.html:3
-#: templates/web/selections.html:17
-#: templates/yabase/listen.html:43
-#: templates/yabase/song.html:44
-#: templates/yabase/widget.html:6
+#: templates/web/favorite.html:16 templates/web/favorites.html:17
+#: templates/web/friends.html:17 templates/web/my_radio.html:3
+#: templates/web/selections.html:17 templates/yabase/listen.html:43
+#: templates/yabase/song.html:44 templates/yabase/widget.html:6
 #: templates/yabase/widget_large.html:6
 msgid "Listening to"
 msgstr "Ecoute de"
 
-#: templates/web/favorites.html:25
-#: templates/web/friends.html:25
+#: templates/web/favorites.html:25 templates/web/friends.html:25
 #: templates/web/selections.html:30
 msgid "Friends"
 msgstr "Amis"
 
-#: templates/web/favorites.html:29
-#: templates/web/selections.html:34
+#: templates/web/favorites.html:29 templates/web/selections.html:34
 #: templates/yabase/app/friends/friendsPage.mustache:59
 #: templates/yabase/app/newRadio/newRadioPage.mustache:26
 #: templates/yabase/app/programming/statusPage.mustache:27
@@ -594,12 +558,9 @@ msgstr "En live"
 msgid "Nothing for now"
 msgstr "Rien pour le moment"
 
-#: templates/web/index.html:12
-#: templates/yabase/buy_link_not_found.html:12
-#: templates/yabase/listen.html:59
-#: templates/yabase/listen.html.py:62
-#: templates/yabase/song.html:60
-#: templates/yabase/song.html.py:63
+#: templates/web/index.html:12 templates/yabase/buy_link_not_found.html:12
+#: templates/yabase/listen.html:59 templates/yabase/listen.html.py:62
+#: templates/yabase/song.html:60 templates/yabase/song.html.py:63
 msgid "Radio logo"
 msgstr "Logo de la radio"
 
@@ -615,15 +576,13 @@ msgstr "Yasound arrive prochainement."
 msgid "My radio"
 msgstr "Ma radio"
 
-#: templates/web/menu.html:9
-#: templates/web/radios.html:4
+#: templates/web/menu.html:9 templates/web/radios.html:4
 #: templates/yabase/app/profile/profilePage.mustache:9
 #: templates/yabase/app/radio/userRadiosPage.mustache:9
 msgid "Radios"
 msgstr "Radios"
 
-#: templates/web/menu.html:10
-#: templates/yabase/app/mobileCenterMenu.html:13
+#: templates/web/menu.html:10 templates/yabase/app/mobileCenterMenu.html:13
 msgid "My friends"
 msgstr "Mes amis"
 
@@ -631,8 +590,7 @@ msgstr "Mes amis"
 msgid "My favorites"
 msgstr "Mes favoris"
 
-#: templates/web/menu.html:12
-#: templates/yabase/app/mobileCenterMenu.html:5
+#: templates/web/menu.html:12 templates/yabase/app/mobileCenterMenu.html:5
 #: templates/yabase/app/common/subMenu.mustache:30
 msgid "Selection"
 msgstr "Sélection"
@@ -645,23 +603,18 @@ msgstr "Recherche"
 msgid "Me"
 msgstr "Moi"
 
-#: templates/web/menu.html:15
-#: templates/web/menu.html.py:20
-#: templates/web/terms.html:4
-#: templates/web/terms.html.py:12
+#: templates/web/menu.html:15 templates/web/menu.html.py:20
+#: templates/web/terms.html:4 templates/web/terms.html.py:12
 #: templates/yabase/app/static/legal.mustache:4
 msgid "Terms and conditions"
 msgstr "Conditions d'utilisation"
 
-#: templates/web/menu.html:18
-#: templates/yainvitation/accept.html:10
+#: templates/web/menu.html:18 templates/yainvitation/accept.html:10
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: templates/web/radio.html:5
-#: templates/yabase/listen.html:78
-#: templates/yabase/song.html:79
-#: templates/yabase/widget.html:57
+#: templates/web/radio.html:5 templates/yabase/listen.html:78
+#: templates/yabase/song.html:79 templates/yabase/widget.html:57
 #: templates/yabase/widget_large.html:57
 #: templates/yabase/app/radioCell.html:17
 #: templates/yabase/app/radioCell.mustache:18
@@ -672,8 +625,7 @@ msgstr "Par"
 msgid "Creator"
 msgstr "Créateur"
 
-#: templates/web/radio.html:19
-#: templates/web/selections.html:35
+#: templates/web/radio.html:19 templates/web/selections.html:35
 msgid "Genre"
 msgstr "Genre"
 
@@ -706,8 +658,7 @@ msgstr ""
 msgid "Backoffice"
 msgstr "Backoffice"
 
-#: templates/yabackoffice/index.html:40
-#: templates/yabase/webapp.html:468
+#: templates/yabackoffice/index.html:40 templates/yabase/webapp.html:468
 msgid "Loading application..."
 msgstr "Chargement de l'application..."
 
@@ -904,41 +855,35 @@ msgstr "Morceau indisponible pour achat"
 
 #: templates/yabase/buy_link_not_found.html:22
 msgid "This item cannot be purchased right now, try later."
-msgstr "Ce morceau ne peut être acheté actuellement, veuillez réessayer plus tard."
+msgstr ""
+"Ce morceau ne peut être acheté actuellement, veuillez réessayer plus tard."
 
-#: templates/yabase/listen.html:74
-#: templates/yabase/song.html:75
-#: templates/yabase/widget.html:45
-#: templates/yabase/widget_large.html:45
+#: templates/yabase/listen.html:74 templates/yabase/song.html:75
+#: templates/yabase/widget.html:45 templates/yabase/widget_large.html:45
 msgid "Track logo"
 msgstr "Logo du morceau"
 
-#: templates/yabase/listen.html:77
-#: templates/yabase/song.html:78
-#: templates/yabase/widget.html:56
-#: templates/yabase/widget_large.html:56
+#: templates/yabase/listen.html:77 templates/yabase/song.html:78
+#: templates/yabase/widget.html:56 templates/yabase/widget_large.html:56
 msgid "No name"
 msgstr "Sans nom"
 
-#: templates/yabase/listen.html:89
-#: templates/yabase/song.html:90
+#: templates/yabase/listen.html:89 templates/yabase/song.html:90
 #: templates/yabase/app/mobileCenterMenu.html:27
 #: templates/yabase/app/mobileCenterMenu.html:28
 #: templates/yabase/app/track.mustache:49
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
-#: templates/yabase/webapp.html:541
+#: templates/yabase/webapp.html:545
 #: templates/yabase/app/mobileCenterMenu.html:24
 #: templates/yabase/app/track.mustache:24
-#: templates/yabase/app/track_deezer.mustache:15
+#: templates/yabase/app/track_deezer.mustache:12
 msgid "Share"
 msgstr "Partager"
 
-#: templates/yabase/webapp.html:546
-#: templates/yabase/webapp.html.py:605
-#: templates/yabase/webapp.html:617
-#: templates/yabase/webapp.html.py:632
+#: templates/yabase/webapp.html:550 templates/yabase/webapp.html.py:609
+#: templates/yabase/webapp.html:621 templates/yabase/webapp.html.py:636
 #: templates/yabase/app/friends/friendsPage.mustache:66
 #: templates/yabase/app/programming/statusPage.mustache:36
 #: templates/yabase/app/radio/editRadioPage.mustache:35
@@ -946,21 +891,21 @@ msgstr "Partager"
 msgid "Close"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:553
+#: templates/yabase/webapp.html:557
 #: templates/yabase/app/profile/user.mustache:20
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: templates/yabase/webapp.html:556
+#: templates/yabase/webapp.html:560
 msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
-#: templates/yabase/webapp.html:560
+#: templates/yabase/webapp.html:564
 #: templates/yabase/app/friends/friendsPage.mustache:15
 #: templates/yabase/app/friends/friendsPage.mustache:45
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:15
 #: templates/yabase/app/programming/programmingPage.mustache:14
-#: templates/yabase/app/programming/songInstances.mustache:42
+#: templates/yabase/app/programming/songInstances.mustache:47
 #: templates/yabase/app/programming/statusPage.mustache:12
 #: templates/yabase/app/radio/radioPage.mustache:54
 #: templates/yabase/app/radio/radioPage.mustache:69
@@ -969,10 +914,10 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 msgid "No thank you"
 msgstr "Non merci"
 
-#: templates/yabase/webapp.html:561
+#: templates/yabase/webapp.html:565
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:16
 #: templates/yabase/app/programming/programmingPage.mustache:15
-#: templates/yabase/app/programming/songInstances.mustache:43
+#: templates/yabase/app/programming/songInstances.mustache:48
 #: templates/yabase/app/programming/statusPage.mustache:13
 #: templates/yabase/app/radio/radioPage.mustache:55
 #: templates/yabase/app/radio/radioPage.mustache:70
@@ -981,104 +926,106 @@ msgstr "Non merci"
 msgid "Yes i want"
 msgstr "Oui je le veux"
 
-#: templates/yabase/webapp.html:568
+#: templates/yabase/webapp.html:572
 msgid "Connection error"
 msgstr "Erreur de connexion"
 
-#: templates/yabase/webapp.html:571
+#: templates/yabase/webapp.html:575
 msgid "Unable to connect Yasound server right now."
 msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
 
-#: templates/yabase/webapp.html:575
-#: templates/yabase/webapp.html.py:590
+#: templates/yabase/webapp.html:579 templates/yabase/webapp.html.py:594
 #: templates/yabase/app/radio/radioPage.mustache:83
 msgid "Dismiss"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:576
+#: templates/yabase/webapp.html:580
 msgid "Reload page"
 msgstr "Recharger la page"
 
-#: templates/yabase/webapp.html:583
+#: templates/yabase/webapp.html:587
 msgid "You are not logged in"
 msgstr "Vous n'êtes pas authentifié"
 
-#: templates/yabase/webapp.html:586
+#: templates/yabase/webapp.html:590
 msgid "You have to login to access the requested resource."
 msgstr "Vous devez être authentifié pour accéder à cette ressource."
 
-#: templates/yabase/webapp.html:591
+#: templates/yabase/webapp.html:595
 msgid "Go to login page"
 msgstr "Aller à la page de login"
 
-#: templates/yabase/webapp.html:631
+#: templates/yabase/webapp.html:635
 #: templates/yabase/app/programming/uploadCell.mustache:10
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/yabase/webapp.html:648
+#: templates/yabase/webapp.html:652
 msgid ""
 "Discover <strong>YaSound</strong>, the free <strong>social radios</strong> "
 "platform!"
-msgstr "Découvrez <strong>YaSound</strong>, la plateforme gratuite de <strong>radios "
+msgstr ""
+"Découvrez <strong>YaSound</strong>, la plateforme gratuite de <strong>radios "
 "sociales</strong> !"
 
-#: templates/yabase/webapp.html:654
+#: templates/yabase/webapp.html:658
 #, python-format
 msgid ""
 "<p><a href='%(link)s'>Listen</a> to the biggest radio database in the world</"
 "p>"
-msgstr "<p><a href='%(link)s'>Ecoutez</a> la plus grande base de radios au monde</p>"
+msgstr ""
+"<p><a href='%(link)s'>Ecoutez</a> la plus grande base de radios au monde</p>"
 
-#: templates/yabase/webapp.html:659
+#: templates/yabase/webapp.html:663
 #, python-format
 msgid ""
 "<p><a href='%(link)s'>Share</a> your listening<br/>with your friends</p>"
 msgstr "<p><a href='%(link)s'>Partagez</a> votre écoute avec vos amis</p>"
 
-#: templates/yabase/webapp.html:664
+#: templates/yabase/webapp.html:668
 #, python-format
 msgid "<p><a href='%(link)s'>Create</a> your radio <br/>easily</p>"
-msgstr "<p><a href='%(link)s'>Créez</a> votre radio facilement et légalement</p>"
+msgstr ""
+"<p><a href='%(link)s'>Créez</a> votre radio facilement et légalement</p>"
 
-#: templates/yabase/webapp.html:669
+#: templates/yabase/webapp.html:673
 msgid "It's free"
 msgstr "C'est gratuit"
 
-#: templates/yabase/webapp.html:670
+#: templates/yabase/webapp.html:674
 msgid "Create an account"
 msgstr "Je crée un compte"
 
-#: templates/yabase/webapp.html:671
+#: templates/yabase/webapp.html:675
 msgid "No, thank you, later"
 msgstr "Non, merci, plus tard"
 
-#: templates/yabase/app/footer.html:25
+#: templates/yabase/app/footer.html:28
 msgid "About"
 msgstr "A propos"
 
-#: templates/yabase/app/footer.html:28
+#: templates/yabase/app/footer.html:31
 #: templates/yabase/app/static/press.mustache:4
 msgid "Press"
 msgstr "Presse"
 
-#: templates/yabase/app/footer.html:33
+#: templates/yabase/app/footer.html:36
 msgid "Jobs"
 msgstr ""
 
-#: templates/yabase/app/footer.html:34
+#: templates/yabase/app/footer.html:37
 msgid "Legal informations"
 msgstr "Mentions légales"
 
-#: templates/yabase/app/footer.html:45
+#: templates/yabase/app/footer.html:48
 msgid "Connected users"
 msgstr "Utilisateurs connectés"
 
-#: templates/yabase/app/footer.html:52
+#: templates/yabase/app/footer.html:55
 msgid "See all"
 msgstr "Tous les voir"
 
-#: templates/yabase/app/footer.html:61
+#: templates/yabase/app/footer.html:66
 msgid "minutes of music have been played"
 msgstr "minutes de musique ont été écoutées"
 
@@ -1106,7 +1053,8 @@ msgid ""
 "No account yet? Get on the <a href='%(signup_url)s'>registration page</a> "
 "and join yasound in a few minutes.\n"
 "</p>\n"
-msgstr "\n"
+msgstr ""
+"\n"
 "<p class='lead'>    \n"
 "Si vous êtes déjà enregistré sur Yasound, entrez vos identifiants sur la <a "
 "href='%(login_url)s'>page de connexion</a>.\n"
@@ -1127,7 +1075,7 @@ msgstr "Top"
 
 #: templates/yabase/app/mobileCenterMenu.html:17
 #: templates/yabase/app/track.mustache:20
-#: templates/yabase/app/track_deezer.mustache:12
+#: templates/yabase/app/track_deezer.mustache:9
 #: templates/yabase/app/common/subMenu.mustache:42
 #: templates/yabase/app/favorites/userFavoritesPage.mustache:8
 #: templates/yabase/app/profile/profilePage.mustache:17
@@ -1176,7 +1124,7 @@ msgid "No result found"
 msgstr "Aucun résultat trouvé"
 
 #: templates/yabase/app/track.mustache:45
-#: templates/yabase/app/track_deezer.mustache:18
+#: templates/yabase/app/track_deezer.mustache:15
 #, fuzzy
 msgid "Like song"
 msgstr "Nombre de J'aime"
@@ -1356,7 +1304,8 @@ msgstr "Supprimer la radio"
 
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:10
 msgid "Do you really want to delete this radio? This action cannot be undone."
-msgstr "Voulez-vous vraiment supprimer cette radio ? Cette action est irréversible."
+msgstr ""
+"Voulez-vous vraiment supprimer cette radio ? Cette action est irréversible."
 
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:11
 msgid "Enter \"yes\" to confirm:"
@@ -1399,7 +1348,8 @@ msgstr "Votre radio est créee."
 msgid ""
 "You will be redirected to the programming page where you will be able to add "
 "content"
-msgstr "Vous allez être redirigé vers la page de programmation où vous pourrez "
+msgstr ""
+"Vous allez être redirigé vers la page de programmation où vous pourrez "
 "ajouter du contenu."
 
 #: templates/yabase/app/newRadio/newRadioPage.mustache:15
@@ -1469,10 +1419,6 @@ msgstr "Titres aimés"
 msgid "Follow"
 msgstr "Suivre"
 
-#: templates/yabase/app/profile/user.mustache:28
-msgid "followers"
-msgstr "abonnés"
-
 #: templates/yabase/app/profile/user.mustache:36
 msgid "on"
 msgstr "sur"
@@ -1491,14 +1437,14 @@ msgstr "Recherche avancée"
 
 #: templates/yabase/app/programming/addFromServer.mustache:12
 #: templates/yabase/app/programming/addFromServer.mustache:21
-#: templates/yabase/app/programming/songInstances.mustache:14
+#: templates/yabase/app/programming/songInstances.mustache:19
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:21
 msgid "Track"
 msgstr "Piste"
 
 #: templates/yabase/app/programming/addFromServer.mustache:13
 #: templates/yabase/app/programming/addFromServer.mustache:22
-#: templates/yabase/app/programming/songInstances.mustache:15
+#: templates/yabase/app/programming/songInstances.mustache:20
 #: templates/yabase/app/programming/statusPage.mustache:29
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:22
 msgid "Album"
@@ -1506,7 +1452,7 @@ msgstr "Album"
 
 #: templates/yabase/app/programming/addFromServer.mustache:14
 #: templates/yabase/app/programming/addFromServer.mustache:23
-#: templates/yabase/app/programming/songInstances.mustache:16
+#: templates/yabase/app/programming/songInstances.mustache:21
 #: templates/yabase/app/programming/statusPage.mustache:28
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:23
 msgid "Artist"
@@ -1580,16 +1526,16 @@ msgstr "Exporter la sélection vers Deezer"
 msgid "Export all to Deezer"
 msgstr "Exporter toute la radio vers Deezer"
 
-#: templates/yabase/app/programming/songInstances.mustache:8
+#: templates/yabase/app/programming/songInstances.mustache:13
 msgid "Remove all songs"
 msgstr "Supprimer tous les morceaux"
 
-#: templates/yabase/app/programming/songInstances.mustache:35
+#: templates/yabase/app/programming/songInstances.mustache:40
 #: templates/yabase/app/programming/upload.mustache:8
 msgid "Remove all"
 msgstr "Supprimer tous les morceaux"
 
-#: templates/yabase/app/programming/songInstances.mustache:38
+#: templates/yabase/app/programming/songInstances.mustache:43
 msgid "Do you really want to remove all filtered titles ?"
 msgstr "Voulez-vous vraiment supprimer tous les titres filtrés ?"
 
@@ -1836,7 +1782,8 @@ msgstr "Merci pour votre inscription sur Yasound"
 msgid ""
 "An email has been sent to confirm your registration.\n"
 "        "
-msgstr "Un email a été envoyé afin de confirmer votre compte.\n"
+msgstr ""
+"Un email a été envoyé afin de confirmer votre compte.\n"
 "        "
 
 #: templates/yabase/app/signup/signup.mustache:65
@@ -1852,7 +1799,8 @@ msgid ""
 "switch user.\n"
 "        </p>\n"
 "        "
-msgstr "\n"
+msgstr ""
+"\n"
 "        <p class='lead'>\n"
 "            <a href='%(logout_url)s/?next=%(root)ssignup/'>Se déconnecter</"
 "a> pour changer d'utilisateur.\n"
@@ -1863,18 +1811,19 @@ msgstr "\n"
 msgid "YaSound, the number one socials radios platform."
 msgstr "YaSound, la plateforme de radios sociales numéro un."
 
-#: templates/yabase/app/static/about.mustache:15
+#: templates/yabase/app/static/about.mustache:16
 msgid ""
 "CEO, Co-Founder <br/> <br/> Jean-Marc founded\n"
 "            the web agency CSTech and Jiwa, a music-on-demand website. <br/"
 ">\n"
 "            When he's not founding startups, Jean-Marc loves to travel.\n"
 "            "
-msgstr "Cofondateur, Président<br /><br />Jean-Marc a fondé la webagency CSTech et "
+msgstr ""
+"Cofondateur, Président<br /><br />Jean-Marc a fondé la webagency CSTech et "
 "le site de musique à la demande Jiwa.<br />A part créer des startups, il "
 "aime bien aussi voyager..."
 
-#: templates/yabase/app/static/about.mustache:27
+#: templates/yabase/app/static/about.mustache:28
 msgid ""
 "CTO, Co-Founder<br /><br />\n"
 "  After developing music software and providing audio R&amp;D for video game "
@@ -1883,13 +1832,14 @@ msgid ""
 "  When he's not coding in C++, Sébastien plays music and studies Asian "
 "languages.\n"
 "            "
-msgstr " Cofondateur, Directeur Technique<br /><br />Après avoir développé de "
+msgstr ""
+" Cofondateur, Directeur Technique<br /><br />Après avoir développé de "
 "nombreux logiciels de musique et assuré la R&D audio d'éditeurs de jeux "
 "vidéos, il rejoint la startup MXP4 où il devient Senior Director of "
 "Technology.<br />Quand il ne code pas en C++, il pratique les langues "
 "orientales et la musique."
 
-#: templates/yabase/app/static/about.mustache:41
+#: templates/yabase/app/static/about.mustache:42
 msgid ""
 "\n"
 "            <p>Listen to thousand of radios on the web and on mobile. Chat "
@@ -1901,12 +1851,16 @@ msgid ""
 "    <p>Yasound was founded in 2011 by Jean-Marc Plueger and Sébastien "
 "Métrot. </p>\n"
 "            "
-msgstr "\n"
-"            <p>Ecouter des milliers de radios sur le web et sur son mobile. Discuter en temps réel avec ses amis. "
-"Créer gratuitement, facilement et légalement sa propre radio, diffusée partout 24h/24 et 7J/7. "
-"Tout cela est maintenant possible avec YaSound.\n"
-"<br/><br/>C'est gratuit, c'est sans pub, c'est pratique, c'est magique... C'est YaSound.<br/><br/>\n"
-"    <p>YaSound a été fondé en 2011 par Jean-Marc Plueger et Sébastien Métrot. </p>\n"
+msgstr ""
+"\n"
+"            <p>Ecouter des milliers de radios sur le web et sur son mobile. "
+"Discuter en temps réel avec ses amis. Créer gratuitement, facilement et "
+"légalement sa propre radio, diffusée partout 24h/24 et 7J/7. Tout cela est "
+"maintenant possible avec YaSound.\n"
+"<br/><br/>C'est gratuit, c'est sans pub, c'est pratique, c'est magique... "
+"C'est YaSound.<br/><br/>\n"
+"    <p>YaSound a été fondé en 2011 par Jean-Marc Plueger et Sébastien "
+"Métrot. </p>\n"
 "            "
 
 #: templates/yabase/app/static/help.mustache:4
@@ -1923,7 +1877,8 @@ msgid ""
 "                Work in our Paris office and join our small and talented "
 "team\n"
 "                working on exciting new projects with our CTO.?"
-msgstr "\n"
+msgstr ""
+"\n"
 "Vous travaillerez en nos locaux de Paris 18ème sous la supervision de notre "
 "Directeur Technique et rejoindrez une petite équipe flexible, compétente et "
 "motivée par un projet passionant.<br />"
@@ -1985,7 +1940,8 @@ msgid ""
 "management? Send\n"
 "                us an email at\n"
 "            "
-msgstr "\n"
+msgstr ""
+"\n"
 "<h3>Développeur mobile</h3>        <p>Vous participerez au développement du "
 "service Yasound sur mobile (iOS + Android)</p>      <ul>        <li>Maitrise "
 "du C++.</li>        <li>          Connaissances d'ObjectiveC et de JNI "
@@ -2053,27 +2009,35 @@ msgstr ""
 msgid "New version"
 msgstr "Nouveaux utilisateurs"
 
+#: templates/yabase/app/static/press.mustache:51
+msgid "YaSound s’ouvre au Web et à l’international"
+msgstr ""
+
 #: templates/yabase/app/static/press.mustache:52
+msgid "screenshots"
+msgstr "copies d'écran"
+
+#: templates/yabase/app/static/press.mustache:54
 msgid "Press Reviews"
 msgstr ""
 
-#: templates/yabase/app/static/press.mustache:54
+#: templates/yabase/app/static/press.mustache:56
 msgid "Press review (march 2012)"
 msgstr ""
 
-#: templates/yabase/app/static/press.mustache:55
+#: templates/yabase/app/static/press.mustache:57
 msgid "Weblogs review (march 2012)"
 msgstr ""
 
-#: templates/yabase/app/static/press.mustache:56
+#: templates/yabase/app/static/press.mustache:58
 msgid "Press review (april 2012)"
 msgstr ""
 
-#: templates/yabase/app/static/press.mustache:57
+#: templates/yabase/app/static/press.mustache:59
 msgid "Weblogs review (april 2012)"
 msgstr ""
 
-#: templates/yabase/app/static/press.mustache:58
+#: templates/yabase/app/static/press.mustache:60
 msgid "Press and weblogs review (may 2012)"
 msgstr ""
 
@@ -2094,7 +2058,8 @@ msgid ""
 "\n"
 "The yasound team.\n"
 "\n"
-msgstr "Cher %(fullname)s,\n"
+msgstr ""
+"Cher %(fullname)s,\n"
 "\n"
 "Vous êtes invité à tester notre service.\n"
 "\n"
@@ -2109,8 +2074,9 @@ msgstr "Cher %(fullname)s,\n"
 msgid "Invitation to join and test Yasound"
 msgstr "Invitation pour rejoindre et tester Yasound"
 
-#: templates/yaref/find_fuzzy.html:6
-#: templates/yaref/find_fuzzy.html.py:13
+#: templates/yaref/find_fuzzy.html:6 templates/yaref/find_fuzzy.html.py:13
 msgid "Fuzzy search"
 msgstr "Recherche floue"
 
+#~ msgid "followers"
+#~ msgstr "abonnés"
