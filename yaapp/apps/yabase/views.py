@@ -1200,6 +1200,7 @@ class WebAppView(View):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
+        context['ignore_radio_cookie'] = True
         if radio.current_song:
             context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
@@ -1566,6 +1567,7 @@ class WebAppView(View):
             'push_url': push_url,
             'enable_push': enable_push,
             'current_uuid': radio_uuid,
+            'ignore_radio_cookie': False,
             'facebook_app_id': settings.FACEBOOK_APP_ID,
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,

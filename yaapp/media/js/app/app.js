@@ -22,12 +22,13 @@ $(document).ready(function () {
     Yasound.App.root = g_root;
     Yasound.App.appName = g_app_name;
     Yasound.App.defaultRadioUUID = g_default_radio_uuid;
+    Yasound.App.ignoreRadioCookie = g_ignore_radio_cookie;
     Yasound.App.showWelcomePopup = g_show_welcome_popup;
     Yasound.App.hd = g_hd_enabled;
     Yasound.App.RADIO_ORIGIN_YASOUND = 0; // constant, radio.origin=0 means radioways radio
     Yasound.App.RADIO_ORIGIN_RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
 
-    if (cookies.get('radio')) {
+    if (cookies.get('radio') && !Yasound.App.ignoreRadioCookie) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');
     }
 
