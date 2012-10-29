@@ -19,7 +19,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         'click #my-notifications-menu': 'onNotificationsMenu',
 
         "submit #my-informations-form": "onSubmitMyInformations",
-        // "submit #my-notifications-form": "onSubmitMyNotifications"
+        "submit #my-accounts-form": "onSubmitMyAccounts"
 
     },
     initialize: function () {
@@ -173,6 +173,16 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     onSubmitMyInformations: function (e) {
         e.preventDefault();
         var form = $('#my-informations-form', this.el);
+        Yasound.Utils.submitForm({
+            form: form,
+            successMessage: gettext('Settings updated'),
+            errorMessage: gettext('Error while saving settings')
+        });
+    },
+
+    onSubmitMyAccounts: function (e) {
+        e.preventDefault();
+        var form = $('#my-accounts-form', this.el);
         Yasound.Utils.submitForm({
             form: form,
             successMessage: gettext('Settings updated'),
