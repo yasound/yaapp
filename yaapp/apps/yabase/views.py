@@ -717,7 +717,7 @@ def song_played(request, radio_uuid, songinstance_id):
         logger.info('song_played: wrong scheduler key (%s)' % key)
         return HttpResponseForbidden()
 
-    async_song_played(radio_uuid, songinstance_id)
+    async_song_played.delay(radio_uuid, songinstance_id)
     return HttpResponse('ok')
 
 @check_api_key(methods=['GET',], login_required=False)
