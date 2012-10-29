@@ -77,9 +77,11 @@ def services(request, subscription_sku=None):
 @check_api_key(methods=['GET'], login_required=False)
 def gifts(request, subscription_sku=None):
     if request.method == 'GET':
-        profile = request.user.get_profile()
-        if profile is not None:
-            check_for_missed_gifts(sender=profile, request=request, user=request.user)
+        if request.user.is_authenticated():
+            profile = request.user.get_profile()
+            if profile is not None:
+                check_for_missed_gifts(sender=profile, request=request, user=request.user)
+
         qs = Gift.objects.filter(enabled=True)
         if request.user.is_anonymous():
             qs = qs.filter(authentication_needed=False)
