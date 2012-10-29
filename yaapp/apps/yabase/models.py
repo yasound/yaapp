@@ -959,6 +959,8 @@ class Radio(models.Model):
         # if self.current_song:
         #     task_report_song.delay(self, self.current_song)
 
+        logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
+
         # update current song
         self.current_song = song_instance
         self.current_song_play_date = datetime.datetime.now()

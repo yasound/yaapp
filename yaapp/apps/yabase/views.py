@@ -22,7 +22,7 @@ from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist
     SongMetadata
 from shutil import rmtree
 from stats.models import RadioListeningStat
-from task import process_playlists, process_upload_song, async_song_played
+from task import process_playlists, process_upload_song, async_song_played, async_songs_started
 from tastypie.http import HttpNotFound
 from tastypie.models import ApiKey
 from tempfile import mkdtemp
@@ -723,6 +723,26 @@ def song_played(request, radio_uuid, songinstance_id):
 
     async_song_played.delay(radio_uuid, songinstance_id)
     return HttpResponse('ok')
+
+@csrf_exempt
+def songs_started(request):
+    if not check_http_method(request, ['post']):
+        logger.info('songs_started: wrong method')
+        return HttpResponse(status=405)
+
+    payload = json.loads(request.raw_post_data)
+
+    key = payload.get('key', 0)
+    if key != settings.SCHEDULER_KEY:
+        logger.info('songs_started: wrong scheduler key (%s)' % key)
+        return HttpResponseForbidden()
+
+    data = payload.get('data', None)
+    if data is None:
+        logger.info('songs_started: cannot get data')
+        return HttpResponse(json.dumps({'success': False, 'error': 'bad data'}))
+    async_songs_started.delay(data)
+    return HttpResponse(json.dumps({'success': True}))
 
 @check_api_key(methods=['GET',], login_required=False)
 def get_current_song(request, radio_id):
