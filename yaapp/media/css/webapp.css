@@ -369,6 +369,18 @@ body {
     float:right;
 }
 
+#hd-box-container #hd-promocode {
+    height:38px;
+}
+
+#hd-box-container #hd-promocode label {
+    display:inline;
+}
+#hd-box-container #hd-promocode input {
+    float:right;
+    width:94px;
+}
+
 #header .navbar-inner {
     background-image: url(/media/app/images/header_bg.png);
     background-repeat: repeat-x;

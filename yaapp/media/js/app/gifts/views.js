@@ -60,7 +60,7 @@ Yasound.Views.Gift = Backbone.View.extend({
                 }
 
                 var href = link.attr('href');
-                if (href && href != '' && href !='#') {
+                if (href && href !== '' && href !=='#') {
                     return;
                 } else {
                     e.preventDefault();
@@ -144,8 +144,8 @@ Yasound.Views.GiftsPage = Backbone.View.extend({
 
 Yasound.Views.GiftsPopup = Backbone.View.extend({
     gifts: new Yasound.Data.Models.Gifts({}),
-
     events: {
+
     },
 
     initialize: function() {
