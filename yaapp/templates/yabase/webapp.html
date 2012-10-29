@@ -237,6 +237,7 @@ HTML, BODY { height: 100%; }
        var g_next_url = {% if next_url %}'{{ next_url|safe }}'{% else %}undefined{% endif %};
        var g_base_url = {% if base_url %}'{{ base_url|safe }}'{% else %}undefined{% endif %};
        var g_default_radio_uuid = '{{ current_uuid }}';
+       var g_ignore_radio_cookie = {% if ignore_radio_cookie %}true{% else %}false{% endif %};
        var g_sound_player = '{{ sound_player }}';
        var g_show_welcome_popup = {% if show_welcome_popup %}true{% else %}false{% endif %};
        var g_hd_enabled = {% if hd_enabled %}true{% else %}false{% endif %};
