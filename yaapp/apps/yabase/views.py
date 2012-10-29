@@ -193,10 +193,12 @@ def radio_recommendations_process(request, internal=False, genre=''):
     selection_radios_ids = [x.id for x in selection_radios]
 
     radio_data = []
+    radio_list = []
     # results: first part
     s = 0
     for r in selection_radios[skip:(skip + limit)]:
         radio_data.append(r.as_dict(request_user=request.user))
+        radio_list.append(r)
         s += 1
 
     # results: second part
@@ -230,6 +232,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
     r = 0
     for radio in recommended_radios[reco_skip:(reco_skip + reco_limit)]:
         radio_data.append(radio.as_dict(request_user=request.user))
+        radio_list.append(radio)
         r += 1
 
     if len(radio_data) < limit:
@@ -247,6 +250,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
         e = 0
         for r in extra_radios:
             radio_data.append(r.as_dict(request_user=request.user))
+            radio_list.append(r)
             e += 1
 
 
@@ -260,7 +264,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
     next_url += '?%s' % params_string
 
     if internal:
-        return radio_data, next_url
+        return radio_data, radio_list, next_url
     response = api_response(radio_data, limit=limit, offset=skip, next_url=next_url)
     return response
 
@@ -1201,12 +1205,13 @@ class WebAppView(View):
         genre = ''
         if 'genre' in kwargs:
             genre = 'style_%s' % (kwargs['genre'])
-        radios, next_url = radio_recommendations_process(request=request, internal=True, genre=genre)
+
+        radio_data, radio_list, next_url = radio_recommendations_process(request=request, internal=True, genre=genre)
         context['submenu_number'] = 1
-        context['radios'] = Radio.objects.filter(id__in=[radio.get('id') for radio in radios])
+        context['radios'] = radio_list
         context['next_url'] = next_url
         context['base_url'] = reverse('yabase.views.radio_recommendations')
-        context['bdata'] = json.dumps([radio for radio in radios], cls=MongoAwareEncoder)
+        context['bdata'] = json.dumps([radio for radio in radio_data], cls=MongoAwareEncoder)
         context['g_page'] = 'home'
 
         return context, 'yabase/app/home/homePage.html'
