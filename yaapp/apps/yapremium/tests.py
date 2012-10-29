@@ -40,6 +40,7 @@ class TestModel(TestCase):
         us = UserSubscription.objects.create(subscription=subscription, user=self.user)
         self.assertEquals(us.expiration_date, today + relativedelta(months=+subscription.duration))
 
+
 class TestVerifyReceipt(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
@@ -77,17 +78,17 @@ class TestView(TestCase):
     def test_get_gifts(self):
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name_en='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+                                   enabled=True)
 
         gift_for_anonymous = Gift.objects.create(name_en='gift for anonymous',
-            description='description',
-            service=service,
-            authentication_needed=False,
-            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
-            enabled=True)
+                                                 description='description',
+                                                 service=service,
+                                                 authentication_needed=False,
+                                                 action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+                                                 enabled=True)
 
         res = self.client.get(reverse('yapremium.views.gifts'))
         self.assertEquals(res.status_code, 200)
@@ -129,13 +130,13 @@ class TestGift(TestCase):
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_CREATE_ACCOUNT,
-            duration=2,
-            duration_unit=yapremium_settings.DURATION_DAY,
-            max_per_user=1,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_CREATE_ACCOUNT,
+                                   duration=2,
+                                   duration_unit=yapremium_settings.DURATION_DAY,
+                                   max_per_user=1,
+                                   enabled=True)
 
         user3 = User.objects.create(email="user3@yasound.com", username="user3")
         self.assertTrue(user3.get_profile().permissions.hd)
@@ -147,7 +148,6 @@ class TestGift(TestCase):
         two_days = today + relativedelta(days=+2)
         self.assertEquals(us.expiration_date.date(), two_days)
 
-
     def test_check_missed_gifts(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
         user2.set_password('test')
@@ -156,14 +156,13 @@ class TestGift(TestCase):
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_CREATE_ACCOUNT,
-            duration=2,
-            duration_unit=yapremium_settings.DURATION_DAY,
-            max_per_user=1,
-            enabled=True)
-
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_CREATE_ACCOUNT,
+                                   duration=2,
+                                   duration_unit=yapremium_settings.DURATION_DAY,
+                                   max_per_user=1,
+                                   enabled=True)
 
         user3 = User.objects.create(email="user3@yasound.com", username="user3")
         self.assertTrue(user3.get_profile().permissions.hd)
@@ -186,17 +185,17 @@ class TestGift(TestCase):
 
         # again, with new radio
         radio = Radio.objects.create(creator=user2)
-        radio.ready=True
+        radio.ready = True
         radio.save()
 
         Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_CREATE_RADIO,
-            duration=3,
-            duration_unit=yapremium_settings.DURATION_DAY,
-            max_per_user=1,
-            enabled=True)
+                            description='description',
+                            service=service,
+                            action=yapremium_settings.ACTION_CREATE_RADIO,
+                            duration=3,
+                            duration_unit=yapremium_settings.DURATION_DAY,
+                            max_per_user=1,
+                            enabled=True)
 
         self.client.logout()
         self.client.login(username="user2", password="test")
@@ -210,20 +209,19 @@ class TestGift(TestCase):
         end_date = today + relativedelta(days=+5)
         self.assertEquals(us.expiration_date.date(), end_date)
 
-
     def test_add_facebook_account(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
         self.assertFalse(user2.get_profile().permissions.hd)
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT,
-            duration=1,
-            duration_unit=yapremium_settings.DURATION_MONTH,
-            max_per_user=1,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT,
+                                   duration=1,
+                                   duration_unit=yapremium_settings.DURATION_MONTH,
+                                   max_per_user=1,
+                                   enabled=True)
 
         account_signals.facebook_account_added.send(sender=user2.get_profile(), user=user2)
 
@@ -243,13 +241,13 @@ class TestGift(TestCase):
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT,
-            duration=1,
-            duration_unit=yapremium_settings.DURATION_MONTH,
-            max_per_user=1,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT,
+                                   duration=1,
+                                   duration_unit=yapremium_settings.DURATION_MONTH,
+                                   max_per_user=1,
+                                   enabled=True)
 
         account_signals.twitter_account_added.send(sender=user2.get_profile(), user=user2)
 
@@ -269,13 +267,13 @@ class TestGift(TestCase):
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
-            duration=1,
-            duration_unit=yapremium_settings.DURATION_MONTH,
-            max_per_user=1,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+                                   duration=1,
+                                   duration_unit=yapremium_settings.DURATION_MONTH,
+                                   max_per_user=1,
+                                   enabled=True)
 
         yabase_signals.user_watched_tutorial.send(sender=user2.get_profile(), user=user2)
 
@@ -289,20 +287,19 @@ class TestGift(TestCase):
         one_month = today + relativedelta(months=+1)
         self.assertEquals(us.expiration_date.date(), one_month)
 
-
     def test_update_programming(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
         self.assertFalse(user2.get_profile().permissions.hd)
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_UPDATE_PROGRAMMING,
-            duration=3,
-            duration_unit=yapremium_settings.DURATION_MONTH,
-            max_per_user=1,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_UPDATE_PROGRAMMING,
+                                   duration=3,
+                                   duration_unit=yapremium_settings.DURATION_MONTH,
+                                   max_per_user=1,
+                                   enabled=True)
 
         radio = Radio.objects.create(creator=user2)
         yabase_signals.new_animator_activity.send(sender=user2.get_profile(), user=user2, radio=radio, atype=None, details=None)
@@ -317,21 +314,20 @@ class TestGift(TestCase):
         end_date = today + relativedelta(months=+3)
         self.assertEquals(us.expiration_date.date(), end_date)
 
-
     def test_gift_delay(self):
         user2 = User.objects.create(email="user2@yasound.com", username="user2")
         self.assertFalse(user2.get_profile().permissions.hd)
 
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
         gift = Gift.objects.create(name='gift',
-            description='description',
-            service=service,
-            action=yapremium_settings.ACTION_WATCH_TUTORIAL,
-            duration=1,
-            duration_unit=yapremium_settings.DURATION_MONTH,
-            max_per_user=0,
-            delay=3,
-            enabled=True)
+                                   description='description',
+                                   service=service,
+                                   action=yapremium_settings.ACTION_WATCH_TUTORIAL,
+                                   duration=1,
+                                   duration_unit=yapremium_settings.DURATION_MONTH,
+                                   max_per_user=0,
+                                   delay=3,
+                                   enabled=True)
 
         self.assertTrue(gift.available(user2))
 
@@ -345,7 +341,6 @@ class TestGift(TestCase):
         Achievement.objects.all().update(achievement_date=past)
 
         self.assertTrue(gift.available(user2))
-
 
 
 class TestExpirationDate(TestCase):
@@ -464,7 +459,6 @@ class TestPromocode(TestCase):
         up = Promocode.objects.create_from_code(code='toutou', user=self.user)
         self.assertIsNone(up)
 
-
     def test_create_from_good_code(self):
         today = date.today()
         service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
@@ -481,7 +475,7 @@ class TestPromocode(TestCase):
         self.assertIsNotNone(up)
 
         us = UserService.objects.get(service=service, user=self.user)
-        self.assertEquals(us.expiration_date.date(), today + relativedelta(months=+promocode.duration+promocode2.duration))
+        self.assertEquals(us.expiration_date.date(), today + relativedelta(months=+promocode.duration + promocode2.duration))
 
     def test_view(self):
         today = date.today()
