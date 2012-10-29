@@ -322,3 +322,18 @@ def async_song_played(radio_uuid, songinstance_id):
         logger.info('song_played: %s - %s - %s' % (song_instance.metadata.artist_name, song_instance.metadata.album_name, song_instance.metadata.name))
     radio.song_starts_playing(song_instance)
     logger.info('song_played: ok')
+
+@task(ignore_result=True)
+def async_songs_started(data):
+    logger.info('async_songs_started')
+    from models import Radio, SongInstance
+    for i in data:
+        if len(i) != 2:
+            logger.info('async_songs_started wrong data format')
+            return
+        radio_uuid = i[0]
+        songinstance_id = i[1]
+        radio = Radio.objects.get(uuid=radio_uuid)
+        song_instance = SongInstance.objects.get(id=songinstance_id)
+        radio.song_starts_playing(song_instance)
+    logger.info('async_songs_started: ok')

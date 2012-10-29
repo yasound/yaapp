@@ -158,6 +158,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/account/association/$', 'account.views.associate'),
     url(r'^api/v1/account/dissociation/$', 'account.views.dissociate'),
 
+    url(r'^api/v1/songs_started/$', 'yabase.views.songs_started'),
+
     # programming
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.my_programming'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/(?P<song_instance_id>\d+)/$', 'yabase.views.my_programming'),
