@@ -272,6 +272,22 @@ class UserProfile(models.Model):
         return account_settings.ACCOUNT_TYPE_YASOUND in self.account_type or \
             account_settings.ACCOUNT_MULT_YASOUND in self.account_type
 
+    @property
+    def is_multi_account(self):
+        """Return true if account has at least 2 types
+        """
+
+        if self.facebook_enabled:
+            if self.twitter_enabled or self.yasound_enabled:
+                return True
+        if self.twitter_enabled:
+            if self.facebook_enabled or self.yasound_enabled:
+                return True
+        if self.yasound_enabled:
+            if self.facebook_enabled or self.twitter_enabled:
+                return True
+        return False
+
     def convert_to_multi_account_type(self, commit=True):
         """Convert a single account type to a potential multi account type
 
