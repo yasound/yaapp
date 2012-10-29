@@ -13,7 +13,7 @@
             <div>
 
                 <div id='my-accounts' style='display:none;'>
-                    <form id='my-accounts' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    <form id='my-accounts-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
                         {{ my_accounts_form }}
 
                         {% if display_associate_facebook %}

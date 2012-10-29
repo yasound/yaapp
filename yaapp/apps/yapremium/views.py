@@ -1,4 +1,5 @@
 from models import Subscription, UserSubscription, UserService, Gift, Promocode
+from models import check_for_missed_gifts
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 from yacore.api import api_response
@@ -76,6 +77,9 @@ def services(request, subscription_sku=None):
 @check_api_key(methods=['GET'], login_required=False)
 def gifts(request, subscription_sku=None):
     if request.method == 'GET':
+        profile = request.user.get_profile()
+        if profile is not None:
+            check_for_missed_gifts(sender=profile, request=request, user=request.user)
         qs = Gift.objects.filter(enabled=True)
         if request.user.is_anonymous():
             qs = qs.filter(authentication_needed=False)

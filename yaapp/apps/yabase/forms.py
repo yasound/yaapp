@@ -1,6 +1,7 @@
 from account.models import UserProfile
 from bootstrap.forms import BootstrapModelForm, Fieldset, BootstrapForm
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from models import Radio
 from yabase.task import async_import_from_itunes
@@ -84,7 +85,7 @@ class MyAccountsForm(BootstrapModelForm):
     def clean(self):
         if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
             if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
-                raise forms.ValidationError(u"You must type the same password each time.")
+                raise forms.ValidationError(_("You must type the same password each time."))
 
         if 'remove_facebook' in self.data:
             success, message = self.instance.remove_facebook_account()
@@ -98,12 +99,31 @@ class MyAccountsForm(BootstrapModelForm):
 
         return self.cleaned_data
 
+    def clean_password2(self):
+        if "password1" in self.cleaned_data and "password2" in self.cleaned_data:
+            if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
+                raise forms.ValidationError(_("You must type the same password each time."))
+        return self.cleaned_data['password2']
+
+    def clean_yasound_email(self):
+        user = User.objects.filter(email__exact=self.cleaned_data["yasound_email"]).exclude(id=self.instance.user.id)
+        if not user:
+            return self.cleaned_data["yasound_email"]
+        raise forms.ValidationError(unicode(_("This email is already taken. Please choose another.")))
+
     def save(self):
-        if "password1" in self.cleaned_data:
+        if "password1" in self.cleaned_data and "yasound_email" in self.cleaned_data:
             password = self.cleaned_data['password1']
-            if len(password) > 0:
+            email = self.cleaned_data['yasound_email']
+
+            if len(password) <= 0:
+                return
+
+            if email == self.instance.user.email:
                 self.instance.user.set_password(self.cleaned_data['password1'])
                 self.instance.user.save()
+            else:
+                self.instance.add_yasound_account(email, password)
 
 class MyNotificationsForm(BootstrapForm):
     fb_share_listen = forms.BooleanField(label=_("Listen"), required=False)

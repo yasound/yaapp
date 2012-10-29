@@ -1,6 +1,7 @@
 from account.api import build_random_username
 from account.models import UserProfile
 from django.contrib.auth.models import User
+import signals as account_signals
 import settings as account_settings
 
 
@@ -73,6 +74,8 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
             except:
                 pass
 
+            account_signals.new_account.send(sender=profile, user=profile.user)
+
             return {
                 'user': user,
                 'is_new': True
@@ -106,6 +109,8 @@ def associate_user(backend, details, response, uid, username, user=None, *args,
                 profile.logged()
             except:
                 pass
+
+            account_signals.new_account.send(sender=profile, user=profile.user)
 
             return {
                 'user': user,

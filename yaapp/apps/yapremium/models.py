@@ -461,14 +461,20 @@ class UserPromocode(models.Model):
 
 # handlers are used to calculate gift achievements
 
-def new_user_profile_handler(sender, instance, created, **kwargs):
-    if created:
-        async_win_gift.delay(user_id=instance.user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
+def new_user_profile_handler(sender, user, **kwargs):
+    async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_CREATE_ACCOUNT)
+    profile = sender
+    if profile is None:
+        return
 
-        if instance.user.email:
-            async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, instance.user.email)
-        if instance.facebook_enabled:
-            async_check_for_invitation.delay(InvitationsManager.TYPE_FACEBOOK, instance.facebook_uid)
+    if profile.yasound_enabled:
+        async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, instance.user.email)
+        async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_EMAIL_ACCOUNT, dont_give_anything=True)
+    if profile.facebook_enabled:
+        async_check_for_invitation.delay(InvitationsManager.TYPE_FACEBOOK, instance.facebook_uid)
+        async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT, dont_give_anything=True)
+    if profile.twitter_enabled:
+        async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT, dont_give_anything=True)
 
 
 def user_profile_updated_handler(sender, instance, created, **kwargs):
@@ -529,6 +535,13 @@ def check_for_missed_gifts(sender, request, user, **kwargs):
             if profile.yasound_enabled:
                 async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT)
                 async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_EMAIL_ACCOUNT, dont_give_anything=True)
+    else:
+        if profile.facebook_enabled:
+            async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT, dont_give_anything=True)
+        elif profile.twitter_enabled:
+            async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT, dont_give_anything=True)
+        elif profile.yasound_enabled:
+            async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_EMAIL_ACCOUNT, dont_give_anything=True)
 
 
 def new_animator_activity_handler(sender, user, radio, **kwargs):
@@ -540,8 +553,8 @@ def new_animator_activity_handler(sender, user, radio, **kwargs):
 
 
 def install_handlers():
-    signals.post_save.connect(new_user_profile_handler, sender=UserProfile)
     signals.post_save.connect(user_profile_updated_handler, sender=UserProfile)
+    account_signals.new_account.connect(new_user_profile_handler)
     account_signals.facebook_account_added.connect(facebook_account_added_handler)
     account_signals.twitter_account_added.connect(twitter_account_added_handler)
     auth_signals.user_logged_in.connect(check_for_missed_gifts)
