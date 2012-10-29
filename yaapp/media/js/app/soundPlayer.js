@@ -82,9 +82,12 @@ Yasound.Player.SoundManager = function () {
                 $.publish('/player/play');
                 return;
             }
-
             var url = '/api/v1/streamer_auth_token/';
             var streamURL = mgr.baseUrl;
+            if (!streamURL) {
+                return;
+            }
+
             if (Yasound.App.userAuthenticated && mgr.radio && mgr.radio.get('origin') === Yasound.App.RADIO_ORIGIN_YASOUND) {
                 $.ajax({
                     url: url,
