@@ -284,7 +284,7 @@ $(document).ready(function () {
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio,
                     el: $('#player')
-                });
+                }).render();
                 this.radioContext.currentSongView.radio = this.currentRadio;
 
                 this.currentRadio.on('change:id', function (model, id) {
