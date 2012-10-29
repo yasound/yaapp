@@ -150,6 +150,7 @@ class Radio(models.Model):
             'cover': settings.DEFAULT_TRACK_IMAGE,
             'large_cover': settings.DEFAULT_TRACK_IMAGE
         }
+        return song_dict
         res = find_metadata(self.metadata_id)
         if not res:
             return song_dict
