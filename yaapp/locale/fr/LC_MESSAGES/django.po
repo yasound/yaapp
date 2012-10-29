@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 15:15+0100\n"
+"POT-Creation-Date: 2012-10-29 16:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr "Se déconnecter"
 
 #: templates/base.html:47 templates/account/login.html:8
 #: templates/account/login.html.py:55 templates/web/index.html:4
-#: templates/web/menu.html:19 templates/yabase/app/track.mustache:145
+#: templates/web/menu.html:19 templates/yabase/app/track.mustache:151
 #: templates/yabase/app/track_deezer.mustache:75
 #: templates/yabase/app/favorites/favoritesPage.mustache:17
 #: templates/yabase/app/friends/friendsPage.mustache:122
@@ -80,7 +80,7 @@ msgid "You are already authenticated"
 msgstr "Vous êtes déjà authentifié"
 
 #: templates/account/login.html:32 templates/account/login.html.py:40
-#: templates/yabase/app/track.mustache:147
+#: templates/yabase/app/track.mustache:153
 #: templates/yabase/app/track_deezer.mustache:77
 #: templates/yabase/app/login/login.mustache:11
 #: templates/yabase/app/login/login.mustache:14
@@ -88,14 +88,14 @@ msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
 #: templates/account/login.html:36 templates/account/login.html.py:44
-#: templates/yabase/app/track.mustache:148
+#: templates/yabase/app/track.mustache:154
 #: templates/yabase/app/track_deezer.mustache:78
 #: templates/yabase/app/login/login.mustache:20
 #: templates/yabase/app/login/login.mustache:23
 msgid "Login with Twitter"
 msgstr "Se connecter avec Twitter"
 
-#: templates/account/login.html:59 templates/yabase/app/track.mustache:157
+#: templates/account/login.html:59 templates/yabase/app/track.mustache:163
 #: templates/yabase/app/track_deezer.mustache:87
 msgid "Lost password ?"
 msgstr "Mot de passe perdu ?"
@@ -154,7 +154,7 @@ msgstr ""
 "\t\t\t\t"
 
 #: templates/account/signup.html:8 templates/account/signup.html.py:56
-#: templates/yabase/app/track.mustache:143
+#: templates/yabase/app/track.mustache:149
 #: templates/yabase/app/track_deezer.mustache:73
 msgid "Signup"
 msgstr "S'inscrire"
@@ -1137,7 +1137,7 @@ msgid "My settings"
 msgstr "Mes paramètres"
 
 #: templates/yabase/app/track.mustache:127
-#: templates/yabase/app/track.mustache:165
+#: templates/yabase/app/track.mustache:171
 msgid "HD"
 msgstr ""
 
@@ -1145,13 +1145,19 @@ msgstr ""
 msgid "enabled until"
 msgstr "activée jusqu'au"
 
-#: templates/yabase/app/track.mustache:151
+#: templates/yabase/app/track.mustache:131
+#: templates/yabase/app/track.mustache:134
+#: templates/yabase/app/track.mustache:178
+msgid "Enter a promo code:"
+msgstr "Entrez un code promo :"
+
+#: templates/yabase/app/track.mustache:157
 #: templates/yabase/app/track_deezer.mustache:81
 #: templates/yabase/app/login/login.mustache:29
 msgid "Email login"
 msgstr "Connexion avec email"
 
-#: templates/yabase/app/track.mustache:152
+#: templates/yabase/app/track.mustache:158
 #: templates/yabase/app/track_deezer.mustache:82
 #: templates/yabase/app/friends/friendsPage.mustache:60
 #: templates/yabase/app/login/login.mustache:32
@@ -1159,7 +1165,7 @@ msgstr "Connexion avec email"
 msgid "Email"
 msgstr "Email"
 
-#: templates/yabase/app/track.mustache:153
+#: templates/yabase/app/track.mustache:159
 #: templates/yabase/app/track_deezer.mustache:83
 #: templates/yabase/app/login/login.mustache:33
 #: templates/yabase/app/signup/signup.mustache:36
