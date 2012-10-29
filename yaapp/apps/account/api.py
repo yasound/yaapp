@@ -1,27 +1,22 @@
 from django.conf import settings as yaapp_settings
 from django.conf.urls.defaults import url
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
 from emailconfirmation.models import EmailAddress
 from models import UserProfile
-from tastypie import fields
 from tastypie.authentication import ApiKeyAuthentication, BasicAuthentication, \
     Authentication
-from tastypie.authorization import Authorization, ReadOnlyAuthorization, \
-    DjangoAuthorization
+from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.models import ApiKey
-from tastypie.resources import ModelResource, Resource
-from tastypie.serializers import Serializer
-from tastypie.utils import trailing_slash
+from tastypie.resources import ModelResource
 from tastypie.validation import Validation
 from yabase.models import Radio
-import datetime
 import json
 import settings as account_settings
 import tweepy
 import urllib
 import uuid
 import time
+import signals as account_signals
 from yacore.http import fill_app_infos, is_iphone_version_1
 from yageoperm import utils as yageoperm_utils
 
@@ -30,8 +25,6 @@ from django.utils.translation import ugettext_lazy as _
 import logging
 from yacore.geoip import request_country
 logger = logging.getLogger("yaapp.account")
-
-
 
 
 class YasoundApiKeyAuthentication(ApiKeyAuthentication):
@@ -68,6 +61,7 @@ class YasoundApiKeyAuthentication(ApiKeyAuthentication):
         else:
             return super(YasoundApiKeyAuthentication, self).get_identifier(request)
 
+
 class YasoundPublicAuthentication(YasoundApiKeyAuthentication):
     """
     This class fills request.user if username/apikey info is given
@@ -75,9 +69,8 @@ class YasoundPublicAuthentication(YasoundApiKeyAuthentication):
     """
 
     def is_authenticated(self, request, **kwargs):
-        super(YasoundPublicAuthentication, self).is_authenticated(request, **kwargs) # be sure that all extra
+        super(YasoundPublicAuthentication, self).is_authenticated(request, **kwargs)  # be sure that all extra
         return True
-
 
 
 class YasoundBasicAuthentication(BasicAuthentication):
@@ -96,7 +89,6 @@ class YasoundBasicAuthentication(BasicAuthentication):
         return authenticated
 
 
-
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -107,9 +99,8 @@ class UserResource(ModelResource):
         authorization = Authorization()
         allowed_methods = ['get', 'put']
 
-
     def dehydrate(self, bundle):
-        userID = bundle.data['id'];
+        userID = bundle.data['id']
         user = User.objects.get(pk=userID)
         userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
@@ -124,6 +115,7 @@ class UserResource(ModelResource):
         user_profile = user.get_profile()
         user_profile.update_with_bundle(bundle, False)
         return user_resource
+
 
 class PublicUserResource(UserResource):
     """
@@ -147,7 +139,7 @@ class PublicUserResource(UserResource):
         ]
 
     def dehydrate(self, bundle):
-        userID = bundle.data['id'];
+        userID = bundle.data['id']
         user = User.objects.get(pk=userID)
         userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
@@ -185,12 +177,13 @@ class SignupAuthentication(Authentication):
 
         print request.COOKIES
         cookies = request.COOKIES
-        if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+        if account_settings.APP_KEY_COOKIE_NAME not in cookies:
             return False
         if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
             return False
 
         return True
+
 
 class SignupValidation(Validation):
     def is_valid(self, bundle, request=None):
@@ -212,6 +205,7 @@ class SignupValidation(Validation):
             logger.info(unicode(error))
         return error
 
+
 class SignupResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -231,7 +225,7 @@ class SignupResource(ModelResource):
         user = user_resource.obj
         password = bundle.data['password']
         user.username = build_random_username()
-        user.set_password(password) # encrypt password
+        user.set_password(password)  # encrypt password
         user.save()
 
         # send confirmation email
@@ -244,11 +238,14 @@ class SignupResource(ModelResource):
         if is_iphone_version_1(request):
             Radio.objects.get_or_create(creator=user)
 
+        account_signals.new_account.send(sender=user_profile, user=user)
+
         radio = Radio.objects.radio_for_user(user)
         if radio is not None:
             radio.create_name(user)
 
         return user_resource
+
 
 class LoginResource(ModelResource):
     class Meta:
@@ -260,7 +257,7 @@ class LoginResource(ModelResource):
         authentication = YasoundBasicAuthentication()
 
     def dehydrate(self, bundle):
-        userID = bundle.data['id'];
+        userID = bundle.data['id']
         user = User.objects.get(pk=userID)
         userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
@@ -283,17 +280,18 @@ def build_random_username():
             build_random_username()
         return candidate
 
+
 def _download_facebook_profile(token):
     facebook_profile = json.load(urllib.urlopen("https://graph.facebook.com/me?" + urllib.urlencode(dict(access_token=token))))
     if not facebook_profile:
         logger.error('cannot communicate with facebook')
         return None
 
-    if facebook_profile.has_key('error'):
-        logger.error('cannot communicate with facebook: %s' %(facebook_profile['error']))
+    if 'error' in facebook_profile:
+        logger.error('cannot communicate with facebook: %s' % (facebook_profile['error']))
         return None
 
-    if not facebook_profile.has_key('id'):
+    if 'id' not in facebook_profile:
         logger.error('no "id" attribute in facebook profile')
         logger.error(facebook_profile)
         return None
@@ -312,7 +310,7 @@ class SocialAuthentication(Authentication):
 
         # Application Cookie authentication:
         cookies = request.COOKIES
-        if not cookies.has_key(account_settings.APP_KEY_COOKIE_NAME):
+        if account_settings.APP_KEY_COOKIE_NAME not in cookies:
             logger.error('no cookies')
             return False
         if cookies[account_settings.APP_KEY_COOKIE_NAME] != account_settings.APP_KEY_IPHONE:
@@ -327,7 +325,7 @@ class SocialAuthentication(Authentication):
         EXPIRATION_DATE = 'expiration_date'
 
         params = request.GET
-        if not (params.has_key(ACCOUNT_TYPE_PARAM_NAME) and params.has_key(UID_PARAM_NAME) and params.has_key(TOKEN_PARAM_NAME) and params.has_key(NAME_PARAM_NAME)):
+        if not (ACCOUNT_TYPE_PARAM_NAME in params and UID_PARAM_NAME in params and TOKEN_PARAM_NAME in params and NAME_PARAM_NAME in params):
             logger.error('missing informations')
             return False
 
@@ -336,7 +334,7 @@ class SocialAuthentication(Authentication):
         token = params[TOKEN_PARAM_NAME]
         name = params[NAME_PARAM_NAME]
         email = None
-        if params.has_key(EMAIL_PARAM_NAME):
+        if EMAIL_PARAM_NAME in params:
             email = params[EMAIL_PARAM_NAME]
 
         expiration_date = params.get(EXPIRATION_DATE)
@@ -398,6 +396,7 @@ class SocialAuthentication(Authentication):
                 except:
                     pass
 
+                account_signals.new_account.send(sender=profile, user=user)
                 request.user = user
 
                 if is_iphone_version_1(request):
@@ -410,7 +409,7 @@ class SocialAuthentication(Authentication):
                 authenticated = True
         elif account_type in account_settings.ACCOUNT_TYPES_TWITTER:
             TOKEN_SECRET_PARAM_NAME = 'token_secret'
-            if not params.has_key(TOKEN_SECRET_PARAM_NAME):
+            if TOKEN_SECRET_PARAM_NAME not in params:
                 return False
 
             token_secret = params[TOKEN_SECRET_PARAM_NAME]
@@ -454,6 +453,7 @@ class SocialAuthentication(Authentication):
                 profile.update_with_social_picture()
 
                 request.user = user
+                account_signals.new_account.send(sender=profile, user=user)
 
                 if is_iphone_version_1(request):
                     Radio.objects.get_or_create(creator=user)
@@ -465,11 +465,11 @@ class SocialAuthentication(Authentication):
         else:
             return False
 
-
         if authenticated:
             profile.logged(request)
 
         return authenticated
+
 
 class LoginSocialResource(ModelResource):
     class Meta:
@@ -480,9 +480,8 @@ class LoginSocialResource(ModelResource):
         allowed_methods = ['get']
         authentication = SocialAuthentication()
 
-
     def dehydrate(self, bundle):
-        userID = bundle.data['id'];
+        userID = bundle.data['id']
         user = User.objects.get(pk=userID)
         userprofile = user.get_profile()
         userprofile.fill_user_bundle(bundle, include_own_current_radios=True)
