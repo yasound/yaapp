@@ -145,11 +145,15 @@ Yasound.Views.GiftsPage = Backbone.View.extend({
 Yasound.Views.GiftsPopup = Backbone.View.extend({
     gifts: new Yasound.Data.Models.Gifts({}),
     events: {
-
+        "keypress #hd-promocode input"    : 'onPromocode',
+        "click #hd-checkbox"              : "onHD"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'onHD');
+        $('#hd-checkbox-container').toggleButtons({
+            onChange: this.onHD
+        });
     },
 
     onClose: function() {
@@ -165,6 +169,7 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
 
     render: function() {
         this.reset();
+
         if (!this.giftsView) {
             this.giftsView = new Yasound.Views.Gifts({
                 collection: this.gifts,
@@ -174,5 +179,50 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
         this.giftsView.clear();
         this.query = this.gifts.fetch();
         return this;
-    }
+    },
+
+    onHD: function (e, checked) {
+        if ((typeof checked === "undefined")) {
+            checked = $(e.target).attr('checked');
+        }
+        if (checked) {
+            $('#hd-button').removeClass('hd-disabled').addClass('hd-enabled');
+        } else {
+            $('#hd-button').removeClass('hd-enabled').addClass('hd-disabled');
+        }
+        Yasound.App.player.setHD(checked);
+    },
+
+    onPromocode: function (e) {
+        if (e.keyCode != 13) {
+            return;
+        }
+
+        var value = $('#hd-promocode input', this.el).val();
+        if (!value) {
+            return;
+        }
+
+        var url = '/api/v1/premium/activate_promocode/';
+        $.ajax({
+            url: url,
+            data: {
+                code: value
+            },
+            dataType: 'json',
+            type: 'POST',
+            success: function(data) {
+                if (!data.success) {
+                    Yasound.Utils.dialog(gettext('Invalid code'), gettext('The provided code is invalid.'));
+                } else {
+                    Yasound.Utils.dialog(gettext('Code validated'), gettext('Your code is now validated, your gift will be available soon.'));
+                }
+            },
+            failure: function() {
+
+            }
+        });
+
+    },
+
 });
