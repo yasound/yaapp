@@ -660,6 +660,17 @@ CLIENT_ADDRESS_PARAM_NAME = 'address'
 def start_listening_to_radio(request, radio_uuid):
     check_api_key_Authentication(request)
 
+    user_id = request.REQUEST.get('user_id')
+    if user_id is not None:
+        try:
+            user = User.objects.get(id=user_id)
+            profile = user.get_profile()
+            if profile:
+                profile.authenticated()
+            request.user = user
+        except:
+            pass
+
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)
 
@@ -680,6 +691,16 @@ def start_listening_to_radio(request, radio_uuid):
 @csrf_exempt
 def stop_listening_to_radio(request, radio_uuid):
     check_api_key_Authentication(request)
+    user_id = request.REQUEST.get('user_id')
+    if user_id is not None:
+        try:
+            user = User.objects.get(id=user_id)
+            profile = user.get_profile()
+            if profile:
+                profile.authenticated()
+            request.user = user
+        except:
+            pass
 
     if not check_http_method(request, ['post']):
         return HttpResponse(status=405)

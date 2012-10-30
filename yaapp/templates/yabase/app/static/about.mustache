@@ -1,52 +1,59 @@
 {% load i18n %}
-<div class='row'>
-    <div class='span12'>
-        <h2>{% trans "YaSound, the number one socials radios platform." %}</h2>
-        <br/>
+<div class='row common-background' id='about'>
+    <div class='span12 no-margin'>
+        <h1>{% trans "YaSound, the number one socials radios platform." %}</h1>
+        <div class='separation-line'></div>
+    </div>
+    <div class='span12 no-margin visible-desktop' id='header'>
+        <div id='headline'>
+            <p>{% trans "<strong>YasSound</strong> is a new service that lets you <br/> create <strong>your own radio station</strong> in <br/>just a few clicks and share it with your friends in real time." %}</p>
+        </div>
     </div>
 
-</div>
-
-<div class='row'>
-    <div class='span3'>
-        <div class="data" style="margin-right: 70px; width: 217px;" id="JM">
-            <img src="/media/yaweb/images/Jean-Marc_Plueger.jpg" width="217"
-                height="297" alt="Jean-Marc_Plueger" />
-            <h3>Jean-Marc_Plueger</h3>
-            {% blocktrans %}CEO, Co-Founder <br/> <br/> Jean-Marc founded
+    <div class='span3' id='jmp'>
+        <div>
+            <img src="/media/app/images/about/jmp.png" width="186"
+                height="252" alt="Jean-Marc_Plueger" />
+            <h3>Jean-Marc Plueger</h3>
+            <h4>{% trans "CEO, Co-Founder" %}</h4>
+            <p>{% blocktrans %}Jean-Marc founded
             the web agency CSTech and Jiwa, a music-on-demand website. <br/>
             When he's not founding startups, Jean-Marc loves to travel.
-            {% endblocktrans %}
+            {% endblocktrans %}</p>
         </div>
-    </div>
 
-    <div class='span3'>
-        <div class="data" style="margin-right: 105px; width: 217px;" id="Seb">
-            <img src="/media/yaweb/images/Sebastien_Metrot.jpg" width="217"
-                height="297" alt="Sébastien Métrot" />
+    </div>
+    <div class='span3' id='seb'>
+        <div>
+            <img src="/media/app/images/about/sme.png" width="186"
+                height="252" alt="Sébastien Métrot" />
             <h3>Sébastien Métrot</h3>
-            {% blocktrans %}CTO, Co-Founder<br /><br />
+            <h4>{% trans "CTO, Co-Founder" %}</h4>
+            <p>{% blocktrans %}
   After developing music software and providing audio R&amp;D for video game publishers, Sébastien joined MXP4 where he became Senior Director of Technology. <br />
   When he's not coding in C++, Sébastien plays music and studies Asian languages.
-            {% endblocktrans %}
+            {% endblocktrans %}</p>
         </div>
-    </div>
 
-    <div class='span1'>
-        &nbsp;
     </div>
-
-    <div class='span5'>
-        <div class="data" style="width: 360px; vertical-align: middle;"
-            id="descriptif">
+    <div class='span6' id='descriptif'>
+            <div id='text'>
             {% blocktrans %}
             <p>Listen to thousand of radios on the web and on mobile. Chat in real time with your friends. Create freely and easily your own radio, broadcasted everywhere, 24 hours a day, 7 days per week. Everything is available now with YaSound.
-<br/><br/>It is free, it is ad-free, it is convenient, it is magic.. It is Yasound.<br/><br/>
+<br/>It is free, it is ad-free, it is convenient, it is magic.. It is Yasound.<br/>
     <p>Yasound was founded in 2011 by Jean-Marc Plueger and Sébastien Métrot. </p>
             {% endblocktrans %}
-        </div>
+            </div>
+            <div class='visible-desktop'>
+            <h3>Video YaSound 2012</h3>
+            <h4>FlashMob Paris</h4>
+
+            <iframe width="370" height="222" src="http://www.youtube.com/embed/XML4P45YAd4" frameborder="0" allowfullscreen></iframe>
+            </div>
 
     </div>
 </div>
+
+
 
 
