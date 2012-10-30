@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 16:33+0100\n"
+"POT-Creation-Date: 2012-10-30 15:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1862,10 +1862,75 @@ msgstr "\n"
 "        "
 
 #: templates/yabase/app/static/about.mustache:4
+#: templates/yabase/app/static/about.mustache:60
 msgid "YaSound, the number one socials radios platform."
 msgstr "YaSound, la plateforme de radios sociales numéro un."
 
-#: templates/yabase/app/static/about.mustache:16
+#: templates/yabase/app/static/about.mustache:9
+msgid ""
+"<strong>YasSound</strong> is a new service that lets you <br/> create "
+"<strong>your own radio station</strong> in <br/>just a few clicks and share "
+"it with your friends in real time."
+msgstr "<strong>Yasound</strong> est un nouveau service qui vous<br/>permet de créer <strong>votre radio musicale</strong> en<br/> un instant et d'échanger en temps réel avec vos amis."
+
+#: templates/yabase/app/static/about.mustache:18
+msgid "CEO, Co-Founder"
+msgstr "Cofondateur, Président"
+
+#: templates/yabase/app/static/about.mustache:19
+msgid ""
+"Jean-Marc founded\n"
+"            the web agency CSTech and Jiwa, a music-on-demand website. <br/"
+">\n"
+"            When he's not founding startups, Jean-Marc loves to travel.\n"
+"            "
+msgstr "Jean-Marc a fondé la webagency CSTech et "
+"le site de musique à la demande Jiwa.<br />A part créer des startups, il "
+"aime bien aussi voyager..."
+
+#: templates/yabase/app/static/about.mustache:31
+msgid "CTO, Co-Founder"
+msgstr "Cofondateur, Directeur Technique"
+
+#: templates/yabase/app/static/about.mustache:32
+msgid ""
+"\n"
+"  After developing music software and providing audio R&amp;D for video game "
+"publishers, Sébastien joined MXP4 where he became Senior Director of "
+"Technology. <br />\n"
+"  When he's not coding in C++, Sébastien plays music and studies Asian "
+"languages.\n"
+"            "
+msgstr "\nAprès avoir développé de "
+"nombreux logiciels de musique et assuré la R&D audio d'éditeurs de jeux "
+"vidéos, il rejoint la startup MXP4 où il devient Senior Director of "
+"Technology.<br />Quand il ne code pas en C++, il pratique les langues "
+"orientales et la musique."
+
+#: templates/yabase/app/static/about.mustache:41
+msgid ""
+"\n"
+"            <p>Listen to thousand of radios on the web and on mobile. Chat "
+"in real time with your friends. Create freely and easily your own radio, "
+"broadcasted everywhere, 24 hours a day, 7 days per week. Everything is "
+"available now with YaSound.\n"
+"<br/>It is free, it is ad-free, it is convenient, it is magic.. It is "
+"Yasound.<br/>\n"
+"    <p>Yasound was founded in 2011 by Jean-Marc Plueger and Sébastien "
+"Métrot. </p>\n"
+"            "
+msgstr "\n"
+"            <p>Ecouter des milliers de radios sur le web et sur son mobile. "
+"Discuter en temps réel avec ses amis. Créer gratuitement, facilement et "
+"légalement sa propre radio, diffusée partout 24h/24 et 7J/7. Tout cela est "
+"maintenant possible avec YaSound.\n"
+"<br/>C'est gratuit, c'est sans pub, c'est pratique, c'est magique... "
+"C'est YaSound.<br/>\n"
+"    <p>YaSound a été fondé en 2011 par Jean-Marc Plueger et Sébastien "
+"Métrot. </p>\n"
+"            "
+
+#: templates/yabase/app/static/about.mustache:72
 msgid ""
 "CEO, Co-Founder <br/> <br/> Jean-Marc founded\n"
 "            the web agency CSTech and Jiwa, a music-on-demand website. <br/"
@@ -1876,7 +1941,7 @@ msgstr "Cofondateur, Président<br /><br />Jean-Marc a fondé la webagency CSTec
 "le site de musique à la demande Jiwa.<br />A part créer des startups, il "
 "aime bien aussi voyager..."
 
-#: templates/yabase/app/static/about.mustache:28
+#: templates/yabase/app/static/about.mustache:84
 msgid ""
 "CTO, Co-Founder<br /><br />\n"
 "  After developing music software and providing audio R&amp;D for video game "
@@ -1891,7 +1956,7 @@ msgstr " Cofondateur, Directeur Technique<br /><br />Après avoir développé de
 "Technology.<br />Quand il ne code pas en C++, il pratique les langues "
 "orientales et la musique."
 
-#: templates/yabase/app/static/about.mustache:42
+#: templates/yabase/app/static/about.mustache:98
 msgid ""
 "\n"
 "            <p>Listen to thousand of radios on the web and on mobile. Chat "
