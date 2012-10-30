@@ -468,10 +468,10 @@ def new_user_profile_handler(sender, user, **kwargs):
         return
 
     if profile.yasound_enabled:
-        async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, instance.user.email)
+        async_check_for_invitation.delay(InvitationsManager.TYPE_EMAIL, user.email)
         async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_EMAIL_ACCOUNT, dont_give_anything=True)
     if profile.facebook_enabled:
-        async_check_for_invitation.delay(InvitationsManager.TYPE_FACEBOOK, instance.facebook_uid)
+        async_check_for_invitation.delay(InvitationsManager.TYPE_FACEBOOK, profile.facebook_uid)
         async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_FACEBOOK_ACCOUNT, dont_give_anything=True)
     if profile.twitter_enabled:
         async_win_gift.delay(user_id=user.id, action=yapremium_settings.ACTION_ADD_TWITTER_ACCOUNT, dont_give_anything=True)
