@@ -4570,6 +4570,18 @@ a.yabutton-small {
     font-weight:200;
 }
 
+#about #about-footer {
+    margin-top:12px;
+    background: url('../app/images/about/footer.png') no-repeat;
+    height:97px;
+    background-size: 100% 100%;
+    width:100%;
+}
+#about {
+    padding-bottom:0;
+    background: url('../app/images/about/background.png');
+}
+
 /* Landscape phones and down */
 @media (max-width: 480px)  {
 
