@@ -137,6 +137,9 @@ Yasound.Views.UserCell = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.userCellTemplate(data));
+        if (data.connected) {
+            $(this.el).addClass('user-connected');
+        }
         return this;
     },
 
