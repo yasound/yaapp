@@ -941,7 +941,8 @@ if TEST_MODE:
     MOST_POPULAR_SONG_COLLECTION_SIZE = 5
 
 ANONYMOUS_ACCESS_ALLOWED = True # access to webapp
-
+if DEVELOPMENT_MODE:
+    ANONYMOUS_ACCESS_ALLOWED = False
 MAX_RADIO_PER_USER = 4000
 
 DEEZER_CONNECT_URL = 'https://connect.deezer.com/oauth/access_token.php'
