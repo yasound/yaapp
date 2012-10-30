@@ -35,6 +35,7 @@ from django.db.models import F
 from django.template.defaultfilters import striptags
 from yageoperm.models import Country
 from django.utils.html import urlize
+from yametadata.kfm import find_metadata as kfm_find_metadata
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -115,6 +116,10 @@ class SongInstanceManager(models.Manager):
             if radio.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
                 radioways_radio = radio.radioways_radio
                 song_dict = radioways_radio.current_song
+                song_json = json.dumps(song_dict)
+                return song_json
+            elif radio.origin == yabase_settings.RADIO_ORIGIN_KFM:
+                song_dict = kfm_find_metadata()
                 song_json = json.dumps(song_dict)
                 return song_json
 

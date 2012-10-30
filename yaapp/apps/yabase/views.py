@@ -34,7 +34,7 @@ from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method, absolute_url
+from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone
 from yacore.geoip import request_country
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
@@ -177,7 +177,12 @@ def radio_recommendations_process(request, internal=False, genre=''):
     qs = Radio.objects.ready_objects()
     if genre != '':
         qs = qs.filter(genre=genre)
-    selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
+
+    if is_iphone(request):
+        selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).exclude(origin=yabase_settings.RADIO_ORIGIN_KFM).order_by('featuredradio__order').all()
+    else:
+        selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
+
     selection_radios = list(selection_radios)
     # limit the number of editorial radios
     # shuffle the list in order not to choose always the same radios
@@ -1954,6 +1959,9 @@ def most_active_radios(request, internal=False, genre=''):
         qs = Radio.objects
 
     qs = qs.exclude(deleted=True)
+    if is_iphone(request):
+        qs = qs.exclude(origin=yabase_settings.RADIO_ORIGIN_KFM)
+
     total_count = qs.count()
     radios = qs.order_by('-popularity_score', '-favorites')[skip:(skip + limit)]
 
