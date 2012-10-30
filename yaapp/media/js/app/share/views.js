@@ -72,7 +72,11 @@ Yasound.Views.Share = Backbone.View.extend({
     onFacebookShare: function (e) {
         e.preventDefault();
         var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
-        var name = this.radio.get('name') +  ' ' + gettext('by') + ' ' + this.radio.get('creator')['name'];
+        var name = this.radio.get('name');
+        var creatorName = this.radio.get('creator')['name'];
+        if (creatorName !== '') {
+            name =  name +  ' ' + gettext('by') + ' ' + this.radio.get('creator')['name'];
+        }
         var obj = {
             method: 'feed',
             display: 'popup',
