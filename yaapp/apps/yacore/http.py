@@ -41,6 +41,12 @@ def is_iphone_version_2(request):
         return True
     return False
 
+def is_iphone(request):
+    """return True if request is made with iOS
+    """
+    app_version = request.REQUEST.get('app_version')
+    if app_version:
+        return True
 
 def coerce_put_post(request):
     """
