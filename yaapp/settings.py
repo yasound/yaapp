@@ -389,6 +389,7 @@ INSTALLED_APPS = (
     'yapremium',
     'yadeezer',
     'yageoperm',
+    'yacore',
     # newsletter,
     #'tinymce',
     'tagging',

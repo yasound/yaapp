@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-24 15:42+0200\n"
+"POT-Creation-Date: 2012-10-31 13:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: api.py:198
+#: api.py:191
 msgid "Empty data"
 msgstr "Aucune donnée"
 
-#: api.py:206
+#: api.py:199
 msgid "A user already exists with this email"
 msgstr "Un utilisateur existe déjà avec cet email"
 
-#: api.py:209
+#: api.py:202
 msgid "A user already exists with this username"
 msgstr "Un utilisateur existe déjà avec cet identifiant"
 
@@ -125,7 +125,7 @@ msgstr "Cet email est déjà pris. Veuillez en choisir un autre."
 
 #: forms.py:136
 msgid "Referal"
-msgstr ""
+msgstr "Référent"
 
 #: forms.py:139
 msgid "Password confirmation"
@@ -187,7 +187,7 @@ msgid "The two password fields didn't match."
 msgstr "Les deux mots de passe ne correspondent pas."
 
 #: models.py:188
-#: models.py:1544
+#: models.py:1560
 msgid "user"
 msgstr "utilisateur"
 
@@ -287,78 +287,78 @@ msgstr "amis"
 msgid "last authentication date"
 msgstr "dernière date d'authentification"
 
-#: models.py:327
+#: models.py:343
 msgid "Cannot communicate with facebook"
 msgstr "Impossible de communiquer avec Facebook"
 
-#: models.py:330
-#: models.py:334
-#: models.py:338
+#: models.py:346
+#: models.py:350
+#: models.py:354
 msgid "Cannot get informations from facebook"
 msgstr "Impossible de récupérer les informations auprès de Facebook"
 
-#: models.py:341
+#: models.py:357
 msgid "Facebook identification mismatch"
 msgstr "Erreur d'identification Facebook"
 
-#: models.py:345
+#: models.py:361
 msgid "The Facebook account is already attached to another account."
 msgstr "Le compte facebook est actuellement attaché à un autre compte."
 
-#: models.py:368
-#: models.py:389
-#: models.py:428
-#: models.py:449
-#: models.py:468
-#: models.py:488
+#: models.py:384
+#: models.py:405
+#: models.py:444
+#: models.py:465
+#: models.py:484
+#: models.py:504
 #: views.py:438
 #: views.py:472
 msgid "OK"
 msgstr "OK"
 
-#: models.py:372
-#: models.py:432
-#: models.py:472
+#: models.py:388
+#: models.py:448
+#: models.py:488
 msgid "This is the last account, removal is impossible"
 msgstr "C'est le dernier compte, retrait impossible"
 
-#: models.py:398
+#: models.py:414
 msgid "Cannot communicate with Twitter"
 msgstr "Impossible de communiquer avec Twitter"
 
-#: models.py:401
+#: models.py:417
 msgid "Twitter account mismatch"
 msgstr "Compte twitter différent"
 
-#: models.py:405
+#: models.py:421
 msgid "The twitter account is already attached to another account."
 msgstr "Le compte twitter est déjà associé à un autre compte."
 
-#: models.py:454
+#: models.py:470
 msgid "An account already exists with this email"
 msgstr "Un compte existe déjà avec cet email"
 
-#: models.py:1545
+#: models.py:1561
 msgid "ios device uuid"
 msgstr "ios mobile uuid"
 
-#: models.py:1546
+#: models.py:1562
 msgid "ios device token"
 msgstr "iods mobile token"
 
-#: models.py:1547
+#: models.py:1563
 msgid "ios token type"
 msgstr "type de token ios"
 
-#: models.py:1548
+#: models.py:1564
 msgid "registration date"
 msgstr "date d'inscription"
 
-#: models.py:1549
+#: models.py:1565
 msgid "ios application identifier"
 msgstr "identifiant d'application ios"
 
-#: models.py:1552
+#: models.py:1568
 msgid "device"
 msgstr "périphérique"
 
@@ -451,39 +451,45 @@ msgstr "Le fichier est trop petit"
 msgid "The file format is not supported"
 msgstr "Le format de fichier n'est pas supporté"
 
-#: views.py:790
-#, fuzzy
-msgid "no emails provided"
-msgstr "email confirmé"
+#: views.py:796
+msgid "cannot decode contacts"
+msgstr "impossible de décoder les contacts"
 
-#: views.py:805
+#: views.py:810
 msgid "Join me on YaSound"
 msgstr "Rejoins moi sur YaSound"
 
-#: views.py:806
+#: views.py:811
 #, python-format
 msgid "Join me on YaSound: %(referal)s"
 msgstr "Rejoins moi sur YaSound: %(referal)s"
 
-#: views.py:809
+#: views.py:814
 msgid ""
 "With Yasound, there's no need to listen to music alone anymore. Create your "
 "own radio station instantly and share with your friends in real time online "
 "and on your phone."
-msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel sur votre mobile et sur le net."
+msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
+"amis, et communiquez avec eux en temps réel sur votre mobile et sur le net."
 
-#: views.py:831
-#, fuzzy
+#: views.py:832
 msgid "no facebook ids provided"
-msgstr "uid facebook"
+msgstr "pad d'identifiant facebook fourni"
 
-#: views.py:850
-#, fuzzy
+#: views.py:851
 msgid "no twitter account associated"
-msgstr "Compte twitter différent"
+msgstr "pas de compte twitter associé"
 
-#: views.py:881
-#, fuzzy
+#: views.py:882
 msgid "no email provided"
-msgstr "email confirmé"
+msgstr "aucun email fourni"
+
+#: views.py:887
+msgid "no message"
+msgstr "aucun message"
+
+#: views.py:894
+#, python-format
+msgid "Message from %(name)s:%(subject)s"
+msgstr "Message de la part de %(name)s : %(subject)s"
 
