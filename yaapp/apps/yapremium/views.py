@@ -2,7 +2,7 @@ from models import Subscription, UserSubscription, UserService, Gift, Promocode
 from models import check_for_missed_gifts
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
-from yacore.api import api_response
+from yacore.api import api_response, api_response_raw
 from yacore.decorators import check_api_key
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404, HttpResponse
@@ -58,18 +58,31 @@ def subscriptions(request, subscription_sku=None):
 
 @csrf_exempt
 @check_api_key(methods=['GET', 'POST'])
-def services(request, subscription_sku=None):
+def services(request, stype=None):
     if request.method == 'GET':
-        limit = int(request.REQUEST.get('limit', 25))
-        offset = int(request.REQUEST.get('offset', 0))
-        qs = UserService.objects.filter(user=request.user)
-        total_count = qs.count()
-        qs = qs[offset:offset + limit]
-        data = []
-        for us in qs:
-            data.append(us.as_dict())
-        response = api_response(data, total_count, limit=limit, offset=offset)
-        return response
+        if stype is None:
+            limit = int(request.REQUEST.get('limit', 25))
+            offset = int(request.REQUEST.get('offset', 0))
+            qs = UserService.objects.filter(user=request.user)
+            total_count = qs.count()
+            qs = qs[offset:offset + limit]
+            data = []
+            for us in qs:
+                data.append(us.as_dict())
+            response = api_response(data, total_count, limit=limit, offset=offset)
+            return response
+        else:
+            us = None
+            try:
+                us = UserService.objects.get(user=request.user, service__stype=stype)
+            except UserService.DoesNotExist:
+                res = {'success': False, 'message': unicode(_('Unknown service'))}
+                response = json.dumps(res)
+                return HttpResponse(response)
+
+            data = us.as_dict()
+            response = api_response_raw(data)
+            return HttpResponse(response)
     raise Http404
 
 

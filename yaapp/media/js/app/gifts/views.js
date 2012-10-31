@@ -150,7 +150,7 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onHD');
+        _.bindAll(this, 'render', 'onHD', 'onServiceFetched');
         $('#hd-checkbox-container').toggleButtons({
             onChange: this.onHD
         });
@@ -169,6 +169,14 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
 
     render: function() {
         this.reset();
+
+        if (Yasound.App.userAuthenticated) {
+            var that = this;
+            this.service = new Yasound.Data.Models.ServiceHD();
+            this.service.fetch({
+                success: that.onServiceFetched
+            });
+        }
 
         if (!this.giftsView) {
             this.giftsView = new Yasound.Views.Gifts({
@@ -225,4 +233,11 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
 
     },
 
+    onServiceFetched: function (service) {
+        if (service && service.get('expiration_date')) {
+            var expirationDate = moment(service.get('expiration_date')).format('LL');
+            var formattedString = '(' + gettext('enabled until') + ' ' + expirationDate + ')';
+            $('span#hd-expiration-date').html(formattedString);
+        }
+    }
 });

@@ -13,6 +13,7 @@ from utils import verify_receipt, generate_code_name
 from yabase.models import Radio
 import json
 
+
 class TestModel(TestCase):
     def setUp(self):
         user = User(email="test@yasound.com", username="test", is_superuser=True, is_staff=True)
@@ -117,6 +118,25 @@ class TestView(TestCase):
         item = data.get('objects')[0]
         self.assertTrue(item.get('enabled'))
         self.assertEquals(item.get('name'), 'gift for anonymous')
+
+    def test_services(self):
+        service = Service.objects.create(stype=yapremium_settings.SERVICE_HD)
+        res = self.client.get(reverse('yapremium.views.services'))
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('meta').get('total_count'), 0)
+
+        UserService.objects.create(user=self.user, service=service)
+
+        res = self.client.get(reverse('yapremium.views.services'))
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('meta').get('total_count'), 1)
+
+        res = self.client.get(reverse('yapremium.views.services', args=[yapremium_settings.SERVICE_HD]))
+        self.assertEquals(res.status_code, 200)
+        data = json.loads(res.content)
+        self.assertEquals(data.get('service_type'), 0)
 
 
 class TestGift(TestCase):

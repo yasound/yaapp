@@ -6,6 +6,7 @@ from django.utils import simplejson
 
 class MongoAwareEncoder(DjangoJSONEncoder):
     """JSON encoder class that adds support for Mongo objectids."""
+
     def default(self, o):
         if isinstance(o, objectid.ObjectId):
             return str(o)
@@ -15,12 +16,12 @@ class MongoAwareEncoder(DjangoJSONEncoder):
             return super(MongoAwareEncoder, self).default(o)
 
 def api_response(data, total_count=None, limit=None, offset=0, next_url=None, previous_url=None):
-    """
-    return standardized response with the following example scheme :
+    """return standardized response with the following example scheme::
 
     {"meta": {"previous": null, "total_count": 2, "offset": 2, "limit": 2, "next": null}, "objects": []}
 
     """
+
     if type(data) == type([]):
         if total_count is None:
             total_count = len(data)
@@ -44,5 +45,8 @@ def api_response(data, total_count=None, limit=None, offset=0, next_url=None, pr
         return HttpResponse(json_response, mimetype='application/json')
 
 def api_response_raw(data):
+    """return data in json format, with encoder aware of datetime
+    """
+
     json_response = simplejson.dumps(data, cls=MongoAwareEncoder)
     return HttpResponse(json_response, mimetype='application/json')
