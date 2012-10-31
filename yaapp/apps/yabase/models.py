@@ -238,8 +238,8 @@ class SongInstance(models.Model):
                 large_cover = song.album.large_cover_url
 
         if cover is None:
-            cover = '/media/images/default_album.png'
-            large_cover = '/media/images/default_album.png'
+            cover = '/media/images/default_album.jpg'
+            large_cover = '/media/images/default_album.jpg'
         desc_dict['cover'] = cover
         desc_dict['large_cover'] = large_cover
 
@@ -1601,7 +1601,7 @@ class WallEvent(models.Model):
     def song_cover_url(self):
         if self.song_cover_filename:
             return YasoundSong.objects.get_cover_url(self.song_cover_filename)
-        return '/media/images/default_album.png'
+        return '/media/images/default_album.jpg'
 
 
 
@@ -1609,7 +1609,7 @@ class WallEvent(models.Model):
     def song_large_cover_url(self):
         if self.song_cover_filename:
             return YasoundSong.objects.get_cover_url(self.song_cover_filename, size='210x210')
-        return '/media/images/default_album.png'
+        return '/media/images/default_album.jpg'
 
 
 
