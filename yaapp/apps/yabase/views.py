@@ -706,7 +706,10 @@ def stop_listening_to_radio(request, radio_uuid):
         return HttpResponse(status=405)
 
     LISTENING_DURATION_PARAM_NAME = 'listening_duration'
-    listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
+    try:
+        listening_duration = int(request.GET.get(LISTENING_DURATION_PARAM_NAME, 0))
+    except:
+        listening_duration = 0
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     radio.user_stopped_listening(request.user, listening_duration)
