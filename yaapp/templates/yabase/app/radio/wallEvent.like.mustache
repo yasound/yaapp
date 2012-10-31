@@ -3,7 +3,7 @@
 	<div class='radio-picto'>
                 {% if wall_event %}
 				<a href='{{ root }}radio/{{ wall_event.radio_uuid }}/'>
-                <img src='{{ wall_event.song_cover_url|default:'/media/images/default_album.png' }}' width='32px' height='32px' alt='Radio picto'/>
+                <img src='{{ wall_event.song_cover_url|default:'/media/images/default_album_small.png' }}' width='32px' height='32px' alt='Radio picto'/>
 				</a>
                 {% else %}
                 <a href='{{ root }}radio/<% radio_uuid %>/'>
@@ -11,7 +11,7 @@
                   <img src="<% song_cover_url %>" width="32" height="32" alt="Song Picto">
                   <%/song_cover_url%>
                   <%^song_cover_url %>
-                  <img src='/media/images/default_album.png' width='32px' height='32px'/>
+                  <img src='/media/images/default_album_small.png' width='32px' height='32px'/>
                   <%/song_cover_url%>
                 </a>
                 {% endif %}
