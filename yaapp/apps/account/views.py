@@ -27,13 +27,13 @@ from tastypie.http import HttpBadRequest
 from yacore.api import api_response
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
+from yacore.mail import send_mail
 import json
 import logging
 import settings as account_settings
 import yabase.settings as yabase_settings
 import uuid
 import tweepy
-from django.core.mail import send_mail
 from yabase.models import WallEvent
 from yacore.http import absolute_url
 
@@ -874,8 +874,8 @@ def invite_twitter_friends(request):
 @check_api_key(methods=['POST', ], login_required=True)
 def invite_email_friends(request):
     data = json.loads(request.raw_post_data)
-    message = data.get('message')
-    subject = data.get('subject')
+    message = data.get('message', '')
+    subject = data.get('subject', '')
     emails = data.get('recipients')
 
     if emails is None:
@@ -883,11 +883,19 @@ def invite_email_friends(request):
         response_data = json.dumps(response)
         return HttpResponse(response_data)
 
+    if message == '':
+        response = {'success': False, 'error': unicode(_('no message'))}
+        response_data = json.dumps(response)
+        return HttpResponse(response_data)
+
+
     friends = emails.split(',')
-    for email in friends[:3]:
+
+    subject = _('Message from %(name)s:%(subject)s') % {'name': request.user.get_profile(), 'subject': "".join(subject.splitlines()) }
+
+    for email in friends[:50]:
         email = email.strip()
-        subject = "".join(subject.splitlines())
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+        send_mail(subject=subject, content=message, from_email=settings.DEFAULT_FROM_EMAIL, to=email)
 
     response = {'success': True}
     response_data = json.dumps(response)
