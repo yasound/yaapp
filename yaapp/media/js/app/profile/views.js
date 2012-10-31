@@ -29,7 +29,12 @@ Yasound.Views.User = Backbone.View.extend({
         }
 
         $(this.el).html(ich.userTemplate(data));
-        $('#picture img', this.el).imgr({size:"6px",color:"white",radius:"100%"});
+
+        var color = 'white';
+        if (data.connected && !data.owner) {
+            color = '#5aabda';
+        }
+        $('#picture img', this.el).imgr({size:"6px",color:color,radius:"100%"});
         return this;
     },
 
