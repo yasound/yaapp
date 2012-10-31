@@ -124,7 +124,7 @@
     <div id="hd-button" class='<%#hd%>hd-enabled<%/hd%><%^hd%>hd-disabled<%/hd%>'>
        <div id='hd-box-container' style='display:none;'>
         <div id='hd-status'>
-          <label for='hd-checkbox'>{% trans "HD" %} {% if hd_expiration_date %}({% trans "enabled until" %} {{ hd_expiration_date|date:"DATE_FORMAT" }}) {% endif %}</label>
+          <label for='hd-checkbox'>{% trans "HD" %}  <span id='hd-expiration-date'>{% if hd_expiration_date %}({% trans "enabled until" %} {{ hd_expiration_date|date:"DATE_FORMAT" }})</span> {% endif %}</label>
             <div id="hd-checkbox-container">
                 <input type='checkbox' id='hd-checkbox' {% if hd_enabled %}checked='checked'{% else %}disabled=""{% endif %}>
             </div>

@@ -309,8 +309,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         "click #favorite-radio": "favorite",
         "hover #hd-button": "displayPopupHD",
         "mouseleave #hd-button": "hidePopupHD",
-        "keypress #hd-promocode input"    : 'onPromocode',
-        "click #hd-checkbox": "onHD",
         "click #player-title span": "displayRadio",
         "click #radio-title span": "displayRadio"
     },
@@ -324,7 +322,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             'onPlayerPlay',
             'onPlayerStop',
             'hidePopupHD',
-            'onHD',
             'displayPopupHD',
             'onShare');
     },
@@ -398,12 +395,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
 
         this.giftsPopup = new Yasound.Views.GiftsPopup({
-            el: '#hd-box-container #gifts-container'
-        });
-
-
-        $('#hd-checkbox-container').toggleButtons({
-            onChange: this.onHD
+            el: '#hd-box-container'
         });
 
         $('#modal-share').on('show', this.onShare);
@@ -495,18 +487,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }, 300);
     },
 
-    onHD: function (e, checked) {
-        if ((typeof checked === "undefined")) {
-            checked = $(e.target).attr('checked');
-        }
-        if (checked) {
-            $('#hd-button').removeClass('hd-disabled').addClass('hd-enabled');
-        } else {
-            $('#hd-button').removeClass('hd-enabled').addClass('hd-disabled');
-        }
-        Yasound.App.player.setHD(checked);
-    },
-
     onShare: function (e) {
         // hide social buttons if current song is empty
         if (this.model.get('id')) {
@@ -522,38 +502,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         } else {
             Yasound.Utils.dialog(gettext('Error'), gettext('Nothing to share'));
         }
-    },
-
-    onPromocode: function (e) {
-        if (e.keyCode != 13) {
-            return;
-        }
-
-        var value = $('#hd-promocode input', this.el).val();
-        if (!value) {
-            return;
-        }
-
-        var url = '/api/v1/premium/activate_promocode/';
-        $.ajax({
-            url: url,
-            data: {
-                code: value
-            },
-            dataType: 'json',
-            type: 'POST',
-            success: function(data) {
-                if (!data.success) {
-                    Yasound.Utils.dialog(gettext('Invalid code'), gettext('The provided code is invalid.'));
-                } else {
-                    Yasound.Utils.dialog(gettext('Code validated'), gettext('Your code is now validated, your gift will be available soon.'));
-                }
-            },
-            failure: function() {
-
-            }
-        });
-
     },
 
     ping: function() {
