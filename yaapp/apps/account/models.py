@@ -37,6 +37,7 @@ from yacore.geoip import request_country
 from yageoperm import utils as yageoperm_utils
 import requests
 from pymongo import DESCENDING
+from dateutil.relativedelta import *
 
 logger = logging.getLogger("yaapp.account")
 
@@ -1646,6 +1647,35 @@ class InvitationsManager():
     def find_invitation_providers(self, type, uid):
         db_ids = self.collection.find({type:uid}, {'db_id': True, '_id': False})
         return db_ids
+
+class AnonymousManager():
+    """Store anonymous users data in mongodb
+    """
+    ANONYMOUS_IDLE_DELAY = 20 # seconds
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.account.users.anonymous
+        self.collection.ensure_index('radio_uuid')
+        self.collection.ensure_index('anonymous_id', unique=True)
+        self.collection.ensure_index('updated')
+
+    def erase_informations(self):
+        self.collection.drop()
+
+    def upsert_anonymous(self, anonymous_id, radio_uuid):
+        now = datetime.datetime.now()
+        doc = {
+            'anonymous_id': anonymous_id,
+            'radio_uuid': radio_uuid,
+            'updated': now
+        }
+        self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
+
+    def remove_inactive_users(self):
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(secondes=-AnonymousManager.ANONYMOUS_IDLE_DELAY)
+        self.collection.remove({'updated': {'$lt': expired_date}}, safe=True)
 
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):

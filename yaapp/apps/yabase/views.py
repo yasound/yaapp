@@ -2008,17 +2008,21 @@ def most_active_radios(request, internal=False, genre=''):
     return response
 
 @csrf_exempt
-@check_api_key(methods=['POST',], login_required=True)
+@check_api_key(methods=['POST',])
 def ping(request):
     profile = request.user.get_profile()
     profile.authenticated()
 
     radio_uuid = request.REQUEST.get('radio_uuid')
-    if radio_uuid:
-        radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    if request.user.is_authenticated():
         radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
         radio_user.connected = True
         radio_user.save()
+    else:
+        anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
+        radio.upsert_anonymous(anonymous_id)
+
     return HttpResponse('OK')
 
 @check_api_key(methods=['GET',], login_required=False)
