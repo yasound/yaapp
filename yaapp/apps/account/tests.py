@@ -969,7 +969,7 @@ class TestAnonymous(TestCase):
         self.assertEquals(anons.count(), 2)
 
         now = datetime.datetime.now()
-        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL-1)
 
         doc = {
             'anonymous_id': 'id1',
