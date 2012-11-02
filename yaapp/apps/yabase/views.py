@@ -2023,7 +2023,9 @@ def ping(request):
         radio_user.save()
     else:
         manager = AnonymousManager()
+        logger.info('anonymous id = %s' % (request.session.get('anonymous_id')))
         anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
+        request.session['anonymous_id'] = anonymous_id
         manager.upsert_anonymous(anonymous_id, radio_uuid)
 
     return HttpResponse('OK')
