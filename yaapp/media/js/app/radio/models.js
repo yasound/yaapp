@@ -66,9 +66,10 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
 Yasound.Data.Models.RadioUser = Backbone.Model.extend({
     idAttribute: 'id'
 });
-Yasound.Data.Models.RadioUsers = Backbone.Collection.extend({
+
+Yasound.Data.Models.RadioUsers = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.RadioUser,
-    limit: 25,
+    perPage: 10,
     url: function() {
         return '/api/v1/radio/' + this.radio.get('id') + '/current_user/';
     },

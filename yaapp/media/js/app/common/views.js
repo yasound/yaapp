@@ -167,9 +167,11 @@ Yasound.Views.UserCell = Backbone.View.extend({
     onUser: function (e) {
         e.preventDefault();
         var username = this.model.get('username');
-        Yasound.App.Router.navigate("profile/" + username + '/', {
-            trigger: true
-        });
+        if (!this.model.get('anonymous')) {
+            Yasound.App.Router.navigate("profile/" + username + '/', {
+                trigger: true
+            });
+        }
     },
 
     unfollow: function (e) {
@@ -510,11 +512,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
 
         sendPing = function () {
             if (!that.radio) {
-                console.log('ping: no radio')
                 return;
             }
 
-            console.log('sending data')
             var query = $.ajax({
                 type: 'POST',
                 url: '/api/v1/ping/',

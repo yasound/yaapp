@@ -547,6 +547,18 @@ class RadioManager(models.Manager):
         radio.empty_next_songs_queue()
         radio.delete()
 
+    def uuid_from_id(self, radio_id):
+        """Convienient function to get uuid from id (data is cached)"""
+
+        radio_uuid = None
+        cache_key = 'radio_%s.uuid' % (radio_id)
+        radio_uuid = cache.get(cache_key)
+        if not radio_uuid:
+            qs = self.filter(id=radio_id).values_list('uuid', flat=True)
+            if len(qs) > 0:
+                radio_uuid = qs[0]
+                cache.set(cache_key, radio_uuid)
+        return radio_uuid
 
 class Radio(models.Model):
     objects = RadioManager()
@@ -1037,7 +1049,15 @@ class Radio(models.Model):
         return data
 
     def current_users(self, limit=25, skip=0):
-        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()[skip:limit+skip]
+        """returns users (anonymous + authenticated) for the radio
+
+        :return: data, total_count
+        """
+
+        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()
+        total_count = users.count()
+
+        users = users[skip:limit+skip]
         data = []
         for user in users:
             data.append(user.get_profile().as_dict())
@@ -1053,7 +1073,8 @@ class Radio(models.Model):
                     break
                 anonymous_user = UserProfile()
                 data.append(anonymous_user.as_dict(anonymous_id=anon.get('anonymous_id')))
-        return data
+                total_count +=1
+        return data, total_count
 
     @property
     def nb_current_users(self):
