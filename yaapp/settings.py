@@ -807,10 +807,6 @@ else:
                 "task": "yabase.task.delete_radios_definitively",
                 "schedule": crontab(minute=0, hour='01'),
             },
-            "remove-inactive-anonymous-users": {
-                "task": "account.task.async_remove_inactive_anonymous_users",
-                "schedule": crontab(minute=0, hour='*'),
-            },
         }
     elif hostname == 'yas-web-09':
         CELERYBEAT_SCHEDULE = {
@@ -832,6 +828,10 @@ else:
             },
             "raido_popularity": {
                 "task": "yametrics.task.popularity_update_task",
+                "schedule": crontab(minute=0, hour='*'),
+            },
+            "remove-inactive-anonymous-users": {
+                "task": "account.task.async_remove_inactive_anonymous_users",
                 "schedule": crontab(minute=0, hour='*'),
             },
         }
