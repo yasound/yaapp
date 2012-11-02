@@ -1063,7 +1063,6 @@ class Radio(models.Model):
             data.append(user.get_profile().as_dict())
 
         max_anonymous = limit - len(data)
-        print max_anonymous
         if max_anonymous > 0:
             from account.models import AnonymousManager, UserProfile
             manager = AnonymousManager()
