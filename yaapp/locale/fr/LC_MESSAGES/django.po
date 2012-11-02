@@ -1863,15 +1863,15 @@ msgstr "\n"
 
 #: templates/yabase/app/static/about.mustache:4
 #: templates/yabase/app/static/about.mustache:60
-msgid "YaSound, the number one socials radios platform."
-msgstr "YaSound, la plateforme de radios sociales numéro un."
+msgid "YaSound, the number one socials radios platform"
+msgstr "YaSound, la plateforme de radios sociales numéro un"
 
 #: templates/yabase/app/static/about.mustache:9
 msgid ""
 "<strong>YasSound</strong> is a new service that lets you <br/> create "
 "<strong>your own radio station</strong> in <br/>just a few clicks and share "
 "it with your friends in real time."
-msgstr "<strong>Yasound</strong> est un nouveau service qui vous<br/>permet de créer <strong>votre radio musicale</strong> en<br/> un instant et d'échanger en temps réel avec vos amis."
+msgstr "<strong>Yasound</strong> est un nouveau service qui vous<br/>""permet de créer <strong>votre radio musicale</strong> en<br/> un instant et d'échanger en temps réel avec vos amis."
 
 #: templates/yabase/app/static/about.mustache:18
 msgid "CEO, Co-Founder"
