@@ -450,9 +450,11 @@ Yasound.Views.RadioUser = Backbone.View.extend({
 
     selectUser: function (event) {
         event.preventDefault();
-        Yasound.App.Router.navigate("profile/" + this.model.get('username') + '/', {
-            trigger: true
-        });
+        if (!this.model.get('anonymous')) {
+            Yasound.App.Router.navigate("profile/" + this.model.get('username') + '/', {
+                trigger: true
+            });
+        }
     }
 });
 
@@ -630,7 +632,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     onRadioUsersChanged: function (collection) {
-        $('.audience-nbr', this.el).html(collection.length);
+        $('.audience-nbr', this.el).html(collection.totalCount);
         if (collection.length === 0) {
             $('.audience-btn', this.el).hide();
         } else {

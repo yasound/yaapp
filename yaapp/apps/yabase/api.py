@@ -652,6 +652,7 @@ class RadioFavoriteResource(ModelResource):
 
 
 class RadioCurrentUserResource(ModelResource):
+    """NOT USED ANYMORE, CHECK IF WE CAN DELETE IT SAFELY"""
     radio = None
 
     class Meta:

@@ -167,9 +167,11 @@ Yasound.Views.UserCell = Backbone.View.extend({
     onUser: function (e) {
         e.preventDefault();
         var username = this.model.get('username');
-        Yasound.App.Router.navigate("profile/" + username + '/', {
-            trigger: true
-        });
+        if (!this.model.get('anonymous')) {
+            Yasound.App.Router.navigate("profile/" + username + '/', {
+                trigger: true
+            });
+        }
     },
 
     unfollow: function (e) {
@@ -381,9 +383,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#btn-unfavorite', this.el).removeClass('is-favorite').addClass('is-not-favorite');
         }
 
-        if (Yasound.App.userAuthenticated) {
-            this.ping();
-        }
+        this.ping();
 
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
@@ -508,9 +508,13 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (this.pingIntervalId) {
             clearInterval(this.pingIntervalId);
         }
-
         var that = this;
-        this.pingIntervalId = setInterval(function () {
+
+        sendPing = function () {
+            if (!that.radio) {
+                return;
+            }
+
             var query = $.ajax({
                 type: 'POST',
                 url: '/api/v1/ping/',
@@ -518,7 +522,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                     radio_uuid: that.radio.get('uuid')
                 }
             });
-        }, 60000);
+        }
+        this.pingIntervalId = setInterval(function () {
+            sendPing();
+        }, 10*1000);
+        sendPing();
     }
 });
 

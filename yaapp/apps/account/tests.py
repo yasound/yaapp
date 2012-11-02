@@ -13,13 +13,14 @@ import task
 import yabase.settings as yabase_settings
 from django.conf import settings
 import datetime
-from models import UserAdditionalInfosManager, InvitationsManager
+from models import UserAdditionalInfosManager, InvitationsManager, AnonymousManager
 from yamessage.models import NotificationsManager
 from yamessage import settings as yamessage_settings
 from pymongo import DESCENDING
 from django.test.client import RequestFactory
 from yacore.http import is_iphone_version_1, is_iphone_version_2
 from yabase.models import SongInstance, SongMetadata, WallEvent
+from dateutil.relativedelta import *
 
 class TestProfile(TestCase):
     def setUp(self):
@@ -913,3 +914,73 @@ class TestInvitationViews(TestCase):
         json_data = json.dumps(data)
         r = self.client.post(reverse('account.views.invite_ios_contacts'), json_data, content_type="application/json")
         self.assertEquals(r.status_code, 200)
+
+class TestAnonymous(TestCase):
+    def setUp(self):
+        manager = AnonymousManager()
+        manager.erase_informations()
+        pass
+
+    def test_upsert(self):
+        manager = AnonymousManager()
+        manager.upsert_anonymous('id1', 'uuid1')
+
+        # radio with no users
+        anons = manager.anonymous_for_radio('uuid')
+        self.assertEquals(anons.count(), 0)
+
+        # radio with 1 user
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 1)
+        self.assertEquals(anons[0].get('anonymous_id'), 'id1')
+
+        # duplicate insert in same radio
+        manager.upsert_anonymous('id1', 'uuid1')
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 1)
+
+        # add id2 to uuid1
+        manager.upsert_anonymous('id2', 'uuid1')
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 2)
+
+        # add id1 to uuid2
+        manager.upsert_anonymous('id1', 'uuid2')
+        anons = manager.anonymous_for_radio('uuid2')
+        self.assertEquals(anons.count(), 1)
+        self.assertEquals(anons[0].get('anonymous_id'), 'id1')
+
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 1)
+        self.assertEquals(anons[0].get('anonymous_id'), 'id2')
+
+    def test_remove_inactive_users(self):
+        manager = AnonymousManager()
+        manager.upsert_anonymous('id1', 'uuid1')
+        manager.upsert_anonymous('id2', 'uuid1')
+
+        # radio with 2 user
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 2)
+
+        manager.remove_inactive_users()
+
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 2)
+
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL-1)
+
+        doc = {
+            'anonymous_id': 'id1',
+            'radio_uuid': 'uuid1',
+            'updated': expired_date
+        }
+        manager.collection.update({'anonymous_id': 'id1'}, {'$set': doc }, upsert=True, safe=True)
+
+        manager.remove_inactive_users()
+
+        anons = manager.anonymous_for_radio('uuid1')
+        self.assertEquals(anons.count(), 1)
+        self.assertEquals(anons[0].get('anonymous_id'), 'id2')
+

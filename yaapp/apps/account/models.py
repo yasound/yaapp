@@ -37,6 +37,7 @@ from yacore.geoip import request_country
 from yageoperm import utils as yageoperm_utils
 import requests
 from pymongo import DESCENDING
+from dateutil.relativedelta import *
 
 logger = logging.getLogger("yaapp.account")
 
@@ -675,17 +676,29 @@ class UserProfile(models.Model):
             alive = total_seconds <= MAX_DELAY_BETWEEN_AUTHENTICATIONS
         return alive
 
-    def as_dict(self, request_user=None, include_own_current_radios=False, include_all_radios=False):
+    def as_dict(self, request_user=None, include_own_current_radios=False, include_all_radios=False, anonymous_id=None):
+        user_id = None
+        username = None
+        if anonymous_id:
+            username = anonymous_id
+            user_id = anonymous_id
+            self.name = unicode(_('Anonymous user'))
+            is_connected = True
+        else:
+            user_id = self.user.id
+            username = self.user.username
+            is_connected = self.connected
         data = {
-                'id': self.user.id,
+                'id': user_id,
                 'picture': self.picture_url,
                 'large_picture': self.large_picture_url,
                 'name': self.name,
-                'username': self.user.username,
+                'username': username,
                 'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
                 'friends_count': self.friends_count,
                 'followers_count': self.followers_count,
-                'connected': self.connected
+                'connected': is_connected,
+                'anonymous': True if anonymous_id is not None else False
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
@@ -1646,6 +1659,45 @@ class InvitationsManager():
     def find_invitation_providers(self, type, uid):
         db_ids = self.collection.find({type:uid}, {'db_id': True, '_id': False})
         return db_ids
+
+class AnonymousManager():
+    """Store anonymous users data in mongodb
+    """
+    ANONYMOUS_TTL = 20 # seconds
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.account.users.anonymous
+        self.collection.ensure_index('radio_uuid')
+        self.collection.ensure_index('anonymous_id', unique=True)
+        self.collection.ensure_index('updated')
+
+    def erase_informations(self):
+        self.collection.drop()
+
+    def upsert_anonymous(self, anonymous_id, radio_uuid):
+        now = datetime.datetime.now()
+        doc = {
+            'anonymous_id': anonymous_id,
+            'radio_uuid': radio_uuid,
+            'updated': now
+        }
+        self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
+
+    def anonymous_for_radio(self, radio_uuid):
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+        return self.collection.find({
+            'radio_uuid': radio_uuid,
+            'updated': {
+                '$gte': expired_date
+            }
+        })
+
+    def remove_inactive_users(self):
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+        self.collection.remove({'updated': {'$lt': expired_date}}, safe=True)
 
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):
