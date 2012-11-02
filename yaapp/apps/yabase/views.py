@@ -55,7 +55,8 @@ import uuid
 import zlib
 import urllib
 
-from account.models import InvitationsManager
+
+from account.models import InvitationsManager, AnonymousManager
 from yapremium.task import async_check_for_invitation
 
 from django.http import HttpResponseForbidden
@@ -2008,20 +2009,22 @@ def most_active_radios(request, internal=False, genre=''):
     return response
 
 @csrf_exempt
-@check_api_key(methods=['POST',])
+@check_api_key(methods=['POST',], login_required=False)
 def ping(request):
-    profile = request.user.get_profile()
-    profile.authenticated()
 
     radio_uuid = request.REQUEST.get('radio_uuid')
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     if request.user.is_authenticated():
+        profile = request.user.get_profile()
+        profile.authenticated()
+
         radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
         radio_user.connected = True
         radio_user.save()
     else:
+        manager = AnonymousManager()
         anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
-        radio.upsert_anonymous(anonymous_id)
+        manager.upsert_anonymous(anonymous_id, radio_uuid)
 
     return HttpResponse('OK')
 
@@ -2528,14 +2531,20 @@ def listeners(request, radio_uuid):
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
 
-    qs = radio.current_users()
-
-    qs = qs[skip:limit+skip]
-    data = []
-    for user in qs:
-        data.append(user.get_profile().as_dict(request.user))
+    data = radio.current_users(limit, skip)
     response = api_response(data, limit=limit, offset=skip)
     return response
+
+@check_api_key(methods=['GET',], login_required=False)
+def listeners_legacy(request, radio_id):
+    radio = get_object_or_404(Radio, id=radio_id)
+    limit = int(request.GET.get('limit', 10))
+    skip = int(request.GET.get('skip', 0))
+
+    data = radio.current_users(limit, skip)
+    response = api_response(data, limit=limit, offset=skip)
+    return response
+
 
 @csrf_exempt
 @check_api_key(methods=['POST',], login_required=False)

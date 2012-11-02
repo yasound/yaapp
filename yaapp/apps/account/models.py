@@ -676,17 +676,29 @@ class UserProfile(models.Model):
             alive = total_seconds <= MAX_DELAY_BETWEEN_AUTHENTICATIONS
         return alive
 
-    def as_dict(self, request_user=None, include_own_current_radios=False, include_all_radios=False):
+    def as_dict(self, request_user=None, include_own_current_radios=False, include_all_radios=False, anonymous_id=None):
+        user_id = None
+        username = None
+        if anonymous_id:
+            username = anonymous_id
+            user_id = anonymous_id
+            self.name = unicode(_('Anonymous user'))
+            is_connected = True
+        else:
+            user_id = self.user.id
+            username = self.user.username
+            is_connected = self.connected
         data = {
-                'id': self.user.id,
+                'id': user_id,
                 'picture': self.picture_url,
                 'large_picture': self.large_picture_url,
                 'name': self.name,
-                'username': self.user.username,
+                'username': username,
                 'bio_text': self.bio_text[:190] if self.bio_text is not None else None,
                 'friends_count': self.friends_count,
                 'followers_count': self.followers_count,
-                'connected': self.connected
+                'connected': is_connected,
+                'anonymous': True if anonymous_id is not None else False
         }
         if request_user and request_user.id == self.user.id:
             data['owner'] = True
@@ -1651,7 +1663,7 @@ class InvitationsManager():
 class AnonymousManager():
     """Store anonymous users data in mongodb
     """
-    ANONYMOUS_IDLE_DELAY = 20 # seconds
+    ANONYMOUS_TTL = 20 # seconds
 
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -1672,9 +1684,19 @@ class AnonymousManager():
         }
         self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
 
+    def anonymous_for_radio(self, radio_uuid):
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+        return self.collection.find({
+            'radio_uuid': radio_uuid,
+            'updated': {
+                '$gte': expired_date
+            }
+        })
+
     def remove_inactive_users(self):
         now = datetime.datetime.now()
-        expired_date = now + relativedelta(secondes=-AnonymousManager.ANONYMOUS_IDLE_DELAY)
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
         self.collection.remove({'updated': {'$lt': expired_date}}, safe=True)
 
 

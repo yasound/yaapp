@@ -1036,9 +1036,24 @@ class Radio(models.Model):
             data.append(dict)
         return data
 
-    def current_users(self):
-        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()
-        return users
+    def current_users(self, limit=25, skip=0):
+        users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).all()[skip:limit+skip]
+        data = []
+        for user in users:
+            data.append(user.get_profile().as_dict())
+
+        max_anonymous = limit - len(data)
+        print max_anonymous
+        if max_anonymous > 0:
+            from account.models import AnonymousManager, UserProfile
+            manager = AnonymousManager()
+            anons = manager.anonymous_for_radio(self.uuid)
+            for i, anon in enumerate(anons):
+                if i > max_anonymous:
+                    break
+                anonymous_user = UserProfile()
+                data.append(anonymous_user.as_dict(anonymous_id=anon.get('anonymous_id')))
+        return data
 
     @property
     def nb_current_users(self):

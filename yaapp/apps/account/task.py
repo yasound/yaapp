@@ -155,3 +155,10 @@ def async_tw_animator_activity(user_id, radio_uuid):
     api.update_status(status=tweet)
 
     logger.debug('done')
+
+
+@task
+def async_remove_inactive_anonymous_users():
+    from models import AnonymousManager
+    manager = AnonymousManager()
+    manager.remove_inactive_users()

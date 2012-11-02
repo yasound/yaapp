@@ -59,7 +59,7 @@ wall_event = RadioWallEventResource()
 radio_likers = RadioLikerResource()
 radio_favorites = RadioFavoriteResource()
 
-current_users = RadioCurrentUserResource()
+#current_users = RadioCurrentUserResource()
 radio_user = RadioUserResource()
 song_user = SongUserResource()
 radio_enabled_playlist = RadioEnabledPlaylistResource()
@@ -118,7 +118,7 @@ urlpatterns = patterns('',
     (r'^api/v1/radio/(?P<radio>\d+)/', include(wall_event.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_likers.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_favorites.urls)),
-    (r'^api/v1/radio/(?P<radio>\d+)/', include(current_users.urls)),
+    #(r'^api/v1/radio/(?P<radio>\d+)/', include(current_users.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_enabled_playlist.urls)),
     (r'^api/v1/radio/(?P<radio>\d+)/', include(radio_all_playlist.urls)),
     (r'^api/v1/playlist/(?P<playlist>\d+)/', include(playlist_matched_songs.urls)),
@@ -178,6 +178,7 @@ urlpatterns = patterns('',
 
     # listeners
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/listeners/$', 'yabase.views.listeners', name='listeners'),
+    url(r'^api/v1/radio/(?P<radio_id>\d+)/current_user/$', 'yabase.views.listeners_legacy', name='listeners_legacy'),
 
 
     url(r'^api/v1/search/radios/$', 'yasearch.views.search_songs_in_radios'),

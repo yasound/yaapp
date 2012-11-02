@@ -381,9 +381,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             $('#btn-unfavorite', this.el).removeClass('is-favorite').addClass('is-not-favorite');
         }
 
-        if (Yasound.App.userAuthenticated) {
-            this.ping();
-        }
+        this.ping();
 
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
@@ -508,9 +506,14 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if (this.pingIntervalId) {
             clearInterval(this.pingIntervalId);
         }
-
         var that = this;
         this.pingIntervalId = setInterval(function () {
+            if (!that.radio) {
+                console.log('ping: no radio')
+                return;
+            }
+
+            console.log('sending data')
             var query = $.ajax({
                 type: 'POST',
                 url: '/api/v1/ping/',
@@ -518,7 +521,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                     radio_uuid: that.radio.get('uuid')
                 }
             });
-        }, 60000);
+        }, 10*1000);
     }
 });
 
