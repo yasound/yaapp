@@ -2027,6 +2027,7 @@ def ping(request):
         radio = get_object_or_404(Radio, uuid=radio_uuid)
         radio_user, _created = RadioUser.objects.get_or_create(radio=radio, user=request.user)
         radio_user.connected = True
+        radio_user.listening = True
         radio_user.save()
     else:
         manager = AnonymousManager()
