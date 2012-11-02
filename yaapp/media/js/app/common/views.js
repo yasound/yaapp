@@ -507,7 +507,8 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             clearInterval(this.pingIntervalId);
         }
         var that = this;
-        this.pingIntervalId = setInterval(function () {
+
+        sendPing = function () {
             if (!that.radio) {
                 console.log('ping: no radio')
                 return;
@@ -521,7 +522,11 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                     radio_uuid: that.radio.get('uuid')
                 }
             });
+        }
+        this.pingIntervalId = setInterval(function () {
+            sendPing();
         }, 10*1000);
+        sendPing();
     }
 });
 
