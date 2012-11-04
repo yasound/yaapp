@@ -1170,6 +1170,9 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
     if song_instance.playlist.radio != radio:
         raise Http404
 
+    url = reverse('webapp_default_radio', args=[radio.uuid])
+    return HttpResponseRedirect(url)
+
     radio_picture_absolute_url = absolute_url(radio.picture_url)
     radio_absolute_url =  absolute_url(reverse('yabase.views.web_listen', args=[radio_uuid]))
     radio_url = radio.stream_url
