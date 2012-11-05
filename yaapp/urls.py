@@ -188,6 +188,9 @@ urlpatterns = patterns('',
     # misc
     url(r'^api/v1/user_watched_tutorial/$', 'yabase.views.user_watched_tutorial'),
 
+    # song download for deezer
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/gdu/$', 'yabase.views.generate_download_current_song_url'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/d/(?P<token>\S+)/$', 'yabase.views.download_current_song', name='download_current_song'),
 
     # api (will override any other url)
     (r'^api/', include(api.urls)),
@@ -241,6 +244,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/invite_email_friends/$', 'account.views.invite_email_friends'),
     url(r'^api/v1/invite_facebook_friends/$', 'account.views.invite_facebook_friends'),
     url(r'^api/v1/invite_twitter_friends/$', 'account.views.invite_twitter_friends'),
+
 
     # web front end
     #url(r'^$', 'yaweb.views.stay_tuned', name='index'),

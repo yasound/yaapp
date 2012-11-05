@@ -54,6 +54,7 @@ import settings as yabase_settings
 import uuid
 import zlib
 import urllib
+import mimetypes
 
 
 from account.models import InvitationsManager, AnonymousManager
@@ -2579,3 +2580,56 @@ def profiling(request):
         raise Http404
     from middleware import SqlProfilingMiddleware
     return render_to_response("yabase/profiling.html", {"queries": SqlProfilingMiddleware.Queries})
+
+
+@check_api_key(methods=['GET'])
+def generate_download_current_song_url(request, radio_uuid):
+    """
+    return a temporary token linked to user account to be given to streamer.
+    """
+    token = uuid.uuid4().hex
+    key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    current_song = radio.current_song
+    yasound_song_id = current_song.metadata.yasound_song_id
+    yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+
+    cache.set(key, token, 60)
+    response = {
+        'url': reverse('download_current_song', args=[radio_uuid, token]),
+        'name': yasound_song.name,
+        'artist': yasound_song.artist_name,
+    }
+    response_data = json.dumps(response)
+    return HttpResponse(response_data)
+
+
+@check_api_key(methods=['GET'], login_required=False)
+def download_current_song(request, radio_uuid, token):
+    if not request.user.is_superuser:
+        raise Http404
+
+    key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
+    if cache.get(key) != token:
+        raise Http404
+    cache.delete(key)
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    current_song = radio.current_song
+    yasound_song_id = current_song.metadata.yasound_song_id
+    yasound_song = YasoundSong.objects.get(id=yasound_song_id)
+    path = yasound_song.get_song_hq_path()
+    mimetype = mimetypes.guess_type(path)[0]
+    if not mimetype:
+        mimetype = "application/octet-stream"
+
+    file = None
+    print path
+    try:
+        file = open(path,"r")
+    except:
+        raise Http404
+
+    response = HttpResponse(file.read(), mimetype=mimetype)
+    return response
