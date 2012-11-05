@@ -1067,22 +1067,40 @@ class Radio(models.Model):
             from account.models import AnonymousManager, UserProfile
             manager = AnonymousManager()
             anons = manager.anonymous_for_radio(self.uuid)
-            for i, anon in enumerate(anons):
-                if i > max_anonymous:
-                    break
-                anonymous_user = UserProfile()
-                data.append(anonymous_user.as_dict(anonymous_id=anon.get('anonymous_id')))
-                total_count +=1
+            if anons is not None:
+                total_count += anons.count()
+                for i, anon in enumerate(anons):
+                    if i > max_anonymous:
+                        break
+                    anonymous_user = UserProfile()
+                    data.append(anonymous_user.as_dict(anonymous_id=anon.get('anonymous_id')))
+
         return data, total_count
 
     @property
     def nb_current_users(self):
+        """Return the number of (anonymous+authenticated) users """
+
+        nb_users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).count()
+        nb_anons = 0
+
+        from account.models import AnonymousManager
+        manager = AnonymousManager()
+        anons = manager.anonymous_for_radio(self.uuid)
+        if anons is not None:
+            nb_anons = anons.count()
+        return nb_users + nb_anons
+
+    @property
+    def nb_current_authenticated_users(self):
+        """Return the number of authenticated only users """
+
         nb_users = User.objects.filter(Q(radiouser__connected=True) | Q(radiouser__listening=True), radiouser__radio=self).count()
         return nb_users
 
     @property
     def audience_total(self):
-        audience = self.nb_current_users
+        audience = self.nb_current_authenticated_users
         audience += self.anonymous_audience
         return audience
 
