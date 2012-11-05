@@ -60,8 +60,6 @@ Yasound.Views.Radio = Backbone.View.extend({
     tagName: 'div',
     className: 'radio',
     events: {
-        "click #btn-favorite": "addToFavorite",
-        "click #btn-unfavorite": "removeFromFavorite",
         "click #user": "selectUser",
         "click #radio-actions-container #like-btn": "onLike",
         "click #radio-actions-container #settings-btn": "onSettings",
@@ -70,37 +68,18 @@ Yasound.Views.Radio = Backbone.View.extend({
     },
 
     initialize: function () {
+        _.bindAll(this, 'updateFavorites');
         this.model.bind('change', this.render, this);
+        $.subscribe('/radio/favorite', this.updateFavorites);
+        $.subscribe('/radio/not_favorite', this.updateFavorites);
     },
+
     onClose: function () {
         this.model.unbind('change', this.render);
+        $.unsubscribe('/radio/favorite', this.updateFavorites);
+        $.unsubscribe('/radio/not_favorite', this.updateFavorites);
     },
 
-    addToFavorite: function (e) {
-        var url = '/api/v1/radio/' + this.model.get('id') + '/favorite/';
-        var that = this;
-        $.post(url, {
-            success: function () {
-                $('#btn-favorite', that.el).hide();
-                $('#btn-unfavorite', that.el).show();
-                $.publish('/radio/favorite');
-            }
-        });
-        e.preventDefault();
-    },
-
-    removeFromFavorite: function (e) {
-        var url = '/api/v1/radio/' + this.model.get('id') + '/not_favorite/';
-        var that = this;
-        $.post(url, {
-            success: function () {
-                $('#btn-unfavorite', that.el).hide();
-                $('#btn-favorite', that.el).show();
-                $.publish('/radio/not_favorite');
-            }
-        });
-        e.preventDefault();
-    },
     selectUser: function (event) {
         event.preventDefault();
         Yasound.App.Router.navigate("profile/" + this.model.get('creator').username + '/', {
@@ -155,6 +134,11 @@ Yasound.Views.Radio = Backbone.View.extend({
             $('#modal-broadcast').modal('hide');
             that.model.broadcast($textarea.val());
         });
+    },
+
+    updateFavorites: function (e, radio) {
+        this.model.set('favorites', radio.get('favorites'), {silent: true});
+        this.render();
     }
 });
 
