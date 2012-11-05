@@ -786,7 +786,7 @@ def check_streamer_auth_token(request, token):
 @check_api_key(methods=['POST'], login_required=True)
 def invite_ios_contacts(request):
     app_version = request.REQUEST.get('app_version', '')
-    if app_version == '2.0.0':
+    if app_version == '2.0.0' or app_version == '2.0':
         # client v2.0.0. are buggy
         return HttpResponse(status=403)
 
