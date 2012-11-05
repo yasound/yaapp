@@ -811,9 +811,6 @@ def invite_ios_contacts(request):
     subject = _('Message from %(name)s:%(subject)s') % {'name': request.user.get_profile(), 'subject': "".join(subject.splitlines()) }
     message = _('Join me on YaSound: %(referal)s') % {'referal': referal}
 
-    message = message + '\n\n'
-    message = message + _("With Yasound, there's no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time online and on your phone.")
-
     for email in emails:
         email = email.strip()
         subject = "".join(subject.splitlines())
