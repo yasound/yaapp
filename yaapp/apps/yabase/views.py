@@ -2599,7 +2599,7 @@ def generate_download_current_song_url(request, radio_uuid):
 
     cache.set(key, token, 60)
     response = {
-        'url': reverse('download_current_song', args=[radio_uuid, token]),
+        'url': absolute_url(reverse('download_current_song', args=[radio_uuid, token])),
         'name': yasound_song.name,
         'artist': yasound_song.artist_name,
     }
