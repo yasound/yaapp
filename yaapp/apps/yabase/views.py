@@ -389,7 +389,8 @@ def favorite_radio(request, radio_id):
 
     yabase_signals.favorite_radio.send(sender=radio, radio=radio, user=request.user)
 
-    res = {'success': True}
+    favorites = Radio.objects.filter(id=radio_id).values_list('favorites', flat=True)[0]
+    res = {'success': True, 'favorites': favorites}
     return HttpResponse(json.dumps(res))
 
 @csrf_exempt
@@ -406,7 +407,8 @@ def not_favorite_radio(request, radio_id):
 
     yabase_signals.not_favorite_radio.send(sender=radio, radio=radio, user=request.user)
 
-    res = {'success': True}
+    favorites = Radio.objects.filter(id=radio_id).values_list('favorites', flat=True)[0]
+    res = {'success': True, 'favorites': favorites}
     return HttpResponse(json.dumps(res))
 
 @csrf_exempt
