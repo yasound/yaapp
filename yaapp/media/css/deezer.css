@@ -80,6 +80,19 @@
     text-decoration: underline;
 }
 
+
+.radio-cell .mask {
+  height:210px;
+  width:210px;
+  position:absolute;
+  border-radius:5px;
+  left:0px;
+  top:0px;
+  z-index:4;
+  background: url('../app/images/deezer/button-play.png') 50% 30% no-repeat;
+}
+
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     #player #metadata-container {
