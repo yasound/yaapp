@@ -3,7 +3,6 @@
 <div class='container'>
     <footer>
         <div id="contacts" class="blocks">
-            {% ifnotequal app_name 'deezer' %}
             <p>
                 <a href="https://facebook.com/yasound" class="footer-text-color2" title="facebook" target='_blank'>
                     <img src="/media/app/images/facebook_logo.png" alt="facebook"/>
@@ -14,15 +13,7 @@
                     <span>Twitter</span>
                 </a>
             </p>
-            {% endifnotequal %}
             <p>
-                {% ifequal app_name 'deezer' %}
-                <br/>
-                <a id='btn-deezer-link-out' href="{% app_url webapp_default %}"
-                    class="link-out"
-                    target="_blank"
-                    title="{% trans 'Yasound' %}">{% trans 'Yasound' %}</a>
-                {% else %}
                 <a id='btn-about' href="{% app_url webapp_about app_name %}"
                     class="footer-text-color1"
                     title="{% trans 'About' %}">{% trans 'About' %}</a> -
@@ -36,7 +27,6 @@
                     title="{% trans 'Jobs' %}">{% trans "Jobs" %}</a> -
                 <a id='btn-legal' href="{% app_url webapp_legal app_name %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
             </p>
-                {% endifequal %}
         </div>
 
         <div class="footer-separation">
@@ -60,13 +50,11 @@
             <img src="/media/app/images/separation.png" width="4" height="81" alt="separation"/>
         </div>
 
-        {% ifnotequal app_name 'deezer' %}
         <div id="minutes" class="blocks">
             <span class="footer-text-color1" >{{ minutes }}</span>
             <p class="footer-text-color2" >{% trans "minutes of music have been played" %}</p>
         </div>
     <p id="copyright">&copy; Yasound 2012</p>
-        {% endifnotequal %}
   <a href='#' id='scroll-top-container' style='display:none;'>
     <img src="/media/app/images/scroll-top.png">
   </a>
