@@ -2587,6 +2587,8 @@ def generate_download_current_song_url(request, radio_uuid):
     """
     return a temporary token linked to user account to be given to streamer.
     """
+    if not request.user.is_superuser:
+        raise Http404
     token = uuid.uuid4().hex
     key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
 
@@ -2607,9 +2609,6 @@ def generate_download_current_song_url(request, radio_uuid):
 
 @check_api_key(methods=['GET'], login_required=False)
 def download_current_song(request, radio_uuid, token):
-    if not request.user.is_superuser:
-        raise Http404
-
     key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
     if cache.get(key) != token:
         raise Http404
@@ -2625,7 +2624,6 @@ def download_current_song(request, radio_uuid, token):
         mimetype = "application/octet-stream"
 
     file = None
-    print path
     try:
         file = open(path,"r")
     except:
