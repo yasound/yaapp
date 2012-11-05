@@ -317,7 +317,11 @@ HTML, BODY { height: 100%; }
 
 
    <script type='text/html' id='radioCellTemplate'>
-     {% include "yabase/app/radioCell.mustache" %}
+      {% ifequal app_name 'deezer' %}
+        {% include "yabase/app/radioCell_deezer.mustache" %}
+      {% else %}
+        {% include "yabase/app/radioCell.mustache" %}
+      {% endifequal %}
    </script>
 
    <script type='text/html' id='userCellTemplate'>

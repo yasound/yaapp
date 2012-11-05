@@ -1,0 +1,34 @@
+{% load i18n %}
+<div class='radio-cell'>
+	<div class="radio-border hidden-phone" style='display:none;'>
+		<img src="/media/app/images/radio/radio-hover-border.png" alt="Radio Hover Border">
+    </div>
+	<div class="radio-container">
+		<div class='picture'>
+	    <a class='big-profile-picture' href='{{ root }}radio/<% uuid %>/'><img src='<% picture %>' width='210' height='210'/><a>
+	    <a class='small-profile-picture' href='{{ root}}radio/<% uuid %>/'><img src='<% picture %>' width='147' height='147'/><a>
+	    </div>
+
+		<div class='mask' style='display:none;'>
+	    </div>
+
+	    <div class="profile">
+	        <%#creator%>
+	        <img src='<% picture %>' width='32px' height='32px'/>
+	        <%/creator%>
+	        <span class="radio-profile-picture-mask">
+				<img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask"/>
+			</span>
+	    </div>
+	    <%#top_rank%><div class='badge'><% top_rank %></div><%/top_rank%>
+	    <div class='caption'>
+	        <div class="caption-content">
+	            <h5><% name %></h5>
+	            <ul class="radio-favorites">
+	                <li><% favorites %></li>
+	                <li><% nb_current_users %></li>
+	            </ul>
+	        </div>
+	    </div>
+	<div>
+</div>
