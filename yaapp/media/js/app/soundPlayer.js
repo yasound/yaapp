@@ -165,6 +165,7 @@ Yasound.Player.SoundManager = function () {
 Yasound.Player.Deezer = function () {
     var mgr = {
         hd: false,
+        radio: undefined,
         radioHasChanged: true,
         deezerId: 0,
         playing: false,
@@ -181,7 +182,35 @@ Yasound.Player.Deezer = function () {
             return false;
         },
 
+        loadExternalTrack: function() {
+            var url = '/api/v1/radio/' + mgr.radio.get('uuid') + '/gdu/';
+            console.log('url is ' + url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // load url into deezer
+                    console.log(data);
+                    var downloadUrl = data.url;
+                    var artist = data.artist;
+                    var name = data.name;
+                    var trackList = [{
+                        url: downloadUrl,
+                        format: 'mp3',
+                        artist: artist,
+                        title: name
+                    }];
+                    DZ.player.playExternalTracks(trackList);
+                },
+                failure: function() {
+                    console.log('failure');
+                }
+            });
+        },
+
         setBaseUrl: function(radio, baseUrl) {
+            mgr.radio = radio;
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
             console.log('radio has changed');
             mgr.radioHasChanged = true;
@@ -242,6 +271,8 @@ Yasound.Player.Deezer = function () {
             } else {
                 console.log('same radio, do nothing');
             }
+            console.log('calling loadExternalTrack');
+            mgr.loadExternalTrack();
         },
 
         setVolume: function (volume) {
