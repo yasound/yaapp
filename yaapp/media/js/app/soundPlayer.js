@@ -184,14 +184,15 @@ Yasound.Player.Deezer = function () {
 
         loadExternalTrack: function() {
             var url = '/api/v1/radio/' + mgr.radio.get('uuid') + '/gdu/';
-            console.log('url is ' + url);
             $.ajax({
                 url: url,
-                type: 'GET',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: cookies.get('csrftoken')
+                },
                 dataType: 'json',
                 success: function(data) {
                     // load url into deezer
-                    console.log(data);
                     var downloadUrl = data.url;
                     var artist = data.artist;
                     var name = data.name;
@@ -204,7 +205,6 @@ Yasound.Player.Deezer = function () {
                     DZ.player.playExternalTracks(trackList);
                 },
                 failure: function() {
-                    console.log('failure');
                 }
             });
         },
