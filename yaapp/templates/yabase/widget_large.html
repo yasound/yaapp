@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load thumbnail %}
+{% load compress %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasoundev: http://ogp.me/ns/fb/yasoundev#">
@@ -10,9 +11,10 @@
     <meta name="copyright" content="Yasound SAS" />
     <meta http-equiv="Cache-control" content="public" />
     <meta name="language" content="french" />
+    {% compress css %}
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/media/css/style_widget_large.css"/>
-
+    {% endcompress %}
     <!--[if lte IE 7] -->
         <link rel="stylesheet" href="/media/css/ie.css"/>
     <!--<![endif]-->
@@ -25,13 +27,15 @@
         var lbl_unmute = "{% trans 'Unmute' %}";
         var lbl_play = "{% trans 'Play' %}";
         var lbl_stop = "{% trans 'Stop' %}";
-        var g_auto_play = false;
+        var g_auto_play = {% if auto_play %}true{% else %}false{% endif %};
     </script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
+    {% compress js %}
     <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/media/js/jquery.timers.js"></script>
     <script type="text/javascript" src="/media/js/sm/soundmanager2-nodebug-jsmin.js"></script>
     <script type="text/javascript" src="/media/js/listen.js"></script>
+    {% endcompress %}
 </head>
 <body>
 
