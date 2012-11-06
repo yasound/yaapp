@@ -404,7 +404,7 @@ class PromocodeManager(models.Manager):
             return up
         return None
 
-    def generate_unique_codes(self, service, duration, count=50, prefix='YA-', group=''):
+    def generate_unique_codes(self, service, duration, count=50, prefix='YA-', group='', duration_unit=yapremium_settings.DURATION_DAY):
         with transaction.commit_on_success():
             for i in range(0, count):
                 self.create(code=yapremium_utils.generate_code_name(prefix),
@@ -412,6 +412,7 @@ class PromocodeManager(models.Manager):
                             service=service,
                             group=group,
                             duration=duration,
+                            duration_unit=duration_unit,
                             unique=True)
 
 

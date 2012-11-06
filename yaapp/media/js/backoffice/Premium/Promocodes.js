@@ -231,16 +231,41 @@ Yasound.Premium.UI.ServiceCombo = function (value) {
     };
 };
 
+Yasound.Premium.UI.DurationUnitCombo = function (value) {
+    return {
+        xtype: 'combo',
+        allowBlank:false,
+        fieldLabel: 'Duration unit',
+        hiddenName:'duration_unit',
+        store: new Ext.data.ArrayStore({
+            fields: ['id', 'label'],
+            data : [
+                [0, gettext('days')],
+                [1, gettext('weeks')],
+                [2, gettext('months')]
+            ]
+        }),
+        valueField:'id',
+        displayField:'label',
+        value: value,
+        typeAhead: true,
+        mode: 'local',
+        triggerAction: 'all',
+        emptyText: gettext('Select a duration...'),
+        selectOnFocus:true
+    };
+};
+
 Yasound.Premium.UI.UniquePromocodesForm = function() {
     return {
         xtype: 'form',
         bodyStyle:'padding:5px 5px 0',
         items: [Yasound.Premium.UI.ServiceCombo(), {
-                fieldLabel: gettext('Service duration (months)'),
+                fieldLabel: gettext('Service duration'),
                 xtype: 'numberfield',
                 name: 'duration',
                 value: 1
-        }, {
+        }, Yasound.Premium.UI.DurationUnitCombo(), {
                 fieldLabel: gettext('Group'),
                 xtype: 'textfield',
                 name: 'group',
@@ -266,12 +291,12 @@ Yasound.Premium.UI.NonUniquePromocodeForm = function() {
         xtype: 'form',
         bodyStyle:'padding:5px 5px 0',
         items: [Yasound.Premium.UI.ServiceCombo(), {
-                fieldLabel: gettext('Service Duration (months)'),
+                fieldLabel: gettext('Service Duration'),
                 xtype: 'numberfield',
                 name: 'duration',
                 allowBlank:false,
                 value: 1
-        }, {
+        }, Yasound.Premium.UI.DurationUnitCombo(), {
                 fieldLabel: gettext('Code'),
                 xtype: 'textfield',
                 name: 'code',
@@ -295,7 +320,7 @@ Yasound.Premium.UI.EditPromocodeForm = function(record) {
                 xtype: 'numberfield',
                 name: 'duration',
                 value: record.data.duration
-        }, {
+        }, Yasound.Premium.UI.DurationUnitCombo(record.data.duration_unit), {
                 fieldLabel: gettext('Code'),
                 xtype: 'textfield',
                 name: 'code',
