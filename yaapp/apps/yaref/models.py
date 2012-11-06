@@ -361,6 +361,13 @@ class YasoundSong(models.Model):
         lq = u'%s_lq%s' % (name, extension)
         return lq
 
+    def get_song_lq_relative_path(self):
+        song_path = yaref_utils.convert_filename_to_filepath(self.filename)
+        name, extension = os.path.splitext(song_path)
+        lq = u'%s_lq%s' % (name, extension)
+        return lq
+
+
     def find_lastfm_fingerprintid(self):
         song_path = os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))
         return lastfm.find_fingerprintid(song_path)
