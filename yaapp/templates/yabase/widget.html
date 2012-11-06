@@ -25,7 +25,7 @@
         var lbl_unmute = "{% trans 'Unmute' %}";
         var lbl_play = "{% trans 'Play' %}";
         var lbl_stop = "{% trans 'Stop' %}";
-        var g_auto_play = false;
+        var g_auto_play = {% if auto_play %}true{% else %}false{% endif %};
     </script>
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>

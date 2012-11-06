@@ -6,23 +6,32 @@ $(document).ready(function() {
     soundManager.debugMode = false;
     soundManager.useFlashBlock = true;
     soundManager.flashVersion = 9;
-    var mySound = undefined;
+    var mySound;
     var soundConfig = {
         id : 'yasoundMainPlay',
         url : g_radio_url,
         autoPlay: g_auto_play,
-        autoLoad: g_auto_play,
+        autoLoad: true,
         stream : true
-    }
+    };
 
     soundManager.onready(function() {
         if (g_auto_play) {
             mySound = soundManager.createSound(soundConfig);
-            mySound.play();
             $('#play i').removeClass('icon-play').addClass('icon-stop');
             $('#volume-position').css("width", mySound.volume + "%");
+        } else {
+            $('#play i').removeClass('icon-stop').addClass('icon-play');
         }
     });
+
+    var isPlaying = function (soundHandler) {
+        if (typeof soundHandler === "undefined" || soundHandler.playState != 1) {
+            return false;
+        }
+        return true;
+    };
+
 
     soundManager.ontimeout(function() {
         if (!(typeof mySound === "undefined")) {
@@ -33,15 +42,20 @@ $(document).ready(function() {
     });
 
     $('#play').click(function() {
-        if (typeof mySound === "undefined") {
-            mySound = soundManager.createSound(soundConfig);
-            mySound.play();
+        if (!isPlaying(mySound)) {
+            if ((typeof mySound === "undefined")) {
+                mySound = soundManager.createSound(soundConfig);
+                mySound.play(soundConfig);
+            } else {
+                mySound.play(soundConfig);
+            }
             $('#play i').removeClass('icon-play').addClass('icon-stop');
             $('#volume-position').css("width", mySound.volume + "%");
         } else {
             $('#play i').removeClass('icon-stop').addClass('icon-play');
-            mySound.destruct();
-            mySound = undefined;
+            if (!(typeof mySound === "undefined")) {
+                mySound.unload();
+            }
         }
     });
 
@@ -56,7 +70,8 @@ $(document).ready(function() {
             $('#volume-position').css("width", "100%");
             mySound.setVolume(100);
         }
-    })
+    });
+
     $('#dec').click(function() {
         if (typeof mySound === "undefined") {
             return;
@@ -68,7 +83,7 @@ $(document).ready(function() {
             $('#volume-position').css("width", "0%");
             mySound.setVolume(0);
         }
-    })
+    });
 
     var getData = function() {
         // get last events
@@ -96,7 +111,7 @@ $(document).ready(function() {
                 }
             }
         });
-    }
+    };
 
     $(document).everyTime(10 * 1000, 'event_timer', function(x) {
         if (typeof mySound === "undefined") {
@@ -117,12 +132,12 @@ $(document).ready(function() {
         var width = $volumeControl.width();
 
         var relativePosition = position - left;
-        var soundVolume = Math.floor(relativePosition * 100 / width)
+        var soundVolume = Math.floor(relativePosition * 100 / width);
         var percentage = soundVolume + "%";
         $('#volume-position').css("width", percentage);
 
         mySound.setVolume(soundVolume);
-    }
+    };
 
     var volumeMouseDown = false;
     $('#volume-control').mousedown(function(event) {
