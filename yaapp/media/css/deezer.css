@@ -80,7 +80,6 @@
     text-decoration: underline;
 }
 
-
 .radio-cell .mask {
   height:210px;
   width:210px;
@@ -95,6 +94,58 @@
 
 #footer {
   display: none;
+}
+
+
+/**
+ * Buttons
+ */
+
+.yabutton-small {
+  background:#f0f0f0;
+  background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(230,230,230)),color-stop(1, rgb(254,254,254)));
+  background-image:-moz-linear-gradient(center bottom,rgb(230,230,230) 0%,rgb(254,254,254) 100%);
+  border:1px solid #d0d0d0;
+  color:#808080;
+  text-shadow:0 1px #fff;
+  font-size:12px;
+  border-radius:3px;
+  font-weight:bold;
+  box-shadow:none;
+}
+
+.yabutton-small:hover {
+  background:#e6e6e6;
+  background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(205,205,205)),color-stop(1, rgb(255,255,255)));
+  background-image:-moz-linear-gradient(center bottom,rgb(205,205,205) 0%,rgb(255,255,255) 100%);
+  color:#404040;
+  border-radius:3px;
+  border:1px solid #d0d0d0;
+  text-shadow:0 1px #fff;
+  box-shadow:none;
+}
+
+.yabutton-large {
+  background:#f0f0f0;
+  background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(230,230,230)),color-stop(1, rgb(254,254,254)));
+  background-image:-moz-linear-gradient(center bottom,rgb(230,230,230) 0%,rgb(254,254,254) 100%);
+  border:1px solid #d0d0d0;
+  color:#808080;
+  text-shadow:0 1px #fff;
+  font-size:12px;
+  border-radius:3px;
+  font-weight:bold;
+}
+
+.yabutton-large:hover {
+  background:#e6e6e6;
+  background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(205,205,205)),color-stop(1, rgb(255,255,255)));
+  background-image:-moz-linear-gradient(center bottom,rgb(205,205,205) 0%,rgb(255,255,255) 100%);
+  color:#404040;
+  border-radius:3px;
+  border:1px solid #d0d0d0;
+  text-shadow:0 1px #fff;
+  box-shadow:none;
 }
 
 /* Portrait tablet to landscape and desktop */
