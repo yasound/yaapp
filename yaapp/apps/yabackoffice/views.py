@@ -1192,6 +1192,7 @@ def premium_non_unique_promocodes(request):
     elif request.method == 'POST':
         service_id = request.REQUEST.get('service_id')
         duration = request.REQUEST.get('duration', 1)
+        duration_unit = request.REQUEST.get('duration_unit', 0)
         group_name = request.REQUEST.get('group', '')
         code = request.REQUEST.get('code')
         group = None;
@@ -1200,6 +1201,7 @@ def premium_non_unique_promocodes(request):
 
         Promocode.objects.create(service=Service.objects.get(id=service_id),
             duration=duration,
+            duration_unit=duration_unit,
             code=code,
             group=group,
             enabled=True,
@@ -1227,6 +1229,7 @@ def premium_unique_promocodes(request):
     elif request.method == 'POST':
         service_id = request.REQUEST.get('service_id')
         duration = request.REQUEST.get('duration', 1)
+        duration_unit = request.REQUEST.get('duration_unit', 0)
         prefix = request.REQUEST.get('prefix', 'YA-')
         group_name = request.REQUEST.get('group', '')
         count = int(request.REQUEST.get('count', 50))
@@ -1236,6 +1239,7 @@ def premium_unique_promocodes(request):
 
         Promocode.objects.generate_unique_codes(service=Service.objects.get(id=service_id),
             duration=duration,
+            duration_unit=duration_unit,
             group=group,
             prefix=prefix,
             count=count)
@@ -1256,6 +1260,7 @@ def premium_promocodes(request, promocode_id=None):
         promocode = get_object_or_404(Promocode, id=promocode_id)
         service_id = request.REQUEST.get('service_id')
         duration = request.REQUEST.get('duration', 1)
+        duration_unit = request.REQUEST.get('duration_unit', 0)
         code = request.REQUEST.get('code')
         group_name = request.REQUEST.get('group', '')
         enabled = request.REQUEST.get('enabled')
@@ -1268,6 +1273,7 @@ def premium_promocodes(request, promocode_id=None):
         promocode.code = code
         promocode.service = service
         promocode.duration = duration
+        promocode.duration_unit = duration_unit
         promocode.group = group
         if enabled == 'true':
             promocode.enabled = True

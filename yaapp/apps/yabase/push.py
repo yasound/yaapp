@@ -23,14 +23,16 @@ def push_wall_event(wall_event, **kwargs):
     from api import RadioWallEventResource
     we = RadioWallEventResource()
     we_bundle = we.build_bundle(obj=wall_event, request=None)
-    serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
-    data = {
-        'event_type': 'wall_event',
-        'data': serialized_we[0]
-    }
-    json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
-    async_redis_publish.delay(channel, json_data)
-
+    try:
+        serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
+        data = {
+            'event_type': 'wall_event',
+            'data': serialized_we[0]
+        }
+        json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
+        async_redis_publish.delay(channel, json_data)
+    except:
+        pass
 
 def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     wall_event = instance
@@ -40,14 +42,17 @@ def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     from api import RadioWallEventResource
     we = RadioWallEventResource()
     we_bundle = we.build_bundle(obj=wall_event, request=None)
-    serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
-    data = {
-        'event_type': 'wall_event_deleted',
-        'data': serialized_we[0]
-    }
-    json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
-    async_redis_publish.delay(channel, json_data)
 
+    try:
+        serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
+        data = {
+            'event_type': 'wall_event_deleted',
+            'data': serialized_we[0]
+        }
+        json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
+        async_redis_publish.delay(channel, json_data)
+    except:
+        pass
 
 def push_current_song(radio, song_json, song, **kwargs):
     channel = 'radio.%s' % (radio.id)

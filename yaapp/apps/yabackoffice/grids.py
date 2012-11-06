@@ -107,7 +107,8 @@ class PromocodeGrid(grids.ModelGrid):
         'code',
         'created',
         'enabled',
-        'duration'
+        'duration',
+        'duration_unit',
     ]
     mapping = {
         'service_id': 'service__id',
