@@ -1155,6 +1155,10 @@ def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.htm
     if wtype == 'large':
         template_name = 'yabase/widget_large.html'
 
+    auto_play = request.REQUEST.get('autoplay', '')
+    if auto_play != '1':
+        auto_play = False
+
     radio_picture_absolute_url = absolute_url(radio.picture_url)
     radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
     return render_to_response(template_name, {
@@ -1164,6 +1168,7 @@ def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.htm
         "fans": radio.radiouser_set.filter(favorite=True).count(),
         "new_page": '/app/#radio/%s' % (radio_uuid),
         "radio_picture_absolute_url": radio_picture_absolute_url,
+        "auto_play": auto_play,
     }, context_instance=RequestContext(request))
 
 
