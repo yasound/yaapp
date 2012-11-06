@@ -2582,7 +2582,7 @@ def profiling(request):
     return render_to_response("yabase/profiling.html", {"queries": SqlProfilingMiddleware.Queries})
 
 
-@check_api_key(methods=['GET'])
+@check_api_key(methods=['POST'])
 def generate_download_current_song_url(request, radio_uuid):
     """
     return a temporary token linked to user account to be given to streamer.
