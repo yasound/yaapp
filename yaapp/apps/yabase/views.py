@@ -2618,16 +2618,9 @@ def download_current_song(request, radio_uuid, token):
     current_song = radio.current_song
     yasound_song_id = current_song.metadata.yasound_song_id
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
-    path = yasound_song.get_song_hq_path()
-    mimetype = mimetypes.guess_type(path)[0]
-    if not mimetype:
-        mimetype = "application/octet-stream"
+    path = yasound_song.get_song_lq_relative_path()
 
-    file = None
-    try:
-        file = open(path,"r")
-    except:
-        raise Http404
-
-    response = HttpResponse(file.read(), mimetype=mimetype)
+    response = HttpResponse()
+    response['Content-Type'] = 'audio/mp3'
+    response['X-Accel-Redirect'] = '/songs/' + path
     return response
