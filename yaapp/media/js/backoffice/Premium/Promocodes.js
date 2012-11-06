@@ -235,7 +235,7 @@ Yasound.Premium.UI.DurationUnitCombo = function (value) {
     return {
         xtype: 'combo',
         allowBlank:false,
-        fieldLabel: 'Duration unit',
+        fieldLabel: gettext('Duration unit'),
         hiddenName:'duration_unit',
         store: new Ext.data.ArrayStore({
             fields: ['id', 'label'],
