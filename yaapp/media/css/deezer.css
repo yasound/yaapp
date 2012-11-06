@@ -48,9 +48,9 @@
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.3);
   *border: 1px solid #999;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
+  -webkit-border-radius: 0px;
+     -moz-border-radius: 0px;
+          border-radius: 0px;
   -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
      -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
           box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
@@ -59,6 +59,18 @@
           background-clip: padding-box;
 }
 
+.modal-header {
+  background:#e8e8e8;
+  color:#606060;
+  font-size:20px;
+  font-weight:700;text-shadow:0 1px #fff;
+}
+
+.modal-footer {
+  background:#f5f5f5;
+}
+
+}
 .modal.fade {
   top: -25%;
 }
@@ -101,6 +113,8 @@
  * Buttons
  */
 
+.modal .btn,
+.yabutton,
 .yabutton-small {
   background:#f0f0f0;
   background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(230,230,230)),color-stop(1, rgb(254,254,254)));
@@ -114,6 +128,8 @@
   box-shadow:none;
 }
 
+.modal .btn:hover,
+.yabutton:hover,
 .yabutton-small:hover {
   background:#e6e6e6;
   background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(205,205,205)),color-stop(1, rgb(255,255,255)));
@@ -146,6 +162,34 @@
   border:1px solid #d0d0d0;
   text-shadow:0 1px #fff;
   box-shadow:none;
+}
+
+.modal .btn-primary,
+.save-btn {
+  background:#62a3d5;
+  background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(59,115,158)),color-stop(1, rgb(99,164,214)));
+  background-image:-moz-linear-gradient(center bottom,rgb(59,115,158) 0%,rgb(99,164,214) 100%);
+  border:1px solid #447abe;
+  text-shadow:0 1px #386b92;
+  color: white;
+  font-size:12px;
+  border-radius:3px;
+  font-weight:bold;
+  box-shadow:none;
+  padding:3px 10px;
+}
+
+.modal .btn-primary:hover,
+.save-btn:hover {
+  background:#5387ac;
+  background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(46,91,123)),color-stop(1, rgb(84,136,173)));
+  background-image:-moz-linear-gradient(center bottom,rgb(46,91,123) 0%,rgb(84,136,173) 100%);
+  border:1px solid #447abe;
+  color: white;
+  font-size:12px;
+  border-radius:3px;
+  box-shadow:none;
+  text-shadow:0 1px #386b92;
 }
 
 /* Portrait tablet to landscape and desktop */
