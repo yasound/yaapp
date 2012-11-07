@@ -516,7 +516,7 @@ class RadioWallEventResource(ModelResource):
     song_cover_url = fields.CharField(attribute='song_cover_url', default=None, readonly=True)
 
     class Meta:
-        queryset = WallEvent.objects.all().order_by('-start_date', 'type')
+        queryset = WallEvent.objects.all().select_related('user', 'user__userprofile', 'radio').order_by('-start_date', 'type')
         resource_name = 'wall'
         fields = ['id', 'type', 'start_date', 'song_name', 'song_artist', 'song_album', 'song_cover_filename', 'user_name', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False

@@ -461,7 +461,7 @@ class RadioManager(models.Manager):
         self.all().update(computing_next_songs=False)
 
     def ready_objects(self):
-        return self.filter(ready=True, creator__isnull=False, deleted=False)
+        return self.filter(ready=True, creator__isnull=False, deleted=False).select_related('creator', 'creator__userprofile')
 
     def most_actives(self):
         from yametrics.models import RadioMetricsManager
@@ -844,22 +844,18 @@ class Radio(models.Model):
             self.tags.add(tag)
 
     def fill_bundle(self, bundle):
-        likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         bundle.data['description'] = urlize(self.description)
-        bundle.data['likes'] = likes
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
         bundle.data['web_url'] = self.web_url
 
     def as_dict(self, request_user=None):
-        likes = self.radiouser_set.filter(mood=yabase_settings.MOOD_LIKE).count()
         data = {
             'id': self.id,
             'uuid': self.uuid,
             'origin': self.origin,
             'name': self.name,
-            'likes': likes,
             'favorites': self.favorites,
             'nb_current_users' : self.nb_current_users,
             'tags' : self.tags_to_string(),

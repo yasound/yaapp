@@ -165,6 +165,7 @@
 }
 
 .modal .btn-primary,
+.action-btn,
 .save-btn {
   background:#62a3d5;
   background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(59,115,158)),color-stop(1, rgb(99,164,214)));
@@ -180,6 +181,7 @@
 }
 
 .modal .btn-primary:hover,
+.action-btn:hover,
 .save-btn:hover {
   background:#5387ac;
   background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(46,91,123)),color-stop(1, rgb(84,136,173)));

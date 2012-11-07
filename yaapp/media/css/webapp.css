@@ -4104,7 +4104,7 @@ a.yabutton {
 a.yabutton:hover {
     text-decoration:none;
 }
-
+.action-btn,
 .yabutton-small {
     height:27px;
 	padding:3px 10px;
@@ -4123,17 +4123,16 @@ a.yabutton:hover {
     vertical-align:middle;
 }
 
+a.action-btn,
 a.yabutton-small {
     display: inline;
 }
 
-
+.action-btn:hover,
 .yabutton-small:hover {
     border:1px solid #cbcdc9;
     border-radius:7px;
     box-shadow:1px 3px 4px #e3e3e3;
-}
-.yabutton-small:hover {
     text-decoration: none;
 }
 
