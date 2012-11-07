@@ -18,24 +18,29 @@ Yasound.Utils.humanizeDate = function(rawDate) {
     return Yasound.Utils.momentDate(rawDate).fromNow();
 };
 
+Yasound.Utils.containerHeight = function () {
+    var containerHeight = 100;
+    if (Yasound.App.appName === 'deezer') {
+        var container = $('#webapp-container-parent');
+        containerHeight = container.height();
+    } else {
+        var viewportHeight = $(window).height();
+        var headerHeight = $('#header').height();
+        containerHeight = viewportHeight - headerHeight;
+    }
+    return containerHeight;
+};
+
 Yasound.Utils.cellsPerPage = function() {
-    var viewportHeight = $(window).height();
-    var headerHeight = $('#header').height();
-    var containerHeight = viewportHeight - headerHeight;
-
+    var containerHeight = Yasound.Utils.containerHeight();
     var cellHeight = 217;
-
     var rows =  Math.ceil(containerHeight / cellHeight);
     return rows*4 * 2;
 };
 
 Yasound.Utils.userCellsPerPage = function() {
-    var viewportHeight = $(window).height();
-    var headerHeight = $('#header').height();
-    var containerHeight = viewportHeight - headerHeight;
-
+    var containerHeight = Yasound.Utils.containerHeight();
     var cellHeight = 158;
-
     var rows =  Math.ceil(containerHeight / cellHeight);
     return rows*5 * 2;
 };
