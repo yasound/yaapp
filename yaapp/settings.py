@@ -398,8 +398,12 @@ INSTALLED_APPS = (
     'yashow',
     'compressor',
     'radioways',
-    'debug_toolbar',
 )
+
+if LOCAL_MODE:
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

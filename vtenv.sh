@@ -29,13 +29,6 @@ else
     git pull origin master
     cd ../../..
 fi
-if [ ! -d ./vtenv/src/fabric ];then
-    vtenv/bin/pip install -e git://github.com/fabric/fabric.git#egg=fabric
-else
-    cd vtenv/src/fabric
-    git pull origin master
-    cd ../../..
-fi
 if [ ! -f ./fab ];then
     echo " * Now you can type ./local_install.sh to init your *local* installation"
     ln -s vtenv/bin/fab fab

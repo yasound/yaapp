@@ -46,3 +46,4 @@ pygeoip
 unicodecsv
 django_compressor
 debug_toolbar
+fabric
