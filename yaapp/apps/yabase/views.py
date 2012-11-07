@@ -1514,8 +1514,10 @@ class WebAppView(View):
 
     def _default_radio_uuid(self, user):
         radios = Radio.objects.ready_objects().filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order')
-        if radios.count() > 0:
-            return radios[0].uuid
+        try:
+            return radios.values_list('uuid', flat=True)[0]
+        except:
+            pass
         return None
 
     def get(self, request, radio_uuid=None, user_id=None, template_name='yabase/webapp.html', page='home', app_name='app', *args, **kwargs):
