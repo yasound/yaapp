@@ -1506,6 +1506,15 @@ class UserProfile(models.Model):
         if commit:
             self.save()
 
+    @property
+    def has_radios(self):
+        """return True if profile has at least one radio"""
+        try:
+            self.user.radio_set.all()[0]
+            return True
+        except:
+            return False
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         _profile, _created = UserProfile.objects.get_or_create(user=instance)
