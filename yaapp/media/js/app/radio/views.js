@@ -167,14 +167,33 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     },
 
     initialize: function () {
+        _.bindAll(this, 'onDeezerSongFound', 'onDeezerSongNotFound');
         this.model.bind('change', this.render, this);
+        $.subscribe('/player/deezer/songFound', this.onDeezerSongFound);
+        $.subscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
+
     onClose: function () {
         this.model.unbind('change', this.render);
+        $.unsubscribe('/player/deezer/songFound', this.onDeezerSongFound);
+        $.unsubscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
+
     render: function () {
         $(this.el).html(ich.trackInRadioTemplate(this.model.toJSON()));
         return this;
+    },
+
+    onDeezerSongFound: function(e, player) {
+        var $link = $('.dz-addtoplaylist', this.el);
+        $link.attr('dz-id', player.deezerAlbumId);
+        DZ.framework.parse('.dz-addtoplaylist');
+        $link.show();
+    },
+
+    onDeezerSongNotFound: function(e, player) {
+        var $link = $('.dz-addtoplaylist', this.el);
+        $link.hide();
     }
 });
 
