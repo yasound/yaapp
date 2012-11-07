@@ -220,7 +220,7 @@ $(document).ready(function () {
 
         _updateDeezerCanvas: function () {
             if (DZ && DZ.canvas) {
-                DZ.canvas.setSize(1125);
+                DZ.canvas.setSize(1325);
             }
         },
 
