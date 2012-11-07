@@ -180,7 +180,7 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
 
         if (Yasound.App.appName === 'deezer') {
             var player = Yasound.App.player;
-            if (player.deezerAlbumId) {
+            if (player.deezerId) {
                 this.addDeezerLinks(player);
             }
         }
@@ -190,9 +190,9 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
 
     addDeezerLinks: function(player) {
         var $link = $('.dz-addtoplaylist', this.el);
-        $link.attr('dz-id', player.deezerAlbumId);
+        $link.attr('dz-id', player.deezerId);
         $link.show();
-        DZ.framework.parse('.dz-addtoplaylist');
+        DZ.framework.parse();
     }
 });
 
