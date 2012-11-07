@@ -261,9 +261,10 @@ Yasound.Player.Deezer = function () {
 
         onSongFound: function (deezerId, deezerAlbumId, deezerArtistId) {
             mgr.noTrackFound = false;
+
             mgr.deezerId = deezerId;
             mgr.deezerAlbumId = deezerAlbumId;
-            mgr.deezer.ArtistId = deezerArtistId;
+            mgr.deezerArtistId = deezerArtistId;
 
             $.publish('/player/deezer/songFound', mgr);
 
@@ -281,9 +282,10 @@ Yasound.Player.Deezer = function () {
 
         onSongNotFound: function () {
             mgr.noTrackFound = true;
+
             mgr.deezerId = 0;
             mgr.deezerAlbumId = 0;
-            mgr.deezer.ArtistId = 0;
+            mgr.deezerArtistId = 0;
 
             $.publish('/player/deezer/songNotFound', mgr);
 
