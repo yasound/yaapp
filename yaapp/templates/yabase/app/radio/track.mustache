@@ -11,3 +11,6 @@
             <h2>{{ yasound_song.title|default:'<% title %>' }}</h2>
    		</div>
    </div>
+   {% ifequal app_name 'deezer' %}
+   <a class="dz-addtoplaylist" dz-id="0" style='display:none;'></a>
+   {% endifequal %}

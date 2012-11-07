@@ -168,6 +168,8 @@ Yasound.Player.Deezer = function () {
         radio: undefined,
         radioHasChanged: true,
         deezerId: 0,
+        deezerAlbumId: 0,
+        deezerArtistId: 0,
         playing: false,
         trackLoaded: false,
         autoplay: false,
@@ -241,15 +243,30 @@ Yasound.Player.Deezer = function () {
                 console.log('found ' + total + ' items');
                 var item = response.data[0];
                 var deezerId = item.id;
-                mgr.onSongFound(deezerId);
+                var deezerArtistId = 0;
+                var deezerAlbumId = 0;
+                if (item.artist) {
+                    deezerArtistId = item.artist.id;
+                }
+                if (item.album) {
+                    deezerAlbumId = item.album.id;
+                }
+                mgr.onSongFound(deezerId, deezerAlbumId, deezerArtistId);
+
+
             } else {
                 mgr.onSongNotFound();
             }
         },
 
-        onSongFound: function (deezerId) {
+        onSongFound: function (deezerId, deezerAlbumId, deezerArtistId) {
             mgr.noTrackFound = false;
             mgr.deezerId = deezerId;
+            mgr.deezerAlbumId = deezerAlbumId;
+            mgr.deezer.ArtistId = deezerArtistId;
+
+            $.publish('/player/deezer/songFound', mgr);
+
             console.log('id is ' + deezerId);
 
             if (mgr.radioHasChanged) {
@@ -264,6 +281,12 @@ Yasound.Player.Deezer = function () {
 
         onSongNotFound: function () {
             mgr.noTrackFound = true;
+            mgr.deezerId = 0;
+            mgr.deezerAlbumId = 0;
+            mgr.deezer.ArtistId = 0;
+
+            $.publish('/player/deezer/songNotFound', mgr);
+
             console.log('no track found');
             if (mgr.radioHasChanged) {
                 console.log('radio has changed, stopping player');
