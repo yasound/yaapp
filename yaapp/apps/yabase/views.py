@@ -1627,7 +1627,7 @@ class WebAppView(View):
         root = get_root(app_name)
 
         sound_player = 'soundmanager'
-        if app_name == 'deezer':
+        if app_name == 'deezer' and settings.LOCAL_MODE == False:
             sound_player = 'deezer'
 
 
