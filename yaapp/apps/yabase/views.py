@@ -1273,7 +1273,7 @@ class WebAppView(View):
         if radio.current_song:
             context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        wall_events = WallEvent.objects.filter(radio=radio).order_by('-start_date')[:15]
+        wall_events = WallEvent.objects.select_related('user', 'user__userprofile', 'radio').filter(radio=radio).order_by('-start_date')[:15]
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
@@ -1612,11 +1612,8 @@ class WebAppView(View):
         genre_form = RadioGenreForm()
 
         has_radios = False
-        radio_count = 0;
         if request.user.is_authenticated():
-            radio_count = request.user.get_profile().own_radios(only_ready_radios=False).count()
-        if radio_count > 0:
-            has_radios = True
+            has_radios = request.user.get_profile().has_radios
 
 
         if not radio_uuid:
@@ -1753,9 +1750,9 @@ class WebAppView(View):
             hd_enabled = user_profile.permissions.hd.is_set
             hd_expiration_date = user_profile.hd_expiration_date
 
-            radio_count = request.user.get_profile().own_radios(only_ready_radios=False).count()
-            if radio_count > 0:
-                has_radios = True
+            has_radios = False
+            if request.user.is_authenticated():
+                has_radios = request.user.get_profile().has_radios
 
             if user_profile.web_preferences().get('hide_welcome_popup'):
                 show_welcome_popup = False
