@@ -189,9 +189,16 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     },
 
     addDeezerLinks: function(player) {
-        var $link = $('.dz-addtoplaylist', this.el);
-        $link.attr('dz-id', player.deezerId);
-        $link.show();
+        var $addToPlaylist = $('.dz-addtoplaylist', this.el);
+        $addToPlaylist.attr('dz-id', player.deezerId);
+        $addToPlaylist.show();
+
+        if (player.deezerAlbumId) {
+            var $addToCollection = $('.dz-library', this.el);
+            $addToCollection.attr('dz-id', player.deezerAlbumId);
+            $addToCollection.show();
+        }
+
         DZ.framework.parse();
     }
 });
