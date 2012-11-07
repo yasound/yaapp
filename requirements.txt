@@ -45,5 +45,5 @@ pygeoip
 -e git+https://github.com/yasound/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
 unicodecsv
 django_compressor
-debug_toolbar
+django-debug-toolbar
 fabric
