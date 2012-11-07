@@ -167,33 +167,32 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     },
 
     initialize: function () {
-        _.bindAll(this, 'onDeezerSongFound', 'onDeezerSongNotFound');
+        _.bindAll(this, 'addDeezerLinks');
         this.model.bind('change', this.render, this);
-        $.subscribe('/player/deezer/songFound', this.onDeezerSongFound);
-        $.subscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
-        $.unsubscribe('/player/deezer/songFound', this.onDeezerSongFound);
-        $.unsubscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
 
     render: function () {
         $(this.el).html(ich.trackInRadioTemplate(this.model.toJSON()));
+
+        if (Yasound.App.appName === 'deezer') {
+            var player = Yasound.App.player;
+            if (player.deezerAlbumId) {
+                this.addDeezerLinks(player);
+            }
+        }
+
         return this;
     },
 
-    onDeezerSongFound: function(e, player) {
+    addDeezerLinks: function(player) {
         var $link = $('.dz-addtoplaylist', this.el);
         $link.attr('dz-id', player.deezerAlbumId);
-        DZ.framework.parse('.dz-addtoplaylist');
         $link.show();
-    },
-
-    onDeezerSongNotFound: function(e, player) {
-        var $link = $('.dz-addtoplaylist', this.el);
-        $link.hide();
+        DZ.framework.parse('.dz-addtoplaylist');
     }
 });
 
