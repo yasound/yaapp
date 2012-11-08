@@ -140,7 +140,8 @@
   text-shadow:0 1px #fff;
   box-shadow:none;
 }
-
+#profile-box-container button,
+#login-box-container form #login-btn-connection,
 .yabutton-large {
   background:#f0f0f0;
   background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(230,230,230)),color-stop(1, rgb(254,254,254)));
@@ -153,6 +154,8 @@
   font-weight:bold;
 }
 
+#profile-box-container button:hover,
+#login-box-container form #login-btn-connection:hover,
 .yabutton-large:hover {
   background:#e6e6e6;
   background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(205,205,205)),color-stop(1, rgb(255,255,255)));
