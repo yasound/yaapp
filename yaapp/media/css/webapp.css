@@ -6691,8 +6691,18 @@ a.yabutton-small {
     }
 
     .wall-container {
-        width: 56%;
-        max-width:400px;
+    }
+
+    #webapp-track-container {
+        margin-left:25px;
+    }
+
+    #webapp-radio {
+        padding-left:20px;
+    }
+
+    .wall-audience-container {
+        margin-left:27px;
     }
 
     .wall-btn-responsive {
@@ -6700,7 +6710,7 @@ a.yabutton-small {
     }
 
     .wall-responsive-span4 {
-        width:300px;
+        width:240px;
         margin-left:0px;
     }
 

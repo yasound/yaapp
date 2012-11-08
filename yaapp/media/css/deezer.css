@@ -209,4 +209,8 @@
     #player #metadata-container {
         width:396px;
     }
+
+    .deezer-actions {
+      margin-left: 25px;
+    }
 }
