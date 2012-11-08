@@ -1,0 +1,29 @@
+{% extends "yabase/webapp.html" %}
+{% load i18n %}
+
+{% block fb_open_graph %}
+  <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" />
+  <meta property="og:type"   content="{{ FACEBOOK_APP_NAMESPACE}}:song" />
+  <meta property="og:url"    content="{{ request.build_absolute_uri }}" />
+  <meta property="og:title"  content="{{ song }}" />
+  <meta property="og:image"  content="{{ radio_picture_absolute_url }}" />
+  <meta property="og:audio"  content="{{ radio.stream_url }}" />
+  <meta property="og:audio:type" content="application/mp3" />
+  <meta property="{{ FACEBOOK_APP_NAMESPACE}}:radio_station" content="{{ radio_station_url }}" />
+  <meta property="og:locale:alternate" content="fr_FR" />
+
+  <meta property="og:video:height" content="40" />
+  <meta property="og:video:width" content="80" />
+  <meta property="og:video:type" content="application/x-shockwave-flash" />
+  <meta property="og:video" content="{{ flash_player_absolute_url }}?mp3={{radio_url}}&showslider=0&showvolume=1&buttonwidth=40&height=40&volumewidth=40&autoplay=1" />
+  <meta property="og:video:secure_url" content="{{ flash_player_absolute_url }}?mp3={{radio_url}}&showslider=0&showvolume=1&buttonwidth=40&height=40&volumewidth=40&autoplay=1" />
+
+{% endblock %}
+
+
+{% block content %}
+<div class='container' id='webapp-content'>
+    {% include "yabase/app/radio/radioPage.mustache" %}
+</div>
+{% endblock %}
+
