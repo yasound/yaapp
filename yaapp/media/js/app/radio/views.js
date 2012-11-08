@@ -197,6 +197,12 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
         $addToPlaylist.attr('dz-id', player.deezerId);
         $addToPlaylist.show();
 
+        if (player.deezerArtistId) {
+            var $share = $('.dz-share', this.el);
+            $share.attr('dz-id', player.deezerArtistId);
+            $share.show();
+        }
+
         DZ.framework.parse();
     },
 
@@ -206,6 +212,7 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
 
     onDeezerSongNotFound: function(e, player) {
         $('.dz-addtoplaylist', this.el).hide();
+        $('.dz-share', this.el).hide();
     }
 });
 
