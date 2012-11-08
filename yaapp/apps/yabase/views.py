@@ -2610,13 +2610,11 @@ def profiling(request):
     return render_to_response("yabase/profiling.html", {"queries": SqlProfilingMiddleware.Queries})
 
 
-@check_api_key(methods=['POST'])
+@check_api_key(methods=['POST'], login_required=False)
 def generate_download_current_song_url(request, radio_uuid):
     """
     return a temporary token linked to user account to be given to streamer.
     """
-    if not request.user.is_superuser:
-        raise Http404
     token = uuid.uuid4().hex
     key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
 
