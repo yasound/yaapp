@@ -34,7 +34,7 @@ from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone
+from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone, is_deezer
 from yacore.geoip import request_country
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
@@ -180,7 +180,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
     if genre != '':
         qs = qs.filter(genre=genre)
 
-    if is_iphone(request):
+    if is_iphone(request) or is_deezer(request):
         selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).exclude(origin=yabase_settings.RADIO_ORIGIN_KFM).order_by('featuredradio__order').all()
     else:
         selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
@@ -2026,7 +2026,7 @@ def most_active_radios(request, internal=False, genre=''):
         qs = Radio.objects
 
     qs = qs.exclude(deleted=True)
-    if is_iphone(request):
+    if is_iphone(request) or is_deezer(request):
         qs = qs.exclude(origin=yabase_settings.RADIO_ORIGIN_KFM)
 
     total_count = qs.count()
@@ -2614,6 +2614,9 @@ def profiling(request):
 def generate_download_current_song_url(request, radio_uuid):
     """return a temporary token linked to user account to be given to streamer.
     """
+    if not is_deezer(request):
+        raise Http404
+
     token = uuid.uuid4().hex
     key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
 
