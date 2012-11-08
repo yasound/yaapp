@@ -1179,7 +1179,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
     if song_instance.playlist.radio != radio:
         raise Http404
 
-    url = reverse('webapp_default_radio', args=[radio.uuid])
+    url = reverse('webapp_default_radio_song', args=[radio.uuid, song_instance_id])
     return HttpResponseRedirect(url)
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
@@ -1286,6 +1286,29 @@ class WebAppView(View):
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
 
         return context, 'yabase/app/radio/radioPage.html'
+
+    def song(self, request, context, *args, **kwargs):
+        radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        song_instance = get_object_or_404(SongInstance, id=kwargs['song_id'])
+        radio.favorite = radio.is_favorite(request.user)
+        context['radio'] = radio
+        context['ignore_radio_cookie'] = True
+        if radio.current_song:
+            context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
+        wall_events = WallEvent.objects.select_related('user', 'user__userprofile', 'radio').filter(radio=radio).order_by('-start_date')[:15]
+        context['wall_events'] = wall_events
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
+        context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
+
+        bdata = {
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'radio': [radio.as_dict(request.user)],
+        }
+        context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
+        context['song_instance'] = song_instance
+        context['radio_station_url'] = absolute_url(reverse('webapp_default_radio', args=[radio.uuid]))
+        return context, 'yabase/app/radio/songPage.html'
 
     def search(self, request, context, *args, **kwargs):
         query = kwargs['query']

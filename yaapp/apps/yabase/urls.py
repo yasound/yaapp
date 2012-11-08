@@ -6,6 +6,7 @@ urlpatterns = patterns('yabase.views',
     # web application
     url(r'^$', WebAppView.as_view(), {'page': 'home'}, name='webapp_default'),
     url(r'^radio/(?P<radio_uuid>\w+)/$', WebAppView.as_view(),  {'page': 'radio'}, name='webapp_default_radio'),
+    url(r'^radio/(?P<radio_uuid>\w+)/(?P<song_id>\d+)/$', WebAppView.as_view(),  {'page': 'song'}, name='webapp_default_radio_song'),
     url(r'^search/(?P<query>\S+)/$',  WebAppView.as_view(),  {'page': 'search'}, name='webapp_default_search'),
     url(r'^radios/$', WebAppView.as_view(), {'page': 'radios'}, name='webapp_default_radios'),
     url(r'^radios/new/$', WebAppView.as_view(), {'page': 'new_radio'}, name='webapp_default_new_radio'),
