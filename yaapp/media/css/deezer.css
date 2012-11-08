@@ -200,6 +200,9 @@
 .deezer-actions {
   margin-left: 45px;
 }
+.deezer-actions a {
+  margin-bottom: 12px;
+}
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
