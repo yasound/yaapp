@@ -5,11 +5,22 @@ Namespace('Yasound.Views');
 Yasound.Views.Share = Backbone.View.extend({
 
     events: {
-        "click #fb_share": "onFacebookShare"
+        "click #fb_share": "onFacebookShare",
+        "mouseup #widget": "selectAll",
+        "click #check-auto-play": "checkAutoplay",
+        "click #check-large": "checkLarge",
+        "mouseup #stream": "selectAll"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'generateSocialShare', 'generateTwitterText', 'radioUrl', 'generateFacebookText');
+        this.large = true;
+        this.autoPlay = true;
+        _.bindAll(this, 'render',
+            'generateSocialShare',
+            'generateTwitterText',
+            'radioUrl',
+            'generateFacebookText',
+            'refreshWidgetCode');
     },
 
     onClose: function() {
@@ -22,7 +33,9 @@ Yasound.Views.Share = Backbone.View.extend({
         this.reset();
         this.radio = radio;
         $(this.el).html(ich.sharePageTemplate(radio.toJSON()));
+
         this.generateSocialShare();
+        this.refreshWidgetCode();
         return this;
     },
 
@@ -89,5 +102,44 @@ Yasound.Views.Share = Backbone.View.extend({
         function callback (response) {
         }
         FB.ui(obj, callback);
+    },
+
+    selectAll: function (e) {
+        $(e.target).select();
+    },
+
+    checkAutoplay: function (e) {
+        if ($(e.target).attr('checked')) {
+            this.autoPlay = true;
+        } else {
+            this.autoPlay = false;
+        }
+        this.refreshWidgetCode();
+    },
+
+    checkLarge: function (e) {
+        if ($(e.target).attr('checked')) {
+            this.large = true;
+        } else {
+            this.large = false;
+        }
+        this.refreshWidgetCode();
+    },
+
+    refreshWidgetCode: function () {
+        var url = 'https://yasound.com/widget/' + this.radio.get('uuid') + '/';
+        if (this.large) {
+            url = url + 'large';
+        }
+        if (this.autoPlay) {
+            url = url + '?autoplay=1';
+        }
+        var size = 380;
+        if (this.large) {
+            size = 280;
+        }
+        code = '<iframe frameborder="0" height="' + size + '" scrolling="no" src="' + url + '"></iframe>';
+        $('#widget').val(code);
+        this.code = code;
     }
 });
