@@ -2612,14 +2612,15 @@ def profiling(request):
 
 @check_api_key(methods=['POST'], login_required=False)
 def generate_download_current_song_url(request, radio_uuid):
-    """
-    return a temporary token linked to user account to be given to streamer.
+    """return a temporary token linked to user account to be given to streamer.
     """
     token = uuid.uuid4().hex
     key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     current_song = radio.current_song
+    if current_song is None:
+        raise Http404
     yasound_song_id = current_song.metadata.yasound_song_id
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
 
