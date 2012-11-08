@@ -48,6 +48,14 @@ def is_iphone(request):
     if app_version:
         return True
 
+def is_deezer(request):
+    """return True if request is made with deezer inapp. """
+
+    referer = request.META.get('HTTP_REFERER', '')
+    if referer.startswith('https://yasound.com/deezer/'):
+        return True
+    return False
+
 def coerce_put_post(request):
     """
     Django doesn't particularly understand REST.
