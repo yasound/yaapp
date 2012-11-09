@@ -968,9 +968,11 @@ class Radio(models.Model):
 
         self.save()
 
-    def song_starts_playing(self, song_instance, play_date=datetime.datetime.now()):
+    def song_starts_playing(self, song_instance, play_date=None):
+        if play_date == None:
+            play_date = datetime.datetime.now()
         # if radio has listeners, the song has been really played, so report it
-        #logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
+        # logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
         if self.current_song:
             try:
                 RadioUser.objects.filter(radio=self, listening=True)[0]
@@ -990,7 +992,6 @@ class Radio(models.Model):
         async_new_current_song.delay(sender=self, radio=self, song=song_instance)
 
         SongInstance.objects.filter(id=song_instance.id).update(play_count=F('play_count') + 1, last_play_time = play_date)
-
 
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.get_profile().name, self.name)
