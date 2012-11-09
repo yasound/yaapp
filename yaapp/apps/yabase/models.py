@@ -971,12 +971,8 @@ class Radio(models.Model):
     def song_starts_playing(self, song_instance, play_date=datetime.datetime.now()):
         # if radio has listeners, the song has been really played, so report it
         #logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
-        if self.current_song:
-            try:
-                RadioUser.objects.filter(radio=self, listening=True)[0]
-                task_report_song.delay(self, self.current_song)
-            except:
-                pass
+        if self.current_song and self.nb_current_users > 0:
+            task_report_song.delay(self, self.current_song)
 
         # update current song
         self.current_song = song_instance
