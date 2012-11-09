@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 11:46+0100\n"
+"POT-Creation-Date: 2012-11-09 06:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: js/app/app.js:67
+#: js/app/app.js:68
 msgid "Unfinished uploads are pending, do you really want to leave Yasound?"
 msgstr "Des uploads sont en cours, voulez-vous vraiment quitter yasound ?"
 
@@ -30,20 +30,20 @@ msgstr "Playlist Yasound"
 msgid "Yasound Import"
 msgstr "Import Yasound"
 
-#: js/app/utils.js:61
+#: js/app/utils.js:66
 msgid "Data saved with success"
 msgstr "Données sauvegardées avec succès"
 
-#: js/app/utils.js:62
+#: js/app/utils.js:67
 msgid "Error while saving data"
 msgstr "Erreur lors de la sauvegarde des données"
 
-#: js/app/utils.js:122
-#: js/app/utils.js.py:123
+#: js/app/utils.js:127
+#: js/app/utils.js.py:128
 msgid "Information"
 msgstr "Information"
 
-#: js/app/utils.js:124
+#: js/app/utils.js:129
 #: js/backoffice/ux/LoggerWindow.js:14
 msgid "Close"
 msgstr "Fermer"
@@ -116,14 +116,14 @@ msgstr "Album inconnu"
 
 #: js/app/common/models.js:328
 #: js/app/profile/models.js:37
-#: js/app/share/views.js:36
-#: js/app/share/views.js.py:78
+#: js/app/share/views.js:49
+#: js/app/share/views.js.py:91
 msgid "by"
 msgstr "par"
 
 #: js/app/common/models.js:330
 #: js/app/profile/models.js:39
-#: js/app/share/views.js:37
+#: js/app/share/views.js:50
 msgid "on"
 msgstr "sur"
 
@@ -393,15 +393,15 @@ msgstr "L'analyse de l'import iTunes a démarré"
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:561
+#: js/app/radio/views.js:599
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:817
+#: js/app/radio/views.js:855
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:818
+#: js/app/radio/views.js:856
 #: js/app/settings/views.js:179
 #: js/app/settings/views.js.py:189
 #: js/app/settings/views.js:199
@@ -409,8 +409,8 @@ msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
 
 #: js/app/settings/views.js:46
-msgid "dd/mm/yyyy"
-msgstr ""
+msgid "mm/dd/yyyy"
+msgstr "dd/mm/yyyy"
 
 #: js/app/settings/views.js:113
 msgid "Facebook settings saved"
@@ -434,7 +434,7 @@ msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 msgid "Settings updated"
 msgstr "Paramètres mis à jour"
 
-#: js/app/share/views.js:34
+#: js/app/share/views.js:47
 msgid "I am listening to"
 msgstr "J'écoute"
 
@@ -911,6 +911,7 @@ msgid "Duration"
 msgstr "Durée"
 
 #: js/backoffice/Premium/PromocodeGrid.js:56
+#: js/backoffice/Premium/Promocodes.js:237
 msgid "Duration unit"
 msgstr "Unité de durée"
 

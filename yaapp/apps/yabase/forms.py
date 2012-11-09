@@ -58,6 +58,11 @@ class MyInformationsForm(BootstrapModelForm):
             Fieldset('', 'name', 'url', 'bio_text', 'birthday', 'gender', 'city'),
         )
 
+    def __init__(self, *args, **kwargs):
+        super(MyInformationsForm, self).__init__(*args, **kwargs)
+        self.fields['birthday'].widget.format = unicode(_('%m/%d/%Y'))
+
+
     def clean_birthday(self):
         birthday = self.cleaned_data['birthday']
         if birthday is None:

@@ -27,6 +27,7 @@ $(document).ready(function () {
     Yasound.App.hd = g_hd_enabled;
     Yasound.App.RADIO_ORIGIN_YASOUND = 0; // constant, radio.origin=0 means radioways radio
     Yasound.App.RADIO_ORIGIN_RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
+    Yasound.App.LanguageCode = g_language_code;
 
     if (cookies.get('radio') && !Yasound.App.ignoreRadioCookie) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');
