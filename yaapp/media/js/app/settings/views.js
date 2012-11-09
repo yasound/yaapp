@@ -43,8 +43,8 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
         $(this.el).html(ich.settingsPageTemplate());
         $("select", this.el).uniform({});
         $('#id_birthday').datepicker({
-            format: gettext('dd/mm/yyyy'),
-            language: 'fr'
+            format: gettext('mm/dd/yyyy'),
+            language: Yasound.App.LanguageCode
         });
 
 

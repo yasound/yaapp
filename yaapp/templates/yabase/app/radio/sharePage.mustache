@@ -1,15 +1,21 @@
 {% load i18n %}
 <div class='share'>
-    <p>{% trans "Share this song on:" %}
-    </p>
+    <h4>{% trans "Share this song on:" %}</h4>
     <ul>
     <li><a href='#' id='fb_share' class='btn-facebook'><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Facebook" %}</span></a></li>
     <li><a href='#' id='tw_share' class='btn-twitter' target='blank'><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Twitter" %}</span></a></li>
     </ul>
-    <div class='clear'>&nbsp;</div>
-    <label for='stream'>{% trans "Link to stream:" %}</label>
+    <div class='clear'></div>
+</div>
+<div>
+    <label class='label-title' for='widget'>{% trans "Add this radio on your blog:" %}</label>
+    <label class="checkbox inline">
+        <input type="checkbox" id="check-auto-play" value="option1" checked>{% trans "Auto play" %}
+    </label>
+    <label class="checkbox inline">
+        <input type="checkbox" id="check-large" value="option2" checked>{% trans "Large widget" %}
+    </label>
+    <textarea id='widget'></textarea>
+    <label class='label-title' for='stream'>{% trans "Link to stream:" %}</label>
     <input id='stream' value='<% stream_url %>' />
-
-    <label for='widget'>{% trans "Add this radio on your blog:" %}</label>
-    <textarea id='widget'><iframe frameborder="0" height="380" scrolling="no" src="https://yasound.com/widget/<% uuid %>"></iframe></textarea>
 </div>

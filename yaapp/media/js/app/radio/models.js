@@ -63,12 +63,8 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     }
 });
 
-Yasound.Data.Models.RadioUser = Backbone.Model.extend({
-    idAttribute: 'id'
-});
-
 Yasound.Data.Models.RadioUsers = Yasound.Data.Paginator.extend({
-    model: Yasound.Data.Models.RadioUser,
+    model: Yasound.Data.Models.User,
     perPage: 10,
     url: function() {
         return '/api/v1/radio/' + this.radio.get('id') + '/current_user/';
@@ -78,10 +74,6 @@ Yasound.Data.Models.RadioUsers = Yasound.Data.Paginator.extend({
         this.reset();
         this.radio = radio;
         return this;
-    },
-
-    comparator: function(radioUser) {
-        return radioUser.get("id");
     }
 });
 
@@ -94,12 +86,8 @@ Yasound.Data.Models.UserRadios = Yasound.Data.Paginator.extend({
 });
 
 Yasound.Data.Models.Listeners = Yasound.Data.Paginator.extend({
-    model: Yasound.Data.Models.RadioUser,
+    model: Yasound.Data.Models.User,
     url: function() {
         return '/api/v1/radio/' + this.uuid + '/listeners/';
-    },
-
-    comparator: function(radioUser) {
-        return radioUser.get("id");
     }
 });

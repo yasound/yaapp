@@ -30,7 +30,6 @@ body {
     padding-left:116px;
 }
 .share {
-    float: left;
     margin-right: 12px;
     margin-top: 2px;
 }
@@ -1096,8 +1095,13 @@ input::-webkit-input-placeholder {
     -o-box-shadow:none;
 }
 
+#modal-share .modal-body {
+    max-height: 400px;
+}
+
 #modal-share ul {
     margin-left: 0;
+    margin-top:16px;
     list-style:none;
     width:100%;
 }
@@ -1118,11 +1122,26 @@ input::-webkit-input-placeholder {
 
 #modal-share #widget {
     width:100%;
-    height:100%;
+    height:55px;
+    font-size: 14px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
 }
 
 #modal-share #stream {
     width:100%;
+    font-size: 14px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+#modal-share .checkbox.inline {
+    width: 120px;
+    margin-top:0;
+    margin-bottom:8px;
+}
+
+#modal-share .label-title {
+    font-size:14px;
+    font-weight: bold;
 }
 
 /*--- LOADER IMAGE ---*/
@@ -2199,7 +2218,6 @@ ul .mask-user .caption-user {
 	width:105px;
 	color:#8c8d8e;
 	font-size:14px;
-	text-transform:lowercase;
 }
 
 .user-cell-inner {
@@ -2358,6 +2376,7 @@ ul .user-cell:hover .caption {
     height:50px;
     margin:13px 21px;
     overflow:hidden;
+    cursor: pointer;
 }
 
 #wall-event-messages {
@@ -6672,8 +6691,18 @@ a.yabutton-small {
     }
 
     .wall-container {
-        width: 56%;
-        max-width:400px;
+    }
+
+    #webapp-track-container {
+        margin-left:25px;
+    }
+
+    #webapp-radio {
+        padding-left:20px;
+    }
+
+    .wall-audience-container {
+        margin-left:27px;
     }
 
     .wall-btn-responsive {
@@ -6681,7 +6710,7 @@ a.yabutton-small {
     }
 
     .wall-responsive-span4 {
-        width:300px;
+        width:240px;
         margin-left:0px;
     }
 
@@ -6695,7 +6724,7 @@ a.yabutton-small {
     }
 
     .form-search .submit-btn {
-        right:10px;
+        right:20px;
     }
 /*-- NOTIFICATIONS --*/
 

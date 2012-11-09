@@ -34,8 +34,8 @@ from account.forms import WebAppSignupForm, LoginForm
 from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone
-from yacore.geoip import request_country
+from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone, is_deezer
+from yacore.geoip import request_country, request_city_record
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager, RadioRecommendationsCache
@@ -180,7 +180,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
     if genre != '':
         qs = qs.filter(genre=genre)
 
-    if is_iphone(request):
+    if is_iphone(request) or is_deezer(request):
         selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).exclude(origin=yabase_settings.RADIO_ORIGIN_KFM).order_by('featuredradio__order').all()
     else:
         selection_radios = qs.filter(featuredcontent__activated=True, featuredcontent__ftype=yabase_settings.FEATURED_SELECTION).order_by('featuredradio__order').all()
@@ -785,7 +785,8 @@ def get_current_song(request, radio_id):
             manager = AnonymousManager()
             anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
             request.session['anonymous_id'] = anonymous_id
-            manager.upsert_anonymous(anonymous_id, radio_uuid)
+            city_record = request_city_record(request)
+            manager.upsert_anonymous(anonymous_id, radio_uuid, city_record)
 
     song_json = SongInstance.objects.get_current_song_json(radio_id)
     if song_json is None:
@@ -1178,7 +1179,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
     if song_instance.playlist.radio != radio:
         raise Http404
 
-    url = reverse('webapp_default_radio', args=[radio.uuid])
+    url = reverse('webapp_default_radio_song', args=[radio.uuid, song_instance_id])
     return HttpResponseRedirect(url)
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
@@ -1285,6 +1286,29 @@ class WebAppView(View):
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
 
         return context, 'yabase/app/radio/radioPage.html'
+
+    def song(self, request, context, *args, **kwargs):
+        radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        song_instance = get_object_or_404(SongInstance, id=kwargs['song_id'])
+        radio.favorite = radio.is_favorite(request.user)
+        context['radio'] = radio
+        context['ignore_radio_cookie'] = True
+        if radio.current_song:
+            context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
+        wall_events = WallEvent.objects.select_related('user', 'user__userprofile', 'radio').filter(radio=radio).order_by('-start_date')[:15]
+        context['wall_events'] = wall_events
+        context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
+        context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
+
+        bdata = {
+            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'radio': [radio.as_dict(request.user)],
+        }
+        context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
+        context['song_instance'] = song_instance
+        context['radio_station_url'] = absolute_url(reverse('webapp_default_radio', args=[radio.uuid]))
+        return context, 'yabase/app/radio/songPage.html'
 
     def search(self, request, context, *args, **kwargs):
         query = kwargs['query']
@@ -2002,7 +2026,7 @@ def most_active_radios(request, internal=False, genre=''):
         qs = Radio.objects
 
     qs = qs.exclude(deleted=True)
-    if is_iphone(request):
+    if is_iphone(request) or is_deezer(request):
         qs = qs.exclude(origin=yabase_settings.RADIO_ORIGIN_KFM)
 
     total_count = qs.count()
@@ -2043,7 +2067,8 @@ def ping(request):
         manager = AnonymousManager()
         anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
         request.session['anonymous_id'] = anonymous_id
-        manager.upsert_anonymous(anonymous_id, radio_uuid)
+        city_record = request_city_record(request)
+        manager.upsert_anonymous(anonymous_id, radio_uuid, city_record)
 
     return HttpResponse('OK')
 
@@ -2586,18 +2611,20 @@ def profiling(request):
     return render_to_response("yabase/profiling.html", {"queries": SqlProfilingMiddleware.Queries})
 
 
-@check_api_key(methods=['POST'])
+@check_api_key(methods=['POST'], login_required=False)
 def generate_download_current_song_url(request, radio_uuid):
+    """return a temporary token linked to user account to be given to streamer.
     """
-    return a temporary token linked to user account to be given to streamer.
-    """
-    if not request.user.is_superuser:
+    if not is_deezer(request):
         raise Http404
+
     token = uuid.uuid4().hex
     key = 'radio_%s.current_song_token.%s' % (radio_uuid, token)
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     current_song = radio.current_song
+    if current_song is None:
+        raise Http404
     yasound_song_id = current_song.metadata.yasound_song_id
     yasound_song = YasoundSong.objects.get(id=yasound_song_id)
 

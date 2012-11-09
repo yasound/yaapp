@@ -27,6 +27,7 @@ $(document).ready(function () {
     Yasound.App.hd = g_hd_enabled;
     Yasound.App.RADIO_ORIGIN_YASOUND = 0; // constant, radio.origin=0 means radioways radio
     Yasound.App.RADIO_ORIGIN_RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
+    Yasound.App.LanguageCode = g_language_code;
 
     if (cookies.get('radio') && !Yasound.App.ignoreRadioCookie) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');
@@ -158,6 +159,18 @@ $(document).ready(function () {
     } else if (g_sound_player == 'deezer') {
         Yasound.App.player = Yasound.Player.Deezer();
     }
+
+    if (Yasound.App.appName == 'deezer') {
+        $(document).on('DOMSubtreeModified', function() {
+            var container = $('#webapp-container-parent');
+            var footer = $('#footer');
+            var documentHeight = container.height() + footer.height() + 12;
+            if (DZ && DZ.canvas) {
+                DZ.canvas.setSize(documentHeight);
+            }
+        });
+    }
+
     /**
      * Application controller
      */
@@ -207,14 +220,9 @@ $(document).ready(function () {
         },
 
         _updateDeezerCanvas: function () {
-            $(document).bind('DOMSubtreeModified', function() {
-                var container = $('#webapp-container-parent');
-                var footer = $('#footer');
-                var documentHeight = container.height() + footer.height() + 12;
-                if (DZ && DZ.canvas) {
-                    DZ.canvas.setSize(documentHeight);
-                }
-            });
+            if (DZ && DZ.canvas) {
+                DZ.canvas.setSize(1325);
+            }
         },
 
         _trackPageview: function() {

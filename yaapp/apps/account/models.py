@@ -682,7 +682,8 @@ class UserProfile(models.Model):
         if anonymous_id:
             username = anonymous_id
             user_id = anonymous_id
-            self.name = unicode(_('Anonymous user'))
+            if self.name is None:
+                self.name = unicode(_('Anonymous user'))
             is_connected = True
         else:
             user_id = self.user.id
@@ -907,11 +908,11 @@ class UserProfile(models.Model):
 
             try:
                 friends_response = graph.get('me/friends')
-            except GraphAPI.FacebookError:
-                logger.error('GraphAPI exception error')
+            except GraphAPI.FacebookError, e:
+                logger.error('GraphAPI exception error: %s' % e)
                 return friend_count, yasound_friend_count
-            except GraphAPI.HTTPError:
-                logger.error('GraphAPI exception error (http)')
+            except GraphAPI.HTTPError, e:
+                logger.error('GraphAPI exception error (http): %s', e)
                 return friend_count, yasound_friend_count
             if not friends_response.has_key('data'):
                 logger.info('No friend data')
@@ -1684,16 +1685,36 @@ class AnonymousManager():
     def erase_informations(self):
         self.collection.drop()
 
-    def upsert_anonymous(self, anonymous_id, radio_uuid):
+    def upsert_anonymous(self, anonymous_id, radio_uuid, city_record=None):
+        """insert or update an anonymous user
+
+        :param anonymous_id: a unique anonymous id
+        :param radio_uuid: radio uuid
+        :param city_record: geoip record
+        """
+
         now = datetime.datetime.now()
         doc = {
             'anonymous_id': anonymous_id,
             'radio_uuid': radio_uuid,
+            'city_record': city_record,
             'updated': now
         }
         self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
 
     def anonymous_for_radio(self, radio_uuid):
+        """return the anonymous users for a given radio
+
+        a list of::
+
+        doc = {
+            'anonymous_id': anonymous_id,
+            'radio_uuid': radio_uuid,
+            'city_record': city_record,
+            'updated': now
+        }
+        """
+
         now = datetime.datetime.now()
         expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
         return self.collection.find({
@@ -1704,6 +1725,8 @@ class AnonymousManager():
         })
 
     def remove_inactive_users(self):
+        """deleted expired anonymous users"""
+
         now = datetime.datetime.now()
         expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
         self.collection.remove({'updated': {'$lt': expired_date}}, safe=True)

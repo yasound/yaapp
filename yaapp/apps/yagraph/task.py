@@ -36,8 +36,8 @@ def async_post_message(user_id, radio_uuid, message):
     try:
         res = graph.post(path=path, radio_station=radio_url)
         logger.debug(res)
-    except GraphAPI.FacebookError as e:
-        logger.info(e)
+    except GraphAPI.FacebookError, e:
+        logger.error('async_post_message: %s' % e)
     logger.debug('done')
 
 
@@ -59,8 +59,8 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
     try:
         res = graph.post(path=path, radio_station=radio_url, song=song_url)
         logger.debug(res)
-    except GraphAPI.FacebookError as e:
-        logger.info(e)
+    except GraphAPI.FacebookError, e:
+        logger.error('async_listen: %s' % e)
     logger.debug('done')
 
 
@@ -72,7 +72,6 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
         logger.debug('no facebook token for user %s' % (user_id))
         return
 
-    radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
     song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
     path = 'me/og.likes'
 
@@ -80,9 +79,8 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
     try:
         res = graph.post(path=path, object=song_url)
         logger.debug(res)
-    except GraphAPI.FacebookError as e:
-        logger.info(e)
-    logger.debug('done')
+    except GraphAPI.FacebookError, e:
+        logger.error('async_like_song: %s' % e)
 
 
 @task(ignore_result=True)
@@ -99,6 +97,5 @@ def async_animator_activity(user_id, radio_uuid):
     try:
         res = graph.post(path=path, radio_station=radio_url)
         logger.debug(res)
-    except GraphAPI.FacebookError as e:
-        logger.info(e)
-    logger.debug('done')
+    except GraphAPI.FacebookError, e:
+        logger.error('async_animator_activity: %s' % e)

@@ -181,19 +181,38 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.trackInRadioTemplate(this.model.toJSON()));
+
+        if (Yasound.App.appName === 'deezer') {
+            var player = Yasound.App.player;
+            if (player.deezerId) {
+                this.addDeezerLinks(player);
+            }
+        }
+
         return this;
     },
 
+    addDeezerLinks: function(player) {
+        var $addToPlaylist = $('.dz-addtoplaylist', this.el);
+        $addToPlaylist.attr('dz-id', player.deezerId);
+        $addToPlaylist.show();
+
+        if (player.deezerArtistId) {
+            var $share = $('.dz-share', this.el);
+            $share.attr('dz-id', player.deezerArtistId);
+            $share.show();
+        }
+
+        DZ.framework.parse();
+    },
+
     onDeezerSongFound: function(e, player) {
-        var $link = $('.dz-addtoplaylist', this.el);
-        $link.attr('dz-id', player.deezerAlbumId);
-        DZ.framework.parse('.dz-addtoplaylist');
-        $link.show();
+        this.addDeezerLinks(player);
     },
 
     onDeezerSongNotFound: function(e, player) {
-        var $link = $('.dz-addtoplaylist', this.el);
-        $link.hide();
+        $('.dz-addtoplaylist', this.el).hide();
+        $('.dz-share', this.el).hide();
     }
 });
 
@@ -297,6 +316,7 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     className: 'wall-event',
     events: {
         'click h2 a': 'selectUser',
+        'click .wall-profile-picture': 'selectUser',
         'click #report-abuse-btn': 'reportAbuse',
         'click #delete-btn': 'deleteMessage'
     },
@@ -446,7 +466,11 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.radioUserTemplate(data));
-        $('.user', this.el).tooltip({title: data.name});
+        var tooltip = data.name;
+        if (data.city) {
+            tooltip = tooltip + '<br/>(' + data.city + ')';
+        }
+        $('.user', this.el).tooltip({title: tooltip});
 
         return this;
     },

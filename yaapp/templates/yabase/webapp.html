@@ -105,6 +105,7 @@ HTML, BODY { height: 100%; }
     {% endcompress %}
 
     {% ifequal app_name 'deezer' %}
+    <link rel="stylesheet" href="https://cdns-files.deezer.com/css/dz.css"/>
     <link rel="stylesheet" href="/media/css/deezer.css"/>
     {% endifequal %}
 
@@ -247,6 +248,9 @@ HTML, BODY { height: 100%; }
        {% if email_referal %}
        var g_email_referal = '{{ email_referal|safe }}';
        {% endif %}
+
+       var g_language_code = '{{request.LANGUAGE_CODE}}';
+
     </script>
 
 

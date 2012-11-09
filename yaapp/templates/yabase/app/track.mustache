@@ -87,7 +87,7 @@
             {% if request.user.is_authenticated %}
             <div id="profile-picture">
                {% if user_profile.picture %}
-                   {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
+                   {% thumbnail user_profile.picture "28x28" format='PNG' crop='center' as im %}
                     <a href='{% app_url webapp_profile app_name request.user.username %}' class='yatooltip'>
                         <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
            <div id='profile-box-container' class='hidden'>

@@ -28,69 +28,64 @@
 
 
         <div id='user-menu'>
-
-
             {% if request.user.is_authenticated %}
-            <div id="profile-picture">
-               {% if user_profile.picture %}
-                   {% thumbnail user_profile.picture "28x28" format='PNG' as im %}
-                    <a href='{% app_url webapp_profile app_name request.user.username %}' class='yatooltip'>
-                        <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
-           <div id='profile-box-container' class='hidden'>
-            <div>
-              <button id='my-profile-btn'>{% trans "My profile" %}</button>
-              <button id='my-settings-btn'>{% trans "My settings" %}</button>
-              <button id='logout-btn'>{% trans "Logout" %}</button>
-            </div>
-           </div>
-                    </a>
-                   {% endthumbnail %}
-               {% else %}
-                    <a href='{% app_url webapp_profile app_name request.user.username %}' class='yatooltip'>
-                        <img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"/>
-           <div id='profile-box-container' class='hidden'>
-            <div>
-              <button id='my-profile-btn'>{% trans "My profile" %}</button>
-              <button id='my-settings-btn'>{% trans "My settings" %}</button>
-              <button id='logout-btn'>{% trans "Logout" %}</button>
-            </div>
-           </div>
-                    </a>
-
-               {% endif %}
-
-
-            </div>
-            <div>
+              <div id="profile-picture">
+                {% if user_profile.picture %}
+                  {% thumbnail user_profile.picture "28x28" format='PNG' crop='center' as im %}
+                  <a href='{% app_url webapp_profile app_name request.user.username %}' class='yatooltip'>
+                  <img src="{{ im.url  }}" width="28" height="28" alt="Profile Picture"/>
+                  <div id='profile-box-container' class='hidden'>
+                    <div>
+                      <button id='my-profile-btn'>{% trans "My profile" %}</button>
+                      <button id='my-settings-btn'>{% trans "My settings" %}</button>
+                      <button id='logout-btn'>{% trans "Logout" %}</button>
+                    </div>
+                  </div>
+                  </a>
+                  {% endthumbnail %}
+                {% else %}
+                  <a href='{% app_url webapp_profile app_name request.user.username %}' class='yatooltip'>
+                  <img src="/media/images/default_image.png" width="28" height="28" alt="Profile Picture"/>
+                  <div id='profile-box-container' class='hidden'>
+                    <div>
+                      <button id='my-profile-btn'>{% trans "My profile" %}</button>
+                      <button id='my-settings-btn'>{% trans "My settings" %}</button>
+                      <button id='logout-btn'>{% trans "Logout" %}</button>
+                    </div>
+                  </div>
+                  </a>
+                {% endif %}
+              </div>
+              <div>
                 <a id="messages-btn" class="header-notification yatooltip" href="{% app_url webapp_notifications app_name %}">
                     <span class="badge badge-info {% ifequal notification_count 0 %}hidden{% endifequal %}" id="message-position-absolute">{{ notification_count }}</span>
                 </a>
-            </div>
-            <div class="header-notification" id="last-social-btn">
-            </div>
+              </div>
+              <div class="header-notification" id="last-social-btn"></div>
+              <a id='btn-deezer-link-out' href="{% app_url webapp_default %}" class="link-out" target="_blank" title="{% trans 'Go to YaSound website' %}">{% trans 'Home' %}</a>
             {% else %}
-            <div id='login'>
-              <a class='float-left' id='signup-btn' href='{% app_url webapp_signup app_name %}'>{% trans 'Signup' %}</a>
-          <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
-          <a class='float-left login-btn' id='login-btn' href='{% app_url webapp_login app_name %}'>{% trans 'Login' %}</a>
-          <div id='login-box-container' class='hidden'>
-            <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='blank'><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
-            <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='blank'><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
-            <div class='login-separation-line'></div>
-            <form id='popup-login-form' method='post' action="{% app_url webapp_login app_name %}">{% csrf_token %}
-              <span>{% trans "Email login" %}</span>
-              <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
-              <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
-              <input type='hidden' name='action' value='login'/>
-              <input id='login-btn-connection' type='submit' value='Connexion'/>
-            </form>
-            <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
-          </div>
+              <div id='login'>
+                <a class='float-left' id='signup-btn' href='{% app_url webapp_signup app_name %}'>{% trans 'Signup' %}</a>
+                <div class="header-separation"><img src="/media/app/images/header-separation.png" width="4" height="54" alt="Header Separation"></div>
+                <a class='float-left login-btn' id='login-btn' href='{% app_url webapp_login app_name %}'>{% trans 'Login' %}</a>
+                <div id='login-box-container' class='hidden'>
+                  <a id='login-btn-facebook' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='blank'><img src="/media/app/images/login/login-icon-facebook.png"><span>{% trans "Login with Facebook" %}</span></a>
+                  <a id='login-btn-twitter' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='blank'><img src="/media/app/images/login/login-icon-twitter.png"><span>{% trans "Login with Twitter" %}</span></a>
+                  <div class='login-separation-line'></div>
+                  <form id='popup-login-form' method='post' action="{% app_url webapp_login app_name %}">{% csrf_token %}
+                    <span>{% trans "Email login" %}</span>
+                    <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
+                    <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
+                    <input type='hidden' name='action' value='login'/>
+                    <input id='login-btn-connection' type='submit' value='Connexion'/>
+                  </form>
+                  <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
+                </div>
+              </div>
             </div>
-
-        </div>
-
+            <a id='btn-deezer-link-out-not-authenticated' href="{% app_url webapp_default %}" class="link-out" target="_blank" title="{% trans 'Go to YaSound website' %}">{% trans 'Home' %}</a>
             {% endif %}
+
         </div>
     </div>
 

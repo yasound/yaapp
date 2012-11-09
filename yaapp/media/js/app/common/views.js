@@ -92,7 +92,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 
     refreshCurrentSong: function(e) {
         var el = $('.current-song', this.el);
-		var el2 = $('.current-artist', this.el2);
+		var el2 = $('.current-artist', this.el);
         var name = this.currentSongModel.get('name');
         var artist =  this.currentSongModel.get('artist');
         var cover = this.currentSongModel.get('cover');
