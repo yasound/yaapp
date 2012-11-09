@@ -970,10 +970,13 @@ class Radio(models.Model):
 
     def song_starts_playing(self, song_instance, play_date=datetime.datetime.now()):
         # if radio has listeners, the song has been really played, so report it
-        if self.current_song and RadioUser.objects.filter(radio=self, listening=True).count() > 0:
-            task_report_song.delay(self, self.current_song)
-
         logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
+        if self.current_song:
+            try:
+                RadioUser.objects.filter(radio=self, listening=True)[0]
+                task_report_song.delay(self, self.current_song)
+            except:
+                pass
 
         # update current song
         self.current_song = song_instance
@@ -986,9 +989,8 @@ class Radio(models.Model):
 
         yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song_instance)
 
-        song_instance.last_play_time = play_date
-        song_instance.play_count += 1
-        song_instance.save()
+        SongInstance.objects.filter(id=song_instance.id).update(play_count=F('play_count') + 1, last_play_time = play_date)
+
 
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.get_profile().name, self.name)
