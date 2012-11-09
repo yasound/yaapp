@@ -1685,6 +1685,12 @@ class AnonymousManager():
         self.collection.drop()
 
     def upsert_anonymous(self, anonymous_id, radio_uuid):
+        """insert or update an anonymous user
+
+        :param anonymous_id: a unique anonymous id
+        :param radio_uuid: radio uuid
+        """
+
         now = datetime.datetime.now()
         doc = {
             'anonymous_id': anonymous_id,
@@ -1694,6 +1700,17 @@ class AnonymousManager():
         self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
 
     def anonymous_for_radio(self, radio_uuid):
+        """return the anonymous users for a given radio
+
+        a list of::
+
+        doc = {
+            'anonymous_id': anonymous_id,
+            'radio_uuid': radio_uuid,
+            'updated': now
+        }
+        """
+
         now = datetime.datetime.now()
         expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
         return self.collection.find({
@@ -1704,6 +1721,8 @@ class AnonymousManager():
         })
 
     def remove_inactive_users(self):
+        """deleted expired anonymous users"""
+
         now = datetime.datetime.now()
         expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
         self.collection.remove({'updated': {'$lt': expired_date}}, safe=True)
