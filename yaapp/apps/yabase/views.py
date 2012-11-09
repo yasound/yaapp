@@ -35,7 +35,7 @@ from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone, is_deezer
-from yacore.geoip import request_country
+from yacore.geoip import request_country, request_city_record
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager, RadioRecommendationsCache
@@ -786,7 +786,8 @@ def get_current_song(request, radio_id):
             manager = AnonymousManager()
             anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
             request.session['anonymous_id'] = anonymous_id
-            manager.upsert_anonymous(anonymous_id, radio_uuid)
+            city_record = request_city_record(request)
+            manager.upsert_anonymous(anonymous_id, radio_uuid, city_record)
 
     song_json = SongInstance.objects.get_current_song_json(radio_id)
     if song_json is None:
@@ -2067,7 +2068,8 @@ def ping(request):
         manager = AnonymousManager()
         anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
         request.session['anonymous_id'] = anonymous_id
-        manager.upsert_anonymous(anonymous_id, radio_uuid)
+        city_record = request_city_record(request)
+        manager.upsert_anonymous(anonymous_id, radio_uuid, city_record)
 
     return HttpResponse('OK')
 

@@ -1068,7 +1068,11 @@ class Radio(models.Model):
                 for i, anon in enumerate(anons):
                     if i > max_anonymous:
                         break
-                    anonymous_user = UserProfile()
+                    anonymous_name = _('Anonymous user')
+                    city_record = anon.get('city_record')
+                    if city_record:
+                        anonymous_name = u'%s<br/>%s (%s)' % (anonymous_name, city_record.get('city'), city_record.get('country_name'))
+                    anonymous_user = UserProfile(name=unicode(anonymous_name))
                     data.append(anonymous_user.as_dict(anonymous_id=anon.get('anonymous_id')))
 
         return data, total_count
