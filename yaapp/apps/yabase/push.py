@@ -17,6 +17,8 @@ def async_redis_publish(channel, json_data):
 
 
 def push_wall_event(wall_event, **kwargs):
+    if wall_event.radio.nb_current_users == 0:
+        return
     channel = 'radio.%s' % (wall_event.radio.id)
     logger.info("publishing message to %s" % (channel))
 
@@ -36,6 +38,8 @@ def push_wall_event(wall_event, **kwargs):
 
 def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     wall_event = instance
+    if wall_event.radio.nb_current_users == 0:
+        return
     channel = 'radio.%s' % (wall_event.radio.id)
     logger.info("publishing message to %s" % (channel))
 
@@ -55,6 +59,9 @@ def push_wall_event_deleted(sender, instance, created=None, **kwargs):
         pass
 
 def push_current_song(radio, song_json, song, **kwargs):
+    if radio.nb_current_users == 0:
+        return
+
     channel = 'radio.%s' % (radio.id)
     data = {
         'event_type': 'song',
