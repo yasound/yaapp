@@ -2586,6 +2586,9 @@ def listeners_legacy(request, radio_id):
     limit = int(request.GET.get('limit', 10))
     skip = int(request.GET.get('skip', 0))
 
+    # if limit == 0:
+    #     limit = 100
+
     data, total_count = radio.current_users(limit, skip)
     response = api_response(data, total_count=total_count, limit=limit, offset=skip)
     return response
