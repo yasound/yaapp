@@ -323,6 +323,7 @@ def async_song_played(radio_uuid, songinstance_id):
     radio.song_starts_playing(song_instance)
     logger.info('song_played: ok')
 
+
 @task(ignore_result=True)
 def async_songs_started(data):
     logger.info('async_songs_started')
@@ -333,7 +334,7 @@ def async_songs_started(data):
             return
         radio_uuid = i[0]
         songinstance_id = i[1]
-        play_date = i[2]
+        play_date = datetime.datetime.strptime(i[2], "%Y-%m-%dT%H:%M:%S.%f")
         radio = Radio.objects.get(uuid=radio_uuid)
         song_instance = SongInstance.objects.get(id=songinstance_id)
         radio.song_starts_playing(song_instance, play_date)
