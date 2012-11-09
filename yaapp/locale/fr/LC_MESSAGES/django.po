@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 09:06+0100\n"
+"POT-Creation-Date: 2012-11-09 09:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1501,7 +1501,6 @@ msgid "Listen now"
 msgstr "Ecouter maintenant"
 
 #: templates/yabase/app/programming/programmingToolbar.mustache:2
-#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:7
 msgid "Playlist"
 msgstr "Playlist"
 
@@ -1588,6 +1587,10 @@ msgstr "démarrer"
 #: templates/yabase/app/programming/yasoundSongCell.mustache:6
 msgid "add"
 msgstr "ajouter"
+
+#: templates/yabase/app/programming/deezer/importFromDeezer.mustache:7
+msgid "Choose a playlist:"
+msgstr "Choisissez une playlist :"
 
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:17
 msgid "Import all"
