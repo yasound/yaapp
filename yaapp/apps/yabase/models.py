@@ -973,7 +973,7 @@ class Radio(models.Model):
         if self.current_song and RadioUser.objects.filter(radio=self, listening=True).count() > 0:
             task_report_song.delay(self, self.current_song)
 
-        logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
+        # logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
 
         # update current song
         self.current_song = song_instance
