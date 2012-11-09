@@ -2377,6 +2377,7 @@ ul .user-cell:hover .caption {
     height:50px;
     margin:13px 21px;
     overflow:hidden;
+    cursor: pointer;
 }
 
 #wall-event-messages {
