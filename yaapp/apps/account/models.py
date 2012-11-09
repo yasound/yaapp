@@ -330,7 +330,7 @@ class UserProfile(models.Model):
 
         accounts = []
         if account_type is not None:
-            accounts = account_type.split(account_settings.ACCOUNT_TYPE_SEPARATOR)
+            accounts = account_type.replace(' ', '').split(account_settings.ACCOUNT_TYPE_SEPARATOR)
         if account_type_to_remove in accounts:
             accounts.remove(account_type_to_remove)
         self.account_type = account_settings.ACCOUNT_TYPE_SEPARATOR.join(accounts)

@@ -410,6 +410,24 @@ class TestMultiAccount(TestCase):
         profile.remove_facebook_account()
         self.assertFalse(profile.is_multi_account)
 
+    def test_remove_with_spaces(self):
+        profile = self.jerome.get_profile()
+        profile.account_type = 'YA, FB, TW'
+        profile.save()
+
+        self.assertTrue(profile.facebook_enabled)
+        self.assertTrue(profile.twitter_enabled)
+        self.assertTrue(profile.yasound_enabled)
+
+        profile.remove_facebook_account()
+        self.assertFalse(profile.facebook_enabled)
+        self.assertTrue(profile.twitter_enabled)
+        self.assertTrue(profile.yasound_enabled)
+
+        profile.remove_twitter_account()
+        self.assertFalse(profile.twitter_enabled)
+        self.assertTrue(profile.yasound_enabled)
+
 class TestFacebook(TestCase):
     def setUp(self):
         erase_index()
