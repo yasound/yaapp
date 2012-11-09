@@ -78,10 +78,6 @@ Yasound.Data.Models.RadioUsers = Yasound.Data.Paginator.extend({
         this.reset();
         this.radio = radio;
         return this;
-    },
-
-    comparator: function(radioUser) {
-        return radioUser.get("id");
     }
 });
 
@@ -97,9 +93,5 @@ Yasound.Data.Models.Listeners = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.RadioUser,
     url: function() {
         return '/api/v1/radio/' + this.uuid + '/listeners/';
-    },
-
-    comparator: function(radioUser) {
-        return radioUser.get("id");
     }
 });
