@@ -316,6 +316,7 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     className: 'wall-event',
     events: {
         'click h2 a': 'selectUser',
+        'click .wall-profile-picture': 'selectUser',
         'click #report-abuse-btn': 'reportAbuse',
         'click #delete-btn': 'deleteMessage'
     },
