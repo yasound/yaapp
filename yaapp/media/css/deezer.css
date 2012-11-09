@@ -214,6 +214,26 @@
   margin-bottom: 12px;
 }
 
+/**
+ * Deezer playlists
+ */
+#deezer-playlists-container .deezer-playlist {
+  background-image: url('../app/images/deezer/deezer-playlist.png');
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  padding-left:24px;
+  text-shadow: 1px 1px 1px #fff;
+  color: #666;
+}
+
+#deezer-playlists-container .table,
+#deezer-playlists-container .table tr,
+#deezer-playlists-container .table td
+ {
+  border: none;
+}
+
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     #player #metadata-container {
