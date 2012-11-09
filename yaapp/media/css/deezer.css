@@ -8,6 +8,16 @@
   width: 350px;
 }
 
+#messages-btn {
+  left:28%;
+}
+#btn-deezer-link-out {
+  float:right;
+  display:block;
+  position: relative;
+  top: -8px;
+}
+
 #sound-level {
   display:none;
 }
@@ -213,4 +223,8 @@
     .deezer-actions {
       margin-left: 25px;
     }
+
+    #btn-deezer-link-out {
+    }
+
 }
