@@ -18,6 +18,12 @@
   top: -8px;
 }
 
+#btn-deezer-link-out-not-authenticated {
+  float:right;
+  display:block;
+  margin-top:23px;
+}
+
 #sound-level {
   display:none;
 }
@@ -244,7 +250,11 @@
       margin-left: 25px;
     }
 
-    #btn-deezer-link-out {
+    #login #login-btn {
+      margin-left:4px;
     }
 
+    #login {
+      margin-left:0;
+    }
 }
