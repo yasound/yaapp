@@ -770,12 +770,11 @@ def songs_started(request):
         logger.info('songs_started: wrong scheduler key (%s)' % key)
         return HttpResponseForbidden()
 
-    # MatDebug deactivate this for now
-    # data = payload.get('data', None)
-    # if data is None:
-    #     logger.info('songs_started: cannot get data')
-    #     return HttpResponse(json.dumps({'success': False, 'error': 'bad data'}))
-    # async_songs_started.delay(data)
+    data = payload.get('data', None)
+    if data is None:
+        logger.info('songs_started: cannot get data')
+        return HttpResponse(json.dumps({'success': False, 'error': 'bad data'}))
+    async_songs_started.delay(data)
     return HttpResponse(json.dumps({'success': True}))
 
 @check_api_key(methods=['GET',], login_required=False)
