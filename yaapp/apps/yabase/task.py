@@ -326,7 +326,7 @@ def async_song_played(radio_uuid, songinstance_id):
 
 @task(ignore_result=True)
 def async_songs_started(data):
-    logger.info('async_songs_started')
+    logger.info('async_songs_started: %d' % (len(data)))
     from models import Radio, SongInstance
     for i in data:
         if len(i) != 3:
@@ -338,4 +338,9 @@ def async_songs_started(data):
         radio = Radio.objects.select_related().get(uuid=radio_uuid)
         song_instance = SongInstance.objects.select_related().get(id=songinstance_id)
         radio.song_starts_playing(song_instance, play_date)
-    logger.info('async_songs_started: ok')
+    logger.info('async_songs_started finished: %d' % (len(data)))
+
+@task(ignore_result=True)
+def async_new_current_song(sender, radio, song):
+    song_json = SongInstance.objects.set_current_song_json(radio.id, song)
+    yabase_signals.new_current_song.send(sender=sender, radio=radio, song_json=song_json, song=song)
