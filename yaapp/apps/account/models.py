@@ -1685,7 +1685,7 @@ class AnonymousManager():
     def erase_informations(self):
         self.collection.drop()
 
-    def upsert_anonymous(self, anonymous_id, radio_uuid, city_record):
+    def upsert_anonymous(self, anonymous_id, radio_uuid, city_record=None):
         """insert or update an anonymous user
 
         :param anonymous_id: a unique anonymous id

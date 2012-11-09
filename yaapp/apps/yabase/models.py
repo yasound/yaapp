@@ -1070,9 +1070,15 @@ class Radio(models.Model):
                         break
                     anonymous_name = _('Anonymous user')
                     city_record = anon.get('city_record')
-                    if city_record:
-                        anonymous_name = u'%s<br/>%s (%s)' % (anonymous_name, city_record.get('city'), city_record.get('country_name'))
-                    anonymous_user = UserProfile(name=unicode(anonymous_name))
+                    city_record = {
+                        'city': u'Lyon',
+                        'country_name': u'France'
+                    }
+                    if city_record is None:
+                        city_record = []
+                    city = city_record.get('city')
+                    country = city_record.get('country_name')
+                    anonymous_user = UserProfile(name=unicode(anonymous_name), city=city)
                     data.append(anonymous_user.as_dict(anonymous_id=anon.get('anonymous_id')))
 
         return data, total_count
