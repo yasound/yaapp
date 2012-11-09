@@ -969,9 +969,9 @@ class Radio(models.Model):
         self.save()
 
     def song_starts_playing(self, song_instance, play_date=datetime.datetime.now()):
-        # FIXME: reports song only if it's really played (handled by a streamer)
-        # if self.current_song:
-        #     task_report_song.delay(self, self.current_song)
+        # if radio has listeners, the song has been really played, so report it
+        if self.current_song and RadioUser.objects.filter(radio=self, listening=True).count() > 0:
+            task_report_song.delay(self, self.current_song)
 
         logger.debug('song_starts_playing: %s / %s - %s' % (self.id, self.uuid, song_instance.id))
 
