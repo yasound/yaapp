@@ -467,7 +467,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).html(ich.radioUserTemplate(data));
         var tooltip = data.name;
-        if (data.anonymous && data.city) {
+        if (data.city) {
             tooltip = tooltip + '<br/>(' + data.city + ')';
         }
         $('.user', this.el).tooltip({title: tooltip});
