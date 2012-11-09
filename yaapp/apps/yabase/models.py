@@ -1070,12 +1070,8 @@ class Radio(models.Model):
                         break
                     anonymous_name = _('Anonymous user')
                     city_record = anon.get('city_record')
-                    city_record = {
-                        'city': u'Lyon',
-                        'country_name': u'France'
-                    }
                     if city_record is None:
-                        city_record = []
+                        city_record = {}
                     city = city_record.get('city')
                     country = city_record.get('country_name')
                     anonymous_user = UserProfile(name=unicode(anonymous_name), city=city)
