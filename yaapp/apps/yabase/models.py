@@ -968,7 +968,7 @@ class Radio(models.Model):
 
         self.save()
 
-    def song_starts_playing(self, song_instance):
+    def song_starts_playing(self, song_instance, play_date=datetime.datetime.now()):
         # FIXME: reports song only if it's really played (handled by a streamer)
         # if self.current_song:
         #     task_report_song.delay(self, self.current_song)
@@ -977,7 +977,7 @@ class Radio(models.Model):
 
         # update current song
         self.current_song = song_instance
-        self.current_song_play_date = datetime.datetime.now()
+        self.current_song_play_date = play_date
 
         # TODO: use a signal instead
         song_json = SongInstance.objects.set_current_song_json(self.id, song_instance)
@@ -986,7 +986,7 @@ class Radio(models.Model):
 
         yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song_instance)
 
-        song_instance.last_play_time = datetime.datetime.now()
+        song_instance.last_play_time = play_date
         song_instance.play_count += 1
         song_instance.save()
 

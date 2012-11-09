@@ -328,12 +328,13 @@ def async_songs_started(data):
     logger.info('async_songs_started')
     from models import Radio, SongInstance
     for i in data:
-        if len(i) != 2:
+        if len(i) != 3:
             logger.info('async_songs_started wrong data format')
             return
         radio_uuid = i[0]
         songinstance_id = i[1]
+        play_date = i[2]
         radio = Radio.objects.get(uuid=radio_uuid)
         song_instance = SongInstance.objects.get(id=songinstance_id)
-        radio.song_starts_playing(song_instance)
+        radio.song_starts_playing(song_instance, play_date)
     logger.info('async_songs_started: ok')
