@@ -682,7 +682,8 @@ class UserProfile(models.Model):
         if anonymous_id:
             username = anonymous_id
             user_id = anonymous_id
-            self.name = unicode(_('Anonymous user'))
+            if self.name is None:
+                self.name = unicode(_('Anonymous user'))
             is_connected = True
         else:
             user_id = self.user.id
@@ -1684,17 +1685,19 @@ class AnonymousManager():
     def erase_informations(self):
         self.collection.drop()
 
-    def upsert_anonymous(self, anonymous_id, radio_uuid):
+    def upsert_anonymous(self, anonymous_id, radio_uuid, city_record=None):
         """insert or update an anonymous user
 
         :param anonymous_id: a unique anonymous id
         :param radio_uuid: radio uuid
+        :param city_record: geoip record
         """
 
         now = datetime.datetime.now()
         doc = {
             'anonymous_id': anonymous_id,
             'radio_uuid': radio_uuid,
+            'city_record': city_record,
             'updated': now
         }
         self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
@@ -1707,6 +1710,7 @@ class AnonymousManager():
         doc = {
             'anonymous_id': anonymous_id,
             'radio_uuid': radio_uuid,
+            'city_record': city_record,
             'updated': now
         }
         """

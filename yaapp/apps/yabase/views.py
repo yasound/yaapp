@@ -35,7 +35,7 @@ from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone, is_deezer
-from yacore.geoip import request_country
+from yacore.geoip import request_country, request_city_record
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
 from yarecommendation.models import ClassifiedRadiosManager, RadioRecommendationsCache
@@ -770,12 +770,11 @@ def songs_started(request):
         logger.info('songs_started: wrong scheduler key (%s)' % key)
         return HttpResponseForbidden()
 
-    # MatDebug deactivate this for now
-    # data = payload.get('data', None)
-    # if data is None:
-    #     logger.info('songs_started: cannot get data')
-    #     return HttpResponse(json.dumps({'success': False, 'error': 'bad data'}))
-    # async_songs_started.delay(data)
+    data = payload.get('data', None)
+    if data is None:
+        logger.info('songs_started: cannot get data')
+        return HttpResponse(json.dumps({'success': False, 'error': 'bad data'}))
+    async_songs_started.delay(data)
     return HttpResponse(json.dumps({'success': True}))
 
 @check_api_key(methods=['GET',], login_required=False)
@@ -786,7 +785,8 @@ def get_current_song(request, radio_id):
             manager = AnonymousManager()
             anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
             request.session['anonymous_id'] = anonymous_id
-            manager.upsert_anonymous(anonymous_id, radio_uuid)
+            city_record = request_city_record(request)
+            manager.upsert_anonymous(anonymous_id, radio_uuid, city_record)
 
     song_json = SongInstance.objects.get_current_song_json(radio_id)
     if song_json is None:
@@ -2067,7 +2067,8 @@ def ping(request):
         manager = AnonymousManager()
         anonymous_id = request.session.get('anonymous_id', uuid.uuid4().hex)
         request.session['anonymous_id'] = anonymous_id
-        manager.upsert_anonymous(anonymous_id, radio_uuid)
+        city_record = request_city_record(request)
+        manager.upsert_anonymous(anonymous_id, radio_uuid, city_record)
 
     return HttpResponse('OK')
 
@@ -2583,6 +2584,9 @@ def listeners_legacy(request, radio_id):
     radio = get_object_or_404(Radio, id=radio_id)
     limit = int(request.GET.get('limit', 10))
     skip = int(request.GET.get('skip', 0))
+
+    # if limit == 0:
+    #     limit = 100
 
     data, total_count = radio.current_users(limit, skip)
     response = api_response(data, total_count=total_count, limit=limit, offset=skip)
