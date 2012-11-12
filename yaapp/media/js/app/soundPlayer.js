@@ -166,7 +166,7 @@ Yasound.Player.Deezer = function () {
     var mgr = {
         hd: false,
         radio: undefined,
-        radioHasChanged: true,
+        radioHasChanged: false,
         deezerId: 0,
         deezerAlbumId: 0,
         deezerArtistId: 0,
@@ -176,6 +176,7 @@ Yasound.Player.Deezer = function () {
         noTrackFound: true,
         previousTitle: '',
         manualStopped: false,
+        firstLoad: true,
 
         isPlaying: function () {
             if (DZ && DZ.player) {
@@ -215,7 +216,12 @@ Yasound.Player.Deezer = function () {
             mgr.radio = radio;
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
             console.log('radio has changed');
-            mgr.radioHasChanged = true;
+
+            if (mgr.firstLoad) {
+                mgr.firstLoad = false;
+            } else {
+                mgr.radioHasChanged = true;
+            }
         },
 
         refreshSong: function (song) {
