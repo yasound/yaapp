@@ -24,6 +24,7 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     },
     initialize: function () {
         _.bindAll(this, 'render', 'templateLoaded');
+        this.disableAjax = false;
     },
 
     onClose: function () {
@@ -88,9 +89,11 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     },
     removeFacebook: function (e) {
         e.preventDefault();
+        var that = this;
         $('#modal-remove-facebook').modal('show');
         $('#modal-remove-facebook .btn-primary').one('click', function () {
             $('#modal-remove-facebook').modal('hide');
+            that.disableAjax = true;
             $('#btn-remove-facebook').attr('id', 'foo').trigger('click');
         });
         return false;
@@ -98,9 +101,11 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
 
     removeTwitter: function (e) {
         e.preventDefault();
+        var that = this;
         $('#modal-remove-twitter').modal('show');
         $('#modal-remove-twitter .btn-primary').one('click', function () {
             $('#modal-remove-twitter').modal('hide');
+            that.disableAjax = true;
             $('#btn-remove-twitter').attr('id', 'foo').trigger('click');
         });
         return false;
@@ -181,6 +186,10 @@ Yasound.Views.SettingsPage = Backbone.View.extend({
     },
 
     onSubmitMyAccounts: function (e) {
+        if (this.disableAjax) {
+            return;
+        }
+
         e.preventDefault();
         var form = $('#my-accounts-form', this.el);
         Yasound.Utils.submitForm({
