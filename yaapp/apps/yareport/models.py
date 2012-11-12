@@ -10,7 +10,7 @@ import logging
 
 def report_song(radio, song_instance):
     db = settings.MONGO_DB
-    
+
     try:
         yasound_song = YasoundSong.objects.get(id=song_instance.metadata.yasound_song_id)
     except YasoundSong.DoesNotExist:
@@ -26,25 +26,25 @@ def report_song(radio, song_instance):
            "song_album_name": yasound_song.album_name,
            "duration": yasound_song.duration,
            "report_date": datetime.datetime.now()
-        } 
+        }
     db.reports.insert(doc)
-    
+
 def print_reports():
     db = settings.MONGO_DB
     i = 0
     for report in db.reports.find():
         print '%d %s (%d)  : %s - %s - %s (%d)  %d seconds' % (i, report["radio_name"], report["radio_id"], report["song_artist_name"], report["song_album_name"], report["song_name"], report["yasound_song_id"], report["duration"])
-        i += 1 
-    
-    
-    
-    
+        i += 1
 
 
-        
+
+
+
+
+
 def song_report(start_date=None, end_date=None, radio_id=None):
     db = settings.MONGO_DB
-    
+
     query_dict = {}
     if start_date:
         if not query_dict.has_key('report_date'):
@@ -53,11 +53,11 @@ def song_report(start_date=None, end_date=None, radio_id=None):
     if end_date:
         if not query_dict.has_key('report_date'):
             query_dict['report_date'] = {}
-        query_dict["report_date"]["lt"] = end_date
-    
+        query_dict["report_date"]["$lt"] = end_date
+
     if radio_id is not None:
         query_dict['radio_id'] = radio_id
-        
+
     song_infos = []
     song_ids = db.reports.find(query_dict).distinct("yasound_song_id")
     for song_id in song_ids:
@@ -74,8 +74,8 @@ def song_report(start_date=None, end_date=None, radio_id=None):
 
 def build_scpp_report_file(song_report_docs, destination_folder=''):
     logger = logging.getLogger("yaapp.yareport")
-    report_rows = [] 
-    
+    report_rows = []
+
     nb_docs = len(song_report_docs)
     i = 0
     for doc in song_report_docs:
@@ -100,9 +100,9 @@ def build_scpp_report_file(song_report_docs, destination_folder=''):
         data.append('')                         # Marque ou producteur
         data.append('')                         # Code barre du support commercia
         data.append(doc["count"])                      # Nombre de reproductions ou de passage
-        
+
         report_rows.append(data)
-        
+
     filename = 'scpp_report_%s.csv' % datetime.datetime.now()
     if destination_folder and destination_folder != '':
         path = os.path.join(destination_folder, filename)
@@ -114,16 +114,16 @@ def build_scpp_report_file(song_report_docs, destination_folder=''):
         csv_writer.writerow(row)
     f.close()
 
-def scpp_report(destination_folder='', start_date=None, end_date=None, restrict_to_radio=None): 
+def scpp_report(destination_folder='', start_date=None, end_date=None, restrict_to_radio=None):
     radio_id = None if restrict_to_radio is None else restrict_to_radio.id
     song_report_docs = song_report(start_date=start_date, end_date=end_date, radio_id=radio_id)
     build_scpp_report_file(song_report_docs, destination_folder)
 
-        
+
 def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, replace_with_space=True, char_count=None, left_justify=True):
     if to_upper:
         s = s.upper()
-    
+
     x = ''
     for i in s:
         if i in allowed_characters:
@@ -132,20 +132,20 @@ def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, repla
             x += i
         elif replace_with_space:
             x += ' '
-            
+
     if char_count is not None:
         x = x[:char_count]
         if left_justify:
             x = x.ljust(char_count)
     return x
-            
-        
 
-   
+
+
+
 def sacem_report(destination_folder='', start_date=None, end_date=None):
     allowed_characters = string.uppercase + '().-/'
     db = settings.MONGO_DB
-    
+
     query_dict = {}
     if start_date or end_date:
                 query_dict["report_date"] = {}
@@ -153,8 +153,8 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
                     query_dict["report_date"]['$gte'] = start_date
                 if end_date:
                     query_dict["report_date"]['$lt'] = end_date
-            
-    # report start and end dates        
+
+    # report start and end dates
     s = start_date
     e = end_date
     if not s or not e:
@@ -163,7 +163,7 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
             s = documents[0]['report_date']
         if not e:
             e = documents[documents.count() - 1]['report_date']
-        
+
     #
     #    dest file
     #
@@ -172,8 +172,8 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
         path = os.path.join(destination_folder, filename)
     else:
         path = filename
-    f = open(path, 'w')    
-        
+    f = open(path, 'w')
+
     #
     #    report HEADER
     #
@@ -183,30 +183,30 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
     report_end_date = e.strftime('%y%m%d')
     report_start_hour = s.time().strftime('%H')
     report_end_hour = e.time().strftime('%H')
-    
-            
+
+
     declarant_identifier = yareport_settings.sacem_declarant_identifier_full
     declarant_identifier = clean_string(declarant_identifier, allowed_characters, char_count=30)
-    
+
     declarant_address_1 = yareport_settings.sacem_declarant_address_line1
     declarant_address_1 = clean_string(declarant_address_1, allowed_characters, char_count=25)
-    
+
     declarant_address_2 = yareport_settings.sacem_declarant_address_line2
     declarant_address_2 = clean_string(declarant_address_2, allowed_characters, char_count=25)
-    
+
     report_header = '%s %s %s %s %s %s %s %s\r\n' % (declarant_code, report_start_date, report_end_date, report_start_hour, report_end_hour, declarant_identifier, declarant_address_1, declarant_address_2)
     f.write(report_header)
-    
+
     report_rows = []
     docs = song_report(start_date=start_date, end_date=end_date)
     for doc in docs:
         song_name = clean_string(doc['song_name'], allowed_characters, char_count=24)
-            
+
         count = min(doc['count'], 9999) # limited to 4 digits
         count_str = '%04d' % count
-        
+
         song_number = '1' # song number in advertisement campaign
-        
+
         duration_seconds = doc["duration"] * count
         minutes = int(duration_seconds) / 60
         seconds = duration_seconds - (minutes * 60)
@@ -214,7 +214,7 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
             minutes = 9999
             seconds = 59
         duration_str = '%04d:%02d' % (minutes, seconds)
-        
+
         artist = clean_string(doc['song_artist_name'], allowed_characters, char_count=24)
         composer = clean_string('', allowed_characters, char_count=24)
         arranger = clean_string('', allowed_characters, char_count=24)
@@ -223,17 +223,17 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
         producer = clean_string('', allowed_characters, char_count=24)
         catalog_number = clean_string('', allowed_characters, char_count=20)
         bar_code = clean_string('', allowed_characters, char_count=13)
-        
+
         report_row = '%s %s %s %s %s %s %s %s %s %s %s %s\r\n' % (song_name, count_str, song_number, duration_str, artist, composer, arranger, editor, genre, producer, catalog_number, bar_code)
         report_rows.append(report_row)
 
     for row in report_rows:
         f.write(row)
     f.close()
-   
 
 
- 
-        
-    
-    
+
+
+
+
+
