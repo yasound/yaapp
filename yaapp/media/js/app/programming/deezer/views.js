@@ -343,9 +343,9 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         //     }
         //     ];
         // }
-        $('#deezer-tracks-container').fadeIn(200);
-        that.tracksView.clear();
-        that.tracks.reset(data);
+        // $('#deezer-tracks-container').fadeIn(200);
+        // that.tracksView.clear();
+        // that.tracks.reset(data);
     },
 
     onImportAll: function (e) {
