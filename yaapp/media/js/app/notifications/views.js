@@ -79,7 +79,7 @@ Yasound.Views.Notifications = Backbone.View.extend({
         $('.loading-mask', this.el).remove();
         this.collection.each(this.addOne);
 
-        if (this.collection.length == 0) {
+        if (this.collection.length === 0) {
             $('.empty', this.el).show();
         } else {
             $('.empty', this.el).hide();
@@ -87,6 +87,19 @@ Yasound.Views.Notifications = Backbone.View.extend({
 
         $('li', this.el).filter(':odd').removeClass('notification-even').addClass('notification-odd');
         $('li', this.el).filter(':even').removeClass('notification-even').addClass('notification-even');
+
+        var f = jQuery("a.popup").fancybox({
+            'speedIn' : 200,
+            'speedOut' : 200,
+            'padding': 0,
+            'margin': 0,
+            'width' : 728,
+            'height' : 392,
+            'scrolling': 'yes',
+            'overlayShow' : true,
+            'type': 'iframe'
+        });
+
     },
 
     clear: function () {
@@ -197,6 +210,7 @@ Yasound.Views.NotificationsPage = Backbone.View.extend({
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification, this);
         }
+
         return this;
     },
 
