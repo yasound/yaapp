@@ -158,46 +158,34 @@ def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, repla
     return x
 
 
-def sacem_report(destination_folder='', start_date=None, end_date=None):
+def build_sacem_report_file(song_report_docs, start_date=None, end_date=None, destination_folder=''):
     logger = logging.getLogger("yaapp.yareport")
-    logger.info('SACEM reporting')
+
     allowed_characters = string.uppercase + '().-/'
-    reports = settings.MONGO_DB.reports
-    reports.ensure_index('report_date')
-    reports.ensure_index('yasound_song_id')
 
-    query_dict = {}
-    if start_date or end_date:
-                query_dict["report_date"] = {}
-                if start_date:
-                    query_dict["report_date"]['$gte'] = start_date
-                if end_date:
-                    query_dict["report_date"]['$lt'] = end_date
-
-    # report start and end dates
     s = start_date
     e = end_date
-    if not s or not e:
-        if not s:
-            documents = reports.find(query_dict).sort('report_date', 1)
-            s = documents[0]['report_date']
-        if not e:
-            documents = reports.find(query_dict).sort('report_date', -1)
-            e = documents[0]['report_date']
 
-    #
-    #    dest file
-    #
-    filename = 'sacem_report_%s.txt' % datetime.datetime.now().isoformat()
+    # if no start or end date is provided, get it from database
+    if not s:
+        documents = reports.find().sort('report_date', 1)
+        s = documents[0]['report_date']
+    if not e:
+        documents = reports.find().sort('report_date', -1)
+        e = documents[0]['report_date']
+
+    # destination file
+    if s and e:
+        filename = 'sacem_report_%s_%s.txt' % (s.date().isoformat(), e.date().isoformat())
+    else:
+        filename = 'sacem_report.txt'
     if destination_folder and destination_folder != '':
         path = os.path.join(destination_folder, filename)
     else:
         path = filename
     f = open(path, 'w')
 
-    #
-    #    report HEADER
-    #
+    # report HEADER
     declarant_code = yareport_settings.sacem_declarant_identifier_short
     declarant_code = clean_string(declarant_code, allowed_characters)
     report_start_date = s.strftime('%y%m%d')
@@ -217,8 +205,9 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
     report_header = '%s %s %s %s %s %s %s %s\r\n' % (declarant_code, report_start_date, report_end_date, report_start_hour, report_end_hour, declarant_identifier, declarant_address_1, declarant_address_2)
     f.write(report_header)
 
+    # format report rows
     report_rows = []
-    docs = list(song_report(start_date=start_date, end_date=end_date))
+    docs = list(song_report_docs)
     nb_docs = len(docs)
     i = 0
     for doc in docs:
@@ -253,6 +242,7 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
         if i % max(1, int(nb_docs / 100)) == 0:
             logger.info('building report... %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
 
+    # write report rows to file
     i = 0
     for row in report_rows:
         f.write(row)
@@ -260,3 +250,10 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
         if i % max(1, int(nb_docs / 100)) == 0:
             logger.info('writing to file... %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
     f.close()
+
+
+def sacem_report(destination_folder='', start_date=None, end_date=None):
+    logger = logging.getLogger("yaapp.yareport")
+    logger.info('SACEM reporting')
+    song_report_docs = song_report(start_date, end_date)
+    build_sacem_report_file(song_report_docs, start_date, end_date, destination_folder)
