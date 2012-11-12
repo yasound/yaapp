@@ -40,7 +40,9 @@ def print_reports():
 
 def song_report(start_date=None, end_date=None, radio_id=None):
     logger = logging.getLogger("yaapp.yareport")
-    db = settings.MONGO_DB
+    reports = settings.MONGO_DB.reports
+    reports.ensure_index('report_date')
+    reports.ensure_index('yasound_song_id')
 
     query_dict = {}
     if start_date:
@@ -56,13 +58,15 @@ def song_report(start_date=None, end_date=None, radio_id=None):
         query_dict['radio_id'] = radio_id
 
     song_infos = []
-    song_ids = list(db.reports.find(query_dict).distinct("yasound_song_id"))
+    song_ids = list(reports.find(query_dict).distinct("yasound_song_id"))
     nb_song_ids = len(song_ids)
+    logger.info('%d different songs' % nb_song_ids)
+
     i = 0
     for song_id in song_ids:
             q = query_dict
             q["yasound_song_id"] = song_id
-            song_docs = db.reports.find(q)
+            song_docs = reports.find(q)
             count = song_docs.count()
             doc = song_docs[0]
             doc.pop('report_date')
@@ -70,7 +74,7 @@ def song_report(start_date=None, end_date=None, radio_id=None):
             song_infos.append(doc)
 
             i += 1
-            if i % max(1, int(nb_song_ids / 50)) == 0:
+            if i % max(1, int(nb_song_ids / 100)) == 0:
                 logger.info('finding songs... %d/%d (%f%%)' % (i, nb_song_ids, float(i) / float(nb_song_ids) * 100.0))
 
     return song_infos
@@ -107,10 +111,10 @@ def build_scpp_report_file(song_report_docs, destination_folder=''):
         report_rows.append(data)
 
         i += 1
-        if i % max(1, int(nb_docs / 50)) == 0:
+        if i % max(1, int(nb_docs / 100)) == 0:
             logger.info('building report... %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
 
-    filename = 'scpp_report_%s.csv' % datetime.datetime.now()
+    filename = 'scpp_report_%s.csv' % datetime.datetime.now().isoformat()
     if destination_folder and destination_folder != '':
         path = os.path.join(destination_folder, filename)
     else:
@@ -121,7 +125,7 @@ def build_scpp_report_file(song_report_docs, destination_folder=''):
     for row in report_rows:
         csv_writer.writerow(row)
         i += 1
-        if i % max(1, int(nb_docs / 50)) == 0:
+        if i % max(1, int(nb_docs / 100)) == 0:
             logger.info('writing to file... %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
     f.close()
 
@@ -158,7 +162,9 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
     logger = logging.getLogger("yaapp.yareport")
     logger.info('SACEM reporting')
     allowed_characters = string.uppercase + '().-/'
-    db = settings.MONGO_DB
+    reports = settings.MONGO_DB.reports
+    reports.ensure_index('report_date')
+    reports.ensure_index('yasound_song_id')
 
     query_dict = {}
     if start_date or end_date:
@@ -172,16 +178,17 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
     s = start_date
     e = end_date
     if not s or not e:
-        documents = db.reports.find(query_dict).sort('report_date', 1)
         if not s:
+            documents = reports.find(query_dict).sort('report_date', 1)
             s = documents[0]['report_date']
         if not e:
-            e = documents[documents.count() - 1]['report_date']
+            documents = reports.find(query_dict).sort('report_date', -1)
+            e = documents[0]['report_date']
 
     #
     #    dest file
     #
-    filename = 'sacem_report_%s.txt' % datetime.date.today().isoformat()
+    filename = 'sacem_report_%s.txt' % datetime.datetime.now().isoformat()
     if destination_folder and destination_folder != '':
         path = os.path.join(destination_folder, filename)
     else:
@@ -243,13 +250,13 @@ def sacem_report(destination_folder='', start_date=None, end_date=None):
         report_rows.append(report_row)
 
         i += 1
-        if i % max(1, int(nb_docs / 50)) == 0:
+        if i % max(1, int(nb_docs / 100)) == 0:
             logger.info('building report... %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
 
     i = 0
     for row in report_rows:
         f.write(row)
         i += 1
-        if i % max(1, int(nb_docs / 50)) == 0:
+        if i % max(1, int(nb_docs / 100)) == 0:
             logger.info('writing to file... %d/%d (%f%%)' % (i, nb_docs, float(i) / float(nb_docs) * 100.0))
     f.close()
