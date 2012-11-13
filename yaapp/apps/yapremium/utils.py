@@ -42,6 +42,7 @@ def calculate_expiration_date(duration, duration_unit, today=None):
         return today + relativedelta(weeks=+duration)
     elif duration_unit == yapremium_settings.DURATION_MONTH:
         return today + relativedelta(months=+duration)
+    return today
 
 
 def generate_code_name(prefix=''):
