@@ -55,3 +55,11 @@ def async_add_buy_link_event(user_id, radio_uuid, song_id):
     from yahistory.models import UserHistory
     uh = UserHistory()
     uh.add_buy_link_event(user_id, radio_uuid, song_id)
+
+@task(ignore_result=True)
+def async_transient_radio_event(event_type, radio_uuid, playlist_id=None):
+    from yahistory.models import TransientRadioHistory
+    tr = TransientRadioHistory()
+    tr.add_event(event_type=event_type, radio_uuid=radio_uuid, playlist_id=playlist_id)
+
+
