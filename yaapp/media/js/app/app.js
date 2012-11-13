@@ -344,7 +344,10 @@ $(document).ready(function () {
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
-                this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
+
+                if (Yasound.App.appName !== 'deezer') {
+                    this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
+                }
 
                 if (!Yasound.App.userAuthenticated) {
                     if (!cookies.get('hideteaser')) {
