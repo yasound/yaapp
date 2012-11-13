@@ -100,6 +100,9 @@ def gifts(request, subscription_sku=None):
             qs = qs.filter(authentication_needed=False)
         else:
             qs = qs.filter(authentication_needed=True)
+
+        qs = qs.exclude(sku=u'update-account-for-existing-users')
+
         data = []
         for gift in qs:
             gift_dict = gift.as_dict(request.user)
