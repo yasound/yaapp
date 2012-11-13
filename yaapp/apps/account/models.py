@@ -1858,9 +1858,13 @@ def new_radio_created(sender, instance, created=None, **kwargs):
         profile.save()
 
 def check_for_language(sender, request, user, **kwargs):
+    if not hasattr(request, 'LANGUAGE_CODE'):
+        return
+
     p = user.get_profile()
     if p is None:
         return
+
 
     if p.language != request.LANGUAGE_CODE and request.LANGUAGE_CODE in yaapp_settings.ALLOWED_LANGUAGES:
         p.language = request.LANGUAGE_CODE
