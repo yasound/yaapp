@@ -1494,7 +1494,7 @@ class UserProfile(models.Model):
         if information is None:
             return {}
         else:
-            return information.get('web_preferences')
+            return information.get('web_preferences', {})
 
     def set_web_preferences(self, preference, value):
         preferences = self.web_preferences()
