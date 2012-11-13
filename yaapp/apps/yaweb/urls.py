@@ -9,6 +9,7 @@ urlpatterns = patterns('yaweb.views',
     url(r'^elecsounds/terms$', 'elecsounds_terms', {'template_name': 'yaweb/elecsounds_terms.html'}, name='elecsounds_terms'),
     url(r'^elecsounds/winner', 'elecsounds_winner', {'template_name': 'yaweb/elecsounds_winner.html'}, name='elecsounds_winner'),
     url(r'^station/$', 'contest_station', {'template_name': 'yaweb/contest_station.html'}, name='contest_station'),
+    url(r'^premium_win/$', 'premium_win', {'template_name': 'yaweb/premium_win.html'}, name='premium_win'),
     url(r'^station/iphone/$', 'contest_station_iphone', {'template_name': 'yaweb/contest_station_iphone.html'}, name='contest_station_iphone'),
     url(r'^station/terms/$', 'contest_station_terms', {'template_name': 'yaweb/contest_station_terms.html'}, name='contest_station_terms'),
 

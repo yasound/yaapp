@@ -93,8 +93,6 @@ Yasound.Views.Notifications = Backbone.View.extend({
             'speedOut' : 200,
             'padding': 0,
             'margin': 0,
-            'width' : 728,
-            'height' : 392,
             'scrolling': 'yes',
             'overlayShow' : true,
             'type': 'iframe'
