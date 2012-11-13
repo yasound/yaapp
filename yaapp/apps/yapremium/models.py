@@ -21,6 +21,8 @@ from yabase.models import Radio
 from task import async_win_gift, async_check_for_invitation
 from django.db import transaction
 
+import logging
+logger = logging.getLogger("yaapp.yapremium")
 
 class Service(models.Model):
     """
@@ -354,10 +356,20 @@ class AchievementManager(models.Manager):
         today = date.today()
         obj = self.create(user=user, gift=gift, achievement_date=today)
         us, _created = UserService.objects.get_or_create(user=user, service=gift.service)
+
+        if gift.sku == u'update-account-for-existing-users':
+            # special case
+            # for users who have created an account before this date,
+            # the gift was only 14 days, so we built a fake gift in order to give them 15 days of HD
+            if user.date_joined >= datetime(2012, 11, 13, 0, 0):
+                dont_give_anything = True
+            else:
+                logger.info('user %d is an old user, we give him the update account gift' % (user.id))
+
         if not dont_give_anything:
             us.calculate_expiration_date(duration=gift.duration, duration_unit=gift.duration_unit)
         else:
-            us.calculate_expiration_date(duration=gift.duration, duration_unit=0)
+            us.calculate_expiration_date(duration=0, duration_unit=0)
         return obj
 
 
