@@ -412,6 +412,7 @@ LANGUAGES = (
     ('en', 'English'),
     ('fr', u'Français'),
 )
+ALLOWED_LANGUAGES = ('en', 'fr')
 DEFAULT_USER_LANGUAGE_CODE = 'fr'
 
 # A sample logging configuration. The only tangible logging

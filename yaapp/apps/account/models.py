@@ -38,6 +38,7 @@ from yageoperm import utils as yageoperm_utils
 import requests
 from pymongo import DESCENDING
 from dateutil.relativedelta import *
+from django.contrib.auth import signals as auth_signals
 
 logger = logging.getLogger("yaapp.account")
 
@@ -1856,6 +1857,14 @@ def new_radio_created(sender, instance, created=None, **kwargs):
         profile.permissions.create_radio = False
         profile.save()
 
+def check_for_language(sender, request, user, **kwargs):
+    p = user.get_profile()
+    if p is None:
+        return
+
+    if p.language != request.LANGUAGE_CODE and request.LANGUAGE_CODE in yaapp_settings.ALLOWED_LANGUAGES:
+        p.language = request.LANGUAGE_CODE
+        p.save()
 
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
@@ -1872,5 +1881,8 @@ def install_handlers():
 
     socialauth_registered.connect(new_social_user)
     post_save.connect(social_user_updated, sender=UserSocialAuth)
+
+    auth_signals.user_logged_in.connect(check_for_language)
+
 install_handlers()
 
