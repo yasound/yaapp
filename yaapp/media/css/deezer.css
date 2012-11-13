@@ -98,8 +98,8 @@
 .link-out {
     background-image: url('../app/images/link-out.png');
     background-repeat: no-repeat;
-    background-position: 0 50%;
-    padding-left:28px;
+    background-position: 100% 50%;
+    padding-right:28px;
     color: #757b7d;
 }
 
