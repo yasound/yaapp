@@ -20,6 +20,7 @@ FRANCOPHONE_COUNTRIES = (
     u'switzerland',
     u'quebec',
     u'belgium',
+    u'senegal',
 )
 
 class Command(BaseCommand):
@@ -45,7 +46,8 @@ class Command(BaseCommand):
                     country = additional_info.get('geo_info').get('PCLD', '').lower()
                 if country == u'canada':
                     country = additional_info.get('geo_info').get('ADM1', '').lower()
-                print country
+                if country != u'france':
+                    print country
                 if country not in FRANCOPHONE_COUNTRIES and country != '':
                     profile.language = 'en'
                     profile.save()
