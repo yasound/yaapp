@@ -739,7 +739,7 @@ Yasound.Views.PublicStats = Backbone.View.extend({
     },
     render: function() {
         var data = this.model.toJSON();
-        $('span', this.el).html(data.minutes);
+        $('#minutes-listened', this.el).html(data.minutes);
     },
     updateData: function() {
         this.model.fetch();
