@@ -78,6 +78,7 @@ CELERY_IMPORTS = (
     "yaref.task",
     "yapremium.task",
     "yadeezer.task",
+    "yascheduler.task",
 )
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
@@ -398,6 +399,7 @@ INSTALLED_APPS = (
     'yashow',
     'compressor',
     'radioways',
+    'yascheduler',
 )
 
 if LOCAL_MODE:
@@ -578,6 +580,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yascheduler': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     }
 }
 
@@ -663,6 +670,10 @@ elif DEVELOPMENT_MODE or LOCAL_MODE:
 
 PUSH_REDIS_HOST = 'localhost'
 PUSH_REDIS_DB = 0
+
+YASCHEDULER_REDIS_HOST = 'localhost'
+if PRODUCTION_MODE:
+    YASCHEDULER_REDIS_HOST = 'yas-sql-01'
 
 YASOUND_PUSH_PORT = 9000
 

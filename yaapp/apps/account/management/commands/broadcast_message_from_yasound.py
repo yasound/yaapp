@@ -1,13 +1,17 @@
+# -*- coding: utf-8 -*-
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.core.urlresolvers import reverse
 from optparse import make_option
 from account.models import UserProfile
+from django.contrib.auth.models import User
+
 
 class Command(BaseCommand):
     """
-    Extract covers
+    Send messages to users
     """
     option_list = BaseCommand.option_list + (
         make_option('-u', '--url', dest='url',
@@ -28,9 +32,20 @@ class Command(BaseCommand):
             UserProfile.objects.broadcast_message_from_yasound(url_param)
 
         if text:
-            default_from = UserProfile.objects.get(id=1).user
+            from_id = 1
+
             profiles = UserProfile.objects.all()
+            if settings.PRODUCTION_MODE:
+                from_id = 2620
+                profiles = UserProfile.objects.filter(user__is_superuser=True, user__id=172)
+
+            default_from = User.objects.get(id=from_id)
+
             for profile in profiles:
-                profile.send_message(sender=default_from, message=text)
+                if profile.language == 'fr':
+                    text = u'Félicitations ! Vous avez 1 mois de HD offert pour tester la nouvelle version de YaSound'
+                else:
+                    text = u'Welcome on YaSound! Play all the radios in HD during 1 month for free'
+                profile.send_message(sender=default_from, message=unicode(text))
 
 

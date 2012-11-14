@@ -14,16 +14,17 @@ from bson.objectid import ObjectId
 
 logger = logging.getLogger("yaapp.yahistory")
 
+
 class UserHistory():
-    ETYPE_LISTEN_RADIO       = 'listen'
-    ETYPE_MESSAGE            = 'message'
-    ETYPE_LIKE_SONG          = 'like_song'
-    ETYPE_FAVORITE_RADIO     = 'favorite_radio'
+    ETYPE_LISTEN_RADIO = 'listen'
+    ETYPE_MESSAGE = 'message'
+    ETYPE_LIKE_SONG = 'like_song'
+    ETYPE_FAVORITE_RADIO = 'favorite_radio'
     ETYPE_NOT_FAVORITE_RADIO = 'not_favorite_radio'
-    ETYPE_SHARE              = 'share'
-    ETYPE_ANIMATOR           = 'animator'
-    ETYPE_BUY_LINK           = 'buy_link'
-    ETYPE_WATCH_TUTORIAL     = 'watch_tutorial'
+    ETYPE_SHARE = 'share'
+    ETYPE_ANIMATOR = 'animator'
+    ETYPE_BUY_LINK = 'buy_link'
+    ETYPE_WATCH_TUTORIAL = 'watch_tutorial'
 
     def __init__(self):
         self.db = settings.MONGO_DB
@@ -114,7 +115,6 @@ class UserHistory():
         doc['data'] = data
         self.collection.insert(doc, safe=True)
 
-
     def add_listen_radio_event(self, user_id, radio_uuid):
         data = {
             'radio_uuid': radio_uuid,
@@ -197,7 +197,6 @@ class UserHistory():
             docs = self.collection.find().skip(start).limit(limit).sort([('date', DESCENDING)])
         return docs
 
-
     def last_message(self, user_id):
         return self.collection.find_one({'db_id': user_id, 'type': UserHistory.ETYPE_MESSAGE}, sort=[('date', DESCENDING)])
 
@@ -217,11 +216,11 @@ class UserHistory():
 
 
 class ProgrammingHistory():
-    PTYPE_UPLOAD_PLAYLIST      = 'upload_playlist'
-    PTYPE_UPLOAD_FILE          = 'upload_file'
-    PTYPE_ADD_FROM_YASOUND     = 'add_from_yasound'
-    PTYPE_ADD_FROM_DEEZER      = 'add_from_deezer'
-    PTYPE_IMPORT_FROM_ITUNES   = 'import_from_itunes'
+    PTYPE_UPLOAD_PLAYLIST = 'upload_playlist'
+    PTYPE_UPLOAD_FILE = 'upload_file'
+    PTYPE_ADD_FROM_YASOUND = 'add_from_yasound'
+    PTYPE_ADD_FROM_DEEZER = 'add_from_deezer'
+    PTYPE_IMPORT_FROM_ITUNES = 'import_from_itunes'
     PTYPE_REMOVE_FROM_PLAYLIST = 'remove_from_playlist'
 
     STATUS_SUCCESS = 'success'
@@ -269,7 +268,6 @@ class ProgrammingHistory():
         details['status'] = ProgrammingHistory.STATUS_FAILED
         return self.add_details(event, details)
 
-
     def update_event(self, event):
         now = datetime.datetime.now()
         event['updated'] = now
@@ -280,7 +278,6 @@ class ProgrammingHistory():
         if isinstance(event_id, str) or isinstance(event_id, unicode):
             event_id = ObjectId(event_id)
         return self.collection.find_one({'_id': event_id})
-
 
     def finished(self, event):
         event['status'] = ProgrammingHistory.STATUS_FINISHED
@@ -326,13 +323,17 @@ class ProgrammingHistory():
 
 
 # event handlers
+
+
 def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
         async_add_listen_radio_event.delay(user.id, radio.uuid)
 
+
 def user_watched_tutorial_handler(sender, user, **kwargs):
     if not user.is_anonymous():
         async_add_watch_tutorial_event.delay(user.id)
+
 
 def new_wall_event_handler(sender, wall_event, **kwargs):
     user = wall_event.user
@@ -348,18 +349,23 @@ def new_wall_event_handler(sender, wall_event, **kwargs):
     elif we_type == yabase_settings.EVENT_LIKE:
         async_add_like_song_event.delay(user.id, wall_event.radio.uuid, wall_event.song.id)
 
+
 def favorite_radio_handler(sender, radio, user, **kwargs):
     async_add_favorite_radio_event.delay(user.id, radio.uuid)
+
 
 def not_favorite_radio_handler(sender, radio, user, **kwargs):
     async_add_not_favorite_radio_event.delay(user.id, radio.uuid)
 
+
 def new_share(sender, radio, user, share_type, **kwargs):
     async_add_share_event.delay(user.id, radio.uuid, share_type=share_type)
+
 
 def new_animator_activity(sender, user, radio, atype, details=None, **kwargs):
     if radio is not None:
         async_add_animator_event.delay(user.id, radio.uuid, atype, details=details)
+
 
 def buy_link_handler(sender, radio, user, song_instance, **kwargs):
     if user is None:
