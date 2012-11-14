@@ -19,7 +19,7 @@ class TransientRadioHistoryManager():
 
     def __init__(self):
         self.db = settings.MONGO_DB
-        self.collection = self.db.yascheduler.transient.radios
+        self.collection = self.db.scheduler.transient.radios
         self.collection.ensure_index("radio_uuid")
         self.collection.ensure_index("playlist_id")
 
@@ -35,7 +35,7 @@ class TransientRadioHistoryManager():
             'playlist_id': playlist_id,
             'type': event_type,
         }
-        self.collection.insert(doc, safe=True)
+        self.collection.update({'radio_uuid': radio_uuid, 'playlist_id': playlist_id}, doc, upsert=True, safe=True)
 
     def events_for_radio(self, radio_uuid):
         return self.collection.find({'radio_uuid': radio_uuid})
