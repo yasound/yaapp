@@ -6,6 +6,9 @@ import logging
 from task import async_transient_radio_event
 from yabase import settings as yabase_settings
 from yabase.models import Playlist
+from redis import Redis
+import json
+
 logger = logging.getLogger("yaapp.yascheduler")
 
 
@@ -36,9 +39,19 @@ class TransientRadioHistoryManager():
             'type': event_type,
         }
         self.collection.update({'radio_uuid': radio_uuid, 'playlist_id': playlist_id}, doc, upsert=True, safe=True)
+        self.notify_yascheduler()
 
     def events_for_radio(self, radio_uuid):
         return self.collection.find({'radio_uuid': radio_uuid})
+
+    def notify_yascheduler(self):
+        red = Redis(host=settings.YASCHEDULER_REDIS_HOST, db=0)
+        channel = 'yaapp'
+        data = {
+            'event_type': 'radio_updated',
+        }
+        json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
+        red.publish(channel, json_data)
 
 
 def radio_deleted_handler(sender, radio, **kwargs):
