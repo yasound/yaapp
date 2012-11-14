@@ -25,6 +25,7 @@ class TransientRadioHistoryManager():
         self.collection = self.db.scheduler.transient.radios
         self.collection.ensure_index("radio_uuid")
         self.collection.ensure_index("playlist_id")
+        self.collection.ensure_index("updated")
 
     def erase_informations(self):
         self.collection.drop()
