@@ -2921,6 +2921,10 @@ ul#notifications {
     margin:10px 0px 20px 20px;
 }
 
+ul .track-container {
+    cursor: pointer;
+}
+
 .track-picture {
     position:absolute;
     height:210px;

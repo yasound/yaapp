@@ -76,6 +76,7 @@ Yasound.Views.User = Backbone.View.extend({
 Yasound.Views.Like = Backbone.View.extend({
     tagName: 'li',
     events: {
+        "click .track-container": "onRadio"
     },
 
     initialize: function () {
@@ -90,6 +91,14 @@ Yasound.Views.Like = Backbone.View.extend({
         var data = this.model.toJSON();
         $(this.el).html(ich.likeCellTemplate(data));
         return this;
+    },
+
+    onRadio: function (e) {
+        e.preventDefault();
+        var uuid = this.model.get('radio_uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
     }
 });
 
