@@ -40,6 +40,9 @@ class Service(models.Model):
 
     def activate(self, user):
         profile = user.get_profile()
+        if profile is None:
+            return
+
         stype = self.stype
         if stype == yapremium_settings.SERVICE_HD:
             profile.permissions.hd = True
@@ -49,6 +52,9 @@ class Service(models.Model):
 
     def disable(self, user):
         profile = user.get_profile()
+        if profile is None:
+            return
+
         stype = self.stype
         if stype == yapremium_settings.SERVICE_HD:
             profile.permissions.hd = False
