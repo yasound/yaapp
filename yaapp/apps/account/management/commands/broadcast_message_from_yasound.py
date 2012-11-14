@@ -35,7 +35,7 @@ class Command(BaseCommand):
             from_id = 1
 
             profiles = UserProfile.objects.all()
-            if setttings.PRODUCTION_MODE:
+            if settings.PRODUCTION_MODE:
                 from_id = 2620
                 profiles = UserProfile.objects.filter(user__is_superuser=True, user__id=172)
 
