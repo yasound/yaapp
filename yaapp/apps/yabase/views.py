@@ -860,10 +860,6 @@ def upload_song(request, song_id=None):
             radio = Radio.objects.get(id=song_instance.playlist.radio.id)
             if request.user != radio.creator:
                 return HttpResponse(status=401)
-            yabase_signals.new_animator_activity.send(sender=request.user,
-                                                  user=request.user,
-                                                  radio=radio,
-                                                  atype=yabase_settings.ANIMATOR_TYPE_UPLOAD_SONG)
         except:
             logger.info('no radio')
 
@@ -898,6 +894,11 @@ def upload_song(request, song_id=None):
 
         if request.user != radio.creator:
             return HttpResponse(status=401)
+
+        yabase_signals.new_animator_activity.send(sender=request.user,
+                                              user=request.user,
+                                              radio=radio,
+                                              atype=yabase_settings.ANIMATOR_TYPE_UPLOAD_SONG)
 
     logger.info('importing song')
 
