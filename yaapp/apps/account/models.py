@@ -1085,7 +1085,7 @@ class UserProfile(models.Model):
                            from_radio_id=radio.id if radio is not None else None,
                            language=self.language)
 
-        self.send_APNs_message(message=message,
+        self.send_APNs_message(message=None,
                                custom_params={
                                     yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params
                                },
