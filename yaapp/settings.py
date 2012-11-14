@@ -78,6 +78,7 @@ CELERY_IMPORTS = (
     "yaref.task",
     "yapremium.task",
     "yadeezer.task",
+    "yascheduler.task",
 )
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
@@ -398,6 +399,7 @@ INSTALLED_APPS = (
     'yashow',
     'compressor',
     'radioways',
+    'yascheduler',
 )
 
 if LOCAL_MODE:
@@ -574,6 +576,11 @@ LOGGING = {
             'propagate': False,
         },
         'yaapp.radioways': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.yascheduler': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,

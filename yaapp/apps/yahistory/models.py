@@ -6,8 +6,7 @@ from yabase.models import Radio, SongInstance
 from yahistory.task import async_add_listen_radio_event, \
     async_add_post_message_event, async_add_like_song_event, \
     async_add_favorite_radio_event, async_add_not_favorite_radio_event, \
-    async_add_share_event, async_add_animator_event, async_add_buy_link_event, async_add_watch_tutorial_event, \
-    async_transient_radio_event
+    async_add_share_event, async_add_animator_event, async_add_buy_link_event, async_add_watch_tutorial_event
 from yaref.models import YasoundSong
 import datetime
 import logging
@@ -323,34 +322,6 @@ class ProgrammingHistory():
         self.collection.remove({'_id': event.get('_id')}, safe=True)
 
 
-class TransientRadioHistory():
-    TYPE_PLAYLIST_ADDED = 'playlist_added'
-    TYPE_PLAYLIST_UPDATED = 'playlist_updated'
-    TYPE_PLAYLIST_DELETED = 'playlist_deleted'
-
-    TYPE_RADIO_ADDED = 'radio_added'
-    TYPE_RADIO_DELETED = 'radio_deleted'
-
-    def __init__(self):
-        self.db = settings.MONGO_DB
-        self.collection = self.db.history.transient.playlist
-        self.collection.ensure_index("radio_uuid")
-        self.collection.ensure_index("playlist_id")
-
-    def erase_informations(self):
-        self.collection.drop()
-
-    def add_event(self, event_type, radio_uuid, playlist_id):
-        now = datetime.datetime.now()
-        doc = {
-            'created': now,
-            'updated': now,
-            'radio_uuid': radio_uuid,
-            'playlist_id': playlist_id,
-            'type': event_type,
-        }
-        self.collection.insert(doc, safe=True)
-
 # event handlers
 
 
@@ -404,10 +375,6 @@ def buy_link_handler(sender, radio, user, song_instance, **kwargs):
     async_add_buy_link_event.delay(user.id, radio.uuid, song_instance.id)
 
 
-def radio_deleted_handler(sender, radio, **kwargs):
-    async_transient_radio_event.delay(event_type=TransientRadioHistory.TYPE_RADIO_DELETED, radio_uuid=radio.uuid)
-
-
 def install_handlers():
     yabase_signals.user_watched_tutorial.connect(user_watched_tutorial_handler)
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
@@ -417,6 +384,4 @@ def install_handlers():
     yabase_signals.radio_shared.connect(new_share)
     yabase_signals.new_animator_activity.connect(new_animator_activity)
     yabase_signals.buy_link.connect(buy_link_handler)
-
-    yabase_signals.radio_deleted.connect(radio_deleted_handler)
 install_handlers()
