@@ -22,6 +22,7 @@ from yabase.api import RadioNextSongsResource, RadioWallEventResource, \
 from yabase.models import Radio
 from yaweb import urls as yaweb_urls
 from yaweb.sitemap import StaticSitemap
+from yabase.sitemap import WebappSiteMap
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
@@ -327,7 +328,7 @@ else:
 
 # sitemap
 sitemaps = {
-    'yaweb': StaticSitemap(yaweb_urls.urlpatterns),
+    'yaapp': WebappSiteMap(),
 }
 
 urlpatterns += patterns('django.contrib.sitemaps.views',
