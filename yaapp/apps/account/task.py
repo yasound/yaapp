@@ -98,8 +98,11 @@ def async_tw_post_message(user_id, radio_uuid, message):
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
     tweet = _('I posted a message on %(url)s #yasound') % {'url': radio_url}
-    logger.debug(tweet)
-    api.update_status(status=tweet)
+    try:
+        api.update_status(status=tweet)
+    except tweepy.error.TweepError, e:
+        logger.error('async_tw_post_message: %s' % e)
+
     logger.debug('done')
 
 
@@ -118,7 +121,7 @@ def async_tw_listen(user_id, radio_uuid, song_title, artist):
     try:
         api.update_status(status=tweet)
     except tweepy.error.TweepError, e:
-        logger.error(e)
+        logger.error('async_tw_listen: %s' % e)
 
     logger.debug('done')
 
@@ -135,7 +138,10 @@ def async_tw_like_song(user_id, radio_uuid, song_title, artist):
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
     tweet = _('I like %(song)s by %(artist)s on %(url)s #yasound') % {'song': song_title[:7], 'artist': artist[:7], 'url': radio_url}
-    api.update_status(status=tweet)
+    try:
+        api.update_status(status=tweet)
+    except tweepy.error.TweepError, e:
+        logger.error('async_tw_like_song: %s' % e)
 
     logger.debug('done')
 
@@ -152,7 +158,10 @@ def async_tw_animator_activity(user_id, radio_uuid):
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
     tweet = _('I have updated my playist on %(url)s #yasound') % {'url': radio_url}
-    api.update_status(status=tweet)
+    try:
+        api.update_status(status=tweet)
+    except tweepy.error.TweepError, e:
+        logger.error('async_tw_animator_activity: %s' % e)
 
     logger.debug('done')
 
