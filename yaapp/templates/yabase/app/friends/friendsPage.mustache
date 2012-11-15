@@ -70,7 +70,11 @@
 <div class='row common-background'>
 
     <div class='span12 no-margin invite'>
+        {% ifequal app_name 'deezer' %}
+        <h1>{% trans "Invite your friends" %}</h1>
+        {% else %}
         <h1>{% trans "Invite your friends and win HD" %}</h1>
+        {% endifequal %}
         <ul>
             <li>
                 <div id='invite-facebook'>
