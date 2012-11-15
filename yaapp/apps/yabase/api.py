@@ -380,6 +380,7 @@ class FavoriteRadioResource(ModelResource):
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
+        ordering = ('radiouser__id',)
         filtering = {
             'genre': ALL,
             'ready': ('exact',),
