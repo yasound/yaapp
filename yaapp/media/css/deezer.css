@@ -99,8 +99,10 @@
     background-image: url('../app/images/link-out.png');
     background-repeat: no-repeat;
     background-position: 100% 50%;
-    padding-right:28px;
+    padding-right:20px;
     color: #757b7d;
+    font-size:10px;
+    font-size:12px;
 }
 
 #contacts p a.link-out:hover {
