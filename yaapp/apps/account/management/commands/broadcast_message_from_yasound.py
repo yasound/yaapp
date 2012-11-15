@@ -37,7 +37,7 @@ class Command(BaseCommand):
             if settings.PRODUCTION_MODE:
                 from_id = 2620
                 profiles = UserProfile.objects.filter(user__is_superuser=True, user__id=172)
-                radio = Radio.objects.get(id=197)
+                radio = Radio.objects.get(id=11475)
 
             default_from = User.objects.get(id=from_id)
 
