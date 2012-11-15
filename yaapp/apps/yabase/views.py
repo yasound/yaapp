@@ -2036,7 +2036,7 @@ def most_active_radios(request, internal=False, genre=''):
     else:
         qs = Radio.objects
 
-    qs = qs.exclude(deleted=True)
+    qs = qs.exclude(deleted=True).exclude(blacklisted=True)
     if is_iphone(request) or is_deezer(request):
         qs = qs.exclude(origin=yabase_settings.RADIO_ORIGIN_KFM)
 
