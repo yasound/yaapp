@@ -249,7 +249,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
         exclude_ids = selection_radios_ids + recommendations
         need_more = limit - len(radio_data)
         need_more_offset = max(0, skip - len(exclude_ids))
-        qs = Radio.objects
+        qs = Radio.objects.ready_objects()
         if genre != '':
             qs = qs.filter(genre=genre)
         if request.user is not None and request.user.is_authenticated():
