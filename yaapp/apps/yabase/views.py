@@ -226,6 +226,9 @@ def radio_recommendations_process(request, internal=False, genre=''):
             except Radio.DoesNotExist:
                 continue
 
+            if r.blacklisted:
+                continue
+
             id_ok = r.id not in selection_radios_ids
             genre_ok = genre == '' or genre == r.genre  # get radio with the right genre
             creator_ok = r.creator != request_user
