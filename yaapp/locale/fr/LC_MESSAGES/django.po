@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-15 13:51+0100\n"
+"POT-Creation-Date: 2012-11-15 16:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,8 +227,6 @@ msgid "Yasound newsletter"
 msgstr "Newsletter Yasound"
 
 #: templates/newsletter/contact_import.html:7
-#: templates/yabase/app/track_deezer.mustache:54
-#: templates/yabase/app/track_deezer.mustache:75
 msgid "Home"
 msgstr "Accueil"
 
@@ -1175,7 +1173,6 @@ msgid "No result found"
 msgstr "Aucun résultat trouvé"
 
 #: templates/yabase/app/track.mustache:45
-#: templates/yabase/app/radio/track.mustache:22
 msgid "Like song"
 msgstr "J'aime le titre"
 
@@ -1225,6 +1222,11 @@ msgstr "Mot de passe"
 #: templates/yabase/app/track_deezer.mustache:75
 msgid "Go to YaSound website"
 msgstr "Aller sur le site de YaSound"
+
+#: templates/yabase/app/track_deezer.mustache:54
+#: templates/yabase/app/track_deezer.mustache:75
+msgid "YaSound.com"
+msgstr "YaSound.com"
 
 #: templates/yabase/app/common/subMenu.mustache:38
 msgid "People"
@@ -1687,6 +1689,18 @@ msgstr "favoris"
 msgid "Broadcast to your fans"
 msgstr "Message aux abonnés"
 
+#: templates/yabase/app/radio/radioInfos.mustache:10
+msgid "Add to YaSound favorites"
+msgstr "Ajouter aux favoris YaSound"
+
+#: templates/yabase/app/radio/radioInfos.mustache:10
+msgid "Remove from favorites"
+msgstr "Retirer des favoris"
+
+#: templates/yabase/app/radio/radioInfos.mustache:11
+msgid "Like song on YaSound"
+msgstr "J'aime le titre sur YaSound"
+
 #: templates/yabase/app/radio/radioPage.mustache:10
 msgid "listeners"
 msgstr "auditeurs"
@@ -1758,14 +1772,6 @@ msgstr "Widget large"
 #: templates/yabase/app/radio/sharePage.mustache:19
 msgid "Link to stream:"
 msgstr "Lien vers le stream :"
-
-#: templates/yabase/app/radio/track.mustache:21
-msgid "Add to favorites"
-msgstr "Ajouter aux favoris"
-
-#: templates/yabase/app/radio/track.mustache:21
-msgid "Remove from favorites"
-msgstr "Retirer des favoris"
 
 #: templates/yabase/app/radio/wallEvent.like.mustache:24
 msgid "likes"
