@@ -461,7 +461,7 @@ class RadioManager(models.Manager):
         self.all().update(computing_next_songs=False)
 
     def ready_objects(self):
-        return self.filter(ready=True, creator__isnull=False, deleted=False).select_related('creator', 'creator__userprofile')
+        return self.filter(ready=True, creator__isnull=False, deleted=False, blacklisted=False).select_related('creator', 'creator__userprofile')
 
     def most_actives(self):
         from yametrics.models import RadioMetricsManager
