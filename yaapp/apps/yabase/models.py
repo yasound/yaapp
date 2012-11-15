@@ -601,6 +601,7 @@ class Radio(models.Model):
     city = models.CharField(_('city'), max_length=128, blank=True)
     latitude = models.FloatField(null=True, blank=True) # degrees
     longitude = models.FloatField(null=True, blank=True) # degrees
+    blacklisted = models.BooleanField(_('blacklisted'), default=False)
 
     def __unicode__(self):
         if self.name:
