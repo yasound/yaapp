@@ -216,8 +216,17 @@
 .deezer-actions {
   margin-left: 45px;
 }
-.deezer-actions .a {
-  margin-bottom: 12px;
+
+.deezer-actions .yabutton-small {
+}
+
+.deezer-actions ul {
+  list-style: none;
+  margin:0;
+}
+
+.deezer-actions ul li {
+  margin-bottom:12px;
 }
 
 /**

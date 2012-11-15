@@ -164,25 +164,43 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     tagName: 'div',
     className: 'track',
     events: {
+        'click .add-to-favorites': 'onAddToFavorites',
+        'click .remove-from-favorites': 'onRemoveFromFavorites',
+        'click .like-song': 'onLikeSong'
     },
 
     initialize: function () {
-        _.bindAll(this, 'onDeezerSongFound', 'onDeezerSongNotFound');
+        _.bindAll(this, 'onDeezerSongFound', 'onDeezerSongNotFound', 'refreshFavorites');
         this.model.bind('change', this.render, this);
         $.subscribe('/player/deezer/songFound', this.onDeezerSongFound);
         $.subscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
+
+        if (Yasound.App.appName === 'deezer') {
+            $.subscribe('/radio/favorite', this.refreshFavorites);
+            $.subscribe('/radio/not_favorite', this.refreshFavorites);
+        }
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
         $.unsubscribe('/player/deezer/songFound', this.onDeezerSongFound);
         $.unsubscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
+        if (Yasound.App.appName === 'deezer') {
+            $.unsubscribe('/radio/favorite', this.refreshFavorites);
+            $.unsubscribe('/radio/not_favorite', this.refreshFavorites);
+        }
+    },
+
+    setRadio: function (radio) {
+        this.radio = radio;
+        return this;
     },
 
     render: function () {
         $(this.el).html(ich.trackInRadioTemplate(this.model.toJSON()));
 
         if (Yasound.App.appName === 'deezer') {
+            this.refreshFavorites();
             var player = Yasound.App.player;
             if (player.deezerId) {
                 this.addDeezerLinks(player);
@@ -213,6 +231,34 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     onDeezerSongNotFound: function(e, player) {
         $('.dz-addtoplaylist', this.el).hide();
         $('.dz-share', this.el).hide();
+    },
+
+    refreshFavorites: function () {
+        if (this.radio.get('favorite')) {
+            $('.add-to-favorites', this.el).hide();
+            $('.remove-from-favorites', this.el).show();
+        } else {
+            $('.remove-from-favorites', this.el).hide();
+            $('.add-to-favorites', this.el).show();
+        }
+    },
+
+    onAddToFavorites: function (e) {
+        e.preventDefault();
+        this.radio.addToFavorite();
+    },
+
+    onRemoveFromFavorites: function (e) {
+        e.preventDefault();
+        this.radio.removeFromFavorite();
+    },
+
+    onLikeSong: function (e) {
+        e.preventDefault();
+        var songId = this.model.get('id');
+        var url = '/api/v1/song/' + songId + '/liker/';
+        $.publish('/song/like', this.model);
+        $.post(url);
     }
 });
 
@@ -582,7 +628,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.trackView = new Yasound.Views.TrackInRadio({
             model: this.model.currentSong,
             el: $('#webapp-track', this.el)
-        });
+        }).setRadio(this.model);
 
 
         this.radioUsers.radio = this.model;
@@ -620,7 +666,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         }
 
         this.radioView.render();
-        this.trackView.render();
+        this.trackView.render(this.model);
         this.wallEventsView.render();
         this.paginationView.render();
         this.radioInfosView.render();
