@@ -1582,8 +1582,13 @@ class WebAppView(View):
 
 
         if request.user.is_authenticated():
-            twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
-            email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
+            if app_name == 'app':
+                twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
+                email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
+            else:
+                twitter_referal = absolute_url(reverse('webapp_signup', args=[app_name])) + '?referal=twitter&username=' + request.user.username
+                email_referal = absolute_url(reverse('webapp_signup', args=[app_name])) + '?referal=email&username=' + request.user.username
+
             user_profile = request.user.get_profile()
 
             if referal == 'twitter' and user_profile.twitter_uid is not None:
@@ -1744,8 +1749,13 @@ class WebAppView(View):
         email_referal = False
 
         if request.user.is_authenticated():
-            twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
-            email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
+            if app_name == 'app':
+                twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
+                email_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=email&username=' + request.user.username
+            else:
+                twitter_referal = absolute_url(reverse('webapp_signup', args=[app_name])) + '?referal=twitter&username=' + request.user.username
+                email_referal = absolute_url(reverse('webapp_signup', args=[app_name])) + '?referal=email&username=' + request.user.username
+
             user_profile = request.user.get_profile()
 
             if referal == 'twitter' and user_profile.twitter_uid is not None:
