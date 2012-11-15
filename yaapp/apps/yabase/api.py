@@ -380,7 +380,6 @@ class FavoriteRadioResource(ModelResource):
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
-        ordering = ('radiouser__id',)
         filtering = {
             'genre': ALL,
             'ready': ('exact',),
@@ -394,7 +393,7 @@ class FavoriteRadioResource(ModelResource):
 
     def apply_authorization_limits(self, request, object_list):
         user = request.user
-        return object_list.filter(radiouser__user=user, radiouser__favorite=True)
+        return object_list.filter(radiouser__user=user, radiouser__favorite=True).order_by('-radiouser__id')
 
 class UserFavoriteRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
