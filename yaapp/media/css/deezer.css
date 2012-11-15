@@ -126,6 +126,25 @@
   display: none;
 }
 
+#radio-toolbar {
+  float:right;
+}
+
+#radio-toolbar ul {
+  list-style: none;
+  margin:0;
+}
+
+#radio-toolbar ul li {
+  float:left;
+  margin-top:4px;
+  margin-left:4px;
+}
+
+#radio-infos h1 {
+  margin-bottom:12px;
+}
+
 
 /**
  * Buttons
