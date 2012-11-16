@@ -643,7 +643,7 @@ body {
 #player #metadata-container #radio-title #title {
     line-height:25px;
     display:inline-block;
-    width: 377px;
+    width: 370px;
     height:25px;
     overflow:hidden;
     text-overflow: ellipsis;
@@ -6570,7 +6570,7 @@ a.yabutton-small {
     #player #metadata-container #radio-title #title {
         line-height:25px;
         display:inline-block;
-        width: 214px;
+        width: 208px;
         overflow:hidden;
         text-overflow: ellipsis;
     }
