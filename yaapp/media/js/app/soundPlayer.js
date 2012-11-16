@@ -244,17 +244,21 @@ Yasound.Player.Deezer = function () {
         },
 
         notifyStreamer: function (url) {
+            console.log('notifyStreamer called with ' + url);
             if (!mgr.soundManagerReady) {
+                console.log('manager not ready, exiting');
                 return;
             }
             mgr.smConfig.url = url;
             var handle = soundManager.createSound(mgr.smConfig);
+            console.log('done!')
             var timerId = setInterval(function () {
+                console.log('unloading manager');
                 if (handle) {
                     handle.unload();
                 }
                 clearInterval(timerId);
-            }, 2000);
+            }, 5000);
         },
 
         refreshSong: function (song) {
