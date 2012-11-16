@@ -269,6 +269,9 @@
   border: none;
 }
 
+#login {
+  margin-left:-40px;
+}
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -285,6 +288,6 @@
     }
 
     #login {
-      margin-left:0;
+      margin-left:-26px;
     }
 }
