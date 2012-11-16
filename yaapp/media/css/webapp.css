@@ -4333,14 +4333,16 @@ a.yabutton-small {
     height:323px;
 }
 
-#teaser h1 {
+#teaser #teaser-title {
     color: white;
     text-shadow:1px 1px #000000;
     font-size:34px;
+    line-height: 36px;
     font-weight: 100;
+    text-rendering: optimizelegibility;
 }
 
-#teaser h1 strong {
+#teaser #teaser-title strong {
     font-weight:400;
 }
 
