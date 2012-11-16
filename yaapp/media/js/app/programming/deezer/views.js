@@ -119,11 +119,28 @@ Yasound.Views.Deezer.TrackCell = Backbone.View.extend({
         return this;
     },
 
-    onImport: function (e) {
+    onImport: function (e, success, error) {
         if (e) {
             e.preventDefault();
         }
-        this.model.addToRadio(this.uuid, this.onImportSucceded, this.onImportFailed);
+        if (!success) {
+            success = function() {};
+        }
+        if (!error) {
+            error = function() {};
+        }
+
+        var that = this;
+        var succ = function () {
+            success();
+            that.onImportSucceded();
+        };
+        var err = function () {
+            error();
+            that.onImportFailed();
+        };
+
+        this.model.addToRadio(this.uuid, succ, err);
     },
 
     onImportSucceded: function (message) {
@@ -199,8 +216,31 @@ Yasound.Views.Deezer.Tracks = Backbone.View.extend({
     },
 
     importAll: function () {
+        var total  = this.views.length;
+        var found = 0;
+        var notFound = 0;
+
+        var displayResult = function () {
+            var body = gettext('Import results:') + '<br/><br/>';
+            body += found + ' ' + gettext('tracks have been added in your playlist') + '<br/>' + notFound + ' ' + gettext('tracks could not be found');
+            Yasound.Utils.dialog(gettext('Results from Deezer import'),  body);
+        };
+
+        var success = function () {
+            found += 1;
+            if (found+notFound === total) {
+                displayResult();
+            }
+        };
+        var error = function () {
+            notFound += 1;
+            if (found+notFound === total) {
+                displayResult();
+            }
+        };
+
         _.each(this.views, function (view) {
-            view.onImport();
+            view.onImport(undefined, success, error);
         });
     }
 });
