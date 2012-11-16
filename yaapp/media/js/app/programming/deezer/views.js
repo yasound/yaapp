@@ -254,7 +254,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
         }
         var that = this;
         DZ.getLoginStatus(function(response) {
-            console.log(response);
+            // console.log(response);
             if (response.authResponse) {
                 that.fetchPlaylists();
             } else {
@@ -262,7 +262,7 @@ Yasound.Views.ImportFromDeezer =  Backbone.View.extend({
                     if (response.authResponse) {
                         that.fetchPlaylists();
                     } else {
-                        console.log('User cancelled login or did not fully authorize.');
+                        // console.log('User cancelled login or did not fully authorize.');
                     }
                 }, {perms: 'basic_access,email,manage_library'});
             }
