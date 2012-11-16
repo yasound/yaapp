@@ -215,7 +215,7 @@ Yasound.Player.Deezer = function () {
         setBaseUrl: function(radio, baseUrl) {
             mgr.radio = radio;
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
-            console.log('radio has changed');
+            // console.log('radio has changed');
 
             if (mgr.firstLoad) {
                 mgr.firstLoad = false;
@@ -225,7 +225,7 @@ Yasound.Player.Deezer = function () {
         },
 
         refreshSong: function (song) {
-            console.log('deezer -- refresh song');
+            // console.log('deezer -- refresh song');
             Yasound.App.Router.radioContext.currentSong.off('change:name', mgr.refreshSong);
 
             var title = song.rawTitleWithoutAlbum();
@@ -236,17 +236,17 @@ Yasound.Player.Deezer = function () {
             mgr.previewTitle = title;
 
             var query = '/search?q=' + title + '&order=RANKING';
-            console.log('query is "' + query + '"');
+            // console.log('query is "' + query + '"');
             DZ.api(query, mgr.searchCallback);
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
         },
 
         searchCallback: function (response) {
-            console.log('response is');
-            console.log(response);
+            // console.log('response is');
+            // console.log(response);
             var total = response.total;
             if (total > 0) {
-                console.log('found ' + total + ' items');
+                // console.log('found ' + total + ' items');
                 var item = response.data[0];
                 var deezerId = item.id;
                 var deezerArtistId = 0;
@@ -274,14 +274,14 @@ Yasound.Player.Deezer = function () {
 
             $.publish('/player/deezer/songFound', mgr);
 
-            console.log('id is ' + deezerId);
+            // console.log('id is ' + deezerId);
 
             if (mgr.radioHasChanged) {
-                console.log('radio has changed, loading track now!');
+                // console.log('radio has changed, loading track now!');
                 DZ.player.playTracks([deezerId]);
                 mgr.radioHasChanged = false;
             } else {
-                console.log('same radio, do not load track now, adding it to queue');
+                // console.log('same radio, do not load track now, adding it to queue');
                 DZ.player.addToQueue([deezerId]);
             }
         },
@@ -295,14 +295,14 @@ Yasound.Player.Deezer = function () {
 
             $.publish('/player/deezer/songNotFound', mgr);
 
-            console.log('no track found');
+            // console.log('no track found');
             if (mgr.radioHasChanged) {
-                console.log('radio has changed, stopping player');
+                // console.log('radio has changed, stopping player');
                 DZ.player.pause();
             } else {
-                console.log('same radio, do nothing');
+                // console.log('same radio, do nothing');
             }
-            console.log('calling loadExternalTrack');
+            // console.log('calling loadExternalTrack');
             mgr.loadExternalTrack();
         },
 
