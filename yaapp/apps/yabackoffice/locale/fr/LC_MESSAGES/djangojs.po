@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 06:10+0100\n"
+"POT-Creation-Date: 2012-11-16 14:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -333,7 +333,7 @@ msgstr "Notification marquée comme lue"
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/notifications/views.js:193
+#: js/app/notifications/views.js:204
 msgid "Next notifications"
 msgstr "Notifications suivantes"
 
@@ -393,44 +393,60 @@ msgstr "L'analyse de l'import iTunes a démarré"
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
-#: js/app/radio/views.js:599
+#: js/app/programming/deezer/views.js:224
+msgid "Import results:"
+msgstr "Résultats de l'import :"
+
+#: js/app/programming/deezer/views.js:225
+msgid "tracks have been added in your playlist"
+msgstr "titres ont été ajoutés à votre playlist"
+
+#: js/app/programming/deezer/views.js:225
+msgid "tracks could not be found"
+msgstr "titres n'ont pas été trouvés"
+
+#: js/app/programming/deezer/views.js:226
+msgid "Results from Deezer import"
+msgstr "Résultats de l'import Deezer"
+
+#: js/app/radio/views.js:650
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:855
+#: js/app/radio/views.js:906
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:856
-#: js/app/settings/views.js:179
-#: js/app/settings/views.js.py:189
-#: js/app/settings/views.js:199
+#: js/app/radio/views.js:907
+#: js/app/settings/views.js:184
+#: js/app/settings/views.js.py:198
+#: js/app/settings/views.js:208
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
 
-#: js/app/settings/views.js:46
+#: js/app/settings/views.js:47
 msgid "mm/dd/yyyy"
 msgstr "dd/mm/yyyy"
 
-#: js/app/settings/views.js:113
+#: js/app/settings/views.js:118
 msgid "Facebook settings saved"
 msgstr "Paramètres Facebook sauvegardés"
 
-#: js/app/settings/views.js:115
+#: js/app/settings/views.js:120
 msgid "Error while saving Facebook settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Facebook"
 
-#: js/app/settings/views.js:123
+#: js/app/settings/views.js:128
 msgid "Twitter settings saved"
 msgstr "Paramètres Twitter sauvegardés"
 
-#: js/app/settings/views.js:125
+#: js/app/settings/views.js:130
 msgid "Error while saving Twitter settings"
 msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 
-#: js/app/settings/views.js:178
-#: js/app/settings/views.js.py:188
-#: js/app/settings/views.js:198
+#: js/app/settings/views.js:183
+#: js/app/settings/views.js.py:197
+#: js/app/settings/views.js:207
 msgid "Settings updated"
 msgstr "Paramètres mis à jour"
 
