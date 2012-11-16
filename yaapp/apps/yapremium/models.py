@@ -39,8 +39,11 @@ class Service(models.Model):
         return u'%s' % (self.get_stype_display())
 
     def activate(self, user):
-        profile = user.get_profile()
-        if profile is None:
+        try:
+            profile = user.get_profile()
+            if profile is None:
+                return
+        except:
             return
 
         stype = self.stype
@@ -51,8 +54,11 @@ class Service(models.Model):
         profile.save()
 
     def disable(self, user):
-        profile = user.get_profile()
-        if profile is None:
+        try:
+            profile = user.get_profile()
+            if profile is None:
+                return
+        except:
             return
 
         stype = self.stype
