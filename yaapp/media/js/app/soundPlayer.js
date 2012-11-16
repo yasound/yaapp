@@ -172,17 +172,16 @@ Yasound.Player.Deezer = function () {
     soundManager.useHighPerformance = true;
     soundManager.useFastPolling = true;
 
-
-    var smConfig = {
+    var mgr = {
+        soundManagerReady: false,
+        smConfig: {
             id: 'yasoundMainPlay',
             url: '/',
             autoPlay: true,
             autoLoad: true,
             volume: 0,
             stream: true
-    };
-
-    var mgr = {
+        },
         hd: false,
         radio: undefined,
         radioHasChanged: false,
@@ -245,8 +244,11 @@ Yasound.Player.Deezer = function () {
         },
 
         notifyStreamer: function (url) {
-            smConfig.url = url;
-            var handle = soundManager.createSound(smConfig);
+            if (!mgr.soundManagerReady) {
+                return;
+            }
+            mgr.smConfig.url = url;
+            var handle = soundManager.createSound(mgr.smConfig);
             var timerId = setInterval(function () {
                 if (handle) {
                     handle.unload();
@@ -374,6 +376,9 @@ Yasound.Player.Deezer = function () {
             if (!callback) {
                 callback = function () { };
             }
+            soundManager.onready(function () {
+                mgr.soundManagerReady = true;
+            });
             DZ.init({
                 ajax : true
             });
