@@ -163,6 +163,25 @@ Yasound.Player.SoundManager = function () {
 
 
 Yasound.Player.Deezer = function () {
+    soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
+    soundManager.preferFlash = true;
+    soundManager.useHTML5Audio = true;
+    soundManager.debugMode = false;
+    soundManager.useFlashBlock = true;
+    soundManager.flashVersion = 9;
+    soundManager.useHighPerformance = true;
+    soundManager.useFastPolling = true;
+
+
+    var smConfig = {
+            id: 'yasoundMainPlay',
+            url: '/',
+            autoPlay: true,
+            autoLoad: true,
+            volume: 0,
+            stream: true
+    };
+
     var mgr = {
         hd: false,
         radio: undefined,
@@ -216,12 +235,24 @@ Yasound.Player.Deezer = function () {
             mgr.radio = radio;
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
             // console.log('radio has changed');
+            mgr.notifyStreamer();
 
             if (mgr.firstLoad) {
                 mgr.firstLoad = false;
             } else {
                 mgr.radioHasChanged = true;
             }
+        },
+
+        notifyStreamer: function (url) {
+            smConfig.url = url;
+            var handle = soundManager.createSound(smConfig);
+            var timerId = setInterval(function () {
+                if (handle) {
+                    handle.unload();
+                }
+                clearInterval(timerId);
+            }, 2000);
         },
 
         refreshSong: function (song) {
