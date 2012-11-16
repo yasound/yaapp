@@ -234,7 +234,7 @@ Yasound.Player.Deezer = function () {
             mgr.radio = radio;
             Yasound.App.Router.radioContext.currentSong.on('change:name', mgr.refreshSong);
             // console.log('radio has changed');
-            mgr.notifyStreamer();
+            mgr.notifyStreamer(baseUrl);
 
             if (mgr.firstLoad) {
                 mgr.firstLoad = false;
