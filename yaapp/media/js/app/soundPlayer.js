@@ -179,7 +179,7 @@ Yasound.Player.Deezer = function () {
             url: '/',
             autoPlay: true,
             autoLoad: true,
-            volume: 0,
+            volume: 1,
             stream: true
         },
         hd: false,
@@ -251,6 +251,7 @@ Yasound.Player.Deezer = function () {
             }
             mgr.smConfig.url = url;
             var handle = soundManager.createSound(mgr.smConfig);
+            handle.play();
             console.log('done!')
             var timerId = setInterval(function () {
                 console.log('unloading manager');
