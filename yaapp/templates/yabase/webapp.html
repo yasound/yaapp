@@ -667,17 +667,17 @@ HTML, BODY { height: 100%; }
       <div class='span3' id='teaser-listen'>
           {% app_url webapp_top app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Listen</a> to the biggest radio database in the world</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/listen.png' width='163' height='136'/>
+          <img src='/media/app/images/teaser/listen.png' width='163' height='136' alt="{% trans 'Listen' %}"/>
       </div>
       <div class='span3' id='teaser-share'>
           {% app_url webapp_friends app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Share</a> your listening<br/>with your friends</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/share.png' width='179' height='141'/>
+          <img src='/media/app/images/teaser/share.png' width='179' height='141' alt="{% trans 'Share' %}"/>
       </div>
       <div class='span3' id='teaser-create'>
           {% app_url webapp_myradios app_name as link %}
           {% blocktrans %}<p><a href='{{ link }}'>Create</a> your radio <br/>easily</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/create.png' width='144' height='144'/>
+          <img src='/media/app/images/teaser/create.png' width='144' height='144' alt="{% trans 'Create radio' %}"/>
 
       </div>
       <div class='span3 last' id='teaser-action'>
