@@ -7,12 +7,12 @@
     <div class="radio-container">
         <div class='picture'>
         <a href='{% app_url webapp_radio app_name radio.uuid %}'>
-            <img src='/media/images/radio-loading.gif' width='210' height='210'/></a>
+            <img src='/media/images/radio-loading.gif' width='210' height='210' alt='{% trans 'Radio picture' %}'/></a>
         </div>
 
         <div class='mask' style='display:none;'>
             <div class="radio-icon">
-                <img src="/media/images/default_album_small.png" width="36" height="36" alt="Radio Radio Picture"/>
+                <img src="/media/images/default_album_small.png" width="36" height="36" alt="{% trans 'Radio Picture' %}"/>
             </div>
             <div class="radio-id">
                 <p><span>{% trans "By" %}</span> <% name %></p>
