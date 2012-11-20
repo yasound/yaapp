@@ -28,6 +28,8 @@ class RadioGrid(grids.ModelGrid):
             'name',
             'created',
             'creator',
+            'deleted',
+            'blacklisted',
             'song_count',
             ]
     mapping = {

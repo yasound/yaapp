@@ -201,6 +201,44 @@ def radio_duplicate(request, radio_id):
 
 @csrf_exempt
 @login_required
+def radio_blacklist(request, radio_id):
+    """
+    blacklist radio
+    """
+    if not request.user.is_superuser:
+        raise Http404()
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        radio.blacklisted = True
+        radio.save()
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
+@csrf_exempt
+@login_required
+def radio_unblacklist(request, radio_id):
+    """
+    unblacklist radio
+    """
+    if not request.user.is_superuser:
+        raise Http404()
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        radio.blacklisted = False
+        radio.save()
+        json_data = json.JSONEncoder(ensure_ascii=False).encode({
+            'success': True,
+            'message': ''
+        })
+        return HttpResponse(json_data, mimetype='application/json')
+    raise Http404
+
+@csrf_exempt
+@login_required
 def radios(request, radio_id=None):
     if not request.user.is_superuser:
         raise Http404()
