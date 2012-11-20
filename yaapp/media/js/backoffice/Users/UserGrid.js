@@ -8,8 +8,11 @@ Yasound.Users.Data.UserStore = function() {
 	              'account_type',
 	              'user_id',
 	              'email',
-	              'is_active',
-	              'date_joined',
+	              'is_active', {
+                    name: 'date_joined',
+                    type: 'date',
+                    dateFormat: 'Y-m-d H:i:s'
+                  },
                   'hd_enabled',
 	              'facebook_uid', {
 					name: 'last_authentication_date',
