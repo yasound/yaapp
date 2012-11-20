@@ -133,7 +133,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 getRowClass: function(row, index){
                     var data = row.data;
                     var cls = '';
-                    if (!data.deleted) {
+                    if (data.deleted) {
                         cls = 'red';
                     } else if (data.blacklisted) {
                         cls = 'yellow';
