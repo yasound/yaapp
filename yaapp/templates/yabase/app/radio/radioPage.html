@@ -4,7 +4,7 @@
 {% block fb_open_graph %}
   <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" />
   <meta property="og:type"   content="{{ FACEBOOK_APP_NAMESPACE}}:radio_station" />
-  <meta property="og:url"    content="{{ request.build_absolute_uri }}" />
+  <meta property="og:url"    content="{{ radio_absolute_url }}" />
   <meta property="og:title"  content="{{ radio }}" />
   <meta property="og:image"  content="{{ radio_picture_absolute_url }}" />
   <meta property="og:locale:alternate" content="fr_FR" />
