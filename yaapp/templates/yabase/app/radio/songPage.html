@@ -16,6 +16,10 @@
   <meta property="og:video" content="{{ flash_player_absolute_url }}?mp3={{radio.stream_url}}&showslider=0&showvolume=1&buttonwidth=40&height=40&volumewidth=40&autoplay=1" />
   <meta property="og:video:secure_url" content="{{ flash_player_absolute_url }}?mp3={{radio.stream_url}}&showslider=0&showvolume=1&buttonwidth=40&height=40&volumewidth=40&autoplay=1" />
 
+  {% if radio.description %}
+  <meta property="og:description" content="{{ radio.description|linebreaksbr|striptags }}" />
+  {% endif %}
+
 {% endblock %}
 
 
