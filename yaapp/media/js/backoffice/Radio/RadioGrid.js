@@ -3,17 +3,19 @@
 //------------------------------------------
 
 Yasound.Backoffice.Data.RadioStore = function(url) {
-	var fields = ['id', 
-	              'name', 
+	var fields = ['id',
+	              'name',
 	              {
 	          		name: 'created',
 	          		type: 'date',
 	          		dateFormat: 'Y-m-d H:i:s'
 	          	  },
-	              'creator', 
-	              'creator_id', 
-	              'creator_profile_id', 
+	              'creator',
+	              'creator_id',
+	              'creator_profile_id',
 	              'creator_profile',
+                  'deleted',
+                  'blacklisted',
 	              'song_count'];
 	return new Yasound.Utils.SimpleStore(url, fields);
 };
@@ -35,8 +37,8 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
         filter: {
             xtype: "numberfield",
             filterName: "id"
-        }        	
-        
+        }
+
     }, {
         header: gettext('Date'),
         dataIndex: 'created',
@@ -53,7 +55,7 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "name"
-        }        	
+        }
     }, {
         header: gettext('Owner'),
         dataIndex: 'creator_profile',
@@ -63,18 +65,18 @@ Yasound.Backoffice.UI.RadioColumnModel = function(sm) {
         filter: {
             xtype: "textfield",
             filterName: "creator_profile"
-        }        	
+        }
     }, {
         header: gettext('Song count'),
         dataIndex: 'song_count',
         sortable: true,
-        width: 20
+        width: 10
     }];
-	
+
 	if (sm) {
-		cm.splice(0, 0, sm); 
+		cm.splice(0, 0, sm);
 	}
-	
+
     return cm;
 };
 
@@ -98,7 +100,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
 	enablePagination: true,
 	enableFilters: true,
     pageSize: 25,
-	
+
     initComponent: function() {
         this.addEvents('selected', 'deselected');
         this.store = Yasound.Backoffice.Data.RadioStore(this.url);
@@ -108,7 +110,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
             listeners: {
                 selectionchange: function(sm){
 					Ext.each(sm.getSelections(), function(record) {
-                        this.grid.fireEvent('selected', this.grid, record.data.id, record);							
+                        this.grid.fireEvent('selected', this.grid, record.data.id, record);
 					}, this);
 					if (!sm.hasSelection()) {
 						this.grid.fireEvent('deselected', this.grid);
@@ -116,8 +118,8 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
             }
         });
-    	
-    	
+
+
         var config = {
             tbar: this.tbar,
             loadMask: true,
@@ -127,7 +129,18 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                 hideGroupedColumn: false,
                 forceFit: true,
                 autoFill: true,
-                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})')
+                groupTextTpl: gettext('{text} ({[values.rs.length]} {[values.rs.length > 1 ? "elements" : "element"]})'),
+                getRowClass: function(row, index){
+                    var data = row.data;
+                    var cls = '';
+                    if (!data.deleted) {
+                        cls = 'red';
+                    } else if (data.blacklisted) {
+                        cls = 'yellow';
+                    }
+                    return cls;
+                }
+
             }),
         	listeners: {
         		show: function(component) {
@@ -138,7 +151,7 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
         		}
         	}
         }; // eo config object
-        
+
         if (this.enablePagination) {
         	Ext.apply(config, {
                 bbar: new Ext.PagingToolbar({
@@ -147,10 +160,10 @@ Yasound.Backoffice.UI.RadioGrid = Ext.extend(Ext.grid.GridPanel, {
                     displayInfo: true,
                     displayMsg: gettext('Displaying {0} - {1} of {2}'),
                     emptyMsg: gettext("Nothing to display")
-                })            
+                })
         	});
         }
-        
+
         if (this.enableFilters) {
         	Ext.apply(config, {
         		plugins: [Yasound.Backoffice.UI.RadioFilters(), new Ext.ux.grid.GridHeaderFilters()],
