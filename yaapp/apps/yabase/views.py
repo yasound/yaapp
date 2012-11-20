@@ -1282,6 +1282,7 @@ class WebAppView(View):
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
+        context['radio_absolute_url'] = absolute_url(reverse('webapp_default_radio', args=[radio.uuid]))
 
         bdata = {
             'wall_events': [wall_event.as_dict() for wall_event in wall_events],
@@ -1304,6 +1305,7 @@ class WebAppView(View):
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
+        context['song_instance_absolute_url'] = absolute_url(reverse('webapp_default_radio_song', args=[radio.uuid, song_instance.id]))
 
         bdata = {
             'wall_events': [wall_event.as_dict() for wall_event in wall_events],
