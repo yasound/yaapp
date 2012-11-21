@@ -39,6 +39,7 @@ import requests
 from pymongo import DESCENDING
 from dateutil.relativedelta import *
 from django.contrib.auth import signals as auth_signals
+from yacore import cache as yacore_cache
 
 logger = logging.getLogger("yaapp.account")
 
@@ -569,11 +570,17 @@ class UserProfile(models.Model):
 
     @property
     def own_radio(self):
-        radios = self.own_radios(only_ready_radios=False)
-        if radios.count() == 0:
-            return None
-        else:
-            return radios[0]
+        cache_key = 'user_%d.own_radio' % (self.user.id)
+        radio = yacore_cache.cached_object(cache_key)
+        if radio is not None:
+            return radio
+
+        radios = self.own_radios(only_ready_radios=False)[:1]
+        if radios.count() > 0:
+            radio = radios[0]
+            yacore_cache.cache_object(cache_key, radio)
+
+        return radio
 
     def own_radios(self, only_ready_radios=True):
         if only_ready_radios:
@@ -1857,6 +1864,16 @@ def new_radio_created(sender, instance, created=None, **kwargs):
         profile.permissions.create_radio = False
         profile.save()
 
+def radio_updated(sender, instance, created, **kwargs):
+    radio = instance
+
+    user = radio.creator
+    if not user:
+        return
+
+    key = 'user_%d.own_radio' % (user.id)
+    yacore_cache.invalidate_object(key)
+
 def check_for_language(sender, request, user, **kwargs):
     if not hasattr(request, 'LANGUAGE_CODE'):
         return
@@ -1877,6 +1894,7 @@ def install_handlers():
     post_save.connect(create_api_key, sender=EmailUser)
     post_save.connect(create_ml_contact, sender=UserProfile)
     post_save.connect(new_radio_created, sender=Radio)
+    post_save.connect(radio_updated, sender=Radio)
     pre_delete.connect(user_profile_deleted, sender=UserProfile)
 
     yabase_signals.new_wall_event.connect(new_wall_event_handler)
