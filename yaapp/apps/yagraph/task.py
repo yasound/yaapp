@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from facepy import GraphAPI
 from yacore.http import absolute_url
+import requests
 import logging
 logger = logging.getLogger("yaapp.yagraph")
 
@@ -61,6 +62,7 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_listen: %s' % e)
+    async_rescrape.delay(radio_uuid, song_id)
     logger.debug('done')
 
 
@@ -81,6 +83,7 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_like_song: %s' % e)
+    async_rescrape.delay(radio_uuid, song_id)
 
 
 @task(ignore_result=True)
@@ -99,3 +102,13 @@ def async_animator_activity(user_id, radio_uuid):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_animator_activity: %s' % e)
+
+
+@task(rate_limit='50/s', ignore_result=True)
+def async_rescrape(radio_uuid, song_id):
+    song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
+    params = {
+        'id': song_url,
+        'scrape': True
+    }
+    requests.post('https://graph.facebook.com', params=params)
