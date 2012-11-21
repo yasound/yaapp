@@ -39,6 +39,7 @@ def async_post_message(user_id, radio_uuid, message):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_post_message: %s' % e)
+    async_rescrape.apply_async(args=[radio_uuid], countdown=30)
     logger.debug('done')
 
 
@@ -102,13 +103,18 @@ def async_animator_activity(user_id, radio_uuid):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_animator_activity: %s' % e)
+    async_rescrape.apply_async(args=[radio_uuid], countdown=30)
 
 
 @task(rate_limit='50/s', ignore_result=True)
-def async_rescrape(radio_uuid, song_id):
-    song_url = absolute_url(reverse('webapp_default_radio_song', args=[radio_uuid, song_id]))
+def async_rescrape(radio_uuid, song_id=None):
+    if song_id is not None:
+        url = absolute_url(reverse('webapp_default_radio_song', args=[radio_uuid, song_id]))
+    else:
+        url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
+
     params = {
-        'id': song_url,
+        'id': url,
         'scrape': True
     }
     logger.debug('async_rescrape: params=%s' % (params))
