@@ -44,7 +44,7 @@ def async_post_message(user_id, radio_uuid, message):
 
 @task(ignore_result=True)
 def async_listen(user_id, radio_uuid, song_title, song_id):
-    logger.debug('async_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
+    logger.debug('async_listen: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_id))
     facebook_token = _facebook_token(user_id)
     if facebook_token is None:
         logger.debug('no facebook token, exiting')
@@ -62,13 +62,13 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_listen: %s' % e)
-    async_rescrape.delay(radio_uuid, song_id)
+    async_rescrape.apply_async(args=[radio_uuid, song_id], countdown=30)
     logger.debug('done')
 
 
 @task(ignore_result=True)
 def async_like_song(user_id, radio_uuid, song_title, song_id):
-    logger.debug('async_like_song: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_title))
+    logger.debug('async_like_song: user = %s, radio = %s, song = %s' % (user_id, radio_uuid, song_id))
     facebook_token = _facebook_token(user_id)
     if facebook_token is None:
         logger.debug('no facebook token for user %s' % (user_id))
@@ -83,7 +83,7 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_like_song: %s' % e)
-    async_rescrape.delay(radio_uuid, song_id)
+    async_rescrape.apply_async(args=[radio_uuid, song_id], countdown=30)
 
 
 @task(ignore_result=True)
@@ -111,4 +111,5 @@ def async_rescrape(radio_uuid, song_id):
         'id': song_url,
         'scrape': True
     }
+    logger.debug('async_rescrape: params=%s' % (params))
     requests.post('https://graph.facebook.com', params=params)
