@@ -51,7 +51,7 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
         return
 
     radio_url = absolute_url(reverse('webapp_default_radio', args=[radio_uuid]))
-    song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
+    song_url = absolute_url(reverse('webapp_default_radio_song', args=[radio_uuid, song_id]))
 
     path = 'me/%s:play' % (settings.FACEBOOK_APP_NAMESPACE)
 
@@ -74,7 +74,7 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
         logger.debug('no facebook token for user %s' % (user_id))
         return
 
-    song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
+    song_url = absolute_url(reverse('webapp_default_radio_song', args=[radio_uuid, song_id]))
     path = 'me/og.likes'
 
     graph = GraphAPI(facebook_token)
@@ -106,7 +106,7 @@ def async_animator_activity(user_id, radio_uuid):
 
 @task(rate_limit='50/s', ignore_result=True)
 def async_rescrape(radio_uuid, song_id):
-    song_url = absolute_url(reverse('yabase.views.web_song', args=[radio_uuid, song_id]))
+    song_url = absolute_url(reverse('webapp_default_radio_song', args=[radio_uuid, song_id]))
     params = {
         'id': song_url,
         'scrape': True
