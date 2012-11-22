@@ -49,6 +49,8 @@ from yapremium.models import Promocode, Service, PromocodeGroup
 from yapremium import settings as yapremium_settings
 from yageoperm.models import Country, GeoFeature
 from django.db import IntegrityError
+from stats import export as stats_export
+
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
     if not request.user.is_superuser:
@@ -236,6 +238,24 @@ def radio_unblacklist(request, radio_id):
         })
         return HttpResponse(json_data, mimetype='application/json')
     raise Http404
+
+
+@csrf_exempt
+@login_required
+def radio_export_stats(request, radio_id):
+    """
+    export radio stats
+    """
+    if not request.user.is_superuser:
+        raise Http404
+    radio = get_object_or_404(Radio, id=radio_id)
+    if request.method == 'POST':
+        data = stats_export.export_radio_stats(radio)
+        response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=stats_%d.xls' % (radio.id)
+        return response
+    raise Http404
+
 
 @csrf_exempt
 @login_required
@@ -1126,6 +1146,7 @@ def radio_activity_score_factors(request, coeff_id=None):
     res = {"success":False}
     resp = utils.JsonResponse(json.JSONEncoder(ensure_ascii=False).encode(res))
     return utils.JsonResponse(resp)
+
 
 @csrf_exempt
 @login_required
