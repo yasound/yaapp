@@ -213,6 +213,9 @@ Ext.onReady(function(){
         }), Ext.apply(Yasound.Backoffice.UI.RejectedSongsPanel(), {
             iconCls: 'x-icon-templates',
             tabTip: gettext('Rejected songs')
+        }), Ext.apply(Yasound.Statistics.UI.RadiosPanel(), {
+            iconCls: 'x-icon-templates',
+            tabTip: gettext('Radios stats')
         })]
     };
 

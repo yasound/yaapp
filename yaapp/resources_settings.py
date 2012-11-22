@@ -62,6 +62,7 @@ PIPELINE_JS = {
             'js/backoffice/Users/Users.js',
             'js/backoffice/Statistics/Statistics.js',
             'js/backoffice/Statistics/Chart.js',
+            'js/backoffice/Statistics/Radios.js',
             'js/backoffice/Menus/MenuGrid.js',
             'js/backoffice/Menus/MenuForm.js',
             'js/backoffice/Menus/Menus.js',
