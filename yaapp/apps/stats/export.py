@@ -4,7 +4,7 @@ import xlwt
 from models import RadioListeningStat
 
 
-def export_radio_stats(radio, days=30):
+def export_radio_stats(radio, days=30*6):
     wb = xlwt.Workbook()
 
     ws = wb.add_sheet(_('Radio'))
