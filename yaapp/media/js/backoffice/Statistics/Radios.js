@@ -43,7 +43,7 @@ Yasound.Statistics.UI.RadiosPanel = function () {
                 }
             },
             tbar: [{
-                text: gettext('Export data'),
+                text: gettext('Export last 6 months data'),
                 disabled: true,
                 ref: '../exportButton',
                 iconCls: 'silk-page-excel',

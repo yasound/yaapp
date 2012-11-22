@@ -2,7 +2,7 @@ from django.utils.translation import ugettext as _
 import StringIO
 import xlwt
 from models import RadioListeningStat
-
+import time
 
 def export_radio_stats(radio, days=30*6):
     wb = xlwt.Workbook()
@@ -16,7 +16,7 @@ def export_radio_stats(radio, days=30*6):
 
     greyFontStyle = xlwt.XFStyle()
     greyFontStyle.pattern = greyBG
-    xf = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    xf_date = xlwt.easyxf(num_format_str='DD/MM/YYYY')
     # header line
     headerBG = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;')
     ws.write(line, col + 0, _('Date'), headerBG)
@@ -29,8 +29,8 @@ def export_radio_stats(radio, days=30*6):
 
     line, col = 1, 0
     for stat in RadioListeningStat.objects.daily_stats(radio, days):
-        ws.write(line, col + 0, stat.date, xf)
-        ws.write(line, col + 1, stat.overall_listening_time)
+        ws.write(line, col + 0, stat.date, xf_date)
+        ws.write(line, col + 1, time.strftime('%H:%M:%S', time.gmtime(stat.overall_listening_time)))
         ws.write(line, col + 2, stat.audience_peak)
         ws.write(line, col + 3, stat.connections)
         ws.write(line, col + 4, stat.favorites)
