@@ -2,9 +2,9 @@
    <div id='webapp-track-container'>
 		<div id='webapp-track-picture'>
             {% if yasound_song %}
-            <img src="{% if yasound_song.large_cover_url %}{{ yasound_song.large_cover_url }}{% else %}{{ yasound_song.album.large_cover_url }}{% endif %}" width="210px" height="210px"/>
+            <img src="{% if yasound_song.large_cover_url %}{{ yasound_song.large_cover_url }}{% else %}{{ yasound_song.album.large_cover_url }}{% endif %}" width="210px" height="210px" alt="{{ yasound_song.title}}"/>
             {% else %}
-            <img src="<% large_cover %>" width="210px" height="210px"/>
+            <img src="<% large_cover %>" width="210px" height="210px" alt='<% title %>'/>
             {% endif %}
    		</div>
    		<div id='webapp-track-title'>
