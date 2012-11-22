@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-20 13:49+0100\n"
+"POT-Creation-Date: 2012-11-22 14:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -467,6 +467,8 @@ msgstr "Erreur lors de création du compte"
 #: js/backoffice/Moderation/Radios.js:46
 #: js/backoffice/Radio/Radios.js:452
 #: js/backoffice/Radio/UnmatchedSongs.js:21
+#: js/backoffice/Statistics/Radios.js:27
+#: js/backoffice/Statistics/Radios.js:33
 msgid "Radios"
 msgstr "Radios"
 
@@ -536,29 +538,33 @@ msgstr "Chansons les plus populaires"
 msgid "Rejected songs"
 msgstr "Chansons rejetées"
 
-#: js/backoffice/backoffice.js:225
+#: js/backoffice/backoffice.js:215
+msgid "Radios stats"
+msgstr "Statistiques des radios"
+
+#: js/backoffice/backoffice.js:228
 #: js/backoffice/Menus/Menus.js:187
 msgid "Menus"
 msgstr "Menus"
 
-#: js/backoffice/backoffice.js:249
+#: js/backoffice/backoffice.js:252
 msgid "Activity score factors"
 msgstr "Pondération des scores d'activités"
 
-#: js/backoffice/backoffice.js:251
+#: js/backoffice/backoffice.js:254
 msgid "factors to compute radio activity score"
 msgstr "Pondération pour calculer le score d'une radio"
 
-#: js/backoffice/backoffice.js:275
+#: js/backoffice/backoffice.js:278
 msgid "Premium"
 msgstr "Premium"
 
-#: js/backoffice/backoffice.js:277
+#: js/backoffice/backoffice.js:280
 msgid "premium settings"
 msgstr "Paramètres premium"
 
-#: js/backoffice/backoffice.js:301
-#: js/backoffice/backoffice.js.py:303
+#: js/backoffice/backoffice.js:304
+#: js/backoffice/backoffice.js.py:306
 #: js/backoffice/Geoperm/Geoperm.js:448
 msgid "Geo permissions"
 msgstr "Geo permissions"
@@ -577,7 +583,7 @@ msgstr "Code"
 #: js/backoffice/Menus/MenuGrid.js:23
 #: js/backoffice/Radio/RadioGrid.js:49
 #: js/backoffice/RadioActivityScoreSettings/SettingsGrid.js:26
-#: js/backoffice/Users/UserGrid.js:32
+#: js/backoffice/Users/UserGrid.js:35
 msgid "Name"
 msgstr "Nom"
 
@@ -591,7 +597,7 @@ msgstr "Nom"
 #: js/backoffice/Radio/YasoundSongGrid.js:115
 #: js/backoffice/Song/MostPopularSongMetadataGrid.js:61
 #: js/backoffice/Song/RejectedSongGrid.js:88
-#: js/backoffice/Users/UserGrid.js:148
+#: js/backoffice/Users/UserGrid.js:151
 #: js/backoffice/Users/UserHistoryGrid.js:90
 #: js/backoffice/WallEvent/WallEventGrid.js:107
 msgid "Displaying {0} - {1} of {2}"
@@ -607,7 +613,7 @@ msgstr "Affichage de {0} - {1} sur {2}"
 #: js/backoffice/Radio/YasoundSongGrid.js:116
 #: js/backoffice/Song/MostPopularSongMetadataGrid.js:62
 #: js/backoffice/Song/RejectedSongGrid.js:89
-#: js/backoffice/Users/UserGrid.js:149
+#: js/backoffice/Users/UserGrid.js:152
 #: js/backoffice/Users/UserHistoryGrid.js:91
 #: js/backoffice/WallEvent/WallEventGrid.js:108
 msgid "Nothing to display"
@@ -778,7 +784,7 @@ msgid "Sending informations..."
 msgstr "Transmission des informations..."
 
 #: js/backoffice/Invitations/InvitationGrid.js:40
-#: js/backoffice/Users/UserGrid.js:42
+#: js/backoffice/Users/UserGrid.js:45
 msgid "Email"
 msgstr "Email"
 
@@ -1247,6 +1253,10 @@ msgstr "Importer un titre"
 msgid "Reject count"
 msgstr "Nombre de rejets"
 
+#: js/backoffice/Statistics/Radios.js:45
+msgid "Export last 6 months data"
+msgstr "Exporter les données des 6 derniers mois"
+
 #: js/backoffice/Statistics/Statistics.js:13
 msgid "Metrics"
 msgstr "Métriques"
@@ -1328,33 +1338,33 @@ msgstr "Historique"
 msgid "Please select user"
 msgstr "Veuillez sélectionner un utilisateur"
 
-#: js/backoffice/Users/UserGrid.js:52
+#: js/backoffice/Users/UserGrid.js:55
 msgid "Facebook UID"
 msgstr "UID facebook"
 
-#: js/backoffice/Users/UserGrid.js:62
+#: js/backoffice/Users/UserGrid.js:65
 msgid "Join date"
 msgstr "Date d'inscription"
 
-#: js/backoffice/Users/UserGrid.js:69
+#: js/backoffice/Users/UserGrid.js:72
 msgid "Last authentication"
 msgstr "Dernière authentification"
 
-#: js/backoffice/Users/UserGrid.js:76
+#: js/backoffice/Users/UserGrid.js:79
 msgid "Superuser?"
 msgstr "Superutilisateur ?"
 
-#: js/backoffice/Users/UserGrid.js:82
-#: js/backoffice/Users/UserGrid.js.py:93
+#: js/backoffice/Users/UserGrid.js:85
+#: js/backoffice/Users/UserGrid.js.py:96
 msgid "Yes"
 msgstr "Oui"
 
-#: js/backoffice/Users/UserGrid.js:84
-#: js/backoffice/Users/UserGrid.js.py:95
+#: js/backoffice/Users/UserGrid.js:87
+#: js/backoffice/Users/UserGrid.js.py:98
 msgid "No"
 msgstr "Non"
 
-#: js/backoffice/Users/UserGrid.js:87
+#: js/backoffice/Users/UserGrid.js:90
 msgid "Actived?"
 msgstr "Activé ?"
 
