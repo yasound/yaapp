@@ -126,7 +126,7 @@ def download(request, filename):
     except:
         raise Http404
     mimetype = mimetypes.guess_type(filename)[0]
-    if mimetype not in ['application/pdf', 'image/eps', 'application/postscript', 'image/png', 'image/jpeg', 'image/jpg', 'application/zip']:
+    if mimetype not in ['application/pdf', 'image/eps', 'application/postscript', 'image/tiff', 'image/png', 'image/jpeg', 'image/jpg', 'application/zip']:
         raise Http404
     if not mimetype: mimetype = "application/octet-stream"
 
