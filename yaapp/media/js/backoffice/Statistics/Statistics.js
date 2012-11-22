@@ -5,6 +5,46 @@
 //------------------------------------------
 // Handlers
 //------------------------------------------
+Yasound.Statistics.ExportMetrics = function () {
+    var maskingAjax = new Ext.data.Connection({});
+
+    maskingAjax.request({
+        disableCaching: true,
+        url: String.format('/yabackoffice/metrics/export/'),
+        form: Ext.fly('frmDummy'),
+        method: 'POST',
+        timeout: 1000 * 60 * 5,
+        isUpload: true
+    });
+};
+
+Yasound.Statistics.ExportPastMonthMetrics = function () {
+    var maskingAjax = new Ext.data.Connection({});
+
+    maskingAjax.request({
+        disableCaching: true,
+        url: String.format('/yabackoffice/past_month_metrics/export/'),
+        form: Ext.fly('frmDummy'),
+        method: 'POST',
+        timeout: 1000 * 60 * 5,
+        isUpload: true
+    });
+};
+
+Yasound.Statistics.ExportPastYearMetrics = function () {
+    var maskingAjax = new Ext.data.Connection({});
+
+    maskingAjax.request({
+        disableCaching: true,
+        url: String.format('/yabackoffice/past_year_metrics/export/'),
+        form: Ext.fly('frmDummy'),
+        method: 'POST',
+        timeout: 1000 * 60 * 5,
+        isUpload: true
+    });
+};
+
+
 
 //------------------------------------------
 // UI
@@ -27,7 +67,12 @@ Yasound.Statistics.UI.Metrics = function () {
             handler: function (event, toolEl, panel) {
                 panel.reload(panel);
             }
-        } ]
+        }, {
+            id: 'save',
+            handler: function (event, toolEl, panel) {
+                Yasound.Statistics.ExportMetrics();
+            }
+        }]
     };
 };
 
@@ -48,6 +93,11 @@ Yasound.Statistics.UI.PastMonthMetrics = function () {
             id: 'refresh',
             handler: function (event, toolEl, panel) {
                 panel.reload(panel);
+            }
+        }, {
+            id: 'save',
+            handler: function (event, toolEl, panel) {
+                Yasound.Statistics.ExportPastMonthMetrics();
             }
         } ]
     };
@@ -70,6 +120,11 @@ Yasound.Statistics.UI.PastYearMetrics = function () {
             id: 'refresh',
             handler: function (event, toolEl, panel) {
                 panel.reload(panel);
+            }
+        }, {
+            id: 'save',
+            handler: function (event, toolEl, panel) {
+                Yasound.Statistics.ExportPastYearMetrics();
             }
         } ]
     };
@@ -97,8 +152,8 @@ Yasound.Statistics.UI.AnimatorsGraph = function () {
         reload: function (component) {
             chart.reload(chart);
         }
-    }
-}
+    };
+};
 
 Yasound.Statistics.UI.ListenGraph = function () {
     var chart = Ext.ComponentMgr.create({
@@ -122,8 +177,8 @@ Yasound.Statistics.UI.ListenGraph = function () {
         reload: function (component) {
             chart.reload(chart);
         }
-    }
-}
+    };
+};
 
 Yasound.Statistics.UI.PostsGraph = function () {
     var chart = Ext.ComponentMgr.create({
@@ -134,7 +189,7 @@ Yasound.Statistics.UI.PostsGraph = function () {
         xField: 'message_count',
         yField: 'user_count',
         xTitle: gettext('Number of messages'),
-        yTitle: gettext('Users'),
+        yTitle: gettext('Users')
     });
     return {
         title: gettext('Message count per user'),
@@ -149,8 +204,8 @@ Yasound.Statistics.UI.PostsGraph = function () {
         reload: function (component) {
             chart.reload(chart);
         }
-    }
-}
+    };
+};
 
 Yasound.Statistics.UI.LikesGraph = function () {
     var chart = Ext.ComponentMgr.create({
@@ -161,7 +216,7 @@ Yasound.Statistics.UI.LikesGraph = function () {
         xField: 'like_count',
         yField: 'user_count',
         xTitle: gettext('Number of likes'),
-        yTitle: gettext('Users'),
+        yTitle: gettext('Users')
     });
     return {
         title: gettext('Likes per user'),
@@ -176,8 +231,8 @@ Yasound.Statistics.UI.LikesGraph = function () {
         reload: function (component) {
             chart.reload(chart);
         }
-    }
-}
+    };
+};
 
 Yasound.Statistics.UI.SharesGraph = function () {
     var chart = Ext.ComponentMgr.create({
@@ -221,8 +276,8 @@ Yasound.Statistics.UI.SharesGraph = function () {
         reload: function (component) {
             chart.reload(chart);
         }
-    }
-}
+    };
+};
 
 Yasound.Statistics.UI.KeyFigures = function () {
     return {
@@ -241,7 +296,7 @@ Yasound.Statistics.UI.KeyFigures = function () {
                 panel.reload(panel);
             }
         } ]
-    }
+    };
 };
 
 Yasound.Statistics.UI.RadioTags = function () {
@@ -261,7 +316,7 @@ Yasound.Statistics.UI.RadioTags = function () {
                 panel.reload(panel);
             }
         } ]
-    }
+    };
 };
 
 Yasound.Statistics.UI.Panel = function () {
@@ -271,16 +326,16 @@ Yasound.Statistics.UI.Panel = function () {
         id: 'statistics-panel',
         items: [
                 {
-                    columnWidth: .33,
+                    columnWidth: 0.33,
                     style: 'padding:10px 0 10px 10px',
                     items: [ Yasound.Statistics.UI.AnimatorsGraph(), Yasound.Statistics.UI.PostsGraph(), Yasound.Statistics.UI.LikesGraph(), Yasound.Statistics.UI.PastMonthMetrics(),
                             Yasound.Statistics.UI.PastYearMetrics(), Yasound.Statistics.UI.RadioTags() ]
                 }, {
-                    columnWidth: .33,
+                    columnWidth: 0.33,
                     style: 'padding:10px 0 10px 10px',
                     items: [ Yasound.Statistics.UI.ListenGraph(), Yasound.Statistics.UI.Metrics() ]
                 }, {
-                    columnWidth: .33,
+                    columnWidth: 0.33,
                     style: 'padding:10px 0 10px 10px',
                     items: [ Yasound.Statistics.UI.SharesGraph(), Yasound.Statistics.UI.KeyFigures() ]
                 } ],
@@ -311,9 +366,9 @@ Yasound.Statistics.UI.Panel = function () {
 
             var postsGraph = Ext.getCmp('posts-graph');
             postsGraph.reload(postsGraph);
-        
+
             var likesGraph = Ext.getCmp('likes-graph');
             likesGraph.reload(likesGraph);
         }
     };
-}
+};
