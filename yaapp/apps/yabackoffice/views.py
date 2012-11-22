@@ -50,6 +50,8 @@ from yapremium import settings as yapremium_settings
 from yageoperm.models import Country, GeoFeature
 from django.db import IntegrityError
 from stats import export as stats_export
+import xlwt
+import StringIO
 
 @login_required
 def index(request, template_name="yabackoffice/index.html"):
@@ -854,6 +856,128 @@ def metrics(request, template_name='yabackoffice/metrics.html'):
         "metrics": metrics,
     }, context_instance=RequestContext(request))
 
+def _metric_label(code):
+    if code == 'new_users':
+        return _('New users')
+    elif code == 'new_radios':
+        return _('New radios')
+    elif code == 'new_real_radios':
+        return _('New real radios')
+    elif code == 'deleted_radios':
+        return _('Deleted radios')
+    elif code == 'new_listeners':
+        return _('Number of people who have already listened to at least one radio')
+    elif code == 'listening_time':
+        return _('Listening time')
+    elif code == 'average_duration':
+        return _('Average duration')
+    elif code == 'device_notifications_activated':
+        return _('Notifications activated on device')
+    elif code == 'device_notifications_disabled':
+        return _('Notifications disabled on device')
+    elif code == 'device_count':
+        return _('Device count')
+    elif code == 'new_wall_messages':
+        return _('Wall messages')
+    elif code == 'new_song_like':
+        return _('Song likes')
+    elif code == 'new_radio_like':
+        return _('Radio likes')
+    elif code == 'new_radio_dislike':
+        return _('Radio dislikes')
+    elif code == 'new_radio_neutral':
+        return _('Radio neutral')
+    elif code == 'new_favorite_radio':
+        return _('Radio favorites')
+    elif code == 'new_not_favorite_radio':
+        return _('Radio unfavorites')
+    elif code == 'new_animator_activity':
+        return _('Animator actions')
+    elif code == 'new_share':
+        return _('New shares')
+    elif code == 'new_moderator_abuse_msg_activity':
+        return _('Abuse report')
+    elif code == 'new_share_facebook':
+        return _('Facebook share')
+    elif code == 'new_share_twitter':
+        return _('Twitter share')
+    elif code == 'new_share_email':
+        return _('Email share')
+    return code
+
+def _export_metrics(metrics):
+    wb = xlwt.Workbook()
+
+    ws = wb.add_sheet(unicode(_('Metrics')))
+    line, col = 0, 0
+
+    greyBG = xlwt.Pattern()
+    greyBG.pattern = greyBG.SOLID_PATTERN
+    greyBG.pattern_fore_colour = 3
+
+    greyFontStyle = xlwt.XFStyle()
+    greyFontStyle.pattern = greyBG
+    # header line
+    headerBG = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;')
+    ws.write(line, col, unicode(_('metric')), headerBG)
+    for i, metric in enumerate(metrics):
+        ws.write(line, col + 1 + i, metric.get('timestamp'), headerBG)
+
+
+    line, col = 1, 0
+    keys = [
+        'new_users',
+        'new_radios',
+        'new_real_radios',
+        'deleted_radios',
+        'new_listeners',
+        'listening_time',
+        'average_duration',
+        'device_notifications_activated',
+        'device_notifications_disabled',
+        'device_count',
+        'new_wall_messages',
+        'new_song_like',
+        'new_favorite_radio',
+        'new_not_favorite_radio',
+        'new_animator_activity',
+        'new_share',
+        'new_share_facebook',
+        'new_share_twitter',
+        'new_share_email',
+    ]
+    for key in keys:
+        ws.write(line, col, unicode(_metric_label(key)))
+
+        for i, metric in enumerate(metrics):
+            value = unicode(metric.get(key, ''))
+            ws.write(line, col+1+i, value)
+
+        line = line+1
+
+    output = StringIO.StringIO()
+    wb.save(output)
+    content = output.getvalue()
+    output.close()
+    return content
+
+@csrf_exempt
+@login_required
+def metrics_export(request, template_name='yabackoffice/metrics.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    mm = GlobalMetricsManager()
+    metrics = mm.get_current_metrics()
+    _format_metrics(metrics)
+
+    data = _export_metrics(metrics)
+    response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=metrics.xls'
+    return response
+
+
+
 @csrf_exempt
 @login_required
 def past_month_metrics(request, template_name='yabackoffice/metrics.html'):
@@ -870,6 +994,21 @@ def past_month_metrics(request, template_name='yabackoffice/metrics.html'):
 
 @csrf_exempt
 @login_required
+def past_month_metrics_export(request, template_name='yabackoffice/metrics.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    mm = GlobalMetricsManager()
+    metrics = mm.get_past_month_metrics()
+    _format_metrics(metrics)
+
+    data = _export_metrics(metrics)
+    response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=metrics.xls'
+    return response
+
+@csrf_exempt
+@login_required
 def past_year_metrics(request, template_name='yabackoffice/metrics.html'):
     if not request.user.is_superuser:
         raise Http404()
@@ -881,6 +1020,21 @@ def past_year_metrics(request, template_name='yabackoffice/metrics.html'):
     return render_to_response(template_name, {
         "metrics": metrics,
     }, context_instance=RequestContext(request))
+
+@csrf_exempt
+@login_required
+def past_year_metrics_export(request, template_name='yabackoffice/metrics.html'):
+    if not request.user.is_superuser:
+        raise Http404()
+
+    mm = GlobalMetricsManager()
+    metrics = mm.get_past_year_metrics()
+    _format_metrics(metrics)
+
+    data = _export_metrics(metrics)
+    response = HttpResponse(data, mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=past_year_metrics.xls'
+    return response
 
 @csrf_exempt
 def light_metrics(request, template_name='yabackoffice/light_metrics.html'):
