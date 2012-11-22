@@ -5,7 +5,7 @@
 
 
     <div id='radio-cover'>
-        <img src="<% radio_picture %>" width="76" height="76" alt="Radio Picture"/>
+        <img src="<% radio_picture %>" width="76" height="76" alt="<% radio_name %>"/>
         <div id="play-btn-large" class='play'>
             &nbsp;
         </div>
@@ -32,9 +32,9 @@
                 <a href="{% app_url webapp_radio app_name current_uuid %}">
 
                     {% if yasound_song %}
-                    <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="Radio Picto">
+                    <img id='track-image' src='{% if yasound_song.cover_url %}{{ yasound_song.cover_url }}{% else %}{{ yasound_song.album.cover_url }}{% endif %}' width="32" height="32" alt="{{ yasound_song.title|default:'<% title_wrapped %>' }}">
                     {% else %}
-                    <img id='track-image' src='<% cover %>' width="32" height="32" alt="Radio Picto">
+                    <img id='track-image' src='<% cover %>' width="32" height="32" alt="{{ yasound_song.title|default:'<% title_wrapped %>' }}">
                     {% endif %}
                 </a>
             </div>

@@ -1,6 +1,6 @@
 {% load i18n %}
    <div id='webapp-radio-picture' class='thumbnail'>
-       <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="210px" height="210px"/>
+       <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="210px" height="210px" alt="{{ radio.name|default:'<% name %>' }}"/>
        <div id='webapp-title-radio'>
           <h2>{{ radio.name|default:'<% name %>' }} {% trans "by" %}
           <a id='user' href='{{ root }}profile/{{ radio.creator.username|default:'<%#creator%><% username %>' }}/'>{{ radio.creator.userprofile.name|default:'<% name %><%/creator%>' }}</a>
