@@ -636,17 +636,13 @@ class Radio(models.Model):
             name_changed = self.name != saved.name
             genre_changed = self.genre != saved.genre
 
-            tags = sorted(self.tags.all())
-            saved_tags = sorted(saved.tags.all())
-            tags_changed = tags != saved_tags
-
             deleted_changed = self.deleted != saved.deleted
             ready_changed = self.ready != saved.ready
             description_changed = self.description != saved.description
 
-            metadata_updated = name_changed or genre_changed or tags_changed or deleted_changed or ready_changed or description_changed
-            logger.info('metadata updated : name_changed=%s, genre_changed=%s, tags_changed=%s, deleted_changed=%s, ready_changed=%s, description_changed=%s',
-                name_changed, genre_changed, tags_changed, deleted_changed, ready_changed, description_changed)
+            metadata_updated = name_changed or genre_changed or deleted_changed or ready_changed or description_changed
+            logger.info('metadata updated : name_changed=%s, genre_changed=%s, deleted_changed=%s, ready_changed=%s, description_changed=%s',
+                name_changed, genre_changed, deleted_changed, ready_changed, description_changed)
 
         if not self.uuid:
             self.uuid = uuid.uuid4().hex
@@ -858,6 +854,8 @@ class Radio(models.Model):
         self.tags.clear()
         for tag in tags_array:
             self.tags.add(tag)
+        yabase_signals.radio_metadata_updated.send(sender=self, radio=self)
+
 
     def fill_bundle(self, bundle):
         bundle.data['description'] = urlize(self.description)
