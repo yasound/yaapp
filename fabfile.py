@@ -10,6 +10,7 @@ def prod():
     global GIT_PATH
     global BRANCH
     global DJANGO_MODE
+    global ALLOW_VTENV
 
     env.forward_agent = 'True'
     env.hosts = [
@@ -22,6 +23,8 @@ def prod():
     GIT_PATH = "git@github.com:yasound/yaapp.git"
     BRANCH = "master"
     DJANGO_MODE = 'production'
+    ALLOW_VTENV = True
+
 
 def filers():
     global WEBSITE_PATH
@@ -29,6 +32,7 @@ def filers():
     global GIT_PATH
     global BRANCH
     global DJANGO_MODE
+    global ALLOW_VTENV
 
     env.forward_agent = 'True'
     env.hosts = [
@@ -41,6 +45,8 @@ def filers():
     GIT_PATH = "git@github.com:yasound/yaapp.git"
     BRANCH = "master"
     DJANGO_MODE = 'production'
+    ALLOW_VTENV = False
+
 
 def dev():
     global WEBSITE_PATH
@@ -67,7 +73,8 @@ def deploy():
     with cd(WEBSITE_PATH):
         run("git checkout %s" % (BRANCH))
         run("git pull")
-        run("./vtenv.sh")
+        if ALLOW_VTENV:
+            run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
         if DJANGO_MODE == 'production':
@@ -125,11 +132,15 @@ def update():
     with cd(WEBSITE_PATH):
         run("git checkout %s" % (BRANCH))
         run("git pull")
-        run("./vtenv.sh")
+        if ALLOW_VTENV:
+            run("./vtenv.sh")
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("DJANGO_MODE='%s' ./manage.py collectstatic --noinput" % (DJANGO_MODE))
         run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         run("/etc/init.d/yaapp restart")
+    if env.host_string == 'yas-web-08.ig-1.net':
+        with cd(WEBSITE_PATH):
+            run("./fab filers update")
 
 
 def restart_all():
@@ -139,6 +150,9 @@ def restart_all():
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
+    if env.host_string == 'yas-web-08.ig-1.net':
+        with cd(WEBSITE_PATH):
+            run("./fab filers restart_all")
 
 
 def restart_celery():
@@ -147,6 +161,9 @@ def restart_celery():
     with cd("%s/%s" % (WEBSITE_PATH, APP_PATH)):
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
+    if env.host_string == 'yas-web-08.ig-1.net':
+        with cd(WEBSITE_PATH):
+            run("./fab filers restart_celery")
 
 
 def test():
