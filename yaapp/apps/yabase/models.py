@@ -629,7 +629,6 @@ class Radio(models.Model):
             update_mongo = True
         else:
             saved = Radio.objects.get(pk=self.pk)
-            logger.debug('radio %d: old = %s' % (self.id, saved.as_dict()))
             name_changed = self.name != saved.name
             genre_changed = self.genre != saved.genre
             tags_changed = self.tags != saved.tags
@@ -644,7 +643,6 @@ class Radio(models.Model):
             self.build_fuzzy_index(upsert=True)
         if ready_changed:
             self.now_ready()
-        logger.debug('radio %d: new = %s' % (self.id, saved.as_dict()))
 
     @property
     def is_valid(self):
