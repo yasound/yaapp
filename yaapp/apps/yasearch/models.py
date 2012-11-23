@@ -534,6 +534,7 @@ def song_instance_deleted(sender, instance, **kwargs):
 
 
 def radio_updated_handler(sender, instance, created, **kwargs):
+    logger.info('radio %d has been updated' % (instance.id))
     async_add_radio.delay(instance.id)
 
 
