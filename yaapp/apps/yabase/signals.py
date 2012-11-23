@@ -16,6 +16,7 @@ not_favorite_radio = django.dispatch.Signal(providing_args=['radio', 'user'])
 new_current_song = django.dispatch.Signal(providing_args=['radio', 'song_json', 'song'])
 access_my_radios = django.dispatch.Signal(providing_args=['user'])
 
+radio_metadata_updated = django.dispatch.Signal(providing_args=['radio'])
 radio_shared = django.dispatch.Signal(providing_args=['radio', 'user', 'share_type'])
 radio_deleted = django.dispatch.Signal(providing_args=['radio', ])
 radio_is_ready = django.dispatch.Signal(providing_args=['radio', ])

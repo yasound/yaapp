@@ -621,28 +621,37 @@ class Radio(models.Model):
             yabase_signals.radio_deleted.send(sender=self, radio=self)
 
     def save(self, *args, **kwargs):
-        update_mongo = False
+        metadata_updated = False
         ready_changed = False
+
         if not self.pk:
             # creation
             self.leaderboard_rank = Radio.objects.count()
-            update_mongo = True
+
+            metadata_updated = True
+            ready_changed = True
         else:
             saved = Radio.objects.get(pk=self.pk)
+
             name_changed = self.name != saved.name
             genre_changed = self.genre != saved.genre
             tags_changed = self.tags != saved.tags
-            update_mongo = name_changed or genre_changed or tags_changed
+            deleted_changed = self.deleted != saved.deleted
             ready_changed = self.ready != saved.ready
+            description_changed = self.description != saved.description
+
+            metadata_updated = name_changed or genre_changed or tags_changed or deleted_changed or ready_changed or description_changed
 
         if not self.uuid:
             self.uuid = uuid.uuid4().hex
 
         super(Radio, self).save(*args, **kwargs)
-        if update_mongo:
-            self.build_fuzzy_index(upsert=True)
-        if ready_changed:
+
+        if ready_changed and self.ready:
             self.now_ready()
+
+        if metadata_updated:
+            yabase_signals.radio_metadata_updated.send(sender=self, radio=self)
 
     @property
     def is_valid(self):

@@ -68,7 +68,7 @@ class TestRadio(TestCase):
         res = self.manager.search('radio1')
         self.assertEquals(len(res), 0)
 
-        radio = Radio.objects.create(name='radio1')
+        radio = Radio.objects.create(name='radio1', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio = radio
         playlist.save()
@@ -86,7 +86,7 @@ class TestRadio(TestCase):
         res = self.manager.search('radio1')
         self.assertEquals(len(res), 0)
 
-        radio = Radio.objects.create(name='radio1')
+        radio = Radio.objects.create(name='radio1', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio = radio
         playlist.save()
@@ -104,7 +104,7 @@ class TestRadio(TestCase):
         res = self.manager.search('radio1')
         self.assertEquals(len(res), 0)
 
-        radio1 = Radio.objects.create(name='radio1')
+        radio1 = Radio.objects.create(name='radio1', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio = radio1
         playlist.save()
@@ -113,7 +113,7 @@ class TestRadio(TestCase):
         radio1.current_song = SongInstance.objects.get(id=1)
         radio1.save()
 
-        radio2 = Radio.objects.create(name='artist')
+        radio2 = Radio.objects.create(name='artist', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio2 = radio2
         playlist.save()
@@ -127,7 +127,7 @@ class TestRadio(TestCase):
         res = self.manager.search('radio1')
         self.assertEquals(len(res), 0)
 
-        radio1 = Radio.objects.create(name='radio1')
+        radio1 = Radio.objects.create(name='radio1', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio = radio1
         playlist.save()
@@ -136,7 +136,7 @@ class TestRadio(TestCase):
         radio1.current_song = SongInstance.objects.get(id=1)
         radio1.save()
 
-        radio2 = Radio.objects.create(name='artist')
+        radio2 = Radio.objects.create(name='artist', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
         playlist.radio2 = radio2
         playlist.save()
