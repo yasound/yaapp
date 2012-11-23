@@ -19,7 +19,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_listen_radio_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_listen_radio_event(user_id=self.user.id, radio_uuid=r.uuid)
 
         now = datetime.datetime.now()
@@ -37,7 +37,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_listen_radio_event2(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_listen_radio_event(user_id=self.user.id, radio_uuid=r.uuid)
 
         now = datetime.datetime.now()
@@ -72,7 +72,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_post_message_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_post_message_event(user_id=self.user.id, radio_uuid=r.uuid, message=u'hello, world')
 
         now = datetime.datetime.now()
@@ -101,7 +101,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_like_song_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_like_song_event(user_id=self.user.id, radio_uuid=r.uuid, song_id=42)
 
         now = datetime.datetime.now()
@@ -122,7 +122,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_favorite_radio_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_favorite_radio_event(user_id=self.user.id, radio_uuid=r.uuid)
 
         now = datetime.datetime.now()
@@ -143,7 +143,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_not_favorite_radio_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_not_favorite_radio_event(user_id=self.user.id, radio_uuid=r.uuid)
 
         now = datetime.datetime.now()
@@ -164,7 +164,7 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_share_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_share_event(user_id=self.user.id, radio_uuid=r.uuid, share_type='email')
 
         now = datetime.datetime.now()
@@ -185,12 +185,12 @@ class TestGlobalMetricsManager(TestCase):
 
     def test_add_animator_event(self):
         uh = UserHistory()
-        r = Radio.objects.create(name='pizza', ready=True, creator=self.user)
+
+        r = Radio.objects.create(name='pizza', ready=False, creator=self.user)
         uh.add_animator_event(user_id=self.user.id, radio_uuid=r.uuid, atype=yabase_settings.ANIMATOR_TYPE_IMPORT_ITUNES)
 
         now = datetime.datetime.now()
         yesterday = now + datetime.timedelta(days=-1)
-
         docs = uh.history_for_user(self.user.id, start_date=yesterday, end_date=now)
         self.assertEquals(docs.count(), 1)
 
