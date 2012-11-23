@@ -629,7 +629,6 @@ class Radio(models.Model):
             update_mongo = True
         else:
             saved = Radio.objects.get(pk=self.pk)
-            logger.debug('radio %d: old = %s' % (self.id, saved.as_dict()))
             name_changed = self.name != saved.name
             genre_changed = self.genre != saved.genre
             tags_changed = self.tags != saved.tags
@@ -644,7 +643,6 @@ class Radio(models.Model):
             self.build_fuzzy_index(upsert=True)
         if ready_changed:
             self.now_ready()
-        logger.debug('radio %d: new = %s' % (self.id, self.as_dict()))
 
     @property
     def is_valid(self):
@@ -791,6 +789,7 @@ class Radio(models.Model):
         # TODO: use a signal instead
         song_json = SongInstance.objects.set_current_song_json(self.id, song)
 
+        logger.info('get_next_song, saving radio %s' % (self.id))
         self.save()
 
         yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song)
@@ -901,10 +900,12 @@ class Radio(models.Model):
 
     def unlock(self):
         self.computing_next_songs = False
+        logger.info('unlock, saving radio %s' % (self.id))
         self.save()
 
     def lock(self):
         self.computing_next_songs = True
+        logger.info('lock, saving radio %s' % (self.id))
         self.save()
 
     def is_favorite(self, user):
@@ -942,6 +943,8 @@ class Radio(models.Model):
             self.audience_peak = audience
         if audience > self.current_audience_peak:
             self.current_audience_peak = audience
+
+        logger.info('user_started_listening, user=%s, saving radio %s' % (user.id, self.id))
         self.save()
 
         atomic_inc(self, 'current_connections', 1)
@@ -957,6 +960,7 @@ class Radio(models.Model):
             atomic_inc(self, 'anonymous_audience', -1)
             if self.anonymous_audience < 0:
                 self.anonymous_audience = 0
+                logger.info('user_stopped_listening, user=%s, saving radio %s' % (user.id, self.id))
                 self.save()
 
         atomic_inc(self, 'overall_listening_time', listening_duration)
@@ -969,6 +973,7 @@ class Radio(models.Model):
         self.save()
         atomic_inc(self, 'overall_listening_time', listening_duration)
 
+        logger.info('stopped_playing, saving radio %s' % (self.id))
         self.save()
 
     def song_starts_playing(self, song_instance, play_date=None):
@@ -985,6 +990,7 @@ class Radio(models.Model):
 
         # TODO: use a signal instead
 
+        logger.info('song_starts_playing, saving radio %s' % (self.id))
         self.save()
 
         from task import async_new_current_song
