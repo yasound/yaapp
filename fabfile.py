@@ -54,6 +54,8 @@ def dev():
     global GIT_PATH
     global BRANCH
     global DJANGO_MODE
+    global ALLOW_VTENV
+
     env.forward_agent = 'True'
     env.hosts = [
         'yas-dev-01.ig-1.net',
@@ -65,6 +67,7 @@ def dev():
     GIT_PATH = "git@github.com:yasound/yaapp.git"
     BRANCH = "dev"
     DJANGO_MODE = 'development'
+    ALLOW_VTENV = True
 
 
 def deploy():
