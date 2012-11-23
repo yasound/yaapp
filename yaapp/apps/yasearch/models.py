@@ -534,9 +534,9 @@ def song_instance_deleted(sender, instance, **kwargs):
     async_remove_song.delay(instance.metadata)
 
 
-def radio_updated_handler(sender, radio, **kwargs):
-    logger.info('radio %d has been updated' % (radio.id))
-    async_add_or_update_radio.delay(radio.id)
+def radio_updated_handler(sender, instance, created, **kwargs):
+    logger.info('radio %d has been updated' % (instance.id))
+    async_add_or_update_radio.delay(instance.id)
 
 
 def radio_deleted_handler(sender, instance, **kwargs):
@@ -544,7 +544,7 @@ def radio_deleted_handler(sender, instance, **kwargs):
 
 
 def install_handlers():
-    yabase_signals.radio_metadata_updated.connect(radio_updated_handler)
+    signals.post_save.connect(radio_updated_handler, sender=Radio)
     signals.post_save.connect(new_song_instance, sender=SongInstance)
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
     signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
