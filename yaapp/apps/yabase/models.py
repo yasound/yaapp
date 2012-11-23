@@ -641,8 +641,6 @@ class Radio(models.Model):
             description_changed = self.description != saved.description
 
             metadata_updated = name_changed or genre_changed or deleted_changed or ready_changed or description_changed
-            logger.info('metadata updated : name_changed=%s, genre_changed=%s, deleted_changed=%s, ready_changed=%s, description_changed=%s',
-                name_changed, genre_changed, deleted_changed, ready_changed, description_changed)
 
         if not self.uuid:
             self.uuid = uuid.uuid4().hex
