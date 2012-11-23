@@ -24,7 +24,7 @@ def async_remove_song(metadata):
     manager.remove_song(metadata)
 
 @task(ignore_result=True)
-def async_add_radio(radio_id):
+def async_add_or_update_radio(radio_id):
     try:
         radio = Radio.objects.get(id=radio_id)
     except:
