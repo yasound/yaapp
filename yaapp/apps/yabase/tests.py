@@ -1204,7 +1204,7 @@ class TestRadioDeleted(TestCase):
         user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
         user.set_password('test')
         user.save()
-        Radio.objects.create(creator=user)
+        Radio.objects.create(creator=user, ready=True)
         self.client.login(username="test", password="test")
         self.user = user
 
@@ -1250,7 +1250,7 @@ class TestRadioDeleted(TestCase):
         results = Radio.objects.search_fuzzy('uneradio')
         self.assertEquals(len(results), 0)
 
-        radio = Radio(name='uneradio')
+        radio = Radio(name='uneradio', creator=self.user, ready=True)
         radio.save()
 
         results = Radio.objects.search_fuzzy('uneradio')
@@ -1265,7 +1265,7 @@ class TestRadioDeleted(TestCase):
         self.assertEquals(len(results), 0)
 
     def test_duplicates(self):
-        radio = Radio(name='uneradio')
+        radio = Radio(name='uneradio', ready=True, creator=self.user)
         radio.save()
 
         results = Radio.objects.search_fuzzy('uneradio')
