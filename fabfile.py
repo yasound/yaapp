@@ -23,6 +23,24 @@ def prod():
     BRANCH = "master"
     DJANGO_MODE = 'production'
 
+def filers():
+    global WEBSITE_PATH
+    global APP_PATH
+    global GIT_PATH
+    global BRANCH
+    global DJANGO_MODE
+
+    env.forward_agent = 'True'
+    env.hosts = [
+        'yas-filer-01',
+        'yas-filer-02',
+    ]
+    env.user = "customer"
+    WEBSITE_PATH = "/data/vhosts/y/yasound.com/root/"
+    APP_PATH = "yaapp"
+    GIT_PATH = "git@github.com:yasound/yaapp.git"
+    BRANCH = "master"
+    DJANGO_MODE = 'production'
 
 def dev():
     global WEBSITE_PATH
@@ -96,6 +114,9 @@ def deploy():
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
+    # if host_string == 'yas-web-08':
+    #     with cd(WEBSITE_PATH):
+    #         run("./fab filers deploy")
 
 
 def update():
