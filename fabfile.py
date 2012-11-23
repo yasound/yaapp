@@ -114,9 +114,9 @@ def deploy():
         run("/etc/init.d/yaapp restart")
         run("/etc/init.d/celeryd restart")
         run("/etc/init.d/celerybeat restart")
-    # if host_string == 'yas-web-08':
-    #     with cd(WEBSITE_PATH):
-    #         run("./fab filers deploy")
+    if host_string == 'yas-web-08':
+        with cd(WEBSITE_PATH):
+            run("./fab filers deploy")
 
 
 def update():
