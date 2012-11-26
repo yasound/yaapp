@@ -211,6 +211,7 @@ def process_need_sync_songs():
 
 @task
 def process_upload_song(filepath, metadata=None, convert=True, song_id=None, allow_unknown_song=False):
+    filepath = settings.SHARED_TEMP_DIRECTORY + filepath
     logger.debug('processing %s' % (filepath))
 
     sm, _messages = import_utils.import_song(filepath=filepath, metadata=metadata, convert=convert, allow_unknown_song=allow_unknown_song)
