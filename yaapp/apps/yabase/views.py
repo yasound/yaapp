@@ -905,7 +905,7 @@ def upload_song(request, song_id=None):
 
     logger.info('importing song')
 
-    process_upload_song.delay(filepath=source[len(settings.SHARED_TEMP_DIRECTORY):],
+    process_upload_song.delay(filepath=source,
                               metadata=json_data,
                               convert=True,
                               song_id=song_id,
