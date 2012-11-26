@@ -117,10 +117,12 @@ class SongInstanceManager(models.Manager):
                 radioways_radio = radio.radioways_radio
                 song_dict = radioways_radio.current_song
                 song_json = json.dumps(song_dict)
+                cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json, 10)
                 return song_json
             elif radio.origin == yabase_settings.RADIO_ORIGIN_KFM:
                 song_dict = kfm_find_metadata()
                 song_json = json.dumps(song_dict)
+                cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json, 10)
                 return song_json
 
             song_instance = None
