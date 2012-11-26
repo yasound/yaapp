@@ -204,8 +204,8 @@ elif PRODUCTION_MODE:
             'LOCATION': [
                 'yas-web-08:11211',
                 'yas-web-09:11211',
-                # 'yas-filer-01:11211',
-                # 'yas-filer-02:11211',
+                'yas-filer-01:11211',
+                'yas-filer-02:11211',
             ]
         }
     }
