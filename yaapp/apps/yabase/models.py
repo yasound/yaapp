@@ -152,12 +152,12 @@ class SongInstanceManager(models.Manager):
                     return song_json
         return None
 
-    def set_current_song_json(self, radio_id, song_instance):
+    def set_current_song_json(self, radio, song_instance):
         song_json = None
+        song_dict = []
         if song_instance:
             song_dict = song_instance.song_description(info_from_yasound_db=True)
             if song_dict:
-                radio = Radio.objects.get(id=radio_id)
                 live_data = radio.live_data()
                 if live_data:
                     try:
@@ -171,8 +171,8 @@ class SongInstanceManager(models.Manager):
                         pass
 
                 song_json = json.dumps(song_dict)
-                cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json)
-        return song_json
+                cache.set('radio_%s.current_song.json' % (str(radio.id)), song_json)
+        return song_json, song_dict
 
 class SongInstance(models.Model):
     objects = SongInstanceManager()
@@ -211,6 +211,10 @@ class SongInstance(models.Model):
         desc_dict['name_client'] = self.metadata.name
         desc_dict['artist_client'] = self.metadata.artist_name
         desc_dict['album_client'] = self.metadata.album_name
+
+        desc_dict['name_simplified'] = song.name_simplified
+        desc_dict['artist_simplified'] = song.artist_name_simplified
+        desc_dict['album_simplified'] = song.album_name_simplified
 
         if info_from_yasound_db:
             desc_dict['name'] = desc_dict['name_server']
@@ -794,22 +798,26 @@ class Radio(models.Model):
         n.delete()
 
         # update current song
-        self.current_song = song
-        self.current_song_play_date = datetime.datetime.now()
-
-        # TODO: use a signal instead
-        song_json = SongInstance.objects.set_current_song_json(self.id, song)
-
+        self.set_current_song(song)
         self.save()
-
-        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song)
-
-        song.last_play_time = datetime.datetime.now()
-        song.play_count += 1
-        song.save()
         self.fill_next_songs_queue()
 
         return song # SongInstance
+
+    def set_current_song(self, song_instance, play_date=None):
+        if play_date is None:
+            play_date = datetime.datetime.now()
+
+        self.current_song = song_instance
+        self.current_song_play_date = play_date
+
+        song_json, song_dict = SongInstance.objects.set_current_song_json(self, song_instance)
+
+        self.save()
+
+        SongInstance.objects.filter(id=song_instance.id).update(play_count=F('play_count') + 1, last_play_time = play_date)
+
+        yabase_signals.new_current_song.send(sender=self, radio=self, song_json=song_json, song=song_instance, song_dict=song_dict)
 
     def test_get_next_song(self, nb_tests=20):
         print 'test get_next_song'
@@ -992,17 +1000,7 @@ class Radio(models.Model):
             task_report_song.delay(self, self.current_song)
 
         # update current song
-        self.current_song = song_instance
-        self.current_song_play_date = play_date
-
-        # TODO: use a signal instead
-
-        self.save()
-
-        from task import async_new_current_song
-        async_new_current_song.delay(sender=self, radio=self, song=song_instance)
-
-        SongInstance.objects.filter(id=song_instance.id).update(play_count=F('play_count') + 1, last_play_time = play_date)
+        self.set_current_song(song_instance, play_date)
 
     def user_connection(self, user):
         print 'user %s entered radio %s' % (user.get_profile().name, self.name)
@@ -1838,7 +1836,7 @@ class ApnsCertificate(models.Model):
     certificate_file = models.CharField(max_length=255)
     objects = ApnsCertificateManager()
 
-def new_current_song_handler(sender, radio, song_json, song, **kwargs):
+def new_current_song_handler(sender, radio, song_json, song, song_dict, **kwargs):
     from yabase.task import async_dispatch_user_started_listening_song
     async_dispatch_user_started_listening_song.delay(radio, song)
 

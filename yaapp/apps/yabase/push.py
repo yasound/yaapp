@@ -58,7 +58,7 @@ def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     except:
         pass
 
-def push_current_song(radio, song_json, song, **kwargs):
+def push_current_song(radio, song_json, song, song_dict, **kwargs):
     if radio.nb_current_users == 0:
         return
 
