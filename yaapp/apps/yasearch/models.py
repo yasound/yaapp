@@ -10,7 +10,7 @@ from yabase.models import Radio, SongMetadata, SongInstance
 from yacore.database import queryset_iterator
 from yaref.models import YasoundSong
 from yasearch.task import async_add_song, async_remove_song, \
-    async_add_or_update_radio, async_remove_radio
+    async_add_or_update_radio, async_remove_radio, async_update_radio_current_song
 import indexer
 import indexer as yasearch_indexer
 import logging
@@ -268,6 +268,39 @@ class RadiosManager():
         elif insert:
             self.collection.insert(radio_doc, safe=True)
         return radio_doc
+
+    def update_radio_current_song(self, radio_id, song):
+        name_simplified = song.get('name_simplified')
+        if name_simplified is None:
+            name_simplified = yasearch_utils.get_simplified_name(song.get('name'))
+
+        artist_simplified = song.get('artist_simplified')
+        if artist_simplified is None:
+            artist_simplified = yasearch_utils.get_simplified_name(song.get('artist'))
+
+        album_simplified = song.get('album_simplified')
+        if album_simplified is None:
+            album_simplified = yasearch_utils.get_simplified_name(song.get('album'))
+
+        song_all = []
+        if name_simplified:
+            song_all.extend(name_simplified.split(' '))
+        if artist_simplified:
+            song_all.extend(artist_simplified.split(' '))
+        if album_simplified:
+            song_all.extend(album_simplified.split(' '))
+        if len(song_all) > 0:
+            song_all = list(set(sorted(song_all)))
+
+        song_dict = {
+            'all': song_all
+        }
+
+        doc = {
+            'song': song_dict
+        }
+
+        self.collection.update({"db_id": radio_id}, {"$set": doc}, upsert=True, safe=True)
 
     def remove_radio(self, radio):
         doc = self.collection.find_one({"db_id": radio.id})
@@ -534,9 +567,14 @@ def song_instance_deleted(sender, instance, **kwargs):
     async_remove_song.delay(instance.metadata)
 
 
-def radio_updated_handler(sender, instance, created, **kwargs):
-    logger.info('radio %d has been updated' % (instance.id))
-    async_add_or_update_radio.delay(instance.id)
+def radio_metadata_updated_handler(sender, radio, **kwargs):
+    logger.info('radio %d has been updated' % (radio.id))
+    async_add_or_update_radio.delay(radio.id)
+
+
+def radio_new_current_song_handler(sender, radio, song_json, song, song_dict, **kwargs):
+    logger.info('radio %d has a new current song' % (radio.id))
+    async_update_radio_current_song.delay(radio.id, song_dict)
 
 
 def radio_deleted_handler(sender, instance, **kwargs):
@@ -544,8 +582,10 @@ def radio_deleted_handler(sender, instance, **kwargs):
 
 
 def install_handlers():
-    signals.post_save.connect(radio_updated_handler, sender=Radio)
     signals.post_save.connect(new_song_instance, sender=SongInstance)
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
     signals.pre_delete.connect(radio_deleted_handler, sender=Radio)
+
+    yabase_signals.radio_metadata_updated.connect(radio_metadata_updated_handler)
+    yabase_signals.new_current_song.connect(radio_new_current_song_handler)
 install_handlers()

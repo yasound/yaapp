@@ -338,8 +338,3 @@ def async_songs_started(data):
         song_instance = SongInstance.objects.select_related().get(id=songinstance_id)
         song_instance.playlist.radio.song_starts_playing(song_instance, play_date)
     logger.info('async_songs_started finished: %d' % (len(data)))
-
-@task(ignore_result=True)
-def async_new_current_song(sender, radio, song):
-    song_json = SongInstance.objects.set_current_song_json(radio.id, song)
-    yabase_signals.new_current_song.send(sender=sender, radio=radio, song_json=song_json, song=song)
