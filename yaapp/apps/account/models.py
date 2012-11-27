@@ -1887,6 +1887,18 @@ def check_for_language(sender, request, user, **kwargs):
         p.language = request.LANGUAGE_CODE
         p.save()
 
+
+def check_geo_localization(sender, request, user, **kwargs):
+    if request is None:
+        return
+
+    p = user.get_profile()
+    if p is None:
+        return
+
+    p.check_geo_localization(request)
+
+
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
     post_save.connect(create_user_profile, sender=EmailUser)
@@ -1905,6 +1917,7 @@ def install_handlers():
     post_save.connect(social_user_updated, sender=UserSocialAuth)
 
     auth_signals.user_logged_in.connect(check_for_language)
+    auth_signals.user_logged_in.connect(check_geo_localization)
 
 install_handlers()
 

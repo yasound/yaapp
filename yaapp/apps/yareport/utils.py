@@ -8,8 +8,8 @@ from datetime import datetime
 
 def build_yasound_2011_report_docs(radio=None):
     logger = logging.getLogger("yaapp.yareport")
-    nb_days = 117
-    nb_songs_played_per_day = 23
+    nb_days = 90
+    nb_songs_played_per_day = 471
     nb_songs_played = nb_days * nb_songs_played_per_day
 
     if radio is None:
