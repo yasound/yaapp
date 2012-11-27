@@ -1892,11 +1892,11 @@ def check_geo_localization(sender, request, user, **kwargs):
     if request is None:
         return
 
-    profile = user.get_profile()
-    if profile:
+    p = user.get_profile()
+    if p is None:
         return
 
-    profile.check_geo_localization(request)
+    p.check_geo_localization(request)
 
 
 def install_handlers():
