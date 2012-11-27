@@ -5,6 +5,7 @@ from yabase.models import Radio, SongInstance
 from models import MostPopularSongsManager, RadiosManager
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundSong
+from yabase import signals as yabase_signals
 
 class TestMostPopularSong(TestCase):
     def setUp(self):
@@ -76,8 +77,7 @@ class TestRadio(TestCase):
         self.assertEquals(len(res), 1)
 
         yaref_test_utils.generate_yasound_song(name='song', artist='artist', album='album')
-        radio.current_song = SongInstance.objects.get(id=1)
-        radio.save()
+        radio.set_current_song(SongInstance.objects.get(id=1))
 
         res = self.manager.search('artist')
         self.assertEquals(len(res), 1)
@@ -94,8 +94,7 @@ class TestRadio(TestCase):
         self.assertEquals(len(res), 1)
 
         yaref_test_utils.generate_yasound_song(name='song', artist='the cure', album='album')
-        radio.current_song = SongInstance.objects.get(id=1)
-        radio.save()
+        radio.set_current_song(SongInstance.objects.get(id=1))
 
         res = self.manager.search('the cure')
         self.assertEquals(len(res), 1)
@@ -110,8 +109,7 @@ class TestRadio(TestCase):
         playlist.save()
 
         yaref_test_utils.generate_yasound_song(name='song', artist='artist', album='album')
-        radio1.current_song = SongInstance.objects.get(id=1)
-        radio1.save()
+        radio1.set_current_song(SongInstance.objects.get(id=1))
 
         radio2 = Radio.objects.create(name='artist', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()
@@ -133,8 +131,7 @@ class TestRadio(TestCase):
         playlist.save()
 
         yaref_test_utils.generate_yasound_song(name='song', artist='artist', album='album')
-        radio1.current_song = SongInstance.objects.get(id=1)
-        radio1.save()
+        radio1.set_current_song(SongInstance.objects.get(id=1))
 
         radio2 = Radio.objects.create(name='artist', ready=True, creator=self.user)
         playlist = yabase_tests_utils.generate_playlist()

@@ -204,8 +204,8 @@ elif PRODUCTION_MODE:
             'LOCATION': [
                 'yas-web-08:11211',
                 'yas-web-09:11211',
-                # 'yas-filer-01:11211',
-                # 'yas-filer-02:11211',
+                'yas-filer-01:11211',
+                'yas-filer-02:11211',
             ]
         }
     }
@@ -929,10 +929,13 @@ GIFT_DEFAULT_IMAGE_DONE = MEDIA_URL +'images/default-gift-done.png'
 # temp files
 if PRODUCTION_MODE:
     TEMP_DIRECTORY = '/data/tmp/'
+    SHARED_TEMP_DIRECTORY = '/data/tmp/'
 elif hostname in ['yas-dev-01', 'yas-dev-02']:
     TEMP_DIRECTORY = '/data/tmp/'
+    SHARED_TEMP_DIRECTORY = '/data/tmp/'
 else:
     TEMP_DIRECTORY = '/tmp/'
+    SHARED_TEMP_DIRECTORY = '/tmp/'
 
 
 # in-app purchase

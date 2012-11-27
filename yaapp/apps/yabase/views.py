@@ -881,7 +881,7 @@ def upload_song(request, song_id=None):
 
     json_data['filename'] = filename
 
-    directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
+    directory = mkdtemp(dir=settings.SHARED_TEMP_DIRECTORY)
     _path, extension = os.path.splitext(f.name)
     source = u'%s/s%s' % (directory, extension)
     source_f = open(source , 'wb')

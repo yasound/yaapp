@@ -35,5 +35,12 @@ def async_add_or_update_radio(radio_id):
         radio.build_fuzzy_index(upsert=True, insert=False)
 
 @task(ignore_result=True)
+def async_update_radio_current_song(radio_id, song_dict):
+    from models import RadiosManager
+    rm = RadiosManager()
+    rm.update_radio_current_song(radio_id, song_dict)
+
+
+@task(ignore_result=True)
 def async_remove_radio(radio):
     radio.remove_from_fuzzy_index()
