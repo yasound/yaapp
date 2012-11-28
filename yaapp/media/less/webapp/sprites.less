@@ -1,0 +1,48 @@
+/* Common */
+.asset
+{
+	background-image: url("@{assets}");
+	background-repeat: no-repeat;
+}
+
+[class^="asset-"],
+[class*=" asset-"]
+{
+	display: inline-block;
+	.ie7-restore-right-whitespace();
+	vertical-align: text-top;
+	.asset();
+}
+
+/* Each asset */
+.asset-logo
+{
+	background-position: 0 0;
+	width: 180px;
+	height: 50px;
+}
+
+.asset-glass
+{
+	background-position: -336px -17px;
+	width: 17px;
+	height: 18px;
+}
+
+/* Textfields */
+[class^="textfield-"],
+[class*=" textfield-"]
+{
+	background-image: url("@{textfields}");
+	background-repeat: no-repeat;
+}
+
+.textfield-email
+{
+	background-position: right 0;
+}
+
+.textfield-pwd
+{
+	background-position: right -30px;
+}

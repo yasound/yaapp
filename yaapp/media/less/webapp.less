@@ -5,3 +5,274 @@
 @import 'webapp/sprites.less';
 
 @import 'webapp/old.less';
+
+body
+{
+	font-family: @defaultFont;
+}
+
+input::-webkit-input-placeholder,
+input::-moz-placeholder,
+input::-ms-input-placeholder
+{
+	color: @placeholderGrey;
+}
+
+.wrapper
+{
+	max-width: @wrapperMaxWidth;
+	margin: auto;
+}
+
+/*
+ * BUTTONS
+ */
+.btn-coral,
+.btn-navy,
+.btn-sky
+{
+	color: #fff;
+	display: inline-block;
+	.ie7-inline-block();
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	.border-radius(5px);
+	height: 30px;
+	line-height: 30px;
+	font-family: @defaultFont;
+	border: none;
+	padding: 0 10px;
+}
+
+.btn-sky
+{
+	border: 1px solid #1a8eb5;
+	#gradient > .vertical(lighten(@skyBlue,4%),darken(@skyBlue,4%));
+	&:hover
+	{
+		#gradient > .vertical(@skyBlue,darken(@skyBlue,6%));
+	}
+	&:active
+	{
+		background: darken(@skyBlue,6%);
+	}
+}
+
+.btn-navy
+{
+	#gradient > .vertical(lighten(@navyBlue,4%),darken(@navyBlue,4%));
+	&:hover
+	{
+		#gradient > .vertical(@navyBlue,darken(@navyBlue,6%));
+	}
+	&:active
+	{
+		background: darken(@navyBlue,6%);
+	}
+}
+
+.btn-coral
+{
+	#gradient > .vertical(lighten(@coral,2%),darken(@coral,2%));
+	&:hover
+	{
+		text-decoration: none;
+		color: #fff;
+		#gradient > .vertical(@coral,darken(@coral,4%));
+	}
+	&:active
+	{
+		background: darken(@coral,4%);
+	}	
+}
+
+/*
+ * HEADER
+ */
+.header-navbar
+{
+	height: 66px;
+	line-height: 66px;
+	#gradient > .vertical(#2b2d2e,#232526);
+	/* Main logo */
+	.asset-logo
+	{
+		margin: 8px 0;
+		display: block;
+		text-indent: -9999px;
+		float: left;
+	}
+}
+
+.header-nav
+{
+	float: right;
+	li
+	{
+		display: block;
+		float: left;
+	}
+	.btn-register
+	{
+		display: block;
+		float: left;
+		width: 115px;
+		margin: 18px 0 18px 10px;
+		.border-radius(15px);
+	}
+	.btn-nav
+	{
+		font-size: 14px;
+		font-weight: bold;
+		color: @lightGrey;
+		display: block;
+		float: left;
+		height: 66px;
+		line-height: 66px;
+		padding: 0 10px;
+		border: 1px solid transparent;
+		border-top: 0;
+		border-bottom: 0;
+		text-shadow: 1px 1px 1px #000;
+		&:hover
+		{
+			color: #fff;
+			text-decoration: none;
+		}
+	}
+	.btn-connect
+	{
+		display: block;
+		float: right;
+	}
+	.dropdown-form
+	{
+		margin: 0;
+	}
+	.dropdown.open
+	{
+		.btn-nav
+		{
+			color: #fff;
+			#gradient > .vertical(#292c2d,#343738);
+			border-color: #1c1e1f;
+			.box-shadow(1px 0 0 0 #323536);
+		}
+		.dropdown-menu
+		{
+			a
+			{
+				color: @grey;
+				text-shadow: 1px 1px 1px #000;
+				padding: 0;
+				&:hover
+				{
+					text-decoration: none;
+					color: #fff;
+				}
+			}
+			.btn-sky,
+			.btn-navy
+			{
+				color: #fff;
+				text-shadow: none;
+			}
+			min-width: 235px;
+			left: auto;
+			right: 0;
+			padding: 0;
+			margin: 0;  
+			border: none;
+			background: #343738;
+			.border-radius(0);
+			&:after,
+			&:before
+			{
+				display: none;
+			}
+		}
+		.dropdown-block
+		{
+			padding: 12px;
+		}
+		.dropdown-block + .dropdown-block
+		{
+			border-top: 1px solid #515657;
+			.box-shadow(0 -1px 0 0 #232526);
+		}
+		.btn-sky,
+		.btn-navy
+		{
+			font-size: 14px;
+			border: none;
+			font-weight: bold;
+			color: #fff;
+			text-decoration: none;
+			line-height: 30px;
+		}
+		.btn-navy
+		{
+			margin-top: 12px;
+		}
+	}
+	.input-text
+	{
+		background-color: #323637;
+		border-width: 1px;
+		border-style: solid;
+		border-color: #202323 #2c2f30 #494b4c #2f3234;
+		height: 16px;
+		line-height: 16px;
+		padding: 8px 10px;
+		font-family: @defaultFont;
+		font-size: 14px;
+		font-weight: bold;
+		color: #fff;
+		&::-webkit-input-placeholder,
+		&::-moz-placeholder,
+		&::-ms-input-placeholder
+		{
+			color: #fff;
+		}
+		&:focus
+		{
+			border-color: #202323 #2c2f30 #494b4c #2f3234;
+			.box-shadow(none);
+		}
+	}
+	.lost-password
+	{
+		text-align: right;
+		margin-top: 12px;
+	}
+}
+
+#search-bar
+{
+	margin: 16px 0 0 16px;
+	.border-radius(20px);
+	height: 34px;
+	line-height: 34px;
+	background: #fff;
+	float: left;
+	width: 325px;
+	position: relative;
+	input
+	{
+		background: transparent;
+		padding: 9px 0 7px 0;
+		font-family: "Myriad Pro", arial, sans-serif;
+		font-size: 14px;
+		.box-shadow(none);
+		border: none;
+		margin: 0 0 0 15px;
+		width: 80%;
+	}
+	.asset-glass
+	{
+		position: absolute;
+		right: 10px;
+		top: 8px;
+	}
+}
