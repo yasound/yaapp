@@ -1484,7 +1484,8 @@ class UserProfile(models.Model):
 
     def check_geo_localization(self, request):
         from task import async_check_geo_localization
-        async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
+        if yaapp_settings.GEOIP_LOOKUP in request.META:
+            async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
 
     def position_changed(self):
         if self.latitude is None or self.longitude is None:
