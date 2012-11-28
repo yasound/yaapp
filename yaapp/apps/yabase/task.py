@@ -233,7 +233,7 @@ def extract_song_cover(yasound_song_id):
     import_utils.extract_song_cover(yasound_song)
 
 
-@task(ignore_result=True, rate_limit='10/s')
+@task(ignore_result=True, rate_limit='50/s')
 def async_dispatch_user_started_listening_song(radio, song):
     """
     Generate user_started_listening_song signals
