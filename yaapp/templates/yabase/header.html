@@ -1,0 +1,40 @@
+{% load i18n %}
+{% load app_url %}
+
+<header id="header" class="navbar header-navbar">
+  <div class="wrapper">
+    <div class="container-fluid">
+      <div id="brand-logo">
+        <a class="asset-logo" href="{% app_url webapp app_name %}" id="btn-webapp">Yasound</a>
+      </div>
+      <div id="search-bar">
+        <input type="text" id="search-input" placeholder="Recherchez un artiste, une radio..." maxlength="25" />
+        <a href="#" class="asset-glass" id="search-symbol"></a>
+      </div>
+      <nav class="header-nav">
+        <ul>
+          <li><a href="#" class="btn-nav">Découvrir</a></li>
+          <li class="dropdown">
+            <a href="#" class="btn-nav" data-toggle="dropdown">Se connecter</a>
+            <div class="dropdown-menu">
+              <div class="dropdown-block">
+                <a href="#" class="btn-sky">{% trans 'Login with Twitter' %}</a>
+                <a href="#" class="btn-navy">{% trans 'Login with Facebook' %}</a>
+              </div>
+              <div class="dropdown-block">
+                <form class="dropdown-form" id='login-form' method='post'>{% csrf_token %}
+                  <input class="input-text textfield-email" type="text" placeholder="Votre email" />
+                  <input class="input-text textfield-pwd" type="password" placeholder="Votre mot de passe" />
+                  <button type="submit" class="btn-coral btn-connect">Connexion</button>
+                  <div class="clearfix"></div>
+                  <div><a class="lost-password" href="#">Mot de passe perdu ?</a></div>
+                </form>
+              </div>
+            </div>
+          </li>
+          <li><a href="#" class="btn-coral btn-register">S'inscrire</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
