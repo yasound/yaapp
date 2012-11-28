@@ -70,10 +70,10 @@
   background-repeat: no-repeat;
 }
 .textfield-email {
-  background-position: right 0;
+  background-position: right 1px;
 }
 .textfield-pwd {
-  background-position: right -30px;
+  background-position: right -29px;
 }
 /**
  * Old styles.
@@ -3986,17 +3986,17 @@ a.yabutton-small {
   #pagination {
     width: 100%;
   }
-  body {
-    padding-right: 0px;
-    padding-left: 0px;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: -40px;
-  }
-  #header {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
+  /*body {
+          padding-right:0px;
+          padding-left:0px;
+          margin-left:5px;
+          margin-right:5px;
+          margin-top: -40px;
+      }*/
+  /*#header {
+          margin-left:0px;
+          margin-right:0px;
+      }*/
   /*-- SIGNIN SUBMENU --*/
   .friends-login-container .friends-login-p {
     width: 50%;
@@ -4035,14 +4035,14 @@ a.yabutton-small {
     display: inline;
   }
   /*-- HEADER --*/
-  #header {
-    position: fixed;
-    z-index: 10;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-  }
+  /*#header {
+          position:fixed;
+          z-index:10;
+          margin-left:0px;
+          margin-right:0px;
+          padding-left:0px;
+          padding-right:0px;
+      }*/
   #player,
   .header-separation,
   #user-menu {
@@ -4057,9 +4057,6 @@ a.yabutton-small {
     display: inline;
     float: none;
     margin-top: 20px;
-  }
-  #brand-logo {
-    display: none;
   }
   .navbar-fixed-top {
     top: 0;
@@ -4839,19 +4836,20 @@ a.yabutton-small {
   #pagination {
     width: 100%;
   }
-  body {
-    padding-right: 0px;
-    padding-left: 0px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: -40px;
-  }
-  #header {
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-  }
+  /*body {
+          padding-right:0px;
+          padding-left:0px;
+          margin-left:10px;
+          margin-right:10px;
+          margin-top: -40px;
+      }
+  
+      #header {
+          margin-left:0px;
+          margin-right:0px;
+          padding-left:0px;
+          padding-right:0px;
+      }*/
   /*-- SIGNIN SUBMENU --*/
   .friends-login-container .friends-login-p {
     width: 50%;
@@ -4873,42 +4871,47 @@ a.yabutton-small {
   #user-menu {
     display: none;
   }
-  #header {
-    height: 60px;
-  }
-  .navbar-inner .container {
-    text-align: center;
-    height: 50px;
-    margin-top: 18px;
-  }
-  #mobile-menu-logo {
-    display: inline;
-    float: none;
-    margin-top: 20px;
-  }
-  #brand-logo {
-    display: none;
-  }
-  .navbar-fixed-top {
-    top: 0;
-  }
-  .navbar-fixed-top,
-  .navbar-fixed-bottom {
-    position: fixed;
-    right: 0;
-    left: 0;
-    z-index: 1030;
-    margin-bottom: 0;
-  }
-  #header .navbar-inner {
-    background-image: url(/media/app/images/header_bg.png);
-    background-repeat: repeat-x;
-    height: 60px;
-    padding-top: 1px;
-    padding-bottom: 0px;
-    padding-right: 0;
-    padding-left: 0;
-  }
+  /*#header {
+          height:60px;
+      }
+  
+      .navbar-inner .container {
+          text-align: center;
+          height:50px;
+          margin-top:18px;
+      }
+  
+      #mobile-menu-logo {
+          display:inline;
+          float:none;
+          margin-top:20px;
+      }
+  
+      #brand-logo {
+          display:none;
+      }
+  
+      .navbar-fixed-top {
+          top: 0;
+      }
+  
+      .navbar-fixed-top, .navbar-fixed-bottom {
+          position: fixed;
+          right: 0;
+          left: 0;
+          z-index: 1030;
+          margin-bottom: 0;
+      }
+  
+      #header .navbar-inner {
+          background-image: url(/media/app/images/header_bg.png);
+          background-repeat: repeat-x;
+          height:60px;
+          padding-top:1px;
+          padding-bottom:0px;
+          padding-right:0;
+          padding-left:0;
+      }*/
   .responsive-settings-btn {
     float: left;
     margin-left: 15%;
@@ -5414,26 +5417,26 @@ a.yabutton-small {
   #pagination {
     width: 100%;
   }
-  body {
-    padding-right: 0px;
-    padding-left: 0px;
-  }
-  #header {
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-  }
+  /*body {
+          padding-right:0px;
+          padding-left:0px;
+      }*/
+  /*#header {
+          margin-left:0px;
+          margin-right:0px;
+          padding-left:0px;
+          padding-right:0px;
+      }*/
   /*-- SIGNIN SUBMENU --*/
   .friends-login-container .friends-login-p,
   .favorites-login-container .favorites-login-p {
     margin-left: 188px;
   }
   /*-- HEADER --*/
-  #header {
-    position: fixed;
-    z-index: 10;
-  }
+  /*#header {
+          position:fixed;
+          z-index: 10;
+      }*/
   .navbar-inner .container {
     width: 724px;
   }
@@ -5930,6 +5933,7 @@ input::-ms-input-placeholder {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  background-color: #2d3132;
 }
 .header-nav .lost-password {
   text-align: right;
@@ -5963,4 +5967,40 @@ input::-ms-input-placeholder {
   position: absolute;
   right: 10px;
   top: 8px;
+}
+@media (max-width: 480px) {
+  
+}
+@media (max-width: 767px) {
+  body {
+    padding: 0;
+  }
+  #search-bar {
+    width: 105px;
+  }
+  #search-bar input {
+    margin-left: 10px;
+    width: 65%;
+  }
+  .header-nav .btn-nav {
+    padding: 0 5px;
+  }
+  .header-nav .btn-register {
+    width: 60px;
+  }
+  .header-navbar .asset-logo {
+    width: 45px;
+  }
+  .container-fluid {
+    padding: 0 10px;
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  #search-bar {
+    width: 170px;
+  }
+  #search-bar input {
+    width: 75%;
+    margin-left: 10px;
+  }
 }

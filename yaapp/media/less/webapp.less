@@ -239,6 +239,7 @@ input::-ms-input-placeholder
 		{
 			border-color: #202323 #2c2f30 #494b4c #2f3234;
 			.box-shadow(none);
+			background-color: darken(#323637,2%);
 		}
 	}
 	.lost-password
@@ -276,3 +277,7 @@ input::-ms-input-placeholder
 		top: 8px;
 	}
 }
+
+@import 'webapp/responsive/landscape-phones-and-down.less';
+@import 'webapp/responsive/landscape-phones-to-portrait-tablet.less';
+@import 'webapp/responsive/portrait-tablet-to-desktop.less';
