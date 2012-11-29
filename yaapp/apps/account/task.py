@@ -11,7 +11,7 @@ from django.utils import translation
 logger = logging.getLogger("yaapp.account")
 
 
-@task
+@task(ignore_result=True)
 def scan_friends_task():
     from models import UserProfile
 
@@ -27,7 +27,7 @@ def scan_friends_task():
     cache.set('total_yasound_friend_count', total_yasound_friend_count)
 
 
-@task
+@task(ignore_result=True)
 def check_live_status_task():
     from models import UserProfile
 
@@ -35,7 +35,7 @@ def check_live_status_task():
         profile.check_live_status()
 
 
-@task
+@task(ignore_result=True)
 def async_check_geo_localization(userprofile, ip):
     logger.info('async_check_geo_localization')
     if userprofile.latitude is not None and userprofile.longitude is not None:

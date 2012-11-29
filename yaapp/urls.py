@@ -292,6 +292,9 @@ urlpatterns = patterns('',
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
 
+    # tapjoy callback
+    url(r'^tapjoy_callback/$', 'yapremium.views.tapjoy_callback', name='tapjoy_callback'),
+
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),

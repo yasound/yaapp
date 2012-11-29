@@ -9,12 +9,16 @@ from django.http import Http404, HttpResponse
 import utils as yapremium_utils
 import logging
 from transmeta import get_real_fieldname
-from task import async_win_gift, async_check_follow_yasound_on_twitter, async_check_like_yasound_on_facebook
+from task import async_win_gift, async_check_follow_yasound_on_twitter, \
+    async_check_like_yasound_on_facebook
 import settings as yapremium_settings
 import json
 import tweepy
 from django.conf import settings
 from yacore.geoip import request_country
+from django.contrib.auth.models import User
+import hashlib
+
 logger = logging.getLogger("yaapp.yapremium")
 
 
@@ -49,7 +53,8 @@ def subscriptions(request, subscription_sku=None):
             return response
         else:
             logger.debug('receipt is valid, creating user subscription')
-            UserSubscription.objects.create(subscription=subscription, user=request.user)
+            UserSubscription.objects.create(
+                subscription=subscription, user=request.user)
             response = api_response({'success': True})
             return response
 
@@ -69,14 +74,17 @@ def services(request, stype=None):
             data = []
             for us in qs:
                 data.append(us.as_dict())
-            response = api_response(data, total_count, limit=limit, offset=offset)
+            response = api_response(
+                data, total_count, limit=limit, offset=offset)
             return response
         else:
             us = None
             try:
-                us = UserService.objects.get(user=request.user, service__stype=stype)
+                us = UserService.objects.get(
+                    user=request.user, service__stype=stype)
             except UserService.DoesNotExist:
-                res = {'success': False, 'message': unicode(_('Unknown service'))}
+                res = {'success': False, 'message':
+                       unicode(_('Unknown service'))}
                 response = json.dumps(res)
                 return HttpResponse(response)
 
@@ -93,7 +101,8 @@ def gifts(request, subscription_sku=None):
         if request.user.is_authenticated():
             profile = request.user.get_profile()
             if profile is not None:
-                check_for_missed_gifts(sender=profile, request=request, user=request.user)
+                check_for_missed_gifts(
+                    sender=profile, request=request, user=request.user)
 
         qs = Gift.objects.filter(enabled=True)
         if request.user.is_anonymous():
@@ -117,7 +126,8 @@ def gifts(request, subscription_sku=None):
 @csrf_exempt
 @check_api_key(methods=['POST'])
 def action_watch_tutorial_completed(request):
-    async_win_gift.delay(user_id=request.user.id, action=yapremium_settings.ACTION_WATCH_TUTORIAL)
+    async_win_gift.delay(user_id=request.user.id,
+                         action=yapremium_settings.ACTION_WATCH_TUTORIAL)
     res = {'success': True}
     response = json.dumps(res)
     return HttpResponse(response)
@@ -128,21 +138,26 @@ def action_watch_tutorial_completed(request):
 def action_follow_yasound_on_twitter_completed(request):
     profile = request.user.get_profile()
     if not profile.twitter_enabled:
-        res = {'success': False, 'message': unicode(_('your account is not associated with twitter.'))}
+        res = {'success': False, 'message': unicode(_(
+            'your account is not associated with twitter.'))}
         response = json.dumps(res)
         return HttpResponse(response)
 
-    auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY, settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
+    auth = tweepy.OAuthHandler(settings.YASOUND_TWITTER_APP_CONSUMER_KEY,
+                               settings.YASOUND_TWITTER_APP_CONSUMER_SECRET)
     auth.set_access_token(profile.twitter_token, profile.twitter_token_secret)
     api = tweepy.API(auth)
 
     country_code = request_country(request)
-    yasound_twitter_account = settings.YASOUND_TWITTER_ACCOUNTS.get(country_code, settings.YASOUND_TWITTER_DEFAULT_ACCOUNT)
+    yasound_twitter_account = settings.YASOUND_TWITTER_ACCOUNTS.get(
+        country_code, settings.YASOUND_TWITTER_DEFAULT_ACCOUNT)
     api.create_friendship(screen_name=yasound_twitter_account)
 
-    async_check_follow_yasound_on_twitter.apply_async(args=[request.user.id, yasound_twitter_account])
+    async_check_follow_yasound_on_twitter.apply_async(
+        args=[request.user.id, yasound_twitter_account])
 
-    res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
+    res = {'success': True, 'message': unicode(_(
+        'Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)
 
@@ -152,11 +167,14 @@ def action_follow_yasound_on_twitter_completed(request):
 def action_like_yasound_on_facebook_completed(request):
     profile = request.user.get_profile()
     if not profile.facebook_enabled:
-        res = {'success': False, 'message': unicode(_('your account is not associated with facebook.'))}
+        res = {'success': False, 'message': unicode(_(
+            'your account is not associated with facebook.'))}
         response = json.dumps(res)
         return HttpResponse(response)
-    async_check_like_yasound_on_facebook.apply_async(args=[request.user.id], countdown=60 * 3)
-    res = {'success': True, 'message': unicode(_('Thank you, your gift will be available soon.'))}
+    async_check_like_yasound_on_facebook.apply_async(
+        args=[request.user.id], countdown=60 * 3)
+    res = {'success': True, 'message': unicode(_(
+        'Thank you, your gift will be available soon.'))}
     response = json.dumps(res)
     return HttpResponse(response)
 
@@ -172,3 +190,32 @@ def activate_promocode(request):
     res = {'success': success}
     response = json.dumps(res)
     return HttpResponse(response)
+
+
+@check_api_key(methods=['GET'])
+def tapjoy_callback(request):
+    username = request.REQUEST.get('snuid')
+    currency = request.REQUEST.get('currency', 0)
+    mac_address = request.REQUEST.get('mac_address')
+    currency_id = request.REQUEST.get('id')
+    verifier = request.REQUEST.get('verifier')
+    logger.info('tapjoy_callback: snuid=%s, currency=%s, mac_address=%s, currency_id=%s, verifier=%s' % (username, currency, mac_address, currency_id, verifier))
+
+    secret_key = settings.TAPJOY_SECRET_KEY
+    md5_string = '%s:%s:%s:%s' % (currency_id, username, currency, secret_key)
+    digest = hashlib.md5()
+    digest.update(md5_string)
+    digest = digest.hexdigest()
+
+    if digest != verifier:
+        logger.error('digest(%s) != verifier(%s)' % (digest, verifier))
+        return HttpResponse(status=403)
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return HttpResponse(status=403)
+
+    # give amount of HD days
+    us, _created = UserService.objects.get_or_create(user=user, service=yapremium_settings.SERVICE_HD)
+    us.calculate_expiration_date(duration=currency, duration_unit=yapremium_settings.DURATION_DAY)
