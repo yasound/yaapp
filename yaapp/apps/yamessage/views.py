@@ -1,4 +1,4 @@
-from django.http import HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from models import NotificationsManager
 from yacore.decorators import check_api_key
@@ -48,8 +48,10 @@ def get_notification(request, notif_id):
 def update_notification(request, notif_id):
     data = json.loads(request.raw_post_data)
     m = NotificationsManager()
-    if not data.has_key('dest_user_id') or int(data['dest_user_id']) != request.user.id:
-        return HttpResponseNotFound()
+
+    if 'dest_user_id' not in data or int(data['dest_user_id']) != request.user.id:
+        raise Http404
+
     n = m.update_notification(data)
     res = json.dumps(n, cls=MongoAwareEncoder)
     return HttpResponse(res)
@@ -59,8 +61,11 @@ def update_notification(request, notif_id):
 def delete_notification(request, notif_id):
     m = NotificationsManager()
     n = m.get_notification(notif_id)
-    if not n.has_key('dest_user_id') or int(n['dest_user_id']) != request.user.id:
-        return HttpResponseNotFound()
+    if n is None:
+        raise Http404
+
+    if 'dest_user_id' not in n or int(n['dest_user_id']) != request.user.id:
+        raise Http404
 
     m.delete_notification(notif_id)
     response = {'succeeded': True}
@@ -85,6 +90,7 @@ def mark_all_as_read(request):
     response = {'succeeded': True}
     res = json.dumps(response)
     return HttpResponse(res)
+
 
 @check_api_key(methods=['GET'])
 def unread_count(request):
