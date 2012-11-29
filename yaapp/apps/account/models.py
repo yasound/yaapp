@@ -645,6 +645,12 @@ class UserProfile(models.Model):
         return self.get_picture_url(size='28x28')
 
     @property
+    def medium_picture_url(self):
+        """ return medium picture url (38x38)
+        """
+        return self.get_picture_url(size='38x38')
+
+    @property
     def age(self):
         bday = self.birthday
         if not bday:
