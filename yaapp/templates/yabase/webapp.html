@@ -693,13 +693,7 @@ HTML, BODY { height: 100%; }
 
   {% block content%}{%endblock%}</div>
 </div>
-<div id='pre-footer'>&nbsp;</div>
-<div id='footer'>
-  {% ifequal app_name 'deezer' %}
-  {% include "yabase/app/footer_deezer.html" %}
-  {% else %}
-  {% include "yabase/app/footer.html" %}
-  {% endifequal %}
+{% include "yabase/app/footer.html" %}
 </body>
 {% endblock %}
 

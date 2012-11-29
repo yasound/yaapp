@@ -555,6 +555,130 @@ input::-ms-input-placeholder
 	float: left;	
 }
 
+/*
+ * FOOTER
+ */
+.footer-player
+{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	#gradient > .vertical(#2b2d2e,#232526);
+	text-shadow: 1px 1px 1px rgba(0,0,0,.7);
+	padding: 15px 0;
+	z-index: 10;
+	.current-radio,
+	.current-song
+	{
+		position: relative;
+		min-height: 70px;
+	}
+	.cover
+	{
+		&:after { #effect > .glossy-absolute(); }
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+	}
+	.current-radio
+	{
+		padding-left: 90px;
+		.cover
+		{
+			.box-shadow(0px 0px 6px 0px rgba(0, 0, 0, .7));
+		}
+		.status
+		{
+			display: block;
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			z-index: 2;
+			.asset();
+			&.play { .asset-player-play(); }
+			&.pause { .asset-player-pause(); }
+		}
+	}
+	.current-song
+	{
+		padding-left: 110px;
+		.cover
+		{
+			padding-top: 1px;
+			padding-left: 1px;
+			.asset();
+			.asset-cover();
+			&:after
+			{
+				width: 68px;
+				height: 68px;
+			}
+		}
+	}
+	h1,h2
+	{
+		color: #fff;
+		font-size: 14px;
+		margin: 0;
+		padding: 0;
+		line-height: 20px;
+		width: 75%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	h3
+	{
+		font-size: 11px;
+		color: @grey;
+		text-transform: uppercase;
+		margin: 0;
+		padding: 0;
+		line-height: 20px;
+	}
+	.pl-star
+	{
+		margin-right: 5px;
+		.asset-inline();
+		.asset-player-star();
+		&.on, &:hover { .asset-player-star-yellow(); }
+		&.on:hover { .asset-player-star(); }
+	}
+	.pl-share
+	{
+		.asset-inline();
+		.asset-player-share();
+	}
+	.pl-like
+	{
+		margin-right: 5px;
+		.asset-inline();
+		.asset-player-like();
+		&.on, &:hover { .asset-player-like-red(); }
+		&.on:hover { .asset-player-like(); }
+	}
+	.pl-cart
+	{
+		.asset-inline();
+		.asset-player-cart();
+	}
+	section
+	{
+		position: relative;
+	}
+	.toggler
+	{
+		top: 50%;
+		margin-top: -12px;
+		right: 0;
+		position: absolute;
+		.asset();
+		.asset-player-toggler-down();
+	}
+}
+
 @import 'webapp/responsive/landscape-phones-and-down.less';
 @import 'webapp/responsive/landscape-phones-to-portrait-tablet.less';
 @import 'webapp/responsive/portrait-tablet-to-desktop.less';
