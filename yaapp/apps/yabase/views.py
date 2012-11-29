@@ -2686,3 +2686,11 @@ def download_current_song(request, radio_uuid, token):
     response['Content-Type'] = 'audio/mp3'
     response['X-Accel-Redirect'] = '/songs/' + path
     return response
+
+
+@check_api_key(methods=['GET'], login_required=False)
+def radio_m3u(request, radio_uuid, template_name='yabase/m3u.txt'):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    return render_to_response(template_name, {
+        'radio': radio
+    }, context_instance=RequestContext(request), mimetype='audio/x-mpegurl')
