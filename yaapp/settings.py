@@ -680,7 +680,7 @@ if PRODUCTION_MODE:
 YASOUND_PUSH_PORT = 9000
 
 if LOCAL_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-09.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://streamer2.yasound.com:8000/'
     YASOUND_RADIO_WEB_URL = 'http://localhost:8000/listen/'
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
@@ -692,7 +692,7 @@ elif DEVELOPMENT_MODE:
         YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-09.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://streamer2.yasound.com:8000/'
     YASOUND_RADIO_WEB_URL = 'https://yasound.com/listen/'
     ENABLE_PUSH = True
     PUSH_REDIS_HOST = 'yas-sql-01'
