@@ -5988,7 +5988,7 @@ input::-ms-input-placeholder {
   box-shadow: 1px 0 0 0 #323536;
 }
 .header-nav .dropdown.open .dropdown-menu {
-  min-width: 235px;
+  min-width: 250px;
   left: auto;
   right: 0;
   padding: 0;
@@ -6251,6 +6251,12 @@ input::-ms-input-placeholder {
   position: absolute;
   right: 5px;
   top: 24px;
+}
+.header-nav .dropdown-toggler {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 0;
 }
 .header-nav .dropdown-promo {
   position: absolute;
