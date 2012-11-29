@@ -14,6 +14,120 @@
       <nav class="header-nav">
         <ul>
           <li><a href="#" class="btn-nav">Découvrir</a></li>
+          {% if request.user.is_authenticated %}
+          <li class="dropdown">
+            <a class="btn-nav" data-toggle="dropdown" href="#"><i class="asset-hd-off"></i></a>
+            <ul class="dropdown-menu dropdown-bordered">
+              <li class="list-block">
+                <div class="a">
+                  <i class="asset-mini-hd-on"></i>
+                  <div class="txt">
+                    <strong>HD activé</strong>
+                    <span>Jusqu'au 13.12.2012</span>
+                  </div>
+                </div>
+              </li>
+              <li class="list-block">
+                <div class="a">
+                  <i class="asset-mini-promo"></i>
+                  <div class="txt">
+                    <strong>Entrez un code<br />promo</strong>
+                  </div>
+                </div>
+              </li>
+              <li class="list-block">
+                <a href="#">
+                  <i class="asset-mini-gift"></i>
+                  <div class="txt">
+                    <strong>Connectez votre compte Facebook</strong>
+                    <span>Jusqu'au 13.12.2012</span>
+                  </div>
+                </a>
+              </li>
+              <li class="list-block">
+                <a href="#">
+                  <i class="asset-mini-gift"></i>
+                  <div class="txt">
+                    <strong>Connectez votre compte Twitter</strong>
+                    <span>Jusqu'au 13.12.2012</span>
+                  </div>
+                </a>
+              </li>
+              <li class="list-foot">
+                <a href="#">Afficher les 8 autres offres</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="btn-nav btn-envelope" data-toggle="dropdown" href="#">
+              <i class="asset-envelope"></i>
+              <span class="count-badge">12</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="list-block">
+                <a href="#">
+                  <i class="asset-mini-com"></i>
+                  <div class="txt-pic">
+                    <strong>1 mois d'abonnement HD offert</strong>
+                    <span>Le 17 janvier 2012 à 13h23</span>
+                  </div>
+                </a>
+              </li>
+              <li class="list-block">
+                <a href="#">
+                  <i class="asset-mini-fav"></i>
+                  <div class="txt-pic">
+                    <strong>Julien l'a ajouté en favoris</strong>
+                    <span>Le 17 janvier 2012 à 13h23</span>
+                  </div>
+                  <div class="img">
+                    <img src="http://placehold.it/30x30" width="30" height="30" alt="" />
+                  </div>
+                </a>
+              </li>
+              <li class="list-block">
+                <a href="#">
+                  <i class="asset-mini-com"></i>
+                  <div class="txt-pic">
+                    <strong>1 nouveau message</strong>
+                    <span>Le 17 janvier 2012 à 13h23</span>
+                  </div>
+                  <div class="img">
+                    <img src="http://placehold.it/30x30" width="30" height="30" alt="" />
+                  </div>
+                </a>
+              </li>
+              <li class="list-block">
+                <a href="#">
+                  <i class="asset-mini-com"></i>
+                  <div class="txt-pic">
+                    <strong>Tommy a aimé ce morceau</strong>
+                    <span>Le 17 janvier 2012 à 13h23</span>
+                  </div>
+                  <div class="img">
+                    <img src="http://placehold.it/30x30" width="30" height="30" alt="" />
+                  </div>
+                </a>
+              </li>
+              <li class="list-foot">
+                <a href="#">Afficher les 8 autres notifications</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="btn-nav btn-profile" data-toggle="dropdown">
+              <img class="img-circle" src="http://placehold.it/38x38" width="38" height="38" alt="" />
+              <i class="asset-arrow-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-mini">
+              <li><a href="#">Mon profil</a></li>
+              <li><a href="#">Mes radios</a></li>
+              <li><a href="#">Mon compte</a></li>
+              <li><a href="#">A propos</a></li>
+              <li><a href="#">Mentions légales</a></li>
+            </ul>
+          </li>
+          {% else %}
           <li class="dropdown">
             <a href="#" class="btn-nav" data-toggle="dropdown">Se connecter</a>
             <div class="dropdown-menu">
@@ -33,6 +147,7 @@
             </div>
           </li>
           <li><a href="#" class="btn-coral btn-register">S'inscrire</a></li>
+          {% endif %}
         </ul>
       </nav>
     </div>
