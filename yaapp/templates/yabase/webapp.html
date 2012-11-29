@@ -147,7 +147,7 @@ HTML, BODY { height: 100%; }
 
 
     {% ifequal sound_player 'deezer' %}
-    <script type="text/javascript" src="https://cdns-files.deezer.com/js/min/dzapp.js"></script>
+    <script type="text/javascript" src="https://cdns-files.deezer.com/js/min/dz.js"></script>
     {% endifequal %}
 
     <script type="text/javascript" src='/media/js/socket.io.js'></script>
@@ -702,8 +702,8 @@ HTML, BODY { height: 100%; }
 </body>
 {% endblock %}
 
-<div id="dz-root"></div>
 {% ifnotequal sound_player 'deezer' %}
+<div id="dz-root"></div>
 <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
 <script>
   DZ.init({
