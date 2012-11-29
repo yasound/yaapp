@@ -199,7 +199,7 @@
 .asset-mini-tracker {
   width: 48px;
   height: 29px;
-  background-position: -466px -92px;
+  background-position: -472px -55px;
 }
 .asset-player-play {
   width: 50px;
@@ -6470,7 +6470,7 @@ input::-ms-input-placeholder {
   background-repeat: no-repeat;
   width: 48px;
   height: 29px;
-  background-position: -466px -92px;
+  background-position: -472px -55px;
 }
 .dropdown-toggler input:checked + label:after {
   left: 39px;
