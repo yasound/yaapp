@@ -215,6 +215,7 @@ input::-ms-input-placeholder
 				height: 30px;
 				line-height: 15px;
 				padding: 5px 0;
+				.user-select(none);
 			}
 			.txt-pic
 			{
@@ -415,7 +416,7 @@ input::-ms-input-placeholder
 		height: 24px;
 		.input-text
 		{
-			width: 80px;
+			width: 72px;
 			height: 18px;
 			line-height: 18px;
 			padding: 2px 5px;
@@ -433,6 +434,91 @@ input::-ms-input-placeholder
 			#gradient > .vertical(#434748,#353839);
 		}
 	}
+}
+
+.dropdown-toggler
+{
+	position: absolute;
+	top: 9px;
+	right: 10px;
+	margin: 0;
+	input:checked,
+	input:not(:checked) {
+		width: 1px;
+		height: 1px;
+		margin: 0;
+		padding: 0;
+		opacity: 0;
+		position: absolute;
+		clip: rect(0 0 0 0);
+		clip: rect(0,0,0,0);
+		-webkit-appearance:	none;
+		-moz-appearance:	none;
+		-o-appearance:		none;
+		appearance:			none;
+	}
+	#foo:checked:before,
+	input+label {
+		display: inline-block;
+		padding-left: 84px;
+		position: relative;
+		cursor: pointer;
+		text-align: left;
+		height: 24px;
+		line-height: 24px;
+		#gradient > .vertical(#323636, #393d3e);
+		border-top: 1px solid #252728;
+		border-bottom: 1px solid #393d3e;
+		.border-radius(15px);
+		margin: 0;
+	}
+	#foo:checked:before,
+	input+label:not(:empty)
+	{
+		padding-right: 5px;
+	}
+	#foo:checked,
+	input+label:before { // Bg.
+		content: '\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0OFF';
+		position: absolute;
+		left: 2px;
+		top: 1px;
+		width: 78px;
+		height: 20px;
+		line-height: 20px;
+		font-size: 12px;
+		font-family: @defaultFont;
+		font-weight: bold;
+		text-align: center;
+		letter-spacing: 0;
+		color: #777777;
+		text-shadow: none;
+		font-weight: normal;
+		#gradient > .vertical(#444749,#353839);
+		border: 1px solid #232526;
+		.border-radius(15px);
+		text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+		.box-shadow(inset 0px 0px 8px 0px rgba(0, 0, 0, .3));
+	}
+	input:checked+label:before {
+		content: 'ON\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0\0000a0';
+		border: 1px solid #232526;
+		#gradient > .vertical(#fdc112,#e85e01);
+		color: #fff;
+		background-position: 0 0, 0 0;
+		text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+		.box-shadow(inset 0px 0px 8px 0px rgba(102, 41, 3, .6));
+	}
+	#foo:checked,
+	input+label:after { // Toggler button.
+		content: "";
+		position: absolute;
+		left: -2px;
+		top: -4px;
+		.asset();
+		.asset-mini-tracker();
+	}
+	input:checked+label:after { left: 39px; }
 }
 
 #search-bar
