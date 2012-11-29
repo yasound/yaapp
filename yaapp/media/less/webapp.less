@@ -1,5 +1,6 @@
 @import 'libs/mixins.less';
 
+@import 'webapp/mixins.less';
 @import 'webapp/variables.less';
 @import 'webapp/fonts.less';
 @import 'webapp/sprites.less';
@@ -203,7 +204,7 @@ input::-ms-input-placeholder
 		ul.dropdown-menu .list-block
 		{
 			position: relative;
-			i
+			i.icon
 			{
 				position: absolute;
 				top: 6px;
@@ -236,13 +237,15 @@ input::-ms-input-placeholder
 			}
 			.img
 			{
+				position: relative;
+				&:after { #effect > .glossy-absolute(); }
 				position: absolute;
 				right: 5px;
 				top: 6px;
 				img
 				{
 					display: block;
-					.box-shadow(0px 1px 1px 0px rgba(0,0,0,.5));
+					.box-shadow(0px 0px 4px 0px rgba(0,0,0,.5));
 				}
 			}
 		}
@@ -394,6 +397,33 @@ input::-ms-input-placeholder
 			position: absolute;
 			right: 5px;
 			top: 24px;
+		}
+	}
+	.dropdown-promo
+	{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		margin: 0;
+		height: 24px;
+		.input-text
+		{
+			width: 80px;
+			height: 18px;
+			line-height: 18px;
+			padding: 2px 5px;
+		}
+		button
+		{
+			display: block;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			bottom: 1px;
+			border: 1px solid #232526;
+			.border-radius(4px);
+			.box-shadow(inset 0 1px 0 0 #5c5f61);
+			#gradient > .vertical(#434748,#353839);
 		}
 	}
 }
