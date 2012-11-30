@@ -20,6 +20,8 @@ Yasound.Views.Footer = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this,
             'render',
+            'renderRadio',
+            'renderSong',
             'onRadioChanged',
             'onPlayerStop');
         $.subscribe('/current_radio/change', this.onRadioChanged);
@@ -33,19 +35,20 @@ Yasound.Views.Footer = Backbone.View.extend({
         $.unsubscribe('/player/stop', this.onPlayerStop);
 
         if (this.currentSong) {
-            this.currentSong.unbind('change', this.render, this);
+            this.currentSong.unbind('change', this.renderSong, this);
         }
     },
 
     render: function () {
+        this.renderRadio();
+        this.renderSong();
+        return this;
+    },
+
+    renderRadio: function() {
         if (this.radio) {
-            $('h2', this.el).text(this.radio.get('name'));
-
-            if (this.currentSong) {
-                var data = this.currentSong.toJSON();
-                $('h1', this.el).text(data.title_wrapped);
-            }
-
+            $('.current-radio h2', this.el).text(this.radio.get('name'));
+            $('.current-radio .cover img', this.el).attr('src', this.radio.get('picture'));
             if (this.radio.get('favorite')) {
                 $('.pl-star', this.el).removeClass('off').addClass('on');
             } else {
@@ -53,8 +56,14 @@ Yasound.Views.Footer = Backbone.View.extend({
             }
 
         }
+    },
 
-        return this;
+    renderSong: function () {
+        if (this.currentSong) {
+            var data = this.currentSong.toJSON();
+            $('.current-song h1', this.el).text(data.title_wrapped);
+            $('.current-song img', this.el).attr('src', data.cover);
+        }
     },
 
     toggleMiniPlayer: function (e) {
@@ -64,13 +73,13 @@ Yasound.Views.Footer = Backbone.View.extend({
 
     onRadioChanged: function (e, radio) {
         if (this.currentSong) {
-            this.currentSong.unbind('change', this.render, this);
+            this.currentSong.unbind('change', this.renderSong, this);
         }
         this.radio = radio;
         this.currentSong = radio.currentSong;
 
-        this.currentSong.bind('change', this.render, this);
-        this.render();
+        this.currentSong.bind('change', this.renderSong, this);
+        this.renderRadio();
     },
 
     onPlayerPlay: function () {
