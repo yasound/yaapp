@@ -29,6 +29,10 @@ Yasound.Views.Footer = Backbone.View.extend({
         $.unsubscribe('/current_radio/change', this.onRadioChanged);
         $.unsubscribe('/player/play', this.onPlayerPlay);
         $.unsubscribe('/player/stop', this.onPlayerStop);
+
+        if (this.radio && this.radio.currentSong) {
+            this.radio.currentSong.unbind('change', this.render, this);
+        }
     },
 
     render: function () {
@@ -58,7 +62,11 @@ Yasound.Views.Footer = Backbone.View.extend({
     },
 
     onRadioChanged: function (e, radio) {
+        if (this.radio && this.radio.currentSong) {
+            this.radio.currentSong.unbind('change', this.render, this);
+        }
         this.radio = radio;
+        this.radio.currentSong.bind('change', this.render, this);
         this.render();
     },
 
