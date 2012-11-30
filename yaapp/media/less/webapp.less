@@ -10,6 +10,7 @@
 body
 {
 	font-family: @defaultFont;
+	background: url("@{bg}") repeat;
 }
 
 input::-webkit-input-placeholder,
@@ -715,11 +716,12 @@ input::-ms-input-placeholder
 		padding: 2px 0 0 1px;
 		&:after { top: 2px; left: 1px; }
 	}
-	.status.play
+	.status
 	{
 		top: 4px;
 		left: 40px;
-		.asset-player-mini-play();
+		&.play { .asset-player-mini-play(); }
+		&.pause { .asset-player-mini-pause(); }
 	}
 	.player-controls, h1, h2
 	{

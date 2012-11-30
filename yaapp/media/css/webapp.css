@@ -216,6 +216,11 @@
   height: 25px;
   background-position: -263px -13px;
 }
+.asset-player-mini-pause {
+  width: 25px;
+  height: 25px;
+  background-position: -151px -130px;
+}
 .asset-cover {
   width: 100px;
   height: 73px;
@@ -5877,6 +5882,7 @@ a.yabutton-small {
 }
 body {
   font-family: ProximaNova, Arial, sans-serif;
+  background: url("../app/images/textures/dotted-grey.jpg") repeat;
 }
 input::-webkit-input-placeholder,
 input::-moz-placeholder,
@@ -6752,12 +6758,19 @@ input::-ms-input-placeholder {
   top: 2px;
   left: 1px;
 }
-.footer-player.mini .status.play {
+.footer-player.mini .status {
   top: 4px;
   left: 40px;
+}
+.footer-player.mini .status.play {
   width: 25px;
   height: 25px;
   background-position: -263px -13px;
+}
+.footer-player.mini .status.pause {
+  width: 25px;
+  height: 25px;
+  background-position: -151px -130px;
 }
 .footer-player.mini .player-controls,
 .footer-player.mini h1,
@@ -6831,12 +6844,19 @@ input::-ms-input-placeholder {
   top: 2px;
   left: 1px;
 }
-#footer > .mini .status.play {
+#footer > .mini .status {
   top: 4px;
   left: 40px;
+}
+#footer > .mini .status.play {
   width: 25px;
   height: 25px;
   background-position: -263px -13px;
+}
+#footer > .mini .status.pause {
+  width: 25px;
+  height: 25px;
+  background-position: -151px -130px;
 }
 #footer > .mini .player-controls,
 #footer > .mini h1,
@@ -6945,13 +6965,22 @@ input::-ms-input-placeholder {
     top: 2px;
     left: 1px;
   }
-  .footer-player .status.play,
-  .footer-player.mini .status.play {
+  .footer-player .status,
+  .footer-player.mini .status {
     top: 4px;
     left: 40px;
+  }
+  .footer-player .status.play,
+  .footer-player.mini .status.play {
     width: 25px;
     height: 25px;
     background-position: -263px -13px;
+  }
+  .footer-player .status.pause,
+  .footer-player.mini .status.pause {
+    width: 25px;
+    height: 25px;
+    background-position: -151px -130px;
   }
   .footer-player .player-controls,
   .footer-player.mini .player-controls,
