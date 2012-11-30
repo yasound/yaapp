@@ -351,6 +351,7 @@ $(document).ready(function () {
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.commonContext.headerView = new Yasound.Views.Header({}).render();
+                this.commonContext.footerView = new Yasound.Views.Footer({}).render();
 
                 if (Yasound.App.appName !== 'deezer') {
                     this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
