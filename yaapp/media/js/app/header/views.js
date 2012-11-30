@@ -6,9 +6,6 @@
 
 Namespace('Yasound.Views');
 
-/**
- * RadioCell - display a radio in a list
- */
 Yasound.Views.Header = Backbone.View.extend({
     el: '#header',
 

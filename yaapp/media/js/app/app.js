@@ -309,6 +309,7 @@ $(document).ready(function () {
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                     that.pushManager.monitorRadio(model);
+                    $.publish('/current_radio/change', model);
                 });
 
                 this.radioContext.radioUUID = 0;
@@ -351,6 +352,7 @@ $(document).ready(function () {
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
                 this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.commonContext.headerView = new Yasound.Views.Header({}).render();
+                this.commonContext.footerView = new Yasound.Views.Footer({}).render();
 
                 if (Yasound.App.appName !== 'deezer') {
                     this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
