@@ -309,6 +309,7 @@ $(document).ready(function () {
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                     that.pushManager.monitorRadio(model);
+                    $.publish('/current_radio/change', model);
                 });
 
                 this.radioContext.radioUUID = 0;
