@@ -12,7 +12,9 @@ Yasound.Views.Footer = Backbone.View.extend({
     events: {
         'click a.toggler': 'toggleMiniPlayer',
         'click a.cover': 'togglePlay',
-        'click a.pl-star': 'toggleFavorite'
+        'click a.pl-star': 'toggleFavorite',
+        'click a.pl-like': 'onLike',
+        'click a.pl-cart': 'onBuy'
     },
 
     initialize: function () {
@@ -30,8 +32,8 @@ Yasound.Views.Footer = Backbone.View.extend({
         $.unsubscribe('/player/play', this.onPlayerPlay);
         $.unsubscribe('/player/stop', this.onPlayerStop);
 
-        if (this.radio && this.radio.currentSong) {
-            this.radio.currentSong.unbind('change', this.render, this);
+        if (this.currentSong) {
+            this.currentSong.unbind('change', this.render, this);
         }
     },
 
@@ -39,9 +41,8 @@ Yasound.Views.Footer = Backbone.View.extend({
         if (this.radio) {
             $('h2', this.el).text(this.radio.get('name'));
 
-            var currentSong = this.radio.currentSong;
-            if (currentSong) {
-                var data = currentSong.toJSON();
+            if (this.currentSong) {
+                var data = this.currentSong.toJSON();
                 $('h1', this.el).text(data.title_wrapped);
             }
 
@@ -62,11 +63,13 @@ Yasound.Views.Footer = Backbone.View.extend({
     },
 
     onRadioChanged: function (e, radio) {
-        if (this.radio && this.radio.currentSong) {
-            this.radio.currentSong.unbind('change', this.render, this);
+        if (this.currentSong) {
+            this.currentSong.unbind('change', this.render, this);
         }
         this.radio = radio;
-        this.radio.currentSong.bind('change', this.render, this);
+        this.currentSong = radio.currentSong;
+
+        this.currentSong.bind('change', this.render, this);
         this.render();
     },
 
@@ -76,6 +79,25 @@ Yasound.Views.Footer = Backbone.View.extend({
 
     onPlayerStop: function () {
         $('.cover i').removeClass('pause').addClass('play');
+    },
+
+    onLike: function (e) {
+        e.preventDefault();
+        if (this.currentSong) {
+            var songId = this.currentSong.get('id');
+            var url = '/api/v1/song/' + songId + '/liker/';
+            $.publish('/song/like', this.currentSong);
+            $.post(url);
+        }
+    },
+
+    onBuy: function (e) {
+        e.preventDefault();
+        if (!this.currentSong) {
+            return;
+        }
+        var link = this.currentSong.get('buy_link');
+        window.open(link);
     },
 
     togglePlay: function (e) {
