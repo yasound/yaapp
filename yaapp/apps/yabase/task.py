@@ -252,7 +252,11 @@ def async_radio_broadcast_message(radio, message):
     recipients = User.objects.filter(radiouser__radio=radio, radiouser__favorite=True)
     logger.debug('async_radio_broadcast_message: radio=%s, message=%s' % (radio.id, unicode(message)))
     for recipient in recipients:
-        recipient.get_profile().send_message(sender=radio.creator, radio=radio, message=message)
+        profile = recipient.get_profile()
+        if profile is None:
+            continue
+        if profile.notifications_preferences.message_posted:
+            profile.send_message(sender=radio.creator, radio=radio, message=message)
 
 
 @task(ignore_result=True)
