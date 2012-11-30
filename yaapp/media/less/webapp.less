@@ -639,13 +639,20 @@ input::-ms-input-placeholder
 		padding: 0;
 		line-height: 20px;
 	}
+	.player-controls a:hover
+	{
+		filter: brightness(15%);
+		-webkit-filter: brightness(15%);
+		-ms-filter: brightness(15%);
+		-moz-filter: brightness(15%);
+		-o-filter: brightness(15%);
+	}
 	.pl-star
 	{
 		margin-right: 5px;
 		.asset-inline();
 		.asset-player-star();
-		&.on, &:hover { .asset-player-star-yellow(); }
-		&.on:hover { .asset-player-star(); }
+		&.on { .asset-player-star-yellow(); }
 	}
 	.pl-share
 	{
@@ -657,8 +664,7 @@ input::-ms-input-placeholder
 		margin-right: 5px;
 		.asset-inline();
 		.asset-player-like();
-		&.on, &:hover { .asset-player-like-red(); }
-		&.on:hover { .asset-player-like(); }
+		&.on { .asset-player-like-red(); }
 	}
 	.pl-cart
 	{
