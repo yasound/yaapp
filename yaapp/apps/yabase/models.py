@@ -577,7 +577,7 @@ class Radio(models.Model):
     deleted = models.BooleanField(default=False)
     name = models.CharField(_('name'), max_length=255)
     picture = models.ImageField(_('picture'), upload_to=yaapp_settings.RADIO_PICTURE_FOLDER, null=True, blank=True)
-    url = models.URLField(_('url'), null=True, blank=True)
+    url = models.CharField(_('url'), null=True, blank=True, max_length=200)
     uuid = models.CharField(_('uuid'), max_length=48, blank=True)
     description = models.TextField(_('description'), blank=True)
     genre = models.CharField(_('genre'), max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
