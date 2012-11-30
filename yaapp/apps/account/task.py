@@ -165,9 +165,3 @@ def async_tw_animator_activity(user_id, radio_uuid):
 
     logger.debug('done')
 
-
-@task(ignore_result=True)
-def async_remove_inactive_anonymous_users():
-    from models import AnonymousManager
-    manager = AnonymousManager()
-    manager.remove_inactive_users()

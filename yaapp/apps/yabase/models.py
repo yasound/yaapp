@@ -1080,7 +1080,7 @@ class Radio(models.Model):
             manager = AnonymousManager()
             anons = manager.anonymous_for_radio(self.uuid)
             if anons is not None:
-                total_count += anons.count()
+                total_count += len(anons)
                 for i, anon in enumerate(anons):
                     if i > max_anonymous:
                         break
@@ -1106,7 +1106,7 @@ class Radio(models.Model):
         manager = AnonymousManager()
         anons = manager.anonymous_for_radio(self.uuid)
         if anons is not None:
-            nb_anons = anons.count()
+            nb_anons = len(anons)
         return nb_users + nb_anons
 
     @property

@@ -790,11 +790,7 @@ if not PRODUCTION_MODE:
         "recommendations_cache_clean": {
             "task": "yarecommendation.task.async_clean_recommendation_cache",
             "schedule": crontab(minute=0, hour='*'),
-        },
-        "remove-inactive-anonymous-users": {
-            "task": "account.task.async_remove_inactive_anonymous_users",
-            "schedule": crontab(minute=0, hour='*'),
-        },
+        }
     }
 else:
     if hostname == 'yas-web-08':
@@ -849,11 +845,7 @@ else:
             "raido_popularity": {
                 "task": "yametrics.task.popularity_update_task",
                 "schedule": crontab(minute=0, hour='*'),
-            },
-            "remove-inactive-anonymous-users": {
-                "task": "account.task.async_remove_inactive_anonymous_users",
-                "schedule": crontab(minute=0, hour='*'),
-            },
+            }
         }
 
 
