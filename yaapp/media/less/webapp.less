@@ -89,6 +89,25 @@ input::-ms-input-placeholder
 	}	
 }
 
+// Extends TB .btn.
+.btn-basic
+{
+	color: #252627;
+	border-color: #cacacb;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 8px 12px;
+	.box-shadow(inset 1px 0 0 0 #fff, 0 1px 0 0 #fff);
+	#gradient > .vertical(#f5f5f6,#e8e9eb);
+	&:active,
+	&.active
+	{
+		.box-shadow(0 1px 0 0 #fff);
+		#gradient > .vertical(#e8e9eb,#f5f5f6);
+		background-position: 0 0;
+	}
+}
+
 /*
  * HEADER
  */
@@ -554,6 +573,39 @@ input::-ms-input-placeholder
 {
 	display: block;
 	float: left;	
+}
+
+/*
+ * SUBMENU
+ */
+.sub-menu .row-fluid
+{
+	height: 55px;
+	border: 1px solid #E7E7E7;
+	border-bottom-color: #dfdfdf;
+	.border-radius(7px 7px 0 0);
+	#gradient > .vertical(#f8f8f8,#f3f3f3);
+}
+
+.sub-menu .btn-group
+{
+	width: 86*4px;
+	margin: 10px auto 0 auto;
+	.btn
+	{
+		width: 60px;
+	}
+}
+
+/*
+ * CONTENT
+ */
+.content .row-fluid
+{
+	background: #fff;
+	border: 1px solid #E7E7E7;
+	border-top: none;
+	.border-radius(0 0 7px 7px);
 }
 
 /*

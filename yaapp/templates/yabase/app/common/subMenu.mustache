@@ -1,7 +1,19 @@
 {% load i18n %}
 {% load thumbnail %}
 {% load app_url %}
-<div id="sub-header">
+
+<div class="container-fluid sub-menu">
+    <div class="row-fluid">
+        <div class="btn-group">
+            <a class="btn btn-basic active" href="#">{% trans "Home" %}</a>
+            <a class="btn btn-basic" href="#">{% trans "Selection" %}</a>
+            <a class="btn btn-basic" href="#">{% trans "Popular" %}</a>
+            <a class="btn btn-basic" href="#">{% trans "Favorites" %}</a>
+        </div>
+    </div>
+</div>
+
+<!--div id="sub-header">
     <div class="responsive-container visible-phone">
         <a id='responsive-song' href="{% app_url webapp_radio app_name current_uuid %}" class='yatooltip'>
             <img id='track-image' src='{% if not static %}<% cover %>{% endif %}' width="32" height="32" alt="Radio Picto">
@@ -64,4 +76,4 @@
 				<input type="submit" value="" id="search-symbol" class="unstyle"/>
         	</div>
     </div>
-</div>
+</div-->

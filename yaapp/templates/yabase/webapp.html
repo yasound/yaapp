@@ -172,7 +172,6 @@ HTML, BODY { height: 100%; }
 
     {% compress js %}
     <script type="text/javascript" src='/media/js/app/header/views.js'></script>
-    <script type="text/javascript" src='/media/js/app/footer/views.js'></script>
     <script type="text/javascript" src='/media/js/app/common/models.js'></script>
     <script type="text/javascript" src='/media/js/app/common/views.js'></script>
     <script type="text/javascript" src='/media/js/app/mobileMenus/views.js'></script>
@@ -648,22 +647,18 @@ HTML, BODY { height: 100%; }
     </div>
 </div>
 
-<div id='teaser-bg' style='display:none;'></div>
-
+<!--div id='teaser-bg' style='display:none;'></div-->
 
 <div class="wrapper">
-  <div class="container-fluid container-gradient container-rounded">
-    
-  </div>
-  <div class="container-fluid container-gradient">
-    
-  </div>
-  <div class="container-fluid container-white">
-    
+  {% include 'yabase/app/common/subMenu.mustache' with static=1%}
+  <div class="container-fluid content">
+    <div class="row-fluid">
+      {% block content%}{%endblock%}
+    </div>
   </div>
 </div>
 
-<div id='webapp-container-parent'>
+<!--div id='webapp-container-parent'>
 <div id='webapp-container'>
   <div id='selected-genre' style='display:none;'><span>Genre selectionné</span></div>
   {% include "yabase/app/mobileLeftMenu.html" %}
@@ -704,9 +699,11 @@ HTML, BODY { height: 100%; }
     </div>
   </div>
 
-  {% block content%}{%endblock%}</div>
-</div>
+  </div>
+</div-->
+{% ifnotequal app_name 'deezer' %}
 {% include "yabase/app/footer.html" %}
+{% endifnotequal %}
 </body>
 {% endblock %}
 
