@@ -11,7 +11,8 @@ Yasound.Views.Footer = Backbone.View.extend({
 
     events: {
         'click a.toggler': 'toggleMiniPlayer',
-        'click a.cover': 'togglePlay'
+        'click a.cover': 'togglePlay',
+        'click a.pl-star': 'toggleFavorite'
     },
 
     initialize: function () {
@@ -39,6 +40,13 @@ Yasound.Views.Footer = Backbone.View.extend({
                 var data = currentSong.toJSON();
                 $('h1', this.el).text(data.title_wrapped);
             }
+
+            if (this.radio.get('favorite')) {
+                $('.pl-star', this.el).removeClass('off').addClass('on');
+            } else {
+                $('.pl-star', this.el).removeClass('on').addClass('off');
+            }
+
         }
 
         return this;
@@ -68,6 +76,20 @@ Yasound.Views.Footer = Backbone.View.extend({
             Yasound.App.player.play();
         } else {
             Yasound.App.player.stop();
+        }
+    },
+
+    toggleFavorite: function (e) {
+        var radio = this.radio;
+        if (!radio) {
+            return;
+        }
+        if (radio.get('favorite')) {
+            radio.removeFromFavorite();
+            $('.pl-star', this.el).removeClass('on').addClass('off');
+        } else {
+            radio.addToFavorite();
+            $('.pl-star', this.el).removeClass('off').addClass('on');
         }
     }
 
