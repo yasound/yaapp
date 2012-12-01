@@ -26,6 +26,11 @@ input::-ms-input-placeholder
 	margin: auto;
 }
 
+.wrapper > .container-fluid
+{
+	margin: 0 20px;
+}
+
 /*
  * BUTTONS
  */
@@ -108,6 +113,19 @@ input::-ms-input-placeholder
 	}
 }
 
+.btn-select
+{
+	position: relative;
+	.box-shadow(1px 0 0 0 #eaeaea);
+	padding-right: 35px;
+	.asset-select
+	{
+		position: absolute;
+		right: 5px;
+		top: 6px;
+	}
+}
+
 /*
  * HEADER
  */
@@ -123,6 +141,10 @@ input::-ms-input-placeholder
 		display: block;
 		text-indent: -9999px;
 		float: left;
+	}
+	.container-fluid
+	{
+		margin: 0;
 	}
 }
 
@@ -578,8 +600,9 @@ input::-ms-input-placeholder
 /*
  * SUBMENU
  */
-.sub-menu .row-fluid
+.sub-menu
 {
+	position: relative;
 	height: 55px;
 	border: 1px solid #E7E7E7;
 	border-bottom-color: #dfdfdf;
@@ -589,18 +612,25 @@ input::-ms-input-placeholder
 
 .sub-menu .btn-group
 {
-	width: 86*4px;
+	width: 91*4px;
 	margin: 10px auto 0 auto;
 	.btn
 	{
-		width: 60px;
+		width: 65px;
 	}
+}
+
+.sub-menu .dropdown-genre
+{
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }
 
 /*
  * CONTENT
  */
-.content .row-fluid
+.content
 {
 	background: #fff;
 	border: 1px solid #E7E7E7;
@@ -621,6 +651,10 @@ input::-ms-input-placeholder
 	text-shadow: 1px 1px 1px rgba(0,0,0,.7);
 	padding: 15px 0;
 	z-index: 10;
+	.container-fluid
+	{
+		margin: 0;
+	}
 	.current-radio,
 	.current-song
 	{

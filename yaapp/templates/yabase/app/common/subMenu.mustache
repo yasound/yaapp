@@ -5,75 +5,23 @@
 <div class="container-fluid sub-menu">
     <div class="row-fluid">
         <div class="btn-group">
-            <a class="btn btn-basic active" href="#">{% trans "Home" %}</a>
-            <a class="btn btn-basic" href="#">{% trans "Selection" %}</a>
-            <a class="btn btn-basic" href="#">{% trans "Popular" %}</a>
-            <a class="btn btn-basic" href="#">{% trans "Favorites" %}</a>
+            <a href="{% app_url webapp app_name %}" class="btn btn-basic {% ifequal submenu_number 1 %}active{% endifequal %}" href="#">{% trans "Selection" %}</a>
+            <a href="{% app_url webapp_top app_name %}" class="btn btn-basic {% ifequal submenu_number 2 %}active{% endifequal %}" href="#">{% trans "Top" %}</a>
+            <a href="{% app_url webapp_friends app_name %}" class="btn btn-basic {% ifequal submenu_number 3 %}active{% endifequal %}" href="#">{% trans "People" %}</a>
+            <a href="{% app_url webapp_favorites app_name %}" class="btn btn-basic {% ifequal submenu_number 4 %}active{% endifequal %}" href="#">{% trans "Favorites" %}</a>
+        </div>
+        <div class="dropdown dropdown-genre">
+            <a class="btn btn-basic btn-select" data-toggle="dropdown" href="#">Trier par genre <i class="asset-select"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">test</a></li>
+                <li><a href="#">test 2</a></li>
+            </ul>
         </div>
     </div>
 </div>
 
-<!--div id="sub-header">
-    <div class="responsive-container visible-phone">
-        <a id='responsive-song' href="{% app_url webapp_radio app_name current_uuid %}" class='yatooltip'>
-            <img id='track-image' src='{% if not static %}<% cover %>{% endif %}' width="32" height="32" alt="Radio Picto">
-        </a>
-        <a id="play-btn">
-            <i class="icon-play"></i>
-        </a>
-        <div class='responsive-infos'>
-            <div id='responsive-player-title'><% name %></div>
-        </div>
-        <div class="responsive-header-social-btn">
-            <a href="#"><img id='responsive-love-btn' src="/media/app/images/responsive-heart-icon-orange.png" alt="{% trans 'Like song' %}"/></a>
-            <div id='mobile-menu-share'>
-                <a id='responsive-share-btn' href="#">
-                    <img src="/media/app/images/responsive-share-icon.png" alt="{% trans 'Share' %}"/>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="container hidden-phone" id="sub-header-container">
-		<div id="sub-header-pointer" class='menu{{submenu_number}}'></div>
-        <ul id="sub-header-nav">
-            <li class="first {% ifequal submenu_number 1 %}selected{% endifequal %}">
-                <a href='{% app_url webapp app_name %}' class='mobile-selection'></a>
-                <a href='{% app_url webapp app_name %}' id="selection">{% trans "Selection" %}</a>
-            </li>
-            <li class="{% ifequal submenu_number 2 %}selected{% endifequal %}">
-                <a href='{% app_url webapp_top app_name %}' class='mobile-top'></a>
-                <a href='{% app_url webapp_top app_name %}' id='top' >{% trans "Top" %}</a>
-            </li>
-            <li class="{% ifequal submenu_number 3 %}selected{% endifequal %}">
-                <a href='{% app_url webapp_friends app_name %}' class='mobile-friends'></a>
-                <a href='{% app_url webapp_friends app_name %}' id='friends'>{% trans "People" %}</a>
-            </li>
-            <li class="{% ifequal submenu_number 4 %}selected{% endifequal %}">
-                <a href='{% app_url webapp_favorites app_name %}' class='mobile-favorites'></a>
-                <a href='{% app_url webapp_favorites app_name %}' id='favorites'>{% trans "Favorites" %}</a>
-            </li>
-        </ul>
-        <div>
-            <form>
-                <div class="genre-selector"><img src="/media/app/images/radio-style-symbol.png" alt="radio symbol"/></div>
-                <p id="form" class="jqtransform">
-					<div id="fix-genre">
-                    {{ genre_form.genre }}
-					</div>
-				</p>
-            </form>
-        </div>
-        <div id="sub-header-separation">
-        </div>
-            {% if request.user.is_authenticated %}
-            <a id="create-radio" href="{% app_url webapp_radios app_name %}">
-                <span>{% trans "Create radio" %}</span>
-            </a>
-            {% endif %}
-        	<div id="search-bar">
-				<input type="text" id="search-input" class="unstyle" placeholder="{% trans "Search" %}" maxlength="25"/>
-				<input type="submit" value="" id="search-symbol" class="unstyle"/>
-        	</div>
-    </div>
-</div-->
+<!-- {% if request.user.is_authenticated %}
+<a id="create-radio" href="{% app_url webapp_radios app_name %}">
+    <span>{% trans "Create radio" %}</span>
+</a>
+{% endif %} -->
