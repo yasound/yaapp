@@ -616,7 +616,66 @@ input::-ms-input-placeholder
  */
 .teaser
 {
-	height: 260px;
+	.argument
+	{
+		right: 150px;
+		.transition(.5s ease all);
+		&.show
+		{
+			right: 100px;
+			.opacity(100);
+		}
+		&.hide
+		{
+			right: 50px;
+			.opacity(0);
+		}
+		.opacity(0);
+		position: absolute;
+		bottom: 80px;
+		width: 225px;
+		line-height: 25px;
+		padding-left: 75px;
+		i
+		{
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	}
+	.paginate
+	{
+		position: absolute;
+		bottom: 15px;
+		right: 200px;
+		li
+		{
+			display: block;
+			float: left;
+			margin-right: 5px;
+		}
+		a
+		{
+			display: block;
+			width: 8px;
+			height: 8px;
+			text-indent: -9999px;
+			background: transparent;
+			border: 2px solid #fff;
+			.border-radius(50%);
+			.opacity(20);
+			&.active
+			{
+				background: #fff;
+				cursor: default;
+				&:hover { .opacity(20); }
+			}
+			&:hover
+			{
+				.opacity(40);
+			}
+		}
+	}
 }
 .teaser-bg
 {
@@ -631,6 +690,7 @@ input::-ms-input-placeholder
 }
 .teaser-content
 {
+	height: 250px;
 	position: relative;
 	h1 { font-weight: normal; font-size: 30px; padding-top: 30px; }
 	h2 { font-size: 18px; font-weight: normal; }
@@ -642,6 +702,32 @@ input::-ms-input-placeholder
 		position: absolute;
 		right: 50px;
 		top: 0;
+	}
+}
+.teaser-close
+{
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	color: #fff;
+	font-size: 20px;
+	cursor: pointer;
+	width: 23px;
+	height: 23px;
+	line-height: 24px;
+	background: rgba(0,0,0,.3);
+	display: block;
+	text-align: center;
+	.border-radius(50%);
+	border: 3px solid rgba(255,255,255,.3);
+	top: 34px;
+	right: 0;
+	position: absolute;
+	&:hover
+	{
+		color: #fff;
+		background: rgba(0,0,0,.5);
+		text-decoration: none;
+		border-color: rgba(255,255,255,.5);
 	}
 }
 
