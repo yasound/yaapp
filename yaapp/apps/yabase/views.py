@@ -1267,8 +1267,8 @@ class WebAppView(View):
         context['base_url'] = reverse('yabase.views.radio_recommendations')
         context['bdata'] = json.dumps([radio for radio in radio_data], cls=MongoAwareEncoder)
         context['g_page'] = 'home'
-
-        return context, 'yabase/app/home/homePage.html'
+        context['mustache_template'] = 'yabase/app/home/homePage.mustache'
+        return context, 'yabase/app/static.html'
 
     def radio(self, request, context, *args, **kwargs):
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])

@@ -658,7 +658,9 @@ HTML, BODY { height: 100%; }
     </div>
   </section>
   {% include 'yabase/app/common/subMenu.mustache' with static=1%}
+  <div class='content'>
   {% block content%}{%endblock%}
+  </div>
 </div>
 
 <!--div id='webapp-container-parent'>
