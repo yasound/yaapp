@@ -286,6 +286,16 @@
   height: 26px;
   background-position: -223px -58px;
 }
+.asset-note {
+  width: 26px;
+  height: 26px;
+  background-position: -150px -94px;
+}
+.asset-fav {
+  width: 26px;
+  height: 26px;
+  background-position: -186px -94px;
+}
 .asset-alert-app-logo {
   width: 72px;
   height: 44px;
@@ -6659,6 +6669,9 @@ input::-ms-input-placeholder {
   background: #fff;
   border: 1px solid #E7E7E7;
   border-top: none;
+  padding-top: 20px;
+}
+.content-zone.last {
   -webkit-border-radius: 0 0 7px 7px;
   -moz-border-radius: 0 0 7px 7px;
   border-radius: 0 0 7px 7px;
@@ -7172,6 +7185,12 @@ input::-ms-input-placeholder {
   .container-fluid {
     padding: 0 10px;
   }
+  .content-zone {
+    padding: 10px;
+  }
+  .block-content {
+    margin-bottom: 10px;
+  }
   .wrapper > .container-fluid,
   .content > .container-fluid {
     margin: 0 10px;
@@ -7322,6 +7341,21 @@ input::-ms-input-placeholder {
     -moz-box-shadow: inset 0 0 0 1px #000000;
     box-shadow: inset 0 0 0 1px #000000;
   }
+  .asset-alert-app-logo {
+    display: none;
+  }
+  .content-alert {
+    text-align: left;
+    padding: 10px 60px 10px 10px;
+  }
+  .content-alert .btn-sky {
+    background: none;
+    display: inline;
+    border: none;
+    color: #25b2f9;
+    margin: 0;
+    padding: 0;
+  }
 }
 @media (min-width: 768px) and (max-width: 979px) {
   #search-bar {
@@ -7330,5 +7364,16 @@ input::-ms-input-placeholder {
   #search-bar input {
     width: 75%;
     margin-left: 10px;
+  }
+  .header-nav .btn-register {
+    width: 60px;
+  }
+  .asset-alert-app-logo {
+    display: none;
+  }
+  .content-alert {
+    padding-right: 60px;
+    text-align: left;
+    padding-left: 20px;
   }
 }
