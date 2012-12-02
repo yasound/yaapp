@@ -370,7 +370,7 @@ $(document).ready(function () {
 
 
                 this.commonContext.subMenuView = new Yasound.Views.SubMenu({
-                    el: '#submenu-container',
+                    el: '.sub-menu',
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio
                 }).render();
