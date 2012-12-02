@@ -172,6 +172,7 @@ HTML, BODY { height: 100%; }
 
     {% compress js %}
     <script type="text/javascript" src='/media/js/app/header/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/footer/views.js'></script>
     <script type="text/javascript" src='/media/js/app/common/models.js'></script>
     <script type="text/javascript" src='/media/js/app/common/views.js'></script>
     <script type="text/javascript" src='/media/js/app/mobileMenus/views.js'></script>
@@ -649,7 +650,7 @@ HTML, BODY { height: 100%; }
 
 <!--div id='teaser-bg' style='display:none;'></div-->
 
-<div class="wrapper">
+<div class="wrapper" id='main-content'>
   {% include 'yabase/app/common/subMenu.mustache' with static=1%}
   <div class="container-fluid content-alert app-alert">
     <a type="button" class="asset-close" data-dismiss="alert">×</a>
