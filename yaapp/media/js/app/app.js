@@ -30,7 +30,7 @@ $(document).ready(function () {
     Yasound.App.LanguageCode = g_language_code;
 
     Yasound.App.CONTENT_EL = '.content';
-    Yasound.App.CONTENT_HTML = "<div class='container-fluid content'/>";
+    Yasound.App.CONTENT_HTML = "<div class='content'/>";
 
     if (cookies.get('radio') && !Yasound.App.ignoreRadioCookie) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');

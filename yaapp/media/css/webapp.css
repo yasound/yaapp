@@ -5921,7 +5921,8 @@ input::-ms-input-placeholder {
   max-width: 1000px;
   margin: auto;
 }
-.wrapper > .container-fluid {
+.wrapper > .container-fluid,
+.content > .container-fluid {
   margin: 0 20px;
 }
 /*
@@ -6654,7 +6655,7 @@ input::-ms-input-placeholder {
 /*
  * CONTENT
  */
-.content {
+.content-zone {
   background: #fff;
   border: 1px solid #E7E7E7;
   border-top: none;
@@ -7171,7 +7172,8 @@ input::-ms-input-placeholder {
   .container-fluid {
     padding: 0 10px;
   }
-  .wrapper > .container-fluid {
+  .wrapper > .container-fluid,
+  .content > .container-fluid {
     margin: 0 10px;
   }
   .header-navbar {
