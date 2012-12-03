@@ -1688,27 +1688,36 @@ class AnonymousManager():
 
     def _remove_from_radio(self, anonymous_id, radio_uuid):
         radio_key = 'radio_%s.anonymous' % (radio_uuid)
+
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+
         anons = yacore_cache.cached_object(radio_key, [])
+        new_anons = []
         for anon in anons:
-            if anon.get('anonymous_id') == anonymous_id:
-                anons.remove(anon)
-                break
-        yacore_cache.cache_object(radio_key, anons, AnonymousManager.ANONYMOUS_TTL)
+            if anon.get('anonymous_id') != anonymous_id and anon.get('updated') >= expired_date:
+                new_anons.append(anon)
+
+        yacore_cache.cache_object(radio_key, new_anons, AnonymousManager.ANONYMOUS_TTL)
 
         anon_key = 'anonymous_%s.radio' % (anonymous_id)
         yacore_cache.invalidate_object(anon_key)
 
     def _add_to_radio(self, anonymous_id, radio_uuid, doc):
         radio_key = 'radio_%s.anonymous' % (radio_uuid)
+
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+
         anons = yacore_cache.cached_object(radio_key, [])
+        new_anons = []
         for anon in anons:
-            if anon.get('anonymous_id') == anonymous_id:
-                anons.remove(anon)
-                break
+            if anon.get('anonymous_id') != anonymous_id and anon.get('updated') >= expired_date:
+                new_anons.append(anon)
 
         anon_key = 'anonymous_%s.radio' % (anonymous_id)
-        anons.append(doc)
-        yacore_cache.cache_object(radio_key, anons, AnonymousManager.ANONYMOUS_TTL)
+        new_anons.append(doc)
+        yacore_cache.cache_object(radio_key, new_anons, AnonymousManager.ANONYMOUS_TTL)
         yacore_cache.cache_object(anon_key, radio_uuid, AnonymousManager.ANONYMOUS_TTL)
 
     def upsert_anonymous(self, anonymous_id, radio_uuid, city_record=None):
