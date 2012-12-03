@@ -316,6 +316,16 @@
   height: 55px;
   background-position: -2px -162px;
 }
+.asset-teaser-radio {
+  width: 55px;
+  height: 55px;
+  background-position: -122px -161px;
+}
+.asset-teaser-link {
+  width: 65px;
+  height: 55px;
+  background-position: -182px -162px;
+}
 /* Textfields */
 [class^="textfield-"],
 [class*=" textfield-"] {
@@ -6765,7 +6775,7 @@ input::-ms-input-placeholder {
 }
 .teaser .argument i {
   position: absolute;
-  top: 0;
+  top: -3px;
   left: 0;
 }
 .teaser .paginate {
