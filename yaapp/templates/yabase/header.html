@@ -141,16 +141,16 @@
             <a href="#" class="btn-nav" data-toggle="dropdown">Se connecter</a>
             <div class="dropdown-menu">
               <div class="dropdown-block">
-                <a href="#" class="btn-sky">{% trans 'Login with Twitter' %}</a>
-                <a href="#" class="btn-navy">{% trans 'Login with Facebook' %}</a>
+                <a href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow" class="btn-sky">{% trans 'Login with Twitter' %}</a>
+                <a href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow" class="btn-navy">{% trans 'Login with Facebook' %}</a>
               </div>
               <div class="dropdown-block">
-                <form class="dropdown-form" id='login-form' method='post'>{% csrf_token %}
-                  <input class="input-text textfield-email" type="text" placeholder="Votre email" />
-                  <input class="input-text textfield-pwd" type="password" placeholder="Votre mot de passe" />
+                <form class="dropdown-form" id='login-form' method='post' action="{% app_url webapp_login app_name %}">{% csrf_token %}
+                  <input class="input-text textfield-email" required="required" type="text" name="email" placeholder="{% trans 'Your email' %}" />
+                  <input class="input-text textfield-pwd" type="password" name="password" required="required"  placeholder="{% trans 'Your password' %}" />
                   <button type="submit" class="btn-coral btn-connect">Connexion</button>
                   <div class="clearfix"></div>
-                  <div><a class="lost-password" href="#">Mot de passe perdu ?</a></div>
+                  <div><a class="lost-password" href='{% url lost_password %}'>Mot de passe perdu ?</a></div>
                 </form>
               </div>
             </div>

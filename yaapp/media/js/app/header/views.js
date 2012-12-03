@@ -17,7 +17,8 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #profile-menu .my-settings': 'onMySettings',
         'click #profile-menu .about': 'onAbout',
         'click #profile-menu .legal': 'onLegal',
-        'click #profile-menu .logout': 'onLogout'
+        'click #profile-menu .logout': 'onLogout',
+        'submit #login-form': 'submitLogin'
     },
 
     initialize: function () {
@@ -109,6 +110,34 @@ Yasound.Views.Header = Backbone.View.extend({
         e.preventDefault();
         window.location = Yasound.App.root + 'logout';
         return false;
+    },
+
+    submitLogin: function(e) {
+        e.preventDefault();
+        var form = $('#login-form', this.el);
+        $('.error-msg', form).remove();
+        $('input').removeClass('error');
+
+        var url = form.attr('action');
+        $.post(url, form.serializeArray(), function(data) {
+            var success = data.success;
+            if (!data.success) {
+                colibri(gettext('Login error'));
+                var errors = data.errors;
+                if (errors) {
+                    _.each(errors, function(value, key) {
+                        var $input = $('input[name=' + key + ']', form);
+                        $input.addClass('error');
+                        $input.after('<div class="error-msg">' + value + '</div>');
+                    });
+                }
+            } else {
+                window.location = Yasound.App.root;
+            }
+        }).error(function() {
+            colibri(gettext('Error while login in', 'colibri-error'));
+        });
     }
+
 
 });
