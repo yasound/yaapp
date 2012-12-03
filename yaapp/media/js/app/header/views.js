@@ -22,7 +22,11 @@ Yasound.Views.Header = Backbone.View.extend({
     },
 
     initialize: function () {
-        _.bindAll(this, 'render', 'hidePopupProfile');
+        _.bindAll(this, 'render', 'hidePopupProfile', 'onNotification', 'onNotificationUnreadCount');
+        if (Yasound.App.Router.pushManager.enablePush) {
+            Yasound.App.Router.pushManager.on('notification', this.onNotification);
+            Yasound.App.Router.pushManager.on('notification_unread_count', this.onNotificationUnreadCount);
+        }
     },
 
     onClose: function () {
@@ -137,7 +141,20 @@ Yasound.Views.Header = Backbone.View.extend({
         }).error(function() {
             colibri(gettext('Error while login in', 'colibri-error'));
         });
+    },
+
+    onNotification: function(notification) {
+        colibri(gettext('New notification received'));
+    },
+
+    onNotificationUnreadCount: function(data) {
+        var unreadCount = data.count;
+        var el = $('.count-badge', this.el);
+        el.html(unreadCount);
+        if (unreadCount > 0) {
+            el.removeClass('hidden');
+        } else {
+            el.addClass('hidden');
+        }
     }
-
-
 });
