@@ -16,7 +16,8 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #profile-menu .my-radios': 'onMyRadios',
         'click #profile-menu .my-settings': 'onMySettings',
         'click #profile-menu .about': 'onAbout',
-        'click #profile-menu .legal': 'onLegal'
+        'click #profile-menu .legal': 'onLegal',
+        'click #profile-menu .logout': 'onLogout'
     },
 
     initialize: function () {
@@ -101,6 +102,12 @@ Yasound.Views.Header = Backbone.View.extend({
         Yasound.App.Router.navigate('legal/', {
             trigger: true
         });
+        return false;
+    },
+
+    onLogout: function (e) {
+        e.preventDefault();
+        window.location = Yasound.App.root + 'logout';
         return false;
     }
 
