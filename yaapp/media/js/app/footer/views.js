@@ -42,6 +42,7 @@ Yasound.Views.Footer = Backbone.View.extend({
     render: function () {
         this.renderRadio();
         this.renderSong();
+        this.renderVolume();
         return this;
     },
 
@@ -64,6 +65,18 @@ Yasound.Views.Footer = Backbone.View.extend({
             $('.current-song h1', this.el).text(data.title_wrapped);
             $('.current-song img', this.el).attr('src', data.cover);
         }
+    },
+
+    renderVolume: function() {
+        var volumeSlider = this.$('#volume-slider');
+        volumeSlider.slider({
+            orientation: "vertical",
+            range: "min",
+            min: 0,
+            max: 100
+        });
+        volumeSlider.bind('slide', this.onVolumeSlide);
+        volumeSlider.slider('value', Yasound.App.player.volume());
     },
 
     toggleMiniPlayer: function (e) {
@@ -130,6 +143,10 @@ Yasound.Views.Footer = Backbone.View.extend({
             radio.addToFavorite();
             $('.pl-star', this.el).removeClass('off').addClass('on');
         }
+    },
+
+    onVolumeSlide: function(e, ui) {
+        Yasound.App.player.setVolume(ui.value);
     }
 
 });
