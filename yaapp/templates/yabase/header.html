@@ -69,7 +69,7 @@
           <li class="dropdown">
             <a class="btn-nav btn-envelope" data-toggle="dropdown" href="#">
               <i class="asset-envelope"></i>
-              <span class="count-badge">12</span>
+              <span class="count-badge {% ifequal notification_count 0 %}hidden{% endifequal %}">{{ notification_count }}</span>
             </a>
             <ul class="dropdown-menu">
               <li class="list-block">
