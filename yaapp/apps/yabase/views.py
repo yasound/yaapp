@@ -95,6 +95,7 @@ def get_root(app_name):
 
     if app_name == 'app':
         root = '/'
+
     return root
 
 
@@ -1670,7 +1671,7 @@ class WebAppView(View):
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
-        root = get_root(app_name)
+        root = settings.DEFAULT_HTTP_PROTOCOL + '://' + request.get_host() + get_root(app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
@@ -1833,7 +1834,7 @@ class WebAppView(View):
 
         genre_form = RadioGenreForm()
 
-        root = get_root(app_name)
+        root = settings.DEFAULT_HTTP_PROTOCOL + '://' + request.get_host() + get_root(app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer':
