@@ -77,3 +77,21 @@ Yasound.Data.Models.Notifications = Backbone.Paginator.requestPager.extend({
         });
     }
 });
+
+Yasound.Data.Models.NotificationsDigest = Backbone.Paginator.requestPager.extend({
+    model: Yasound.Data.Models.Notification,
+    url: '/api/v1/notifications/',
+    perPageAttribute: 'limit',
+    skipAttribute: 'offset',
+    perPage: 4,
+    page:0,
+    customAttribute1: 'read_status',
+    customParam1: 'unread',
+
+    parse: function(response) {
+        var results = response.objects;
+        this.totalCount = response.meta.total_count;
+        this.totalPages = this.totalCount / this.perPage;
+        return results;
+    }
+});

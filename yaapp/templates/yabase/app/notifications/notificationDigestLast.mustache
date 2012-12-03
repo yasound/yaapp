@@ -1,0 +1,10 @@
+{% load i18n %}
+{% load app_url %}
+<li class="list-foot">
+    <%^remaining%>
+    <a href="{% app_url webapp_notifications app_name %}">{% trans "Go to notifications center" %}</a>
+    <%/remaining%>
+    <%#remaining%>
+    <a href="{% app_url webapp_notifications app_name %}">{% trans "Display the" %} <% remaining%> {% trans "others notifications" %}</a>
+    <%/remaining%>
+</li>

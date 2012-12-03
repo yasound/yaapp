@@ -18,11 +18,16 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #profile-menu .about': 'onAbout',
         'click #profile-menu .legal': 'onLegal',
         'click #profile-menu .logout': 'onLogout',
+        'click #notifications-menu .list-foot a': 'onNotifications',
+        'click .btn-envelope': 'refreshNotificationsDigest',
         'submit #login-form': 'submitLogin'
     },
 
     initialize: function () {
-        _.bindAll(this, 'render', 'hidePopupProfile', 'onNotification', 'onNotificationUnreadCount');
+        _.bindAll(this, 'render', 'hidePopupProfile', 'onNotification', 'onNotificationUnreadCount', 'hidePopupNotifications');
+
+        this.notificationsDigest = new Yasound.Data.Models.NotificationsDigest({});
+
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification);
             Yasound.App.Router.pushManager.on('notification_unread_count', this.onNotificationUnreadCount);
@@ -33,6 +38,11 @@ Yasound.Views.Header = Backbone.View.extend({
     },
 
     render: function () {
+        this.notificationsDigestView = new Yasound.Views.NotificationsDigest({
+            el: '#notifications-menu',
+            collection: this.notificationsDigest
+        });
+
         return this;
     },
 
@@ -56,6 +66,10 @@ Yasound.Views.Header = Backbone.View.extend({
 
     hidePopupProfile: function () {
         $('#profile-menu').parent().removeClass('open');
+    },
+
+    hidePopupNotifications: function () {
+        $('#notifications-menu').parent().removeClass('open');
     },
 
     onRegister: function (e) {
@@ -147,6 +161,14 @@ Yasound.Views.Header = Backbone.View.extend({
         colibri(gettext('New notification received'));
     },
 
+    onNotifications: function(e) {
+        e.preventDefault();
+        this.hidePopupNotifications();
+        Yasound.App.Router.navigate('notifications/', {
+            trigger: true
+        });
+    },
+
     onNotificationUnreadCount: function(data) {
         var unreadCount = data.count;
         var el = $('.count-badge', this.el);
@@ -156,5 +178,10 @@ Yasound.Views.Header = Backbone.View.extend({
         } else {
             el.addClass('hidden');
         }
+    },
+
+    refreshNotificationsDigest: function (e) {
+        e.preventDefault();
+        this.notificationsDigest.fetch();
     }
 });
