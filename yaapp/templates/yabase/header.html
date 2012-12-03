@@ -16,7 +16,7 @@
           <li><a href="#" class="btn-nav">Découvrir</a></li>
           {% if request.user.is_authenticated %}
           <li class="dropdown">
-            <a class="btn-nav" data-toggle="dropdown" href="#"><i class="asset-hd-off"></i></a>
+            <a class="btn-nav btn-hd" data-toggle="dropdown" href="#"><i class="asset-hd-off"></i></a>
             <ul class="dropdown-menu dropdown-bordered">
               <li class="list-block">
                 <div class="a">
@@ -71,55 +71,7 @@
               <i class="asset-envelope"></i>
               <span class="count-badge {% ifequal notification_count 0 %}hidden{% endifequal %}">{{ notification_count }}</span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="list-block">
-                <a href="#">
-                  <i class="icon asset-mini-com"></i>
-                  <div class="txt-pic">
-                    <strong>1 mois d'abonnement HD offert</strong>
-                    <span>Le 17 janvier 2012 à 13h23</span>
-                  </div>
-                </a>
-              </li>
-              <li class="list-block">
-                <a href="#">
-                  <i class="icon asset-mini-fav"></i>
-                  <div class="txt-pic">
-                    <strong>Julien l'a ajouté en favoris</strong>
-                    <span>Le 17 janvier 2012 à 13h23</span>
-                  </div>
-                  <div class="img">
-                    <img src="http://placehold.it/30x30" width="30" height="30" alt="" />
-                  </div>
-                </a>
-              </li>
-              <li class="list-block">
-                <a href="#">
-                  <i class="icon asset-mini-com"></i>
-                  <div class="txt-pic">
-                    <strong>1 nouveau message</strong>
-                    <span>Le 17 janvier 2012 à 13h23</span>
-                  </div>
-                  <div class="img">
-                    <img src="http://placehold.it/30x30" width="30" height="30" alt="" />
-                  </div>
-                </a>
-              </li>
-              <li class="list-block">
-                <a href="#">
-                  <i class="icon asset-mini-com"></i>
-                  <div class="txt-pic">
-                    <strong>Tommy a aimé ce morceau</strong>
-                    <span>Le 17 janvier 2012 à 13h23</span>
-                  </div>
-                  <div class="img">
-                    <img src="http://placehold.it/30x30" width="30" height="30" alt="" />
-                  </div>
-                </a>
-              </li>
-              <li class="list-foot">
-                <a href="#">Afficher les 8 autres notifications</a>
-              </li>
+            <ul class="dropdown-menu" id='notifications-menu'>
             </ul>
           </li>
           <li class="dropdown">
