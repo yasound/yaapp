@@ -29,10 +29,12 @@ class NotificationsManager():
             print 'NotificationManager is disabled (settings.YAMESSAGE_NOTIFICATION_MANAGER_ENABLED = False)'
             return
         from_user_name = None
+        from_user_username = None
         if from_user_id is not None:
             try:
                 u = User.objects.get(id=from_user_id)
                 from_user_name = u.userprofile.name
+                from_user_username = u.username
             except User.DoesNotExist:
                 pass
 
@@ -56,6 +58,7 @@ class NotificationsManager():
             'dest_user_id': recipient_user_id,
             'from_user_id': from_user_id,
             'from_user_name': from_user_name,
+            'from_user_username': from_user_username,
             'from_radio_id': from_radio_id,
             'from_radio_uuid': from_radio_uuid,
             'from_radio_name': from_radio_name,

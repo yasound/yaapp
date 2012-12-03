@@ -231,7 +231,6 @@ Yasound.Views.NotificationsDigest = Backbone.View.extend({
         } else {
             $('.empty', this.el).hide();
         }
-        console.log(this.collection.info());
 
         var totalCount = this.collection.totalCount;
         var remaining = totalCount - this.collection.length;
@@ -251,6 +250,7 @@ Yasound.Views.NotificationsDigest = Backbone.View.extend({
     },
 
     addOne: function (notification) {
+        console.log(notification.toJSON())
         var view = new Yasound.Views.NotificationDigest({
             model: notification
         });
