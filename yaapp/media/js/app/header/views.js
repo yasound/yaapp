@@ -11,10 +11,16 @@ Yasound.Views.Header = Backbone.View.extend({
 
     events: {
         'keypress #search-input' : 'search',
-        'click .btn-register': 'register'
+        'click .btn-register': 'onRegister',
+        'click #profile-menu .my-profile': 'onMyProfile',
+        'click #profile-menu .my-radios': 'onMyRadios',
+        'click #profile-menu .my-settings': 'onMySettings',
+        'click #profile-menu .about': 'onAbout',
+        'click #profile-menu .legal': 'onLegal'
     },
 
     initialize: function () {
+        _.bindAll(this, 'render', 'hidePopupProfile');
     },
 
     onClose: function () {
@@ -42,10 +48,60 @@ Yasound.Views.Header = Backbone.View.extend({
         });
     },
 
-    register: function (e) {
+    hidePopupProfile: function () {
+        $('#profile-menu').parent().removeClass('open');
+    },
+
+    onRegister: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('/signup/', {
             trigger: true
         });
+    },
+
+    onMyProfile: function (e) {
+        e.preventDefault();
+        this.hidePopupProfile();
+        Yasound.App.Router.navigate('profile/' + Yasound.App.username + '/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onMySettings: function (e) {
+        e.preventDefault();
+        this.hidePopupProfile();
+        Yasound.App.Router.navigate('settings/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onMyRadios: function (e) {
+        e.preventDefault();
+        this.hidePopupProfile();
+        Yasound.App.Router.navigate('radios/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onAbout: function (e) {
+        e.preventDefault();
+        this.hidePopupProfile();
+        Yasound.App.Router.navigate('about/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onLegal: function (e) {
+        e.preventDefault();
+        this.hidePopupProfile();
+        Yasound.App.Router.navigate('legal/', {
+            trigger: true
+        });
+        return false;
     }
+
 });

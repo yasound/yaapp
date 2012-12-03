@@ -5,7 +5,7 @@
   <div class="wrapper">
     <div class="container-fluid">
       <div id="brand-logo">
-        <a class="asset-logo" href="{% app_url webapp app_name %}" id="btn-webapp">Yasound</a>
+        <a class="asset-logo" href="{% app_url webapp app_name %}" id="btn-webapp">YaSound</a>
       </div>
       <div id="search-bar">
         <input type="text" id="search-input" placeholder="Recherchez un artiste, une radio..." maxlength="25" />
@@ -127,12 +127,12 @@
               <img class="img-circle" src="{{ user_profile.medium_picture_url }}" width="38" height="38" alt="" />
               <i class="asset-arrow-down"></i>
             </a>
-            <ul class="dropdown-menu dropdown-mini">
-              <li><a href="#">Mon profil</a></li>
-              <li><a href="#">Mes radios</a></li>
-              <li><a href="#">Mon compte</a></li>
-              <li><a href="#">A propos</a></li>
-              <li><a href="#">Mentions légales</a></li>
+            <ul class="dropdown-menu dropdown-mini" id='profile-menu'>
+              <li><a href="#" class='my-profile'>{% trans "My profile" %}</a></li>
+              <li><a href="#" class='my-radios'>{% trans "My radios" %}</a></li>
+              <li><a href="#" class='my-settings'>{% trans "My settings" %}</a></li>
+              <li><a href="#" class='about'>{% trans "About" %}</a></li>
+              <li><a href="#" class='legal'>{% trans "Legal informations" %}</a></li>
             </ul>
           </li>
           {% else %}
