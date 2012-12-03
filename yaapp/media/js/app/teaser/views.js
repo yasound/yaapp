@@ -9,7 +9,9 @@ Namespace('Yasound.Views');
 Yasound.Views.Teaser = Backbone.View.extend({
     el: '.teaser',
     events: {
-        'click a.teaser-close': 'slideUp'
+        'click a.teaser-close': 'slideUp',
+        'mouseover .paginate a': 'onArgumentChanged',
+        'click .paginate a': 'onArgumentChanged'
     },
 
     initialize: function() {
@@ -30,5 +32,25 @@ Yasound.Views.Teaser = Backbone.View.extend({
             cookies.set('hideteaser', true);
         }
         this.$el.slideUp();
+    },
+
+    onArgumentChanged: function(e) {
+        e.preventDefault();
+
+        var paginateLinks = this.$('.paginate a'),
+            args = this.$('.argument'),
+            newIndex = $(e.currentTarget).text(),
+            oldIndex = paginateLinks.filter('.active').text();
+
+        if(newIndex === oldIndex) {
+            return;
+        }
+
+        $(paginateLinks[oldIndex-1]).removeClass('active');
+        $(paginateLinks[newIndex-1]).addClass('active');
+        $(args[newIndex-1]).addClass('show');
+        $(args[oldIndex-1]).removeClass('show');
+        
     }
+
 });
