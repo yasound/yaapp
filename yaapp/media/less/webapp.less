@@ -618,16 +618,17 @@ input::-ms-input-placeholder
 {
 	.argument
 	{
-		right: 150px;
+		right: 60px;
+		.translate(-50px,0);
 		.transition(.5s ease all);
 		&.show
 		{
-			right: 100px;
+			.translate(0,0);
 			.opacity(100);
 		}
 		&.hide
 		{
-			right: 50px;
+			.translate(50px,0);
 			.opacity(0);
 		}
 		.opacity(0);
@@ -647,7 +648,7 @@ input::-ms-input-placeholder
 	{
 		position: absolute;
 		bottom: 15px;
-		right: 200px;
+		right: 180px;
 		li
 		{
 			display: block;
@@ -827,6 +828,27 @@ input::-ms-input-placeholder
 .block-content
 {
 	margin-bottom: 20px;
+}
+
+.block-slide-container
+{
+	position: relative;
+	overflow: hidden;
+}
+
+.block-slide
+{
+	ul
+	{
+		margin: 0;
+		padding: 0;
+	}
+	li
+	{
+		float: left;
+		margin-right: 30px;
+		display: block;
+	}
 }
 
 .stories-list

@@ -6688,7 +6688,12 @@ input::-ms-input-placeholder {
  * TEASER
  */
 .teaser .argument {
-  right: 150px;
+  right: 60px;
+  -webkit-transform: translate(-50px, 0);
+  -moz-transform: translate(-50px, 0);
+  -ms-transform: translate(-50px, 0);
+  -o-transform: translate(-50px, 0);
+  transform: translate(-50px, 0);
   -webkit-transition: 0.5s ease all;
   -moz-transition: 0.5s ease all;
   -o-transition: 0.5s ease all;
@@ -6702,12 +6707,20 @@ input::-ms-input-placeholder {
   padding-left: 75px;
 }
 .teaser .argument.show {
-  right: 100px;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
   opacity: 1;
   filter: alpha(opacity=100);
 }
 .teaser .argument.hide {
-  right: 50px;
+  -webkit-transform: translate(50px, 0);
+  -moz-transform: translate(50px, 0);
+  -ms-transform: translate(50px, 0);
+  -o-transform: translate(50px, 0);
+  transform: translate(50px, 0);
   opacity: 0;
   filter: alpha(opacity=0);
 }
@@ -6719,7 +6732,7 @@ input::-ms-input-placeholder {
 .teaser .paginate {
   position: absolute;
   bottom: 15px;
-  right: 200px;
+  right: 180px;
 }
 .teaser .paginate li {
   display: block;
@@ -6909,6 +6922,19 @@ input::-ms-input-placeholder {
 }
 .block-content {
   margin-bottom: 20px;
+}
+.block-slide-container {
+  position: relative;
+  overflow: hidden;
+}
+.block-slide ul {
+  margin: 0;
+  padding: 0;
+}
+.block-slide li {
+  float: left;
+  margin-right: 30px;
+  display: block;
 }
 .stories-list {
   margin: 0;
@@ -7419,14 +7445,20 @@ input::-ms-input-placeholder {
   background-position: -298px -13px;
 }
 @media (max-width: 480px) {
-  
+  .teaser .argument {
+    bottom: 115px;
+    padding-left: 95px;
+  }
+  .teaser .paginate {
+    bottom: 80px;
+  }
 }
 @media (max-width: 767px) {
   body {
     padding: 0;
   }
   #search-bar {
-    width: 30%;
+    width: 25%;
   }
   #search-bar input {
     margin-left: 10px;
@@ -7618,6 +7650,24 @@ input::-ms-input-placeholder {
   .teaser-bg {
     background-size: 1000px 689px;
   }
+  .teaser .asset-teaser-register {
+    display: none;
+  }
+  .teaser .teaser-close {
+    top: 15px;
+  }
+  .teaser h1 {
+    font-size: 18px;
+    line-height: 20px;
+    padding-right: 40px;
+    padding-top: 10px;
+  }
+  .teaser .argument {
+    right: 0px;
+  }
+  .teaser .paginate {
+    right: 100px;
+  }
 }
 @media (min-width: 768px) and (max-width: 979px) {
   #search-bar {
@@ -7640,5 +7690,17 @@ input::-ms-input-placeholder {
   }
   .teaser-bg {
     background-size: 1000px 689px;
+  }
+  .teaser .asset-teaser-register {
+    display: none;
+  }
+  .teaser h1 {
+    font-size: 24px;
+  }
+  .teaser .argument {
+    right: 50px;
+  }
+  .teaser .paginate {
+    right: 150px;
   }
 }
