@@ -7,13 +7,9 @@
 Namespace('Yasound.Views');
 
 Yasound.Views.Teaser = Backbone.View.extend({
-    el: '#teaser',
+    el: '.teaser',
     events: {
-        'click #teaser-signup-later-btn'    : 'slideUp',
-        'click #teaser-signup-now-btn'      : 'signup',
-        'click #teaser-listen p a'          : 'listen',
-        'click #teaser-create p a'          : 'create',
-        'click #teaser-share p a'           : 'share'
+        'click a.teaser-close': 'slideUp'
     },
 
     initialize: function() {
@@ -24,9 +20,7 @@ Yasound.Views.Teaser = Backbone.View.extend({
         if (Yasound.App.isMobile) {
             return;
         }
-
-        $('#teaser-bg').show();
-        $('#teaser').show();
+        this.$el.show();
         return this;
     },
 
@@ -35,35 +29,6 @@ Yasound.Views.Teaser = Backbone.View.extend({
             e.preventDefault();
             cookies.set('hideteaser', true);
         }
-        $('#teaser-bg').slideUp();
         this.$el.slideUp();
-    },
-
-    listen: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('top/', {
-            trigger: true
-        });
-    },
-
-    create: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('radios/', {
-            trigger: true
-        });
-    },
-
-    share: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('friends/', {
-            trigger: true
-        });
-    },
-
-    signup: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('signup/', {
-            trigger: true
-        });
     }
 });
