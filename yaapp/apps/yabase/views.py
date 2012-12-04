@@ -1215,7 +1215,7 @@ class WebAppView(View):
         return True, None if ok or False, redirect page else
         """
 
-        if self.app_name not in ['app', 'deezer']:
+        if self.app_name not in ['app', 'deezer', 'deezer/dev']:
             raise Http404
 
         if settings.ANONYMOUS_ACCESS_ALLOWED == True:
@@ -1676,7 +1676,8 @@ class WebAppView(View):
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
             sound_player = 'deezer'
-
+        if app_name == 'deezer/dev':
+            sound_player = 'deezer'
 
         context = {
             'user_id' : user_id,

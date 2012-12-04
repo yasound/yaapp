@@ -147,8 +147,43 @@ HTML, BODY { height: 100%; }
 
 
     {% ifequal sound_player 'deezer' %}
+        {% ifequal app_name 'deezer/dev' %}
+    <link rel="stylesheet" href="http://cdn-files.deezer.com/css/dz.css"/>
+    <link rel="stylesheet" href="/media/css/deezer.css"/>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/dz.js"></script>
+<script type="text/javascript">
+DZ.SETTING_HOST_SITE     = "http://david.www.deezerdev.com";
+DZ.SETTING_HOST_CONNECT = "http://david.connect.deezerdev.com";
+DZ.SETTING_HOST_API     = "http://david.api-v3.deezerdev.com/2.0";
+DZ.DEBUG = true;
+</script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/api.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/error.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/event.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/exceptions.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/framework.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/iframe_communication.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/json.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/notify.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/player.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/player_controler.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/player_controler_widget.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/request.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/util.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/dzapp.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/canvas.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/framework.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/user.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/jquery.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/navigation.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dzapp/mobile.js"></script>
+<script type="text/javascript" src="http://david.files.deezerdev.com/js/dz/loaders.js"></script>
+        {% else %}
     <script type="text/javascript" src="http://cdn-files.deezer.com/js/min/dz.js"></script>
+        {% endifequal %}
     {% endifequal %}
+
+
 
     <script type="text/javascript" src='/media/js/socket.io.js'></script>
 
@@ -702,7 +737,7 @@ HTML, BODY { height: 100%; }
 </body>
 {% endblock %}
 
-{% ifnotequal sound_player 'deezer' %}
+{% ifequal sound_player 'soundmanager' %}
 <div id="dz-root"></div>
 <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
 <script>
@@ -711,7 +746,7 @@ HTML, BODY { height: 100%; }
     channelUrl : '{{ deezer_channel_url }}'
   });
 </script>
-{% endifnotequal %}
+{% endifequal %}
 
 <script type="text/javascript">
 
