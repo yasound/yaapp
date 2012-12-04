@@ -161,11 +161,11 @@ $(document).ready(function () {
     }
 
     if (Yasound.App.appName == 'deezer') {
-        $.ajaxPrefilter( function( options ) {
-            if (options.url.indexOf('/api/') === 0) {
-                options.url = "https://yasound.com" + options.url;
-            }
-        });
+        // $.ajaxPrefilter( function( options ) {
+        //     if (options.url.indexOf('/api/') === 0) {
+        //         options.url = "https://yasound.com" + options.url;
+        //     }
+        // });
 
         $(document).on('DOMSubtreeModified', function() {
             var container = $('#webapp-container-parent');
