@@ -62,7 +62,8 @@ class AllowOriginMiddleware(object):
         origin = request.META.get('HTTP_ORIGIN')
         if origin:
             response['Access-Control-Allow-Origin'] = origin
-            response['Access-Control-Allow-Credentials'] = True
+            response['Access-Control-Allow-Headers'] = '*'
+            response['Access-Control-Allow-Credentials'] = "true"
+            response['Access-Control-Expose-Headers'] = '*'
             response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, DELETE, PUT'
-            response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
         return response
