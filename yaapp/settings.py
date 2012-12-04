@@ -309,6 +309,9 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
+    # special middleware for deezer CORS exception
+    'yabase.middleware.AllowOriginMiddleware',
+
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -319,8 +322,6 @@ MIDDLEWARE_CLASSES = (
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
 
-    # special middleware for deezer CORS exception
-    'yabase.middleware.AllowOriginMiddleware',
 )
 
 if LOCAL_MODE or DEVELOPMENT_MODE:
