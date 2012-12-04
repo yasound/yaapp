@@ -164,6 +164,9 @@ $(document).ready(function () {
         $.ajaxPrefilter( function( options ) {
             if (options.url.indexOf('/api/') === 0) {
                 options.url = "https://yasound.com" + options.url;
+                options.xhrFields = {
+                    withCredentials: true
+               };
             }
         });
 
