@@ -63,7 +63,7 @@ class AllowOriginMiddleware(object):
         if origin and origin == 'http://yasound.com':
             logger.info('CORS: origin=%s' % (origin))
             response['Access-Control-Allow-Origin'] = origin
-            response['Access-Control-Allow-Headers'] = '*'
+            response['Access-Control-Allow-Headers'] = 'X-Requested-With'
             response['Access-Control-Allow-Credentials'] = "true"
             response['Access-Control-Expose-Headers'] = '*'
             response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, DELETE, PUT'
