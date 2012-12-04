@@ -194,8 +194,8 @@ HTML, BODY { height: 100%; }
     <script type="text/javascript" src='/media/js/app/profile/views.js'></script>
     <script type="text/javascript" src='/media/js/app/settings/views.js'></script>
     <script type="text/javascript" src='/media/js/app/settings/models.js'></script>
-    <script type="text/javascript" src='/media/js/app/notifications/views.js'></script>
     <script type="text/javascript" src='/media/js/app/notifications/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/notifications/views.js'></script>
     <script type="text/javascript" src='/media/js/app/users/views.js'></script>
     <script type="text/javascript" src='/media/js/app/users/models.js'></script>
     <script type="text/javascript" src='/media/js/app/programming/models.js'></script>
@@ -265,6 +265,18 @@ HTML, BODY { height: 100%; }
    </script>
    <script type="text/html" id="giftTemplate">
       {% include "yabase/app/gifts/gift.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestTemplate">
+      {% include "yabase/app/gifts/giftDigest.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestLastTemplate">
+      {% include "yabase/app/gifts/giftDigestLast.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestHDTemplate">
+      {% include "yabase/app/gifts/giftDigestHD.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestPromocodeTemplate">
+      {% include "yabase/app/gifts/giftDigestPromocode.mustache" %}
    </script>
    <script type="text/html" id="radioInlineTemplate">
       {% include "yabase/app/programming/radioInline.mustache" with radio=None %}

@@ -27,8 +27,6 @@ Yasound.Views.Header = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'render', 'hidePopupProfile', 'onNotification', 'onNotificationUnreadCount', 'hidePopupNotifications');
 
-        this.notificationsDigest = new Yasound.Data.Models.NotificationsDigest({});
-
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification);
             Yasound.App.Router.pushManager.on('notification_unread_count', this.onNotificationUnreadCount);
@@ -40,8 +38,11 @@ Yasound.Views.Header = Backbone.View.extend({
 
     render: function () {
         this.notificationsDigestView = new Yasound.Views.NotificationsDigest({
-            el: '#notifications-menu',
-            collection: this.notificationsDigest
+            el: '#notifications-menu'
+        });
+
+        this.giftsDigestView = new Yasound.Views.GiftsDigest({
+            el: '#gifts-menu'
         });
 
         return this;
@@ -183,10 +184,11 @@ Yasound.Views.Header = Backbone.View.extend({
 
     refreshNotificationsDigest: function (e) {
         e.preventDefault();
-        this.notificationsDigest.fetch();
+        this.notificationsDigestView.render();
     },
 
     refreshHD: function (e) {
         e.preventDefault();
+        this.giftsDigestView.render();
     }
 });

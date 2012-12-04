@@ -1,0 +1,9 @@
+{% load i18n %}
+<li class="list-foot">
+    <%^remaining%>
+    <a href="#">{% trans "Go to Gifts center" %}</a>
+    <%/remaining%>
+    <%#remaining%>
+    <a href="#">{% trans "Display the" %} <% remaining %> {% trans "other offers" %}</a>
+    <%/remaining%>
+</li>

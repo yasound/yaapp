@@ -297,13 +297,6 @@ $(document).ready(function () {
                     currentSong: new Yasound.Data.Models.CurrentSong()
                 };
 
-                this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
-                    model: this.radioContext.currentSong,
-                    radio: this.currentRadio,
-                    el: $('#player')
-                }).render();
-                this.radioContext.currentSongView.radio = this.currentRadio;
-
                 this.currentRadio.on('change:id', function (model, id) {
                     var origin = model.get('origin');
                     model.currentSong = that.radioContext.currentSong;

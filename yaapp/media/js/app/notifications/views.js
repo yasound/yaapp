@@ -207,8 +207,10 @@ Yasound.Views.NotificationDigest = Backbone.View.extend({
 });
 
 Yasound.Views.NotificationsDigest = Backbone.View.extend({
+    collection: new Yasound.Data.Models.NotificationsDigest({}),
+
     initialize: function () {
-        _.bindAll(this, 'addOne', 'addAll');
+        _.bindAll(this, 'addOne', 'addAll', 'render');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -219,6 +221,11 @@ Yasound.Views.NotificationsDigest = Backbone.View.extend({
     onClose: function () {
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
+    },
+
+    render: function () {
+        this.collection.fetch();
+        return this;
     },
 
     addAll: function () {
@@ -250,7 +257,6 @@ Yasound.Views.NotificationsDigest = Backbone.View.extend({
     },
 
     addOne: function (notification) {
-        console.log(notification.toJSON())
         var view = new Yasound.Views.NotificationDigest({
             model: notification
         });

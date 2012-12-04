@@ -71,6 +71,76 @@ Yasound.Views.Gift = Backbone.View.extend({
     }
 });
 
+
+Yasound.Views.GiftDigest = Backbone.View.extend({
+    tagName: 'li',
+    className: 'list-block',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+
+        if (Yasound.App.enableFX) {
+            $(this.el).hide().html(ich.giftDigestTemplate(data)).fadeIn(200);
+        } else {
+            $(this.el).html(ich.giftDigestTemplate(data));
+        }
+
+        var that = this;
+        var link = $('a', this.el);
+        link.on('click', function(e) {
+            var url = link.data('ajax-url');
+            if (url) {
+                e.preventDefault();
+                Yasound.App.Router.navigate(url, {
+                    trigger: true
+                });
+            } else {
+                var completed_url = link.data('completed-url');
+                if (completed_url) {
+
+                    $('img', that.el).toggle();
+                    $.ajax({
+                        url: completed_url,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function(data) {
+                            if (!(data.success)) {
+                                Yasound.Utils.dialog(gettext('Error'), data.message);
+                            } else {
+                                Yasound.Utils.dialog(gettext('Thank you'), data.message);
+                            }
+                            $('img', that.el).toggle();
+                        },
+                        failure: function() {
+                            Yasound.Utils.dialog(gettext('Error'), gettext('Error while communicating with Yasound, please retry late'));
+                            $('img', that.el).toggle();
+                        }
+                    });
+                }
+
+                var href = link.attr('href');
+                if (href && href !== '' && href !=='#') {
+                    return;
+                } else {
+                    e.preventDefault();
+                }
+            }
+        });
+        return this;
+    }
+});
+
 Yasound.Views.Gifts = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'addOne', 'addAll', 'clear');
@@ -142,22 +212,23 @@ Yasound.Views.GiftsPage = Backbone.View.extend({
     }
 });
 
-Yasound.Views.GiftsPopup = Backbone.View.extend({
-    gifts: new Yasound.Data.Models.Gifts({}),
+
+Yasound.Views.GiftsDigest = Backbone.View.extend({
+    collection: new Yasound.Data.Models.GiftsDigest({}),
     events: {
-        "keypress #hd-promocode input"    : 'onPromocode',
-        "click #hd-checkbox"              : "onHD"
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'onHD', 'onServiceFetched');
-        $('#hd-checkbox-container').toggleButtons({
-            onChange: this.onHD
-        });
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'clear', 'onServiceFetched', 'onPromocode', 'onHD');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.views = [];
     },
 
     onClose: function() {
-        this.giftsView.close();
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
     },
 
     reset: function() {
@@ -169,6 +240,8 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
 
     render: function() {
         this.reset();
+        this.expire = undefined;
+        this.hd = undefined;
 
         if (Yasound.App.userAuthenticated) {
             var that = this;
@@ -176,29 +249,60 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
             this.service.fetch({
                 success: that.onServiceFetched
             });
+        } else {
+            this.query = this.collection.fetch();
         }
 
-        if (!this.giftsView) {
-            this.giftsView = new Yasound.Views.Gifts({
-                collection: this.gifts,
-                el: $('#gifts', this.el)
-            });
-        }
-        this.giftsView.clear();
-        this.query = this.gifts.fetch();
         return this;
     },
 
-    onHD: function (e, checked) {
-        if ((typeof checked === "undefined")) {
-            checked = $(e.target).attr('checked');
+    onServiceFetched: function (service) {
+        if (service && service.get('expiration_date')) {
+            this.expire = moment(service.get('expiration_date')).format('L');
+            this.hd = service.get('active');
         }
-        if (checked) {
-            $('#hd-button').removeClass('hd-disabled').addClass('hd-enabled');
-        } else {
-            $('#hd-button').removeClass('hd-enabled').addClass('hd-disabled');
+        this.query = this.collection.fetch();
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).hide();
+        this.clear();
+        $(this.el).append(ich.giftDigestHDTemplate({'expire': this.expire, 'hd': this.hd}));
+        $(this.el).append(ich.giftDigestPromocodeTemplate({}));
+
+        $('#toggle-hd', this.el).on('change', this.onHD);
+        $('.input-text', this.el).on('keypress', this.onPromocode);
+
+        this.collection.each(this.addOne);
+
+        var totalCount = this.collection.totalCount;
+        var remaining = totalCount - this.collection.length;
+        if (remaining < 0) {
+            remaining = 0;
         }
-        Yasound.App.player.setHD(checked);
+
+        $(this.el).append(ich.giftDigestLastTemplate({'remaining': remaining}));
+    },
+
+    clear: function () {
+        $('.loading-mask', this.el).show();
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+        $('.input-text', this.el).off('keypress', this.onPromocode);
+        $('#toggle-hd', this.el).off('change', this.onHD);
+
+        $('li', this.el).remove();
+
+    },
+
+    addOne: function (gift) {
+        var view = new Yasound.Views.GiftDigest({
+            model: gift
+        });
+        $(this.el).append(view.render().el);
+        this.views.push(view);
     },
 
     onPromocode: function (e) {
@@ -206,7 +310,7 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
             return;
         }
 
-        var value = $('#hd-promocode input', this.el).val();
+        var value = $(e.target).val();
         if (!value) {
             return;
         }
@@ -220,6 +324,7 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
             dataType: 'json',
             type: 'POST',
             success: function(data) {
+                $('#gifts-menu').parent().removeClass('open');
                 if (!data.success) {
                     Yasound.Utils.dialog(gettext('Invalid code'), gettext('The provided code is invalid.'));
                 } else {
@@ -230,14 +335,18 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
 
             }
         });
-
     },
 
-    onServiceFetched: function (service) {
-        if (service && service.get('expiration_date')) {
-            var expirationDate = moment(service.get('expiration_date')).format('LL');
-            var formattedString = '(' + gettext('enabled until') + ' ' + expirationDate + ')';
-            $('span#hd-expiration-date').html(formattedString);
+    onHD: function (e, checked) {
+        if ((typeof checked === "undefined")) {
+            checked = $(e.target).attr('checked');
         }
+        if (checked) {
+            $('.btn-hd i').removeClass('asset-hd-off').addClass('asset-hd-on');
+        } else {
+            $('.btn-hd i').removeClass('asset-hd-on').addClass('asset-hd-off');
+        }
+        Yasound.App.player.setHD(checked);
     }
+
 });
