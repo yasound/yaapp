@@ -14,7 +14,8 @@ Yasound.Views.Footer = Backbone.View.extend({
         'click a.cover': 'togglePlay',
         'click a.pl-star': 'toggleFavorite',
         'click a.pl-like': 'onLike',
-        'click a.pl-cart': 'onBuy'
+        'click a.pl-cart': 'onBuy',
+        'click .pl-volume': 'toggleVolume'
     },
 
     initialize: function () {
@@ -22,8 +23,11 @@ Yasound.Views.Footer = Backbone.View.extend({
             'render',
             'renderRadio',
             'renderSong',
+            'renderVolume',
             'onRadioChanged',
-            'onPlayerStop');
+            'onPlayerStop',
+            'toggleVolume',
+            'onVolumeSlide');
         $.subscribe('/current_radio/change', this.onRadioChanged);
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
@@ -77,6 +81,7 @@ Yasound.Views.Footer = Backbone.View.extend({
         });
         volumeSlider.bind('slide', this.onVolumeSlide);
         volumeSlider.slider('value', Yasound.App.player.volume());
+        this.setVolumeThreshold(Yasound.App.player.volume());
     },
 
     toggleMiniPlayer: function (e) {
@@ -145,8 +150,37 @@ Yasound.Views.Footer = Backbone.View.extend({
         }
     },
 
+    toggleVolume: function(e) {
+        e.stopPropagation();
+        var $target = this.$('.pl-volume');
+
+        if($target.hasClass('open')) {
+            $target.removeClass('open');
+            $('html').unbind('click', this.toggleVolume);
+        } else {
+            $target.addClass('open');
+            $('html').bind('click', this.toggleVolume);
+        }
+    },
+
     onVolumeSlide: function(e, ui) {
+        this.setVolumeThreshold(ui.value);
         Yasound.App.player.setVolume(ui.value);
+    },
+
+    setVolumeThreshold: function(val) {
+
+        var step = 25,
+            classes = [],
+            threshold;
+
+        for(var i=0 ; i<=100 ; i=i+step) {
+            classes.push('vol'+i);
+            if(threshold === undefined && val <= i) threshold = i;
+        }
+
+        this.$('.pl-volume').removeClass(classes.join(' ')).addClass('vol' + threshold);
+
     }
 
 });

@@ -326,10 +326,30 @@
   height: 55px;
   background-position: -182px -162px;
 }
-.asset-player-volume {
+.asset-player-vol100 {
   width: 26px;
   height: 26px;
   background-position: -298px -132px;
+}
+.asset-player-vol75 {
+  width: 26px;
+  height: 26px;
+  background-position: -406px -132px;
+}
+.asset-player-vol50 {
+  width: 26px;
+  height: 26px;
+  background-position: -370px -132px;
+}
+.asset-player-vol25 {
+  width: 26px;
+  height: 26px;
+  background-position: -439px -132px;
+}
+.asset-player-vol0 {
+  width: 26px;
+  height: 26px;
+  background-position: -334px -132px;
 }
 .asset-teaser-phone {
   width: 37px;
@@ -7164,6 +7184,11 @@ input::-ms-input-placeholder {
  * FOOTER
  */
 .footer-player {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -7289,7 +7314,8 @@ input::-ms-input-placeholder {
   padding: 0;
   line-height: 20px;
 }
-.footer-player .player-controls a:hover {
+.footer-player .player-controls a:hover,
+.footer-player .pl-volume:not(.open):hover {
   filter: brightness(15%);
   -webkit-filter: brightness(15%);
   -ms-filter: brightness(15%);
@@ -7350,6 +7376,7 @@ input::-ms-input-placeholder {
   background-position: -298px -57px;
 }
 .footer-player .pl-volume {
+  cursor: pointer;
   display: inline-block;
   *margin-right: .3em;
   vertical-align: text-top;
@@ -7360,7 +7387,32 @@ input::-ms-input-placeholder {
   background-position: -298px -132px;
   position: relative;
 }
-.footer-player .pl-volume:hover .volume-container {
+.footer-player .pl-volume.vol0 {
+  width: 26px;
+  height: 26px;
+  background-position: -334px -132px;
+}
+.footer-player .pl-volume.vol25 {
+  width: 26px;
+  height: 26px;
+  background-position: -439px -132px;
+}
+.footer-player .pl-volume.vol50 {
+  width: 26px;
+  height: 26px;
+  background-position: -370px -132px;
+}
+.footer-player .pl-volume.vol75 {
+  width: 26px;
+  height: 26px;
+  background-position: -406px -132px;
+}
+.footer-player .pl-volume.vol100 {
+  width: 26px;
+  height: 26px;
+  background-position: -298px -132px;
+}
+.footer-player .open .volume-container {
   display: block;
 }
 .footer-player .volume-container {
@@ -7379,7 +7431,7 @@ input::-ms-input-placeholder {
   -moz-border-radius: 4px;
   border-radius: 4px;
   position: absolute;
-  top: -116px;
+  top: -120px;
   left: 3px;
   border: 1px solid #000;
   border-color: #ededed #c2c2c2 #e5e6e7 #ededed;
