@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load app_url %}
-<div class="footer-player"><!-- Add/Remove Class "mini" to toggle -->
+<div class="footer-player">
   <div class="wrapper">
     <div class="container-fluid">
       <section class="row-fluid">
@@ -10,10 +10,15 @@
             <i class="status play"></i>
           </a>
           <h3>{% trans "Radio" %}</h3>
-          <h2>We love HipHop Party</h2>
+          <h2></h2>
           <div class="player-controls">
             <a href="#" class="pl-star on"></a>
             <a class="pl-share" data-toggle="modal" href="#modal-share"></a>
+            <div href="#" class="pl-volume">
+              <div class="volume-container">
+                <div id="volume-slider"></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="span6 current-song">
@@ -21,7 +26,7 @@
             <img src="http://placehold.it/68x68" width="68" height="68" alt="" />
           </div>
           <h3>{% trans "Current song" %}</h3>
-          <h1>Action Bronson - Supreme Chandeliers</h1>
+          <h1></h1>
           <div class="player-controls">
             <a href="#" class="pl-like"></a>
             <a href="#" class="pl-cart"></a>

@@ -318,7 +318,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     initialize: function () {
         this.model.bind('change', this.render, this);
         _.bindAll(this, 'render',
-            'onVolumeSlide',
+            //'onVolumeSlide',
             'togglePlay',
             'favorite',
             'onPlayerPlay',
@@ -363,18 +363,18 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         this.loginView = new Yasound.Views.LogIn({}).render();
 
 
-        var volumeSlider = $('#volume-slider');
+        /*var volumeSlider = $('#volume-slider');
         volumeSlider.slider({
             range: "min",
             min: 0,
             max: 100
         });
-        volumeSlider.bind("slide", this.onVolumeSlide);
+        volumeSlider.bind("slide", this.onVolumeSlide);*/
 
         if (Yasound.App.player.isPlaying()) {
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         }
-        volumeSlider.slider('value', Yasound.App.player.volume());
+        //volumeSlider.slider('value', Yasound.App.player.volume());
 
         var radio = Yasound.App.Router.currentRadio;
         if (radio && radio.get('favorite')) {
@@ -423,9 +423,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    onVolumeSlide: function(e, ui) {
+    /*onVolumeSlide: function(e, ui) {
         Yasound.App.player.setVolume(ui.value);
-    },
+    },*/
 
     like: function (e) {
         e.preventDefault();

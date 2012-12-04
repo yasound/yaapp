@@ -161,19 +161,19 @@ input::-ms-input-placeholder
 		border-right: none;
 		&:hover
 		{
-			#gradient > .vertical(#f5f5f6,#e8e9eb);
-			border-color: #cacacb;
-			color: @defaultColor;
+			border: 1px solid #1a8eb5;
+			#gradient > .vertical(lighten(@skyBlue,4%),darken(@skyBlue,4%));
+			color: #fff;
 		}
 	}
 	li:first-child a
 	{
-		border-top: none;
+		//border-top: none;
 		.border-radius(3px 3px 0 0);
 	}
 	li:last-child a
 	{
-		border-bottom: none;
+		//border-bottom: none;
 		.border-radius(0 0 3px 3px);
 	}
 	li + li a { border-top: 1px solid #E7E7E7; }
@@ -324,6 +324,10 @@ input::-ms-input-placeholder
 			{
 				display: block;
 				font-size: 13px;
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 			span
 			{
@@ -655,6 +659,18 @@ input::-ms-input-placeholder
  */
 .teaser
 {
+	.appstore
+	{
+		position: absolute;
+		height: 55px;
+		display: block;
+		bottom: 80px;
+		left: 50px;
+		&:hover
+		{
+			text-decoration: none;
+		}
+	}
 	.argument
 	{
 		right: 60px;
@@ -1137,6 +1153,7 @@ input::-ms-input-placeholder
 	}
 	.pl-share
 	{
+		margin-right: 5px;
 		.asset-inline();
 		.asset-player-share();
 	}
@@ -1151,6 +1168,70 @@ input::-ms-input-placeholder
 	{
 		.asset-inline();
 		.asset-player-cart();
+	}
+	.pl-volume
+	{
+		.asset-inline();
+		.asset-player-volume();
+		position: relative;
+		&:hover .volume-container
+		{
+			display: block;
+		}
+	}
+	.volume-container
+	{
+		display: none;
+		width: 16px;
+		height: 112px;
+		#gradient > .vertical(#fafafa,#e5e6e7);
+		.border-radius(4px);
+		position: absolute;
+		top: -116px;
+		left: 3px;
+		border: 1px solid #000;
+		border-color: #ededed #c2c2c2 #e5e6e7 #ededed;
+		.box-shadow(1px 0px 2px 1px rgba(0, 0, 0, .1));
+		&:after
+		{
+			position: absolute;
+			bottom: -6px;
+			left: 4px;
+			content: "";
+			width: 0px;
+			height: 0px;
+			border-color: #e5e6e7 transparent transparent;
+			border-style: solid;
+			border-width: 5px 4px 0 4px;
+		}
+	}
+	#volume-slider
+	{
+		width: 5px;
+		border: 1px solid #fff;
+		border-left: none;
+		border-top: none;
+		margin: 5px 0 0 5px;
+		.border-radius(2px);
+		background: #dddddd;
+		.box-shadow(inset 1px 1px 2px 0px rgba(0, 0, 0, .3));
+		.ui-slider-range
+		{
+			background: #ecab22;
+			.box-shadow(inset 1px 1px 2px 0px rgba(0, 0, 0, .3));
+			.border-radius(2px);
+		}
+		.ui-slider-handle
+		{
+			.asset();
+			.asset-volume-handle();
+			border: none;
+			background-color: transparent;
+			outline: none;
+			left: -8px;
+			margin-bottom: -14px;
+			cursor: pointer;
+		}
 	}
 	section
 	{
