@@ -224,14 +224,8 @@ $(document).ready(function () {
         initialize: function() {
             if (Yasound.App.appName == 'deezer' || Yasound.App.appName == 'deezer/dev') {
                 this.bind('all', this._updateDeezerCanvas);
-                this.bind('all', this._trackCalls);
             }
             return this.bind('all', this._trackPageview);
-        },
-
-        _trackCalls: function () {
-            console.log('_trackCalls');
-            console.log(arguments);
         },
 
         _updateDeezerCanvas: function () {
