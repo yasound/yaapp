@@ -60,7 +60,7 @@ class AllowOriginMiddleware(object):
 
     def process_response(self, request, response):
         origin = request.META.get('HTTP_ORIGIN')
-        if origin and origin == 'http://yasound.com/deezer/':
+        if origin and origin == 'http://yasound.com':
             response['Access-Control-Allow-Origin'] = origin
             response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, DELETE, PUT'
             response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
