@@ -62,6 +62,7 @@ class AllowOriginMiddleware(object):
         origin = request.META.get('HTTP_ORIGIN')
         if origin and origin == 'http://yasound.com':
             response['Access-Control-Allow-Origin'] = origin
+            response['Access-Control-Allow-Credentials'] = True
             response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, DELETE, PUT'
             response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
         return response
