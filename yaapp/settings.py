@@ -318,6 +318,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
+
+    # special middleware for deezer CORS exception
+    #'yabase.middleware.AllowOriginMiddleware',
 )
 
 if LOCAL_MODE or DEVELOPMENT_MODE:
