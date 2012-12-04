@@ -61,6 +61,7 @@ class AllowOriginMiddleware(object):
     def process_response(self, request, response):
         origin = request.META.get('HTTP_ORIGIN')
         if origin:
+            logger.info('CORS: origin=%s' % (origin))
             response['Access-Control-Allow-Origin'] = origin
             response['Access-Control-Allow-Headers'] = '*'
             response['Access-Control-Allow-Credentials'] = "true"
