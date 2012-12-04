@@ -308,7 +308,7 @@ urlpatterns = patterns('',
     # internal stuff
     url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
 
-    url(r'^close/$', 'yabase.views.close', name='close'),
+    url(r'^deezer/close/$', 'yabase.views.close', name='close'),
 
 
     (r'^', include('yabase.urls')),
