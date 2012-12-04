@@ -174,9 +174,9 @@ $(document).ready(function () {
             var container = $('#webapp-container-parent');
             var footer = $('#footer');
             var documentHeight = container.height() + footer.height() + 12;
-            if (DZ && DZ.canvas) {
+            DZ.ready(function() {
                 DZ.canvas.setSize(documentHeight);
-            }
+            });
         });
     }
 
@@ -235,9 +235,9 @@ $(document).ready(function () {
         },
 
         _updateDeezerCanvas: function () {
-            if (DZ && DZ.canvas) {
+            DZ.ready(function(){
                 DZ.canvas.setSize(1325);
-            }
+            });
         },
 
         _trackPageview: function() {
