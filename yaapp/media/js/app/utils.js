@@ -20,7 +20,7 @@ Yasound.Utils.humanizeDate = function(rawDate) {
 
 Yasound.Utils.containerHeight = function () {
     var containerHeight = 100;
-    if (Yasound.App.appName === 'deezer') {
+    if (Yasound.App.appName === 'deezer' || Yasound.App.appName === 'deezer/dev') {
         var container = $('#webapp-container-parent');
         containerHeight = container.height();
     } else {
