@@ -5,11 +5,71 @@
 /* extern Ext, $ */
 Namespace('Yasound.Views');
 
+
+Yasound.Views.RadiosSlide = Backbone.View.extend({
+    initialize: function() {
+        _.bindAll(this, 'addOne', 'addAll');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('beforeFetch', this.beforeFetch, this);
+        this.views = [];
+    },
+    onClose: function() {
+        this.collection.unbind('beforeFetch', this.beforeFetch);
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    beforeFetch: function() {
+        if (this.loadingMask) {
+            this.loadingMask.show();
+        }
+    },
+
+    addAll: function() {
+        if (!this.loadingMask) {
+            var mask = this.$el.siblings('.loading-mask');
+            this.loadingMask = mask;
+        }
+
+        this.loadingMask.hide();
+
+        if (this.collection.length === 0) {
+            $('.empty', this.el).show();
+        } else {
+            $('.empty', this.el).hide();
+        }
+        this.currentRadioIndex = 0;
+        this.collection.each(this.addOne);
+    },
+
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function(radio) {
+        if (this.currentRadioIndex === 0 ) {
+            this.cellsRange = $('<ul/>').appendTo(this.el);
+        } else if ( this.currentRadioIndex % 5 === 0) {
+            this.cellsRange = $('<ul/>').appendTo(this.el);
+        }
+        var view = new Yasound.Views.RadioCell({
+            model: radio
+        });
+        this.cellsRange.append(view.render().el);
+        this.views.push(view);
+        this.currentRadioIndex++;
+    }
+});
+
 /**
  * Home page
  */
 Yasound.Views.HomePage = Backbone.View.extend({
-    collection: new Yasound.Data.Models.SelectedRadios({}),
 
     events: {
     },
@@ -17,6 +77,11 @@ Yasound.Views.HomePage = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'onGenreChanged', 'updateGenreSlug');
         $.subscribe('/submenu/genre', this.onGenreChanged);
+
+        this.selection = new Yasound.Data.Models.SelectedRadios({});
+        this.favorites = new Yasound.Data.Models.SelectedRadios({});
+        this.popular = new Yasound.Data.Models.SelectedRadios({});
+
     },
 
     onClose: function() {
@@ -24,9 +89,17 @@ Yasound.Views.HomePage = Backbone.View.extend({
     },
 
     reset: function() {
-        if (this.resultsView) {
-            this.resultsView.close();
-            this.resultsViews = undefined;
+        if (this.selectionView) {
+            this.selectionView.close();
+            this.selectionView = undefined;
+        }
+        if (this.favoritesView) {
+            this.favoritesView.close();
+            this.favoritesView = undefined;
+        }
+        if (this.popularView) {
+            this.popularView.close();
+            this.popularView = undefined;
         }
     },
 
@@ -34,28 +107,22 @@ Yasound.Views.HomePage = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.homePageTemplate());
 
-        this.collection.perPage = Yasound.Utils.cellsPerPage();
-
-        this.resultsView = new Yasound.Views.SearchResults({
-            collection: this.collection,
-            el: $('#selected-radios', this.el)
+        this.selectionView = new Yasound.Views.RadiosSlide({
+            collection: this.selection,
+            el: $('#selection-slides', this.el)
+        });
+        this.favoritesView = new Yasound.Views.RadiosSlide({
+            collection: this.favorites,
+            el: $('#favorites-slides', this.el)
+        });
+        this.popularView = new Yasound.Views.RadiosSlide({
+            collection: this.popular,
+            el: $('#popular-slides', this.el)
         });
 
-        this.paginationView = new Yasound.Views.Pagination({
-            collection: this.collection,
-            el: $('#pagination', this.el)
-        }).setTitle(gettext('Next radios'));
-
-        this.collection.params.genre = genre;
-
-        if (g_bootstrapped_data) {
-            this.collection.reset(g_bootstrapped_data, {'silent': true});
-            this.collection.next = g_next_url;
-            this.collection.baseUrl = g_base_url;
-            this.collection.trigger('reset', this.collection);
-        } else {
-            this.collection.goTo(0);
-        }
+        this.selection.goTo(0);
+        this.favorites.goTo(0);
+        this.popular.goTo(0);
 
         this.updateGenreSlug(genre);
         return this;
@@ -78,8 +145,5 @@ Yasound.Views.HomePage = Backbone.View.extend({
 
     onGenreChanged: function(e, genre) {
         this.updateGenreSlug(genre);
-        this.collection.params.genre = genre;
-        this.resultsView.clear();
-        this.collection.goTo(0);
     }
 });
