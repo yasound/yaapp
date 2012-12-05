@@ -65,7 +65,7 @@ def dev():
     WEBSITE_PATH = "/data/vhosts/y/yasound.com/root/"
     APP_PATH = "yaapp"
     GIT_PATH = "git@github.com:yasound/yaapp.git"
-    BRANCH = "dev"
+    BRANCH = "new-ux"
     DJANGO_MODE = 'development'
     ALLOW_VTENV = True
 
