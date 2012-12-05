@@ -219,7 +219,7 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'addOne', 'addAll', 'clear', 'onServiceFetched', 'onPromocode', 'onPromocodeSubmit', 'sendPromocode', 'onHD');
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'clear', 'onServiceFetched', 'onPromocode', 'onPromocodeSubmit', 'sendPromocode', 'onHD', 'onDisplayAll');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -283,6 +283,7 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
         }
 
         $(this.el).append(ich.giftDigestLastTemplate({'remaining': remaining}));
+        $('.list-foot a', this.el).on('click', this.onDisplayAll);
     },
 
     clear: function () {
@@ -294,6 +295,7 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
         $('.dropdown-promo .input-text', this.el).off('keypress', this.onPromocode);
         $('.dropdown-promo button', this.el).off('click', this.onPromocodeSubmit);
         $('#toggle-hd', this.el).off('change', this.onHD);
+        $('.list-foot a', this.el).off('click', this.onDisplayAll);
 
         $('li', this.el).remove();
 
@@ -362,6 +364,12 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
             $('.btn-hd i').removeClass('asset-hd-on').addClass('asset-hd-off');
         }
         Yasound.App.player.setHD(checked);
-    }
+    },
 
+    onDisplayAll: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('gifts/', {
+            trigger: true
+        });
+    }
 });
