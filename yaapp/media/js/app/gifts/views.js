@@ -219,7 +219,7 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'addOne', 'addAll', 'clear', 'onServiceFetched', 'onPromocode', 'onHD');
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'clear', 'onServiceFetched', 'onPromocode', 'onPromocodeSubmit', 'sendPromocode', 'onHD');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -271,7 +271,8 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
         $(this.el).append(ich.giftDigestPromocodeTemplate({}));
 
         $('#toggle-hd', this.el).on('change', this.onHD);
-        $('.input-text', this.el).on('keypress', this.onPromocode);
+        $('.dropdown-promo .input-text', this.el).on('keypress', this.onPromocode);
+        $('.dropdown-promo button', this.el).on('click', this.onPromocodeSubmit);
 
         this.collection.each(this.addOne);
 
@@ -290,7 +291,8 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
             view.close();
         });
         this.views = [];
-        $('.input-text', this.el).off('keypress', this.onPromocode);
+        $('.dropdown-promo .input-text', this.el).off('keypress', this.onPromocode);
+        $('.dropdown-promo button', this.el).off('click', this.onPromocodeSubmit);
         $('#toggle-hd', this.el).off('change', this.onHD);
 
         $('li', this.el).remove();
@@ -309,12 +311,25 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
         if (e.keyCode != 13) {
             return;
         }
-
+        e.preventDefault();
         var value = $(e.target).val();
         if (!value) {
             return;
         }
+        this.sendPromocode(value);
 
+    },
+
+    onPromocodeSubmit: function (e) {
+        e.preventDefault();
+        var value = $('.dropdown-promo .input-text', this.el).val();
+        if (!value) {
+            return;
+        }
+        this.sendPromocode(value);
+    },
+
+    sendPromocode: function(value) {
         var url = '/api/v1/premium/activate_promocode/';
         $.ajax({
             url: url,
