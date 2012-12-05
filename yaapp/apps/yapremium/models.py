@@ -220,6 +220,7 @@ class Gift(models.Model):
     name = models.CharField(_('name'), max_length=255, blank=True)
     sku = models.CharField(_('sku'), max_length=255, blank=True)
     description = models.TextField(_('description'), blank=True)
+    digest = models.CharField(_('digest'), max_length=40, blank=True)
 
     authentication_needed = models.BooleanField(_('authentication needed'), default=True)
     facebook_needed = models.BooleanField(_('facebook needed'), default=False)
@@ -322,6 +323,7 @@ class Gift(models.Model):
             'name': self.name,
             'sku': self.sku,
             'description': self.description,
+            'digest': self.digest,
             'max': self.max_per_user,
             'count': count,
             'last_achievement_date': last_achievement_date,
@@ -360,7 +362,7 @@ class Gift(models.Model):
 
     class Meta:
         verbose_name = _('gift')
-        translate = ('name', 'description',)
+        translate = ('name', 'description', 'digest')
 
 
 class AchievementManager(models.Manager):
