@@ -161,7 +161,7 @@ $(document).ready(function () {
     }
 
     if (Yasound.App.appName === 'deezer') {
-        g_enable_push = false;
+        //g_enable_push = false;
 
         $.ajaxPrefilter( function( options ) {
             if (options.url.indexOf('/api/') === 0) {
