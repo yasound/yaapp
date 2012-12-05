@@ -160,7 +160,7 @@ $(document).ready(function () {
         Yasound.App.player = Yasound.Player.Deezer();
     }
 
-    if (Yasound.App.appName == 'deezer' || Yasound.App.appName == 'deezer/dev') {
+    if (Yasound.App.appName === 'deezer') {
         g_enable_push = false;
 
         $.ajaxPrefilter( function( options ) {
@@ -224,7 +224,7 @@ $(document).ready(function () {
             "*args": "index"
         },
         initialize: function() {
-            if (Yasound.App.appName == 'deezer' || Yasound.App.appName == 'deezer/dev') {
+            if (Yasound.App.appName == 'deezer') {
                 this.bind('all', this._updateDeezerCanvas);
             }
             return this.bind('all', this._trackPageview);

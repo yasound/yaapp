@@ -153,14 +153,14 @@ Yasound.Views.RadioInfos = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this,  'refreshFavorites');
         this.model.bind('change', this.render, this);
-        if (Yasound.App.appName === 'deezer' || Yasound.App.appName === 'deezer/dev') {
+        if (Yasound.App.appName === 'deezer') {
             $.subscribe('/radio/favorite', this.refreshFavorites);
             $.subscribe('/radio/not_favorite', this.refreshFavorites);
         }
     },
     onClose: function () {
         this.model.unbind('change', this.render);
-        if (Yasound.App.appName === 'deezer' || Yasound.App.appName === 'deezer/dev') {
+        if (Yasound.App.appName === 'deezer') {
             $.unsubscribe('/radio/favorite', this.refreshFavorites);
             $.unsubscribe('/radio/not_favorite', this.refreshFavorites);
         }
@@ -168,7 +168,7 @@ Yasound.Views.RadioInfos = Backbone.View.extend({
 
     render: function () {
         $(this.el).html(ich.radioInfosTemplate(this.model.toJSON()));
-        if (Yasound.App.appName === 'deezer' || Yasound.App.appName === 'deezer/dev') {
+        if (Yasound.App.appName === 'deezer') {
             this.refreshFavorites();
         }
         return this;
@@ -228,7 +228,7 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     render: function () {
         $(this.el).html(ich.trackInRadioTemplate(this.model.toJSON()));
 
-        if (Yasound.App.appName === 'deezer' || Yasound.App.appName === 'deezer/dev') {
+        if (Yasound.App.appName === 'deezer') {
             var player = Yasound.App.player;
             if (player.deezerId) {
                 this.addDeezerLinks(player);
