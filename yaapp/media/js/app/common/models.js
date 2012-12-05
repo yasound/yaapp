@@ -193,10 +193,14 @@ Yasound.Data.Models.CurrentSong = Backbone.Model.extend({
 
     // the current song will auto-refresh with either polling or push system
     initialize: function () {
-        _.bindAll(this, 'refresh', 'stopPushOrTimer', 'startPushOrTimer', 'startPush', 'startTimer');
+        _.bindAll(this, 'refresh', 'stopPushOrTimer', 'startPushOrTimer', 'startPush', 'startTimer', 'onClose');
 
         var that = this;
         that.startPushOrTimer();
+    },
+
+    onClose: function () {
+        this.stopPushOrTimer();
     },
 
     refresh: function (msg) {

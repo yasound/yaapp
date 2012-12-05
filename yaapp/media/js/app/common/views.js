@@ -23,9 +23,14 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         this.currentSongModel = new Yasound.Data.Models.CurrentSong();
         this.currentSongModel.bind('change', this.refreshCurrentSong, this);
     },
+
     onClose: function () {
         this.model.unbind('change', this.render);
+        this.currentSongModel.unbind('change', this.refreshCurrentSong);
+        this.currentSongModel.onClose();
+        delete this.currentSongModel;
     },
+
     render: function () {
         var data = this.model.toJSON();
         if (data && data.name && data.name.length > 18) {
