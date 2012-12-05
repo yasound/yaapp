@@ -52,7 +52,11 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             } else {
                 $("li .mask", $(this.el).parent()).hide();
             }
-            this.currentSongModel.fetch();
+
+            if (Yasound.App.appName !== 'deezer') {
+                // deezer design does not need info to be fetched
+                this.currentSongModel.fetch();
+            }
 
             if (Yasound.App.enableFX) {
                 mask.removeClass('hidden').fadeIn(300);
