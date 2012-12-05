@@ -1657,7 +1657,10 @@ class WebAppView(View):
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = absolute_url(reverse('webapp_default'))
 
-        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        if app_name != 'deezer':
+            facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        else:
+            facebook_channel_url = absolute_url(reverse('deezer_facebook_channel_url'))
 
         genre_form = RadioGenreForm()
 
@@ -1831,7 +1834,10 @@ class WebAppView(View):
                 if request.is_ajax():
                     return self._ajax_error(import_itunes_form.errors)
 
-        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        if app_name != 'deezer':
+            facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        else:
+            facebook_channel_url = absolute_url(reverse('deezer_facebook_channel_url'))
 
         genre_form = RadioGenreForm()
 
