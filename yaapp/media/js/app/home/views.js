@@ -14,14 +14,17 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
     },
 
     currentStep: 0,
+    lastStep: 1,
 
     initialize: function() {
-        _.bindAll(this, 'addOne', 'addAll', 'onSlide', 'resetSlide');
+        _.bindAll(this, 'addOne', 'addAll', 'onSlide', 'resetSlide', 'getSlideOffset', 'onWindowResized');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
         this.collection.bind('beforeFetch', this.beforeFetch, this);
         this.views = [];
+
+        $(window).bind('resize', this.onWindowResized);
     },
     onClose: function() {
         this.collection.unbind('beforeFetch', this.beforeFetch);
@@ -51,8 +54,6 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
         this.currentRadioIndex = 0;
         this.collection.each(this.addOne);
         this.resetSlide();
-
-        $(window).bind('resize', this.resetSlide);
     },
 
     clear: function() {
@@ -82,38 +83,42 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
             var cellWidth = $(cells.get(0)).outerWidth(true);
             this.$('.block-slide').width(cells.length*cellWidth + 'px');
         }
-
-        // this.currentStep = 0;
-        // this.$('.block-slide').css('marginLeft', 0);
-        // this.$el.removeClass('last').addClass('first');
-
+        this.lastStep = this.$('ul').length;
     },
 
     onSlide: function(e) {
         e.preventDefault();
 
-
-        var ranges = this.$('ul');
-            offset = $(ranges.get(0)).outerWidth(true),
-            max = ranges.length,
-            previousStep = this.currentStep;
+        var previousStep = this.currentStep;
             btn = $(e.currentTarget);
 
-        if(btn.hasClass('asset-slide-right') && this.currentStep < max-1) this.currentStep++;
+        if(btn.hasClass('asset-slide-right') && this.currentStep < this.lastStep-1) this.currentStep++;
         else if(btn.hasClass('asset-slide-left') && this.currentStep !== 0) this.currentStep--;
 
         if(this.currentStep === 0) this.$el.addClass('first');
         else this.$el.removeClass('first');
 
-        if(this.currentStep === max - 1) this.$el.addClass('last');
+        if(this.currentStep === this.lastStep - 1) this.$el.addClass('last');
         else this.$el.removeClass('last');
 
-        this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*offset + 'px' });
+        this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*this.getSlideOffset() + 'px' });
 
         if (previousStep < this.currentStep) {
             this.collection.requestNextPage();
         }
+    },
+
+    getSlideOffset: function() {
+        var ranges = this.$('ul');
+        if(ranges.length === 0) return 0;
+        else return $(ranges.get(0)).outerWidth(true);
+    },
+
+    onWindowResized: function() {
+        this.resetSlide();
+        this.$('.block-slide').css('marginLeft', '-' + this.currentStep*this.getSlideOffset() + 'px');
     }
+
 });
 
 /**
