@@ -135,9 +135,9 @@ Yasound.Views.HomePage = Backbone.View.extend({
 
         this.selection = new Yasound.Data.Models.SelectedRadios({});
         this.selection.perPage = 10;
-        this.favorites = new Yasound.Data.Models.SelectedRadios({});
+        this.favorites = new Yasound.Data.Models.Favorites({});
         this.favorites.perPage = 10;
-        this.popular = new Yasound.Data.Models.SelectedRadios({});
+        this.popular = new Yasound.Data.Models.MostActiveRadios({});
         this.popular.perPage = 10;
 
     },
