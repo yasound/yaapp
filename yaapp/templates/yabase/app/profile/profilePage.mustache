@@ -1,48 +1,59 @@
 {% load i18n %}
-<div class="container-fluid content-zone last">
+<div class="container-fluid content-zone">
+  <div class="row-fluid" id='user-profile'></div>
+</div>
 
-
-  <div class='span12' id='user-profile'>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='user-radios span12 no-margin'>
+      <button class='yabutton right' id='radios-btn'>{% trans 'All radios' %}</button>
+  	<h2 class='zone-title'>{% trans "Radios" %}</h2>
+      <ul class='radio-cells' id='radios'>
+      </ul>
+    </div>
   </div>
+</div>
 
-  <div class='user-radios span12 no-margin'>
-    <button class='yabutton right' id='radios-btn'>{% trans 'All radios' %}</button>
-	<h2 class='zone-title'>{% trans "Radios" %}</h2>
-    <ul class='radio-cells' id='radios'>
-    </ul>
-  <div class='separation-line'></div>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12 no-margin' id='favorites-zone'>
+      <button class='yabutton right' id='favorites-btn'>{% trans 'All favorites' %}</button>
+      <h2 class='zone-title'>{% trans "Favorites" %}</h2>
+      <ul class='radio-cells' id='favorites'>
+      </ul>
+    </div>
   </div>
+</div>
 
-  <div class='span12 no-margin' id='favorites-zone'>
-    <button class='yabutton right' id='favorites-btn'>{% trans 'All favorites' %}</button>
-    <h2 class='zone-title'>{% trans "Favorites" %}</h2>
-    <ul class='radio-cells' id='favorites'>
-    </ul>
-  <div class='separation-line'></div>
-  </div>
-
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
    <div class='span12 no-margin' id='friends-zone'>
       <button class='yabutton right' id='friends-btn'>{% trans 'All people' %}</button>
       <h2 class='zone-title'><%#owner%>{% trans "People you follow" %}<%/owner%><%^owner%>{% trans "Following"%}<%/owner%>&nbsp; (<% friends_count %>)</h2>
       <ul class='' id='friends'>
       </ul>
-     <div class='separation-line'></div>
+    </div>
   </div>
+</div>
 
-
-  <div class='span12 no-margin' id='followers-zone'>
-    <button class='yabutton right' id='followers-btn'>{% trans 'All people' %}</button>
-      <h2 class='zone-title'><%#owner%>{% trans "People following you" %}<%/owner%><%^owner%>{% trans "Followed by"%}<%/owner%>&nbsp; (<% followers_count %>)</h2>
-    <ul class='' id='followers'>
-    </ul>
-    <div class='separation-line'></div>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12 no-margin' id='followers-zone'>
+      <button class='yabutton right' id='followers-btn'>{% trans 'All people' %}</button>
+        <h2 class='zone-title'><%#owner%>{% trans "People following you" %}<%/owner%><%^owner%>{% trans "Followed by"%}<%/owner%>&nbsp; (<% followers_count %>)</h2>
+      <ul class='' id='followers'>
+      </ul>
+    </div>
   </div>
+</div>
 
-  <div class='span12 no-margin' id='likes-zone'>
-    <button class='yabutton right' id='likes-btn'>{% trans 'All tracks' %}</button>
-    <h2 class='zone-title'><%#owner%>{% trans "Tracks you liked" %}<%/owner%><%^owner%>{% trans "Tracks liked"%}<%/owner%></h2>
-    <ul class='radio-cells' id='likes'>
-    </ul>
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <div class='span12 no-margin' id='likes-zone'>
+      <button class='yabutton right' id='likes-btn'>{% trans 'All tracks' %}</button>
+      <h2 class='zone-title'><%#owner%>{% trans "Tracks you liked" %}<%/owner%><%^owner%>{% trans "Tracks liked"%}<%/owner%></h2>
+      <ul class='radio-cells' id='likes'>
+      </ul>
+    </div>
   </div>
-
 </div>
