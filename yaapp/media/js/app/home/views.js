@@ -16,7 +16,7 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
     currentStep: 0,
 
     initialize: function() {
-        _.bindAll(this, 'addOne', 'addAll', 'onSlide');
+        _.bindAll(this, 'addOne', 'addAll', 'onSlide', 'resetSlide');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -50,7 +50,9 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
         }
         this.currentRadioIndex = 0;
         this.collection.each(this.addOne);
-        this.resetSlideWidth();
+        this.resetSlide();
+
+        $(window).bind('resize', this.resetSlide);
     },
 
     clear: function() {
@@ -74,13 +76,17 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
         this.currentRadioIndex++;
     },
 
-    resetSlideWidth: function() {
+    resetSlide: function() {
 
         var cells = this.$('li');
         if(cells.length > 0) {
             var cellWidth = $(cells.get(0)).outerWidth(true);
             this.$('.block-slide').width(cells.length*cellWidth + 'px');
         }
+
+        this.currentStep = 0;
+        this.$('.block-slide').css('marginLeft', 0);
+        this.$el.removeClass('last').addClass('first');
 
     },
 
