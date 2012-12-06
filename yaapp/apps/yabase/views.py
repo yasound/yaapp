@@ -210,7 +210,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
 
     # results: second part
     reco_skip = max(0, skip - selection_radios_count)
-    reco_limit = max(0, limit - selection_radios_count)
+    reco_limit = max(0, limit - len(radio_data))
 
     request_user = None
     favorite_radio_ids = []
@@ -491,6 +491,7 @@ def report_message_as_abuse(request, message_id):
 
     wall_event = get_object_or_404(WallEvent, pk=message_id)
     logger.debug('wall event found: %s' % (message_id))
+    logger.debug(wall_event.type)
 
     logger.debug('reporting message message')
     wall_event.report_as_abuse(request.user)
