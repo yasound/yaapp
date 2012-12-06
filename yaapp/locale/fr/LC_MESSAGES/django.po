@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-06 11:50+0100\n"
+"POT-Creation-Date: 2012-12-06 14:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -875,16 +875,16 @@ msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
 #: templates/yabase/webapp.html:9
-msgid ""
-"Yasound - The number one social radios platform - Create your free web radio"
-msgstr "YaSound - La plateforme de radios sociales numéro un - Créez votre web radio gratuitement"
+msgid "YaSound - Create your social web radio instantly"
+msgstr "YaSound -  Créez votre web radio sociale en un instant"
 
 #: templates/yabase/webapp.html:14
 msgid ""
 "With Yasound, there’s no need to listen to music alone anymore. Create your "
 "own radio station instantly and share with your friends in real time online "
 "and on your phone."
-msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
+msgstr ""
+"Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
 "amis, et communiquez avec eux en temps réel sur votre mobile et sur le net."
 
 #: templates/yabase/webapp.html:556 templates/yabase/webapp.html.py:675
@@ -1688,8 +1688,8 @@ msgid "Like song on YaSound"
 msgstr "J'aime le titre sur YaSound"
 
 #: templates/yabase/app/radio/radioPage.html:4
-msgid "Online radio powered by YaSound"
-msgstr "Radio en ligne propulsée par YaSound"
+msgid "powered by YaSound"
+msgstr "propulsée par YaSound"
 
 #: templates/yabase/app/radio/radioPage.mustache:10
 msgid "listeners"
@@ -2199,3 +2199,10 @@ msgstr "Invitation pour rejoindre et tester Yasound"
 #: templates/yaref/find_fuzzy.html:6 templates/yaref/find_fuzzy.html.py:13
 msgid "Fuzzy search"
 msgstr "Recherche floue"
+
+#~ msgid ""
+#~ "Yasound - The number one social radios platform - Create your free web "
+#~ "radio"
+#~ msgstr ""
+#~ "YaSound - La plateforme de radios sociales numéro un - Créez votre web "
+#~ "radio gratuitement"
