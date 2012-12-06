@@ -87,7 +87,7 @@ def task_status(request, task_id):
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
-def get_root(app_name):
+def get_root(request, app_name):
     if len(app_name) > 0:
         root = '/' + app_name + '/'
     else:
@@ -96,7 +96,7 @@ def get_root(app_name):
     if app_name == 'app':
         root = '/'
 
-    return root
+    return '/' + request.LANGUAGE_CODE + root
 
 
 @csrf_exempt
@@ -1675,7 +1675,7 @@ class WebAppView(View):
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
-        root = get_root(app_name)
+        root = get_root(request, app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
@@ -1840,7 +1840,7 @@ class WebAppView(View):
 
         genre_form = RadioGenreForm()
 
-        root = get_root(app_name)
+        root = get_root(request, app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer':
@@ -2390,7 +2390,7 @@ def logout(request, app_name='app'):
     return HttpResponseRedirect(logout_url + '?next=%s' % (next_url))
 
 def load_template(request, template_name, app_name='app'):
-    root = get_root(app_name)
+    root = get_root(request, app_name)
 
     context = {
         'root': root,

@@ -313,12 +313,12 @@ MIDDLEWARE_CLASSES = (
     'yabase.middleware.AllowOriginMiddleware',
 
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
 
@@ -362,6 +362,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django_extensions',
     'django_jenkins',
+    'localeurl',
     'extjs',
     'pipeline',
     'south',
@@ -1024,3 +1025,6 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
 )
+
+# django-localeurl stuff
+LOCALEURL_USE_ACCEPT_LANGUAGE = True
