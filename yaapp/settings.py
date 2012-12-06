@@ -309,6 +309,9 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
+    # special middleware for deezer CORS exception
+    'yabase.middleware.AllowOriginMiddleware',
+
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -318,6 +321,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
+
 )
 
 if LOCAL_MODE or DEVELOPMENT_MODE:
@@ -680,7 +684,7 @@ if PRODUCTION_MODE:
 YASOUND_PUSH_PORT = 9000
 
 if LOCAL_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-09.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://streamer2.yasound.com:8000/'
     YASOUND_RADIO_WEB_URL = 'http://localhost:8000/listen/'
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
@@ -692,7 +696,7 @@ elif DEVELOPMENT_MODE:
         YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
-    YASOUND_STREAM_SERVER_URL = 'http://yas-web-09.ig-1.net:8000/'
+    YASOUND_STREAM_SERVER_URL = 'http://streamer2.yasound.com:8000/'
     YASOUND_RADIO_WEB_URL = 'https://yasound.com/listen/'
     ENABLE_PUSH = True
     PUSH_REDIS_HOST = 'yas-sql-01'
@@ -790,11 +794,7 @@ if not PRODUCTION_MODE:
         "recommendations_cache_clean": {
             "task": "yarecommendation.task.async_clean_recommendation_cache",
             "schedule": crontab(minute=0, hour='*'),
-        },
-        "remove-inactive-anonymous-users": {
-            "task": "account.task.async_remove_inactive_anonymous_users",
-            "schedule": crontab(minute=0, hour='*'),
-        },
+        }
     }
 else:
     if hostname == 'yas-web-08':
@@ -849,11 +849,7 @@ else:
             "raido_popularity": {
                 "task": "yametrics.task.popularity_update_task",
                 "schedule": crontab(minute=0, hour='*'),
-            },
-            "remove-inactive-anonymous-users": {
-                "task": "account.task.async_remove_inactive_anonymous_users",
-                "schedule": crontab(minute=0, hour='*'),
-            },
+            }
         }
 
 
@@ -1011,6 +1007,9 @@ YASOUND_TWITTER_ACCOUNTS = {
     'FR': 'YasoundSAS'
 }
 YASOUND_TWITTER_DEFAULT_ACCOUNT = 'YasoundUS'
+
+# TAPJOY
+TAPJOY_SECRET_KEY = 'ry3Fk6iJfOgXv6IY0tjo'
 
 # django debug toolbar
 INTERNAL_IPS = ('127.0.0.1',)

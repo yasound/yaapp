@@ -218,7 +218,7 @@ msgid ""
 "own radio station instantly and share with your friends in real time online "
 "and on your phone."
 msgstr "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
-"amis, et communiquez avec eux en temps réel sur votre mobile, et bientôt sur le net."
+"amis, et communiquez avec eux en temps réel sur votre mobile et sur le net."
 
 #: templates/yaweb/base.html:58
 #: templates/yaweb/base.html.py:60

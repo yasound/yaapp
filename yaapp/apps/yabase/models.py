@@ -7,11 +7,13 @@ from django.db import models, transaction
 from django.db.models import Q, signals
 from django.db.models.aggregates import Sum
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItem, Tag
 from yacore.database import atomic_inc
+from yacore.http import absolute_url
 from yacore.tags import clean_tags, clean_tag
 from yametrics.matching_errors import MatchingErrorsManager
 from yaref.models import YasoundSong
@@ -575,7 +577,7 @@ class Radio(models.Model):
     deleted = models.BooleanField(default=False)
     name = models.CharField(_('name'), max_length=255)
     picture = models.ImageField(_('picture'), upload_to=yaapp_settings.RADIO_PICTURE_FOLDER, null=True, blank=True)
-    url = models.URLField(_('url'), null=True, blank=True)
+    url = models.CharField(_('url'), null=True, blank=True, max_length=200)
     uuid = models.CharField(_('uuid'), max_length=48, blank=True)
     description = models.TextField(_('description'), blank=True)
     genre = models.CharField(_('genre'), max_length=255, blank=True, choices=yabase_settings.RADIO_STYLE_CHOICES, default=yabase_settings.RADIO_STYLE_ALL)
@@ -870,6 +872,7 @@ class Radio(models.Model):
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
+        bundle.data['m3u_url'] = self.m3u_url
         bundle.data['web_url'] = self.web_url
 
     def as_dict(self, request_user=None):
@@ -885,6 +888,7 @@ class Radio(models.Model):
             'large_picture': self.large_picture_url,
             'ready': self.ready,
             'stream_url' : self.stream_url,
+            'm3u_url' : self.m3u_url,
             'web_url': self.web_url,
             'genre': self.genre,
             'overall_listening_time': self.overall_listening_time,
@@ -1076,7 +1080,7 @@ class Radio(models.Model):
             manager = AnonymousManager()
             anons = manager.anonymous_for_radio(self.uuid)
             if anons is not None:
-                total_count += anons.count()
+                total_count += len(anons)
                 for i, anon in enumerate(anons):
                     if i > max_anonymous:
                         break
@@ -1102,7 +1106,7 @@ class Radio(models.Model):
         manager = AnonymousManager()
         anons = manager.anonymous_for_radio(self.uuid)
         if anons is not None:
-            nb_anons = anons.count()
+            nb_anons = len(anons)
         return nb_users + nb_anons
 
     @property
@@ -1187,13 +1191,32 @@ class Radio(models.Model):
     def stream_url(self):
         url = self.url
         if url is None or url == '':
-            url = yaapp_settings.YASOUND_STREAM_SERVER_URL+ self.uuid
+            url = yaapp_settings.YASOUND_STREAM_SERVER_URL + self.uuid
         return url
+
+    @property
+    def m3u_url(self):
+        return absolute_url(reverse('radio_m3u', args=[self.uuid]))
 
     @property
     def web_url(self):
         url = yaapp_settings.YASOUND_RADIO_WEB_URL + self.uuid
         return url
+
+    @property
+    def meta_description(self):
+        """ return data useful for <meta name="description"/> tag"""
+
+        if self.description is not None and len(self.description) > 0:
+            if self.genre:
+                return _('%(description)s (style: %(genre)s) - A webradio powered by YaSound') % {'description': self.description, 'genre': self.get_genre_display().lower()}
+            else:
+                return _('%(description)s - A webradio powered by YaSound') % {'description': self.description}
+        else:
+            if self.genre:
+                return _('Listen to the online webradio %(name)s (style: %(genre)s) - powered by YaSound') % {'name': self.name, 'genre': self.get_genre_display().lower()}
+            else:
+                return _('Listen to the online webradio %(name)s - powered by YaSound') % {'name': self.name}
 
     def added_in_favorites(self, user):
         creator_profile = self.creator.get_profile()
