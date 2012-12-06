@@ -77,25 +77,26 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
     },
 
     resetSlide: function() {
-
         var cells = this.$('li');
         if(cells.length > 0) {
             var cellWidth = $(cells.get(0)).outerWidth(true);
             this.$('.block-slide').width(cells.length*cellWidth + 'px');
         }
 
-        this.currentStep = 0;
-        this.$('.block-slide').css('marginLeft', 0);
-        this.$el.removeClass('last').addClass('first');
+        // this.currentStep = 0;
+        // this.$('.block-slide').css('marginLeft', 0);
+        // this.$el.removeClass('last').addClass('first');
 
     },
 
     onSlide: function(e) {
         e.preventDefault();
 
+
         var ranges = this.$('ul');
             offset = $(ranges.get(0)).outerWidth(true),
             max = ranges.length,
+            previousStep = this.currentStep;
             btn = $(e.currentTarget);
 
         if(btn.hasClass('asset-slide-right') && this.currentStep < max-1) this.currentStep++;
@@ -109,6 +110,9 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
 
         this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*offset + 'px' });
 
+        if (previousStep < this.currentStep) {
+            this.collection.requestNextPage();
+        }
     }
 });
 
@@ -125,8 +129,11 @@ Yasound.Views.HomePage = Backbone.View.extend({
         $.subscribe('/submenu/genre', this.onGenreChanged);
 
         this.selection = new Yasound.Data.Models.SelectedRadios({});
+        this.selection.perPage = 10;
         this.favorites = new Yasound.Data.Models.SelectedRadios({});
+        this.favorites.perPage = 10;
         this.popular = new Yasound.Data.Models.SelectedRadios({});
+        this.popular.perPage = 10;
 
     },
 
