@@ -7141,6 +7141,10 @@ input::-ms-input-placeholder {
   line-height: 20px;
   font-size: 14px;
   margin-top: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
 }
 .radio-cell h1 a {
   color: #313234;
@@ -7944,6 +7948,30 @@ input::-ms-input-placeholder {
   }
   .teaser .appstore {
     left: 20px;
+  }
+  .block-slide {
+    max-width: 100%;
+  }
+  .block-slide li {
+    margin-right: 1.2%;
+    width: 19%;
+  }
+  .block-slide li h1 a {
+    font-size: 12px;
+  }
+  .block-slide li:last-child {
+    margin-right: 0;
+  }
+  .block-slide-mask {
+    width: 100%;
+  }
+  .block-slide-container .asset-slide-left,
+  .block-slide-container .asset-slide-right,
+  .block-slide-container ul + ul,
+  .block-slide-container .tag,
+  .block-slide-container .fav,
+  .block-slide-container .share {
+    display: none;
   }
 }
 @media (min-width: 768px) and (max-width: 979px) {
