@@ -357,7 +357,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             data['radio_name'] = this.radio.get('name');
         }
         $(this.el).html(ich.trackTemplate(data));
-        document.title = 'Yasound - ' + this.model.title();
 
         if (this.userMenu) {
             this.userMenu.close();
