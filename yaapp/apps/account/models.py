@@ -1490,7 +1490,8 @@ class UserProfile(models.Model):
 
     def check_geo_localization(self, request):
         from task import async_check_geo_localization
-        async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
+        if yaapp_settings.GEOIP_LOOKUP in request.META:
+            async_check_geo_localization.delay(userprofile=self, ip=request.META[yaapp_settings.GEOIP_LOOKUP])
 
     def position_changed(self):
         if self.latitude is None or self.longitude is None:
@@ -1684,20 +1685,46 @@ class InvitationsManager():
         db_ids = self.collection.find({type:uid}, {'db_id': True, '_id': False})
         return db_ids
 
+
 class AnonymousManager():
-    """Store anonymous users data in mongodb
+    """Store anonymous users data in memcached
     """
-    ANONYMOUS_TTL = 20 # seconds
 
-    def __init__(self):
-        self.db = settings.MONGO_DB
-        self.collection = self.db.account.users.anonymous
-        self.collection.ensure_index('radio_uuid')
-        self.collection.ensure_index('anonymous_id', unique=True)
-        self.collection.ensure_index('updated')
+    ANONYMOUS_TTL = 20  # seconds
 
-    def erase_informations(self):
-        self.collection.drop()
+    def _remove_from_radio(self, anonymous_id, radio_uuid):
+        radio_key = 'radio_%s.anonymous' % (radio_uuid)
+
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+
+        anons = yacore_cache.cached_object(radio_key, [])
+        new_anons = []
+        for anon in anons:
+            if anon.get('anonymous_id') != anonymous_id and anon.get('updated') >= expired_date:
+                new_anons.append(anon)
+
+        yacore_cache.cache_object(radio_key, new_anons, AnonymousManager.ANONYMOUS_TTL)
+
+        anon_key = 'anonymous_%s.radio' % (anonymous_id)
+        yacore_cache.invalidate_object(anon_key)
+
+    def _add_to_radio(self, anonymous_id, radio_uuid, doc):
+        radio_key = 'radio_%s.anonymous' % (radio_uuid)
+
+        now = datetime.datetime.now()
+        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
+
+        anons = yacore_cache.cached_object(radio_key, [])
+        new_anons = []
+        for anon in anons:
+            if anon.get('anonymous_id') != anonymous_id and anon.get('updated') >= expired_date:
+                new_anons.append(anon)
+
+        anon_key = 'anonymous_%s.radio' % (anonymous_id)
+        new_anons.append(doc)
+        yacore_cache.cache_object(radio_key, new_anons, AnonymousManager.ANONYMOUS_TTL)
+        yacore_cache.cache_object(anon_key, radio_uuid, AnonymousManager.ANONYMOUS_TTL)
 
     def upsert_anonymous(self, anonymous_id, radio_uuid, city_record=None):
         """insert or update an anonymous user
@@ -1707,6 +1734,11 @@ class AnonymousManager():
         :param city_record: geoip record
         """
 
+        anon_key = 'anonymous_%s.radio' % (anonymous_id)
+        previous_radio_uuid = yacore_cache.cached_object(anon_key, None)
+        if previous_radio_uuid is not None:
+            self._remove_from_radio(anonymous_id, previous_radio_uuid)
+
         now = datetime.datetime.now()
         doc = {
             'anonymous_id': anonymous_id,
@@ -1714,7 +1746,7 @@ class AnonymousManager():
             'city_record': city_record,
             'updated': now
         }
-        self.collection.update({'anonymous_id': anonymous_id}, {'$set': doc }, upsert=True, safe=True)
+        self._add_to_radio(anonymous_id, radio_uuid, doc)
 
     def anonymous_for_radio(self, radio_uuid):
         """return the anonymous users for a given radio
@@ -1729,21 +1761,9 @@ class AnonymousManager():
         }
         """
 
-        now = datetime.datetime.now()
-        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
-        return self.collection.find({
-            'radio_uuid': radio_uuid,
-            'updated': {
-                '$gte': expired_date
-            }
-        })
-
-    def remove_inactive_users(self):
-        """deleted expired anonymous users"""
-
-        now = datetime.datetime.now()
-        expired_date = now + relativedelta(seconds=-AnonymousManager.ANONYMOUS_TTL)
-        self.collection.remove({'updated': {'$lt': expired_date}}, safe=True)
+        key = 'radio_%s.anonymous' % (radio_uuid)
+        anons = yacore_cache.cached_object(key, [])
+        return anons
 
 
 def user_profile_deleted(sender, instance, created=None, **kwargs):
@@ -1893,6 +1913,18 @@ def check_for_language(sender, request, user, **kwargs):
         p.language = request.LANGUAGE_CODE
         p.save()
 
+
+def check_geo_localization(sender, request, user, **kwargs):
+    if request is None:
+        return
+
+    p = user.get_profile()
+    if p is None:
+        return
+
+    p.check_geo_localization(request)
+
+
 def install_handlers():
     post_save.connect(create_user_profile, sender=User)
     post_save.connect(create_user_profile, sender=EmailUser)
@@ -1911,6 +1943,7 @@ def install_handlers():
     post_save.connect(social_user_updated, sender=UserSocialAuth)
 
     auth_signals.user_logged_in.connect(check_for_language)
+    auth_signals.user_logged_in.connect(check_geo_localization)
 
 install_handlers()
 

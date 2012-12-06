@@ -23,9 +23,14 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         this.currentSongModel = new Yasound.Data.Models.CurrentSong();
         this.currentSongModel.bind('change', this.refreshCurrentSong, this);
     },
+
     onClose: function () {
         this.model.unbind('change', this.render);
+        this.currentSongModel.unbind('change', this.refreshCurrentSong);
+        this.currentSongModel.onClose();
+        delete this.currentSongModel;
     },
+
     render: function () {
         var data = this.model.toJSON();
         if (data && data.name && data.name.length > 18) {
@@ -52,7 +57,11 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             } else {
                 $("li .mask", $(this.el).parent()).hide();
             }
-            this.currentSongModel.fetch();
+
+            if (Yasound.App.appName !== 'deezer') {
+                // deezer design does not need info to be fetched
+                this.currentSongModel.fetch();
+            }
 
             if (Yasound.App.enableFX) {
                 mask.removeClass('hidden').fadeIn(300);
@@ -348,7 +357,6 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
             data['radio_name'] = this.radio.get('name');
         }
         $(this.el).html(ich.trackTemplate(data));
-        document.title = 'Yasound - ' + this.model.title();
 
         if (this.userMenu) {
             this.userMenu.close();

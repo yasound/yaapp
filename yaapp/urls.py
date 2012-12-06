@@ -292,6 +292,9 @@ urlpatterns = patterns('',
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),
 
+    # tapjoy callback
+    url(r'^tapjoy_callback/$', 'yapremium.views.tapjoy_callback', name='tapjoy_callback'),
+
 
     #email confirmation
     (r'^confirm_email/(\w+)/$', 'emailconfirmation.views.confirm_email'),
@@ -305,7 +308,7 @@ urlpatterns = patterns('',
     # internal stuff
     url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
 
-    url(r'^close/$', 'yabase.views.close', name='close'),
+    url(r'^deezer/close/$', 'yabase.views.close', name='close'),
 
 
     (r'^', include('yabase.urls')),
@@ -319,11 +322,13 @@ if settings.PRODUCTION_MODE:
     urlpatterns += patterns('',
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.txt', 'mimetype': 'text/plain'}),
         url(r'^channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='facebook_channel_url'),
+        url(r'^deezer/facebook_channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='deezer_facebook_channel_url'),
     )
 else:
     urlpatterns += patterns('',
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.forbidden.txt', 'mimetype': 'text/plain'}),
         url(r'^channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='facebook_channel_url'),
+        url(r'^deezer/facebook_channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='deezer_facebook_channel_url'),
     )
 
 # sitemap

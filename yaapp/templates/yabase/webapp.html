@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="/media/app/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos amis, et communiquez avec eux en temps réel." />
+    <meta name="description" content="{% block meta_description %}{% trans 'With Yasound, there’s no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time online and on your phone.' %}{% endblock%}" />
     <meta name="Author" content="Yasound SAS" />
     <meta name="copyright" content="Yasound SAS" />
     <meta http-equiv="Cache-control" content="public" />
@@ -106,7 +106,7 @@ HTML, BODY { height: 100%; }
     {% endcompress %}
 
     {% ifequal app_name 'deezer' %}
-    <link rel="stylesheet" href="https://cdns-files.deezer.com/css/dz.css"/>
+    <link rel="stylesheet" href="http://cdn-files.deezer.com/css/dz.css"/>
     <link rel="stylesheet" href="/media/css/deezer.css"/>
     {% endifequal %}
 
@@ -147,8 +147,10 @@ HTML, BODY { height: 100%; }
 
 
     {% ifequal sound_player 'deezer' %}
-    <script type="text/javascript" src="https://cdns-files.deezer.com/js/min/dzapp.js"></script>
+    <script type="text/javascript" src="http://cdn-files.deezer.com/js/min/dz.js"></script>
     {% endifequal %}
+
+
 
     <script type="text/javascript" src='/media/js/socket.io.js'></script>
 
@@ -744,7 +746,7 @@ HTML, BODY { height: 100%; }
 </body>
 {% endblock %}
 
-{% ifnotequal sound_player 'deezer' %}
+{% ifequal sound_player 'soundmanager' %}
 <div id="dz-root"></div>
 <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
 <script>
@@ -753,7 +755,7 @@ HTML, BODY { height: 100%; }
     channelUrl : '{{ deezer_channel_url }}'
   });
 </script>
-{% endifnotequal %}
+{% endifequal %}
 
 <script type="text/javascript">
 

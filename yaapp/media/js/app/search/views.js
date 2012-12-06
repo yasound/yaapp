@@ -36,6 +36,7 @@ Yasound.Views.SearchResults = Backbone.View.extend({
         this.views = [];
     },
     onClose: function() {
+        this.clear();
         this.collection.unbind('beforeFetch', this.beforeFetch);
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
@@ -54,7 +55,7 @@ Yasound.Views.SearchResults = Backbone.View.extend({
 
         this.loadingMask.hide();
 
-        if (this.collection.length == 0) {
+        if (this.collection.length === 0) {
             $('.empty', this.el).show();
         } else {
             $('.empty', this.el).hide();

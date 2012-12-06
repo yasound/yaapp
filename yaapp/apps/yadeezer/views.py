@@ -73,6 +73,14 @@ def channel_url(request, template_name='deezer/channel_url.html'):
     }, context_instance=RequestContext(request))
 
 
+def channel_url_https(request, template_name='deezer/channel_url_https.html'):
+    """
+    dumb view which renders the channel_url file
+    """
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))
+
+
 @csrf_exempt
 @check_api_key(methods=['POST'])
 def import_track(request, radio_uuid):

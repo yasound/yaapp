@@ -95,6 +95,7 @@ def get_root(app_name):
 
     if app_name == 'app':
         root = '/'
+
     return root
 
 
@@ -1656,7 +1657,10 @@ class WebAppView(View):
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
         facebook_share_link = absolute_url(reverse('webapp_default'))
 
-        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        if app_name != 'deezer':
+            facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        else:
+            facebook_channel_url = absolute_url(reverse('deezer_facebook_channel_url'))
 
         genre_form = RadioGenreForm()
 
@@ -1675,7 +1679,6 @@ class WebAppView(View):
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
             sound_player = 'deezer'
-
 
         context = {
             'user_id' : user_id,
@@ -1699,7 +1702,7 @@ class WebAppView(View):
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
             'minutes': get_global_minutes(),
-            'deezer_channel_url': absolute_url(reverse('deezer_channel')),
+            'deezer_channel_url': absolute_url(reverse('deezer_channel_https')),
             'deezer_app_id': settings.DEEZER_APP_ID,
             'connected_users': connected_users,
             'sound_player': sound_player,
@@ -1829,7 +1832,10 @@ class WebAppView(View):
                 if request.is_ajax():
                     return self._ajax_error(import_itunes_form.errors)
 
-        facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        if app_name != 'deezer':
+            facebook_channel_url = absolute_url(reverse('facebook_channel_url'))
+        else:
+            facebook_channel_url = absolute_url(reverse('deezer_facebook_channel_url'))
 
         genre_form = RadioGenreForm()
 
@@ -1863,7 +1869,7 @@ class WebAppView(View):
             'my_accounts_form': my_accounts_form,
             'my_notifications_form': my_notifications_form,
             'minutes': get_global_minutes(),
-            'deezer_channel_url': absolute_url(reverse('deezer_channel')),
+            'deezer_channel_url': absolute_url(reverse('deezer_channel_https')),
             'deezer_app_id': settings.DEEZER_APP_ID,
             'sound_player': sound_player,
             'root': root,
@@ -2686,3 +2692,11 @@ def download_current_song(request, radio_uuid, token):
     response['Content-Type'] = 'audio/mp3'
     response['X-Accel-Redirect'] = '/songs/' + path
     return response
+
+
+@check_api_key(methods=['GET'], login_required=False)
+def radio_m3u(request, radio_uuid, template_name='yabase/m3u.txt'):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    return render_to_response(template_name, {
+        'radio': radio
+    }, context_instance=RequestContext(request), mimetype='audio/x-mpegurl')
