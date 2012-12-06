@@ -1203,6 +1203,21 @@ class Radio(models.Model):
         url = yaapp_settings.YASOUND_RADIO_WEB_URL + self.uuid
         return url
 
+    @property
+    def meta_description(self):
+        """ return data useful for <meta name="description"/> tag"""
+
+        if self.description is not None and len(self.description) > 0:
+            if self.genre:
+                return _('%(description)s (style: %(genre)s) - A webradio powered by YaSound') % {'description': self.description, 'genre': self.get_genre_display().lower()}
+            else:
+                return _('%(description)s - A webradio powered by YaSound') % {'description': self.description}
+        else:
+            if self.genre:
+                return _('Listen to the online webradio %(name)s (style: %(genre)s) - powered by YaSound') % {'name': self.name, 'genre': self.get_genre_display().lower()}
+            else:
+                return _('Listen to the online webradio %(name)s - powered by YaSound') % {'name': self.name}
+
     def added_in_favorites(self, user):
         creator_profile = self.creator.get_profile()
         creator_profile.my_radio_added_in_favorites(user.get_profile(), self)

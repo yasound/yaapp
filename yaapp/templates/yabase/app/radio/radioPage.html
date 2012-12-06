@@ -1,6 +1,10 @@
 {% extends "yabase/webapp.html" %}
 {% load i18n %}
 
+{% block head_title%}{{ radio.name }} - Webradio {{ radio.get_genre_display }} - {% trans "Online radio listening" %} - YaSound{% endblock %}
+
+{% block meta_description %}{{ radio.meta_description|linebreaksbr|striptags }}{% endblock %}
+
 {% block fb_open_graph %}
   <meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}" />
   <meta property="og:type"   content="{{ FACEBOOK_APP_NAMESPACE}}:radio_station" />
