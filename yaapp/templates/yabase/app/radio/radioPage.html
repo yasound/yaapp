@@ -1,7 +1,7 @@
 {% extends "yabase/webapp.html" %}
 {% load i18n %}
 
-{% block head_title%}{{ radio.name }} - Webradio {{ radio.get_genre_display }} - {% trans "Online radio powered by YaSound"{% endblock %}
+{% block head_title%}{{ radio.name }} - Webradio {{ radio.get_genre_display }} - {% trans "Online radio powered by YaSound" %}{% endblock %}
 
 {% block meta_description %}{{ radio.meta_description|linebreaksbr|striptags }}{% endblock %}
 
