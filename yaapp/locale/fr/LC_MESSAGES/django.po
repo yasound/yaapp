@@ -880,7 +880,7 @@ msgstr "YaSound -  Créez votre web radio sociale en un instant"
 
 #: templates/yabase/webapp.html:14
 msgid ""
-"With Yasound, there’s no need to listen to music alone anymore. Create your "
+"With Yasound, there's no need to listen to music alone anymore. Create your "
 "own radio station instantly and share with your friends in real time."
 msgstr ""
 "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
