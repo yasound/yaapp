@@ -7,8 +7,16 @@ Namespace('Yasound.Views');
 
 
 Yasound.Views.RadiosSlide = Backbone.View.extend({
+
+    events: {
+        'click a.asset-slide-right': 'onSlide',
+        'click a.asset-slide-left': 'onSlide'
+    },
+
+    currentStep: 0,
+
     initialize: function() {
-        _.bindAll(this, 'addOne', 'addAll');
+        _.bindAll(this, 'addOne', 'addAll', 'onSlide');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -42,6 +50,7 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
         }
         this.currentRadioIndex = 0;
         this.collection.each(this.addOne);
+        this.resetSlideWidth();
     },
 
     clear: function() {
@@ -53,9 +62,9 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
 
     addOne: function(radio) {
         if (this.currentRadioIndex === 0 ) {
-            this.cellsRange = $('<ul/>').appendTo(this.el);
+            this.cellsRange = $('<ul/>').appendTo(this.$('.block-slide'));
         } else if ( this.currentRadioIndex % 5 === 0) {
-            this.cellsRange = $('<ul/>').appendTo(this.el);
+            this.cellsRange = $('<ul/>').appendTo(this.$('.block-slide'));
         }
         var view = new Yasound.Views.RadioCell({
             model: radio
@@ -63,6 +72,37 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
         this.cellsRange.append(view.render().el);
         this.views.push(view);
         this.currentRadioIndex++;
+    },
+
+    resetSlideWidth: function() {
+
+        var cells = this.$('li');
+        if(cells.length > 0) {
+            var cellWidth = $(cells.get(0)).outerWidth(true);
+            this.$('.block-slide').width(cells.length*cellWidth + 'px');
+        }
+
+    },
+
+    onSlide: function(e) {
+        e.preventDefault();
+
+        var ranges = this.$('ul');
+            offset = $(ranges.get(0)).outerWidth(true),
+            max = ranges.length,
+            btn = $(e.currentTarget);
+
+        if(btn.hasClass('asset-slide-right') && this.currentStep < max-1) this.currentStep++;
+        else if(btn.hasClass('asset-slide-left') && this.currentStep !== 0) this.currentStep--;
+
+        if(this.currentStep === 0) this.$el.addClass('first');
+        else this.$el.removeClass('first');
+
+        if(this.currentStep === max - 1) this.$el.addClass('last');
+        else this.$el.removeClass('last');
+
+        this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*offset + 'px' });
+
     }
 });
 
