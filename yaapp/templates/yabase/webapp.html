@@ -4,7 +4,13 @@
 {% load compress %}
 {% load app_url %}
 {% load straight_include %}<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
+
+<!--[if lt IE 7 ]><html class="ie ie6"><![endif]-->
+<!--[if IE 7 ]><html class="ie ie7"><![endif]-->
+<!--[if IE 8 ]><html class="ie ie8"><![endif]-->
+<!--[if IE 9 ]><html class="ie ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html xml:lang="{{current_locale}}" lang="{{current_locale}}"><!--<![endif]-->
+
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasound: http://ogp.me/ns/fb/yasound#">
     <title>{% block head_title %}Yasound{% endblock %}</title>
     <meta charset="utf-8" />
