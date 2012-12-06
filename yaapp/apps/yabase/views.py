@@ -9,7 +9,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseBadRequest, HttpResponseRedirect
+    HttpResponseBadRequest, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
@@ -1121,13 +1121,13 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
             if radios.count() > 0:
                 radio = radios[0]
                 url = reverse('yabase.views.web_listen', args=[radio.uuid])
-                return HttpResponseRedirect(url)
+                return HttpResponsePermanentRedirect(url)
 
     if radio is None:
         raise Http404
 
     url = reverse('webapp_default_radio', args=[radio.uuid])
-    return HttpResponseRedirect(url)
+    return HttpResponsePermanentRedirect(url)
 
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
@@ -1154,7 +1154,7 @@ def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.htm
             if radios.count() > 0:
                 radio = radios[0]
                 url = reverse('yabase.views.web_widget', args=[radio.uuid, wtype])
-                return HttpResponseRedirect(url)
+                return HttpResponsePermanentRedirect(url)
 
     if radio is None:
         raise Http404
