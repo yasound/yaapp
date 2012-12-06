@@ -134,11 +134,12 @@ Yasound.Views.HomePage = Backbone.View.extend({
         $.subscribe('/submenu/genre', this.onGenreChanged);
 
         this.selection = new Yasound.Data.Models.SelectedRadios({});
-        this.selection.perPage = 10;
         this.favorites = new Yasound.Data.Models.Favorites({});
-        this.favorites.perPage = 10;
         this.popular = new Yasound.Data.Models.MostActiveRadios({});
-        this.popular.perPage = 10;
+
+        this.selection.perPage = 15;
+        this.favorites.perPage = 15;
+        this.popular.perPage = 15;
 
     },
 
@@ -181,6 +182,10 @@ Yasound.Views.HomePage = Backbone.View.extend({
         this.selection.goTo(0);
         this.favorites.goTo(0);
         this.popular.goTo(0);
+
+        this.selection.perPage = 5;
+        this.favorites.perPage = 5;
+        this.popular.perPage = 5;
 
         this.updateGenreSlug(genre);
         return this;
