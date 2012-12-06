@@ -1028,3 +1028,6 @@ DEBUG_TOOLBAR_PANELS = (
 
 # django-localeurl stuff
 LOCALEURL_USE_ACCEPT_LANGUAGE = True
+LOCALE_INDEPENDENT_PATHS = (
+    r'^/api/v1/*',
+)
