@@ -27,10 +27,13 @@ Yasound.Views.Footer = Backbone.View.extend({
             'onRadioChanged',
             'onPlayerStop',
             'toggleVolume',
-            'onVolumeSlide');
+            'onVolumeSlide',
+            'onShare');
         $.subscribe('/current_radio/change', this.onRadioChanged);
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
+        $('#modal-share').on('show', this.onShare);
+
     },
 
     onClose: function () {
@@ -41,6 +44,7 @@ Yasound.Views.Footer = Backbone.View.extend({
         if (this.currentSong) {
             this.currentSong.unbind('change', this.renderSong, this);
         }
+        $('#modal-share').off('show', this.onShare);
     },
 
     render: function () {
@@ -181,6 +185,21 @@ Yasound.Views.Footer = Backbone.View.extend({
 
         this.$('.pl-volume').removeClass(classes.join(' ')).addClass('vol' + threshold);
 
+    },
+
+    onShare: function (e) {
+        if (this.currentSong.get('id')) {
+            var el = $('#modal-share .modal-body');
+            if (!this.shareView) {
+                this.shareView = new Yasound.Views.Share({
+                    el: el,
+                    model: this.currentSong
+                });
+            }
+            this.shareView.render(this.radio);
+        } else {
+            Yasound.Utils.dialog(gettext('Error'), gettext('Nothing to share'));
+        }
     }
 
 });
