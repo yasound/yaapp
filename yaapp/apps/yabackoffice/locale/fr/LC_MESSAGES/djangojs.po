@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-05 10:48+0100\n"
+"POT-Creation-Date: 2012-12-07 17:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,46 +106,46 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:274 js/app/common/models.js.py:329
+#: js/app/common/models.js:278 js/app/common/models.js.py:333
 #: js/app/profile/models.js:38
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:328 js/app/profile/models.js:37
+#: js/app/common/models.js:332 js/app/profile/models.js:37
 #: js/app/share/views.js:49 js/app/share/views.js.py:91
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:330 js/app/profile/models.js:39
+#: js/app/common/models.js:334 js/app/profile/models.js:39
 #: js/app/share/views.js:50
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:402
+#: js/app/common/models.js:406
 msgid "followers"
 msgstr "abonnés"
 
-#: js/app/common/models.js:406
+#: js/app/common/models.js:410
 msgid "follower"
 msgstr "abonné"
 
-#: js/app/common/models.js:414
+#: js/app/common/models.js:418
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:421
+#: js/app/common/models.js:425
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:423
+#: js/app/common/models.js:427
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:269 js/app/header/views.js:163
+#: js/app/common/views.js:278 js/app/header/views.js:163
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:503 js/app/friends/views.js:272
+#: js/app/common/views.js:511 js/app/friends/views.js:272
 #: js/app/friends/views.js.py:319 js/app/friends/views.js:325
 #: js/app/friends/views.js.py:339 js/app/friends/views.js:345
 #: js/app/friends/views.js.py:364 js/app/friends/views.js:370
@@ -154,38 +154,42 @@ msgstr "Nouvelle notification reçue"
 msgid "Error"
 msgstr "Erreur"
 
-#: js/app/common/views.js:503
+#: js/app/common/views.js:511
 msgid "Nothing to share"
 msgstr "Rien à partager"
 
-#: js/app/common/views.js:534
+#: js/app/common/views.js:542
 msgid "Show more"
 msgstr "Charger plus"
 
-#: js/app/common/views.js:811 js/app/header/views.js:145
+#: js/app/common/views.js:819 js/app/header/views.js:145
 #: js/app/login/views.js:34
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:824 js/app/header/views.js:158
+#: js/app/common/views.js:832 js/app/header/views.js:158
 #: js/app/login/views.js:47 js/app/newRadio/views.js:77
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:873
+#: js/app/common/views.js:882
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:875 js/backoffice/Geoperm/Geoperm.js:317
+#: js/app/common/views.js:884 js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
+
+#: js/app/common/views.js:1015
+msgid "Sort by genre"
+msgstr "Trier par genre"
 
 #: js/app/favorites/views.js:40
 msgid "Next favorites"
 msgstr "Favoris suivants"
 
-#: js/app/favorites/views.js:131 js/app/home/views.js:47
-#: js/app/myRadios/views.js:248 js/app/top/views.js:120
+#: js/app/favorites/views.js:131 js/app/myRadios/views.js:248
+#: js/app/top/views.js:120
 msgid "Next radios"
 msgstr "Radios suivantes"
 
@@ -228,19 +232,19 @@ msgstr ""
 "Erreur lors de la communication avec Yasound, veuillez réessayer "
 "ultérieurement."
 
-#: js/app/gifts/views.js:329
+#: js/app/gifts/views.js:346
 msgid "Invalid code"
 msgstr "Code invalide"
 
-#: js/app/gifts/views.js:329
+#: js/app/gifts/views.js:346
 msgid "The provided code is invalid."
 msgstr "Le code fourni est invalide."
 
-#: js/app/gifts/views.js:331
+#: js/app/gifts/views.js:348
 msgid "Code validated"
 msgstr "Code validé"
 
-#: js/app/gifts/views.js:331
+#: js/app/gifts/views.js:348
 msgid "Your code is now validated, your gift will be available soon."
 msgstr ""
 "Votre code est maintenant validé, votre cadeau sera bientôt disponible."

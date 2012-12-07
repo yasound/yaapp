@@ -850,7 +850,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #play-btn"           : "togglePlay",
         "click #responsive-love-btn": "like",
         "click #responsive-song"    : "displayRadio",
-        "click .responsive-infos"   : "displayRadio"
+        "click .responsive-infos"   : "displayRadio",
+        'click .dropdown-genre ul li a': 'onGenre'
     },
 
     initialize: function() {
@@ -890,6 +891,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
 
+        $('.dropdown-genre ul li', this.el).first().hide();
         return this;
     },
     selectMenu: function(menu) {
@@ -997,8 +999,23 @@ Yasound.Views.SubMenu = Backbone.View.extend({
                 });
             }
         }
-    }
+    },
 
+    onGenre: function (e) {
+        e.preventDefault();
+        var value = $(e.target).data('genre');
+        $('.btn-select', this.el).text(text);
+        var first = $('.dropdown-genre ul li', this.el).first();
+        if (value !== '') {
+            first.show();
+            var text = $(e.target).text();
+            $('.btn-select', this.el).html(text + ' <i class="asset-select">');
+        } else {
+            first.hide();
+            $('.btn-select', this.el).html(gettext('Sort by genre') + ' <i class="asset-select">');
+        }
+        $.publish('/submenu/genre', value);
+    }
 });
 
 Yasound.Views.SelectedGenre = Backbone.View.extend({
@@ -1040,6 +1057,6 @@ Yasound.Views.SelectedGenre = Backbone.View.extend({
             return;
         }
         this.render();
-    },
+    }
 
 });
