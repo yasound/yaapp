@@ -7281,6 +7281,9 @@ input::-ms-input-placeholder {
   padding: 15px 0;
   z-index: 10;
 }
+.footer-player .wrapper {
+  cursor: pointer;
+}
 .footer-player .container-fluid {
   margin: 0;
 }

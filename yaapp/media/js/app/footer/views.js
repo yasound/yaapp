@@ -15,7 +15,8 @@ Yasound.Views.Footer = Backbone.View.extend({
         'click a.pl-star': 'toggleFavorite',
         'click a.pl-like': 'onLike',
         'click a.pl-cart': 'onBuy',
-        'click .pl-volume': 'toggleVolume'
+        'click .pl-volume': 'toggleVolume',
+        'click .wrapper': 'gotoRadio'
     },
 
     initialize: function () {
@@ -27,7 +28,8 @@ Yasound.Views.Footer = Backbone.View.extend({
             'onRadioChanged',
             'onPlayerStop',
             'toggleVolume',
-            'onVolumeSlide');
+            'onVolumeSlide',
+            'gotoRadio');
         $.subscribe('/current_radio/change', this.onRadioChanged);
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
@@ -180,6 +182,18 @@ Yasound.Views.Footer = Backbone.View.extend({
         }
 
         this.$('.pl-volume').removeClass(classes.join(' ')).addClass('vol' + threshold);
+
+    },
+
+    gotoRadio: function(e) {
+
+        // Check if there is no link clicked.
+        // Check if volume slider is not open.
+        if($(e.target).closest('a').length === 0 && !this.$('.pl-volume').hasClass('open')) {
+            Yasound.App.Router.navigate("radio/" + this.radio.get('uuid') + '/', {
+                trigger: true
+            });
+        }
 
     }
 
