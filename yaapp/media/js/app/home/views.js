@@ -61,6 +61,13 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
             view.close();
         });
         this.views = [];
+        $('ul', this.el).remove();
+
+        this.currentStep = 0;
+        this.lastStep = 1;
+        this.currentRadioIndex = 0;
+        this.resetSlide();
+        this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*this.getSlideOffset() + 'px' });
     },
 
     addOne: function(radio) {
@@ -90,7 +97,7 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
         e.preventDefault();
 
         var previousStep = this.currentStep;
-            btn = $(e.currentTarget);
+        var btn = $(e.currentTarget);
 
         if(btn.hasClass('asset-slide-right') && this.currentStep < this.lastStep-1) this.currentStep++;
         else if(btn.hasClass('asset-slide-left') && this.currentStep !== 0) this.currentStep--;
@@ -220,6 +227,11 @@ Yasound.Views.HomePage = Backbone.View.extend({
         this.selectionView.clear();
         this.favoritesView.clear();
         this.popularView.clear();
+
+        this.selection.perPage = 15;
+        this.favorites.perPage = 15;
+        this.popular.perPage = 15;
+
         this.selection.goTo(0);
         this.favorites.goTo(0);
         this.popular.goTo(0);
