@@ -1,44 +1,14 @@
 {% load i18n %}
 {% load app_url %}
-<div class='radio-cell'>
-    <div class="radio-border" style='display:none;'>
-        <img src="/media/app/images/radio/radio-hover-border.png" alt="Radio Hover Border">
+<article class="radio-cell">
+  <a class="radio-cell-link" href="{% app_url webapp_radio app_name radio.uuid %}">
+    <div class="radio-cell-img"><img width="150" height="150" alt="" src="/media/images/radio-loading.gif" /></div>
+    <div class="radio-cell-info">
+      <div class="tag"></div>
+      <i class="play asset-player-play"></i>
+      <div class="fav"><i class="asset-player-star-yellow"></i>{{ radio.favorites}}</div>
+      <div class="share"><i class="asset-player-share"></i></div>
     </div>
-    <div class="radio-container">
-        <div class='picture'>
-        <a href='{% app_url webapp_radio app_name radio.uuid %}'>
-            <img src='/media/images/radio-loading.gif' width='210' height='210' alt='{% trans 'Radio picture' %}'/></a>
-        </div>
-
-        <div class='mask' style='display:none;'>
-            <div class="radio-icon">
-                <img src="/media/images/default_album_small.png" width="36" height="36" alt="{% trans 'Radio Picture' %}"/>
-            </div>
-            <div class="radio-id">
-                <p><span>{% trans "By" %}</span> <% name %></p>
-                {{ radio.creator.user_profile }}
-                <p class='current-song'></p>
-                <p class='current-artist'></p>
-            </div>
-            <div class="tag">
-                <div class="tag-right-side"></div>
-            </div>
-        </div>
-
-        <div class="profile">
-            <img src='' width='32px' height='32px'/>
-            <span class="radio-profile-picture-mask">
-                <img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask"/>
-            </span>
-        </div>
-        <div class='caption'>
-            <div class="caption-content">
-                <h5>{{ radio.name }}</h5>
-                <ul class="radio-favorites">
-                    <li>{{ radio.favorites }}</li>
-                    <li>{{ radio.nb_current_users }}</li>
-                </ul>
-            </div>
-        </div>
-    <div>
-</div>
+  </a>
+  <h1><a href=""{% app_url webapp_radio app_name radio.uuid %}">{{ radio.name}}</a></h1>
+</article>

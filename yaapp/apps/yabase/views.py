@@ -1257,16 +1257,6 @@ class WebAppView(View):
         return HttpResponse(response, mimetype='application/json')
 
     def home(self, request, context, *args, **kwargs):
-        genre = ''
-        if 'genre' in kwargs:
-            genre = 'style_%s' % (kwargs['genre'])
-
-        radio_data, radio_list, next_url = radio_recommendations_process(request=request, internal=True, genre=genre)
-        context['submenu_number'] = 1
-        context['radios'] = radio_list
-        context['next_url'] = next_url
-        context['base_url'] = reverse('yabase.views.radio_recommendations')
-        context['bdata'] = json.dumps([radio for radio in radio_data], cls=MongoAwareEncoder)
         context['g_page'] = 'home'
         context['mustache_template'] = 'yabase/app/home/homePage.mustache'
         return context, 'yabase/app/static.html'
