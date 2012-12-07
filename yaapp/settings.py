@@ -1044,5 +1044,6 @@ LOCALE_INDEPENDENT_PATHS = (
     r'^/radio/(?P<radio_uuid>\w+).m3u$',
     r'^/listen/*',
     r'^/widget/*',
+    r'^/status/$',
 )
 LOCALE_REDIRECT_PERMANENT = True
