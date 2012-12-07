@@ -1,9 +1,16 @@
 {% load i18n %}
 {% load app_url %}
 
-<div class='row-fluid'>
-    <div class='span12 settings-container'>
+<div class="container-fluid content-zone">
+  <div class="row-fluid"></div>
+    <div class='span12'>
         <h1>{% trans "Settings" %}</h1>
+    </div>
+</div>
+
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12 settings-container'>
         <ul id='settings-nav' class='span4'>
             <li class='checked' id='my-informations-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>{% trans "My informations" %}</span></a></li>
             <li class='' id='my-accounts-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-accounts.png" alt='accounts' /><span>{% trans "My accounts" %}</span></a></li>
@@ -154,5 +161,6 @@
             </div>
         </div>
     </div>
+  </div>
 </div>
 
