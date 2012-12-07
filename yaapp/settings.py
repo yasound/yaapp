@@ -986,6 +986,7 @@ TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
 IGNORE_TESTS = (
     # Apps to ignore. example : 'django.contrib.auth',
     'django.contrib.auth',
+    'django.contrib.sitemaps',
     'django_extensions',
     'emencia.django.newsletter',
     'bootstrap',
