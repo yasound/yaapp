@@ -1032,4 +1032,4 @@ LOCALE_INDEPENDENT_PATHS = (
     r'^/api/v1/*',
     r'^/deezer/*',
 )
-LOCALE_REDIRECT_PERMANENT = False
+LOCALE_REDIRECT_PERMANENT = True
