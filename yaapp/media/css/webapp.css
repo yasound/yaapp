@@ -7170,6 +7170,20 @@ input::-ms-input-placeholder {
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
+.radio-grid {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.radio-grid li {
+  display: block;
+  float: left;
+  margin: 6px .5%;
+  width: 15.6666%;
+}
+.radio-grid h1 {
+  margin-bottom: 4px;
+}
 .radio-cell h1 {
   line-height: 20px;
   font-size: 14px;
@@ -7769,6 +7783,10 @@ input::-ms-input-placeholder {
     left: 50%;
     margin-left: -71px;
   }
+  .span12 .radio-grid li {
+    margin: 6px 1%;
+    width: 31.3333%;
+  }
 }
 @media (max-width: 767px) {
   body {
@@ -8018,6 +8036,18 @@ input::-ms-input-placeholder {
   }
   .block-slide-container ul {
     float: none;
+  }
+  .radio-grid li {
+    margin: 6px .5%;
+    width: 19%;
+  }
+  .radio-grid .tag,
+  .radio-grid .fav,
+  .radio-grid .share {
+    display: none;
+  }
+  .content {
+    padding-bottom: 110px;
   }
 }
 @media (min-width: 768px) and (max-width: 979px) {

@@ -1,21 +1,28 @@
 {% load i18n %}
 {% load app_url %}
 {% if request.user.is_authenticated %}
-<div class='no-margin'>
-    <ul id='results' class='radio-cells'>
-    </ul>
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    <div class='cell-pagination' id='pagination'></div>
+<div class="container-fluid content-zone last">
+    <div class="row-fluid">
+        <div class="span12">
+            <ul id='results' class='radio-cells'></ul>
+            <img class='loading-mask' src='/media/images/loading.gif'/>
+            <div class='cell-pagination' id='pagination'></div>
+        </div>
+    </div>
 </div>
 {% else %}
-<div class='no-margin'>
-	<div class='favorites-login-container'>
-		<img class='favorites-login-large'src="/media/app/images/icon-star-big-blue.png" height='164' width='164'>
-		<img class='favorites-login-small' src="/media/app/images/icon-star-big-blue.png" height='100' width='100'>
-		<p class='favorites-login-p'>{% trans "Log in to view your favorites." %}</p>
-        <form action='{% app_url webapp_login app_name %}' method='get'>
-		<button id='login-btn'>{% trans "Login" %}</button>
-        </form>
-	</div>
+<div class="container-fluid content-zone last">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class='favorites-login-container'>
+                <img class='favorites-login-large'src="/media/app/images/icon-star-big-blue.png" height='164' width='164'>
+                <img class='favorites-login-small' src="/media/app/images/icon-star-big-blue.png" height='100' width='100'>
+                <p class='favorites-login-p'>{% trans "Log in to view your favorites." %}</p>
+                <form action='{% app_url webapp_login app_name %}' method='get'>
+                <button id='login-btn'>{% trans "Login" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endif %}

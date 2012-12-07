@@ -1,15 +1,20 @@
 {% load i18n %}
-<div class='span12 no-margin'>
-    <ul id='results' class='radio-cells'>
-    {% if not radios %}
-    {% else %}
-        {% for radio in radios %}
-        <li>{% include 'yabase/app/radioCell.html' %}</li>
-        {% endfor %}
-    {% endif %}
-    </ul>
-    {% if not radios %}
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    {% endif %}
-    <div class='cell-pagination' id='pagination'></div>
+
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <div class="span12">
+      <ul id='results' class="radio-grid">
+        {% if not radios %}
+        {% else %}
+            {% for radio in radios %}
+            <li>{% include 'yabase/app/radioCell.html' %}</li>
+            {% endfor %}
+        {% endif %}
+      </ul>
+      {% if not radios %}
+      <img class='loading-mask' src='/media/images/loading.gif'/>
+      {% endif %}
+      <div class='cell-pagination' id='pagination'></div>
+    </div>
+  </div>
 </div>
