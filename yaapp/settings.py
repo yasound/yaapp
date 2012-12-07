@@ -1031,5 +1031,14 @@ LOCALEURL_USE_ACCEPT_LANGUAGE = True
 LOCALE_INDEPENDENT_PATHS = (
     r'^/api/v1/*',
     r'^/deezer/*',
+    r'^/internal/*',
+    r'^/tapjoy_callback/*',
+    r'^/facebook_update/*',
+    r'^/robots*',
+    r'^/channel*',
+    r'^/sitemap*',
+    r'^/yabackoffice/*',
+    r'^/yaref/*',
+    r'^/rahadm/*',
 )
 LOCALE_REDIRECT_PERMANENT = True
