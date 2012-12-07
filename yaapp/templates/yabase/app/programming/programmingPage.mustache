@@ -16,19 +16,21 @@
     </div>
 </div>
 
-
-<div class='row  programming-container'>
-    <div class='span12 no-margin'>
-
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12'>
         <div class='btn-group right' id='programming-top-toolbar'>
             <button type="button" class='yabutton-small' id='listen-btn'>{% trans 'Listen now' %}</button>
             <button type="button" class='yabutton-small' id='edit-settings-btn'>{% trans 'Settings' %}</button>
         </div>
         <h1>{% trans "Programming" %}</h1>
         <div id='radio'></div>
-        <hr/>
     </div>
+  </div>
+</div>
 
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
     {% comment %}
 
     <div class='span3 no-margin'>
@@ -46,4 +48,5 @@
     </div>
 
     <div class='span9' id='status' style='display:none'/>
+</div>
 </div>
