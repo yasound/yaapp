@@ -208,5 +208,20 @@ Yasound.Views.HomePage = Backbone.View.extend({
 
     onGenreChanged: function(e, genre) {
         this.updateGenreSlug(genre);
+        if (genre === '') {
+            this.selection.params.genre = undefined;
+            this.favorites.params.genre = undefined;
+            this.popular.params.genre = undefined;
+        } else {
+            this.selection.params.genre = genre;
+            this.favorites.params.genre = genre;
+            this.popular.params.genre = genre;
+        }
+        this.selectionView.clear();
+        this.favoritesView.clear();
+        this.popularView.clear();
+        this.selection.goTo(0);
+        this.favorites.goTo(0);
+        this.popular.goTo(0);
     }
 });
