@@ -87,6 +87,7 @@ def task_status(request, task_id):
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
+
 def get_root(request, app_name):
     if len(app_name) > 0:
         root = '/' + app_name + '/'
@@ -96,7 +97,9 @@ def get_root(request, app_name):
     if app_name == 'app':
         root = '/'
 
-    return '/' + request.LANGUAGE_CODE + root
+    if app_name != 'deezer':
+        root = '/' + request.LANGUAGE_CODE + root
+    return root
 
 
 @csrf_exempt
