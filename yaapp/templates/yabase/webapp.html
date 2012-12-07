@@ -542,41 +542,7 @@ HTML, BODY { height: 100%; }
    }(document));
  </script>
 
-    {% include 'yabase/header.html' %}
-
-    <!--div class="navbar navbar-fixed-top" id='header'>
-      <div class="navbar-inner">
-        <div class="container">
-      <div id="brand-logo" >
-				<a href="{% app_url webapp app_name %}" id='btn-webapp'>
-          {% ifequal app_name 'deezer' %}
-          <img src="/media/images/logos/yasound-inline-grey.png" alt="Logo Yasound">
-          {% else %}
-          <img src="/media/app/images/yasound-logo.png" width="110" height="86" alt="Logo Yasound">
-          {% endifequal %}
-				</a>
-			</div>
-      <div id="mobile-menu-logo">
-        <a id='mobile-menu-btn-logo'>
-          <img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
-        </a>
-      </div>
-      <div id='mobile-menu' class='visible-phone responsive-settings-btn'>
-        <a id= 'mobile-menu-btn'>
-          <img src="/media/app/images/phone-settings-icon.png" alt='phone settings icon'>
-        </a>
-      </div>
-      <div class='visible-phone responsive-settings-btn2'>
-        <div id="hd-button-mobile" class='hd-disabled'>
-            &nbsp;
-        </div>
-      </div>
-            <div id='player'>
-            </div>
-		</div>
-	</div>
-	</div>
-	<div id='submenu-container' >{% include 'yabase/app/common/subMenu.mustache' with static=1%}</div-->
+{% include 'yabase/header.html' %}
 
 <div class="modal hide fade" id="modal-share">
     <div class="modal-header">
@@ -703,49 +669,6 @@ HTML, BODY { height: 100%; }
   </div>
 </div>
 
-<!--div id='webapp-container-parent'>
-<div id='webapp-container'>
-  <div id='selected-genre' style='display:none;'><span>Genre selectionné</span></div>
-  {% include "yabase/app/mobileLeftMenu.html" %}
-  {% include "yabase/app/mobileCenterMenu.html" %}
-
-  <div class='container' id='teaser' style='display:none;'>
-    <div class='row'>
-      <div class='span12'>
-        <div id='teaser-title'>{% trans "Discover <strong>YaSound</strong>, the free <strong>social radios</strong> platform!" %}</div>
-      </div>
-    </div>
-    <div class='row'>
-      <div class='span3' id='teaser-listen'>
-          {% app_url webapp_top app_name as link %}
-          {% blocktrans %}<p><a href='{{ link }}'>Listen</a> to the biggest radio database in the world</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/listen.png' width='163' height='136' alt="{% trans 'Listen' %}"/>
-      </div>
-      <div class='span3' id='teaser-share'>
-          {% app_url webapp_friends app_name as link %}
-          {% blocktrans %}<p><a href='{{ link }}'>Share</a> your listening<br/>with your friends</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/share.png' width='179' height='141' alt="{% trans 'Share' %}"/>
-      </div>
-      <div class='span3' id='teaser-create'>
-          {% app_url webapp_myradios app_name as link %}
-          {% blocktrans %}<p><a href='{{ link }}'>Create</a> your radio <br/>easily</p>{% endblocktrans %}
-          <img src='/media/app/images/teaser/create.png' width='144' height='144' alt="{% trans 'Create radio' %}"/>
-
-      </div>
-      <div class='span3 last' id='teaser-action'>
-          <div id='free'>{% trans "It's free" %}</div>
-          <a id='teaser-signup-now-btn' href='{% app_url webapp_signup app_name %}'>{% trans "Create an account" %}</a>
-          <a id='teaser-signup-later-btn' href='#'>{% trans "No, thank you, later" %}</a>
-          <div id="app">
-              <a href="http://itunes.apple.com/us/app/yasound/id492680161?ls=1&mt=8"><img src="/media/app/images/teaser/appstore_now.png" width="167" height="58"/></a>
-          </div>
-
-      </div>
-    </div>
-  </div>
-
-  </div>
-</div-->
 {% ifnotequal app_name 'deezer' %}
 {% include "yabase/app/footer.html" %}
 {% endifnotequal %}
