@@ -1040,5 +1040,6 @@ LOCALE_INDEPENDENT_PATHS = (
     r'^/yabackoffice/*',
     r'^/yaref/*',
     r'^/rahadm/*',
+    r'^/radio/(?P<radio_uuid>\w+).m3u$',
 )
 LOCALE_REDIRECT_PERMANENT = True
