@@ -1132,6 +1132,154 @@ input::-ms-input-placeholder
 }
 
 /*
+ * WALL
+ */
+.wall .pic-wide
+{
+	padding: 5px;
+	#gradient > .vertical(#ebebeb,#ececec);
+}
+
+.wall-input-container,
+.wall-event-container
+{
+	position: relative;
+	.pic
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	margin-bottom: 22px;
+}
+
+.wall-input
+{
+	#gradient > .vertical(#fafafa,#e8e9eb);
+	border: 1px solid #cacacb;
+	.border-radius(4px);
+	padding: 7px;
+	margin-left: 80px;
+	position: relative;
+	textarea
+	{
+		white-space: nowrap;
+		width: 78%;
+		.box-sizing(border-box);
+		margin-bottom: 0;
+		border: 1px solid #cacacb;
+		.border-radius(3px);
+		.box-shadow(none);
+		resize: none;
+		height: 40px;
+		padding: 10px;
+		color: #313234;
+		font-size: 15px;
+		font-family: @defaultFont;
+		.transition(height .25s ease);
+		&:focus
+		{
+			height: 100px;
+		}
+	}
+	&:after
+	{
+		content: "";
+		position: absolute;
+		.asset();
+		.asset-msg-tip-darken();
+		top: 18px;
+		left: -14px;
+	}
+	.box-shadow(0px 1px 3px -1px rgba(0, 0, 0, .2));
+	.btn-coral
+	{
+		position: absolute;
+		top: 7px;
+		right: 7px;
+		border: 1px solid #c24033;
+		height: 39px;
+		width: 20%;
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+.wall-event
+{
+	border: 1px solid #d7d7d7;
+	.border-radius(4px);
+	padding: 8px 40px 8px 12px;
+	#gradient > .vertical(#fff,#f6f6f6);
+	margin-left: 80px;
+	min-height: 39px;
+	position: relative;
+	line-height: 19px;
+	&:after
+	{
+		content: "";
+		position: absolute;
+		.asset();
+		.asset-msg-tip-lighten();
+		top: 18px;
+		left: -14px;
+	}
+	.box-shadow(0px 1px 3px -1px rgba(0, 0, 0, .15));
+	color: #727476;
+}
+
+.wall-event-title
+{
+	font-size: 14px;
+	strong
+	{
+		color: #313234;
+	}
+}
+
+.wall-event-action
+{
+	font-size: 13px;
+}
+
+.wall-counters
+{
+	position: absolute;
+	top: 7px;
+	right: 7px;
+	color: #313234;
+	font-weight: bold;
+	font-size: 15px;
+	text-align: right;
+	.likes,
+	.comments
+	{
+		height: 15px;
+		line-height: 15px;
+		position: relative;
+		margin-bottom: 5px;
+	}
+}
+
+.wall-comment
+{
+	position: relative;
+	margin-top: 10px;
+}
+
+.wall-comment-title
+{
+	font-weight: bold;
+	color: #313234;
+}
+
+.wall-comment-title,
+.wall-comment-action
+{
+	padding-left: 50px;
+}
+
+/*
  * FOOTER
  */
 .footer-player

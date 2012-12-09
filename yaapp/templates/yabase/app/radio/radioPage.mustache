@@ -1,4 +1,66 @@
 {% load i18n %}
+
+<div class="container-fluid content-zone last">
+  <div class="wall row-fluid">
+    <div class="span4">
+      <p class="digest">Vestibulum varius, nunc id hendrerit elementum, mauris lectus pellentesque quam, quis dictum tortor risus eget quam. Morbi mattis sagittis nunc. Cras sagittis tristique gravida.</p>
+      <h2 class="aside-title">Ils écoutent la radio (5)</h2>
+      <h2 class="aside-title">Ils l'ont ajouté en favori (158)</h2>
+      <h2 class="aside-title">Créateur de la radio</h2>
+    </div>
+    <div class="span8">
+      <div class="wall-input-container">
+        <a class="pic pic-circle pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+        <form class="wall-input">
+          <textarea placeholder="Donnez un avis sur le titre en cours de lecture..."></textarea>
+          <input class="btn-coral" type="submit" value="Publier" />
+        </form>
+      </div>
+      <div class="wall-event-container">
+        <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+        <div class="wall-event">
+          <div class="wall-event-title"><strong>Action Bronson - Righteous Mind</strong>, il y a 3 heures</div>
+          <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
+          <div class="wall-counters">
+            <div class="likes">4 <i class="asset-mini-like"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="wall-event-container">
+        <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+        <div class="wall-event">
+          <div class="wall-event-title"><strong>Murs & Fashawn - Satisfaction Feat. Mac Miller</strong>, il y a 3 heures</div>
+          <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
+          <div class="wall-counters">
+            <div class="likes">12 <i class="asset-mini-like"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="wall-event-container">
+        <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+        <div class="wall-event">
+          <div class="wall-event-title"><strong>Murs & Fashawn - Satisfaction Feat. Mac Miller</strong>, il y a 3 heures</div>
+          <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
+          <div class="wall-counters">
+            <div class="likes">12 <i class="asset-mini-like"></i></div>
+            <div class="likes">2 <i class="asset-mini-comment"></i></div>
+          </div>
+          <div class="wall-comment">
+            <a class="pic pic-circle" href="#"><img src="http://placehold.it/30x30" width="30" height="30" alt=""></a>
+            <div class="wall-comment-title">Tommy Roussel</div>
+            <div class="wall-comment-action">Vraiment super sympa ce morceau, j’adore le vrai rap dans ce genre !</div>
+          </div>
+          <div class="wall-comment">
+            <a class="pic pic-circle" href="#"><img src="http://placehold.it/30x30" width="30" height="30" alt=""></a>
+            <div class="wall-comment-title">Tommy Roussel</div>
+            <div class="wall-comment-action">Vraiment super sympa ce morceau, j’adore le vrai rap dans ce genre !</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class='row'>
 <div class='span4 wall-responsive-span4'>
     <div id='webapp-track'>{% if yasound_song %} {% include "yabase/app/radio/track.mustache" %} {% endif %}</div>
