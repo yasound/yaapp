@@ -1178,11 +1178,23 @@ input::-ms-input-placeholder
 		display: block;
 		float: left;
 	}
+	&:after
+	{
+		position: absolute;
+		height: 100%;
+		width: 20%;
+		#gradient > .horizontal(rgba(0,0,0,0),rgba(0,0,0,.7));
+		background-color: transparent;
+		content: "";
+		top: 0;
+		right: 0;
+	}
 }
 
 .wall-covers-pics
 {
 	width: 1100px;
+	height: 100%;
 }
 
 .wall-cover-group
@@ -1315,16 +1327,19 @@ input::-ms-input-placeholder
 	li
 	{
 		position: relative;
-		width: 20%;
-		/*.pic
+		width: 21%;
+		&:nth-child(5n+0)
 		{
-			position: absolute;
-			top: 0;
-			left: 0;
-		}*/
-		max-width: 38px;
-		display: inline-block;
-		.ie7-inline-block();
+			width: 15%;
+		}
+		height: 38px;
+		.pic
+		{
+			max-width: 30px;
+		}
+		margin-bottom: 5px;
+		display: block;
+		float: left;
 	}
 }
 

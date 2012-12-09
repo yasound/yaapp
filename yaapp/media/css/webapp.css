@@ -7464,8 +7464,26 @@ input::-ms-input-placeholder {
   display: block;
   float: left;
 }
+.wall-covers:after {
+  position: absolute;
+  height: 100%;
+  width: 20%;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+  background-image: -webkit-gradient(linear, 0 0, 100% 0, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.7)));
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#b3000000', GradientType=1);
+  background-color: transparent;
+  content: "";
+  top: 0;
+  right: 0;
+}
 .wall-covers-pics {
   width: 1100px;
+  height: 100%;
 }
 .wall-cover-group {
   float: left;
@@ -7593,20 +7611,17 @@ input::-ms-input-placeholder {
 }
 .wall-profiles li {
   position: relative;
-  width: 20%;
-  /*.pic
-		{
-			position: absolute;
-			top: 0;
-			left: 0;
-		}*/
-
-  max-width: 38px;
-  display: inline-block;
-  *display: inline;
-  /* IE7 inline-block hack */
-
-  *zoom: 1;
+  width: 21%;
+  height: 38px;
+  margin-bottom: 5px;
+  display: block;
+  float: left;
+}
+.wall-profiles li:nth-child(5n+0) {
+  width: 15%;
+}
+.wall-profiles li .pic {
+  max-width: 30px;
 }
 .wall-owner-link,
 .wall-owner-link:hover {
@@ -8590,6 +8605,9 @@ input::-ms-input-placeholder {
     bottom: auto;
     line-height: 24px;
   }
+  .wall-covers:after {
+    display: none;
+  }
   .wall-fav {
     position: absolute;
     top: -30px;
@@ -8671,5 +8689,9 @@ input::-ms-input-placeholder {
   }
   .wall-numbers li {
     width: 31%;
+  }
+  .wall-profiles li,
+  .wall-profiles li:nth-child(5n+0) {
+    width: 20%;
   }
 }
