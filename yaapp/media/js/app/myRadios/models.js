@@ -6,7 +6,7 @@
 Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.MyRadio = Yasound.Data.Models.Radio.extend({
-    urlRoot: '/api/v1/my_radios/',
+    urlRoot: '/api/v1/my_radios/'
 });
 
 Yasound.Data.Models.MyRadios = Yasound.Data.Paginator.extend({

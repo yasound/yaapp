@@ -102,7 +102,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
                 callback();
             }
         });
-    },
+    }
 });
 
 
