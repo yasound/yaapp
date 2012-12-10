@@ -5,6 +5,27 @@
 /* extern Ext, $ */
 Namespace('Yasound.Views');
 
+Yasound.Views.Creator = Backbone.View.extend({
+    tagName: 'div',
+    className: '.wall-owner-container',
+    el: '.wall-owner-container',
+    events: {
+    },
+
+    initialize: function () {
+        this.creator = new Yasound.Data.Models.User(this.model.get('creator'));
+    },
+
+    close: function () {
+        delete this.creator;
+    },
+
+    render: function () {
+        $(this.el).html(ich.radioCreatorTemplate(this.creator.toJSON()));
+        return this;
+    }
+});
+
 Yasound.Views.WallInput = Backbone.View.extend({
     tagName: 'div',
     events: {
@@ -582,6 +603,9 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         if (this.paginationView) {
             this.paginationView.close();
         }
+        if (this.creatorView) {
+            this.creatorView.close();
+        }
 
         this.wallEvents.reset();
         this.listeners.reset();
@@ -673,10 +697,16 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.fans.fetch();
         }
 
+        this.creatorView = new Yasound.Views.Creator({
+            model: this.model
+        });
+
+
         this.radioView.render();
         this.trackView.render();
         this.wallEventsView.render();
         this.paginationView.render();
+        this.creatorView.render();
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('wall_event', function (msg) {
