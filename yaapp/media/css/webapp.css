@@ -6196,7 +6196,8 @@ input::-ms-input-placeholder {
 .btn-coral,
 .btn-navy,
 .btn-sky,
-.btn-green {
+.btn-green,
+.btn-white {
   color: #fff;
   display: inline-block;
   *display: inline;
@@ -6214,6 +6215,23 @@ input::-ms-input-placeholder {
   font-family: ProximaNova, Arial, sans-serif;
   border: none;
   padding: 0 10px;
+}
+.btn-white {
+  border: 1px solid #d2d2d2;
+  background-color: #fcfcfc;
+  background-image: -moz-linear-gradient(top, #ffffff, #f8f8f8);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f8f8f8));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f8f8f8);
+  background-image: -o-linear-gradient(top, #ffffff, #f8f8f8);
+  background-image: linear-gradient(to bottom, #ffffff, #f8f8f8);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
+  color: #252627;
+}
+.btn-white:hover {
+  color: #000;
+  text-decoration: none;
+  background: #f8f8f8;
 }
 .btn-sky {
   border: 1px solid #1a8eb5;
@@ -7499,6 +7517,7 @@ input::-ms-input-placeholder {
 }
 .wall-left-col {
   border-right: 1px solid #e7e7e7;
+  padding-bottom: 10px;
 }
 .wall-right-col {
   padding-top: 20px;
@@ -7522,9 +7541,9 @@ input::-ms-input-placeholder {
   left: 50%;
   margin-left: -80px;
 }
-.wall-fav {
+.wall-button {
   width: 158px;
-  margin: 0 auto;
+  margin: 0 auto 5px auto;
   padding: 0;
   display: block;
 }
@@ -7551,7 +7570,10 @@ input::-ms-input-placeholder {
   margin-bottom: 10px;
 }
 .wall-aside-block {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+.wall-link-more {
+  text-align: right;
 }
 .wall-owner-container {
   position: relative;
@@ -7716,7 +7738,7 @@ input::-ms-input-placeholder {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  padding: 8px 40px 8px 12px;
+  padding: 8px 50px 8px 12px;
   background-color: #fbfbfb;
   background-image: -moz-linear-gradient(top, #ffffff, #f6f6f6);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f6f6f6));
@@ -8608,10 +8630,14 @@ input::-ms-input-placeholder {
   .wall-covers:after {
     display: none;
   }
+  .wall-button {
+    display: none;
+  }
   .wall-fav {
     position: absolute;
     top: -30px;
     left: 140px;
+    display: block;
   }
   .wall-digest {
     padding-top: 25px;
