@@ -400,25 +400,27 @@ Yasound.Data.Models.User = Backbone.Model.extend({
     toJSON: function() {
         var data = Yasound.Data.Models.User.__super__.toJSON.apply(this);
 
+        data['fagc'] = '';
         data['agc'] = '';
         data['human_date'] = this.humanDate();
 
         var addComma = false;
 
         if (this.get('followers_count') > 1) {
-            data['agc'] = this.get('followers_count') +  ' ' + gettext('followers');
+            data['fagc'] = this.get('followers_count') +  ' ' + gettext('followers');
             addComma = true;
 
         } else if (this.get('followers_count') == 1) {
-            data['agc'] = this.get('followers_count') +  ' ' + gettext('follower');
+            data['fagc'] = this.get('followers_count') +  ' ' + gettext('follower');
             addComma = true;
         }
 
         if (this.get('age')) {
             if (addComma) {
-                data['agc'] = data['agc'] + ', ';
+                data['fagc'] = data['fagc'] + ', ';
             }
-            data['agc'] = data['agc'] + this.get('age') +  ' ' + gettext('years old');
+            data['fagc'] = data['fagc'] + this.get('age') +  ' ' + gettext('years old');
+            data['agc'] = this.get('age') +  ' ' + gettext('years old');
             addComma = true;
         }
         if (this.get('gender')) {
@@ -431,16 +433,20 @@ Yasound.Data.Models.User = Backbone.Model.extend({
             }
             if (addComma) {
                 data['agc'] = data['agc'] + ', ' + gender_display;
+                data['fagc'] = data['fagc'] + ', ' + gender_display;
             } else {
                 data['agc'] = data['agc'] + gender_display;
+                data['fagc'] = data['fagc'] + gender_display;
             }
             addComma = true;
         }
         if (this.get('city')) {
             if (addComma) {
                 data['agc'] = data['agc'] + ', ' + this.get('city');
+                data['fagc'] = data['fagc'] + ', ' + this.get('city');
             } else {
                 data['agc'] = data['agc'] + this.get('city');
+                data['fagc'] = data['fagc'] + this.get('city');
             }
         }
         return data;
