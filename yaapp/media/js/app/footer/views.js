@@ -143,6 +143,7 @@ Yasound.Views.Footer = Backbone.View.extend({
     },
 
     toggleFavorite: function (e) {
+        e.preventDefault();
         var radio = this.radio;
         if (!radio) {
             return;
