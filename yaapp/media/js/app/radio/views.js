@@ -433,7 +433,7 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     }
 });
 
-Yasound.Views.Listeners = Backbone.View.extend({
+Yasound.Views.RadioUsers = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'addOne', 'addAll', 'clear');
 
@@ -471,7 +471,7 @@ Yasound.Views.Listeners = Backbone.View.extend({
             return;
         }
 
-        var view = new Yasound.Views.Listener({
+        var view = new Yasound.Views.RadioUser({
             model: listener
         });
 
@@ -486,9 +486,9 @@ Yasound.Views.Listeners = Backbone.View.extend({
 });
 
 /**
- * User connected to radio cell
+ * User on radio
  */
-Yasound.Views.Listener = Backbone.View.extend({
+Yasound.Views.RadioUser = Backbone.View.extend({
     tagName: 'li',
     events: {
         'click a': 'selectUser'
@@ -507,7 +507,7 @@ Yasound.Views.Listener = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        $(this.el).html(ich.listenerTemplate(data));
+        $(this.el).html(ich.radioUserTemplate(data));
         var tooltip = data.name;
         if (data.city) {
             tooltip = tooltip + '<br/>(' + data.city + ')';
@@ -527,8 +527,10 @@ Yasound.Views.Listener = Backbone.View.extend({
     }
 });
 
+
 Yasound.Views.RadioPage = Backbone.View.extend({
     listeners: new Yasound.Data.Models.RadioUsers({}),
+    fans: new Yasound.Data.Models.RadioFans({}),
     wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
     intervalId: undefined,
     wallPosted: undefined,
@@ -540,6 +542,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'removeWallEvent');
         this.model.bind('change', this.render, this);
+        this.fans.perPage = 15;
     },
 
     onClose: function () {
@@ -551,6 +554,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.listeners.unbind('add', this.onListenersChanged, this);
         this.listeners.unbind('remove', this.onListenersChanged, this);
         this.listeners.unbind('reset', this.onListenersChanged, this);
+
+        this.fans.unbind('add', this.onFansChanged, this);
+        this.fans.unbind('remove', this.onFansChanged, this);
+        this.fans.unbind('reset', this.onFansChanged, this);
 
         if (this.wallPosted) {
             $.unsubscribe('/wall/posted', this.wallPosted);
@@ -591,6 +598,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.listeners.bind('remove', this.onListenersChanged, this);
         this.listeners.bind('reset', this.onListenersChanged, this);
 
+        this.fans.bind('add', this.onFansChanged, this);
+        this.fans.bind('remove', this.onFansChanged, this);
+        this.fans.bind('reset', this.onFansChanged, this);
+
         var that = this;
         var wallPosted = function () {
             that.wallEvents.page = 0;
@@ -622,9 +633,15 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
 
         this.listeners.radio = this.model;
-        this.listenersView = new Yasound.Views.Listeners({
+        this.listenersView = new Yasound.Views.RadioUsers({
             collection: this.listeners,
             el: $('#listeners', this.el)
+        });
+
+        this.fans.radio = this.model;
+        this.fansView = new Yasound.Views.RadioUsers({
+            collection: this.fans,
+            el: $('#fans', this.el)
         });
 
 
@@ -653,6 +670,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
                 this.wallEvents.goTo(0);
             }
             this.listeners.fetch();
+            this.fans.fetch();
         }
 
         this.radioView.render();
@@ -674,6 +692,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
                 that.wallEvents.fetchFirst();
             }
             that.listeners.fetch();
+            that.fans.fetch();
         }, 10000);
 
         return this;

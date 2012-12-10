@@ -1136,6 +1136,22 @@ class Radio(models.Model):
         songs = SongInstance.objects.filter(metadata__yasound_song_id=None, playlist__in=self.playlists.all())
         return songs
 
+    def fans(self, limit=25, skip=0):
+        """returns users (anonymous + authenticated) for the radio
+
+        :return: data, total_count
+        """
+
+        users = self.radiouser_set.select_related('user').filter(favorite=True)
+        total_count = users.count()
+
+        users = users[skip:limit + skip]
+        data = []
+        for ru in users:
+            data.append(ru.user.get_profile().as_dict())
+
+        return data, total_count
+
     def get_picture_url(self, size='210x210'):
         if self.picture:
             try:

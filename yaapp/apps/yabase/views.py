@@ -2619,6 +2619,19 @@ def listeners_legacy(request, radio_id):
     return response
 
 
+@check_api_key(methods=['GET',], login_required=False)
+def fans(request, radio_uuid):
+    """ Return the user who have added the radio as favorite"""
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
+    skip = int(request.GET.get('skip', 0))
+
+    data, total_count = radio.fans(limit, skip)
+    response = api_response(data, total_count=total_count, limit=limit, offset=skip)
+    return response
+
+
 @csrf_exempt
 @check_api_key(methods=['POST',], login_required=False)
 def user_watched_tutorial(request):

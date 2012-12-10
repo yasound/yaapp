@@ -77,6 +77,13 @@ Yasound.Data.Models.RadioUsers = Yasound.Data.Paginator.extend({
     }
 });
 
+Yasound.Data.Models.RadioFans = Yasound.Data.Paginator.extend({
+    model: Yasound.Data.Models.User,
+    url: function() {
+        return '/api/v1/radio/' + this.radio.get('uuid') + '/favorites/';
+    }
+});
+
 Yasound.Data.Models.UserRadios = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.Radio,
     setUsername: function(username) {
