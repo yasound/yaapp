@@ -1,5 +1,5 @@
 {% load i18n %}
-
+{% load thumbnail %}
 <div class="container-fluid wall-covers">
   <h1>We love hip hop</h1>
   <div class="wall-covers-pics">
@@ -86,7 +86,7 @@
     </div>
     <div class="span8 wall-right-col">
       <div class="wall-input-container">
-        <a class="pic pic-circle pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+        <a class="pic pic-circle pic-wide" href="#"><img src="{% if user.is_authenticated %}{% url user_custom_picture request.user.username '45x45' %}{% else %}/media/images/avatars/default_45x45.png{% endif %}" width="45" height="45" alt=""></a>
         <form class="wall-input">
           <textarea placeholder="Donnez un avis sur le titre en cours de lecture..."></textarea>
           <input class="btn-coral" type="submit" value="Publier" />

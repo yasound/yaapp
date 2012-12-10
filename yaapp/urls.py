@@ -100,6 +100,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture', {'size': 'large'}),
     url(r'^api/v1/user/(?P<username>\S+)/picture/xl/$', 'account.views.user_picture', {'size': 'xl'}),
     url(r'^api/v1/user/(?P<username>\S+)/picture/xs/$', 'account.views.user_picture', {'size': 'xs'}, name='user_small_picture'),
+    url(r'^api/v1/user/(?P<username>\S+)/picture/(?P<size>\w+)/$', 'account.views.user_picture', name='user_custom_picture'),
 
     url(r'^api/v1/followers/$', 'account.views.user_followers'),
     url(r'^api/v1/user/(?P<username>\S+)/friends/(?P<friend>\S+)/$', 'account.views.user_friends_add_remove'),

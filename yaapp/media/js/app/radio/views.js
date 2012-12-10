@@ -8,16 +8,15 @@ Namespace('Yasound.Views');
 Yasound.Views.WallInput = Backbone.View.extend({
     tagName: 'div',
     events: {
-        "click #submit"                 : "submit",
-        "click #refresh"                : "refreshWall",
-        "keypress #wall-input-textarea" : "onWallInputChanged"
+        "click input[type='submit']" : "submit",
+        "keypress textarea" : "onWallInputChanged"
     },
 
     submit: function (e) {
-        var $button = $('.btn', this.el);
+        var $button = $(e.target);
         $button.attr('disabled', 'disable');
         if (this.radioUUID) {
-            var $input = $('textarea[type=textarea]', this.el);
+            var $input = $('textarea', this.el);
             var message = $input.val();
             if (message.length > 0) {
                 var url = '/api/v1/radio/' + this.radioUUID + '/post_message/';
@@ -38,7 +37,7 @@ Yasound.Views.WallInput = Backbone.View.extend({
     onWallInputChanged: function (e) {
         var val = $(e.target).val();
         if (val.length > 0) {
-            $('#submit').removeAttr('disabled');
+            $("input[type='submit']", this.el).removeAttr('disabled');
         }
     },
 
@@ -51,7 +50,6 @@ Yasound.Views.WallInput = Backbone.View.extend({
     },
 
     render: function () {
-        $(this.el).html(ich.wallInputTemplate());
         return this;
     }
 });
@@ -607,11 +605,11 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.wallPosted = wallPosted;
         $.subscribe("/wall/posted", wallPosted);
 
-
         this.wallInputView = new Yasound.Views.WallInput({
             model: this.model,
-            el: $('#webapp-wall-input', this.el)
+            el: $('.wall-input-container', this.el)
         });
+
         this.wallInputView.radioUUID = this.model.get('uuid');
         this.wallInputView.render();
 
