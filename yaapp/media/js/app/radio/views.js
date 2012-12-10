@@ -56,6 +56,7 @@ Yasound.Views.WallInput = Backbone.View.extend({
 
 Yasound.Views.Radio = Backbone.View.extend({
     tagName: 'div',
+
     events: {
         "click #user": "selectUser",
         "click #radio-actions-container #like-btn": "onLike",
@@ -200,7 +201,6 @@ Yasound.Views.RadioInfos = Backbone.View.extend({
             $.post(url);
         }
     }
-
 });
 
 Yasound.Views.TrackInRadio = Backbone.View.extend({
@@ -490,7 +490,6 @@ Yasound.Views.RadioUsers = Backbone.View.extend({
  */
 Yasound.Views.RadioUser = Backbone.View.extend({
     tagName: 'li',
-    className: 'radio-user',
     events: {
         'click a': 'selectUser'
     },
@@ -559,9 +558,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         if (this.intervalId) {
             clearInterval(this.intervalId);
         }
-        if (this.radioInfosView) {
-            this.radioInfosView.close();
-        }
         if (this.wallInputView) {
             this.wallInputView.close();
         }
@@ -619,11 +615,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             el: $('#radio-side', this.el)
         });
 
-        this.radioInfosView = new Yasound.Views.RadioInfos({
-            model: this.model,
-            el: $('#radio-infos', this.el)
-        });
-
         this.trackView = new Yasound.Views.TrackInRadio({
             model: this.model.currentSong,
             el: $('#webapp-track', this.el)
@@ -633,7 +624,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.radioUsers.radio = this.model;
         this.radioUsersView = new Yasound.Views.RadioUsers({
             collection: this.radioUsers,
-            el: $('#webapp-radio-users', this.el)
+            el: $('#listeners', this.el)
         });
 
 
@@ -668,7 +659,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.trackView.render();
         this.wallEventsView.render();
         this.paginationView.render();
-        this.radioInfosView.render();
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('wall_event', function (msg) {
