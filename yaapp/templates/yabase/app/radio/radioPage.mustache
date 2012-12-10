@@ -48,6 +48,7 @@
         <div class="wall-aside-block">
           <h2 class="wall-aside-title">Créateur de la radio</h2>
           <div class="wall-owner-container">
+          {% if radio %} {% include "yabase/app/radio/radioCreator.mustache" with creator=radio.creator.get_profile %} {% endif %}
           </div>
         </div>
       </div>
