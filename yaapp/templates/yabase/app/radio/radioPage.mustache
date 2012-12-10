@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load thumbnail %}
 <div class="container-fluid wall-covers">
-  <h1>We love hip hop</h1>
+  <h1>{{ radio.name }}</h1>
   <div class="wall-covers-pics">
     <div class="wall-cover-group col3">
       <div>
@@ -28,16 +28,9 @@
   <div class="row-fluid">
     <div class="span4 wall-left-col">
       <div class="wall-aside">
-        <div class="wall-pic">
-          <img src="http://placehold.it/150x150" width="150" height="150" alt="" />
+        <div id='radio-side'>
+        {% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}
         </div>
-        <a href="#" class="wall-fav btn-sky">Ajouter aux favoris</a>
-        <p class="wall-digest">Vestibulum varius, nunc id hendrerit elementum, mauris lectus pellentesque quam, quis dictum tortor risus eget quam. Morbi mattis sagittis nunc. Cras sagittis tristique gravida.</p>
-        <ul class="wall-numbers">
-          <li><strong>158</strong> favoris</li>
-          <li><strong>8</strong> messages</li>
-          <li><strong>45</strong> j'aime</li>
-        </ul>
         <div class="wall-aside-block">
           <h2 class="wall-aside-title">Ils écoutent la radio (5)</h2>
           <ul class="wall-profiles">
@@ -137,47 +130,7 @@
   </div>
 </div>
 
-<div class='row'>
-<div class='span4 wall-responsive-span4'>
-    <div id='webapp-track'>{% if yasound_song %} {% include "yabase/app/radio/track.mustache" %} {% endif %}</div>
-    <div id='webapp-radio'>{% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}</div>
-    <div class='wall-audience-container'>
-        <div class='audience-nbr-container'>
-          <span class='audience-nbr'>0</span>
-          <img src="/media/app/images/icon-friends-gradient.png">
-          <div class='audience-txt'>{% trans "listeners" %}</div>
-        </div>
-        <ul id='webapp-radio-users' class='thumbnails'></ul>
-        <div class='yabutton-small audience-btn float-right'>{% trans "Show all" %}</div>
-    </div>
-</div>
-<div class='span8'>
-    <div id='radio-infos'>{% if radio %}{% include "yabase/app/radio/radioInfos.mustache" %} {% endif %}</div>
-    <div class='wall-container'>
-    <div id='webapp-wall-input'>{% if radio %}{% include "yabase/app/radio/wallInput.mustache" %} {% endif %}</div>
-    <div>
-    <ul id='wall'>
-        {% if not wall_events %}
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
-        {% else %}
-        {% for wall_event in wall_events %}
-            {% ifequal wall_event.type "M" %}
-            {% include "yabase/app/radio/wallEvent.message.mustache" %}
-            {% endifequal %}
-            {% ifequal wall_event.type "S" %}
-            {% include "yabase/app/radio/wallEvent.song.mustache" %}
-            {% endifequal %}
-            {% ifequal wall_event.type "L" %}
-            {% include "yabase/app/radio/wallEvent.like.mustache" with wall_event=wall_event%}
-            {% endifequal %}
-        {% endfor %}
-        {% endif %}
-    </ul>
-    <div class='empty' style='display:none'>{% trans "No post yet, be the first to comment!" %}</div>
-    </div>
-    <div id='pagination-wall'></div>
-    </div>
-</div>
+
 
 <div class="modal hide fade" id="modal-report-abuse">
     <div class="modal-header">

@@ -655,7 +655,7 @@ def user_picture(request, username, size=''):
     """
     RESTful view for handling user picture
     """
-    user = get_object_or_404(username=username)
+    user = get_object_or_404(User, username=username)
     user_profile = user.get_profile()
     if user_profile is None:
         user_profile = UserProfile()

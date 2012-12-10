@@ -56,7 +56,6 @@ Yasound.Views.WallInput = Backbone.View.extend({
 
 Yasound.Views.Radio = Backbone.View.extend({
     tagName: 'div',
-    className: 'radio',
     events: {
         "click #user": "selectUser",
         "click #radio-actions-container #like-btn": "onLike",
@@ -590,6 +589,8 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
         $(this.el).html(ich.radioPageTemplate());
 
+        $('h1', this.el).html(this.model.get('name'));
+
         this.radioUsers.bind('add', this.onRadioUsersChanged, this);
         this.radioUsers.bind('remove', this.onRadioUsersChanged, this);
         this.radioUsers.bind('reset', this.onRadioUsersChanged, this);
@@ -615,7 +616,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
         this.radioView = new Yasound.Views.Radio({
             model: this.model,
-            el: $('#webapp-radio', this.el)
+            el: $('#radio-side', this.el)
         });
 
         this.radioInfosView = new Yasound.Views.RadioInfos({

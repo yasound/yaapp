@@ -152,6 +152,8 @@ class PublicRadioResource(ModelResource):
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
     large_picture = fields.CharField(attribute='large_picture_url', default=None, readonly=True)
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True , full=True)
+    messages = fields.IntegerField(attribute='message_count', default=None, readonly=True)
+    likes = fields.IntegerField(attribute='like_count', default=None, readonly=True)
 
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False, deleted=False)

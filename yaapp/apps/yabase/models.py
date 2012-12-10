@@ -882,6 +882,8 @@ class Radio(models.Model):
             'origin': self.origin,
             'name': self.name,
             'favorites': self.favorites,
+            'messages': self.message_count,
+            'likes': self.like_count,
             'nb_current_users' : self.nb_current_users,
             'tags' : self.tags_to_string(),
             'picture': self.picture_url,
@@ -941,6 +943,13 @@ class Radio(models.Model):
             return True
         return False
 
+    @property
+    def message_count(self):
+        return WallEvent.objects.get_message_events(self).count()
+
+    @property
+    def like_count(self):
+        return WallEvent.objects.get_like_events(self).count()
 
     @property
     def is_locked(self):
@@ -1497,6 +1506,10 @@ class WallEventManager(models.Manager):
 
     def get_song_events(self, radio):
         events = self.get_events(radio, yabase_settings.EVENT_SONG)
+        return events
+
+    def get_like_events(self, radio):
+        events = self.get_events(radio, yabase_settings.EVENT_LIKE)
         return events
 
     def add_current_song_event(self, radio):
