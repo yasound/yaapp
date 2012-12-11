@@ -519,7 +519,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     },
 
     beforeRemove: function () {
-        $('.user', this.el).tooltip('hide');
+        $('a', this.el).tooltip('hide');
     },
 
     onClose: function () {
@@ -533,7 +533,7 @@ Yasound.Views.RadioUser = Backbone.View.extend({
         if (data.city) {
             tooltip = tooltip + '<br/>(' + data.city + ')';
         }
-        $('.user', this.el).tooltip({title: tooltip});
+        $('a', this.el).tooltip({title: tooltip});
 
         return this;
     },
