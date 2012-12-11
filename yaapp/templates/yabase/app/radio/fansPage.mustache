@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load app_url %}
+<div class="wall container-fluid content-zone last">
+    <div class="row-fluid">
+        <div class='span12'>
+            <button class='yabutton right' id='back-btn'>{% trans 'Back to radio' %}</button>
+            <h1 class='zone-title'>{% trans "Fans" %}</h1>
+            <ul id='results'>
+            </ul>
+            <img class='loading-mask' src='/media/images/loading-white.gif'/>
+            <div class='cell-pagination' id='pagination'></div>
+        </div>
+    </div>
+</div>

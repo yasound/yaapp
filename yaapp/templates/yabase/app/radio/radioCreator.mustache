@@ -1,8 +1,9 @@
 {% load i18n %}
+{% load app_url %}
 {% if creator %}
-<a class="pic pic-circle pic-wide" href="#"><img src="{% url user_custom_picture creator.user '45x45' %}" width="45" height="45" alt=""></a>
+<a class="pic pic-circle pic-wide" href="{% app_url webapp_profile app_name creator.user.username %}"><img src="{% url user_custom_picture creator.user '45x45' %}" width="45" height="45" alt=""></a>
 <div class="wall-owner">
-  <div><a class="wall-owner-link" href="#">{{ creator }}</a></div>
+  <div><a class="wall-owner-link" href="{% app_url webapp_profile app_name creator.user.username %}">{{ creator }}</a></div>
   <div>{{ creator.followers_count }} {% trans "followers" %}</div>
   <div>{{ creator.agc }}</div>
   <div><a href="#" class="btn-green">Suivre</a></div>

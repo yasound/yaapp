@@ -3,7 +3,7 @@
   <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="150" height="150" alt="{{ radio.name|default:'<% name %>' }}" />
 </div>
 {% if radio %}
-<a href="#" class="wall-fav wall-button btn-sky">{% trans "Add to favorites" %}</a>
+<a href="#" class="wall-fav wall-button btn-sky">{% if radio.favorite %}{% trans "Remove from favorites" %}{% else %}{% trans "Add to favorites" %}{% endif %}</a>
 {% else %}
 <a href="#" class="wall-fav wall-button btn-sky"><%#favorite%>{% trans "Remove from favorites" %}<%/favorite%><%^favorite%>{% trans "Add to favorites" %}<%/favorite%></a>
 {% endif %}
@@ -15,6 +15,6 @@
 <p class="wall-digest">{% if radio %}{{ radio.description|urlize }}{% else %}<%{description%>{% endif %}</p>
 <ul class="wall-numbers">
   <li><strong>{% if radio %}{{ radio.favorites }}{% else %}<% favorites %> {% endif %}</strong> {% trans "favorites" %}</li>
-  <li><strong>{% if radio %}{{ radio.messages}}{% else %}<% messages %>{% endif %}</strong> messages</li>
-  <li><strong>{% if radio %}{{ radio.likes}}{% else %}<% likes %>{% endif %}</strong> j'aime</li>
+  <li><strong>{% if radio %}{{ radio.message_count}}{% else %}<% messages %>{% endif %}</strong> messages</li>
+  <li><strong>{% if radio %}{{ radio.like_count}}{% else %}<% likes %>{% endif %}</strong> j'aime</li>
 </ul>

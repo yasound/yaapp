@@ -212,6 +212,7 @@ $(document).ready(function () {
             "radio/:uuid/programming/": "programming",
             "radio/:uuid/edit/": "editRadio",
             "radio/:uuid/listeners/": "listeners",
+            "radio/:uuid/fans/": "fans",
             "signup/": "signup",
             "signup/*args": "signup",
             "login/": "login",
@@ -516,6 +517,14 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.ListenersPage({
+                el: Yasound.App.CONTENT_EL
+            }).render(uuid);
+        },
+
+        fans: function (uuid) {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.FansPage({
                 el: Yasound.App.CONTENT_EL
             }).render(uuid);
         },

@@ -10,8 +10,9 @@ Yasound.Views.Creator = Backbone.View.extend({
     className: '.wall-owner-container',
     el: '.wall-owner-container',
     events: {
-        'click .pic a': 'selectUser',
-        'click .wall-owner a': 'follow'
+        'click a.pic': 'selectUser',
+        'click a.wall-owner-link': 'selectUser',
+        'click .wall-owner a.follow': 'follow'
     },
 
     initialize: function () {
@@ -40,7 +41,7 @@ Yasound.Views.Creator = Backbone.View.extend({
 
     selectUser: function (event) {
         event.preventDefault();
-        Yasound.App.Router.navigate("profile/" + this.creator.username + '/', {
+        Yasound.App.Router.navigate("profile/" + this.creator.get('username') + '/', {
             trigger: true
         });
     }
@@ -577,7 +578,8 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     wallPosted: undefined,
 
     events: {
-        "click #more-listeners": "displayListeners"
+        "click #more-listeners": "displayListeners",
+        "click #more-fans": "displayFans"
     },
 
     initialize: function () {
@@ -682,7 +684,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             el: $('#listeners', this.el)
         });
 
-        this.fans.radio = this.model;
+        this.fans.uuid = this.model.get('uuid');
         this.fansView = new Yasound.Views.RadioUsers({
             collection: this.fans,
             el: $('#fans', this.el)
@@ -774,6 +776,13 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     displayListeners: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/listeners/', {
+            trigger: true
+        });
+    },
+
+    displayFans: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/fans/', {
             trigger: true
         });
     }
@@ -874,6 +883,51 @@ Yasound.Views.ListenersPage = Backbone.View.extend({
         this.reset();
         this.uuid = uuid;
         $(this.el).html(ich.listenersPageTemplate());
+        this.collection.uuid = uuid;
+        this.collection.perPage = Yasound.Utils.cellsPerPage();
+
+        this.resultsView = new Yasound.Views.Friends({
+            collection: this.collection,
+            el: $('#results', this.el)
+        });
+
+        this.collection.fetch();
+        return this;
+    },
+
+    onBack: function(e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("radio/" + this.uuid + '/', {
+            trigger: true
+        });
+    }
+});
+
+Yasound.Views.FansPage = Backbone.View.extend({
+    collection: new Yasound.Data.Models.RadioFans({}),
+
+    events: {
+        'click #back-btn': 'onBack'
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'onBack');
+    },
+
+    onClose: function() {
+    },
+
+    reset: function() {
+        if (this.resultsView) {
+            this.resultsView.close();
+            this.resultsViews = undefined;
+        }
+    },
+
+    render: function(uuid) {
+        this.reset();
+        this.uuid = uuid;
+        $(this.el).html(ich.fansPageTemplate());
         this.collection.uuid = uuid;
         this.collection.perPage = Yasound.Utils.cellsPerPage();
 
