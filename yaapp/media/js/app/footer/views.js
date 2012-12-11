@@ -30,18 +30,21 @@ Yasound.Views.Footer = Backbone.View.extend({
             'toggleVolume',
             'onVolumeSlide',
             'gotoRadio',
-            'onShare');
+            'onShare',
+            'onFavoriteChanged');
+
         $.subscribe('/current_radio/change', this.onRadioChanged);
+        $.subscribe('/current_radio/favorite_change', this.onFavoriteChanged);
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
         $('#modal-share').on('show', this.onShare);
-
     },
 
     onClose: function () {
         $.unsubscribe('/current_radio/change', this.onRadioChanged);
         $.unsubscribe('/player/play', this.onPlayerPlay);
         $.unsubscribe('/player/stop', this.onPlayerStop);
+        $.unsubscribe('/current_radio/favorite_change', this.onFavoriteChanged);
 
         if (this.currentSong) {
             this.currentSong.unbind('change', this.renderSong, this);
@@ -112,6 +115,11 @@ Yasound.Views.Footer = Backbone.View.extend({
 
     onPlayerStop: function () {
         $('.cover i').removeClass('pause').addClass('play');
+    },
+
+    onFavoriteChanged: function (e, favorite) {
+        this.radio.set('favorite', favorite);
+        this.render();
     },
 
     onLike: function (e) {

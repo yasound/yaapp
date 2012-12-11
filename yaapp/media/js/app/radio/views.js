@@ -101,10 +101,11 @@ Yasound.Views.Radio = Backbone.View.extend({
 
     events: {
         "click #user": "selectUser",
-        "click #radio-actions-container #like-btn": "onLike",
-        "click #radio-actions-container #settings-btn": "onSettings",
-        "click #radio-actions-container #programming-btn": "onProgramming",
-        "click #radio-actions-container #broadcast-btn": "onBroadcast"
+        "click #radio-actions-container like-btn": "onLike",
+        "click .btn-settings": "onSettings",
+        "click .btn-programming": "onProgramming",
+        "click .btn-broadcast": "onBroadcast",
+        "click a.wall-fav": "toggleFavorite"
     },
 
     initialize: function () {
@@ -135,6 +136,16 @@ Yasound.Views.Radio = Backbone.View.extend({
         } else {
             $('#btn-unfavorite', this.el).hide();
             $('#btn-favorite', this.el).show();
+        }
+
+        if (this.model.get('creator').owner) {
+            $('.btn-settings', this.el).show();
+            $('.btn-programming', this.el).show();
+            $('.btn-broadcast', this.el).show();
+        } else {
+            $('.btn-settings', this.el).hide();
+            $('.btn-programming', this.el).hide();
+            $('.btn-broadcast', this.el).hide();
         }
         return this;
     },
@@ -179,6 +190,18 @@ Yasound.Views.Radio = Backbone.View.extend({
     updateFavorites: function (e, radio) {
         this.model.set('favorites', radio.get('favorites'), {silent: true});
         this.render();
+    },
+
+    toggleFavorite: function (e) {
+        e.preventDefault();
+        var favorite = false;
+        if (this.model.get('favorite')) {
+            this.model.removeFromFavorite();
+        } else {
+            this.model.addToFavorite();
+            favorite = true;
+        }
+        $.publish('/current_radio/favorite_change', favorite);
     }
 });
 

@@ -8,9 +8,9 @@
 <a href="#" class="wall-fav wall-button btn-sky"><%#favorite%>{% trans "Remove from favorites" %}<%/favorite%><%^favorite%>{% trans "Add to favorites" %}<%/favorite%></a>
 {% endif %}
 
-<a href="#" class="wall-button btn-white">Paramètres</a>
-<a href="#" class="wall-button btn-white">Programmation</a>
-<a href="#" class="wall-button btn-green">Message aux abonnés</a>
+<a href="#" class="wall-button btn-white btn-settings" style='display:none;'>{% trans "Settings" %}</a>
+<a href="#" class="wall-button btn-white btn-programming" style='display:none;'>{% trans "Programming" %}</a>
+<a href="#" class="wall-button btn-green btn-broadcast" style='display:none;'>{% trans "Broadcast to your fans" %}</a>
 
 <p class="wall-digest">{% if radio %}{{ radio.description|urlize }}{% else %}<%{description%>{% endif %}</p>
 <ul class="wall-numbers">
