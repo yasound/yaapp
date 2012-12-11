@@ -1360,6 +1360,10 @@ class WebAppView(View):
         context['mustache_template'] = 'yabase/app/friends/friendsPage.mustache'
         return context, 'yabase/app/static.html'
 
+    def listeners(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/radio/listenersPage.mustache'
+        return context, 'yabase/app/static.html'
+
     def profile(self, request, context, *args, **kwargs):
         return context, 'yabase/webapp.html'
 

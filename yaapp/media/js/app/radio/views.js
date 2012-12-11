@@ -10,6 +10,8 @@ Yasound.Views.Creator = Backbone.View.extend({
     className: '.wall-owner-container',
     el: '.wall-owner-container',
     events: {
+        'click .pic a': 'selectUser',
+        'click .wall-owner a': 'follow'
     },
 
     initialize: function () {
@@ -23,6 +25,24 @@ Yasound.Views.Creator = Backbone.View.extend({
     render: function () {
         $(this.el).html(ich.radioCreatorTemplate(this.creator.toJSON()));
         return this;
+    },
+
+    follow: function(e) {
+        e.preventDefault();
+        if (this.creator.get('is_friend')) {
+            $(e.target, this.el).html(gettext('Follow'));
+            this.creator.unfollow(Yasound.App.username);
+        } else {
+            $(e.target, this.el).html(gettext('Unfollow'));
+            this.creator.follow(Yasound.App.username);
+        }
+    },
+
+    selectUser: function (event) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.creator.username + '/', {
+            trigger: true
+        });
     }
 });
 
@@ -557,7 +577,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     wallPosted: undefined,
 
     events: {
-        "click .audience-btn": "displayListeners"
+        "click #more-listeners": "displayListeners"
     },
 
     initialize: function () {

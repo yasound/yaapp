@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load thumbnail %}
+{% load app_url %}
 <div class="container-fluid wall-covers">
   <h1>{{ radio.name }}</h1>
   <div class="wall-covers-pics">
@@ -36,7 +37,7 @@
           <h2 class="wall-aside-title">Ils écoutent la radio (5)</h2>
           <ul class="wall-profiles" id='listeners'></ul>
           <div class="clearfix"></div>
-          <div class="wall-link-more"><a href="#">Tout afficher</a></div>
+          <div class="wall-link-more"><a href="{% if radio %}{% app_url webapp_listeners app_name radio.uuid %}{% endif %}" id='more-listeners'>Tout afficher</a></div>
         </div>
 
         <div class="wall-aside-block">
@@ -44,7 +45,7 @@
           <ul class="wall-profiles" id='fans'>
           </ul>
           <div class="clearfix"></div>
-          <div class="wall-link-more"><a href="#">Tout afficher</a></div>
+          <div class="wall-link-more"><a href="#" id='more-fans'>Tout afficher</a></div>
         </div>
 
         <div class="wall-aside-block">
