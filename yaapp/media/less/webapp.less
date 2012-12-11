@@ -1500,9 +1500,14 @@ input::-ms-input-placeholder
 {
 	position: relative;
 	margin-top: 10px;
+	&:hover .wall-comment-btns
+	{
+		display: block;
+	}
 }
 
-.wall-comment-title
+.wall-comment-title,
+.wall-comment-title a
 {
 	font-weight: bold;
 	color: #313234;
@@ -1512,6 +1517,16 @@ input::-ms-input-placeholder
 .wall-comment-action
 {
 	padding-left: 50px;
+}
+
+.wall-comment-btns
+{
+	display: none;
+	height: 20px;
+	width: 50px;
+	position: absolute;
+	top: 15px;
+	right: -50px;
 }
 
 /*
