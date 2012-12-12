@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
-from taggit.models import TaggedItem, Tag
+from transmeta import TransMeta
 from yacore.database import atomic_inc
 from yacore.http import absolute_url
 from yacore.tags import clean_tags, clean_tag
@@ -1887,6 +1887,31 @@ class ApnsCertificate(models.Model):
     sandbox = models.BooleanField()
     certificate_file = models.CharField(max_length=255)
     objects = ApnsCertificateManager()
+
+
+class Announcement(models.Model):
+    """ A model to store announcements displayed on web app """
+
+    __metaclass__ = TransMeta
+
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
+    activated = models.BooleanField(default=False)
+    name = models.CharField(_('name'), max_length=255)
+    body = models.TextField(_('body'), max_length=255, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.activated:
+            Announcement.objects.all().exclude(id=self.id).update(activated=False)
+        super(Announcement, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u'%s' % (self.name)
+
+    class Meta:
+        verbose_name = _('announcement')
+        translate = ('name', 'body')
+
 
 def new_current_song_handler(sender, radio, song_json, song, song_dict, **kwargs):
     from yabase.task import async_dispatch_user_started_listening_song

@@ -1,10 +1,11 @@
 from django.contrib import admin
 from models import SongMetadata, SongInstance, Playlist, Radio, WallEvent, \
-    NextSong, RadioUser, SongUser, FeaturedContent, FeaturedRadio
+    NextSong, RadioUser, SongUser, FeaturedContent, FeaturedRadio, Announcement
+
 
 class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ('name', 'source', 'radio', 'enabled', 'sync_date', 'CRC' )
-    search_fields = ( 'name', 'source', )
+    list_display = ('name', 'source', 'radio', 'enabled', 'sync_date', 'CRC')
+    search_fields = ('name', 'source', )
     raw_id_fields = ('radio',)
 admin.site.register(Playlist, PlaylistAdmin)
 
@@ -20,14 +21,16 @@ admin.site.register(Radio, RadioAdmin)
 
 class SongMetadataAdmin(admin.ModelAdmin):
     list_display = ('name', 'artist_name', 'album_name', 'yasound_song_id', 'hash_name')
-    search_fields = ( 'name', 'artist_name', 'album_name', )
-    actions = ['generate_hash_name',]
+    search_fields = ('name', 'artist_name', 'album_name', )
+    actions = ['generate_hash_name', ]
+
     def generate_hash_name(self, request, qs):
         for metadata in qs.all():
             metadata.calculate_hash_name(commit=True)
     generate_hash_name.short_description = "Generate hash name"
 
 admin.site.register(SongMetadata, SongMetadataAdmin)
+
 
 class SongInstanceAdmin(admin.ModelAdmin):
     list_display = ('id', 'playlist', 'metadata_name', 'metadata_album', 'metadata_artist', 'yasound_song_id', 'need_sync')
@@ -37,16 +40,20 @@ class SongInstanceAdmin(admin.ModelAdmin):
     def metadata_name(self, obj):
         return obj.metadata.name
     metadata_name.short_description = 'Song'
+
     def metadata_album(self, obj):
         return obj.metadata.album_name
     metadata_album.short_description = 'Album'
+
     def metadata_artist(self, obj):
         return obj.metadata.artist_name
     metadata_artist.short_description = 'Artist'
+
     def yasound_song_id(self, obj):
         return obj.metadata.yasound_song_id
     metadata_artist.short_description = 'Yasound Song Id'
 admin.site.register(SongInstance, SongInstanceAdmin)
+
 
 class WallEventAdmin(admin.ModelAdmin):
     list_display = ('radio', 'type', 'start_date', 'song', 'user', 'text')
@@ -55,14 +62,17 @@ class WallEventAdmin(admin.ModelAdmin):
     search_fields = ['radio__name']
 admin.site.register(WallEvent, WallEventAdmin)
 
+
 class NextSongAdmin(admin.ModelAdmin):
     raw_id_fields = ('radio', 'song')
 admin.site.register(NextSong, NextSongAdmin)
+
 
 class FeaturedRadioInline(admin.TabularInline):
     raw_id_fields = ('radio',)
     model = FeaturedRadio
     extra = 1
+
 
 class FeaturedContentAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'activated', 'ftype')
@@ -73,7 +83,15 @@ class FeaturedContentAdmin(admin.ModelAdmin):
 admin.site.register(FeaturedContent, FeaturedContentAdmin)
 
 
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_en', 'name_fr', 'activated')
+    search_fields = ['name_en', 'name_fr', 'body_fr', 'body_en']
+    list_editable = ('activated',)
+admin.site.register(Announcement, AnnouncementAdmin)
+
 # basic admin
+
+
 class RadioUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'radio', 'user', 'favorite')
     raw_id_fields = ('radio', 'user')
