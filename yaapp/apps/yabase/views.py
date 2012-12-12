@@ -19,7 +19,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.base import View
 from forms import SettingsRadioForm, NewRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
-    SongMetadata
+    SongMetadata, Announcement
 from shutil import rmtree
 from stats.models import RadioListeningStat
 from task import process_playlists, process_upload_song, async_song_played, async_songs_started
@@ -1678,6 +1678,9 @@ class WebAppView(View):
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
             sound_player = 'deezer'
 
+        announcement = Announcement.objects.get_current_announcement()
+
+
         context = {
             'user_id' : user_id,
             'push_url': push_url,
@@ -1713,6 +1716,7 @@ class WebAppView(View):
             'twitter_referal': twitter_referal,
             'email_referal': email_referal,
             'referal_username': referal_username,
+            'announcement': announcement,
             'next': next,
         }
 

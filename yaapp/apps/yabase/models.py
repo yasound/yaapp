@@ -1882,6 +1882,7 @@ class ApnsCertificateManager(models.Manager):
         self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/techtour/prod.pem')
         self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/techtour/dev.pem')
 
+
 class ApnsCertificate(models.Model):
     application_id = models.CharField(max_length=127)
     sandbox = models.BooleanField()
@@ -1889,10 +1890,19 @@ class ApnsCertificate(models.Model):
     objects = ApnsCertificateManager()
 
 
+class AnnouncementManager(models.Manager):
+    def get_current_announcement(self):
+        try:
+            return self.filter(activated=True).order_by('-created')[0]
+        except:
+            return None
+
+
 class Announcement(models.Model):
     """ A model to store announcements displayed on web app """
 
     __metaclass__ = TransMeta
+    objects = AnnouncementManager()
 
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)

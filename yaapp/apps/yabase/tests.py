@@ -508,9 +508,12 @@ class TestAnnouncementModels(TestCase):
     def testActivate(self):
         an1 = Announcement.objects.create(name_en='name')
         self.assertEquals(an1.activated, False)
+
+        self.assertIsNone(Announcement.objects.get_current_announcement())
         an1.activated = True
         an1.save()
         self.assertEquals(an1.activated, True)
+        self.assertEquals(Announcement.objects.get_current_announcement().id, an1.id)
 
         an2 = Announcement.objects.create(name_en='name')
         self.assertEquals(an2.activated, False)
@@ -519,6 +522,8 @@ class TestAnnouncementModels(TestCase):
         an2.save()
         an1 = Announcement.objects.get(id=an1.id)
         self.assertEquals(an1.activated, False)
+        self.assertEquals(Announcement.objects.get_current_announcement().id, an2.id)
+
 
 
 class TestImportPlaylist(TestCase):

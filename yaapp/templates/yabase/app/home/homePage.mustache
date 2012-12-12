@@ -1,11 +1,11 @@
 {% load i18n %}
 
+{% if announcement %}
 <div class="container-fluid content-alert app-alert">
   <a type="button" class="asset-close" data-dismiss="alert">×</a>
-  <i class="asset-alert-app-logo"></i>
-  La nouvelle version de l'application <strong>YaSound</strong> est <strong>disponible sur l'AppStore</strong>
-  <a class="btn-sky" href="#">Télécharger l'app</a>
+  {{ announcement.body|safe }}
 </div>
+{% endif %}
 
 <div class="container-fluid content-zone">
   <section class="row-fluid">
