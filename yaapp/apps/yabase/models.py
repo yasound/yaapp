@@ -1192,6 +1192,24 @@ class Radio(models.Model):
         self.picture.save(filename, data, save=True)
         delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
 
+    @property
+    def pictures(self):
+        """ return a list of pictures urls """
+        key = 'radio_%s.pictures' % (self.id)
+        data = cache.get(key)
+        if data:
+            return data
+
+        data = []
+        song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:8].values_list('yasound_song_id', flat=True)
+        songs = YasoundSong.objects.filter(id__in=list(song_ids))
+        size = '157x157'
+        for i, song in enumerate(songs):
+            data.append(song.custom_cover_url(size))
+            if i > 6:
+                size = '314x314'
+        cache.set(key, data, 0)
+        return data
 
     def build_fuzzy_index(self, upsert=False, insert=True):
         from yasearch.models import RadiosManager

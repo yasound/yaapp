@@ -71,9 +71,23 @@ class YasoundAlbum(models.Model):
         except:
             return None
 
+    def custom_cover_url(self, size='64x64'):
+        url = None
+        if not self.cover_filename:
+            url = get_thumbnail(settings.DEFAULT_TRACK_IMAGE_PATH, size, crop='center', format='JPEG', quality=90).url
+        else:
+            short_url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
+                                  yaref_utils.convert_filename_to_filepath(self.cover_filename))
+            try:
+                url = get_thumbnail(short_url, size, crop='center', format='JPEG', quality=90).url
+            except:
+                pass
+        return url
+
     class Meta:
         db_table = u'yasound_album'
         db_name = u'yasound'
+
     def __unicode__(self):
         return self.name
 
@@ -321,6 +335,19 @@ class YasoundSong(models.Model):
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
             return None
+
+    def custom_cover_url(self, size='64x64'):
+        url = None
+        if not self.cover_filename:
+            url = get_thumbnail(settings.DEFAULT_TRACK_IMAGE_PATH, size, crop='center', format='JPEG', quality=90).url
+        else:
+            short_url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
+                             yaref_utils.convert_filename_to_filepath(self.cover_filename))
+            try:
+                url = get_thumbnail(short_url, size, crop='center', format='JPEG', quality=90).url
+            except:
+                pass
+        return url
 
     @property
     def title(self):

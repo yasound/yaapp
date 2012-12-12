@@ -920,6 +920,7 @@ else:
 DEFAULT_IMAGE = MEDIA_URL +'images/default_image.png'
 DEFAULT_IMAGE_PATH = MEDIA_ROOT + '/images/default_image.png'
 DEFAULT_TRACK_IMAGE = MEDIA_URL +'images/default_track.jpg'
+DEFAULT_TRACK_IMAGE_PATH = MEDIA_ROOT +'/images/default_track.jpg'
 GIFT_DEFAULT_IMAGE_TODO = MEDIA_URL +'images/default-gift-todo.png'
 GIFT_DEFAULT_IMAGE_DONE = MEDIA_URL +'images/default-gift-done.png'
 

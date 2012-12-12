@@ -2610,6 +2610,15 @@ def radio_picture(request, radio_uuid, size=''):
         return HttpResponse(response_data, mimetype="application/json")
     raise Http404
 
+@check_api_key(methods=['GET'], login_required=False)
+def radio_pictures(request, radio_uuid):
+    """
+    return the list of pictures for displaying in the wall
+    """
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    response_data = json.dumps(radio.pictures)
+    return HttpResponse(response_data, mimetype="application/json")
 
 @check_api_key(methods=['GET',], login_required=False)
 def listeners(request, radio_uuid):

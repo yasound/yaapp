@@ -592,6 +592,46 @@ Yasound.Views.RadioUser = Backbone.View.extend({
     }
 });
 
+Yasound.Views.RadioHeader = Backbone.View.extend({
+    events: {
+
+    },
+
+    initialize: function () {
+        _.bindAll(this, 'render', 'fetchPictures');
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render, this);
+    },
+
+    reset: function () {
+    },
+
+    render: function () {
+        this.fetchPictures();
+        return this;
+    },
+
+    fetchPictures: function () {
+        var url = '/api/v1/radio/' + this.model.get('uuid') + '/pictures/';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('.wall-covers-pics img').each(function(index) {
+                    if (index < data.length) {
+                        $(this).attr('src', data[index]);
+                    }
+                });
+            },
+            failure: function() {
+            }
+        });
+    }
+});
 
 Yasound.Views.RadioPage = Backbone.View.extend({
     listeners: new Yasound.Data.Models.RadioUsers({}),
@@ -671,6 +711,11 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.fans.bind('remove', this.onFansChanged, this);
         this.fans.bind('reset', this.onFansChanged, this);
 
+        this.headerView = new Yasound.Views.RadioHeader({
+            el: $('.wall-covers'),
+            model: this.model
+        });
+
         var that = this;
         var wallPosted = function () {
             that.wallEvents.page = 0;
@@ -713,7 +758,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             el: $('#fans', this.el)
         });
 
-
         this.wallEventsView = new Yasound.Views.PaginatedWallEvents({
             collection: this.wallEvents,
             el: $('#wall', this.el)
@@ -746,7 +790,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             model: this.model
         });
 
-
+        this.headerView.render();
         this.radioView.render();
         this.trackView.render();
         this.wallEventsView.render();
