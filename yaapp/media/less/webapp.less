@@ -1070,6 +1070,7 @@ input::-ms-input-placeholder
 
 .radio-cell
 {
+	max-width: 150px;
 	h1
 	{
 		line-height: 20px;
@@ -1527,6 +1528,85 @@ input::-ms-input-placeholder
 	position: absolute;
 	top: 15px;
 	right: -50px;
+}
+
+/*
+ * PROGRAMMING
+ */
+.programming-header
+{
+	margin-bottom: 20px;
+	position: relative;
+	.asset-programming
+	{
+		top: 0;
+		left: 0;
+		position: absolute;
+		display: block;
+	}
+	hgroup
+	{
+		margin-left: 90px;
+		height: 76px;
+	}
+	.headline1
+	{
+		display: block;
+		line-height: 20px;
+		font-size: 23px;
+		color: #94999b;
+		font-weight: normal;
+		a:hover { text-decoration: none; }
+	}
+	.headline2
+	{
+		line-height: 45px;
+		font-weight: bold;
+		font-size: 23px;
+		display: block;
+	}
+	ul
+	{
+		text-align: right;
+		display: block;
+		list-style-type: none;
+		margin-right: 100px;
+	}
+	.programming-cover
+	{
+		display: block;
+		position: absolute;
+		right: 0;
+		top: 3px;
+	}
+}
+
+.programming-body
+{
+	padding-bottom: 20px;
+	.headline1
+	{
+		font-weight: bold;
+		text-align: center;
+		font-size: 30px;
+	}
+	.headline2
+	{
+		margin: 25px 0;
+		font-weight: normal;
+		text-align: center;
+		font-size: 20px;
+		color: #94999b;
+		strong
+		{
+			color: @defaultColor;
+			font-weight: bold;
+		}
+	}
+	hgroup .headline2
+	{
+		margin-top: 0;
+	}
 }
 
 /*

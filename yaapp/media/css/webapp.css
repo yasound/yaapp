@@ -416,6 +416,11 @@
   width: 20px;
   height: 20px;
 }
+.asset-programming {
+  width: 66px;
+  height: 76px;
+  background-position: -586px -7px;
+}
 /* Textfields */
 [class^="textfield-"],
 [class*=" textfield-"] {
@@ -7384,6 +7389,9 @@ input::-ms-input-placeholder {
 .radio-grid h1 {
   margin-bottom: 4px;
 }
+.radio-cell {
+  max-width: 150px;
+}
 .radio-cell h1 {
   line-height: 20px;
   font-size: 14px;
@@ -7829,6 +7837,73 @@ input::-ms-input-placeholder {
   position: absolute;
   top: 15px;
   right: -50px;
+}
+/*
+ * PROGRAMMING
+ */
+.programming-header {
+  margin-bottom: 20px;
+  position: relative;
+}
+.programming-header .asset-programming {
+  top: 0;
+  left: 0;
+  position: absolute;
+  display: block;
+}
+.programming-header hgroup {
+  margin-left: 90px;
+  height: 76px;
+}
+.programming-header .headline1 {
+  display: block;
+  line-height: 20px;
+  font-size: 23px;
+  color: #94999b;
+  font-weight: normal;
+}
+.programming-header .headline1 a:hover {
+  text-decoration: none;
+}
+.programming-header .headline2 {
+  line-height: 45px;
+  font-weight: bold;
+  font-size: 23px;
+  display: block;
+}
+.programming-header ul {
+  text-align: right;
+  display: block;
+  list-style-type: none;
+  margin-right: 100px;
+}
+.programming-header .programming-cover {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 3px;
+}
+.programming-body {
+  padding-bottom: 20px;
+}
+.programming-body .headline1 {
+  font-weight: bold;
+  text-align: center;
+  font-size: 30px;
+}
+.programming-body .headline2 {
+  margin: 25px 0;
+  font-weight: normal;
+  text-align: center;
+  font-size: 20px;
+  color: #94999b;
+}
+.programming-body .headline2 strong {
+  color: #313234;
+  font-weight: bold;
+}
+.programming-body hgroup .headline2 {
+  margin-top: 0;
 }
 /*
  * FOOTER
