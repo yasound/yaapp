@@ -9,7 +9,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseNotFound, \
-    HttpResponseBadRequest, HttpResponseRedirect
+    HttpResponseBadRequest, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
@@ -87,7 +87,8 @@ def task_status(request, task_id):
     response = json.dumps(response_dict)
     return HttpResponse(response)
 
-def get_root(app_name):
+
+def get_root(request, app_name):
     if len(app_name) > 0:
         root = '/' + app_name + '/'
     else:
@@ -96,6 +97,8 @@ def get_root(app_name):
     if app_name == 'app':
         root = '/'
 
+    if app_name != 'deezer':
+        root = '/' + request.LANGUAGE_CODE + root
     return root
 
 
@@ -211,7 +214,7 @@ def radio_recommendations_process(request, internal=False, genre=''):
 
     # results: second part
     reco_skip = max(0, skip - selection_radios_count)
-    reco_limit = max(0, limit - selection_radios_count)
+    reco_limit = max(0, limit - len(radio_data))
 
     request_user = None
     favorite_radio_ids = []
@@ -492,6 +495,7 @@ def report_message_as_abuse(request, message_id):
 
     wall_event = get_object_or_404(WallEvent, pk=message_id)
     logger.debug('wall event found: %s' % (message_id))
+    logger.debug(wall_event.type)
 
     logger.debug('reporting message message')
     wall_event.report_as_abuse(request.user)
@@ -1120,13 +1124,13 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
             if radios.count() > 0:
                 radio = radios[0]
                 url = reverse('yabase.views.web_listen', args=[radio.uuid])
-                return HttpResponseRedirect(url)
+                return HttpResponsePermanentRedirect(url)
 
     if radio is None:
         raise Http404
 
     url = reverse('webapp_default_radio', args=[radio.uuid])
-    return HttpResponseRedirect(url)
+    return HttpResponsePermanentRedirect(url)
 
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
@@ -1153,7 +1157,7 @@ def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.htm
             if radios.count() > 0:
                 radio = radios[0]
                 url = reverse('yabase.views.web_widget', args=[radio.uuid, wtype])
-                return HttpResponseRedirect(url)
+                return HttpResponsePermanentRedirect(url)
 
     if radio is None:
         raise Http404
@@ -1672,7 +1676,7 @@ class WebAppView(View):
 
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
-        root = get_root(app_name)
+        root = get_root(request, app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
@@ -1842,7 +1846,7 @@ class WebAppView(View):
 
         genre_form = RadioGenreForm()
 
-        root = get_root(app_name)
+        root = get_root(request, app_name)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer':
@@ -2393,7 +2397,7 @@ def logout(request, app_name='app'):
     return HttpResponseRedirect(logout_url + '?next=%s' % (next_url))
 
 def load_template(request, template_name, app_name='app'):
-    root = get_root(app_name)
+    root = get_root(request, app_name)
 
     context = {
         'root': root,

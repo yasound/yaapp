@@ -12,12 +12,12 @@
 <!--[if (gt IE 9)|!(IE)]><!--><html xml:lang="{{current_locale}}" lang="{{current_locale}}"><!--<![endif]-->
 
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasound: http://ogp.me/ns/fb/yasound#">
-    <title>{% block head_title %}Yasound{% endblock %}</title>
-    <meta charset="utf-8" />
+    <title>{% block head_title %}{% trans 'YaSound - Create your social web radio instantly' %}{% endblock %}</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="/media/app/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="{% block meta_description %}{% trans 'With Yasound, there’s no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time online and on your phone.' %}{% endblock%}" />
+    <meta name="description" content="{% block meta_description %}{% blocktrans %}With Yasound, there's no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time.{% endblocktrans %}{% endblock%}" />
     <meta name="Author" content="Yasound SAS" />
     <meta name="copyright" content="Yasound SAS" />
     <meta http-equiv="Cache-control" content="public" />

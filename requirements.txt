@@ -47,3 +47,4 @@ unicodecsv
 django_compressor
 django-debug-toolbar
 fabric
+django-localeurl

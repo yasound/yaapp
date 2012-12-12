@@ -166,14 +166,6 @@ def build_sacem_report_file(song_report_docs, start_date=None, end_date=None, de
     s = start_date
     e = end_date
 
-    # if no start or end date is provided, get it from database
-    if not s:
-        documents = reports.find().sort('report_date', 1)
-        s = documents[0]['report_date']
-    if not e:
-        documents = reports.find().sort('report_date', -1)
-        e = documents[0]['report_date']
-
     # destination file
     if s and e:
         filename = 'sacem_report_%s_%s.txt' % (s.date().isoformat(), e.date().isoformat())

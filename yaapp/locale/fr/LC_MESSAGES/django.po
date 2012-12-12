@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-11 17:33+0100\n"
+"POT-Creation-Date: 2012-12-12 14:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -909,14 +909,17 @@ msgstr "Sans nom"
 msgid "Buy on iTunes"
 msgstr "Acheter sur iTunes"
 
+#: templates/yabase/webapp.html:15
+msgid "YaSound - Create your social web radio instantly"
+msgstr "YaSound -  Créez votre web radio sociale en un instant"
+
 #: templates/yabase/webapp.html:20
 msgid ""
-"With Yasound, there’s no need to listen to music alone anymore. Create your "
-"own radio station instantly and share with your friends in real time online "
-"and on your phone."
+"With Yasound, there's no need to listen to music alone anymore. Create your "
+"own radio station instantly and share with your friends in real time."
 msgstr ""
 "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
-"amis, et communiquez avec eux en temps réel sur votre mobile et sur le net."
+"amis, et communiquez avec eux en temps réel."
 
 #: templates/yabase/webapp.html:556
 #: templates/yabase/app/mobileCenterMenu.html:24
@@ -950,8 +953,8 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 #: templates/yabase/app/programming/programmingPage.mustache:14
 #: templates/yabase/app/programming/songInstances.mustache:47
 #: templates/yabase/app/programming/statusPage.mustache:12
-#: templates/yabase/app/radio/radioPage.mustache:124
-#: templates/yabase/app/radio/radioPage.mustache:139
+#: templates/yabase/app/radio/radioPage.mustache:132
+#: templates/yabase/app/radio/radioPage.mustache:147
 #: templates/yabase/app/settings/settingsPage.mustache:88
 #: templates/yabase/app/settings/settingsPage.mustache:104
 msgid "No thank you"
@@ -962,8 +965,8 @@ msgstr "Non merci"
 #: templates/yabase/app/programming/programmingPage.mustache:15
 #: templates/yabase/app/programming/songInstances.mustache:48
 #: templates/yabase/app/programming/statusPage.mustache:13
-#: templates/yabase/app/radio/radioPage.mustache:125
-#: templates/yabase/app/radio/radioPage.mustache:140
+#: templates/yabase/app/radio/radioPage.mustache:133
+#: templates/yabase/app/radio/radioPage.mustache:148
 #: templates/yabase/app/settings/settingsPage.mustache:89
 #: templates/yabase/app/settings/settingsPage.mustache:105
 msgid "Yes i want"
@@ -978,7 +981,7 @@ msgid "Unable to connect Yasound server right now."
 msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
 
 #: templates/yabase/webapp.html:590 templates/yabase/webapp.html.py:605
-#: templates/yabase/app/radio/radioPage.mustache:153
+#: templates/yabase/app/radio/radioPage.mustache:161
 msgid "Dismiss"
 msgstr "Fermer"
 
@@ -1671,34 +1674,34 @@ msgid "Like song on YaSound"
 msgstr "J'aime le titre sur YaSound"
 
 #: templates/yabase/app/radio/radioPage.html:4
-msgid "Online radio powered by YaSound"
-msgstr "Radio en ligne propulsée par YaSound"
+msgid "powered by YaSound"
+msgstr "propulsée par YaSound"
 
-#: templates/yabase/app/radio/radioPage.mustache:117
+#: templates/yabase/app/radio/radioPage.mustache:125
 msgid "Confirm report as abuse"
 msgstr "Confirmer la notification d'abus"
 
-#: templates/yabase/app/radio/radioPage.mustache:120
+#: templates/yabase/app/radio/radioPage.mustache:128
 msgid "Do you really want to report this message as an abuse?"
 msgstr "Voulez-vous vraiment signaler ce contenu comme abusif ?"
 
-#: templates/yabase/app/radio/radioPage.mustache:132
+#: templates/yabase/app/radio/radioPage.mustache:140
 msgid "Confirm delete message"
 msgstr "Confirmer la suppression du message"
 
-#: templates/yabase/app/radio/radioPage.mustache:135
+#: templates/yabase/app/radio/radioPage.mustache:143
 msgid "Do you really want to delete this message?"
 msgstr "Voulez-vous vraiment supprimer ce message ?"
 
-#: templates/yabase/app/radio/radioPage.mustache:147
+#: templates/yabase/app/radio/radioPage.mustache:155
 msgid "Broadcast message to your fans"
 msgstr "Envoyer un message à vos abonnés"
 
-#: templates/yabase/app/radio/radioPage.mustache:150
+#: templates/yabase/app/radio/radioPage.mustache:158
 msgid "Your message"
 msgstr "Votre message"
 
-#: templates/yabase/app/radio/radioPage.mustache:154
+#: templates/yabase/app/radio/radioPage.mustache:162
 msgid "Send now"
 msgstr "Envoyer maintenant"
 
