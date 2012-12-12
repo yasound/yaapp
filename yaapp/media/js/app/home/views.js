@@ -177,21 +177,24 @@ Yasound.Views.HomePage = Backbone.View.extend({
             collection: this.selection,
             el: $('#selection-slides', this.el)
         });
-        this.favoritesView = new Yasound.Views.RadiosSlide({
-            collection: this.favorites,
-            el: $('#favorites-slides', this.el)
-        });
+
+        if (Yasound.App.userAuthenticated) {
+            this.favoritesView = new Yasound.Views.RadiosSlide({
+                collection: this.favorites,
+                el: $('#favorites-slides', this.el)
+            });
+            this.favorites.goTo(0);
+            this.favorites.perPage = 5;
+        }
         this.popularView = new Yasound.Views.RadiosSlide({
             collection: this.popular,
             el: $('#popular-slides', this.el)
         });
 
         this.selection.goTo(0);
-        this.favorites.goTo(0);
         this.popular.goTo(0);
 
         this.selection.perPage = 5;
-        this.favorites.perPage = 5;
         this.popular.perPage = 5;
 
         this.updateGenreSlug(genre);
@@ -225,15 +228,18 @@ Yasound.Views.HomePage = Backbone.View.extend({
             this.popular.params.genre = genre;
         }
         this.selectionView.clear();
-        this.favoritesView.clear();
         this.popularView.clear();
 
         this.selection.perPage = 15;
-        this.favorites.perPage = 15;
         this.popular.perPage = 15;
 
         this.selection.goTo(0);
-        this.favorites.goTo(0);
         this.popular.goTo(0);
+
+        if (Yasound.App.userAuthenticated) {
+            this.favoritesView.clear();
+            this.favorites.perPage = 15;
+            this.favorites.goTo(0);
+        }
     }
 });

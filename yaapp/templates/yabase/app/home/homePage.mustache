@@ -22,7 +22,7 @@
   </section>
 </div>
 
-<div class="container-fluid content-zone">
+<div class="container-fluid content-zone {% if request.user.is_anonymous %}last{% endif %}">
   <section class="row-fluid">
     <h1 class="block-title"><i class="asset-note"></i>Populaires</h1>
     <div class="block-content">
@@ -37,6 +37,7 @@
   </section>
 </div>
 
+{% if request.user.is_authenticated %}
 <div class="container-fluid content-zone">
   <section class="row-fluid">
     <h1 class="block-title"><i class="asset-fav"></i>Favoris</h1>
@@ -120,3 +121,4 @@
     </section>
   </div>
 </div>
+{% endif %}
