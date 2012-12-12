@@ -1205,9 +1205,9 @@ class Radio(models.Model):
         songs = YasoundSong.objects.filter(id__in=list(song_ids))
         size = '157x157'
         for i, song in enumerate(songs):
-            data.append(song.custom_cover_url(size))
-            if i > 6:
+            if i > 5:
                 size = '314x314'
+            data.append(song.custom_cover_url(size))
         cache.set(key, data, 0)
         return data
 
