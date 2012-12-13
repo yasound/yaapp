@@ -2,13 +2,19 @@
 {% load app_url %}
 <a href="#">
     <i class="icon asset-mini-com"></i>
+    <%#from_user_username%>
     <div class="txt-pic">
         <strong><% from_user_name%> {% trans "has sent you a message" %}</strong>
         <span><% formatted_date %></span>
     </div>
-    <%#from_user_username%>
     <div class="img">
         <img src="/api/v1/user/<% from_user_username %>/picture/xs/" width="30" height="30" alt="" />
+    </div>
+    <%/from_user_username%>
+    <%^from_user_username%>
+    <div class="txt-pic">
+        <strong><%#html%><%{html %><%/html%><%^html%><% text %><%/html%></strong>
+        <span><% formatted_date %></span>
     </div>
     <%/from_user_username%>
 </a>

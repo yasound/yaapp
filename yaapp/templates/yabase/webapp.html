@@ -435,9 +435,26 @@ HTML, BODY { height: 100%; }
       {% include "yabase/app/notifications/notificationDigest.mustache" %}
    </script>
 
+   <script type="text/html" id="notificationFriendOnlineDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendOnlineDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationMessageInWallDigestTemplate">
+      {% include "yabase/app/notifications/notificationMessageInWallDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationAddedFavoriteDigestTemplate">
+      {% include "yabase/app/notifications/notificationAddedFavoriteDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationSongLikedDigestTemplate">
+      {% include "yabase/app/notifications/notificationSongLikedDigest.mustache" %}
+   </script>
+
    <script type="text/html" id="notificationDigestLastTemplate">
       {% include "yabase/app/notifications/notificationDigestLast.mustache" %}
    </script>
+
 
    <script type="text/html" id="programmingPageTemplate">
       {% include "yabase/app/programming/programmingPage.mustache" %}

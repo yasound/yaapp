@@ -174,7 +174,18 @@ Yasound.Views.NotificationDigest = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         data.formatted_date = this.model.getFormattedDate();
-        $(this.el).html(ich.notificationDigestTemplate(data));
+        console.log(data);
+        if (data.type === 'type_notif_friend_online') {
+            $(this.el).html(ich.notificationFriendOnlineDigestTemplate(data));
+        } else if (data.type == 'type_notif_message_in_wall') {
+            $(this.el).html(ich.notificationMessageInWallDigestTemplate(data));
+        } else if (data.type == 'type_notif_radio_in_favorites') {
+            $(this.el).html(ich.notificationAddedFavoriteDigestTemplate(data));
+        } else if (data.type == 'type_notif_song_liked') {
+            $(this.el).html(ich.notificationSongLikedDigestTemplate(data));
+        } else {
+            $(this.el).html(ich.notificationDigestTemplate(data));
+        }
 
         return this;
     },

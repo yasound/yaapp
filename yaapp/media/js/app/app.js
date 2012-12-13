@@ -185,6 +185,15 @@ $(document).ready(function () {
         });
     }
 
+    $('#anon').on('click', function (e) {
+        e.preventDefault();
+        var uuid = $(e.target).data('uuid');
+        Yasound.App.Router.navigate('radio/' + uuid + '/', {
+            trigger: true
+        });
+        $('#anon-alert').hide();
+    });
+
     /**
      * Application controller
      */
