@@ -626,17 +626,17 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.wallInputView.radioUUID = this.model.get('uuid');
         this.wallInputView.render();
 
-        if (!is_jm_radio) {
-            this.radioView = new Yasound.Views.Radio({
-                model: this.model,
-                el: $('#webapp-radio', this.el)
-            });
-        }
-        this.radioInfosView = new Yasound.Views.RadioInfos({
+        this.radioView = new Yasound.Views.Radio({
             model: this.model,
-            el: $('#radio-infos', this.el)
+            el: $('#webapp-radio', this.el)
         });
 
+        if (!is_jm_radio) {
+            this.radioInfosView = new Yasound.Views.RadioInfos({
+                model: this.model,
+                el: $('#radio-infos', this.el)
+            });
+        }
         this.trackView = new Yasound.Views.TrackInRadio({
             model: this.model.currentSong,
             el: $('#webapp-track', this.el)
@@ -677,13 +677,14 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.radioUsers.fetch();
         }
 
-        if (!is_jm_radio) {
-            this.radioView.render();
-        }
+        this.radioView.render();
         this.trackView.render();
         this.wallEventsView.render();
         this.paginationView.render();
-        this.radioInfosView.render();
+
+        if (!is_jm_radio) {
+            this.radioInfosView.render();
+        }
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('wall_event', function (msg) {
