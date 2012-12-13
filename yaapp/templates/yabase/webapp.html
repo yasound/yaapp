@@ -657,6 +657,13 @@ HTML, BODY { height: 100%; }
   {% include "yabase/app/mobileLeftMenu.html" %}
   {% include "yabase/app/mobileCenterMenu.html" %}
 
+
+  <div class='container'>
+    <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>{% trans "Important " %}</strong> <a href='{% app_url webapp_default_radio "423e0e61b0e34bf5a2167dbf6d414636" %}'>{% trans "Important news about YaSound corporate management" %}</a>
+    </div>
+  </div>
   <div class='container' id='teaser' style='display:none;'>
     <div class='row'>
       <div class='span12'>
