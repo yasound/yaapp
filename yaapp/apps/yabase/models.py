@@ -1208,7 +1208,7 @@ class Radio(models.Model):
             if i > 5:
                 size = '314x314'
             data.append(song.custom_cover_url(size))
-        cache.set(key, data, 0)
+        cache.set(key, data, 60 * 60)
         return data
 
     def clear_pictures_cache(self):
