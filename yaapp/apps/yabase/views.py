@@ -1594,6 +1594,8 @@ class WebAppView(View):
         twitter_referal = False
         email_referal = False
 
+        is_jm_radio = radio_uuid == settings.JM_RADIO
+
         next = ''
         referal = request.REQUEST.get('referal', '')
         referal_username = request.REQUEST.get('username', '')
@@ -1686,6 +1688,7 @@ class WebAppView(View):
 
         context = {
             'user_id' : user_id,
+            'is_jm_radio': is_jm_radio,
             'push_url': push_url,
             'enable_push': enable_push,
             'current_uuid': radio_uuid,
@@ -1772,6 +1775,8 @@ class WebAppView(View):
         twitter_referal = False
         email_referal = False
 
+        is_jm_radio = radio_uuid == settings.JM_RADIO
+
         if request.user.is_authenticated():
             if app_name == 'app':
                 twitter_referal = absolute_url(reverse('webapp_default_signup')) + '?referal=twitter&username=' + request.user.username
@@ -1854,6 +1859,7 @@ class WebAppView(View):
 
         context = {
             'user_id' : user_id,
+            'is_jm_radio': is_jm_radio,
             'push_url': push_url,
             'enable_push': enable_push,
             'current_uuid': radio_uuid,

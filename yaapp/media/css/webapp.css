@@ -4313,6 +4313,32 @@ a.yabutton-small {
     display:none;
 }
 
+#hommage-bg {
+    position:absolute;
+    top:168px;
+    background-color: #181818;
+    width:100%;
+    height:260px;
+    z-index:-10;
+}
+
+#hommage {
+    text-align:center;
+    font-size:16px;
+    font-weight: 100;
+    font-family: 'proxima-nova', sans-serif;
+    margin-bottom:12px;
+    z-index:8;
+}
+
+#hommage img {
+    margin-top:-27px;
+}
+
+#hommage .span5 img {
+    margin-top:72px;
+}
+
 #teaser-bg {
     position:absolute;
     top:168px;

@@ -7,13 +7,13 @@
 Namespace('Yasound.Views');
 
 Yasound.Views.Teaser = Backbone.View.extend({
-    el: '#teaser',
+    el: '#hommage',
     events: {
-        'click #teaser-signup-later-btn'    : 'slideUp',
-        'click #teaser-signup-now-btn'      : 'signup',
-        'click #teaser-listen p a'          : 'listen',
-        'click #teaser-create p a'          : 'create',
-        'click #teaser-share p a'           : 'share'
+        // 'click #teaser-signup-later-btn'    : 'slideUp',
+        // 'click #teaser-signup-now-btn'      : 'signup',
+        // 'click #teaser-listen p a'          : 'listen',
+        // 'click #teaser-create p a'          : 'create',
+        // 'click #teaser-share p a'           : 'share'
     },
 
     initialize: function() {
@@ -35,7 +35,7 @@ Yasound.Views.Teaser = Backbone.View.extend({
             e.preventDefault();
             cookies.set('hideteaser', true);
         }
-        $('#teaser-bg').slideUp();
+        $('#hommage-bg').slideUp();
         this.$el.slideUp();
     },
 
