@@ -599,11 +599,9 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
 
     initialize: function () {
         _.bindAll(this, 'render', 'fetchPictures');
-        this.model.bind('change', this.render, this);
     },
 
     onClose: function () {
-        this.model.unbind('change', this.render, this);
     },
 
     reset: function () {
