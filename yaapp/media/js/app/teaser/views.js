@@ -35,8 +35,8 @@ Yasound.Views.Teaser = Backbone.View.extend({
             e.preventDefault();
             cookies.set('hideteaser', true);
         }
-        $('#hommage-bg').slideUp();
-        this.$el.slideUp();
+        $('#hommage-bg').hide();
+        this.$el.hide();
     },
 
     listen: function (e) {

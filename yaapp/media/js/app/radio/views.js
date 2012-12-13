@@ -589,8 +589,19 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
     render: function () {
         this.reset();
-
+        var is_jm_radio = false;
         $(this.el).html(ich.radioPageTemplate());
+
+        if (this.model.get('uuid') === g_jm_radio) {
+            $('#jm-header', this.el).html(ich.jmHeaderTemplate());
+            is_jm_radio = true;
+            $('#hommage-bg').show();
+            $('#hommage').hide();
+            $('#radio-infos', this.el).html('');
+        } else {
+            $('#jm-header', this.el).html('');
+
+        }
 
         this.radioUsers.bind('add', this.onRadioUsersChanged, this);
         this.radioUsers.bind('remove', this.onRadioUsersChanged, this);
@@ -615,11 +626,12 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.wallInputView.radioUUID = this.model.get('uuid');
         this.wallInputView.render();
 
-        this.radioView = new Yasound.Views.Radio({
-            model: this.model,
-            el: $('#webapp-radio', this.el)
-        });
-
+        if (!is_jm_radio) {
+            this.radioView = new Yasound.Views.Radio({
+                model: this.model,
+                el: $('#webapp-radio', this.el)
+            });
+        }
         this.radioInfosView = new Yasound.Views.RadioInfos({
             model: this.model,
             el: $('#radio-infos', this.el)
@@ -665,7 +677,9 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.radioUsers.fetch();
         }
 
-        this.radioView.render();
+        if (!is_jm_radio) {
+            this.radioView.render();
+        }
         this.trackView.render();
         this.wallEventsView.render();
         this.paginationView.render();

@@ -1,4 +1,7 @@
 {% load i18n %}
+<div id='jm-header'>
+    {% if is_jm_radio %}{% include "yabase/app/radio/jmHeader.mustache" %}{% endif %}
+</div>
 
 <div class='row'>
 <div class='span4 wall-responsive-span4'>
@@ -15,7 +18,7 @@
     </div>
 </div>
 <div class='span8'>
-    <div id='radio-infos'>{% if radio %}{% include "yabase/app/radio/radioInfos.mustache" %} {% endif %}</div>
+    <div id='radio-infos'>{% if not is_jm_radio %}{% if radio %}{% include "yabase/app/radio/radioInfos.mustache" %} {% endif %}{% endif %}</div>
     <div class='wall-container'>
     <div id='webapp-wall-input'>{% if radio %}{% include "yabase/app/radio/wallInput.mustache" %} {% endif %}</div>
     <div>

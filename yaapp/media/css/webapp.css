@@ -4339,6 +4339,22 @@ a.yabutton-small {
     margin-top:72px;
 }
 
+.radio-jm {
+    background-color: #171717;
+    font-size:14px;
+    font-weight: 400;
+    font-style: italic;
+    font-family: 'proxima-nova', sans-serif;
+    color: #b1b1b1;
+    height:233px;
+}
+
+.radio-jm .jm-picture {
+    margin-top:33px;
+}
+.radio-jm .jm-picture img {
+    margin-left:42px;
+}
 #teaser-bg {
     position:absolute;
     top:168px;

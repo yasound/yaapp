@@ -1689,6 +1689,7 @@ class WebAppView(View):
         context = {
             'user_id' : user_id,
             'is_jm_radio': is_jm_radio,
+            'jm_radio_uuid': settings.JM_RADIO,
             'push_url': push_url,
             'enable_push': enable_push,
             'current_uuid': radio_uuid,
@@ -1860,6 +1861,7 @@ class WebAppView(View):
         context = {
             'user_id' : user_id,
             'is_jm_radio': is_jm_radio,
+            'jm_radio_uuid': settings.JM_RADIO,
             'push_url': push_url,
             'enable_push': enable_push,
             'current_uuid': radio_uuid,

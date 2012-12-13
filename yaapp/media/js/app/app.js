@@ -182,7 +182,7 @@ $(document).ready(function () {
         });
     }
 
-    $('#anon').on('click', function (e) {
+    $('#hommage a').on('click', function (e) {
         e.preventDefault();
         var uuid = $(e.target).data('uuid');
         Yasound.App.Router.navigate('radio/' + uuid + '/', {
@@ -369,11 +369,12 @@ $(document).ready(function () {
                     this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
                 }
 
-                if (!Yasound.App.userAuthenticated) {
-                    if (!cookies.get('hideteaser')) {
-                        this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
-                    }
-                }
+                // if (!Yasound.App.userAuthenticated) {
+                //     if (!cookies.get('hideteaser')) {
+                //         this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+                //     }
+                // }
+                this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 
 

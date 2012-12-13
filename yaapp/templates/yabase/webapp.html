@@ -253,7 +253,7 @@ HTML, BODY { height: 100%; }
        {% endif %}
 
        var g_language_code = '{{request.LANGUAGE_CODE}}';
-
+       var g_jm_radio = '{{ jm_radio_uuid }}';
     </script>
 
 
@@ -298,6 +298,10 @@ HTML, BODY { height: 100%; }
 
    <script type='text/html' id='radioPageTemplate'>
      {% include "yabase/app/radio/radioPage.mustache" with wall_events=None%}
+   </script>
+
+   <script type='text/html' id='jmHeaderTemplate'>
+     {% include "yabase/app/radio/jmHeader.mustache" %}
    </script>
 
    <script type='text/html' id='radioInfosTemplate'>
@@ -648,7 +652,7 @@ HTML, BODY { height: 100%; }
     </div>
 </div>
 
-<div id='hommage-bg'></div>
+<div id='hommage-bg' class='hidden-phone'></div>
 
 
 <div id='webapp-container-parent'>
@@ -657,7 +661,7 @@ HTML, BODY { height: 100%; }
   {% include "yabase/app/mobileLeftMenu.html" %}
   {% include "yabase/app/mobileCenterMenu.html" %}
 
-  <div class='container' id='hommage'>
+  <div class='container hidden-phone' id='hommage' {% if is_jm_radio %}style='display:none;'{% endif%}>
     <div class='row'>
       <div class='span3'>
           <img src='/media/images/jm/jm.png' width='176' height='260' alt="{% trans 'Jean-Marc Plueger' %}"/>
@@ -666,7 +670,7 @@ HTML, BODY { height: 100%; }
           <img src='/media/images/jm/text.png' width='298' height='260' alt="{% trans 'Jean-Marc Plueger - 1966 - 2012' %}"/>
       </div>
       <div class='span5'>
-          <a href="{% url webapp_default_radio '23e0e61b0e34bf5a2167dbf6d414636' %}"><img src='/media/images/jm/button.png' width='275' height='55' alt="{% trans 'Goto radio' %}"/></a>
+          <a href="{% url webapp_default_radio jm_radio_uuid %}" data-uuid='{{ jm_radio_uuid }}'><img data-uuid='{{ jm_radio_uuid }}' src='/media/images/jm/button.png' width='275' height='55' alt="{% trans 'Goto radio' %}"/></a>
       </div>
     </div>
   </div>
