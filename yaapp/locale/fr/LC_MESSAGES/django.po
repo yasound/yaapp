@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-13 16:30+0100\n"
+"POT-Creation-Date: 2012-12-13 17:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,8 +67,8 @@ msgstr "Se déconnecter"
 msgid "Login"
 msgstr "Se connecter"
 
-#: templates/account/login.html:24 templates/yabase/webapp.html:613
-#: templates/yabase/webapp.html.py:616
+#: templates/account/login.html:24 templates/yabase/webapp.html:617
+#: templates/yabase/webapp.html.py:620
 #: templates/yabase/app/login/login.mustache:5
 msgid "Welcome to Yasound"
 msgstr "Bienvenue sur Yasound"
@@ -159,7 +159,7 @@ msgstr ""
 msgid "Signup"
 msgstr "S'inscrire"
 
-#: templates/account/signup.html:24 templates/yabase/webapp.html:484
+#: templates/account/signup.html:24 templates/yabase/webapp.html:488
 msgid "Yasound"
 msgstr "Yasound"
 
@@ -657,7 +657,7 @@ msgstr ""
 msgid "Backoffice"
 msgstr "Backoffice"
 
-#: templates/yabackoffice/index.html:40 templates/yabase/webapp.html:479
+#: templates/yabackoffice/index.html:40 templates/yabase/webapp.html:483
 msgid "Loading application..."
 msgstr "Chargement de l'application..."
 
@@ -886,15 +886,15 @@ msgstr ""
 "Avec Yasound, créez votre radio en un instant, écoutez la musique avec vos "
 "amis, et communiquez avec eux en temps réel."
 
-#: templates/yabase/webapp.html:556
+#: templates/yabase/webapp.html:560
 #: templates/yabase/app/mobileCenterMenu.html:24
 #: templates/yabase/app/track.mustache:24
 #: templates/yabase/app/common/subMenu.mustache:19
 msgid "Share"
 msgstr "Partager"
 
-#: templates/yabase/webapp.html:561 templates/yabase/webapp.html.py:620
-#: templates/yabase/webapp.html:632 templates/yabase/webapp.html.py:647
+#: templates/yabase/webapp.html:565 templates/yabase/webapp.html.py:624
+#: templates/yabase/webapp.html:636 templates/yabase/webapp.html.py:651
 #: templates/yabase/app/friends/friendsPage.mustache:66
 #: templates/yabase/app/programming/statusPage.mustache:36
 #: templates/yabase/app/radio/editRadioPage.mustache:35
@@ -902,85 +902,85 @@ msgstr "Partager"
 msgid "Close"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:568
+#: templates/yabase/webapp.html:572
 #: templates/yabase/app/profile/user.mustache:20
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
-#: templates/yabase/webapp.html:571
+#: templates/yabase/webapp.html:575
 msgid "Do you really want to unfollow this user ?"
 msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 
-#: templates/yabase/webapp.html:575
+#: templates/yabase/webapp.html:579
 #: templates/yabase/app/friends/friendsPage.mustache:15
 #: templates/yabase/app/friends/friendsPage.mustache:45
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:15
 #: templates/yabase/app/programming/programmingPage.mustache:14
 #: templates/yabase/app/programming/songInstances.mustache:47
 #: templates/yabase/app/programming/statusPage.mustache:12
+#: templates/yabase/app/radio/radioPage.mustache:58
 #: templates/yabase/app/radio/radioPage.mustache:73
-#: templates/yabase/app/radio/radioPage.mustache:88
 #: templates/yabase/app/settings/settingsPage.mustache:82
 #: templates/yabase/app/settings/settingsPage.mustache:98
 msgid "No thank you"
 msgstr "Non merci"
 
-#: templates/yabase/webapp.html:576
+#: templates/yabase/webapp.html:580
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:16
 #: templates/yabase/app/programming/programmingPage.mustache:15
 #: templates/yabase/app/programming/songInstances.mustache:48
 #: templates/yabase/app/programming/statusPage.mustache:13
+#: templates/yabase/app/radio/radioPage.mustache:59
 #: templates/yabase/app/radio/radioPage.mustache:74
-#: templates/yabase/app/radio/radioPage.mustache:89
 #: templates/yabase/app/settings/settingsPage.mustache:83
 #: templates/yabase/app/settings/settingsPage.mustache:99
 msgid "Yes i want"
 msgstr "Oui je le veux"
 
-#: templates/yabase/webapp.html:583
+#: templates/yabase/webapp.html:587
 msgid "Connection error"
 msgstr "Erreur de connexion"
 
-#: templates/yabase/webapp.html:586
+#: templates/yabase/webapp.html:590
 msgid "Unable to connect Yasound server right now."
 msgstr "Impossible de se connecter au serveur Yasound pour l'instant."
 
-#: templates/yabase/webapp.html:590 templates/yabase/webapp.html.py:605
-#: templates/yabase/app/radio/radioPage.mustache:102
+#: templates/yabase/webapp.html:594 templates/yabase/webapp.html.py:609
+#: templates/yabase/app/radio/radioPage.mustache:87
 msgid "Dismiss"
 msgstr "Fermer"
 
-#: templates/yabase/webapp.html:591
+#: templates/yabase/webapp.html:595
 msgid "Reload page"
 msgstr "Recharger la page"
 
-#: templates/yabase/webapp.html:598
+#: templates/yabase/webapp.html:602
 msgid "You are not logged in"
 msgstr "Vous n'êtes pas authentifié"
 
-#: templates/yabase/webapp.html:601
+#: templates/yabase/webapp.html:605
 msgid "You have to login to access the requested resource."
 msgstr "Vous devez être authentifié pour accéder à cette ressource."
 
-#: templates/yabase/webapp.html:606
+#: templates/yabase/webapp.html:610
 msgid "Go to login page"
 msgstr "Aller à la page de login"
 
-#: templates/yabase/webapp.html:646
+#: templates/yabase/webapp.html:650
 #: templates/yabase/app/programming/uploadCell.mustache:10
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/yabase/webapp.html:663
-#: templates/yabase/app/radio/radioPage.mustache:5
+#: templates/yabase/webapp.html:667
+#: templates/yabase/app/radio/jmHeader.mustache:4
 msgid "Jean-Marc Plueger"
 msgstr ""
 
-#: templates/yabase/webapp.html:666
+#: templates/yabase/webapp.html:670
 msgid "Jean-Marc Plueger - 1966 - 2012"
 msgstr ""
 
-#: templates/yabase/webapp.html:669
+#: templates/yabase/webapp.html:673
 #, fuzzy
 msgid "Goto radio"
 msgstr "Retour à la radio"
@@ -1625,6 +1625,33 @@ msgstr "Erreur d'upload"
 msgid "Save"
 msgstr "Enregistrer"
 
+#: templates/yabase/app/radio/jmHeader.mustache:7
+msgid ""
+"\n"
+"Jean-Marc Plueger passed away on monday December 10th 2012. He was the co-"
+"founder of YaSound. Our condolences go to his family, his friends and all "
+"the people who shared his communicative drive.<br/><br/>\n"
+"His energy and creative spirit enabled YaSound to become what it is today. "
+"He has always been able to transmit us his enthusiasm. Of course we will "
+"continue developing YaSound and think about him every day.<br/><br/>\n"
+"You can send your condolences to <a href=\"mailto:condolences-jm@yasound.com"
+"\">condolences-jm@yasound.com</a> or leave a message on this radio, his "
+"radio.<br/><br/>\n"
+"\n"
+"The YaSound team"
+msgstr ""
+"\n"
+"Jean-Marc Plueger, co-fondateur de YaSound, nous a quitté lundi 10 Décembre "
+"2012. Toutes nos pensées vont vers ses proches, vers ceux qui l'aiment "
+"et tous ceux qui ont su apprécier son énergie communicative.<br/><br/>C'est cette "
+"énergie et son esprit créatif qui ont permis au projet YaSound d'être ce "
+"qu'il est aujourd'hui. Il a toujours su nous communiquer son "
+"enthousiasme. Nous continuerons bien entendu le développement de Yasound en "
+"pensant chaque jour à lui.<br/><br/>Vous pouvez adresser vos condoléances à : "
+"<a href=\"mailto:condoleances-jm@yasound.com\">condoleances-jm@yasound.com</a> ou laisser un message sur le mur de cette radio, "
+"sa radio.<br/><br/>\n"
+"L'équipe YaSound"
+
 #: templates/yabase/app/radio/listenersPage.mustache:3
 msgid "Back to radio"
 msgstr "Retour à la radio"
@@ -1658,70 +1685,43 @@ msgstr "J'aime le titre sur YaSound"
 msgid "powered by YaSound"
 msgstr "propulsée par YaSound"
 
-#: templates/yabase/app/radio/radioPage.mustache:8
-msgid ""
-"\n"
-"Jean-Marc Plueger passed away on monday December 10th 2012. He was the co-"
-"founder of YaSound.<br/>\n"
-"Our condolences go to his family, his friends and all the people who shared "
-"his communicative drive.<br/>\n"
-"His energy and creative spirit enabled YaSound to become what it is today."
-"<br/>\n"
-"He has always been able to transmit us his enthusiasm. <br/>\n"
-"Of course we will continue developing YaSound and think about him every day."
-"<br/>\n"
-"You can send your condolences to condolences-jm@yasound.com or leave a "
-"message on this radio, his radio.<br/><br/>\n"
-"\n"
-"The YaSound team"
-msgstr ""
-"\n"
-"Jean-Marc Plueger, co-fondateur de YaSound, nous a quitté lundi 10 Décembre 2012.<br/>"
-"Toutes nos pensées vont vers ses proches, vers ceux qui l'aiment et tous ceux qui ont su apprécier son énergie communicative.<br/>"
-"C'est cette énergie et son esprit créatif qui ont permis au projet YaSound d'être ce qu'il est aujourd'hui.<br/>"
-"Il a toujours su nous communiquer son enthousiasme. "
-"Nous continuerons bien entendu le développement de Yasound en pensant chaque jour à lui.<br/>"
-"Vous pouvez adresser vos condoléances à : condoleances-jm@yasound.com ou laisser un message sur le mur de cette radio, sa radio.<br/><br/>"
-"\n"
-"L'équipe YaSound"
-
-#: templates/yabase/app/radio/radioPage.mustache:29
+#: templates/yabase/app/radio/radioPage.mustache:14
 msgid "listeners"
 msgstr "auditeurs"
 
-#: templates/yabase/app/radio/radioPage.mustache:32
+#: templates/yabase/app/radio/radioPage.mustache:17
 msgid "Show all"
 msgstr "Tout afficher"
 
-#: templates/yabase/app/radio/radioPage.mustache:57
+#: templates/yabase/app/radio/radioPage.mustache:42
 msgid "No post yet, be the first to comment!"
 msgstr "Il n'y a encore aucun commentaire, soyez le premier à vous exprimer!"
 
-#: templates/yabase/app/radio/radioPage.mustache:66
+#: templates/yabase/app/radio/radioPage.mustache:51
 msgid "Confirm report as abuse"
 msgstr "Confirmer la notification d'abus"
 
-#: templates/yabase/app/radio/radioPage.mustache:69
+#: templates/yabase/app/radio/radioPage.mustache:54
 msgid "Do you really want to report this message as an abuse?"
 msgstr "Voulez-vous vraiment signaler ce contenu comme abusif ?"
 
-#: templates/yabase/app/radio/radioPage.mustache:81
+#: templates/yabase/app/radio/radioPage.mustache:66
 msgid "Confirm delete message"
 msgstr "Confirmer la suppression du message"
 
-#: templates/yabase/app/radio/radioPage.mustache:84
+#: templates/yabase/app/radio/radioPage.mustache:69
 msgid "Do you really want to delete this message?"
 msgstr "Voulez-vous vraiment supprimer ce message ?"
 
-#: templates/yabase/app/radio/radioPage.mustache:96
+#: templates/yabase/app/radio/radioPage.mustache:81
 msgid "Broadcast message to your fans"
 msgstr "Envoyer un message à vos abonnés"
 
-#: templates/yabase/app/radio/radioPage.mustache:99
+#: templates/yabase/app/radio/radioPage.mustache:84
 msgid "Your message"
 msgstr "Votre message"
 
-#: templates/yabase/app/radio/radioPage.mustache:103
+#: templates/yabase/app/radio/radioPage.mustache:88
 msgid "Send now"
 msgstr "Envoyer maintenant"
 

@@ -4355,6 +4355,10 @@ a.yabutton-small {
 .radio-jm .jm-picture img {
     margin-left:42px;
 }
+.radio-jm .span7 {
+    margin-top:-12px;
+}
+
 #teaser-bg {
     position:absolute;
     top:168px;
