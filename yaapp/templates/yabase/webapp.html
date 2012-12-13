@@ -670,7 +670,7 @@ HTML, BODY { height: 100%; }
           <img src='/media/images/jm/text.png' width='298' height='260' alt="{% trans 'Jean-Marc Plueger - 1966 - 2012' %}"/>
       </div>
       <div class='span5'>
-          <a href="{% url webapp_default_radio jm_radio_uuid %}" data-uuid='{{ jm_radio_uuid }}'><img data-uuid='{{ jm_radio_uuid }}' src='/media/images/jm/button.png' width='275' height='55' alt="{% trans 'Goto radio' %}"/></a>
+          <a href="{% url webapp_default_radio jm_radio_uuid %}" data-uuid='{{ jm_radio_uuid }}'><img data-uuid='{{ jm_radio_uuid }}' src='/media/images/jm/button-{{request.LANGUAGE_CODE}}.png' width='275' height='55' alt="{% trans 'Goto radio' %}"/></a>
       </div>
     </div>
   </div>
