@@ -1,7 +1,11 @@
 {% load i18n %}
 {% if radio %}
 <h1>{{ radio.name }}</h1>
+{% if radio.creator.is_superuser %}
+<p>{{ radio.description|safe }}</p>
+{% else %}
 <p>{{ radio.description|urlize }}</p>
+{% endif %}
 {% else %}
 
 {% ifequal app_name 'deezer' %}
@@ -14,6 +18,6 @@
 {% endifequal %}
 
 <h1><% fullname %></h1>
-<p><%{description|safe%></p>
+<p><%{description%></p>
 {% endif %}
 <div class='clear'/>
