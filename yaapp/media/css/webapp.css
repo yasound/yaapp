@@ -4317,6 +4317,7 @@ a.yabutton-small {
     position:absolute;
     top:168px;
     background-color: #181818;
+    background: url(../images/jm/bg.png) repeat-x 50% 50%;
     width:100%;
     height:260px;
     z-index:-10;
@@ -4340,13 +4341,14 @@ a.yabutton-small {
 }
 
 .radio-jm {
-    background-color: #171717;
+    background-color: #181818;
     font-size:14px;
     font-weight: 400;
     font-style: italic;
     font-family: 'proxima-nova', sans-serif;
     color: #b1b1b1;
     height:233px;
+    background: url(../images/jm/bg.png) repeat-x 50% 50%;
 }
 
 .radio-jm .jm-picture {
