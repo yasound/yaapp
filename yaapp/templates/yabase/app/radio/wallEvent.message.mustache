@@ -1,34 +1,21 @@
 {% load i18n %}
-{% load thumbnail %}
-<div id='wall-event-messages' class='wall-event-message'>
-	{% if wall_event %}
-    {% thumbnail wall_event.user_picture "48x48" format='PNG' as im %}
-	<div class='wall-profile-picture'>
-		<img class='user' src='{{im.url}}' width='50px' height='50px'/>
-	</div>
-	{% endthumbnail %}
-	{% else %}
-	<div class='wall-profile-picture'>
-		<img class='user' src='<% user_picture %>' width='50px' height='50px'/>
-	</div>
-	{% endif %}
-	{% if request.user.is_authenticated %}
-	<div class='wall-event-remove'>
-	    <button class='yabutton-small' id='report-abuse-btn' href="#"><i class="icon-thumbs-down"></i> {% trans "report as abusive" %}</button>
-	    {% if wall_event %}
-		    {% ifequal wall_event.user request.user %}
-		    <button class='yabutton-small wall-delete' href="#" id='delete-btn'><i class="icon-trash"></i> {% trans "delete" %}</button>
-		    {% endifequal %}
-		{% else %}
-	    <%#creator%>
-	    <button class='yabutton-small wall-delete' href="#" id='delete-btn'><i class="icon-trash"></i> {% trans "delete" %}</button>
-	    <%/creator%>
-	    {% endif %}
-	</div>
-	{% endif %}
-	<div class='wall-messages-text'>
-		<p>{{ wall_event.text|default:'<% text %>' }}</p>
-		<h2><a href='{{ root }}profile/{{ wall_event.username|default:'<% user_username %>' }}/'>{{ wall_event.user_name|default:'<% user_name %>'}}</a></h2>
-		<div class='date date-comment'>{{ wall_event.start_date|default:'<% formatted_start_date %>' }}</div>
-	</div>
-</div>
+  <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+  <div class="wall-event">
+    <div class="wall-event-title"><strong><% title %></strong>, <% formatted_date %></div>
+    <div class="wall-event-action"><%#likers_digest%><% likers_digest %> ont aimé ce morceau !<%/likers_digest%></div>
+    <div class="wall-counters">
+      <div class="likes"><%like_count%> <i class="asset-mini-like"></i></div>
+      <div class="likes"><%message_count%> <i class="asset-mini-comment"></i></div>
+    </div>
+    <%#messages%>
+    <div class="wall-comment">
+      <a class="pic pic-circle" href="#"><img src="/api/v1/user/<% username %>/picture/30x30/" width="30" height="30" alt=""></a>
+      <div class="wall-comment-title"><a href="#"><% name %></a></div>
+      <div class="wall-comment-action"><% text %></div>
+      <div class="wall-comment-btns">
+        <a class="asset-bin" href="#"></a>
+        <a class="asset-report" href="#"></a>
+      </div>
+    </div>
+    <%/messages%>
+  </div>

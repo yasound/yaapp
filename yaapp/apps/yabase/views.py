@@ -1276,6 +1276,7 @@ class WebAppView(View):
         return context, 'yabase/app/static.html'
 
     def radio(self, request, context, *args, **kwargs):
+        wm = WallManager()
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
@@ -1283,14 +1284,14 @@ class WebAppView(View):
         if radio.current_song:
             context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        wall_events = WallEvent.objects.select_related('user', 'user__userprofile', 'radio').filter(radio=radio).order_by('-start_date')[:15]
+        wall_events = list(wm.events_for_radio(radio.uuid))
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
         context['radio_absolute_url'] = absolute_url(reverse('webapp_default_radio', args=[radio.uuid]))
 
         bdata = {
-            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'wall_events': wall_events,
             'radio': [radio.as_dict(request.user)],
         }
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)

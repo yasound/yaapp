@@ -46,6 +46,18 @@ class WallManager():
         }
         return current_song
 
+    def _generate_title(self, current_song):
+        artist = current_song.get('artist', '')
+        name = current_song.get('name', '')
+
+        if artist != '' and name != '':
+            return u'%s - %s' % (name, artist)
+
+        if name != '':
+            return name
+
+        return ''
+
     def add_event(self, event_type, radio, user, message=None):
         lock_id = "wall-add-event-lock"
         acquire_lock = lambda: cache.add(lock_id, "true", LOCK_EXPIRE)
@@ -67,20 +79,25 @@ class WallManager():
             current_song = self._create_blank_current_song()
 
         event_id = self._generate_event_id(radio, current_song)
+        title = self._generate_title(current_song)
+
         doc = self.collection.find_one({'event_id': event_id}, {'_id': False})
         if doc is None:
             doc = {
                 'event_type': event_type,
                 'radio_uuid': radio.uuid,
+                'title': title,
                 'current_song': current_song,
                 'created': now,
                 'event_id': event_id,
                 'messages': [],
                 'likes': [],
+                'likers_digest': [],
                 'like_count': 0,
                 'message_count': 0
             }
         doc['updated'] = now
+        doc['title'] = title
 
         if event_type == WallManager.EVENT_MESSAGE:
             message_data = {
@@ -104,6 +121,12 @@ class WallManager():
             if not already_liked:
                 doc.get('likes').append(like_data)
                 doc['like_count'] = doc.get('like_count', 0) + 1
+
+            likers = doc.get('likes')
+            likers_digest = []
+            for like in likers[:3]:
+                likers_digest.append(like)
+            doc['liker_digest'] = likers_digest
 
         self.collection.update({"event_id": doc.get('event_id')},
                                {"$set": doc}, upsert=True, safe=True)

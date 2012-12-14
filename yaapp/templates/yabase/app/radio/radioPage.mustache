@@ -64,51 +64,59 @@
           <input class="btn-coral" type="submit" value="Publier" />
         </form>
       </div>
-      <div class="wall-event-container">
-        <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
-        <div class="wall-event">
-          <div class="wall-event-title"><strong>Action Bronson - Righteous Mind</strong>, il y a 3 heures</div>
-          <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
-          <div class="wall-counters">
-            <div class="likes">4 <i class="asset-mini-like"></i></div>
+      <div id='wall'>
+        {% for event in wall_events %}
+          <div class='wall-event-container'>
+          {% ifequal event.event_type 'like' %}{% include 'yabase/app/radio/wallEvent.like.mustache' %}{% endifequal %}
+          {% ifequal event.event_type 'message' %}{% include 'yabase/app/radio/wallEvent.message.mustache' %}{% endifequal %}
           </div>
-        </div>
-      </div>
-      <div class="wall-event-container">
-        <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
-        <div class="wall-event">
-          <div class="wall-event-title"><strong>Murs & Fashawn - Satisfaction Feat. Mac Miller</strong>, il y a 3 heures</div>
-          <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
-          <div class="wall-counters">
-            <div class="likes">12 <i class="asset-mini-like"></i></div>
-          </div>
-        </div>
-      </div>
-      <div class="wall-event-container">
-        <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
-        <div class="wall-event">
-          <div class="wall-event-title"><strong>Murs & Fashawn - Satisfaction Feat. Mac Miller</strong>, il y a 3 heures</div>
-          <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
-          <div class="wall-counters">
-            <div class="likes">12 <i class="asset-mini-like"></i></div>
-            <div class="likes">2 <i class="asset-mini-comment"></i></div>
-          </div>
-          <div class="wall-comment">
-            <a class="pic pic-circle" href="#"><img src="http://placehold.it/30x30" width="30" height="30" alt=""></a>
-            <div class="wall-comment-title"><a href="#">Tommy Roussel</a></div>
-            <div class="wall-comment-action">Vraiment super sympa ce morceau, j’adore le vrai rap dans ce genre !</div>
-            <div class="wall-comment-btns">
-              <a class="asset-bin" href="#"></a>
-              <a class="asset-report" href="#"></a>
+        {% endfor %}
+        <div class="wall-event-container">
+          <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+          <div class="wall-event">
+            <div class="wall-event-title"><strong>Action Bronson - Righteous Mind</strong>, il y a 3 heures</div>
+            <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
+            <div class="wall-counters">
+              <div class="likes">4 <i class="asset-mini-like"></i></div>
             </div>
           </div>
-          <div class="wall-comment">
-            <a class="pic pic-circle" href="#"><img src="http://placehold.it/30x30" width="30" height="30" alt=""></a>
-            <div class="wall-comment-title"><a href="#">Tommy Roussel</a></div>
-            <div class="wall-comment-action">Vraiment super sympa ce morceau, j’adore le vrai rap dans ce genre !</div>
-            <div class="wall-comment-btns">
-              <a class="asset-bin" href="#"></a>
-              <a class="asset-report" href="#"></a>
+        </div>
+        <div class="wall-event-container">
+          <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+          <div class="wall-event">
+            <div class="wall-event-title"><strong>Murs & Fashawn - Satisfaction Feat. Mac Miller</strong>, il y a 3 heures</div>
+            <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
+            <div class="wall-counters">
+              <div class="likes">12 <i class="asset-mini-like"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="wall-event-container">
+          <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+          <div class="wall-event">
+            <div class="wall-event-title"><strong>Murs & Fashawn - Satisfaction Feat. Mac Miller</strong>, il y a 3 heures</div>
+            <div class="wall-event-action">Julien, Jean-Marc, Tommy Roussel et Sebastien ont aimé ce morceau !</div>
+            <div class="wall-counters">
+              <div class="likes">12 <i class="asset-mini-like"></i></div>
+              <div class="likes">2 <i class="asset-mini-comment"></i></div>
+            </div>
+            <div class="wall-comment">
+              <a class="pic pic-circle" href="#"><img src="http://placehold.it/30x30" width="30" height="30" alt=""></a>
+              <div class="wall-comment-title"><a href="#">Tommy Roussel</a></div>
+              <div class="wall-comment-action">Vraiment super sympa ce morceau, j’adore le vrai rap dans ce genre !</div>
+              <div class="wall-comment-btns">
+                <a class="asset-bin" href="#"></a>
+                <a class="asset-report" href="#"></a>
+              </div>
+            </div>
+            <div class="wall-comment">
+              <a class="pic pic-circle" href="#"><img src="http://placehold.it/30x30" width="30" height="30" alt=""></a>
+              <div class="wall-comment-title"><a href="#">Tommy Roussel</a></div>
+              <div class="wall-comment-action">Vraiment super sympa ce morceau, j’adore le vrai rap dans ce genre !</div>
+              <div class="wall-comment-btns">
+                <a class="asset-bin" href="#"></a>
+                <a class="asset-report" href="#"></a>
+              </div>
             </div>
           </div>
         </div>

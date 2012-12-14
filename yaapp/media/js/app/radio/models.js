@@ -23,7 +23,7 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
     }
 });
 
-Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend({
+Yasound.Data.Models.WallEvents = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.WallEvent,
     url: '/api/v1/radio/0/wall/',
     perPageAttribute: 'limit',
@@ -39,7 +39,7 @@ Yasound.Data.Models.PaginatedWallEvents = Backbone.Paginator.requestPager.extend
     },
     setRadio: function(radio) {
         this.radio = radio;
-        this.url = '/api/v1/radio/' + this.radio.get('id') + '/wall/';
+        this.url = '/api/v1/radio/' + this.radio.get('uuid') + '/wall/';
 
         return this;
     },

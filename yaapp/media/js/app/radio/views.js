@@ -324,7 +324,7 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     }
 });
 
-Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
+Yasound.Views.WallEvents = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, 'addOne', 'addAll', 'beforeFetch');
 
@@ -420,8 +420,8 @@ Yasound.Views.PaginatedWallEvents = Backbone.View.extend({
 
 
 Yasound.Views.WallEvent = Backbone.View.extend({
-    tagName: 'li',
-    className: 'wall-event',
+    tagName: 'div',
+    className: 'wall-event-container',
     events: {
         'click h2 a': 'selectUser',
         'click .wall-profile-picture': 'selectUser',
@@ -444,23 +444,18 @@ Yasound.Views.WallEvent = Backbone.View.extend({
             timeZone = '+02:00';
         }
         // if start_date contains microsecond precision, we remove it
-        var start_date = this.model.get('start_date').substr(0, 19);
+        var start_date = this.model.get('updated').substr(0, 19);
         var date = moment(start_date + timeZone);
-        data.formatted_start_date= date.format('LLL');
+        data.formatted_date= date.format('LLL');
 
-        if (this.model.get('type') == 'M') {
+        var event_type = this.model.get('event_type');
+        if (event_type === 'message') {
             if (Yasound.App.enableFX) {
                 $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
             } else {
                 $(this.el).html(ich.wallEventTemplateMessage(data));
             }
-        } else if (this.model.get('type') == 'S') {
-            if (Yasound.App.enableFX) {
-                $(this.el).hide().html(ich.wallEventTemplateSong(data)).fadeIn(200);
-            } else {
-                $(this.el).html(ich.wallEventTemplateSong(data));
-            }
-        } else if (this.model.get('type') == 'L') {
+        } else if (event_type === 'like') {
             if (Yasound.App.enableFX) {
                 $(this.el).hide().html(ich.wallEventTemplateLike(data)).fadeIn(200);
             } else {
@@ -634,7 +629,7 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
 Yasound.Views.RadioPage = Backbone.View.extend({
     listeners: new Yasound.Data.Models.RadioUsers({}),
     fans: new Yasound.Data.Models.RadioFans({}),
-    wallEvents: new Yasound.Data.Models.PaginatedWallEvents({}),
+    wallEvents: new Yasound.Data.Models.WallEvents({}),
     intervalId: undefined,
     wallPosted: undefined,
 
@@ -756,7 +751,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             el: $('#fans', this.el)
         });
 
-        this.wallEventsView = new Yasound.Views.PaginatedWallEvents({
+        this.wallEventsView = new Yasound.Views.WallEvents({
             collection: this.wallEvents,
             el: $('#wall', this.el)
         });
