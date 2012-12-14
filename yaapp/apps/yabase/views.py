@@ -44,6 +44,7 @@ import yasearch.search as yasearch_search
 from yasearch.models import RadiosManager
 from yageoperm import utils as yageoperm_utils
 from yahistory.models import ProgrammingHistory
+from yawall.models import WallManager
 from account.views import fast_connected_users_by_distance
 import import_utils
 import json
@@ -455,16 +456,25 @@ def like_song(request, song_id):
         if radio is not None:
             WallEvent.objects.add_like_event(radio, song, request.user)
 
+            wm = WallManager()
+            wm.add_event(event_type=WallManager.EVENT_LIKE, radio=radio, user=request.user)
+
     res = '%s (user) likes %s (song)\n' % (request.user, song)
     return HttpResponse(res)
 
+
 @csrf_exempt
-@check_api_key(methods=['POST',])
+@check_api_key(methods=['POST'])
 def post_message(request, radio_id):
     message = request.REQUEST.get('message')
     radio = get_object_or_404(Radio, uuid=radio_id)
     radio.post_message(request.user, message)
+
+    wm = WallManager()
+    wm.add_event(event_type=WallManager.EVENT_MESSAGE, radio=radio, user=request.user, message=message)
+
     return HttpResponse(status=200)
+
 
 @check_api_key(methods=['PUT', 'DELETE'])
 def delete_message(request, message_id):

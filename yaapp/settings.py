@@ -407,6 +407,7 @@ INSTALLED_APPS = (
     'compressor',
     'radioways',
     'yascheduler',
+    'yawall',
 )
 
 if LOCAL_MODE:
@@ -588,6 +589,11 @@ LOGGING = {
             'propagate': False,
         },
         'yaapp.yascheduler': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.yawall': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,
