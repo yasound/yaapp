@@ -440,14 +440,6 @@ Yasound.Views.WallEvent = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        var timeZone = '+01:00';
-        if (moment().isDST()) {
-            timeZone = '+02:00';
-        }
-        // if start_date contains microsecond precision, we remove it
-        var start_date = this.model.get('updated').substr(0, 19);
-        var date = moment(start_date + timeZone);
-        data.formatted_date= date.format('LLL');
 
         if (Yasound.App.enableFX) {
             $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);

@@ -1,8 +1,30 @@
 {% load i18n %}
+{% if event %}
+  <a class="pic pic-rounded pic-wide" href="#"><img src="{{ event.current_song.cover }}" width="45" height="45" alt="{{ event.title }}"></a>
+  <div class="wall-event">
+    <div class="wall-event-title"><strong>{{ event.title }}</strong>, {{ event.updated }} </div>
+    <div class="wall-event-action"></div>
+    <div class="wall-counters">
+      <div class="likes">{{ event.like_count }} <i class="asset-mini-like"></i></div>
+      <div class="likes">{{ event.message_count}} <i class="asset-mini-comment"></i></div>
+    </div>
+    {% for message in event.messages %}
+    <div class="wall-comment">
+      <a class="pic pic-circle" href="#"><img src="/api/v1/user/{{ message.username }}/picture/30x30/" width="30" height="30" alt=""></a>
+      <div class="wall-comment-title"><a href="#">{{ message.name }}</a></div>
+      <div class="wall-comment-action">{{ message.text }}</div>
+      <div class="wall-comment-btns">
+        <a class="asset-bin" href="#"></a>
+        <a class="asset-report" href="#"></a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
   <a class="pic pic-rounded pic-wide" href="#"><img src="<%#current_song%><% cover %><%/current_song%>" width="45" height="45" alt="<% title %>"></a>
   <div class="wall-event">
     <div class="wall-event-title"><strong><% title %></strong>, <% formatted_date %></div>
-    <div class="wall-event-action"><%#likers_digest%><% name %>, ont aimé ce morceau !<%/likers_digest%></div>
+    <div class="wall-event-action"><%#formatted_likers%><% formatted_likers %><%/formatted_likers%></div>
     <div class="wall-counters">
       <div class="likes"><%like_count%> <i class="asset-mini-like"></i></div>
       <div class="likes"><%message_count%> <i class="asset-mini-comment"></i></div>
@@ -19,3 +41,4 @@
     </div>
     <%/messages%>
   </div>
+{% endif %}
