@@ -111,6 +111,7 @@ Yasound.Views.SearchPage = Backbone.View.extend({
         this.reset();
         $(this.el).html(ich.searchPageTemplate());
         this.collection.setQuery(query);
+        $('#search-input').val(query);
         this.collection.perPage = Yasound.Utils.cellsPerPage();
 
         this.resultsView = new Yasound.Views.SearchResults({

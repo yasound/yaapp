@@ -1319,6 +1319,7 @@ class WebAppView(View):
         rm = RadiosManager()
         result = rm.search(query)
         context['submenu_number'] = 6
+        context['query'] = query
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
