@@ -37,7 +37,7 @@ Yasound.App.PushManager = Class({
 
             this.socketUser = io.connect(g_push_url + 'me');
             this.socketUser.on('user_event', this.onUserEvent);
-            
+
             var cookieSession = cookies.get('sessionid');
             this.socketUser.emit('subscribe', {'sessionid': cookieSession});
 

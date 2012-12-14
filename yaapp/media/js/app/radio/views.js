@@ -370,10 +370,11 @@ Yasound.Views.WallEvents = Backbone.View.extend({
     },
 
     addOne: function (wallEvent) {
-        var currentId = wallEvent.id;
 
         var found = _.find(this.views, function (view) {
             if (view.model.id == wallEvent.id) {
+                view.model = wallEvent;
+                view.render();
                 return true;
             }
         });
@@ -388,9 +389,9 @@ Yasound.Views.WallEvents = Backbone.View.extend({
 
         var insertOnTop = false;
         if (this.views.length > 0) {
-            var lastId = parseInt(this.views[0].model.get('id'), 10);
-            currentId = parseInt(wallEvent.id, 10);
-            if (currentId > lastId) {
+            var lastDate = this.views[0].model.get('updated');
+            var currentDate = wallEvent.get('updated');
+            if (currentDate > lastDate) {
                 insertOnTop = true;
             }
         }
@@ -448,19 +449,10 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         var date = moment(start_date + timeZone);
         data.formatted_date= date.format('LLL');
 
-        var event_type = this.model.get('event_type');
-        if (event_type === 'message') {
-            if (Yasound.App.enableFX) {
-                $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
-            } else {
-                $(this.el).html(ich.wallEventTemplateMessage(data));
-            }
-        } else if (event_type === 'like') {
-            if (Yasound.App.enableFX) {
-                $(this.el).hide().html(ich.wallEventTemplateLike(data)).fadeIn(200);
-            } else {
-                $(this.el).html(ich.wallEventTemplateLike(data));
-            }
+        if (Yasound.App.enableFX) {
+            $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
+        } else {
+            $(this.el).html(ich.wallEventTemplateMessage(data));
         }
         return this;
     },
@@ -646,7 +638,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
     onClose: function () {
         this.model.unbind('change', this.render);
-        Yasound.App.Router.pushManager.off('wall_event');
+        Yasound.App.Router.pushManager.off('wall_event_v2_updated');
     },
 
     reset: function () {
@@ -791,10 +783,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.creatorView.render();
 
         if (Yasound.App.Router.pushManager.enablePush) {
-            Yasound.App.Router.pushManager.on('wall_event', function (msg) {
+            Yasound.App.Router.pushManager.on('wall_event_v2_updated', function (msg) {
                 that.wallEvents.reset(msg);
             });
-            Yasound.App.Router.pushManager.on('wall_event_deleted', function (msg) {
+            Yasound.App.Router.pushManager.on('wall_event_v2_deleted', function (msg) {
                 that.removeWallEvent(msg);
             });
         }

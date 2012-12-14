@@ -36,6 +36,7 @@ def push_wall_event(wall_event, **kwargs):
     except:
         pass
 
+
 def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     wall_event = instance
     if wall_event.radio.nb_current_users == 0:

@@ -9,7 +9,10 @@ import json
 def wall(request, radio_uuid):
     wm = WallManager()
     offset = int(request.REQUEST.get('offset', 0))
-    limit = request.REQUEST.get('limit', 20)
+    try:
+        limit = int(request.REQUEST.get('limit', 20))
+    except:
+        limit = 20
     total_count = wm.events_count_for_radio(radio_uuid)
     data = wm.events_for_radio(radio_uuid, skip=offset, limit=limit)
     return api_response(list(data), total_count=total_count, limit=limit, offset=offset)

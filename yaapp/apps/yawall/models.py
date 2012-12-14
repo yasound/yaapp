@@ -8,7 +8,7 @@ from pymongo import DESCENDING
 import logging
 logger = logging.getLogger("yaapp.yawall")
 import dateutil.parser
-
+import signals as yawall_signals
 LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
 
@@ -25,12 +25,11 @@ class WallManager():
         self.collection.ensure_index('updated')
 
     def _generate_event_id(self, radio, current_song):
-        now = datetime.datetime.now()
         song_date = current_song.get('last_play_time')
-        if song_date is not None:
+        try:
             song_date = dateutil.parser.parse(song_date)
-        else:
-            song_date = now
+        except:
+            song_date = datetime.datetime.now()
 
         time_val = time.mktime(song_date.timetuple())
         return '%s-%s' % (radio.uuid, time_val)
@@ -84,7 +83,7 @@ class WallManager():
         doc = self.collection.find_one({'event_id': event_id}, {'_id': False})
         if doc is None:
             doc = {
-                'event_type': event_type,
+                'radio_id': radio.id,
                 'radio_uuid': radio.uuid,
                 'title': title,
                 'current_song': current_song,
@@ -98,6 +97,8 @@ class WallManager():
             }
         doc['updated'] = now
         doc['title'] = title
+        doc['radio_id'] = radio.id
+        doc['radio_uuid'] = radio.uuid
 
         if event_type == WallManager.EVENT_MESSAGE:
             message_data = {
@@ -126,12 +127,13 @@ class WallManager():
             likers_digest = []
             for like in likers[:3]:
                 likers_digest.append(like)
-            doc['liker_digest'] = likers_digest
+            doc['likers_digest'] = likers_digest
 
         self.collection.update({"event_id": doc.get('event_id')},
                                {"$set": doc}, upsert=True, safe=True)
 
         release_lock()
+        yawall_signals.wall_event_updated.send(sender=self, event=doc)
 
     def events_for_radio(self, radio_uuid, skip=0, limit=20):
         return self.collection.find({
@@ -142,3 +144,7 @@ class WallManager():
         return self.collection.find({
             'radio_uuid': radio_uuid,
         }).count()
+
+if settings.ENABLE_PUSH:
+    from push import install_handlers
+    install_handlers()

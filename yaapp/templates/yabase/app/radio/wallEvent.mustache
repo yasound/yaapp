@@ -1,8 +1,8 @@
 {% load i18n %}
-  <a class="pic pic-rounded pic-wide" href="#"><img src="http://placehold.it/45x45" width="45" height="45" alt=""></a>
+  <a class="pic pic-rounded pic-wide" href="#"><img src="<%#current_song%><% cover %><%/current_song%>" width="45" height="45" alt="<% title %>"></a>
   <div class="wall-event">
     <div class="wall-event-title"><strong><% title %></strong>, <% formatted_date %></div>
-    <div class="wall-event-action"><%#likers_digest%><% likers_digest %> ont aimé ce morceau !<%/likers_digest%></div>
+    <div class="wall-event-action"><%#likers_digest%><% name %>, ont aimé ce morceau !<%/likers_digest%></div>
     <div class="wall-counters">
       <div class="likes"><%like_count%> <i class="asset-mini-like"></i></div>
       <div class="likes"><%message_count%> <i class="asset-mini-comment"></i></div>

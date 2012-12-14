@@ -4,7 +4,7 @@ Namespace('Yasound.Data.Models');
 
 
 Yasound.Data.Models.WallEvent = Backbone.Model.extend({
-    idAttribute: 'id',
+    idAttribute: 'event_id',
 
     reportAbuse: function () {
         var url = '/api/v1/report_message/' + this.id + '/';
