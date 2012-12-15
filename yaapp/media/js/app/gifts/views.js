@@ -89,11 +89,7 @@ Yasound.Views.GiftDigest = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
 
-        if (Yasound.App.enableFX) {
-            $(this.el).hide().html(ich.giftDigestTemplate(data)).fadeIn(200);
-        } else {
-            $(this.el).html(ich.giftDigestTemplate(data));
-        }
+        $(this.el).html(ich.giftDigestTemplate(data));
 
         var that = this;
         var link = $('a', this.el);

@@ -183,6 +183,14 @@ Yasound.Views.NotificationDigest = Backbone.View.extend({
             $(this.el).html(ich.notificationAddedFavoriteDigestTemplate(data));
         } else if (data.type == 'type_notif_song_liked') {
             $(this.el).html(ich.notificationSongLikedDigestTemplate(data));
+        } else if (data.type == 'type_notif_friend_created_radio') {
+            $(this.el).html(ich.notificationFriendCreatedRadioDigestTemplate(data));
+        } else if (data.type == 'type_notif_user_in_radio') {
+            $(this.el).html(ich.notificationUserInRadioDigestTemplate(data));
+        } else if (data.type == 'type_notif_friend_in_radio') {
+            $(this.el).html(ich.notificationFriendInRadioDigestTemplate(data));
+        } else if (data.type == 'type_notif_radio_shared') {
+            $(this.el).html(ich.notificationRadioSharedDigestTemplate(data));
         } else {
             $(this.el).html(ich.notificationDigestTemplate(data));
         }

@@ -44,6 +44,7 @@ import yasearch.search as yasearch_search
 from yasearch.models import RadiosManager
 from yageoperm import utils as yageoperm_utils
 from yahistory.models import ProgrammingHistory
+from yawall.models import WallManager
 from account.views import fast_connected_users_by_distance
 import import_utils
 import json
@@ -455,16 +456,25 @@ def like_song(request, song_id):
         if radio is not None:
             WallEvent.objects.add_like_event(radio, song, request.user)
 
+            wm = WallManager()
+            wm.add_event(event_type=WallManager.EVENT_LIKE, radio=radio, user=request.user)
+
     res = '%s (user) likes %s (song)\n' % (request.user, song)
     return HttpResponse(res)
 
+
 @csrf_exempt
-@check_api_key(methods=['POST',])
+@check_api_key(methods=['POST'])
 def post_message(request, radio_id):
     message = request.REQUEST.get('message')
     radio = get_object_or_404(Radio, uuid=radio_id)
     radio.post_message(request.user, message)
+
+    wm = WallManager()
+    wm.add_event(event_type=WallManager.EVENT_MESSAGE, radio=radio, user=request.user, message=message)
+
     return HttpResponse(status=200)
+
 
 @check_api_key(methods=['PUT', 'DELETE'])
 def delete_message(request, message_id):
@@ -1266,6 +1276,7 @@ class WebAppView(View):
         return context, 'yabase/app/static.html'
 
     def radio(self, request, context, *args, **kwargs):
+        wm = WallManager()
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
@@ -1273,14 +1284,14 @@ class WebAppView(View):
         if radio.current_song:
             context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        wall_events = WallEvent.objects.select_related('user', 'user__userprofile', 'radio').filter(radio=radio).order_by('-start_date')[:15]
+        wall_events = list(wm.events_for_radio(radio.uuid))
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
         context['radio_absolute_url'] = absolute_url(reverse('webapp_default_radio', args=[radio.uuid]))
 
         bdata = {
-            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'wall_events': wall_events,
             'radio': [radio.as_dict(request.user)],
         }
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
@@ -1319,6 +1330,7 @@ class WebAppView(View):
         rm = RadiosManager()
         result = rm.search(query)
         context['submenu_number'] = 6
+        context['query'] = query
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):

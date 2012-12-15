@@ -170,6 +170,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/status/(?P<event_id>\S+)/$', 'yabase.views.my_programming_status'),
     url(r'^api/v1/programming/status/(?P<event_id>\S+)/$', 'yabase.views.programming_status_details'),
 
+    # new wall system
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall/$', 'yawall.views.wall'),
+
     # pictures
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/$', 'yabase.views.radio_picture'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xl/$', 'yabase.views.radio_picture', {'size': 'xl'}),

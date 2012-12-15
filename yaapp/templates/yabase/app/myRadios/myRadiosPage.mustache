@@ -17,23 +17,22 @@
     </div>
 </div>
 
-<div class="container-fluid content-zone">
-    <ul id='results' class='radio-with-stats-cells'>
-    </ul>
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    <div class='cell-pagination' id='pagination'></div>
-</div>
-
-
-{% if user_profile.permissions.create_radio %}
-<div class='row'>
-    <div class='span12'>
-        <div id='create-radio-container'>
-        <a class='yabutton-large' id='create-radio-btn' href='{% app_url webapp_new_radio app_name %}'>{% trans "Create radio" %}</a>
-        </div>
+<div class="container-fluid content-zone last">
+    <div class='row-fluid'>
+        <ul id='results' class='radio-with-stats-cells'>
+        </ul>
+        <img class='loading-mask' src='/media/images/loading.gif'/>
+        <div class='cell-pagination' id='pagination'></div>
+        {% if user_profile.permissions.create_radio %}
+            <div class='clear'></div>
+            <div id='create-radio-container'>
+            <a class='yabutton-large' id='create-radio-btn' href='{% app_url webapp_new_radio app_name %}'>{% trans "Create radio" %}</a>
+            </div>
+        {% endif %}
     </div>
 </div>
-{% endif %}
+
+
 
 {% else %}
 

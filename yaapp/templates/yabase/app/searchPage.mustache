@@ -1,8 +1,12 @@
 {% load i18n %}
-<div class='span12'>
-    <ul id='results' class='radio-cells'>
-        <div class='empty' style='display:none'>{% trans "No result found" %}</div>
-    </ul>
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    <div id='pagination'></div>
+<div class="container-fluid content-zone last">
+    <div class="row-fluid">
+        <div class='span12'>
+            <ul id='results' class='radio-grid'>
+                <div class='empty' style='display:none'>{% trans "No result found" %}</div>
+            </ul>
+            <img class='loading-mask' src='/media/images/loading.gif'/>
+            <div id='pagination'></div>
+        </div>
+    </div>
 </div>
