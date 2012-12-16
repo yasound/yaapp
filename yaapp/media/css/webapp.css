@@ -7544,7 +7544,7 @@ input::-ms-input-placeholder {
 .content-table th + th {
   border-left: 1px solid #cacacb;
 }
-.content-table tr:nth-child(2n+1) td {
+.content-table tr:nth-child(2n+1) {
   background-color: #f5f6f6;
   background-image: -moz-linear-gradient(top, #f8f8f8, #f1f2f3);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f8f8f8), to(#f1f2f3));
@@ -7554,7 +7554,7 @@ input::-ms-input-placeholder {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#fff1f2f3', GradientType=0);
 }
-.content-table tr:nth-child(2n) td {
+.content-table tr:nth-child(2n) {
   background-color: #fcfcfc;
   background-image: -moz-linear-gradient(top, #ffffff, #f8f8f8);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f8f8f8));
@@ -7564,10 +7564,7 @@ input::-ms-input-placeholder {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
 }
-.content-table tr:hover {
-  border-color: #b9b9b9;
-}
-.content-table tr:hover td {
+.content-table tbody tr:hover {
   background-color: #ecedef;
   background-image: -moz-linear-gradient(top, #f2f3f4, #e4e5e7);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f2f3f4), to(#e4e5e7));
@@ -7577,13 +7574,17 @@ input::-ms-input-placeholder {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2f3f4', endColorstr='#ffe4e5e7', GradientType=0);
   border-color: #b9b9b9;
+}
+.content-table tbody tr:hover td {
+  background: none;
+  border-color: #b9b9b9;
   -webkit-box-shadow: inset 0 1px 0 0 #ffffff;
   -moz-box-shadow: inset 0 1px 0 0 #ffffff;
   box-shadow: inset 0 1px 0 0 #ffffff;
   color: #313234;
 }
-.content-table tr:hover td a,
-.content-table tr:hover td a:hover {
+.content-table tbody tr:hover td a,
+.content-table tbody tr:hover td a:hover {
   color: #313234;
   text-decoration: none;
 }
