@@ -104,10 +104,6 @@ Yasound.Data.Models.WallEvents = Backbone.Paginator.requestPager.extend({
         return this;
     },
 
-    comparator: function(wallEvent) {
-        return -parseInt(wallEvent.get("id"), 10);
-    },
-
     fetchFirst: function() {
         var savedPage = this.page;
         this.page = 0;
