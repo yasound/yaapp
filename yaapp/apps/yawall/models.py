@@ -123,7 +123,7 @@ class WallManager():
         doc['title'] = title
         doc['radio_id'] = radio.id
         doc['radio_uuid'] = radio.uuid
-        doc['song_id'] = song_uuid
+        doc['song_uuid'] = song_uuid
 
         if event_type == WallManager.EVENT_MESSAGE:
             message_data = {
