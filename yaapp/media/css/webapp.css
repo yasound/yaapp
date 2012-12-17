@@ -8076,7 +8076,7 @@ input::-ms-input-placeholder {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  padding: 8px 50px 8px 12px;
+  padding: 8px 12px;
   background-color: #fbfbfb;
   background-image: -moz-linear-gradient(top, #ffffff, #f6f6f6);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f6f6f6));
@@ -8107,6 +8107,7 @@ input::-ms-input-placeholder {
 }
 .wall-event-title {
   font-size: 14px;
+  padding-right: 30px;
 }
 .wall-event-title strong {
   color: #313234;
@@ -8152,7 +8153,7 @@ input::-ms-input-placeholder {
   width: 50px;
   position: absolute;
   top: 15px;
-  right: -50px;
+  right: -11px;
 }
 /*
  * PROGRAMMING
