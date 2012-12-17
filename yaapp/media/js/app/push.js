@@ -37,7 +37,7 @@ Yasound.App.PushManager = Class({
 
             this.socketUser = io.connect(g_push_url + 'me');
             this.socketUser.on('user_event', this.onUserEvent);
-            
+
             var cookieSession = cookies.get('sessionid');
             this.socketUser.emit('subscribe', {'sessionid': cookieSession});
 
@@ -53,7 +53,7 @@ Yasound.App.PushManager = Class({
     unMonitorRadio: function () {
         if (this.enablePush) {
             this.socketRadio.emit('unsubscribe', {
-                'radio_id': this.radio.get('id')
+                'radio_uuid': this.radio.get('radio_uuid')
             });
         }
     },
@@ -67,7 +67,7 @@ Yasound.App.PushManager = Class({
 
         if (this.enablePush) {
             this.socketRadio.emit('subscribe', {
-                'radio_id': this.radio.get('id')
+                'radio_uuid': this.radio.get('radio_uuid')
             });
         }
     },
