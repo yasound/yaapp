@@ -48,8 +48,7 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
                 tpl = gettext('<%name1%> and <%name2%> liked this song!');
                 context = {
                     name1: likers[0].name,
-                    name2: likers[1].name,
-                    name3: likers[2].name
+                    name2: likers[1].name
                 };
             } else if (likers.length == 3) {
                 tpl = gettext('<%name1%>, <%name2%> and <%name3%> liked this song!');
