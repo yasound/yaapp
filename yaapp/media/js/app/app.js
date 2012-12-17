@@ -28,7 +28,7 @@ $(document).ready(function () {
     Yasound.App.RADIO_ORIGIN_YASOUND = 0; // constant, radio.origin=0 means radioways radio
     Yasound.App.RADIO_ORIGIN_RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
     Yasound.App.LanguageCode = g_language_code;
-
+    Yasound.App.announcementId = g_announcement_id;
     Yasound.App.CONTENT_EL = '.content';
     Yasound.App.CONTENT_HTML = "<div class='content'/>";
 
@@ -374,6 +374,7 @@ $(document).ready(function () {
                         this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
                     }
                 }
+
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 
 

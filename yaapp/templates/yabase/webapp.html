@@ -259,7 +259,11 @@ HTML, BODY { height: 100%; }
        {% endif %}
 
        var g_language_code = '{{request.LANGUAGE_CODE}}';
-
+       {% if announcement %}
+       var g_announcement_id = {{ announcement.id }};
+       {% else %}
+       var g_announcement_id;
+       {% endif %}
     </script>
 
 

@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if announcement %}
-<div class="container-fluid content-alert app-alert">
+<div class="container-fluid content-alert app-alert" style="display:none;">
   <a type="button" class="asset-close" data-dismiss="alert">×</a>
   {{ announcement.body|safe }}
 </div>
