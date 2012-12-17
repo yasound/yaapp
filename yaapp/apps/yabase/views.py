@@ -435,6 +435,29 @@ def radio_shared(request, radio_id):
     return HttpResponse(res)
 
 
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def radio_likes(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    payload = json.loads(request.raw_post_data)
+    last_play_time = payload.get('last_play_time')
+    # TODO use last_play_time to check song validity
+
+    song = radio.current_song
+    if song is not None:
+        radio = song.playlist.radio
+        if radio and not radio.is_live():
+            song_user, _created = SongUser.objects.get_or_create(song=song, user=request.user)
+            song_user.mood = yabase_settings.MOOD_LIKE
+            song_user.save()
+
+        # add like event in wall
+        if radio is not None:
+            WallEvent.objects.add_like_event(radio, song, request.user)
+
+    res = '%s (user) likes %s (song)\n' % (request.user, song)
+    return HttpResponse(res)
+
 
 # SONG USER
 @csrf_exempt
