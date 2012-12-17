@@ -426,8 +426,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     events: {
         'click h2 a': 'selectUser',
         'click .wall-profile-picture': 'selectUser',
-        'click #report-abuse-btn': 'reportAbuse',
-        'click #delete-btn': 'deleteMessage'
+        'click .asset-report': 'reportAbuse',
+        'click .asset-bin': 'deleteMessage'
     },
 
     initialize: function () {
@@ -658,6 +658,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.listenersView.clear();
             this.listenersView.close();
         }
+        if (this.fansView) {
+            this.fansView.clear();
+            this.fansView.close();
+        }
         if (this.wallEventsView) {
             this.wallEventsView.clear();
             this.wallEventsView.close();
@@ -809,11 +813,20 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     onListenersChanged: function (collection) {
-        $('.audience-nbr', this.el).html(collection.totalCount);
+        $('.listener-count', this.el).html(collection.totalCount);
         if (collection.length === 0) {
-            $('.audience-btn', this.el).hide();
+            $('#more-listeners', this.el).hide();
         } else {
-            $('.audience-btn', this.el).show();
+            $('#more-listeners', this.el).show();
+        }
+    },
+
+    onFansChanged: function (collection) {
+        $('.fan-count', this.el).html(collection.totalCount);
+        if (collection.length === 0) {
+            $('#more-fans', this.el).hide();
+        } else {
+            $('#more-fans', this.el).show();
         }
     },
 

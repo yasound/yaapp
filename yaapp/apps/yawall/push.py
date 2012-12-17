@@ -19,12 +19,13 @@ def async_redis_publish(channel, json_data):
 
 
 def push_wall_event(event, **kwargs):
-    channel = 'radio.%s' % (event.get('radio_id'))
+    channel = 'radio.%s' % (event.get('radio_uuid'))
 
     logger.info("publishing message to %s" % (channel))
 
     data = {
         'event_type': 'wall_event_v2_updated',
+        'radio_uuid': event.get('radio_uuid'),
         'data': simplejson.dumps(event, cls=MongoAwareEncoder)
     }
     try:
@@ -35,11 +36,12 @@ def push_wall_event(event, **kwargs):
 
 
 def push_wall_event_deleted(sender, event, **kwargs):
-    channel = 'radio.%s' % (event.get('radio_id'))
+    channel = 'radio.%s' % (event.get('radio_uuid'))
     logger.info("publishing message to %s" % (channel))
 
     data = {
         'event_type': 'wall_event_v2_deleted',
+        'radio_uuid': event.get('radio_uuid'),
         'data': simplejson.dumps(event, cls=MongoAwareEncoder)
     }
     try:

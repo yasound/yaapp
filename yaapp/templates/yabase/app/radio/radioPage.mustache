@@ -34,14 +34,14 @@
         {% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}
         </div>
         <div class="wall-aside-block">
-          <h2 class="wall-aside-title">Ils écoutent la radio (5)</h2>
+          <h2 class="wall-aside-title">Ils écoutent la radio (<span class='listener-count'>0</span>)</h2>
           <ul class="wall-profiles" id='listeners'></ul>
           <div class="clearfix"></div>
           <div class="wall-link-more"><a href="{% if radio %}{% app_url webapp_listeners app_name radio.uuid %}{% endif %}" id='more-listeners'>Tout afficher</a></div>
         </div>
 
         <div class="wall-aside-block">
-          <h2 class="wall-aside-title">Ils l'ont ajouté en favori (158)</h2>
+          <h2 class="wall-aside-title">Ils l'ont ajouté en favori (<span class='fan-count'>0</span>)</h2>
           <ul class="wall-profiles" id='fans'>
           </ul>
           <div class="clearfix"></div>

@@ -44,7 +44,8 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
             this.loadingMask = mask;
         }
 
-        this.loadingMask.hide();
+        this.loadingMask.remove();
+        this.loadingMask = undefined;
 
         if (this.collection.length === 0) {
             $('.empty', this.el).show();
@@ -134,6 +135,7 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
 Yasound.Views.HomePage = Backbone.View.extend({
 
     events: {
+        'click .app-alert .asset-close': 'onCloseAnnouncement'
     },
 
     initialize: function() {
@@ -172,6 +174,13 @@ Yasound.Views.HomePage = Backbone.View.extend({
     render: function(genre) {
         this.reset();
         $(this.el).html(ich.homePageTemplate());
+
+        var hideAnnouncementCookie = cookies.get('hideannouncement');
+        if (hideAnnouncementCookie == Yasound.App.announcementId) {
+            $('.app-alert').hide();
+        } else{
+            $('.app-alert').show();
+        }
 
         this.selectionView = new Yasound.Views.RadiosSlide({
             collection: this.selection,
@@ -241,5 +250,10 @@ Yasound.Views.HomePage = Backbone.View.extend({
             this.favorites.perPage = 15;
             this.favorites.goTo(0);
         }
+    },
+
+    onCloseAnnouncement: function (e) {
+        e.preventDefault();
+        cookies.set('hideannouncement', Yasound.App.announcementId);
     }
 });

@@ -8,6 +8,7 @@ from pymongo import DESCENDING
 import logging
 logger = logging.getLogger("yaapp.yawall")
 import dateutil.parser
+import hashlib
 import signals as yawall_signals
 LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
@@ -22,6 +23,7 @@ class WallManager():
         self.collection = self.db.wall
         self.collection.ensure_index('radio_uuid')
         self.collection.ensure_index('event_id')
+        self.collection.ensure_index('song_uuid')
         self.collection.ensure_index('updated')
 
     def _generate_event_id(self, radio, current_song):
@@ -34,11 +36,21 @@ class WallManager():
         time_val = time.mktime(song_date.timetuple())
         return '%s-%s' % (radio.uuid, time_val)
 
+    def _generate_song_uuid(self, current_song):
+        """ generate a unique uuid from song """
+        hash_name = hashlib.md5()
+        hash_name.update(current_song.get('name', ''))
+        hash_name.update(current_song.get('album', ''))
+        hash_name.update(current_song.get('artist', ''))
+        hash_name = hash_name.hexdigest()
+        return hash_name
+
     def _create_blank_current_song(self):
         now = datetime.datetime.now()
         current_song = {
             'name': '',
             'artist': '',
+            'album': '',
             'last_play_time': now,
             'large_cover_url': settings.DEFAULT_TRACK_IMAGE,
             'cover_url': settings.DEFAULT_TRACK_IMAGE,
@@ -56,6 +68,17 @@ class WallManager():
             return name
 
         return ''
+
+    def _likers_for_song(self, radio_uuid, song_uuid):
+        likers = []
+        filters = {
+            'radio_uuid': radio_uuid,
+            'song_uuid': song_uuid
+        }
+        res = self.collection.find(filters, {'likers': True})
+        for doc in res:
+            likers.extend(doc.get('likers', []))
+        return likers
 
     def add_event(self, event_type, radio, user, message=None):
         lock_id = "wall-add-event-lock"
@@ -90,40 +113,49 @@ class WallManager():
                 'created': now,
                 'event_id': event_id,
                 'messages': [],
-                'likes': [],
+                'likers': [],
                 'likers_digest': [],
                 'like_count': 0,
                 'message_count': 0
             }
+        song_uuid = self._generate_song_uuid(current_song)
         doc['updated'] = now
         doc['title'] = title
         doc['radio_id'] = radio.id
         doc['radio_uuid'] = radio.uuid
+        doc['song_uuid'] = song_uuid
 
         if event_type == WallManager.EVENT_MESSAGE:
             message_data = {
                 'text': message,
                 'name': unicode(user.get_profile()),
+                'created': now,
                 'username': user.username,
             }
             doc.get('messages').insert(0, message_data)
             doc['message_count'] = doc.get('message_count', 0) + 1
 
         elif event_type == WallManager.EVENT_LIKE:
+            previous_likers = self._likers_for_song(radio.uuid, song_uuid)
+            likers = []
             like_data = {
                 'name': unicode(user.get_profile()),
+                'created': now,
+                'updated': now,
                 'username': user.username,
             }
-            already_liked = False
-            for like in doc.get('likes', []):
-                if like.get('username') == user.username:
-                    already_liked = True
-                    break
-            if not already_liked:
-                doc.get('likes').append(like_data)
-                doc['like_count'] = doc.get('like_count', 0) + 1
+            for liker in previous_likers:
+                if liker.get('username') == user.username:
+                    # save original creation date
+                    like_data['created'] = liker.get('created')
+                    continue
+                likers.append(liker)
 
-            likers = doc.get('likes')
+            likers.insert(0, like_data)
+
+            doc['likers'] = likers
+            doc['like_count'] = len(likers)
+
             likers_digest = []
             for like in likers[:3]:
                 likers_digest.append(like)

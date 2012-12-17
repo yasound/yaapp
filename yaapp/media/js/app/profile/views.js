@@ -248,7 +248,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         });
 
         this.radios = new Yasound.Data.Models.UserRadios({});
-        this.radios.perPage = 4;
+        this.radios.perPage = 6;
 
         this.radiosView = new Yasound.Views.SearchResults({
             collection: this.radios,
@@ -261,7 +261,7 @@ Yasound.Views.ProfilePage = Backbone.View.extend({
         });
 
         this.favorites = new Yasound.Data.Models.Favorites({});
-        this.favorites.perPage = 4;
+        this.favorites.perPage = 6;
 
         this.favoritesView = new Yasound.Views.SearchResults({
             collection: this.favorites,
