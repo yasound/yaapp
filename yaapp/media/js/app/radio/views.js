@@ -658,6 +658,10 @@ Yasound.Views.RadioPage = Backbone.View.extend({
             this.listenersView.clear();
             this.listenersView.close();
         }
+        if (this.fansView) {
+            this.fansView.clear();
+            this.fansView.close();
+        }
         if (this.wallEventsView) {
             this.wallEventsView.clear();
             this.wallEventsView.close();
