@@ -19,7 +19,7 @@ def async_redis_publish(channel, json_data):
 def push_wall_event(wall_event, **kwargs):
     if wall_event.radio.nb_current_users == 0:
         return
-    channel = 'radio.%s' % (wall_event.radio.id)
+    channel = 'radio.%s' % (wall_event.radio.uuid)
     logger.info("publishing message to %s" % (channel))
 
     from api import RadioWallEventResource
@@ -29,6 +29,7 @@ def push_wall_event(wall_event, **kwargs):
         serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
         data = {
             'event_type': 'wall_event',
+            'radio_uuid': wall_event.radio.uuid,
             'data': serialized_we[0]
         }
         json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
@@ -36,12 +37,11 @@ def push_wall_event(wall_event, **kwargs):
     except:
         pass
 
-
 def push_wall_event_deleted(sender, instance, created=None, **kwargs):
     wall_event = instance
     if wall_event.radio.nb_current_users == 0:
         return
-    channel = 'radio.%s' % (wall_event.radio.id)
+    channel = 'radio.%s' % (wall_event.radio.uuid)
     logger.info("publishing message to %s" % (channel))
 
     from api import RadioWallEventResource
@@ -52,6 +52,7 @@ def push_wall_event_deleted(sender, instance, created=None, **kwargs):
         serialized_we = we.serialize(None, we.full_dehydrate(we_bundle), 'application/json'),
         data = {
             'event_type': 'wall_event_deleted',
+            'radio_uuid': wall_event.radio.uuid,
             'data': serialized_we[0]
         }
         json_data = json.JSONEncoder(ensure_ascii=False).encode(data)
@@ -63,9 +64,10 @@ def push_current_song(radio, song_json, song, song_dict, **kwargs):
     if radio.nb_current_users == 0:
         return
 
-    channel = 'radio.%s' % (radio.id)
+    channel = 'radio.%s' % (radio.uuid)
     data = {
         'event_type': 'song',
+        'radio_uuid': radio.uuid,
         'data': song_json
     }
 
