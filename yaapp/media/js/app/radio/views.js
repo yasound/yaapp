@@ -809,7 +809,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     onListenersChanged: function (collection) {
-        $('.audience-nbr', this.el).html(collection.totalCount);
+        $('.audience-count', this.el).html(collection.totalCount);
         if (collection.length === 0) {
             $('.audience-btn', this.el).hide();
         } else {
