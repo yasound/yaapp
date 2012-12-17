@@ -53,7 +53,7 @@ Yasound.App.PushManager = Class({
     unMonitorRadio: function () {
         if (this.enablePush) {
             this.socketRadio.emit('unsubscribe', {
-                'radio_uuid': this.radio.get('radio_uuid')
+                'radio_uuid': this.radio.get('uuid')
             });
         }
     },
@@ -67,7 +67,7 @@ Yasound.App.PushManager = Class({
 
         if (this.enablePush) {
             this.socketRadio.emit('subscribe', {
-                'radio_uuid': this.radio.get('radio_uuid')
+                'radio_uuid': this.radio.get('uuid')
             });
         }
     },
