@@ -809,11 +809,20 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     onListenersChanged: function (collection) {
-        $('.audience-count', this.el).html(collection.totalCount);
+        $('.listener-count', this.el).html(collection.totalCount);
         if (collection.length === 0) {
-            $('.audience-btn', this.el).hide();
+            $('#more-listeners', this.el).hide();
         } else {
-            $('.audience-btn', this.el).show();
+            $('#more-listeners', this.el).show();
+        }
+    },
+
+    onFansChanged: function (collection) {
+        $('.fan-count', this.el).html(collection.totalCount);
+        if (collection.length === 0) {
+            $('#more-fans', this.el).hide();
+        } else {
+            $('#more-fans', this.el).show();
         }
     },
 
