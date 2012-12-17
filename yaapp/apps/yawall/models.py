@@ -113,7 +113,7 @@ class WallManager():
                 'created': now,
                 'event_id': event_id,
                 'messages': [],
-                'likes': [],
+                'likers': [],
                 'likers_digest': [],
                 'like_count': 0,
                 'message_count': 0
@@ -141,19 +141,19 @@ class WallManager():
             like_data = {
                 'name': unicode(user.get_profile()),
                 'created': now,
+                'updated': now,
                 'username': user.username,
             }
-            already_liked = False
             for liker in previous_likers:
                 if liker.get('username') == user.username:
-                    already_liked = True
+                    # save original creation date
+                    like_data['created'] = liker.get('created')
                     continue
                 likers.append(liker)
 
-            if not already_liked:
-                likers.insert(0, like_data)
+            likers.insert(0, like_data)
 
-            doc['likes'] = likers
+            doc['likers'] = likers
             doc['like_count'] = len(likers)
 
             likers_digest = []
