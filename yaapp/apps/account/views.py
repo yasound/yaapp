@@ -650,7 +650,7 @@ def user_friends_add_remove(request, username, friend):
 
 
 @csrf_exempt
-@check_api_key(methods=['GET', 'POST', 'DELETE'])
+@check_api_key(methods=['GET', 'POST', 'DELETE'], login_required=False)
 def user_picture(request, username, size=''):
     """
     RESTful view for handling user picture
