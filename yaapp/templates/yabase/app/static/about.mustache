@@ -1,14 +1,24 @@
 {% load i18n %}
-<div class='row common-background' id='about'>
-    <div class='span12 no-margin'>
-        <h1>{% trans "YaSound, the number one socials radios platform" %}</h1>
-        <div class='separation-line'></div>
-    </div>
-    <div class='span12 no-margin visible-desktop' id='header'>
-        <div id='headline'>
-            <p>{% trans "<strong>YasSound</strong> is a new service that lets you <br/> create <strong>your own radio station</strong> in <br/>just a few clicks and share it with your friends in real time." %}</p>
+<div class="container-fluid content-zone">
+    <div class='row-fluid'>
+        <div class='span12'>
+            <h1>{% trans "YaSound, the number one socials radios platform" %}</h1>
         </div>
     </div>
+</div>
+
+<div class="container-fluid content-zone visible-desktop">
+    <div class='row-fluid' id='about'>
+        <div class='span12' id='header'>
+            <div id='headline'>
+                <p>{% trans "<strong>YasSound</strong> is a new service that lets you <br/> create <strong>your own radio station</strong> in <br/>just a few clicks and share it with your friends in real time." %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid content-zone about">
+    <div class='row-fluid'>
 
     <div class='span3' id='jmp'>
         <div>
@@ -52,9 +62,7 @@
             </div>
 
     </div>
-    <div class='span12 no-margin' id='about-footer'>&nbsp;</div>
-
+    </div>
 </div>
 
-
-
+    <div id='about-footer'>&nbsp;</div>
