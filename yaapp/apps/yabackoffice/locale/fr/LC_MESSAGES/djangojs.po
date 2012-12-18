@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-11 17:37+0100\n"
+"POT-Creation-Date: 2012-12-18 08:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,8 +150,8 @@ msgstr "Nouvelle notification reçue"
 #: js/app/friends/views.js:325 js/app/friends/views.js.py:339
 #: js/app/friends/views.js:345 js/app/friends/views.js.py:364
 #: js/app/friends/views.js:370 js/app/gifts/views.js:49
-#: js/app/gifts/views.js.py:56 js/app/gifts/views.js:119
-#: js/app/gifts/views.js.py:126
+#: js/app/gifts/views.js.py:56 js/app/gifts/views.js:115
+#: js/app/gifts/views.js.py:122
 msgid "Error"
 msgstr "Erreur"
 
@@ -216,7 +216,7 @@ msgstr "Rejoins moi sur Yasound"
 
 #: js/app/friends/views.js:321 js/app/friends/views.js.py:341
 #: js/app/friends/views.js:366 js/app/gifts/views.js:51
-#: js/app/gifts/views.js.py:121
+#: js/app/gifts/views.js.py:117
 msgid "Thank you"
 msgstr "Merci"
 
@@ -227,25 +227,25 @@ msgstr "Vos amis ont été invités avec succès."
 
 #: js/app/friends/views.js:325 js/app/friends/views.js.py:345
 #: js/app/friends/views.js:370 js/app/gifts/views.js:56
-#: js/app/gifts/views.js.py:126
+#: js/app/gifts/views.js.py:122
 msgid "Error while communicating with Yasound, please retry late"
 msgstr ""
 "Erreur lors de la communication avec Yasound, veuillez réessayer "
 "ultérieurement."
 
-#: js/app/gifts/views.js:346
+#: js/app/gifts/views.js:342
 msgid "Invalid code"
 msgstr "Code invalide"
 
-#: js/app/gifts/views.js:346
+#: js/app/gifts/views.js:342
 msgid "The provided code is invalid."
 msgstr "Le code fourni est invalide."
 
-#: js/app/gifts/views.js:348
+#: js/app/gifts/views.js:344
 msgid "Code validated"
 msgstr "Code validé"
 
-#: js/app/gifts/views.js:348
+#: js/app/gifts/views.js:344
 msgid "Your code is now validated, your gift will be available soon."
 msgstr ""
 "Votre code est maintenant validé, votre cadeau sera bientôt disponible."
@@ -311,15 +311,15 @@ msgstr "oui"
 msgid "Error while creating radio"
 msgstr "Erreur lors de création de la radio"
 
-#: js/app/notifications/views.js:39 js/app/notifications/views.js.py:185
+#: js/app/notifications/views.js:39 js/app/notifications/views.js.py:204
 msgid "Notification marked as read"
 msgstr "Notification marquée comme lue"
 
-#: js/app/notifications/views.js:41 js/app/notifications/views.js.py:187
+#: js/app/notifications/views.js:41 js/app/notifications/views.js.py:206
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/notifications/views.js:317
+#: js/app/notifications/views.js:336
 msgid "Next notifications"
 msgstr "Notifications suivantes"
 
@@ -396,15 +396,36 @@ msgstr "titres n'ont pas été trouvés"
 msgid "Results from Deezer import"
 msgstr "Résultats de l'import Deezer"
 
-#: js/app/radio/views.js:726
+#: js/app/radio/models.js:43
+msgid "<%name%> liked this song!"
+msgstr "<%name%> a aimé ce morceau !"
+
+#: js/app/radio/models.js:48
+msgid "<%name1%> and <%name2%> liked this song!"
+msgstr "<%name1%> et <%name2%> ont aimé ce morceau !"
+
+#: js/app/radio/models.js:54 js/app/radio/models.js.py:63
+msgid "<%name1%>, <%name2%> and <%name3%> liked this song!"
+msgstr "<%name1%>, <%name2%> et <%name3%> ont aimé ce morceau !"
+
+#: js/app/radio/models.js:65
+msgid "<%name1%>, <%name2%>, <%name3%> and another person liked this song!"
+msgstr "<%name1%>, <%name2%> et <%name3%> et une autre personne ont aimé ce morceau !"
+
+#: js/app/radio/models.js:67
+msgid ""
+"<%name1%>, <%name2%> and <%name3%> and <%other%> people liked this song!"
+msgstr "<%name1%>, <%name2%> et <%name3%> et <%other%> autres personnes ont aimé ce morceau !"
+
+#: js/app/radio/views.js:751
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:1041
+#: js/app/radio/views.js:1075
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:1042 js/app/settings/views.js:184
+#: js/app/radio/views.js:1076 js/app/settings/views.js:184
 #: js/app/settings/views.js.py:198 js/app/settings/views.js:208
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
