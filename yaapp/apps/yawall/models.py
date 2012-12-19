@@ -10,6 +10,8 @@ logger = logging.getLogger("yaapp.yawall")
 import dateutil.parser
 import hashlib
 import signals as yawall_signals
+import uuid
+
 LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
 
@@ -26,15 +28,20 @@ class WallManager():
         self.collection.ensure_index('song_uuid')
         self.collection.ensure_index('updated')
 
-    def _generate_event_id(self, radio, current_song):
-        song_date = current_song.get('last_play_time')
-        try:
-            song_date = dateutil.parser.parse(song_date)
-        except:
-            song_date = datetime.datetime.now()
+    def _generate_event_id(self, radio, event_type, current_song):
+        if event_type == WallManager.EVENT_MESSAGE:
+            now = datetime.datetime.now()
+            time_val = time.mktime(now.timetuple())
+            return '%s-msg-%s' % (radio.uuid, time_val)
+        elif event_type == WallManager.EVENT_LIKE:
+            song_date = current_song.get('last_play_time')
+            try:
+                song_date = dateutil.parser.parse(song_date)
+            except:
+                song_date = datetime.datetime.now()
 
-        time_val = time.mktime(song_date.timetuple())
-        return '%s-%s' % (radio.uuid, time_val)
+            time_val = time.mktime(song_date.timetuple())
+            return '%s-like-%s' % (radio.uuid, time_val)
 
     def _generate_song_uuid(self, current_song):
         """ generate a unique uuid from song """
@@ -100,19 +107,20 @@ class WallManager():
         else:
             current_song = self._create_blank_current_song()
 
-        event_id = self._generate_event_id(radio, current_song)
+        event_id = self._generate_event_id(radio, event_type, current_song)
         title = self._generate_title(current_song)
 
         doc = self.collection.find_one({'event_id': event_id}, {'_id': False})
         if doc is None:
             doc = {
                 'radio_id': radio.id,
+                'event_type': event_type,
                 'radio_uuid': radio.uuid,
                 'title': title,
                 'current_song': current_song,
                 'created': now,
                 'event_id': event_id,
-                'messages': [],
+                'message': {},
                 'likers': [],
                 'likers_digest': [],
                 'like_count': 0,
@@ -124,6 +132,7 @@ class WallManager():
         doc['radio_id'] = radio.id
         doc['radio_uuid'] = radio.uuid
         doc['song_uuid'] = song_uuid
+        doc['event_type'] = event_type
 
         if event_type == WallManager.EVENT_MESSAGE:
             message_data = {
@@ -132,8 +141,7 @@ class WallManager():
                 'created': now,
                 'username': user.username,
             }
-            doc.get('messages').insert(0, message_data)
-            doc['message_count'] = doc.get('message_count', 0) + 1
+            doc['message'] = message_data
 
         elif event_type == WallManager.EVENT_LIKE:
             previous_likers = self._likers_for_song(radio.uuid, song_uuid)

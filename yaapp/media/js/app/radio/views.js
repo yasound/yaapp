@@ -441,10 +441,18 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
 
-        if (Yasound.App.enableFX) {
-            $(this.el).hide().html(ich.wallEventTemplateMessage(data)).fadeIn(200);
+        if (data.event_type === 'like') {
+            if (Yasound.App.enableFX) {
+                $(this.el).hide().html(ich.wallEventLikeTemplate(data)).fadeIn(200);
+            } else {
+                $(this.el).html(ich.wallEventLikeTemplate(data));
+            }
         } else {
-            $(this.el).html(ich.wallEventTemplateMessage(data));
+            if (Yasound.App.enableFX) {
+                $(this.el).hide().html(ich.wallEventMessageTemplate(data)).fadeIn(200);
+            } else {
+                $(this.el).html(ich.wallEventMessageTemplate(data));
+            }
         }
         return this;
     },

@@ -1,0 +1,24 @@
+{% load i18n %}
+{% if event %}
+  <a class="pic pic-circle pic-wide" href="#"><img src="{% url user_custom_picture event.message.username '45x45' %}" width="45" height="45" alt="{{ event.title }}"></a>
+  <div class="wall-event">
+    <div class="wall-event-title"><strong>{{ event.message.name }}</strong>, {{ event.message.created }} </div>
+    <div class="wall-event-action">{{ event.message.text }}</div>
+    <div class="wall-counters">
+      <a class="asset-bin" href="#"></a>
+      <a class="asset-report" href="#"></a>
+    </div>
+  </div>
+{% else %}
+  <%#message%>
+  <a class="pic pic-circle pic-wide" href="#"><img src="/api/v1/user/<% username %>/picture/45x45/" width="45" height="45" alt="<% name %>"></a>
+  <div class="wall-event">
+    <div class="wall-event-title"><strong><% name %></strong>, <% formatted_date %></div>
+    <div class="wall-event-action"><% text %></div>
+    <div class="wall-counters">
+        <%#owner%><a class="asset-bin" href="#"></a><%/owner%>
+        <a class="asset-report" href="#"></a>
+    </div>
+  </div>
+  <%/message%>
+{% endif %}

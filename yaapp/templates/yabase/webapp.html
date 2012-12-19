@@ -330,8 +330,11 @@ HTML, BODY { height: 100%; }
      {% include "yabase/app/radio/radioCreator.mustache" with creator=None %}
    </script>
 
-   <script type="text/html" id="wallEventTemplateMessage">
-      {% include "yabase/app/radio/wallEvent.mustache" %}
+   <script type="text/html" id="wallEventLikeTemplate">
+      {% include "yabase/app/radio/wallEventLike.mustache" %}
+   </script>
+   <script type="text/html" id="wallEventMessageTemplate">
+      {% include "yabase/app/radio/wallEventMessage.mustache" %}
    </script>
 
    <script type="text/html" id="radioUserTemplate">

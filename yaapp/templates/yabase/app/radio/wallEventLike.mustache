@@ -1,0 +1,20 @@
+{% load i18n %}
+{% if event %}
+  <a class="pic pic-rounded pic-wide" href="#"><img src="{{ event.current_song.cover }}" width="45" height="45" alt="{{ event.title }}"></a>
+  <div class="wall-event">
+    <div class="wall-event-title"><strong>{{ event.title }}</strong>, {{ event.updated }} </div>
+    <div class="wall-event-action"></div>
+    <div class="wall-counters">
+      <div class="likes">{{ event.like_count }} <i class="asset-mini-like"></i></div>
+    </div>
+  </div>
+{% else %}
+  <a class="pic pic-rounded pic-wide" href="#"><img src="<%#current_song%><% cover %><%/current_song%>" width="45" height="45" alt="<% title %>"></a>
+  <div class="wall-event">
+    <div class="wall-event-title"><strong><% title %></strong>, <% formatted_date %></div>
+    <div class="wall-event-action"><%#formatted_likers%><% formatted_likers %><%/formatted_likers%></div>
+    <div class="wall-counters">
+      <div class="likes"><%like_count%> <i class="asset-mini-like"></i></div>
+    </div>
+  </div>
+{% endif %}
