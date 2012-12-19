@@ -8023,6 +8023,9 @@ input::-ms-input-placeholder {
   top: 18px;
   left: -14px;
 }
+.wall-event:hover .wall-comment-btns {
+  display: block;
+}
 .wall-event-title {
   font-size: 14px;
   padding-right: 30px;
@@ -8052,9 +8055,6 @@ input::-ms-input-placeholder {
 .wall-comment {
   position: relative;
   margin-top: 10px;
-}
-.wall-comment:hover .wall-comment-btns {
-  display: block;
 }
 .wall-comment-title,
 .wall-comment-title a {
