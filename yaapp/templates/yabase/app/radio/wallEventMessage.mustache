@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if event %}
-  <a class="pic pic-circle pic-wide" href="#"><img src="{% url user_custom_picture event.message.username '45x45' %}" width="45" height="45" alt="{{ event.title }}"></a>
+  <a class="pic pic-circle pic-wide" href="#"><img src="{% if event.message.username %}{% url user_custom_picture event.message.username '45x45' %}{% endif %}" width="45" height="45" alt="{{ event.title }}"></a>
   <div class="wall-event">
     <div class="wall-event-title"><strong>{{ event.message.name }}</strong>, {{ event.message.created }} </div>
     <div class="wall-event-action">{{ event.message.text }}</div>
