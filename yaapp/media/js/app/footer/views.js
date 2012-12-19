@@ -126,9 +126,18 @@ Yasound.Views.Footer = Backbone.View.extend({
         e.preventDefault();
         if (this.currentSong) {
             var songId = this.currentSong.get('id');
-            var url = '/api/v1/song/' + songId + '/liker/';
-            $.publish('/song/like', this.currentSong);
-            $.post(url);
+            var radioUUID = this.radio.get('uuid');
+
+            var data = {
+                'last_play_time': this.currentSong.get('last_play_time')
+            };
+            var url = '/api/v1/radio/' + radioUUID + '/likes/';
+            $.ajax({
+               url: url,
+               type: 'POST',
+               dataType: 'json',
+               data: JSON.stringify(data)
+            });
         }
     },
 

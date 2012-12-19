@@ -455,6 +455,10 @@ def radio_likes(request, radio_uuid):
         if radio is not None:
             WallEvent.objects.add_like_event(radio, song, request.user)
 
+    if radio is not None:
+        wm = WallManager()
+        wm.add_event(event_type=WallManager.EVENT_LIKE, radio=radio, user=request.user)
+
     res = '%s (user) likes %s (song)\n' % (request.user, song)
     return HttpResponse(res)
 
