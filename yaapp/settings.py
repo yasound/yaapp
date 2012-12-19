@@ -69,6 +69,7 @@ CELERY_IMPORTS = (
     "yabase.task",
     "yabase.push",
     "yawall.push",
+    "yaactivity.task",
     "stats.task",
     "account.task",
     "emailconfirmation.task",
@@ -409,6 +410,7 @@ INSTALLED_APPS = (
     'radioways',
     'yascheduler',
     'yawall',
+    'yaactivity',
 )
 
 if LOCAL_MODE:
@@ -595,6 +597,11 @@ LOGGING = {
             'propagate': False,
         },
         'yaapp.yawall': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'yaapp.yaactivity': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,

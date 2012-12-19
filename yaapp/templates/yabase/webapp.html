@@ -370,6 +370,10 @@ HTML, BODY { height: 100%; }
       {% include "yabase/app/common/connectedUser.mustache" with user=None%}
    </script>
 
+   <script type='text/html' id='friendActivityTemplate'>
+     {% include "yabase/app/home/friendActivity.mustache" %}
+   </script>
+
    <script type="text/html" id="subMenuTemplate">
       {% include "yabase/app/common/subMenu.mustache" %}
    </script>

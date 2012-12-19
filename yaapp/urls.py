@@ -102,6 +102,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/user/(?P<username>\S+)/picture/xs/$', 'account.views.user_picture', {'size': 'xs'}, name='user_small_picture'),
     url(r'^api/v1/user/(?P<username>\S+)/picture/(?P<size>\w+)/$', 'account.views.user_picture', name='user_custom_picture'),
 
+    # activity
+    url(r'^api/v1/friends_activity/$', 'yaactivity.views.friends_activity'),
+
     url(r'^api/v1/followers/$', 'account.views.user_followers'),
     url(r'^api/v1/user/(?P<username>\S+)/friends/(?P<friend>\S+)/$', 'account.views.user_friends_add_remove'),
     url(r'^api/v1/user/(?P<username>\S+)/radios/$', 'yabase.views.user_radios'),
