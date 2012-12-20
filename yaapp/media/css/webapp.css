@@ -3651,25 +3651,6 @@ ul .radio-with-stats-cells li {
 #settings-nav .checked span {
   color: white;
 }
-.settings-content-container {
-  width: 465px;
-  float: left;
-  font-size: 15px;
-  color: #4f4f4f;
-  border-left: 1px solid #e3e3e3;
-  padding-left: 37px;
-  padding: 25px 135px 30px 37px;
-}
-.settings-content-container form fieldset legend {
-  display: block;
-  border-bottom: none;
-  font-size: 23px;
-  line-height: 30px;
-  font-weight: bold;
-}
-.settings-content-container form textarea {
-  width: 100%;
-}
 .control-group label {
   color: #434343;
   font-size: 17px;
@@ -8892,6 +8873,27 @@ input::-ms-input-placeholder {
   line-height: 24px;
   text-align: justify;
   height: 250px;
+}
+/**
+ * Settings page
+ */
+.settings-content-container {
+  width: 465px;
+  float: left;
+  font-size: 15px;
+  color: #4f4f4f;
+  border-left: 1px solid #e3e3e3;
+  padding-left: 37px;
+}
+.settings-content-container form fieldset legend {
+  display: block;
+  border-bottom: none;
+  font-size: 23px;
+  line-height: 30px;
+  font-weight: bold;
+}
+.settings-content-container form textarea {
+  width: 100%;
 }
 @media (max-width: 480px) {
   .teaser .argument {
