@@ -1,4 +1,4 @@
 {% load i18n %}
-<%#friend%><a class="pic pic-circle" href="#"><img src="/api/v1/user/<% username %>/picture/30x30/" width="30" height="30" alt="<% name %>" /></a><%/friend%>
-<div class="story"><a href="#"><%#friend%><% name %><%/friend%></a> {% trans "has listened to" %} <a href="#"><%#radio%><% name %><%/radio%></a></div>
+<%#friend%><a class="pic pic-circle" href="#" data-type='user' data-id='<% username %>'><img src="/api/v1/user/<% username %>/picture/30x30/" width="30" height="30" alt="<% name %>" /></a><%/friend%>
+<div class="story"><%#friend%><a href="#" data-type='user' data-id='<% username %>'><% name %><%/friend%></a> {% trans "has listened to" %} <%#radio%><a href="#" data-type='radio' data-id='<% uuid %>'><% name %><%/radio%></a></div>
 <div class="date"><% formatted_date %></div>

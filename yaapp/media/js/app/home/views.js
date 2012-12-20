@@ -133,6 +133,7 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
 Yasound.Views.FriendActivity = Backbone.View.extend({
     tagName: 'li',
     events: {
+        'click a': 'onLink'
     },
 
     initialize: function () {
@@ -151,7 +152,30 @@ Yasound.Views.FriendActivity = Backbone.View.extend({
             $(this.el).html(ich.friendActivityTemplate(data));
         }
         return this;
+    },
+
+    onLink: function (e) {
+        e.preventDefault();
+
+        var link = $(e.target);
+        if (!link.is('a')) {
+            link = $(e.target).parent('a');
+        }
+
+        var type = link.data('type');
+        if (type === 'radio') {
+            var uuid = link.data('id');
+            Yasound.App.Router.navigate('radio/' + uuid + '/', {
+                trigger: true
+            });
+        } else if (type === 'user') {
+            var username = link.data('id');
+            Yasound.App.Router.navigate('profile/' + username + '/', {
+                trigger: true
+            });
+        }
     }
+
 });
 
 Yasound.Views.FriendsActivity = Backbone.View.extend({
@@ -209,6 +233,7 @@ Yasound.Views.FriendsActivity = Backbone.View.extend({
 Yasound.Views.RadioActivity = Backbone.View.extend({
     tagName: 'li',
     events: {
+        'click a': 'onLink'
     },
 
     initialize: function () {
@@ -227,6 +252,27 @@ Yasound.Views.RadioActivity = Backbone.View.extend({
             $(this.el).html(ich.radioActivityTemplate(data));
         }
         return this;
+    },
+
+    onLink: function (e) {
+        e.preventDefault();
+        var link = $(e.target);
+        if (!link.is('a')) {
+            link = $(e.target).parent('a');
+        }
+
+        var type = link.data('type');
+        if (type === 'radio') {
+            var uuid = link.data('id');
+            Yasound.App.Router.navigate('radio/' + uuid + '/', {
+                trigger: true
+            });
+        } else if (type === 'user') {
+            var username = link.data('id');
+            Yasound.App.Router.navigate('profile/' + username + '/', {
+                trigger: true
+            });
+        }
     }
 });
 
