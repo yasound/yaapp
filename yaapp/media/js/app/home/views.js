@@ -206,6 +206,81 @@ Yasound.Views.FriendsActivity = Backbone.View.extend({
     }
 });
 
+Yasound.Views.RadioActivity = Backbone.View.extend({
+    tagName: 'li',
+    events: {
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        if (Yasound.App.enableFX) {
+            $(this.el).hide().html(ich.radioActivityTemplate(data)).fadeIn(200);
+        } else {
+            $(this.el).html(ich.radioActivityTemplate(data));
+        }
+        return this;
+    }
+});
+
+Yasound.Views.RadiosActivity = Backbone.View.extend({
+    initialize: function () {
+        _.bindAll(this, 'addOne', 'addAll', 'clear');
+
+        this.collection.bind('add', this.addOne);
+        this.collection.bind('reset', this.addAll);
+        this.views = [];
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    addAll: function () {
+        this.clear();
+        this.collection.each(this.addOne);
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+    },
+
+    addOne: function (activity) {
+        var found = _.find(this.views, function (view) {
+            if (view.model.id == listener.id) {
+                return true;
+            }
+        });
+
+        if (found) {
+            // do not insert duplicated content
+            return;
+        }
+
+        var view = new Yasound.Views.RadioActivity({
+            model: activity
+        });
+
+        $(this.el).prepend(view.render().el);
+        this.views.push(view);
+
+        if (this.views.length >= this.collection.limit) {
+            this.views[0].close();
+            this.views.splice(0, 1);
+        }
+    }
+});
 
 /**
  * Home page
@@ -224,11 +299,13 @@ Yasound.Views.HomePage = Backbone.View.extend({
         this.favorites = new Yasound.Data.Models.Favorites({});
         this.popular = new Yasound.Data.Models.MostActiveRadios({});
         this.friendsActivity = new Yasound.Data.Models.FriendsActivity({});
+        this.radiosActivity = new Yasound.Data.Models.RadiosActivity({});
 
         this.selection.perPage = 15;
         this.favorites.perPage = 15;
         this.popular.perPage = 15;
         this.friendsActivity.perPage = 5;
+        this.radiosActivity.perPage = 5;
     },
 
     onClose: function() {
@@ -252,6 +329,11 @@ Yasound.Views.HomePage = Backbone.View.extend({
         if (this.friendsActivityView) {
             this.friendsActivityView.close();
             this.friendsActivityView = undefined;
+        }
+
+        if (this.radiosActivityView) {
+            this.radiosActivityView.close();
+            this.radiosActivityView = undefined;
         }
     },
 
@@ -285,6 +367,12 @@ Yasound.Views.HomePage = Backbone.View.extend({
 
             });
             this.friendsActivity.fetch();
+
+            this.radiosActivityView = new Yasound.Views.RadiosActivity({
+                collection: this.radiosActivity,
+                el: $('#radios-activity', this.el)
+            });
+            this.radiosActivity.fetch();
         }
 
         this.popularView = new Yasound.Views.RadiosSlide({

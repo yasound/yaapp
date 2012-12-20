@@ -1,10 +1,16 @@
 from django.conf import settings
+import time
 import datetime
 from pymongo import DESCENDING
 from yabase import signals as yabase_signals
-from task import async_add_listen_activity
+from task import async_add_listen_activity, async_add_animator_activity
+from dateutil.relativedelta import *
+from django.core.cache import cache
+
 import logging
 logger = logging.getLogger("yaapp.yaactivity")
+
+LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
 
 class FriendActivityManager():
@@ -39,7 +45,6 @@ class FriendActivityManager():
         now = datetime.datetime.now()
         if activity == FriendActivityManager.ACTIVITY_LISTEN:
             doc = {
-                'friend': friend.username,
                 'user': self._user_doc(user),
                 'friend': self._user_doc(friend),
                 'radio': self._radio_doc(kwargs.get('radio')),
@@ -60,6 +65,8 @@ class FriendActivityManager():
 
 
 class RadioActivityManager():
+    WAIT_FOR_LOCK = 10  # wait 10 seconds
+
     ACTIVITY_UPDATE_PROGRAMMING = 'programming'
     MAX_ACTIVITY_PER_USER = 100
 
@@ -89,17 +96,39 @@ class RadioActivityManager():
             doc.remove(safe=True)
 
     def add_radio_activity(self, user, radio, activity, **kwargs):
+        lock_id = "radio-activity-%s" % (radio.uuid)
+        acquire_lock = lambda: cache.add(lock_id, "true", LOCK_EXPIRE)
+        release_lock = lambda: cache.delete(lock_id)
+
+        retry = 0
+        max_retry = 3
+        while not acquire_lock():
+            time.sleep(WallManager.WAIT_FOR_LOCK)
+            retry += 1
+            if retry > max_retry:
+                return
+
         now = datetime.datetime.now()
         if activity == RadioActivityManager.ACTIVITY_UPDATE_PROGRAMMING:
-            doc = {
-                'user': self._user_doc(user),
-                'radio': self._radio_doc(kwargs.get('radio')),
-                'activity': activity,
-                'created': now
+            last_hour = now - relativedelta(hour=1)
+            filter = {
+                'user.username': user.username,
+                'radio.uuid': radio.uuid,
+                'created': {
+                    '$gte': last_hour
+                }
             }
-
-            self.collection.insert(doc, safe=True)
+            doc = self.collection.find_one(filter)
+            if doc is None:
+                doc = {
+                    'user': self._user_doc(user),
+                    'radio': self._radio_doc(radio),
+                    'activity': activity,
+                    'created': now,
+                }
+                self.collection.insert(doc, safe=True)
             self.remove_obsolete_data_for_user(user)
+        release_lock()
 
     def activities_for_user(self, user, activity=None, limit=10, skip=0):
         filter = {
@@ -115,6 +144,13 @@ def user_started_listening_handler(sender, radio, user, **kwargs):
         async_add_listen_activity.delay(user.id, radio.id)
 
 
+def new_animator_activity_handler(sender, user, radio, atype, details=None, **kwargs):
+    if radio is not None:
+        async_add_animator_activity.delay(radio.id, atype, details=details)
+
+
 def install_handlers():
     yabase_signals.user_started_listening.connect(user_started_listening_handler)
+    yabase_signals.new_animator_activity.connect(new_animator_activity_handler)
+
 install_handlers()

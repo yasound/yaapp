@@ -2586,8 +2586,10 @@ def radio_picture(request, radio_uuid, size=''):
             picture_url = radio.large_picture_url
         elif size == 'xs':
             picture_url = radio.small_picture_url
-        else:
+        elif size == '':
             picture_url = radio.picture_url
+        else:
+            picture_url = radio.get_picture_url(size)
 
         return HttpResponseRedirect(picture_url)
 

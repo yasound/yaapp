@@ -1,0 +1,6 @@
+{% load i18n %}
+<%#radio%>
+<a class="pic pic-rounded" href="#"><img src="/api/v1/radio/<% uuid %>/picture/30x30/" width="30" height="30" alt="<% name %>" /></a>
+<div class="story">{% trans "the programming of" %} <a href="#"><% name %></a> {% trans "has been updated" %}</div>
+<div class="date"><% formatted_date %></div>
+<%/radio%>

@@ -10,11 +10,11 @@ Yasound.Data.Models.SelectedRadios = Yasound.Data.Paginator.extend({
     url: '/api/v1/radio_recommendations/'
 });
 
-Yasound.Data.Models.FriendActivity = Backbone.Model.extend({
+Yasound.Data.Models.Activity = Backbone.Model.extend({
     idAttribute: '_id',
 
     toJSON: function() {
-        var data = Yasound.Data.Models.FriendActivity.__super__.toJSON.apply(this);
+        var data = Yasound.Data.Models.Activity.__super__.toJSON.apply(this);
 
         var timeZone = '+01:00';
         if (moment().isDST()) {
@@ -29,8 +29,15 @@ Yasound.Data.Models.FriendActivity = Backbone.Model.extend({
 });
 
 Yasound.Data.Models.FriendsActivity = Yasound.Data.Paginator.extend({
-    model: Yasound.Data.Models.FriendActivity,
+    model: Yasound.Data.Models.Activity,
     url: function() {
         return '/api/v1/friends_activity/';
+    }
+});
+
+Yasound.Data.Models.RadiosActivity = Yasound.Data.Paginator.extend({
+    model: Yasound.Data.Models.Activity,
+    url: function() {
+        return '/api/v1/radios_activity/';
     }
 });
