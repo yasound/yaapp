@@ -238,6 +238,9 @@ Yasound.Views.GiftsPopup = Backbone.View.extend({
             var expirationDate = moment(service.get('expiration_date')).format('LL');
             var formattedString = '(' + gettext('enabled until') + ' ' + expirationDate + ')';
             $('span#hd-expiration-date').html(formattedString);
+
+            $('#hd-checkbox-container').removeClass('deactivate');
+            $('#hd-checkbox').removeAttr('disabled');
         }
     }
 });
