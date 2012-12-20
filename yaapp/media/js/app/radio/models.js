@@ -7,7 +7,8 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
     idAttribute: 'event_id',
 
     reportAbuse: function () {
-        var url = '/api/v1/report_message/' + this.id + '/';
+        var uuid = this.get('radio_uuid');
+        var url = '/api/v1/wall/' + this.id + '/report_as_abuse/';
         $.ajax({
            url: url,
            type: 'POST'

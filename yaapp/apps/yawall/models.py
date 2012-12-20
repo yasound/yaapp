@@ -192,6 +192,17 @@ class WallManager():
             yawall_signals.wall_event_deleted.send(sender=self, event=event)
             self.collection.remove({'event_id': event_id}, safe=True)
 
+    def event(self, event_id):
+        return self.collection.find_one({'event_id': event_id})
+
+    def mark_as_abuse(self, event_id):
+        self.collection.update({
+                'event_id': event_id
+            }, {
+                '$set': {'abuse': True}
+            }, safe=True)
+
+
 if settings.ENABLE_PUSH:
     from push import install_handlers
     install_handlers()
