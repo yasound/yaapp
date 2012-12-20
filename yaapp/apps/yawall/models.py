@@ -11,6 +11,7 @@ import dateutil.parser
 import hashlib
 import signals as yawall_signals
 import uuid
+from yasearch.utils import get_simplified_name
 
 LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
@@ -46,9 +47,9 @@ class WallManager():
     def _generate_song_uuid(self, current_song):
         """ generate a unique uuid from song """
         hash_name = hashlib.md5()
-        hash_name.update(current_song.get('name', ''))
-        hash_name.update(current_song.get('album', ''))
-        hash_name.update(current_song.get('artist', ''))
+        hash_name.update(get_simplified_name(current_song.get('name', '')))
+        hash_name.update(get_simplified_name(current_song.get('album', '')))
+        hash_name.update(get_simplified_name(current_song.get('artist', '')))
         hash_name = hash_name.hexdigest()
         return hash_name
 
@@ -184,6 +185,12 @@ class WallManager():
         return self.collection.find({
             'radio_uuid': radio_uuid,
         }).count()
+
+    def remove_event(self, event_id):
+        event = self.collection.find_one({'event_id': event_id})
+        if event:
+            yawall_signals.wall_event_deleted.send(sender=self, event=event)
+            self.collection.remove({'event_id': event_id}, safe=True)
 
 if settings.ENABLE_PUSH:
     from push import install_handlers

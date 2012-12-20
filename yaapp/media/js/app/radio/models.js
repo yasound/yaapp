@@ -15,7 +15,8 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
     },
 
     deleteMessage: function () {
-        var url = '/api/v1/delete_message/' + this.id + '/';
+        var uuid = this.get('radio_uuid');
+        var url = '/api/v1/radio/' + uuid + '/wall/' + this.id + '/';
         $.ajax({
            url: url,
            type: 'DELETE'

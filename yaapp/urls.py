@@ -177,6 +177,7 @@ urlpatterns = patterns('',
 
     # new wall system
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall/$', 'yawall.views.wall'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall/(?P<event_id>\S+)/$', 'yawall.views.wall'),
 
     # pictures
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/$', 'yabase.views.radio_picture'),

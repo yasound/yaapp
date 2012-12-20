@@ -468,7 +468,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         e.preventDefault();
         var that = this;
         $('#modal-report-abuse').modal('show');
-        $('#modal-report-abuse .btn-primary').one('click', function () {
+        $('#modal-report-abuse .btn-primary').one('click', function (e) {
+            e.preventDefault();
             $('#modal-report-abuse').modal('hide');
             that.model.reportAbuse();
         });
@@ -478,7 +479,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
         e.preventDefault();
         var that = this;
         $('#modal-delete-message').modal('show');
-        $('#modal-delete-message .btn-primary').one('click', function () {
+        $('#modal-delete-message .btn-primary').one('click', function (e) {
+            e.preventDefault();
             $('#modal-delete-message').modal('hide');
             that.model.deleteMessage();
         });
@@ -809,7 +811,7 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     removeWallEvent: function(message) {
         var viewToRemove;
         _.each(this.wallEventsView.views, function(view) {
-            if (view.model.get('id') === message.id) {
+            if (view.model.get('event_id') === message.event_id) {
                 viewToRemove = view;
             }
         });
