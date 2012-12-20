@@ -59,6 +59,57 @@ class FriendActivityManager():
         return self.collection.find(filter).sort([('updated', DESCENDING)]).skip(skip).limit(limit)
 
 
+class RadioActivityManager():
+    ACTIVITY_UPDATE_PROGRAMMING = 'programming'
+    MAX_ACTIVITY_PER_USER = 100
+
+    def __init__(self):
+        self.db = settings.MONGO_DB
+        self.collection = self.db.activity.radio
+        self.collection.ensure_index('user.username')
+        self.collection.ensure_index('radio.uuid')
+        self.collection.ensure_index('activity')
+        self.collection.ensure_index('created')
+
+    def _user_doc(self, user):
+        return {
+            'name': unicode(user.get_profile()),
+            'username': user.username,
+        }
+
+    def _radio_doc(self, radio):
+        return {
+            'uuid': radio.uuid,
+            'name': radio.name,
+        }
+
+    def remove_obsolete_data_for_user(self, user):
+        res = self.collection.find({'user.username': user.username}, safe=True).sort([('updated', DESCENDING)]).skip(RadioActivityManager.MAX_ACTIVITY_PER_USER)
+        for doc in res:
+            doc.remove(safe=True)
+
+    def add_radio_activity(self, user, radio, activity, **kwargs):
+        now = datetime.datetime.now()
+        if activity == RadioActivityManager.ACTIVITY_UPDATE_PROGRAMMING:
+            doc = {
+                'user': self._user_doc(user),
+                'radio': self._radio_doc(kwargs.get('radio')),
+                'activity': activity,
+                'created': now
+            }
+
+            self.collection.insert(doc, safe=True)
+            self.remove_obsolete_data_for_user(user)
+
+    def activities_for_user(self, user, activity=None, limit=10, skip=0):
+        filter = {
+            'user.username': user.username
+        }
+        if activity is not None:
+            filter['activity'] = activity
+        return self.collection.find(filter).sort([('updated', DESCENDING)]).skip(skip).limit(limit)
+
+
 def user_started_listening_handler(sender, radio, user, **kwargs):
     if not user.is_anonymous():
         async_add_listen_activity.delay(user.id, radio.id)
