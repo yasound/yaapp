@@ -21,7 +21,7 @@ django-pipeline == 1.1.27
 jsmin
 simplejson
 django-social-auth
-requests>=0.13.9
+requests==0.13.9
 -e git+ssh://git@github.com/yasound/uploader.git#egg=uploader
 -e git+ssh://git@github.com/yasound/yametadata.git#egg=yametadata
 sorl-thumbnail
