@@ -670,7 +670,7 @@ def get_next_song(request, radio_id):
         return HttpResponse('cannot find next song', status=404)
 
     song = get_object_or_404(YasoundSong, id=nextsong.metadata.yasound_song_id)
-    logger.debug('get_next_song: radio = %s - found yaref song, finished!' % (radio_id))
+    logger.debug('get_next_song: radio = %s - found yaref song (%s), finished!' % (radio_id, song.get_song_path()))
     return HttpResponse(song.filename)
 
 @csrf_exempt
