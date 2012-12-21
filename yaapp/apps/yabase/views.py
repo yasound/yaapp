@@ -103,6 +103,22 @@ def get_root(request, app_name):
     return root
 
 
+def get_alternate_language_urls(request):
+    from localeurl import utils as localeurl_utils
+
+    path = request.path
+    alternate_urls = []
+    for code, name in settings.LANGUAGES:
+        if request.LANGUAGE_CODE == code:
+            continue
+        locale, path = localeurl_utils.strip_path(path)
+
+        localized_url = absolute_url(localeurl_utils.locale_url(path, code))
+        alternate_urls.append((code, localized_url))
+
+    return alternate_urls
+
+
 @csrf_exempt
 def upload_playlists(request, radio_id):
     if not check_api_key_Authentication(request):
@@ -1716,6 +1732,7 @@ class WebAppView(View):
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
         root = get_root(request, app_name)
+        alternate_language_urls = get_alternate_language_urls(request)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
@@ -1725,6 +1742,7 @@ class WebAppView(View):
 
 
         context = {
+            'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
@@ -1893,8 +1911,10 @@ class WebAppView(View):
 
 
         show_welcome_popup = True
+        alternate_language_urls = get_alternate_language_urls(request)
 
         context = {
+            'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
