@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import datetime
 from django.conf import settings
@@ -17,6 +18,84 @@ LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
 
 class WallManager():
+    """Store wall events in mongodb.
+
+    A wall event can be::
+
+    * like
+    * message
+
+    like::
+
+        { "_id" : ObjectId( "50d18e3712e5950fbd60a4a1" ),
+          "created" : Date( 1355914311407 ),
+          "current_song" : { "artist_server" : "Feist",
+            "album" : "Let It Die",
+            "large_cover" : "/media/images/default_album.jpg",
+            "artist_simplified" : "feist",
+            "name" : "Let it die",
+            "name_server" : "Let it die",
+            "artist" : "Feist",
+            "album_client" : "Thriller",
+            "enabled" : true,
+            "cover" : "/media/images/default_album.jpg",
+            "id" : 1,
+            "last_play_time" : "2012-11-26T23:11:26.911373",
+            "frequency" : 0.5,
+            "name_simplified" : "let it die",
+            "album_server" : "Let It Die",
+            "need_sync" : false,
+            "name_client" : "Billie Jean",
+            "artist_client" : "Mickael Jackson",
+            "order" : null,
+            "album_simplified" : "let it die",
+            "likes" : 2 },
+          "event_id" : "4b58a6e208c14a5c8718262877d4da57-like-1353967886.0",
+          "event_type" : "like",
+          "like_count" : 1,
+          "likers" : [
+            { "username" : "jerome",
+              "updated" : Date( 1355916716021 ),
+              "name" : "Jérôme Blondon",
+              "created" : Date( 1355914311407 ) } ],
+          "likers_digest" : [
+            { "username" : "jerome",
+              "updated" : Date( 1355916716021 ),
+              "name" : "Jérôme Blondon",
+              "created" : Date( 1355914311407 ) } ],
+          "message" : {},
+          "message_count" : 0,
+          "radio_id" : 1,
+          "radio_uuid" : "4b58a6e208c14a5c8718262877d4da57",
+          "song_uuid" : "2dbb1ec99fea3861dabf595f3aa0ec5c",
+          "title" : "Let it die - Feist",
+          "updated" : Date( 1355916716021 ) }
+
+    message::
+
+        { "_id" : ObjectId( "50d1c26712e5950fbd60a4b2" ),
+          "created" : Date( 1355927671325 ),
+          "current_song" : { "large_cover" : "http://www.k-fm.com/wp-content/plugins/4ways/_radio/pochettes/Yoon Mi Rae Tasha Get It In.jpg~210",
+            "cover" : "http://www.k-fm.com/wp-content/plugins/4ways/_radio/pochettes/Yoon Mi Rae Tasha Get It In.jpg~32",
+            "name" : "Get It In (Feat. Tiger JK)",
+            "artist" : "YOON MI RAE (TASHA)" },
+          "event_id" : "eb029b2e37254170a03652addcce6afd-msg-1355924071.0",
+          "event_type" : "message",
+          "like_count" : 0,
+          "likers" : [],
+          "likers_digest" : [],
+          "message" : { "username" : "jerome",
+            "text" : "There is a hard disk failure, replace the drive immediately.",
+            "name" : "Jérôme Blondon",
+            "created" : Date( 1355927671325 ) },
+          "message_count" : 0,
+          "radio_id" : 8,
+          "radio_uuid" : "eb029b2e37254170a03652addcce6afd",
+          "song_uuid" : "77478e5c800a31f64b9143f5d4995059",
+          "title" : "Get It In (Feat. Tiger JK) - YOON MI RAE (TASHA)",
+          "updated" : Date( 1355927671325 ) }
+    """
+
     EVENT_LIKE = 'like'
     EVENT_MESSAGE = 'message'
     WAIT_FOR_LOCK = 10  # wait 10 seconds
@@ -89,6 +168,14 @@ class WallManager():
         return likers
 
     def add_event(self, event_type, radio, user, message=None):
+        """Add a new event to the wall
+
+        :param event_type: like or message
+        :param radio: radio
+        :param user: user
+        :param message: message when event_type is 'message'
+        """
+
         lock_id = "wall-add-event-lock"
         acquire_lock = lambda: cache.add(lock_id, "true", LOCK_EXPIRE)
         release_lock = lambda: cache.delete(lock_id)
@@ -177,30 +264,54 @@ class WallManager():
         yawall_signals.wall_event_updated.send(sender=self, event=doc)
 
     def events_for_radio(self, radio_uuid, skip=0, limit=20):
+        """return the events for the given radio
+
+        :param skip: skip
+        :param limit: limit (default=20)
+        :return: mongodb cursor
+        """
+
         return self.collection.find({
             'radio_uuid': radio_uuid,
         }).sort([('updated', DESCENDING)]).skip(skip).limit(limit)
 
     def events_count_for_radio(self, radio_uuid):
+        """return the total number of events for a given radio
+
+        :return: events count
+        """
         return self.collection.find({
             'radio_uuid': radio_uuid,
         }).count()
 
     def remove_event(self, event_id):
+        """remove definitively the event
+
+        :param event_id: event_id (not _id)
+        """
         event = self.collection.find_one({'event_id': event_id})
         if event:
             yawall_signals.wall_event_deleted.send(sender=self, event=event)
             self.collection.remove({'event_id': event_id}, safe=True)
 
     def event(self, event_id):
+        """return event doc
+
+        :param event_id: event_id (not _id)
+        :return: full event doc
+        """
         return self.collection.find_one({'event_id': event_id})
 
     def mark_as_abuse(self, event_id):
+        """mark event as abuse
+
+        :param event_id: event_id (not _id)
+        """
         self.collection.update({
-                'event_id': event_id
-            }, {
-                '$set': {'abuse': True}
-            }, safe=True)
+            'event_id': event_id
+        }, {
+            '$set': {'abuse': True}
+        }, safe=True)
 
 
 if settings.ENABLE_PUSH:
