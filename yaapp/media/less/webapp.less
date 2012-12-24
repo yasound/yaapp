@@ -1365,6 +1365,23 @@ input::-ms-input-placeholder
 		margin: 0;
 		padding: 0;
 	}
+	.tip-btn
+	{
+		position: absolute;
+		bottom: 10px;
+		left: 0;
+		font-size: 13px;
+		text-transform: uppercase;
+		color: #fff;
+		background: rgba(0,0,0,.75);
+		width: 50%;
+		margin: 0 25%;
+		height: 25px;
+		line-height: 25px;
+		font-weight: bold;
+		.border-radius(20px);
+		text-align: center;	
+	}
 }
 
 .radio-cell-img img
@@ -1382,6 +1399,10 @@ input::-ms-input-placeholder
 		.transition(ease all .5s);
 	}
 }
+.open .radio-cell-link .radio-cell-info
+{
+	.opacity(100);
+}
 
 .radio-cell-info
 {
@@ -1393,6 +1414,120 @@ input::-ms-input-placeholder
 	right: 0;
 	bottom: 0;
 	background: rgba(0,0,0,.6);
+}
+
+.radio-cell-tip
+{
+	z-index: 200;
+	position: absolute;
+	width: 190px;
+	margin-top: -10px;
+	.arrow
+	{
+		height: 20px;
+		background: transparent;
+		&:after
+		{
+			content: "";
+			position: absolute;
+			margin-left: -6px;
+			top: 14px;
+			left: 50%;
+			width: 0; 
+			height: 0; 
+			border-left: 6px solid transparent;
+			border-right: 6px solid transparent;
+			border-bottom: 6px solid rgba(0,0,0,.9);
+		}
+	}
+	.content
+	{
+		padding: 15px;
+		background: rgba(0,0,0,.9);
+		.border-radius(4px);
+		font-size: 12px;
+		color: #fff;
+	}
+	.btn-green
+	{
+		border: none;
+		width: 120px;
+		margin: 0 auto;
+		display: block;
+	}
+	.current-track,
+	.metrics
+	{
+		margin-bottom: 15px;
+		text-shadow: 1px 1px 1px #000;
+	}
+	.current-track
+	{
+		.headline
+		{
+			display: block;
+			color: #828181;
+			border-bottom: 1px solid #414141;
+			margin-bottom: 10px;
+		}
+	}
+	.track-info
+	{
+		position: relative;
+		padding-left: 30px;
+		line-height: 11px;
+		strong,
+		span
+		{
+			display: block;
+			font-size: 11px;
+		}
+		img
+		{
+			position: absolute;
+			display: block;
+			left: 0;
+			top: 0;
+		}
+	}
+	.metrics
+	{
+		height: 20px;
+		i
+		{
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		strong
+		{
+			font-size: 14px;
+			line-height: 16px;
+			font-weight: bold;
+			display: block;
+		}
+		span
+		{
+			line-height: 12px;
+			color: #b1b1b1;
+			display: block;
+		}
+	}
+	.metrics-left
+	{
+		position: relative;
+		width: 32%;
+		float: left;
+		padding-left: 16%;
+	}
+	.metrics-right
+	{
+		position: relative;
+		width: 34%;
+		float: right;
+		padding-left: 18%;
+	}
 }
 
 /*

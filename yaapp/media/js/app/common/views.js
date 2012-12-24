@@ -15,7 +15,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     events: {
         'click .radio-cell': 'onRadio',
         'mouseover .radio-cell': 'onHover',
-        'mouseleave .radio-cell': 'onLeave'
+        'mouseleave .radio-cell': 'onLeave',
+        'mouseenter .tip-btn': 'showTip'
     },
 
     initialize: function () {
@@ -119,7 +120,67 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 
         var genre = this.model.genre();
         $('.tag', this.el).html(genre + '<div class="tag-right-side"></div>');
+    },
+
+    showTip: function(e) {
+        var $source = $(e.currentTarget),
+            $cell = this.$('.radio-cell');
+
+        if($cell.hasClass('open')) return;
+        else $cell.addClass('open');
+
+        this.tip = new Yasound.Views.RadioCellTip({ model: this.model, $source: $source }).render();
+        var $cellInfo = this.$('.radio-cell-info');
+        var offset = $cellInfo.offset();
+        offset.width = $cellInfo[0].offsetWidth;
+        offset.height = $cellInfo[0].offsetHeight;
+        this.tip.show(offset);
     }
+
+});
+
+Yasound.Views.RadioCellTip = Backbone.View.extend({
+    tagName: 'div',
+    className: 'radio-cell-tip',
+
+    events: {
+        'mouseleave': 'hide'
+    },
+
+    initialize: function () {
+        _.bindAll(this, 'show', 'hide');
+        this.options.$source.on('click mouseleave', this.hide);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        this.$el.html(ich.radioCellTipTemplate(data));
+        return this;
+    },
+
+    show: function(offset) {
+
+        $('body').append(this.$el);
+
+        // Dynamic tip position.
+        var actualWidth = this.$el[0].offsetWidth;
+        var actualHeight = this.$el[0].offsetHeight;
+
+        var pos = { top: offset.top + offset.height, left: offset.left + offset.width / 2 - actualWidth / 2 };
+        // Top: Maybe @todo
+        // else pos = { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 };
+
+        this.$el.offset(pos);
+    },
+
+    hide: function(e) {
+        if($(e.toElement).closest('.radio-cell-tip, .tip-btn').length > 0 && e.originalEvent.type !== 'click') return;
+        this.options.$source.off('mouseleave', this.hide);
+        this.off('click mouseleave', this.hide);
+        this.options.$source.closest('.radio-cell').removeClass('open');
+        this.remove();
+    }
+
 });
 
 /**
