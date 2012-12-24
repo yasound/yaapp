@@ -37,7 +37,7 @@ def push_wall_event(event, **kwargs):
 
 def push_wall_event_deleted(sender, event, **kwargs):
     channel = 'radio.%s' % (event.get('radio_uuid'))
-    logger.info("publishing message to %s" % (channel))
+    logger.info("publishing message (delete) to %s" % (channel))
 
     data = {
         'event_type': 'wall_event_v2_deleted',

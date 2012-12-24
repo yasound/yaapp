@@ -103,6 +103,22 @@ def get_root(request, app_name):
     return root
 
 
+def get_alternate_language_urls(request):
+    from localeurl import utils as localeurl_utils
+
+    path = request.path
+    alternate_urls = []
+    for code, name in settings.LANGUAGES:
+        if request.LANGUAGE_CODE == code:
+            continue
+        locale, path = localeurl_utils.strip_path(path)
+
+        localized_url = absolute_url(localeurl_utils.locale_url(path, code))
+        alternate_urls.append((code, localized_url))
+
+    return alternate_urls
+
+
 @csrf_exempt
 def upload_playlists(request, radio_id):
     if not check_api_key_Authentication(request):
@@ -434,6 +450,33 @@ def radio_shared(request, radio_id):
     res = 'user %s has shared radio %s' % (request.user.get_profile().name, radio.name)
     return HttpResponse(res)
 
+
+@csrf_exempt
+@check_api_key(methods=['POST'])
+def radio_likes(request, radio_uuid):
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    payload = json.loads(request.raw_post_data)
+    last_play_time = payload.get('last_play_time')
+    # TODO use last_play_time to check song validity
+
+    song = radio.current_song
+    if song is not None:
+        radio = song.playlist.radio
+        if radio and not radio.is_live():
+            song_user, _created = SongUser.objects.get_or_create(song=song, user=request.user)
+            song_user.mood = yabase_settings.MOOD_LIKE
+            song_user.save()
+
+        # add like event in wall
+        if radio is not None:
+            WallEvent.objects.add_like_event(radio, song, request.user)
+
+    if radio is not None:
+        wm = WallManager()
+        wm.add_event(event_type=WallManager.EVENT_LIKE, radio=radio, user=request.user)
+
+    res = '%s (user) likes %s (song)\n' % (request.user, song)
+    return HttpResponse(res)
 
 
 # SONG USER
@@ -1284,7 +1327,7 @@ class WebAppView(View):
         if radio.current_song:
             context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        wall_events = list(wm.events_for_radio(radio.uuid))
+        wall_events = list(wm.events_for_radio(radio.uuid, limit=10))
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
@@ -1689,6 +1732,7 @@ class WebAppView(View):
         connected_users = fast_connected_users_by_distance(request, internal=True)
 
         root = get_root(request, app_name)
+        alternate_language_urls = get_alternate_language_urls(request)
 
         sound_player = 'soundmanager'
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
@@ -1698,6 +1742,7 @@ class WebAppView(View):
 
 
         context = {
+            'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
@@ -1866,8 +1911,10 @@ class WebAppView(View):
 
 
         show_welcome_popup = True
+        alternate_language_urls = get_alternate_language_urls(request)
 
         context = {
+            'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
             'push_url': push_url,
             'enable_push': enable_push,
@@ -2559,8 +2606,10 @@ def radio_picture(request, radio_uuid, size=''):
             picture_url = radio.large_picture_url
         elif size == 'xs':
             picture_url = radio.small_picture_url
-        else:
+        elif size == '':
             picture_url = radio.picture_url
+        else:
+            picture_url = radio.get_picture_url(size)
 
         return HttpResponseRedirect(picture_url)
 

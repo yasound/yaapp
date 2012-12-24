@@ -7,7 +7,8 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
     idAttribute: 'event_id',
 
     reportAbuse: function () {
-        var url = '/api/v1/report_message/' + this.id + '/';
+        var uuid = this.get('radio_uuid');
+        var url = '/api/v1/wall/' + this.id + '/report_as_abuse/';
         $.ajax({
            url: url,
            type: 'POST'
@@ -15,7 +16,8 @@ Yasound.Data.Models.WallEvent = Backbone.Model.extend({
     },
 
     deleteMessage: function () {
-        var url = '/api/v1/delete_message/' + this.id + '/';
+        var uuid = this.get('radio_uuid');
+        var url = '/api/v1/radio/' + uuid + '/wall/' + this.id + '/';
         $.ajax({
            url: url,
            type: 'DELETE'
@@ -87,7 +89,7 @@ Yasound.Data.Models.WallEvents = Backbone.Paginator.requestPager.extend({
     url: '/api/v1/radio/0/wall/',
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
-    perPage: 15,
+    perPage: 10,
     page:0,
 
     parse: function(response) {

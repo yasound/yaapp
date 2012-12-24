@@ -14,6 +14,9 @@
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasound: http://ogp.me/ns/fb/yasound#">
     <title>{% block head_title %}{% trans 'YaSound - Create your social web radio instantly' %}{% endblock %}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    {% for code, url in alternate_language_urls %}
+    <link rel="alternate" hreflang="{{ code }}" href="{{ url }}" />
+    {% endfor %}
     <link rel="icon" type="image/png" href="/media/app/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -330,8 +333,11 @@ HTML, BODY { height: 100%; }
      {% include "yabase/app/radio/radioCreator.mustache" with creator=None %}
    </script>
 
-   <script type="text/html" id="wallEventTemplateMessage">
-      {% include "yabase/app/radio/wallEvent.mustache" %}
+   <script type="text/html" id="wallEventLikeTemplate">
+      {% include "yabase/app/radio/wallEventLike.mustache" %}
+   </script>
+   <script type="text/html" id="wallEventMessageTemplate">
+      {% include "yabase/app/radio/wallEventMessage.mustache" %}
    </script>
 
    <script type="text/html" id="radioUserTemplate">
@@ -368,6 +374,14 @@ HTML, BODY { height: 100%; }
 
    <script type="text/html" id="connectedUserTemplate">
       {% include "yabase/app/common/connectedUser.mustache" with user=None%}
+   </script>
+
+   <script type='text/html' id='friendActivityTemplate'>
+     {% include "yabase/app/home/friendActivity.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioActivityTemplate'>
+     {% include "yabase/app/home/radioActivity.mustache" %}
    </script>
 
    <script type="text/html" id="subMenuTemplate">
