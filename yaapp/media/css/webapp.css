@@ -9005,7 +9005,6 @@ input::-ms-input-placeholder {
   float: left;
   font-size: 15px;
   color: #4f4f4f;
-  border-left: 1px solid #e3e3e3;
   padding-left: 37px;
 }
 .settings-content-container form fieldset legend {
@@ -9017,6 +9016,9 @@ input::-ms-input-placeholder {
 }
 .settings-content-container form textarea {
   width: 100%;
+}
+.settings-content-container.left-border {
+  border-left: 1px solid #e3e3e3;
 }
 @media (max-width: 480px) {
   .teaser .argument {
