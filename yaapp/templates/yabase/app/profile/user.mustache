@@ -16,10 +16,10 @@
 	</span>
     <em class='visible-phone'><% fagc %></em>
     <%^owner%>
-	<button type="button" class="user-btn yabutton-large right" id='follow'>
-    	<%#is_friend%>{% trans "Unfollow" %}<%/is_friend%>
-        <%^is_friend%>{% trans "Follow" %}<%/is_friend%>
-	</button>
+
+  <%#is_friend%><button type="button" class="btn-coral right" id='follow'>{% trans "Unfollow" %}</button><%/is_friend%>
+  <%^is_friend%><button type="button" class="btn-sky right" id='follow'>{% trans "Follow" %}</button><%/is_friend%>
+
     <%/owner%>
     <%#owner%>
     <button type="button" id='logout-btn' class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
