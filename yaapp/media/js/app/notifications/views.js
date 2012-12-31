@@ -174,7 +174,6 @@ Yasound.Views.NotificationDigest = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         data.formatted_date = this.model.getFormattedDate();
-        console.log(data);
         if (data.type === 'type_notif_friend_online') {
             $(this.el).html(ich.notificationFriendOnlineDigestTemplate(data));
         } else if (data.type == 'type_notif_message_in_wall') {
