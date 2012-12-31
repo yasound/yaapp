@@ -6,21 +6,31 @@
       <div class="metrics-left">
         <i class="asset-player-star-yellow"></i>
         <strong><% favorites %></strong>
-        <span>favoris</span>
+        <%#multiple_favorites%>
+        <span>{% trans "favorites" %}</span>
+        <%/multiple_favorites%>
+        <%^multiple_favorites%>
+        <span>{% trans "favorite" %}</span>
+        <%/multiple_favorites%>
       </div>
       <div class="metrics-right">
         <i class="asset-comment"></i>
-        <strong>X</strong>
-        <span>messages</span>
+        <strong><% messages %></strong>
+        <%#multiple_messages%>
+        <span>{% trans "messages" %}</span>
+        <%/multiple_messages%>
+        <%^multiple_messages%>
+        <span>{% trans "message" %}</span>
+        <%/multiple_messages%>
       </div>
       <div class="clearfix"></div>
     </div>
     <div class="current-track">
-      <strong class="headline">En cours de lecture</strong>
+      <strong class="headline">{% trans "Playing" %}</strong>
       <div class="track-info">
         <img src="/media/images/tracks/default_20x20.png" width="20" height="20" alt="" />
-        <strong>Action Branson</strong>
-        <span>Money, power & respect</span>
+        <strong>&nbsp;</strong>
+        <span>&nbsp;</span>
       </div>
     </div>
     <div class="main-button">

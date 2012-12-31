@@ -179,6 +179,17 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
         if (data && data.name && data.name.length > 18) {
             data.name = data.name.substring(0,18) + "...";
         }
+
+        data.multiple_favorites = false;
+        if (data.favorites > 1) {
+            data.multiple_favorites = true;
+        }
+
+        data.multiple_messages = false;
+        if (data.messages > 1) {
+            data.multiple_messages = true;
+        }
+
         return data;
     }
 });
