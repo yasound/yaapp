@@ -15,11 +15,14 @@
         <ul>
           <li><a href="#" class="btn-nav">Découvrir</a></li>
           {% if request.user.is_authenticated %}
+
+          {% ifnotequal app_name 'deezer' %}
           <li class="dropdown">
             <a class="btn-nav btn-hd" data-toggle="dropdown" href="#"><i class="{% if hd_enabled %}asset-hd-on{% else %}asset-hd-off{% endif %}"></i></a>
             <ul class="dropdown-menu dropdown-bordered" id="gifts-menu">
             </ul>
           </li>
+          {% endifnotequal %}
           <li class="dropdown">
             <a class="btn-nav btn-envelope" data-toggle="dropdown" href="#">
               <i class="asset-envelope"></i>

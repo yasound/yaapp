@@ -297,11 +297,7 @@ HTML, BODY { height: 100%; }
 
 
    <script type="text/html" id="trackTemplate">
-      {% ifequal app_name 'deezer' %}
-      {% include "yabase/app/track_deezer.mustache" with yasound_song=None %}
-      {% else %}
       {% include "yabase/app/track.mustache" with yasound_song=None %}
-      {% endifequal %}
    </script>
 
    <script type="text/html" id="signupPageTemplate">
@@ -349,11 +345,7 @@ HTML, BODY { height: 100%; }
    </script>
 
    <script type='text/html' id='radioCellTemplate'>
-      {% ifequal app_name 'deezer' %}
-        {% include "yabase/app/radioCell_deezer.mustache" %}
-      {% else %}
-        {% include "yabase/app/radioCell.mustache" %}
-      {% endifequal %}
+      {% include "yabase/app/radioCell.mustache" %}
    </script>
 
    <script type='text/html' id='radioCellTipTemplate'>
@@ -719,9 +711,7 @@ HTML, BODY { height: 100%; }
   </div>
 </div>
 
-{% ifnotequal app_name 'deezer' %}
 {% include "yabase/app/footer.html" %}
-{% endifnotequal %}
 </body>
 {% endblock %}
 
