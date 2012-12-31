@@ -12,6 +12,16 @@
 <a href="#" class="wall-button btn-white btn-programming" style='display:none;'>{% trans "Programming" %}</a>
 <a href="#" class="wall-button btn-green btn-broadcast" style='display:none;'>{% trans "Broadcast to your fans" %}</a>
 
+{% ifequal app_name 'deezer' %}
+<div class='deezer-actions'>
+  <ul>
+     <li><a class="dz-addtoplaylist" dz-id="0" style='display:none;'></a></li>
+     <li><a class="dz-share" dz-id="0" dz-type="artist" style='display:none;'></a></li>
+     <li><a class="dz-library" dz-id="0" dz-type="album" style='display:none;'></a></li>
+  <ul>
+</div>
+{% endifequal %}
+
 <p class="wall-digest">{% if radio %}{{ radio.description|urlize }}{% else %}<%{description%>{% endif %}</p>
 <ul class="wall-numbers">
   <li><strong>{% if radio %}{{ radio.favorites }}{% else %}<% favorites %> {% endif %}</strong> {% trans "favorites" %}</li>

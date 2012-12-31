@@ -275,52 +275,17 @@ Yasound.Views.TrackInRadio = Backbone.View.extend({
     },
 
     initialize: function () {
-        _.bindAll(this, 'onDeezerSongFound', 'onDeezerSongNotFound');
         this.model.bind('change', this.render, this);
-        $.subscribe('/player/deezer/songFound', this.onDeezerSongFound);
-        $.subscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
-        $.unsubscribe('/player/deezer/songFound', this.onDeezerSongFound);
-        $.unsubscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
 
     render: function () {
         $(this.el).html(ich.trackInRadioTemplate(this.model.toJSON()));
 
-        if (Yasound.App.appName === 'deezer') {
-            var player = Yasound.App.player;
-            if (player.deezerId) {
-                this.addDeezerLinks(player);
-            }
-        }
-
         return this;
-    },
-
-    addDeezerLinks: function(player) {
-        var $addToPlaylist = $('.dz-addtoplaylist', this.el);
-        $addToPlaylist.attr('dz-id', player.deezerId);
-        $addToPlaylist.show();
-
-        if (player.deezerArtistId) {
-            var $share = $('.dz-share', this.el);
-            $share.attr('dz-id', player.deezerArtistId);
-            $share.show();
-        }
-
-        DZ.framework.parse();
-    },
-
-    onDeezerSongFound: function(e, player) {
-        this.addDeezerLinks(player);
-    },
-
-    onDeezerSongNotFound: function(e, player) {
-        $('.dz-addtoplaylist', this.el).hide();
-        $('.dz-share', this.el).hide();
     }
 });
 
@@ -633,13 +598,18 @@ Yasound.Views.RadioPage = Backbone.View.extend({
     },
 
     initialize: function () {
-        _.bindAll(this, 'removeWallEvent');
+        _.bindAll(this, 'removeWallEvent', 'onDeezerSongFound', 'onDeezerSongNotFound');
         this.model.bind('change', this.render, this);
         this.fans.perPage = 15;
+
+        $.subscribe('/player/deezer/songFound', this.onDeezerSongFound);
+        $.subscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
+        $.unsubscribe('/player/deezer/songFound', this.onDeezerSongFound);
+        $.unsubscribe('/player/deezer/songNotFound', this.onDeezerNotSongFound);
         Yasound.App.Router.pushManager.off('wall_event_v2_updated');
     },
 
@@ -691,6 +661,13 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         this.reset();
 
         $(this.el).html(ich.radioPageTemplate());
+
+        if (Yasound.App.appName === 'deezer') {
+            var player = Yasound.App.player;
+            if (player.deezerId) {
+                this.addDeezerLinks(player);
+            }
+        }
 
         $('h1', this.el).html(this.model.get('name'));
 
@@ -852,7 +829,31 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/fans/', {
             trigger: true
         });
+    },
+
+    addDeezerLinks: function(player) {
+        var $addToPlaylist = $('.dz-addtoplaylist', this.el);
+        $addToPlaylist.attr('dz-id', player.deezerId);
+        $addToPlaylist.show();
+
+        if (player.deezerArtistId) {
+            var $share = $('.dz-share', this.el);
+            $share.attr('dz-id', player.deezerArtistId);
+            $share.show();
+        }
+
+        DZ.framework.parse();
+    },
+
+    onDeezerSongFound: function(e, player) {
+        this.addDeezerLinks(player);
+    },
+
+    onDeezerSongNotFound: function(e, player) {
+        $('.dz-addtoplaylist', this.el).hide();
+        $('.dz-share', this.el).hide();
     }
+
 });
 
 Yasound.Views.UserRadiosPage = Backbone.View.extend({
