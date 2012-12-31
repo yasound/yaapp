@@ -144,7 +144,8 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
     className: 'radio-cell-tip',
 
     events: {
-        'mouseleave': 'hide'
+        'mouseleave': 'hide',
+        'click .main-button a' : 'onDisplayRadio'
     },
 
     initialize: function () {
@@ -210,6 +211,17 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
 
         var img = $('.track-info img', this.el);
         img.attr('src', cover);
+    },
+
+    onDisplayRadio: function (e) {
+        e.preventDefault();
+
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
+
+        this.hide();
     }
 });
 

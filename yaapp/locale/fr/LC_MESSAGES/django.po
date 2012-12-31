@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-31 10:54+0100\n"
+"POT-Creation-Date: 2012-12-31 12:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1110,6 +1110,10 @@ msgstr "message"
 #: templates/yabase/app/radioCellTip.mustache:29
 msgid "Playing"
 msgstr "En cours de lecture"
+
+#: templates/yabase/app/radioCellTip.mustache:37
+msgid "Display the radio"
+msgstr "Afficher la radio"
 
 #: templates/yabase/app/searchPage.mustache:6
 msgid "No result found"
