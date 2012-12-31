@@ -31,12 +31,11 @@ Yasound.Views.Creator = Backbone.View.extend({
     follow: function(e) {
         e.preventDefault();
         if (this.creator.get('is_friend')) {
-            $(e.target, this.el).html(gettext('Follow'));
             this.creator.unfollow(Yasound.App.username);
         } else {
-            $(e.target, this.el).html(gettext('Unfollow'));
             this.creator.follow(Yasound.App.username);
         }
+        this.render();
     },
 
     selectUser: function (event) {

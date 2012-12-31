@@ -14,6 +14,7 @@
   <div><a class="wall-owner-link" href="#"><% name %></a></div>
   <div><% followers_count %> {% trans "followers" %}</div>
   <div><% agc %></div>
-  <div><a href="#" class="btn-green follow"><%#is_friend%>{% trans "Unfollow" %}<%/is_friend%><%^is_friend%>{% trans "Follow" %}<%/is_friend%></a></div>
+  <%#is_friend%><div><a href="#" class="btn-coral follow">{% trans "Unfollow" %}</a></div><%/is_friend%>
+  <%^is_friend%><div><a href="#" class="btn-green follow">{% trans "Follow" %}</a></div><%/is_friend%>
 </div>
 {% endif %}
