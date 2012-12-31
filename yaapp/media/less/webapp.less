@@ -2541,6 +2541,71 @@ input::-ms-input-placeholder
     &.left-border { border-left: 1px solid #e3e3e3; }
  }
 
+
+/**
+ * My radios
+ */
+.radio-with-stats-cells{
+    width:100%;
+    list-style: none;
+	margin:0px;
+	.radio-with-stats {
+		float:left;
+		display:block;
+		height:260px;
+		width:100%;
+		margin-top:23px;
+		border:1px solid #e3e3e3;
+		background-image: linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+	    background-image: -o-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+	    background-image: -moz-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+	    background-image: -webkit-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+	    background-image: -ms-linear-gradient(bottom, rgb(241,241,241) 35%, rgb(255,255,255) 68%);
+
+	    background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.35, rgb(241,241,241)),
+	    color-stop(0.68, rgb(255,255,255))
+	    );
+		border-radius:10px;
+
+		.radio-cell-parent {
+			float:left;
+			width:220px;
+			margin-right:24px;
+			margin:21px;
+			.radio-cell {
+				margin:0;
+				padding:0;
+				float:none;
+			}
+		}
+
+		.radio-toolbar {
+		    float:right;
+		    margin-top: 6px;
+		    margin-right:20px;
+		    button {
+			    margin-right: 12px;
+			}
+		}
+		.chartdiv {
+			float:right;
+			margin:30px;
+		    margin-top: 4px;
+		    height:90% !important;
+		    width:50% !important;
+		}
+	}
+}
+
+ul .radio-with-stats-cells li {
+	display:block;
+	float:none;
+}
+
 @import 'webapp/responsive/landscape-phones-and-down.less';
 @import 'webapp/responsive/landscape-phones-to-portrait-tablet.less';
 @import 'webapp/responsive/portrait-tablet-to-desktop.less';
