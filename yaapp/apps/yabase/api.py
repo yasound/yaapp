@@ -373,6 +373,7 @@ class TopRadioResource(ModelResource):
 class FavoriteRadioResource(ModelResource):
     creator = fields.ForeignKey('yabase.api.UserResource', 'creator', null=True, full=True)
     picture = fields.CharField(attribute='picture_url', default=None, readonly=True)
+    messages = fields.IntegerField(attribute='message_count', default=None, readonly=True)
 
     class Meta:
         queryset = Radio.objects.ready_objects()
@@ -404,7 +405,7 @@ class UserFavoriteRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready', 'messages']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
