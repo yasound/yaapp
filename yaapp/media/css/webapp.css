@@ -6802,6 +6802,9 @@ input::-ms-input-placeholder {
   display: block;
   margin-right: 30px;
 }
+.block-slide .loading-mask {
+  margin-top: 50px;
+}
 .stories-list {
   margin: 0;
   padding: 0;
