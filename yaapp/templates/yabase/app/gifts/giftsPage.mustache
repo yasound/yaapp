@@ -1,10 +1,19 @@
 {% load i18n %}
-<div class='row-fluid'>
-    <div class='span12 notifications-container'>
+<div class="container-fluid content-zone">
+  <div class='row-fluid'>
+    <div class='span12'>
         <h1>{% trans "Gifts" %}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid content-zone last">
+  <div class='row-fluid'>
+    <div class='span12'>
         <ul id='gifts'>
             <img class='loading-mask' src='/media/images/loading.gif'/>
         </ul>
         <div id='pagination'></div>
     </div>
+  </div>
 </div>
