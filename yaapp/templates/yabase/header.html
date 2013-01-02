@@ -20,6 +20,7 @@
           <li class="dropdown">
             <a class="btn-nav btn-hd" data-toggle="dropdown" href="#"><i class="{% if hd_enabled %}asset-hd-on{% else %}asset-hd-off{% endif %}"></i></a>
             <ul class="dropdown-menu dropdown-bordered" id="gifts-menu">
+              <img src='/media/images/loading-popup.gif' class='loading-mask'/>
             </ul>
           </li>
           {% endifnotequal %}
@@ -29,6 +30,7 @@
               <span class="count-badge {% ifequal notification_count 0 %}hidden{% endifequal %}">{{ notification_count }}</span>
             </a>
             <ul class="dropdown-menu" id='notifications-menu'>
+              <img src='/media/images/loading-popup.gif' class='loading-mask'/>
             </ul>
           </li>
           <li class="dropdown">

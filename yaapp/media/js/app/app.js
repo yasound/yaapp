@@ -361,7 +361,6 @@ $(document).ready(function () {
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
-                this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
                 this.commonContext.headerView = new Yasound.Views.Header({}).render();
                 this.commonContext.footerView = new Yasound.Views.Footer({}).render();
 

@@ -261,7 +261,7 @@ Yasound.Views.GiftsDigest = Backbone.View.extend({
     },
 
     addAll: function () {
-        $('.loading-mask', this.el).hide();
+        $('.loading-mask', this.el).remove();
         this.clear();
         $(this.el).append(ich.giftDigestHDTemplate({'expire': this.expire, 'hd': this.hd}));
         $(this.el).append(ich.giftDigestPromocodeTemplate({}));
