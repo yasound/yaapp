@@ -1,26 +1,17 @@
 {% load i18n %}
 {% load app_url %}
 
-<div class='row-fluid'>
-
-    <div class="modal hide fade" id="modal-radio-created" data-keyboard='false' backdrop='static'>
-        <div class="modal-header">
-            <h3>{% trans "Radio created" %}</h3>
-        </div>
-        <div class="modal-body">
-            <p>{% trans "Your radio has been created successfully." %}</p>
-            <p>{% trans "You will be redirected to the programming page where you will be able to add content" %}</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Go to programming page" %}</a>
-        </div>
+<div class="container-fluid content-zone">
+  <div class='row-fluid'>
+    <div class='span12'>
+        <h1>{% trans "Yasound radio creation" %}</h1>
     </div>
+  </div>
+</div>
 
-
-    <div id='radio-creation-container' class='span12'>
-        <h1>
-            {% trans "Yasound radio creation" %}
-        </h1>
+<div class="container-fluid content-zone last">
+  <div class='row-fluid'>
+    <div class='span12 radio-creation-container'>
         <form id='new-radio-form' action='{% app_url webapp_new_radio app_name %}' enctype="multipart/form-data" method='post'>{% csrf_token %}
             <div id='form-left'>
                 <input class='radio-creation-textfield radio-creation-name' name='name' type='text' required="required" placeholder='{% trans "Name" %}' />
@@ -55,8 +46,25 @@
                     <input type='file' name='picture' id='upload-photo'/>
                 </div>
             </div>
-            <input class='radio-creation-submit yabutton-large' type='submit' value='{% trans "Create the radio" %}' />
+            <div class='clear'>&nbsp;</div>
+            <div class='radio-creation-submit'>
+            <input class='yabutton-large' type='submit' value='{% trans "Create the radio" %}' />
+            </div>
         </form>
         {{ form }}
     </div>
+  </div>
 </div>
+
+    <div class="modal hide fade" id="modal-radio-created" data-keyboard='false' backdrop='static'>
+        <div class="modal-header">
+            <h3>{% trans "Radio created" %}</h3>
+        </div>
+        <div class="modal-body">
+            <p>{% trans "Your radio has been created successfully." %}</p>
+            <p>{% trans "You will be redirected to the programming page where you will be able to add content" %}</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Go to programming page" %}</a>
+        </div>
+    </div>
