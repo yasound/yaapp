@@ -40,7 +40,7 @@ Yasound.Views.RadiosSlide = Backbone.View.extend({
 
     addAll: function() {
         if (!this.loadingMask) {
-            var mask = this.$el.siblings('.loading-mask');
+            var mask = $('.loading-mask', this.el);
             this.loadingMask = mask;
         }
 
