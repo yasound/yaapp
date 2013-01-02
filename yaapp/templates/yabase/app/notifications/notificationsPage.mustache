@@ -4,7 +4,12 @@
 	<div class='span12'>
         <button type="button" class="right btn-sky" id='mark-all-read-btn'>{% trans "Mark all as read" %}</button>
 	    <h1>{% trans "Notifications" %}</h1>
+  </section>
+</div>
 
+<div class="container-fluid content-zone last">
+  <section class="row-fluid">
+    <div class='span12'>
         <ul id='notifications'>
             {% if not notifications %}
             <img class='loading-mask' src='/media/images/loading.gif'/>
