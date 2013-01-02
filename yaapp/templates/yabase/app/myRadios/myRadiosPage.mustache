@@ -36,13 +36,15 @@
 
 {% else %}
 
-<div class='no-margin'>
-    <div class='favorites-login-container'>
-        <img class='favorites-login-large'src="/media/app/images/teaser/create.png"'>
+<div class="container-fluid content-zone last">
+  <div class='row-fluid'>
+    <div class='span12 favorites-login-container'>
+        <img class='favorites-login-large'src="/media/app/images/teaser/create.png">
         <p class='favorites-login-p'>{% trans "Log in to create your radio." %}</p>
         <form action='{% app_url webapp_login app_name %}' method='get'>
         <button id='login-btn'>{% trans "Login" %}</button>
         </form>
     </div>
+  </div>
 </div>
 {% endif %}
