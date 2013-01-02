@@ -8,7 +8,7 @@
         <a class="asset-logo" href="{% app_url webapp app_name %}" id="btn-webapp">YaSound</a>
       </div>
       <div id="search-bar">
-        <input type="text" id="search-input" placeholder="Recherchez un artiste, une radio..." maxlength="25" value="{{ query }}"/>
+        <input type="text" id="search-input" placeholder="{% trans 'Search artist, radio ...' %}" maxlength="25" value="{{ query }}"/>
         <a href="#" class="asset-glass" id="search-symbol"></a>
       </div>
       <nav class="header-nav">
