@@ -18,7 +18,7 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #profile-menu .about': 'onAbout',
         'click #profile-menu .legal': 'onLegal',
         'click #profile-menu .logout': 'onLogout',
-        'click #notifications-menu .list-foot a': 'onNotifications',
+        'click #notifications-menu a': 'onNotifications',
         'click .btn-envelope': 'refreshNotificationsDigest',
         'click .btn-hd': 'refreshHD',
         'submit #login-form': 'submitLogin'
