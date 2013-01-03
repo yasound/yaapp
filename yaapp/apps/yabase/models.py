@@ -1152,16 +1152,16 @@ class Radio(models.Model):
 
         return data, total_count
 
-    def get_picture_url(self, size='210x210'):
+    def get_picture_url(self, size='210x210', crop='center', **kwargs):
         if self.picture:
             try:
-                url = get_thumbnail(self.picture,  size, crop='center', format='JPEG', quality=70).url
+                url = get_thumbnail(self.picture,  size, crop=crop, format='JPEG', quality=70, **kwargs).url
             except:
-                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center').url
+                url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop=crop, **kwargs).url
         else:
             if self.origin == yabase_settings.RADIO_ORIGIN_RADIOWAYS:
                 return self.radioways_radio.get_cover_url(size)
-            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop='center', format='JPEG', quality=70).url
+            url = get_thumbnail(yaapp_settings.DEFAULT_IMAGE_PATH, size, crop=crop, format='JPEG', quality=70, **kwargs).url
         return url
 
     @property
@@ -1207,7 +1207,14 @@ class Radio(models.Model):
         for i, song in enumerate(songs):
             if i > 5:
                 size = '314x314'
-            data.append(song.custom_cover_url(size))
+
+            if song.has_cover():
+                data.append(song.custom_cover_url(size))
+
+        if len(data) != 8:
+            # not enough song covers, using fallback based on radio picture
+            data = [self.get_picture_url(size='1200x400', gaussianblur=20)]
+
         cache.set(key, data, 60 * 60)
         return data
 

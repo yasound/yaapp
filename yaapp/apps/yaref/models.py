@@ -349,6 +349,13 @@ class YasoundSong(models.Model):
                 pass
         return url
 
+    def has_cover(self):
+        """return True if song has a non-generic cover"""
+
+        if not self.cover_filename:
+            return False
+        return True
+
     @property
     def title(self):
         name = self.name

@@ -572,11 +572,20 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                $('.wall-covers-pics img').each(function(index) {
-                    if (index < data.length) {
-                        $(this).attr('src', data[index]);
+                if (data.length === 1) {
+                    // only one picture --> lets use all the available space for it
+                    if (Yasound.App.enableFX) {
+                        $('.wall-covers-pics').hide().html('<img src="' + data[0] + '"/>').fadeIn(500);
+                    } else {
+                        $('.wall-covers-pics').html('<img src="' + data[0] + '"/>');
                     }
-                });
+                } else {
+                    $('.wall-covers-pics img').each(function(index) {
+                        if (index < data.length) {
+                            $(this).attr('src', data[index]);
+                        }
+                    });
+                }
             },
             failure: function() {
             }
