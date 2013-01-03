@@ -1343,16 +1343,15 @@ msgstr "Entrez un code<br/>promo :"
 
 #: templates/yabase/app/home/friendActivity.mustache:3
 msgid "has listened to"
-msgstr ""
+msgstr "a écouté"
 
 #: templates/yabase/app/home/radioActivity.mustache:4
-#, fuzzy
 msgid "the programming of"
-msgstr "Aller à la page de programmation"
+msgstr "la programmation de"
 
 #: templates/yabase/app/home/radioActivity.mustache:4
 msgid "has been updated"
-msgstr ""
+msgstr "a mis à jour"
 
 #: templates/yabase/app/login/login.mustache:7
 msgid "Not registered yet ? Create an account"
