@@ -360,10 +360,15 @@
   height: 55px;
   background-position: -256px -162px;
 }
-.asset-teaser-appstore {
+.asset-teaser-appstore-fr {
   width: 143px;
   height: 55px;
   background-position: -292px -162px;
+}
+.asset-teaser-appstore-en {
+  width: 143px;
+  height: 55px;
+  background-position: 0px -217px;
 }
 .asset-volume-handle {
   width: 22px;
