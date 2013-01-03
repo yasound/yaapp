@@ -1,49 +1,86 @@
 {% load i18n %}
-<div id='jm-header'>
-    {% if is_jm_radio %}{% include "yabase/app/radio/jmHeader.mustache" %}{% endif %}
+{% load thumbnail %}
+{% load app_url %}
+<div class="container-fluid wall-covers">
+  <h1>{{ radio.name }}</h1>
+  <div class="wall-covers-pics">
+    <div class="wall-cover-group col3">
+      <div>
+        <img class="" src="/media/images/tracks/default_157x157.png" width="157" height="157" alt="" />
+        <img class="" src="/media/images/tracks/default_157x157.png" width="157" height="157" alt="" />
+        <img class="" src="/media/images/tracks/default_157x157.png" width="157" height="157" alt="" />
+      </div>
+      <div>
+        <img class="" src="/media/images/tracks/default_157x157.png" width="157" height="157" alt="" />
+        <img class="" src="/media/images/tracks/default_157x157.png" width="157" height="157" alt="" />
+        <img class="" src="/media/images/tracks/default_157x157.png" width="157" height="157" alt="" />
+      </div>
+    </div>
+    <div class="wall-cover-group col2">
+      <img class="" src="/media/images/tracks/default_314x314.png" width="314" height="314" alt="" />
+    </div>
+    <div class="wall-cover-group col2">
+      <img class="" src="/media/images/tracks/default_314x314.png" width="314" height="314" alt="" />
+    </div>
+  </div>
 </div>
 
-<div class='row'>
-<div class='span4 wall-responsive-span4'>
-    <div id='webapp-track'>{% if yasound_song %} {% include "yabase/app/radio/track.mustache" %} {% endif %}</div>
-    <div id='webapp-radio'>{% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}</div>
-    <div class='wall-audience-container'>
-        <div class='audience-nbr-container'>
-          <span class='audience-nbr'>0</span>
-          <img src="/media/app/images/icon-friends-gradient.png">
-          <div class='audience-txt'>{% trans "listeners" %}</div>
+<div class="wall container-fluid content-zone last">
+  <div class="row-fluid">
+    <div class="span4 wall-left-col">
+
+      <div class="wall-aside">
+        <div id='radio-side'>
+        {% if radio %} {% include "yabase/app/radio/radio.mustache" %} {% endif %}
         </div>
-        <ul id='webapp-radio-users' class='thumbnails'></ul>
-        <div class='yabutton-small audience-btn float-right'>{% trans "Show all" %}</div>
+        <div class="wall-aside-block">
+          <h2 class="wall-aside-title">Ils écoutent la radio (<span class='listener-count'>0</span>)</h2>
+          <ul class="wall-profiles" id='listeners'></ul>
+          <div class="clearfix"></div>
+          <div class="wall-link-more"><a href="{% if radio %}{% app_url webapp_listeners app_name radio.uuid %}{% endif %}" id='more-listeners'>Tout afficher</a></div>
+        </div>
+
+        <div class="wall-aside-block">
+          <h2 class="wall-aside-title">Ils l'ont ajouté en favori (<span class='fan-count'>0</span>)</h2>
+          <ul class="wall-profiles" id='fans'>
+          </ul>
+          <div class="clearfix"></div>
+          <div class="wall-link-more"><a href="#" id='more-fans'>Tout afficher</a></div>
+        </div>
+
+        <div class="wall-aside-block">
+          <h2 class="wall-aside-title">Créateur de la radio</h2>
+          <div class="wall-owner-container">
+          {% if radio %} {% include "yabase/app/radio/radioCreator.mustache" with creator=radio.creator.get_profile %} {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-<div class='span8'>
-    <div id='radio-infos'>{% if not is_jm_radio %}{% if radio %}{% include "yabase/app/radio/radioInfos.mustache" %} {% endif %}{% endif %}</div>
-    <div class='wall-container'>
-    <div id='webapp-wall-input'>{% if radio %}{% include "yabase/app/radio/wallInput.mustache" %} {% endif %}</div>
-    <div>
-    <ul id='wall'>
-        {% if not wall_events %}
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
-        {% else %}
-        {% for wall_event in wall_events %}
-            {% ifequal wall_event.type "M" %}
-            {% include "yabase/app/radio/wallEvent.message.mustache" %}
+    <div class="span8 wall-right-col">
+      <div class="wall-input-container">
+        <a class="pic pic-circle pic-wide" href="#"><img src="{% if user.is_authenticated %}{% url user_custom_picture request.user.username '45x45' %}{% else %}/media/images/avatars/default_45x45.png{% endif %}" width="45" height="45" alt=""></a>
+        <form class="wall-input">
+          <textarea placeholder="Exprimez-vous..."></textarea>
+          <input class="btn-coral" type="submit" value="Publier" />
+        </form>
+      </div>
+      <div id='wall'>
+        {% for event in wall_events %}
+          <div class='wall-event-container'>
+            {% ifequal event.event_type 'like' %}
+              {% include 'yabase/app/radio/wallEventLike.mustache' %}
+            {% else %}
+              {% include 'yabase/app/radio/wallEventMessage.mustache' %}
             {% endifequal %}
-            {% ifequal wall_event.type "S" %}
-            {% include "yabase/app/radio/wallEvent.song.mustache" %}
-            {% endifequal %}
-            {% ifequal wall_event.type "L" %}
-            {% include "yabase/app/radio/wallEvent.like.mustache" with wall_event=wall_event%}
-            {% endifequal %}
+          </div>
         {% endfor %}
-        {% endif %}
-    </ul>
-    <div class='empty' style='display:none'>{% trans "No post yet, be the first to comment!" %}</div>
+      </div>
+      <div id='pagination-wall'></div>
     </div>
-    <div id='pagination-wall'></div>
-    </div>
+  </div>
 </div>
+
+
 
 <div class="modal hide fade" id="modal-report-abuse">
     <div class="modal-header">

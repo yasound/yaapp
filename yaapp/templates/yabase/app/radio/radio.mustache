@@ -1,33 +1,30 @@
 {% load i18n %}
-   <div id='webapp-radio-picture' class='thumbnail'>
-       <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="210px" height="210px" alt="{{ radio.name|default:'<% name %>' }}"/>
-       <div id='webapp-title-radio'>
-          <h2>{{ radio.name|default:'<% name %>' }} {% trans "by" %}
-          <a id='user' href='{{ root }}profile/{{ radio.creator.username|default:'<%#creator%><% username %>' }}/'>{{ radio.creator.userprofile.name|default:'<% name %><%/creator%>' }}</a>
-          </h2>
-       </div>
-   </div>
-   <div id='webapp-radio-title'>
-        <div class='favorites-nbr-container'>
-          <span class='favorites-nbr'>{{ radio.favorites|default:'<% favorites %>' }}</span>
-          <img src="/media/app/images/icon-star-gradient.png">
-          <div class='favorites-txt'>{% trans "favorites" %}</div>
-        </div>
-   </div>
-	<ul id='radio-actions-container'>
-    {% if radio %}
-      {% ifequal radio.creator request.user %}
-        <li class='wall-first-child'><a href='{{ root }}radio/{{ radio.uuid }}/edit/' id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
-        <li><a href='{{ root }}radio/{{ radio.uuid }}/programming/' id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
-        <li class='wall-last-child'><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
-      {% endifequal %}
-    {% else %}
-  		<%#creator%>
-      <%#owner%>
-  		<li class='wall-first-child'><a href='{{ root }}radio/<%uuid%>/edit/' id="settings-btn"><img src="/media/app/images/radio/radio-icon-settings.png"/><span>{% trans "Settings" %}</span></a></li>
-  		<li><a href='{{ root }}radio/<%uuid%>/programming/' id="programming-btn"><img src="/media/app/images/radio/radio-icon-music.png"/><span>{% trans "Programming" %}</span></a></li>
-      <li class='wall-last-child'><a href="#" id='broadcast-btn'><img src="/media/app/images/radio/radio-icon-message.png"/><span>{% trans "Broadcast to your fans" %}</span></a></li>
-  		<%/owner%>
-      <%/creator%>
-    {% endif %}
-	</ul>
+<div class="wall-pic">
+  <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="150" height="150" alt="{{ radio.name|default:'<% name %>' }}" />
+</div>
+{% if radio %}
+<a href="#" class="wall-fav wall-button btn-sky">{% if radio.favorite %}{% trans "Remove from favorites" %}{% else %}{% trans "Add to favorites" %}{% endif %}</a>
+{% else %}
+<a href="#" class="wall-fav wall-button btn-sky"><%#favorite%>{% trans "Remove from favorites" %}<%/favorite%><%^favorite%>{% trans "Add to favorites" %}<%/favorite%></a>
+{% endif %}
+
+<a href="#" class="wall-button btn-white btn-settings" style='display:none;'>{% trans "Settings" %}</a>
+<a href="#" class="wall-button btn-white btn-programming" style='display:none;'>{% trans "Programming" %}</a>
+<a href="#" class="wall-button btn-green btn-broadcast" style='display:none;'>{% trans "Broadcast to your fans" %}</a>
+
+{% ifequal app_name 'deezer' %}
+<div class='deezer-actions'>
+  <ul>
+     <li><a class="dz-addtoplaylist" dz-id="0" style='display:none;'></a></li>
+     <li><a class="dz-share" dz-id="0" dz-type="artist" style='display:none;'></a></li>
+     <li><a class="dz-library" dz-id="0" dz-type="album" style='display:none;'></a></li>
+  <ul>
+</div>
+{% endifequal %}
+
+<p class="wall-digest">{% if radio %}{{ radio.description|urlize }}{% else %}<%{description%>{% endif %}</p>
+<ul class="wall-numbers">
+  <li><strong>{% if radio %}{{ radio.favorites }}{% else %}<% favorites %> {% endif %}</strong> {% trans "favorites" %}</li>
+  <li><strong>{% if radio %}{{ radio.message_count}}{% else %}<% messages %>{% endif %}</strong> messages</li>
+  <li><strong>{% if radio %}{{ radio.like_count}}{% else %}<% likes %>{% endif %}</strong> j'aime</li>
+</ul>

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load app_url %}
-<div class='span12 no-margin'>
+<div class='span12'>
    <div id='picture'>
        <img src="<% picture %>" width="148px" height="148px"/>
    </div>
@@ -14,18 +14,18 @@
 	    <%/is_friend%>
         <%/owner%>
 	</span>
-    <em class='visible-phone'><% agc %></em>
+    <em class='visible-phone'><% fagc %></em>
     <%^owner%>
-	<button type="button" class="user-btn yabutton-large right" id='follow'>
-    	<%#is_friend%>{% trans "Unfollow" %}<%/is_friend%>
-        <%^is_friend%>{% trans "Follow" %}<%/is_friend%>
-	</button>
+
+  <%#is_friend%><button type="button" class="btn-coral right" id='follow'>{% trans "Unfollow" %}</button><%/is_friend%>
+  <%^is_friend%><button type="button" class="btn-sky right" id='follow'>{% trans "Follow" %}</button><%/is_friend%>
+
     <%/owner%>
     <%#owner%>
     <button type="button" id='logout-btn' class="user-btn yabutton right"><a href='{% url logout %}'>{% trans "Logout" %}</a></button>
     <button type="button" id='settings-btn' class="user-btn yabutton right"><a href='{% app_url webapp_settings app_name %}'>{% trans "Settings" %}</a></button>
     <%/owner%>
-    <em class='hidden-phone'><% agc %></em>
+    <em class='hidden-phone'><% fagc %></em>
     <p class="profile-bio"><% bio_text %></p>
    </div>
 	<div class='separation-high'>

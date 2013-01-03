@@ -8,7 +8,7 @@ from django.db.models.fields import FieldDoesNotExist
 from django.test import TestCase
 from mock import Mock, patch
 from models import NextSong, SongInstance, RADIO_NEXT_SONGS_COUNT, Radio, \
-    RadioUser
+    RadioUser, Announcement
 from task import process_playlists_exec
 from tastypie.models import ApiKey
 from tests_utils import generate_playlist
@@ -494,6 +494,36 @@ class TestFeaturedModels(TestCase):
         self.assertEquals(featured_content1.activated, True)
         self.assertEquals(featured_content2.activated, False)
         self.assertEquals(featured_content3.activated, True)
+
+class TestAnnouncementModels(TestCase):
+    multi_db = True
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.client.login(username="test", password="test")
+        self.user = user
+
+
+    def testActivate(self):
+        an1 = Announcement.objects.create(name_en='name')
+        self.assertEquals(an1.activated, False)
+
+        self.assertIsNone(Announcement.objects.get_current_announcement())
+        an1.activated = True
+        an1.save()
+        self.assertEquals(an1.activated, True)
+        self.assertEquals(Announcement.objects.get_current_announcement().id, an1.id)
+
+        an2 = Announcement.objects.create(name_en='name')
+        self.assertEquals(an2.activated, False)
+
+        an2.activated = True
+        an2.save()
+        an1 = Announcement.objects.get(id=an1.id)
+        self.assertEquals(an1.activated, False)
+        self.assertEquals(Announcement.objects.get_current_announcement().id, an2.id)
+
 
 
 class TestImportPlaylist(TestCase):

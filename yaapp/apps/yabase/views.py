@@ -19,7 +19,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.base import View
 from forms import SettingsRadioForm, NewRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
-    SongMetadata
+    SongMetadata, Announcement
 from shutil import rmtree
 from stats.models import RadioListeningStat
 from task import process_playlists, process_upload_song, async_song_played, async_songs_started
@@ -44,6 +44,7 @@ import yasearch.search as yasearch_search
 from yasearch.models import RadiosManager
 from yageoperm import utils as yageoperm_utils
 from yahistory.models import ProgrammingHistory
+from yawall.models import WallManager
 from account.views import fast_connected_users_by_distance
 import import_utils
 import json
@@ -470,6 +471,10 @@ def radio_likes(request, radio_uuid):
         if radio is not None:
             WallEvent.objects.add_like_event(radio, song, request.user)
 
+    if radio is not None:
+        wm = WallManager()
+        wm.add_event(event_type=WallManager.EVENT_LIKE, radio=radio, user=request.user)
+
     res = '%s (user) likes %s (song)\n' % (request.user, song)
     return HttpResponse(res)
 
@@ -494,16 +499,25 @@ def like_song(request, song_id):
         if radio is not None:
             WallEvent.objects.add_like_event(radio, song, request.user)
 
+            wm = WallManager()
+            wm.add_event(event_type=WallManager.EVENT_LIKE, radio=radio, user=request.user)
+
     res = '%s (user) likes %s (song)\n' % (request.user, song)
     return HttpResponse(res)
 
+
 @csrf_exempt
-@check_api_key(methods=['POST',])
+@check_api_key(methods=['POST'])
 def post_message(request, radio_id):
     message = request.REQUEST.get('message')
     radio = get_object_or_404(Radio, uuid=radio_id)
     radio.post_message(request.user, message)
+
+    wm = WallManager()
+    wm.add_event(event_type=WallManager.EVENT_MESSAGE, radio=radio, user=request.user, message=message)
+
     return HttpResponse(status=200)
+
 
 @check_api_key(methods=['PUT', 'DELETE'])
 def delete_message(request, message_id):
@@ -1304,21 +1318,12 @@ class WebAppView(View):
         return HttpResponse(response, mimetype='application/json')
 
     def home(self, request, context, *args, **kwargs):
-        genre = ''
-        if 'genre' in kwargs:
-            genre = 'style_%s' % (kwargs['genre'])
-
-        radio_data, radio_list, next_url = radio_recommendations_process(request=request, internal=True, genre=genre)
-        context['submenu_number'] = 1
-        context['radios'] = radio_list
-        context['next_url'] = next_url
-        context['base_url'] = reverse('yabase.views.radio_recommendations')
-        context['bdata'] = json.dumps([radio for radio in radio_data], cls=MongoAwareEncoder)
         context['g_page'] = 'home'
-
-        return context, 'yabase/app/home/homePage.html'
+        context['mustache_template'] = 'yabase/app/home/homePage.mustache'
+        return context, 'yabase/app/static.html'
 
     def radio(self, request, context, *args, **kwargs):
+        wm = WallManager()
         radio = get_object_or_404(Radio, uuid=context['current_uuid'])
         radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
@@ -1326,14 +1331,14 @@ class WebAppView(View):
         if radio.current_song:
             context['yasound_song'] = YasoundSong.objects.get(id=radio.current_song.metadata.yasound_song_id)
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
-        wall_events = WallEvent.objects.select_related('user', 'user__userprofile', 'radio').filter(radio=radio).order_by('-start_date')[:15]
+        wall_events = list(wm.events_for_radio(radio.uuid, limit=10))
         context['wall_events'] = wall_events
         context['radio_picture_absolute_url'] = absolute_url(radio.picture_url)
         context['flash_player_absolute_url'] = absolute_url('/media/player.swf')
         context['radio_absolute_url'] = absolute_url(reverse('webapp_default_radio', args=[radio.uuid]))
 
         bdata = {
-            'wall_events': [wall_event.as_dict() for wall_event in wall_events],
+            'wall_events': wall_events,
             'radio': [radio.as_dict(request.user)],
         }
         context['bdata'] = json.dumps(bdata, cls=MongoAwareEncoder)
@@ -1372,6 +1377,7 @@ class WebAppView(View):
         rm = RadiosManager()
         result = rm.search(query)
         context['submenu_number'] = 6
+        context['query'] = query
         return context, 'yabase/app/searchPage.html'
 
     def top(self, request, context, *args, **kwargs):
@@ -1415,6 +1421,14 @@ class WebAppView(View):
     def friends(self, request, context, *args, **kwargs):
         context['submenu_number'] = 3
         context['mustache_template'] = 'yabase/app/friends/friendsPage.mustache'
+        return context, 'yabase/app/static.html'
+
+    def listeners(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/radio/listenersPage.mustache'
+        return context, 'yabase/app/static.html'
+
+    def fans(self, request, context, *args, **kwargs):
+        context['mustache_template'] = 'yabase/app/radio/fansPage.mustache'
         return context, 'yabase/app/static.html'
 
     def profile(self, request, context, *args, **kwargs):
@@ -1730,6 +1744,9 @@ class WebAppView(View):
         if app_name == 'deezer' and settings.LOCAL_MODE == False:
             sound_player = 'deezer'
 
+        announcement = Announcement.objects.get_current_announcement()
+
+
         context = {
             'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
@@ -1743,6 +1760,7 @@ class WebAppView(View):
             'facebook_share_picture': facebook_share_picture,
             'facebook_share_link': facebook_share_link,
             'facebook_channel_url': facebook_channel_url,
+            'genres': yabase_settings.RADIO_STYLE_CHOICES,
             'user_profile': user_profile,
             'import_itunes_form': ImportItunesForm(user=request.user),
             'notification_count': notification_count,
@@ -1767,6 +1785,7 @@ class WebAppView(View):
             'twitter_referal': twitter_referal,
             'email_referal': email_referal,
             'referal_username': referal_username,
+            'announcement': announcement,
             'next': next,
         }
 
@@ -1920,6 +1939,7 @@ class WebAppView(View):
             'import_itunes_form': import_itunes_form,
             'notification_count': notification_count,
             'submenu_number': 1,
+            'genres': yabase_settings.RADIO_STYLE_CHOICES,
             'has_radios': has_radios,
             'genre_form': genre_form,
             'display_associate_facebook': display_associate_facebook,
@@ -2598,8 +2618,10 @@ def radio_picture(request, radio_uuid, size=''):
             picture_url = radio.large_picture_url
         elif size == 'xs':
             picture_url = radio.small_picture_url
-        else:
+        elif size == '':
             picture_url = radio.picture_url
+        else:
+            picture_url = radio.get_picture_url(size)
 
         return HttpResponseRedirect(picture_url)
 
@@ -2661,6 +2683,15 @@ def radio_picture(request, radio_uuid, size=''):
         return HttpResponse(response_data, mimetype="application/json")
     raise Http404
 
+@check_api_key(methods=['GET'], login_required=False)
+def radio_pictures(request, radio_uuid):
+    """
+    return the list of pictures for displaying in the wall
+    """
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    response_data = json.dumps(radio.pictures)
+    return HttpResponse(response_data, mimetype="application/json")
 
 @check_api_key(methods=['GET',], login_required=False)
 def listeners(request, radio_uuid):
@@ -2682,6 +2713,19 @@ def listeners_legacy(request, radio_id):
     #     limit = 100
 
     data, total_count = radio.current_users(limit, skip)
+    response = api_response(data, total_count=total_count, limit=limit, offset=skip)
+    return response
+
+
+@check_api_key(methods=['GET',], login_required=False)
+def fans(request, radio_uuid):
+    """ Return the user who have added the radio as favorite"""
+
+    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
+    skip = int(request.GET.get('skip', 0))
+
+    data, total_count = radio.fans(limit, skip)
     response = api_response(data, total_count=total_count, limit=limit, offset=skip)
     return response
 

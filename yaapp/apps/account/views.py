@@ -650,24 +650,25 @@ def user_friends_add_remove(request, username, friend):
 
 
 @csrf_exempt
-@check_api_key(methods=['GET', 'POST', 'DELETE'])
+@check_api_key(methods=['GET', 'POST', 'DELETE'], login_required=False)
 def user_picture(request, username, size=''):
     """
     RESTful view for handling user picture
     """
-
     user = get_object_or_404(User, username=username)
     user_profile = user.get_profile()
-    if not user_profile:
-        raise Http404
+    if user_profile is None:
+        user_profile = UserProfile()
 
     if request.method == 'GET':
         if size == 'xs':
-            return HttpResponseRedirect(user.get_profile().small_picture_url)
+            return HttpResponseRedirect(user_profile.small_picture_url)
         elif size == 'xl':
-            return HttpResponseRedirect(user.get_profile().large_picture_url)
+            return HttpResponseRedirect(user_profile.large_picture_url)
+        elif size != '':
+            return HttpResponseRedirect(user_profile.custom_picture_url(size))
         else:
-            return HttpResponseRedirect(user.get_profile().picture_url)
+            return HttpResponseRedirect(user_profile.picture_url)
 
     if user != request.user:
         return HttpResponse(status=401)

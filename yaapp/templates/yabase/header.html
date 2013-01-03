@@ -1,0 +1,75 @@
+{% load i18n %}
+{% load app_url %}
+
+<header id="header" class="navbar header-navbar">
+  <div class="wrapper">
+    <div class="container-fluid">
+      <div id="brand-logo">
+        <a class="asset-logo" href="{% app_url webapp app_name %}" id="btn-webapp">YaSound</a>
+      </div>
+      <div id="search-bar">
+        <input type="text" id="search-input" placeholder="{% trans 'Search artist, radio ...' %}" maxlength="25" value="{{ query }}"/>
+        <a href="#" class="asset-glass" id="search-symbol"></a>
+      </div>
+      <nav class="header-nav">
+        <ul>
+          <li><a href="#" class="btn-nav">Découvrir</a></li>
+          {% if request.user.is_authenticated %}
+
+          {% ifnotequal app_name 'deezer' %}
+          <li class="dropdown">
+            <a class="btn-nav btn-hd" data-toggle="dropdown" href="#"><i class="{% if hd_enabled %}asset-hd-on{% else %}asset-hd-off{% endif %}"></i></a>
+            <ul class="dropdown-menu dropdown-bordered" id="gifts-menu">
+              <img src='/media/images/loading-popup.gif' class='loading-mask'/>
+            </ul>
+          </li>
+          {% endifnotequal %}
+          <li class="dropdown">
+            <a class="btn-nav btn-envelope" data-toggle="dropdown" href="#">
+              <i class="asset-envelope"></i>
+              <span class="count-badge {% ifequal notification_count 0 %}hidden{% endifequal %}">{{ notification_count }}</span>
+            </a>
+            <ul class="dropdown-menu" id='notifications-menu'>
+              <img src='/media/images/loading-popup.gif' class='loading-mask'/>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="btn-nav btn-profile" data-toggle="dropdown">
+              <img class="img-circle" src="{{ user_profile.medium_picture_url }}" width="38" height="38" alt="" />
+              <i class="asset-arrow-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-mini" id='profile-menu'>
+              <li><a href="#" class='my-profile'>{% trans "My profile" %}</a></li>
+              <li><a href="#" class='my-radios'>{% trans "My radios" %}</a></li>
+              <li><a href="#" class='my-settings'>{% trans "My settings" %}</a></li>
+              <li><a href="#" class='about'>{% trans "About" %}</a></li>
+              <li><a href="#" class='legal'>{% trans "Legal informations" %}</a></li>
+              <li><a href="#" class='logout'>{% trans "Logout" %}</a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="dropdown">
+            <a href="#" class="btn-nav" data-toggle="dropdown">Se connecter</a>
+            <div class="dropdown-menu">
+              <div class="dropdown-block">
+                <a href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow" class="btn-sky">{% trans 'Login with Twitter' %}</a>
+                <a href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow" class="btn-navy">{% trans 'Login with Facebook' %}</a>
+              </div>
+              <div class="dropdown-block">
+                <form class="dropdown-form" id='login-form' method='post' action="{% app_url webapp_login app_name %}">{% csrf_token %}
+                  <input class="input-text textfield-email" required="required" type="text" name="email" placeholder="{% trans 'Your email' %}" />
+                  <input class="input-text textfield-pwd" type="password" name="password" required="required"  placeholder="{% trans 'Your password' %}" />
+                  <button type="submit" class="btn-coral btn-connect">Connexion</button>
+                  <div class="clearfix"></div>
+                  <div><a class="lost-password" href='{% url lost_password %}'>Mot de passe perdu ?</a></div>
+                </form>
+              </div>
+            </div>
+          </li>
+          <li><a href="#" class="btn-coral btn-register">S'inscrire</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

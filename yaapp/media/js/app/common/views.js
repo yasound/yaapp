@@ -15,7 +15,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     events: {
         'click .radio-cell': 'onRadio',
         'mouseover .radio-cell': 'onHover',
-        'mouseleave .radio-cell': 'onLeave'
+        'mouseleave .radio-cell': 'onLeave',
+        'mouseenter .tip-btn': 'showTip'
     },
 
     initialize: function () {
@@ -119,6 +120,108 @@ Yasound.Views.RadioCell = Backbone.View.extend({
 
         var genre = this.model.genre();
         $('.tag', this.el).html(genre + '<div class="tag-right-side"></div>');
+    },
+
+    showTip: function(e) {
+        var $source = $(e.currentTarget),
+            $cell = this.$('.radio-cell');
+
+        if($cell.hasClass('open')) return;
+        else $cell.addClass('open');
+
+        this.tip = new Yasound.Views.RadioCellTip({ model: this.model, $source: $source }).render();
+        var $cellInfo = this.$('.radio-cell-info');
+        var offset = $cellInfo.offset();
+        offset.width = $cellInfo[0].offsetWidth;
+        offset.height = $cellInfo[0].offsetHeight;
+        this.tip.show(offset);
+    }
+
+});
+
+Yasound.Views.RadioCellTip = Backbone.View.extend({
+    tagName: 'div',
+    className: 'radio-cell-tip',
+
+    events: {
+        'mouseleave': 'hide',
+        'click .main-button a' : 'onDisplayRadio'
+    },
+
+    initialize: function () {
+        _.bindAll(this, 'show', 'hide');
+        this.options.$source.on('click mouseleave', this.hide);
+        this.currentSongModel = new Yasound.Data.Models.CurrentSong();
+        this.currentSongModel.bind('change', this.refreshCurrentSong, this);
+    },
+
+    onClose: function () {
+        this.currentSongModel.unbind('change', this.refreshCurrentSong);
+        this.currentSongModel.onClose();
+        delete this.currentSongModel;
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        this.$el.html(ich.radioCellTipTemplate(data));
+
+        this.currentSongModel.set('radioId', this.model.get('id'));
+        this.currentSongModel.fetch();
+
+        return this;
+    },
+
+    show: function(offset) {
+
+        $('body').append(this.$el);
+
+        // Dynamic tip position.
+        var actualWidth = this.$el[0].offsetWidth;
+        var actualHeight = this.$el[0].offsetHeight;
+
+        var pos = { top: offset.top + offset.height, left: offset.left + offset.width / 2 - actualWidth / 2 };
+        // Top: Maybe @todo
+        // else pos = { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 };
+
+        this.$el.offset(pos);
+    },
+
+    hide: function(e) {
+        if($(e.toElement).closest('.radio-cell-tip, .tip-btn').length > 0 && e.originalEvent.type !== 'click') return;
+        this.options.$source.off('mouseleave', this.hide);
+        this.off('click mouseleave', this.hide);
+        this.options.$source.closest('.radio-cell').removeClass('open');
+        this.close();
+    },
+
+    refreshCurrentSong: function(e) {
+        var $name = $('.track-info span', this.el);
+        var $artist = $('.track-info strong', this.el);
+        var name = this.currentSongModel.get('name');
+        var artist =  this.currentSongModel.get('artist');
+        var cover = this.currentSongModel.get('cover');
+        if (!name) {
+            name = '&nbsp;';
+        }
+        if (!artist) {
+            artist = '&nbsp;';
+        }
+        $name.html(name);
+        $artist.html(artist);
+
+        var img = $('.track-info img', this.el);
+        img.attr('src', cover);
+    },
+
+    onDisplayRadio: function (e) {
+        e.preventDefault();
+
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
+
+        this.hide();
     }
 });
 
@@ -327,7 +430,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
     initialize: function () {
         this.model.bind('change', this.render, this);
         _.bindAll(this, 'render',
-            'onVolumeSlide',
+            //'onVolumeSlide',
             'togglePlay',
             'favorite',
             'onPlayerPlay',
@@ -371,18 +474,18 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         this.loginView = new Yasound.Views.LogIn({}).render();
 
 
-        var volumeSlider = $('#volume-slider');
+        /*var volumeSlider = $('#volume-slider');
         volumeSlider.slider({
             range: "min",
             min: 0,
             max: 100
         });
-        volumeSlider.bind("slide", this.onVolumeSlide);
+        volumeSlider.bind("slide", this.onVolumeSlide);*/
 
         if (Yasound.App.player.isPlaying()) {
             $('#play-btn i').removeClass('icon-play').addClass('icon-pause');
         }
-        volumeSlider.slider('value', Yasound.App.player.volume());
+        //volumeSlider.slider('value', Yasound.App.player.volume());
 
         var radio = Yasound.App.Router.currentRadio;
         if (radio && radio.get('favorite')) {
@@ -431,9 +534,9 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         }
     },
 
-    onVolumeSlide: function(e, ui) {
+    /*onVolumeSlide: function(e, ui) {
         Yasound.App.player.setVolume(ui.value);
-    },
+    },*/
 
     like: function (e) {
         e.preventDefault();
@@ -482,7 +585,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
         if ($('#hd-box-container').is(":visible")) {
             return;
         }
-        $('#hd-promocode input', this.el).val('')
+        $('#hd-promocode input', this.el).val('');
         $('#hd-box-container', this.el).show();
         $('#hd-box-container', this.el).one('mousenter', this.displayPopupHD);
 
@@ -530,7 +633,7 @@ Yasound.Views.CurrentSong = Backbone.View.extend({
                     radio_uuid: that.radio.get('uuid')
                 }
             });
-        }
+        };
         this.pingIntervalId = setInterval(function () {
             sendPing();
         }, 10*1000);
@@ -850,7 +953,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         "click #play-btn"           : "togglePlay",
         "click #responsive-love-btn": "like",
         "click #responsive-song"    : "displayRadio",
-        "click .responsive-infos"   : "displayRadio"
+        "click .responsive-infos"   : "displayRadio",
+        'click .dropdown-genre ul li a': 'onGenre'
     },
 
     initialize: function() {
@@ -866,8 +970,8 @@ Yasound.Views.SubMenu = Backbone.View.extend({
     render: function() {
         this.reset();
         var jsonModel = this.model.toJSON();
-        $(this.el).html('');
-        $(this.el).html(ich.subMenuTemplate(jsonModel));
+        // $(this.el).html('');
+        // $(this.el).html(ich.subMenuTemplate(jsonModel));
         this.mobileMenuShareView = new Yasound.Views.MobileMenuShare({}).render(jsonModel);
 
         $('#profile-picture img', this.el).imgr({size:"2px",color:"white",radius:"50%"});
@@ -890,36 +994,14 @@ Yasound.Views.SubMenu = Backbone.View.extend({
         $.subscribe('/player/play', this.onPlayerPlay);
         $.subscribe('/player/stop', this.onPlayerStop);
 
+        $('.dropdown-genre ul li', this.el).first().hide();
         return this;
     },
     selectMenu: function(menu) {
-        $("#sub-header-nav li", this.el).removeClass('selected');
-        $("#" + menu, this.el).parent().addClass('selected');
-        var $pointer = $('#sub-header-pointer', this.el);
-
-        var menuNumber = 0;
-        if (menu == 'selection') {
-            menuNumber = 1;
-        } else if (menu == 'top') {
-            menuNumber = 2;
-        } else if (menu == 'friends') {
-            menuNumber = 3;
-        } else if (menu == 'favorites') {
-            menuNumber = 4;
-        } else if (menu == 'my-radios') {
-            menuNumber = 5;
-        } else if (menu == 'search') {
-            menuNumber = 6;
-        } else {
-            $pointer.fadeOut(200);
-        }
-
-        if (menuNumber !== 0) {
-            $pointer.fadeIn(200);
-            $pointer.removeClass().addClass('menu' + menuNumber);
-        }
-
+        $(".btn-group a", this.el).removeClass('active');
+        $("#" + menu, this.el).addClass('active');
     },
+
     selection: function(e) {
         e.preventDefault();
 
@@ -1020,8 +1102,23 @@ Yasound.Views.SubMenu = Backbone.View.extend({
                 });
             }
         }
-    }
+    },
 
+    onGenre: function (e) {
+        e.preventDefault();
+        var value = $(e.target).data('genre');
+        $('.btn-select', this.el).text(text);
+        var first = $('.dropdown-genre ul li', this.el).first();
+        if (value !== '') {
+            first.show();
+            var text = $(e.target).text();
+            $('.btn-select', this.el).html(text + ' <i class="asset-select">');
+        } else {
+            first.hide();
+            $('.btn-select', this.el).html(gettext('Sort by genre') + ' <i class="asset-select">');
+        }
+        $.publish('/submenu/genre', value);
+    }
 });
 
 Yasound.Views.SelectedGenre = Backbone.View.extend({
@@ -1052,7 +1149,7 @@ Yasound.Views.SelectedGenre = Backbone.View.extend({
     },
 
     setVisible: function (visible, menu) {
-        this.menu = menu
+        this.menu = menu;
         this.visible = visible;
         this.render();
     },
@@ -1063,6 +1160,6 @@ Yasound.Views.SelectedGenre = Backbone.View.extend({
             return;
         }
         this.render();
-    },
+    }
 
 });

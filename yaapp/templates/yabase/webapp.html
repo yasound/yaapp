@@ -3,8 +3,14 @@
 {% load compressed %}
 {% load compress %}
 {% load app_url %}
-{% load straight_include %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{current_locale}}" lang="{{current_locale}}">
+{% load straight_include %}<!DOCTYPE html>
+
+<!--[if lt IE 7 ]><html class="ie ie6"><![endif]-->
+<!--[if IE 7 ]><html class="ie ie7"><![endif]-->
+<!--[if IE 8 ]><html class="ie ie8"><![endif]-->
+<!--[if IE 9 ]><html class="ie ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html xml:lang="{{current_locale}}" lang="{{current_locale}}"><!--<![endif]-->
+
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasound: http://ogp.me/ns/fb/yasound#">
     <title>{% block head_title %}{% trans 'YaSound - Create your social web radio instantly' %}{% endblock %}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -42,9 +48,7 @@
     </script>
 <![endif]-->
 
-
 <!--[if lt IE 9]>
-<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
 <script type="text/javascript" type="text/javascript" src="/media/js/flot/excanvas.min.js"></script>
 <![endif]-->
 
@@ -176,6 +180,8 @@ HTML, BODY { height: 100%; }
 	<![endif]-->
 
     {% compress js %}
+    <script type="text/javascript" src='/media/js/app/header/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/footer/views.js'></script>
     <script type="text/javascript" src='/media/js/app/common/models.js'></script>
     <script type="text/javascript" src='/media/js/app/common/views.js'></script>
     <script type="text/javascript" src='/media/js/app/mobileMenus/views.js'></script>
@@ -197,8 +203,8 @@ HTML, BODY { height: 100%; }
     <script type="text/javascript" src='/media/js/app/profile/views.js'></script>
     <script type="text/javascript" src='/media/js/app/settings/views.js'></script>
     <script type="text/javascript" src='/media/js/app/settings/models.js'></script>
-    <script type="text/javascript" src='/media/js/app/notifications/views.js'></script>
     <script type="text/javascript" src='/media/js/app/notifications/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/notifications/views.js'></script>
     <script type="text/javascript" src='/media/js/app/users/views.js'></script>
     <script type="text/javascript" src='/media/js/app/users/models.js'></script>
     <script type="text/javascript" src='/media/js/app/programming/models.js'></script>
@@ -256,7 +262,11 @@ HTML, BODY { height: 100%; }
        {% endif %}
 
        var g_language_code = '{{request.LANGUAGE_CODE}}';
-       var g_jm_radio = '{{ jm_radio_uuid }}';
+       {% if announcement %}
+       var g_announcement_id = {{ announcement.id }};
+       {% else %}
+       var g_announcement_id;
+       {% endif %}
     </script>
 
 
@@ -269,17 +279,25 @@ HTML, BODY { height: 100%; }
    <script type="text/html" id="giftTemplate">
       {% include "yabase/app/gifts/gift.mustache" %}
    </script>
+   <script type="text/html" id="giftDigestTemplate">
+      {% include "yabase/app/gifts/giftDigest.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestLastTemplate">
+      {% include "yabase/app/gifts/giftDigestLast.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestHDTemplate">
+      {% include "yabase/app/gifts/giftDigestHD.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestPromocodeTemplate">
+      {% include "yabase/app/gifts/giftDigestPromocode.mustache" %}
+   </script>
    <script type="text/html" id="radioInlineTemplate">
       {% include "yabase/app/programming/radioInline.mustache" with radio=None %}
    </script>
 
 
    <script type="text/html" id="trackTemplate">
-      {% ifequal app_name 'deezer' %}
-      {% include "yabase/app/track_deezer.mustache" with yasound_song=None %}
-      {% else %}
       {% include "yabase/app/track.mustache" with yasound_song=None %}
-      {% endifequal %}
    </script>
 
    <script type="text/html" id="signupPageTemplate">
@@ -300,25 +318,22 @@ HTML, BODY { height: 100%; }
    </script>
 
    <script type='text/html' id='radioPageTemplate'>
-     {% include "yabase/app/radio/radioPage.mustache" with wall_events=None%}
-   </script>
-
-   <script type='text/html' id='jmHeaderTemplate'>
-     {% include "yabase/app/radio/jmHeader.mustache" %}
+     {% include "yabase/app/radio/radioPage.mustache" with wall_events=None radio=radio%}
    </script>
 
    <script type='text/html' id='radioInfosTemplate'>
      {% include "yabase/app/radio/radioInfos.mustache" with radio=None%}
    </script>
 
-   <script type="text/html" id="wallEventTemplateMessage">
-      {% include "yabase/app/radio/wallEvent.message.mustache" %}
+   <script type='text/html' id='radioCreatorTemplate'>
+     {% include "yabase/app/radio/radioCreator.mustache" with creator=None %}
    </script>
-   <script type="text/html" id="wallEventTemplateLike">
-      {% include "yabase/app/radio/wallEvent.like.mustache" %}
+
+   <script type="text/html" id="wallEventLikeTemplate">
+      {% include "yabase/app/radio/wallEventLike.mustache" %}
    </script>
-   <script type="text/html" id="wallEventTemplateSong">
-      {% include "yabase/app/radio/wallEvent.song.mustache" %}
+   <script type="text/html" id="wallEventMessageTemplate">
+      {% include "yabase/app/radio/wallEventMessage.mustache" %}
    </script>
 
    <script type="text/html" id="radioUserTemplate">
@@ -329,13 +344,12 @@ HTML, BODY { height: 100%; }
      {% include "yabase/app/pagination.mustache" %}
    </script>
 
-
    <script type='text/html' id='radioCellTemplate'>
-      {% ifequal app_name 'deezer' %}
-        {% include "yabase/app/radioCell_deezer.mustache" %}
-      {% else %}
-        {% include "yabase/app/radioCell.mustache" %}
-      {% endifequal %}
+      {% include "yabase/app/radioCell.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioCellTipTemplate'>
+     {% include "yabase/app/radioCellTip.mustache" %}
    </script>
 
    <script type='text/html' id='userCellTemplate'>
@@ -347,11 +361,19 @@ HTML, BODY { height: 100%; }
    </script>
 
    <script type='text/html' id='homePageTemplate'>
-     {% include "yabase/app/home/homePage.mustache" with radio=None %}
+     {% include "yabase/app/home/homePage.mustache" with selection=None top=None favorite=None%}
    </script>
 
    <script type="text/html" id="connectedUserTemplate">
       {% include "yabase/app/common/connectedUser.mustache" with user=None%}
+   </script>
+
+   <script type='text/html' id='friendActivityTemplate'>
+     {% include "yabase/app/home/friendActivity.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioActivityTemplate'>
+     {% include "yabase/app/home/radioActivity.mustache" %}
    </script>
 
    <script type="text/html" id="subMenuTemplate">
@@ -387,6 +409,10 @@ HTML, BODY { height: 100%; }
      {% include "yabase/app/radio/listenersPage.mustache" %}
    </script>
 
+   <script type='text/html' id='fansPageTemplate'>
+     {% include "yabase/app/radio/fansPage.mustache" %}
+   </script>
+
    <script type='text/html' id='favoritesPageTemplate'>
      {% include "yabase/app/favorites/favoritesPage.mustache" %}
    </script>
@@ -411,6 +437,43 @@ HTML, BODY { height: 100%; }
    <script type="text/html" id="notificationTemplate">
       {% include "yabase/app/notifications/notification.mustache" %}
    </script>
+
+   <script type="text/html" id="notificationDigestTemplate">
+      {% include "yabase/app/notifications/notificationDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationFriendOnlineDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendOnlineDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationMessageInWallDigestTemplate">
+      {% include "yabase/app/notifications/notificationMessageInWallDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationAddedFavoriteDigestTemplate">
+      {% include "yabase/app/notifications/notificationAddedFavoriteDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationSongLikedDigestTemplate">
+      {% include "yabase/app/notifications/notificationSongLikedDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationFriendCreatedRadioDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendCreatedRadioDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationFriendInRadioDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendInRadioDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationUserInRadioDigestTemplate">
+      {% include "yabase/app/notifications/notificationUserInRadioDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationRadioSharedDigestTemplate">
+      {% include "yabase/app/notifications/notificationRadioSharedDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationDigestLastTemplate">
+      {% include "yabase/app/notifications/notificationDigestLast.mustache" %}
+   </script>
+
 
    <script type="text/html" id="programmingPageTemplate">
       {% include "yabase/app/programming/programmingPage.mustache" %}
@@ -521,41 +584,7 @@ HTML, BODY { height: 100%; }
    }(document));
  </script>
 
-
-
-    <div class="navbar navbar-fixed-top" id='header'>
-      <div class="navbar-inner">
-        <div class="container">
-      <div id="brand-logo" >
-				<a href="{% app_url webapp app_name %}" id='btn-webapp'>
-          {% ifequal app_name 'deezer' %}
-          <img src="/media/images/logos/yasound-inline-grey.png" alt="Logo Yasound">
-          {% else %}
-          <img src="/media/app/images/yasound-logo.png" width="110" height="86" alt="Logo Yasound">
-          {% endifequal %}
-				</a>
-			</div>
-      <div id="mobile-menu-logo">
-        <a id='mobile-menu-btn-logo'>
-          <img src="/media/app/images/brand-logo.png" width="138" height="23" alt="Logo Yasound">
-        </a>
-      </div>
-      <div id='mobile-menu' class='visible-phone responsive-settings-btn'>
-        <a id= 'mobile-menu-btn'>
-          <img src="/media/app/images/phone-settings-icon.png" alt='phone settings icon'>
-        </a>
-      </div>
-      <div class='visible-phone responsive-settings-btn2'>
-        <div id="hd-button-mobile" class='hd-disabled'>
-            &nbsp;
-        </div>
-      </div>
-            <div id='player'>
-            </div>
-		</div>
-	</div>
-	</div>
-	<div id='submenu-container' >{% include 'yabase/app/common/subMenu.mustache' with static=1%}</div>
+{% include 'yabase/header.html' %}
 
 <div class="modal hide fade" id="modal-share">
     <div class="modal-header">
@@ -655,39 +684,15 @@ HTML, BODY { height: 100%; }
     </div>
 </div>
 
-<div id='hommage-bg' class='hidden-phone'></div>
-
-
-<div id='webapp-container-parent'>
-<div id='webapp-container'>
-  <div id='selected-genre' style='display:none;'><span>Genre selectionné<span></div>
-  {% include "yabase/app/mobileLeftMenu.html" %}
-  {% include "yabase/app/mobileCenterMenu.html" %}
-
-  <div class='container hidden-phone' id='hommage' {% if is_jm_radio %}style='display:none;'{% endif%}>
-    <div class='row'>
-      <div class='span3'>
-          <img src='/media/images/jm/jm.png' width='176' height='260' alt="{% trans 'Jean-Marc Plueger' %}"/>
-      </div>
-      <div class='span4'>
-          <img src='/media/images/jm/text.png' width='298' height='260' alt="{% trans 'Jean-Marc Plueger - 1966 - 2012' %}"/>
-      </div>
-      <div class='span5'>
-          <a href="{% url webapp_default_radio jm_radio_uuid %}" data-uuid='{{ jm_radio_uuid }}'><img data-uuid='{{ jm_radio_uuid }}' src='/media/images/jm/button-{{request.LANGUAGE_CODE}}.png' width='275' height='55' alt="{% trans 'Goto radio' %}"/></a>
-      </div>
-    </div>
+<div class="wrapper" id='main-content'>
+  {% include "yabase/teaser.html" %}
+  {% include 'yabase/app/common/subMenu.mustache' with static=1%}
+  <div class='content'>
+  {% block content%}{%endblock%}
   </div>
-
-
-  {% block content%}{%endblock%}</div>
 </div>
-<div id='pre-footer'>&nbsp;</div>
-<div id='footer'>
-  {% ifequal app_name 'deezer' %}
-  {% include "yabase/app/footer_deezer.html" %}
-  {% else %}
-  {% include "yabase/app/footer.html" %}
-  {% endifequal %}
+
+{% include "yabase/app/footer.html" %}
 </body>
 {% endblock %}
 

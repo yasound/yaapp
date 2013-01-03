@@ -15,6 +15,7 @@ Contents:
    yabase
    yametrics
    radioways
+   yawall/yawall
 
 Indices and tables
 ==================

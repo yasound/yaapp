@@ -7,13 +7,11 @@
 Namespace('Yasound.Views');
 
 Yasound.Views.Teaser = Backbone.View.extend({
-    el: '#hommage',
+    el: '.teaser',
     events: {
-        // 'click #teaser-signup-later-btn'    : 'slideUp',
-        // 'click #teaser-signup-now-btn'      : 'signup',
-        // 'click #teaser-listen p a'          : 'listen',
-        // 'click #teaser-create p a'          : 'create',
-        // 'click #teaser-share p a'           : 'share'
+        'click a.teaser-close': 'slideUp',
+        'mouseover .paginate a': 'onArgumentChanged',
+        'click .paginate a': 'onArgumentChanged'
     },
 
     initialize: function() {
@@ -24,9 +22,7 @@ Yasound.Views.Teaser = Backbone.View.extend({
         if (Yasound.App.isMobile) {
             return;
         }
-
-        $('#teaser-bg').show();
-        $('#teaser').show();
+        this.$el.show();
         return this;
     },
 
@@ -35,35 +31,26 @@ Yasound.Views.Teaser = Backbone.View.extend({
             e.preventDefault();
             cookies.set('hideteaser', true);
         }
-        $('#hommage-bg').hide();
-        this.$el.hide();
+        this.$el.slideUp();
     },
 
-    listen: function (e) {
+    onArgumentChanged: function(e) {
         e.preventDefault();
-        Yasound.App.Router.navigate('top/', {
-            trigger: true
-        });
-    },
 
-    create: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('radios/', {
-            trigger: true
-        });
-    },
+        var paginateLinks = this.$('.paginate a'),
+            args = this.$('.argument'),
+            newIndex = $(e.currentTarget).text(),
+            oldIndex = paginateLinks.filter('.active').text();
 
-    share: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('friends/', {
-            trigger: true
-        });
-    },
+        if(newIndex === oldIndex) {
+            return;
+        }
 
-    signup: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('signup/', {
-            trigger: true
-        });
+        $(paginateLinks[oldIndex-1]).removeClass('active');
+        $(paginateLinks[newIndex-1]).addClass('active');
+        $(args[newIndex-1]).addClass('show');
+        $(args[oldIndex-1]).removeClass('show');
+        
     }
+
 });

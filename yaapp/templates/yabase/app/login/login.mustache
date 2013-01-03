@@ -1,39 +1,47 @@
 {% load i18n %}
 
-<div class='row'>
-    <div class='span12 signup-container'>
-        <h2>{% trans "Welcome to Yasound" %}</h2>
-        <h3><a class='mobile-signin-link'href="#">{% trans 'Not registered yet ? Create an account' %}</a></h3>
-        <h3>{% trans 'Login with Facebook or Twitter' %}</h3>
-        <div class='signup-btns'>
-            <div class="signup-btn-fbk">
+<div class="container-fluid content-zone">
+    <div class='row-fluid'>
+        <div class='span12 signup-container'>
+            <h1>{% trans "Welcome to Yasound" %}</h1>
+            <h2><a class='mobile-signin-link'href="#">{% trans 'Not registered yet ? Create an account' %}</a></h2>
+            <h2>{% trans 'Login with Facebook or Twitter' %}</h2>
+            <div class='signup-btns'>
+                <div class="signup-btn-fbk">
+                        {% ifequal app_name 'deezer' %}
+                        <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
+                        <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
+                        {% else %}
+                        <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
+                        <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
+                        {% endifequal %}
+                </div>
+                <div class="signup-btn-twitter">
                     {% ifequal app_name 'deezer' %}
-                    <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
-                    <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
+                        <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
+                        <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
                     {% else %}
-                    <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
-                    <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
+                        <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
+                        <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
                     {% endifequal %}
-            </div>
-            <div class="signup-btn-twitter">
-                {% ifequal app_name 'deezer' %}
-                    <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
-                    <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
-                {% else %}
-                    <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
-                    <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
-                {% endifequal %}
+                </div>
             </div>
         </div>
-        <div id="signup-separation-line">&nbsp;</div>
-        <h3>{% trans 'Email login' %}</h3>
-        <form id='login-form' method='post'>{% csrf_token %}
-            <div id="signup-input">
-                <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
-                <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
-                <input id="signup-save-btn" type="submit" value="{% trans 'Login' %}" />
-            </div>
-        </form>
-        <a class='mobile-lost-password'>{% trans 'Lost password ?'}</a>
+    </div>
+</div>
+
+<div class="container-fluid content-zone last">
+    <div class='row-fluid'>
+        <div class='span12 signup-container'>
+            <h2>{% trans 'Email login' %}</h2>
+            <form id='login-form' method='post'>{% csrf_token %}
+                <div id="signup-input">
+                    <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
+                    <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
+                    <input id="signup-save-btn" type="submit" value="{% trans 'Login' %}" />
+                </div>
+            </form>
+            <a href='{% url lost_password %}' id='lost-password'>{% trans 'Lost password ?' %}</a>
+        </div>
     </div>
 </div>

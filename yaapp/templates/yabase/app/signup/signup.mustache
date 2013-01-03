@@ -2,10 +2,12 @@
 {% load app_url %}
 
 {% if request.user.is_anonymous %}
-<div class='row'>
+
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
     <div class='span12 signup-container'>
-        <h2>{% trans "Create your Yasound account" %}</h2>
-        <h3>{% trans 'Quick registration with Facebook or Twitter' %}</h3>
+        <h1>{% trans "Create your Yasound account" %}</h1>
+        <h2>{% trans 'Quick registration with Facebook or Twitter' %}</h2>
         <div class='signup-btns'>
             <div class="signup-btn-fbk">
                     {% ifequal app_name 'deezer' %}
@@ -26,8 +28,14 @@
                     {% endifequal %}
     	    </div>
 	    </div>
-		<div id="signup-separation-line">&nbsp;</div>
-        <h3>{% trans 'Email registration' %}</h3>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <div class='span12 signup-container'>
+        <h2>{% trans 'Email registration' %}</h2>
 	    <form id='signup-form' method='post'>{% csrf_token %}
 	        <div id="signup-input">
                 <input placeholder="{% trans 'Choose a user name' %}" required="required" type="text" name="username">
@@ -39,6 +47,7 @@
 	        </div>
 	    </form>
     </div>
+  </div>
 </div>
 
 <div class="modal hide fade" id="modal-after-signup">
@@ -58,9 +67,10 @@
 
 
 {% else %}
-<div class='row'>
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
     <div class='span12'>
-        <h2>{% trans "Create your Yasound account" %}</h2>
+        <h1>{% trans "Create your Yasound account" %}</h1>
 
         <p class='lead'>{% trans "You are currently logged as" %} <a href='{% app_url webapp_profile app_name request.user.username %}'>{{ request.user.get_profile }}</a></p>
         {% url logout as logout_url %}
@@ -71,5 +81,6 @@
         {% endblocktrans %}
 
     </div>
+  </div>
 </div>
 {% endif %}

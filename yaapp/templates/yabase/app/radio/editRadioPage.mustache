@@ -1,13 +1,22 @@
 {% load i18n %}
 {% load app_url %}
 
-<div class='row-fluid'>
-    <div class='span12 settings-container'>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12'>
         <div class='btn-group right' id='edit-radio-toolbar'>
-            <button type="button" class="yabutton-small" id='listen-btn'>{% trans "Listen now" %}</button>
-            <button type="button" class="yabutton-small" id='programming-btn'>{% trans "Programming" %}</button>
+            <button type="button" class="btn-sky" id='listen-btn'>{% trans "Listen now" %}</button>
+            <button type="button" class="btn-green" id='programming-btn'>{% trans "Programming" %}</button>
         </div>
-        <h1>{% trans "Radio settings" %}</h1>
+        <h1>{% trans "Settings" %}</h1>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <div class='span12'>
         <div class='settings-content-container'>
             <div class='upload-container'>
                 <div class='upload-content yabutton-small'>
@@ -47,4 +56,4 @@
         </div>
     </div>
 </div>
-
+</div>

@@ -28,6 +28,9 @@ $(document).ready(function () {
     Yasound.App.RADIO_ORIGIN_YASOUND = 0; // constant, radio.origin=0 means radioways radio
     Yasound.App.RADIO_ORIGIN_RADIOWAYS = 1; // constant, radio.origin=1 means radioways radio
     Yasound.App.LanguageCode = g_language_code;
+    Yasound.App.announcementId = g_announcement_id;
+    Yasound.App.CONTENT_EL = '.content';
+    Yasound.App.CONTENT_HTML = "<div class='content'/>";
 
     if (cookies.get('radio') && !Yasound.App.ignoreRadioCookie) {
         Yasound.App.defaultRadioUUID = cookies.get('radio');
@@ -218,6 +221,7 @@ $(document).ready(function () {
             "radio/:uuid/programming/": "programming",
             "radio/:uuid/edit/": "editRadio",
             "radio/:uuid/listeners/": "listeners",
+            "radio/:uuid/fans/": "fans",
             "signup/": "signup",
             "signup/*args": "signup",
             "login/": "login",
@@ -299,6 +303,7 @@ $(document).ready(function () {
                 if (this.commonContext.teaserView) {
                     this.commonContext.teaserView.slideUp();
                 }
+                $('#main-content').append(Yasound.App.CONTENT_HTML);
             }
             this.alreadyLoaded = true;
 
@@ -308,13 +313,6 @@ $(document).ready(function () {
                     currentSong: new Yasound.Data.Models.CurrentSong()
                 };
 
-                this.radioContext.currentSongView = new Yasound.Views.CurrentSong({
-                    model: this.radioContext.currentSong,
-                    radio: this.currentRadio,
-                    el: $('#player')
-                }).render();
-                this.radioContext.currentSongView.radio = this.currentRadio;
-
                 this.currentRadio.on('change:id', function (model, id) {
                     var origin = model.get('origin');
                     model.currentSong = that.radioContext.currentSong;
@@ -323,6 +321,7 @@ $(document).ready(function () {
                     that.radioContext.currentSong.fetch();
                     that.radioContext.currentSong.set('buy_link', '/api/v1/radio/' + id + '/buy_link/');
                     that.pushManager.monitorRadio(model);
+                    $.publish('/current_radio/change', model);
                 });
 
                 this.radioContext.radioUUID = 0;
@@ -335,7 +334,6 @@ $(document).ready(function () {
                 this.currentView.close();
                 this.currentView = undefined;
             }
-            $('#webapp-container').append("<div class='container' id='webapp-content'/>");
             $('html, body').scrollTop(0);
 
 
@@ -363,23 +361,24 @@ $(document).ready(function () {
                 this.commonContext.mobileMenuView = new Yasound.Views.MobileMenu({}).render();
                 this.commonContext.mobileMenuLogoView = new Yasound.Views.MobileMenuLogo({}).render();
                 this.commonContext.searchMenuView = new Yasound.Views.SearchMenu({}).render();
-                this.commonContext.connectedUsersView = new Yasound.Views.ConnectedUsers({}).render();
+                this.commonContext.headerView = new Yasound.Views.Header({}).render();
+                this.commonContext.footerView = new Yasound.Views.Footer({}).render();
 
                 if (Yasound.App.appName !== 'deezer') {
                     this.commonContext.publicStatsView = new Yasound.Views.PublicStats({});
                 }
 
-                // if (!Yasound.App.userAuthenticated) {
-                //     if (!cookies.get('hideteaser')) {
-                //         this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
-                //     }
-                // }
-                this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+                if (!Yasound.App.userAuthenticated) {
+                    if (!cookies.get('hideteaser')) {
+                        this.commonContext.teaserView = new Yasound.Views.Teaser({}).render();
+                    }
+                }
+
                 this.currentRadio.on('change:stream_url', this.commonContext.streamFunction);
 
 
                 this.commonContext.subMenuView = new Yasound.Views.SubMenu({
-                    el: '#submenu-container',
+                    el: '.sub-menu',
                     model: this.radioContext.currentSong,
                     radio: this.currentRadio
                 }).render();
@@ -398,7 +397,7 @@ $(document).ready(function () {
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.HomePage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(genre);
 
             Yasound.Utils.enableFX();
@@ -408,7 +407,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.SettingsPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
@@ -416,21 +415,21 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.NotificationsPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
         programming: function (uuid) {
             this.clearView('my-radios');
             this.currentView = new Yasound.Views.ProgrammingPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(uuid);
         },
 
         editRadio: function (uuid) {
             this.clearView('my-radios');
             this.currentView = new Yasound.Views.EditRadioPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(uuid);
         },
 
@@ -439,7 +438,7 @@ $(document).ready(function () {
             this.clearView('search');
 
             this.currentView = new Yasound.Views.SearchPage({
-                el: '#webapp-content'
+                el: '.content'
             }).render(query);
         },
 
@@ -454,14 +453,14 @@ $(document).ready(function () {
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.FavoritesPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(genre);
         },
 
         userFavorites: function (username) {
             this.clearView();
             this.currentView = new Yasound.Views.UserFavoritesPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render('', username);
         },
 
@@ -474,7 +473,7 @@ $(document).ready(function () {
             }
             var genre =  this.commonContext.subMenuView.currentGenre();
             this.currentView = new Yasound.Views.TopRadiosPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(genre);
         },
 
@@ -483,7 +482,7 @@ $(document).ready(function () {
             this.clearView('friends');
 
             this.currentView = new Yasound.Views.FriendsPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
@@ -492,7 +491,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.UserFriendsPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(username);
         },
 
@@ -500,7 +499,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.UserFollowersPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(username);
         },
 
@@ -509,7 +508,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.UserRadiosPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render('', username);
         },
 
@@ -518,7 +517,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.UserLikesPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(username);
         },
 
@@ -527,7 +526,15 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.ListenersPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
+            }).render(uuid);
+        },
+
+        fans: function (uuid) {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.FansPage({
+                el: Yasound.App.CONTENT_EL
             }).render(uuid);
         },
 
@@ -539,7 +546,7 @@ $(document).ready(function () {
 
             this.currentView = new Yasound.Views.UsersPage({
                 collection: users,
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
@@ -549,7 +556,7 @@ $(document).ready(function () {
 
             this.currentView = new Yasound.Views.ProfilePage({
                 model: new Yasound.Data.Models.User({username:username}),
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             });
             this.currentView.model.fetch();
         },
@@ -561,7 +568,7 @@ $(document).ready(function () {
 
             this.currentView = new Yasound.Views.RadioPage({
                 model: this.currentRadio,
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             });
 
             this.radioContext.radioUUID = 0;
@@ -575,7 +582,7 @@ $(document).ready(function () {
             var genre =  this.commonContext.subMenuView.currentGenre();
 
             this.currentView = new Yasound.Views.MyRadiosPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(genre);
         },
 
@@ -583,7 +590,7 @@ $(document).ready(function () {
             this.clearView('my-radios');
 
             this.currentView = new Yasound.Views.NewRadioPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
@@ -622,7 +629,7 @@ $(document).ready(function () {
             page = page.replace('/', '');
 
             this.currentView = new Yasound.Views.StaticPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render(page);
         },
 
@@ -630,7 +637,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.SignupPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
@@ -638,7 +645,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.LoginPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         },
 
@@ -646,7 +653,7 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.GiftsPage({
-                el: '#webapp-content'
+                el: Yasound.App.CONTENT_EL
             }).render();
         }
 

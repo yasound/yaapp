@@ -1,9 +1,80 @@
 {% load i18n %}
-<div class=''>
-    <ul id='selected-radios' class='radio-cells'>
-    </ul>
-    {# {% if not radios %} #}
-    <img class='loading-mask' src='/media/images/loading.gif'/>
-    {# {% endif %} #}
-    <div class='cell-pagination' id='pagination'></div>
+
+{% if announcement %}
+<div class="container-fluid content-alert app-alert" style="display:none;">
+  <a type="button" class="asset-close" data-dismiss="alert">×</a>
+  {{ announcement.body|safe }}
 </div>
+{% endif %}
+
+<div class="container-fluid content-zone">
+  <section class="row-fluid">
+    <h1 class="block-title"><i class="asset-note"></i>{% trans "Selection" %}</h1>
+    <div class="block-content">
+      <div class="block-slide-container first" id='selection-slides'>
+        <div class="block-slide-mask">
+          <div class="block-slide">
+            <img src='/media/images/loading-white.gif' class='loading-mask'/>
+          </div>
+        </div>
+        <a href="#" class="asset-slide-left"></a>
+        <a href="#" class="asset-slide-right"></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="container-fluid content-zone {% if request.user.is_anonymous %}last{% endif %}">
+  <section class="row-fluid">
+    <h1 class="block-title"><i class="asset-note"></i>Populaires</h1>
+    <div class="block-content">
+      <div class="block-slide-container first" id='popular-slides'>
+        <div class="block-slide-mask">
+          <div class="block-slide">
+            <img src='/media/images/loading-white.gif' class='loading-mask'/>
+          </div>
+        </div>
+        <a href="#" class="asset-slide-left"></a>
+        <a href="#" class="asset-slide-right"></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% if request.user.is_authenticated %}
+<div class="container-fluid content-zone">
+  <section class="row-fluid">
+    <h1 class="block-title"><i class="asset-fav"></i>Favoris</h1>
+    <div class="block-content">
+      <div class="block-slide-container first" id='favorites-slides'>
+        <div class="block-slide-mask">
+          <div class="block-slide">
+            <img src='/media/images/loading-white.gif' class='loading-mask'/>
+          </div>
+        </div>
+        <a href="#" class="asset-slide-left"></a>
+        <a href="#" class="asset-slide-right"></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <section class="span6">
+      <h1 class="block-title"><i class="asset-headphones"></i>Qu'est ce que vos amis écoutent ?</h1>
+      <div class="block-content">
+        <ul class="stories-list" id='friends-activity'>
+        </ul>
+      </div>
+    </section>
+    <section class="span6">
+      <h1 class="block-title"><i class="asset-playlist"></i>L'activité de vos radios</h1>
+      <div class="block-content">
+        <ul class="stories-list" id='radios-activity'>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+{% endif %}

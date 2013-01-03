@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from sorl.thumbnail import get_thumbnail, delete
 from stats.models import RadioListeningStat
 from taggit.managers import TaggableManager
-from taggit.models import TaggedItem, Tag
+from transmeta import TransMeta
 from yacore.database import atomic_inc
 from yacore.http import absolute_url
 from yacore.tags import clean_tags, clean_tag
@@ -882,6 +882,8 @@ class Radio(models.Model):
             'origin': self.origin,
             'name': self.name,
             'favorites': self.favorites,
+            'messages': self.message_count,
+            'likes': self.like_count,
             'nb_current_users' : self.nb_current_users,
             'tags' : self.tags_to_string(),
             'picture': self.picture_url,
@@ -941,6 +943,13 @@ class Radio(models.Model):
             return True
         return False
 
+    @property
+    def message_count(self):
+        return WallEvent.objects.get_message_events(self).count()
+
+    @property
+    def like_count(self):
+        return WallEvent.objects.get_like_events(self).count()
 
     @property
     def is_locked(self):
@@ -1127,6 +1136,22 @@ class Radio(models.Model):
         songs = SongInstance.objects.filter(metadata__yasound_song_id=None, playlist__in=self.playlists.all())
         return songs
 
+    def fans(self, limit=25, skip=0):
+        """returns users (anonymous + authenticated) for the radio
+
+        :return: data, total_count
+        """
+
+        users = self.radiouser_set.select_related('user').filter(favorite=True)
+        total_count = users.count()
+
+        users = users[skip:limit + skip]
+        data = []
+        for ru in users:
+            data.append(ru.user.get_profile().as_dict())
+
+        return data, total_count
+
     def get_picture_url(self, size='210x210'):
         if self.picture:
             try:
@@ -1167,6 +1192,29 @@ class Radio(models.Model):
         self.picture.save(filename, data, save=True)
         delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
 
+    @property
+    def pictures(self):
+        """ return a list of pictures urls """
+        key = 'radio_%s.pictures' % (self.id)
+        data = cache.get(key)
+        if data:
+            return data
+
+        data = []
+        song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:8].values_list('yasound_song_id', flat=True)
+        songs = YasoundSong.objects.filter(id__in=list(song_ids))
+        size = '157x157'
+        for i, song in enumerate(songs):
+            if i > 5:
+                size = '314x314'
+            data.append(song.custom_cover_url(size))
+        cache.set(key, data, 60 * 60)
+        return data
+
+    def clear_pictures_cache(self):
+        """ invalidate pictures cache """
+        key = 'radio_%s.pictures' % (self.id)
+        cache.delete(key)
 
     def build_fuzzy_index(self, upsert=False, insert=True):
         from yasearch.models import RadiosManager
@@ -1497,6 +1545,10 @@ class WallEventManager(models.Manager):
 
     def get_song_events(self, radio):
         events = self.get_events(radio, yabase_settings.EVENT_SONG)
+        return events
+
+    def get_like_events(self, radio):
+        events = self.get_events(radio, yabase_settings.EVENT_LIKE)
         return events
 
     def add_current_song_event(self, radio):
@@ -1853,11 +1905,46 @@ class ApnsCertificateManager(models.Manager):
         self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=False, certificate_file='certificates/techtour/prod.pem')
         self.get_or_create(application_id=yabase_settings.IPHONE_TECH_TOUR_APPLICATION_IDENTIFIER, sandbox=True, certificate_file='certificates/techtour/dev.pem')
 
+
 class ApnsCertificate(models.Model):
     application_id = models.CharField(max_length=127)
     sandbox = models.BooleanField()
     certificate_file = models.CharField(max_length=255)
     objects = ApnsCertificateManager()
+
+
+class AnnouncementManager(models.Manager):
+    def get_current_announcement(self):
+        try:
+            return self.filter(activated=True).order_by('-created')[0]
+        except:
+            return None
+
+
+class Announcement(models.Model):
+    """ A model to store announcements displayed on web app """
+
+    __metaclass__ = TransMeta
+    objects = AnnouncementManager()
+
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
+    activated = models.BooleanField(default=False)
+    name = models.CharField(_('name'), max_length=255)
+    body = models.TextField(_('body'), max_length=255, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.activated:
+            Announcement.objects.all().exclude(id=self.id).update(activated=False)
+        super(Announcement, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u'%s' % (self.name)
+
+    class Meta:
+        verbose_name = _('announcement')
+        translate = ('name', 'body')
+
 
 def new_current_song_handler(sender, radio, song_json, song, song_dict, **kwargs):
     from yabase.task import async_dispatch_user_started_listening_song
@@ -1869,10 +1956,15 @@ def song_metadata_updated(sender, instance, created, **kwargs):
         from yaref.task import async_convert_song
         async_convert_song.delay(instance.yasound_song_id, exclude_primary=True)
 
+def animator_activity_handler(sender, user, radio, atype, details=None, playlist=None, **kwargs):
+    radio.clear_pictures_cache()
+
 def install_handlers():
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
     signals.post_delete.connect(next_song_deleted, sender=NextSong)
     yabase_signals.new_current_song.connect(new_current_song_handler)
+    yabase_signals.new_animator_activity.connect(animator_activity_handler)
+
     if not yaapp_settings.TEST_MODE:
         signals.post_save.connect(song_metadata_updated, sender=SongMetadata)
 install_handlers()

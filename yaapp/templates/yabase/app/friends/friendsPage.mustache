@@ -67,9 +67,9 @@
     </div>
 </div>
 
-<div class='row common-background'>
-
-    <div class='span12 no-margin invite'>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12 invite'>
         {% ifequal app_name 'deezer' %}
         <h1>{% trans "Invite your friends" %}</h1>
         {% else %}
@@ -92,32 +92,39 @@
                 </div>
             </li>
         </ul>
-        <div class='separation-line'></div>
     </div>
+  </div>
+</div>
 
-    <div class='span12 no-margin '>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <section class='span12'>
         <h1>{% trans "People you follow" %} (<span id='friends-count'></span>)</h1>
         <ul id='results'>
         </ul>
         <img class='loading-mask' src='/media/images/loading-white.gif'/>
         <div class='cell-pagination' id='pagination'></div>
-        <div class='separation-line'></div>
-    </div>
+    </section>
+  </div>
+</div>
 
-    <div class='span12 no-margin'>
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <section class='span12'>
         <h1>{% trans "People following you" %} (<span id='followers-count'></span>)</h1>
-    </div>
-    <div class='span12 no-margin '>
         <ul id='followers'>
         </ul>
         <img class='loading-mask' src='/media/images/loading-white.gif'/>
         <div class='cell-pagination' id='followers-pagination'></div>
-    </div>
+    </section>
+  </div>
+</div>
 
 </div>
 {% else %}
-<div class='row'>
-    <div class='span12'>
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <section class='span12'>
     	<div class='friends-login-container'>
     		<img class='friends-login-large'src="/media/app/images/friends-icon-large.png" height='230' width='260'>
             <img class='friends-login-small'src="/media/app/images/friends-icon-large.png" height='153' width='173'>
@@ -126,6 +133,7 @@
     		<button id='login-btn'>{% trans "Login" %}</button>
             </form>
     	</div>
-    </div>
+    </section>
+  </div>
 </div>
 {% endif %}

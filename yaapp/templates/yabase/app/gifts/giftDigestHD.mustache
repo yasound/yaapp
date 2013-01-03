@@ -1,0 +1,14 @@
+{% load i18n %}
+<li class="list-block">
+  <div class="a">
+    <i class="icon asset-mini-hd-<%#hd%>on<%/hd%><%^hd%>off<%/hd%>"></i>
+    <div class="txt">
+      <strong><%#hd%>{% trans "HD actived" %}<%/hd%><%^hd%>{% trans "HD not activated" %}<%/hd%></strong>
+      <span><%#expire%>{% trans "Until" %} <% expire %><%/expire%></span>
+    </div>
+    <form class="dropdown-toggler">
+      <input type="checkbox" id="toggle-hd" <%#hd%>checked="checked"<%/hd%>/>
+      <label for="toggle-hd"></label>
+    </form>
+  </div>
+</li>

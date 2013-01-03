@@ -1,47 +1,13 @@
 {% load i18n %}
-<div class='radio-cell'>
-	<div class="radio-border hidden-phone" style='display:none;'>
-		<img src="/media/app/images/radio/radio-hover-border.png" alt="Radio Hover Border">
+<article class="radio-cell">
+  <a class="radio-cell-link" href="{{root}}radio/<% uuid %>/">
+    <div class="radio-cell-img"><img width="150" height="150" alt="" src="<% picture %>" /></div>
+    <div class="radio-cell-info">
+      <div class="tag"></div>
+      <i class="play asset-player-play"></i>
+      <div class="tip-btn">Infos</div>
+      </div>
     </div>
-	<div class="radio-container">
-		<div class='picture'>
-	    <a class='big-profile-picture' href='{{ root }}radio/<% uuid %>/'><img src='<% picture %>' width='210' height='210'/><a>
-	    <a class='small-profile-picture' href='{{ root}}radio/<% uuid %>/'><img src='<% picture %>' width='147' height='147'/><a>
-	    </div>
-
-		<div class='mask' style='display:none;'>
-			<div class="radio-icon">
-				<img src="/media/images/default_album_small.png" width="36" height="36" alt="Radio Radio Picture"/>
-			</div>
-			<div class="radio-id">
-	            <%#creator%>
-				<p><span>{% trans "By" %}</span> <% name %></p>
-	            <%/creator%>
-				<p class='current-song'></p>
-				<p class='current-artist'></p>
-			</div>
-			<div class="tag">
-				<div class="tag-right-side"></div>
-			</div>
-	    </div>
-
-	    <div class="profile">
-	        <%#creator%>
-	        <img src='<% picture %>' width='32px' height='32px'/>
-	        <%/creator%>
-	        <span class="radio-profile-picture-mask">
-				<img src="/media/app/images/radio/radio-profile-picture-mask.png" width="28" height="28" alt="Radio Profile Picture Mask"/>
-			</span>
-	    </div>
-	    <%#top_rank%><div class='badge'><% top_rank %></div><%/top_rank%>
-	    <div class='caption'>
-	        <div class="caption-content">
-	            <h5><% name %></h5>
-	            <ul class="radio-favorites">
-	                <li><% favorites %></li>
-	                <li><% nb_current_users %></li>
-	            </ul>
-	        </div>
-	    </div>
-	<div>
-</div>
+  </a>
+  <h1><a href="{{root}}radio/<% uuid %>/"><% name %></a></h1>
+</article>

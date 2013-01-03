@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load app_url %}
+<a href="#">
+    <i class="icon asset-mini-com"></i>
+    <div class="txt-pic">
+        <%#params%>
+        <strong><% user_name %> {% trans "has posted a message" %}</strong>
+        <%/params%>
+        <span><% formatted_date %></span>
+    </div>
+    <div class="img">
+        <%#params%>
+        <img src="/api/v1/radio/<% radio_uuid %>/picture/xs/" width="30" height="30" alt="" />
+        <%/params%>
+    </div>
+</a>

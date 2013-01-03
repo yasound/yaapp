@@ -1,158 +1,165 @@
 {% load i18n %}
 {% load app_url %}
 
-<div class='row-fluid'>
-    <div class='span12 settings-container'>
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <div class='span12'>
         <h1>{% trans "Settings" %}</h1>
-        <ul id='settings-nav' class='span4'>
-            <li class='checked' id='my-informations-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>{% trans "My informations" %}</span></a></li>
-            <li class='' id='my-accounts-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-accounts.png" alt='accounts' /><span>{% trans "My accounts" %}</span></a></li>
-            <li class='' id='my-notifications-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-notifications.png" alt='notifications' /><span>{% trans "Notifications" %}</span></a></li>
-        </ul>
-        <div class='settings-content-container'>
-            <div>
+    </div>
+  </div>
+</div>
 
-                <div id='my-accounts' style='display:none;'>
-                    <form id='my-accounts-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
-                        {{ my_accounts_form }}
+<div class="container-fluid content-zone">
+  <div class="row-fluid">
+    <ul id='settings-nav' class='span4'>
+        <li class='checked' id='my-informations-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>{% trans "My informations" %}</span></a></li>
+        <li class='' id='my-accounts-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-accounts.png" alt='accounts' /><span>{% trans "My accounts" %}</span></a></li>
+        <li class='' id='my-notifications-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-notifications.png" alt='notifications' /><span>{% trans "Notifications" %}</span></a></li>
+    </ul>
+    <div class='settings-content-container span8 left-border'>
+        <div>
 
-                        {% if display_associate_facebook %}
-                        <fieldset>
-                            <legend>{% trans "Facebook" %}</legend>
-                            <div class='control-group'>
-                                <div class='controls'>
-                                    <a class="btn-auth btn-facebook large first" href="{% url socialauth_associate_begin 'facebook' %}?next={{ next }}" rel="nofollow">
-                                    {% trans 'Associate my facebook account' %}
-                                    </a>
-                                </div>
+            <div id='my-accounts' style='display:none;'>
+                <form id='my-accounts-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    {{ my_accounts_form }}
+
+                    {% if display_associate_facebook %}
+                    <fieldset>
+                        <legend>{% trans "Facebook" %}</legend>
+                        <div class='control-group'>
+                            <div class='controls'>
+                                <a class="btn-auth btn-facebook large first" href="{% url socialauth_associate_begin 'facebook' %}?next={{ next }}" rel="nofollow">
+                                {% trans 'Associate my facebook account' %}
+                                </a>
                             </div>
-                        </fieldset>
-                        {% else %}
-                        <fieldset>
-                            <legend>{% trans "Facebook" %}</legend>
-                            <div class='control-group'>
-                                <div class='controls'>
-                                    <button type="submit" name='remove_facebook' id='btn-remove-facebook' class="btn btn-danger">{% trans "Remove facebook account" %}</button>
-                                    </a>
-                                </div>
-                            </div>
-                        </fieldset>
-                        {% endif %}
-
-
-                        {% if display_associate_twitter %}
-                        <fieldset>
-                            <legend>{% trans "Twitter" %}</legend>
-                            <div class='control-group'>
-                                <div class='controls'>
-                                    <a class="btn-auth btn-twitter large" href="{% url socialauth_associate_begin 'twitter' %}?next={{ next }}" rel="nofollow">
-                                    {% trans 'Associate my twitter account' %}
-                                    </a>
-                                </div>
-                            </div>
-                        </fieldset>
-                        {% else %}
-                        <fieldset>
-                            <legend>{% trans "Twitter" %}</legend>
-                            <div class='control-group'>
-                                <div class='controls'>
-                                    <button type="submit" name='remove_twitter' id='btn-remove-twitter' class="btn btn-danger">{% trans "Remove twitter account" %}</button>
-                                    </a>
-                                </div>
-                            </div>
-                        </fieldset>
-                        {% endif %}
-
-                        <div class="">
-                            <input type='hidden' name='action' value='my_accounts'/>
-                            <button type="submit" name='save' class="save-btn">{% trans "Save" %}</button>
                         </div>
-                    </form>
+                    </fieldset>
+                    {% else %}
+                    <fieldset>
+                        <legend>{% trans "Facebook" %}</legend>
+                        <div class='control-group'>
+                            <div class='controls'>
+                                <button type="submit" name='remove_facebook' id='btn-remove-facebook' class="btn btn-danger">{% trans "Remove facebook account" %}</button>
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
+                    {% endif %}
 
 
-                   <div class="modal hide fade" id="modal-remove-facebook">
-                      <div class="modal-header">
-                        <button class="close" data-dismiss="modal">×</button>
-                        <h3>{% trans "Remove facebook account ?" %}</h3>
-                      </div>
-                      <div class="modal-body">
-                        <p>{% trans "Do you want to remove your facebook account ?" %}</p>
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
-                        <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
-                      </div>
+                    {% if display_associate_twitter %}
+                    <fieldset>
+                        <legend>{% trans "Twitter" %}</legend>
+                        <div class='control-group'>
+                            <div class='controls'>
+                                <a class="btn-auth btn-twitter large" href="{% url socialauth_associate_begin 'twitter' %}?next={{ next }}" rel="nofollow">
+                                {% trans 'Associate my twitter account' %}
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
+                    {% else %}
+                    <fieldset>
+                        <legend>{% trans "Twitter" %}</legend>
+                        <div class='control-group'>
+                            <div class='controls'>
+                                <button type="submit" name='remove_twitter' id='btn-remove-twitter' class="btn btn-danger">{% trans "Remove twitter account" %}</button>
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
+                    {% endif %}
+
+                    <div class="">
+                        <input type='hidden' name='action' value='my_accounts'/>
+                        <button type="submit" name='save' class="save-btn">{% trans "Save" %}</button>
                     </div>
+                </form>
 
 
-
-                   <div class="modal hide fade" id="modal-remove-twitter">
-                      <div class="modal-header">
-                        <button class="close" data-dismiss="modal">×</button>
-                        <h3>{% trans "Remove twitter account ?" %}</h3>
-                      </div>
-                      <div class="modal-body">
-                        <p>{% trans "Do you want to remove your twitter account ?" %}</p>
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
-                        <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
-                      </div>
-                    </div>
-
+               <div class="modal hide fade" id="modal-remove-facebook">
+                  <div class="modal-header">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <h3>{% trans "Remove facebook account ?" %}</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>{% trans "Do you want to remove your facebook account ?" %}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+                    <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+                  </div>
                 </div>
 
-                <div id='my-informations'>
-                    <div class='upload-container'>
-                        <div class='upload-content yabutton-small'>
-                            <span>{% trans "Upload photo" %}</span>
-                            <input type="file" name="picture" data-url="/api/v1/user/{{ request.user.username }}/picture/" id='file-upload'/>
-                        </div>
-                        <div class='settings-picture'>
-                            <img src='{{ user_profile.picture_url }}' id='user-picture-image'/>
-                        </div>
-                    </div>
-                    <div id='progress' class="progress progress-striped active">
-                      <div class="bar"></div>
-                    </div>
-
-                    <div class="modal hide fade" id="modal-upload-error">
-                        <div class="modal-header">
-                            <button class="close" data-dismiss="modal">×</button>
-                            <h3>{% trans "Upload error" %}</h3>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
-                        </div>
-                    </div>
 
 
-                    <form id='my-informations-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
-                        {{ my_informations_form }}
-
-                        <div>
-                            <input type='hidden' name='action' value='my_informations'/>
-                            <button type="submit" class ="save-btn">{% trans "Save" %}</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div id='my-notifications' style='display:none;'>
-                    <form id='my-notifications-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
-                        {{ my_notifications_form }}
-                        <div>
-                            <input type='hidden' name='action' value='my_notifications'/>
-                            <button type="submit" name='save-btn' class="save-btn">{% trans "Save" %}</button>
-                        </div>
-                    </form>
+               <div class="modal hide fade" id="modal-remove-twitter">
+                  <div class="modal-header">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <h3>{% trans "Remove twitter account ?" %}</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>{% trans "Do you want to remove your twitter account ?" %}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+                    <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+                  </div>
                 </div>
 
             </div>
+
+            <div id='my-informations'>
+                <div class='upload-container'>
+                    <div class='upload-content yabutton-small'>
+                        <span>{% trans "Upload photo" %}</span>
+                        <input type="file" name="picture" data-url="/api/v1/user/{{ request.user.username }}/picture/" id='file-upload'/>
+                    </div>
+                    <div class='settings-picture'>
+                        <img src='{{ user_profile.picture_url }}' id='user-picture-image'/>
+                    </div>
+                </div>
+                <div id='progress' class="progress progress-striped active">
+                  <div class="bar"></div>
+                </div>
+
+                <div class="modal hide fade" id="modal-upload-error">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">×</button>
+                        <h3>{% trans "Upload error" %}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+                    </div>
+                </div>
+
+
+                <form id='my-informations-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    {{ my_informations_form }}
+
+                    <div>
+                        <input type='hidden' name='action' value='my_informations'/>
+                        <button type="submit" class ="save-btn">{% trans "Save" %}</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id='my-notifications' style='display:none;'>
+                <form id='my-notifications-form' enctype="multipart/form-data" class='' action="{% app_url webapp_settings app_name %}" method='post'>{% csrf_token %}
+                    {{ my_notifications_form }}
+                    <div>
+                        <input type='hidden' name='action' value='my_notifications'/>
+                        <button type="submit" name='save-btn' class="save-btn">{% trans "Save" %}</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
+  </div>
 </div>
 

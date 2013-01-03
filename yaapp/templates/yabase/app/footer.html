@@ -1,63 +1,39 @@
 {% load i18n %}
 {% load app_url %}
-<div class='container'>
-    <footer>
-        <div id="contacts" class="blocks">
-            <p>
-                <a href="https://facebook.com/yasound" class="footer-text-color2" title="facebook" target='_blank'>
-                    <img src="/media/app/images/facebook_logo.png" alt="facebook"/>
-                    <span>Facebook</span>
-                </a>
-                <a href="https://twitter.com/YasoundSAS" class="footer-text-color2" title="twitter" target='_blank'>
-                    <img src="/media/app/images/twitter_logo.png" alt="twitter" class="padding-social-logo"/>
-                    <span>Twitter</span>
-                </a>
-            </p>
-            <p>
-                <a id='btn-about' href="{% app_url webapp_about app_name %}"
-                    class="footer-text-color1"
-                    title="{% trans 'About' %}">{% trans 'About' %}</a> -
-                <a id='btn-press' href="{% app_url webapp_press app_name %}"
-                    class="footer-text-color1"
-                    title="{% trans 'Press' %}">{% trans 'Press' %}</a>
-            </p>
-            <p>
-                <a id='btn-jobs' href="{% app_url webapp_jobs app_name %}"
-                    class="footer-text-color1"
-                    title="{% trans 'Jobs' %}">{% trans "Jobs" %}</a> -
-                <a id='btn-legal' href="{% app_url webapp_legal app_name %}" class="footer-text-color1" title="{% trans 'Legal informations' %}">{% trans 'Legal informations' %}</a>
-            </p>
-        </div>
-
-        <div class="footer-separation">
-            <img src="/media/app/images/separation.png" width="4" height="81" alt="separation"/>
-        </div>
-
-        <div id="connected-users" class="blocks">
-            <p id="text-users">
-                {% trans "Connected users" %}
-            </p>
-            <div id="img-users">
-        {% for user in connected_users %}
-        <span class='connected-user-cell'>{% include 'yabase/app/common/connectedUser.mustache' %}</span>
-        {% endfor %}
-                <a href="#" id="footer-button">
-                    <span id="footer-button-text">{% trans "See all" %}</span>
-                </a>
+<div class="footer-player">
+  <div class="wrapper">
+    <div class="container-fluid">
+      <section class="row-fluid">
+        <div class="span6 current-radio">
+          <a class="cover" href="#">
+            <img src="http://placehold.it/70x70" width="70" height="70" alt="" />
+            <i class="status play"></i>
+          </a>
+          <h3>{% trans "Radio" %}</h3>
+          <h2></h2>
+          <div class="player-controls">
+            <a href="#" class="pl-star on"></a>
+            <a class="pl-share" data-toggle="modal" href="#modal-share"></a>
+            <div href="#" class="pl-volume">
+              <div class="volume-container">
+                <div id="volume-slider"></div>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="footer-separation">
-            <img src="/media/app/images/separation.png" width="4" height="81" alt="separation"/>
+        <div class="span6 current-song">
+          <div class="cover">
+            <img src="http://placehold.it/68x68" width="68" height="68" alt="" />
+          </div>
+          <h3>{% trans "Current song" %}</h3>
+          <h1></h1>
+          <div class="player-controls">
+            <a href="#" class="pl-like"></a>
+            <a href="#" class="pl-cart"></a>
+          </div>
         </div>
-
-        <div id="minutes" class="blocks">
-            <span class="footer-text-color1" id='minutes-listened'>{{ minutes }}</span>
-            <p class="footer-text-color2" >{% trans "minutes of music have been played" %}</p>
-        </div>
-    <p id="copyright">&copy; Yasound 2012</p>
-  <a href='#' id='scroll-top-container' style='display:none;'>
-    <img src="/media/app/images/scroll-top.png" alt="{% trans 'Go to top' %}">
-  </a>
-    </footer>
-</div>
+        <a class="toggler" href=""></a>
+      </section>
+    </div>
+  </div>
 </div>

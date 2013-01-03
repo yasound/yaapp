@@ -153,6 +153,137 @@ Yasound.Views.Notifications = Backbone.View.extend({
     }
 });
 
+Yasound.Views.NotificationDigest = Backbone.View.extend({
+    tagName: 'li',
+    className: 'list-block',
+    events: {
+        "click .close-icon": "onRemove",
+        "click .profile": "onProfile",
+        "click a.radio-link": "onRadio",
+        "click .radio": "onRadio"
+    },
+
+    initialize: function () {
+        this.model.bind('change', this.render, this);
+    },
+
+    onClose: function () {
+        this.model.unbind('change', this.render);
+    },
+
+    render: function () {
+        var data = this.model.toJSON();
+        data.formatted_date = this.model.getFormattedDate();
+        if (data.type === 'type_notif_friend_online') {
+            $(this.el).html(ich.notificationFriendOnlineDigestTemplate(data));
+        } else if (data.type == 'type_notif_message_in_wall') {
+            $(this.el).html(ich.notificationMessageInWallDigestTemplate(data));
+        } else if (data.type == 'type_notif_radio_in_favorites') {
+            $(this.el).html(ich.notificationAddedFavoriteDigestTemplate(data));
+        } else if (data.type == 'type_notif_song_liked') {
+            $(this.el).html(ich.notificationSongLikedDigestTemplate(data));
+        } else if (data.type == 'type_notif_friend_created_radio') {
+            $(this.el).html(ich.notificationFriendCreatedRadioDigestTemplate(data));
+        } else if (data.type == 'type_notif_user_in_radio') {
+            $(this.el).html(ich.notificationUserInRadioDigestTemplate(data));
+        } else if (data.type == 'type_notif_friend_in_radio') {
+            $(this.el).html(ich.notificationFriendInRadioDigestTemplate(data));
+        } else if (data.type == 'type_notif_radio_shared') {
+            $(this.el).html(ich.notificationRadioSharedDigestTemplate(data));
+        } else {
+            $(this.el).html(ich.notificationDigestTemplate(data));
+        }
+
+        return this;
+    },
+
+    onRemove: function() {
+        if (this.model.get('read') === false ) {
+            this.model.markAsRead();
+            colibri(gettext('Notification marked as read'));
+        } else {
+            colibri(gettext('Notification deleted'));
+            this.model.remove();
+        }
+    },
+
+    onProfile: function (e) {
+        e.preventDefault();
+        var username = $(e.target).attr('data-username');
+        Yasound.App.Router.navigate("profile/" + username + '/', {
+            trigger: true
+        });
+    },
+
+    onRadio: function (e) {
+        e.preventDefault();
+        var uuid = $(e.target).attr('data-uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
+    }
+});
+
+Yasound.Views.NotificationsDigest = Backbone.View.extend({
+    collection: new Yasound.Data.Models.NotificationsDigest({}),
+
+    initialize: function () {
+        _.bindAll(this, 'addOne', 'addAll', 'render');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.mode = 'unread';
+        this.views = [];
+    },
+
+    onClose: function () {
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    render: function () {
+        this.collection.fetch();
+        return this;
+    },
+
+    addAll: function () {
+        $('.loading-mask', this.el).remove();
+        this.clear();
+        this.collection.each(this.addOne);
+
+        if (this.collection.length === 0) {
+            $('.empty', this.el).show();
+        } else {
+            $('.empty', this.el).hide();
+        }
+
+        var totalCount = this.collection.totalCount;
+        var remaining = totalCount - this.collection.length;
+        if (remaining < 0) {
+            remaining = 0;
+        }
+
+        $(this.el).append(ich.notificationDigestLastTemplate({'remaining': remaining}));
+    },
+
+    clear: function () {
+        _.map(this.views, function (view) {
+            view.close();
+        });
+        this.views = [];
+        $('li', this.el).remove();
+    },
+
+    addOne: function (notification) {
+        var view = new Yasound.Views.NotificationDigest({
+            model: notification
+        });
+        view.mode = this.mode;
+        $(this.el).append(view.render().el);
+        this.views.push(view);
+    }
+});
+
 /**
  * Notifications page
  */
