@@ -672,9 +672,11 @@ else:
 
 # thumbnail
 THUMBNAIL_KEY_DBCOLUMN = 'thumb_key' # key is a mysql reserved keyword and break replication
+THUMBNAIL_ENGINE = 'yacore.thumbnail_engine.FxEngine'
 PICTURE_FOLDER = 'pictures'
 USER_PICTURE_FOLDER = 'user_pictures/%Y/%m/%d'
 RADIO_PICTURE_FOLDER = 'radio_pictures/%Y/%m/%d'
+
 if PRODUCTION_MODE:
     # use shared folder on prod servers
     THUMBNAIL_PREFIX = 'cache/'
