@@ -15,12 +15,15 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #profile-menu .my-profile': 'onMyProfile',
         'click #profile-menu .my-radios': 'onMyRadios',
         'click #profile-menu .my-settings': 'onMySettings',
-        'click #profile-menu .about': 'onAbout',
-        'click #profile-menu .legal': 'onLegal',
         'click #profile-menu .logout': 'onLogout',
         'click #notifications-menu a': 'onNotifications',
+        'click #brand-logo a.btn-logo': 'onHome',
         'click .btn-envelope': 'refreshNotificationsDigest',
         'click .btn-hd': 'refreshHD',
+        'click #brand-menu .about': 'onAbout',
+        'click #brand-menu .legal': 'onLegal',
+        'click #brand-menu .press': 'onPress',
+        'click #brand-menu .jobs': 'onJobs',
         'submit #login-form': 'submitLogin'
     },
 
@@ -74,6 +77,10 @@ Yasound.Views.Header = Backbone.View.extend({
         $('#notifications-menu').parent().removeClass('open');
     },
 
+    hidePopupBrand: function () {
+        $('#brand-menu').parent().removeClass('open');
+    },
+
     onRegister: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('/signup/', {
@@ -110,7 +117,7 @@ Yasound.Views.Header = Backbone.View.extend({
 
     onAbout: function (e) {
         e.preventDefault();
-        this.hidePopupProfile();
+        this.hidePopupBrand();
         Yasound.App.Router.navigate('about/', {
             trigger: true
         });
@@ -119,11 +126,41 @@ Yasound.Views.Header = Backbone.View.extend({
 
     onLegal: function (e) {
         e.preventDefault();
-        this.hidePopupProfile();
+        this.hidePopupBrand();
         Yasound.App.Router.navigate('legal/', {
             trigger: true
         });
         return false;
+    },
+
+    onPress: function (e) {
+        e.preventDefault();
+        this.hidePopupBrand();
+        Yasound.App.Router.navigate('press/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onJobs: function (e) {
+        e.preventDefault();
+        this.hidePopupBrand();
+        Yasound.App.Router.navigate('jobs/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onHome: function (e) {
+        e.preventDefault();
+        if ($('#brand-menu').parent().hasClass('open')) {
+            this.hidePopupBrand();
+            Yasound.App.Router.navigate('/', {
+                trigger: true
+            });
+            return false;
+        }
+        return true;
     },
 
     onLogout: function (e) {

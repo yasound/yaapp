@@ -652,6 +652,255 @@ input::-ms-input-placeholder
 	}
 }
 
+#brand-logo
+{
+	.btn-nav
+	{
+		font-size: 14px;
+		font-weight: bold;
+		color: @lightGrey;
+		display: block;
+		float: left;
+		height: 66px;
+		line-height: 66px;
+		padding: 0 10px;
+		border: 1px solid transparent;
+		border-top: 0;
+		border-bottom: 0;
+		text-shadow: 1px 1px 1px #000;
+		&:hover
+		{
+			color: #fff;
+			text-decoration: none;
+		}
+	}
+	.btn-logo
+	{
+		position: relative;
+		padding-right:24px;
+		.img-circle
+		{
+			display: block;
+			margin-top: 14px;
+			margin-right: 20px;
+			.box-shadow(0px 1px 2px 1px rgba(0,0,0,.2));
+		}
+		.asset-arrow-down
+		{
+			display: block;
+			position: absolute;
+			right: 7px;
+			top: 24px;
+		}
+	}
+	.open
+	{
+		.btn-nav
+		{
+			color: #fff;
+			#gradient > .vertical(#292c2d,#343738);
+			border-color: #1c1e1f;
+			.box-shadow(1px 0 0 0 #323536);
+		}
+		.dropdown-menu
+		{
+			min-width: 250px;
+			right: 0;
+			padding: 0;
+			top:100%;
+			margin: 0;
+			margin-top:66px;
+			border: none;
+			background: #343738;
+			.border-radius(0);
+			&:after,
+			&:before
+			{
+				display: none;
+			}
+		}
+		ul.dropdown-menu
+		{
+			li, a
+			{
+				display: block;
+			}
+			a, .a
+			{
+				border: 1px solid #343738;
+				text-shadow: 1px 1px 1px #000;
+				color: #fff;
+				font-size: 14px;
+				font-weight: bold;
+				height: 30px;
+				line-height: 30px;
+				padding: 0 10px;
+			}
+			a:hover
+			{
+				.box-shadow(inset 0 1px 0 0 #575b5c);
+				#gradient > .vertical(#46494a,#353839);
+				border-color: #252728;
+			}
+		}
+		ul.dropdown-menu .list-block
+		{
+			position: relative;
+			i.icon
+			{
+				position: absolute;
+				top: 6px;
+				left: 7px;
+			}
+			a, .a
+			{
+				height: 30px;
+				line-height: 15px;
+				padding: 5px 0;
+				.user-select(none);
+			}
+			.txt-pic
+			{
+				margin: 0 50px 0 30px;
+			}
+			.txt
+			{
+				margin: 0 10px 0 35px;
+			}
+			strong
+			{
+				display: block;
+				font-size: 13px;
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			span
+			{
+				display: block;
+				font-size: 11px;
+				color: #80888a;
+			}
+			.img
+			{
+				position: relative;
+				&:after { #effect > .glossy-absolute(); }
+				position: absolute;
+				right: 5px;
+				top: 6px;
+				img
+				{
+					display: block;
+					.box-shadow(0px 0px 4px 0px rgba(0,0,0,.5));
+				}
+			}
+		}
+		ul.dropdown-menu .list-foot a
+		{
+			text-align: center;
+			color: @lightGrey;
+			font-size: 11px;
+			.box-shadow(inset 0 1px 0 0 #575b5c);
+			#gradient > .vertical(#46494a,#353839);
+			border-color: #252728;
+			&:hover
+			{
+				color: #fff;
+			}
+		}
+		.dropdown-mini
+		{
+			min-width: 216px;
+			width: 216px;
+		}
+		.dropdown-bordered
+		{
+			li+li a,
+			li+li .a
+			{
+				border-top-color: #252728;
+				.box-shadow(inset 0 1px 0 0 #575b5c);
+			}
+			li a:hover
+			{
+				border-bottom-color: #353839;
+			}
+		}
+		.dropdown-block
+		{
+			padding: 12px;
+		}
+		.dropdown-block + .dropdown-block
+		{
+			border-top: 1px solid #515657;
+			.box-shadow(0 -1px 0 0 #232526);
+		}
+		.btn-sky,
+		.btn-navy
+		{
+			font-size: 14px;
+			border: none;
+			font-weight: bold;
+			color: #fff;
+			text-decoration: none;
+			line-height: 30px;
+		}
+		.btn-navy
+		{
+			margin-top: 12px;
+		}
+	}
+	div.dropdown-menu
+	{
+		a
+		{
+			color: @grey;
+			text-shadow: 1px 1px 1px #000;
+			padding: 0;
+			&:hover
+			{
+				text-decoration: none;
+				color: #fff;
+			}
+		}
+	}
+	.dropdown-toggler
+	{
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		margin: 0;
+	}
+	.dropdown-promo
+	{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		margin: 0;
+		height: 24px;
+		.input-text
+		{
+			width: 72px;
+			height: 18px;
+			line-height: 18px;
+			padding: 2px 5px;
+		}
+		button
+		{
+			display: block;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			bottom: 1px;
+			border: 1px solid #232526;
+			.border-radius(4px);
+			.box-shadow(inset 0 1px 0 0 #5c5f61);
+			#gradient > .vertical(#434748,#353839);
+		}
+	}
+}
+
 .dropdown-toggler
 {
 	position: absolute;

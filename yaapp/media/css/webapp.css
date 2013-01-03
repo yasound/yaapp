@@ -6339,6 +6339,290 @@ input::-ms-input-placeholder {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff434748', endColorstr='#ff353839', GradientType=0);
 }
+#brand-logo .btn-nav {
+  font-size: 14px;
+  font-weight: bold;
+  color: #bbc0c2;
+  display: block;
+  float: left;
+  height: 66px;
+  line-height: 66px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-top: 0;
+  border-bottom: 0;
+  text-shadow: 1px 1px 1px #000;
+}
+#brand-logo .btn-nav:hover {
+  color: #fff;
+  text-decoration: none;
+}
+#brand-logo .btn-logo {
+  position: relative;
+  padding-right: 24px;
+}
+#brand-logo .btn-logo .img-circle {
+  display: block;
+  margin-top: 14px;
+  margin-right: 20px;
+  -webkit-box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+#brand-logo .btn-logo .asset-arrow-down {
+  display: block;
+  position: absolute;
+  right: 7px;
+  top: 24px;
+}
+#brand-logo .open .btn-nav {
+  color: #fff;
+  background-color: #2d3031;
+  background-image: -moz-linear-gradient(top, #292c2d, #343738);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#292c2d), to(#343738));
+  background-image: -webkit-linear-gradient(top, #292c2d, #343738);
+  background-image: -o-linear-gradient(top, #292c2d, #343738);
+  background-image: linear-gradient(to bottom, #292c2d, #343738);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff292c2d', endColorstr='#ff343738', GradientType=0);
+  border-color: #1c1e1f;
+  -webkit-box-shadow: 1px 0 0 0 #323536;
+  -moz-box-shadow: 1px 0 0 0 #323536;
+  box-shadow: 1px 0 0 0 #323536;
+}
+#brand-logo .open .dropdown-menu {
+  min-width: 250px;
+  right: 0;
+  padding: 0;
+  top: 100%;
+  margin: 0;
+  margin-top: 66px;
+  border: none;
+  background: #343738;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+#brand-logo .open .dropdown-menu:after,
+#brand-logo .open .dropdown-menu:before {
+  display: none;
+}
+#brand-logo .open ul.dropdown-menu li,
+#brand-logo .open ul.dropdown-menu a {
+  display: block;
+}
+#brand-logo .open ul.dropdown-menu a,
+#brand-logo .open ul.dropdown-menu .a {
+  border: 1px solid #343738;
+  text-shadow: 1px 1px 1px #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+}
+#brand-logo .open ul.dropdown-menu a:hover {
+  -webkit-box-shadow: inset 0 1px 0 0 #575b5c;
+  -moz-box-shadow: inset 0 1px 0 0 #575b5c;
+  box-shadow: inset 0 1px 0 0 #575b5c;
+  background-color: #3f4243;
+  background-image: -moz-linear-gradient(top, #46494a, #353839);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#46494a), to(#353839));
+  background-image: -webkit-linear-gradient(top, #46494a, #353839);
+  background-image: -o-linear-gradient(top, #46494a, #353839);
+  background-image: linear-gradient(to bottom, #46494a, #353839);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff46494a', endColorstr='#ff353839', GradientType=0);
+  border-color: #252728;
+}
+#brand-logo .open ul.dropdown-menu .list-block {
+  position: relative;
+}
+#brand-logo .open ul.dropdown-menu .list-block i.icon {
+  position: absolute;
+  top: 6px;
+  left: 7px;
+}
+#brand-logo .open ul.dropdown-menu .list-block a,
+#brand-logo .open ul.dropdown-menu .list-block .a {
+  height: 30px;
+  line-height: 15px;
+  padding: 5px 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+#brand-logo .open ul.dropdown-menu .list-block .txt-pic {
+  margin: 0 50px 0 30px;
+}
+#brand-logo .open ul.dropdown-menu .list-block .txt {
+  margin: 0 10px 0 35px;
+}
+#brand-logo .open ul.dropdown-menu .list-block strong {
+  display: block;
+  font-size: 13px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#brand-logo .open ul.dropdown-menu .list-block span {
+  display: block;
+  font-size: 11px;
+  color: #80888a;
+}
+#brand-logo .open ul.dropdown-menu .list-block .img {
+  position: relative;
+  position: absolute;
+  right: 5px;
+  top: 6px;
+}
+#brand-logo .open ul.dropdown-menu .list-block .img:after {
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMiIvPgogICAgPHN0b3Agb2Zmc2V0PSI1MSUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==);
+  background: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(50%, rgba(255, 255, 255, 0.2)), color-stop(51%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0)));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(-45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(-45deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+  /* IE10+ */
+
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+  /* W3C */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#00ffffff', GradientType=1);
+  /* IE6-8 fallback on horizontal gradient */
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+}
+#brand-logo .open ul.dropdown-menu .list-block .img img {
+  display: block;
+  -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
+}
+#brand-logo .open ul.dropdown-menu .list-foot a {
+  text-align: center;
+  color: #bbc0c2;
+  font-size: 11px;
+  -webkit-box-shadow: inset 0 1px 0 0 #575b5c;
+  -moz-box-shadow: inset 0 1px 0 0 #575b5c;
+  box-shadow: inset 0 1px 0 0 #575b5c;
+  background-color: #3f4243;
+  background-image: -moz-linear-gradient(top, #46494a, #353839);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#46494a), to(#353839));
+  background-image: -webkit-linear-gradient(top, #46494a, #353839);
+  background-image: -o-linear-gradient(top, #46494a, #353839);
+  background-image: linear-gradient(to bottom, #46494a, #353839);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff46494a', endColorstr='#ff353839', GradientType=0);
+  border-color: #252728;
+}
+#brand-logo .open ul.dropdown-menu .list-foot a:hover {
+  color: #fff;
+}
+#brand-logo .open .dropdown-mini {
+  min-width: 216px;
+  width: 216px;
+}
+#brand-logo .open .dropdown-bordered li + li a,
+#brand-logo .open .dropdown-bordered li + li .a {
+  border-top-color: #252728;
+  -webkit-box-shadow: inset 0 1px 0 0 #575b5c;
+  -moz-box-shadow: inset 0 1px 0 0 #575b5c;
+  box-shadow: inset 0 1px 0 0 #575b5c;
+}
+#brand-logo .open .dropdown-bordered li a:hover {
+  border-bottom-color: #353839;
+}
+#brand-logo .open .dropdown-block {
+  padding: 12px;
+}
+#brand-logo .open .dropdown-block + .dropdown-block {
+  border-top: 1px solid #515657;
+  -webkit-box-shadow: 0 -1px 0 0 #232526;
+  -moz-box-shadow: 0 -1px 0 0 #232526;
+  box-shadow: 0 -1px 0 0 #232526;
+}
+#brand-logo .open .btn-sky,
+#brand-logo .open .btn-navy {
+  font-size: 14px;
+  border: none;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  line-height: 30px;
+}
+#brand-logo .open .btn-navy {
+  margin-top: 12px;
+}
+#brand-logo div.dropdown-menu a {
+  color: #6c7579;
+  text-shadow: 1px 1px 1px #000;
+  padding: 0;
+}
+#brand-logo div.dropdown-menu a:hover {
+  text-decoration: none;
+  color: #fff;
+}
+#brand-logo .dropdown-toggler {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 0;
+}
+#brand-logo .dropdown-promo {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  margin: 0;
+  height: 24px;
+}
+#brand-logo .dropdown-promo .input-text {
+  width: 72px;
+  height: 18px;
+  line-height: 18px;
+  padding: 2px 5px;
+}
+#brand-logo .dropdown-promo button {
+  display: block;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  bottom: 1px;
+  border: 1px solid #232526;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 0 #5c5f61;
+  -moz-box-shadow: inset 0 1px 0 0 #5c5f61;
+  box-shadow: inset 0 1px 0 0 #5c5f61;
+  background-color: #3d4142;
+  background-image: -moz-linear-gradient(top, #434748, #353839);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#434748), to(#353839));
+  background-image: -webkit-linear-gradient(top, #434748, #353839);
+  background-image: -o-linear-gradient(top, #434748, #353839);
+  background-image: linear-gradient(to bottom, #434748, #353839);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff434748', endColorstr='#ff353839', GradientType=0);
+}
 .dropdown-toggler {
   position: absolute;
   top: 9px;

@@ -5,7 +5,18 @@
   <div class="wrapper">
     <div class="container-fluid">
       <div id="brand-logo">
-        <a class="asset-logo" href="{% app_url webapp app_name %}" id="btn-webapp">YaSound</a>
+        <div class='dropdown'>
+          <a href="#" class="btn-nav btn-logo" data-toggle="dropdown">
+            <div class="asset-logo">YaSound</div>
+            <i class="asset-arrow-down"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-mini" id='brand-menu'>
+            <li><a href="#" class='about'>{% trans "About" %}</a></li>
+            <li><a href="#" class='press'>{% trans "Press" %}</a></li>
+            <li><a href="#" class='jobs'>{% trans "Jobs" %}</a></li>
+            <li><a href="#" class='legal'>{% trans "Legal informations" %}</a></li>
+          </ul>
+        </div>
       </div>
       <div id="search-bar">
         <input type="text" id="search-input" placeholder="{% trans 'Search artist, radio ...' %}" maxlength="25" value="{{ query }}"/>
@@ -42,8 +53,6 @@
               <li><a href="#" class='my-profile'>{% trans "My profile" %}</a></li>
               <li><a href="#" class='my-radios'>{% trans "My radios" %}</a></li>
               <li><a href="#" class='my-settings'>{% trans "My settings" %}</a></li>
-              <li><a href="#" class='about'>{% trans "About" %}</a></li>
-              <li><a href="#" class='legal'>{% trans "Legal informations" %}</a></li>
               <li><a href="#" class='logout'>{% trans "Logout" %}</a></li>
             </ul>
           </li>
