@@ -1283,6 +1283,9 @@ Yasound.Views.Status = Backbone.View.extend({
 Yasound.Views.RadioInline = Backbone.View.extend({
 
     events: {
+        'click .radio-name': 'onRadio',
+        'click .listen-btn': 'onListen',
+        'click .edit-settings-btn': 'onSettings'
     },
 
     initialize: function () {
@@ -1292,20 +1295,43 @@ Yasound.Views.RadioInline = Backbone.View.extend({
     onClose: function () {
         this.model.unbind('change', this.render);
     },
+
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.radioInlineTemplate(data));
         return this;
+    },
+
+    onRadio: function (e) {
+        e.preventDefault();
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+            trigger: true
+        });
+    },
+
+    onSettings: function (e) {
+        e.preventDefault();
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid + '/edit/', {
+            trigger: true
+        });
+    },
+
+    onListen: function (e) {
+        e.preventDefault();
+        var uuid = this.model.get('uuid');
+        Yasound.App.Router.navigate("radio/" + uuid, {
+            trigger: true
+        });
     }
 });
+
 /**
  * Programming page
  */
 Yasound.Views.ProgrammingPage = Backbone.View.extend({
     events: {
-        "click #edit-settings-btn": "onSettings",
-        "click #listen-btn": "onListen",
-        "click #programming-btn": "onProgramming",
         "click #status-btn": "onStatus"
     },
 
@@ -1342,20 +1368,6 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
 
         this.playlistView = new Yasound.Views.Playlist({}).render(uuid);
         return this;
-    },
-
-    onSettings: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate("radio/" + this.uuid + '/edit/', {
-            trigger: true
-        });
-    },
-
-    onListen: function (e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate("radio/" + this.uuid, {
-            trigger: true
-        });
     },
 
     onProgramming: function (e) {

@@ -1,2 +1,18 @@
 {% load i18n %}
-<span><% name %></span>
+    <div class="span6">
+      <i class="asset-programming"></i>
+      <hgroup>
+        <h2 class="headline2">Gestion de la programmation</h2>
+        <h1 class="headline1">de <a href="#" class='radio-name'><% name %></a></h1>
+      </hgroup>
+    </div>
+    <div class="span6">
+      <ul>
+        <li class="headline2"><a class='btn-sky listen-btn'>{% trans 'Listen now' %}</a></li>
+        <li class="headline1"><a class='btn-green edit-settings-btn'>{% trans 'Settings' %}</a></li>
+      </ul>
+      <a class="programming-cover radio-name" href="#" >
+        <img src="<% picture %>" width="70" height="70" alt="<% name%>" />
+      </a>
+    </div>
+
