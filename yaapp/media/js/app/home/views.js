@@ -334,7 +334,8 @@ Yasound.Views.RadiosActivity = Backbone.View.extend({
 Yasound.Views.HomePage = Backbone.View.extend({
 
     events: {
-        'click .app-alert .asset-close': 'onCloseAnnouncement'
+        'click .app-alert .asset-close': 'onCloseAnnouncement',
+        'click .app-alert a': 'onAnnouncementLink'
     },
 
     initialize: function() {
@@ -481,5 +482,16 @@ Yasound.Views.HomePage = Backbone.View.extend({
     onCloseAnnouncement: function (e) {
         e.preventDefault();
         cookies.set('hideannouncement', Yasound.App.announcementId);
+    },
+
+    onAnnouncementLink: function (e) {
+        e.preventDefault();
+
+        var uuid = $(e.target).data('uuid');
+        if (uuid) {
+            Yasound.App.Router.navigate('radio/' + uuid + '/', {
+                trigger: true
+            });
+        }
     }
 });
