@@ -1351,7 +1351,7 @@ msgstr "la programmation de"
 
 #: templates/yabase/app/home/radioActivity.mustache:4
 msgid "has been updated"
-msgstr "a mis à jour"
+msgstr "a été mise à jour"
 
 #: templates/yabase/app/login/login.mustache:7
 msgid "Not registered yet ? Create an account"
