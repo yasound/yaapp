@@ -33,9 +33,9 @@ Yasound.Utils.containerHeight = function () {
 
 Yasound.Utils.cellsPerPage = function() {
     var containerHeight = Yasound.Utils.containerHeight();
-    var cellHeight = 217;
+    var cellHeight = 144;
     var rows =  Math.ceil(containerHeight / cellHeight);
-    return rows*4 * 2;
+    return rows*6 * 2;
 };
 
 Yasound.Utils.userCellsPerPage = function() {
