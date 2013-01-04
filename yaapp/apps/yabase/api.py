@@ -20,6 +20,7 @@ from yasearch.models import search_radio_by_user, \
     search_radio_by_song
 import datetime
 import json
+from yawall.models import WallManager
 import settings as yabase_settings
 
 class SongMetadataResource(ModelResource):
@@ -485,12 +486,13 @@ class TechTourRadioResource(ModelResource):
 class WallEventResource(ModelResource):
     radio = fields.ForeignKey(RadioResource, 'radio', full=True)
     user = fields.ForeignKey(UserResource, 'user', full=True, null=True)
+
     class Meta:
         queryset = WallEvent.objects.all()
         resource_name = 'wall_event'
         fields = ['id', 'type', 'start_date', 'user', 'text', 'animated_emoticon', 'picture', 'radio']
         include_resource_uri = False
-        authorization= Authorization()
+        authorization = Authorization()
         authentication = YasoundApiKeyAuthentication()
         allowed_methods = ['post']
 
@@ -500,7 +502,7 @@ class WallEventResource(ModelResource):
 
         radio_uri = bundle.data['radio']
         elements = radio_uri.split('/')
-        radio_id = int(elements[len(elements)-2])
+        radio_id = int(elements[len(elements) - 2])
         try:
             radio = Radio.objects.get(id=radio_id)
         except Radio.DoesNotExist:
@@ -508,8 +510,22 @@ class WallEventResource(ModelResource):
 
         WallEvent.objects.add_current_song_event(radio)
         wall_event_resource = super(WallEventResource, self).obj_create(bundle, request, **kwargs)
-        wall_event_resource.obj.start_date = datetime.datetime.now() # be sure the song event is before message event
+        wall_event_resource.obj.start_date = datetime.datetime.now()  # be sure the song event is before message event
         wall_event_resource.obj.save()
+
+        # create new wall event
+        wall_event_type = wall_event_resource.obj.type
+        wm = WallManager()
+        if wall_event_type == yabase_settings.EVENT_MESSAGE:
+            wm.add_event(event_type=WallManager.EVENT_MESSAGE,
+                         radio=wall_event_resource.obj.radio,
+                         user=request.user,
+                         message=wall_event_resource.obj.text)
+        elif wall_event_type == yabase_settings.EVENT_LIKE:
+            wm.add_event(event_type=WallManager.EVENT_LIKE,
+                         radio=wall_event_resource.obj.radio,
+                         user=request.user)
+
         return wall_event_resource
 
 class RadioWallEventResource(ModelResource):
