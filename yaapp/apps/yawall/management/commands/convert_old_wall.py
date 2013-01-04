@@ -39,7 +39,6 @@ class Command(BaseCommand):
                                                             username=wall_event.user.username)
 
                     if not existing_event:
-                        logger.info(wall_event.id)
                         imported_count += 1
                         wm.import_old_event(wall_event)
                 elif wall_event.type == yabase_settings.EVENT_LIKE:
@@ -50,7 +49,6 @@ class Command(BaseCommand):
                                                             song=wall_event.song)
 
                     if not existing_event:
-                        logger.info(wall_event.id)
                         imported_count += 1
                         wm.import_old_event(wall_event)
             logger.info('analyzed radio %s (%s): imported %d messages' % (radio.id, radio.uuid, imported_count))
