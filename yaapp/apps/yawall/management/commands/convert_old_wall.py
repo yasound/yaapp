@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
         radios = Radio.objects.filter(ready=True, deleted=False)
         for radio in radios:
-            wall_events = WallEvent.objects.filter(radio=radio)
+            wall_events = WallEvent.objects.filter(radio=radio).order_by('start_date')
             imported_count = 0
             count = wall_events.count()
             if count == 0:
