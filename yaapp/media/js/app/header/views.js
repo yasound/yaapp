@@ -11,6 +11,7 @@ Yasound.Views.Header = Backbone.View.extend({
 
     events: {
         'keypress #search-input' : 'search',
+        'click #search-symbol': 'searchWithSymbol',
         'click .btn-register': 'onRegister',
         'click #profile-menu .my-profile': 'onMyProfile',
         'click #profile-menu .my-radios': 'onMyRadios',
@@ -64,6 +65,19 @@ Yasound.Views.Header = Backbone.View.extend({
         $('#search-input', this.el).val('');
         e.preventDefault();
 
+        Yasound.App.Router.navigate("search/" + value + '/', {
+            trigger: true
+        });
+    },
+
+    searchWithSymbol: function (e) {
+        e.preventDefault();
+        var value = $('#search-input', this.el).val();
+        if (!value) {
+            return;
+        }
+
+        $('#search-input', this.el).val('');
         Yasound.App.Router.navigate("search/" + value + '/', {
             trigger: true
         });
