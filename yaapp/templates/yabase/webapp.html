@@ -267,6 +267,8 @@ HTML, BODY { height: 100%; }
        {% else %}
        var g_announcement_id;
        {% endif %}
+
+       var g_jm_radio = '{{ jm_radio_uuid }}';
     </script>
 
 
@@ -319,6 +321,10 @@ HTML, BODY { height: 100%; }
 
    <script type='text/html' id='radioPageTemplate'>
      {% include "yabase/app/radio/radioPage.mustache" with wall_events=None radio=radio%}
+   </script>
+
+   <script type='text/html' id='jmHeaderTemplate'>
+     {% include "yabase/app/radio/jmHeader.mustache" %}
    </script>
 
    <script type='text/html' id='radioInfosTemplate'>

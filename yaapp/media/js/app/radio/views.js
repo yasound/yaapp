@@ -561,6 +561,15 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
     },
 
     render: function () {
+        if (this.model.get('uuid') === g_jm_radio) {
+            $('.wall-covers-pics', this.el).html(ich.jmHeaderTemplate());
+            $('.wall-covers').addClass('jm-header');
+            is_jm_radio = true;
+            return this;
+        } else {
+            $('.wall-covers').removeClass('jm-header');
+        }
+
         this.fetchPictures();
         return this;
     },

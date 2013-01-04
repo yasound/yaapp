@@ -9038,6 +9038,36 @@ ul .radio-with-stats-cells li {
   background-image: -webkit-linear-gradient(bottom, #ebebeb 50%, #fbfbfc 69%);
   background-image: -ms-linear-gradient(bottom, #ebebeb 50%, #fbfbfc 69%);
 }
+/**
+ * JM header
+ */
+.jm-header {
+  color: #b1b1b1;
+  background-image: none;
+  background: url(../images/jm/bg.png) repeat-x 50% 50%;
+}
+.jm-header:after {
+  background: none;
+}
+.radio-jm {
+  background-color: #181818;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  font-family: 'proxima-nova', sans-serif;
+  color: #b1b1b1;
+  height: 314px;
+}
+.radio-jm .jm-picture {
+  margin-top: 33px;
+}
+.radio-jm .jm-picture img {
+  margin-left: 68px;
+  margin-top: 20px;
+}
+.radio-jm .span7 {
+  margin-top: 10px;
+}
 @media (max-width: 480px) {
   .teaser .argument {
     bottom: 115px;
