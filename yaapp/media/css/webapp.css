@@ -1982,7 +1982,7 @@ div .selector span {
 /*--- SCROLL TO TOP ---*/
 #scroll-top-container {
   position: fixed;
-  bottom: 0;
+  bottom: 0px;
   right: 20px;
   width: 66px;
   height: 68px;
