@@ -1368,7 +1368,7 @@ class Radio(models.Model):
         self.save()
 
     def broadcast_message(self, message):
-        message = striptags(message)
+        message = striptags(message)[:800]
 
         from task import async_radio_broadcast_message
         async_radio_broadcast_message(self, message)
