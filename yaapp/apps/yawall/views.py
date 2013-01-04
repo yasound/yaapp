@@ -6,7 +6,7 @@ from django.conf import settings
 from models import WallManager
 from yacore.decorators import check_api_key
 from yacore.api import api_response
-from yabase.models import Radio
+from yabase.models import Radio, WallEvent
 from yabase import signals as yabase_signals
 from emailconfirmation.models import EmailTemplate
 from django.core.mail import send_mail
@@ -29,6 +29,17 @@ def wall(request, radio_uuid, event_id=None):
         radio = get_object_or_404(Radio, uuid=radio_uuid)
         if not request.user.is_superuser and (radio.creator != request.user):
             return HttpResponse(status=401)
+
+        # remove legacy wall event
+        event = wm.collection.find_one({'event_id': event_id})
+        if event:
+            if event.get('event_type') == WallManager.EVENT_MESSAGE:
+                username = event.get('message').get('username')
+                message = event.get('message').get('text')
+                radio_uuid = event.get('radio_uuid')
+                legacy_events = WallEvent.objects.filter(radio__uuid=radio_uuid, user__username=username, text=message).order_by('-start_date')
+                if len(legacy_events) > 0:
+                    legacy_events[0].delete()
 
         wm.remove_event(event_id)
         yabase_signals.new_moderator_del_msg_activity.send(sender=request.user, user=request.user)
