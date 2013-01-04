@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-04 10:42+0100\n"
+"POT-Creation-Date: 2013-01-04 11:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1993,18 +1993,19 @@ msgstr "Cofondateur, Président"
 msgid ""
 "Jean-Marc founded\n"
 "            the web agency CSTech and Jiwa, a music-on-demand website. <br/"
-">\n"
-"            When he's not founding startups, Jean-Marc loves to travel.\n"
+">YaSound was his latest venture. He passed away on monday December 10th of "
+"2012 but he managed to transmit his drive and energy to the team. We will "
+"continue the project, thinking about him everyday in the future.\n"
 "            "
 msgstr ""
 "Jean-Marc a fondé la webagency CSTech et le site de musique à la demande "
-"Jiwa.<br />A part créer des startups, il aime bien aussi voyager..."
+"Jiwa.<br />YaSound est la dernière aventure entrepreneuriale dans laquelle il s'est investit. Il nous a quitté le 10 décembre 2012 mais a eu le temps de communiquer toute son énergie et son enthousiasme à son équipe qui continue le développement de ce projet en pensant chaque jour à lui."
 
-#: templates/yabase/app/static/about.mustache:41
+#: templates/yabase/app/static/about.mustache:40
 msgid "CTO, Co-Founder"
 msgstr "Cofondateur, Directeur Technique"
 
-#: templates/yabase/app/static/about.mustache:42
+#: templates/yabase/app/static/about.mustache:41
 msgid ""
 "\n"
 "  After developing music software and providing audio R&amp;D for video game "
@@ -2020,7 +2021,7 @@ msgstr ""
 "Senior Director of Technology.<br />Quand il ne code pas en C++, il pratique "
 "les langues orientales et la musique."
 
-#: templates/yabase/app/static/about.mustache:51
+#: templates/yabase/app/static/about.mustache:50
 msgid ""
 "\n"
 "            <p>Listen to thousand of radios on the web and on mobile. Chat "
