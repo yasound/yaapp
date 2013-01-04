@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-18 08:33+0100\n"
+"POT-Creation-Date: 2013-01-04 10:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,46 +106,46 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:278 js/app/common/models.js.py:333
+#: js/app/common/models.js:289 js/app/common/models.js.py:344
 #: js/app/profile/models.js:38
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:332 js/app/profile/models.js:37
+#: js/app/common/models.js:343 js/app/profile/models.js:37
 #: js/app/share/views.js:49 js/app/share/views.js.py:91
 msgid "by"
 msgstr "par"
 
-#: js/app/common/models.js:334 js/app/profile/models.js:39
+#: js/app/common/models.js:345 js/app/profile/models.js:39
 #: js/app/share/views.js:50
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:407
+#: js/app/common/models.js:418
 msgid "followers"
 msgstr "abonnés"
 
-#: js/app/common/models.js:411
+#: js/app/common/models.js:422
 msgid "follower"
 msgstr "abonné"
 
-#: js/app/common/models.js:419 js/app/common/models.js.py:420
+#: js/app/common/models.js:430 js/app/common/models.js.py:431
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:427
+#: js/app/common/models.js:438
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:429
+#: js/app/common/models.js:440
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:278 js/app/header/views.js:163
+#: js/app/common/views.js:380 js/app/header/views.js:200
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:511 js/app/footer/views.js:222
+#: js/app/common/views.js:613 js/app/footer/views.js:231
 #: js/app/friends/views.js:272 js/app/friends/views.js.py:319
 #: js/app/friends/views.js:325 js/app/friends/views.js.py:339
 #: js/app/friends/views.js:345 js/app/friends/views.js.py:364
@@ -155,35 +155,35 @@ msgstr "Nouvelle notification reçue"
 msgid "Error"
 msgstr "Erreur"
 
-#: js/app/common/views.js:511 js/app/footer/views.js:222
+#: js/app/common/views.js:613 js/app/footer/views.js:231
 msgid "Nothing to share"
 msgstr "Rien à partager"
 
-#: js/app/common/views.js:542
+#: js/app/common/views.js:644
 msgid "Show more"
 msgstr "Charger plus"
 
-#: js/app/common/views.js:819 js/app/header/views.js:145
+#: js/app/common/views.js:921 js/app/header/views.js:182
 #: js/app/login/views.js:34
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:832 js/app/header/views.js:158
+#: js/app/common/views.js:934 js/app/header/views.js:195
 #: js/app/login/views.js:47 js/app/newRadio/views.js:77
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:882
+#: js/app/common/views.js:984
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:884 js/backoffice/Geoperm/Geoperm.js:317
+#: js/app/common/views.js:986 js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
 
-#: js/app/common/views.js:1015
-msgid "Sort by genre"
-msgstr "Trier par genre"
+#: js/app/common/views.js:1117
+msgid "Filter by genre"
+msgstr "Filtrer par genre"
 
 #: js/app/favorites/views.js:40
 msgid "Next favorites"
@@ -311,23 +311,23 @@ msgstr "oui"
 msgid "Error while creating radio"
 msgstr "Erreur lors de création de la radio"
 
-#: js/app/notifications/views.js:39 js/app/notifications/views.js.py:204
+#: js/app/notifications/views.js:39 js/app/notifications/views.js.py:203
 msgid "Notification marked as read"
 msgstr "Notification marquée comme lue"
 
-#: js/app/notifications/views.js:41 js/app/notifications/views.js.py:206
+#: js/app/notifications/views.js:41 js/app/notifications/views.js.py:205
 msgid "Notification deleted"
 msgstr "Notification effacée"
 
-#: js/app/notifications/views.js:336
+#: js/app/notifications/views.js:335
 msgid "Next notifications"
 msgstr "Notifications suivantes"
 
-#: js/app/profile/views.js:67 js/app/radio/views.js:34
+#: js/app/profile/views.js:67
 msgid "Follow"
 msgstr "Suivre"
 
-#: js/app/profile/views.js:70 js/app/radio/views.js:37
+#: js/app/profile/views.js:70
 msgid "Unfollow"
 msgstr "Ne plus suivre"
 
@@ -396,36 +396,39 @@ msgstr "titres n'ont pas été trouvés"
 msgid "Results from Deezer import"
 msgstr "Résultats de l'import Deezer"
 
-#: js/app/radio/models.js:43
+#: js/app/radio/models.js:45
 msgid "<%name%> liked this song!"
 msgstr "<%name%> a aimé ce morceau !"
 
-#: js/app/radio/models.js:48
+#: js/app/radio/models.js:50
 msgid "<%name1%> and <%name2%> liked this song!"
 msgstr "<%name1%> et <%name2%> ont aimé ce morceau !"
 
-#: js/app/radio/models.js:54 js/app/radio/models.js.py:63
+#: js/app/radio/models.js:56 js/app/radio/models.js.py:65
 msgid "<%name1%>, <%name2%> and <%name3%> liked this song!"
 msgstr "<%name1%>, <%name2%> et <%name3%> ont aimé ce morceau !"
 
-#: js/app/radio/models.js:65
-msgid "<%name1%>, <%name2%>, <%name3%> and another person liked this song!"
-msgstr "<%name1%>, <%name2%> et <%name3%> et une autre personne ont aimé ce morceau !"
-
 #: js/app/radio/models.js:67
+msgid "<%name1%>, <%name2%>, <%name3%> and another person liked this song!"
+msgstr ""
+"<%name1%>, <%name2%> et <%name3%> et une autre personne ont aimé ce morceau !"
+
+#: js/app/radio/models.js:69
 msgid ""
 "<%name1%>, <%name2%> and <%name3%> and <%other%> people liked this song!"
-msgstr "<%name1%>, <%name2%> et <%name3%> et <%other%> autres personnes ont aimé ce morceau !"
+msgstr ""
+"<%name1%>, <%name2%> et <%name3%> et <%other%> autres personnes ont aimé ce "
+"morceau !"
 
-#: js/app/radio/views.js:751
+#: js/app/radio/views.js:755
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:1075
+#: js/app/radio/views.js:1103
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:1076 js/app/settings/views.js:184
+#: js/app/radio/views.js:1104 js/app/settings/views.js:184
 #: js/app/settings/views.js.py:198 js/app/settings/views.js:208
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"

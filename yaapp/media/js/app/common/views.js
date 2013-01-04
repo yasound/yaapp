@@ -1115,7 +1115,7 @@ Yasound.Views.SubMenu = Backbone.View.extend({
             $('.btn-select', this.el).html(text + ' <i class="asset-select">');
         } else {
             first.hide();
-            $('.btn-select', this.el).html(gettext('Sort by genre') + ' <i class="asset-select">');
+            $('.btn-select', this.el).html(gettext('Filter by genre') + ' <i class="asset-select">');
         }
         $.publish('/submenu/genre', value);
     }

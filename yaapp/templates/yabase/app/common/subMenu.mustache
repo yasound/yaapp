@@ -11,9 +11,9 @@
             <a id="favorites" href="{% app_url webapp_favorites app_name %}" class="btn btn-basic {% ifequal submenu_number 4 %}active{% endifequal %}" >{% trans "Favorites" %}</a>
         </div>
         <div class="dropdown dropdown-genre">
-            <a class="btn btn-basic btn-select" data-toggle="dropdown" href="#">{% trans "Sort by genre" %} <i class="asset-select"></i></a>
+            <a class="btn btn-basic btn-select" data-toggle="dropdown" href="#">{% trans "Filter by genre" %} <i class="asset-select"></i></a>
             <ul class="dropdown-menu">
-                <li><a href="#" data-genre=''>{% trans "Clear sort" %}</a></li>
+                <li><a href="#" data-genre=''>{% trans "Clear filter" %}</a></li>
                 {% for value, text in genres %}
                 <li><a href="#" data-genre='{{ value }}'>{{ text }}</a></li>
                 {% endfor %}
