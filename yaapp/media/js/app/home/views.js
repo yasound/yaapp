@@ -304,7 +304,7 @@ Yasound.Views.RadiosActivity = Backbone.View.extend({
 
     addOne: function (activity) {
         var found = _.find(this.views, function (view) {
-            if (view.model.id == listener.id) {
+            if (view.model.id == activity.id) {
                 return true;
             }
         });
