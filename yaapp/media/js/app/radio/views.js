@@ -749,10 +749,6 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         });
         this.wallEvents.setRadio(this.model);
 
-        this.paginationView = new Yasound.Views.Pagination({
-            collection: this.wallEvents,
-            el: $('#pagination-wall', this.el)
-        }).setTitle(gettext('Next messages'));
 
         this.wallEventsView.clear();
 
@@ -764,12 +760,18 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         if (this.model.get('id')) {
             if (g_bootstrapped_data) {
                 this.wallEvents.reset(g_bootstrapped_data.wall_events);
+                this.wallEvents.totalPages = 2;
             } else {
                 this.wallEvents.goTo(0);
             }
             this.listeners.fetch();
             this.fans.fetch();
         }
+
+        this.paginationView = new Yasound.Views.Pagination({
+            collection: this.wallEvents,
+            el: $('#pagination-wall', this.el)
+        }).setTitle(gettext('Next messages'));
 
         this.creatorView = new Yasound.Views.Creator({
             model: this.model
