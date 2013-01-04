@@ -177,6 +177,7 @@ class WallManager():
         :param message: message when event_type is 'message'
         """
 
+        logger.info('adding new event: %s' % (event_type))
         lock_id = "wall-add-event-lock"
         acquire_lock = lambda: cache.add(lock_id, "true", LOCK_EXPIRE)
         release_lock = lambda: cache.delete(lock_id)
@@ -318,13 +319,14 @@ class WallManager():
         filters = {
             'radio_uuid': radio_uuid,
             'event_type': event_type,
-            'created': {
-                '$lte': date
-            }
         }
+
         if message is not None:
             filters['message.text'] = message
             filters['message.username'] = username
+            filters['created'] = {
+                '$gte': date
+            }
 
         if song is not None:
             song_desc = song.song_description(info_from_yasound_db=True)
@@ -332,7 +334,9 @@ class WallManager():
             filters['current_song.artist'] = song_desc.get('artist')
             filters['current_song.album'] = song_desc.get('album')
             filters['likers.username'] = username
-
+            filters['likers.created'] = {
+                 '$gte': date
+            }
 
         return self.collection.find_one(filters)
 

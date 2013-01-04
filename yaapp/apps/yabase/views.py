@@ -529,6 +529,24 @@ def delete_message(request, message_id):
         logger.debug('user is not the owner of the radio, delete is impossible')
         return HttpResponse(status=401)
 
+    wm = WallManager()
+    if wall_event.type == yabase_settings.EVENT_MESSAGE:
+        existing_event = wm.find_existing_event(event_type=WallManager.EVENT_MESSAGE,
+                                                radio_uuid=wall_event.radio.uuid,
+                                                message=wall_event.text,
+                                                date=wall_event.start_date,
+                                                username=wall_event.user.username)
+    elif wall_event.type == yabase_settings.EVENT_LIKE:
+        existing_event = wm.find_existing_event(event_type=WallManager.EVENT_LIKE,
+                                                radio_uuid=wall_event.radio.uuid,
+                                                date=wall_event.start_date,
+                                                username=wall_event.user.username,
+                                                song=wall_event.song)
+
+    if existing_event:
+        print "------->"
+        wm.remove_event(existing_event.get('event_id'))
+
     logger.debug('deleting message')
     wall_event.delete()
 
@@ -537,7 +555,7 @@ def delete_message(request, message_id):
 
     logger.debug('ok, done')
 
-    response = {'success':True}
+    response = {'success': True}
     res = json.dumps(response)
     return HttpResponse(res)
 
