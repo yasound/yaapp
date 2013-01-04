@@ -11,8 +11,8 @@ logger = logging.getLogger("yaapp.yawall")
 import dateutil.parser
 import hashlib
 import signals as yawall_signals
-import uuid
 from yasearch.utils import get_simplified_name
+from yabase import settings as yabase_settings
 
 LOCK_EXPIRE = 60 * 1  # Lock expires in 1 minute(s)
 
@@ -108,9 +108,10 @@ class WallManager():
         self.collection.ensure_index('song_uuid')
         self.collection.ensure_index('updated')
 
-    def _generate_event_id(self, radio, event_type, current_song):
+    def _generate_event_id(self, radio, event_type, current_song, now=None):
+        if now is None:
+            now = now = datetime.datetime.now()
         if event_type == WallManager.EVENT_MESSAGE:
-            now = datetime.datetime.now()
             time_val = time.mktime(now.timetuple())
             return '%s-msg-%s' % (radio.uuid, time_val)
         elif event_type == WallManager.EVENT_LIKE:
@@ -118,7 +119,7 @@ class WallManager():
             try:
                 song_date = dateutil.parser.parse(song_date)
             except:
-                song_date = datetime.datetime.now()
+                song_date = now
 
             time_val = time.mktime(song_date.timetuple())
             return '%s-like-%s' % (radio.uuid, time_val)
@@ -312,6 +313,113 @@ class WallManager():
         }, {
             '$set': {'abuse': True}
         }, safe=True)
+
+    def find_existing_event(self, event_type, radio_uuid, date, username, message=None, song=None):
+        filters = {
+            'radio_uuid': radio_uuid,
+            'event_type': event_type,
+            'created': {
+                '$lte': date
+            }
+        }
+        if message is not None:
+            filters['message.text'] = message
+            filters['message.username'] = username
+
+        if song is not None:
+            song_desc = song.song_description(info_from_yasound_db=True)
+            filters['current_song.name'] = song_desc.get('name')
+            filters['current_song.artist'] = song_desc.get('artist')
+            filters['current_song.album'] = song_desc.get('album')
+            filters['likers.username'] = username
+
+
+        return self.collection.find_one(filters)
+
+    def import_old_event(self, wall_event):
+        now = wall_event.start_date
+        radio = wall_event.radio
+        user = wall_event.user
+
+        event_type = WallManager.EVENT_MESSAGE
+        if wall_event.type == yabase_settings.EVENT_LIKE:
+            event_type = WallManager.EVENT_LIKE
+        elif wall_event.type == yabase_settings.EVENT_MESSAGE:
+            event_type = WallManager.EVENT_MESSAGE
+        else:
+            return
+
+        if wall_event.song:
+            current_song = wall_event.song.song_description(info_from_yasound_db=True)
+        else:
+            current_song = self._create_blank_current_song()
+
+        event_id = self._generate_event_id(radio, event_type, current_song, now=now)
+        title = self._generate_title(current_song)
+
+        doc = self.collection.find_one({'event_id': event_id}, {'_id': False})
+        if doc is None:
+            doc = {
+                'radio_id': radio.id,
+                'event_type': event_type,
+                'radio_uuid': radio.uuid,
+                'title': title,
+                'current_song': current_song,
+                'created': now,
+                'event_id': event_id,
+                'message': {},
+                'likers': [],
+                'likers_digest': [],
+                'like_count': 0,
+                'message_count': 0
+            }
+        song_uuid = self._generate_song_uuid(current_song)
+        doc['updated'] = now
+        doc['title'] = title
+        doc['radio_id'] = radio.id
+        doc['radio_uuid'] = radio.uuid
+        doc['song_uuid'] = song_uuid
+        doc['event_type'] = event_type
+
+        if event_type == WallManager.EVENT_MESSAGE:
+            message = wall_event.text
+
+            message_data = {
+                'text': message,
+                'name': unicode(user.get_profile()),
+                'created': now,
+                'username': user.username,
+            }
+            doc['message'] = message_data
+
+        elif event_type == WallManager.EVENT_LIKE:
+            previous_likers = self._likers_for_song(radio.uuid, song_uuid)
+            likers = []
+            like_data = {
+                'name': unicode(user.get_profile()),
+                'created': now,
+                'updated': now,
+                'username': user.username,
+            }
+            for liker in previous_likers:
+                if liker.get('username') == user.username:
+                    # save original creation date
+                    like_data['created'] = liker.get('created')
+                    continue
+                likers.append(liker)
+
+            likers.insert(0, like_data)
+
+            doc['likers'] = likers
+            doc['like_count'] = len(likers)
+
+            likers_digest = []
+            for like in likers[:3]:
+                likers_digest.append(like)
+            doc['likers_digest'] = likers_digest
+
+        self.collection.update({"event_id": doc.get('event_id')},
+                               {"$set": doc}, upsert=True, safe=True)
 
 
 if settings.ENABLE_PUSH:
