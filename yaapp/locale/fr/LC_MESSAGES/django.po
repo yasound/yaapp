@@ -1787,9 +1787,8 @@ msgstr "Message aux abonnés"
 
 #: templates/yabase/app/radio/radioCreator.mustache:7
 #: templates/yabase/app/radio/radioCreator.mustache:15
-#, fuzzy
 msgid "followers"
-msgstr "Ne plus suivre"
+msgstr "abonnés"
 
 #: templates/yabase/app/radio/radioInfos.mustache:14
 msgid "Add to YaSound favorites"
