@@ -493,13 +493,12 @@ Yasound.Data.Models.ConnectedUser = Backbone.Model.extend({
 /**
  * Connected user list
  */
-Yasound.Data.Models.ConnectedUsers = Backbone.Collection.extend({
+Yasound.Data.Models.ConnectedUsers = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.ConnectedUser,
     url: function() {
         return '/api/v1/fast_connected_users/?limit=13';
     }
 });
-
 
 Yasound.Data.Models.PublicStats =  Backbone.Model.extend({
     urlRoot: '/api/v1/public_stats/'

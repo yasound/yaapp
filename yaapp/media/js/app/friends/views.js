@@ -169,6 +169,7 @@ Yasound.Views.Friends = Backbone.View.extend({
 Yasound.Views.FriendsPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.Friends({}),
     followers: new Yasound.Data.Models.Followers({}),
+    connected: new Yasound.Data.Models.ConnectedUsers({}),
 
     events: {
         'click #login-btn': 'onLogin',
@@ -194,12 +195,17 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             this.followersView.close();
             this.followersView = undefined;
         }
+        if (this.connectedView) {
+            this.connectedView.close();
+            this.connectedView = undefined;
+        }
     },
 
     render: function() {
         this.reset();
         this.collection.perPage = Yasound.Utils.userCellsPerPage();
         this.followers.perPage = Yasound.Utils.userCellsPerPage();
+        this.connected.perPage = Yasound.Utils.userCellsPerPage();
         $(this.el).html(ich.friendsPageTemplate());
 
         this.resultsView = new Yasound.Views.Friends({
@@ -222,6 +228,15 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             el: $('#followers-pagination', this.el)
         });
 
+        this.connectedView = new Yasound.Views.Friends({
+            collection: this.connected,
+            el: $('#connected', this.el)
+        });
+
+        this.connectedPaginationView = new Yasound.Views.Pagination({
+            collection: this.connected,
+            el: $('#connected-pagination', this.el)
+        });
 
         var that = this;
         if (Yasound.App.userAuthenticated) {
@@ -233,6 +248,11 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
             this.followers.fetch({
                 success: function (collection, response) {
                     $('#followers-count', that.el).html(collection.totalCount);
+                }
+            });
+            this.connected.fetch({
+                success: function (collection, response) {
+                    $('#connected-count', that.el).html(collection.totalCount);
                 }
             });
         }

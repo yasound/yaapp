@@ -108,11 +108,23 @@
   </div>
 </div>
 
-<div class="container-fluid content-zone last">
+<div class="container-fluid content-zone">
   <div class="row-fluid">
     <section class='span12'>
         <h1>{% trans "People following you" %} (<span id='followers-count'></span>)</h1>
         <ul id='followers'>
+        </ul>
+        <img class='loading-mask' src='/media/images/loading-white.gif'/>
+        <div class='cell-pagination' id='followers-pagination'></div>
+    </section>
+  </div>
+</div>
+
+<div class="container-fluid content-zone last">
+  <div class="row-fluid">
+    <section class='span12'>
+        <h1>{% trans "Connected users near your location" %} (<span id='connected-count'></span>)</h1>
+        <ul id='connected'>
         </ul>
         <img class='loading-mask' src='/media/images/loading-white.gif'/>
         <div class='cell-pagination' id='followers-pagination'></div>
