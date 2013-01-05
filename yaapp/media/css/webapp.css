@@ -7505,8 +7505,22 @@ input::-ms-input-placeholder {
 .radio-cell-tip .current-track .headline {
   display: block;
   color: #828181;
-  border-bottom: 1px solid #414141;
+}
+.radio-cell-tip .current-track .progress {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.9);
   margin-bottom: 10px;
+}
+.radio-cell-tip .current-track .progress .bar {
+  background: #414141;
+  -webkit-transition: width 0.6s linear;
+  -moz-transition: width 0.6s linear;
+  -ms-transition: width 0.6s linear;
+  -o-transition: width 0.6s linear;
+  transition: width 0.6s linear;
 }
 .radio-cell-tip .track-info {
   position: relative;

@@ -149,7 +149,7 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
     },
 
     initialize: function () {
-        _.bindAll(this, 'show', 'hide', 'play', 'stop', 'clearPlayTimeout');
+        _.bindAll(this, 'show', 'hide', 'play', 'stop', 'clearPlayTimeout', 'updateProgressBar');
         this.options.$source.on('click mouseleave', this.hide);
         this.currentSongModel = new Yasound.Data.Models.CurrentSong();
         this.currentSongModel.bind('change', this.refreshCurrentSong, this);
@@ -186,7 +186,12 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
         this.$el.offset(pos);
 
         this.clearPlayTimeout();
-        this.playTimeout = setTimeout(this.play, 3*1000);
+        this.playTimeout = setTimeout(this.play, 2*1000);
+
+        this.step = 0;
+        this.total = 2;
+        this.progressInterval = setInterval(this.updateProgressBar, 1*600);
+        this.updateProgressBar();
     },
 
     hide: function(e) {
@@ -259,11 +264,23 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
     },
 
     clearPlayTimeout: function () {
-        console.log('clearPlayTimeout')
         if (this.playTimeout) {
             clearTimeout(this.playTimeout);
             this.playTimeout = undefined;
         }
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = undefined;
+        }
+    },
+
+    updateProgressBar: function () {
+        var $progress = $('.current-track .progress .bar');
+        var percentage = (this.step*100) / this.total;
+        var progress = parseInt(percentage, 10);
+        $progress.css('width', progress + '%');
+
+        this.step = this.step + 1;
     }
 });
 
