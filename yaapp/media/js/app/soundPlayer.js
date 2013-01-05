@@ -161,6 +161,99 @@ Yasound.Player.SoundManager = function () {
     return mgr;
 };
 
+Yasound.Player.InstantPlayer = function () {
+    soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
+    soundManager.preferFlash = true;
+    soundManager.useHTML5Audio = true;
+    soundManager.debugMode = false;
+    soundManager.useFlashBlock = true;
+    soundManager.flashVersion = 9;
+    soundManager.useHighPerformance = true;
+    soundManager.useFastPolling = true;
+
+    var async = true;
+    if (Yasound.App.isMobile) {
+        async = false;
+    }
+
+    var mgr = {
+        config : {
+            id: 'yasoundInstantPlay',
+            url: '/',
+            autoPlay: true,
+            autoLoad: true,
+            volume: 100,
+            stream: true
+        },
+        baseUrl: undefined,
+        soundHandler: undefined,
+        autoplay: false,
+        manualStopped: false,
+
+        isPlaying: function () {
+            if (typeof mgr.soundHandler === "undefined" || mgr.soundHandler.playState != 1) {
+                return false;
+            }
+            return true;
+        },
+
+        setVolume: function (volume) {
+            mgr.config.volume = volume;
+            if (mgr.isPlaying()) {
+                mgr.soundHandler.setVolume(volume);
+            }
+        },
+
+        volume: function () {
+            return mgr.config.volume;
+        },
+
+        stop: function () {
+            mgr.autoplay = false;
+            mgr.manualStopped = true;
+            if (!(typeof mgr.soundHandler === "undefined")) {
+                mgr.soundHandler.unload();
+            }
+        },
+
+        play: function (streamURL) {
+            if (mgr.isPlaying()) {
+                return;
+            }
+            mgr.config.url = streamURL;
+            if (!mgr.config.url) {
+                return;
+            }
+
+            if ((typeof mgr.soundHandler === "undefined")) {
+                mgr.soundHandler = soundManager.createSound(mgr.config);
+            } else {
+                mgr.soundHandler.play(mgr.config);
+            }
+        },
+
+        init: function (callback) {
+            if (!callback) {
+                callback = function () { };
+            }
+
+            var waitForSM = true;
+            if ($.browser.msie) {
+                if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+                    waitForSM = false;
+                }
+            }
+
+            if (waitForSM) {
+                soundManager.onready(callback);
+            } else {
+                callback();
+            }
+        }
+    };
+    return mgr;
+};
+
 
 Yasound.Player.Deezer = function () {
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs

@@ -149,7 +149,7 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
     },
 
     initialize: function () {
-        _.bindAll(this, 'show', 'hide');
+        _.bindAll(this, 'show', 'hide', 'play', 'stop', 'clearPlayTimeout');
         this.options.$source.on('click mouseleave', this.hide);
         this.currentSongModel = new Yasound.Data.Models.CurrentSong();
         this.currentSongModel.bind('change', this.refreshCurrentSong, this);
@@ -184,6 +184,9 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
         // else pos = { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 };
 
         this.$el.offset(pos);
+
+        this.clearPlayTimeout();
+        this.playTimeout = setTimeout(this.play, 3*1000);
     },
 
     hide: function(e) {
@@ -191,6 +194,7 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
         this.options.$source.off('mouseleave', this.hide);
         this.off('click mouseleave', this.hide);
         this.options.$source.closest('.radio-cell').removeClass('open');
+        this.stop();
         this.close();
     },
 
@@ -222,6 +226,44 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
         });
 
         this.hide();
+    },
+
+    play: function (e) {
+        this.clearPlayTimeout();
+        if (!Yasound.App.instantPlayer) {
+            return;
+        }
+
+        Yasound.App.instantPlayer.stop();
+
+        if (Yasound.App.player.isPlaying()) {
+            Yasound.App.player.stop();
+            this.resumeCurrentRadio = true;
+        } else {
+            this.resumeCurrentRadio = false;
+        }
+
+        var streamURL = this.model.get('stream_url');
+        Yasound.App.instantPlayer.play(streamURL);
+    },
+
+    stop: function (e) {
+        this.clearPlayTimeout();
+        if (!Yasound.App.instantPlayer) {
+            return;
+        }
+        Yasound.App.instantPlayer.stop();
+        if (this.resumeCurrentRadio) {
+            Yasound.App.player.play();
+        }
+    },
+
+    clearPlayTimeout: function () {
+        console.log('clearPlayTimeout')
+        if (this.playTimeout) {
+            clearTimeout(this.playTimeout);
+            this.playTimeout = undefined;
+        }
     }
 });
 

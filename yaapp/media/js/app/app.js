@@ -159,6 +159,7 @@ $(document).ready(function () {
      */
     if (g_sound_player == 'soundmanager') {
         Yasound.App.player = Yasound.Player.SoundManager();
+        Yasound.App.instantPlayer = Yasound.Player.InstantPlayer();
     } else if (g_sound_player == 'deezer') {
         Yasound.App.player = Yasound.Player.Deezer();
     }
@@ -663,6 +664,9 @@ $(document).ready(function () {
     // Global object, useful to navigate in views
     Yasound.App.Router = new Yasound.App.Workspace();
 
+    if (Yasound.App.instantPlayer) {
+        Yasound.App.instantPlayer.init();
+    }
     Yasound.App.player.init(function () {
         Backbone.history.start({
             pushState: true,
