@@ -195,7 +195,9 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
     },
 
     hide: function(e) {
-        if($(e.toElement).closest('.radio-cell-tip, .tip-btn').length > 0 && e.originalEvent.type !== 'click') return;
+        if (e) {
+            if($(e.toElement).closest('.radio-cell-tip, .tip-btn').length > 0 && e.originalEvent.type !== 'click') return;
+        }
         this.options.$source.off('mouseleave', this.hide);
         this.off('click mouseleave', this.hide);
         this.options.$source.closest('.radio-cell').removeClass('open');
@@ -226,11 +228,12 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
         e.preventDefault();
 
         var uuid = this.model.get('uuid');
+        this.hide();
+
         Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
         });
 
-        this.hide();
     },
 
     play: function (e) {
