@@ -103,7 +103,7 @@ class RadioActivityManager():
         retry = 0
         max_retry = 3
         while not acquire_lock():
-            time.sleep(WallManager.WAIT_FOR_LOCK)
+            time.sleep(RadioActivityManager.WAIT_FOR_LOCK)
             retry += 1
             if retry > max_retry:
                 return
