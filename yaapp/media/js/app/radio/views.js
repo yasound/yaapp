@@ -388,8 +388,8 @@ Yasound.Views.WallEvent = Backbone.View.extend({
     tagName: 'div',
     className: 'wall-event-container',
     events: {
-        'click h2 a': 'selectUser',
-        'click .wall-profile-picture': 'selectUser',
+        'click .pic': 'selectUser',
+        'click .wall-event-title': 'selectUser',
         'click .asset-report': 'reportAbuse',
         'click .asset-bin': 'deleteMessage'
     },
@@ -423,9 +423,12 @@ Yasound.Views.WallEvent = Backbone.View.extend({
 
     selectUser: function (event) {
         event.preventDefault();
-        Yasound.App.Router.navigate("profile/" + this.model.get('user_username') + '/', {
-            trigger: true
-        });
+        var username = this.model.get('message').username;
+        if (username) {
+            Yasound.App.Router.navigate("profile/" + username + '/', {
+                trigger: true
+            });
+        }
     },
 
     reportAbuse: function (e) {

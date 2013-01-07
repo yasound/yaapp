@@ -13,7 +13,7 @@
   <%#message%>
   <a class="pic pic-circle pic-wide" href="#"><img src="/api/v1/user/<% username %>/picture/45x45/" width="45" height="45" alt="<% name %>"></a>
   <div class="wall-event {% if request.user.is_superuser %}<%#abuse%>wall-event-marked-as-abuse<%/abuse%>{% endif %}">
-    <div class="wall-event-title"><strong><% name %></strong>, <% formatted_date %></div>
+    <div class="wall-event-title"><strong><a href='#'><% name %></a></strong>, <% formatted_date %></div>
     <div class="wall-event-action"><% text %></div>
     <div class="wall-comment-btns">
         {% if request.user.is_superuser %}
