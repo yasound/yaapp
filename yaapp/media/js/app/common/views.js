@@ -20,18 +20,14 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
 
     initialize: function () {
-        this.rendered = false;
         this.model.bind('change', this.render, this);
         this.currentSongModel = new Yasound.Data.Models.CurrentSong();
-        this.currentSongModel.bind('change', this.refreshCurrentSong, this);
     },
 
     onClose: function () {
         this.model.unbind('change', this.render);
-        this.currentSongModel.unbind('change', this.refreshCurrentSong);
         this.currentSongModel.onClose();
         delete this.currentSongModel;
-        this.rendered = false;
     },
 
     render: function () {
@@ -44,8 +40,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         } else {
             $(this.el).html(ich.radioCellTemplate(data));
         }
-        this.rendered = true;
-        this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
     },
 
@@ -59,11 +53,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
                 $("li .mask", $(this.el).parent()).fadeOut(300);
             } else {
                 $("li .mask", $(this.el).parent()).hide();
-            }
-
-            if (Yasound.App.appName !== 'deezer') {
-                // deezer design does not need info to be fetched
-                this.currentSongModel.fetch();
             }
 
             if (Yasound.App.enableFX) {
@@ -100,32 +89,6 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         Yasound.App.Router.navigate("radio/" + uuid + '/', {
             trigger: true
         });
-    },
-
-    refreshCurrentSong: function(e) {
-        if (!this.rendered) {
-            return;
-        }
-
-        var el = $('.current-song', this.el);
-		var el2 = $('.current-artist', this.el);
-        var name = this.currentSongModel.get('name');
-        var artist =  this.currentSongModel.get('artist');
-        var cover = this.currentSongModel.get('cover');
-        if (!name) {
-            name = '';
-        }
-        if (!artist) {
-            artist = '';
-        }
-        el.html(name);
-		el2.html(artist);
-
-        var img = $('.radio-icon img', this.el);
-        img.attr('src', cover);
-
-        var genre = this.model.genre();
-        $('.tag', this.el).html(genre + '<div class="tag-right-side"></div>');
     },
 
     showTip: function(e) {

@@ -190,6 +190,8 @@ Yasound.Data.Models.Radio = Backbone.Model.extend({
             data.multiple_messages = true;
         }
 
+        data.genre_display = this.genre();
+
         return data;
     }
 });

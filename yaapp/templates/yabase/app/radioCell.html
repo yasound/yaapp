@@ -4,10 +4,9 @@
   <a class="radio-cell-link" href="{% app_url webapp_radio app_name radio.uuid %}">
     <div class="radio-cell-img"><img width="150" height="150" alt="" src="/media/images/radio-loading.gif" /></div>
     <div class="radio-cell-info">
-      <div class="tag"></div>
+      <div class="tag">{{ radio.get_genre_display }}</div>
       <i class="play asset-player-play"></i>
-      <div class="fav"><i class="asset-player-star-yellow"></i>{{ radio.favorites}}</div>
-      <div class="share"><i class="asset-player-share"></i></div>
+      <div class="tip-btn">Infos</div>
     </div>
   </a>
   <h1><a href="{% app_url webapp_radio app_name radio.uuid %}">{{ radio.name}}</a></h1>
