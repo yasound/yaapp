@@ -142,7 +142,7 @@ Yasound.Views.TopRadiosPage = Backbone.View.extend({
                 trigger: false
             });
         } else {
-            Yasound.App.Router.navigate("top", {
+            Yasound.App.Router.navigate("top/", {
                 trigger: false
             });
         }
