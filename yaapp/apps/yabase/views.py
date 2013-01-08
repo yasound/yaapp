@@ -1294,7 +1294,7 @@ class WebAppView(View):
         return True, None if ok or False, redirect page else
         """
 
-        if self.app_name not in ['app', 'deezer']:
+        if self.app_name not in ['app', 'deezer', 'live']:
             raise Http404
 
         if settings.ANONYMOUS_ACCESS_ALLOWED == True:
