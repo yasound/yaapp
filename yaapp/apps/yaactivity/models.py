@@ -94,7 +94,7 @@ class RadioActivityManager():
     def remove_obsolete_data_for_user(self, user):
         res = self.collection.find({'user.username': user.username}, safe=True).sort([('updated', DESCENDING)]).skip(RadioActivityManager.MAX_ACTIVITY_PER_USER)
         for doc in res:
-            doc.remove(safe=True)
+            self.collection.remove(ObjectId(doc.get('_id')), safe=True)
 
     def add_radio_activity(self, user, radio, activity, **kwargs):
         lock_id = "radio-activity-%s" % (radio.uuid)
