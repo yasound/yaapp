@@ -44,7 +44,7 @@
 {% if request.user.is_authenticated %}
 <div class="container-fluid content-zone">
   <section class="row-fluid">
-    <h1 class="block-title"><i class="asset-fav"></i>Favoris</h1>
+    <h1 class="block-title"><i class="asset-fav"></i>{% trans "Favorites" %}</h1>
     <div class="block-content">
       <div class="block-slide-container first" id='favorites-slides'>
         <div class="block-slide-mask">
@@ -62,14 +62,14 @@
 <div class="container-fluid content-zone last">
   <div class="row-fluid">
     <section class="span6">
-      <h1 class="block-title"><i class="asset-headphones"></i>Qu'est ce que vos amis écoutent ?</h1>
+      <h1 class="block-title"><i class="asset-headphones"></i>{% trans "Friends activities" %}</h1>
       <div class="block-content">
         <ul class="stories-list" id='friends-activity'>
         </ul>
       </div>
     </section>
     <section class="span6">
-      <h1 class="block-title"><i class="asset-playlist"></i>L'activité de vos radios</h1>
+      <h1 class="block-title"><i class="asset-playlist"></i>{% trans "Radios activities" %}</h1>
       <div class="block-content">
         <ul class="stories-list" id='radios-activity'>
         </ul>
