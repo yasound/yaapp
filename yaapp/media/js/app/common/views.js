@@ -20,6 +20,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
 
     initialize: function () {
+        this.rendered = false;
         this.model.bind('change', this.render, this);
         this.currentSongModel = new Yasound.Data.Models.CurrentSong();
         this.currentSongModel.bind('change', this.refreshCurrentSong, this);
@@ -30,6 +31,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         this.currentSongModel.unbind('change', this.refreshCurrentSong);
         this.currentSongModel.onClose();
         delete this.currentSongModel;
+        this.rendered = false;
     },
 
     render: function () {
@@ -42,7 +44,7 @@ Yasound.Views.RadioCell = Backbone.View.extend({
         } else {
             $(this.el).html(ich.radioCellTemplate(data));
         }
-
+        this.rendered = true;
         this.currentSongModel.set('radioId', this.model.get('id'));
         return this;
     },
@@ -101,6 +103,10 @@ Yasound.Views.RadioCell = Backbone.View.extend({
     },
 
     refreshCurrentSong: function(e) {
+        if (!this.rendered) {
+            return;
+        }
+
         var el = $('.current-song', this.el);
 		var el2 = $('.current-artist', this.el);
         var name = this.currentSongModel.get('name');
