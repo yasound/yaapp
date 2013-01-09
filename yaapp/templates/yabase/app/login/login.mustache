@@ -4,27 +4,26 @@
     <div class='row-fluid'>
         <div class='span12 signup-container'>
             <h1>{% trans "Welcome to Yasound" %}</h1>
-            <h2><a class='mobile-signin-link'href="#">{% trans 'Not registered yet ? Create an account' %}</a></h2>
             <h2>{% trans 'Login with Facebook or Twitter' %}</h2>
-            <div class='signup-btns'>
-                <div class="signup-btn-fbk">
-                        {% ifequal app_name 'deezer' %}
-                        <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
-                        <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
-                        {% else %}
-                        <a class='screen-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
-                        <a class='mobile-social-btn' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Use Facebook' %}</a>
-                        {% endifequal %}
-                </div>
-                <div class="signup-btn-twitter">
-                    {% ifequal app_name 'deezer' %}
-                        <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
-                        <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
-                    {% else %}
-                        <a class='screen-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
-                        <a class='mobile-social-btn' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Use Twitter' %}</a>
-                    {% endifequal %}
-                </div>
+        </div>
+    </div>
+    <div class='row-fluid signup-container'>
+        <div class='span6'>
+            <div class='social-btn'>
+            {% ifequal app_name 'deezer' %}
+            <a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
+            {% else %}
+            <a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Login with Facebook' %}</a>
+            {% endifequal %}
+            </div>
+        </div>
+        <div class="span6">
+            <div class='social-btn'>
+            {% ifequal app_name 'deezer' %}
+                <a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target='_blank'><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
+            {% else %}
+                <a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Login with Twitter' %}</a>
+            {% endifequal %}
             </div>
         </div>
     </div>
@@ -34,13 +33,25 @@
     <div class='row-fluid'>
         <div class='span12 signup-container'>
             <h2>{% trans 'Email login' %}</h2>
-            <form id='login-form' method='post'>{% csrf_token %}
-                <div id="signup-input">
-                    <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
-                    <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
-                    <input id="signup-save-btn" type="submit" value="{% trans 'Login' %}" />
-                </div>
-            </form>
+        </div>
+    </div>
+    <form id='login-form' method='post'>{% csrf_token %}
+    <div class='row-fluid signup-container'>
+        <div class='span6 signup-input'>
+            <input placeholder="{% trans 'Email' %}" type="email" required="required" name="email">
+        </div>
+        <div class='span6 signup-input'>
+            <input placeholder="{% trans 'Password' %}"class="right-input" required="required" type="password" name="password">
+        </div>
+    </div>
+    <div class='row-fluid signup-container'>
+        <div class='span12 signup-input'>
+            <input id="signup-save-btn" type="submit" value="{% trans 'Login' %}" />
+        </div>
+    </div>
+    </form>
+    <div class='row-fluid signup-container'>
+        <div class='span12'>
             <a href='{% url lost_password %}' id='lost-password'>{% trans 'Lost password ?' %}</a>
         </div>
     </div>
