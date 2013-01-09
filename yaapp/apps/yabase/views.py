@@ -2702,13 +2702,13 @@ def radio_picture(request, radio_uuid, size=''):
     raise Http404
 
 @check_api_key(methods=['GET'], login_required=False)
-def radio_pictures(request, radio_uuid):
+def wall_layout(request, radio_uuid):
     """
     return the list of pictures for displaying in the wall
     """
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
-    response_data = json.dumps(radio.pictures)
+    response_data = json.dumps(radio.wall_layout)
     return HttpResponse(response_data, mimetype="application/json")
 
 @check_api_key(methods=['GET',], login_required=False)

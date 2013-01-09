@@ -1193,16 +1193,16 @@ class Radio(models.Model):
         delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
 
     @property
-    def pictures(self):
+    def wall_layout(self):
         """ return a list of pictures urls """
-        key = 'radio_%s.pictures' % (self.id)
+        key = 'radio_%s.wall_layout' % (self.id)
         data = cache.get(key)
         if data:
             return data
 
         data = []
-        song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:8].values_list('yasound_song_id', flat=True)
-        songs = YasoundSong.objects.filter(id__in=list(song_ids))
+        song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:300].values_list('yasound_song_id', flat=True)
+        songs = YasoundSong.objects.filter(id__in=list(song_ids), cover_filename__isnull=False).order_by('?')[:8]
         size = '157x157'
         for i, song in enumerate(songs):
             if i > 5:
@@ -1951,6 +1951,30 @@ class Announcement(models.Model):
     class Meta:
         verbose_name = _('announcement')
         translate = ('name', 'body')
+
+
+class RadioAdditionalInfosManager():
+    """Store additional informations about radios (like wall preferences for instance)."""
+
+    def __init__(self):
+        self.db = yaapp_settings.MONGO_DB
+        self.collection = self.db.yabase.radios
+        self.collection.ensure_index('db_id', unique=True)
+
+    def erase_informations(self):
+        self.collection.drop()
+
+    def add_information(self, radio_uuid, information_key, data):
+        self.collection.update({'db_id': radio_uuid}, {'$set': {information_key: data}}, upsert=True, safe=True)
+
+    def remove_information(self, user_id, information_key):
+        self.collection.update({'db_id': user_id}, {'$unset': {information_key: 1}}, upsert=True, safe=True)
+
+    def information(self, radio_uuid):
+        return self.collection.find_one({'db_id': radio_uuid})
+
+    def remove_user(self, radio_uuid):
+        self.collection.remove({'db_id': radio_uuid})
 
 
 def new_current_song_handler(sender, radio, song_json, song, song_dict, **kwargs):

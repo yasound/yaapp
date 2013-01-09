@@ -578,7 +578,7 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
     },
 
     fetchPictures: function () {
-        var url = '/api/v1/radio/' + this.model.get('uuid') + '/pictures/';
+        var url = '/api/v1/radio/' + this.model.get('uuid') + '/wall_layout/';
         $.ajax({
             url: url,
             type: 'GET',
