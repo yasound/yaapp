@@ -576,6 +576,7 @@ class Radio(models.Model):
     ready = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
     name = models.CharField(_('name'), max_length=255)
+    slug = models.SlugField(_('slug'), max_length=255, blank=True)
     picture = models.ImageField(_('picture'), upload_to=yaapp_settings.RADIO_PICTURE_FOLDER, null=True, blank=True)
     url = models.CharField(_('url'), null=True, blank=True, max_length=200)
     uuid = models.CharField(_('uuid'), max_length=48, blank=True)
@@ -879,6 +880,7 @@ class Radio(models.Model):
         data = {
             'id': self.id,
             'uuid': self.uuid,
+            'slug': self.slug,
             'origin': self.origin,
             'name': self.name,
             'favorites': self.favorites,

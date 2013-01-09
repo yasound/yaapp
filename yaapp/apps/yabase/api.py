@@ -113,7 +113,7 @@ class RadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False, deleted=False)
         resource_name = 'radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = Authorization()
@@ -159,7 +159,7 @@ class PublicRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.filter(creator__isnull=False, deleted=False)
         resource_name = 'public_radio'
-        fields = ['id', 'name', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites']
+        fields = ['id', 'name', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites']
         include_resource_uri = False;
         authorization = ReadOnlyAuthorization()
         filtering = {
@@ -189,7 +189,7 @@ class SearchRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'search_radio'
-        fields = ['id', 'name', 'origin', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'origin', 'creator', 'description', 'genre', 'theme', 'uuid',  'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -225,7 +225,7 @@ class SearchRadioByUserResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'search_radio_by_user'
-        fields = ['id', 'name', 'origin', 'creator', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'origin', 'creator', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -256,7 +256,7 @@ class SearchRadioBySongResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'search_radio_by_song'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -290,7 +290,7 @@ class SelectedRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'selected_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -321,7 +321,7 @@ class SelectedWebRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'selected_web_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
@@ -348,7 +348,7 @@ class TopRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'top_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundPublicAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -406,7 +406,7 @@ class UserFavoriteRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'favorite_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready', 'messages']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready', 'messages']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -435,7 +435,7 @@ class FriendRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'friend_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
@@ -462,7 +462,7 @@ class TechTourRadioResource(ModelResource):
     class Meta:
         queryset = Radio.objects.ready_objects()
         resource_name = 'techtour_radio'
-        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
+        fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
         include_resource_uri = False;
         authentication = Authentication()
         authorization = ReadOnlyAuthorization()
