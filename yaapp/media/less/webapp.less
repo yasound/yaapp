@@ -3179,6 +3179,98 @@ ul .radio-with-stats-cells li {
 	}
 }
 
+/**
+ * User cell
+ */
+
+ul .user-cell {
+    list-style: none;
+    height: 134px;
+    width: 134px;
+    float: left;
+    margin-right: 28px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    .border-radius(50%);
+    border: 8px solid white;
+	box-shadow: 0px 2px 8px #e6e6e6;
+    overflow: hidden;
+
+    &:hover {
+		border:8px solid #5aabda;
+		-webkit-transition: border 0.6s ease;
+	    -moz-transition: border 0.6s ease;
+	    -ms-transition: border 0.6s ease;
+	    -o-transition: border 0.6s ease;
+	    transition: border 0.6s ease;
+    }
+}
+
+ul .user-connected {
+    border:8px solid #5aabda;
+}
+
+
+ul .mask-user {
+	position:absolute;
+	height:134px;
+	width:134px;
+    .border-radius(50%);
+	background-color: rgba(0,0,0,0.8);
+	text-align:center;
+	.caption-user {
+		display:block;
+		position:absolute;
+		top:34px;
+		left:15px;
+		height:85px;
+		width:105px;
+		color:#8c8d8e;
+		font-size:14px;
+	}
+}
+
+.user-cell-inner {
+	height: 134px;
+    width: 134px;
+}
+
+.delete-friend {
+    position:absolute;
+    bottom:-51px;
+    right:37px;
+}
+
+ul .user-cell .caption {
+    position: relative;
+    top: 0px;
+    background-color: black;
+    .border-radius(1px);
+    -webkit-transition: top 0.5s ease;
+    -moz-transition: top 0.5s ease;
+    -ms-transition: top 0.5s ease;
+    -o-transition: top 0.5s ease;
+    transition: top 0.5s ease;
+}
+
+
+
+ul .user-cell .caption h5 {
+    color: white;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+ul .user-cell:hover .caption {
+    top: -65px;
+}
+
+// .user-cell img {
+//     -webkit-border-radius: 50%;
+//     -moz-border-radius: 50%;
+//     border-radius: 50%;
+// }
+
 @import 'webapp/responsive/landscape-phones-and-down.less';
 @import 'webapp/responsive/landscape-phones-to-portrait-tablet.less';
 @import 'webapp/responsive/portrait-tablet-to-desktop.less';
