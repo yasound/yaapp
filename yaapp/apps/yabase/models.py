@@ -1198,6 +1198,15 @@ class Radio(models.Model):
         doc = m.information(self.uuid)
         if doc is None:
             return default
+        else:
+            return doc.get('wall_layout', {})
+
+    def update_wall_layout_preferences(self, prefs):
+        """ save wall_layout preferences """
+        m = RadioAdditionalInfosManager()
+        m.add_information(self.uuid, 'wall_layout', prefs)
+        key = 'radio_%s.wall_layout' % (self.id)
+        cache.delete(key)
 
     @property
     def wall_layout(self):
@@ -1207,17 +1216,18 @@ class Radio(models.Model):
         if data:
             return data
 
-        preferences = self.wall_layout_preferences()
-        layout = preferences.get('layout', yabase_settings.WALL_LAYOUT_DISPLAY_RADIO_PICTURE)
-        fx = preferences.get('fx', yabase_settings.WALL_LAYOUT_FX_BLUR)
-        if layout == yabase_settings.WALL_LAYOUT_DISPLAY_RADIO_PICTURE:
-            gaussian_blur = None
-            if fx == yabase_settings.WALL_LAYOUT_FX_BLUR:
-                gaussian_blur = 20
-            data = [self.get_picture_url(size='1200x400', gaussianblur=gaussian_blur)]
+        wall_layout_preferences = self.wall_layout_preferences()
+        header_prefs = wall_layout_preferences.get('header', {})
+        header = header_prefs.get('display', yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE)
+        fx = header_prefs.get('fx', yabase_settings.WALL_HEADER_FX_BLUR)
+        if header == yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE:
+            gaussianblur = None
+            if fx == yabase_settings.WALL_HEADER_FX_BLUR:
+                gaussianblur = 20
+            data = [self.get_picture_url(size='1200x400', gaussianblur=gaussianblur)]
             cache.set(key, data, 60 * 60)
             return data
-        elif layout == yabase_settings.WALL_LAYOUT_DISPLAY_COVERS:
+        elif header == yabase_settings.WALL_HEADER_DISPLAY_COVERS:
             data = []
             song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:300].values_list('yasound_song_id', flat=True)
             songs = YasoundSong.objects.filter(id__in=list(song_ids), cover_filename__isnull=False).order_by('?')[:8]
@@ -1231,7 +1241,10 @@ class Radio(models.Model):
 
             if len(data) != 8:
                 # not enough song covers, using fallback based on radio picture
-                data = [self.get_picture_url(size='1200x400', gaussianblur=20)]
+                gaussianblur = None
+                if fx == yabase_settings.WALL_HEADER_FX_BLUR:
+                    gaussianblur = 20
+                data = [self.get_picture_url(size='1200x400', gaussianblur=gaussianblur)]
 
         cache.set(key, data, 60 * 60)
         return data

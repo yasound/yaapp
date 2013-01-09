@@ -14,22 +14,56 @@ import datetime
 from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
+
 class SettingsRadioForm(BootstrapModelForm):
     name = forms.CharField(label=_('Name'), required=True, max_length=255)
     tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
+    wall_header_display = forms.ChoiceField(label=_('Wall header style'),
+        choices=yabase_settings.WALL_HEADER_DISPLAY_CHOICES_FORM,
+        initial=yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE,
+        help_text=_('If not enough covers are available, the radio picture is used'))
+    wall_header_fx = forms.ChoiceField(label=_('Wall header effect'),
+        choices=yabase_settings.WALL_HEADER_FX_CHOICES_FORM,
+        initial=yabase_settings.WALL_HEADER_FX_BLUR)
 
     class Meta:
         model = Radio
-        fields = ('name', 'genre', 'description', 'tags')
+        fields = ('name', 'genre', 'description', 'tags', 'wall_header_display', 'wall_header_fx')
         layout = (
-            Fieldset('', 'name', 'genre', 'description', 'tags'),
+            Fieldset('', 'name', 'genre', 'description', 'tags', 'wall_header_display', 'wall_header_fx'),
         )
+
+    def __init__(self, *args, **kwargs):
+        wall_layout_preferences = kwargs.get('instance').wall_layout_preferences()
+        header = wall_layout_preferences.get('header', {})
+
+        initial = {
+            'wall_header_display': header.get('display', yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE),
+            'wall_header_fx': header.get('fx', yabase_settings.WALL_HEADER_FX_BLUR),
+        }
+
+        super(SettingsRadioForm, self).__init__(initial=initial, *args, **kwargs)
 
     def clean_tags(self):
         tags = self.cleaned_data['tags']
         tags = clean_tags(tags)
         self.cleaned_data['tags'] = tags
         return tags
+
+    def save(self, *args, **kwargs):
+        super(SettingsRadioForm, self).save(*args, **kwargs)
+
+        wall_header_display = self.cleaned_data['wall_header_display']
+        wall_header_fx = self.cleaned_data['wall_header_fx']
+
+        radio = self.instance
+        prefs = radio.wall_layout_preferences()
+        prefs['header'] = {
+            'display': wall_header_display,
+            'fx': wall_header_fx
+        }
+        radio.update_wall_layout_preferences(prefs)
+
 
 class NewRadioForm(BootstrapModelForm):
     name = forms.CharField(label=_('Name'), required=True, max_length=255)

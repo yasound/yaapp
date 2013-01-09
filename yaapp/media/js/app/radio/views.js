@@ -1067,7 +1067,6 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
 
     templateLoaded: function() {
         $(this.el).html(ich.editRadioPageTemplate());
-        $("select").uniform();
         var that = this;
         var $progress = $('#progress .bar', this.el);
         $progress.parent().hide();
