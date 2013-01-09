@@ -1192,6 +1192,13 @@ class Radio(models.Model):
         self.picture.save(filename, data, save=True)
         delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
 
+    def wall_layout_preferences(self, default={}):
+        """ return wall_layout preferences object. """
+        m = RadioAdditionalInfosManager()
+        doc = m.information(self.uuid)
+        if doc is None:
+            return default
+
     @property
     def wall_layout(self):
         """ return a list of pictures urls """
@@ -1200,20 +1207,31 @@ class Radio(models.Model):
         if data:
             return data
 
-        data = []
-        song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:300].values_list('yasound_song_id', flat=True)
-        songs = YasoundSong.objects.filter(id__in=list(song_ids), cover_filename__isnull=False).order_by('?')[:8]
-        size = '157x157'
-        for i, song in enumerate(songs):
-            if i > 5:
-                size = '314x314'
+        preferences = self.wall_layout_preferences()
+        layout = preferences.get('layout', yabase_settings.WALL_LAYOUT_DISPLAY_RADIO_PICTURE)
+        fx = preferences.get('fx', yabase_settings.WALL_LAYOUT_FX_BLUR)
+        if layout == yabase_settings.WALL_LAYOUT_DISPLAY_RADIO_PICTURE:
+            gaussian_blur = None
+            if fx == yabase_settings.WALL_LAYOUT_FX_BLUR:
+                gaussian_blur = 20
+            data = [self.get_picture_url(size='1200x400', gaussianblur=gaussian_blur)]
+            cache.set(key, data, 60 * 60)
+            return data
+        elif layout == yabase_settings.WALL_LAYOUT_DISPLAY_COVERS:
+            data = []
+            song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:300].values_list('yasound_song_id', flat=True)
+            songs = YasoundSong.objects.filter(id__in=list(song_ids), cover_filename__isnull=False).order_by('?')[:8]
+            size = '157x157'
+            for i, song in enumerate(songs):
+                if i > 5:
+                    size = '314x314'
 
-            if song.has_cover():
-                data.append(song.custom_cover_url(size))
+                if song.has_cover():
+                    data.append(song.custom_cover_url(size))
 
-        if len(data) != 8:
-            # not enough song covers, using fallback based on radio picture
-            data = [self.get_picture_url(size='1200x400', gaussianblur=20)]
+            if len(data) != 8:
+                # not enough song covers, using fallback based on radio picture
+                data = [self.get_picture_url(size='1200x400', gaussianblur=20)]
 
         cache.set(key, data, 60 * 60)
         return data

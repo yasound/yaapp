@@ -113,3 +113,10 @@ ANIMATOR_TYPE_ADD_SONG          = 'add_song'
 ANIMATOR_TYPE_REJECT_SONG       = 'reject_song'
 ANIMATOR_TYPE_DELETE_SONG       = 'delete_song'
 ANIMATOR_TYPE_IMPORT_ITUNES     = 'import_itunes'
+
+# wall layout
+WALL_LAYOUT_DISPLAY_RADIO_PICTURE  = 'radio_picture'
+WALL_LAYOUT_DISPLAY_COVERS         = 'covers'
+WALL_LAYOUT_FX_NONE                = 'none'
+WALL_LAYOUT_FX_BLUR                = 'blur'
+
