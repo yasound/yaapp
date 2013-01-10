@@ -456,6 +456,16 @@
   height: 20px;
   background-position: -622px -179px;
 }
+.asset-facebook-small {
+  width: 15px;
+  height: 15px;
+  background-position: -4px -268px;
+}
+.asset-twitter-small {
+  width: 15px;
+  height: 15px;
+  background-position: -26px -268px;
+}
 /* Textfields */
 [class^="textfield-"],
 [class*=" textfield-"] {
