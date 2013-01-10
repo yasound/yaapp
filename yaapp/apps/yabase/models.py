@@ -1245,7 +1245,7 @@ class Radio(models.Model):
 
         # save pictures
         if prefs.get('header') is None:
-            prefs['headers'] = {}
+            prefs['header'] = {}
 
         prefs['header']['pictures'] = pictures
 
