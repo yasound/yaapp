@@ -104,7 +104,8 @@ Yasound.Views.Radio = Backbone.View.extend({
         "click .btn-settings": "onSettings",
         "click .btn-programming": "onProgramming",
         "click .btn-broadcast": "onBroadcast",
-        "click a.wall-fav": "toggleFavorite"
+        "click a.wall-fav": "toggleFavorite",
+        "click .wall-digest a": 'onLink'
     },
 
     initialize: function () {
@@ -201,6 +202,11 @@ Yasound.Views.Radio = Backbone.View.extend({
             favorite = true;
         }
         $.publish('/current_radio/favorite_change', favorite);
+    },
+
+    onLink: function (e) {
+        e.preventDefault();
+        window.open($(e.target).attr('href'));
     }
 });
 
