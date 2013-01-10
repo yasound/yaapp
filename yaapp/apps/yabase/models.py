@@ -1198,7 +1198,7 @@ class Radio(models.Model):
         cache.delete(key)
         prefs = self.wall_layout_preferences()
         header_prefs = prefs.get('header', {})
-        pictures = header_prefs.get('pictures')
+        pictures = header_prefs.get('pictures', [])
         if len(pictures) < 8:
             self.update_wall_layout_preferences(prefs)
 
