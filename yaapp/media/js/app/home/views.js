@@ -485,10 +485,9 @@ Yasound.Views.HomePage = Backbone.View.extend({
     },
 
     onAnnouncementLink: function (e) {
-        e.preventDefault();
-
         var uuid = $(e.target).data('uuid');
         if (uuid) {
+            e.preventDefault();
             Yasound.App.Router.navigate('radio/' + uuid + '/', {
                 trigger: true
             });
