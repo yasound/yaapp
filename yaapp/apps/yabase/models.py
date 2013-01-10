@@ -36,7 +36,7 @@ import yasearch.utils as yasearch_utils
 from django.db.models import F
 from django.template.defaultfilters import striptags
 from yageoperm.models import Country
-from django.utils.html import urlize
+from django.utils.html import urlize, linebreaks
 from yametadata.kfm import find_metadata as kfm_find_metadata
 
 logger = logging.getLogger("yaapp.yabase")
@@ -868,7 +868,7 @@ class Radio(models.Model):
 
 
     def fill_bundle(self, bundle):
-        bundle.data['description'] = urlize(self.description)
+        bundle.data['description'] = linebreaks(urlize(self.description))
         bundle.data['nb_current_users'] = self.nb_current_users
         bundle.data['tags'] = self.tags_to_string()
         bundle.data['stream_url'] = self.stream_url
