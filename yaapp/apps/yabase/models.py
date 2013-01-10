@@ -1191,6 +1191,16 @@ class Radio(models.Model):
             self.picture.delete(save=True)
         self.picture.save(filename, data, save=True)
         delete(self.picture, delete_file=False) # reset sorl-thumbnail cache since the source file has been replaced
+        self.invalidate_wall_layout_cache()
+
+    def invalidate_wall_layout_cache(self):
+        key = 'radio_%s.wall_layout' % (self.id)
+        cache.delete(key)
+        prefs = self.wall_layout_preferences()
+        header_prefs = prefs.get('header', {})
+        pictures = header_prefs.get('pictures')
+        if len(pictures) < 8:
+            self.update_wall_layout_preferences(prefs)
 
     def wall_layout_preferences(self, default={}):
         """ return wall_layout preferences object. """
@@ -1201,12 +1211,50 @@ class Radio(models.Model):
         else:
             return doc.get('wall_layout', {})
 
-    def update_wall_layout_preferences(self, prefs):
+    def update_wall_layout_preferences(self, prefs={'header': {}}):
         """ save wall_layout preferences """
         m = RadioAdditionalInfosManager()
+
+        header_prefs = prefs.get('header', {})
+        display = header_prefs.get('display', yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE)
+        fx = header_prefs.get('fx', yabase_settings.WALL_HEADER_FX_BLUR)
+        pictures = []
+        if display == yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE:
+            gaussianblur = None
+            if fx == yabase_settings.WALL_HEADER_FX_BLUR:
+                gaussianblur = 20
+            pictures = [self.get_picture_url(size='1200x400', gaussianblur=gaussianblur)]
+
+        elif display == yabase_settings.WALL_HEADER_DISPLAY_COVERS:
+            song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:300].values_list('yasound_song_id', flat=True)
+            songs = YasoundSong.objects.filter(id__in=list(song_ids), cover_filename__isnull=False).order_by('?')[:8]
+            size = '157x157'
+            for i, song in enumerate(songs):
+                if i > 5:
+                    size = '314x314'
+
+                if song.has_cover():
+                    pictures.append(song.custom_cover_url(size))
+
+            if len(pictures) != 8:
+                # not enough song covers, using fallback based on radio picture
+                gaussianblur = None
+                if fx == yabase_settings.WALL_HEADER_FX_BLUR:
+                    gaussianblur = 20
+                pictures = [self.get_picture_url(size='1200x400', gaussianblur=gaussianblur)]
+
+        # save pictures
+        if prefs.get('header') is None:
+            prefs['headers'] = {}
+
+        prefs['header']['pictures'] = pictures
+
+        # save prefs
         m.add_information(self.uuid, 'wall_layout', prefs)
+
         key = 'radio_%s.wall_layout' % (self.id)
         cache.delete(key)
+        return prefs
 
     @property
     def wall_layout(self):
@@ -1217,35 +1265,12 @@ class Radio(models.Model):
             return data
 
         wall_layout_preferences = self.wall_layout_preferences()
-        header_prefs = wall_layout_preferences.get('header', {})
-        header = header_prefs.get('display', yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE)
-        fx = header_prefs.get('fx', yabase_settings.WALL_HEADER_FX_BLUR)
-        if header == yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE:
-            gaussianblur = None
-            if fx == yabase_settings.WALL_HEADER_FX_BLUR:
-                gaussianblur = 20
-            data = [self.get_picture_url(size='1200x400', gaussianblur=gaussianblur)]
-            cache.set(key, data, 60 * 60)
-            return data
-        elif header == yabase_settings.WALL_HEADER_DISPLAY_COVERS:
-            data = []
-            song_ids = SongMetadata.objects.filter(songinstance__playlist__radio=self).order_by('?')[:300].values_list('yasound_song_id', flat=True)
-            songs = YasoundSong.objects.filter(id__in=list(song_ids), cover_filename__isnull=False).order_by('?')[:8]
-            size = '157x157'
-            for i, song in enumerate(songs):
-                if i > 5:
-                    size = '314x314'
+        header_prefs = wall_layout_preferences.get('header')
+        if header_prefs is None:
+            wall_layout_preferences = self.update_wall_layout_preferences()
+            header_prefs = wall_layout_preferences.get('header')
 
-                if song.has_cover():
-                    data.append(song.custom_cover_url(size))
-
-            if len(data) != 8:
-                # not enough song covers, using fallback based on radio picture
-                gaussianblur = None
-                if fx == yabase_settings.WALL_HEADER_FX_BLUR:
-                    gaussianblur = 20
-                data = [self.get_picture_url(size='1200x400', gaussianblur=gaussianblur)]
-
+        data = header_prefs.get('pictures')
         cache.set(key, data, 60 * 60)
         return data
 

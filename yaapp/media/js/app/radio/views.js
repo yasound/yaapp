@@ -579,12 +579,16 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
 
     fetchPictures: function () {
         var url = '/api/v1/radio/' + this.model.get('uuid') + '/wall_layout/';
+        var that = this;
         $.ajax({
             url: url,
             type: 'GET',
             dataType: 'json',
             success: function(data) {
                 if (data.length === 1) {
+                    if (!that.savedNode)  {
+                        that.savedNode = $('.wall-covers-pics').clone();
+                    }
                     // only one picture --> lets use all the available space for it
                     if (Yasound.App.enableFX) {
                         $('.wall-covers-pics').hide().html('<img src="' + data[0] + '"/>').fadeIn(500);
@@ -592,6 +596,10 @@ Yasound.Views.RadioHeader = Backbone.View.extend({
                         $('.wall-covers-pics').html('<img src="' + data[0] + '"/>');
                     }
                 } else {
+                    if (that.savedNode) {
+                        $('.wall-covers-pics').html(that.savedNode);
+                        that.savedNode = undefined;
+                    }
                     $('.wall-covers-pics img').each(function(index) {
                         if (index < data.length) {
                             $(this).attr('src', data[index]);
@@ -671,6 +679,9 @@ Yasound.Views.RadioPage = Backbone.View.extend({
         }
         if (this.creatorView) {
             this.creatorView.close();
+        }
+        if (this.headerView) {
+            this.headerView.close();
         }
 
         this.wallEvents.reset();
@@ -1042,7 +1053,10 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
     events: {
         "click #programming-btn": "onProgramming",
         "click #listen-btn": "onListen",
-        "submit #edit-radio": "onSubmit"
+        "click #radio-settings-menu": 'onRadioSettings',
+        "click #wall-settings-menu": 'onWallSettings',
+        "submit #edit-radio": "onSubmit",
+        "submit #edit-wall": "onSubmit"
     },
 
     initialize: function () {
@@ -1050,6 +1064,9 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
     },
 
     onClose: function () {
+        if (this.headerView) {
+            this.headerView.close();
+        }
     },
 
     reset: function () {
@@ -1067,6 +1084,15 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
 
     templateLoaded: function() {
         $(this.el).html(ich.editRadioPageTemplate());
+
+        var model = new Yasound.Data.Models.Radio({});
+        model.set('uuid', this.uuid);
+        this.headerView = new Yasound.Views.RadioHeader({
+            el: $('.wall-covers'),
+            model: model
+        }).render();
+
+
         var that = this;
         var $progress = $('#progress .bar', this.el);
         $progress.parent().hide();
@@ -1095,6 +1121,7 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
                 }
                 $progress.css('width', '0%');
                 $progress.parent().hide();
+                that.headerView.render();
             },
             fail: function (e, data) {
             }
@@ -1103,14 +1130,17 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
 
     onSubmit: function (e) {
         e.preventDefault();
-        var form = $('#edit-radio', this.el);
+        var form = $(e.target).closest('form');
         var successMessage = gettext('Radio settings updated');
         var errorMessage = gettext('Error while saving settings');
-
+        var that = this;
         Yasound.Utils.submitForm({
             form: form,
             successMessage: successMessage,
-            errorMessage: errorMessage
+            errorMessage: errorMessage,
+            success: function () {
+                that.headerView.render();
+            }
         });
     },
 
@@ -1126,5 +1156,34 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
         Yasound.App.Router.navigate("radio/" + this.uuid, {
             trigger: true
         });
+    },
+
+    onRadioSettings: function (e) {
+        e.preventDefault();
+        $('#settings-nav li', this.el).removeClass('checked');
+        $('#settings-nav #radio-settings-menu', this.el).addClass('checked');
+
+
+        if (Yasound.App.enableFX) {
+            $('#radio-settings', this.el).fadeIn(200);
+        } else {
+            $('#radio-settings', this.el).show();
+        }
+        $('#wall-settings', this.el).hide();
+    },
+
+    onWallSettings: function (e) {
+        e.preventDefault();
+        $('#settings-nav li', this.el).removeClass('checked');
+        $('#settings-nav #wall-settings-menu', this.el).addClass('checked');
+
+
+        if (Yasound.App.enableFX) {
+            $('#wall-settings', this.el).fadeIn(200);
+        } else {
+            $('#wall-settings', this.el).show();
+        }
+        $('#radio-settings', this.el).hide();
     }
+
 });

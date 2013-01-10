@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-09 17:07+0100\n"
+"POT-Creation-Date: 2013-01-10 11:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -966,7 +966,7 @@ msgstr "Partager"
 #: templates/yabase/webapp.html:676 templates/yabase/webapp.html.py:691
 #: templates/yabase/app/friends/friendsPage.mustache:66
 #: templates/yabase/app/programming/statusPage.mustache:36
-#: templates/yabase/app/radio/editRadioPage.mustache:44
+#: templates/yabase/app/radio/editRadioPage.mustache:72
 #: templates/yabase/app/settings/settingsPage.mustache:136
 msgid "Close"
 msgstr "Fermer"
@@ -1717,22 +1717,38 @@ msgstr "Choisissez une playlist :"
 msgid "Import all"
 msgstr "Tout Importer"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:23
+#: templates/yabase/app/radio/editRadioPage.mustache:44
+msgid "Radio settings"
+msgstr "Paramètres de la radio"
+
+#: templates/yabase/app/radio/editRadioPage.mustache:45
+msgid "Wall settings"
+msgstr "Paramètres du wall"
+
+#: templates/yabase/app/radio/editRadioPage.mustache:51
 #: templates/yabase/app/settings/settingsPage.mustache:115
 msgid "Upload photo"
 msgstr "Importer une photo"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:37
+#: templates/yabase/app/radio/editRadioPage.mustache:65
 #: templates/yabase/app/settings/settingsPage.mustache:129
 msgid "Upload error"
 msgstr "Erreur d'upload"
 
-#: templates/yabase/app/radio/editRadioPage.mustache:53
+#: templates/yabase/app/radio/editRadioPage.mustache:81
 #: templates/yabase/app/settings/settingsPage.mustache:75
 #: templates/yabase/app/settings/settingsPage.mustache:146
 #: templates/yabase/app/settings/settingsPage.mustache:156
 msgid "Save"
 msgstr "Enregistrer"
+
+#: templates/yabase/app/radio/editRadioPage.mustache:88
+msgid "Header"
+msgstr "Bandeau"
+
+#: templates/yabase/app/radio/editRadioPage.mustache:93
+msgid "Generate new header"
+msgstr "Générer un nouveau bandeau"
 
 #: templates/yabase/app/radio/fansPage.mustache:6
 #: templates/yabase/app/radio/listenersPage.mustache:6

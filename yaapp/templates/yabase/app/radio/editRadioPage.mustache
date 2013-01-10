@@ -14,10 +14,38 @@
 </div>
 
 
+<div class="container-fluid wall-covers">
+  <h1>{{ radio.name }}</h1>
+  <div class="wall-covers-pics">
+    <div class="wall-cover-group col3">
+      <div>
+        <img class="" src="/media/images/blank.gif" width="157" height="157" alt="" />
+        <img class="" src="/media/images/blank.gif" width="157" height="157" alt="" />
+        <img class="" src="/media/images/blank.gif" width="157" height="157" alt="" />
+      </div>
+      <div>
+        <img class="" src="/media/images/blank.gif" width="157" height="157" alt="" />
+        <img class="" src="/media/images/blank.gif" width="157" height="157" alt="" />
+        <img class="" src="/media/images/blank.gif" width="157" height="157" alt="" />
+      </div>
+    </div>
+    <div class="wall-cover-group col2">
+      <img class="" src="/media/images/blank.gif" width="314" height="314" alt="" />
+    </div>
+    <div class="wall-cover-group col2">
+      <img class="" src="/media/images/blank.gif" width="314" height="314" alt="" />
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid content-zone last">
   <div class="row-fluid">
-    <div class='span12'>
-        <div class='settings-content-container'>
+    <ul id='settings-nav' class='span4'>
+        <li class='checked' id='radio-settings-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-gear-wheel.png" alt='gear wheel' /><span>{% trans "Radio settings" %}</span></a></li>
+        <li class='' id='wall-settings-menu'><a href="#"><img src="/media/app/images/settings/settings-icon-accounts.png" alt='accounts' /><span>{% trans "Wall settings" %}</span></a></li>
+    </ul>
+    <div class='span8 left-border'>
+        <div class='settings-content-container' id='radio-settings'>
             <div class='upload-container'>
                 <div class='upload-content yabutton-small'>
                     <span>{% trans "Upload photo" %}</span>
@@ -54,6 +82,20 @@
                 </div>
             </form>
         </div>
+
+        <div class='settings-content-container' style='display:none;' id='wall-settings'>
+            <form id='edit-wall' enctype="multipart/form-data" class='' action="{% app_url webapp_edit_radio app_name radio.uuid %}" method='post'>{% csrf_token %}
+                <legend>{% trans "Header" %}</legend>
+                {{ wall_radio_form }}
+                <div>
+                    <input type='hidden' name='uuid' value='{{ radio.uuid }}'/>
+                    <input type='hidden' name='action' value='wall_settings'/>
+                    <button type="submit" name='save' class="save-btn">{% trans "Generate new header" %}</button>
+                </div>
+            </form>
+        </div>
+
     </div>
 </div>
 </div>
+

@@ -18,6 +18,22 @@ logger = logging.getLogger("yaapp.yabase")
 class SettingsRadioForm(BootstrapModelForm):
     name = forms.CharField(label=_('Name'), required=True, max_length=255)
     tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
+
+    class Meta:
+        model = Radio
+        fields = ('name', 'genre', 'description', 'tags')
+        layout = (
+            Fieldset('', 'name', 'genre', 'description', 'tags'),
+        )
+
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        tags = clean_tags(tags)
+        self.cleaned_data['tags'] = tags
+        return tags
+
+
+class WallRadioForm(BootstrapForm):
     wall_header_display = forms.ChoiceField(label=_('Wall header style'),
         choices=yabase_settings.WALL_HEADER_DISPLAY_CHOICES_FORM,
         initial=yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE,
@@ -27,14 +43,14 @@ class SettingsRadioForm(BootstrapModelForm):
         initial=yabase_settings.WALL_HEADER_FX_BLUR)
 
     class Meta:
-        model = Radio
-        fields = ('name', 'genre', 'description', 'tags', 'wall_header_display', 'wall_header_fx')
+        fields = ('wall_header_display', 'wall_header_fx')
         layout = (
-            Fieldset('', 'name', 'genre', 'description', 'tags', 'wall_header_display', 'wall_header_fx'),
+            Fieldset('', 'wall_header_display', 'wall_header_fx'),
         )
 
-    def __init__(self, *args, **kwargs):
-        wall_layout_preferences = kwargs.get('instance').wall_layout_preferences()
+    def __init__(self, instance, *args, **kwargs):
+        self.instance = instance
+        wall_layout_preferences = self.instance.wall_layout_preferences()
         header = wall_layout_preferences.get('header', {})
 
         initial = {
@@ -42,17 +58,9 @@ class SettingsRadioForm(BootstrapModelForm):
             'wall_header_fx': header.get('fx', yabase_settings.WALL_HEADER_FX_BLUR),
         }
 
-        super(SettingsRadioForm, self).__init__(initial=initial, *args, **kwargs)
-
-    def clean_tags(self):
-        tags = self.cleaned_data['tags']
-        tags = clean_tags(tags)
-        self.cleaned_data['tags'] = tags
-        return tags
+        super(WallRadioForm, self).__init__(initial=initial, *args, **kwargs)
 
     def save(self, *args, **kwargs):
-        super(SettingsRadioForm, self).save(*args, **kwargs)
-
         wall_header_display = self.cleaned_data['wall_header_display']
         wall_header_fx = self.cleaned_data['wall_header_fx']
 

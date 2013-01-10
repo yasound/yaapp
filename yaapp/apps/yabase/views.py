@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic.base import View
-from forms import SettingsRadioForm, NewRadioForm
+from forms import SettingsRadioForm, WallRadioForm, NewRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata, Announcement
 from shutil import rmtree
@@ -1616,12 +1616,12 @@ class WebAppView(View):
             return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
 
         if request.method == 'POST':
+            uuid = request.REQUEST.get('uuid', '')
+            radio = get_object_or_404(Radio, uuid=uuid)
+            if radio.creator != request.user:
+                return HttpResponse(status=401)
             action = request.REQUEST.get('action')
             if action == 'radio_settings':
-                uuid = request.REQUEST.get('uuid', '')
-                radio = get_object_or_404(Radio, uuid=uuid)
-                if radio.creator != request.user:
-                    return HttpResponse(status=401)
                 form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
                 if form.is_valid():
                     form.save()
@@ -1631,7 +1631,16 @@ class WebAppView(View):
                 else:
                     if request.is_ajax():
                         return self._ajax_error(form.errors)
-
+            elif action == 'wall_settings':
+                form = WallRadioForm(radio, request.POST, request.FILES)
+                if form.is_valid():
+                    form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
+                    return HttpResponseRedirect(reverse('webapp_edit_radio', args=[self.app_name, uuid]))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(form.errors)
         return context, 'yabase/webapp.html'
 
     def _default_radio_uuid(self, user):
@@ -2500,6 +2509,7 @@ def load_template(request, template_name, app_name='app'):
 
         context['radio'] = radio
         context['settings_radio_form'] = SettingsRadioForm(instance=radio)
+        context['wall_radio_form'] = WallRadioForm(instance=radio)
     elif template_name == 'settings/settingsPage.mustache':
         my_informations_form = MyInformationsForm(instance=request.user.get_profile())
         my_accounts_form = MyAccountsForm(instance=request.user.get_profile())
@@ -2564,7 +2574,7 @@ def my_radios(request, radio_uuid=None):
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
-        qs = request.user.get_profile().own_radios(only_ready_radios=False)
+        qs = request.user.get_profile().own_radios(only_ready_radios=False).order_by('-id')
         total_count = qs.count()
         qs = qs[offset:offset+limit]
         data = []
