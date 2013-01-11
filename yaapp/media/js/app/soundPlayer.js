@@ -224,6 +224,7 @@ Yasound.Player.InstantPlayer = function () {
             if (!mgr.config.url) {
                 return;
             }
+            mgr.setVolume(Yasound.App.player.volume());
 
             if ((typeof mgr.soundHandler === "undefined")) {
                 mgr.soundHandler = soundManager.createSound(mgr.config);

@@ -2,6 +2,130 @@
 /*extern Ext, $ */
 Namespace('Yasound.Views');
 
+Yasound.Views.FriendsSlide = Backbone.View.extend({
+
+    events: {
+        'click a.asset-slide-right': 'onSlide',
+        'click a.asset-slide-left': 'onSlide'
+    },
+
+    currentStep: 0,
+    lastStep: 1,
+
+    initialize: function() {
+        _.bindAll(this, 'addOne', 'addAll', 'onSlide', 'resetSlide', 'getSlideOffset', 'onWindowResized');
+
+        this.collection.bind('add', this.addOne, this);
+        this.collection.bind('reset', this.addAll, this);
+        this.collection.bind('beforeFetch', this.beforeFetch, this);
+        this.views = [];
+
+        $(window).bind('resize', this.onWindowResized);
+    },
+    onClose: function() {
+        this.collection.unbind('beforeFetch', this.beforeFetch);
+        this.collection.unbind('add', this.addOne);
+        this.collection.unbind('reset', this.addAll);
+    },
+
+    beforeFetch: function() {
+        if (this.loadingMask) {
+            this.loadingMask.show();
+        }
+    },
+
+    addAll: function() {
+        if (!this.loadingMask) {
+            var mask = $('.loading-mask', this.el);
+            this.loadingMask = mask;
+        }
+
+        this.loadingMask.remove();
+        this.loadingMask = undefined;
+
+        if (this.collection.length === 0) {
+            $('.empty', this.el).show();
+        } else {
+            $('.empty', this.el).hide();
+        }
+        this.currentRadioIndex = 0;
+        this.collection.each(this.addOne);
+        this.resetSlide();
+    },
+
+    clear: function() {
+        _.map(this.views, function(view) {
+            view.close();
+        });
+        this.views = [];
+        $('ul', this.el).remove();
+
+        this.currentStep = 0;
+        this.lastStep = 1;
+        this.currentRadioIndex = 0;
+        this.resetSlide();
+        this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*this.getSlideOffset() + 'px' });
+    },
+
+    addOne: function(user) {
+        if (this.currentRadioIndex === 0 ) {
+            this.cellsRange = $('<ul/>').appendTo(this.$('.block-slide'));
+        } else if ( this.currentRadioIndex % 5 === 0) {
+            this.cellsRange = $('<ul/>').appendTo(this.$('.block-slide'));
+        }
+        var view = new Yasound.Views.UserCell({
+            model: user
+        });
+        this.cellsRange.append(view.render().el);
+        this.views.push(view);
+        this.currentRadioIndex++;
+    },
+
+    resetSlide: function() {
+        var cells = this.$('li');
+        if(cells.length > 0) {
+            var cellWidth = $(cells.get(0)).outerWidth(true);
+            this.$('.block-slide').width(cells.length*cellWidth + 'px');
+        }
+        this.lastStep = this.$('ul').length;
+    },
+
+    onSlide: function(e) {
+        e.preventDefault();
+
+        var previousStep = this.currentStep;
+        var btn = $(e.currentTarget);
+
+        if(btn.hasClass('asset-slide-right') && this.currentStep < this.lastStep-1) this.currentStep++;
+        else if(btn.hasClass('asset-slide-left') && this.currentStep !== 0) this.currentStep--;
+
+        if(this.currentStep === 0) this.$el.addClass('first');
+        else this.$el.removeClass('first');
+
+        if(this.currentStep === this.lastStep - 1) this.$el.addClass('last');
+        else this.$el.removeClass('last');
+
+        this.$('.block-slide').animate({ marginLeft: '-' + this.currentStep*this.getSlideOffset() + 'px' });
+
+        if (previousStep < this.currentStep) {
+            this.collection.requestNextPage();
+        }
+    },
+
+    getSlideOffset: function() {
+        var ranges = this.$('ul');
+        if(ranges.length === 0) return 0;
+        else return $(ranges.get(0)).outerWidth(true);
+    },
+
+    onWindowResized: function() {
+        this.resetSlide();
+        this.$('.block-slide').css('marginLeft', '-' + this.currentStep*this.getSlideOffset() + 'px');
+    }
+
+});
+
+
 Yasound.Views.GoogleContact = Backbone.View.extend({
     tagName: 'tr',
 
@@ -77,7 +201,7 @@ Yasound.Views.GoogleContacts = Backbone.View.extend({
         $(this.el).append(view.render().el);
         view.$el.on('click', function () {
             that.onSelect(contact);
-        })
+        });
         this.views.push(view);
     },
 
@@ -208,34 +332,19 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
         this.connected.perPage = Yasound.Utils.userCellsPerPage();
         $(this.el).html(ich.friendsPageTemplate());
 
-        this.resultsView = new Yasound.Views.Friends({
+        this.resultsView = new Yasound.Views.FriendsSlide({
             collection: this.collection,
-            el: $('#results', this.el)
+            el: $('#following-slides', this.el)
         });
 
-        this.paginationView = new Yasound.Views.Pagination({
-            collection: this.collection,
-            el: $('#pagination', this.el)
-        });
-
-        this.followersView = new Yasound.Views.Friends({
+        this.followersView = new Yasound.Views.FriendsSlide({
             collection: this.followers,
-            el: $('#followers', this.el)
+            el: $('#followers-slides', this.el)
         });
 
-        this.followersPaginationView = new Yasound.Views.Pagination({
-            collection: this.followers,
-            el: $('#followers-pagination', this.el)
-        });
-
-        this.connectedView = new Yasound.Views.Friends({
+        this.connectedView = new Yasound.Views.FriendsSlide({
             collection: this.connected,
-            el: $('#connected', this.el)
-        });
-
-        this.connectedPaginationView = new Yasound.Views.Pagination({
-            collection: this.connected,
-            el: $('#connected-pagination', this.el)
+            el: $('#connected-slides', this.el)
         });
 
         var that = this;

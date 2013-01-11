@@ -6,6 +6,7 @@ from yabase import signals as yabase_signals
 from task import async_add_listen_activity, async_add_animator_activity
 from dateutil.relativedelta import *
 from django.core.cache import cache
+from bson.objectid import ObjectId
 
 import logging
 logger = logging.getLogger("yaapp.yaactivity")
@@ -39,7 +40,7 @@ class FriendActivityManager():
     def remove_obsolete_data_for_user(self, user):
         res = self.collection.find({'user.username': user.username}, safe=True).sort([('updated', DESCENDING)]).skip(FriendActivityManager.MAX_ACTIVITY_PER_USER)
         for doc in res:
-            doc.remove(safe=True)
+            self.collection.remove(ObjectId(doc.get('_id')), safe=True)
 
     def add_friend_activity(self, user, friend, activity, **kwargs):
         now = datetime.datetime.now()
@@ -93,7 +94,7 @@ class RadioActivityManager():
     def remove_obsolete_data_for_user(self, user):
         res = self.collection.find({'user.username': user.username}, safe=True).sort([('updated', DESCENDING)]).skip(RadioActivityManager.MAX_ACTIVITY_PER_USER)
         for doc in res:
-            doc.remove(safe=True)
+            self.collection.remove(ObjectId(doc.get('_id')), safe=True)
 
     def add_radio_activity(self, user, radio, activity, **kwargs):
         lock_id = "radio-activity-%s" % (radio.uuid)
@@ -103,7 +104,7 @@ class RadioActivityManager():
         retry = 0
         max_retry = 3
         while not acquire_lock():
-            time.sleep(WallManager.WAIT_FOR_LOCK)
+            time.sleep(RadioActivityManager.WAIT_FOR_LOCK)
             retry += 1
             if retry > max_retry:
                 return

@@ -154,13 +154,23 @@ $(document).ready(function () {
             }
         }
     };
+
+
+    if (Yasound.App.appName == 'live' && Yasound.App.userAuthenticated) {
+        var sessionid = cookies.get('sessionid');
+        if (console.loginCompleted) {
+            console.loginCompleted(sessionid);
+        }
+    }
+
+
     /**
      * Sound engine initialization
      */
-    if (g_sound_player == 'soundmanager') {
+    if (g_sound_player === 'soundmanager') {
         Yasound.App.player = Yasound.Player.SoundManager();
         Yasound.App.instantPlayer = Yasound.Player.InstantPlayer();
-    } else if (g_sound_player == 'deezer') {
+    } else if (g_sound_player === 'deezer') {
         Yasound.App.player = Yasound.Player.Deezer();
     }
 

@@ -590,7 +590,9 @@ HTML, BODY { height: 100%; }
    }(document));
  </script>
 
+{% ifnotequal app_name 'live' %}
 {% include 'yabase/header.html' %}
+{% endifnotequal %}
 
 <div class="modal hide fade" id="modal-share">
     <div class="modal-header">
@@ -691,14 +693,18 @@ HTML, BODY { height: 100%; }
 </div>
 
 <div class="wrapper" id='main-content'>
+  {% ifnotequal app_name 'live' %}
   {% include "yabase/teaser.html" %}
   {% include 'yabase/app/common/subMenu.mustache' with static=1%}
+  {% endifnotequal %}
   <div class='content'>
   {% block content%}{%endblock%}
   </div>
 </div>
 
+{% ifnotequal app_name 'live' %}
 {% include "yabase/app/footer.html" %}
+{% endifnotequal %}
 </body>
 {% endblock %}
 

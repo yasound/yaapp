@@ -20,4 +20,7 @@ class FxEngine(Engine):
         return image
 
     def gaussianblur(self, image, radius=2):
-        return image.filter(CustomGaussianBlur(radius=radius))
+        try:
+            return image.filter(CustomGaussianBlur(radius=radius))
+        except:
+            return image

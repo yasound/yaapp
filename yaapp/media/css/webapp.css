@@ -456,6 +456,16 @@
   height: 20px;
   background-position: -622px -179px;
 }
+.asset-facebook-small {
+  width: 15px;
+  height: 15px;
+  background-position: -4px -268px;
+}
+.asset-twitter-small {
+  width: 15px;
+  height: 15px;
+  background-position: -26px -268px;
+}
 /* Textfields */
 [class^="textfield-"],
 [class*=" textfield-"] {
@@ -2388,88 +2398,6 @@ div .selector span {
 #modal-broadcast .modal-body textarea {
   width: 100%;
 }
-/**
- * User cell
- */
-ul .user-cell {
-  list-style: none;
-  height: 146px;
-  width: 146px;
-  float: left;
-  margin-right: 20px;
-  cursor: pointer;
-  margin-bottom: 12px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-  border: 8px solid white;
-  box-shadow: 0px 2px 8px #e6e6e6;
-  overflow: hidden;
-}
-ul .user-connected {
-  border: 8px solid #5aabda;
-}
-ul .user-cell:hover {
-  border: 8px solid #5aabda;
-  -webkit-transition: border 0.6s ease;
-  -moz-transition: border 0.6s ease;
-  -ms-transition: border 0.6s ease;
-  -o-transition: border 0.6s ease;
-  transition: border 0.6s ease;
-}
-ul .mask-user {
-  position: absolute;
-  height: 146px;
-  width: 146px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.8);
-  text-align: center;
-}
-ul .mask-user .caption-user {
-  display: block;
-  position: absolute;
-  top: 34px;
-  left: 25px;
-  height: 85px;
-  width: 105px;
-  color: #8c8d8e;
-  font-size: 14px;
-}
-.user-cell-inner {
-  height: 158px;
-  width: 158px;
-}
-.delete-friend {
-  position: absolute;
-  bottom: -51px;
-  right: 37px;
-}
-ul .user-cell .caption {
-  position: relative;
-  top: 0px;
-  background-color: black;
-  -webkit-border-radius: 1px;
-  -moz-border-radius: 1px;
-  border-radius: 1px;
-  -webkit-transition: top 0.5s ease;
-  -moz-transition: top 0.5s ease;
-  -ms-transition: top 0.5s ease;
-  -o-transition: top 0.5s ease;
-  transition: top 0.5s ease;
-}
-ul .user-cell .caption h5 {
-  color: white;
-  font-size: 16px;
-  font-weight: normal;
-}
-ul .user-cell:hover .caption {
-  top: -65px;
-}
-.user-cell img {
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-}
 #user-menu {
   margin-top: 0px;
   margin-left: 0;
@@ -3328,29 +3256,6 @@ ul .track-container {
   background-repeat: repeat-x;
   padding: 0px 5px;
 }
-#div_id_gender .controls {
-  width: 144px;
-  height: 30px;
-  position: relative;
-  border: 1px solid #bebebe;
-  border-radius: 7px;
-  box-shadow: 0px 2px 4px #d4d4d4;
-  background-image: url('../app/images/settings/settings-form-bg.png');
-  background-repeat: repeat-x;
-  padding: 3px 5px;
-}
-#div_id_gender .controls:after {
-  content: url('../app/images/settings/settings-selector.png');
-  position: absolute;
-  top: 11px;
-  right: 11px;
-}
-#div_id_gender span {
-  color: #74737b;
-  font-size: 17px;
-  padding: 0px;
-  margin: 0px;
-}
 #my-accounts fieldset legend {
   margin: 0px;
 }
@@ -3426,29 +3331,6 @@ ul .track-container {
   height: 100;
   box-shadow: 0px 0px 5px #7b7b7b, inset 1px 1px -5px #7b7b7b;
   margin-right: 40px;
-}
-#div_id_genre .controls {
-  width: 144px;
-  height: 30px;
-  position: relative;
-  border: 1px solid #bebebe;
-  border-radius: 7px;
-  box-shadow: 0px 2px 4px #d4d4d4;
-  background-image: url('../app/images/settings/settings-form-bg.png');
-  background-repeat: repeat-x;
-  padding: 3px 5px;
-}
-#div_id_genre .controls:after {
-  content: url('../app/images/settings/settings-selector.png');
-  position: absolute;
-  top: 11px;
-  right: 11px;
-}
-#div_id_gendre span {
-  color: #74737b;
-  font-size: 17px;
-  padding: 0px;
-  margin: 0px;
 }
 /**
  * Favorite Login
@@ -7895,6 +7777,9 @@ input::-ms-input-placeholder {
 .wall-event-title strong {
   color: #313234;
 }
+.wall-event-title strong a {
+  color: #313234;
+}
 .wall-event-action {
   font-size: 13px;
 }
@@ -8851,39 +8736,40 @@ ul .radio-with-stats-cells li {
   font-size: 28px;
   font-weight: normal;
 }
-.signup-container .signup-btns {
-  clear: both;
-  height: 132px;
+.signup-container .social-btn {
+  margin: 0 auto;
+  width: 340px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
-.signup-container .signup-btn-fbk {
+.signup-container .facebook {
+  text-align: left;
   display: block;
   height: 52px;
-  width: 349px;
-  float: left;
-  margin: 30px 0px 42px 101px;
+  padding-left: 70px;
   position: relative;
   background-image: url('../app/images/sign-up/btn-bg-facebook.png');
   background-repeat: repeat-x;
   border: 1px solid #283f70;
   border-radius: 5px;
   box-shadow: 0px 1px 2px #c9c9ca;
+  color: white;
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 54px;
+  text-decoration: none;
 }
-.signup-container .signup-btn-twitter {
+.signup-container .twitter {
+  text-align: left;
   display: block;
   height: 52px;
-  width: 349px;
-  float: left;
-  margin: 30px 0px 42px 33px;
+  padding-left: 70px;
   position: relative;
   background-image: url('../app/images/sign-up/btn-bg-twitter.png');
   background-repeat: repeat-x;
   border: 1px solid #2c7996;
   border-radius: 5px;
   box-shadow: 0px 1px 2px #c9c9ca;
-}
-.signup-container a {
-  display: block;
-  margin-left: 65px;
   color: white;
   font-weight: normal;
   font-size: 17px;
@@ -8895,11 +8781,10 @@ ul .radio-with-stats-cells li {
   top: 10px;
   left: 17px;
 }
-.signup-container #signup-input {
+.signup-container .signup-input {
   text-align: center;
-  margin-top: 35px;
 }
-.signup-container #signup-input input {
+.signup-container .signup-input input {
   height: 53px;
   width: 334px;
   color: #959595;
@@ -8910,30 +8795,32 @@ ul .radio-with-stats-cells li {
   border: 1px solid #9e9e9e;
   border-radius: 5px;
 }
-.signup-container #signup-input input.error {
+.signup-container .signup-input input.error {
   border: 4px solid red;
   border-radius: 5px;
 }
-.signup-container #signup-input .right-input {
-  margin-left: 33px;
-}
-.signup-container #signup-input .bottom-input {
-  margin-top: 17px;
-}
-.signup-container #signup-input #signup-save-btn {
+.signup-container .signup-input #signup-save-btn {
   background-image: url('../app/images/common/btn-bg-grey-average.png');
   margin-top: 30px;
   color: #58595c;
   text-shadow: 1px 1px white;
   box-shadow: 0px 2px 2px #e4e4e4;
 }
-.signup-container #signup-input #signup-save-btn[disabled=disabled] {
+.signup-container .signup-input #signup-save-btn[disabled=disabled] {
   color: #aaaaaa;
 }
 .signup-container a#lost-password {
   text-align: center;
   color: #25b2f9;
   margin: 0;
+  display: block;
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 54px;
+}
+#signup-form,
+#login-form {
+  margin-top: 32px;
 }
 /**
  * Radio Creation
@@ -9082,6 +8969,85 @@ ul .radio-with-stats-cells li {
 }
 .radio-jm .span7 {
   margin-top: 10px;
+}
+/**
+ * User cell
+ */
+ul .user-cell {
+  list-style: none;
+  height: 134px;
+  width: 134px;
+  float: left;
+  margin-right: 28px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 8px solid white;
+  box-shadow: 0px 2px 8px #e6e6e6;
+  overflow: hidden;
+}
+ul .user-cell:hover {
+  border: 8px solid #5aabda;
+  -webkit-transition: border 0.6s ease;
+  -moz-transition: border 0.6s ease;
+  -ms-transition: border 0.6s ease;
+  -o-transition: border 0.6s ease;
+  transition: border 0.6s ease;
+}
+ul .user-connected {
+  border: 8px solid #5aabda;
+}
+ul .mask-user {
+  position: absolute;
+  height: 134px;
+  width: 134px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+ul .mask-user .caption-user {
+  display: block;
+  position: absolute;
+  top: 34px;
+  left: 15px;
+  height: 85px;
+  width: 105px;
+  color: #8c8d8e;
+  font-size: 14px;
+}
+.user-cell-inner {
+  height: 134px;
+  width: 134px;
+}
+.delete-friend {
+  position: absolute;
+  bottom: -51px;
+  right: 37px;
+}
+ul .user-cell .caption {
+  position: relative;
+  top: 0px;
+  background-color: black;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+  -webkit-transition: top 0.5s ease;
+  -moz-transition: top 0.5s ease;
+  -ms-transition: top 0.5s ease;
+  -o-transition: top 0.5s ease;
+  transition: top 0.5s ease;
+}
+ul .user-cell .caption h5 {
+  color: white;
+  font-size: 16px;
+  font-weight: normal;
+}
+ul .user-cell:hover .caption {
+  top: -65px;
 }
 @media (max-width: 480px) {
   .teaser .argument {
