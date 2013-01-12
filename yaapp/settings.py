@@ -411,6 +411,7 @@ INSTALLED_APPS = (
     'yascheduler',
     'yawall',
     'yaactivity',
+    'yablog',
 )
 
 if LOCAL_MODE:

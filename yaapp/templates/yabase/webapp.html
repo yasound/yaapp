@@ -221,6 +221,8 @@ HTML, BODY { height: 100%; }
     <script type="text/javascript" src='/media/js/app/gifts/views.js'></script>
     <script type="text/javascript" src='/media/js/app/tutorial/views.js'></script>
     <script type="text/javascript" src='/media/js/app/teaser/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/blog/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/blog/views.js'></script>
     <script type="text/javascript" src='/media/js/app/static/views.js'></script>
     <script type="text/javascript" src='/media/js/app/static/models.js'></script>
     <script type="text/javascript" src='/media/js/app/share/views.js'></script>
@@ -270,6 +272,22 @@ HTML, BODY { height: 100%; }
 
        var g_jm_radio = '{{ jm_radio_uuid }}';
     </script>
+
+   <script type="text/html" id="blogPostsPageTemplate">
+      {% include "yabase/app/blog/blogPostsPage.mustache" %}
+   </script>
+
+   <script type="text/html" id="blogPostPageTemplate">
+      {% include "yabase/app/blog/blogPostPage.mustache" %}
+   </script>
+
+   <script type="text/html" id="blogPostTemplate">
+      {% include "yabase/app/blog/blogPost.mustache" %}
+   </script>
+
+   <script type="text/html" id="blogPostTeaserTemplate">
+      {% include "yabase/app/blog/blogPostTeaser.mustache" %}
+   </script>
 
 
    <script type="text/html" id="radioTemplate">

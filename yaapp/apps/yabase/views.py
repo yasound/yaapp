@@ -2569,6 +2569,7 @@ def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
+    logger.info(request)
     request.user.get_profile().update_geo_restrictions(request)
 
     if request.method == 'GET':

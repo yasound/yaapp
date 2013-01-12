@@ -282,6 +282,9 @@ urlpatterns = patterns('',
     # yapremium
     (r'^api/v1/premium/', include('yapremium.urls')),
 
+    # blog
+    (r'^api/v1/blog/', include('yablog.urls')),
+
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),

@@ -7651,11 +7651,13 @@ input::-ms-input-placeholder {
   padding-left: 75px;
 }
 .wall-input-container,
+.blog-post-container,
 .wall-event-container {
   position: relative;
   margin-bottom: 22px;
 }
 .wall-input-container .pic,
+.blog-post-container .pic,
 .wall-event-container .pic {
   position: absolute;
   top: 0;
@@ -7730,6 +7732,7 @@ input::-ms-input-placeholder {
   padding-left: 0;
   padding-right: 0;
 }
+.blog-post,
 .wall-event {
   border: 1px solid #d7d7d7;
   -webkit-border-radius: 4px;
@@ -7753,6 +7756,7 @@ input::-ms-input-placeholder {
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.15);
   color: #727476;
 }
+.blog-post:after,
 .wall-event:after {
   content: "";
   position: absolute;
@@ -7764,23 +7768,27 @@ input::-ms-input-placeholder {
   top: 18px;
   left: -14px;
 }
+.blog-post:hover .wall-comment-btns,
 .wall-event:hover .wall-comment-btns {
   display: block;
 }
 .wall-event-marked-as-abuse {
   color: red;
 }
+.blog-post-title,
 .wall-event-title {
   font-size: 14px;
   padding-right: 30px;
 }
+.blog-post-title strong,
 .wall-event-title strong {
   color: #313234;
 }
+.blog-post-title strong a,
 .wall-event-title strong a {
   color: #313234;
 }
-.wall-event-action {
+.blog-post-action .wall-event-action {
   font-size: 13px;
 }
 .wall-counters {

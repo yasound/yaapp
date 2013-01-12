@@ -245,6 +245,8 @@ $(document).ready(function () {
             "jobs/": "jobs",
             "press/": "press",
             "selection/:genre/": "index",
+            "blog/": "blogs",
+            "blog/:slug/": "blog",
             "*args": "index"
         },
         initialize: function() {
@@ -604,6 +606,23 @@ $(document).ready(function () {
                 el: Yasound.App.CONTENT_EL
             }).render();
         },
+
+        blogs: function () {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.BlogsPage({
+                el: Yasound.App.CONTENT_EL
+            }).render();
+        },
+
+        blog: function (slug) {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.BlogPage({
+                el: Yasound.App.CONTENT_EL
+            }).render(slug);
+        },
+
 
         legal: function () {
             return this.staticPage('legal');
