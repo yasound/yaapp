@@ -379,6 +379,7 @@ INSTALLED_APPS = (
     'taggit_templatetags',
     'test_utils',
     'bootstrap',
+    'wysihtml5',
     #'django-iphone-push',
     'yagraph',
     'yabackoffice',
@@ -1071,3 +1072,44 @@ if DEVELOPMENT_MODE:
     JM_RADIO = '423e0e61b0e34bf5a2167dbf6d414636'
 elif PRODUCTION_MODE:
     JM_RADIO = 'cdb37a39c8714f5ab9cdb03a40df08b5'
+
+WYSIHTML5_EDITOR = {
+    # Give the editor a name, the name will also be set as class
+    # name on the iframe and on the iframe's body
+    'name': 'null',
+    # Whether the editor should look like the textarea (by adopting styles)
+    'style': 'true',
+    # Id of the toolbar element, pass falsey value if you don't want
+    # any toolbar logic
+    'toolbar': 'null',
+    # Whether urls, entered by the user should automatically become
+    # clickable-links
+    'autoLink': 'true',
+    # Object which includes parser rules (set this to
+    # examples/rules/spec.json or your own spec, otherwise only span
+    # tags are allowed!)
+    'parserRules': 'customWysihtml5ParserRules',
+    # Parser method to use when the user inserts content via copy & paste
+    'parser': 'wysihtml5.dom.parse || Prototype.K',
+    # Class name which should be set on the contentEditable element in
+    # the created sandbox iframe, can be styled via the 'stylesheets' option
+    'composerClassName': '"wysihtml5-editor"',
+    # Class name to add to the body when the wysihtml5 editor is supported
+    'bodyClassName': '"wysihtml5-supported"',
+    # By default wysihtml5 will insert <br> for line breaks, set this to
+    # false to use <p>
+    'useLineBreaks': 'true',
+    # Array (or single string) of stylesheet urls to be loaded in the
+    # editor's iframe
+    'stylesheets': '["%s"]' % (STATIC_URL +
+                               "/wysihtml5/css/stylesheet.css"),
+    # Placeholder text to use, defaults to the placeholder attribute
+    # on the textarea element
+    'placeholderText': 'null',
+    # Whether the composer should allow the user to manually resize
+    # images, tables etc.
+    'allowObjectResizing': 'true',
+    # Whether the rich text editor should be rendered on touch devices
+    # (wysihtml5 >= 0.3.0 comes with basic support for iOS 5)
+    'supportTouchDevices': 'true'
+}

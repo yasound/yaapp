@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from transmeta import TransMeta
 from datetime import datetime
 from taggit.managers import TaggableManager
-
-
+from wysihtml5.fields import Wysihtml5TextField
+from django.template.defaultfilters import truncatewords_html
 class BlogPostManager(models.Manager):
     def get_posts(self):
         now = datetime.now()
@@ -18,14 +18,14 @@ class BlogPost(models.Model):
     __metaclass__ = TransMeta
 
     objects = BlogPostManager()
-    name = models.CharField(_('name'), max_length=80, unique=True)
-    slug = models.SlugField(_('slug'))
+    name = models.CharField(_('name'), max_length=80)
+    slug = models.SlugField(_('slug'), unique=True)
     creator = models.ForeignKey(User)
     created = models.DateTimeField(_('created at'), auto_now_add=True)
     updated = models.DateTimeField(_('created at'), auto_now=True)
     publish_date = models.DateTimeField(_('publish date'), blank=True, null=True)
-    teaser = models.TextField(_('teaser'), blank=True)
-    description = models.TextField(_('description'))
+    teaser = Wysihtml5TextField(_('teaser'), blank=True)
+    description = Wysihtml5TextField(_('description'))
     sticky = models.BooleanField(_('sticky'), default=False)
     tags = TaggableManager(_('tags'), blank=True)
 
@@ -66,7 +66,7 @@ class BlogPost(models.Model):
     def get_teaser(self):
         if self.teaser != '':
             return self.teaser
-        return self.description
+        return truncatewords_html(self.description, 250)
 
     def tags_to_string(self):
         first = True

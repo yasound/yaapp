@@ -7772,6 +7772,9 @@ input::-ms-input-placeholder {
 .wall-event:hover .wall-comment-btns {
   display: block;
 }
+.blog-post {
+  font-size: 16px;
+}
 .wall-event-marked-as-abuse {
   color: red;
 }
@@ -7787,6 +7790,9 @@ input::-ms-input-placeholder {
 .blog-post-title strong a,
 .wall-event-title strong a {
   color: #313234;
+}
+.blog-post-title {
+  font-size: 18px;
 }
 .blog-post-action .wall-event-action {
   font-size: 13px;
