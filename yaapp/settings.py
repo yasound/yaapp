@@ -380,6 +380,7 @@ INSTALLED_APPS = (
     'test_utils',
     'bootstrap',
     'wysihtml5',
+    'attachments',
     #'django-iphone-push',
     'yagraph',
     'yabackoffice',

@@ -157,7 +157,6 @@ Yasound.Views.BlogsPage = Backbone.View.extend({
 });
 
 Yasound.Views.BlogPage = Backbone.View.extend({
-    model: new Yasound.Data.Models.BlogPost({}),
     events: {
     },
 
@@ -169,13 +168,22 @@ Yasound.Views.BlogPage = Backbone.View.extend({
         if (this.blogPostView) {
             this.blogPostView.close();
         }
+        delete this.model;
     },
 
     reset: function() {
+        if (this.model) {
+            delete this.model;
+        }
     },
 
     render: function(slug) {
         this.reset();
+
+        this.model = new Yasound.Data.Models.BlogPost({
+            slug: slug
+        }),
+
         $(this.el).html(ich.blogPostPageTemplate());
 
         this.blogPostView = new Yasound.Views.BlogPost({
@@ -184,7 +192,6 @@ Yasound.Views.BlogPage = Backbone.View.extend({
         });
 
         var that = this;
-        this.model.set('slug', slug, {silent: true});
         this.model.fetch({
             success: function () {
                 $('.blog-title').html(that.model.get('name'));

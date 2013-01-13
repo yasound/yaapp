@@ -329,6 +329,7 @@ urlpatterns = patterns('',
 
     url(r'^deezer/close/$', 'yabase.views.close', name='close'),
 
+    (r'^attachments/', include('attachments.urls')),
 
     (r'^', include('yabase.urls')),
 
