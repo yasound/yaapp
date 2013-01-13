@@ -48,5 +48,6 @@ django_compressor
 django-debug-toolbar
 fabric
 django-localeurl
--e git+https://github.com/danirus/django-wysihtml5.git#egg=django-wysihtml5
 django-attachments
+markdown
+Pygments

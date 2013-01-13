@@ -6,6 +6,8 @@ from datetime import datetime
 from taggit.managers import TaggableManager
 from wysihtml5.fields import Wysihtml5TextField
 from django.template.defaultfilters import truncatewords_html
+import markdown
+
 class BlogPostManager(models.Manager):
     def get_posts(self):
         now = datetime.now()
@@ -57,7 +59,7 @@ class BlogPost(models.Model):
             'created': self.created,
             'updated': self.updated,
             'teaser': self.get_teaser(),
-            'description': self.description,
+            'description': markdown.markdown(self.description, extensions=['extra', 'codehilite']),
             'sticky': self.sticky,
             'tags': self.tags_to_string(),
         }
@@ -65,8 +67,8 @@ class BlogPost(models.Model):
 
     def get_teaser(self):
         if self.teaser != '':
-            return self.teaser
-        return truncatewords_html(self.description, 250)
+            return markdown.markdown(self.teaser, extensions=['extra', 'codehilite'])
+        return truncatewords_html(markdown.markdown(self.description, extensions=['extra', 'codehilite']), 250)
 
     def tags_to_string(self):
         first = True
