@@ -11,14 +11,17 @@ class Migration(SchemaMigration):
         # Adding model 'BlogPost'
         db.create_table('yablog_blogpost', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=80)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
+            ('name_en', self.gf('django.db.models.fields.CharField')(max_length=80)),
+            ('name_fr', self.gf('django.db.models.fields.CharField')(max_length=80, null=True, blank=True)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('publish_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('teaser', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
+            ('teaser_en', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('teaser_fr', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('description_en', self.gf('django.db.models.fields.TextField')()),
+            ('description_fr', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('sticky', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('state', self.gf('django.db.models.fields.IntegerField')(default=1)),
         ))
@@ -81,17 +84,20 @@ class Migration(SchemaMigration):
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'taggit_taggeditem_items'", 'to': "orm['taggit.Tag']"})
         },
         'yablog.blogpost': {
-            'Meta': {'ordering': "['-sticky', '-publish_date', 'name']", 'object_name': 'BlogPost'},
+            'Meta': {'ordering': "['-sticky', '-publish_date', 'slug']", 'object_name': 'BlogPost'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'description': ('django.db.models.fields.TextField', [], {}),
+            'description_en': ('django.db.models.fields.TextField', [], {}),
+            'description_fr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'name_fr': ('django.db.models.fields.CharField', [], {'max_length': '80', 'null': 'True', 'blank': 'True'}),
             'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'state': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'sticky': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'teaser': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'teaser_en': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'teaser_fr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }
