@@ -7732,7 +7732,6 @@ input::-ms-input-placeholder {
   padding-left: 0;
   padding-right: 0;
 }
-.blog-post,
 .wall-event {
   border: 1px solid #d7d7d7;
   -webkit-border-radius: 4px;
@@ -7756,7 +7755,6 @@ input::-ms-input-placeholder {
   box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.15);
   color: #727476;
 }
-.blog-post:after,
 .wall-event:after {
   content: "";
   position: absolute;
@@ -7768,12 +7766,50 @@ input::-ms-input-placeholder {
   top: 18px;
   left: -14px;
 }
-.blog-post:hover .wall-comment-btns,
-.wall-event:hover .wall-comment-btns {
+.wall-event .wall-comment-btns {
   display: block;
 }
 .blog-post {
+  border: 1px solid #d7d7d7;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding: 8px 12px;
   font-size: 16px;
+  margin-left: 80px;
+  min-height: 39px;
+  position: relative;
+  line-height: 19px;
+  -webkit-box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.15);
+  color: #727476;
+}
+.blog-post:after {
+  content: "";
+  position: absolute;
+  background-image: url("../app/images/sprites/assets.png");
+  background-repeat: no-repeat;
+  width: 14px;
+  height: 18px;
+  background-position: -471px -136px;
+  top: 18px;
+  left: -14px;
+}
+.blog-post:hover .blog-post-btns {
+  display: block;
+}
+.blog-post .blog-post-see-more {
+  text-align: right;
+}
+.blog-post .blog-post-see-more a {
+  cursor: pointer;
+}
+.blog-rss {
+  float: right;
+  position: relative;
+  top: 16px;
+  right: 16px;
 }
 .wall-event-marked-as-abuse {
   color: red;
@@ -7833,6 +7869,13 @@ input::-ms-input-placeholder {
   position: absolute;
   top: 2px;
   right: -11px;
+}
+.blog-post-btns {
+  height: 20px;
+  width: 50px;
+  position: absolute;
+  top: 8px;
+  right: -12px;
 }
 /*
  * PROGRAMMING

@@ -14,7 +14,7 @@ Yasound.Data.Models.BlogPost = Backbone.Model.extend({
         // if start_date contains microsecond precision, we remove it
         var start_date = this.get('updated').substr(0, 19);
         var date = moment(start_date + timeZone);
-        data.formatted_date= date.format('LLL');
+        data.formatted_date= date.format('LL');
         return data;
     },
     url: function() {

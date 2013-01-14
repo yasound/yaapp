@@ -34,7 +34,8 @@ Yasound.Views.BlogPostTeaser = Backbone.View.extend({
     tagName: 'div',
     className: 'blog-post-container',
     events: {
-        'click .blog-post-title': 'onSelected'
+        'click .blog-post-title': 'onSelected',
+        'click .blog-post-btns a': 'onSelected'
     },
 
     initialize: function () {

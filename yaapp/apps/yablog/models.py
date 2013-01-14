@@ -91,9 +91,6 @@ class BlogPost(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('blog_post', None, {
-            'year': self.publish_date.year,
-            'month': "%02d" % self.publish_date.month,
-            'day': "%02d" % self.publish_date.day,
+        return ('webapp_default_blog_post', None, {
             'slug': self.slug
         })

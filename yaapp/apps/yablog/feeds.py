@@ -2,6 +2,7 @@ from django.contrib.syndication.views import Feed
 from models import BlogPost
 from django.utils.translation import ugettext as _
 
+
 class LatestPostFeed(Feed):
     title = _("YaSound blog feed")
     link = "/blog/feeds/"

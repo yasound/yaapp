@@ -23,6 +23,9 @@ from yabase.models import Radio
 from yaweb import urls as yaweb_urls
 from yaweb.sitemap import StaticSitemap
 from yabase.sitemap import WebappSiteMap
+from yablog.sitemaps import BlogPostSitemap
+from yablog.feeds import LatestPostFeed
+
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
@@ -284,6 +287,7 @@ urlpatterns = patterns('',
 
     # blog
     (r'^api/v1/blog/', include('yablog.urls')),
+    url(r'^blog/rss/$',  LatestPostFeed(), name='blog_post_rss'),
 
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
@@ -354,6 +358,7 @@ else:
 # sitemap
 sitemaps = {
     'yaapp': WebappSiteMap(),
+    'blog': BlogPostSitemap(),
 }
 
 urlpatterns += patterns('django.contrib.sitemaps.views',
