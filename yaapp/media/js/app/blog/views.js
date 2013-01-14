@@ -6,6 +6,7 @@ Yasound.Views.BlogPost = Backbone.View.extend({
     tagName: 'div',
     className: 'blog-post-container',
     events: {
+        'click a.facebook-share': 'onFacebookShare'
     },
 
     initialize: function () {
@@ -19,6 +20,14 @@ Yasound.Views.BlogPost = Backbone.View.extend({
     render: function () {
         var data = this.model.toJSON();
         $(this.el).html(ich.blogPostTemplate(data));
+
+        var twitterParams = {
+            url: this.model.absoluteUrl(),
+            text: '',
+            hashtags: 'yasound'
+        };
+        $('.twitter-share').attr('href', "http://twitter.com/share?" + $.param(twitterParams));
+
         return this;
     },
 
@@ -27,6 +36,28 @@ Yasound.Views.BlogPost = Backbone.View.extend({
         Yasound.App.Router.navigate('blog/' + this.model.get('slug') + '/', {
             trigger: true
         });
+    },
+
+    onFacebookShare: function (e) {
+        e.preventDefault();
+        var link = this.model.absoluteUrl();
+        var name = this.model.get('name');
+        var creatorName = this.model.get('creator')['name'];
+        if (creatorName !== '') {
+            name =  name +  ' ' + gettext('by') + ' ' + this.model.get('creator')['name'];
+        }
+        var obj = {
+            method: 'feed',
+            display: 'popup',
+            link: link,
+            picture: Yasound.App.FacebookShare.picture,
+            name: name,
+            caption: this.model.get('name'),
+            description: ''
+        };
+        function callback (response) {
+        }
+        FB.ui(obj, callback);
     }
 });
 

@@ -6,8 +6,8 @@
     <div class="blog-post-title">{{ post.updated|date:"DATE_FORMAT" }}</div>
     <div class="blog-post-action">{{ post.get_description|safe }} </div>
     <div class="blog-post-btns">
-        <a class="icon-twitter" href="#"></a>
-        <a class="icon-facebook" href="#"></a>
+        <a class="icon-twitter twitter-share" target='blank' rel='nofollow' href="#"></a>
+        <a class="icon-facebook facebook-share" rel='nofollow' href="#"></a>
     </div>
 </div>
 {% else %}
@@ -16,8 +16,8 @@
     <div class="blog-post-title"><% formatted_date %></a></div>
     <div class="blog-post-action"><%{description %></div>
     <div class="blog-post-btns">
-        <a class="icon-twitter" href="#"></a>
-        <a class="icon-facebook" href="#"></a>
+        <a class="icon-twitter twitter-share" target='blank' rel='nofollow' href="#"></a>
+        <a class="icon-facebook facebook-share" rel='no-follow' href="#"></a>
     </div>
 </div>
 {% endif %}

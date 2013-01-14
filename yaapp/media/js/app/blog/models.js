@@ -4,6 +4,7 @@ Namespace('Yasound.Data.Models');
 
 Yasound.Data.Models.BlogPost = Backbone.Model.extend({
     idAttribute: 'slug',
+
     toJSON: function() {
         var data = Yasound.Data.Models.BlogPost.__super__.toJSON.apply(this);
 
@@ -17,8 +18,16 @@ Yasound.Data.Models.BlogPost = Backbone.Model.extend({
         data.formatted_date= date.format('LL');
         return data;
     },
+
     url: function() {
         return '/api/v1/blog/' + this.get('slug') + '/';
+    },
+
+    absoluteUrl: function () {
+        var protocol = window.location.protocol;
+        var host = window.location.host;
+        var url =  protocol + '//' + host + Yasound.App.root + 'blog/' + this.get('slug');
+        return url;
     }
 });
 
