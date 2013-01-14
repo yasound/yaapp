@@ -6,7 +6,8 @@ Yasound.Views.BlogPost = Backbone.View.extend({
     tagName: 'div',
     className: 'blog-post-container',
     events: {
-        'click a.facebook-share': 'onFacebookShare'
+        'click a.facebook-share': 'onFacebookShare',
+        'click a.pic': 'selectUser'
     },
 
     initialize: function () {
@@ -58,6 +59,13 @@ Yasound.Views.BlogPost = Backbone.View.extend({
         function callback (response) {
         }
         FB.ui(obj, callback);
+    },
+
+    selectUser: function (event) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.model.get('creator')['username'] + '/', {
+            trigger: true
+        });
     }
 });
 
@@ -66,7 +74,8 @@ Yasound.Views.BlogPostTeaser = Backbone.View.extend({
     className: 'blog-post-container',
     events: {
         'click .blog-post-title': 'onSelected',
-        'click .blog-post-btns a': 'onSelected'
+        'click .blog-post-see-more a': 'onSelected',
+        'click a.pic': 'selectUser'
     },
 
     initialize: function () {
@@ -86,6 +95,13 @@ Yasound.Views.BlogPostTeaser = Backbone.View.extend({
     onSelected: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('blog/' + this.model.get('slug') + '/', {
+            trigger: true
+        });
+    },
+
+    selectUser: function (event) {
+        event.preventDefault();
+        Yasound.App.Router.navigate("profile/" + this.model.get('creator')['username'] + '/', {
             trigger: true
         });
     }

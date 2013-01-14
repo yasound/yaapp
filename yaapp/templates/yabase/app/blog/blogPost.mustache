@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load app_url %}
 {% if post %}
-<a class="pic pic-circle pic-wide" href="<a href='#"><img src="{% url user_custom_picture post.creator '45x45' %}" width="45" height="45" alt="{{ post.creator }}"></a>
+<a class="pic pic-circle pic-wide" href="{% app_url webapp_profile app_name post.creator.username %}"><img src="{% url user_custom_picture post.creator '45x45' %}" width="45" height="45" alt="{{ post.creator }}"></a>
 <div class="blog-post">
     <div class="blog-post-title">{{ post.updated|date:"DATE_FORMAT" }}</div>
     <div class="blog-post-action">{{ post.get_description|safe }} </div>
