@@ -11,6 +11,7 @@ from django.template.smartif import IfParser, Literal
 from django.conf import settings
 from django.utils.encoding import smart_str, smart_unicode
 from django.utils.safestring import mark_safe
+from localeurl import utils as localeurl_utils
 
 register = Library()
 # Regex for token keyword arguments
@@ -107,10 +108,14 @@ class URLNode(Node):
                 if self.asvar is None:
                     raise e
 
-        if url.startswith('/app/'):
-            url = url[len('/app/'):]
-        if len(url) > 0 and url[0] != '/':
-            url = '/' + url
+        language, stripped_url = localeurl_utils.strip_path(url)
+        if stripped_url.startswith('/app/'):
+            stripped_url = stripped_url[len('/app/'):]
+        if len(stripped_url) > 0 and stripped_url[0] != '/':
+            stripped_url = '/' + stripped_url
+
+        url = localeurl_utils.locale_url(stripped_url, language)
+
         if self.asvar:
             context[self.asvar] = url
             return ''
