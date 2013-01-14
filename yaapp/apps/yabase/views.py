@@ -1313,7 +1313,10 @@ class WebAppView(View):
         return absolute url (with port) of push server
         """
 
-        host = request.META.get('HTTP_HOST', 'yasound.com'),
+        if 'HTTP_HOST' not in request.META:
+            return None
+
+        host = request.META['HTTP_HOST']
         protocol = settings.DEFAULT_HTTP_PROTOCOL
         if ':' in host:
             host = host[:host.find(':')]
