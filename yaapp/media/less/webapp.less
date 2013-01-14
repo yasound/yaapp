@@ -3328,6 +3328,48 @@ ul .user-cell:hover .caption {
 //     border-radius: 50%;
 // }
 
+
+/**
+ * Track like cell
+ */
+.track-container {
+    height:200px;
+    width:200px;
+    position:relative;
+    margin:10px 0px 20px 20px;
+
+	.track-title {
+	    width:198px;
+	    position:absolute;
+	    border:1px solid black;
+	    background-color: rgba(39, 37, 36, 0.80);
+	    bottom:0px;
+	    left:0px;
+	    border-radius:0px 0px 5px 5px;
+	    box-shadow:0px 1px 1px grey inset;
+
+	    h2 {
+		    font-size:15px;
+		    font-weight:normal;
+		    color:white;
+		    line-height:20px;
+		    margin:5px;
+	    }
+	}
+
+	.track-picture {
+	    position:absolute;
+	    height:200px;
+	    width:200px;
+	}
+}
+
+ul .track-container {
+    cursor: pointer;
+}
+
+
+
 @import 'webapp/responsive/landscape-phones-and-down.less';
 @import 'webapp/responsive/landscape-phones-to-portrait-tablet.less';
 @import 'webapp/responsive/portrait-tablet-to-desktop.less';
