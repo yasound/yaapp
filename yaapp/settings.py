@@ -35,6 +35,8 @@ else:
 
 TEMPLATE_DEBUG = DEBUG
 
+if TEST_MODE:
+    COMPRESS_ENABLED = False
 
 DEFAULT_FROM_EMAIL = "Yasound Notification <noreply@yasound.com>"
 SERVER_EMAIL = "dev@yasound.com"

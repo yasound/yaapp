@@ -1313,7 +1313,7 @@ class WebAppView(View):
         return absolute url (with port) of push server
         """
 
-        host = request.META['HTTP_HOST']
+        host = request.META.get('HTTP_HOST', 'yasound.com'),
         protocol = settings.DEFAULT_HTTP_PROTOCOL
         if ':' in host:
             host = host[:host.find(':')]
@@ -1477,7 +1477,7 @@ class WebAppView(View):
         return context, 'yabase/app/static.html'
 
     def blog_post(self, request, context, *args, **kwargs):
-        slug = (kwargs['slug'])
+        slug = kwargs['slug']
         post = get_object_or_404(BlogPost, slug=slug)
         context['bdata'] = json.dumps(post.as_dict(), cls=MongoAwareEncoder)
         context['post'] = post
