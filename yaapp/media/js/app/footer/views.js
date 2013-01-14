@@ -31,7 +31,8 @@ Yasound.Views.Footer = Backbone.View.extend({
             'onVolumeSlide',
             'gotoRadio',
             'onShare',
-            'onFavoriteChanged');
+            'onFavoriteChanged',
+            'ping');
 
         $.subscribe('/current_radio/change', this.onRadioChanged);
         $.subscribe('/current_radio/favorite_change', this.onFavoriteChanged);
@@ -49,6 +50,11 @@ Yasound.Views.Footer = Backbone.View.extend({
         if (this.currentSong) {
             this.currentSong.unbind('change', this.renderSong, this);
         }
+
+        if (this.pingIntervalId) {
+            clearInterval(this.pingIntervalId);
+        }
+
         $('#modal-share').off('show', this.onShare);
     },
 
@@ -56,6 +62,7 @@ Yasound.Views.Footer = Backbone.View.extend({
         this.renderRadio();
         this.renderSong();
         this.renderVolume();
+        this.ping();
         return this;
     },
 
@@ -232,6 +239,30 @@ Yasound.Views.Footer = Backbone.View.extend({
             Yasound.Utils.dialog(gettext('Error'), gettext('Nothing to share'));
         }
 
-    }
+    },
 
+    ping: function() {
+        if (this.pingIntervalId) {
+            clearInterval(this.pingIntervalId);
+        }
+        var that = this;
+
+        sendPing = function () {
+            if (!that.radio) {
+                return;
+            }
+
+            var query = $.ajax({
+                type: 'POST',
+                url: '/api/v1/ping/',
+                data: {
+                    radio_uuid: that.radio.get('uuid')
+                }
+            });
+        };
+        this.pingIntervalId = setInterval(function () {
+            sendPing();
+        }, 10*1000);
+        sendPing();
+    }
 });
