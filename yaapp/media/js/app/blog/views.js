@@ -18,12 +18,7 @@ Yasound.Views.BlogPost = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-
-        if (Yasound.App.enableFX) {
-            $(this.el).hide().html(ich.blogPostTemplate(data)).fadeIn(200);
-        } else {
-            $(this.el).html(ich.blogPostTemplate(data));
-        }
+        $(this.el).html(ich.blogPostTemplate(data));
         return this;
     },
 
@@ -52,11 +47,7 @@ Yasound.Views.BlogPostTeaser = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        if (Yasound.App.enableFX) {
-            $(this.el).hide().html(ich.blogPostTeaserTemplate(data)).fadeIn(200);
-        } else {
-            $(this.el).html(ich.blogPostTeaserTemplate(data));
-        }
+        $(this.el).html(ich.blogPostTeaserTemplate(data));
         return this;
     },
 
