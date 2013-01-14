@@ -20,7 +20,7 @@ Yasound.Data.Models.BlogPost = Backbone.Model.extend({
     },
 
     url: function() {
-        return '/api/v1/blog/' + this.get('slug') + '/';
+        return '/api/v1/blog/' + this.get('slug') + '/?lang=' + g_language_code;
     },
 
     absoluteUrl: function () {
@@ -33,5 +33,7 @@ Yasound.Data.Models.BlogPost = Backbone.Model.extend({
 
 Yasound.Data.Models.BlogPosts = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.BlogPost,
-    url: '/api/v1/blog/'
+    url: function() {
+        return '/api/v1/blog/';
+    }
 });
