@@ -338,7 +338,10 @@ def async_songs_started(data):
             return
         radio_uuid = i[0]
         songinstance_id = i[1]
-        play_date = datetime.datetime.strptime(i[2], "%Y-%m-%dT%H:%M:%S.%f")
+        if '.' in i[2]:
+            play_date = datetime.datetime.strptime(i[2], "%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            play_date = datetime.datetime.strptime(i[2], "%Y-%m-%dT%H:%M:%S")
         song_instance = SongInstance.objects.select_related().get(id=songinstance_id)
         song_instance.playlist.radio.song_starts_playing(song_instance, play_date)
     logger.info('async_songs_started finished: %d' % (len(data)))
