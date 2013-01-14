@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from transmeta import TransMeta
 from datetime import datetime
 from taggit.managers import TaggableManager
-from wysihtml5.fields import Wysihtml5TextField
 from django.template.defaultfilters import truncatewords_html
 import markdown
 
@@ -26,8 +25,8 @@ class BlogPost(models.Model):
     created = models.DateTimeField(_('created at'), auto_now_add=True)
     updated = models.DateTimeField(_('created at'), auto_now=True)
     publish_date = models.DateTimeField(_('publish date'), blank=True, null=True)
-    teaser = Wysihtml5TextField(_('teaser'), blank=True)
-    description = Wysihtml5TextField(_('description'))
+    teaser = models.TextField(_('teaser'), blank=True)
+    description = models.TextField(_('description'))
     sticky = models.BooleanField(_('sticky'), default=False)
     tags = TaggableManager(_('tags'), blank=True)
 
@@ -59,7 +58,7 @@ class BlogPost(models.Model):
             'created': self.created,
             'updated': self.updated,
             'teaser': self.get_teaser(),
-            'description': markdown.markdown(self.description, extensions=['extra', 'codehilite']),
+            'description': self.get_description(),
             'sticky': self.sticky,
             'tags': self.tags_to_string(),
         }
@@ -69,6 +68,9 @@ class BlogPost(models.Model):
         if self.teaser != '':
             return markdown.markdown(self.teaser, extensions=['extra', 'codehilite'])
         return truncatewords_html(markdown.markdown(self.description, extensions=['extra', 'codehilite']), 250)
+
+    def get_description(self):
+        return markdown.markdown(self.description, extensions=['extra', 'codehilite'])
 
     def tags_to_string(self):
         first = True

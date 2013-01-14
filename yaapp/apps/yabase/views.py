@@ -46,6 +46,7 @@ from yageoperm import utils as yageoperm_utils
 from yahistory.models import ProgrammingHistory
 from yawall.models import WallManager
 from account.views import fast_connected_users_by_distance
+from yablog.models import BlogPost
 import import_utils
 import json
 import logging
@@ -1467,6 +1468,21 @@ class WebAppView(View):
             context['bdata'] = json.dumps([notification for notification in notifications], cls=MongoAwareEncoder)
             context['g_page'] = 'notifications'
         return context, 'yabase/app/notifications/notificationsPage.html'
+
+    def blog_posts(self, request, context, *args, **kwargs):
+        posts = BlogPost.objects.get_posts()
+        context['bdata'] = json.dumps([post.as_dict() for post in posts], cls=MongoAwareEncoder)
+        context['blog_posts'] = posts
+        context['mustache_template'] = 'yabase/app/blog/blogPostsPage.mustache'
+        return context, 'yabase/app/static.html'
+
+    def blog_post(self, request, context, *args, **kwargs):
+        slug = (kwargs['slug'])
+        post = get_object_or_404(BlogPost, slug=slug)
+        context['bdata'] = json.dumps(post.as_dict(), cls=MongoAwareEncoder)
+        context['post'] = post
+        context['mustache_template'] = 'yabase/app/blog/blogPostPage.mustache'
+        return context, 'yabase/app/static.html'
 
     def radios(self, request, context, *args, **kwargs):
         context['submenu_number'] = 5

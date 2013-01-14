@@ -275,19 +275,19 @@ HTML, BODY { height: 100%; }
     </script>
 
    <script type="text/html" id="blogPostsPageTemplate">
-      {% include "yabase/app/blog/blogPostsPage.mustache" %}
+      {% include "yabase/app/blog/blogPostsPage.mustache" with blog_posts=None %}
    </script>
 
    <script type="text/html" id="blogPostPageTemplate">
-      {% include "yabase/app/blog/blogPostPage.mustache" %}
+      {% include "yabase/app/blog/blogPostPage.mustache" with post=None %}
    </script>
 
    <script type="text/html" id="blogPostTemplate">
-      {% include "yabase/app/blog/blogPost.mustache" %}
+      {% include "yabase/app/blog/blogPost.mustache" with post=None %}
    </script>
 
    <script type="text/html" id="blogPostTeaserTemplate">
-      {% include "yabase/app/blog/blogPostTeaser.mustache" %}
+      {% include "yabase/app/blog/blogPostTeaser.mustache" with post=None%}
    </script>
 
 

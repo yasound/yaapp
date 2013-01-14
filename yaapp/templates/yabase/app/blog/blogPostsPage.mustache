@@ -7,5 +7,11 @@
 </div>
 
 <div class="container-fluid content-zone last">
-    <div id='blog-posts'></div>
+    <div id='blog-posts'>
+        {% for post in blog_posts %}
+        <div class='blog-post-container'>
+            {% include 'yabase/app/blog/blogPostTeaser.mustache' with post=post %}
+        </div>
+        {% endfor %}
+    </div>
 </div>

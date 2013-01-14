@@ -52,11 +52,10 @@ Yasound.Views.BlogPostTeaser = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-
         if (Yasound.App.enableFX) {
             $(this.el).hide().html(ich.blogPostTeaserTemplate(data)).fadeIn(200);
         } else {
-            $(this.el).html(ich.blogPostTemplate(data));
+            $(this.el).html(ich.blogPostTeaserTemplate(data));
         }
         return this;
     },
@@ -111,6 +110,7 @@ Yasound.Views.BlogPosts = Backbone.View.extend({
         _.map(this.views, function(view) {
             view.close();
         });
+        $(this.el).html('');
         this.views = [];
     },
 
@@ -150,14 +150,21 @@ Yasound.Views.BlogsPage = Backbone.View.extend({
             el: $('#blog-posts', this.el)
         });
 
-        this.collection.fetch();
-
+        if (g_bootstrapped_data) {
+            this.collection.reset(g_bootstrapped_data, {'silent': true});
+            this.collection.next = g_next_url;
+            this.collection.baseUrl = g_base_url;
+            this.collection.trigger('reset', this.collection);
+        } else {
+            this.collection.fetch();
+        }
         return this;
     }
 });
 
 Yasound.Views.BlogPage = Backbone.View.extend({
     events: {
+        'click a.back': 'onBack'
     },
 
     initialize: function() {
@@ -192,13 +199,25 @@ Yasound.Views.BlogPage = Backbone.View.extend({
         });
 
         var that = this;
-        this.model.fetch({
-            success: function () {
-                $('.blog-title').html(that.model.get('name'));
-            }
-         });
 
+        if (g_bootstrapped_data) {
+            this.model.set(g_bootstrapped_data);
+            $('.blog-title').html(this.model.get('name'));
+        } else {
+            this.model.fetch({
+                success: function () {
+                    $('.blog-title').html(that.model.get('name'));
+                }
+             });
+        }
         return this;
+    },
+
+    onBack: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('blog/', {
+            trigger: true
+        });
     }
 });
 
