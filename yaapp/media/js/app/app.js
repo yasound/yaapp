@@ -187,7 +187,7 @@ $(document).ready(function () {
         });
 
         $(document).on('DOMSubtreeModified', function() {
-            var container = $('#webapp-container-parent');
+            var container = $('#main-content');
             var footer = $('#footer');
             var documentHeight = container.height() + footer.height() + 12;
             DZ.ready(function() {
