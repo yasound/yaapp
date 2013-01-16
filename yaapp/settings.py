@@ -948,7 +948,7 @@ GIFT_DEFAULT_IMAGE_DONE = MEDIA_URL +'images/default-gift-done.png'
 if PRODUCTION_MODE:
     TEMP_DIRECTORY = '/data/tmp/'
     SHARED_TEMP_DIRECTORY = '/data/tmp/'
-elif hostname in ['yas-dev-01', 'yas-dev-02']:
+elif DEVELOPMENT_MODE or hostname in ['yas-dev-01', 'yas-dev-02']:
     TEMP_DIRECTORY = '/data/tmp/'
     SHARED_TEMP_DIRECTORY = '/data/tmp/'
 else:
