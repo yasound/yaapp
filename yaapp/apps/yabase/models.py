@@ -887,6 +887,8 @@ class Radio(models.Model):
         bundle.data['stream_url'] = self.stream_url
         bundle.data['m3u_url'] = self.m3u_url
         bundle.data['web_url'] = self.web_url
+        if self.slug == '':
+            bundle.data['slug'] = self.uuid
 
     def as_dict(self, request_user=None):
         data = {
@@ -898,7 +900,7 @@ class Radio(models.Model):
             'favorites': self.favorites,
             'messages': self.message_count,
             'likes': self.like_count,
-            'nb_current_users' : self.nb_current_users,
+            'nb_current_users': self.nb_current_users,
             'tags' : self.tags_to_string(),
             'picture': self.picture_url,
             'large_picture': self.large_picture_url,

@@ -1133,6 +1133,9 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             fail: function (e, data) {
             }
         });
+
+        var parent = $('#id_slug').closest('.controls');
+        $('span.help-block', parent).html('https://yasound.com/radio/' + $('#id_slug').val());
     },
 
     onSubmit: function (e) {

@@ -121,8 +121,8 @@ def get_alternate_language_urls(request):
 
 
 @check_api_key(methods=['GET'], login_required=False)
-def radio(request, radio_slug_or_uuid):
-    radio = Radio.objects.get_or_404(radio_slug_or_uuid)
+def radio(request, radio_uuid):
+    radio = Radio.objects.get_or_404(radio_uuid)
     data = radio.as_dict(request_user=request.user)
     json_response = json.dumps(data, cls=MongoAwareEncoder)
     return HttpResponse(json_response, mimetype='application/json')
@@ -1283,6 +1283,9 @@ class WebAppView(View):
             raise Http404
 
         if radio_uuid is not None:
+            if '/edit/' in request.path_info or '/programming/' in request.path_info:
+                # do not redirect for these specials urls
+                return True, None
             radio = Radio.objects.get_or_404(radio_uuid)
             if radio.slug != '' and radio.slug != radio_uuid:
                 if self.app_name == 'app':
@@ -2522,7 +2525,7 @@ def load_template(request, template_name, app_name='app'):
     }
     if template_name == 'radio/editRadioPage.mustache':
         uuid = request.REQUEST.get('uuid', '')
-        radio = get_object_or_404(Radio, uuid=uuid)
+        radio = Radio.objects.get_or_404(uuid)
         if radio.creator != request.user:
             return HttpResponse(status=401)
 
