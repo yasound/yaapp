@@ -14,6 +14,7 @@ import datetime
 from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
+
 class SettingsRadioForm(BootstrapModelForm):
     name = forms.CharField(label=_('Name'), required=True, max_length=255)
     tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
@@ -30,6 +31,47 @@ class SettingsRadioForm(BootstrapModelForm):
         tags = clean_tags(tags)
         self.cleaned_data['tags'] = tags
         return tags
+
+
+class WallRadioForm(BootstrapForm):
+    wall_header_display = forms.ChoiceField(label=_('Wall header style'),
+        choices=yabase_settings.WALL_HEADER_DISPLAY_CHOICES_FORM,
+        initial=yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE,
+        help_text=_('If not enough covers are available, the radio picture is used'))
+    wall_header_fx = forms.ChoiceField(label=_('Wall header effect'),
+        choices=yabase_settings.WALL_HEADER_FX_CHOICES_FORM,
+        initial=yabase_settings.WALL_HEADER_FX_BLUR)
+
+    class Meta:
+        fields = ('wall_header_display', 'wall_header_fx')
+        layout = (
+            Fieldset('', 'wall_header_display', 'wall_header_fx'),
+        )
+
+    def __init__(self, instance, *args, **kwargs):
+        self.instance = instance
+        wall_layout_preferences = self.instance.wall_layout_preferences()
+        header = wall_layout_preferences.get('header', {})
+
+        initial = {
+            'wall_header_display': header.get('display', yabase_settings.WALL_HEADER_DISPLAY_RADIO_PICTURE),
+            'wall_header_fx': header.get('fx', yabase_settings.WALL_HEADER_FX_BLUR),
+        }
+
+        super(WallRadioForm, self).__init__(initial=initial, *args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        wall_header_display = self.cleaned_data['wall_header_display']
+        wall_header_fx = self.cleaned_data['wall_header_fx']
+
+        radio = self.instance
+        prefs = radio.wall_layout_preferences()
+        prefs['header'] = {
+            'display': wall_header_display,
+            'fx': wall_header_fx
+        }
+        radio.update_wall_layout_preferences(prefs)
+
 
 class NewRadioForm(BootstrapModelForm):
     name = forms.CharField(label=_('Name'), required=True, max_length=255)

@@ -21,7 +21,7 @@ Yasound.Utils.humanizeDate = function(rawDate) {
 Yasound.Utils.containerHeight = function () {
     var containerHeight = 100;
     if (Yasound.App.appName === 'deezer') {
-        var container = $('#webapp-container-parent');
+        var container = $('#main-content');
         containerHeight = container.height();
     } else {
         var viewportHeight = $(window).height();

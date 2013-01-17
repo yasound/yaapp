@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic.base import View
-from forms import SettingsRadioForm, NewRadioForm
+from forms import SettingsRadioForm, WallRadioForm, NewRadioForm
 from models import Radio, RadioUser, SongInstance, SongUser, WallEvent, Playlist, \
     SongMetadata, Announcement
 from shutil import rmtree
@@ -46,6 +46,7 @@ from yageoperm import utils as yageoperm_utils
 from yahistory.models import ProgrammingHistory
 from yawall.models import WallManager
 from account.views import fast_connected_users_by_distance
+from yablog.models import BlogPost
 import import_utils
 import json
 import logging
@@ -1312,6 +1313,9 @@ class WebAppView(View):
         return absolute url (with port) of push server
         """
 
+        if 'HTTP_HOST' not in request.META:
+            return None
+
         host = request.META['HTTP_HOST']
         protocol = settings.DEFAULT_HTTP_PROTOCOL
         if ':' in host:
@@ -1468,6 +1472,21 @@ class WebAppView(View):
             context['g_page'] = 'notifications'
         return context, 'yabase/app/notifications/notificationsPage.html'
 
+    def blog_posts(self, request, context, *args, **kwargs):
+        posts = BlogPost.objects.get_posts()
+        context['bdata'] = json.dumps([post.as_dict() for post in posts], cls=MongoAwareEncoder)
+        context['blog_posts'] = posts
+        context['mustache_template'] = 'yabase/app/blog/blogPostsPage.mustache'
+        return context, 'yabase/app/static.html'
+
+    def blog_post(self, request, context, *args, **kwargs):
+        slug = kwargs['slug']
+        post = get_object_or_404(BlogPost, slug=slug)
+        context['bdata'] = json.dumps(post.as_dict(), cls=MongoAwareEncoder)
+        context['post'] = post
+        context['mustache_template'] = 'yabase/app/blog/blogPostPage.mustache'
+        return context, 'yabase/app/static.html'
+
     def radios(self, request, context, *args, **kwargs):
         context['submenu_number'] = 5
         return context, 'yabase/webapp.html'
@@ -1616,12 +1635,12 @@ class WebAppView(View):
             return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
 
         if request.method == 'POST':
+            uuid = request.REQUEST.get('uuid', '')
+            radio = get_object_or_404(Radio, uuid=uuid)
+            if radio.creator != request.user:
+                return HttpResponse(status=401)
             action = request.REQUEST.get('action')
             if action == 'radio_settings':
-                uuid = request.REQUEST.get('uuid', '')
-                radio = get_object_or_404(Radio, uuid=uuid)
-                if radio.creator != request.user:
-                    return HttpResponse(status=401)
                 form = SettingsRadioForm(request.POST, request.FILES, instance=radio)
                 if form.is_valid():
                     form.save()
@@ -1631,7 +1650,16 @@ class WebAppView(View):
                 else:
                     if request.is_ajax():
                         return self._ajax_error(form.errors)
-
+            elif action == 'wall_settings':
+                form = WallRadioForm(radio, request.POST, request.FILES)
+                if form.is_valid():
+                    form.save()
+                    if request.is_ajax():
+                        return self._ajax_success()
+                    return HttpResponseRedirect(reverse('webapp_edit_radio', args=[self.app_name, uuid]))
+                else:
+                    if request.is_ajax():
+                        return self._ajax_error(form.errors)
         return context, 'yabase/webapp.html'
 
     def _default_radio_uuid(self, user):
@@ -2500,6 +2528,7 @@ def load_template(request, template_name, app_name='app'):
 
         context['radio'] = radio
         context['settings_radio_form'] = SettingsRadioForm(instance=radio)
+        context['wall_radio_form'] = WallRadioForm(instance=radio)
     elif template_name == 'settings/settingsPage.mustache':
         my_informations_form = MyInformationsForm(instance=request.user.get_profile())
         my_accounts_form = MyAccountsForm(instance=request.user.get_profile())
@@ -2559,12 +2588,13 @@ def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
+    logger.info(request)
     request.user.get_profile().update_geo_restrictions(request)
 
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
-        qs = request.user.get_profile().own_radios(only_ready_radios=False)
+        qs = request.user.get_profile().own_radios(only_ready_radios=False).order_by('-id')
         total_count = qs.count()
         qs = qs[offset:offset+limit]
         data = []
@@ -2702,13 +2732,13 @@ def radio_picture(request, radio_uuid, size=''):
     raise Http404
 
 @check_api_key(methods=['GET'], login_required=False)
-def radio_pictures(request, radio_uuid):
+def wall_layout(request, radio_uuid):
     """
     return the list of pictures for displaying in the wall
     """
 
     radio = get_object_or_404(Radio, uuid=radio_uuid)
-    response_data = json.dumps(radio.pictures)
+    response_data = json.dumps(radio.wall_layout)
     return HttpResponse(response_data, mimetype="application/json")
 
 @check_api_key(methods=['GET',], login_required=False)

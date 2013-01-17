@@ -9,7 +9,7 @@ Yasound.Data.Models.Gift = Backbone.Model.extend({
 
 });
 
-Yasound.Data.Models.Gifts = Backbone.Collection.extend({
+Yasound.Data.Models.Gifts = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.Gift,
     url: function() {
         return '/api/v1/premium/gifts/';

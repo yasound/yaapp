@@ -117,6 +117,10 @@ def check_api_key_Authentication(request):
     return True
 
 
+def requested_language(request):
+    return request.REQUEST.get('lang')
+
+
 def check_http_method(request, allowed_methods):
     method = request.method.lower()
     allowed = [x.lower() for x in allowed_methods]

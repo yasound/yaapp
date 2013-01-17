@@ -113,3 +113,21 @@ ANIMATOR_TYPE_ADD_SONG          = 'add_song'
 ANIMATOR_TYPE_REJECT_SONG       = 'reject_song'
 ANIMATOR_TYPE_DELETE_SONG       = 'delete_song'
 ANIMATOR_TYPE_IMPORT_ITUNES     = 'import_itunes'
+
+# wall layout
+WALL_HEADER_DISPLAY_RADIO_PICTURE  = 'radio_picture'
+WALL_HEADER_DISPLAY_COVERS         = 'covers'
+WALL_HEADER_FX_NONE                = 'none'
+WALL_HEADER_FX_BLUR                = 'blur'
+
+
+WALL_HEADER_DISPLAY_CHOICES_FORM = (
+    (WALL_HEADER_DISPLAY_RADIO_PICTURE, _('Radio picture')),
+    (WALL_HEADER_DISPLAY_COVERS, _('Songs covers')),
+)
+
+WALL_HEADER_FX_CHOICES_FORM = (
+    (WALL_HEADER_FX_BLUR, _('Blur')),
+    (WALL_HEADER_FX_NONE, _('No effect')),
+)
+

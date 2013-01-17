@@ -31,6 +31,7 @@ from task import fast_import, delete_radios_definitively
 import datetime
 import uploader
 from yahistory.models import ProgrammingHistory
+from models import RadioAdditionalInfosManager
 
 def turn_off_auto_now(Clazz, field_name):
     def auto_now_off(field):
@@ -91,6 +92,34 @@ class TestMisc(TestCase):
 
         good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
         self.assertEquals(url, good_url)
+
+
+class TestAdditionalInformations(TestCase):
+    def setUp(self):
+        user = User(email="test@yasound.com", username="test", is_superuser=False, is_staff=False)
+        user.set_password('test')
+        user.save()
+        self.user = user
+
+        m = RadioAdditionalInfosManager()
+        m.erase_informations()
+
+    def test_additional_info(self):
+        radio = Radio(creator=self.user, name='radio1')
+        radio.save()
+        self.radio = radio
+
+        info = {
+            'display': 'radio',
+            'fx': 'blur'
+        }
+
+        m = RadioAdditionalInfosManager()
+        m.add_information(radio.uuid, 'wall_layout', info)
+
+        doc = m.information(radio.uuid)
+        self.assertEquals(doc.get('wall_layout').get('display'), 'radio')
+        self.assertEquals(doc.get('wall_layout').get('fx'), 'blur')
 
 
 class TestDatabase(TestCase):

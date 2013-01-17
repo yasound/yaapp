@@ -35,6 +35,8 @@ else:
 
 TEMPLATE_DEBUG = DEBUG
 
+if TEST_MODE:
+    COMPRESS_ENABLED = False
 
 DEFAULT_FROM_EMAIL = "Yasound Notification <noreply@yasound.com>"
 SERVER_EMAIL = "dev@yasound.com"
@@ -379,6 +381,7 @@ INSTALLED_APPS = (
     'taggit_templatetags',
     'test_utils',
     'bootstrap',
+    'attachments',
     #'django-iphone-push',
     'yagraph',
     'yabackoffice',
@@ -411,6 +414,7 @@ INSTALLED_APPS = (
     'yascheduler',
     'yawall',
     'yaactivity',
+    'yablog',
 )
 
 if LOCAL_MODE:
@@ -944,7 +948,7 @@ GIFT_DEFAULT_IMAGE_DONE = MEDIA_URL +'images/default-gift-done.png'
 if PRODUCTION_MODE:
     TEMP_DIRECTORY = '/data/tmp/'
     SHARED_TEMP_DIRECTORY = '/data/tmp/'
-elif hostname in ['yas-dev-01', 'yas-dev-02']:
+elif DEVELOPMENT_MODE or hostname in ['yas-dev-01', 'yas-dev-02']:
     TEMP_DIRECTORY = '/data/tmp/'
     SHARED_TEMP_DIRECTORY = '/data/tmp/'
 else:

@@ -237,6 +237,9 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 			if (this.query) {
 			    queryMap[this.queryAttribute] =  this.query;
 			}
+
+			queryMap['lang'] = g_language_code;
+
 			if (this.params) {
 			    _.extend(queryMap, this.params);
 			}

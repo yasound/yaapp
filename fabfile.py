@@ -99,6 +99,8 @@ def deploy():
                 run("ln -s /data/glusterfs-mnt/replica2all/song-cover ./media/covers/songs")
             if not exists("./media/radioways"):
                 run("ln -s /data/glusterfs-mnt/replica2all/front/radioways ./media/radioways")
+            if not exists("./media/attachments"):
+                run("ln -s /data/glusterfs-mnt/replica2all/front/attachments ./media/attachments")
 
         elif DJANGO_MODE == 'development':
             if not exists("./media/cache"):
@@ -119,6 +121,8 @@ def deploy():
                 run("ln -s /data/storage/song-cover ./media/covers/songs")
             if not exists("./media/radioways"):
                 run("ln -s /data/storage/front/radioways ./media/radioways")
+            if not exists("./media/attachments"):
+                run("ln -s /data/storage/front/attachments ./media/attachments")
 
         run("DJANGO_MODE='%s' ./manage.py compress" % (DJANGO_MODE))
         run("/etc/init.d/yaapp restart")

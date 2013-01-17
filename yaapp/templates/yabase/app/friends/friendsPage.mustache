@@ -97,42 +97,54 @@
 </div>
 
 <div class="container-fluid content-zone">
-  <div class="row-fluid">
-    <section class='span12'>
-        <h1>{% trans "People you follow" %} (<span id='friends-count'></span>)</h1>
-        <ul id='results'>
-        </ul>
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
-        <div class='cell-pagination' id='pagination'></div>
-    </section>
-  </div>
+  <section class="row-fluid">
+    <h1 class="block-title"><i class="asset-headphones"></i>{% trans "Connected users near your location" %} (<span id='connected-count'></span>)</h1>
+    <div class="block-content">
+      <div class="block-slide-container first" id='connected-slides'>
+        <div class="block-slide-mask">
+          <div class="block-slide">
+            <img src='/media/images/loading-white.gif' class='loading-mask'/>
+          </div>
+        </div>
+        <a href="#" class="asset-slide-left"></a>
+        <a href="#" class="asset-slide-right"></a>
+      </div>
+    </div>
 </div>
 
 <div class="container-fluid content-zone">
-  <div class="row-fluid">
-    <section class='span12'>
-        <h1>{% trans "People following you" %} (<span id='followers-count'></span>)</h1>
-        <ul id='followers'>
-        </ul>
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
-        <div class='cell-pagination' id='followers-pagination'></div>
-    </section>
-  </div>
+  <section class="row-fluid">
+    <h1 class="block-title"><i class="asset-fav"></i>{% trans "People you follow" %} (<span id='friends-count'></span>)</h1>
+    <div class="block-content">
+      <div class="block-slide-container first" id='following-slides'>
+        <div class="block-slide-mask">
+          <div class="block-slide">
+            <img src='/media/images/loading-white.gif' class='loading-mask'/>
+          </div>
+        </div>
+        <a href="#" class="asset-slide-left"></a>
+        <a href="#" class="asset-slide-right"></a>
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="container-fluid content-zone last">
-  <div class="row-fluid">
-    <section class='span12'>
-        <h1>{% trans "Connected users near your location" %} (<span id='connected-count'></span>)</h1>
-        <ul id='connected'>
-        </ul>
-        <img class='loading-mask' src='/media/images/loading-white.gif'/>
-        <div class='cell-pagination' id='followers-pagination'></div>
-    </section>
-  </div>
+  <section class="row-fluid">
+    <h1 class="block-title"><i class="asset-fav"></i>{% trans "People following you" %} (<span id='followers-count'></span>)</h1>
+    <div class="block-content">
+      <div class="block-slide-container first" id='followers-slides'>
+        <div class="block-slide-mask">
+          <div class="block-slide">
+            <img src='/media/images/loading-white.gif' class='loading-mask'/>
+          </div>
+        </div>
+        <a href="#" class="asset-slide-left"></a>
+        <a href="#" class="asset-slide-right"></a>
+      </div>
+    </div>
 </div>
 
-</div>
 {% else %}
 <div class="container-fluid content-zone last">
   <div class="row-fluid">

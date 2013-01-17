@@ -23,6 +23,9 @@ from yabase.models import Radio
 from yaweb import urls as yaweb_urls
 from yaweb.sitemap import StaticSitemap
 from yabase.sitemap import WebappSiteMap
+from yablog.sitemaps import BlogPostSitemap
+from yablog.feeds import LatestPostFeed
+
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
@@ -185,7 +188,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xl/$', 'yabase.views.radio_picture', {'size': 'xl'}),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xs/$', 'yabase.views.radio_picture', {'size': 'xs'}, name='radio_small_picture'),
     url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/(?P<size>\w+)/$', 'yabase.views.radio_picture', name='radio_custom_picture'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/pictures/$', 'yabase.views.radio_pictures'),
+    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall_layout/$', 'yabase.views.wall_layout'),
 
 
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture'),
@@ -282,6 +285,10 @@ urlpatterns = patterns('',
     # yapremium
     (r'^api/v1/premium/', include('yapremium.urls')),
 
+    # blog
+    (r'^api/v1/blog/', include('yablog.urls')),
+    url(r'^blog/rss/$',  LatestPostFeed(), name='blog_post_rss'),
+
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
     (r'^yabackoffice/', include('yabackoffice.urls')),
@@ -326,6 +333,7 @@ urlpatterns = patterns('',
 
     url(r'^deezer/close/$', 'yabase.views.close', name='close'),
 
+    (r'^attachments/', include('attachments.urls')),
 
     (r'^', include('yabase.urls')),
 
@@ -350,6 +358,7 @@ else:
 # sitemap
 sitemaps = {
     'yaapp': WebappSiteMap(),
+    'blog': BlogPostSitemap(),
 }
 
 urlpatterns += patterns('django.contrib.sitemaps.views',

@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load app_url %}
+{% if post %}
+<a class="pic pic-circle pic-wide" href="{% app_url webapp_profile app_name post.creator.username %}"><img src="{% url user_custom_picture post.creator '45x45' %}" width="45" height="45" alt="{{ post.creator }}"></a>
+<div class="blog-post">
+<div class="blog-post-title"><strong><a href='{% app_url webapp_blog_post app_name post.slug %}'>{{ post.name }}</a></strong>, {{ post.updated|date:"DATE_FORMAT" }}</div>
+<div class="blog-post-action"> {{ post.get_teaser|safe }}</div>
+<div class="blog-post-btns"><a href='{% app_url webapp_blog_post app_name post.slug %}' class='btn-sky'>{% trans "Read more" %}</a></div>
+</div>
+</div>
+{% else %}
+<a class="pic pic-circle pic-wide" href="#"><img src="/api/v1/user/<%#creator%><% username %><%/creator%>/picture/45x45/" width="45" height="45" alt="<% name %>"></a>
+<div class="blog-post">
+<div class="blog-post-title"><strong><a href='#'><% name %></a></strong>, <% formatted_date %></div>
+<div class="blog-post-action"><%{teaser%></div>
+<div class="blog-post-see-more"><a class='btn-sky' href='{% app_url webapp_blog_posts app_name %}<% slug %>' >{% trans "Read more" %}</a></div>
+</div>
+</div>
+{% endif %}

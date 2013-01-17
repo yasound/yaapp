@@ -1,0 +1,15 @@
+{% load i18n %}
+{% load app_url %}
+<div class="container-fluid content-zone">
+    <div class='row-fluid'>
+        <h1><a href='{% app_url webapp_blog_posts app_name %}' class='back'>{% trans "Blog" %}</a> <i class='icon-angle-right'></i> <span class='blog-title'>{{ post.name }}</span></h1>
+    </div>
+</div>
+
+<div class="container-fluid content-zone last">
+    <div class='blog-post-container'>
+        {% if post %}
+        {% include 'yabase/app/blog/blogPost.mustache' with post=post %}
+        {% endif %}
+    </div>
+</div>

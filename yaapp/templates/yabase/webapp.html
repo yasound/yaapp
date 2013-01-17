@@ -96,11 +96,13 @@ HTML, BODY { height: 100%; }
     {% compress css %}
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/media/bootstrap/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="/media/css/font-awesome.min.css">
     <link rel="stylesheet" href="/media/css/flashblock.css"/>
     <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
     <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
-	<link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
+	   <link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
 
+    <link rel="stylesheet" href="/media/css/pygments/github.css" />
 
     <link rel="stylesheet" href="/media/js/colibri/colibri.css"/>
     <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
@@ -221,6 +223,8 @@ HTML, BODY { height: 100%; }
     <script type="text/javascript" src='/media/js/app/gifts/views.js'></script>
     <script type="text/javascript" src='/media/js/app/tutorial/views.js'></script>
     <script type="text/javascript" src='/media/js/app/teaser/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/blog/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/blog/views.js'></script>
     <script type="text/javascript" src='/media/js/app/static/views.js'></script>
     <script type="text/javascript" src='/media/js/app/static/models.js'></script>
     <script type="text/javascript" src='/media/js/app/share/views.js'></script>
@@ -270,6 +274,22 @@ HTML, BODY { height: 100%; }
 
        var g_jm_radio = '{{ jm_radio_uuid }}';
     </script>
+
+   <script type="text/html" id="blogPostsPageTemplate">
+      {% include "yabase/app/blog/blogPostsPage.mustache" with blog_posts=None %}
+   </script>
+
+   <script type="text/html" id="blogPostPageTemplate">
+      {% include "yabase/app/blog/blogPostPage.mustache" with post=None %}
+   </script>
+
+   <script type="text/html" id="blogPostTemplate">
+      {% include "yabase/app/blog/blogPost.mustache" with post=None %}
+   </script>
+
+   <script type="text/html" id="blogPostTeaserTemplate">
+      {% include "yabase/app/blog/blogPostTeaser.mustache" with post=None %}
+   </script>
 
 
    <script type="text/html" id="radioTemplate">

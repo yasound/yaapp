@@ -48,3 +48,6 @@ django_compressor
 django-debug-toolbar
 fabric
 django-localeurl
+django-attachments
+markdown
+Pygments
