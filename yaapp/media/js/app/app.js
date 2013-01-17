@@ -189,7 +189,7 @@ $(document).ready(function () {
         $(document).on('DOMSubtreeModified', function() {
             var container = $('#main-content');
             var footer = $('#footer');
-            var documentHeight = container.height() + footer.height() + 212;
+            var documentHeight = container.height() + footer.height() + 112;
             DZ.ready(function() {
                 DZ.canvas.setSize(documentHeight);
             });
