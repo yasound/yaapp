@@ -10,7 +10,7 @@ import logging
 import settings as yabase_settings
 from django.forms.widgets import HiddenInput
 import datetime
-
+from django.conf import settings
 from taggit.forms import TagField
 logger = logging.getLogger("yaapp.yabase")
 
@@ -18,13 +18,27 @@ logger = logging.getLogger("yaapp.yabase")
 class SettingsRadioForm(BootstrapModelForm):
     name = forms.CharField(label=_('Name'), required=True, max_length=255)
     tags = TagField(label=_('Tags'), help_text=_('A comma-separated list of tags'), required=False)
+    slug = forms.SlugField(label=_('URL'), help_text=('https://yasound.com/radio/'), required=False)
 
     class Meta:
         model = Radio
-        fields = ('name', 'genre', 'description', 'tags')
+        fields = ('name', 'slug', 'genre', 'description', 'tags')
         layout = (
-            Fieldset('', 'name', 'genre', 'description', 'tags'),
+            Fieldset('', 'slug', 'name', 'genre', 'description', 'tags'),
         )
+
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        qs = Radio.objects.all()
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if slug.lower() in settings.FORBIDDEN_SLUGS:
+            raise forms.ValidationError(_('This url is not allowed'))
+
+        if qs.filter(slug=slug).count() > 0:
+            raise forms.ValidationError(_('This url is already taken'))
+        return slug
 
     def clean_tags(self):
         tags = self.cleaned_data['tags']

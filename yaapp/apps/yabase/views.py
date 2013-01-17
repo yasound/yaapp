@@ -1199,19 +1199,7 @@ def song_instance_cover(request, song_instance_id):
 
 
 def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
-    radio = None
-    try:
-        radio = Radio.objects.get(uuid=radio_uuid)
-    except Radio.DoesNotExist:
-        if len(radio_uuid) > 4:
-            radios = Radio.objects.filter(uuid__startswith=radio_uuid)[:1]
-            if radios.count() > 0:
-                radio = radios[0]
-                url = reverse('yabase.views.web_listen', args=[radio.uuid])
-                return HttpResponsePermanentRedirect(url)
-
-    if radio is None:
-        raise Http404
+    radio = Radio.objects.get_or_404(radio_uuid)
 
     url = reverse('webapp_default_radio', args=[radio.uuid])
     return HttpResponsePermanentRedirect(url)
@@ -1232,19 +1220,7 @@ def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
     }, context_instance=RequestContext(request))
 
 def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.html'):
-    radio = None
-    try:
-        radio = Radio.objects.get(uuid=radio_uuid)
-    except Radio.DoesNotExist:
-        if len(radio_uuid) > 4:
-            radios = Radio.objects.filter(uuid__startswith=radio_uuid)[:1]
-            if radios.count() > 0:
-                radio = radios[0]
-                url = reverse('yabase.views.web_widget', args=[radio.uuid, wtype])
-                return HttpResponsePermanentRedirect(url)
-
-    if radio is None:
-        raise Http404
+    radio = Radio.objects.get_or_404(radio_uuid)
 
     if wtype == 'large':
         template_name = 'yabase/widget_large.html'

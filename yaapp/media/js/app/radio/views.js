@@ -1062,6 +1062,7 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
         "click #radio-settings-menu": 'onRadioSettings',
         "click #wall-settings-menu": 'onWallSettings',
         "submit #edit-radio": "onSubmit",
+        'keyup #id_slug' : 'onSlug',
         "submit #edit-wall": "onSubmit"
     },
 
@@ -1190,6 +1191,16 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
             $('#wall-settings', this.el).show();
         }
         $('#radio-settings', this.el).hide();
+    },
+
+    onSlug: function (e) {
+        var value = $('#id_slug', this.el).val();
+        console.log(value)
+        if (!value) {
+            return;
+        }
+        var parent = $('#id_slug').closest('.controls');
+        $('span.help-block', parent).html('https://yasound.com/radio/' + value);
     }
 
 });

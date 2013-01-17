@@ -1074,3 +1074,23 @@ if DEVELOPMENT_MODE:
     JM_RADIO = '423e0e61b0e34bf5a2167dbf6d414636'
 elif PRODUCTION_MODE:
     JM_RADIO = 'cdb37a39c8714f5ab9cdb03a40df08b5'
+
+
+FORBIDDEN_SLUGS = (
+    u'yasound',
+    u'sex',
+    u'sexe',
+    u'cul',
+    u'fuck',
+    u'porn',
+    u'queue'
+    u'merde',
+    u'nichon',
+    u'bite',
+    u'bites',
+    u'dick',
+    u'ass',
+    u'cum',
+    u'official',
+    u'yasound-official',
+)

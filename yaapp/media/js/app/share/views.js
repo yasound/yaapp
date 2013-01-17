@@ -59,7 +59,7 @@ Yasound.Views.Share = Backbone.View.extend({
         var protocol = window.location.protocol;
         var host = window.location.host;
 
-        var url =  protocol + '//' + host + Yasound.App.root + 'radio/' + this.radio.get('uuid');
+        var url =  protocol + '//' + host + Yasound.App.root + 'radio/' + this.radio.get('slug');
         return url;
     },
 
@@ -84,7 +84,7 @@ Yasound.Views.Share = Backbone.View.extend({
 
     onFacebookShare: function (e) {
         e.preventDefault();
-        var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('uuid') + '/';
+        var link = Yasound.App.FacebookShare.link + 'radio/' + this.radio.get('slug') + '/';
         var name = this.radio.get('name');
         var creatorName = this.radio.get('creator')['name'];
         if (creatorName !== '') {
@@ -127,7 +127,7 @@ Yasound.Views.Share = Backbone.View.extend({
     },
 
     refreshWidgetCode: function () {
-        var url = 'https://yasound.com/widget/' + this.radio.get('uuid') + '/';
+        var url = 'https://yasound.com/widget/' + this.radio.get('slug') + '/';
         if (this.large) {
             url = url + 'large';
         }
