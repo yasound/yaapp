@@ -211,7 +211,7 @@ $(document).ready(function () {
     Yasound.App.Workspace = Backbone.Router.extend({
         routes: {
             "": "index",
-            "radio/:slug": "radio",
+            "radio/:uuid_or_slug": "radio",
             "search/:query/": "search",
             "favorites/": "myFavorites",
             "favorites/:genre/": "myFavorites",
@@ -229,14 +229,14 @@ $(document).ready(function () {
             "settings/": "settings",
             "friends/": "myFriends",
             "notifications/": "notifications",
-            "radio/:slug/programming/": "programming",
-            "radio/:slug/edit/": "editRadio",
-            "radio/:slug/listeners/": "listeners",
-            "radio/:slug/fans/": "fans",
+            "radio/:uuid_or_slug/programming/": "programming",
+            "radio/:uuid_or_slug/edit/": "editRadio",
+            "radio/:uuid_or_slug/listeners/": "listeners",
+            "radio/:uuid_or_slug/fans/": "fans",
             "signup/": "signup",
             "signup/*args": "signup",
             "login/": "login",
-            "radio/:slug/*args": "radio",
+            "radio/:uuid_or_slug/*args": "radio",
             "gifts/": "gifts",
             "legal/": "legal",
             "contact/": "contact",
@@ -432,18 +432,18 @@ $(document).ready(function () {
             }).render();
         },
 
-        programming: function (slug) {
+        programming: function (uuid_or_slug) {
             this.clearView('my-radios');
             this.currentView = new Yasound.Views.ProgrammingPage({
                 el: Yasound.App.CONTENT_EL
-            }).render(slug);
+            }).render(uuid_or_slug);
         },
 
-        editRadio: function (slug) {
+        editRadio: function (uuid_or_slug) {
             this.clearView('my-radios');
             this.currentView = new Yasound.Views.EditRadioPage({
                 el: Yasound.App.CONTENT_EL
-            }).render(slug);
+            }).render(uuid_or_slug);
         },
 
         // search page
@@ -575,7 +575,7 @@ $(document).ready(function () {
         },
 
         // radio details page
-        radio: function (slug) {
+        radio: function (uuid_or_slug) {
             Yasound.App.player.setAutoplay(true);
             this.clearView();
 
@@ -585,7 +585,7 @@ $(document).ready(function () {
             });
 
             this.radioContext.radioUUID = 0;
-            this.setCurrentRadioUUID(slug);
+            this.setCurrentRadioUUID(uuid_or_slug);
 
         },
 

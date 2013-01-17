@@ -329,6 +329,16 @@ class TestModels(TestCase):
 
         self.assertEquals(Radio.objects.all().count(), 1) # we do not delete radios right now
 
+    def test_uuid_or_slug(self):
+        radio = self.radio
+
+        self.assertEquals(radio.id, Radio.objects.get_or_404(radio.uuid).id)
+
+        radio.slug = 'my slug'
+        radio.save()
+
+        self.assertEquals(radio.id, Radio.objects.get_or_404('my slug').id)
+
 class TestNextSong(TestCase):
     multi_db = True
     fixtures = ['yasound_local.yaml',]

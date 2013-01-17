@@ -27,13 +27,42 @@ class SettingsRadioForm(BootstrapModelForm):
             Fieldset('', 'slug', 'name', 'genre', 'description', 'tags'),
         )
 
+    def __init__(self, *args, **kwargs):
+        super(SettingsRadioForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.id:
+            if self._slug_has_alread_been_set(instance):
+                self.fields['slug'].widget.attrs['readonly'] = True
+
+    def _is_number(self, s):
+        try:
+            float(s)  # for int, long and float
+        except ValueError:
+            try:
+                complex(s)  # for complex
+            except ValueError:
+                return False
+
+        return True
+
+    def _slug_has_alread_been_set(self, radio):
+        if radio.slug == '' or radio.slug == radio.uuid:
+            return False
+        return True
+
     def clean_slug(self):
         slug = self.cleaned_data['slug']
         qs = Radio.objects.all()
         if self.instance:
+            if self._slug_has_alread_been_set(self.instance):
+                return self.instance.slug
+
             qs = qs.exclude(pk=self.instance.pk)
 
         if slug.lower() in settings.FORBIDDEN_SLUGS:
+            raise forms.ValidationError(_('This url is not allowed'))
+
+        if self._is_number(slug):
             raise forms.ValidationError(_('This url is not allowed'))
 
         if qs.filter(slug=slug).count() > 0:

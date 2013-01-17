@@ -1061,13 +1061,13 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
         "click #listen-btn": "onListen",
         "click #radio-settings-menu": 'onRadioSettings',
         "click #wall-settings-menu": 'onWallSettings',
-        "submit #edit-radio": "onSubmit",
+        "submit #edit-radio": "onSubmitRadio",
         'keyup #id_slug' : 'onSlug',
-        "submit #edit-wall": "onSubmit"
+        "submit #edit-wall": "onSubmitWall"
     },
 
     initialize: function () {
-        _.bindAll(this, 'render', 'templateLoaded');
+        _.bindAll(this, 'render', 'templateLoaded', 'slug');
     },
 
     onClose: function () {
@@ -1138,7 +1138,50 @@ Yasound.Views.EditRadioPage = Backbone.View.extend({
         $('span.help-block', parent).html('https://yasound.com/radio/' + $('#id_slug').val());
     },
 
-    onSubmit: function (e) {
+    slug: function () {
+        return $('#id_slug', this.el);
+    },
+
+    onSubmitRadio: function (e) {
+        e.preventDefault();
+        var form = $(e.target).closest('form');
+        var successMessage = gettext('Radio settings updated');
+        var errorMessage = gettext('Error while saving settings');
+        var that = this;
+
+        var slug = this.slug();
+
+        var submitFunction = function (disableSlug) {
+            Yasound.Utils.submitForm({
+                form: form,
+                successMessage: successMessage,
+                errorMessage: errorMessage,
+                success: function () {
+                    that.headerView.render();
+                    if (disableSlug) {
+                        that.slug().attr('readonly', true);
+                    }
+                }
+            });
+        };
+
+        if (!slug.attr('readonly') && slug.val() !== '') {
+            Yasound.Utils.dialog({
+                title: gettext('Warning'),
+                content: gettext('The url you defined is permanent and cannot be changed, continue?'),
+                closeButton: gettext('Yes, set the url'),
+                cancelButton: gettext('Cancel'),
+                onClose: function() {
+                    submitFunction(true);
+                }
+            });
+        } else {
+            submitFunction(false);
+        }
+
+    },
+
+    onSubmitWall: function (e) {
         e.preventDefault();
         var form = $(e.target).closest('form');
         var successMessage = gettext('Radio settings updated');

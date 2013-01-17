@@ -87,7 +87,7 @@ urlpatterns = patterns('',
     #(r'^wall/', include('wall.urls')),
     (r'^rahadm/', include(admin.site.urls)),
     (r'^wall/', include('wall.urls')),
-    url(r'^api/v1/radio_slug/(?P<radio_uuid>[\w-]+)/$', 'yabase.views.radio'),
+    url(r'^api/v1/radio_slug/(?P<radio_uuid_or_slug>[\w-]+)/$', 'yabase.views.radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/playlist/(?P<playlist_index>\d+)/add_song/(?P<yasound_song_id>\d+)/$', 'yabase.views.add_song'),
     url(r'^api/v1/upload_song/(?P<song_id>\d+)/$', 'yabase.views.upload_song'),
     url(r'^api/v1/upload_song/$', 'yabase.views.upload_song'),
@@ -139,7 +139,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
 
     # live
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/live/$', 'yabase.views.radio_live'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/live/$', 'yabase.views.radio_live'),
 
     # show songs
     url(r'^api/v1/show/(?P<show_id>\S+)/songs/$', 'yashow.views.get_songs_for_show'),
@@ -148,21 +148,21 @@ urlpatterns = patterns('',
     # shows
     url(r'^api/v1/show/(?P<show_id>\S+)/duplicate/$', 'yashow.views.duplicate_show'),
     url(r'^api/v1/show/(?P<show_id>\S+)/$', 'yashow.views.show'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/create_show/$', 'yashow.views.create_show'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/shows/$', 'yashow.views.get_shows_for_radio'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/create_show/$', 'yashow.views.create_show'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/shows/$', 'yashow.views.get_shows_for_radio'),
 
 
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/stopped/$', 'yabase.views.radio_has_stopped'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/song/(?P<songinstance_id>\d+)/played/$', 'yabase.views.song_played'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/broadcast_message/$', 'yabase.views.radio_broadcast_message'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/start_listening/$', 'yabase.views.start_listening_to_radio'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/stop_listening/$', 'yabase.views.stop_listening_to_radio'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/stopped/$', 'yabase.views.radio_has_stopped'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/song/(?P<songinstance_id>\d+)/played/$', 'yabase.views.song_played'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/connect/$', 'yabase.views.connect_to_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/disconnect/$', 'yabase.views.disconnect_from_radio'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_song/$', 'yabase.views.get_current_song'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/buy_link/$', 'yabase.views.buy_link', name='buy_link'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/similar/$', 'yabase.views.similar_radios', name='similar_radios'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/likes/$', 'yabase.views.radio_likes', name='radio_likes'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/similar/$', 'yabase.views.similar_radios', name='similar_radios'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/likes/$', 'yabase.views.radio_likes', name='radio_likes'),
     url(r'^api/v1/song_instance/(?P<song_instance_id>\d+)/cover/$', 'yabase.views.song_instance_cover'),
     url(r'^api/v1/account/association/$', 'account.views.associate'),
     url(r'^api/v1/account/dissociation/$', 'account.views.dissociate'),
@@ -170,33 +170,33 @@ urlpatterns = patterns('',
     url(r'^api/v1/songs_started/$', 'yabase.views.songs_started'),
 
     # programming
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/$', 'yabase.views.my_programming'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/(?P<song_instance_id>\d+)/$', 'yabase.views.my_programming'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/artists/$', 'yabase.views.my_programming_artists'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/albums/$', 'yabase.views.my_programming_albums'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/yasound_songs/$', 'yabase.views.my_programming_yasound_songs'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/status/$', 'yabase.views.my_programming_status'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/programming/status/(?P<event_id>\S+)/$', 'yabase.views.my_programming_status'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/$', 'yabase.views.my_programming'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/(?P<song_instance_id>\d+)/$', 'yabase.views.my_programming'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/artists/$', 'yabase.views.my_programming_artists'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/albums/$', 'yabase.views.my_programming_albums'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/yasound_songs/$', 'yabase.views.my_programming_yasound_songs'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/status/$', 'yabase.views.my_programming_status'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/programming/status/(?P<event_id>\S+)/$', 'yabase.views.my_programming_status'),
     url(r'^api/v1/programming/status/(?P<event_id>\S+)/$', 'yabase.views.programming_status_details'),
 
     # new wall system
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall/$', 'yawall.views.wall'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall/(?P<event_id>\S+)/$', 'yawall.views.wall'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/wall/$', 'yawall.views.wall'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/wall/(?P<event_id>\S+)/$', 'yawall.views.wall'),
     url(r'^api/v1/wall/(?P<event_id>\S+)/report_as_abuse/$', 'yawall.views.report_event_as_abuse'),
 
     # pictures
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/$', 'yabase.views.radio_picture'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xl/$', 'yabase.views.radio_picture', {'size': 'xl'}),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/xs/$', 'yabase.views.radio_picture', {'size': 'xs'}, name='radio_small_picture'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/picture/(?P<size>\w+)/$', 'yabase.views.radio_picture', name='radio_custom_picture'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/wall_layout/$', 'yabase.views.wall_layout'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/picture/$', 'yabase.views.radio_picture'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/picture/xl/$', 'yabase.views.radio_picture', {'size': 'xl'}),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/picture/xs/$', 'yabase.views.radio_picture', {'size': 'xs'}, name='radio_small_picture'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/picture/(?P<size>\w+)/$', 'yabase.views.radio_picture', name='radio_custom_picture'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/wall_layout/$', 'yabase.views.wall_layout'),
 
 
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture'),
 
     # listeners
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/listeners/$', 'yabase.views.listeners', name='listeners'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/favorites/$', 'yabase.views.fans', name='fans'),
+    url(r'^api/v1/radio/(?P<radio_uuid_or_slug>[\w-]+)/listeners/$', 'yabase.views.listeners', name='listeners'),
+    url(r'^api/v1/radio/(?P<radio_uuid_or_slug>[\w-]+)/favorites/$', 'yabase.views.fans', name='fans'),
     url(r'^api/v1/radio/(?P<radio_id>\d+)/current_user/$', 'yabase.views.listeners_legacy', name='listeners_legacy'),
 
 
@@ -208,8 +208,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/user_watched_tutorial/$', 'yabase.views.user_watched_tutorial'),
 
     # song download for deezer
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/gdu/$', 'yabase.views.generate_download_current_song_url'),
-    url(r'^api/v1/radio/(?P<radio_uuid>\S+)/d/(?P<token>\S+)/$', 'yabase.views.download_current_song', name='download_current_song'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/gdu/$', 'yabase.views.generate_download_current_song_url'),
+    url(r'^api/v1/radio/(?P<radio_uuid>[\w-]+)/d/(?P<token>\S+)/$', 'yabase.views.download_current_song', name='download_current_song'),
 
     # api (will override any other url)
     (r'^api/', include(api.urls)),
@@ -230,7 +230,7 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/public_stats/$', 'yabase.views.public_stats'),
     url(r'^api/v1/my_radios/$', 'yabase.views.my_radios'),
-    url(r'^api/v1/my_radios/(?P<radio_uuid>\S+)/$', 'yabase.views.my_radios'),
+    url(r'^api/v1/my_radios/(?P<radio_uuid>[\w-]+)/$', 'yabase.views.my_radios'),
 
 
     url(r'^api/v1/ios_push_notif_token/$', 'account.views.send_ios_push_notif_token'),
@@ -275,10 +275,10 @@ urlpatterns = patterns('',
 
     url(r'^', include('yaweb.urls')),
 
-    (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<song_instance_id>\d+)$', 'yabase.views.web_song'),
-    (r'^listen/(?P<radio_uuid>[\w-]+.*[\w-]*)$', 'yabase.views.web_listen'),
-    (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)/$', 'yabase.views.web_widget'),
-    (r'^widget/(?P<radio_uuid>[\w-]+.*[\w-]*)/(?P<wtype>\S+)', 'yabase.views.web_widget'),
+    (r'^listen/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)/(?P<song_instance_id>\d+)$', 'yabase.views.web_song'),
+    (r'^listen/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)$', 'yabase.views.web_listen'),
+    (r'^widget/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)/$', 'yabase.views.web_widget'),
+    (r'^widget/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)/(?P<wtype>\S+)', 'yabase.views.web_widget'),
 
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
@@ -311,7 +311,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/fast_connected_users/$','account.views.fast_connected_users_by_distance'),
 
 
-    url(r'^api/v2/radio/(?P<radio_uuid>\S+)/leaderboard/$', 'yabase.views.radio_leaderboard', name='radio_leaderboard'),
+    url(r'^api/v2/radio/(?P<radio_uuid>[\w-]+)/leaderboard/$', 'yabase.views.radio_leaderboard', name='radio_leaderboard'),
 
     # facebook update notification
     url(r'^facebook_update/$', 'account.views.facebook_update', name='facebook_update'),

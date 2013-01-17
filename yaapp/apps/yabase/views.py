@@ -121,8 +121,8 @@ def get_alternate_language_urls(request):
 
 
 @check_api_key(methods=['GET'], login_required=False)
-def radio(request, radio_uuid):
-    radio = Radio.objects.get_or_404(radio_uuid)
+def radio(request, radio_uuid_or_slug):
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     data = radio.as_dict(request_user=request.user)
     json_response = json.dumps(data, cls=MongoAwareEncoder)
     return HttpResponse(json_response, mimetype='application/json')
@@ -1198,29 +1198,15 @@ def song_instance_cover(request, song_instance_id):
     return HttpResponseRedirect(url)
 
 
-def web_listen(request, radio_uuid, template_name='yabase/listen.html'):
-    radio = Radio.objects.get_or_404(radio_uuid)
+def web_listen(request, radio_uuid_or_slug, template_name='yabase/listen.html'):
+    """This view is no more used and redirect to webapp"""
 
-    url = reverse('webapp_default_radio', args=[radio.uuid])
+    url = reverse('webapp_default_radio', args=[radio_uuid_or_slug])
     return HttpResponsePermanentRedirect(url)
 
 
-    radio_picture_absolute_url = absolute_url(radio.picture_url)
-    flash_player_absolute_url = absolute_url('/media/player.swf')
-
-    radio_url = radio.stream_url
-    return render_to_response(template_name, {
-        "radio": radio,
-        "radio_url": radio_url,
-        "listeners": radio.radiouser_set.filter(listening=True).count(),
-        "fans": radio.radiouser_set.filter(favorite=True).count(),
-        "new_page": '/app/#radio/%s' % (radio_uuid),
-        "radio_picture_absolute_url": radio_picture_absolute_url,
-        'flash_player_absolute_url': flash_player_absolute_url,
-    }, context_instance=RequestContext(request))
-
-def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.html'):
-    radio = Radio.objects.get_or_404(radio_uuid)
+def web_widget(request, radio_uuid_or_slug, wtype=None, template_name='yabase/widget.html'):
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
 
     if wtype == 'large':
         template_name = 'yabase/widget_large.html'
@@ -1230,21 +1216,21 @@ def web_widget(request, radio_uuid, wtype=None, template_name='yabase/widget.htm
         auto_play = False
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
-    radio_url = '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio_uuid)
+    radio_url = radio.stream_url
     return render_to_response(template_name, {
         "radio": radio,
         "radio_url": radio_url,
         "listeners": radio.radiouser_set.filter(listening=True).count(),
         "fans": radio.radiouser_set.filter(favorite=True).count(),
-        "new_page": '/app/#radio/%s' % (radio_uuid),
+        "new_page": '/app/#radio/%s' % (radio_uuid_or_slug),
         "radio_picture_absolute_url": radio_picture_absolute_url,
         "auto_play": auto_play,
     }, context_instance=RequestContext(request))
 
 
-def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.html'):
+def web_song(request, radio_uuid_or_slug, song_instance_id, template_name='yabase/song.html'):
     song_instance = get_object_or_404(SongInstance, id=song_instance_id)
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     if song_instance.playlist.radio != radio:
         raise Http404
 
@@ -1252,7 +1238,7 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
     return HttpResponseRedirect(url)
 
     radio_picture_absolute_url = absolute_url(radio.picture_url)
-    radio_absolute_url =  absolute_url(reverse('yabase.views.web_listen', args=[radio_uuid]))
+    radio_absolute_url = absolute_url(reverse('yabase.views.web_listen', args=[radio_uuid_or_slug]))
     radio_url = radio.stream_url
     flash_player_absolute_url = absolute_url('/media/player.swf')
 
@@ -1263,11 +1249,12 @@ def web_song(request, radio_uuid, song_instance_id, template_name='yabase/song.h
         "fans": radio.radiouser_set.filter(favorite=True).count(),
         "new_page": '/app/#radio/%s' % (radio.uuid),
         "song": song_instance,
-        "radio_station_url":radio_absolute_url,
-        "radio_url" : radio_url,
+        "radio_station_url": radio_absolute_url,
+        "radio_url": radio_url,
         "radio_picture_absolute_url": radio_picture_absolute_url,
         'flash_player_absolute_url': flash_player_absolute_url,
     }, context_instance=RequestContext(request))
+
 
 class WebAppView(View):
     """ Class based view for web app.
@@ -2744,8 +2731,8 @@ def wall_layout(request, radio_uuid):
     return HttpResponse(response_data, mimetype="application/json")
 
 @check_api_key(methods=['GET',], login_required=False)
-def listeners(request, radio_uuid):
-    radio = Radio.objects.get_or_404(radio_uuid)
+def listeners(request, radio_uuid_or_slug):
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
 
@@ -2768,10 +2755,10 @@ def listeners_legacy(request, radio_id):
 
 
 @check_api_key(methods=['GET',], login_required=False)
-def fans(request, radio_uuid):
+def fans(request, radio_uuid_or_slug):
     """ Return the user who have added the radio as favorite"""
 
-    radio = Radio.objects.get_or_404(radio_uuid)
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
 
@@ -2788,10 +2775,10 @@ def user_watched_tutorial(request):
     res = {'success': True}
     return HttpResponse(json.dumps(res), mimetype='application/json')
 
+
 def close(request, template_name='yabase/close.html'):
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))
-
 
 
 def profiling(request):
