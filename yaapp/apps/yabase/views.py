@@ -120,6 +120,22 @@ def get_alternate_language_urls(request):
     return alternate_urls
 
 
+@check_api_key(methods=['GET'], login_required=False)
+def radio(request, radio_slug_or_uuid):
+    qs = Radio.objects.ready_objects().filter(uuid=radio_slug_or_uuid)
+    if qs.count() == 0:
+        qs = Radio.objects.ready_objects().filter(slug=radio_slug_or_uuid)
+
+    if qs.count() == 0:
+        raise Http404
+
+    radio = qs[0]
+
+    data = radio.as_dict(request_user=request.user)
+    json_response = json.dumps(data, cls=MongoAwareEncoder)
+    return HttpResponse(json_response, mimetype='application/json')
+
+
 @csrf_exempt
 def upload_playlists(request, radio_id):
     if not check_api_key_Authentication(request):
@@ -2588,7 +2604,6 @@ def my_radios(request, radio_uuid=None):
     """
     Return the owner radio with additional informations (stats)
     """
-    logger.info(request)
     request.user.get_profile().update_geo_restrictions(request)
 
     if request.method == 'GET':
