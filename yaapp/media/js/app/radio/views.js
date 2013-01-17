@@ -858,14 +858,14 @@ Yasound.Views.RadioPage = Backbone.View.extend({
 
     displayListeners: function (e) {
         e.preventDefault();
-        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/listeners/', {
+        Yasound.App.Router.navigate("radio/" + this.model.get('slug') + '/listeners/', {
             trigger: true
         });
     },
 
     displayFans: function (e) {
         e.preventDefault();
-        Yasound.App.Router.navigate("radio/" + this.model.get('uuid') + '/fans/', {
+        Yasound.App.Router.navigate("radio/" + this.model.get('slug') + '/fans/', {
             trigger: true
         });
     },

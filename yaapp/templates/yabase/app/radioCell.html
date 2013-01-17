@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load app_url %}
 <article class="radio-cell">
-  <a class="radio-cell-link" href="{% app_url webapp_radio app_name radio.uuid %}">
+  <a class="radio-cell-link" href="{% app_url webapp_radio app_name radio.slug|default:radio.uuid %}">
     <div class="radio-cell-img"><img width="150" height="150" alt="" src="/media/images/radio-loading.gif" /></div>
     <div class="radio-cell-info">
       <div class="tag">{{ radio.get_genre_display }}</div>

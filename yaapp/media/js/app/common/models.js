@@ -60,8 +60,8 @@ Yasound.Data.Paginator = Backbone.Paginator.requestPager.extend({
  * A radio
  */
 Yasound.Data.Models.Radio = Backbone.Model.extend({
-    idAttribute: 'uuid',
-    urlRoot: '/api/v1/public_radio/',
+    idAttribute: 'slug',
+    urlRoot: '/api/v1/radio/',
 
     // notify server that user is connected to radio
     connect: function () {

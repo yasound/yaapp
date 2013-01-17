@@ -38,6 +38,7 @@ from django.template.defaultfilters import striptags
 from yageoperm.models import Country
 from django.utils.html import urlize, linebreaks
 from yametadata.kfm import find_metadata as kfm_find_metadata
+from django.http import Http404
 
 logger = logging.getLogger("yaapp.yabase")
 
@@ -568,6 +569,17 @@ class RadioManager(models.Manager):
                 cache.set(cache_key, radio_uuid)
         return radio_uuid
 
+    def get_or_404(self, uuid_or_slug):
+        try:
+            radio = self.get(uuid=uuid_or_slug)
+        except Radio.DoesNotExist:
+            try:
+                radio = self.get(slug=uuid_or_slug)
+            except Radio.DoesNotExist:
+                raise Http404
+        return radio
+
+
 class Radio(models.Model):
     objects = RadioManager()
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name='owned_radios', null=True, blank=True)
@@ -880,7 +892,7 @@ class Radio(models.Model):
         data = {
             'id': self.id,
             'uuid': self.uuid,
-            'slug': self.slug,
+            'slug': self.slug if self.slug != '' else self.uuid,
             'origin': self.origin,
             'name': self.name,
             'favorites': self.favorites,

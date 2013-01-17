@@ -122,15 +122,7 @@ def get_alternate_language_urls(request):
 
 @check_api_key(methods=['GET'], login_required=False)
 def radio(request, radio_slug_or_uuid):
-    qs = Radio.objects.ready_objects().filter(uuid=radio_slug_or_uuid)
-    if qs.count() == 0:
-        qs = Radio.objects.ready_objects().filter(slug=radio_slug_or_uuid)
-
-    if qs.count() == 0:
-        raise Http404
-
-    radio = qs[0]
-
+    radio = Radio.objects.get_or_404(radio_slug_or_uuid)
     data = radio.as_dict(request_user=request.user)
     json_response = json.dumps(data, cls=MongoAwareEncoder)
     return HttpResponse(json_response, mimetype='application/json')
@@ -1314,6 +1306,21 @@ class WebAppView(View):
         if self.app_name not in ['app', 'deezer', 'live']:
             raise Http404
 
+        if radio_uuid is not None:
+            radio = Radio.objects.get_or_404(radio_uuid)
+            if radio.slug != '' and radio.slug != radio_uuid:
+                if self.app_name == 'app':
+                    kwargs = {
+                        'radio_uuid': radio.slug,
+                    }
+                    return False, HttpResponsePermanentRedirect(reverse('webapp_default_radio', kwargs=kwargs))
+                else:
+                    kwargs = {
+                        'app_name': self.app_name,
+                        'radio_uuid': radio.slug,
+                    }
+                    return False, HttpResponsePermanentRedirect(reverse('webapp_radio', kwargs=kwargs))
+
         if settings.ANONYMOUS_ACCESS_ALLOWED == True:
             return True, None
 
@@ -1362,7 +1369,8 @@ class WebAppView(View):
 
     def radio(self, request, context, *args, **kwargs):
         wm = WallManager()
-        radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        radio = Radio.objects.get_or_404(context['current_uuid'])
+
         radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
         context['ignore_radio_cookie'] = True
@@ -1384,7 +1392,7 @@ class WebAppView(View):
         return context, 'yabase/app/radio/radioPage.html'
 
     def song(self, request, context, *args, **kwargs):
-        radio = get_object_or_404(Radio, uuid=context['current_uuid'])
+        radio = Radio.objects.get_or_404(context['current_uuid'])
         song_instance = get_object_or_404(SongInstance, id=kwargs['song_id'])
         radio.favorite = radio.is_favorite(request.user)
         context['radio'] = radio
@@ -2758,7 +2766,7 @@ def wall_layout(request, radio_uuid):
 
 @check_api_key(methods=['GET',], login_required=False)
 def listeners(request, radio_uuid):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = Radio.objects.get_or_404(radio_uuid)
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
 
@@ -2784,7 +2792,7 @@ def listeners_legacy(request, radio_id):
 def fans(request, radio_uuid):
     """ Return the user who have added the radio as favorite"""
 
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+    radio = Radio.objects.get_or_404(radio_uuid)
     limit = int(request.GET.get('limit', yabase_settings.MOST_ACTIVE_RADIOS_LIMIT))
     skip = int(request.GET.get('skip', 0))
 

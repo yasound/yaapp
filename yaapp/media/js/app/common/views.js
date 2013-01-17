@@ -85,8 +85,8 @@ Yasound.Views.RadioCell = Backbone.View.extend({
             mask.hide();
             $('.radio-border', this.el).hide();
         }
-        var uuid = this.model.get('uuid');
-        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+        var slug = this.model.get('slug');
+        Yasound.App.Router.navigate("radio/" + slug + '/', {
             trigger: true
         });
     },
@@ -196,10 +196,10 @@ Yasound.Views.RadioCellTip = Backbone.View.extend({
     onDisplayRadio: function (e) {
         e.preventDefault();
 
-        var uuid = this.model.get('uuid');
+        var slug = this.model.get('slug');
         this.hide();
 
-        Yasound.App.Router.navigate("radio/" + uuid + '/', {
+        Yasound.App.Router.navigate("radio/" + slug + '/', {
             trigger: true
         });
 
