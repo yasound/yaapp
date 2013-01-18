@@ -2835,8 +2835,8 @@ def download_current_song(request, radio_uuid, token):
 
 
 @check_api_key(methods=['GET'], login_required=False)
-def radio_m3u(request, radio_uuid, template_name='yabase/m3u.txt'):
-    radio = get_object_or_404(Radio, uuid=radio_uuid)
+def radio_m3u(request, radio_uuid_or_slug, template_name='yabase/m3u.txt'):
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     return render_to_response(template_name, {
         'radio': radio
     }, context_instance=RequestContext(request), mimetype='audio/x-mpegurl')

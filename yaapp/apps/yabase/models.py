@@ -1323,7 +1323,10 @@ class Radio(models.Model):
 
     @property
     def m3u_url(self):
-        return absolute_url(reverse('radio_m3u', args=[self.uuid]))
+        radio_uuid_or_slug = self.slug
+        if radio_uuid_or_slug == '':
+            radio_uuid_or_slug = self.uuid
+        return absolute_url(reverse('radio_m3u', args=[radio_uuid_or_slug]))
 
     @property
     def web_url(self):
