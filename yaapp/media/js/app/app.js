@@ -241,6 +241,7 @@ $(document).ready(function () {
             "legal/": "legal",
             "contact/": "contact",
             "about/": "about",
+            "faq/": "faq",
             "help/": "help",
             "jobs/": "jobs",
             "press/": "press",
@@ -642,6 +643,10 @@ $(document).ready(function () {
 
         about: function () {
             return this.staticPage('about');
+        },
+
+        faq: function () {
+            return this.staticPage('faq');
         },
 
         help: function () {

@@ -61,6 +61,7 @@ import mimetypes
 
 from account.models import InvitationsManager, AnonymousManager
 from yapremium.task import async_check_for_invitation
+from yafaq.models import FaqEntry
 
 from django.http import HttpResponseForbidden
 GET_NEXT_SONG_LOCK_EXPIRE = 60 * 3 # Lock expires in 3 minutes
@@ -1419,6 +1420,11 @@ class WebAppView(View):
         context['mustache_template'] = 'yabase/app/static/about.mustache'
         return context, 'yabase/app/static.html'
 
+    def faq(self, request, context, *args, **kwargs):
+        context['entries'] = FaqEntry.objects.get_entries()
+        context['mustache_template'] = 'yabase/app/static/faq.mustache'
+        return context, 'yabase/app/static.html'
+
     def press(self, request, context, *args, **kwargs):
         context['mustache_template'] = 'yabase/app/static/press.mustache'
         return context, 'yabase/app/static.html'
@@ -2534,6 +2540,8 @@ def load_template(request, template_name, app_name='app'):
         context['user_profile'] = request.user.get_profile()
         context['display_associate_facebook'] = display_associate_facebook
         context['display_associate_twitter'] = display_associate_twitter
+    elif template_name == 'static/faq.mustache':
+        context['entries'] = FaqEntry.objects.get_entries()
 
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, context, context_instance=RequestContext(request))
