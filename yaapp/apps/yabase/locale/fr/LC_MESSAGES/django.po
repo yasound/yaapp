@@ -48,11 +48,11 @@ msgstr ""
 
 #: forms.py:63 forms.py:66
 msgid "This url is not allowed"
-msgstr ""
+msgstr "Cette url n'est pas autorisée"
 
 #: forms.py:69
 msgid "This url is already taken"
-msgstr ""
+msgstr "Cette url est déjà prise"
 
 #: forms.py:80
 msgid "Wall header style"
