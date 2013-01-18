@@ -1385,6 +1385,7 @@ class WebAppView(View):
         return context, 'yabase/app/radio/songPage.html'
 
     def search(self, request, context, *args, **kwargs):
+        context['head_title'] = _('Search - YaSound')
         query = kwargs['query']
         if len(query) > 0:
             query = query[:25]
@@ -1405,22 +1406,27 @@ class WebAppView(View):
         context['base_url'] = reverse('yabase.views.most_active_radios')
         context['bdata'] = json.dumps([radio.as_dict(request.user) for radio in radios], cls=MongoAwareEncoder)
         context['submenu_number'] = 2
+        context['head_title'] = _('Top radios - YaSound')
         context['mustache_template'] = 'yabase/app/top/topRadiosPage.mustache'
         return context, 'yabase/app/static.html'
 
     def legal(self, request, context, *args, **kwargs):
+        context['head_title'] = _('Legal - YaSound')
         context['mustache_template'] = 'yabase/app/static/legal.mustache'
         return context, 'yabase/app/static.html'
 
     def contact(self, request, context, *args, **kwargs):
+        context['head_title'] = _('Contact - YaSound')
         context['mustache_template'] = 'yabase/app/static/contact.mustache'
         return context, 'yabase/app/static.html'
 
     def about(self, request, context, *args, **kwargs):
+        context['head_title'] = _('About - YaSound')
         context['mustache_template'] = 'yabase/app/static/about.mustache'
         return context, 'yabase/app/static.html'
 
     def faq(self, request, context, *args, **kwargs):
+        context['head_title'] = _('Frequently Asked Questions - YaSound')
         context['entries'] = FaqEntry.objects.get_entries()
         context['mustache_template'] = 'yabase/app/static/faq.mustache'
         return context, 'yabase/app/static.html'

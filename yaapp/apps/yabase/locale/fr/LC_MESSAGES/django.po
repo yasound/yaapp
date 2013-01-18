@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-09 17:09+0100\n"
+"POT-Creation-Date: 2013-01-18 14:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Songs"
 msgstr "Chansons"
 
-#: export_utils.py:20 forms.py:19 forms.py:69
+#: export_utils.py:20 forms.py:19 forms.py:120
 msgid "Name"
 msgstr "Nom"
 
@@ -34,119 +34,133 @@ msgstr "Artiste"
 msgid "Album"
 msgstr ""
 
-#: forms.py:20 forms.py:70
+#: forms.py:20 forms.py:121
 msgid "Tags"
 msgstr "Tags"
 
-#: forms.py:20 forms.py:70
+#: forms.py:20 forms.py:121
 msgid "A comma-separated list of tags"
 msgstr "Une liste de tags séparés par des virgules"
 
 #: forms.py:21
+msgid "URL"
+msgstr ""
+
+#: forms.py:63 forms.py:66
+msgid "This url is not allowed"
+msgstr ""
+
+#: forms.py:69
+msgid "This url is already taken"
+msgstr ""
+
+#: forms.py:80
 msgid "Wall header style"
 msgstr "Style de l'entête du wall"
 
-#: forms.py:24
+#: forms.py:83
 msgid "If not enough covers are available, the radio picture is used"
-msgstr "S'il n'y a pas assez de pochettes disponibles, la photo de la radio sera utilisée"
+msgstr ""
+"S'il n'y a pas assez de pochettes disponibles, la photo de la radio sera "
+"utilisée"
 
-#: forms.py:25
+#: forms.py:84
 msgid "Wall header effect"
 msgstr "Effet sur l'entête du wall"
 
-#: forms.py:87
+#: forms.py:138
 msgid "Biography"
 msgstr "Biographie"
 
-#: forms.py:97
+#: forms.py:148
 msgid "%m/%d/%Y"
 msgstr "%d/%m/%Y"
 
-#: forms.py:108
+#: forms.py:159
 msgid "Invalid birthday"
 msgstr ""
 
-#: forms.py:110
+#: forms.py:161
 msgid "Invalide birthday"
 msgstr ""
 
-#: forms.py:114 forms.py:306
+#: forms.py:165 forms.py:357
 msgid "Password"
 msgstr "Mot de passe"
 
-#: forms.py:115 forms.py:307
+#: forms.py:166 forms.py:358
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: forms.py:127 forms.py:144
+#: forms.py:178 forms.py:195
 msgid "You must type the same password each time."
 msgstr ""
 
-#: forms.py:151
+#: forms.py:202
 msgid "This email is already taken. Please choose another."
 msgstr ""
 
-#: forms.py:168 forms.py:173 forms.py:325 forms.py:372
+#: forms.py:219 forms.py:224 forms.py:376 forms.py:423
 msgid "Listen"
 msgstr "J'écoute un morceau"
 
-#: forms.py:169 forms.py:174 forms.py:326 forms.py:373
+#: forms.py:220 forms.py:225 forms.py:377 forms.py:424
 msgid "Like song"
 msgstr "J'aime le morceau"
 
-#: forms.py:170 forms.py:175 forms.py:327 forms.py:374
+#: forms.py:221 forms.py:226 forms.py:378 forms.py:425
 msgid "Post message"
 msgstr "Je poste un message"
 
-#: forms.py:171 forms.py:176 forms.py:328 forms.py:375
+#: forms.py:222 forms.py:227 forms.py:379 forms.py:426
 msgid "Update programming"
 msgstr "Je mets à jour ma programmation"
 
-#: forms.py:178
+#: forms.py:229
 msgid "A user enters"
 msgstr "Un auditeur entre"
 
-#: forms.py:179
+#: forms.py:230
 msgid "A friend enters"
 msgstr "Un ami entre"
 
-#: forms.py:180
+#: forms.py:231
 msgid "A friend goes online"
 msgstr "Un ami passe en ligne"
 
-#: forms.py:181
+#: forms.py:232
 msgid "A message is posted"
 msgstr "Un auditeur a écrit un message"
 
-#: forms.py:182
+#: forms.py:233
 msgid "Someone likes a song"
 msgstr "Un auditeur aime une chanson"
 
-#: forms.py:183
+#: forms.py:234
 msgid "My radio is added as favorite"
 msgstr "Un auditeur ajoute ma radio à ses favoris"
 
-#: forms.py:184
+#: forms.py:235
 msgid "Someone shared my radio"
 msgstr "Un auditeur partage ma radio"
 
-#: forms.py:185
+#: forms.py:236
 msgid "A friend creates his radio"
 msgstr "Un ami crée une radio"
 
-#: forms.py:191
+#: forms.py:242
 msgid "Notifications"
 msgstr "Notifications"
 
-#: forms.py:201 forms.py:331
+#: forms.py:252 forms.py:382
 msgid "Facebook share options"
 msgstr "Options de partage de Facebook"
 
-#: forms.py:207 forms.py:378
+#: forms.py:258 forms.py:429
 msgid "Twitter share options"
 msgstr "Options de partage de twitter"
 
-#: forms.py:419
+#: forms.py:470
 msgid "Please paste from iTunes"
 msgstr "Veuillez effectuer un copier/coller depuis iTunes"
 
@@ -226,102 +240,106 @@ msgstr ""
 msgid "Building mongodb index"
 msgstr ""
 
-#: models.py:69
+#: models.py:70
 msgid "yasound song id"
 msgstr ""
 
-#: models.py:352
+#: models.py:353
 msgid "song"
 msgstr "chanson"
 
-#: models.py:353 models.py:1520
+#: models.py:354 models.py:1564
 msgid "user"
 msgstr "utilisateur"
 
-#: models.py:361
+#: models.py:362
 msgid "Song user"
 msgstr ""
 
-#: models.py:573
+#: models.py:585
 msgid "creator"
 msgstr "créateur"
 
-#: models.py:574 models.py:1894 models.py:1968
+#: models.py:586 models.py:1938 models.py:2012
 msgid "created"
 msgstr ""
 
-#: models.py:575 models.py:1895 models.py:1969
+#: models.py:587 models.py:1939 models.py:2013
 msgid "updated"
 msgstr ""
 
-#: models.py:578 models.py:1896 models.py:1971
+#: models.py:590 models.py:1940 models.py:2015
 msgid "name"
 msgstr "nom"
 
-#: models.py:579
+#: models.py:591
+msgid "slug"
+msgstr ""
+
+#: models.py:592
 msgid "picture"
 msgstr ""
 
-#: models.py:580
+#: models.py:593
 msgid "url"
 msgstr ""
 
-#: models.py:581
+#: models.py:594
 msgid "uuid"
 msgstr ""
 
-#: models.py:582 models.py:1897
+#: models.py:595 models.py:1941
 msgid "description"
 msgstr "description"
 
-#: models.py:583
+#: models.py:596
 msgid "genre"
 msgstr "genre"
 
-#: models.py:584
+#: models.py:597
 msgid "theme"
 msgstr ""
 
-#: models.py:585
+#: models.py:598
 msgid "tags"
 msgstr ""
 
-#: models.py:600
+#: models.py:613
 msgid "current song"
 msgstr ""
 
-#: models.py:607
+#: models.py:620
 msgid "radio origin"
 msgstr ""
 
-#: models.py:608
+#: models.py:621
 msgid "country"
 msgstr ""
 
-#: models.py:609
+#: models.py:622
 msgid "city"
 msgstr ""
 
-#: models.py:612
+#: models.py:625
 msgid "blacklisted"
 msgstr ""
 
-#: models.py:1096
+#: models.py:1112
 msgid "Anonymous user"
 msgstr ""
 
-#: models.py:1298
+#: models.py:1342
 #, python-format
 msgid "%(description)s (style: %(genre)s) - A webradio powered by YaSound"
 msgstr ""
 "%(description)s (style : %(genre)s) - Une webradio propulsée par YaSound"
 
-#: models.py:1300
+#: models.py:1344
 #, python-format
 msgid "%(description)s - A webradio powered by YaSound"
 msgstr "%(description)s - Une webradio propulsée par YaSound"
 
-#: models.py:1303
+#: models.py:1347
 #, python-format
 msgid ""
 "Listen to the online webradio %(name)s (style: %(genre)s) - powered by "
@@ -330,40 +348,40 @@ msgstr ""
 "Ecoutez en ligne la webradio %(name)s (style : %(genre)s) - propulsée par "
 "YaSound"
 
-#: models.py:1305
+#: models.py:1349
 #, python-format
 msgid "Listen to the online webradio %(name)s - powered by YaSound"
 msgstr "Ecoutez en ligne la webradio %(name)s - propulsée par YaSound"
 
-#: models.py:1519 models.py:1916
+#: models.py:1563 models.py:1960
 msgid "radio"
 msgstr "radio"
 
-#: models.py:1535
+#: models.py:1579
 msgid "Radio user"
 msgstr ""
 
-#: models.py:1898
+#: models.py:1942
 msgid "activated"
 msgstr "activé"
 
-#: models.py:1912 models.py:1915
+#: models.py:1956 models.py:1959
 msgid "featured content"
 msgstr ""
 
-#: models.py:1917
+#: models.py:1961
 msgid "order"
 msgstr ""
 
-#: models.py:1924
+#: models.py:1968
 msgid "featured radio"
 msgstr ""
 
-#: models.py:1972
+#: models.py:2016
 msgid "body"
 msgstr ""
 
-#: models.py:1983
+#: models.py:2027
 msgid "announcement"
 msgstr ""
 
@@ -491,70 +509,94 @@ msgstr "Flou"
 msgid "No effect"
 msgstr "Pas d'effet"
 
-#: views.py:1485 views.py:2589
+#: views.py:1388
+msgid "Search - YaSound"
+msgstr "Rechercher - YaSound"
+
+#: views.py:1409
+msgid "Top radios - YaSound"
+msgstr "Top radios - YaSound"
+
+#: views.py:1414
+msgid "Legal - YasSound"
+msgstr "Informations légales - YaSound"
+
+#: views.py:1419
+msgid "Contact - YaSound"
+msgstr "Contact - YaSound"
+
+#: views.py:1424
+msgid "About - YaSound"
+msgstr "A propos - YaSound"
+
+#: views.py:1429
+msgid "Frequently Asked Questions - YaSound"
+msgstr "Questions Fréquemment Posées - YaSound"
+
+#: views.py:1508 views.py:2624
 msgid "You are not allowed to create a radio"
 msgstr "Vous n'avez le droit de créer une radio"
 
-#: views.py:1496 views.py:2597
+#: views.py:1519 views.py:2632
 msgid "This feature is not yet available for your country"
 msgstr "Cette fonctionnalité n'est pas encore accessible pour votre pays"
 
-#: views.py:2384 views.py:2417
+#: views.py:2416 views.py:2449
 msgid "success"
 msgstr "succès"
 
-#: views.py:2386 views.py:2419
+#: views.py:2418 views.py:2451
 msgid "finished"
 msgstr "terminé"
 
-#: views.py:2388 views.py:2421
+#: views.py:2420 views.py:2453
 msgid "failed"
 msgstr "échec"
 
-#: views.py:2390 views.py:2423
+#: views.py:2422 views.py:2455
 msgid "pending"
 msgstr "en cours"
 
-#: views.py:2426
+#: views.py:2458
 msgid "playlist upload"
 msgstr "upload de playlist"
 
-#: views.py:2428
+#: views.py:2460
 msgid "file upload"
 msgstr "upload de fichier"
 
-#: views.py:2430
+#: views.py:2462
 msgid "add from yasound"
 msgstr "ajout depuis Yasound"
 
-#: views.py:2432
+#: views.py:2464
 msgid "add from Deezer"
 msgstr "ajout depuis Deezer"
 
-#: views.py:2434
+#: views.py:2466
 msgid "import from iTunes"
 msgstr "import depuis iTunes"
 
-#: views.py:2436
+#: views.py:2468
 msgid "remove from playlist"
 msgstr "suppression de la playlist"
 
-#: views.py:2453
+#: views.py:2485
 msgid "Unknown event"
 msgstr ""
 
-#: views.py:2601
+#: views.py:2636
 msgid "new radio"
 msgstr "nouvelle radio"
 
-#: views.py:2657
+#: views.py:2692
 msgid "The provided file is too big"
 msgstr "Le fichier transmis est trop gros"
 
-#: views.py:2659
+#: views.py:2694
 msgid "The provided file is too small"
 msgstr "Le fichier transmis est trop petit"
 
-#: views.py:2661
+#: views.py:2696
 msgid "The file format is not supported"
 msgstr "Le format de fichier n'est pas supporté"
