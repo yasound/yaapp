@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-04 10:43+0100\n"
+"POT-Creation-Date: 2013-01-18 08:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,6 +45,12 @@ msgstr "Information"
 #: js/app/utils.js:129 js/backoffice/ux/LoggerWindow.js:14
 msgid "Close"
 msgstr "Fermer"
+
+#: js/app/blog/views.js:48 js/app/common/models.js:345
+#: js/app/profile/models.js:37 js/app/share/views.js:49
+#: js/app/share/views.js.py:91
+msgid "by"
+msgstr "par"
 
 #: js/app/common/models.js:127
 msgid "All genres"
@@ -106,82 +112,63 @@ msgstr "World"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: js/app/common/models.js:289 js/app/common/models.js.py:344
+#: js/app/common/models.js:291 js/app/common/models.js.py:346
 #: js/app/profile/models.js:38
 msgid "Unknown album"
 msgstr "Album inconnu"
 
-#: js/app/common/models.js:343 js/app/profile/models.js:37
-#: js/app/share/views.js:49 js/app/share/views.js.py:91
-msgid "by"
-msgstr "par"
-
-#: js/app/common/models.js:345 js/app/profile/models.js:39
+#: js/app/common/models.js:347 js/app/profile/models.js:39
 #: js/app/share/views.js:50
 msgid "on"
 msgstr "sur"
 
-#: js/app/common/models.js:418
+#: js/app/common/models.js:420
 msgid "followers"
 msgstr "abonnés"
 
-#: js/app/common/models.js:422
+#: js/app/common/models.js:424
 msgid "follower"
 msgstr "abonné"
 
-#: js/app/common/models.js:430 js/app/common/models.js.py:431
+#: js/app/common/models.js:432 js/app/common/models.js.py:433
 msgid "years old"
 msgstr "ans"
 
-#: js/app/common/models.js:438
+#: js/app/common/models.js:440
 msgid "male"
 msgstr "homme"
 
-#: js/app/common/models.js:440
+#: js/app/common/models.js:442
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:380 js/app/header/views.js:200
+#: js/app/common/views.js:411 js/app/header/views.js:224
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
-#: js/app/common/views.js:613 js/app/footer/views.js:231
-#: js/app/friends/views.js:272 js/app/friends/views.js.py:319
-#: js/app/friends/views.js:325 js/app/friends/views.js.py:339
-#: js/app/friends/views.js:345 js/app/friends/views.js.py:364
-#: js/app/friends/views.js:370 js/app/gifts/views.js:49
-#: js/app/gifts/views.js.py:56 js/app/gifts/views.js:115
-#: js/app/gifts/views.js.py:122
-msgid "Error"
-msgstr "Erreur"
-
-#: js/app/common/views.js:613 js/app/footer/views.js:231
-msgid "Nothing to share"
-msgstr "Rien à partager"
-
-#: js/app/common/views.js:644
+#: js/app/common/views.js:440
 msgid "Show more"
 msgstr "Charger plus"
 
-#: js/app/common/views.js:921 js/app/header/views.js:182
+#: js/app/common/views.js:717 js/app/header/views.js:206
 #: js/app/login/views.js:34
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:934 js/app/header/views.js:195
+#: js/app/common/views.js:730 js/app/header/views.js:219
 #: js/app/login/views.js:47 js/app/newRadio/views.js:77
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:984
+#: js/app/common/views.js:780
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:986 js/backoffice/Geoperm/Geoperm.js:317
+#: js/app/common/views.js:782 js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
 
-#: js/app/common/views.js:1117
+#: js/app/common/views.js:913
 msgid "Filter by genre"
 msgstr "Filtrer par genre"
 
@@ -194,39 +181,52 @@ msgstr "Favoris suivants"
 msgid "Next radios"
 msgstr "Radios suivantes"
 
-#: js/app/friends/views.js:256
+#: js/app/footer/views.js:238 js/app/friends/views.js:401
+#: js/app/friends/views.js.py:448 js/app/friends/views.js:454
+#: js/app/friends/views.js.py:468 js/app/friends/views.js:474
+#: js/app/friends/views.js.py:493 js/app/friends/views.js:499
+#: js/app/gifts/views.js:49 js/app/gifts/views.js.py:56
+#: js/app/gifts/views.js:115 js/app/gifts/views.js.py:122
+msgid "Error"
+msgstr "Erreur"
+
+#: js/app/footer/views.js:238
+msgid "Nothing to share"
+msgstr "Rien à partager"
+
+#: js/app/friends/views.js:385
 msgid "Join me on Yasound and let's share music"
 msgstr "Rejoins moi sur Yasound et partageons notre musique"
 
-#: js/app/friends/views.js:272
+#: js/app/friends/views.js:401
 msgid "You must be logged in"
 msgstr "Vous devez être authentifié"
 
-#: js/app/friends/views.js:275
+#: js/app/friends/views.js:404
 msgid "Join me on #yasound"
 msgstr "Rejoins moi sur #yasound"
 
-#: js/app/friends/views.js:290
+#: js/app/friends/views.js:419
 msgid "Join me on yasound:"
 msgstr "Rejoins moi sur yasound:"
 
-#: js/app/friends/views.js:291
+#: js/app/friends/views.js:420
 msgid "Join me on Yasound"
 msgstr "Rejoins moi sur Yasound"
 
-#: js/app/friends/views.js:321 js/app/friends/views.js.py:341
-#: js/app/friends/views.js:366 js/app/gifts/views.js:51
+#: js/app/friends/views.js:450 js/app/friends/views.js.py:470
+#: js/app/friends/views.js:495 js/app/gifts/views.js:51
 #: js/app/gifts/views.js.py:117
 msgid "Thank you"
 msgstr "Merci"
 
-#: js/app/friends/views.js:321 js/app/friends/views.js.py:341
-#: js/app/friends/views.js:366
+#: js/app/friends/views.js:450 js/app/friends/views.js.py:470
+#: js/app/friends/views.js:495
 msgid "Your friends have been invited successfully."
 msgstr "Vos amis ont été invités avec succès."
 
-#: js/app/friends/views.js:325 js/app/friends/views.js.py:345
-#: js/app/friends/views.js:370 js/app/gifts/views.js:56
+#: js/app/friends/views.js:454 js/app/friends/views.js.py:474
+#: js/app/friends/views.js:499 js/app/gifts/views.js:56
 #: js/app/gifts/views.js.py:122
 msgid "Error while communicating with Yasound, please retry late"
 msgstr ""
@@ -351,7 +351,7 @@ msgstr "titres non trouvés"
 msgid "Results"
 msgstr "Résultats"
 
-#: js/app/programming/views.js:603
+#: js/app/programming/views.js:603 js/app/radio/views.js:1170
 msgid "Warning"
 msgstr "Attention"
 
@@ -366,7 +366,7 @@ msgstr ""
 msgid "I agree"
 msgstr "Je suis d'accord"
 
-#: js/app/programming/views.js:609
+#: js/app/programming/views.js:609 js/app/radio/views.js:1173
 #: js/backoffice/Invitations/InvitationForm.js:84
 #: js/backoffice/Radio/RadioForm.js:79
 msgid "Cancel"
@@ -396,42 +396,51 @@ msgstr "titres n'ont pas été trouvés"
 msgid "Results from Deezer import"
 msgstr "Résultats de l'import Deezer"
 
-#: js/app/radio/models.js:45
+#: js/app/radio/models.js:44
 msgid "<%name%> liked this song!"
 msgstr "<%name%> a aimé ce morceau !"
 
-#: js/app/radio/models.js:50
+#: js/app/radio/models.js:49
 msgid "<%name1%> and <%name2%> liked this song!"
 msgstr "<%name1%> et <%name2%> ont aimé ce morceau !"
 
-#: js/app/radio/models.js:56 js/app/radio/models.js.py:65
+#: js/app/radio/models.js:55 js/app/radio/models.js.py:64
 msgid "<%name1%>, <%name2%> and <%name3%> liked this song!"
 msgstr "<%name1%>, <%name2%> et <%name3%> ont aimé ce morceau !"
 
-#: js/app/radio/models.js:67
+#: js/app/radio/models.js:66
 msgid "<%name1%>, <%name2%>, <%name3%> and another person liked this song!"
 msgstr ""
 "<%name1%>, <%name2%> et <%name3%> et une autre personne ont aimé ce morceau !"
 
-#: js/app/radio/models.js:69
+#: js/app/radio/models.js:68
 msgid ""
 "<%name1%>, <%name2%> and <%name3%> and <%other%> people liked this song!"
 msgstr ""
 "<%name1%>, <%name2%> et <%name3%> et <%other%> autres personnes ont aimé ce "
 "morceau !"
 
-#: js/app/radio/views.js:755
+#: js/app/radio/views.js:794
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:1103
+#: js/app/radio/views.js:1148 js/app/radio/views.js.py:1187
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:1104 js/app/settings/views.js:184
-#: js/app/settings/views.js.py:198 js/app/settings/views.js:208
+#: js/app/radio/views.js:1149 js/app/radio/views.js.py:1188
+#: js/app/settings/views.js:184 js/app/settings/views.js.py:198
+#: js/app/settings/views.js:208
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
+
+#: js/app/radio/views.js:1171
+msgid "The url you defined is permanent and cannot be changed, continue?"
+msgstr "L'url que vous venez de saisir sera permanente et ne pourra être modifiée, continuer ?"
+
+#: js/app/radio/views.js:1172
+msgid "Yes, set the url"
+msgstr "Oui, définir l'url"
 
 #: js/app/settings/views.js:47
 msgid "mm/dd/yyyy"
