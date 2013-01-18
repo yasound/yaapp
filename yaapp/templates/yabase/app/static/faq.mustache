@@ -1,0 +1,20 @@
+{% load i18n %}
+<div class="container-fluid content-zone">
+    <div class='row-fluid'>
+        <div class='span12'>
+            <h1>{% trans "Frequently Asked Questions" %}</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid content-zone">
+    <div class='row-fluid'>
+        <div class='span12'>
+            {% for entry in entries %}
+            <h2>{{ entry.title }}</h2>
+            {{ entry.get_content|safe }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
