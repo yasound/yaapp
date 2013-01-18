@@ -65,6 +65,9 @@ class SettingsRadioForm(BootstrapModelForm):
         if self._is_number(slug):
             raise forms.ValidationError(_('This url is not allowed'))
 
+        if 'yasound' in slug.lower():
+            raise forms.ValidationError(_('This url is not allowed'))
+
         if slug != '' and qs.filter(slug=slug).count() > 0:
             raise forms.ValidationError(_('This url is already taken'))
         return slug
