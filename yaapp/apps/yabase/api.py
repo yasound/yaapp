@@ -380,7 +380,7 @@ class FavoriteRadioResource(ModelResource):
         queryset = Radio.objects.ready_objects()
         resource_name = 'favorite_radio'
         fields = ['id', 'name', 'creator', 'origin', 'description', 'genre', 'theme', 'uuid', 'slug', 'tags', 'favorites', 'audience_peak', 'overall_listening_time', 'created', 'ready']
-        include_resource_uri = False;
+        include_resource_uri = False
         authentication = YasoundApiKeyAuthentication()
         authorization = ReadOnlyAuthorization()
         allowed_methods = ['get']
