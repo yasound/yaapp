@@ -7208,7 +7208,6 @@ input::-ms-input-placeholder {
   font-size: 14px;
   margin-top: 5px;
   white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: hidden;
   width: 100%;
 }
