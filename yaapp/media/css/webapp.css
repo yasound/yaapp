@@ -8163,7 +8163,8 @@ input::-ms-input-placeholder {
   width: 75%;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /*text-overflow: ellipsis;*/
+
 }
 .footer-player h3 {
   font-size: 11px;
