@@ -11,6 +11,7 @@ class WebappSiteMap(sitemaps.Sitemap):
 
     STATIC_PAGES = (
         'about',
+        'faq',
         'press',
         'jobs',
         'legal',
