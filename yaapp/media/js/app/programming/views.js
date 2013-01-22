@@ -1354,7 +1354,7 @@ Yasound.Views.ProgrammingPage = Backbone.View.extend({
         $(this.el).html(ich.programmingPageTemplate());
 
         this.radio.set({
-                'uuid': uuid,
+                'slug': uuid,
                 'id': 0
             }, {
                 silent: true
