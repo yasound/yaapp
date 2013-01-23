@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-18 14:48+0100\n"
+"POT-Creation-Date: 2013-01-23 14:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2221,79 +2221,91 @@ msgid "Office"
 msgstr "Bureaux"
 
 #: templates/yabase/app/static/press.mustache:46
+msgid "Press Kits"
+msgstr "Dossiers de Presse"
+
+#: templates/yabase/app/static/press.mustache:48
+msgid "January 2013"
+msgstr "Janvier 2013"
+
+#: templates/yabase/app/static/press.mustache:48
+msgid "Press Kit"
+msgstr "Dossier de Presse"
+
+#: templates/yabase/app/static/press.mustache:50
 msgid "Press Releases"
 msgstr "Communiqués de presse"
 
-#: templates/yabase/app/static/press.mustache:48
+#: templates/yabase/app/static/press.mustache:52
 msgid "October 23, 2012"
 msgstr "23 octobre 2012"
 
-#: templates/yabase/app/static/press.mustache:48
+#: templates/yabase/app/static/press.mustache:52
 msgid "YaSound s’ouvre au Web et à l’international"
 msgstr ""
 
-#: templates/yabase/app/static/press.mustache:49
+#: templates/yabase/app/static/press.mustache:53
 msgid "(+graphic pack)"
 msgstr "(+pack graphique)"
 
-#: templates/yabase/app/static/press.mustache:51
+#: templates/yabase/app/static/press.mustache:55
 msgid "April 23, 2012"
 msgstr "23 avril 2012"
 
-#: templates/yabase/app/static/press.mustache:51
+#: templates/yabase/app/static/press.mustache:55
 msgid "New version"
 msgstr "Nouvelle version"
 
-#: templates/yabase/app/static/press.mustache:52
+#: templates/yabase/app/static/press.mustache:56
 msgid "March 20, 2012"
 msgstr "20 mars 2012"
 
-#: templates/yabase/app/static/press.mustache:52
+#: templates/yabase/app/static/press.mustache:56
 msgid "Launch"
 msgstr "Lancement"
 
-#: templates/yabase/app/static/press.mustache:53
+#: templates/yabase/app/static/press.mustache:57
 msgid "March 13, 2012"
 msgstr "13 mars 2012"
 
-#: templates/yabase/app/static/press.mustache:53
+#: templates/yabase/app/static/press.mustache:57
 msgid "Corporate"
 msgstr "Institutionnel"
 
-#: templates/yabase/app/static/press.mustache:55
+#: templates/yabase/app/static/press.mustache:59
 msgid "Press Reviews"
 msgstr "Revue de presse"
 
-#: templates/yabase/app/static/press.mustache:57
+#: templates/yabase/app/static/press.mustache:61
 msgid "June 2012"
 msgstr "Juin 2012"
 
-#: templates/yabase/app/static/press.mustache:57
-#: templates/yabase/app/static/press.mustache:58
+#: templates/yabase/app/static/press.mustache:61
+#: templates/yabase/app/static/press.mustache:62
 msgid "Press and weblogs review"
 msgstr "Revue de presse & web"
 
-#: templates/yabase/app/static/press.mustache:58
+#: templates/yabase/app/static/press.mustache:62
 msgid "May 2012"
 msgstr "Mai 2012"
 
-#: templates/yabase/app/static/press.mustache:59
-#: templates/yabase/app/static/press.mustache:60
+#: templates/yabase/app/static/press.mustache:63
+#: templates/yabase/app/static/press.mustache:64
 msgid "April 2012"
 msgstr "Avril 2012"
 
-#: templates/yabase/app/static/press.mustache:59
-#: templates/yabase/app/static/press.mustache:62
+#: templates/yabase/app/static/press.mustache:63
+#: templates/yabase/app/static/press.mustache:66
 msgid "Weblogs review"
 msgstr "Revue de web"
 
-#: templates/yabase/app/static/press.mustache:60
-#: templates/yabase/app/static/press.mustache:61
+#: templates/yabase/app/static/press.mustache:64
+#: templates/yabase/app/static/press.mustache:65
 msgid "Press review"
 msgstr "Revue de presse"
 
-#: templates/yabase/app/static/press.mustache:61
-#: templates/yabase/app/static/press.mustache:62
+#: templates/yabase/app/static/press.mustache:65
+#: templates/yabase/app/static/press.mustache:66
 msgid "March 2012"
 msgstr "Mars 2012"
 
