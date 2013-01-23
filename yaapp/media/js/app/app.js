@@ -155,18 +155,10 @@ $(document).ready(function () {
         }
     };
 
-    if (Yasound.App.appName == 'live' && Yasound.App.userAuthenticated) {
-        var sessionid = cookies.get('sessionid');
-        if (console.loginCompleted) {
-            // cocoa call
-            console.loginCompleted(sessionid);
-        } else {
-            // iOS call
-            var iframe = document.createElement("IFRAME");
-            iframe.setAttribute("src", "js-frame:loginCompleted:" + sessionid);
-            document.documentElement.appendChild(iframe);
-            iframe.parentNode.removeChild(iframe);
-            iframe = null;
+    if (Yasound.App.appName == 'live') {
+        if (Yasound.App.userAuthenticated) {
+            var sessionid = cookies.get('sessionid');
+            Yasound.NativeBridge.Call('loginCompleted', sessionid);
         }
     }
 
