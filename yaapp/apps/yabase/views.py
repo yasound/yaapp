@@ -1798,6 +1798,7 @@ class WebAppView(View):
 
 
         context = {
+            'page': page,
             'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
             'is_jm_radio': is_jm_radio,
@@ -1974,6 +1975,7 @@ class WebAppView(View):
         alternate_language_urls = get_alternate_language_urls(request)
 
         context = {
+            'page': page,
             'alternate_language_urls': alternate_language_urls,
             'user_id' : user_id,
             'is_jm_radio': is_jm_radio,

@@ -3,13 +3,12 @@
 Namespace('Yasound.NativeBridge');
 
 Yasound.NativeBridge.Call = function (method, arg) {
-    if (method === 'loginCompleted') {
-        if (console.loginCompleted) {
-            // cocoa call
-            console.loginCompleted(arg);
-        } else {
-            Yasound.NativeBridge.CallUIKit(method, arg);
-        }
+    if (console[method]) {
+        // cocoa call
+        console[method](arg);
+    } else {
+        // uikit call
+        Yasound.NativeBridge.CallUIKit(method, arg);
     }
 };
 

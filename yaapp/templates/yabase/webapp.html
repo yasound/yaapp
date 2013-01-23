@@ -243,6 +243,7 @@ HTML, BODY { height: 100%; }
        moment.lang('{{request.LANGUAGE_CODE}}');
        var g_root = '{{ root }}';
        var g_app_name = '{{ app_name }}';
+       var g_page = '{{ page }}';
        var g_authenticated = {% if request.user.is_authenticated %}1{% else %}0{% endif %};
        var g_username = '{% if request.user.is_authenticated %}{{request.user.username}}{% endif %}';
        var g_push_url = '{{ push_url }}';

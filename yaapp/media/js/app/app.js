@@ -15,6 +15,7 @@ $(document).ready(function () {
 
     Yasound.App.userAuthenticated = g_authenticated;
     Yasound.App.username = g_username;
+    Yasound.App.page = g_page;
     Yasound.App.isMobile = false;
     Yasound.App.hasRadios = g_has_radios;
     Yasound.App.stickyViews = [];
@@ -155,13 +156,17 @@ $(document).ready(function () {
         }
     };
 
-    if (Yasound.App.appName == 'live') {
+    if (Yasound.App.appName === 'live') {
         if (Yasound.App.userAuthenticated) {
             var sessionid = cookies.get('sessionid');
             Yasound.NativeBridge.Call('loginCompleted', sessionid);
+        } else {
+            Yasound.NativeBridge.Call('loginCompleted', sessionid);
+            if (Yasound.App.page !== 'login') {
+                Yasound.NativeBridge.Call('loginCanceled', '');
+            }
         }
     }
-
 
     /**
      * Sound engine initialization
