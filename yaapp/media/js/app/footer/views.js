@@ -219,7 +219,7 @@ Yasound.Views.Footer = Backbone.View.extend({
         // Check if there is no link clicked.
         // Check if volume slider is not open.
         if($(e.target).closest('a').length === 0 && !this.$('.pl-volume').hasClass('open')) {
-            Yasound.App.Router.navigate("radio/" + this.radio.get('uuid') + '/', {
+            Yasound.App.Router.navigate("radio/" + this.radio.get('slug') + '/', {
                 trigger: true
             });
         }
