@@ -160,10 +160,6 @@ $(document).ready(function () {
         var sessionid = cookies.get('sessionid');
         if (Yasound.App.userAuthenticated && sessionid) {
             Yasound.NativeBridge.Call('loginCompleted', sessionid);
-        } else {
-            if (Yasound.App.page !== 'login') {
-                Yasound.NativeBridge.Call('loginCanceled');
-            }
         }
     }
 
