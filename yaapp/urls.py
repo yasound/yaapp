@@ -107,6 +107,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/user/(?P<username>\S+)/picture/(?P<size>\w+)/$', 'account.views.user_picture', name='user_custom_picture'),
 
     url(r'^api/v1/my_profile/$', 'account.views.my_profile'),
+    url(r'^api/v1/logout/$', 'account.views.logout_current_user'),
 
     # activity
     url(r'^api/v1/friends_activity/$', 'yaactivity.views.friends_activity'),

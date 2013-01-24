@@ -909,3 +909,12 @@ def my_profile(request):
     user_profile = request.user.get_profile()
     data = user_profile.as_dict()
     return api_response_raw(data)
+
+
+@csrf_exempt
+@check_api_key(methods=['POST'], login_required=True)
+def logout_current_user(request):
+    from django.contrib.auth import logout
+    logout(request)
+    data = {'success': True}
+    return api_response_raw(data)
