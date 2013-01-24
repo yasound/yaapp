@@ -24,7 +24,7 @@ from django_mobile import get_flavour
 from models import User, UserProfile, Device
 from social_auth import __version__ as version
 from tastypie.http import HttpBadRequest
-from yacore.api import api_response
+from yacore.api import api_response, api_response_raw
 from yacore.decorators import check_api_key
 from yacore.http import check_api_key_Authentication, check_http_method
 from yacore.mail import send_mail
@@ -899,3 +899,13 @@ def invite_email_friends(request):
     response = {'success': True}
     response_data = json.dumps(response)
     return HttpResponse(response_data)
+
+
+@check_api_key(methods=['GET'], login_required=True)
+def my_profile(request):
+    """
+    RESTful view for getting own profile info
+    """
+    user_profile = request.user.get_profile()
+    data = user_profile.as_dict()
+    return api_response_raw(data)
