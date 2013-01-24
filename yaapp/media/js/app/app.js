@@ -157,13 +157,12 @@ $(document).ready(function () {
     };
 
     if (Yasound.App.appName === 'live') {
-        if (Yasound.App.userAuthenticated) {
-            var sessionid = cookies.get('sessionid');
+        var sessionid = cookies.get('sessionid');
+        if (Yasound.App.userAuthenticated && sessionid) {
             Yasound.NativeBridge.Call('loginCompleted', sessionid);
         } else {
-            Yasound.NativeBridge.Call('loginCompleted', sessionid);
             if (Yasound.App.page !== 'login') {
-                Yasound.NativeBridge.Call('loginCanceled', '');
+                Yasound.NativeBridge.Call('loginCanceled');
             }
         }
     }
