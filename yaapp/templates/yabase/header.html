@@ -11,11 +11,11 @@
             <i class="asset-arrow-down"></i>
           </a>
           <ul class="dropdown-menu dropdown-mini" id='brand-menu'>
-            <li><a href="#" class='about'>{% trans "About" %}</a></li>
-            <li><a href="#" class='faq'>{% trans "FAQ" %}</a></li>
-            <li><a href="#" class='press'>{% trans "Press" %}</a></li>
-            <li><a href="#" class='jobs'>{% trans "Jobs" %}</a></li>
-            <li><a href="#" class='legal'>{% trans "Legal informations" %}</a></li>
+            <li><a href="{% app_url webapp_about app_name %}" class='about'>{% trans "About" %}</a></li>
+            <li><a href="{% app_url webapp_faq app_name %}" class='faq'>{% trans "FAQ" %}</a></li>
+            <li><a href="{% app_url webapp_press app_name %}" class='press'>{% trans "Press" %}</a></li>
+            <li><a href="{% app_url webapp_jobs app_name %}" class='jobs'>{% trans "Jobs" %}</a></li>
+            <li><a href="{% app_url webapp_legal app_name %}" class='legal'>{% trans "Legal informations" %}</a></li>
             <li>
                <a href="https://facebook.com/yasound" title="facebook" target='_blank'>
                     <i class="asset-facebook-small"></i> {% trans "Find us on Facebook" %}
@@ -60,9 +60,9 @@
               <i class="asset-arrow-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-mini" id='profile-menu'>
-              <li><a href="#" class='my-profile'>{% trans "My profile" %}</a></li>
-              <li><a href="#" class='my-radios'>{% trans "My radios" %}</a></li>
-              <li><a href="#" class='my-settings'>{% trans "My settings" %}</a></li>
+              <li><a href="{% app_url webapp_profile app_name request.user.username %}" class='my-profile'>{% trans "My profile" %}</a></li>
+              <li><a href="{% app_url webapp_radios app_name %}" class='my-radios'>{% trans "My radios" %}</a></li>
+              <li><a href="{% app_url webapp_settings app_name %}" class='my-settings'>{% trans "My settings" %}</a></li>
               <li><a href="#" class='logout'>{% trans "Logout" %}</a></li>
             </ul>
           </li>
@@ -85,7 +85,7 @@
               </div>
             </div>
           </li>
-          <li><a href="#" class="btn-coral btn-register">S'inscrire</a></li>
+          <li><a href="{% app_url webapp_signup app_name %}" class="btn-coral btn-register">S'inscrire</a></li>
           {% endif %}
         </ul>
       </nav>
