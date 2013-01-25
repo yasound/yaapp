@@ -59,6 +59,7 @@ Yasound.Views.Footer = Backbone.View.extend({
     },
 
     render: function () {
+        this.toggleToMinIfNeeded();
         this.renderRadio();
         this.renderSong();
         this.renderVolume();
@@ -98,6 +99,13 @@ Yasound.Views.Footer = Backbone.View.extend({
         volumeSlider.bind('slide', this.onVolumeSlide);
         volumeSlider.slider('value', Yasound.App.player.volume());
         this.setVolumeThreshold(Yasound.App.player.volume());
+    },
+
+    toggleToMinIfNeeded : function () {
+        var height = Yasound.Utils.containerHeight();
+        if (height < 800) {
+            this.$el.addClass('mini');
+        }
     },
 
     toggleMiniPlayer: function (e) {
