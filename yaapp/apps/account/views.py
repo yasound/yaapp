@@ -541,8 +541,8 @@ def connected_users_by_distance(request):
 
 @check_api_key(methods=['GET'], login_required=False)
 def fast_connected_users_by_distance(request, internal=False):
-    skip = 0
-    limit = 13
+    skip = int(request.GET.get('skip', 0))
+    limit = int(request.REQUEST.get('limit', 15))
     data = []
     profiles = None
 
@@ -550,7 +550,7 @@ def fast_connected_users_by_distance(request, internal=False):
     if request.user and request.user.is_authenticated():
         userprofile = request.user.get_profile()
 
-        key = '%d.fast_connected_users' % (userprofile.id)
+        key = '%d.fast_connected_users_%d_%d' % (userprofile.id, skip, limit)
         data = cache.get(key, [])
         if not data:
             profiles = userprofile.connected_userprofiles(skip=skip, limit=limit)
@@ -563,7 +563,7 @@ def fast_connected_users_by_distance(request, internal=False):
         else:
             sanitized_coords = '%s' % ([coords])
             sanitized_coords = sanitized_coords.replace('[', '').replace(']', '').replace(' ', '').replace('(', '').replace(')', '').replace(',', '-')
-            key = '%s.fast_connected_users' % (sanitized_coords)
+            key = '%s.fast_connected_users_%d_%d' % (sanitized_coords, skip, limit)
             data = cache.get(key, [])
             if not data:
                 profiles = UserProfile.objects.connected_userprofiles(coords[0], coords[1], skip=skip, limit=limit)
