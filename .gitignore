@@ -31,3 +31,7 @@ yaapp/media/*-all.*.js
 .rope*
 yaapp.sublime*
 yaapp/doc/_build/*
+yaapp/media/radio_pictures/*
+yaapp/media/user_pictures/*
+yaapp/media/compressed/*
+yaapp/media/covers/*
