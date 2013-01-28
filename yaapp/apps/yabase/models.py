@@ -2065,12 +2065,12 @@ def song_metadata_updated(sender, instance, created, **kwargs):
 def animator_activity_handler(sender, user, radio, atype, details=None, playlist=None, **kwargs):
     radio.clear_pictures_cache()
 
+
 def install_handlers():
     signals.pre_delete.connect(song_instance_deleted, sender=SongInstance)
     signals.post_delete.connect(next_song_deleted, sender=NextSong)
     yabase_signals.new_current_song.connect(new_current_song_handler)
     yabase_signals.new_animator_activity.connect(animator_activity_handler)
-
     if not yaapp_settings.TEST_MODE:
         signals.post_save.connect(song_metadata_updated, sender=SongMetadata)
 install_handlers()

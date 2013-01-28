@@ -58,8 +58,6 @@ import zlib
 import urllib
 import mimetypes
 
-import yacore.cache as yacore_cache
-
 from account.models import InvitationsManager, AnonymousManager
 from yapremium.task import async_check_for_invitation
 from yafaq.models import FaqEntry
@@ -2598,39 +2596,23 @@ def my_radios(request, radio_uuid=None):
     Return the owner radio with additional informations (stats)
     """
     request.user.get_profile().update_geo_restrictions(request)
-    cache_key = 'user_%d.my_radios' % (request.user.id)
 
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
 
-        cached_data = {}
-        if offset == 0:
-            cached_data = yacore_cache.cached_object(cache_key, {})
-
-        total_count = cached_data.get('total_count')
-        data = cached_data.get('data')
-
-        if data is None:
-            qs = request.user.get_profile().own_radios(only_ready_radios=False).order_by('-id')
-            total_count = qs.count()
-            qs = qs[offset:offset + limit]
-            data = []
-            for radio in qs:
-                radio_data = radio.as_dict(request_user=request.user)
-                stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
-                stats_data = []
-                for stat in stats:
-                    stats_data.append(stat.as_dict())
-                radio_data['stats'] = stats_data
-                data.append(radio_data)
-
-            if offset == 0:
-                cached_data = {
-                    'total_count': total_count,
-                    'data': data
-                }
-                yacore_cache.cache_object(cache_key, cached_data, ttl=60 * 5)
+        qs = request.user.get_profile().own_radios(only_ready_radios=False).order_by('-id')
+        total_count = qs.count()
+        qs = qs[offset:offset + limit]
+        data = []
+        for radio in qs:
+            radio_data = radio.as_dict(request_user=request.user)
+            stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
+            stats_data = []
+            for stat in stats:
+                stats_data.append(stat.as_dict())
+            radio_data['stats'] = stats_data
+            data.append(radio_data)
 
         yabase_signals.access_my_radios.send(sender=request.user, user=request.user)
 
@@ -2657,16 +2639,12 @@ def my_radios(request, radio_uuid=None):
         radio = Radio.objects.create(creator=request.user, name=default_name)
         radio.get_or_create_default_playlist()
 
-        yacore_cache.invalidate_object(cache_key)
-
         data = radio.as_dict(request_user=request.user)
         return api_response(data)
     elif request.method == 'DELETE' and radio_uuid is not None:
         radio = get_object_or_404(Radio, uuid=radio_uuid)
         if radio.creator != request.user:
             return HttpResponse(status=401)
-
-        yacore_cache.invalidate_object(cache_key)
 
         radio.mark_as_deleted()
         data = {
