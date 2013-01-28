@@ -1,0 +1,4 @@
+How to generate a pem from a p12 ?
+
+openssl pkcs12 -in CertificateName.p12 -out CertificateName.pem -nodes
+
