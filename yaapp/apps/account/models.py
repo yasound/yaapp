@@ -154,7 +154,7 @@ class UserProfileManager(models.Manager):
                          'skip': skip_info,
                          'limit': limit_info
                          }
-        query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(skip)s %(limit)s' % format_params
+        query = 'SELECT id, %(formula)s as %(dist_field_name)s FROM account_userprofile WHERE %(id_cond)s %(lat_cond)s %(lon_cond)s %(time_cond)s %(order)s %(limit)s %(skip)s' % format_params
         raw = UserProfile.objects.raw(query)
         profiles = list(raw)
         return profiles
