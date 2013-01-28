@@ -32,7 +32,6 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True, application_
         This requires IPHONE_APN_PUSH_CERT in settings.py to be the full
         path to the cert/pk .pem file.
         """
-        return  ## temp JBL before re-creating a new certificate
 
         aps_payload = {}
 
