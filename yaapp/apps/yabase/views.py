@@ -2598,15 +2598,15 @@ def my_radios(request, radio_uuid=None):
     Return the owner radio with additional informations (stats)
     """
     request.user.get_profile().update_geo_restrictions(request)
+    cache_key = 'user_%d.my_radios' % (request.user.id)
 
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
 
         cached_data = {}
-        key = 'user_%d.my_radios'
         if offset == 0:
-            cached_data = yacore_cache.cached_object(key, {})
+            cached_data = yacore_cache.cached_object(cache_key, {})
 
         total_count = cached_data.get('total_count')
         data = cached_data.get('data')
@@ -2630,7 +2630,7 @@ def my_radios(request, radio_uuid=None):
                     'total_count': total_count,
                     'data': data
                 }
-                yacore_cache.cache_object(key, cached_data, ttl=60 * 5)
+                yacore_cache.cache_object(cache_key, cached_data, ttl=60 * 5)
 
         yabase_signals.access_my_radios.send(sender=request.user, user=request.user)
 
@@ -2653,15 +2653,20 @@ def my_radios(request, radio_uuid=None):
             }
             return api_response(data)
 
-        default_name = u'%s - %s' % ( _('new radio'), unicode(request.user.get_profile()))
+        default_name = u'%s - %s' % (_('new radio'), unicode(request.user.get_profile()))
         radio = Radio.objects.create(creator=request.user, name=default_name)
         radio.get_or_create_default_playlist()
+
+        yacore_cache.invalidate_object(cache_key)
+
         data = radio.as_dict(request_user=request.user)
         return api_response(data)
     elif request.method == 'DELETE' and radio_uuid is not None:
         radio = get_object_or_404(Radio, uuid=radio_uuid)
         if radio.creator != request.user:
             return HttpResponse(status=401)
+
+        yacore_cache.invalidate_object(cache_key)
 
         radio.mark_as_deleted()
         data = {
