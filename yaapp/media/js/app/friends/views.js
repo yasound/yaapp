@@ -327,9 +327,9 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
 
     render: function() {
         this.reset();
-        this.collection.perPage = Yasound.Utils.userCellsPerPage();
-        this.followers.perPage = Yasound.Utils.userCellsPerPage();
-        this.connected.perPage = Yasound.Utils.userCellsPerPage();
+        this.collection.perPage = 15;
+        this.followers.perPage = 15;
+        this.connected.perPage = 15;
         $(this.el).html(ich.friendsPageTemplate());
 
         this.resultsView = new Yasound.Views.FriendsSlide({
@@ -364,6 +364,11 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
                     $('#connected-count', that.el).html(collection.totalCount);
                 }
             });
+
+            this.collection.perPage = 5;
+            this.followers.perPage = 5;
+            this.connected.perPage = 5;
+
         }
 
         return this;
