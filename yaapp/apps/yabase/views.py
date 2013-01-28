@@ -58,6 +58,7 @@ import zlib
 import urllib
 import mimetypes
 
+import yacore.cache as yacore_cache
 
 from account.models import InvitationsManager, AnonymousManager
 from yapremium.task import async_check_for_invitation
@@ -2601,18 +2602,35 @@ def my_radios(request, radio_uuid=None):
     if request.method == 'GET':
         limit = int(request.REQUEST.get('limit', 25))
         offset = int(request.REQUEST.get('offset', 0))
-        qs = request.user.get_profile().own_radios(only_ready_radios=False).order_by('-id')
-        total_count = qs.count()
-        qs = qs[offset:offset+limit]
-        data = []
-        for radio in qs:
-            radio_data = radio.as_dict(request_user=request.user)
-            stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
-            stats_data = []
-            for stat in stats:
-                stats_data.append(stat.as_dict())
-            radio_data['stats'] = stats_data
-            data.append(radio_data)
+
+        cached_data = {}
+        key = 'user_%d.my_radios'
+        if offset == 0:
+            cached_data = yacore_cache.cached_object(key, {})
+
+        total_count = cached_data.get('total_count')
+        data = cached_data.get('data')
+
+        if data is None:
+            qs = request.user.get_profile().own_radios(only_ready_radios=False).order_by('-id')
+            total_count = qs.count()
+            qs = qs[offset:offset + limit]
+            data = []
+            for radio in qs:
+                radio_data = radio.as_dict(request_user=request.user)
+                stats = RadioListeningStat.objects.daily_stats(radio, nb_days=30)
+                stats_data = []
+                for stat in stats:
+                    stats_data.append(stat.as_dict())
+                radio_data['stats'] = stats_data
+                data.append(radio_data)
+
+            if offset == 0:
+                cached_data = {
+                    'total_count': total_count,
+                    'data': data
+                }
+                yacore_cache.cache_object(key, cached_data, ttl=60 * 5)
 
         yabase_signals.access_my_radios.send(sender=request.user, user=request.user)
 
