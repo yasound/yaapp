@@ -1,5 +1,5 @@
 from account.task import async_tw_post_message, async_tw_like_song, \
-    async_tw_listen, async_tw_animator_activity
+    async_tw_listen, async_tw_animator_activity, async_send_APNs_message
 from bitfield import BitField
 from django.conf import settings, settings as yaapp_settings
 from django.contrib.auth.models import User, Group
@@ -1101,22 +1101,13 @@ class UserProfile(models.Model):
                            from_radio_id=radio.id if radio is not None else None,
                            language=self.language)
 
-        self.send_APNs_message(message=None,
-                               custom_params={
-                                    yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params
-                               },
-                               loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_USER,
-                               loc_args=[sender.get_profile().name])
-
-
-    def send_APNs_message(self, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
-        devices = Device.objects.for_userprofile(self)
-        for d in devices:
-            if d.ios_token and d.ios_token_type:
-                sandbox = d.is_sandbox()
-                token = d.ios_token
-                app_id = d.application_identifier
-                send_message(token, message, sandbox=sandbox, application_id=app_id, custom_params=custom_params, action_loc_key=action_loc_key, loc_key=loc_key, loc_args=loc_args)
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                yamessage_settings.YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_USER,
+            loc_args=[sender.get_profile().name])
 
     def user_in_my_radio(self, user_profile, radio):
         if user_profile.user in self.friends.all():
@@ -1153,7 +1144,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.friend_in_radio:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_IN_RADIO, loc_args=[friend_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_IN_RADIO,
+            loc_args=[friend_profile.name])
 
     def _user_in_my_radio_internal(self, user_profile, radio):
         if user_profile == self:
@@ -1183,7 +1180,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.user_in_radio:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_USER_IN_RADIO, loc_args=[user_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_USER_IN_RADIO,
+            loc_args=[user_profile.name])
 
 
     def my_friend_is_online(self, friend_profile):
@@ -1220,7 +1223,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.friend_online:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_ONLINE, loc_args=[friend_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+                },
+                loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_ONLINE,
+                loc_args=[friend_profile.name])
 
     def message_posted_in_my_radio(self, wall_message):
         user_profile = wall_message.user.get_profile()
@@ -1253,7 +1262,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.message_posted:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_IN_WALL, loc_args=[user_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_IN_WALL,
+            loc_args=[user_profile.name])
 
     def song_liked_in_my_radio(self, user_profile, radio, song):
         if user_profile == self:
@@ -1286,7 +1301,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.song_liked:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_SONG_LIKED, loc_args=[user_profile.name, song.metadata.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_SONG_LIKED,
+            loc_args=[user_profile.name, song.metadata.name])
 
     def my_radio_added_in_favorites(self, user_profile, radio):
         if user_profile == self:
@@ -1314,7 +1335,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.radio_in_favorites:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_RADIO_IN_FAVORITES, loc_args=[user_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_RADIO_IN_FAVORITES,
+            loc_args=[user_profile.name])
 
     def my_radio_shared(self, user_profile, radio):
         if user_profile == self:
@@ -1342,7 +1369,12 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.radio_shared:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_RADIO_SHARED, loc_args=[user_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_RADIO_SHARED,
+            loc_args=[user_profile.name])
 
     def my_friend_created_radio(self, friend_profile, radio):
         custom_params = {}
@@ -1368,7 +1400,13 @@ class UserProfile(models.Model):
         if not self.notifications_preferences.friend_created_radio:
             return
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_CREATED_RADIO, loc_args=[friend_profile.name])
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_FRIEND_CREATED_RADIO,
+            loc_args=[friend_profile.name])
 
     def message_from_yasound(self, url_param):
         custom_params = {}
@@ -1382,8 +1420,12 @@ class UserProfile(models.Model):
                            language=self.language)
 
         # send APNs notification
-        self.send_APNs_message(message=None, custom_params={YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME:custom_params}, loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_YASOUND)
-
+        async_send_APNs_message.delay(self,
+            message=None,
+            custom_params={
+                YASOUND_NOTIF_PARAMS_ATTRIBUTE_NAME: custom_params
+            },
+            loc_key=yamessage_settings.APNS_LOC_KEY_MESSAGE_FROM_YASOUND)
 
     def notif_preferences(self):
         prefs = {}

@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from yacore.http import absolute_url
+from yabase.apns import send_message
 import logging
 import tweepy
 from django.utils import translation
@@ -165,3 +166,15 @@ def async_tw_animator_activity(user_id, radio_uuid):
 
     logger.debug('done')
 
+
+@task(ignore_result=True)
+def async_send_APNs_message(profile, message, custom_params={}, action_loc_key=None, loc_key=None, loc_args=[]):
+    from models import Device
+
+    devices = Device.objects.for_userprofile(profile)
+    for d in devices:
+        if d.ios_token and d.ios_token_type:
+            sandbox = d.is_sandbox()
+            token = d.ios_token
+            app_id = d.application_identifier
+            send_message(token, message, sandbox=sandbox, application_id=app_id, custom_params=custom_params, action_loc_key=action_loc_key, loc_key=loc_key, loc_args=loc_args)
