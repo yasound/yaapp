@@ -406,7 +406,6 @@ Yasound.Views.HomePage = Backbone.View.extend({
                 el: $('#favorites-slides', this.el)
             });
             this.favorites.goTo(0);
-            this.favorites.perPage = 5;
 
             this.friendsActivityView = new Yasound.Views.FriendsActivity({
                 collection: this.friendsActivity,
@@ -429,9 +428,6 @@ Yasound.Views.HomePage = Backbone.View.extend({
 
         this.selection.goTo(0);
         this.popular.goTo(0);
-
-        this.selection.perPage = 5;
-        this.popular.perPage = 5;
 
         this.updateGenreSlug(genre);
         return this;

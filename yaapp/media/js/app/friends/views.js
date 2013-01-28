@@ -364,11 +364,6 @@ Yasound.Views.FriendsPage = Backbone.View.extend({
                     $('#connected-count', that.el).html(collection.totalCount);
                 }
             });
-
-            this.collection.perPage = 5;
-            this.followers.perPage = 5;
-            this.connected.perPage = 5;
-
         }
 
         return this;
