@@ -12,6 +12,9 @@ import json
 from yabase import settings as yabase_settings
 from yabase.models import ApnsCertificate
 
+import logging
+logger = logging.getLogger("yaapp.yabase")
+
 def send_message(udid, alert, badge=0, sound="chime", sandbox=True, application_id=yabase_settings.IPHONE_DEFAULT_APPLICATION_IDENTIFIER,
                         custom_params={}, action_loc_key=None, loc_key=None,
                         loc_args=[], passed_socket=None):
@@ -69,6 +72,8 @@ def send_message(udid, alert, badge=0, sound="chime", sandbox=True, application_
         else:
             host_name = 'gateway.sandbox.push.apple.com' if sandbox else 'gateway.push.apple.com'
             certif_file = ApnsCertificate.objects.certificate_file(application_id, sandbox)
+
+            logger.info('sending notification, hostname=%s, cert file=%s' % (host_name, certif_file))
             s = socket()
             c = ssl.wrap_socket(s,
                                 ssl_version=ssl.PROTOCOL_SSLv3,
