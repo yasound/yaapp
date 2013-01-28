@@ -497,6 +497,7 @@ Yasound.Data.Models.ConnectedUser = Backbone.Model.extend({
  */
 Yasound.Data.Models.ConnectedUsers = Yasound.Data.Paginator.extend({
     model: Yasound.Data.Models.ConnectedUser,
+    skipAttribute: 'skip',
     url: function() {
         return '/api/v1/fast_connected_users/';
     }
