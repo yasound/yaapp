@@ -78,6 +78,7 @@ PIPELINE_JS = {
             'js/backoffice/Premium/PromocodeGroupGrid.js',
             'js/backoffice/Premium/Promocodes.js',
             'js/backoffice/Premium/PromocodesGroupUsage.js',
+            'js/backoffice/Premium/PermanentPromocodesUsage.js',
             'js/backoffice/Geoperm/CountryGrid.js',
             'js/backoffice/Geoperm/GeoFeatureGrid.js',
             'js/backoffice/Geoperm/Geoperm.js',
