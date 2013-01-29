@@ -1548,13 +1548,35 @@ def premium_promocodes_group(request):
 @csrf_exempt
 @login_required
 def premium_promocodes_group_users(request):
-    """ users who have used a promocode """
+    """ users who have used a group promocode """
     if not request.user.is_superuser:
         raise Http404()
 
     if request.method == 'GET':
         group_id = request.REQUEST.get('group_id', 0)
         qs = UserProfile.objects.filter(user__userpromocode__promocode__group__id=group_id)
+        filters = ['name', 'facebook_uid',
+                   'last_authentication_date',
+                   ('email', 'user__email'),
+                   ('date_joined', 'user__date_joined'),
+                   ('is_active', 'user__is_active'),
+                   ('is_superuser', 'user__is_superuser')]
+        grid = UserProfileGrid()
+        json = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(json)
+        return resp
+    raise Http404
+
+@csrf_exempt
+@login_required
+def premium_promocodes_users(request):
+    """ users who have used a promocode """
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        promocode_id = request.REQUEST.get('promocode_id', 0)
+        qs = UserProfile.objects.filter(user__userpromocode__promocode__id=promocode_id)
         filters = ['name', 'facebook_uid',
                    'last_authentication_date',
                    ('email', 'user__email'),

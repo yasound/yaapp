@@ -18,7 +18,7 @@ Yasound.Premium.UI.PermanentPromocodesUsagePanel = function() {
         layout:'border',
         items:[{
             xtype: 'promocodegrid',
-            title: gettext('Groups'),
+            title: gettext('Promocodes'),
             singleSelect: true,
             url: '/yabackoffice/premium/non_unique_promocodes/',
             region: 'west',
@@ -29,7 +29,7 @@ Yasound.Premium.UI.PermanentPromocodesUsagePanel = function() {
                 'selected': function (grid, id, record) {
                     var usersGrid = grid.nextSibling();
                     usersGrid.setParams({
-                        'group_id': id
+                        'promocode_id': id
                     });
                     usersGrid.reload();
                 }
@@ -38,7 +38,7 @@ Yasound.Premium.UI.PermanentPromocodesUsagePanel = function() {
             xtype: 'usergrid',
             title: gettext('Users'),
             singleSelect: false,
-            url: '/yabackoffice/premium/promocodes/group/users/',
+            url: '/yabackoffice/premium/promocodes/users/',
             region: 'center'
         }],
         updateData : function(component) {
