@@ -51,3 +51,4 @@ django-localeurl
 django-attachments
 markdown
 Pygments
+raven==3.1.6

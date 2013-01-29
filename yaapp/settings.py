@@ -33,7 +33,6 @@ if PRODUCTION_MODE or DEVELOPMENT_MODE:
 else:
     DEBUG = True
 
-
 TEMPLATE_DEBUG = DEBUG
 
 if TEST_MODE:
@@ -367,6 +366,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django_extensions',
     'django_jenkins',
+    'raven.contrib.django',
     'localeurl',
     'extjs',
     'pipeline',
@@ -459,14 +459,18 @@ LOGGING = {
         },
     },
     'handlers': {
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
             'filters': ['time_throttled'],
         },
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
         },
         'console':{
             'level':'DEBUG',
@@ -476,7 +480,7 @@ LOGGING = {
         'file':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000,
+            'maxBytes': 1024 * 10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.log'),
             'formatter': 'verbose'
@@ -484,7 +488,7 @@ LOGGING = {
         'file_yaweb':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000,
+            'maxBytes': 1024 * 10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/yaweb.log'),
             'formatter': 'verbose'
@@ -492,7 +496,7 @@ LOGGING = {
         'file_missing_songs':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000,
+            'maxBytes': 1024 * 10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/missing_songs.log'),
             'formatter': 'verbose'
@@ -500,7 +504,7 @@ LOGGING = {
         'file_delete_song':{
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*10000,
+            'maxBytes': 1024 * 10000,
             'backupCount': 10,
             'filename': os.path.join(PROJECT_PATH, 'logs/yaapp.delete_song.log'),
             'formatter': 'verbose'
@@ -513,7 +517,7 @@ LOGGING = {
             'level':'INFO',
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'sentry'],
             'level': 'ERROR',
             'propagate': False,
         },
@@ -1096,3 +1100,8 @@ FORBIDDEN_SLUGS = (
     u'official',
     u'yasound-official',
 )
+
+# sentry
+SENTRY_DSN = 'http://0b3f975dfc254aeea3e3f6848d886dcc:0c76a3b0e21749b1995a2020b5e47f8f@yas-dev-02.ig-1.net/3'
+if PRODUCTION_MODE:
+    SENTRY_DSN = 'http://ac3e1378f9614a43962202fc25c91f37:83f6b94eae704e3fa16637dd9d45a624@yas-dev-02.ig-1.net/2'
