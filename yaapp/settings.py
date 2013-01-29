@@ -1102,6 +1102,7 @@ FORBIDDEN_SLUGS = (
 )
 
 # sentry
-SENTRY_DSN = 'http://0b3f975dfc254aeea3e3f6848d886dcc:0c76a3b0e21749b1995a2020b5e47f8f@yas-dev-02.ig-1.net/3'
+if DEVELOPMENT_MODE:
+    SENTRY_DSN = 'http://0b3f975dfc254aeea3e3f6848d886dcc:0c76a3b0e21749b1995a2020b5e47f8f@yas-dev-02.ig-1.net/3'
 if PRODUCTION_MODE:
     SENTRY_DSN = 'http://ac3e1378f9614a43962202fc25c91f37:83f6b94eae704e3fa16637dd9d45a624@yas-dev-02.ig-1.net/2'
