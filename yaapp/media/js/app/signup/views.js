@@ -40,7 +40,7 @@ Yasound.Views.SignupPage = Backbone.View.extend({
                         var $input = $('input[name=' + key + ']', form);
                         $input.addClass('error');
                         text =  text + '<br/><br/>' + '<strong>' + value + '</strong>';
-                    })
+                    });
                 }
                 colibri(text);
                 button.removeAttr('disabled');
@@ -48,7 +48,9 @@ Yasound.Views.SignupPage = Backbone.View.extend({
                 button.removeAttr('disabled');
                 $('#modal-after-signup').modal('show');
                 $('#modal-after-signup').one('hidden', function () {
-                    window.location = Yasound.App.root;
+                    Yasound.App.Router.navigate("login/", {
+                        trigger: true
+                    });
                 });
             }
         }).error(function() {

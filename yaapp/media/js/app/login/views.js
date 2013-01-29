@@ -4,7 +4,8 @@ Namespace('Yasound.Views');
 
 Yasound.Views.LoginPage = Backbone.View.extend({
     events: {
-        'submit #login-form': 'submit'
+        'submit #login-form': 'submit',
+        'click #signup-now': 'onSignup'
     },
 
     initialize: function() {
@@ -45,6 +46,13 @@ Yasound.Views.LoginPage = Backbone.View.extend({
             }
         }).error(function() {
             colibri(gettext('Error while login in'), 'colibri-error');
+        });
+    },
+
+    onSignup: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("signup/", {
+            trigger: true
         });
     }
 });

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load app_url %}
 
 <div class="container-fluid content-zone">
     <div class='row-fluid'>
@@ -52,6 +53,7 @@
     </form>
     <div class='row-fluid signup-container'>
         <div class='span12'>
+            <a href='{% app_url webapp_signup app_name  %}' id='signup-now'>{% trans 'No account? Register now' %}</a>
             <a href='{% url lost_password %}' id='lost-password'>{% trans 'Lost password ?' %}</a>
         </div>
     </div>
