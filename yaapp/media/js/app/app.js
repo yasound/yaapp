@@ -316,6 +316,7 @@ $(document).ready(function () {
                 if (this.commonContext.teaserView) {
                     this.commonContext.teaserView.slideUp();
                 }
+                $('#main-content .content').remove();
                 $('#main-content').append(Yasound.App.CONTENT_HTML);
             }
             this.alreadyLoaded = true;
