@@ -71,6 +71,8 @@ urlpatterns = patterns('yabackoffice.views',
     url(r'^premium/non_unique_promocodes/$', 'premium_non_unique_promocodes'),
     url(r'^premium/promocodes/(?P<promocode_id>\d+)/$', 'premium_promocodes'),
     url(r'^premium/promocodes/$', 'premium_promocodes'),
+    url(r'^premium/promocodes/group/$', 'premium_promocodes_group'),
+    url(r'^premium/promocodes/group/users/$', 'premium_promocodes_group_users'),
 
     url(r'^geoperm/countries/$', 'geoperm_countries'),
     url(r'^geoperm/countries/(?P<country_id>\d+)/$', 'geoperm_countries'),

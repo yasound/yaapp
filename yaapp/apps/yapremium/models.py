@@ -447,6 +447,14 @@ class PromocodeGroup(models.Model):
     updated = models.DateTimeField(_('updated'), auto_now=True)
     name = models.CharField(_('group'), max_length=100, unique=True)
 
+    @property
+    def used_codes_count(self):
+        return Promocode.objects.filter(group=self, unique=True, userpromocode__isnull=False).count()
+
+    @property
+    def available_codes_count(self):
+        return Promocode.objects.filter(group=self, unique=True, userpromocode__isnull=True).count()
+
     def __unicode__(self):
         return self.name
 

@@ -2,26 +2,25 @@
 // Datastore
 //------------------------------------------
 
-Yasound.Users.Data.UserStore = function() {
-	var fields = ['id',
-	              'name',
-	              'account_type',
-	              'user_id',
-	              'email',
-	              'is_active', {
+Yasound.Users.Data.UserStore = function(url) {
+    var fields = ['id',
+                  'name',
+                  'account_type',
+                  'user_id',
+                  'email',
+                  'is_active', {
                     name: 'date_joined',
                     type: 'date',
                     dateFormat: 'Y-m-d H:i:s'
                   },
                   'hd_enabled',
-	              'facebook_uid', {
-					name: 'last_authentication_date',
-					type: 'date',
-					dateFormat: 'Y-m-d H:i:s'
-	              },
-	              'is_superuser'];
-	var url = '/yabackoffice/users';
-	return new Yasound.Utils.SimpleStore(url, fields);
+                  'facebook_uid', {
+                    name: 'last_authentication_date',
+                    type: 'date',
+                    dateFormat: 'Y-m-d H:i:s'
+                  },
+                  'is_superuser'];
+    return new Yasound.Utils.SimpleStore(url, fields);
 };
 
 //------------------------------------------
@@ -32,7 +31,7 @@ Yasound.Users.Data.UserStore = function() {
 // UI
 //------------------------------------------
 Yasound.Users.UI.UserColumnModel = function(sm) {
-	var cm = [{
+    var cm = [{
         header: gettext('Name'),
         dataIndex: 'name',
         sortable: true,
@@ -82,10 +81,10 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         sortable: true,
         width: 50,
         renderer: function(value, p, record){
-        	if (value) {
-        		return gettext('Yes');
-        	}
-        	return gettext('No');
+            if (value) {
+                return gettext('Yes');
+            }
+            return gettext('No');
         }
     }, {
         header: gettext('Actived?'),
@@ -100,9 +99,9 @@ Yasound.Users.UI.UserColumnModel = function(sm) {
         }
     }];
 
-	if (sm) {
-		cm.splice(0, 0, sm);
-	}
+    if (sm) {
+        cm.splice(0, 0, sm);
+    }
 
     return cm;
 };
@@ -120,25 +119,27 @@ Yasound.Users.UI.UserFilters = function(){
 
 
 Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
-	singleSelect: true,
-	checkboxSelect: true,
-	tbar: [],
+    singleSelect: true,
+    checkboxSelect: true,
+    tbar: [],
+    url: '/yabackoffice/users',
+
     initComponent: function() {
         this.addEvents('selected', 'deselected');
         this.pageSize = 25;
-        this.store = Yasound.Users.Data.UserStore();
+        this.store = Yasound.Users.Data.UserStore(this.url);
         this.store.pageSize = this.pageSize;
 
-    	var sm = new Ext.grid.CheckboxSelectionModel({
+        var sm = new Ext.grid.CheckboxSelectionModel({
             singleSelect: this.singleSelect,
             listeners: {
                 selectionchange: function(sm){
-					Ext.each(sm.getSelections(), function(record) {
+                    Ext.each(sm.getSelections(), function(record) {
                         this.grid.fireEvent('selected', this.grid, record.data.id, record);
-					}, this);
-					if (!sm.hasSelection()) {
-						this.grid.fireEvent('deselected', this.grid);
-					}
+                    }, this);
+                    if (!sm.hasSelection()) {
+                        this.grid.fireEvent('deselected', this.grid);
+                    }
                 }
             }
         });
@@ -170,31 +171,37 @@ Yasound.Users.UI.UserGrid = Ext.extend(Ext.grid.GridPanel, {
                     return cls;
                 }
             }),
-        	plugins: [Yasound.Users.UI.UserFilters(), new Ext.ux.grid.GridHeaderFilters()],
-        	listeners: {
-        		show: function(component) {
-        			component.calculatePageSize();
-        		},
-        		resize: function(component) {
-        			component.calculatePageSize();
-        		}
-        	}
+            plugins: [Yasound.Users.UI.UserFilters(), new Ext.ux.grid.GridHeaderFilters()],
+            listeners: {
+                show: function(component) {
+                    component.calculatePageSize();
+                },
+                resize: function(component) {
+                    component.calculatePageSize();
+                }
+            }
         }; // eo config object
         // apply config
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         Yasound.Users.UI.UserGrid.superclass.initComponent.apply(this, arguments);
     },
+    setParams: function (additionalParams) {
+        this.getStore().additionalParams = additionalParams;
+    },
+    reload: function () {
+        this.getStore().reload();
+    },
     calculatePageSize: function() {
-    	if (!this.isVisible()) {
-    		return;
-    	}
-		var bodyHeight = this.getHeight();
-		var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50+20;
-		var rowHeight = 21;
-		var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
+        if (!this.isVisible()) {
+            return;
+        }
+        var bodyHeight = this.getHeight();
+        var heightOther = this.getTopToolbar().getHeight() + this.getBottomToolbar().getHeight() + 50+20;
+        var rowHeight = 21;
+        var gridRows = parseInt( ( bodyHeight - heightOther ) / rowHeight );
 
-		this.getBottomToolbar().pageSize = gridRows;
-		this.getStore().reload({ params:{ start:0, limit:gridRows } });
+        this.getBottomToolbar().pageSize = gridRows;
+        this.getStore().reload({ params:{ start:0, limit:gridRows } });
     }
 
 });

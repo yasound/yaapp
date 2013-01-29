@@ -4,7 +4,7 @@ from yabackoffice.models import BackofficeRadio
 from yabase.models import SongInstance, WallEvent
 from yainvitation.models import Invitation
 from yaref.models import YasoundSong
-from yapremium.models import Promocode
+from yapremium.models import Promocode, PromocodeGroup
 from yageoperm.models import Country, GeoFeature
 
 
@@ -118,8 +118,21 @@ class PromocodeGrid(grids.ModelGrid):
     }
 
 
+class PromocodeGroupGrid(grids.ModelGrid):
+    model = PromocodeGroup
+    list_mapping = [
+        'id',
+        'name',
+        'created',
+        'updated',
+        'used_codes_count',
+        'available_codes_count',
+    ]
+
+
 class CountryGrid(grids.ModelGrid):
     model = Country
+
 
 class GeoFeatureGrid(grids.ModelGrid):
     model = GeoFeature

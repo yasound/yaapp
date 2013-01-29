@@ -292,6 +292,8 @@ Ext.onReady(function(){
                 }
             }, Ext.apply(Yasound.Premium.UI.PromocodesPanel(), {
                 iconCls: 'x-icon-templates'
+            }), Ext.apply(Yasound.Premium.UI.PromocodesGroupUsagePanel(), {
+                iconCls: 'x-icon-templates'
             })]
         };
 

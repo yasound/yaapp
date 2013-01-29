@@ -21,7 +21,8 @@ from emailconfirmation.models import EmailConfirmation, EmailAddress
 from emencia.django.newsletter.models import Contact
 from extjs import utils
 from grids import SongInstanceGrid, RadioGrid, \
-    InvitationGrid, YasoundSongGrid, PromocodeGrid, CountryGrid, GeoFeatureGrid
+    InvitationGrid, YasoundSongGrid, PromocodeGrid, CountryGrid, GeoFeatureGrid, \
+    PromocodeGroupGrid
 from yabackoffice.forms import RadioForm, InvitationForm
 from yabackoffice.grids import UserProfileGrid, WallEventGrid
 from yabackoffice.models import BackofficeRadio
@@ -1524,6 +1525,48 @@ def premium_promocodes(request, promocode_id=None):
             response['Content-Disposition'] = 'attachment; filename=promocodes-%s.xls' % (group.name)
             return response
     raise Http404
+
+
+@csrf_exempt
+@login_required
+def premium_promocodes_group(request):
+    """ handle promocodes groups """
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        qs = PromocodeGroup.objects.filter(promocode__unique=True).distinct()
+        grid = PromocodeGroupGrid()
+        filters = [
+            'name'
+        ]
+        json = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(json)
+        return resp
+    raise Http404
+
+@csrf_exempt
+@login_required
+def premium_promocodes_group_users(request):
+    """ users who have used a promocode """
+    if not request.user.is_superuser:
+        raise Http404()
+
+    if request.method == 'GET':
+        group_id = request.REQUEST.get('group_id', 0)
+        qs = UserProfile.objects.filter(user__userpromocode__promocode__group__id=group_id)
+        filters = ['name', 'facebook_uid',
+                   'last_authentication_date',
+                   ('email', 'user__email'),
+                   ('date_joined', 'user__date_joined'),
+                   ('is_active', 'user__is_active'),
+                   ('is_superuser', 'user__is_superuser')]
+        grid = UserProfileGrid()
+        json = yabackoffice_utils.generate_grid_rows_json(request, grid, qs, filters)
+        resp = utils.JsonResponse(json)
+        return resp
+    raise Http404
+
 
 @csrf_exempt
 @login_required
