@@ -235,6 +235,7 @@ $(document).ready(function () {
             "signup/": "signup",
             "signup/*args": "signup",
             "login/": "login",
+            "lostpassword/": "passreset",
             "radio/:uuid_or_slug/*args": "radio",
             "gifts/": "gifts",
             "legal/": "legal",
@@ -680,6 +681,14 @@ $(document).ready(function () {
             this.clearView();
 
             this.currentView = new Yasound.Views.LoginPage({
+                el: Yasound.App.CONTENT_EL
+            }).render();
+        },
+
+        passreset: function() {
+            this.clearView();
+
+            this.currentView = new Yasound.Views.PassResetPage({
                 el: Yasound.App.CONTENT_EL
             }).render();
         },

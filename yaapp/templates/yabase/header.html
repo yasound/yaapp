@@ -69,7 +69,7 @@
           {% else %}
           <li class="dropdown">
             <a href="#" class="btn-nav" data-toggle="dropdown">Se connecter</a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu" id='signup-menu'>
               <div class="dropdown-block">
                 <a href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow" class="btn-sky">{% trans 'Login with Twitter' %}</a>
                 <a href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow" class="btn-navy">{% trans 'Login with Facebook' %}</a>
@@ -80,7 +80,7 @@
                   <input class="input-text textfield-pwd" type="password" name="password" required="required"  placeholder="{% trans 'Your password' %}" />
                   <button type="submit" class="btn-coral btn-connect">Connexion</button>
                   <div class="clearfix"></div>
-                  <div><a class="lost-password" href='{% url lost_password %}'>Mot de passe perdu ?</a></div>
+                  <div><a class="lost-password" href='{% app_url webapp_passreset app_name %}'>{% trans "Lost password ?" %}</a></div>
                 </form>
               </div>
             </div>

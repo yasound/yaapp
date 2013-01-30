@@ -9111,6 +9111,9 @@ ul .user-cell:hover .caption {
 ul .track-container {
   cursor: pointer;
 }
+#passreset-form label {
+  display: none;
+}
 @media (max-width: 480px) {
   .teaser .argument {
     bottom: 115px;

@@ -27,11 +27,19 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #brand-menu .legal': 'onLegal',
         'click #brand-menu .press': 'onPress',
         'click #brand-menu .jobs': 'onJobs',
+        'click .lost-password': 'onPassReset',
         'submit #login-form': 'submitLogin'
     },
 
     initialize: function () {
-        _.bindAll(this, 'render', 'hidePopupProfile', 'onNotification', 'onNotificationUnreadCount', 'hidePopupNotifications');
+        _.bindAll(this,
+            'render',
+            'hidePopupProfile',
+            'onNotification',
+            'onNotificationUnreadCount',
+            'hidePopupNotifications',
+            'hidePopupSignup'
+        );
 
         if (Yasound.App.Router.pushManager.enablePush) {
             Yasound.App.Router.pushManager.on('notification', this.onNotification);
@@ -91,6 +99,10 @@ Yasound.Views.Header = Backbone.View.extend({
 
     hidePopupNotifications: function () {
         $('#notifications-menu').parent().removeClass('open');
+    },
+
+    hidePopupSignup: function () {
+        $('#signup-menu').parent().removeClass('open');
     },
 
     hidePopupBrand: function () {
@@ -180,6 +192,15 @@ Yasound.Views.Header = Backbone.View.extend({
         e.preventDefault();
         this.hidePopupBrand();
         Yasound.App.Router.navigate('jobs/', {
+            trigger: true
+        });
+        return false;
+    },
+
+    onPassReset: function (e) {
+        e.preventDefault();
+        this.hidePopupSignup();
+        Yasound.App.Router.navigate('lostpassword/', {
             trigger: true
         });
         return false;

@@ -3,6 +3,7 @@ from account.models import UserProfile
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User, Group
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.core.cache import cache
@@ -30,7 +31,7 @@ from yabase import signals as yabase_signals
 from yabase.forms import SettingsUserForm, SettingsFacebookForm, \
     SettingsTwitterForm, ImportItunesForm, RadioGenreForm
 from forms import MyAccountsForm, MyInformationsForm, MyNotificationsForm
-from account.forms import WebAppSignupForm, LoginForm
+from account.forms import WebAppSignupForm, LoginForm, PasswordResetForm
 from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
@@ -1586,6 +1587,31 @@ class WebAppView(View):
                     context['signup_form'] = form
         return context, 'yabase/app/login/login.html'
 
+    def passreset(self, request, context, *args, **kwargs):
+        context['form'] = PasswordResetForm()
+        if request.method == 'POST':
+            form = PasswordResetForm(request.POST)
+            if form.is_valid():
+                opts = {
+                    'use_https': request.is_secure(),
+                    'token_generator': default_token_generator,
+                    'from_email': settings.DEFAULT_FROM_EMAIL,
+                    'email_template_name': 'account/password_reset_email.html',
+                    'request': request,
+                }
+                form.save(**opts)
+
+                if request.is_ajax():
+                    return self._ajax_success()
+                else:
+                    return HttpResponseRedirect(reverse('webapp', args=[self.app_name]))
+            else:
+                if request.is_ajax():
+                    return self._ajax_error(form.errors)
+                else:
+                    context['form'] = form
+        return context, 'yabase/app/passreset/passreset.html'
+
     def settings(self, request, context, *args, **kwargs):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('webapp_login', args=[self.app_name]))
@@ -2549,7 +2575,9 @@ def load_template(request, template_name, app_name='app'):
         context['display_associate_twitter'] = display_associate_twitter
     elif template_name == 'static/faq.mustache':
         context['entries'] = FaqEntry.objects.get_entries()
-
+    elif template_name == 'passreset/passreset.mustache':
+        form = PasswordResetForm()
+        context['form'] = form
     template_full_name = 'yabase/app/%s' % (template_name)
     return render_to_response(template_full_name, context, context_instance=RequestContext(request))
 

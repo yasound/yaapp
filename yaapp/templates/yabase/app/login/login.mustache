@@ -54,7 +54,7 @@
     <div class='row-fluid signup-container'>
         <div class='span12'>
             <a href='{% app_url webapp_signup app_name  %}' id='signup-now'>{% trans 'No account? Register now' %}</a>
-            <a href='{% url lost_password %}' id='lost-password'>{% trans 'Lost password ?' %}</a>
+            <a href='{% app_url webapp_passreset app_name %}' id='lost-password'>{% trans 'Lost password ?' %}</a>
         </div>
     </div>
 </div>

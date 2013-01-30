@@ -5,7 +5,8 @@ Namespace('Yasound.Views');
 Yasound.Views.LoginPage = Backbone.View.extend({
     events: {
         'submit #login-form': 'submit',
-        'click #signup-now': 'onSignup'
+        'click #signup-now': 'onSignup',
+        'click #lost-password': 'onPassReset'
     },
 
     initialize: function() {
@@ -52,6 +53,13 @@ Yasound.Views.LoginPage = Backbone.View.extend({
     onSignup: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate("signup/", {
+            trigger: true
+        });
+    },
+
+    onPassReset: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate("lostpassword/", {
             trigger: true
         });
     }

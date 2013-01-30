@@ -68,7 +68,7 @@
                     <input type='hidden' name='action' value='login'/>
                     <input id='login-btn-connection' type='submit' value='Connexion'/>
                   </form>
-                  <a class="login-psw-lost" href='{% url lost_password %}'>{% trans "Lost password ?" %}</a>
+                  <a class="login-psw-lost" href='{% app_url webapp_passreset app_name %}'>{% trans "Lost password ?" %}</a>
                 </div>
               </div>
             </div>
