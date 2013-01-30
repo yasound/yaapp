@@ -8835,6 +8835,7 @@ ul .radio-with-stats-cells li {
 .signup-container .signup-input #signup-save-btn[disabled=disabled] {
   color: #aaaaaa;
 }
+.signup-container a.bottom-link,
 .signup-container a#lost-password,
 .signup-container a#signup-now {
   text-align: center;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-29 19:08+0100\n"
+"POT-Creation-Date: 2013-01-30 09:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,12 +65,13 @@ msgstr "Se déconnecter"
 #: templates/yabase/app/friends/friendsPage.mustache:157
 #: templates/yabase/app/login/login.mustache:50
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:45
-#: templates/yabase/app/signup/signup.mustache:73
+#: templates/yabase/app/signup/signup.mustache:80
 msgid "Login"
 msgstr "Se connecter"
 
 #: templates/account/login.html:24 templates/yabase/webapp.html:679
 #: templates/yabase/webapp.html.py:682
+#: templates/yabase/app/login/login.mustache:7
 msgid "Welcome to Yasound"
 msgstr "Bienvenue sur Yasound"
 
@@ -1405,11 +1406,6 @@ msgstr "la programmation de"
 msgid "has been updated"
 msgstr "a été mise à jour"
 
-#: templates/yabase/app/login/login.mustache:7
-#, fuzzy
-msgid "Welcome to Yasound!"
-msgstr "Bienvenue sur Yasound"
-
 #: templates/yabase/app/login/login.mustache:8
 msgid "Login with Facebook or Twitter"
 msgstr "Connexion avec Facebook ou Twitter"
@@ -1954,7 +1950,7 @@ msgid "Do you want to remove your twitter account ?"
 msgstr "Voulez-vous retirer votre compte twitter ?"
 
 #: templates/yabase/app/signup/signup.mustache:9
-#: templates/yabase/app/signup/signup.mustache:82
+#: templates/yabase/app/signup/signup.mustache:89
 msgid "Create your Yasound account"
 msgstr "Création de votre compte Yasound"
 
@@ -1988,11 +1984,15 @@ msgstr "Mot de passe (à nouveau)"
 msgid "Register my account"
 msgstr "Enregistrer mon compte"
 
-#: templates/yabase/app/signup/signup.mustache:65
+#: templates/yabase/app/signup/signup.mustache:62
+msgid "Already registered? Login now"
+msgstr "Déja enregistré ? Se connecter maintenant"
+
+#: templates/yabase/app/signup/signup.mustache:72
 msgid "Thank you for registering at Yasound"
 msgstr "Merci pour votre inscription sur Yasound"
 
-#: templates/yabase/app/signup/signup.mustache:68
+#: templates/yabase/app/signup/signup.mustache:75
 msgid ""
 "An email has been sent to confirm your registration.\n"
 "        "
@@ -2000,11 +2000,11 @@ msgstr ""
 "Un email a été envoyé afin de confirmer votre compte.\n"
 "        "
 
-#: templates/yabase/app/signup/signup.mustache:84
+#: templates/yabase/app/signup/signup.mustache:91
 msgid "You are currently logged as"
 msgstr "Vous êtes actuellement connecté sous"
 
-#: templates/yabase/app/signup/signup.mustache:86
+#: templates/yabase/app/signup/signup.mustache:93
 #, python-format
 msgid ""
 "\n"
@@ -2350,6 +2350,10 @@ msgstr "Invitation pour rejoindre et tester Yasound"
 #: templates/yaref/find_fuzzy.html:6 templates/yaref/find_fuzzy.html.py:13
 msgid "Fuzzy search"
 msgstr "Recherche floue"
+
+#, fuzzy
+#~ msgid "Welcome to Yasound!"
+#~ msgstr "Bienvenue sur Yasound"
 
 #~ msgid "Not registered yet ? Create an account"
 #~ msgstr "Pas encore enregistré ? Créer un compte"
