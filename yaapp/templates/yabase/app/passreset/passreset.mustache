@@ -12,18 +12,17 @@
 <div class="container-fluid content-zone last">
     <div class='row-fluid'>
         <div class='span12 signup-container'>
-            <div class='signup-input'>
             <form id='passreset-form' method='post'>{% csrf_token %}
-            <fieldset>
-              {{form}}
-            </div>
-            <div class='row-fluid signup-container'>
-                <div class='span12 signup-input'>
-                    <input id="signup-save-btn" type="submit" value="{% trans 'Reset' %}" />
+                <div class='signup-input'>
+                    <fieldset>
+                      {{form}}
+                    </div>
+                <div class='row-fluid signup-container'>
+                    <div class='span12 signup-input'>
+                        <input id="signup-save-btn" type="submit" value="{% trans 'Reset' %}" />
+                    </div>
                 </div>
-            </div>
-            </fieldset>
-            </form>
+                </form>
         </div>
     </div>
     <div class='row-fluid signup-container'>
