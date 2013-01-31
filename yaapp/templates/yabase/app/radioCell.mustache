@@ -1,7 +1,7 @@
 {% load i18n %}
-<article class="radio-cell">
+<article class="radio-cell" itemscope itemtype="http://schema.org/CreativeWork">
   <a class="radio-cell-link" href="{{root}}radio/<% slug %>/">
-    <div class="radio-cell-img"><img width="150" height="150" alt="" src="<% picture %>" /></div>
+    <div class="radio-cell-img"><img width="150" height="150" alt="" src="<% picture %>" itemprop="image"/></div>
     <div class="radio-cell-info">
       <%#genre%><div class="tag"><% genre_display %></div><%/genre%>
       <i class="play asset-player-play"></i>
@@ -9,5 +9,5 @@
       </div>
     </div>
   </a>
-  <h1><a href="{{root}}radio/<% uuid %>/"><% name %></a></h1>
+  <h1><a href="{{root}}radio/<% uuid %>/" itemprop="name"><% name %></a></h1>
 </article>

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load app_url %}
-<article class="radio-cell">
+<article class="radio-cell" itemscope itemtype="http://schema.org/CreativeWork">
   <a class="radio-cell-link" href="{% app_url webapp_radio app_name radio.slug|default:radio.uuid %}">
     <div class="radio-cell-img"><img width="150" height="150" alt="" src="/media/images/radio-loading.gif" /></div>
     <div class="radio-cell-info">
@@ -9,5 +9,5 @@
       <div class="tip-btn">Infos</div>
     </div>
   </a>
-  <h1><a href="{% app_url webapp_radio app_name radio.uuid %}">{{ radio.name}}</a></h1>
+  <h1><a href="{% app_url webapp_radio app_name radio.uuid %}" itemprop="name">{{ radio.name}}</a></h1>
 </article>
