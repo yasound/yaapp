@@ -68,7 +68,7 @@
           </li>
           {% else %}
           <li class="dropdown">
-            <a href="#" class="btn-nav" data-toggle="dropdown">Se connecter</a>
+            <a href="#" class="btn-nav" data-toggle="dropdown">{% trans "Login" %}</a>
             <div class="dropdown-menu" id='signup-menu'>
               <div class="dropdown-block">
                 <a href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow" class="btn-sky">{% trans 'Login with Twitter' %}</a>
@@ -85,7 +85,7 @@
               </div>
             </div>
           </li>
-          <li><a href="{% app_url webapp_signup app_name %}" class="btn-coral btn-register">S'inscrire</a></li>
+          <li><a href="{% app_url webapp_signup app_name %}" class="btn-coral btn-register">{% trans "Signup" %}</a></li>
           {% endif %}
         </ul>
       </nav>
