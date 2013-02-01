@@ -175,6 +175,23 @@ class WallManager():
                 return True
         return False
 
+    def remove_duplicate_likers(self, doc):
+        if doc.get('event_type') != WallManager.EVENT_LIKE:
+            return doc
+
+        previous_likers = doc.get('likers')
+        likers = []
+        for liker in previous_likers:
+            if not self._is_in_likers(liker, likers):
+                likers.append(liker)
+
+        doc['likers'] = likers
+        doc['like_count'] = len(likers)
+        return doc
+
+    def save_event(self, doc):
+        self.collection.save(doc, safe=True)
+
     def add_event(self, event_type, radio, user, message=None):
         """Add a new event to the wall
 
