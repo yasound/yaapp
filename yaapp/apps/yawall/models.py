@@ -168,6 +168,13 @@ class WallManager():
             likers.extend(doc.get('likers', []))
         return likers
 
+    def _is_in_likers(self, liker, likers):
+        username = liker.get('username')
+        for item in likers:
+            if item.get('username') == username:
+                return True
+        return False
+
     def add_event(self, event_type, radio, user, message=None):
         """Add a new event to the wall
 
@@ -247,7 +254,8 @@ class WallManager():
                     # save original creation date
                     like_data['created'] = liker.get('created')
                     continue
-                likers.append(liker)
+                if not self._is_in_likers(liker, likers):
+                    likers.append(liker)
 
             likers.insert(0, like_data)
 
