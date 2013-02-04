@@ -38,6 +38,7 @@ from django.template.defaultfilters import striptags
 from yageoperm.models import Country
 from django.utils.html import urlize, linebreaks
 from yametadata.kfm import find_metadata as kfm_find_metadata
+from yametadata.hotmixradio import find_metadata as hotmixradio_find_metadata
 from django.http import Http404
 
 logger = logging.getLogger("yaapp.yabase")
@@ -124,6 +125,12 @@ class SongInstanceManager(models.Manager):
                 return song_json
             elif radio.origin == yabase_settings.RADIO_ORIGIN_KFM:
                 song_dict = kfm_find_metadata()
+                song_json = json.dumps(song_dict)
+                cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json, 10)
+                return song_json
+            elif radio.origin == yabase_settings.RADIO_ORIGIN_HOTMIXRADIO:
+                song_dict = hotmixradio_find_metadata(radio.slug.split('_')[1])
+                song_dict['large_cover'] = song_dict.get('cover')
                 song_json = json.dumps(song_dict)
                 cache.set('radio_%s.current_song.json' % (str(radio_id)), song_json, 10)
                 return song_json
