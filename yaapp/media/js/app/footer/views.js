@@ -234,7 +234,7 @@ Yasound.Views.Footer = Backbone.View.extend({
     },
 
     onShare: function (e) {
-        if (this.currentSong.get('id')) {
+        if (this.currentSong.get('name')) {
             var el = $('#modal-share .modal-body');
             if (!this.shareView) {
                 this.shareView = new Yasound.Views.Share({
