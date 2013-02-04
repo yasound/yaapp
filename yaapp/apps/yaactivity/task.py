@@ -21,7 +21,10 @@ def async_add_listen_activity(user_id, radio_id):
 
 @task(ignore_result=True)
 def async_add_animator_activity(radio_id, atype, details):
-    radio = Radio.objects.get(id=radio_id)
+    try:
+        radio = Radio.objects.get(id=radio_id)
+    except Radio.DoesNotExist:
+        return
 
     from models import RadioActivityManager
     m = RadioActivityManager()
