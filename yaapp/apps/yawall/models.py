@@ -127,9 +127,21 @@ class WallManager():
     def _generate_song_uuid(self, current_song):
         """ generate a unique uuid from song """
         hash_name = hashlib.md5()
-        hash_name.update(get_simplified_name(current_song.get('name', '')))
-        hash_name.update(get_simplified_name(current_song.get('album', '')))
-        hash_name.update(get_simplified_name(current_song.get('artist', '')))
+
+        name = get_simplified_name(current_song.get('name', ''))
+        album = get_simplified_name(current_song.get('album', ''))
+        artist = get_simplified_name(current_song.get('artist', ''))
+
+        if name is None:
+            name = ''
+        if album is None:
+            album = ''
+        if artist is None:
+            artist = ''
+
+        hash_name.update(name)
+        hash_name.update(album)
+        hash_name.update(artist)
         hash_name = hash_name.hexdigest()
         return hash_name
 
