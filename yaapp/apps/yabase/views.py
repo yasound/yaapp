@@ -1231,6 +1231,33 @@ def web_widget(request, radio_uuid_or_slug, wtype=None, template_name='yabase/wi
     }, context_instance=RequestContext(request))
 
 
+def _get_push_url(request):
+    if 'HTTP_HOST' not in request.META:
+        return None
+
+    host = request.META['HTTP_HOST']
+    protocol = settings.DEFAULT_HTTP_PROTOCOL
+    if ':' in host:
+        host = host[:host.find(':')]
+
+    url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
+    return url
+
+
+def web_social_widget(request, radio_uuid_or_slug, wtype=None, template_name='yabase/social_widget.html'):
+    radio = Radio.objects.get_or_404(radio_uuid_or_slug)
+    enable_push = settings.ENABLE_PUSH
+    push_url = _get_push_url(request)
+
+    return render_to_response(template_name, {
+        'radio': radio,
+        'enable_push': enable_push,
+        'current_uuid': radio.uuid,
+        'push_url': push_url,
+        'app_name': 'app'
+    }, context_instance=RequestContext(request))
+
+
 def web_song(request, radio_uuid_or_slug, song_instance_id, template_name='yabase/song.html'):
     song_instance = get_object_or_404(SongInstance, id=song_instance_id)
     radio = Radio.objects.get_or_404(radio_uuid_or_slug)
