@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from forms import SearchForm
 from models import YasoundSong
 from time import time
@@ -64,4 +65,32 @@ def album_cover(request, album_id):
     if not url:
         url = '/media/images/default_image.png'
     return HttpResponseRedirect(url)
+
+
+def internal_songs(request):
+    key = request.REQUEST.get('key')
+    if key != settings.DOWNLOAD_KEY:
+        raise Http404
+    limit = int(request.POST.get('limit', 25))
+    skip = int(request.POST.get('skip', 0))
+
+    qs = YasoundSong.objects.all().order_by('id')[skip:skip + limit]
+    data = []
+    for song in qs:
+        data.append(song.as_dict())
+    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
+
+
+def internal_download_song(request, song_id):
+    key = request.POST.get('key')
+    if key != settings.DOWNLOAD_KEY:
+        raise Http404
+
+    yasound_song = YasoundSong.objects.get(id=song_id)
+    path = yasound_song.get_song_lq_relative_path()
+
+    response = HttpResponse()
+    response['Content-Type'] = 'audio/mp3'
+    response['X-Accel-Redirect'] = '/songs/' + path
+    return response
 
