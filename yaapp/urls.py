@@ -337,6 +337,10 @@ urlpatterns = patterns('',
     # internal stuff
     url(r'^internal/user_authenticated/$', 'account.views.user_authenticated', name='user_authenticated'),
 
+    url(r'^internal/songs/$', 'yaref.views.internal_songs'),
+    url(r'^internal/songs/download/(?P<song_id>\d+)/$', 'yaref.views.internal_song_download'),
+
+
     url(r'^deezer/close/$', 'yabase.views.close', name='close'),
 
     (r'^attachments/', include('attachments.urls')),

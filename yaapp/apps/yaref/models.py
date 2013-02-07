@@ -372,7 +372,18 @@ class YasoundSong(models.Model):
         else:
             return u'%s %s %s' % (name, _('by'), artist_name)
 
-
+    def as_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'name_simplified': self.name_simplified,
+            'album': self.album_name,
+            'album_simplified': self.album_name_simplified,
+            'artist': self.artist_name,
+            'artist_simplified': self.artist_name_simplified,
+            'filesize': self.filesize
+        }
+        return data
 
     def build_fuzzy_index(self, upsert=False, insert=True):
         return yasearch_indexer.add_song(self, upsert, insert)
@@ -401,6 +412,9 @@ class YasoundSong(models.Model):
         lq = u'%s_lq%s' % (name, extension)
         return lq
 
+    def get_song_hq_relative_path(self):
+        song_path = yaref_utils.convert_filename_to_filepath(self.filename)
+        return song_path
 
     def find_lastfm_fingerprintid(self):
         song_path = os.path.join(settings.SONGS_ROOT, yaref_utils.convert_filename_to_filepath(self.filename))

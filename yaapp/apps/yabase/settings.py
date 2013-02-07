@@ -83,7 +83,7 @@ YASOUND_FAVORITES_PLAYLIST_NAME = '#yasound_songs_from_other_radios'
 YASOUND_FAVORITES_PLAYLIST_SOURCE_BASENAME = '#yasound_songs_from_other_radios_source'
 
 UPLOAD_KEY='weeriwjwsdiwew9ei9nksxsdwxj,.29x2jdnjweapnfnhshdf'
-
+DOWNLOAD_KEY = 'p+[<#t7"j_+PiJ}cJ6iXkOSP5XW8GuH}@60lWWebG#3w3(C|U#9}^Sdk;uG'
 DEFAULT_FILENAME='file'
 
 TOP_RADIOS_LIMIT = 25
