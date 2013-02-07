@@ -76,8 +76,8 @@ def internal_songs(request):
     key = request.REQUEST.get('key')
     if key != settings.DOWNLOAD_KEY:
         raise Http404
-    limit = int(request.POST.get('limit', 25))
-    skip = int(request.POST.get('skip', 0))
+    limit = int(request.REQUEST.get('limit', 10))
+    skip = int(request.REQUEST.get('skip', 0))
 
     qs = YasoundSong.objects.all().order_by('id')[skip:skip + limit]
     data = []
