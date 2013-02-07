@@ -66,7 +66,7 @@ def album_cover(request, album_id):
         url = '/media/images/default_image.png'
     return HttpResponseRedirect(url)
 
-
+@csrf_exempt
 def internal_songs(request):
     key = request.REQUEST.get('key')
     if key != settings.DOWNLOAD_KEY:
@@ -81,6 +81,7 @@ def internal_songs(request):
     return HttpResponse(simplejson.dumps(data), mimetype='application/json')
 
 
+@csrf_exempt
 def internal_song_download(request, song_id):
     key = request.POST.get('key')
     if key != settings.DOWNLOAD_KEY:
