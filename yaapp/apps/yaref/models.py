@@ -381,6 +381,7 @@ class YasoundSong(models.Model):
             'album_simplified': self.album_name_simplified,
             'artist': self.artist_name,
             'artist_simplified': self.artist_name_simplified,
+            'filesize': self.filesize
         }
         return data
 
