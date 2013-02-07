@@ -81,7 +81,7 @@ def internal_songs(request):
     return HttpResponse(simplejson.dumps(data), mimetype='application/json')
 
 
-def internal_download_song(request, song_id):
+def internal_song_download(request, song_id):
     key = request.POST.get('key')
     if key != settings.DOWNLOAD_KEY:
         raise Http404
