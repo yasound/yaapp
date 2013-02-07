@@ -84,7 +84,7 @@ def internal_songs(request):
     if radio_id:
         radio = get_object_or_404(Radio, id=radio_id)
         ids = SongMetadata.objects.filter(songinstance__playlist__radio=radio).values_list('yasound_song_id', flat=True)
-        qs = YasoundSong.objects.filter(id__in=ids)
+        qs = YasoundSong.objects.filter(id__in=list(ids))
     else:
         qs = YasoundSong.objects.all().order_by('id')[skip:skip + limit]
 
