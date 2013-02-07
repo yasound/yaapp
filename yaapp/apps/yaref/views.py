@@ -14,6 +14,8 @@ from settings import FUZZY_KEY
 from django.utils import simplejson
 from yacore.http import check_api_key_Authentication, check_http_method
 from yaref.models import YasoundAlbum
+import logging
+logger = logging.getLogger("yaapp.yaref")
 
 @login_required
 def find_fuzzy(request, template_name='yaref/find_fuzzy.html'):
@@ -83,8 +85,10 @@ def internal_songs(request):
 
 @csrf_exempt
 def internal_song_download(request, song_id):
+    logger.debug('received internal_song_download for song %s' % (song_id))
     key = request.POST.get('key')
     if key != settings.DOWNLOAD_KEY:
+        logger.debug('key invalid: %s' % (key))
         raise Http404
 
     yasound_song = YasoundSong.objects.get(id=song_id)
@@ -94,4 +98,3 @@ def internal_song_download(request, song_id):
     response['Content-Type'] = 'audio/mp3'
     response['X-Accel-Redirect'] = '/songs/' + path
     return response
-
