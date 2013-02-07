@@ -13,6 +13,7 @@ from time import time
 from settings import FUZZY_KEY
 from django.utils import simplejson
 from yacore.http import check_api_key_Authentication, check_http_method
+from yacore.decorators import check_api_key
 from yaref.models import YasoundAlbum
 import logging
 logger = logging.getLogger("yaapp.yaref")
@@ -69,6 +70,7 @@ def album_cover(request, album_id):
     return HttpResponseRedirect(url)
 
 @csrf_exempt
+@check_api_key(methods=['POST'], login_required=False)
 def internal_songs(request):
     key = request.REQUEST.get('key')
     if key != settings.DOWNLOAD_KEY:
@@ -84,9 +86,10 @@ def internal_songs(request):
 
 
 @csrf_exempt
+@check_api_key(methods=['POST'], login_required=False)
 def internal_song_download(request, song_id):
     logger.debug('received internal_song_download for song %s' % (song_id))
-    key = request.POST.get('key')
+    key = request.REQUEST.get('key')
     if key != settings.DOWNLOAD_KEY:
         logger.debug('key invalid: %s' % (key))
         raise Http404
