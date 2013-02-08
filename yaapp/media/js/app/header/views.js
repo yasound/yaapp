@@ -59,37 +59,6 @@ Yasound.Views.Header = Backbone.View.extend({
             el: '#gifts-menu'
         });
 
-
-        if (Yasound.App.LanguageCode === 'fr') {
-            var isIpad = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i));
-            var f = jQuery(".jeu-concours").fancybox({
-                'speedIn' : 200,
-                'speedOut' : 200,
-                'padding': 0,
-                'margin': 0,
-                'width' : 728,
-                'height' : 392,
-                'scrolling': 'no',
-                'overlayShow' : true,
-                onStart : function() {
-                    if (isIpad) {
-                        jQuery('object').hide();
-                    }
-                },
-                onClosed : function() {
-                    if (isIpad) {
-                        jQuery('object').show();
-                    }
-                }
-            });
-
-            jQuery(".jeu-concours").trigger('click');
-
-            jQuery(window).resize(function() {
-                jQuery.fancybox.resize();
-            });
-        }
-
         return this;
     },
 

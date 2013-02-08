@@ -9156,6 +9156,15 @@ ul .track-container {
   #modal-search-results th:nth-child(2) {
     display: none;
   }
+  .blog-post {
+    margin-left: 0px;
+    border: none;
+  }
+  .blog-post:after {
+    content: "";
+    position: absolute;
+    background: none;
+  }
 }
 @media (max-width: 767px) {
   body {
@@ -9551,6 +9560,15 @@ ul .track-container {
   }
   .content-table .rel-tag-right .hover {
     padding: 5px 4px;
+  }
+  .blog-post {
+    margin-left: 0px;
+    border: none;
+  }
+  .blog-post:after {
+    content: "";
+    position: absolute;
+    background: none;
   }
 }
 @media (min-width: 768px) and (max-width: 979px) {
