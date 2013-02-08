@@ -27,6 +27,7 @@ def index(request, template_name='yaweb/index.html', template_name_mobile='yaweb
         'production_mode': settings.PRODUCTION_MODE
     }, context_instance=RequestContext(request))
 
+
 @csrf_exempt
 def stay_tuned(request, template_name='yaweb/stay_tuned.html'):
     return render_to_response(template_name, {
@@ -34,25 +35,30 @@ def stay_tuned(request, template_name='yaweb/stay_tuned.html'):
         'production_mode': settings.PRODUCTION_MODE
     }, context_instance=RequestContext(request))
 
+
 def about(request, template_name='yaweb/about.html'):
     return render_to_response(template_name, {
         'current_page': 'about',
     }, context_instance=RequestContext(request))
+
 
 def jobs(request, template_name='yaweb/jobs.html'):
     return render_to_response(template_name, {
         'current_page': 'jobs',
     }, context_instance=RequestContext(request))
 
+
 def press(request, template_name='yaweb/press.html'):
     return render_to_response(template_name, {
         'current_page': 'press',
     }, context_instance=RequestContext(request))
 
+
 def contact(request, template_name='yaweb/contact.html'):
     return render_to_response(template_name, {
         'current_page': 'contact',
     }, context_instance=RequestContext(request))
+
 
 def redirect(request, url=''):
     redirected_url = '/' + url
@@ -62,50 +68,64 @@ def redirect(request, url=''):
         redirected_url = reverse(urls[url])
     return HttpResponseRedirect(redirected_url)
 
+
 def eula(request, template_name='yaweb/eula.html'):
     return render_to_response(template_name, {
         'current_page': 'eula',
     }, context_instance=RequestContext(request))
+
 
 def privacy(request, template_name='yaweb/privacy.html'):
     return render_to_response(template_name, {
         'current_page': 'privacy',
     }, context_instance=RequestContext(request))
 
+
 def elecsounds(request, template_name='yaweb/elecsounds.html'):
     return render_to_response(template_name, {
         'current_page': 'elecsounds',
     }, context_instance=RequestContext(request))
+
 
 def elecsounds_terms(request, template_name='yaweb/elecsounds_terms.html'):
     return render_to_response(template_name, {
         'current_page': 'elecsounds_terms',
     }, context_instance=RequestContext(request))
 
+
 def elecsounds_winner(request, template_name='yaweb/elecsounds_winner.html'):
     return render_to_response(template_name, {
         'current_page': 'elecsounds_winner',
     }, context_instance=RequestContext(request))
+
 
 def contest_station(request, template_name='yaweb/contest_station.html'):
     return render_to_response(template_name, {
         'current_page': 'contest_station',
     }, context_instance=RequestContext(request))
 
+
 def contest_station_terms(request, template_name='yaweb/contest_station_terms.html'):
     return render_to_response(template_name, {
         'current_page': 'contest_station_terms',
     }, context_instance=RequestContext(request))
+
 
 def contest_station_iphone(request, template_name='yaweb/contest_station_iphone.html'):
     return render_to_response(template_name, {
         'current_page': 'contest_station_iphone',
     }, context_instance=RequestContext(request))
 
+
+def valentine_2013(request, template_name='yaweb/valentine_2013.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))
+
 def premium_win(request, template_name='yaweb/premium_win.html'):
     return render_to_response(template_name, {
         'current_page': 'premium_win',
     }, context_instance=RequestContext(request))
+
 
 def logo(request):
     return HttpResponseRedirect('/media/yaweb/images/logo.png')
@@ -122,17 +142,19 @@ def download(request, filename):
         fullpath = os.path.abspath(filename)
         if '/media/yaweb/presse/' not in fullpath:
             raise Http404
-        file = open(fullpath,"r")
+        file = open(fullpath, "r")
     except:
         raise Http404
     mimetype = mimetypes.guess_type(filename)[0]
     if mimetype not in ['application/pdf', 'image/eps', 'application/postscript', 'image/tiff', 'image/png', 'image/jpeg', 'image/jpg', 'application/zip']:
         raise Http404
-    if not mimetype: mimetype = "application/octet-stream"
+    if not mimetype:
+        mimetype = "application/octet-stream"
 
     response = HttpResponse(file.read(), mimetype=mimetype)
-    response["Content-Disposition"]= "attachment; filename=%s" % os.path.split(filename)[1]
+    response["Content-Disposition"] = "attachment; filename=%s" % os.path.split(filename)[1]
     return response
+
 
 def betatest(request, template_name='yaweb/betatest.html'):
     if request.method == 'GET':
@@ -152,6 +174,7 @@ def betatest(request, template_name='yaweb/betatest.html'):
         }, context_instance=RequestContext(request))
 
     raise Http404
+
 
 def betatest_thankyou(request, template_name='yaweb/betatest_thankyou.html'):
     return render_to_response(template_name, {
