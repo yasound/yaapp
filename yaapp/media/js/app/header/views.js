@@ -21,7 +21,7 @@ Yasound.Views.Header = Backbone.View.extend({
         'click #brand-logo a.btn-logo': 'onHome',
         'click .btn-envelope': 'refreshNotificationsDigest',
         'click .btn-hd': 'refreshHD',
-        'click #brand-menu .blog': 'onBlog',
+        'click #brand-menu .news': 'onBlog',
         'click #brand-menu .about': 'onAbout',
         'click #brand-menu .faq': 'onFaq',
         'click #brand-menu .legal': 'onLegal',
@@ -146,7 +146,7 @@ Yasound.Views.Header = Backbone.View.extend({
     onBlog: function (e) {
         e.preventDefault();
         this.hidePopupBrand();
-        Yasound.App.Router.navigate('blog/', {
+        Yasound.App.Router.navigate('news/', {
             trigger: true
         });
         return false;

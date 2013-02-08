@@ -34,7 +34,7 @@ Yasound.Views.BlogPost = Backbone.View.extend({
 
     onSelected: function (e) {
         e.preventDefault();
-        Yasound.App.Router.navigate('blog/' + this.model.get('slug') + '/', {
+        Yasound.App.Router.navigate('news/' + this.model.get('slug') + '/', {
             trigger: true
         });
     },
@@ -94,7 +94,7 @@ Yasound.Views.BlogPostTeaser = Backbone.View.extend({
 
     onSelected: function (e) {
         e.preventDefault();
-        Yasound.App.Router.navigate('blog/' + this.model.get('slug') + '/', {
+        Yasound.App.Router.navigate('news/' + this.model.get('slug') + '/', {
             trigger: true
         });
     },
@@ -254,7 +254,7 @@ Yasound.Views.BlogPage = Backbone.View.extend({
 
     onBack: function (e) {
         e.preventDefault();
-        Yasound.App.Router.navigate('blog/', {
+        Yasound.App.Router.navigate('news/', {
             trigger: true
         });
     }

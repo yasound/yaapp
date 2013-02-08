@@ -246,8 +246,8 @@ $(document).ready(function () {
             "jobs/": "jobs",
             "press/": "press",
             "selection/:genre/": "index",
-            "blog/": "blogs",
-            "blog/:slug/": "blog",
+            "news/": "blogs",
+            "news/:slug/": "blog",
             "*args": "index"
         },
         initialize: function() {

@@ -291,7 +291,7 @@ urlpatterns = patterns('',
 
     # blog
     (r'^api/v1/blog/', include('yablog.urls')),
-    url(r'^blog/rss/$',  LatestPostFeed(), name='blog_post_rss'),
+    url(r'^news/rss/$',  LatestPostFeed(), name='blog_post_rss'),
 
     # yaref (fuzzy, ..)
     (r'^yaref/', include('yaref.urls')),
