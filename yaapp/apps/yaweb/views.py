@@ -121,6 +121,10 @@ def valentine_2013(request, template_name='yaweb/valentine_2013.html'):
     return render_to_response(template_name, {
     }, context_instance=RequestContext(request))
 
+def valentine_2013_iphone(request, template_name='yaweb/valentine_2013_iphone.html'):
+    return render_to_response(template_name, {
+    }, context_instance=RequestContext(request))
+
 def premium_win(request, template_name='yaweb/premium_win.html'):
     return render_to_response(template_name, {
         'current_page': 'premium_win',
