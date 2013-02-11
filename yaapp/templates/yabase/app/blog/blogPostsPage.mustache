@@ -3,7 +3,7 @@
 <div class="container-fluid content-zone">
     <div class='row-fluid'>
         <a href='{% url blog_post_rss %}' class='blog-rss'><i class="icon-rss icon-large"></i> {% trans "RSS" %}</a>
-        <h1>News</h1>
+        <h1><a href='{% app_url webapp app_name %}' class='home'>{% trans "Home" %}</a> <i class='icon-angle-right'></i> News</h1>
     </div>
 </div>
 

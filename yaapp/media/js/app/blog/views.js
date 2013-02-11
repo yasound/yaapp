@@ -165,6 +165,7 @@ Yasound.Views.BlogPosts = Backbone.View.extend({
 Yasound.Views.BlogsPage = Backbone.View.extend({
     collection: new Yasound.Data.Models.BlogPosts({}),
     events: {
+        'click a.home': 'onHome'
     },
 
     initialize: function() {
@@ -198,12 +199,21 @@ Yasound.Views.BlogsPage = Backbone.View.extend({
             this.collection.fetch();
         }
         return this;
+    },
+
+    onHome: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/', {
+            trigger: true
+        });
     }
+
 });
 
 Yasound.Views.BlogPage = Backbone.View.extend({
     events: {
-        'click a.back': 'onBack'
+        'click a.back': 'onBack',
+        'click a.home': 'onHome'
     },
 
     initialize: function() {
@@ -255,6 +265,13 @@ Yasound.Views.BlogPage = Backbone.View.extend({
     onBack: function (e) {
         e.preventDefault();
         Yasound.App.Router.navigate('news/', {
+            trigger: true
+        });
+    },
+
+    onHome: function (e) {
+        e.preventDefault();
+        Yasound.App.Router.navigate('/', {
             trigger: true
         });
     }
