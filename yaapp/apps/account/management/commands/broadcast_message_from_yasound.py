@@ -29,8 +29,7 @@ class Command(BaseCommand):
 
         if url_param is not None:
             UserProfile.objects.broadcast_message_from_yasound(url_param)
-
-        if text:
+        elif text:
             from_id = 1
             radio = None
             profiles = UserProfile.objects.all()
