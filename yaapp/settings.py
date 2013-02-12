@@ -716,7 +716,7 @@ if LOCAL_MODE:
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
     if hostname in ['yas-dev-01', 'yas-dev-02']:
-        YASOUND_STREAM_SERVER_URL = 'http://%s.ig-1.net:8000/' % (hostname)
+        YASOUND_STREAM_SERVER_URL = 'http://%s.ig-1.net:7999/' % (hostname)
         YASOUND_NEW_STREAM_SERVER_URL = 'http://%s.ig-1.net:8000/' % (hostname)
         YASOUND_RADIO_WEB_URL = 'http://%s.ig-1.net/listen/' % (hostname)
     else:
