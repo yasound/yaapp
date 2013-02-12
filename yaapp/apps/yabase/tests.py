@@ -121,6 +121,22 @@ class TestAdditionalInformations(TestCase):
         self.assertEquals(doc.get('wall_layout').get('display'), 'radio')
         self.assertEquals(doc.get('wall_layout').get('fx'), 'blur')
 
+    def test_new_stream_url(self):
+        radio = Radio(creator=self.user, name='radio1')
+        radio.save()
+        radio.set_new_streamer(True)
+        url = radio.stream_url
+        self.assertEquals(url, '%s%s' % (settings.YASOUND_NEW_STREAM_SERVER_URL, radio.uuid))
+
+        radio.set_new_streamer(False)
+        url = radio.stream_url
+        self.assertEquals(url, '%s%s' % (settings.YASOUND_STREAM_SERVER_URL, radio.uuid))
+
+        radio.url = 'foo'
+        radio.save()
+        url = radio.stream_url
+        self.assertEquals(url, 'foo')
+
 
 class TestDatabase(TestCase):
     multi_db = True

@@ -1324,7 +1324,17 @@ class Radio(models.Model):
     @property
     def stream_url(self):
         url = self.url
-        if url is None or url == '':
+        if url != '' and url is not None:
+            return url
+
+        m = RadioAdditionalInfosManager()
+        query = {
+            'db_id': self.uuid,
+            'new_streamer': True
+        }
+        if m.collection.find_one(query) is not None:
+            url = yaapp_settings.YASOUND_NEW_STREAM_SERVER_URL + self.uuid
+        else:
             url = yaapp_settings.YASOUND_STREAM_SERVER_URL + self.uuid
         return url
 
