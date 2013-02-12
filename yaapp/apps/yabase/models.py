@@ -1392,6 +1392,10 @@ class Radio(models.Model):
             new_playlist.save()
         return new_radio
 
+    def set_new_streamer(self, new_streamer=True):
+        m = RadioAdditionalInfosManager()
+        m.add_information(self.uuid, 'new_streamer', new_streamer)
+
     def set_live(self, enabled=False, name=None, album=None, artist=None, id=None):
         key = 'radio_%s.live' % (str(self.id))
         current_song_key = 'radio_%s.current_song.json' % (str(self.id))
@@ -2042,6 +2046,7 @@ class RadioAdditionalInfosManager():
         self.db = yaapp_settings.MONGO_DB
         self.collection = self.db.yabase.radios
         self.collection.ensure_index('db_id', unique=True)
+        self.collection.ensure_index('new_streamer', unique=False)
 
     def erase_informations(self):
         self.collection.drop()
