@@ -1,3 +1,7 @@
+"""
+Asynchronous tasks for managing Facebook Graph API actions.
+"""
+
 from account.models import UserProfile
 from celery.task import task
 from django.conf import settings
@@ -39,6 +43,8 @@ def async_post_message(user_id, radio_uuid, message):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_post_message: %s' % e)
+    except GraphAPI.HTTPError, e:
+        logger.error('async_post_message: %s' % e)
     async_rescrape.apply_async(args=[radio_uuid], countdown=30)
     logger.debug('done')
 
@@ -63,6 +69,8 @@ def async_listen(user_id, radio_uuid, song_title, song_id):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_listen: %s' % e)
+    except GraphAPI.HTTPError, e:
+        logger.error('async_listen: %s' % e)
     async_rescrape.apply_async(args=[radio_uuid, song_id], countdown=30)
     logger.debug('done')
 
@@ -84,6 +92,8 @@ def async_like_song(user_id, radio_uuid, song_title, song_id):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_like_song: %s' % e)
+    except GraphAPI.HTTPError, e:
+        logger.error('async_like_song: %s' % e)
     async_rescrape.apply_async(args=[radio_uuid, song_id], countdown=30)
 
 
@@ -103,11 +113,17 @@ def async_animator_activity(user_id, radio_uuid):
         logger.debug(res)
     except GraphAPI.FacebookError, e:
         logger.error('async_animator_activity: %s' % e)
+    except GraphAPI.HTTPError, e:
+        logger.error('async_animator_activity: %s' % e)
     async_rescrape.apply_async(args=[radio_uuid], countdown=30)
 
 
 @task(rate_limit='50/s', ignore_result=True)
 def async_rescrape(radio_uuid, song_id=None):
+    """
+    rescrape a facebook graph object to force a refresh.
+    """
+
     if song_id is not None:
         url = absolute_url(reverse('webapp_default_radio_song', args=[radio_uuid, song_id]))
     else:
@@ -118,4 +134,7 @@ def async_rescrape(radio_uuid, song_id=None):
         'scrape': True
     }
     logger.debug('async_rescrape: params=%s' % (params))
-    requests.post('https://graph.facebook.com', params=params)
+    try:
+        requests.post('https://graph.facebook.com', params=params)
+    except Exception, e:
+        logger.error('async_rescrape: %s' % e)
