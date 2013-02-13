@@ -1248,13 +1248,15 @@ def web_social_widget(request, radio_uuid_or_slug, wtype=None, template_name='ya
     radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     enable_push = settings.ENABLE_PUSH
     push_url = _get_push_url(request)
+    root = '/%s/social_widget/%s/' % (request.LANGUAGE_CODE, radio_uuid_or_slug)
 
     return render_to_response(template_name, {
         'radio': radio,
         'enable_push': enable_push,
         'current_uuid': radio.uuid,
         'push_url': push_url,
-        'app_name': 'app'
+        'app_name': 'app',
+        'root': root,
     }, context_instance=RequestContext(request))
 
 

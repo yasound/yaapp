@@ -20,7 +20,8 @@ Yasound.Views.Share = Backbone.View.extend({
             'generateTwitterText',
             'radioUrl',
             'generateFacebookText',
-            'refreshWidgetCode');
+            'refreshWidgetCode',
+            'refreshSocialWidgetCode');
     },
 
     onClose: function() {
@@ -36,6 +37,7 @@ Yasound.Views.Share = Backbone.View.extend({
 
         this.generateSocialShare();
         this.refreshWidgetCode();
+        this.refreshSocialWidgetCode();
         return this;
     },
 
@@ -141,5 +143,14 @@ Yasound.Views.Share = Backbone.View.extend({
         code = '<iframe frameborder="0" height="' + size + '" scrolling="no" src="' + url + '"></iframe>';
         $('#widget').val(code);
         this.code = code;
+    },
+
+    refreshSocialWidgetCode: function () {
+        var url = 'https://yasound.com/social_widget/' + this.radio.get('slug') + '/';
+        var size = 680;
+        code = '<iframe frameborder="0" height="' + size + '" scrolling="no" src="' + url + '"></iframe>';
+        $('#social-widget').val(code);
+        this.code = code;
     }
+
 });

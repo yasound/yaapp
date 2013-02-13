@@ -54,25 +54,6 @@ $(document).ready(function () {
         }
     }
 
-
-    $.subscribe('/programming/upload_started', function () {
-        Yasound.App.uploadCount = Yasound.App.uploadCount + 1;
-    });
-    $.subscribe('/programming/upload_stopped', function () {
-        Yasound.App.uploadCount = Yasound.App.uploadCount - 1;
-    });
-    $.subscribe('/programming/upload_finished', function () {
-        Yasound.App.uploadCount = Yasound.App.uploadCount - 1;
-    });
-    $.subscribe('/programming/upload_failed', function () {
-        Yasound.App.uploadCount = Yasound.App.uploadCount - 1;
-    });
-
-    $(window).bind('beforeunload', function() {
-        if (Yasound.App.uploadCount > 0) {
-            return gettext('Unfinished uploads are pending, do you really want to leave Yasound?');
-        }
-    });
     var $win = $(window);
     $.fn.scrollBottom = function() {
         return $(document).height() - this.scrollTop() - this.height();
@@ -95,50 +76,6 @@ $(document).ready(function () {
      * component initalization
      */
     $('.dropdown-toggle').dropdown();
-
-    $('#btn-webapp').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('', {
-            trigger: true
-        });
-    });
-    $('#btn-legal').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('legal/', {
-            trigger: true
-        });
-    });
-    $('#btn-contact').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('contact/', {
-            trigger: true
-        });
-    });
-    $('#btn-about').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('about/', {
-            trigger: true
-        });
-    });
-    $('#btn-help').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('help/', {
-            trigger: true
-        });
-    });
-    $('#btn-press').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('press/', {
-            trigger: true
-        });
-    });
-    $('#btn-jobs').click(function(e) {
-        e.preventDefault();
-        Yasound.App.Router.navigate('jobs/', {
-            trigger: true
-        });
-    });
-
 
     Backbone.View.prototype.close = function () {
         if (this.sticky) {
@@ -164,47 +101,6 @@ $(document).ready(function () {
     }
 
     /**
-     * Sound engine initialization
-     */
-    if (g_sound_player === 'soundmanager') {
-        Yasound.App.player = Yasound.Player.SoundManager();
-        Yasound.App.instantPlayer = Yasound.Player.InstantPlayer();
-    } else if (g_sound_player === 'deezer') {
-        Yasound.App.player = Yasound.Player.Deezer();
-    }
-
-    if (Yasound.App.appName === 'deezer') {
-        //g_enable_push = false;
-
-        $.ajaxPrefilter( function( options ) {
-            if (options.url.indexOf('/api/') === 0) {
-                options.url = "https://yasound.com" + options.url;
-                options.xhrFields = {
-                    withCredentials: true
-               };
-            }
-        });
-
-        $(document).on('DOMSubtreeModified', function() {
-            var container = $('#main-content');
-            var footer = $('#footer');
-            var documentHeight = container.height() + footer.height() + 112;
-            DZ.ready(function() {
-                DZ.canvas.setSize(documentHeight);
-            });
-        });
-    }
-
-    $('#hommage a').on('click', function (e) {
-        e.preventDefault();
-        var uuid = $(e.target).data('uuid');
-        Yasound.App.Router.navigate('radio/' + uuid + '/', {
-            trigger: true
-        });
-        $('#anon-alert').hide();
-    });
-
-    /**
      * Application controller
      */
     Yasound.App.Workspace = Backbone.Router.extend({
@@ -214,7 +110,7 @@ $(document).ready(function () {
             "signup/*args": "signup",
             "login/": "login",
             "lostpassword/": "passreset",
-            "*args": "index"
+            "*args": "otherLinks"
         },
 
         initialize: function() {
@@ -365,6 +261,15 @@ $(document).ready(function () {
             this.currentView = new Yasound.Views.PassResetPage({
                 el: Yasound.App.CONTENT_EL
             }).render();
+        },
+
+        otherLinks: function(args) {
+            var url = '/' + args;
+            window.open(url, '_blank');
+            Yasound.App.Router.navigate('/', {
+                trigger: false,
+                replace: true
+            });
         }
 
     });

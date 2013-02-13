@@ -9127,6 +9127,50 @@ ul .track-container {
   width: 72px;
   height: 66px;
 }
+/*
+ * Modal share
+ */
+#modal-share .modal-body {
+  max-height: 400px;
+}
+#modal-share ul {
+  margin-left: 0;
+  margin-top: 16px;
+  list-style: none;
+  width: 100%;
+}
+#modal-share ul li {
+  float: left;
+  width: 190px;
+  margin-bottom: 12px;
+}
+#modal-share ul li:first-child {
+  margin-right: 20px;
+}
+#modal-share label {
+  margin-top: 12px;
+}
+#modal-share #widget,
+#modal-share #social-widget {
+  width: 100%;
+  height: 55px;
+  font-size: 14px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+#modal-share #stream {
+  width: 100%;
+  font-size: 14px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+#modal-share .checkbox.inline {
+  width: 120px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+#modal-share .label-title {
+  font-size: 14px;
+  font-weight: bold;
+}
 @media (max-width: 480px) {
   .teaser .argument {
     bottom: 115px;
