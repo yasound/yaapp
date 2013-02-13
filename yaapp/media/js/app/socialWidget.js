@@ -109,7 +109,6 @@ $(document).ready(function () {
             "signup/": "signup",
             "signup/*args": "signup",
             "login/": "login",
-            "lostpassword/": "passreset",
             "*args": "otherLinks"
         },
 

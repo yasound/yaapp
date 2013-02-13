@@ -35,7 +35,7 @@ from account.forms import WebAppSignupForm, LoginForm, PasswordResetForm
 from yacore.api import api_response, MongoAwareEncoder
 from yacore.binary import BinaryData
 from yacore.decorators import check_api_key
-from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone, is_deezer
+from yacore.http import check_api_key_Authentication, check_http_method, absolute_url, is_iphone, is_deezer, get_push_url
 from yacore.geoip import request_country, request_city_record
 from yamessage.models import NotificationsManager
 from yametrics.models import GlobalMetricsManager
@@ -1231,23 +1231,10 @@ def web_widget(request, radio_uuid_or_slug, wtype=None, template_name='yabase/wi
     }, context_instance=RequestContext(request))
 
 
-def _get_push_url(request):
-    if 'HTTP_HOST' not in request.META:
-        return None
-
-    host = request.META['HTTP_HOST']
-    protocol = settings.DEFAULT_HTTP_PROTOCOL
-    if ':' in host:
-        host = host[:host.find(':')]
-
-    url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
-    return url
-
-
 def web_social_widget(request, radio_uuid_or_slug, wtype=None, template_name='yabase/social_widget.html'):
     radio = Radio.objects.get_or_404(radio_uuid_or_slug)
     enable_push = settings.ENABLE_PUSH
-    push_url = _get_push_url(request)
+    push_url = get_push_url(request)
     root = '/%s/social_widget/%s/' % (request.LANGUAGE_CODE, radio_uuid_or_slug)
     external_login = True
     return render_to_response(template_name, {
@@ -1265,6 +1252,26 @@ def web_social_widget_login(request, radio_uuid_or_slug):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid() and form.login(request):
+            data = {
+                'success': True
+            }
+            response = json.dumps(data)
+            return HttpResponse(response, mimetype='application/json')
+        else:
+            data = {
+                'success': False,
+                'errors': form.errors
+            }
+            response = json.dumps(data)
+            return HttpResponse(response, mimetype='application/json')
+    raise Http404
+
+
+def web_social_widget_signup(request, radio_uuid_or_slug):
+    if request.method == 'POST':
+        form = WebAppSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
             data = {
                 'success': True
             }
@@ -1348,22 +1355,6 @@ class WebAppView(View):
                     return False, HttpResponseRedirect(reverse('yabase.views.web_listen', args=[radio_uuid]))
                 raise Http404
         return True, None
-
-    def _get_push_url(self, request):
-        """
-        return absolute url (with port) of push server
-        """
-
-        if 'HTTP_HOST' not in request.META:
-            return None
-
-        host = request.META['HTTP_HOST']
-        protocol = settings.DEFAULT_HTTP_PROTOCOL
-        if ':' in host:
-            host = host[:host.find(':')]
-
-        url = '%s://%s:%d/' % (protocol, host, settings.YASOUND_PUSH_PORT)
-        return url
 
     def _ajax_success(self):
         data = {
@@ -1838,7 +1829,7 @@ class WebAppView(View):
         else:
             user_profile = None
 
-        push_url = self._get_push_url(request)
+        push_url = get_push_url(request)
         enable_push = settings.ENABLE_PUSH
 
         facebook_share_picture = absolute_url(settings.FACEBOOK_SHARE_PICTURE)
@@ -1934,7 +1925,7 @@ class WebAppView(View):
 
         user_profile = None
         notification_count = 0
-        push_url = self._get_push_url(request)
+        push_url = get_push_url(request)
         enable_push = settings.ENABLE_PUSH
 
         my_informations_form = None

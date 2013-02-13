@@ -285,6 +285,7 @@ urlpatterns = patterns('',
 
     (r'^social_widget/(?P<radio_uuid_or_slug>[\w-]+)/$', 'yabase.views.web_social_widget'),
     (r'^social_widget/(?P<radio_uuid_or_slug>[\w-]+)/login/$', 'yabase.views.web_social_widget_login'),
+    (r'^social_widget/(?P<radio_uuid_or_slug>[\w-]+)/signup/$', 'yabase.views.web_social_widget_signup'),
 
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),

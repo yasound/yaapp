@@ -50,6 +50,7 @@ Yasound.Views.WallInput = Backbone.View.extend({
     tagName: 'div',
     events: {
         "click input[type='submit']" : "submit",
+        "click .wall-input-container .pic": "onProfile",
         "keypress textarea" : "onWallInputChanged"
     },
 
@@ -80,6 +81,18 @@ Yasound.Views.WallInput = Backbone.View.extend({
         if (val.length > 0) {
             $("input[type='submit']", this.el).removeAttr('disabled');
         }
+    },
+
+    onProfile: function (e) {
+        e.preventDefault();
+
+        var page = 'login/';
+        if (Yasound.App.userAuthenticated) {
+            page = 'profile/' + Yasound.App.username + '/';
+        }
+        Yasound.App.Router.navigate(page, {
+            trigger: true
+        });
     },
 
     refreshWall: function (e) {
