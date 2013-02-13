@@ -17,6 +17,7 @@ from yabase.import_utils import SongImporter, generate_default_filename, \
 from yabase.models import FeaturedContent, Playlist, SongMetadata, WallEvent
 from yabase.task import process_playlists
 from yacore.database import atomic_inc
+from yacore.http import get_push_url
 from yacore.tags import clean_tags
 from yaref import test_utils as yaref_test_utils
 from yaref.models import YasoundAlbum, YasoundSong, YasoundArtist
@@ -82,13 +83,13 @@ class TestMisc(TestCase):
         wa = WebAppView()
         request = self.factory.get('/status/')
         request.META['HTTP_HOST'] = 'localhost:8000'
-        url = wa._get_push_url(request)
+        url = get_push_url(request)
 
         good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
         self.assertEquals(url, good_url)
 
         request.META['HTTP_HOST'] = 'localhost'
-        url = wa._get_push_url(request)
+        url = get_push_url(request)
 
         good_url = '%s://%s:%d/' % (settings.DEFAULT_HTTP_PROTOCOL, 'localhost', settings.YASOUND_PUSH_PORT)
         self.assertEquals(url, good_url)
