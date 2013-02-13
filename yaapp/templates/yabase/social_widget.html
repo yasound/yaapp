@@ -1,0 +1,718 @@
+{% load i18n %}
+{% load thumbnail %}
+{% load compressed %}
+{% load compress %}
+{% load app_url %}
+{% load straight_include %}<!DOCTYPE html>
+
+<!--[if lt IE 7 ]><html class="ie ie6"><![endif]-->
+<!--[if IE 7 ]><html class="ie ie7"><![endif]-->
+<!--[if IE 8 ]><html class="ie ie8"><![endif]-->
+<!--[if IE 9 ]><html class="ie ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html xml:lang="{{current_locale}}" lang="{{current_locale}}"><!--<![endif]-->
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# yasound: http://ogp.me/ns/fb/yasound#">
+    <title>{% block head_title %}{% if head_title %}{{ head_title}}{% else %}{% trans 'YaSound - Create your social web radio instantly' %}{% endif %}{% endblock %}</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    {% for code, url in alternate_language_urls %}
+    <link rel="alternate" hreflang="{{ code }}" href="{{ url }}" />
+    {% endfor %}
+    <link rel="icon" type="image/png" href="/media/app/images/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="{% block meta_description %}{% blocktrans %}With Yasound, there's no need to listen to music alone anymore. Create your own radio station instantly and share with your friends in real time.{% endblocktrans %}{% endblock%}" />
+    <meta name="Author" content="Yasound SAS" />
+    <meta name="copyright" content="Yasound SAS" />
+    <meta http-equiv="Cache-control" content="public" />
+    <meta name="language" content="french" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msvalidate.01" content="C65C6AAA7CF0D1B25A13007F8CD9E233" />
+
+<!--[if lt IE 9]>
+    <script type="text/javascript"
+     src="https://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+
+    <style>
+     .chromeFrameInstallDefaultStyle {
+       width: 100%; /* default is 800px */
+       border: 5px solid blue;
+     }
+    </style>
+
+    <script>
+     window.attachEvent("onload", function() {
+       CFInstall.check({
+          mode: "overlay"
+       });
+     });
+    </script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+<script type="text/javascript" type="text/javascript" src="/media/js/flot/excanvas.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript" src="//use.typekit.net/qfb4bbn.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+{% block extra_head %}
+    {% block fb_open_graph %}{% endblock %}
+
+    <link rel="image_src" href="/media/images/logos/yasound-grey.png" />
+
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+
+<style type="text/css">
+HTML, BODY { height: 100%; }
+#loading-mask {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: #f0f0f0;
+     z-index: 2000;
+}
+#loading {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     z-index: 2002;
+}
+#loading span {
+     background: url('/media/images/loader-gray.gif') no-repeat left center;
+     padding: 5px 30px;
+     position:relative;
+     margin:0 auto;
+     left:-60px;
+     top:-20px;
+     display: block;
+     color: black;
+}
+</style>
+
+
+
+    {% compress css %}
+    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/media/bootstrap/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="/media/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/media/css/flashblock.css"/>
+    <link rel="stylesheet" href="/media/css/auth-buttons.css"/>
+    <link rel="stylesheet" href="/media/jquery-ui-1.8.21.custom/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>
+	   <link rel="stylesheet" href="/media/css/uniform.yasound.css/uniform.yasound.css" />
+
+    <link rel="stylesheet" href="/media/css/pygments/github.css" />
+
+    <link rel="stylesheet" href="/media/js/colibri/colibri.css"/>
+    <link rel="stylesheet" href="/media/js/chosen/chosen.css"/>
+    <link rel="stylesheet" href="/media/css/bootstrap-toggle-buttons.css"/>
+
+    <link rel="stylesheet" href="/media/datepicker/css/datepicker.css"/>
+
+    <link rel="stylesheet" href="/media/js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/media/css/webapp.css"/>
+    {% endcompress %}
+
+    {% ifequal app_name 'deezer' %}
+    <link rel="stylesheet" href="http://cdn-files.deezer.com/css/dz.css"/>
+    <link rel="stylesheet" href="/media/css/deezer.css"/>
+    {% endifequal %}
+
+{% compress js %}
+    <script type="text/javascript" src='/media/js/jquery-1.7.1.min.js'></script>
+    <script type="text/javascript" src='/media/js/jquery.timers.js'></script>
+    <script type="text/javascript" src='/media/js/moment.min.js'></script>
+    <script type="text/javascript" src='/media/js/moment-lang-all.min.js'></script>
+    <script type="text/javascript" src='/media/js/json2.js'></script>
+    <script type="text/javascript" src='/media/js/mustache-django-friendly.js'></script>
+    <script type="text/javascript" src='/media/js/ICanHaz-no-mustache.min.js'></script>
+    <script type="text/javascript" src='/media/js/underscore-min.js'></script>
+    <script type="text/javascript" src='/media/js/underscore.string.min.js'></script>
+    <script type="text/javascript" src='/media/js/backbone-min.js'></script>
+    <script type="text/javascript" src='/media/js/backbone-tastypie.js'></script>
+    <script type="text/javascript" src='/media/js/backbone.paginator.js'></script>
+    <script type="text/javascript" src='/media/bootstrap/js/bootstrap.min.js'></script>
+    <script type="text/javascript" src='/media/js/pubsub.js'></script>
+    <script type="text/javascript" src='/media/js/Namespace.js'></script>
+    <script type="text/javascript" src='/media/js/colibri/colibri.js'></script>
+    <script type="text/javascript" src='/media/js/chosen/chosen.jquery.min.js'></script>
+    <script type="text/javascript" src="/media/js/jquery.imgr.min.js"></script>
+    <script type="text/javascript" src="/media/jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="/media/js/cookies.js"></script>
+    <script type="text/javascript" type="text/javascript" src="/media/js/flot/jquery.flot.js"></script>
+    <script type="text/javascript" type="text/javascript" src="/media/js/flot/jquery.flot.selection.js"></script>
+    <script language="javascript" type="text/javascript" src="/media/js/flot/jquery.flot.resize.js"></script>
+    <script src="/media/js/jquery.toggle.buttons.js" type="text/javascript"></script>
+    <script src="/media/js/jquery.uniform.js" type="text/javascript"></script>
+    <script src="/media/datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="/media/datepicker/js/locales/bootstrap-datepicker.fr.js" type="text/javascript" charset="UTF-8"></script>
+    <script type="text/javascript" src="/media/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+{% endcompress %}
+
+
+  <script src="https://apis.google.com/js/client.js"></script>
+
+
+    {% ifequal sound_player 'deezer' %}
+    <script type="text/javascript" src="http://cdn-files.deezer.com/js/min/dz.js"></script>
+    {% endifequal %}
+
+
+
+    <script type="text/javascript" src='/media/js/socket.io.js'></script>
+
+    <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!-- The Templates plugin is included to render the upload/download listings -->
+
+    <script src="/media/blueimp/js/jquery.iframe-transport.js"></script>
+    <script src="/media/blueimp/js/jquery.fileupload.js"></script>
+    <script src="/media/blueimp/js/locale.js"></script>
+    <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
+    <!--[if gte IE 8]><script src="/media/blueimp/js/cors/jquery.xdr-transport.js"></script><![endif]-->
+    <script src="/media/js/load-image.min.js"></script>
+
+
+	<!--[if (gte IE 6)&(lte IE 8)]>
+	  <script type="text/javascript" src="/media/js/selectivizr-min.js"></script>
+	  <link rel="stylesheet" href="/media/css/ie.css" />
+      <link rel="stylesheet" href="/media/css/ie.css" />
+	<![endif]-->
+
+    {% compress js %}
+    <script type="text/javascript" src='/media/js/app/common/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/common/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/mobileMenus/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/radio/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/radio/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/myRadios/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/myRadios/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/newRadio/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/newRadio/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/search/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/search/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/favorites/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/favorites/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/top/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/top/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/friends/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/friends/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/profile/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/profile/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/settings/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/settings/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/notifications/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/notifications/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/users/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/users/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/deezer/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/deezer/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/signup/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/signup/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/login/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/login/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/passreset/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/home/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/home/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/gifts/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/gifts/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/tutorial/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/teaser/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/static/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/static/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/share/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/templateLoader.js'></script>
+    <script type="text/javascript" src='/media/js/app/push.js'></script>
+    <script type="text/javascript" src='/media/js/app/nativeBridge.js'></script>
+    <script type="text/javascript" src='/media/js/app/utils.js'></script>
+    <script type="text/javascript" src='/media/js/app/error.js'></script>
+    <script type="text/javascript" src='/media/js/app/soundPlayer.js'></script>
+    <script type="text/javascript" src='/media/js/app/deezer.js'></script>
+    <script type="text/javascript" src='/media/js/app/socialWidget.js'></script>
+    {% endcompress %}
+
+
+    <script type="text/javascript">
+       moment.lang('{{request.LANGUAGE_CODE}}');
+       var g_root = '{{ root }}';
+       var g_app_name = '{{ app_name }}';
+       var g_page = '{{ page }}';
+       var g_authenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+       var g_username = '{% if request.user.is_authenticated %}{{request.user.username}}{% endif %}';
+       var g_push_url = '{{ push_url }}';
+       var g_enable_push = {% if enable_push %}true{% else %}false{% endif %};
+       var g_facebook_share_picture = '{{ facebook_share_picture}}';
+       var g_facebook_share_link = '{{ facebook_share_link}}';
+       var g_has_radios = {% if has_radios %}true{% else %}false{% endif %};
+       var g_page = '{{ g_page }}';
+       var g_bootstrapped_data = {% if bdata %}{{ bdata|safe }}{% else %}undefined{% endif %};
+       var g_next_url = {% if next_url %}'{{ next_url|safe }}'{% else %}undefined{% endif %};
+       var g_base_url = {% if base_url %}'{{ base_url|safe }}'{% else %}undefined{% endif %};
+       var g_default_radio_uuid = '{{ current_uuid }}';
+       var g_ignore_radio_cookie = {% if ignore_radio_cookie %}true{% else %}false{% endif %};
+       var g_sound_player = '{{ sound_player }}';
+       var g_show_welcome_popup = {% if show_welcome_popup %}true{% else %}false{% endif %};
+       var g_hd_enabled = {% if hd_enabled %}true{% else %}false{% endif %};
+       {% if twitter_referal %}
+       var g_twitter_referal = '{{ twitter_referal|safe }}';
+       {% endif %}
+       {% if email_referal %}
+       var g_email_referal = '{{ email_referal|safe }}';
+       {% endif %}
+
+       var g_language_code = '{{request.LANGUAGE_CODE}}';
+       {% if announcement %}
+       var g_announcement_id = {{ announcement.id }};
+       {% else %}
+       var g_announcement_id;
+       {% endif %}
+
+       var g_jm_radio = '{{ jm_radio_uuid }}';
+    </script>
+
+
+   <script type="text/html" id="radioTemplate">
+      {% include "yabase/app/radio/radio.mustache" with radio=None %}
+   </script>
+   <script type="text/html" id="trackInRadioTemplate">
+      {% include "yabase/app/radio/track.mustache" with yasound_song=None %}
+   </script>
+   <script type="text/html" id="giftTemplate">
+      {% include "yabase/app/gifts/gift.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestTemplate">
+      {% include "yabase/app/gifts/giftDigest.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestLastTemplate">
+      {% include "yabase/app/gifts/giftDigestLast.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestHDTemplate">
+      {% include "yabase/app/gifts/giftDigestHD.mustache" %}
+   </script>
+   <script type="text/html" id="giftDigestPromocodeTemplate">
+      {% include "yabase/app/gifts/giftDigestPromocode.mustache" %}
+   </script>
+   <script type="text/html" id="radioInlineTemplate">
+      {% include "yabase/app/programming/radioInline.mustache" with radio=None %}
+   </script>
+
+
+   <script type="text/html" id="trackTemplate">
+      {% include "yabase/app/track.mustache" with yasound_song=None %}
+   </script>
+
+   <script type="text/html" id="signupPageTemplate">
+      {% include "yabase/app/signup/signup.mustache" %}
+   </script>
+   <script type="text/html" id="loginPageTemplate">
+      {% include "yabase/app/login/login.mustache" %}
+   </script>
+
+   <script type='text/html' id='profilePageTemplate'>
+     {% include "yabase/app/profile/profilePage.mustache" %}
+   </script>
+   <script type='text/html' id='likeCellTemplate'>
+     {% include "yabase/app/profile/likeCell.mustache" %}
+   </script>
+   <script type='text/html' id='userTemplate'>
+     {% include "yabase/app/profile/user.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioPageTemplate'>
+     {% include "yabase/app/radio/radioPage.mustache" with wall_events=None radio=radio%}
+   </script>
+
+   <script type='text/html' id='jmHeaderTemplate'>
+     {% include "yabase/app/radio/jmHeader.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioInfosTemplate'>
+     {% include "yabase/app/radio/radioInfos.mustache" with radio=None%}
+   </script>
+
+   <script type='text/html' id='radioCreatorTemplate'>
+     {% include "yabase/app/radio/radioCreator.mustache" with creator=None %}
+   </script>
+
+   <script type="text/html" id="wallEventLikeTemplate">
+      {% include "yabase/app/radio/wallEventLike.mustache" %}
+   </script>
+   <script type="text/html" id="wallEventMessageTemplate">
+      {% include "yabase/app/radio/wallEventMessage.mustache" %}
+   </script>
+
+   <script type="text/html" id="radioUserTemplate">
+      {% include "yabase/app/radio/radioUser.mustache" %}
+   </script>
+
+   <script type='text/html' id='paginationTemplate'>
+     {% include "yabase/app/pagination.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioCellTemplate'>
+      {% include "yabase/app/radioCell.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioCellTipTemplate'>
+     {% include "yabase/app/radioCellTip.mustache" %}
+   </script>
+
+   <script type='text/html' id='userCellTemplate'>
+     {% include "yabase/app/userCell.mustache" %}
+   </script>
+
+   <script type='text/html' id='searchPageTemplate'>
+     {% include "yabase/app/searchPage.mustache" %}
+   </script>
+
+   <script type='text/html' id='homePageTemplate'>
+     {% include "yabase/app/home/homePage.mustache" with selection=None top=None favorite=None%}
+   </script>
+
+   <script type="text/html" id="connectedUserTemplate">
+      {% include "yabase/app/common/connectedUser.mustache" with user=None%}
+   </script>
+
+   <script type='text/html' id='friendActivityTemplate'>
+     {% include "yabase/app/home/friendActivity.mustache" %}
+   </script>
+
+   <script type='text/html' id='radioActivityTemplate'>
+     {% include "yabase/app/home/radioActivity.mustache" %}
+   </script>
+
+   <script type="text/html" id="subMenuTemplate">
+      {% include "yabase/app/common/subMenu.mustache" %}
+   </script>
+
+
+   <script type='text/html' id='topRadiosPageTemplate'>
+     {% include "yabase/app/top/topRadiosPage.mustache" with radios=None %}
+   </script>
+
+   <script type='text/html' id='usersPageTemplate'>
+     {% include "yabase/app/users/usersPage.mustache" %}
+   </script>
+
+   <script type='text/html' id='userFavoritesPageTemplate'>
+     {% include "yabase/app/favorites/userFavoritesPage.mustache" %}
+   </script>
+   <script type='text/html' id='userFriendsPageTemplate'>
+     {% include "yabase/app/friends/userFriendsPage.mustache" %}
+   </script>
+   <script type='text/html' id='userFollowersPageTemplate'>
+     {% include "yabase/app/friends/userFollowersPage.mustache" %}
+   </script>
+   <script type='text/html' id='userLikesPageTemplate'>
+     {% include "yabase/app/profile/userLikesPage.mustache" %}
+   </script>
+   <script type='text/html' id='userRadiosPageTemplate'>
+     {% include "yabase/app/radio/userRadiosPage.mustache" %}
+   </script>
+
+   <script type='text/html' id='listenersPageTemplate'>
+     {% include "yabase/app/radio/listenersPage.mustache" %}
+   </script>
+
+   <script type='text/html' id='fansPageTemplate'>
+     {% include "yabase/app/radio/fansPage.mustache" %}
+   </script>
+
+   <script type='text/html' id='favoritesPageTemplate'>
+     {% include "yabase/app/favorites/favoritesPage.mustache" %}
+   </script>
+
+   <script type='text/html' id='friendsPageTemplate'>
+     {% include "yabase/app/friends/friendsPage.mustache" %}
+   </script>
+   <script type='text/html' id='googleContactTemplate'>
+     {% include "yabase/app/friends/googleContact.mustache" %}
+   </script>
+
+
+   <script type="text/html" id="wallInputTemplate">
+      {% include "yabase/app/radio/wallInput.mustache" %}
+   </script>
+{% if request.user.is_authenticated %}
+
+   <script type="text/html" id="notificationsPageTemplate">
+      {% include "yabase/app/notifications/notificationsPage.mustache" with notifications=None%}
+   </script>
+
+   <script type="text/html" id="notificationTemplate">
+      {% include "yabase/app/notifications/notification.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationDigestTemplate">
+      {% include "yabase/app/notifications/notificationDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationFriendOnlineDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendOnlineDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationMessageInWallDigestTemplate">
+      {% include "yabase/app/notifications/notificationMessageInWallDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationAddedFavoriteDigestTemplate">
+      {% include "yabase/app/notifications/notificationAddedFavoriteDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationSongLikedDigestTemplate">
+      {% include "yabase/app/notifications/notificationSongLikedDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationFriendCreatedRadioDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendCreatedRadioDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationFriendInRadioDigestTemplate">
+      {% include "yabase/app/notifications/notificationFriendInRadioDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationUserInRadioDigestTemplate">
+      {% include "yabase/app/notifications/notificationUserInRadioDigest.mustache" %}
+   </script>
+   <script type="text/html" id="notificationRadioSharedDigestTemplate">
+      {% include "yabase/app/notifications/notificationRadioSharedDigest.mustache" %}
+   </script>
+
+   <script type="text/html" id="notificationDigestLastTemplate">
+      {% include "yabase/app/notifications/notificationDigestLast.mustache" %}
+   </script>
+
+
+   <script type="text/html" id="programmingPageTemplate">
+      {% include "yabase/app/programming/programmingPage.mustache" %}
+   </script>
+   <script type="text/html" id="programmingStatusPageTemplate">
+      {% include "yabase/app/programming/statusPage.mustache" %}
+   </script>
+   <script type="text/html" id="playlistTemplate">
+      {% include "yabase/app/programming/playlist.mustache" %}
+   </script>
+   <script type="text/html" id="songInstancesTemplate">
+      {% include "yabase/app/programming/songInstances.mustache" %}
+   </script>
+   <script type="text/html" id="songInstanceCellTemplate">
+      {% include "yabase/app/programming/songInstanceCell.mustache" %}
+   </script>
+   <script type="text/html" id="programmingStatusCellTemplate">
+      {% include "yabase/app/programming/statusCell.mustache" %}
+   </script>
+   <script type="text/html" id="programmingStatusDetailsCellTemplate">
+      {% include "yabase/app/programming/statusDetailsCell.mustache" %}
+   </script>
+   <script type="text/html" id="programmingToolbarTemplate">
+      {% include "yabase/app/programming/programmingToolbar.mustache" %}
+   </script>
+   <script type="text/html" id="programmingFiltersTemplate">
+      {% include "yabase/app/programming/programmingFilters.mustache" %}
+   </script>
+   <script type="text/html" id="importFromItunesTemplate">
+      {% include "yabase/app/programming/importFromItunes.mustache" %}
+   </script>
+   <script type="text/html" id="importFromDeezerTemplate">
+      {% include "yabase/app/programming/deezer/importFromDeezer.mustache" %}
+   </script>
+   <script type="text/html" id="deezerPlaylistCellTemplate">
+      {% include "yabase/app/programming/deezer/playlistCell.mustache" %}
+   </script>
+   <script type="text/html" id="deezerTrackCellTemplate">
+      {% include "yabase/app/programming/deezer/trackCell.mustache" %}
+   </script>
+   <script type="text/html" id="programmingUploadTemplate">
+      {% include "yabase/app/programming/upload.mustache" %}
+   </script>
+   <script type="text/html" id="programmingUploadCellTemplate">
+      {% include "yabase/app/programming/uploadCell.mustache" %}
+   </script>
+   <script type="text/html" id="programmingAddFromServerTemplate">
+      {% include "yabase/app/programming/addFromServer.mustache" %}
+   </script>
+   <script type="text/html" id="yasoundSongCellTemplate">
+      {% include "yabase/app/programming/yasoundSongCell.mustache" %}
+   </script>
+
+
+{% endif %}
+   <script type='text/html' id='myRadiosPageTemplate'>
+     {% include "yabase/app/myRadios/myRadiosPage.mustache" %}
+   </script>
+   <script type='text/html' id='radioWithStatsCellTemplate'>
+     {% include "yabase/app/myRadios/radioWithStatsCell.mustache" %}
+   </script>
+
+   <script type='text/html' id='sharePageTemplate'>
+     {% include "yabase/app/radio/sharePage.mustache" %}
+   </script>
+
+{% endblock %}
+
+</head>
+<body id='yasound'>
+<div id="loading-mask" style="display:none;"></div>
+<div id="loading" style="display:none;">
+<span id="loading-message">{% trans "Loading application..." %}</span>
+</div>
+
+<!--[if ! lt IE 9]>
+<script type="text/javascript">
+//    document.getElementById('loading-message').innerHTML = "{% trans 'Yasound' %}";
+
+//    document.getElementById('loading-mask').style.removeProperty("display");
+//    document.getElementById('loading').style.removeProperty("display");
+</script>
+<![endif]-->
+
+{% block body %}
+
+<div id="fb-root"></div>
+<script>
+   window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ facebook_app_id }}', // App ID
+      channelUrl : '{{ facebook_channel_url }}',
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+ </script>
+
+
+<div class="modal hide fade" id="modal-share">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Share" %}</h3>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-unfollow">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Unfollow" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Do you really want to unfollow this user ?" %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "No thank you" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Yes i want" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-error">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Connection error" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Unable to connect Yasound server right now." %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Dismiss" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Reload page" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-error-disconnected">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "You are not logged in" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "You have to login to access the requested resource." %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Dismiss" %}</a>
+        <a href="#" class="btn btn-primary">{% trans "Go to login page" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-what-next">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Welcome to Yasound" %}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{% trans "Welcome to Yasound" %}
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-window">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Yasound</h3>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modal-dialog">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3></h3>
+    </div>
+    <div class="modal-body">
+        <p>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-cancel" data-dismiss="modal">{% trans "Cancel" %}</a>
+        <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Close" %}</a>
+    </div>
+</div>
+
+<div class="wrapper" id='main-content'>
+  <div class='content'>
+  {% block content%}{%endblock%}
+  </div>
+</div>
+
+</body>
+{% endblock %}
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27871295-2']);
+  _gaq.push(['_setDomainName', 'yasound.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</html>
+
