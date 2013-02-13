@@ -1062,6 +1062,7 @@ LOCALEURL_USE_ACCEPT_LANGUAGE = True
 LOCALE_INDEPENDENT_PATHS = (
     r'^/api/v1/*',
     r'^/deezer/*',
+    r'^/login/*',
     r'^/internal/*',
     r'^/tapjoy_callback/*',
     r'^/facebook_update/*',

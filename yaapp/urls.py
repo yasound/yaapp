@@ -283,7 +283,8 @@ urlpatterns = patterns('',
     (r'^widget/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)/$', 'yabase.views.web_widget'),
     (r'^widget/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)/(?P<wtype>\S+)', 'yabase.views.web_widget'),
 
-    (r'^social_widget/(?P<radio_uuid_or_slug>[\w-]+.*[\w-]*)/$', 'yabase.views.web_social_widget'),
+    (r'^social_widget/(?P<radio_uuid_or_slug>[\w-]+)/$', 'yabase.views.web_social_widget'),
+    (r'^social_widget/(?P<radio_uuid_or_slug>[\w-]+)/login/$', 'yabase.views.web_social_widget_login'),
 
     url(r'^buy_unavailable/$', 'yabase.views.buy_link_not_found', name='buy_link_not_found'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page": "/"}, name="logout"),
@@ -342,6 +343,7 @@ urlpatterns = patterns('',
 
 
     url(r'^deezer/close/$', 'yabase.views.close', name='close'),
+    url(r'^login/close/$', 'yabase.views.close', name='login_close'),
 
     (r'^attachments/', include('attachments.urls')),
 

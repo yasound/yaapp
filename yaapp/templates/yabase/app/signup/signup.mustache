@@ -13,20 +13,28 @@
     <div class='row-fluid signup-container'>
         <div class='span6'>
             <div class='social-btn'>
-                {% ifequal app_name 'deezer' %}
-                <a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target="_blank"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+                {% if external_login %}
+                    <a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={% url login_close %}" rel="nofollow" target="_blank"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
                 {% else %}
-		    	<a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
-                {% endifequal %}
+                    {% ifequal app_name 'deezer' %}
+                    <a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={% url close %}" rel="nofollow" target="_blank"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+                    {% else %}
+    		    	<a class='facebook' href="{% url socialauth_begin 'facebook' %}?next={{ root }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-facebook.png">{% trans 'Quick registration with Facebook' %}</a>
+                    {% endifequal %}
+                {% endif %}
     	    </div>
         </div>
         <div class="span6">
             <div class='social-btn'>
-                {% ifequal app_name 'deezer' %}
-                <a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target="_blank"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+                {% if external_login %}
+                    <a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={% url login_close %}" rel="nofollow" target="_blank"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
                 {% else %}
-		    	<a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
-                {% endifequal %}
+                    {% ifequal app_name 'deezer' %}
+                    <a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={% url close %}" rel="nofollow" target="_blank"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+                    {% else %}
+    		    	<a class='twitter' href="{% url socialauth_begin 'twitter' %}?next={{ root }}{{ next }}" rel="nofollow"><img src="/media/app/images/sign-up/signup-icon-twitter.png">{% trans 'Quick registration with Twitter' %}</a>
+                    {% endifequal %}
+                {% endif %}
     	    </div>
 	    </div>
     </div>

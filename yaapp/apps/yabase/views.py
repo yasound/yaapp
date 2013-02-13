@@ -1249,7 +1249,7 @@ def web_social_widget(request, radio_uuid_or_slug, wtype=None, template_name='ya
     enable_push = settings.ENABLE_PUSH
     push_url = _get_push_url(request)
     root = '/%s/social_widget/%s/' % (request.LANGUAGE_CODE, radio_uuid_or_slug)
-
+    external_login = True
     return render_to_response(template_name, {
         'radio': radio,
         'enable_push': enable_push,
@@ -1257,7 +1257,27 @@ def web_social_widget(request, radio_uuid_or_slug, wtype=None, template_name='ya
         'push_url': push_url,
         'app_name': 'app',
         'root': root,
+        'external_login': external_login,
     }, context_instance=RequestContext(request))
+
+
+def web_social_widget_login(request, radio_uuid_or_slug):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid() and form.login(request):
+            data = {
+                'success': True
+            }
+            response = json.dumps(data)
+            return HttpResponse(response, mimetype='application/json')
+        else:
+            data = {
+                'success': False,
+                'errors': form.errors
+            }
+            response = json.dumps(data)
+            return HttpResponse(response, mimetype='application/json')
+    raise Http404
 
 
 def web_song(request, radio_uuid_or_slug, song_instance_id, template_name='yabase/song.html'):
