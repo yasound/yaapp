@@ -1324,7 +1324,17 @@ class Radio(models.Model):
     @property
     def stream_url(self):
         url = self.url
-        if url is None or url == '':
+        if url != '' and url is not None:
+            return url
+
+        m = RadioAdditionalInfosManager()
+        query = {
+            'db_id': self.uuid,
+            'new_streamer': True
+        }
+        if m.collection.find_one(query) is not None:
+            url = yaapp_settings.YASOUND_NEW_STREAM_SERVER_URL + self.uuid
+        else:
             url = yaapp_settings.YASOUND_STREAM_SERVER_URL + self.uuid
         return url
 
@@ -1391,6 +1401,10 @@ class Radio(models.Model):
             new_playlist = playlist.duplicate(new_radio)
             new_playlist.save()
         return new_radio
+
+    def set_new_streamer(self, new_streamer=True):
+        m = RadioAdditionalInfosManager()
+        m.add_information(self.uuid, 'new_streamer', new_streamer)
 
     def set_live(self, enabled=False, name=None, album=None, artist=None, id=None):
         key = 'radio_%s.live' % (str(self.id))
@@ -2042,6 +2056,7 @@ class RadioAdditionalInfosManager():
         self.db = yaapp_settings.MONGO_DB
         self.collection = self.db.yabase.radios
         self.collection.ensure_index('db_id', unique=True)
+        self.collection.ensure_index('new_streamer', unique=False)
 
     def erase_informations(self):
         self.collection.drop()

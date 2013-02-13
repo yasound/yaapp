@@ -73,13 +73,21 @@ def album_cover(request, album_id):
 @csrf_exempt
 @check_api_key(methods=['POST'], login_required=False)
 def internal_songs(request):
+    from yabase.models import Radio, SongMetadata
     key = request.REQUEST.get('key')
     if key != settings.DOWNLOAD_KEY:
         raise Http404
     limit = int(request.REQUEST.get('limit', 10))
     skip = int(request.REQUEST.get('skip', 0))
+    radio_id = request.REQUEST.get('radio_id')
 
-    qs = YasoundSong.objects.all().order_by('id')[skip:skip + limit]
+    if radio_id:
+        radio = get_object_or_404(Radio, id=radio_id)
+        ids = SongMetadata.objects.filter(songinstance__playlist__radio=radio).values_list('yasound_song_id', flat=True)
+        qs = YasoundSong.objects.filter(id__in=list(ids))
+    else:
+        qs = YasoundSong.objects.all().order_by('id')[skip:skip + limit]
+
     data = []
     for song in qs:
         data.append(song.as_dict())

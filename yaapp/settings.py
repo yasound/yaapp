@@ -711,18 +711,22 @@ YASOUND_PUSH_PORT = 9000
 
 if LOCAL_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://streamer2.yasound.com:8000/'
+    YASOUND_NEW_STREAM_SERVER_URL = 'http://streamer1.yasound.com:8000/'
     YASOUND_RADIO_WEB_URL = 'http://localhost:8000/listen/'
     ENABLE_PUSH = True
 elif DEVELOPMENT_MODE:
     if hostname in ['yas-dev-01', 'yas-dev-02']:
-        YASOUND_STREAM_SERVER_URL = 'http://%s.ig-1.net:8000/' % (hostname)
+        YASOUND_STREAM_SERVER_URL = 'http://%s.ig-1.net:7999/' % (hostname)
+        YASOUND_NEW_STREAM_SERVER_URL = 'http://%s.ig-1.net:8000/' % (hostname)
         YASOUND_RADIO_WEB_URL = 'http://%s.ig-1.net/listen/' % (hostname)
     else:
         YASOUND_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
+        YASOUND_NEW_STREAM_SERVER_URL = 'http://dev.yasound.com:8000/'
         YASOUND_RADIO_WEB_URL = 'http://dev.yasound.com/listen/'
     ENABLE_PUSH = True
 elif PRODUCTION_MODE:
     YASOUND_STREAM_SERVER_URL = 'http://streamer2.yasound.com:8000/'
+    YASOUND_NEW_STREAM_SERVER_URL = 'http://streamer1.yasound.com:8000/'
     YASOUND_RADIO_WEB_URL = 'https://yasound.com/listen/'
     ENABLE_PUSH = True
     PUSH_REDIS_HOST = 'yas-sql-01'

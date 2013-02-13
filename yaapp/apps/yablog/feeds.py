@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 
 class LatestPostFeed(Feed):
     title = _("YaSound blog feed")
-    link = "/blog/feeds/"
+    link = "/news/feeds/"
     description = "Updates on changes and additions to yasound.com/blog."
 
     def items(self):

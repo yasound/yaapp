@@ -6846,6 +6846,11 @@ input::-ms-input-placeholder {
   bottom: 0;
   left: 60px;
 }
+.app-alert .alert-logo {
+  position: absolute;
+  bottom: 0;
+  left: 60px;
+}
 .block-title {
   font-size: 22px;
   color: #252627;
@@ -7796,6 +7801,9 @@ input::-ms-input-placeholder {
   color: #313234;
 }
 .blog-post-title {
+  font-size: 18px;
+}
+.blog-breadcrumb {
   font-size: 18px;
 }
 .blog-post-action .wall-event-action {
@@ -9114,6 +9122,11 @@ ul .track-container {
 #passreset-form label {
   display: none;
 }
+.k7 {
+  background: url('../app/images/K7.png');
+  width: 72px;
+  height: 66px;
+}
 @media (max-width: 480px) {
   .teaser .argument {
     bottom: 115px;
@@ -9155,6 +9168,15 @@ ul .track-container {
   #modal-search-results td:nth-child(2),
   #modal-search-results th:nth-child(2) {
     display: none;
+  }
+  .blog-post {
+    margin-left: 0px;
+    border: none;
+  }
+  .blog-post:after {
+    content: "";
+    position: absolute;
+    background: none;
   }
 }
 @media (max-width: 767px) {
@@ -9335,6 +9357,9 @@ ul .track-container {
     padding-left: 10px;
   }
   .asset-alert-app-logo {
+    display: none;
+  }
+  .alert-logo {
     display: none;
   }
   .content-alert {
@@ -9552,6 +9577,15 @@ ul .track-container {
   .content-table .rel-tag-right .hover {
     padding: 5px 4px;
   }
+  .blog-post {
+    margin-left: 0px;
+    border: none;
+  }
+  .blog-post:after {
+    content: "";
+    position: absolute;
+    background: none;
+  }
 }
 @media (min-width: 768px) and (max-width: 979px) {
   #search-bar {
@@ -9565,6 +9599,9 @@ ul .track-container {
     width: 60px;
   }
   .asset-alert-app-logo {
+    display: none;
+  }
+  .alert-logo {
     display: none;
   }
   .content-alert {
