@@ -7469,6 +7469,29 @@ input::-ms-input-placeholder {
   top: 0;
   right: 0;
 }
+.social-header {
+  margin-top: 20px;
+}
+.social-sub-header {
+  background: #fff;
+  border: 1px solid #E7E7E7;
+  -webkit-border-radius: 7px 7px 0 0;
+  -moz-border-radius: 7px 7px 0 0;
+  border-radius: 7px 7px 0 0;
+  border-top: none;
+  padding-top: 20px;
+  overflow: hidden;
+  height: 132px;
+  padding: 0;
+  position: relative;
+}
+.social-sub-header h1 {
+  position: absolute;
+  bottom: 25px;
+  left: 29%;
+  font-size: 39px;
+  z-index: 40;
+}
 .wall-covers-pics {
   width: 1100px;
   height: 100%;
