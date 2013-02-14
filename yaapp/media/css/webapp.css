@@ -9255,6 +9255,39 @@ ul .track-container {
     position: absolute;
     background: none;
   }
+  .wall-fav {
+    display: none;
+  }
+  .social-sub-header {
+    background: #fff;
+    border: 1px solid #E7E7E7;
+    -webkit-border-radius: 7px 7px 0 0;
+    -moz-border-radius: 7px 7px 0 0;
+    border-radius: 7px 7px 0 0;
+    border-top: none;
+    padding-top: 20px;
+    overflow: hidden;
+    height: 102px;
+    padding: 0;
+    position: relative;
+  }
+  .social-sub-header h1 {
+    position: absolute;
+    bottom: 25px;
+    left: 29%;
+    font-size: 24px;
+    z-index: 40;
+  }
+  .social-sub-header .powered-by-yasound {
+    display: block;
+    background: url('../images/logos/yasound-inline-black.png');
+    width: 32px;
+    height: 34px;
+    text-indent: -9999px;
+    position: absolute;
+    bottom: 28px;
+    right: 24px;
+  }
 }
 @media (max-width: 767px) {
   body {
@@ -9662,6 +9695,39 @@ ul .track-container {
     content: "";
     position: absolute;
     background: none;
+  }
+  .wall-fav {
+    display: none;
+  }
+  .social-sub-header {
+    background: #fff;
+    border: 1px solid #E7E7E7;
+    -webkit-border-radius: 7px 7px 0 0;
+    -moz-border-radius: 7px 7px 0 0;
+    border-radius: 7px 7px 0 0;
+    border-top: none;
+    padding-top: 20px;
+    overflow: hidden;
+    height: 102px;
+    padding: 0;
+    position: relative;
+  }
+  .social-sub-header h1 {
+    position: absolute;
+    bottom: 25px;
+    left: 29%;
+    font-size: 24px;
+    z-index: 40;
+  }
+  .social-sub-header .powered-by-yasound {
+    display: block;
+    background: url('../images/logos/yasound-inline-black.png');
+    width: 32px;
+    height: 34px;
+    text-indent: -9999px;
+    position: absolute;
+    bottom: 28px;
+    right: 24px;
   }
 }
 @media (min-width: 768px) and (max-width: 979px) {
