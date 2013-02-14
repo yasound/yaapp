@@ -283,6 +283,10 @@ class YasoundSongManager(models.Manager):
 
 
 class YasoundSong(models.Model):
+    """A song, associated with mp3 file.
+
+    """
+
     objects = YasoundSongManager()
     artist = models.ForeignKey(YasoundArtist, null=True, blank=True)
     album = models.ForeignKey(YasoundAlbum, null=True, blank=True)
