@@ -403,35 +403,6 @@ $(document).ready(function () {
         },
 
         index: function (genre) {
-            if (!this.alreadyLoaded) {
-                if (Yasound.App.LanguageCode === 'fr') {
-                    var isIpad = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i));
-                    var f = jQuery(".jeu-concours").fancybox({
-                        'speedIn' : 200,
-                        'speedOut' : 200,
-                        'padding': 0,
-                        'margin': 0,
-                        'width' : 728,
-                        'height' : 300,
-                        'scrolling': 'no',
-                        'overlayShow' : true,
-                        'type': 'iframe',
-                        onStart : function() {
-                            if (isIpad) {
-                                jQuery('object').hide();
-                            }
-                        },
-                        onClosed : function() {
-                            if (isIpad) {
-                                jQuery('object').show();
-                            }
-                        }
-                    });
-
-                    jQuery(".jeu-concours").trigger('click');
-                }
-            }
-
             this.clearView('selection');
 
             if (genre) {
