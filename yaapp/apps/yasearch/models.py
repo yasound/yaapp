@@ -573,7 +573,6 @@ def radio_metadata_updated_handler(sender, radio, **kwargs):
 
 
 def radio_new_current_song_handler(sender, radio, song_json, song, song_dict, **kwargs):
-    logger.info('radio %d has a new current song' % (radio.id))
     async_update_radio_current_song.delay(radio.id, song_dict)
 
 
