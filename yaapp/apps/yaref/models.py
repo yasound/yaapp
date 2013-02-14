@@ -26,6 +26,7 @@ logger = logging.getLogger("yaapp.yaref")
 if not 'db_name' in options.DEFAULT_NAMES:
     options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('db_name',)
 
+
 class YasoundArtist(models.Model):
     echonest_id = models.CharField(unique=True, max_length=20)
     lastfm_id = models.CharField(max_length=20, blank=True, null=True)
@@ -38,8 +39,10 @@ class YasoundArtist(models.Model):
     class Meta:
         db_table = u'yasound_artist'
         db_name = u'yasound'
+
     def __unicode__(self):
         return self.name
+
 
 class YasoundAlbum(models.Model):
     lastfm_id = models.CharField(unique=True, max_length=20, null=True, blank=True)
@@ -53,7 +56,7 @@ class YasoundAlbum(models.Model):
         if not self.cover_filename:
             return None
         short_url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
-                         yaref_utils.convert_filename_to_filepath(self.cover_filename))
+                              yaref_utils.convert_filename_to_filepath(self.cover_filename))
         print short_url
         try:
             return get_thumbnail(short_url, '64x64', crop='center').url
@@ -65,7 +68,7 @@ class YasoundAlbum(models.Model):
         if not self.cover_filename:
             return None
         short_url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
-                         yaref_utils.convert_filename_to_filepath(self.cover_filename))
+                              yaref_utils.convert_filename_to_filepath(self.cover_filename))
         try:
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
@@ -91,14 +94,18 @@ class YasoundAlbum(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class YasoundGenre(models.Model):
     name = models.CharField(max_length=45)
     name_canonical = models.CharField(unique=True, max_length=45)
+
     class Meta:
         db_table = u'yasound_genre'
         db_name = u'yasound'
+
     def __unicode__(self):
         return self.name
+
 
 class YasoundSongManager(models.Manager):
 
@@ -106,7 +113,6 @@ class YasoundSongManager(models.Manager):
     _max_song = None
 
     def test_fuzzy(self, limit=5):
-#        from yaref.models import *;YasoundSong.objects.test_fuzzy()
         import random
         from time import time
         count = 100
@@ -117,20 +123,21 @@ class YasoundSongManager(models.Manager):
         errors = 0
         start = time()
         for i, artist in enumerate(artist_records):
-            res = self.find_fuzzy(artist.name,  artist.album_name, artist.artist_name, limit=limit)
+            res = self.find_fuzzy(artist.name, artist.album_name, artist.artist_name, limit=limit)
             if res:
-                found +=1
+                found += 1
                 if res["db_id"] != artist.id:
                     if res["name"] != artist.name or res["artist"] != artist.artist_name or res["album"] != artist.album_name:
                         logger.debug("** error : %d instead of %d" % (res['db_id'], artist.id))
-                        logger.debug("** wrong = %s|%s|%s" % (res["name"],res["album"],res["artist"]))
-                        logger.debug("** real  = %s|%s|%s" % (artist.name,artist.album_name,artist.artist_name))
+                        logger.debug("** wrong = %s|%s|%s" % (res["name"], res["album"], res["artist"]))
+                        logger.debug("** real  = %s|%s|%s" % (artist.name, artist.album_name, artist.artist_name))
                         errors += 1
                         found -= 1
         elapsed = time() - start
         logger.debug('Complete search took ' + str(elapsed) + ' seconds')
-        logger.debug('Mean : ' + str(elapsed/count) + ' seconds')
-        logger.debug('Found : %d/%d (%d%%), errors = %d (%d%%)' % (found, count, 100*found/count, errors, 100*errors/count))
+        logger.debug('Mean : ' + str(elapsed / count) + ' seconds')
+        logger.debug(
+            'Found : %d/%d (%d%%), errors = %d (%d%%)' % (found, count, 100 * found / count, errors, 100 * errors / count))
         if self._max_song:
             song = self.get(id=self._max_song['db_id'])
             logger.debug('slowest song : %d:%s|%s|%s (%f)' % (song.id,
@@ -236,7 +243,8 @@ class YasoundSongManager(models.Manager):
     def search(self, search_text, offset=0, count=25, tolerance=0.75):
         limit = offset + count
 
-        songs = list(self.filter(Q(name_simplified__iexact=search_text) | Q(artist_name_simplified__iexact=search_text) | Q(album_name_simplified__iexact=search_text)))
+        songs = list(self.filter(Q(name_simplified__iexact=search_text) | Q(
+            artist_name_simplified__iexact=search_text) | Q(album_name_simplified__iexact=search_text)))
         exact_count = len(songs)
 
         if exact_count < limit:
@@ -256,9 +264,8 @@ class YasoundSongManager(models.Manager):
                     break
                 songs.append(YasoundSong.objects.get(id=song_id))
 
-        final_songs = songs[offset:offset+count]
+        final_songs = songs[offset:offset + count]
         return final_songs
-
 
     def get_cover_url(self, filename, size='64x64'):
         url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
@@ -267,7 +274,7 @@ class YasoundSongManager(models.Manager):
             return get_thumbnail(url, size, crop='center').url
         except:
             url = '%s%s' % (settings.ALBUM_COVER_SHORT_URL,
-                             yaref_utils.convert_filename_to_filepath(filename))
+                            yaref_utils.convert_filename_to_filepath(filename))
             try:
                 return get_thumbnail(url, size, crop='center').url
             except:
@@ -310,7 +317,6 @@ class YasoundSong(models.Model):
     quality = models.SmallIntegerField(blank=True, null=True)
     owner_id = models.IntegerField(blank=True, null=True)
 
-
     def generate_buy_link(self):
         return buylink.generate_buy_link(self.name, self.album_name, self.artist_name)
 
@@ -319,7 +325,7 @@ class YasoundSong(models.Model):
         if not self.cover_filename:
             return None
         short_url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
-                         yaref_utils.convert_filename_to_filepath(self.cover_filename))
+                              yaref_utils.convert_filename_to_filepath(self.cover_filename))
         try:
             return get_thumbnail(short_url, '64x64', crop='center').url
         except:
@@ -330,7 +336,7 @@ class YasoundSong(models.Model):
         if not self.cover_filename:
             return None
         short_url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
-                         yaref_utils.convert_filename_to_filepath(self.cover_filename))
+                              yaref_utils.convert_filename_to_filepath(self.cover_filename))
         try:
             return get_thumbnail(short_url, '256x256', crop='center').url
         except:
@@ -342,7 +348,7 @@ class YasoundSong(models.Model):
             url = get_thumbnail(settings.DEFAULT_TRACK_IMAGE_PATH, size, crop='center', format='JPEG', quality=90).url
         else:
             short_url = '%s%s' % (settings.SONG_COVER_SHORT_URL,
-                             yaref_utils.convert_filename_to_filepath(self.cover_filename))
+                                  yaref_utils.convert_filename_to_filepath(self.cover_filename))
             try:
                 url = get_thumbnail(short_url, size, crop='center', format='JPEG', quality=90).url
             except:
@@ -482,7 +488,7 @@ class YasoundSong(models.Model):
             pass
 
         if name != '' or artist != '' or album != '':
-            s =  {
+            s = {
                 'name': name,
                 'album': album,
                 'artist': artist
@@ -501,14 +507,14 @@ class YasoundSong(models.Model):
         if lastfm_data:
             if lastfm_data['name'].lower() != name \
                 or lastfm_data['artist'].lower() != artist \
-                or lastfm_data['album'].lower() != album:
+                    or lastfm_data['album'].lower() != album:
                 synonyms.append(lastfm_data)
 
         musicbrainz_data = self._musicbrainz_data()
         if musicbrainz_data:
             if musicbrainz_data['name'].lower() != name \
-               or musicbrainz_data['artist'].lower() != artist \
-               or musicbrainz_data['album'].lower() != album:
+                or musicbrainz_data['artist'].lower() != artist \
+                    or musicbrainz_data['album'].lower() != album:
                 synonyms.append(musicbrainz_data)
 
         return synonyms
@@ -521,10 +527,9 @@ class YasoundSong(models.Model):
         i = 0
         while path_exists:
             i = i + 1
-            backup_path =  u'%s_quarantine_%d%s' % (name, i, extension)
+            backup_path = u'%s_quarantine_%d%s' % (name, i, extension)
             path_exists = os.path.exists(backup_path)
         return backup_path
-
 
     def replace(self, new_file, lastfm_fingerprint_id=None):
         if not os.path.exists(new_file):
@@ -576,7 +581,7 @@ class YasoundSong(models.Model):
                 source]
         args.extend(settings.FFMPEG_GENERATE_PREVIEW_OPTIONS.split(" "))
         args.append(destination)
-        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
+        p = sub.Popen(args, stdout=sub.PIPE, stderr=sub.PIPE)
         _output, errors = p.communicate()
         if len(errors) == 0:
             logger.error('error while generating preview of %d' % (self.id))
@@ -593,7 +598,7 @@ class YasoundSong(models.Model):
                 source]
         args.extend(settings.FFMPEG_CONVERT_LOW_QUALITY_OPTIONS.split(" "))
         args.append(destination)
-        p = sub.Popen(args,stdout=sub.PIPE,stderr=sub.PIPE)
+        p = sub.Popen(args, stdout=sub.PIPE, stderr=sub.PIPE)
         _output, errors = p.communicate()
         if len(errors) == 0:
             logger.error('error while generating lq of %d' % (self.id))
@@ -610,6 +615,7 @@ class YasoundSong(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class YasoundSongGenre(models.Model):
     song = models.ForeignKey(YasoundSong)
     genre = models.ForeignKey(YasoundGenre)
@@ -621,5 +627,3 @@ class YasoundSongGenre(models.Model):
 
     def __unicode__(self):
         return self.genre.name
-
-
