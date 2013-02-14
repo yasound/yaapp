@@ -1023,6 +1023,7 @@ def upload_song(request, song_id=None):
 
 @login_required
 def upload_song_ajax(request):
+    logger.debug('upload_song_ajax called')
     if not request.user.is_superuser:
         raise Http404
     radio_id = request.REQUEST.get('radio_id')
@@ -1045,6 +1046,7 @@ def upload_song_ajax(request):
 
 
     if 'file' in request.FILES:
+        logger.debug('file found!')
         f = request.FILES['file']
         directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
         _path, extension = os.path.splitext(f.name)
@@ -1054,12 +1056,14 @@ def upload_song_ajax(request):
             source_f.write(chunk)
         source_f.close()
 
+        logger.debug('importing song!')
         _sm, messages = import_utils.import_song(filepath=source,
                                                  metadata=metadata,
                                                  convert=True,
                                                  allow_unknown_song=True,
                                                  song_metadata_id=song_metadata_id)
         rmtree(directory)
+        logger.debug('done')
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
             'success': True,
             'message': unicode(messages)
@@ -1067,6 +1071,7 @@ def upload_song_ajax(request):
         return HttpResponse(json_data, mimetype='text/html')
     else:
         for f in request.FILES.getlist('songs'):
+            logger.debug('importing song!')
             directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
             _path, extension = os.path.splitext(f.name)
             source = u'%s/s%s' % (directory, extension)
@@ -1081,6 +1086,7 @@ def upload_song_ajax(request):
                                                     allow_unknown_song=True,
                                                     song_metadata_id=song_metadata_id)
             rmtree(directory)
+            logger.debug('done!')
 
             global_message = global_message + messages + '\n'
         json_data = json.JSONEncoder(ensure_ascii=False).encode({
