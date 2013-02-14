@@ -704,7 +704,6 @@ def get_next_song(request, radio_id):
 
     try:
         nextsong = radio.get_next_song()
-        logger.debug('get_next_song: radio = %s - found next song' % (radio_id))
     finally:
         release_lock()
 
