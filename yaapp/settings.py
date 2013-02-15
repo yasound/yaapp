@@ -417,6 +417,7 @@ INSTALLED_APPS = (
     'yaactivity',
     'yablog',
     'yafaq',
+    'yajingle',
 )
 
 if LOCAL_MODE:
