@@ -11,7 +11,7 @@ import buylink
 import django.db.models.options as options
 import logging
 import musicbrainzngs
-import os
+import os, errno
 import shutil
 import string
 import utils as yaref_utils
@@ -607,6 +607,33 @@ class YasoundSong(models.Model):
         if len(errors) == 0:
             logger.error('error while generating lq of %d' % (self.id))
             logger.error(errors)
+
+    def set_cover(self, data, extension, replace=True):
+        has_cover = self.has_cover()
+        logger.debug('%s has cover ? ' % (self.id, has_cover))
+        if has_cover and not replace:
+            return
+
+        filename = ''
+        if has_cover:
+            filename = self.cover_filename
+            path = yaref_utils.convert_filename_to_filepath(filename)
+        else:
+            filename, path = yaref_utils.generate_filename_and_path_for_song_cover(extension)
+
+        logger.debug('filename=%s, path=%s' % (filename, path))
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError as e:
+            if e.errno == errno.EEXIST:
+                pass
+            else:
+                raise
+
+        with open(path, 'wb') as img:
+            img.write(data)
+            self.cover_filename = filename
+            self.save()
 
     def file_exists(self):
         path = self.get_song_path()
