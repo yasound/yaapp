@@ -52,3 +52,5 @@ django-attachments
 markdown
 Pygments
 raven==3.1.6
+python-musicbrainz2
+pyquery

@@ -36,16 +36,25 @@ class Command(BaseCommand):
         ids = SongMetadata.objects.filter(songinstance__playlist__radio__id=radio_id, yasound_song_id__isnull=False).values_list('yasound_song_id', flat=True)
         ids = list(ids)
 
-        songs = YasoundSong.objects.filter(id__in=ids, cover_filename__isnull=True, musicbrainz_id__isnull=False)
+        songs = YasoundSong.objects.filter(id__in=ids)
         for song in songs:
-            logger.info("getting cover for %s (%s)" % (song, song.musicbrainz_id))
-            data, extension = yaref_utils.find_cover(song.musicbrainz_id)
+            if not song.album:
+                logger.info(u"%s (%s): skipping (no album)" % (song, song.musicbrainz_id))
+                continue
+            if song.album.musicbrainz_id is None:
+                logger.info(u"%s (%s): skipping (no musicbrainzid)" % (song, song.musicbrainz_id))
+                continue
+            if song.album.has_cover():
+                logger.info(u"%s (%s): skipping (has already a cover)" % (song, song.musicbrainz_id))
+                continue
+            logger.info(u"album = %s (%s)" % (unicode(song.album), song.album.musicbrainz_id))
+            data, extension = yaref_utils.find_cover(song.album.musicbrainz_id)
             if data is None or extension is None:
                 continue
-            logger.info('found cover for %s' % (song))
+            logger.info(u"%s (%s): found cover" % (song, song.musicbrainz_id))
             if dry:
                 continue
-            song.set_cover(data, extension, replace=True)
+            song.album.set_cover(data, extension, replace=False)
 
         logger.info("done")
 

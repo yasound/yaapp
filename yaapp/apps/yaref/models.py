@@ -51,6 +51,11 @@ class YasoundAlbum(models.Model):
     name_simplified = models.CharField(max_length=255)
     cover_filename = models.CharField(max_length=45, null=True, blank=True)
 
+    def has_cover(self):
+        if self.cover_filename is None or len(self.cover_filename) == 0:
+            return False
+        return True
+
     @property
     def cover_url(self):
         if not self.cover_filename:
@@ -86,6 +91,33 @@ class YasoundAlbum(models.Model):
             except:
                 pass
         return url
+
+    def set_cover(self, data, extension, replace=True):
+        has_cover = self.has_cover()
+        logger.debug('%s has cover ? %s' % (self.id, has_cover))
+        if has_cover and not replace:
+            return
+
+        filename = ''
+        if has_cover:
+            filename = self.cover_filename
+            path = os.path.join(settings.ALBUM_COVERS_ROOT, yaref_utils.convert_filename_to_filepath(filename))
+        else:
+            filename, path = yaref_utils.generate_filename_and_path_for_album_cover(extension)
+
+        logger.debug('filename=%s, path=%s' % (filename, path))
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError as e:
+            if e.errno == errno.EEXIST:
+                pass
+            else:
+                raise
+
+        with open(path, 'wb') as img:
+            img.write(data)
+            self.cover_filename = filename
+            self.save()
 
     class Meta:
         db_table = u'yasound_album'
@@ -608,32 +640,6 @@ class YasoundSong(models.Model):
             logger.error('error while generating lq of %d' % (self.id))
             logger.error(errors)
 
-    def set_cover(self, data, extension, replace=True):
-        has_cover = self.has_cover()
-        logger.debug('%s has cover ? ' % (self.id, has_cover))
-        if has_cover and not replace:
-            return
-
-        filename = ''
-        if has_cover:
-            filename = self.cover_filename
-            path = yaref_utils.convert_filename_to_filepath(filename)
-        else:
-            filename, path = yaref_utils.generate_filename_and_path_for_song_cover(extension)
-
-        logger.debug('filename=%s, path=%s' % (filename, path))
-        try:
-            os.makedirs(os.path.dirname(path))
-        except OSError as e:
-            if e.errno == errno.EEXIST:
-                pass
-            else:
-                raise
-
-        with open(path, 'wb') as img:
-            img.write(data)
-            self.cover_filename = filename
-            self.save()
 
     def file_exists(self):
         path = self.get_song_path()
