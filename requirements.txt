@@ -1,56 +1,57 @@
 # Put here all your python libs dependencies before vtenv.sh
-Django >=1.3, < 1.4
-South
-django-tastypie
-celery==2.5.1
-celery-with-redis==2.5
-django-celery==2.5.1
-tweepy
-django-taggit
-django-taggit-templatetags
-python-memcached
-facepy ==0.6.8
-django-test-utils
--e git+https://github.com/yasound/fuzzywuzzy.git#egg=fuzzywuzzy
-pyyaml
-pymongo
-django-extensions
-django-iphone-push
+-e git+https://github.com/yasound/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/yasound/django-extjs#egg=django-extjs
-django-pipeline == 1.1.27
-jsmin
-simplejson
-django-social-auth
-requests==0.13.9
+-e git+https://github.com/yasound/emencia-django-newsletter.git#egg=emencia-django-newsletter
+-e git+https://github.com/yasound/fuzzywuzzy.git#egg=fuzzywuzzy
+-e git+https://github.com/yasound/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
 -e git+ssh://git@github.com/yasound/uploader.git#egg=uploader
 -e git+ssh://git@github.com/yasound/yametadata.git#egg=yametadata
-sorl-thumbnail
-unidecode
-fuzzy
-kombu==2.1.8
-django-mobile
-django-bitfield
-django-simple-captcha
-django-transmeta
-django-jenkins
-django-ignoretests
-redis
-mock
-python-dateutil<=1
--e git+https://github.com/yasound/django-bootstrap.git#egg=bootstrap
-xlwt
--e git+https://github.com/yasound/emencia-django-newsletter.git#egg=emencia-django-newsletter
-django-tinymce
-pygeoip
--e git+https://github.com/yasound/python-musicbrainz-ngs.git#egg=python-musicbrainz-ngs
-unicodecsv
-django_compressor
-django-debug-toolbar
+Django >=1.3, < 1.4
+Fuzzy==1.0
+Markdown==2.2.1
+PyYAML==3.10
+Pygments==1.6rc1
+South==0.7.6
+Unidecode==0.04.9
+celery-with-redis==2.5
+celery==2.5.1
+django-attachments==0.3.1
+django-bitfield==1.5.0
+django-celery==2.5.1
+django-compressor==1.2
+django-debug-toolbar==0.9.4
+django-extensions==0.9
+django-ignoretests==0.3.2
+django-iphone-push==1.0
+django-jenkins==0.13.0
+django-localeurl==1.5
+django-mobile==0.2.4
+django-pipeline == 1.1.27
+django-simple-captcha==0.3.1
+django-social-auth==0.7.7
+django-taggit-templatetags==0.4.6dev
+django-taggit==0.9.3
+django-tastypie==0.9.11
+django-test-utils==0.3
+django-tinymce==1.5.1b2
+django-transmeta==0.6.8
 fabric
-django-localeurl
-django-attachments
-markdown
-Pygments
+facepy==0.6.8
+jsmin==2.0.2
+kombu==2.1.8
+mock==1.0.0
+pygeoip==0.2.5
+pymongo==2.3
+pyquery==1.2.4
+python-dateutil<=1
+python-memcached==1.48
+python-musicbrainz2==0.7.4
 raven==3.1.6
-python-musicbrainz2
-pyquery
+redis==2.7.1
+requests==0.13.9
+simplejson==2.6.2
+sorl-thumbnail==11.12
+tweepy==1.8
+unicodecsv==0.9.0
+xlrd==0.7.8
+xlwt==0.7.4
