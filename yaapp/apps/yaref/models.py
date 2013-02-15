@@ -320,8 +320,8 @@ class YasoundSong(models.Model):
     """
 
     objects = YasoundSongManager()
-    artist = models.ForeignKey(YasoundArtist, null=True, blank=True)
-    album = models.ForeignKey(YasoundAlbum, null=True, blank=True)
+    artist = models.ForeignKey(YasoundArtist, null=True, blank=True, on_delete=models.SET_NULL)
+    album = models.ForeignKey(YasoundAlbum, null=True, blank=True, on_delete=models.SET_NULL)
     echonest_id = models.CharField(max_length=20, blank=True, null=True)
     lastfm_id = models.CharField(max_length=20, blank=True, null=True)
     lastfm_fingerprint_id = models.CharField(max_length=20, blank=True, null=True)

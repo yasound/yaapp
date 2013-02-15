@@ -57,13 +57,15 @@ def generate_filename_and_path_for_album_cover(extension='.jpg'):
     return filename, path
 
 
-def find_cover(mbid):
+def find_cover(release_mbid):
+    """Return cover of release (ie album)"""
+
     q = ws.Query()
     try:
         inc = ws.ReleaseIncludes(artist=True, releaseEvents=True, labels=True,
                 discs=True, tracks=True, releaseGroup=True, releaseRelations=True,
                 trackRelations=True, urlRelations=True)
-        release = q.getReleaseById(mbid, inc)
+        release = q.getReleaseById(release_mbid, inc)
     except ws.WebServiceError, e:
         logger.error(e)
         return None, None
@@ -107,3 +109,50 @@ def find_cover(mbid):
     elif content_type == 'image/png':
         extension = '.png'
     return content, extension
+
+
+def generate_album(track_mbid):
+    """Find album of track on musicbrainz """
+    from models import YasoundAlbum
+    from yasearch.utils import get_simplified_name
+
+    q = ws.Query()
+    try:
+        inc = ws.TrackIncludes(artist=True,
+            releases=True)
+        track = q.getTrackById(track_mbid, inc)
+    except ws.WebServiceError, e:
+        logger.error(e)
+        return None
+
+    if len(track.releases) == 0:
+        return None
+
+    release = track.releases[0]
+    release_mbid = release.id[len('http://musicbrainz.org/release/'):]
+    name = release.title
+    album = YasoundAlbum(name=name,
+        musicbrainz_id=release_mbid,
+        name_simplified=get_simplified_name(name))
+    return album
+
+
+def find_track_mbid(song):
+    q = ws.Query()
+    try:
+        f = ws.TrackFilter(title=song.name, artistName=song.artist_name, releaseTitle=song.album_name)
+        results = q.getTracks(f)
+    except ws.WebServiceError, e:
+        logger.error(e)
+        return None
+
+    if len(results) == 0:
+        return None
+
+    result = results[0]
+    track = result.track
+    score = result.score
+    if score < 90:
+        return None
+    mbid = track.id[len('http://musicbrainz.org/track/'):]
+    return mbid
