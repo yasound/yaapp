@@ -283,7 +283,7 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 		},
 
 		requestPreviousPage: function () {
-			if ( this.page !== undefined ) {
+			if ( this.page !== undefined && this.page !== 0) {
 				this.page -= 1;
 				this.pager();
 			}

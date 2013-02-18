@@ -72,6 +72,7 @@ Yasound.Views.SongInstances = Backbone.View.extend({
     },
 
     addAll: function () {
+        this.clear();
         $('.loading-mask', this.el).remove();
         this.collection.each(this.addOne);
     },
@@ -300,7 +301,8 @@ Yasound.Views.PlaylistContent =  Backbone.View.extend({
 
         this.paginationView = new Yasound.Views.Pagination({
             collection: this.songInstances,
-            el: $('#pagination', this.el)
+            el: $('#pagination', this.el),
+            type: 'prevnext'
         });
 
         this.filters = new Yasound.Views.ProgrammingFilters({

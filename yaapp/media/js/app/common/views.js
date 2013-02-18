@@ -439,10 +439,11 @@ Yasound.Views.UserMenu = Backbone.View.extend({
 
 Yasound.Views.Pagination = Backbone.View.extend({
     title: gettext('Show more'),
+    type: 'paginate', // 'paginate' or 'prevnext'
 
     events: {
         'click button.servernext': 'nextResultPage',
-        'click a.serverprevious': 'previousResultPage',
+        'click button.serverprev': 'previousResultPage',
         'click a.orderUpdate': 'updateSortBy',
         'click a.serverlast': 'gotoLast',
         'click a.page': 'gotoPage',
@@ -454,8 +455,10 @@ Yasound.Views.Pagination = Backbone.View.extend({
 
     tagName: 'aside',
 
-    initialize: function () {
+    initialize: function (options) {
         _.bindAll(this, 'scroll', 'setTitle');
+
+        this.type = options.type;
 
         $(window).on('scroll', this.scroll);
         this.locked = true;
@@ -480,12 +483,16 @@ Yasound.Views.Pagination = Backbone.View.extend({
         var page = info.page;
         var totalPages = info.totalPages;
 
-        if (info.next) {
-            this.$el.html(ich.paginationTemplate({title: this.title}));
-        } else if (page+1 < totalPages) {
+        if (this.type === 'paginate') {
+            if (info.next) {
                 this.$el.html(ich.paginationTemplate({title: this.title}));
-        } else {
-            this.$el.html('');
+            } else if (page+1 < totalPages) {
+                    this.$el.html(ich.paginationTemplate({title: this.title}));
+            } else {
+                this.$el.html('');
+            }
+        } else if (this.type === 'prevnext') {
+            this.$el.html(ich.paginationPrevNextTemplate());
         }
     },
 

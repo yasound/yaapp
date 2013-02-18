@@ -37,7 +37,7 @@ Yasound.Data.Models.SongInstances = Backbone.Paginator.requestPager.extend({
     model: Yasound.Data.Models.SongInstance,
     perPageAttribute: 'limit',
     skipAttribute: 'offset',
-    perPage: 25,
+    perPage: 10,
     page:0,
     params:{},
 
