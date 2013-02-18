@@ -271,13 +271,8 @@ Backbone.Paginator = (function ( Backbone, _, $ ) {
 				return;
 			}
 
-			if ( this.page !== undefined && this.page < this.totalPages) {
+			if ( this.page !== undefined && this.page+1 < this.totalPages) {
 				this.page += 1;
-				// customize as needed. For the Netflix API, skipping ahead based on
-				// page * number of results per page was necessary. You may have a
-				// simpler server-side pagination API where just updating
-				// the 'page' value is all you need to do.
-				// This applies similarly to requestPreviousPage()
 				this.pager();
 			}
 		},
