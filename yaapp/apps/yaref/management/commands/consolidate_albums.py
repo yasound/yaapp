@@ -1,20 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from optparse import make_option
-from time import time
 from yabase.models import SongMetadata
-from yacore.database import queryset_iterator
-from yaref.mongo import SongAdditionalInfosManager
 from yaref.models import YasoundSong, YasoundAlbum
-from yabase.models import Radio
 from yaref import utils as yaref_utils
-import datetime
-import gc
 import logging
-import random
-import os
 logger = logging.getLogger("yaapp.yaref")
-
 
 
 class Command(BaseCommand):
@@ -22,9 +13,9 @@ class Command(BaseCommand):
     """
     option_list = BaseCommand.option_list + (
         make_option('-d', '--dry', dest='dry', action='store_true',
-            default=False, help="dry: does nothing except logging into mongodb"),
+                    default=False, help="dry: does nothing except logging"),
         make_option('-r', '--radio', dest='radio_id',
-            default=0, help="radio id"),
+                    default=0, help="radio id"),
     )
     help = "Consolidate missing albums from musicbrainz"
     args = ''
@@ -62,4 +53,3 @@ class Command(BaseCommand):
                 logger.info(u"%s (%s): found cover" % (song, song.musicbrainz_id))
                 song.album.set_cover(data, extension, replace=False)
         logger.info("done")
-
