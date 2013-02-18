@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from yacore.decorators import check_api_key
 from yacore.api import api_response
@@ -79,3 +79,20 @@ def upload(request, song_id=None):
     else:
         res = 'upload OK for jingle: %s' % unicode(f.name)
     return HttpResponse(res)
+
+
+@csrf_exempt
+@check_api_key(methods=['POST', 'GET', 'PUT'], login_required=True)
+def jingle(request, id):
+    jm = JingleManager()
+    jingle = jm.jingle(id)
+    if jingle is None:
+        raise Http404
+    if jingle.get('creator') != request.user.id:
+        return HttpResponse(status=401)
+    if request.method == 'PUT':
+        payload = json.loads(request.raw_post_data)
+        name = payload.get('name')
+        jingle['name'] = name
+        jm.update_jingle(jingle)
+        return api_response(jingle)

@@ -42,6 +42,14 @@ class JingleManager():
             jingle_id = ObjectId(jingle_id)
         self.collection.remove({'_id': jingle_id}, safe=True)
 
+    def jingle(self, jingle_id):
+        if isinstance(jingle_id, str) or isinstance(jingle_id, unicode):
+            jingle_id = ObjectId(jingle_id)
+        return self.collection.find_one({'_id': jingle_id})
+
+    def update_jingle(self, doc):
+        self.collection.save(doc, safe=True)
+
     def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None):
         doc = {
             'radio_uuid': radio.uuid,
