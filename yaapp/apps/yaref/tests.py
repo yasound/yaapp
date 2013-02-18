@@ -6,8 +6,11 @@ from yasearch.utils import get_simplified_name, build_dms
 from yasearch import settings as yasearch_settings
 from yasearch.models import build_mongodb_index
 
+import utils as yaref_utils
+
 import test_utils as yaref_test_utils
 import buylink
+
 
 class TestUtils(TestCase):
     def setUp(self):
@@ -83,10 +86,15 @@ class TestUtils(TestCase):
         dms = build_dms(query, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         self.assertEquals(dms, ['XNSN', 'FRNK', 'PLS'])
 
-
         query = 'Portela h\xc3\xa9'
         dms = build_dms(query, True, yasearch_settings.SONG_STRING_EXCEPTIONS)
         self.assertEquals(dms, ['PRTL'])
+
+    def test_convert_filename_to_filepath2(self):
+        name = '123456789.mp3'
+        name2 = yaref_utils.convert_filename_to_filepath2(name)
+        self.assertEquals(name2, '12/34/56/123456789.mp3')
+
 
 class TestBuyLink(TestCase):
     def setUp(self):
@@ -116,6 +124,7 @@ class TestBuyLink(TestCase):
         url = buylink.generate_buy_link(name, album, artist)
         self.assertIsNone(url)
 
+
 class TestFind(TestCase):
     def setUp(self):
         pass
@@ -136,6 +145,7 @@ class TestFind(TestCase):
 #        self.assertEquals(metadata.get('artist'), 'Cher')
 #        self.assertEquals(metadata.get('album'), 'Believe')
 
+
 class TestAdditionalInfo(TestCase):
     def setUp(self):
         sa = SongAdditionalInfosManager()
@@ -143,7 +153,7 @@ class TestAdditionalInfo(TestCase):
 
     def test_additional_info(self):
         info = {
-            'conversion_status' : {
+            'conversion_status': {
                 'preview_generated': False,
                 'hq_generated': False,
                 'lq_generated': False
@@ -163,93 +173,90 @@ class TestAdditionalInfo(TestCase):
         self.assertIsNone(doc.get('conversion_status'))
         self.assertEquals(doc.get('verified'), True)
 
+
 class TestFuzzy(TestCase):
     def setUp(self):
         pass
 
     def test_karaoke(self):
         bad_cure = yaref_test_utils.generate_yasound_song(name='from the edge of the deep green sea',
-            artist='tribute to the cure',
-            album='wish')
+                                                          artist='tribute to the cure',
+                                                          album='wish')
 
         good_cure = yaref_test_utils.generate_yasound_song(name='from the edge of the deep green sea',
-            artist='the cure',
-            album='wish')
-
+                                                           artist='the cure',
+                                                           album='wish')
 
         bad_queen = yaref_test_utils.generate_yasound_song(name='innuendo',
-            artist='queen',
-            album='karaoke version')
+                                                           artist='queen',
+                                                           album='karaoke version')
 
         good_queen = yaref_test_utils.generate_yasound_song(name='innuendo',
-            artist='queen',
-            album='good version')
+                                                            artist='queen',
+                                                            album='good version')
 
         good_pixies = yaref_test_utils.generate_yasound_song(name='where is my mind',
-            artist='pixies',
-            album='live at houston (1992)')
+                                                             artist='pixies',
+                                                             album='live at houston (1992)')
 
         bad_pixies = yaref_test_utils.generate_yasound_song(name='where is my mind',
-            artist='pixies',
-            album='karaoke')
+                                                            artist='pixies',
+                                                            album='karaoke')
 
         bad_pixies2 = yaref_test_utils.generate_yasound_song(name='where is my mind',
-            artist='tribute to the pixies',
-            album='karaoke')
+                                                             artist='tribute to the pixies',
+                                                             album='karaoke')
 
         build_mongodb_index(erase=True)
 
         res = YasoundSong.objects.find_fuzzy(name='where is my mind',
-            artist='the pixies',
-            album='')
+                                             artist='the pixies',
+                                             album='')
         self.assertEquals(res.get('db_id'), good_pixies.id)
 
-
         res = YasoundSong.objects.find_fuzzy(name='from the edge of the deep green sea',
-            artist='the cure',
-            album='wish')
+                                             artist='the cure',
+                                             album='wish')
         self.assertEquals(res.get('db_id'), good_cure.id)
 
         res = YasoundSong.objects.find_fuzzy(name='innuendo',
-            artist='queen',
-            album='')
+                                             artist='queen',
+                                             album='')
         self.assertEquals(res.get('db_id'), good_queen.id)
 
         res = YasoundSong.objects.find_fuzzy(name='innuendo',
-            artist='queen',
-            album='karaoke')
+                                             artist='queen',
+                                             album='karaoke')
         self.assertEquals(res.get('db_id'), bad_queen.id)
 
         res = YasoundSong.objects.find_fuzzy(name='where is my mind',
-            artist='',
-            album='')
+                                             artist='',
+                                             album='')
         self.assertEquals(res.get('db_id'), good_pixies.id)
 
-
-
         res = YasoundSong.objects.find_fuzzy(name='where is my mind',
-            artist='',
-            album='karaoke')
+                                             artist='',
+                                             album='karaoke')
         self.assertEquals(res.get('db_id'), bad_pixies.id)
 
     def test_bad_matching(self):
         justice = yaref_test_utils.generate_yasound_song(name='Get It Together',
-            artist='Justus League, Joe Scudda',
-            album='Triple Play: The Second Inning')
+                                                         artist='Justus League, Joe Scudda',
+                                                         album='Triple Play: The Second Inning')
 
         build_mongodb_index(erase=True)
 
         res = YasoundSong.objects.find_fuzzy(name="we've got to",
-            artist='ayo',
-            album='billie-eve')
+                                             artist='ayo',
+                                             album='billie-eve')
         self.assertIsNone(res)
 
         ayo = yaref_test_utils.generate_yasound_song(name="we've got to",
-            artist='ayo',
-            album='billie-eve')
+                                                     artist='ayo',
+                                                     album='billie-eve')
         build_mongodb_index(erase=True)
 
         res = YasoundSong.objects.find_fuzzy(name="we've got to",
-            artist='ayo',
-            album='billie-eve')
+                                             artist='ayo',
+                                             album='billie-eve')
         print res

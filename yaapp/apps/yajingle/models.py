@@ -42,7 +42,7 @@ class JingleManager():
             jingle_id = ObjectId(jingle_id)
         self.collection.remove({'_id': jingle_id}, safe=True)
 
-    def create_jingle(self, name, description, radio, creator, filename=None, schedule=None):
+    def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None):
         doc = {
             'radio_uuid': radio.uuid,
             'creator': creator.id,

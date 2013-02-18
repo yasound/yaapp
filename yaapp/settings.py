@@ -83,6 +83,7 @@ CELERY_IMPORTS = (
     "yapremium.task",
     "yadeezer.task",
     "yascheduler.task",
+    "yajingle.task",
 )
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
@@ -592,6 +593,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'yaapp.yajingle': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'yaapp.yadeezer': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
@@ -924,24 +930,28 @@ FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS = '-ar 44100 -ab 192000 -y -reservoir 0' # c
 
 if PRODUCTION_MODE:
     SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
+    JINGLES_ROOT = '/data/glusterfs-mnt/replica2all/jingle/'
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
     SONG_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/song-cover/'
     RECOMMENDATION_CACHE = '/data/glusterfs-mnt/replica2all/recommendation/'
     RADIOWAYS_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/front/radioways/logos/'
 elif DEVELOPMENT_MODE:
     SONGS_ROOT = '/data/storage/song/'
+    JINGLES_ROOT = '/data/storage/jingle/'
     ALBUM_COVERS_ROOT = '/data/storage/album-cover/'
     SONG_COVERS_ROOT = '/data/storage/song-cover/'
     RECOMMENDATION_CACHE = '/data/storage/recommendation/'
     RADIOWAYS_COVERS_ROOT = '/data/storage/radioways/logos/'
 elif hostname in ['yas-dev-01', 'yas-dev-02']:
     SONGS_ROOT = '/data/tmp/'
+    JINGLE_ROOT = '/data/tmp/'
     ALBUM_COVERS_ROOT = '/data/tmp/'
     SONG_COVERS_ROOT = '/data/tmp/'
     RECOMMENDATION_CACHE = '/data/tmp/'
     RADIOWAYS_COVERS_ROOT = '/data/tmp/'
 else:
     SONGS_ROOT = '/tmp/'
+    JINGLES_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
     SONG_COVERS_ROOT = '/tmp/'
     RECOMMENDATION_CACHE = '/tmp/'

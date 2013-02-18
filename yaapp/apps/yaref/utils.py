@@ -25,6 +25,18 @@ def convert_filename_to_filepath(filename):
     return '%s/%s/%s.%s' % (part1, part2, part3, extension)
 
 
+def convert_filename_to_filepath2(filename):
+    """
+    123456789.jpg --> 12/34/56/12356789.jpg
+    """
+    if len(filename) != len('123456789.jpg'):
+        return None
+    part1 = filename[:2]
+    part2 = filename[2:4]
+    part3 = filename[4:6]
+    return '%s/%s/%s/%s' % (part1, part2, part3, filename)
+
+
 def convert_to_mp3(ffmpeg_bin, ffmpeg_options, source, destination):
     args = [ffmpeg_bin,
             '-i',

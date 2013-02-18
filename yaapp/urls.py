@@ -25,7 +25,6 @@ from yaweb.sitemap import StaticSitemap
 from yabase.sitemap import WebappSiteMap
 from yablog.sitemaps import BlogPostSitemap
 from yablog.feeds import LatestPostFeed
-
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
@@ -196,6 +195,9 @@ urlpatterns = patterns('',
 
 
     url(r'^api/v1/user/(?P<username>\S+)/picture/$', 'account.views.user_picture'),
+
+    # jingles
+    url(r'^api/v1/jingle/', include('yajingle.urls')),
 
     # listeners
     url(r'^api/v1/radio/(?P<radio_uuid_or_slug>[\w-]+)/listeners/$', 'yabase.views.listeners', name='listeners'),

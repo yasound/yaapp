@@ -212,6 +212,8 @@ HTML, BODY { height: 100%; }
     <script type="text/javascript" src='/media/js/app/programming/models.js'></script>
     <script type="text/javascript" src='/media/js/app/programming/deezer/models.js'></script>
     <script type="text/javascript" src='/media/js/app/programming/deezer/views.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/jingles/models.js'></script>
+    <script type="text/javascript" src='/media/js/app/programming/jingles/views.js'></script>
     <script type="text/javascript" src='/media/js/app/programming/views.js'></script>
     <script type="text/javascript" src='/media/js/app/signup/models.js'></script>
     <script type="text/javascript" src='/media/js/app/signup/views.js'></script>
@@ -546,6 +548,12 @@ HTML, BODY { height: 100%; }
    </script>
    <script type="text/html" id="deezerTrackCellTemplate">
       {% include "yabase/app/programming/deezer/trackCell.mustache" %}
+   </script>
+   <script type="text/html" id="jinglesTemplate">
+      {% include "yabase/app/programming/jingles/jingles.mustache" %}
+   </script>
+   <script type="text/html" id="jingleCellTemplate">
+      {% include "yabase/app/programming/jingles/jingleCell.mustache" %}
    </script>
    <script type="text/html" id="programmingUploadTemplate">
       {% include "yabase/app/programming/upload.mustache" %}

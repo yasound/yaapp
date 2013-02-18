@@ -747,7 +747,8 @@ Yasound.Views.Playlist = Backbone.View.extend({
             'onImportItunes',
             'onImportDeezer',
             'onAddFromServer',
-            'onAddFromDesktop');
+            'onAddFromDesktop',
+            'onJingles');
     },
 
     onClose: function() {
@@ -809,6 +810,14 @@ Yasound.Views.Playlist = Backbone.View.extend({
         }
     },
 
+    onJingles: function() {
+        this.clearView();
+
+        this.currentView = new Yasound.Views.JinglesPage({
+            el: $('#content', this.el)
+        }).render(this.uuid);
+    },
+
     render: function(uuid) {
         this.reset();
         this.uuid = uuid;
@@ -822,6 +831,7 @@ Yasound.Views.Playlist = Backbone.View.extend({
         this.toolbar.on('importDeezer', this.onImportDeezer);
         this.toolbar.on('addFromServer', this.onAddFromServer);
         this.toolbar.on('addFromDesktop', this.onAddFromDesktop);
+        this.toolbar.on('jingles', this.onJingles);
 
         this.onAll();
 
@@ -839,6 +849,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
         'click #all': 'all',
         'click #import-itunes': 'importItunes',
         'click #import-deezer': 'importDeezer',
+        'click #jingles': 'jingles',
         'click #add-from-server': 'addFromServer',
         'click #add-from-desktop': 'addFromDesktop'
     },
@@ -858,6 +869,7 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
         $('#import-itunes', this.el).removeClass('active');
         $('#add-from-server', this.el).removeClass('active');
         $('#add-from-desktop', this.el).removeClass('active');
+        $('#jingles', this.el).removeClass('active');
 
         $(menu).addClass('active');
     },
@@ -886,6 +898,12 @@ Yasound.Views.ProgrammingToolbar = Backbone.View.extend({
         e.preventDefault();
         this.selectMenu('#add-from-desktop');
         this.trigger('addFromDesktop');
+    },
+
+    jingles: function(e) {
+        e.preventDefault();
+        this.selectMenu('#jingles');
+        this.trigger('jingles');
     }
 });
 
