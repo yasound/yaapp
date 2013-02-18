@@ -439,7 +439,7 @@ Yasound.Views.UserMenu = Backbone.View.extend({
 
 Yasound.Views.Pagination = Backbone.View.extend({
     title: gettext('Show more'),
-    type: 'paginate', // 'paginate' or 'prevnext'
+    type: 'endless', // 'endless' or 'prevnext'
 
     events: {
         'click button.servernext': 'nextResultPage',
@@ -458,7 +458,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
     initialize: function (options) {
         _.bindAll(this, 'scroll', 'setTitle');
 
-        this.type = options.type;
+        this.type = options.type || 'endless';
 
         $(window).on('scroll', this.scroll);
         this.locked = true;
@@ -483,7 +483,7 @@ Yasound.Views.Pagination = Backbone.View.extend({
         var page = info.page;
         var totalPages = info.totalPages;
 
-        if (this.type === 'paginate') {
+        if (this.type === 'endless') {
             if (info.next) {
                 this.$el.html(ich.paginationTemplate({title: this.title}));
             } else if (page+1 < totalPages) {
