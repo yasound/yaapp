@@ -3,6 +3,11 @@ import datetime
 from bson.objectid import ObjectId
 from yaref.utils import convert_filename_to_filepath2
 import os
+
+from yabase.models import Playlist
+from yascheduler.task import async_transient_radio_event
+from yascheduler.models import TransientRadioHistoryManager
+
 import logging
 logger = logging.getLogger("yaapp.yajingle")
 
@@ -42,6 +47,12 @@ class JingleManager():
         path = os.path.join(settings.JINGLES_ROOT, convert_filename_to_filepath2(jingle.get('filename')))
         return path
 
+    def notify_scheduler(self, radio_uuid):
+        playlist = Playlist.objects.filter(radio__uuid=radio_uuid)[0]
+        async_transient_radio_event.delay(event_type=TransientRadioHistoryManager.TYPE_PLAYLIST_UPDATED,
+            radio_uuid=radio_uuid,
+            playlist_id=playlist.id)
+
     def jingles_for_radio(self, radio_uuid):
         return self.collection.find({'radio_uuid': radio_uuid})
 
@@ -58,6 +69,10 @@ class JingleManager():
 
         self.collection.remove({'_id': jingle_id}, safe=True)
 
+        radio_uuid = doc.get('radio_uuid')
+        if radio_uuid is not None:
+            self.notify_scheduler(radio_uuid)
+
     def jingle(self, jingle_id):
         if isinstance(jingle_id, str) or isinstance(jingle_id, unicode):
             jingle_id = ObjectId(jingle_id)
@@ -65,6 +80,9 @@ class JingleManager():
 
     def update_jingle(self, doc):
         self.collection.save(doc, safe=True)
+        radio_uuid = doc.get('radio_uuid')
+        if radio_uuid is not None:
+            self.notify_scheduler(radio_uuid)
 
     def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None):
         doc = {
@@ -77,4 +95,6 @@ class JingleManager():
             'description': description,
             'schedule': schedule
         }
+        if radio.uuid is not None:
+            self.notify_scheduler(radio.uuid)
         return self.collection.insert(doc, safe=True)
