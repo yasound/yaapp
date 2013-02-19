@@ -153,6 +153,7 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
             return;
         } else if (e.keyCode == 27) {
             this.cancelEdit();
+            return;
         }
         this.mode = 'edit';
     },
