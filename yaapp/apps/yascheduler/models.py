@@ -34,13 +34,14 @@ class TransientRadioHistoryManager():
     def erase_informations(self):
         self.collection.drop()
 
-    def add_event(self, event_type, radio_uuid, playlist_id):
+    def add_event(self, event_type, radio_uuid, playlist_id, jingle_id=None):
         now = datetime.datetime.now()
         doc = {
             'created': now,
             'updated': now,
             'radio_uuid': radio_uuid,
             'playlist_id': playlist_id,
+            'jingle_id': jingle_id,
             'type': event_type,
         }
         self.collection.update({'radio_uuid': radio_uuid, 'playlist_id': playlist_id}, doc, upsert=True, safe=True)
