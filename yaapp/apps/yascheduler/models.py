@@ -17,6 +17,10 @@ class TransientRadioHistoryManager():
     TYPE_PLAYLIST_UPDATED = 'playlist_updated'
     TYPE_PLAYLIST_DELETED = 'playlist_deleted'
 
+    TYPE_JINGLE_ADDED = 'jingle_added'
+    TYPE_JINGLE_UPDATED = 'jingle_updated'
+    TYPE_JINGLE_DELETED = 'jingle_deleted'
+
     TYPE_RADIO_ADDED = 'radio_added'
     TYPE_RADIO_DELETED = 'radio_deleted'
 

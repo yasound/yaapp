@@ -47,11 +47,8 @@ class JingleManager():
         path = os.path.join(settings.JINGLES_ROOT, convert_filename_to_filepath2(jingle.get('filename')))
         return path
 
-    def notify_scheduler(self, radio_uuid):
-        playlist = Playlist.objects.filter(radio__uuid=radio_uuid)[0]
-        async_transient_radio_event.delay(event_type=TransientRadioHistoryManager.TYPE_PLAYLIST_UPDATED,
-            radio_uuid=radio_uuid,
-            playlist_id=playlist.id)
+    def notify_scheduler(self, radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_UPDATED):
+        async_transient_radio_event.delay(event_type=event_type, radio_uuid=radio_uuid)
 
     def jingles_for_radio(self, radio_uuid):
         return self.collection.find({'radio_uuid': radio_uuid})
@@ -71,7 +68,7 @@ class JingleManager():
 
         radio_uuid = doc.get('radio_uuid')
         if radio_uuid is not None:
-            self.notify_scheduler(radio_uuid)
+            self.notify_scheduler(radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_DELETED)
 
     def jingle(self, jingle_id):
         if isinstance(jingle_id, str) or isinstance(jingle_id, unicode):
@@ -82,7 +79,7 @@ class JingleManager():
         self.collection.save(doc, safe=True)
         radio_uuid = doc.get('radio_uuid')
         if radio_uuid is not None:
-            self.notify_scheduler(radio_uuid)
+            self.notify_scheduler(radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_UPDATED)
 
     def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None):
         doc = {
@@ -96,5 +93,5 @@ class JingleManager():
             'schedule': schedule
         }
         if radio.uuid is not None:
-            self.notify_scheduler(radio.uuid)
+            self.notify_scheduler(radio.uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_ADDED)
         return self.collection.insert(doc, safe=True)
