@@ -15,6 +15,7 @@ import os
 
 @check_api_key(methods=['GET'], login_required=True)
 def jingles(request, radio_uuid):
+    """Return available jingles for radio. """
     radio = get_object_or_404(Radio, uuid=radio_uuid)
     if radio.creator != request.user:
         return HttpResponse(status=401)
@@ -32,7 +33,11 @@ def upload(request, song_id=None):
     """
     Upload a jingle
 
-    A metadata json dict must be provided.
+    A metadata json dict must be provided::
+        dict = {
+            'radio_uuid': radio_uuid,
+            'name': 'jingle name'
+        }
 
     """
     f = request.FILES.get('jingle')
@@ -82,8 +87,9 @@ def upload(request, song_id=None):
 
 
 @csrf_exempt
-@check_api_key(methods=['POST', 'GET', 'PUT'], login_required=True)
+@check_api_key(methods=['POST', 'PUT', 'DELETE'], login_required=True)
 def jingle(request, id):
+    """RESTful view for jingle """
     jm = JingleManager()
     jingle = jm.jingle(id)
     if jingle is None:
@@ -96,3 +102,6 @@ def jingle(request, id):
         jingle['name'] = name
         jm.update_jingle(jingle)
         return api_response(jingle)
+    elif request.method == 'DELETE':
+        jm.delete_jingle(id)
+        return api_response({'success': True})

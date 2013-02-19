@@ -5,7 +5,8 @@ Namespace('Yasound.Views.Jingles');
 Yasound.Views.Jingles.Cell = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        'click .name': 'onEditName'
+        'click .name': 'onEditName',
+        'click .delete': 'onDelete'
     },
 
     initialize: function () {
@@ -20,7 +21,8 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
             'onFinished',
             'onFailed',
             'edit',
-            'cancelEdit');
+            'cancelEdit',
+            'deleteJingle');
 
         this.model.bind('change', this.render, this);
         this.job = undefined;
@@ -146,13 +148,33 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
         $('.name input').off('keydown', this.edit);
         $('.name', this.el).html(this.model.get('name'));
         this.mode = 'view';
+    },
+
+    onDelete: function (e) {
+        e.preventDefault();
+        var that = this;
+        Yasound.Utils.dialog({
+            title: gettext('Warning'),
+            content: gettext('Your jingle will be lost for ever, continue?'),
+            closeButton: gettext('Yes, delete it'),
+            cancelButton: gettext('Cancel'),
+            onClose: function() {
+                that.deleteJingle();
+            }
+        });
+    },
+
+    deleteJingle: function (e) {
+        this.model.destroy();
+        this.trigger('remove', this);
+        this.remove();
     }
 });
 
 
 Yasound.Views.Jingles.List = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy');
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy', 'onRemoveView');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
@@ -186,6 +208,8 @@ Yasound.Views.Jingles.List = Backbone.View.extend({
         var view = new Yasound.Views.Jingles.Cell({
             model: jingle
         });
+        view.on('remove', this.onRemoveView);
+
         $(this.el).append(view.render().el);
         this.views.push(view);
         return view;
@@ -194,7 +218,13 @@ Yasound.Views.Jingles.List = Backbone.View.extend({
     onDestroy: function(model) {
         this.clear();
         this.collection.fetch();
+    },
+
+    onRemoveView: function (view) {
+        this.views = _.without(this.views, view);
+        view.off('remove', this.onRemoveView);
     }
+
 });
 
 

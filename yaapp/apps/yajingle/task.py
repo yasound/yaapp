@@ -1,26 +1,16 @@
 from django.contrib.auth.models import User
 from celery.task import task
-from account.models import UserProfile
 from django.conf import settings
-from yaref.utils import convert_to_mp3, convert_filename_to_filepath2
+from yaref.utils import convert_to_mp3
 import os
-import logging
-logger = logging.getLogger("yaapp.yajingle")
 import shutil
-import random
 import errno
 from yabase.models import Radio
 from models import JingleManager
+import utils as yajingle_utils
 
-
-def _generate_filename_and_path_for_jingle():
-    path_exists = True
-    filename = None
-    while path_exists:
-        filename = ''.join(random.choice("01234567890abcdef") for _i in xrange(9)) + '.mp3'
-        path = os.path.join(settings.JINGLES_ROOT, convert_filename_to_filepath2(filename))
-        path_exists = os.path.exists(path)
-    return filename, path
+import logging
+logger = logging.getLogger("yaapp.yajingle")
 
 
 @task
@@ -34,7 +24,7 @@ def import_jingle(filename, name, radio_uuid, creator_id):
         logger.error('cannot convert %s to %s' % (filename, converted))
         return
 
-    jingle_filename, jingle_path = _generate_filename_and_path_for_jingle()
+    jingle_filename, jingle_path = yajingle_utils.generate_filename_and_path_for_jingle()
     try:
         os.makedirs(os.path.dirname(jingle_path))
     except OSError as e:
