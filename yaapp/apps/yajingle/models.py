@@ -38,7 +38,7 @@ class JingleManager():
         self.collection = self.db.jingles
         self.collection.ensure_index("radio_uuid")
 
-    def _jingle_filepath(self, jingle):
+    def jingle_filepath(self, jingle):
         path = os.path.join(settings.JINGLES_ROOT, convert_filename_to_filepath2(jingle.get('filename')))
         return path
 
@@ -52,7 +52,7 @@ class JingleManager():
         if doc is None:
             return
 
-        fullpath = self._jingle_filepath(doc)
+        fullpath = self.jingle_filepath(doc)
         if fullpath:
             os.remove(fullpath)
 

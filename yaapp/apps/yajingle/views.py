@@ -107,3 +107,20 @@ def jingle(request, id):
     elif request.method == 'DELETE':
         jm.delete_jingle(id)
         return api_response({'success': True})
+
+
+@check_api_key(methods=['GET'], login_required=True)
+def download_jingle(request, id):
+    """RESTful view for jingle """
+    jm = JingleManager()
+    jingle = jm.jingle(id)
+    if jingle is None:
+        raise Http404
+    if jingle.get('creator') != request.user.id:
+        return HttpResponse(status=401)
+
+    path = jm.jingle_filepath(jingle)
+    f = open(path, "rb")
+    response = HttpResponse(f.read(), mimetype='audio/mp3')
+    response['Content-Disposition'] = 'attachment; filename=%s.mp3' % (jingle.get('name'))
+    return response

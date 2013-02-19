@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-29 13:39+0100\n"
+"POT-Creation-Date: 2013-02-19 15:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,8 +47,8 @@ msgid "Close"
 msgstr "Fermer"
 
 #: js/app/blog/views.js:48 js/app/common/models.js:345
-#: js/app/profile/models.js:37 js/app/share/views.js:49
-#: js/app/share/views.js.py:91
+#: js/app/profile/models.js:37 js/app/share/views.js:51
+#: js/app/share/views.js.py:93
 msgid "by"
 msgstr "par"
 
@@ -118,7 +118,7 @@ msgid "Unknown album"
 msgstr "Album inconnu"
 
 #: js/app/common/models.js:347 js/app/profile/models.js:39
-#: js/app/share/views.js:50
+#: js/app/share/views.js:52
 msgid "on"
 msgstr "sur"
 
@@ -142,7 +142,7 @@ msgstr "homme"
 msgid "female"
 msgstr "femme"
 
-#: js/app/common/views.js:411 js/app/header/views.js:234
+#: js/app/common/views.js:411 js/app/header/views.js:255
 msgid "New notification received"
 msgstr "Nouvelle notification reçue"
 
@@ -150,25 +150,25 @@ msgstr "Nouvelle notification reçue"
 msgid "Show more"
 msgstr "Charger plus"
 
-#: js/app/common/views.js:717 js/app/header/views.js:216
-#: js/app/login/views.js:34
+#: js/app/common/views.js:724 js/app/header/views.js:237
+#: js/app/login/views.js:36
 msgid "Login error"
 msgstr "Erreur de connexion"
 
-#: js/app/common/views.js:730 js/app/header/views.js:229
-#: js/app/login/views.js:47 js/app/newRadio/views.js:77
+#: js/app/common/views.js:737 js/app/header/views.js:250
+#: js/app/login/views.js:49 js/app/newRadio/views.js:77
 msgid "Error while login in"
 msgstr "Erreur lors de la connexion"
 
-#: js/app/common/views.js:780
+#: js/app/common/views.js:787
 msgid "My radios"
 msgstr "Mes radios"
 
-#: js/app/common/views.js:782 js/backoffice/Geoperm/Geoperm.js:317
+#: js/app/common/views.js:789 js/backoffice/Geoperm/Geoperm.js:317
 msgid "Create radio"
 msgstr "Créer une radio"
 
-#: js/app/common/views.js:913
+#: js/app/common/views.js:920
 msgid "Filter by genre"
 msgstr "Filtrer par genre"
 
@@ -187,6 +187,7 @@ msgstr "Radios suivantes"
 #: js/app/friends/views.js.py:497 js/app/friends/views.js:503
 #: js/app/gifts/views.js:49 js/app/gifts/views.js.py:56
 #: js/app/gifts/views.js:115 js/app/gifts/views.js.py:122
+#: js/app/passreset/views.js:57 js/app/passreset/views.js.py:78
 msgid "Error"
 msgstr "Erreur"
 
@@ -335,48 +336,50 @@ msgstr "Ne plus suivre"
 msgid "Song added"
 msgstr "Titre ajouté"
 
-#: js/app/programming/views.js:451
+#: js/app/programming/views.js:453
 msgid "Export results:"
 msgstr "Résultats de export:"
 
-#: js/app/programming/views.js:452
+#: js/app/programming/views.js:454
 msgid "tracks founds"
 msgstr "titres trouvés"
 
-#: js/app/programming/views.js:452
+#: js/app/programming/views.js:454
 msgid "tracks not found"
 msgstr "titres non trouvés"
 
-#: js/app/programming/views.js:453
+#: js/app/programming/views.js:455
 msgid "Results"
 msgstr "Résultats"
 
-#: js/app/programming/views.js:603 js/app/radio/views.js:1170
+#: js/app/programming/views.js:605 js/app/programming/jingles/views.js:173
+#: js/app/programming/jingles/views.js:299 js/app/radio/views.js:1183
 msgid "Warning"
 msgstr "Attention"
 
-#: js/app/programming/views.js:604
+#: js/app/programming/views.js:606 js/app/programming/jingles/views.js:300
 msgid ""
 "You must own the copyright or have the necessary rights for any content you "
 "upload on Yasound"
 msgstr ""
 "Vous devez posséder tous les droits du contenu que vous uploadez sur Yasound"
 
-#: js/app/programming/views.js:608
+#: js/app/programming/views.js:610 js/app/programming/jingles/views.js:304
 msgid "I agree"
 msgstr "Je suis d'accord"
 
-#: js/app/programming/views.js:609 js/app/radio/views.js:1173
+#: js/app/programming/views.js:611 js/app/programming/jingles/views.js:176
+#: js/app/programming/jingles/views.js:305 js/app/radio/views.js:1186
 #: js/backoffice/Invitations/InvitationForm.js:84
 #: js/backoffice/Radio/RadioForm.js:79
 msgid "Cancel"
 msgstr "Annuler"
 
-#: js/app/programming/views.js:716
+#: js/app/programming/views.js:718
 msgid "iTunes import analyzis started"
 msgstr "L'analyse de l'import iTunes a démarré"
 
-#: js/app/programming/views.js:717
+#: js/app/programming/views.js:719
 msgid "Error while analyzing iTunes import data"
 msgstr "Erreur lors de l'analyse de l'import iTunes"
 
@@ -395,6 +398,22 @@ msgstr "titres n'ont pas été trouvés"
 #: js/app/programming/deezer/views.js:226
 msgid "Results from Deezer import"
 msgstr "Résultats de l'import Deezer"
+
+#: js/app/programming/jingles/models.js:26
+msgid "every <%range%> songs"
+msgstr "tous les <%range%> morceaux"
+
+#: js/app/programming/jingles/views.js:174
+msgid "Your jingle will be lost for ever, continue?"
+msgstr "Votre jingle sera supprimé définitivement, continuer ?"
+
+#: js/app/programming/jingles/views.js:175
+msgid "Yes, delete it"
+msgstr "Oui, l'effacer"
+
+#: js/app/programming/jingles/views.js:308
+msgid "new jingle"
+msgstr "nouveau jingle"
 
 #: js/app/radio/models.js:44
 msgid "<%name%> liked this song!"
@@ -420,27 +439,27 @@ msgstr ""
 "<%name1%>, <%name2%> et <%name3%> et <%other%> autres personnes ont aimé ce "
 "morceau !"
 
-#: js/app/radio/views.js:794
+#: js/app/radio/views.js:807
 msgid "Next messages"
 msgstr "Messages suivants"
 
-#: js/app/radio/views.js:1148 js/app/radio/views.js.py:1187
+#: js/app/radio/views.js:1161 js/app/radio/views.js.py:1200
 msgid "Radio settings updated"
 msgstr "Paramètres de la radio mis à jour"
 
-#: js/app/radio/views.js:1149 js/app/radio/views.js.py:1188
+#: js/app/radio/views.js:1162 js/app/radio/views.js.py:1201
 #: js/app/settings/views.js:184 js/app/settings/views.js.py:198
 #: js/app/settings/views.js:208
 msgid "Error while saving settings"
 msgstr "Erreur lors de la sauvegarde des paramètres"
 
-#: js/app/radio/views.js:1171
+#: js/app/radio/views.js:1184
 msgid "The url you defined is permanent and cannot be changed, continue?"
 msgstr ""
 "L'url que vous venez de saisir sera permanente et ne pourra être modifiée, "
 "continuer ?"
 
-#: js/app/radio/views.js:1172
+#: js/app/radio/views.js:1185
 msgid "Yes, set the url"
 msgstr "Oui, définir l'url"
 
@@ -469,15 +488,15 @@ msgstr "Erreur lors de la sauvegarde des paramètres Twitter"
 msgid "Settings updated"
 msgstr "Paramètres mis à jour"
 
-#: js/app/share/views.js:47
+#: js/app/share/views.js:49
 msgid "I am listening to"
 msgstr "J'écoute"
 
-#: js/app/signup/views.js:36
+#: js/app/signup/views.js:37
 msgid "Registration error"
 msgstr "Erreur d'inscription"
 
-#: js/app/signup/views.js:55
+#: js/app/signup/views.js:58
 msgid "Error while creating account"
 msgstr "Erreur lors de création du compte"
 
@@ -849,7 +868,6 @@ msgid "Language"
 msgstr "Langue"
 
 #: js/backoffice/Menus/MenuGrid.js:43
-#: js/backoffice/Premium/PermanentPromocodesUsage.js:20
 #: js/backoffice/Premium/PromocodesGroupUsage.js:20
 msgid "Groups"
 msgstr "Groupes"
@@ -927,6 +945,11 @@ msgstr "Voulez-vous supprimer ce commentaire ?"
 #: js/backoffice/Premium/PermanentPromocodesUsage.js:15
 msgid "Permanent codes usage"
 msgstr "Utilisation des codes permanents"
+
+#: js/backoffice/Premium/PermanentPromocodesUsage.js:20
+#: js/backoffice/Premium/Promocodes.js:346
+msgid "Promocodes"
+msgstr "Promocodes"
 
 #: js/backoffice/Premium/PromocodeGrid.js:26
 #: js/backoffice/Premium/PromocodeGroupGrid.js:30
@@ -1025,10 +1048,6 @@ msgstr "Durée du service (mois)"
 #: js/backoffice/Premium/Promocodes.js:335
 msgid "Enabled"
 msgstr "Activé"
-
-#: js/backoffice/Premium/Promocodes.js:346
-msgid "Promocodes"
-msgstr "Promocodes"
 
 #: js/backoffice/Premium/Promocodes.js:351
 msgid "Permanent codes"
