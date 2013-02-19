@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<div class="modal hide fade" id="modal-add-schedule">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{% trans "Add schedule" %}</h3>
+    </div>
+    <div class="modal-body">
+        <label for='delay'>{% trans "Song range:" %}</label>
+        <input type='number' name='delay' value='5'>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">{% trans "Cancel" %}</a>
+        <a href="#" class="btn btn-primary" data-dismiss="modal">{% trans "Save" %}</a>
+    </div>
+</div>
+
+<div>
+    <input id="file-upload-jingle" type="file" name="jingle" data-url="/api/v1/jingle/upload/">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Preview" %}</th>
+                <th>{% trans "Schedule" %}</th>
+                <th>{% trans "Action" %}</th>
+            </tr>
+        </thead>
+        <tbody id='jingles'>
+            <tr class='loading-row'>
+                <td colspan='4'><img  src='/media/images/loading-white.gif'/></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

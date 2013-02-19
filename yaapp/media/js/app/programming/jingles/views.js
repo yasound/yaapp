@@ -6,7 +6,10 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
     tagName: 'tr',
     events: {
         'click .name': 'onEditName',
-        'click .delete': 'onDelete'
+        'click .delete': 'onDelete',
+        'click .cancel': 'onRemove',
+        'click .schedule': 'onAddSchedule',
+        'click .unschedule': 'onUnSchedule'
     },
 
     initialize: function () {
@@ -37,14 +40,19 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        $(this.el).html(ich.jingleCellTemplate(data));
-
+        if (Yasound.App.enableFX) {
+            $(this.el).html(ich.jingleCellTemplate(data)).fadeIn(200);
+        } else {
+            $(this.el).html(ich.jingleCellTemplate(data));
+        }
         $.subscribe('/jingle/cancel_edit', this.cancelEdit);
 
         return this;
     },
 
     upload: function(data, uuid) {
+        $('.cancel', this.el).show();
+        $('.delete', this.el).hide();
         this.data = data;
         this.data.formData = {
             'response_format': 'json',
@@ -64,8 +72,7 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
     start: function() {
         this.job = this.data.submit();
         $.publish('/jingle/upload_started');
-        $('#start', this.el).hide();
-        $('#stop', this.el).show();
+        $('.progress', this.el).show();
     },
 
     stop: function () {
@@ -78,6 +85,9 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
             $('#start', this.el).show();
             $('#stop', this.el).hide();
         }
+        $('.cancel', this.el).hide();
+        $('.delete', this.el).show();
+        $('.progress', this.el).hide();
     },
 
     onStart: function(e) {
@@ -97,6 +107,9 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
     },
 
     onFinished: function(e, data) {
+        $('.progress', this.el).hide();
+        $('.cancel', this.el).hide();
+        $('.delete', this.el).show();
         res =  data.result[0];
         $.publish('/jingle/upload_finished');
         $('.progress', this.el).remove();
@@ -105,6 +118,9 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
     },
 
     onFailed: function(e, data) {
+        $('.progress', this.el).hide();
+        $('.cancel', this.el).hide();
+        $('.delete', this.el).show();
         $.publish('/jingle/upload_failed');
     },
 
@@ -168,7 +184,27 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
         this.model.destroy();
         this.trigger('remove', this);
         this.remove();
+    },
+
+    onAddSchedule: function (e) {
+        var $modal = $('#modal-add-schedule');
+        var that = this;
+        $modal.modal({
+            show: true
+        });
+        $('#modal-add-schedule .btn-primary').one('click', function () {
+            var range = $('input[name=delay]', $modal).val();
+            that.model.setSongRange(range);
+            that.model.save();
+            $modal.modal('hide');
+        });
+    },
+
+    onUnSchedule: function (e) {
+        this.model.set({schedule: undefined});
+        this.model.save();
     }
+
 });
 
 

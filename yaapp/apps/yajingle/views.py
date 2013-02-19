@@ -100,6 +100,8 @@ def jingle(request, id):
         payload = json.loads(request.raw_post_data)
         name = payload.get('name')
         jingle['name'] = name
+        schedule = payload.get('schedule', [])
+        jingle['schedule'] = schedule
         jm.update_jingle(jingle)
         return api_response(jingle)
     elif request.method == 'DELETE':
