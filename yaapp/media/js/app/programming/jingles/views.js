@@ -210,12 +210,14 @@ Yasound.Views.Jingles.Cell = Backbone.View.extend({
 
 Yasound.Views.Jingles.List = Backbone.View.extend({
     initialize: function () {
-        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy', 'onRemoveView');
+        _.bindAll(this, 'render', 'addOne', 'addAll', 'onDestroy', 'onRemoveView', 'onJingleUploaded');
 
         this.collection.bind('add', this.addOne, this);
         this.collection.bind('reset', this.addAll, this);
         this.collection.bind('destroy', this.onDestroy, this);
         this.views = [];
+
+        $.subscribe('/jingle/upload_finished', this.onJingleUploaded);
     },
 
     render: function() {
@@ -223,6 +225,7 @@ Yasound.Views.Jingles.List = Backbone.View.extend({
     },
 
     onClose: function () {
+        $.unsubscribe('/jingle/upload_finished', this.onJingleUploaded);
         this.collection.unbind('add', this.addOne);
         this.collection.unbind('reset', this.addAll);
         this.collection.unbind('destroy', this.onDestroy);
@@ -259,6 +262,10 @@ Yasound.Views.Jingles.List = Backbone.View.extend({
     onRemoveView: function (view) {
         this.views = _.without(this.views, view);
         view.off('remove', this.onRemoveView);
+    },
+
+    onJingleUploaded: function () {
+        this.onDestroy();
     }
 
 });
