@@ -55,7 +55,7 @@ class Command(BaseCommand):
         global_start = time()
         start = time()
         skipped = 0
-        for i, song in enumerate(songs):
+        for i, song in enumerate(queryset_iterator(songs)):
             if i % 1000 == 0:
                 elapsed = time() - start
                 logger.info(
