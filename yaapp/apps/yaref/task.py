@@ -50,6 +50,12 @@ def async_find_synonyms(yasound_song_id):
             sm.calculate_hash_name(commit=True)
 
 
+@task(ignore_result=True)
+def async_generate_low_quality(yasound_song_id):
+    song = YasoundSong.objects.get(id=yasound_song_id)
+    song.generate_low_quality()
+
+
 @task(rate_limit='8/s', ignore_result=True, max_retries=2000)
 def async_convert_song(yasound_song_id, dry=False, primary=False, exclude_primary=False):
     jm = JobManager()

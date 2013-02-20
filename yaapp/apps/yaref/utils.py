@@ -173,10 +173,12 @@ def find_track_mbid(song):
 
 
 def get_preview_data(song):
+    from task import async_generate_low_quality
     if not song.lq_file_exists():
-        song.generate_low_quality()
-
-    path = song.get_song_lq_path()
+        async_generate_low_quality.delay(song.id)
+        path = song.get_song_path()
+    else:
+        path = song.get_song_lq_path()
 
     source = path
 
