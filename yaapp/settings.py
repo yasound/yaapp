@@ -930,14 +930,12 @@ FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS = '-ar 44100 -ab 192000 -y -reservoir 0' # c
 
 if PRODUCTION_MODE:
     SONGS_ROOT = '/data/glusterfs-mnt/replica2all/song/'
-    JINGLES_ROOT = '/data/glusterfs-mnt/replica2all/jingle/'
     ALBUM_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/album-cover/'
     SONG_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/song-cover/'
     RECOMMENDATION_CACHE = '/data/glusterfs-mnt/replica2all/recommendation/'
     RADIOWAYS_COVERS_ROOT = '/data/glusterfs-mnt/replica2all/front/radioways/logos/'
 elif DEVELOPMENT_MODE:
     SONGS_ROOT = '/data/storage/song/'
-    JINGLES_ROOT = '/data/storage/jingle/'
     ALBUM_COVERS_ROOT = '/data/storage/album-cover/'
     SONG_COVERS_ROOT = '/data/storage/song-cover/'
     RECOMMENDATION_CACHE = '/data/storage/recommendation/'
@@ -951,7 +949,6 @@ elif hostname in ['yas-dev-01', 'yas-dev-02']:
     RADIOWAYS_COVERS_ROOT = '/data/tmp/'
 else:
     SONGS_ROOT = '/tmp/'
-    JINGLES_ROOT = '/tmp/'
     ALBUM_COVERS_ROOT = '/tmp/'
     SONG_COVERS_ROOT = '/tmp/'
     RECOMMENDATION_CACHE = '/tmp/'
