@@ -644,6 +644,11 @@ class YasoundSong(models.Model):
         path = self.get_song_path()
         return os.path.exists(path)
 
+    def lq_file_exists(self):
+        """ check if low quality file exists """
+        path = self.get_song_lq_path()
+        return os.path.exists(path)
+
     class Meta:
         db_table = u'yasound_song'
         db_name = u'yasound'
