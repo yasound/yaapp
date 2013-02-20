@@ -173,7 +173,11 @@ def find_track_mbid(song):
 
 
 def get_preview_data(song):
+    if not song.lq_file_exists():
+        song.generate_low_quality()
+
     path = song.get_song_lq_path()
+
     source = path
 
     directory = mkdtemp(dir=settings.SHARED_TEMP_DIRECTORY)
