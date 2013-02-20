@@ -369,6 +369,7 @@ Yasound.Player.PreviewPlayer = function () {
             if (mgr.finishCallback) {
                 mgr.finishCallback();
             }
+            mgr.finishCallback = undefined;
         }
     };
     return mgr;

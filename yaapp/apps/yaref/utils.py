@@ -4,7 +4,8 @@ from django.conf import settings
 import random
 import requests
 import pyquery
-
+import shutil
+from tempfile import mkdtemp
 import musicbrainz2.webservice as ws
 from pyquery import PyQuery as pq
 
@@ -173,11 +174,27 @@ def find_track_mbid(song):
 
 def get_preview_data(song):
     path = song.get_song_lq_path()
-    stats = os.stat(path)
-    size = stats.st_size
-    begin = size / 2
-    f = open(path, "rb")
-    f.seek(begin)
-    data = f.read(65535)
-    f.close
+    source = path
+
+    directory = mkdtemp(dir=settings.SHARED_TEMP_DIRECTORY)
+    dest = os.path.join(directory, 'dest.mp3')
+
+    ffmpeg_bin = settings.FFMPEG_BIN
+    args = [ffmpeg_bin,
+            '-t',
+            '30',
+            '-ss',
+            '30',
+            '-i',
+            source,
+            '-acodec',
+            'copy',
+            dest]
+    p = sub.Popen(args, stdout=sub.PIPE, stderr=sub.PIPE)
+    output, errors = p.communicate()
+
+    f = open(dest, "rb")
+    data = f.read()
+    f.close()
+    shutil.rmtree(directory)
     return data
