@@ -12,10 +12,7 @@ Yasound.Player.SoundManager = function () {
     soundManager.useHighPerformance = true;
     soundManager.useFastPolling = true;
 
-    var async = true;
-    if (Yasound.App.isMobile) {
-        async = false;
-    }
+    var async = false;
 
     var mgr = {
         config : {
@@ -273,7 +270,7 @@ Yasound.Player.PreviewPlayer = function () {
 
     var mgr = {
         config : {
-            id: 'yasoundInstantPlay',
+            id: 'yasoundPreviewPlay',
             url: '/',
             autoPlay: true,
             autoLoad: true,
