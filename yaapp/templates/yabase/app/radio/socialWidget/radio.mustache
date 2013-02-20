@@ -2,15 +2,13 @@
 <div class="wall-pic">
   <img src="{{ radio.picture_url|default:'<% picture %>'}}" width="150" height="150" alt="{{ radio.name|default:'<% name %>' }}" />
 </div>
+<a href="#" class="wall-button btn-coral btn-like"><i class='icon-heart'></i> {% trans "Like song" %}</a>
 {% if radio %}
 <a href="#" class="wall-fav wall-button btn-sky">{% if radio.favorite %}{% trans "Remove from favorites" %}{% else %}{% trans "Add to favorites" %}{% endif %}</a>
 {% else %}
 <a href="#" class="wall-fav wall-button btn-sky"><%#favorite%>{% trans "Remove from favorites" %}<%/favorite%><%^favorite%>{% trans "Add to favorites" %}<%/favorite%></a>
 {% endif %}
 
-{% ifequal display_like 1%}
-<a href="#" class="wall-button btn-coral btn-like"><i class='icon-heart'></i> {% trans "Like song" %}</a>
-{% endifequal %}
 <a href="#" class="wall-button btn-white btn-settings" style='display:none;'>{% trans "Settings" %}</a>
 <a href="#" class="wall-button btn-white btn-programming" style='display:none;'>{% trans "Programming" %}</a>
 <a href="#" class="wall-button btn-green btn-broadcast" style='display:none;'>{% trans "Broadcast to your fans" %}</a>

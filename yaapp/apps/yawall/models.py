@@ -110,19 +110,23 @@ class WallManager():
 
     def _generate_event_id(self, radio, event_type, current_song, now=None):
         if now is None:
-            now = now = datetime.datetime.now()
+            now = datetime.datetime.now()
         if event_type == WallManager.EVENT_MESSAGE:
             time_val = time.mktime(now.timetuple())
             return '%s-msg-%s' % (radio.uuid, time_val)
         elif event_type == WallManager.EVENT_LIKE:
             song_date = current_song.get('last_play_time')
-            try:
-                song_date = dateutil.parser.parse(song_date)
-            except:
-                song_date = now
+            if song_date is not None:
+                try:
+                    song_date = dateutil.parser.parse(song_date)
+                except:
+                    song_date = now
 
-            time_val = time.mktime(song_date.timetuple())
-            return '%s-like-%s' % (radio.uuid, time_val)
+                time_val = time.mktime(song_date.timetuple())
+                return '%s-like-%s' % (radio.uuid, time_val)
+            else:
+                return '%s-like-%s' % (radio.uuid, self._generate_song_uuid(current_song))
+
 
     def _generate_song_uuid(self, current_song):
         """ generate a unique uuid from song """

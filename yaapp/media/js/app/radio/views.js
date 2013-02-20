@@ -118,7 +118,8 @@ Yasound.Views.Radio = Backbone.View.extend({
         "click .btn-programming": "onProgramming",
         "click .btn-broadcast": "onBroadcast",
         "click a.wall-fav": "toggleFavorite",
-        "click .wall-digest a": 'onLink'
+        "click .wall-digest a": 'onLink',
+        "click .btn-like": 'onLike'
     },
 
     initialize: function () {
@@ -161,13 +162,6 @@ Yasound.Views.Radio = Backbone.View.extend({
             $('.btn-broadcast', this.el).hide();
         }
         return this;
-    },
-
-    onLike: function (e) {
-        e.preventDefault();
-        if (this.model.currentSong) {
-            this.model.currentSong.like();
-        }
     },
 
     onSettings: function (e) {
@@ -220,6 +214,26 @@ Yasound.Views.Radio = Backbone.View.extend({
     onLink: function (e) {
         e.preventDefault();
         window.open($(e.target).attr('href'));
+    },
+
+    onLike: function (e) {
+        e.preventDefault();
+        var currentSong = Yasound.App.Router.radioContext.currentSong;
+        if (!currentSong) {
+            return;
+        }
+        var songId = currentSong.get('id');
+        var radioUUID = this.model.get('uuid');
+        var data = {
+            'last_play_time': currentSong.get('last_play_time')
+        };
+        var url = '/api/v1/radio/' + radioUUID + '/likes/';
+        $.ajax({
+           url: url,
+           type: 'POST',
+           dataType: 'json',
+           data: JSON.stringify(data)
+        });
     }
 });
 
