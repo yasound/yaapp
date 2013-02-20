@@ -319,8 +319,8 @@ Yasound.Player.PreviewPlayer = function () {
         },
 
         play: function (streamURL, finishCallback) {
+            mgr.stop();
             mgr.finishCallback = finishCallback;
-            mgr.stop(true);
             if (Yasound.App.player.isPlaying()) {
                 Yasound.App.player.stop();
                 mgr.resumeAtEnd = true;
