@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-19 14:59+0100\n"
+"POT-Creation-Date: 2013-02-20 14:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -365,8 +365,8 @@ msgid "Contact"
 msgstr ""
 
 #: templates/newsletter/newsletter_historic.html:25
-#: templates/yabase/app/programming/addFromServer.mustache:24
-#: templates/yabase/app/programming/songInstances.mustache:22
+#: templates/yabase/app/programming/addFromServer.mustache:25
+#: templates/yabase/app/programming/songInstances.mustache:24
 #: templates/yabase/app/programming/statusPage.mustache:50
 #: templates/yabase/app/programming/upload.mustache:15
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:24
@@ -1006,7 +1006,7 @@ msgstr "Voulez-vous vraiment ne plus suivre cet utilisateur ?"
 #: templates/yabase/app/friends/friendsPage.mustache:45
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:15
 #: templates/yabase/app/programming/programmingPage.mustache:14
-#: templates/yabase/app/programming/songInstances.mustache:47
+#: templates/yabase/app/programming/songInstances.mustache:50
 #: templates/yabase/app/programming/statusPage.mustache:12
 #: templates/yabase/app/radio/radioPage.mustache:95
 #: templates/yabase/app/radio/radioPage.mustache:110
@@ -1020,7 +1020,7 @@ msgstr "Non merci"
 #: templates/yabase/social_widget.html:620 templates/yabase/webapp.html:655
 #: templates/yabase/app/myRadios/myRadiosPage.mustache:16
 #: templates/yabase/app/programming/programmingPage.mustache:15
-#: templates/yabase/app/programming/songInstances.mustache:48
+#: templates/yabase/app/programming/songInstances.mustache:51
 #: templates/yabase/app/programming/statusPage.mustache:13
 #: templates/yabase/app/radio/radioPage.mustache:96
 #: templates/yabase/app/radio/radioPage.mustache:111
@@ -1177,7 +1177,8 @@ msgstr "Cadeaux"
 #: templates/yabase/app/profile/user.mustache:26
 #: templates/yabase/app/programming/radioInline.mustache:12
 #: templates/yabase/app/radio/editRadioPage.mustache:11
-#: templates/yabase/app/radio/radio.mustache:11
+#: templates/yabase/app/radio/radio.mustache:14
+#: templates/yabase/app/radio/socialWidget/radio.mustache:12
 #: templates/yabase/app/settings/settingsPage.mustache:7
 msgid "Settings"
 msgstr "Paramètres"
@@ -1191,7 +1192,8 @@ msgid "Next »"
 msgstr "Suivant »"
 
 #: templates/yabase/app/radioCellTip.mustache:10
-#: templates/yabase/app/radio/radio.mustache:27
+#: templates/yabase/app/radio/radio.mustache:30
+#: templates/yabase/app/radio/socialWidget/radio.mustache:28
 msgid "favorites"
 msgstr "favoris"
 
@@ -1220,6 +1222,8 @@ msgid "No result found"
 msgstr "Aucun résultat trouvé"
 
 #: templates/yabase/app/track.mustache:45
+#: templates/yabase/app/radio/radio.mustache:12
+#: templates/yabase/app/radio/socialWidget/radio.mustache:5
 msgid "Like song"
 msgstr "J'aime le titre"
 
@@ -1481,7 +1485,8 @@ msgstr "Supprimer"
 
 #: templates/yabase/app/myRadios/radioWithStatsCell.mustache:10
 #: templates/yabase/app/radio/editRadioPage.mustache:9
-#: templates/yabase/app/radio/radio.mustache:12
+#: templates/yabase/app/radio/radio.mustache:15
+#: templates/yabase/app/radio/socialWidget/radio.mustache:13
 msgid "Programming"
 msgstr "Programmation"
 
@@ -1652,23 +1657,23 @@ msgid "Advanced search "
 msgstr "Recherche avancée"
 
 #: templates/yabase/app/programming/addFromServer.mustache:12
-#: templates/yabase/app/programming/addFromServer.mustache:21
-#: templates/yabase/app/programming/songInstances.mustache:19
+#: templates/yabase/app/programming/addFromServer.mustache:22
+#: templates/yabase/app/programming/songInstances.mustache:21
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:21
 msgid "Track"
 msgstr "Piste"
 
 #: templates/yabase/app/programming/addFromServer.mustache:13
-#: templates/yabase/app/programming/addFromServer.mustache:22
-#: templates/yabase/app/programming/songInstances.mustache:20
+#: templates/yabase/app/programming/addFromServer.mustache:23
+#: templates/yabase/app/programming/songInstances.mustache:22
 #: templates/yabase/app/programming/statusPage.mustache:29
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:22
 msgid "Album"
 msgstr "Album"
 
 #: templates/yabase/app/programming/addFromServer.mustache:14
-#: templates/yabase/app/programming/addFromServer.mustache:23
-#: templates/yabase/app/programming/songInstances.mustache:21
+#: templates/yabase/app/programming/addFromServer.mustache:24
+#: templates/yabase/app/programming/songInstances.mustache:23
 #: templates/yabase/app/programming/statusPage.mustache:28
 #: templates/yabase/app/programming/deezer/importFromDeezer.mustache:23
 msgid "Artist"
@@ -1722,7 +1727,7 @@ msgstr "Importer depuis iTunes"
 msgid "Import from deezer"
 msgstr "Importer depuis Deezer"
 
-#: templates/yabase/app/programming/programmingToolbar.mustache:9
+#: templates/yabase/app/programming/programmingToolbar.mustache:10
 msgid "Jingles"
 msgstr ""
 
@@ -1731,7 +1736,7 @@ msgstr ""
 msgid "Listen now"
 msgstr "Ecouter maintenant"
 
-#: templates/yabase/app/programming/songInstanceCell.mustache:6
+#: templates/yabase/app/programming/songInstanceCell.mustache:10
 #: templates/yabase/app/programming/statusPage.mustache:5
 #: templates/yabase/app/programming/uploadCell.mustache:11
 msgid "Remove"
@@ -1749,12 +1754,12 @@ msgstr "Exporter la sélection vers Deezer"
 msgid "Remove all songs"
 msgstr "Supprimer tous les morceaux"
 
-#: templates/yabase/app/programming/songInstances.mustache:40
+#: templates/yabase/app/programming/songInstances.mustache:43
 #: templates/yabase/app/programming/upload.mustache:8
 msgid "Remove all"
 msgstr "Supprimer tous les morceaux"
 
-#: templates/yabase/app/programming/songInstances.mustache:43
+#: templates/yabase/app/programming/songInstances.mustache:46
 msgid "Do you really want to remove all filtered titles ?"
 msgstr "Voulez-vous vraiment supprimer tous les titres filtrés ?"
 
@@ -1794,7 +1799,7 @@ msgstr "Progression"
 msgid "Start"
 msgstr "Démarrer"
 
-#: templates/yabase/app/programming/yasoundSongCell.mustache:6
+#: templates/yabase/app/programming/yasoundSongCell.mustache:10
 msgid "add"
 msgstr "ajouter"
 
@@ -1902,15 +1907,20 @@ msgstr ""
 #: templates/yabase/app/radio/radio.mustache:6
 #: templates/yabase/app/radio/radio.mustache:8
 #: templates/yabase/app/radio/radioInfos.mustache:14
+#: templates/yabase/app/radio/socialWidget/radio.mustache:7
+#: templates/yabase/app/radio/socialWidget/radio.mustache:9
 msgid "Remove from favorites"
 msgstr "Retirer des favoris"
 
 #: templates/yabase/app/radio/radio.mustache:6
 #: templates/yabase/app/radio/radio.mustache:8
+#: templates/yabase/app/radio/socialWidget/radio.mustache:7
+#: templates/yabase/app/radio/socialWidget/radio.mustache:9
 msgid "Add to favorites"
 msgstr "Ajouter aux favoris"
 
-#: templates/yabase/app/radio/radio.mustache:13
+#: templates/yabase/app/radio/radio.mustache:16
+#: templates/yabase/app/radio/socialWidget/radio.mustache:14
 msgid "Broadcast to your fans"
 msgstr "Message aux abonnés"
 
@@ -1931,6 +1941,30 @@ msgstr "J'aime le titre sur YaSound"
 #: templates/yabase/app/radio/socialWidget/radioPage.mustache:7
 msgid "powered by YaSound"
 msgstr "propulsée par YaSound"
+
+#: templates/yabase/app/radio/radioPage.mustache:37
+msgid "Listening to the radio"
+msgstr "Ils écoutent la radio"
+
+#: templates/yabase/app/radio/radioPage.mustache:44
+msgid "Added in favorites"
+msgstr "Ils l'ont ajouté aux favoris"
+
+#: templates/yabase/app/radio/radioPage.mustache:48
+msgid "View all"
+msgstr "Tout afficher"
+
+#: templates/yabase/app/radio/radioPage.mustache:52
+msgid "Radio creator"
+msgstr "Créateur de la radio"
+
+#: templates/yabase/app/radio/radioPage.mustache:63
+msgid "Express yourself..."
+msgstr "Exprimez vous..."
+
+#: templates/yabase/app/radio/radioPage.mustache:64
+msgid "Publish"
+msgstr "Publier"
 
 #: templates/yabase/app/radio/radioPage.mustache:88
 #: templates/yabase/app/radio/socialWidget/radioPage.mustache:70
@@ -2506,9 +2540,6 @@ msgstr "Recherche floue"
 
 #~ msgid "Connected users"
 #~ msgstr "Utilisateurs connectés"
-
-#~ msgid "See all"
-#~ msgstr "Tous les voir"
 
 #~ msgid "minutes of music have been played"
 #~ msgstr "minutes de musique ont été écoutées"
