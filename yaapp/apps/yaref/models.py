@@ -11,6 +11,7 @@ import buylink
 import django.db.models.options as options
 import logging
 import musicbrainzngs
+from tempfile import mkdtemp
 import os, errno
 import shutil
 import string
@@ -626,8 +627,9 @@ class YasoundSong(models.Model):
     def generate_low_quality(self):
         import subprocess as sub
         source = self.get_song_path()
-        destination = self.get_filepath_for_lq()
 
+        directory = mkdtemp(dir=settings.TEMP_DIRECTORY)
+        destination = u'%s/converted.mp3' % (directory)
         logger.debug('generating lq for %s' % (source))
         args = [settings.FFMPEG_BIN,
                 '-i',
@@ -639,6 +641,13 @@ class YasoundSong(models.Model):
         if len(errors) == 0:
             logger.error('error while generating lq of %d' % (self.id))
             logger.error(errors)
+
+        lq_destination = self.get_song_lq_path()
+        try:
+            shutil.copy(destination, lq_destination)
+        except:
+            logger.error('cannot copy %s to %s' % (destination, lq_destination))
+        shutil.rmtree(directory)
 
     def file_exists(self):
         path = self.get_song_path()
