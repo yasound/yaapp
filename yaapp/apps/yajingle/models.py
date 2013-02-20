@@ -22,6 +22,7 @@ class JingleManager():
             'creator': user_id,
             'created': '',
             'updated': '',
+            'duration': 120,
             'filename': 'aabbccdd.mp3',
             'name': 'Jingle introduction',
             'description': ''
@@ -81,7 +82,7 @@ class JingleManager():
         if radio_uuid is not None:
             self.notify_scheduler(doc.get('_id'), radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_UPDATED)
 
-    def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None):
+    def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None, duration=None):
         doc = {
             'radio_uuid': radio.uuid,
             'creator': creator.id,
@@ -89,6 +90,7 @@ class JingleManager():
             'created': datetime.datetime.now(),
             'updated': datetime.datetime.now(),
             'name': name,
+            'duration': duration,
             'description': description,
             'schedule': schedule
         }

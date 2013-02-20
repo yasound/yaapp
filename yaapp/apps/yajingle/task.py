@@ -9,9 +9,22 @@ from yabase.models import Radio
 from models import JingleManager
 import utils as yajingle_utils
 
+from uploader import echogen
+
 import logging
 logger = logging.getLogger("yaapp.yajingle")
 
+
+def _get_mp3_duration(filename):
+    echo_data = echogen.run_echogen(filename)
+    if echo_data and len(echo_data) > 0:
+        if 'metadata' in echo_data[0]:
+            try:
+                duration = echo_data[0]['metadata']['duration']
+                return duration
+            except:
+                pass
+    return 0
 
 @task
 def import_jingle(filename, name, radio_uuid, creator_id):
@@ -36,4 +49,4 @@ def import_jingle(filename, name, radio_uuid, creator_id):
     shutil.copy(converted, jingle_path)
 
     m = JingleManager()
-    m.create_jingle(name=name, radio=radio, creator=creator, filename=jingle_filename)
+    m.create_jingle(name=name, radio=radio, creator=creator, filename=jingle_filename, duration=_get_mp3_duration(jingle_path))
