@@ -1,6 +1,6 @@
 import random
 import os
-from yaref.utils import convert_filename_to_filepath2
+from yaref.utils import convert_filename_to_filepath
 from django.conf import settings
 
 
@@ -12,6 +12,6 @@ def generate_filename_and_path_for_jingle():
     filename = None
     while path_exists:
         filename = ''.join(random.choice("01234567890abcdef") for _i in xrange(9)) + '.mp3'
-        path = os.path.join(settings.JINGLES_ROOT, convert_filename_to_filepath2(filename))
+        path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(filename))
         path_exists = os.path.exists(path)
     return filename, path

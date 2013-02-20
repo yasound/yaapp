@@ -26,15 +26,18 @@ def _get_mp3_duration(filename):
                 pass
     return 0
 
+
 @task
 def import_jingle(filename, name, radio_uuid, creator_id):
     radio = Radio.objects.get(uuid=radio_uuid)
     creator = User.objects.get(id=creator_id)
     directory = os.path.dirname(filename)
-    converted = u'%s/d.mp3' % (directory)
-    res = convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS, filename, converted)
-    if not res:
-        logger.error('cannot convert %s to %s' % (filename, converted))
+    hq = u'%s/d.mp3' % (directory)
+    lq = u'%s/d_lq.mp3' % (directory)
+    res1 = convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_LOW_QUALITY_OPTIONS, filename, lq)
+    res2 = convert_to_mp3(settings.FFMPEG_BIN, settings.FFMPEG_CONVERT_HIGH_QUALITY_OPTIONS, filename, hq)
+    if not res1 or not res2:
+        logger.error('cannot convert %s to %s (%s)' % (filename, lq, hq))
         return
 
     jingle_filename, jingle_path = yajingle_utils.generate_filename_and_path_for_jingle()
@@ -46,7 +49,10 @@ def import_jingle(filename, name, radio_uuid, creator_id):
         else:
             raise
 
-    shutil.copy(converted, jingle_path)
+    shutil.copy(hq, jingle_path)
 
     m = JingleManager()
     m.create_jingle(name=name, radio=radio, creator=creator, filename=jingle_filename, duration=_get_mp3_duration(jingle_path))
+
+    jingle_lq_path = m.jingle_lq_filepath({'filename': jingle_filename})
+    shutil.copy(lq, jingle_lq_path)

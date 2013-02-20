@@ -1,7 +1,7 @@
 from django.conf import settings
 import datetime
 from bson.objectid import ObjectId
-from yaref.utils import convert_filename_to_filepath2
+from yaref.utils import convert_filename_to_filepath
 import os
 
 from yabase.models import Playlist
@@ -45,7 +45,11 @@ class JingleManager():
         self.collection.ensure_index("radio_uuid")
 
     def jingle_filepath(self, jingle):
-        path = os.path.join(settings.JINGLES_ROOT, convert_filename_to_filepath2(jingle.get('filename')))
+        path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(jingle.get('filename')))
+        return path
+
+    def jingle_lq_filepath(self, jingle):
+        path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(jingle.get('filename')))
         return path
 
     def notify_scheduler(self, jingle_id, radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_UPDATED):
@@ -62,6 +66,10 @@ class JingleManager():
             return
 
         fullpath = self.jingle_filepath(doc)
+        if fullpath:
+            os.remove(fullpath)
+
+        fullpath = self.jingle_lq_filepath(doc)
         if fullpath:
             os.remove(fullpath)
 
