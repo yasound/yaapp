@@ -11,7 +11,7 @@ Yasound.Data.Models.Jingle = Backbone.Model.extend({
     setSongRange: function(range) {
         schedule = [{
             type: 'between_songs',
-            range: range
+            range: parseInt(range, 10)
         }];
         this.set({
             'schedule': schedule
