@@ -49,8 +49,10 @@ class JingleManager():
         return path
 
     def jingle_lq_filepath(self, jingle):
-        path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(jingle.get('filename')))
-        return path
+        song_path = os.path.join(settings.SONGS_ROOT, convert_filename_to_filepath(jingle.get('filename')))
+        name, extension = os.path.splitext(song_path)
+        lq = u'%s_lq%s' % (name, extension)
+        return lq
 
     def notify_scheduler(self, jingle_id, radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_UPDATED):
         async_transient_radio_event.delay(event_type=event_type, radio_uuid=radio_uuid, jingle_id=jingle_id)
@@ -67,11 +69,17 @@ class JingleManager():
 
         fullpath = self.jingle_filepath(doc)
         if fullpath:
-            os.remove(fullpath)
+            try:
+                os.remove(fullpath)
+            except:
+                pass
 
         fullpath = self.jingle_lq_filepath(doc)
         if fullpath:
-            os.remove(fullpath)
+            try:
+                os.remove(fullpath)
+            except:
+                pass
 
         self.collection.remove({'_id': jingle_id}, safe=True)
 

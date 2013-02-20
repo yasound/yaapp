@@ -55,4 +55,5 @@ def import_jingle(filename, name, radio_uuid, creator_id):
     m.create_jingle(name=name, radio=radio, creator=creator, filename=jingle_filename, duration=_get_mp3_duration(jingle_path))
 
     jingle_lq_path = m.jingle_lq_filepath({'filename': jingle_filename})
+    logger.info(jingle_lq_path)
     shutil.copy(lq, jingle_lq_path)
