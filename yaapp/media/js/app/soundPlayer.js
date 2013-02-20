@@ -256,6 +256,125 @@ Yasound.Player.InstantPlayer = function () {
 };
 
 
+Yasound.Player.PreviewPlayer = function () {
+    soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
+    soundManager.preferFlash = true;
+    soundManager.useHTML5Audio = true;
+    soundManager.debugMode = false;
+    soundManager.useFlashBlock = true;
+    soundManager.flashVersion = 9;
+    soundManager.useHighPerformance = true;
+    soundManager.useFastPolling = true;
+
+    var async = true;
+    if (Yasound.App.isMobile) {
+        async = false;
+    }
+
+    var mgr = {
+        config : {
+            id: 'yasoundInstantPlay',
+            url: '/',
+            autoPlay: true,
+            autoLoad: true,
+            volume: 100,
+            stream: false,
+            onfinish: function () {
+                mgr.onFinished();
+            }
+        },
+        resumeAtEnd: false,
+        baseUrl: undefined,
+        soundHandler: undefined,
+        autoplay: false,
+        manualStopped: false,
+
+        isPlaying: function () {
+            if (typeof mgr.soundHandler === "undefined" || mgr.soundHandler.playState != 1) {
+                return false;
+            }
+            return true;
+        },
+
+        setVolume: function (volume) {
+            mgr.config.volume = volume;
+            if (mgr.isPlaying()) {
+                mgr.soundHandler.setVolume(volume);
+            }
+        },
+
+        volume: function () {
+            return mgr.config.volume;
+        },
+
+        stop: function (disableCb) {
+            mgr.autoplay = false;
+            mgr.manualStopped = true;
+            if (!(typeof mgr.soundHandler === "undefined")) {
+                mgr.soundHandler.unload();
+            }
+            if (!disableCb) {
+                mgr.onFinished();
+            }
+        },
+
+        play: function (streamURL, finishCallback) {
+            mgr.finishCallback = finishCallback;
+            mgr.stop(true);
+            if (Yasound.App.player.isPlaying()) {
+                Yasound.App.player.stop();
+                mgr.resumeAtEnd = true;
+            } else {
+                mgr.resumeAtEnd = false;
+            }
+            if (mgr.isPlaying()) {
+                return;
+            }
+            mgr.config.url = streamURL;
+            if (!mgr.config.url) {
+                return;
+            }
+            mgr.setVolume(Yasound.App.player.volume());
+
+            if ((typeof mgr.soundHandler === "undefined")) {
+                mgr.soundHandler = soundManager.createSound(mgr.config);
+            } else {
+                mgr.soundHandler.play(mgr.config);
+            }
+        },
+
+        init: function (callback) {
+            if (!callback) {
+                callback = function () { };
+            }
+
+            var waitForSM = true;
+            if ($.browser.msie) {
+                if ($.browser.version == '8.0' || $.browser.version == '7.0' || $.browser.version == '6.0') {
+                    waitForSM = false;
+                }
+            }
+
+            if (waitForSM) {
+                soundManager.onready(callback);
+            } else {
+                callback();
+            }
+        },
+
+        onFinished: function () {
+            if (mgr.resumeAtEnd) {
+                Yasound.App.player.play();
+            }
+            if (mgr.finishCallback) {
+                mgr.finishCallback();
+            }
+        }
+    };
+    return mgr;
+};
+
+
 Yasound.Player.Deezer = function () {
     soundManager.url = '/media/js/sm/swf/'; // directory where SM2 .SWFs
     soundManager.preferFlash = true;

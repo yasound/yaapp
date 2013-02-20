@@ -138,6 +138,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/song/(?P<song_id>\d+)/neutral/$', 'yabase.views.neutral_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/disliker/$', 'yabase.views.dislike_song'),
     url(r'^api/v1/song/(?P<song_id>\d+)/status/$', 'yabase.views.get_song_status'),
+    url(r'^api/v1/song/(?P<song_id>\d+)/download_preview/$', 'yabase.views.download_preview'),
     url(r'^api/v1/subscription/$', 'account.views.get_subscription'),
 
     # live

@@ -640,7 +640,6 @@ class YasoundSong(models.Model):
             logger.error('error while generating lq of %d' % (self.id))
             logger.error(errors)
 
-
     def file_exists(self):
         path = self.get_song_path()
         return os.path.exists(path)

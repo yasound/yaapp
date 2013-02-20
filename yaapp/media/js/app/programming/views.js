@@ -9,12 +9,15 @@ Namespace('Yasound.Views');
 Yasound.Views.SongInstance = Backbone.View.extend({
     tagName: 'tr',
     events: {
+        "click .preview": "onPreview",
+        "click .stop-preview": "onStopPreview",
         "click .remove": "onRemove",
         "click .artist": "onArtist",
         "click .album": "onAlbum"
     },
 
     initialize: function () {
+        _.bindAll(this, 'onPreviewFinished');
         this.model.bind('change', this.render, this);
     },
 
@@ -48,6 +51,26 @@ Yasound.Views.SongInstance = Backbone.View.extend({
         $('#album-select').trigger("liszt:updated");
         $('#album-select').trigger("change");
         $('html, body').scrollTop(0);
+    },
+
+    onPreview: function (e) {
+        e.preventDefault();
+        var url = '/api/v1/song/' + this.model.get('id') + '/download_preview/';
+        $('.preview', this.el).hide();
+        $('.stop-preview', this.el).show();
+        Yasound.App.previewPlayer.play(url, this.onPreviewFinished);
+    },
+
+    onStopPreview: function (e) {
+        e.preventDefault();
+        Yasound.App.previewPlayer.stop();
+        $('.stop-preview', this.el).hide();
+        $('.preview', this.el).show();
+    },
+
+    onPreviewFinished: function () {
+        $('.stop-preview', this.el).hide();
+        $('.preview', this.el).show();
     }
 });
 
@@ -115,10 +138,13 @@ Yasound.Views.SongInstances = Backbone.View.extend({
 Yasound.Views.YasoundSong = Backbone.View.extend({
     tagName: 'tr',
     events: {
-        "click .add": "addSong"
+        "click .add": "addSong",
+        "click .preview": "onPreview",
+        "click .stop-preview": "onStopPreview"
     },
 
     initialize: function () {
+        _.bindAll(this, 'onPreviewFinished');
         this.model.bind('change', this.render, this);
     },
 
@@ -135,6 +161,27 @@ Yasound.Views.YasoundSong = Backbone.View.extend({
     addSong: function(e) {
         this.model.addToPlaylist();
         this.close();
+    },
+
+    onPreview: function (e) {
+        e.preventDefault();
+        $('.stop-preview', this.el).show();
+        $('.preview', this.el).hide();
+
+        var url = '/yaref/download_preview/'+ this.model.get('id') + '/';
+        Yasound.App.previewPlayer.play(url, this.onPreviewFinished);
+    },
+
+    onStopPreview: function (e) {
+        e.preventDefault();
+        Yasound.App.previewPlayer.stop();
+        $('.stop-preview', this.el).hide();
+        $('.preview', this.el).show();
+    },
+
+    onPreviewFinished: function () {
+        $('.stop-preview', this.el).hide();
+        $('.preview', this.el).show();
     }
 });
 

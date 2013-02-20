@@ -169,3 +169,15 @@ def find_track_mbid(song):
         return None
     mbid = track.id[len('http://musicbrainz.org/track/'):]
     return mbid
+
+
+def get_preview_data(song):
+    path = song.get_song_lq_path()
+    stats = os.stat(path)
+    size = stats.st_size
+    begin = size / 2
+    f = open(path, "rb")
+    f.seek(begin)
+    data = f.read(65535)
+    f.close
+    return data

@@ -49,6 +49,7 @@ from yawall.models import WallManager
 from account.views import fast_connected_users_by_distance
 from yablog.models import BlogPost
 import import_utils
+from yaref import utils as yaref_utils
 import json
 import logging
 import os
@@ -2930,3 +2931,15 @@ def radio_m3u(request, radio_uuid_or_slug, template_name='yabase/m3u.txt'):
     return render_to_response(template_name, {
         'radio': radio
     }, context_instance=RequestContext(request), mimetype='audio/x-mpegurl')
+
+
+@check_api_key(methods=['GET'], login_required=True)
+def download_preview(request, song_id):
+    song_instance = get_object_or_404(SongInstance, id=song_id)
+    yasound_song_id = song_instance.metadata.yasound_song_id
+    song = get_object_or_404(YasoundSong, id=yasound_song_id)
+    if not song.file_exists():
+        raise Http404
+    data = yaref_utils.get_preview_data(song)
+    response = HttpResponse(data, mimetype='audio/mp3')
+    return response

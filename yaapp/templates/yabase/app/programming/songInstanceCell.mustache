@@ -1,7 +1,11 @@
 {% load i18n %}
+<td>
+    <button class='btn-sky stop-preview' style='display:none;'>{% trans "Stop" %}</button>
+    <button class='btn-sky preview'>{% trans "Play" %}</button>
+</td>
 <td><% metadata__name %></td>
 <td><a href='#' class='album'><% metadata__album_name %></a></td>
 <td><a href='#' class='artist'><% metadata__artist_name %></a></td>
 <td>
-    <button class='yabutton-small remove'>{% trans 'Remove' %}</button
+    <button class='btn-coral remove'>{% trans 'Remove' %}</button
 </td>

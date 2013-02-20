@@ -14,6 +14,8 @@ from settings import FUZZY_KEY
 from django.utils import simplejson
 from yacore.http import check_api_key_Authentication, check_http_method
 from yacore.decorators import check_api_key
+import yaref.utils as yaref_utils
+import os
 
 from yaref.models import YasoundAlbum
 import logging
@@ -109,4 +111,14 @@ def internal_song_download(request, song_id):
     response = HttpResponse()
     response['Content-Type'] = 'audio/mp3'
     response['X-Accel-Redirect'] = '/songs/' + path
+    return response
+
+
+@check_api_key(methods=['GET'], login_required=True)
+def download_preview(request, id):
+    song = get_object_or_404(YasoundSong, id=id)
+    if not song.file_exists():
+        raise Http404
+    data = yaref_utils.get_preview_data(song)
+    response = HttpResponse(data, mimetype='audio/mp3')
     return response
