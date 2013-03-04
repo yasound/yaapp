@@ -95,7 +95,9 @@ class JingleManager():
     def update_jingle(self, doc):
         self.collection.save(doc, safe=True)
         radio_uuid = doc.get('radio_uuid')
+        logger.info('updating jingle %s' % doc)
         if radio_uuid is not None:
+            logger.info('notifying scheduler for radio %s' % radio_uuid)
             self.notify_scheduler(doc.get('_id'), radio_uuid, event_type=TransientRadioHistoryManager.TYPE_JINGLE_UPDATED)
 
     def create_jingle(self, name, radio, creator, description=None, filename=None, schedule=None, duration=None):
