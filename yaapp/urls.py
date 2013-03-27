@@ -361,12 +361,14 @@ urlpatterns = patterns('',
 if settings.PRODUCTION_MODE:
     urlpatterns += patterns('',
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.txt', 'mimetype': 'text/plain'}),
+        url(r'^9EE008A3E4D3EDCC2AFD49389AC54723\.txt$', direct_to_template, {'template': '9EE008A3E4D3EDCC2AFD49389AC54723.txt', 'mimetype': 'text/plain'}),
         url(r'^channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='facebook_channel_url'),
         url(r'^deezer/facebook_channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='deezer_facebook_channel_url'),
     )
 else:
     urlpatterns += patterns('',
         url(r'^robots\.txt$', direct_to_template, {'template': 'robots.forbidden.txt', 'mimetype': 'text/plain'}),
+        url(r'^9EE008A3E4D3EDCC2AFD49389AC54723\.txt$', direct_to_template, {'template': '9EE008A3E4D3EDCC2AFD49389AC54723.txt', 'mimetype': 'text/plain'}),
         url(r'^channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='facebook_channel_url'),
         url(r'^deezer/facebook_channel\.html$', direct_to_template, {'template': 'facebook_channel.html', 'mimetype': 'text/html'}, name='deezer_facebook_channel_url'),
     )

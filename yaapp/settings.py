@@ -1075,6 +1075,7 @@ LOCALE_INDEPENDENT_PATHS = (
     r'^/tapjoy_callback/*',
     r'^/facebook_update/*',
     r'^/robots*',
+    r'^/9EE008A3E4D3EDCC2AFD49389AC54723*',
     r'^/channel*',
     r'^/sitemap*',
     r'^/yabackoffice/*',

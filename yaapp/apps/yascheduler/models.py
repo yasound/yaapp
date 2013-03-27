@@ -44,7 +44,7 @@ class TransientRadioHistoryManager():
             'jingle_id': jingle_id,
             'type': event_type,
         }
-        self.collection.update({'radio_uuid': radio_uuid, 'playlist_id': playlist_id}, doc, upsert=True, safe=True)
+        self.collection.update({'radio_uuid': radio_uuid}, doc, upsert=True, safe=True)
         self.notify_yascheduler()
 
     def events_for_radio(self, radio_uuid):
