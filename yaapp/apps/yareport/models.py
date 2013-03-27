@@ -139,6 +139,9 @@ def scpp_report(destination_folder='', start_date=None, end_date=None, restrict_
 
 
 def clean_string(s, allowed_characters, allow_numeric=True, to_upper=True, replace_with_space=True, char_count=None, left_justify=True):
+    if s == None:
+        return s
+
     if to_upper:
         s = s.upper()
 
