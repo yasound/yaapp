@@ -82,6 +82,9 @@ def internal_songs(request, song_id=None):
     limit = int(request.REQUEST.get('limit', 10))
     skip = int(request.REQUEST.get('skip', 0))
     radio_id = request.REQUEST.get('radio_id')
+    only_valid = request.REQUEST.get('only_valid')
+    if only_valid is not None:
+        only_valid = True
 
     if radio_id:
         radio = get_object_or_404(Radio, id=radio_id)
@@ -93,7 +96,16 @@ def internal_songs(request, song_id=None):
 
     data = []
     for song in qs:
-        data.append(song.as_dict())
+        if only_valid:
+            if song.lastfm_id is None and song.echonest_id is None and song.musicbrainz_id is None:
+                continue
+
+        song_data = song.as_dict()
+        song_data['lastfm_id'] = song.lastfm_id
+        song_data['echonest_id'] = song.echonest_id
+        song_data['musicbrainz_id'] = song.musicbrainz_id
+
+        data.append(song_data)
     return HttpResponse(simplejson.dumps(data), mimetype='application/json')
 
 
